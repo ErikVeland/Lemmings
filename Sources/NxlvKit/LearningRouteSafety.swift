@@ -23,12 +23,17 @@ public enum LearningRouteSafety {
     ]
     public static func minimumDemand(for entry: LevelPlaylistEntry, concepts: [String] = [], assetsRevision: String = "") -> Double {
         let identity = [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "|")
-        // Reported retail routes need more practice than their Gentle Redux counterparts.
+        // Reported Classic routes need more practice than their Redux counterparts suggest.
         switch identity {
-        case "classic|lemmings-LEVEL-120|11:Fun:12:0:7": return 237.5
-        case "classic|lemmings-LEVEL-120|58:Tricky:29:2:0": return 257.5
-        case "classic|lemmings-LEVEL-120|26:Fun:27:4:6": return 287.5
-        case "classic|lemmings-LEVEL-120|59:Tricky:30:1:7": return 377.5
+        case "classic|lemmings-LEVEL-120|11:Fun:12:0:7": return 400
+        case "classic|lemmings-LEVEL-120|58:Tricky:29:2:0": return 620
+        case "classic|lemmings-LEVEL-120|26:Fun:27:4:6": return 430
+        case "classic|fan:lldb-48|lm_set08.dat#5": return 600
+        case "classic|lemmings-LEVEL-120|34:Tricky:5:3:1": return 440
+        case "classic|lemmings-LEVEL-120|59:Tricky:30:1:7": return 650
+        case "classic|ohNoMoreLemmings-DLVEL-100|40:Wild:1:9:2": return 630
+        case "classic|lemmings-LEVEL-120|47:Tricky:18:9:5": return 640
+        case "classic|ohNoMoreLemmings-DLVEL-100|45:Wild:6:7:5": return 700
         default: break
         }
         let state = String(assetsRevision.prefix(64))

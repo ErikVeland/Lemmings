@@ -9,6 +9,42 @@ private final class FlippedRoot: NSView {
     override var isFlipped: Bool { true }
 }
 
+private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
+
+@MainActor private func testSystemControlRegions() {
+    for flipped in [false, true] {
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 600, height: 400),
+            styleMask: [], backing: .buffered, defer: false)
+        let root = flipped ? FlippedRoot(frame: CGRect(x: 0, y: 0, width: 600, height: 400))
+            : NSView(frame: CGRect(x: 0, y: 0, width: 600, height: 400))
+        window.contentView = root
+        let terrain = NSView(frame: root.bounds); root.addSubview(terrain)
+        let group = SystemPointerGroup(frame: CGRect(x: 120, y: 30, width: 320, height: 100))
+        root.addSubview(group)
+        let button = NSButton(title: "Ghost solution", target: nil, action: nil)
+        button.frame = CGRect(x: 0, y: 56, width: 320, height: 44); group.addSubview(button)
+        for local in [CGPoint(x: 10, y: 10), CGPoint(x: 160, y: 52), CGPoint(x: 310, y: 90)] {
+            check(GameCursor.isOverSystemControl(at: terrain.convert(local, from: group), in: terrain),
+                "An overlay button or gap retained the gameplay cursor")
+        }
+        button.isEnabled = false
+        check(GameCursor.isOverSystemControl(at: terrain.convert(CGPoint(x: 20, y: 70), from: group), in: terrain),
+            "A disabled control exposed the gameplay cursor")
+        check(!GameCursor.isOverSystemControl(at: CGPoint(x: 20, y: 200), in: terrain),
+            "Bare terrain selected the system cursor")
+        group.isHidden = true
+        check(!GameCursor.isOverSystemControl(at: terrain.convert(CGPoint(x: 20, y: 70), from: group), in: terrain),
+            "A hidden overlay blocked the gameplay cursor")
+        button.isEnabled = true
+        button.removeFromSuperview(); group.removeFromSuperview(); root.addSubview(button)
+        button.frame = CGRect(x: 100, y: 40, width: 160, height: 44)
+        check(GameCursor.isOverSystemControl(at: terrain.convert(CGPoint(x: button.bounds.midX, y: button.bounds.midY), from: button), in: terrain),
+            "A native control did not select the system cursor")
+        window.contentView = nil
+    }
+    print("PASS system cursor over overlay buttons, gaps and disabled controls; hidden controls, terrain and flipped coordinates")
+}
+
 @MainActor private func check(_ condition: @autoclosure () -> Bool, _ message: String) {
     guard condition() else { FileHandle.standardError.write(Data((message + "\n").utf8)); exit(1) }
 }
@@ -142,6 +178,7 @@ private final class FlippedRoot: NSView {
     check(!GameCursor.hidesSystemCursor(at: CGPoint(x: 20, y: 20), inside: playfield),
         "A dialog retained the drawn gameplay pointer")
     GameCursor.gameplaySuppressed = false
+    testSystemControlRegions()
     testOriginalCursor()
     print("PASS dialog focus rows, hidden controls and gameplay cursor policy")
 }

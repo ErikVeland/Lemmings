@@ -1,6 +1,9 @@
 #if os(macOS)
 import AppKit
 
+/// Bitmap control groups use the system pointer across their buttons and gaps.
+@MainActor protocol GameSystemCursorRegion: AnyObject {}
+
 /// Cursor presentation shared by gameplay views and their controls.
 @MainActor enum GameCursor {
   static var gameplaySuppressed = false
@@ -10,6 +13,17 @@ import AppKit
     let image = NSImage(size: NSSize(width: 1, height: 1), flipped: true) { _ in true }
     return NSCursor(image: image, hotSpot: .zero)
   }()
+
+  static func isOverSystemControl(at point: CGPoint, in view: NSView) -> Bool {
+    guard let root = view.window?.contentView else { return false }
+    var target = root.hitTest(view.convert(point, to: root.superview))
+    while let current = target {
+      if current is NSControl || current is any GameSystemCursorRegion { return true }
+      if current === root { break }
+      target = current.superview
+    }
+    return false
+  }
 
   /**
    * Returns true only where the game draws its own pointer.

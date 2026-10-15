@@ -148,12 +148,14 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard runtime.configuration.skills.indices.contains(control) else { return [] }
-        return runtime.lemmings.filter(\.active).map { lemming in
-            MobileTargetCandidate(
+        let results = runtime.assignmentResults(slot: control)
+        return runtime.lemmings.enumerated().compactMap { index, lemming in
+            guard lemming.active else { return nil }
+            return MobileTargetCandidate(
                 id: lemming.id,
                 point: MobilePoint(x: Double(lemming.x), y: Double(lemming.y - 5)),
                 direction: lemming.direction,
-                assignment: runtime.canAssign(slot: control, to: lemming.id) ? .eligible : .unavailable,
+                assignment: results[index] ? .eligible : .unavailable,
                 isBuilding: lemming.state == .building,
                 pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
             )
@@ -462,12 +464,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
             let accepted: Bool
             if action == .use {
                 accepted = Lemmings3Runtime.Direction.allCases.contains { direction in
-                    var probe = runtime
-                    return probe.useTool(to: lemming.id, direction: direction)
+                    runtime.canUseTool(lemming, direction: direction)
                 }
             } else {
-                var probe = runtime
-                accepted = probe.assign(action, to: lemming.id)
+                accepted = runtime.canAssign(action, to: lemming)
             }
             return MobileTargetCandidate(
                 id: lemming.id,

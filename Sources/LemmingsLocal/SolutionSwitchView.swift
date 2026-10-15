@@ -3,7 +3,9 @@ import AppKit
 import LemmingsGameArt
 import NxlvKit
 
-@MainActor final class SolutionSwitchView: NSView {
+@MainActor final class SolutionSwitchView: NSView, GameSystemCursorRegion {
+    var onPointerEntered: (() -> Void)?
+    private var pointerTracking: NSTrackingArea?
     var mode = SolutionReplayMode.game { didSet { buttons.forEach { $0.needsDisplay = true } } }
     var ghostEnabled = false { didSet { ghostButton.setAccessibilityValue(ghostEnabled ? 1 : 0); ghostButton.needsDisplay = true } }
     var onToggleGhost: (() -> Void)?
@@ -32,6 +34,18 @@ import NxlvKit
         }
     }
     required init?(coder: NSCoder) { nil }
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if let pointerTracking { removeTrackingArea(pointerTracking) }
+        let area = NSTrackingArea(rect: bounds,
+            options: [.activeInKeyWindow, .mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .inVisibleRect], owner: self)
+        addTrackingArea(area); pointerTracking = area
+    }
+    override func resetCursorRects() { addCursorRect(bounds, cursor: .arrow) }
+    override func cursorUpdate(with event: NSEvent) { showSystemPointer() }
+    override func mouseEntered(with event: NSEvent) { showSystemPointer() }
+    override func mouseMoved(with event: NSEvent) { showSystemPointer() }
+    private func showSystemPointer() { onPointerEntered?(); NSCursor.arrow.set() }
     override func layout() {
         super.layout()
         for (button, frame) in zip(buttons, SolutionSwitchArt.frames(in: switchFrame)) { button.frame = frame }

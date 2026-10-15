@@ -1,13 +1,15 @@
 [
   {
-    "demand": 5.0,
+    "demand": 5,
     "level": "Just dig!",
     "newSkills": [
       "digger"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 44.74239215686274,
     "rawReplayScoreChange": 0,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "spatial tolerance unmeasured"
     ],
@@ -23,9 +25,11 @@
     "newSkills": [
       "basher"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 48.60780870246962,
     "rawReplayScoreChange": 3.8654165456068768,
     "referenceStep": 0.5,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -34,14 +38,16 @@
     "variantDifferences": []
   },
   {
-    "demand": 10.0,
+    "demand": 10,
     "level": "Only floaters can survive this",
     "newSkills": [
       "floater"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 121.11564457124167,
     "rawReplayScoreChange": 72.50783586877205,
     "referenceStep": 0.5,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -54,14 +60,16 @@
     ]
   },
   {
-    "demand": 15.0,
+    "demand": 15,
     "level": "Tailor-made for blockers",
     "newSkills": [
       "blocker"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 188.59672799552158,
     "rawReplayScoreChange": 67.4810834242799,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -77,15 +85,17 @@
     ]
   },
   {
-    "demand": 20.0,
+    "demand": 20,
     "level": "Now use miners and climbers",
     "newSkills": [
       "climber",
       "miner"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 194.61555590386465,
     "rawReplayScoreChange": 6.01882790834307,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -98,12 +108,14 @@
     ]
   },
   {
-    "demand": 25.0,
+    "demand": 25,
     "level": "You need bashers this time",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 67.67042888496717,
     "rawReplayScoreChange": -126.94512701889748,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -119,14 +131,16 @@
     ]
   },
   {
-    "demand": 30.0,
+    "demand": 30,
     "level": "A task for blockers and bombers",
     "newSkills": [
       "bomber"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 129.81518428814968,
     "rawReplayScoreChange": 62.144755403182515,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -142,14 +156,16 @@
     ]
   },
   {
-    "demand": 35.0,
+    "demand": 35,
     "level": "Builders will help you here",
     "newSkills": [
       "builder"
     ],
+    "pressureWarnings": [],
     "rawReplayScore": 155.98306405305559,
     "rawReplayScoreChange": 26.167879764905905,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -163,136 +179,115 @@
     ]
   },
   {
-    "demand": 40.0,
-    "level": "Snuggle up to a Lemming",
+    "demand": 45,
+    "level": "Downwardly Mobile Lemmings",
     "newSkills": [],
-    "rawReplayScore": 480.10781678054445,
-    "rawReplayScoreChange": 324.12475272748884,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 160.5063725490196,
+    "rawReplayScoreChange": 4.523308495964017,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
     "step": 9,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different skill inventory",
-      "Classic retains a time limit",
-      "Classic bomber countdown needs additional execution review"
-    ]
-  },
-  {
-    "demand": 45.0,
-    "level": "Get a little extra help",
-    "newSkills": [],
-    "rawReplayScore": 120.08263157894737,
-    "rawReplayScoreChange": -360.0251852015971,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness"
-    ],
-    "step": 10,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 50.0,
-    "level": "Downwardly Mobile Lemmings",
+    "demand": 52,
+    "level": "Intsy-Wintsy...Lemming?",
     "newSkills": [],
-    "rawReplayScore": 160.5063725490196,
-    "rawReplayScoreChange": 40.42374097007223,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 132.74,
+    "rawReplayScoreChange": -27.766372549019593,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured"
+    ],
+    "step": 10,
+    "variantDifferences": []
+  },
+  {
+    "demand": 59,
+    "level": "New Lemmings On The Block",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 161.1582843137255,
+    "rawReplayScoreChange": 28.41828431372548,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
     "risks": [
       "spatial tolerance unmeasured"
     ],
     "step": 11,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 55.0,
-    "level": "Keep your hair on Mr. Lemming",
+    "demand": 66,
+    "level": "Honey, I Saved The Lemmings",
     "newSkills": [],
-    "rawReplayScore": 427.4696470588235,
-    "rawReplayScoreChange": 266.9632745098039,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 132.06004901960785,
+    "rawReplayScoreChange": -29.098235294117643,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
     "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 12,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 80.0,
-    "level": "A Beast of a level",
+    "demand": 73,
+    "level": "Citizen Lemming",
     "newSkills": [],
-    "rawReplayScore": 325.3197163105611,
-    "rawReplayScoreChange": -102.14993074826242,
-    "referenceStep": 5.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 80.85539215686275,
+    "rawReplayScoreChange": -51.2046568627451,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 13,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 85.0,
-    "level": "You Live and Lem",
+    "demand": 80,
+    "level": "Lemmings For Presidents!",
     "newSkills": [],
-    "rawReplayScore": 202.83379901960782,
-    "rawReplayScoreChange": -122.48591729095327,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
-    ],
-    "step": 14,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 130.0,
-    "level": "Careless clicking costs lives",
-    "newSkills": [],
-    "rawReplayScore": 190.58245497353954,
-    "rawReplayScoreChange": -12.251344046068283,
-    "referenceStep": 9.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 114.93400781756145,
+    "rawReplayScoreChange": 34.0786156606987,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
+    ],
+    "step": 14,
+    "variantDifferences": []
+  },
+  {
+    "demand": 87,
+    "level": "Get a little extra help",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 120.08263157894737,
+    "rawReplayScoreChange": 5.14862376138592,
+    "referenceStep": 1.4,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
     ],
     "step": 15,
     "variantDifferences": [
@@ -304,600 +299,605 @@
     ]
   },
   {
-    "demand": 150.0,
-    "level": "Turn around young lemmings!",
+    "demand": 95,
+    "level": "Lemmings Lemmings everywhere",
     "newSkills": [],
-    "rawReplayScore": 180.2493177186376,
-    "rawReplayScoreChange": -10.333137254901942,
-    "referenceStep": 4.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 71.78914189744489,
+    "rawReplayScoreChange": -48.29348968150248,
+    "referenceStep": 1.6,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
     "step": 16,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 155.0,
-    "level": "Doomsday",
+    "demand": 105,
+    "level": "Take good care of my Lemmings",
     "newSkills": [],
-    "rawReplayScore": 321.3428716402062,
-    "rawReplayScoreChange": 141.09355392156863,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 190.0787843137255,
+    "rawReplayScoreChange": 118.2896424162806,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 17,
+    "variantDifferences": []
+  },
+  {
+    "demand": 110,
+    "level": "Down And Out Lemmings",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 215.08268575851392,
+    "rawReplayScoreChange": 25.003901444788426,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
+    ],
+    "step": 18,
+    "variantDifferences": []
+  },
+  {
+    "demand": 115,
+    "level": "Rent-a-Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 319.2599745528273,
+    "rawReplayScoreChange": 104.1772887943134,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 19,
+    "variantDifferences": []
+  },
+  {
+    "demand": 120,
+    "level": "Undercover Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 252.68078724632576,
+    "rawReplayScoreChange": -66.57918730650155,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
+    ],
+    "step": 20,
+    "variantDifferences": []
+  },
+  {
+    "demand": 125,
+    "level": "Snuggle up to a Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 480.10781678054445,
+    "rawReplayScoreChange": 227.4270295342187,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
+    ],
+    "step": 21,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
-      "different rescue fraction",
       "different skill inventory",
       "Classic retains a time limit",
       "Classic bomber countdown needs additional execution review"
     ]
   },
   {
-    "demand": 160.0,
-    "level": "Going their separate ways",
+    "demand": 130,
+    "level": "Who`s That Lemming",
     "newSkills": [],
-    "rawReplayScore": 396.8685223825976,
-    "rawReplayScoreChange": 75.52565074239135,
+    "pressureWarnings": [],
+    "rawReplayScore": 373.3382089374072,
+    "rawReplayScoreChange": -106.76960784313724,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 18,
-    "variantDifferences": [
-      "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
-      "Classic conversion retains a four-minute time limit; Redux has no time limit."
-    ]
-  },
-  {
-    "demand": 165.0,
-    "level": "PoP YoR ToP!!!",
-    "newSkills": [],
-    "rawReplayScore": 329.6606092436975,
-    "rawReplayScoreChange": -67.2079131389001,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 19,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different rescue fraction",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 170.0,
-    "level": "It's Lemmingentry Watson",
-    "newSkills": [],
-    "rawReplayScore": 216.69816468030655,
-    "rawReplayScoreChange": -112.96244456339093,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 20,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 190.0,
-    "level": "Just A Quicky",
-    "newSkills": [],
-    "rawReplayScore": 439.0263598254332,
-    "rawReplayScoreChange": 222.32819514512664,
-    "referenceStep": 4.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 21,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory"
-    ]
-  },
-  {
-    "demand": 205.0,
-    "level": "Exodus!",
-    "newSkills": [],
-    "rawReplayScore": 378.91549793093014,
-    "rawReplayScoreChange": -60.110861894503046,
-    "referenceStep": 3.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 22,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 205.0,
-    "level": "Intsy-Wintsy...Lemming?",
+    "demand": 135,
+    "level": "Dangerzone",
     "newSkills": [],
-    "rawReplayScore": 132.74,
-    "rawReplayScoreChange": -246.17549793093013,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 240.4304856216831,
+    "rawReplayScoreChange": -132.90772331572413,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
+      "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 23,
     "variantDifferences": []
   },
   {
-    "demand": 205.0,
-    "level": "New Lemmings On The Block",
+    "demand": 140,
+    "level": "And now this...",
     "newSkills": [],
-    "rawReplayScore": 161.1582843137255,
-    "rawReplayScoreChange": 28.41828431372548,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 396.83771874132884,
+    "rawReplayScoreChange": 156.40723311964575,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
-      "spatial tolerance unmeasured"
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
     ],
     "step": 24,
     "variantDifferences": []
   },
   {
-    "demand": 210.0,
-    "level": "Citizen Lemming",
+    "demand": 145,
+    "level": "With Compliments",
     "newSkills": [],
-    "rawReplayScore": 80.85539215686275,
-    "rawReplayScoreChange": -80.30289215686274,
+    "pressureWarnings": [],
+    "rawReplayScore": 231.34225783456102,
+    "rawReplayScoreChange": -165.49546090676782,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
     ],
     "step": 25,
     "variantDifferences": []
   },
   {
-    "demand": 215.0,
-    "level": "Lemmings For Presidents!",
+    "demand": 150,
+    "level": "Thunder-Lemmings are go!",
     "newSkills": [],
-    "rawReplayScore": 114.93400781756145,
-    "rawReplayScoreChange": 34.0786156606987,
+    "pressureWarnings": [],
+    "rawReplayScore": 151.61641699423208,
+    "rawReplayScoreChange": -79.72584084032894,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
     ],
     "step": 26,
     "variantDifferences": []
   },
   {
-    "demand": 215.0,
-    "level": "Lemmings Lemmings everywhere",
+    "demand": 155,
+    "level": "Not just a pretty Lemming",
     "newSkills": [],
-    "rawReplayScore": 71.78914189744489,
-    "rawReplayScoreChange": -43.14486592011656,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 468.8510948286058,
+    "rawReplayScoreChange": 317.23467783437377,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
     ],
     "step": 27,
     "variantDifferences": []
   },
   {
-    "demand": 215.0,
-    "level": "DON`T PANIC",
+    "demand": 160,
+    "level": "Gone With The Lemming",
     "newSkills": [],
-    "rawReplayScore": 325.4752661064426,
-    "rawReplayScoreChange": 253.68612420899768,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 216.32949948400412,
+    "rawReplayScoreChange": -252.5215953446017,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 28,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 230.0,
-    "level": "Meeting Adjourned",
+    "demand": 165,
+    "level": "Lemming Productions Present...",
     "newSkills": [],
-    "rawReplayScore": 269.1182916300652,
-    "rawReplayScoreChange": -56.35697447637739,
-    "referenceStep": 3.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 29,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 237.5,
-    "level": "Patience",
-    "newSkills": [],
-    "rawReplayScore": 421.9826262841691,
-    "rawReplayScoreChange": 152.8643346541039,
-    "referenceStep": 1.5,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 30,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 250.0,
-    "level": "One way or another",
-    "newSkills": [],
-    "rawReplayScore": 397.0893627450981,
-    "rawReplayScoreChange": -24.89326353907103,
-    "referenceStep": 2.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 424.8960093574932,
+    "rawReplayScoreChange": 208.56650987348908,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
+      "four or more assignments within two seconds"
+    ],
+    "step": 29,
+    "variantDifferences": []
+  },
+  {
+    "demand": 170,
+    "level": "Custom built for Lemmings",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 166.54490823035815,
+    "rawReplayScoreChange": -258.35110112713505,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 30,
+    "variantDifferences": []
+  },
+  {
+    "demand": 180,
+    "level": "Keep your hair on Mr. Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 427.4696470588235,
+    "rawReplayScoreChange": 260.92473882846537,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 31,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
+      "different rescue fraction",
       "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 257.5,
-    "level": "Rainbow Island",
+    "demand": 190,
+    "level": "Not as complicated as it looks",
     "newSkills": [],
-    "rawReplayScore": 301.04710203236306,
-    "rawReplayScoreChange": -96.04226071273501,
-    "referenceStep": 1.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 149.9693177186376,
+    "rawReplayScoreChange": -277.5003293401859,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "four or more assignments within two seconds"
     ],
     "step": 32,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 260.0,
-    "level": "Perseverance",
+    "demand": 200,
+    "level": "As long as you try your best",
     "newSkills": [],
-    "rawReplayScore": 320.7689088450411,
-    "rawReplayScoreChange": 19.72180681267804,
-    "referenceStep": 0.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 296.532700628019,
+    "rawReplayScoreChange": 146.56338290938137,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "four or more assignments within two seconds"
     ],
     "step": 33,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 270.0,
-    "level": "The Far Side",
+    "demand": 210,
+    "level": "Smile if you love lemmings",
     "newSkills": [],
-    "rawReplayScore": 417.09171568627454,
-    "rawReplayScoreChange": 96.32280684123344,
+    "pressureWarnings": [],
+    "rawReplayScore": 234.36130306588734,
+    "rawReplayScoreChange": -62.17139756213163,
     "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "narrow measured timing"
     ],
     "step": 34,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 287.5,
-    "level": "Let's be careful out there",
+    "demand": 220,
+    "level": "Let's block and blow",
     "newSkills": [],
-    "rawReplayScore": 288.6567609305363,
-    "rawReplayScoreChange": -128.43495475573826,
-    "referenceStep": 3.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 67.41452789266016,
+    "rawReplayScoreChange": -166.9467751732272,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 35,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 290.0,
-    "level": "Take care, Sweetie",
+    "demand": 250,
+    "level": "You Live and Lem",
     "newSkills": [],
-    "rawReplayScore": 338.9190866097103,
-    "rawReplayScoreChange": 50.26232567917401,
-    "referenceStep": 0.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 202.83379901960782,
+    "rawReplayScoreChange": 135.41927112694765,
+    "referenceStep": 6.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "narrow measured timing"
     ],
     "step": 36,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 295.0,
-    "level": "The Island of the Wicker people",
-    "newSkills": [],
-    "rawReplayScore": 413.2641176470588,
-    "rawReplayScoreChange": 74.34503103734852,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 37,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 310.0,
-    "level": "Izzie Wizzie lemmings get busy",
-    "newSkills": [],
-    "rawReplayScore": 434.66895238095236,
-    "rawReplayScoreChange": 21.40483473389355,
-    "referenceStep": 3.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
-    ],
-    "step": 38,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 315.0,
-    "level": "Cascade",
+    "demand": 260,
+    "level": "We are now at LEMCON ONE",
     "newSkills": [],
-    "rawReplayScore": 407.7986813684849,
-    "rawReplayScoreChange": -26.87027101246747,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 273.1174852900536,
+    "rawReplayScoreChange": 70.28368627044577,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
-    "step": 39,
+    "step": 37,
+    "variantDifferences": []
+  },
+  {
+    "demand": 270,
+    "level": "A Beast of a level",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 325.3197163105611,
+    "rawReplayScoreChange": 52.2022310205075,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 38,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
+      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 315.0,
-    "level": "Not as complicated as it looks",
+    "demand": 300,
+    "level": "If only they could fly",
     "newSkills": [],
-    "rawReplayScore": 149.9693177186376,
-    "rawReplayScoreChange": -257.8293636498473,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 198.33916417908483,
+    "rawReplayScoreChange": -126.98055213147626,
+    "referenceStep": 6.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
+    ],
+    "step": 39,
+    "variantDifferences": []
+  },
+  {
+    "demand": 310,
+    "level": "worra lorra lemmings",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 240.61610079278677,
+    "rawReplayScoreChange": 42.276936613701935,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
     ],
     "step": 40,
     "variantDifferences": []
   },
   {
-    "demand": 320.0,
-    "level": "And then there were four....",
+    "demand": 320,
+    "level": "Origins and Lemmings",
     "newSkills": [],
-    "rawReplayScore": 569.3221655174585,
-    "rawReplayScoreChange": 419.3528477988209,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 41,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "different skill inventory"
-    ]
-  },
-  {
-    "demand": 335.0,
-    "level": "Last one out is a rotten egg!",
-    "newSkills": [],
-    "rawReplayScore": 398.2226078431372,
-    "rawReplayScoreChange": -171.09955767432132,
-    "referenceStep": 3.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 501.5518055514915,
+    "rawReplayScoreChange": 260.93570475870473,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 42,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "step": 41,
+    "variantDifferences": []
   },
   {
-    "demand": 345.0,
-    "level": "Watch out, there`s traps about",
+    "demand": 330,
+    "level": "Lock up your Lemmings",
     "newSkills": [],
-    "rawReplayScore": 537.8098655462185,
-    "rawReplayScoreChange": 139.58725770308126,
+    "pressureWarnings": [],
+    "rawReplayScore": 283.85185434173667,
+    "rawReplayScoreChange": -217.69995120975483,
     "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "narrow measured timing"
+    ],
+    "step": 42,
+    "variantDifferences": []
+  },
+  {
+    "demand": 345,
+    "level": "Lemming sanctuary in sight",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 146.54303921568626,
+    "rawReplayScoreChange": -137.3088151260504,
+    "referenceStep": 3.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
     ],
     "step": 43,
+    "variantDifferences": []
+  },
+  {
+    "demand": 355,
+    "level": "What an AWESOME level",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 184.84410451528,
+    "rawReplayScoreChange": 38.301065299593745,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 44,
     "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
+      "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
     "demand": 370.0,
     "level": "Don't let your eyes deceive you",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 488.65657765737876,
-    "rawReplayScoreChange": -49.153287888839714,
-    "referenceStep": 5.0,
+    "rawReplayScoreChange": 303.8124731420987,
+    "referenceStep": 3.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 44,
+    "step": 45,
     "variantDifferences": []
   },
   {
-    "demand": 370.0,
-    "level": "Flow Control",
+    "demand": 400,
+    "level": "Patience",
     "newSkills": [],
-    "rawReplayScore": 249.06266106442575,
-    "rawReplayScoreChange": -239.593916592953,
-    "referenceStep": 0.0,
-    "risks": [
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 45,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 377.5,
-    "level": "The Crankshaft",
-    "newSkills": [],
-    "rawReplayScore": 537.2543697478992,
-    "rawReplayScoreChange": 288.19170868347345,
-    "referenceStep": 1.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 421.9826262841691,
+    "rawReplayScoreChange": -66.67395137320966,
+    "referenceStep": 6.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
     "step": 46,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
+      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 385.0,
-    "level": "Honey, I Saved The Lemmings",
+    "demand": 420,
+    "level": "Meeting Adjourned",
     "newSkills": [],
-    "rawReplayScore": 132.06004901960785,
-    "rawReplayScoreChange": -405.19432072829136,
-    "referenceStep": 1.5,
+    "pressureWarnings": [],
+    "rawReplayScore": 269.1182916300652,
+    "rawReplayScoreChange": -152.8643346541039,
+    "referenceStep": 4.0,
+    "reportedTooHard": false,
     "risks": [
+      "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 47,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 410.0,
-    "level": "KEEP ON TRUCKING",
+    "demand": 430,
+    "level": "Let's be careful out there",
     "newSkills": [],
-    "rawReplayScore": 434.90202863549104,
-    "rawReplayScoreChange": 302.8419796158832,
-    "referenceStep": 5.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 288.6567609305363,
+    "rawReplayScoreChange": 19.538469300471093,
+    "referenceStep": 2.0,
+    "reportedTooHard": true,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 48,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 430.0,
+    "level": "SNOW JOKE",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 266.4068210418299,
+    "rawReplayScoreChange": -22.249939888706365,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 48,
+    "step": 49,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -906,53 +906,40 @@
     ]
   },
   {
-    "demand": 415.0,
-    "level": "Postcard from Lemmingland",
+    "demand": 440,
+    "level": "Careless clicking costs lives",
     "newSkills": [],
-    "rawReplayScore": 346.73726013148695,
-    "rawReplayScoreChange": -88.16476850400409,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 190.58245497353954,
+    "rawReplayScoreChange": -75.82436606829037,
+    "referenceStep": 2.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 49,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 420.0,
-    "level": "Dolly Dimple",
-    "newSkills": [],
-    "rawReplayScore": 312.58981123790835,
-    "rawReplayScoreChange": -34.1474488935786,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 50,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
+      "different rescue fraction",
+      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 425.0,
-    "level": "Mutiny On The Bounty",
+    "demand": 470.0,
+    "level": "Got anything....Lemmingy???",
     "newSkills": [],
-    "rawReplayScore": 329.91400069661813,
-    "rawReplayScoreChange": 17.32418945870978,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 322.9611646803065,
+    "rawReplayScoreChange": 132.37870970676698,
+    "referenceStep": 6.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
+      "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "step": 51,
@@ -964,33 +951,30 @@
     ]
   },
   {
-    "demand": 430.0,
-    "level": "SNOW JOKE",
+    "demand": 480,
+    "level": "Follow the leader...",
     "newSkills": [],
-    "rawReplayScore": 266.4068210418299,
-    "rawReplayScoreChange": -63.50717965478822,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 215.15348039215684,
+    "rawReplayScoreChange": -107.80768428814969,
+    "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 52,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 435.0,
-    "level": "They just keep on coming",
+    "demand": 480,
+    "level": "King of the castle",
     "newSkills": [],
-    "rawReplayScore": 361.8276013071895,
-    "rawReplayScoreChange": 95.42078026535961,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 170.33219607843137,
+    "rawReplayScoreChange": -44.82128431372547,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -999,103 +983,106 @@
     "variantDifferences": []
   },
   {
-    "demand": 435.0,
-    "level": "ONWARD AND UPWARD",
+    "demand": 510.0,
+    "level": "MENACING !!",
     "newSkills": [],
-    "rawReplayScore": 507.9719888896569,
-    "rawReplayScoreChange": 146.1443875824674,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 565.1040077243018,
+    "rawReplayScoreChange": 394.77181164587046,
+    "referenceStep": 6.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
+      "four or more assignments within two seconds"
     ],
     "step": 54,
     "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit",
-      "Classic bomber countdown needs additional execution review"
+      "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
-    "demand": 440.0,
-    "level": "I have a cunning plan",
+    "demand": 535.0,
+    "level": "Diet Lemmingaid",
     "newSkills": [],
-    "rawReplayScore": 416.6628091510948,
-    "rawReplayScoreChange": -91.30917973856214,
-    "referenceStep": 1.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 144.49798727641365,
+    "rawReplayScoreChange": -420.60602044788817,
+    "referenceStep": 5.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 55,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 450.0,
-    "level": "Take good care of my Lemmings",
+    "demand": 540.0,
+    "level": "Ozone friendly Lemmings",
     "newSkills": [],
-    "rawReplayScore": 190.0787843137255,
-    "rawReplayScoreChange": -226.5840248373693,
-    "referenceStep": 2.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 194.92094368179607,
+    "rawReplayScoreChange": 50.42295640538242,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
     ],
     "step": 56,
     "variantDifferences": []
   },
   {
-    "demand": 450.0,
-    "level": "Across The Gap",
+    "demand": 545.0,
+    "level": "The Art Gallery",
     "newSkills": [],
-    "rawReplayScore": 555.3545751633986,
-    "rawReplayScoreChange": 365.2757908496732,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 226.889945169618,
+    "rawReplayScoreChange": 31.969001487821913,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 57,
+    "variantDifferences": []
+  },
+  {
+    "demand": 550.0,
+    "level": "Come on over to my place",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 380.13330788616065,
+    "rawReplayScoreChange": 153.24336271654266,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
     ],
-    "step": 57,
+    "step": 58,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 450.0,
-    "level": "Everyone turn left (Part two)",
+    "demand": 600,
+    "level": "Dr Lemminggood",
     "newSkills": [],
-    "rawReplayScore": 86.76850044244777,
-    "rawReplayScoreChange": -468.5860747209509,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
-    ],
-    "step": 58,
-    "variantDifferences": []
-  },
-  {
-    "demand": 450.0,
-    "level": "Lemming sanctuary in sight",
-    "newSkills": [],
-    "rawReplayScore": 146.54303921568626,
-    "rawReplayScoreChange": 59.77453877323849,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 252.8701093874712,
+    "rawReplayScoreChange": -127.26319849868946,
+    "referenceStep": 10.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -1104,28 +1091,32 @@
     "variantDifferences": []
   },
   {
-    "demand": 450.0,
-    "level": "What an AWESOME level",
+    "demand": 600,
+    "level": "Pea Soup",
     "newSkills": [],
-    "rawReplayScore": 184.84410451528,
-    "rawReplayScoreChange": 38.301065299593745,
+    "pressureWarnings": [],
+    "rawReplayScore": 98.33647175170688,
+    "rawReplayScoreChange": -154.5336376357643,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 60,
-    "variantDifferences": [
-      "Classic rescue fraction exceeds Redux by more than ten percentage points"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 450.0,
-    "level": "King of the castle",
+    "demand": 600,
+    "level": "Bomboozal",
     "newSkills": [],
-    "rawReplayScore": 170.33219607843137,
-    "rawReplayScoreChange": -14.511908436848643,
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 83.78684874827513,
+    "rawReplayScoreChange": -14.549623003431748,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -1134,51 +1125,52 @@
     "variantDifferences": []
   },
   {
-    "demand": 450.0,
-    "level": "Follow the leader...",
+    "demand": 600,
+    "level": "Everyone turn left (Part two)",
     "newSkills": [],
-    "rawReplayScore": 215.15348039215684,
-    "rawReplayScoreChange": 44.82128431372547,
+    "pressureWarnings": [],
+    "rawReplayScore": 86.76850044244777,
+    "rawReplayScoreChange": 2.9816516941726405,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
     ],
     "step": 62,
     "variantDifferences": []
   },
   {
-    "demand": 470.0,
-    "level": "Got anything....Lemmingy???",
+    "demand": 600,
+    "level": "The Chain with no name",
     "newSkills": [],
-    "rawReplayScore": 322.9611646803065,
-    "rawReplayScoreChange": 107.80768428814969,
-    "referenceStep": 4.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 315.67824582321276,
+    "rawReplayScoreChange": 228.909745380765,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 63,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 490.0,
-    "level": "The Lemming Funhouse",
+    "demand": 600,
+    "level": "Mutiny On The Bounty",
     "newSkills": [],
-    "rawReplayScore": 448.1128294920268,
-    "rawReplayScoreChange": 125.15166481172025,
-    "referenceStep": 4.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
+    "rawReplayScore": 329.91400069661813,
+    "rawReplayScoreChange": 14.23575487340537,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "step": 64,
@@ -1190,16 +1182,20 @@
     ]
   },
   {
-    "demand": 495.0,
-    "level": "If at first you don`t succeed..",
+    "demand": 600,
+    "level": "The Lemming Funhouse",
     "newSkills": [],
-    "rawReplayScore": 238.73469409207127,
-    "rawReplayScoreChange": -209.3781353999555,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions"
+    ],
+    "rawReplayScore": 448.1128294920268,
+    "rawReplayScoreChange": 118.19882879540864,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
+      "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "step": 65,
@@ -1207,17 +1203,20 @@
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
-      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 500.0,
-    "level": "No world without you",
+    "demand": 600,
+    "level": "Down the tube",
     "newSkills": [],
-    "rawReplayScore": 382.46980915109475,
-    "rawReplayScoreChange": 143.73511505902349,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 327.0568418308334,
+    "rawReplayScoreChange": -121.0559876611934,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1227,79 +1226,6 @@
     "step": 66,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 505.0,
-    "level": "Synchronised Lemming",
-    "newSkills": [],
-    "rawReplayScore": 565.099945169618,
-    "rawReplayScoreChange": 182.63013601852322,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 67,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population"
-    ]
-  },
-  {
-    "demand": 510.0,
-    "level": "MENACING !!",
-    "newSkills": [],
-    "rawReplayScore": 565.1040077243018,
-    "rawReplayScoreChange": 0.004062554683855524,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
-    ],
-    "step": 68,
-    "variantDifferences": [
-      "Classic rescue fraction exceeds Redux by more than ten percentage points"
-    ]
-  },
-  {
-    "demand": 510.0,
-    "level": "Chill out!",
-    "newSkills": [],
-    "rawReplayScore": 558.373137254902,
-    "rawReplayScoreChange": -6.730870469399861,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 69,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 515.0,
-    "level": "Down the tube",
-    "newSkills": [],
-    "rawReplayScore": 327.0568418308334,
-    "rawReplayScoreChange": -231.31629542406858,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 70,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
       "Classic retains a time limit",
@@ -1307,36 +1233,42 @@
     ]
   },
   {
-    "demand": 520.0,
+    "demand": 600,
     "level": "Is this a circus?",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 239.53257267581685,
     "rawReplayScoreChange": -87.52426915501653,
-    "referenceStep": 1.0,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 71,
+    "step": 67,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 525.0,
+    "demand": 600,
     "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
     "rawReplayScore": 477.1742855134113,
     "rawReplayScoreChange": 237.64171283759444,
-    "referenceStep": 1.0,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 72,
+    "step": 68,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1344,12 +1276,92 @@
     ]
   },
   {
-    "demand": 530.0,
-    "level": "ROCKY VI",
+    "demand": 600,
+    "level": "Lemming Friendly",
     "newSkills": [],
-    "rawReplayScore": 310.7856935908495,
-    "rawReplayScoreChange": -166.38859192256177,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 253.65851774042955,
+    "rawReplayScoreChange": -223.51576777298175,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 69,
+    "variantDifferences": []
+  },
+  {
+    "demand": 600,
+    "level": "It`s all a matter of timing",
+    "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 299.52237383063334,
+    "rawReplayScoreChange": 45.8638560902038,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 70,
+    "variantDifferences": []
+  },
+  {
+    "demand": 600,
+    "level": "Oh No! It`s the 4TH DIMENSION!",
+    "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 332.17644514106263,
+    "rawReplayScoreChange": 32.65407131042929,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 71,
+    "variantDifferences": []
+  },
+  {
+    "demand": 600,
+    "level": "Flow Control",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 249.06266106442575,
+    "rawReplayScoreChange": -83.11378407663688,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 72,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 600,
+    "level": "If at first you don`t succeed..",
+    "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 238.73469409207127,
+    "rawReplayScoreChange": -10.327966972354488,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1361,149 +1373,211 @@
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
-      "Classic retains a time limit",
-      "Classic bomber countdown needs additional execution review"
+      "different skill inventory",
+      "Classic retains a time limit"
     ]
   },
   {
-    "demand": 535.0,
-    "level": "With a twist of lemming please",
+    "demand": 600,
+    "level": "Luvly Jubly",
     "newSkills": [],
-    "rawReplayScore": 304.53435904915966,
-    "rawReplayScoreChange": -6.251334541689857,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 205.58978113989033,
+    "rawReplayScoreChange": -33.14491295218093,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 74,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
+    "variantDifferences": []
   },
   {
-    "demand": 535.0,
-    "level": "Diet Lemmingaid",
+    "demand": 600,
+    "level": "They just keep on coming",
     "newSkills": [],
-    "rawReplayScore": 144.49798727641365,
-    "rawReplayScoreChange": -160.036371772746,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 361.8276013071895,
+    "rawReplayScoreChange": 156.2378201672992,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 75,
     "variantDifferences": []
   },
   {
-    "demand": 540.0,
-    "level": "Thunder-Lemmings are go!",
+    "demand": 600,
+    "level": "The Far Side",
     "newSkills": [],
-    "rawReplayScore": 151.61641699423208,
-    "rawReplayScoreChange": 7.1184297178184295,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
     ],
-    "step": 76,
-    "variantDifferences": []
-  },
-  {
-    "demand": 540.0,
-    "level": "Let's block and blow",
-    "newSkills": [],
-    "rawReplayScore": 67.41452789266016,
-    "rawReplayScoreChange": -84.20188910157192,
+    "rawReplayScore": 417.09171568627454,
+    "rawReplayScoreChange": 55.264114379085015,
     "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 77,
-    "variantDifferences": []
-  },
-  {
-    "demand": 540.0,
-    "level": "Ozone friendly Lemmings",
-    "newSkills": [],
-    "rawReplayScore": 194.92094368179607,
-    "rawReplayScoreChange": 127.50641578913591,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
-    ],
-    "step": 78,
-    "variantDifferences": []
-  },
-  {
-    "demand": 540.0,
-    "level": "Bomboozal",
-    "newSkills": [],
-    "rawReplayScore": 83.78684874827513,
-    "rawReplayScoreChange": -111.13409493352094,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 79,
-    "variantDifferences": []
-  },
-  {
-    "demand": 545.0,
-    "level": "The Art Gallery",
-    "newSkills": [],
-    "rawReplayScore": 226.889945169618,
-    "rawReplayScoreChange": 143.10309642134285,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 80,
-    "variantDifferences": []
-  },
-  {
-    "demand": 545.0,
-    "level": "Upsidedown World",
-    "newSkills": [],
-    "rawReplayScore": 423.23938270125024,
-    "rawReplayScoreChange": 196.34943753163225,
-    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 81,
+    "step": 76,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
-      "different rescue fraction",
-      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 550.0,
-    "level": "Come on over to my place",
+    "demand": 600,
+    "level": "Watch out, there`s traps about",
     "newSkills": [],
-    "rawReplayScore": 380.13330788616065,
-    "rawReplayScoreChange": -43.106074815089585,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 537.8098655462185,
+    "rawReplayScoreChange": 120.71814985994394,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 77,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 600,
+    "level": "Cascade",
+    "newSkills": [],
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 407.7986813684849,
+    "rawReplayScoreChange": -130.01118417773358,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 78,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "DON`T PANIC",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 325.4752661064426,
+    "rawReplayScoreChange": -82.32341526204232,
+    "referenceStep": 3.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 79,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "ROCKY VI",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 310.7856935908495,
+    "rawReplayScoreChange": -14.689572515593056,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 80,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit",
+      "Classic bomber countdown needs additional execution review"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "Take care, Sweetie",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 338.9190866097103,
+    "rawReplayScoreChange": 28.133393018860772,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 81,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "KEEP ON TRUCKING",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 434.90202863549104,
+    "rawReplayScoreChange": 95.98294202578074,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 82,
@@ -1515,34 +1589,93 @@
     ]
   },
   {
-    "demand": 555.0,
-    "level": "Luvly Jubly",
+    "demand": 615,
+    "level": "The race against cliches",
     "newSkills": [],
-    "rawReplayScore": 205.58978113989033,
-    "rawReplayScoreChange": -174.54352674627032,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 433.1251450849306,
+    "rawReplayScoreChange": -1.7768835505604557,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 83,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "With a twist of lemming please",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 304.53435904915966,
+    "rawReplayScoreChange": -128.59078603577092,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 83,
+    "step": 84,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "Last Lemming To Lemmingcentral",
+    "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 190.08430100190384,
+    "rawReplayScoreChange": -114.45005804725582,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 85,
     "variantDifferences": []
   },
   {
-    "demand": 555.0,
+    "demand": 615,
     "level": "THE SILENCE OF THE LEMMINGS",
     "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
     "rawReplayScore": 481.37289947320244,
-    "rawReplayScoreChange": 275.78311833331213,
+    "rawReplayScoreChange": 291.2885984712986,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 84,
+    "step": 86,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1552,67 +1685,43 @@
     ]
   },
   {
-    "demand": 565.0,
-    "level": "Just a Minute...",
+    "demand": 615,
+    "level": "Upsidedown World",
     "newSkills": [],
-    "rawReplayScore": 312.0091058567772,
-    "rawReplayScoreChange": -169.36379361642526,
-    "referenceStep": 2.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
     ],
-    "step": 85,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different skill inventory"
-    ]
-  },
-  {
-    "demand": 570.0,
-    "level": "The gate trap Lemmings.",
-    "newSkills": [],
-    "rawReplayScore": 425.62096477746104,
-    "rawReplayScoreChange": 113.61185892068386,
-    "referenceStep": 1.0,
+    "rawReplayScore": 423.23938270125024,
+    "rawReplayScoreChange": -58.1335167719522,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 86,
+    "step": 87,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
       "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 575.0,
-    "level": "Feel the heat!",
-    "newSkills": [],
-    "rawReplayScore": 346.03731123790834,
-    "rawReplayScoreChange": -79.5836535395527,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 87,
-    "variantDifferences": []
-  },
-  {
-    "demand": 575.0,
+    "demand": 615,
     "level": "Poles Apart",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 349.1453284273085,
-    "rawReplayScoreChange": 3.1080171894001865,
+    "rawReplayScoreChange": -74.09405427394171,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1627,26 +1736,88 @@
     ]
   },
   {
-    "demand": 600,
-    "level": "Pea Soup",
+    "demand": 615,
+    "level": "Perseverance",
     "newSkills": [],
-    "rawReplayScore": 98.33647175170688,
-    "rawReplayScoreChange": -250.80885667560165,
-    "referenceStep": 5.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 320.7689088450411,
+    "rawReplayScoreChange": -28.37641958226743,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
     ],
     "step": 89,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "Feel the heat!",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 346.03731123790834,
+    "rawReplayScoreChange": 25.268402392867245,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 90,
     "variantDifferences": []
   },
   {
-    "demand": 600,
-    "level": "A BeastII of a level",
+    "demand": 615,
+    "level": "Turn around young lemmings!",
     "newSkills": [],
-    "rawReplayScore": 450.3695294117647,
-    "rawReplayScoreChange": 352.0330576600578,
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 180.2493177186376,
+    "rawReplayScoreChange": -165.78799351927074,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 91,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 615,
+    "level": "Just a Minute...",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 312.0091058567772,
+    "rawReplayScoreChange": 131.75978813813958,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1654,134 +1825,159 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 90,
+    "step": 92,
     "variantDifferences": [
-      "Classic rescue fraction exceeds Redux by more than ten percentage points"
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different skill inventory"
     ]
   },
   {
-    "demand": 600,
-    "level": "Lemming Friendly",
+    "demand": 615,
+    "level": "Doomsday",
     "newSkills": [],
-    "rawReplayScore": 253.65851774042955,
-    "rawReplayScoreChange": -196.71101167133514,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
     ],
-    "step": 91,
-    "variantDifferences": []
-  },
-  {
-    "demand": 600,
-    "level": "The Chain with no name",
-    "newSkills": [],
-    "rawReplayScore": 315.67824582321276,
-    "rawReplayScoreChange": 62.01972808278322,
+    "rawReplayScore": 321.3428716402062,
+    "rawReplayScoreChange": 9.333765783429044,
     "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 92,
-    "variantDifferences": []
-  },
-  {
-    "demand": 600,
-    "level": "Dr Lemminggood",
-    "newSkills": [],
-    "rawReplayScore": 252.8701093874712,
-    "rawReplayScoreChange": -62.808136435741574,
-    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 93,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "different skill inventory",
+      "Classic retains a time limit",
+      "Classic bomber countdown needs additional execution review"
+    ]
   },
   {
-    "demand": 600,
-    "level": "Oh No! It`s the 4TH DIMENSION!",
+    "demand": 615,
+    "level": "Chill out!",
     "newSkills": [],
-    "rawReplayScore": 332.17644514106263,
-    "rawReplayScoreChange": 79.30633575359144,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 558.373137254902,
+    "rawReplayScoreChange": 237.03026561469574,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 94,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 600,
-    "level": "Last Lemming To Lemmingcentral",
+    "demand": 615,
+    "level": "One way or another",
     "newSkills": [],
-    "rawReplayScore": 190.08430100190384,
-    "rawReplayScoreChange": -142.0921441391588,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 397.0893627450981,
+    "rawReplayScoreChange": -161.2837745098039,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness"
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
     ],
     "step": 95,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 600.0,
-    "level": "The race against cliches",
+    "demand": 615,
+    "level": "The Island of the Wicker people",
     "newSkills": [],
-    "rawReplayScore": 433.1251450849306,
-    "rawReplayScoreChange": 243.04084408302674,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 413.2641176470588,
+    "rawReplayScoreChange": 16.17475490196074,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 96,
     "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence"
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
     ]
   },
   {
-    "demand": 600,
-    "level": "It`s all a matter of timing",
+    "demand": 615,
+    "level": "Last one out is a rotten egg!",
     "newSkills": [],
-    "rawReplayScore": 299.52237383063334,
-    "rawReplayScoreChange": -133.60277125429724,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 398.2226078431372,
+    "rawReplayScoreChange": -15.041509803921599,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 97,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 610.0,
-    "level": "Triple Trouble",
+    "demand": 620,
+    "level": "Rainbow Island",
     "newSkills": [],
-    "rawReplayScore": 341.86466085589245,
-    "rawReplayScoreChange": 42.34228702525911,
-    "referenceStep": 2.0,
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 301.04710203236306,
+    "rawReplayScoreChange": -97.17550581077415,
+    "referenceStep": 1.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
     ],
     "step": 98,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
-      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
@@ -1789,9 +1985,11 @@
     "demand": 625.0,
     "level": "Just a Minute (Part Two)",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 212.30078431372547,
-    "rawReplayScoreChange": -129.56387654216698,
-    "referenceStep": 3.0,
+    "rawReplayScoreChange": -88.74631771863758,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1805,182 +2003,273 @@
     ]
   },
   {
-    "demand": 635.0,
-    "level": "PoP TiL YoU DrOp!",
+    "demand": 630,
+    "level": "Exodus!",
     "newSkills": [],
-    "rawReplayScore": 233.05489017050266,
-    "rawReplayScoreChange": 20.754105856777187,
-    "referenceStep": 2.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "near-full rescue with multiple measured narrow actions"
+    ],
+    "rawReplayScore": 378.91549793093014,
+    "rawReplayScoreChange": 166.61471361720467,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 100,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 635.0,
-    "level": "Almost Nearly Virtual Reality",
+    "demand": 630,
+    "level": "Going their separate ways",
     "newSkills": [],
-    "rawReplayScore": 305.6043301594982,
-    "rawReplayScoreChange": 72.54943998899554,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
     ],
-    "step": 101,
-    "variantDifferences": []
-  },
-  {
-    "demand": 640.0,
-    "level": "Temple of Love",
-    "newSkills": [],
-    "rawReplayScore": 408.9240000000001,
-    "rawReplayScoreChange": 103.31966984050189,
-    "referenceStep": 1.0,
+    "rawReplayScore": 396.8685223825976,
+    "rawReplayScoreChange": 17.95302445166743,
+    "referenceStep": 0.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 101,
+    "variantDifferences": [
+      "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
+      "Classic conversion retains a four-minute time limit; Redux has no time limit."
+    ]
+  },
+  {
+    "demand": 630,
+    "level": "Postcard from Lemmingland",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 346.73726013148695,
+    "rawReplayScoreChange": -50.13126225111063,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 102,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
-      "different rescue fraction",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 645.0,
-    "level": "It`s hero time!",
+    "demand": 630,
+    "level": "ONWARD AND UPWARD",
     "newSkills": [],
-    "rawReplayScore": 373.0244970803352,
-    "rawReplayScoreChange": -35.89950291966488,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 507.9719888896569,
+    "rawReplayScoreChange": 161.23472875816998,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 103,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population"
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit",
+      "Classic bomber countdown needs additional execution review"
     ]
   },
   {
-    "demand": 650.0,
-    "level": "All or Nothing",
+    "demand": 630,
+    "level": "Across The Gap",
     "newSkills": [],
-    "rawReplayScore": 265.22251230924707,
-    "rawReplayScoreChange": -107.80198477108814,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 555.3545751633986,
+    "rawReplayScoreChange": 47.38258627374171,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 104,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 650.0,
-    "level": "Custom built for Lemmings",
+    "demand": 630,
+    "level": "Izzie Wizzie lemmings get busy",
     "newSkills": [],
-    "rawReplayScore": 166.54490823035815,
-    "rawReplayScoreChange": -98.67760407888892,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 434.66895238095236,
+    "rawReplayScoreChange": -120.68562278244627,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing"
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 105,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 650.0,
-    "level": "Quote: \"That`s a good level\"",
+    "demand": 630,
+    "level": "And then there were four....",
     "newSkills": [],
-    "rawReplayScore": 271.7390853156293,
-    "rawReplayScoreChange": 105.19417708527118,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 569.3221655174585,
+    "rawReplayScoreChange": 134.65321313650617,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "step": 106,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "different skill inventory"
+    ]
   },
   {
-    "demand": 650.0,
-    "level": "Now get out of that!",
+    "demand": 630,
+    "level": "PoP YoR ToP!!!",
     "newSkills": [],
-    "rawReplayScore": 293.68643593460376,
-    "rawReplayScoreChange": 21.94735061897444,
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 329.6606092436975,
+    "rawReplayScoreChange": -239.66155627376105,
     "referenceStep": 0.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing"
+      "witness exhausts at least one used skill"
     ],
     "step": 107,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different rescue fraction",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 650.0,
-    "level": "The Boiler Room",
+    "demand": 630,
+    "level": "Triple Trouble",
     "newSkills": [],
-    "rawReplayScore": 230.65036318754585,
-    "rawReplayScoreChange": -63.036072747057915,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 341.86466085589245,
+    "rawReplayScoreChange": 12.204051612194974,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
     "step": 108,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
+      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 650.0,
-    "level": "The Crossroads",
+    "demand": 630,
+    "level": "Dolly Dimple",
     "newSkills": [],
-    "rawReplayScore": 180.35926522484777,
-    "rawReplayScoreChange": -50.291097962698075,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "fast minimum release rate with no slower crowd-management option",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 312.58981123790835,
+    "rawReplayScoreChange": -29.274849617984103,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "less than 30 seconds spare on the witness"
+      "witness exhausts at least one used skill"
     ],
     "step": 109,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "Classic retains a time limit"
+    ]
   },
   {
-    "demand": 655.0,
-    "level": "Anxiety",
+    "demand": 630,
+    "level": "The gate trap Lemmings.",
     "newSkills": [],
-    "rawReplayScore": 261.73358239596456,
-    "rawReplayScoreChange": 81.37431717111679,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 425.62096477746104,
+    "rawReplayScoreChange": 113.03115353955269,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -1989,26 +2278,377 @@
     "step": 110,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
+      "different skill inventory",
       "Classic retains a time limit"
     ]
   },
   {
-    "demand": 660.0,
-    "level": "No added colours or Lemmings",
+    "demand": 630,
+    "level": "A BeastII of a level",
     "newSkills": [],
-    "rawReplayScore": 364.198756302521,
-    "rawReplayScoreChange": 102.46517390655646,
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 450.3695294117647,
+    "rawReplayScoreChange": 24.748564634303648,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 111,
+    "variantDifferences": [
+      "Classic rescue fraction exceeds Redux by more than ten percentage points"
+    ]
+  },
+  {
+    "demand": 635.0,
+    "level": "Almost Nearly Virtual Reality",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 305.6043301594982,
+    "rawReplayScoreChange": -144.76519925226648,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 112,
+    "variantDifferences": []
+  },
+  {
+    "demand": 635.0,
+    "level": "PoP TiL YoU DrOp!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 233.05489017050266,
+    "rawReplayScoreChange": -72.54943998899554,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 113,
+    "variantDifferences": []
+  },
+  {
+    "demand": 640,
+    "level": "It's Lemmingentry Watson",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 216.69816468030655,
+    "rawReplayScoreChange": -16.356725490196112,
+    "referenceStep": 1.0,
+    "reportedTooHard": true,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 114,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 645.0,
+    "level": "It`s hero time!",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 373.0244970803352,
+    "rawReplayScoreChange": 156.32633240002866,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 115,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population"
+    ]
+  },
+  {
+    "demand": 645,
+    "level": "Temple of Love",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 408.9240000000001,
+    "rawReplayScoreChange": 35.89950291966488,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 116,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 645,
+    "level": "Synchronised Lemming",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 565.099945169618,
+    "rawReplayScoreChange": 156.17594516961788,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 117,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population"
+    ]
+  },
+  {
+    "demand": 645,
+    "level": "No world without you",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 382.46980915109475,
+    "rawReplayScoreChange": -182.63013601852322,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 111,
+    "step": 118,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 645,
+    "level": "I have a cunning plan",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 416.6628091510948,
+    "rawReplayScoreChange": 34.19300000000004,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 119,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 650.0,
+    "level": "All or Nothing",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 265.22251230924707,
+    "rawReplayScoreChange": -151.44029684184773,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 120,
+    "variantDifferences": []
+  },
+  {
+    "demand": 650.0,
+    "level": "Quote: \"That`s a good level\"",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 271.7390853156293,
+    "rawReplayScoreChange": 6.516573006382259,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 121,
+    "variantDifferences": []
+  },
+  {
+    "demand": 650.0,
+    "level": "Now get out of that!",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions"
+    ],
+    "rawReplayScore": 293.68643593460376,
+    "rawReplayScoreChange": 21.94735061897444,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 122,
+    "variantDifferences": []
+  },
+  {
+    "demand": 650.0,
+    "level": "The Crossroads",
+    "newSkills": [],
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 180.35926522484777,
+    "rawReplayScoreChange": -113.32717070975599,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 123,
+    "variantDifferences": []
+  },
+  {
+    "demand": 650.0,
+    "level": "The Boiler Room",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 230.65036318754585,
+    "rawReplayScoreChange": 50.291097962698075,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
+    ],
+    "step": 124,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 650,
+    "level": "The Crankshaft",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 537.2543697478992,
+    "rawReplayScoreChange": 306.60400656035335,
+    "referenceStep": 0.0,
+    "reportedTooHard": true,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 125,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 655.0,
+    "level": "Anxiety",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 261.73358239596456,
+    "rawReplayScoreChange": -275.52078735193464,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 126,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
       "Classic retains a time limit"
     ]
   },
@@ -2016,46 +2656,82 @@
     "demand": 660.0,
     "level": "Have an ice day",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 284.077700628019,
-    "rawReplayScoreChange": -80.12105567450203,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": 22.344118232054427,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 112,
+    "step": 127,
     "variantDifferences": []
   },
   {
-    "demand": 665.0,
-    "level": "Mind the step.....",
+    "demand": 660.0,
+    "level": "No added colours or Lemmings",
     "newSkills": [],
-    "rawReplayScore": 199.1795518207283,
-    "rawReplayScoreChange": -84.89814880729068,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option",
+      "very few tools with high rescue or release pressure"
     ],
-    "step": 113,
-    "variantDifferences": []
-  },
-  {
-    "demand": 665.0,
-    "level": "There`s madness in the method",
-    "newSkills": [],
-    "rawReplayScore": 391.1248092280146,
-    "rawReplayScoreChange": 191.9452574072863,
+    "rawReplayScore": 364.198756302521,
+    "rawReplayScoreChange": 80.12105567450203,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 114,
+    "step": 128,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 665.0,
+    "level": "Mind the step.....",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 199.1795518207283,
+    "rawReplayScoreChange": -165.0192044817927,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 129,
+    "variantDifferences": []
+  },
+  {
+    "demand": 665.0,
+    "level": "There`s madness in the method",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "near-full rescue with multiple measured narrow actions"
+    ],
+    "rawReplayScore": 391.1248092280146,
+    "rawReplayScoreChange": 191.9452574072863,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 130,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -2066,89 +2742,95 @@
     "demand": 670.0,
     "level": "You Take the High Road",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
     "rawReplayScore": 383.34749418922576,
     "rawReplayScoreChange": -7.777315038788856,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 115,
+    "step": 131,
     "variantDifferences": []
   },
   {
     "demand": 675.0,
     "level": "Here's one I prepared earlier",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 426.9110259103642,
     "rawReplayScoreChange": 43.56353172113842,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 116,
-    "variantDifferences": []
-  },
-  {
-    "demand": 680.0,
-    "level": "Many Lemmings make level work",
-    "newSkills": [],
-    "rawReplayScore": 149.28972350383594,
-    "rawReplayScoreChange": -277.62130240652823,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 117,
+    "step": 132,
     "variantDifferences": []
   },
   {
     "demand": 680.0,
     "level": "This should be a doddle!",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 299.57876993540856,
-    "rawReplayScoreChange": 150.28904643157261,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": -127.33225597495561,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 118,
+    "step": 133,
     "variantDifferences": []
   },
   {
     "demand": 680.0,
     "level": "The Lemming Learning Curve",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
     "rawReplayScore": 325.11423202614384,
     "rawReplayScoreChange": 25.53546209073528,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 119,
+    "step": 134,
     "variantDifferences": []
   },
   {
     "demand": 680.0,
     "level": "Lemming about town",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 321.74172300261426,
     "rawReplayScoreChange": -3.372509023529574,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 120,
+    "step": 135,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2157,18 +2839,44 @@
     ]
   },
   {
-    "demand": 685.0,
-    "level": "Evacuating a coal mine",
+    "demand": 680.0,
+    "level": "Many Lemmings make level work",
     "newSkills": [],
-    "rawReplayScore": 331.0599166626026,
-    "rawReplayScoreChange": 9.31819365998831,
-    "referenceStep": 1.0,
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 149.28972350383594,
+    "rawReplayScoreChange": -172.45199949877832,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 121,
+    "step": 136,
+    "variantDifferences": []
+  },
+  {
+    "demand": 685.0,
+    "level": "Evacuating a coal mine",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 331.0599166626026,
+    "rawReplayScoreChange": 181.77019315876663,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 137,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2179,9 +2887,15 @@
     "demand": 690.0,
     "level": "NO PROBLEM",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 388.4762490626312,
     "rawReplayScoreChange": 57.41633240002864,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -2189,41 +2903,29 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 122,
+    "step": 138,
     "variantDifferences": []
-  },
-  {
-    "demand": 690.0,
-    "level": "Watch right or left (Part two)",
-    "newSkills": [],
-    "rawReplayScore": 357.490324929972,
-    "rawReplayScoreChange": -30.985924132659193,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 123,
-    "variantDifferences": [
-      "Classic rescue fraction exceeds Redux by more than ten percentage points"
-    ]
   },
   {
     "demand": 690.0,
     "level": "Be more than just a number",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 435.17999999999995,
-    "rawReplayScoreChange": 77.68967507002793,
+    "rawReplayScoreChange": 46.70375093736874,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 124,
+    "step": 139,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -2231,49 +2933,83 @@
     ]
   },
   {
-    "demand": 695.0,
-    "level": "Watch your step",
+    "demand": 690.0,
+    "level": "Watch right or left (Part two)",
     "newSkills": [],
-    "rawReplayScore": 308.2317164114481,
-    "rawReplayScoreChange": -126.94828358855187,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
     ],
-    "step": 125,
-    "variantDifferences": []
-  },
-  {
-    "demand": 695.0,
-    "level": "Higgledy Piggledy",
-    "newSkills": [],
-    "rawReplayScore": 316.87131039148613,
-    "rawReplayScoreChange": 8.639593980038057,
+    "rawReplayScore": 357.490324929972,
+    "rawReplayScoreChange": -77.68967507002793,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 126,
+    "step": 140,
+    "variantDifferences": [
+      "Classic rescue fraction exceeds Redux by more than ten percentage points"
+    ]
+  },
+  {
+    "demand": 695.0,
+    "level": "Higgledy Piggledy",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 316.87131039148613,
+    "rawReplayScoreChange": -40.619014538485885,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 141,
+    "variantDifferences": []
+  },
+  {
+    "demand": 695.0,
+    "level": "Watch your step",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
+    "rawReplayScore": 308.2317164114481,
+    "rawReplayScoreChange": -8.639593980038057,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 142,
     "variantDifferences": []
   },
   {
     "demand": 700.0,
     "level": "Water processing plant",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 431.97839250517177,
-    "rawReplayScoreChange": 115.10708211368564,
+    "rawReplayScoreChange": 123.74667609372369,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 127,
+    "step": 143,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2282,77 +3018,90 @@
     ]
   },
   {
-    "demand": 705.0,
-    "level": "Gone With The Lemming",
+    "demand": 700,
+    "level": "Just A Quicky",
     "newSkills": [],
-    "rawReplayScore": 216.32949948400412,
-    "rawReplayScoreChange": -215.64889302116765,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
     ],
-    "step": 128,
-    "variantDifferences": []
-  },
-  {
-    "demand": 705.0,
-    "level": "If only they could fly",
-    "newSkills": [],
-    "rawReplayScore": 198.33916417908483,
-    "rawReplayScoreChange": -17.990335304919284,
+    "rawReplayScore": 439.0263598254332,
+    "rawReplayScoreChange": 7.047967320261421,
     "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 129,
-    "variantDifferences": []
-  },
-  {
-    "demand": 705.0,
-    "level": "LeMming ToMato KetchUp fAcilitY",
-    "newSkills": [],
-    "rawReplayScore": 326.419554249134,
-    "rawReplayScoreChange": 128.0803900700492,
-    "referenceStep": 0.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 130,
+    "step": 144,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different skill inventory"
+    ]
+  },
+  {
+    "demand": 705.0,
+    "level": "LeMming ToMato KetchUp fAcilitY",
+    "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 326.419554249134,
+    "rawReplayScoreChange": -112.60680557629917,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 145,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
-    "demand": 705.0,
-    "level": "Dangerzone",
+    "demand": 710.0,
+    "level": "Inroducing SUPERLEMMING",
     "newSkills": [],
-    "rawReplayScore": 240.4304856216831,
-    "rawReplayScoreChange": -85.98906862745093,
-    "referenceStep": 0.0,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 366.7278921568627,
+    "rawReplayScoreChange": 40.308337907728685,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
     ],
-    "step": 131,
+    "step": 146,
     "variantDifferences": []
   },
   {
     "demand": 710.0,
     "level": "Move on in two separate groups.",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
     "rawReplayScore": 421.14236347027156,
-    "rawReplayScoreChange": 180.71187784858847,
-    "referenceStep": 1.0,
+    "rawReplayScoreChange": 54.41447131340885,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 132,
+    "step": 147,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2360,87 +3109,31 @@
     ]
   },
   {
-    "demand": 710.0,
-    "level": "Inroducing SUPERLEMMING",
-    "newSkills": [],
-    "rawReplayScore": 366.7278921568627,
-    "rawReplayScoreChange": -54.41447131340885,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 133,
-    "variantDifferences": []
-  },
-  {
-    "demand": 710.0,
-    "level": "As long as you try your best",
-    "newSkills": [],
-    "rawReplayScore": 296.532700628019,
-    "rawReplayScoreChange": -70.19519152884374,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "four or more assignments within two seconds"
-    ],
-    "step": 134,
-    "variantDifferences": []
-  },
-  {
-    "demand": 715.0,
-    "level": "With Compliments",
-    "newSkills": [],
-    "rawReplayScore": 231.34225783456102,
-    "rawReplayScoreChange": -65.19044279345795,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
-    ],
-    "step": 135,
-    "variantDifferences": []
-  },
-  {
-    "demand": 715.0,
-    "level": "Rent-a-Lemming",
-    "newSkills": [],
-    "rawReplayScore": 319.2599745528273,
-    "rawReplayScoreChange": 87.91771671826629,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 136,
-    "variantDifferences": []
-  },
-  {
     "demand": 715.0,
     "level": "A ladder would be handy",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 394.920903345397,
-    "rawReplayScoreChange": 75.66092879256968,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": -26.221460124874568,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 137,
+    "step": 148,
     "variantDifferences": []
   },
   {
     "demand": 715.0,
     "level": "How on Earth?",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 327.66141699423207,
     "rawReplayScoreChange": -67.25948635116492,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -2448,60 +3141,77 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 138,
+    "step": 149,
     "variantDifferences": []
   },
   {
     "demand": 715.0,
     "level": "How do I dig up the way?",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
     "rawReplayScore": 419.1972294547881,
     "rawReplayScoreChange": 91.53581246055603,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 139,
-    "variantDifferences": []
-  },
-  {
-    "demand": 720.0,
-    "level": "Spiral staircase",
-    "newSkills": [],
-    "rawReplayScore": 278.6826980399837,
-    "rawReplayScoreChange": -140.51453141480442,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 140,
+    "step": 150,
     "variantDifferences": []
   },
   {
     "demand": 720.0,
     "level": "Here is Mr.Lemming's house",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 311.5230955516338,
-    "rawReplayScoreChange": 32.84039751165011,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": -107.67413390315431,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 141,
+    "step": 151,
+    "variantDifferences": []
+  },
+  {
+    "demand": 720.0,
+    "level": "Spiral staircase",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
+    "rawReplayScore": 278.6826980399837,
+    "rawReplayScoreChange": -32.84039751165011,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 152,
     "variantDifferences": []
   },
   {
     "demand": 725.0,
     "level": "Creature Discomforts",
     "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock",
+      "multiple hatches with combined work and little rescue or tool margin",
+      "dense assignment workload with limited recovery margin"
+    ],
     "rawReplayScore": 517.8743315771402,
-    "rawReplayScoreChange": 206.3512360255064,
+    "rawReplayScoreChange": 239.19163353715652,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -2509,7 +3219,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 142,
+    "step": 153,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -2519,175 +3229,182 @@
   },
   {
     "demand": 730.0,
-    "level": "Lemming Express",
-    "newSkills": [],
-    "rawReplayScore": 182.04356739794923,
-    "rawReplayScoreChange": -335.83076417919096,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
-    ],
-    "step": 143,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "Lock up your Lemmings",
-    "newSkills": [],
-    "rawReplayScore": 283.85185434173667,
-    "rawReplayScoreChange": 101.80828694378744,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
-    ],
-    "step": 144,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "Undercover Lemming",
-    "newSkills": [],
-    "rawReplayScore": 252.68078724632576,
-    "rawReplayScoreChange": -31.171067095410905,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
-    ],
-    "step": 145,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
     "level": "No Problemming!",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 260.1643010019038,
-    "rawReplayScoreChange": 7.483513755578059,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": -257.7100305752364,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 146,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "It`s a trade off",
-    "newSkills": [],
-    "rawReplayScore": 272.0327659874961,
-    "rawReplayScoreChange": 11.868464985592254,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 147,
+    "step": 154,
     "variantDifferences": []
   },
   {
     "demand": 730.0,
     "level": "Turn around and look.",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 218.49972583850519,
-    "rawReplayScoreChange": -53.53304014899089,
+    "rawReplayScoreChange": -41.66457516339864,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 148,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "Tightrope City",
-    "newSkills": [],
-    "rawReplayScore": 264.39453081232494,
-    "rawReplayScoreChange": 45.89480497381976,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "less than 30 seconds spare on the witness"
-    ],
-    "step": 149,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "A TOWERING PROBLEM",
-    "newSkills": [],
-    "rawReplayScore": 304.89242553321947,
-    "rawReplayScoreChange": 40.49789472089452,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 150,
-    "variantDifferences": []
-  },
-  {
-    "demand": 730.0,
-    "level": "Five Alive",
-    "newSkills": [],
-    "rawReplayScore": 330.160828758938,
-    "rawReplayScoreChange": 25.268403225718544,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 151,
+    "step": 155,
     "variantDifferences": []
   },
   {
     "demand": 730.0,
     "level": "Take a running jump.....",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions"
+    ],
     "rawReplayScore": 244.55514741905077,
-    "rawReplayScoreChange": -85.60568133988724,
+    "rawReplayScoreChange": 26.055421580545584,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 152,
+    "step": 156,
+    "variantDifferences": []
+  },
+  {
+    "demand": 730.0,
+    "level": "It`s a trade off",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 272.0327659874961,
+    "rawReplayScoreChange": 27.47761856844531,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 157,
+    "variantDifferences": []
+  },
+  {
+    "demand": 730.0,
+    "level": "A TOWERING PROBLEM",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 304.89242553321947,
+    "rawReplayScoreChange": 32.85965954572339,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 158,
+    "variantDifferences": []
+  },
+  {
+    "demand": 730.0,
+    "level": "Five Alive",
+    "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option",
+      "dense assignment workload with limited recovery margin",
+      "very few tools with high rescue or release pressure"
+    ],
+    "rawReplayScore": 330.160828758938,
+    "rawReplayScoreChange": 25.268403225718544,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 159,
+    "variantDifferences": []
+  },
+  {
+    "demand": 730.0,
+    "level": "Tightrope City",
+    "newSkills": [],
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 264.39453081232494,
+    "rawReplayScoreChange": -65.76629794661307,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 160,
+    "variantDifferences": []
+  },
+  {
+    "demand": 730.0,
+    "level": "Lemming Express",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with multiple measured narrow actions",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 182.04356739794923,
+    "rawReplayScoreChange": -82.35096341437571,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 161,
     "variantDifferences": []
   },
   {
     "demand": 730.0,
     "level": "Scaling the Heights",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
     "rawReplayScore": 372.1743010019038,
-    "rawReplayScoreChange": 127.61915358285304,
+    "rawReplayScoreChange": 190.13073360395458,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 153,
+    "step": 162,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2699,212 +3416,88 @@
     "demand": 735.0,
     "level": "DIGGING FOR VICTORY",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 396.33545132870125,
     "rawReplayScoreChange": 24.16115032679744,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 154,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "We are now at LEMCON ONE",
-    "newSkills": [],
-    "rawReplayScore": 273.1174852900536,
-    "rawReplayScoreChange": -123.21796603864766,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 155,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Inside the bone",
-    "newSkills": [],
-    "rawReplayScore": 330.5882352941176,
-    "rawReplayScoreChange": 57.47075000406403,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 156,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Ice Ice Lemming",
-    "newSkills": [],
-    "rawReplayScore": 262.47423523423424,
-    "rawReplayScoreChange": -68.11400005988338,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness"
-    ],
-    "step": 157,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Ice Station Lemming",
-    "newSkills": [],
-    "rawReplayScore": 243.0209992237264,
-    "rawReplayScoreChange": -19.45323601050785,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 158,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Lend a helping hand....",
-    "newSkills": [],
-    "rawReplayScore": 353.522985621683,
-    "rawReplayScoreChange": 110.50198639795661,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 159,
+    "step": 163,
     "variantDifferences": []
   },
   {
     "demand": 740.0,
     "level": "Livin` On The Edge",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 318.9432668026586,
-    "rawReplayScoreChange": -34.57971881902438,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 160,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Tribute to M.C.Escher",
-    "newSkills": [],
-    "rawReplayScore": 320.7880236009906,
-    "rawReplayScoreChange": 1.8447567983319573,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 161,
-    "variantDifferences": []
-  },
-  {
-    "demand": 740.0,
-    "level": "Curse of the Pharaohs",
-    "newSkills": [],
-    "rawReplayScore": 314.49124892700513,
-    "rawReplayScoreChange": -6.296774673985453,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 162,
-    "variantDifferences": []
-  },
-  {
-    "demand": 745.0,
-    "level": "The Steel Mines of Kessel",
-    "newSkills": [],
-    "rawReplayScore": 212.48383316564656,
-    "rawReplayScoreChange": -102.00741576135857,
+    "rawReplayScoreChange": -77.39218452604263,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness"
-    ],
-    "step": 163,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "different skill inventory",
-      "Classic retains a time limit",
-      "Classic bomber countdown needs additional execution review"
-    ]
-  },
-  {
-    "demand": 750.0,
-    "level": "The Fast Food Kitchen...",
-    "newSkills": [],
-    "rawReplayScore": 562.6583886888088,
-    "rawReplayScoreChange": 350.17455552316227,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 164,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "Not just a pretty Lemming",
+    "demand": 740.0,
+    "level": "Inside the bone",
     "newSkills": [],
-    "rawReplayScore": 468.8510948286058,
-    "rawReplayScoreChange": -93.807293860203,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 330.5882352941176,
+    "rawReplayScoreChange": 11.644968491458997,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness"
+      "witness exhausts at least one used skill"
     ],
     "step": 165,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "Lemming Productions Present...",
+    "demand": 740.0,
+    "level": "Ice Ice Lemming",
     "newSkills": [],
-    "rawReplayScore": 424.8960093574932,
-    "rawReplayScoreChange": -43.955085471112625,
+    "pressureWarnings": [],
+    "rawReplayScore": 262.47423523423424,
+    "rawReplayScoreChange": -68.11400005988338,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "less than 30 seconds spare on the witness"
     ],
     "step": 166,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "There's a lot of them about",
+    "demand": 740.0,
+    "level": "Lend a helping hand....",
     "newSkills": [],
-    "rawReplayScore": 446.37346802119146,
-    "rawReplayScoreChange": 21.477458663698258,
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 353.522985621683,
+    "rawReplayScoreChange": 91.04875038744876,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -2914,94 +3507,189 @@
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "From The Boundary Line",
+    "demand": 740.0,
+    "level": "Tribute to M.C.Escher",
     "newSkills": [],
-    "rawReplayScore": 518.0898431372549,
-    "rawReplayScoreChange": 71.71637511606343,
+    "pressureWarnings": [],
+    "rawReplayScore": 320.7880236009906,
+    "rawReplayScoreChange": -32.73496202069242,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 168,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "Who`s That Lemming",
+    "demand": 740.0,
+    "level": "Ice Station Lemming",
     "newSkills": [],
-    "rawReplayScore": 373.3382089374072,
-    "rawReplayScoreChange": -144.75163419984767,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 243.0209992237264,
+    "rawReplayScoreChange": -77.76702437726419,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
     ],
     "step": 169,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "The ascending pillar scenario",
+    "demand": 740.0,
+    "level": "Curse of the Pharaohs",
     "newSkills": [],
-    "rawReplayScore": 506.1465196078431,
-    "rawReplayScoreChange": 132.8083106704359,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 314.49124892700513,
+    "rawReplayScoreChange": 71.47024970327874,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 170,
     "variantDifferences": []
   },
   {
-    "demand": 750.0,
-    "level": "And now this...",
+    "demand": 745.0,
+    "level": "The Steel Mines of Kessel",
     "newSkills": [],
-    "rawReplayScore": 396.83771874132884,
-    "rawReplayScoreChange": -109.30880086651428,
-    "referenceStep": 0.0,
+    "pressureWarnings": [],
+    "rawReplayScore": 212.48383316564656,
+    "rawReplayScoreChange": -102.00741576135857,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
     "step": 171,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "different skill inventory",
+      "Classic retains a time limit",
+      "Classic bomber countdown needs additional execution review"
+    ]
   },
   {
-    "demand": 755.0,
-    "level": "Down And Out Lemmings",
+    "demand": 750.0,
+    "level": "There's a lot of them about",
     "newSkills": [],
-    "rawReplayScore": 215.08268575851392,
-    "rawReplayScoreChange": -181.75503298281492,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 446.37346802119146,
+    "rawReplayScoreChange": 233.8896348555449,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 172,
+    "variantDifferences": []
+  },
+  {
+    "demand": 750.0,
+    "level": "The ascending pillar scenario",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 506.1465196078431,
+    "rawReplayScoreChange": 59.77305158665166,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 173,
+    "variantDifferences": []
+  },
+  {
+    "demand": 750.0,
+    "level": "From The Boundary Line",
+    "newSkills": [],
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 518.0898431372549,
+    "rawReplayScoreChange": 11.94332352941177,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 174,
+    "variantDifferences": []
+  },
+  {
+    "demand": 750.0,
+    "level": "The Fast Food Kitchen...",
+    "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 562.6583886888088,
+    "rawReplayScoreChange": 44.56854555155394,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 175,
     "variantDifferences": []
   },
   {
     "demand": 755.0,
     "level": "The Great Lemming Caper",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 342.90082875893796,
-    "rawReplayScoreChange": 127.81814300042404,
-    "referenceStep": 0.0,
+    "rawReplayScoreChange": -219.75755992987087,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 173,
+    "step": 176,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -3010,86 +3698,91 @@
   },
   {
     "demand": 755.0,
-    "level": "worra lorra lemmings",
-    "newSkills": [],
-    "rawReplayScore": 240.61610079278677,
-    "rawReplayScoreChange": -102.2847279661512,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 174,
-    "variantDifferences": []
-  },
-  {
-    "demand": 755.0,
     "level": "LOoK BeFoRe YoU LeAp!",
     "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin",
+      "dense assignment workload with limited recovery margin"
+    ],
     "rawReplayScore": 296.6790497610032,
-    "rawReplayScoreChange": 56.06294896821646,
+    "rawReplayScoreChange": -46.221778997934734,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 175,
+    "step": 177,
     "variantDifferences": []
   },
   {
     "demand": 770.0,
     "level": "Lemming Hotel",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 242.86046474890577,
     "rawReplayScoreChange": -53.81858501209746,
     "referenceStep": 3.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 176,
-    "variantDifferences": []
-  },
-  {
-    "demand": 775.0,
-    "level": "Walk the web rope",
-    "newSkills": [],
-    "rawReplayScore": 350.036030771404,
-    "rawReplayScoreChange": 107.17556602249823,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 177,
-    "variantDifferences": []
-  },
-  {
-    "demand": 775.0,
-    "level": "Down, along, up. In that order",
-    "newSkills": [],
-    "rawReplayScore": 331.74055424913405,
-    "rawReplayScoreChange": -18.29547652226995,
-    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 178,
+    "variantDifferences": []
+  },
+  {
+    "demand": 775.0,
+    "level": "Down, along, up. In that order",
+    "newSkills": [],
+    "pressureWarnings": [
+      "fast minimum release rate with no slower crowd-management option"
+    ],
+    "rawReplayScore": 331.74055424913405,
+    "rawReplayScoreChange": 88.88008950022828,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 179,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
+    "demand": 775.0,
+    "level": "Walk the web rope",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 350.036030771404,
+    "rawReplayScoreChange": 18.29547652226995,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 180,
+    "variantDifferences": []
+  },
+  {
     "demand": 780.0,
     "level": "And now, the end is near...",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 320.71448179271715,
-    "rawReplayScoreChange": -11.026072456416898,
+    "rawReplayScoreChange": -29.32154897868685,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3097,69 +3790,45 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 179,
+    "step": 181,
     "variantDifferences": []
   },
   {
     "demand": 780.0,
     "level": "Every Lemming for himself!!!",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock",
+      "dense assignment workload with limited recovery margin"
+    ],
     "rawReplayScore": 360.25247186984905,
     "rawReplayScoreChange": 39.537990077131894,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 180,
+    "step": 182,
     "variantDifferences": []
   },
   {
     "demand": 780.0,
     "level": "Lemmings in a situation",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option"
+    ],
     "rawReplayScore": 457.2926912909508,
     "rawReplayScoreChange": 97.04021942110177,
     "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 181,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit",
-      "Classic bomber countdown needs additional execution review"
-    ]
-  },
-  {
-    "demand": 780.0,
-    "level": "Smile if you love lemmings",
-    "newSkills": [],
-    "rawReplayScore": 234.36130306588734,
-    "rawReplayScoreChange": -222.93138822506347,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
-    ],
-    "step": 182,
-    "variantDifferences": []
-  },
-  {
-    "demand": 785.0,
-    "level": "Save Me",
-    "newSkills": [],
-    "rawReplayScore": 393.2678994732025,
-    "rawReplayScoreChange": 158.90659640731513,
-    "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3170,6 +3839,32 @@
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
+      "different rescue fraction",
+      "Classic retains a time limit",
+      "Classic bomber countdown needs additional execution review"
+    ]
+  },
+  {
+    "demand": 785.0,
+    "level": "Save Me",
+    "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 393.2678994732025,
+    "rawReplayScoreChange": -64.02479181774834,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 184,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
       "Classic retains a time limit"
     ]
   },
@@ -3177,9 +3872,14 @@
     "demand": 795.0,
     "level": "I am A.T.",
     "newSkills": [],
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin",
+      "dense assignment workload with limited recovery margin"
+    ],
     "rawReplayScore": 232.6196514554985,
     "rawReplayScoreChange": -160.64824801770396,
     "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3187,7 +3887,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 184,
+    "step": 185,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -3198,16 +3898,22 @@
     "demand": 800.0,
     "level": "Fall and no life (Part Two)",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 513.7639660138399,
     "rawReplayScoreChange": 281.14431455834136,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 185,
+    "step": 186,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3218,77 +3924,69 @@
     "demand": 805.0,
     "level": "One way digging to freedom",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 368.4217529156007,
     "rawReplayScoreChange": -145.3422130982392,
     "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 186,
-    "variantDifferences": []
-  },
-  {
-    "demand": 805.0,
-    "level": "POOR WEE CREATURES!",
-    "newSkills": [],
-    "rawReplayScore": 460.79947899159663,
-    "rawReplayScoreChange": 92.37772607599595,
-    "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "step": 187,
+    "variantDifferences": []
+  },
+  {
+    "demand": 805.0,
+    "level": "POOR WEE CREATURES!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 460.79947899159663,
+    "rawReplayScoreChange": 92.37772607599595,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 188,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
     "demand": 810.0,
-    "level": "Stepping Stones",
+    "level": "Lemming Drops",
     "newSkills": [],
-    "rawReplayScore": 457.2159640522876,
-    "rawReplayScoreChange": -3.5835149393090546,
+    "pressureWarnings": [],
+    "rawReplayScore": 418.7695813406663,
+    "rawReplayScoreChange": -42.02989765093031,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
-    ],
-    "step": 188,
-    "variantDifferences": []
-  },
-  {
-    "demand": 810.0,
-    "level": "Have a nice day!",
-    "newSkills": [],
-    "rawReplayScore": 449.582648008435,
-    "rawReplayScoreChange": -7.633316043852574,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 189,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Origins and Lemmings",
+    "level": "Lemmingology",
     "newSkills": [],
-    "rawReplayScore": 501.5518055514915,
-    "rawReplayScoreChange": 51.9691575430565,
+    "pressureWarnings": [],
+    "rawReplayScore": 381.73836635706914,
+    "rawReplayScoreChange": -37.03121498359718,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
     "step": 190,
@@ -3296,103 +3994,131 @@
   },
   {
     "demand": 810.0,
-    "level": "Konbanwa Lemming san",
+    "level": "All the 6`s ........",
     "newSkills": [],
-    "rawReplayScore": 271.56434021759014,
-    "rawReplayScoreChange": -229.98746533390135,
+    "pressureWarnings": [],
+    "rawReplayScore": 374.3849403700874,
+    "rawReplayScoreChange": -7.353425986981733,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing"
+      "spatial tolerance unmeasured"
     ],
     "step": 191,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Nightmare on Lem street",
+    "level": "Konbanwa Lemming san",
     "newSkills": [],
-    "rawReplayScore": 365.9808809456797,
-    "rawReplayScoreChange": 94.41654072808956,
+    "pressureWarnings": [],
+    "rawReplayScore": 271.56434021759014,
+    "rawReplayScoreChange": -102.82060015249726,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "narrow measured timing"
     ],
     "step": 192,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Lemmingology",
+    "level": "Have a nice day!",
     "newSkills": [],
-    "rawReplayScore": 381.73836635706914,
-    "rawReplayScoreChange": 15.757485411389439,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 449.582648008435,
+    "rawReplayScoreChange": 178.01830779084486,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 193,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Been there, seen it, done it",
+    "level": "Pillars of Hercules",
     "newSkills": [],
-    "rawReplayScore": 536.6207786377709,
-    "rawReplayScoreChange": 154.88241228070171,
+    "pressureWarnings": [
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 554.1723137254902,
+    "rawReplayScoreChange": 104.5896657170552,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 194,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Lemming Drops",
+    "level": "Been there, seen it, done it",
     "newSkills": [],
-    "rawReplayScore": 418.7695813406663,
-    "rawReplayScoreChange": -117.85119729710453,
+    "pressureWarnings": [],
+    "rawReplayScore": 536.6207786377709,
+    "rawReplayScoreChange": -17.551535087719344,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
     ],
     "step": 195,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "All the 6`s ........",
+    "level": "Stepping Stones",
     "newSkills": [],
-    "rawReplayScore": 374.3849403700874,
-    "rawReplayScoreChange": -44.384640970578914,
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 457.2159640522876,
+    "rawReplayScoreChange": -79.40481458548328,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 196,
     "variantDifferences": []
   },
   {
     "demand": 810.0,
-    "level": "Pillars of Hercules",
+    "level": "Nightmare on Lem street",
     "newSkills": [],
-    "rawReplayScore": 554.1723137254902,
-    "rawReplayScoreChange": 179.7873733554028,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 365.9808809456797,
+    "rawReplayScoreChange": -91.23508310660787,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
     "step": 197,
@@ -3402,9 +4128,13 @@
     "demand": 815.0,
     "level": "Time to get up!",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 319.7414484928103,
-    "rawReplayScoreChange": -234.43086523267988,
+    "rawReplayScoreChange": -46.23943245286938,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -3414,76 +4144,92 @@
   },
   {
     "demand": 815.0,
-    "level": "Two heads are better...",
-    "newSkills": [],
-    "rawReplayScore": 265.2956608273371,
-    "rawReplayScoreChange": -54.44578766547323,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 199,
-    "variantDifferences": []
-  },
-  {
-    "demand": 815.0,
     "level": "Mary Poppins` land",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes",
+      "dense assignment workload with limited recovery margin"
+    ],
     "rawReplayScore": 338.27778139406075,
-    "rawReplayScoreChange": 72.98212056672367,
+    "rawReplayScoreChange": 18.536332901250432,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
+    "step": 199,
+    "variantDifferences": []
+  },
+  {
+    "demand": 815.0,
+    "level": "Two heads are better...",
+    "newSkills": [],
+    "pressureWarnings": [
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 265.2956608273371,
+    "rawReplayScoreChange": -72.98212056672367,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
     "step": 200,
     "variantDifferences": []
   },
   {
     "demand": 820.0,
-    "level": "We all fall down",
+    "level": "Lemmingdelica",
     "newSkills": [],
-    "rawReplayScore": 157.62996636214902,
-    "rawReplayScoreChange": -180.64781503191173,
+    "pressureWarnings": [],
+    "rawReplayScore": 267.4830368973238,
+    "rawReplayScoreChange": 2.187376069986726,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 201,
     "variantDifferences": []
   },
   {
     "demand": 820.0,
-    "level": "24 hour Lemathon",
+    "level": "Heaven can wait (we hope!!!!)",
     "newSkills": [],
-    "rawReplayScore": 328.40726221830056,
-    "rawReplayScoreChange": 170.77729585615154,
+    "pressureWarnings": [
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 281.8183917929274,
+    "rawReplayScoreChange": 14.335354895603587,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "less than 30 seconds spare on the witness",
+      "four or more assignments within two seconds"
     ],
     "step": 202,
     "variantDifferences": []
   },
   {
     "demand": 820.0,
-    "level": "Rules to fall",
+    "level": "We all fall down",
     "newSkills": [],
-    "rawReplayScore": 208.04780143398676,
-    "rawReplayScoreChange": -120.3594607843138,
+    "pressureWarnings": [],
+    "rawReplayScore": 157.62996636214902,
+    "rawReplayScoreChange": -124.18842543077838,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 203,
@@ -3491,57 +4237,69 @@
   },
   {
     "demand": 820.0,
-    "level": "Lemmings in the attic",
+    "level": "24 hour Lemathon",
     "newSkills": [],
-    "rawReplayScore": 309.7101141014938,
-    "rawReplayScoreChange": 101.66231266750702,
+    "pressureWarnings": [],
+    "rawReplayScore": 328.40726221830056,
+    "rawReplayScoreChange": 170.77729585615154,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
     ],
     "step": 204,
-    "variantDifferences": [
-      "Classic rescue fraction exceeds Redux by more than ten percentage points"
-    ]
+    "variantDifferences": []
   },
   {
     "demand": 820.0,
-    "level": "Lemmingdelica",
+    "level": "Rules to fall",
     "newSkills": [],
-    "rawReplayScore": 267.4830368973238,
-    "rawReplayScoreChange": -42.22707720416997,
+    "pressureWarnings": [],
+    "rawReplayScore": 208.04780143398676,
+    "rawReplayScoreChange": -120.3594607843138,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
     ],
     "step": 205,
     "variantDifferences": []
   },
   {
     "demand": 820.0,
-    "level": "Heaven can wait (we hope!!!!)",
+    "level": "Lemmings in the attic",
     "newSkills": [],
-    "rawReplayScore": 281.8183917929274,
-    "rawReplayScoreChange": 14.335354895603587,
+    "pressureWarnings": [],
+    "rawReplayScore": 309.7101141014938,
+    "rawReplayScoreChange": 101.66231266750702,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "four or more assignments within two seconds"
+      "spatial tolerance unmeasured"
     ],
     "step": 206,
-    "variantDifferences": []
+    "variantDifferences": [
+      "Classic rescue fraction exceeds Redux by more than ten percentage points"
+    ]
   },
   {
     "demand": 820.0,
     "level": "Suicidal Tendencies",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 318.34789947320246,
-    "rawReplayScoreChange": 36.52950768027506,
+    "rawReplayScoreChange": 8.637785371708674,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3553,14 +4311,20 @@
   },
   {
     "demand": 825.0,
-    "level": "Lemming Rhythms",
+    "level": "HIGHLAND FLING",
     "newSkills": [],
-    "rawReplayScore": 394.9645052295262,
-    "rawReplayScoreChange": 76.61660575632374,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with multiple measured narrow actions"
+    ],
+    "rawReplayScore": 400.7200543260538,
+    "rawReplayScoreChange": 82.37215485285134,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
+      "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "step": 208,
@@ -3568,51 +4332,63 @@
   },
   {
     "demand": 825.0,
-    "level": "It`s a tight fit!",
-    "newSkills": [],
-    "rawReplayScore": 442.8715269241829,
-    "rawReplayScoreChange": 47.90702169465669,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill",
-      "four or more assignments within two seconds"
-    ],
-    "step": 209,
-    "variantDifferences": []
-  },
-  {
-    "demand": 825.0,
     "level": "ROCKY ROAD",
     "newSkills": [],
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 413.28622091580075,
-    "rawReplayScoreChange": -29.585306008382133,
+    "rawReplayScoreChange": 12.566166589746956,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 210,
+    "step": 209,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
   },
   {
     "demand": 825.0,
-    "level": "HIGHLAND FLING",
+    "level": "Lemming Rhythms",
     "newSkills": [],
-    "rawReplayScore": 400.7200543260538,
-    "rawReplayScoreChange": -12.566166589746956,
+    "pressureWarnings": [],
+    "rawReplayScore": 394.9645052295262,
+    "rawReplayScoreChange": -18.32171568627456,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "narrow measured timing",
       "witness exhausts at least one used skill"
+    ],
+    "step": 210,
+    "variantDifferences": []
+  },
+  {
+    "demand": 825.0,
+    "level": "It`s a tight fit!",
+    "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "dense assignment workload with limited recovery margin"
+    ],
+    "rawReplayScore": 442.8715269241829,
+    "rawReplayScoreChange": 47.90702169465669,
+    "referenceStep": 0.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
     ],
     "step": 211,
     "variantDifferences": []
@@ -3621,9 +4397,17 @@
     "demand": 830.0,
     "level": "Just a minute (Part Three)",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock",
+      "fast minimum release rate with no slower crowd-management option",
+      "very few tools with high rescue or release pressure"
+    ],
     "rawReplayScore": 446.9525490196079,
-    "rawReplayScoreChange": 46.23249469355409,
+    "rawReplayScoreChange": 4.0810220954249985,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3637,9 +4421,15 @@
     "demand": 845.0,
     "level": "The Stack",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes",
+      "little deadline margin with combined skills and exhausted stock"
+    ],
     "rawReplayScore": 429.63093592213664,
     "rawReplayScoreChange": -17.321613097471243,
     "referenceStep": 3.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3653,9 +4443,14 @@
     "demand": 845.0,
     "level": "It`s the price you have to pay",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 452.11096860187513,
     "rawReplayScoreChange": 22.480032679738486,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3668,9 +4463,13 @@
     "demand": 850.0,
     "level": "Time waits for no Lemming",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks"
+    ],
     "rawReplayScore": 397.44998820971836,
     "rawReplayScoreChange": -54.66098039215677,
     "referenceStep": 1.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3683,9 +4482,11 @@
     "demand": 850.0,
     "level": "This Corrosion",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 342.8443010019039,
     "rawReplayScoreChange": -54.60568720781447,
     "referenceStep": 0.0,
+    "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3701,44 +4502,57 @@
   },
   {
     "demand": 855.0,
-    "level": "Lemming Head",
+    "level": "Steel Works",
     "newSkills": [],
-    "rawReplayScore": 297.541416994232,
-    "rawReplayScoreChange": -45.30288400767188,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 333.1508088194653,
+    "rawReplayScoreChange": -9.693492182438604,
     "referenceStep": 1.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
-      "witness exhausts at least one used skill"
+      "spatial tolerance unmeasured"
     ],
     "step": 217,
     "variantDifferences": []
   },
   {
     "demand": 855.0,
-    "level": "Steel Works",
+    "level": "Lemming Head",
     "newSkills": [],
-    "rawReplayScore": 333.1508088194653,
-    "rawReplayScoreChange": 35.609391825233274,
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 297.541416994232,
+    "rawReplayScoreChange": -35.609391825233274,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
-      "spatial tolerance unmeasured"
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
     ],
     "step": 218,
     "variantDifferences": []
   },
   {
     "demand": 865.0,
-    "level": "Be sure to be a builder.",
+    "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
     "newSkills": [],
-    "rawReplayScore": 302.66269150403605,
-    "rawReplayScoreChange": -30.488117315429236,
+    "pressureWarnings": [
+      "little deadline margin with combined skills and exhausted stock"
+    ],
+    "rawReplayScore": 414.4760534160524,
+    "rawReplayScoreChange": 116.93463642182041,
     "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 219,
@@ -3746,15 +4560,19 @@
   },
   {
     "demand": 865.0,
-    "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
+    "level": "Be sure to be a builder.",
     "newSkills": [],
-    "rawReplayScore": 414.4760534160524,
-    "rawReplayScoreChange": 111.81336191201638,
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 302.66269150403605,
+    "rawReplayScoreChange": -111.81336191201638,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "step": 220,
@@ -3762,11 +4580,15 @@
   },
   {
     "demand": 875.0,
-    "level": "Going up.......",
+    "level": "Welcome to the party, pal!",
     "newSkills": [],
-    "rawReplayScore": 292.1967889207805,
-    "rawReplayScoreChange": -122.27926449527195,
+    "pressureWarnings": [
+      "near-full rescue with repeated worker skill changes"
+    ],
+    "rawReplayScore": 366.9626715645634,
+    "rawReplayScoreChange": 64.29998006052733,
     "referenceStep": 2.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -3778,9 +4600,11 @@
     "demand": 875.0,
     "level": "SUNSOFT Special",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 388.999667358973,
-    "rawReplayScoreChange": 96.80287843819252,
+    "rawReplayScoreChange": 22.03699579440962,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3793,9 +4617,14 @@
     "demand": 875.0,
     "level": "Out, away from the tune",
     "newSkills": [],
+    "pressureWarnings": [
+      "near-full rescue with several exhausted used skill stocks",
+      "near-full rescue with repeated worker skill changes"
+    ],
     "rawReplayScore": 340.1254745813827,
     "rawReplayScoreChange": -48.87419277759028,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3808,11 +4637,13 @@
   },
   {
     "demand": 875.0,
-    "level": "Welcome to the party, pal!",
+    "level": "Going up.......",
     "newSkills": [],
-    "rawReplayScore": 366.9626715645634,
-    "rawReplayScoreChange": 26.83719698318066,
+    "pressureWarnings": [],
+    "rawReplayScore": 292.1967889207805,
+    "rawReplayScoreChange": -47.92868566060224,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
@@ -3822,30 +4653,36 @@
   },
   {
     "demand": 910.0,
-    "level": "Libra",
+    "level": "Call in the bomb squad",
     "newSkills": [],
-    "rawReplayScore": 287.44311126854427,
-    "rawReplayScoreChange": -79.51956029601911,
+    "pressureWarnings": [],
+    "rawReplayScore": 288.4429333341014,
+    "rawReplayScoreChange": -3.7538555866790944,
     "referenceStep": 7.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "four or more assignments within two seconds"
+      "witness exhausts at least one used skill"
     ],
     "step": 225,
     "variantDifferences": []
   },
   {
     "demand": 910.0,
-    "level": "Call in the bomb squad",
+    "level": "Libra",
     "newSkills": [],
-    "rawReplayScore": 288.4429333341014,
-    "rawReplayScoreChange": 0.9998220655571117,
+    "pressureWarnings": [
+      "multiple hatches with combined work and little rescue or tool margin"
+    ],
+    "rawReplayScore": 287.44311126854427,
+    "rawReplayScoreChange": -0.9998220655571117,
     "referenceStep": 0.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
+      "four or more assignments within two seconds"
     ],
     "step": 226,
     "variantDifferences": []
@@ -3854,9 +4691,11 @@
     "demand": 940.0,
     "level": "The Prison!",
     "newSkills": [],
+    "pressureWarnings": [],
     "rawReplayScore": 349.1967884394126,
-    "rawReplayScoreChange": 60.75385510531123,
+    "rawReplayScoreChange": 61.75367717086834,
     "referenceStep": 6.0,
+    "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",

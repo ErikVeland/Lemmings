@@ -233,7 +233,7 @@ import NxlvKit
     "interfaceSizeChanged:": L10n.text("Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window."),
     "reduceMotionChanged:": L10n.text("Disable speed trails and cinematic explosions. Keep gameplay speed and controls."),
     "showSongInfoChanged:": L10n.text("Show the song title and soundtrack briefly when the music changes."),
-    "fadeMenuButtonChanged:": L10n.text("Fade Menu during play. Turn this off to keep the button visible."),
+    "fadeMenuButtonChanged:": L10n.text("Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible."),
     "reduceFlashesChanged:": L10n.text("Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain."),
     "musicChanged:": L10n.text("Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries."),
     "styleChanged:": L10n.text("Faithful keeps the source's original sound. Modern applies the enhanced music treatment."),
@@ -584,8 +584,8 @@ import NxlvKit
     songInfo.setAccessibilityLabel(L10n.text("Show song info"))
     songInfo.state = settings.showSongInfo ? .on : .off
     showSongInfoCheck = songInfo
-    let fadeMenu = GameCheckButton(title: L10n.text("Fade Menu button"), target: self, action: #selector(fadeMenuButtonChanged))
-    fadeMenu.setAccessibilityLabel(L10n.text("Fade Menu button"))
+    let fadeMenu = GameCheckButton(title: L10n.text("Fade gameplay buttons"), target: self, action: #selector(fadeMenuButtonChanged))
+    fadeMenu.setAccessibilityLabel(L10n.text("Fade gameplay buttons"))
     fadeMenu.state = settings.fadeMenuButton ? .on : .off
     fadeMenuButtonCheck = fadeMenu
     let staticHome = GameCheckButton(title: L10n.text("Static home screen"), target: self, action: #selector(staticHomeScreenChanged))

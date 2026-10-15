@@ -38,6 +38,9 @@ import UIKit
     private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat) -> GameFrontEnd.Layout {
         #if os(tvOS)
         if page.home { return TVMenuPresentation.homeLayout(page, width: width, height: minimumHeight) }
+        if page.pause != nil {
+            return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight, television: true)
+        }
         #endif
         return GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight, boxedHome: boxesHome)
     }

@@ -27,6 +27,7 @@ import NxlvKit
      * Handles Continue for a level sequence. The argument reports whether the level was won.
      */
     var onSequenceContinue: ((Bool) -> Bool)?
+    var learningResultActions: LearningJourneyResultActions?
     var sequenceContinueTitle = L10n.text("Next level")
     /**
      * Controls whether this run can update campaign, replay and verified records.
@@ -448,6 +449,10 @@ import NxlvKit
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
+        keyboard.nextGraphics = { SequelArtworkPreference.setEnabled(!SequelArtworkPreference.enabled) }
+        keyboard.graphicsName = {
+            SequelArtworkPreference.enabled ? L10n.text("Macintosh-style 2x") : L10n.text("Original PC")
+        }
         keyboard.djShuffle = { [weak self] in self?.shuffleMusic() }
         keyboard.pauseOnInterruption = { [weak self] in self?.audioSettings.pauseOnInterruption ?? true }
         keyboard.onInterruption = { [weak self] in self?.interruptGameplay() }
@@ -511,6 +516,15 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testGameplayQuickControls() throws {
+        timer?.invalidate(); timer = nil; paused = true
+        canvas.startCountdown.cancel(); canvas.menuRows = nil; refresh()
+        let before = L3RunRecovery.stateHash(game)
+        let selectedBefore = selected
+        try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings3")
+        try checkGameplayQuickControl(L3RunRecovery.stateHash(game) == before && selected == selectedBefore && paused,
+            "Lemmings 3 quick controls changed the run")
+    }
     func testExitAndSequenceResult(won: Bool) throws {
         timer?.invalidate(); paused = true; canvas.startCountdown.cancel()
         try validateExitControl(gameplayKeyboard!, owner: window!, name: "lemmings3")
@@ -690,6 +704,11 @@ import NxlvKit
         }
         browserCache.insert(result, for: cacheKey)
         return result
+    }
+    func showLearningHints() {
+        if game.isComplete { retryLevel() }
+        paused = true; accumulator = 0
+        showLevelHints()
     }
     func showLevelHints() {
         guard let window, !GameScreen.shared.isPresented, !game.isComplete else { return }
@@ -1377,7 +1396,9 @@ import NxlvKit
         canvas.setPrecisionZoom(wallet.active != nil, at: point)
         speedControl.bulletTimeActive = wallet.active == .superzoom
         canvas.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
-            superzoom: wallet.remaining(.superzoom), active: wallet.active, isEmpty: false)
+            superzoom: wallet.remaining(.superzoom),
+            skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
+            active: wallet.active, isEmpty: false)
     }
 
     func suspendForReplay() -> () -> Void {
@@ -1441,7 +1462,10 @@ import NxlvKit
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
+            skip: audioSettings.modernControlsEnabled && learningResultActions != nil
+                ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
+            prepareSkip: learningResultActions?.prepareSkip,
+            later: learningResultActions?.later, hints: learningResultActions?.hints,
             status: needsTribeSurvivors ? L10n.text("Need 50 survivors to complete this tribe.") : nil,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }

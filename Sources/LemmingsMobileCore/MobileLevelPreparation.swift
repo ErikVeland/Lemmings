@@ -41,6 +41,13 @@ public struct MobileMenuPreview: Sendable {
     public let frame: MobilePixelFrame
     public let origin: MobilePoint
     public let snapshot: MobileGameSnapshot
+    public let renderScale: Double
+
+    public var sourceRect: MobileRect {
+        let width = min(320 * renderScale, Double(frame.width))
+        return .init(x: max(0, min(Double(frame.width) - width, origin.x * renderScale)),
+                     y: 0, width: width, height: Double(frame.height))
+    }
 }
 
 /// A prepared session transfers to gameplay once. The loader then drops its reference.
@@ -115,7 +122,8 @@ public actor MobileMenuPreviewLoader {
         session.applySettings(settings)
         try cancellation.check()
         let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
-                                        origin: session.initialCameraOrigin, snapshot: session.snapshot)
+                                        origin: session.initialCameraOrigin, snapshot: session.snapshot,
+                                        renderScale: session.renderScale)
         try cancellation.check()
         recent.removeAll { $0 == index }; recent.append(index)
         prepared[index] = content

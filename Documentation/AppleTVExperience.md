@@ -144,6 +144,71 @@ uses at most one render pixel per point while menus/HUD retain native resolution
 The engine clock and physics ticks remain unchanged. Actual Apple TV frame-time
 improvement has not been measured on hardware.
 
+Gameplay buttons also use native press/release callbacks on the owning device.
+Short clicks survive between rendered frames, and assignment runs when the
+button event arrives. Frame polling reads the same captured button state, so
+it cannot count a click twice. Aim movement keeps its existing frame clock.
+Menus, suspension, disconnects and leaving gameplay remove the callbacks.
+Reattachment primes held buttons before accepting a fresh click. UIKit gameplay
+press cancellation does not reset the separate Game Controller input stream.
+
+Muted, offscreen checks use snapshot gamepads and remotes for 100 short clicks
+each, polling overlap, held input, reattachment, stale callbacks, remapping and
+repeat assignment. Native short clicks also assign in Classic, Lemmings 2 and
+Lemmings 3 without advancing paused physics. Shared tvOS UI compilation passes.
+Physical remote/controller timing and native UIKit delivery remain device checks.
+
+Gameplay now uses `GCEventViewController` to route controller input directly to
+Game Controller. Menus and the L3 direction picker restore UIKit focus immediately.
+Gameplay disables system gestures for its controller buttons and restores each
+button's previous setting on exit, suspension or menus. Native Back and
+Play/Pause events cannot also act while gameplay owns controller delivery.
+The TV scheme's Run action now selects Release optimisations. Debug remains
+available for source debugging and the Test action.
+
+Crowd targeting evaluates L2 resource limits once per skill and uses read-only
+L3 eligibility checks. It no longer searches or copies the crowd for each actor.
+Classic caches up to 512 sprite frames, including backpacks, and clears them on
+artwork/backpack changes or resource purges. Shared frame updates reuse target
+candidates for accessibility, skill icons and the playfield bitmap for minimaps.
+TV aiming and edge scrolling also avoid a duplicate target query.
+
+For Classic, repeated redraws within one physics tick reuse the rendered bitmap
+when the selected actor/state is unchanged. Assignment, ticks, rewind, restore,
+settings, ghost changes and resource purges invalidate it. Moving the TV cursor
+still refreshes its overlay. TV display frames batch input, edge scrolling,
+physics and HUD work into one final playfield update. This avoids rendering the
+crowd once before physics and again after it.
+
+On this Mac, the muted 80-actor fixture reduced an all-skill targeting pass from
+6.15 to 1.34 ms in L2 and 2.31 to 0.48 ms in L3. Before adding same-tick bitmap
+reuse, sprite caching alone changed Classic rendering from 1.90 to 1.29 ms
+without backpacks and 4.25 to 1.35 ms with them. These compare
+the same host fixtures and unoptimised native libraries; they are not Apple TV
+frame-rate measurements. The L3 stress fixture includes 70 extra actors alongside
+its ten ordinary entrants. Normal release rules remain unchanged.
+
+The 181 TV experience checks, controller regressions, 250 menu captures and
+native L2/L3 rule suites pass. The crowd fixture preserves checkpoint state and
+exact pre-cache bitmap hashes. Amiga, Macintosh, monochrome and DOS captures
+remain byte-identical, with unchanged HUD targets. tvOS SDK compilation passes.
+Cache regressions also cover same-tick assignment, selection changes, restore,
+purge and advancing physics. Final iOS and tvOS modules and entry points compile.
+Physical Circle/Back delivery and sustained Apple TV 4K CPU/GPU timing remain
+device checks.
+
+The funeral mood now desaturates gameplay inside the drawing pass. Flat mode
+blends over an opaque playfield canvas; CRT mode uses the existing saturation
+and brightness uniforms. A separate transparent UIKit view cannot desaturate
+the Metal surface beneath it and previously produced a pale veil. The shared
+iOS/tvOS fix adds no texture upload or Metal pass during the fade. Classic, L2
+and L3 use the same playfield view, with their input targets unchanged.
+`Scripts/run-mobile-failure-mood-tests.sh` checks desaturation, darkening,
+preserved black and exact recovery. The flat gameplay captures were inspected,
+and failure/music timing checks pass muted and offscreen. The Metal pixel check
+is available but could not run because this headless environment exposes no
+Metal device. Physical CRT, HDR and TV compositor output remain device checks.
+
 Planning pauses and pause menus retain the pointer position. Resume redraws it
 at that position immediately. The square corner reticule stays at the input
 position over terrain and HUD controls, including empty and unavailable targets.

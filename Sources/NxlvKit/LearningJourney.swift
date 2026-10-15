@@ -3,8 +3,8 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = L10n.text("Oh My! All Lemmings!")
-    public static let version = "learning-23"
-    public static let communityPlacementPolicy = "redux-calibrated-3"
+    public static let version = "learning-28"
+    public static let communityPlacementPolicy = "teaching-curriculum-2"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -108,7 +108,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                   lessons.filter({ !$0.entry.identity.packID.hasPrefix("fan:") }).count * 5 >= lessons.count * 4,
                   lessons.allSatisfy({ lesson in
                       guard let p = lesson.placement else { return false }
-                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "reviewedVariant", "solutionEstimate", "userPlaytest"].contains(p.basis)
+                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "reviewedVariant", "solutionEstimate", "userPlaytest", "teachingCurriculum"].contains(p.basis)
+                          && lesson.demand >= Self.teachingMinimumDemand(for: lesson.entry)
                           && !p.reference.isEmpty && p.sourceURL.hasPrefix("https://")
                           && p.position.isFinite && p.lower.isFinite && p.upper.isFinite
                           && 0 <= p.lower && p.lower <= p.position && p.position <= p.upper
@@ -131,8 +132,38 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         return metadata.range(of: "xmas|christmas|holiday", options: [.regularExpression, .caseInsensitive]) != nil
     }
 
+    /// Editorial boundaries protect generous practice from restricted puzzle ranks.
+    /// A Redux counterpart or a short replay cannot bypass these boundaries.
+    public static func teachingMinimumDemand(for entry: LevelPlaylistEntry) -> Double {
+        let parts = entry.identity.levelID.split(separator: ":").map(String.init)
+        var floor = 180.0
+        switch entry.identity.packID {
+        case "lemmings-LEVEL-120" where parts.count > 1:
+            // These exact native routes offer spare builders and rescues before constrained puzzles.
+            if entry.identity.levelID == "37:Tricky:8:4:7" { return max(345, LearningRouteSafety.minimumDemand(for: entry)) }
+            if entry.identity.levelID == "74:Taxing:15:0:1" { return max(355, LearningRouteSafety.minimumDemand(for: entry)) }
+            switch parts[1] {
+            case "Fun": floor = [0, 1, 2, 3, 4, 5, 6, 18, 24].contains(Int(parts[0]) ?? -1) ? 0 : 180
+            case "Tricky": floor = 360
+            case "Taxing": floor = 480
+            default: floor = 600
+            }
+        case "ohNoMoreLemmings-DLVEL-100" where parts.count > 1:
+            switch parts[1] {
+            case "Tame": floor = 0
+            case "Crazy": floor = 360
+            case "Wild": floor = 420
+            default: floor = 600
+            }
+        case "ohYesMoreLemmings-OHYES-60": floor = 600
+        case "fan:lldb-547" where entry.identity.levelID == "Ji Hoon Heaven 1.DAT#5": floor = 0
+        default: break
+        }
+        return max(floor, LearningRouteSafety.minimumDemand(for: entry))
+    }
+
     /// Replace an older built-in queue without inventing wins or changing its owner.
-    /// Defer reported advanced lessons. Retain other current lessons and all past visits.
+    /// Restore the teaching order of unvisited lessons and retain all past visits.
     public func migrating(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
         guard run.source == .playlist(Self.playlistID),
               run.pool.id.hasPrefix("learning-"),
@@ -142,17 +173,9 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         _ = try validated()
         guard placementPolicy == Self.communityPlacementPolicy else { return run }
         let visited = Set(run.entries.prefix(run.currentIndex).map(\.identity))
-        let current = lessons.firstIndex { $0.entry.identity == run.currentEntry.identity
-            && $0.entry.sourceRevision == run.currentEntry.sourceRevision }
-        // Retain ordinary current lessons. Defer reported advanced lessons to their new position.
-        // Moving a future lesson earlier must not silently remove it from a saved queue.
-        var future = lessons.map(\.entry).filter { !visited.contains($0.identity) }
-        if let current, LearningRouteSafety.minimumDemand(for: lessons[current].entry) == 0
-            || future.first?.identity == lessons[current].entry.identity {
-            let entry = lessons[current].entry
-            future.removeAll { $0.identity == entry.identity }
-            future.insert(entry, at: 0)
-        }
+        // Keeping a newly demoted current puzzle would bypass the new practice section.
+        // Past visits remain history. Reorder only the unvisited tail of this built-in run.
+        let future = lessons.map(\.entry).filter { !visited.contains($0.identity) }
         guard !future.isEmpty else { return nil }
         // Past visits are history, not proof of completion. Progress records stay untouched.
         let past = Array(run.entries.prefix(run.currentIndex))

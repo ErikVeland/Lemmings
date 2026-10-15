@@ -353,13 +353,15 @@ import LemmingsGameArt
 struct PrecisionZoomStatus: Equatable {
   var zoom = 0
   var superzoom = 0
+  var skips = 0
   var active: PrecisionZoomKind?
   var isEmpty = true
 
-  init(zoom: Int = 0, superzoom: Int = 0, active: PrecisionZoomKind? = nil,
+  init(zoom: Int = 0, superzoom: Int = 0, skips: Int = 0, active: PrecisionZoomKind? = nil,
        isEmpty: Bool = true) {
     self.zoom = zoom
     self.superzoom = superzoom
+    self.skips = skips
     self.active = active
     self.isEmpty = isEmpty
   }
@@ -367,23 +369,24 @@ struct PrecisionZoomStatus: Equatable {
   var accessibility: String {
     guard !isEmpty else { return "" }
     let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
-    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)")
+    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(state)")
   }
 
   func size(scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count)
+    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count, L10n.text("Skips \(skips)").count)
     return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
-                  height: 24 * scale)
+                  height: 37 * scale)
   }
 
   @MainActor @discardableResult
   func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let rows = [(L10n.text("z - \(zoom)"), PrecisionZoomKind.zoom),
-                (L10n.text("Z - \(superzoom)"), PrecisionZoomKind.superzoom)]
+    let rows: [(String, PrecisionZoomKind?)] = [(L10n.text("z - \(zoom)"), .zoom),
+                (L10n.text("Z - \(superzoom)"), .superzoom),
+                (L10n.text("Skips \(skips)"), nil)]
     let badgeSize = size(scale: scale)
     let width = badgeSize.width
     let rowHeight = 11 * scale
@@ -392,7 +395,7 @@ struct PrecisionZoomStatus: Equatable {
                         width: width, height: rowHeight)
       NSColor.black.withAlphaComponent(0.8).setFill()
       rect.fill()
-      if active == row.1 {
+      if let kind = row.1, active == kind {
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
         NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
@@ -400,7 +403,7 @@ struct PrecisionZoomStatus: Equatable {
         NSGraphicsContext.restoreGraphicsState()
       }
       GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
-        maxScale: scale, palette: active == row.1 ? .green : .blue, preservesCase: true)
+        maxScale: scale, palette: row.1 != nil && active == row.1 ? .green : .blue, preservesCase: row.1 != nil)
     }
     return badgeSize
   }

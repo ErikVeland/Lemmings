@@ -1,110 +1,259 @@
 {
-  "version": "route-safety-1",
   "reportedLevels": [
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "Crazy.DAT#13",
         "packID": "fan:lldb-478"
       },
-      "sourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
       "initialHash": "5599a2951d606da4deced2bbca5695b3f00f8797138f8e9d57b9d992c469b8b2",
-      "title": "Time waits for no Lemming",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+      "title": "Time waits for no Lemming",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "Wicked.DAT#2",
         "packID": "fan:lldb-480"
       },
-      "sourceRevision": "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
       "initialHash": "56f8f19a1df74a39fc111bf483570771fa31b820a41ddf98f51220759b8f1fb6",
-      "title": "This Corrosion",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+      "title": "This Corrosion",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "Xmas 1991.DAT#2",
         "packID": "fan:lldb-486"
       },
-      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
       "initialHash": "41595c7ecb7849c5ed662fe5bea9f9fa3e74aff9c975b5880d0699c1ecc6c631",
-      "title": "Time waits for no Lemming",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
+      "title": "Time waits for no Lemming",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "Xmas 1991.DAT#3",
         "packID": "fan:lldb-486"
       },
-      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
       "initialHash": "f5d3110d5e960c995d2a82f8b078095777b0b419ec22fad35ad9e4ad2e089331",
-      "title": "This Corrosion",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
+      "title": "This Corrosion",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "33:Crazy:14:1:5",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "initialHash": "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
-      "title": "Time waits for no Lemming",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Time waits for no Lemming",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "62:Wicked:3:9:0",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "initialHash": "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
-      "title": "This Corrosion",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "This Corrosion",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "2:Xmas:3:0:2",
         "packID": "xmasLemmings1991-LEVEL-4"
       },
-      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
       "initialHash": "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
-      "title": "Time waits for no Lemming",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "title": "Time waits for no Lemming",
+      "verdict": "tooHardForEarlyJourney"
     },
     {
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug.",
       "identity": {
         "engine": "classic",
         "levelID": "3:Xmas:4:0:3",
         "packID": "xmasLemmings1991-LEVEL-4"
       },
-      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
       "initialHash": "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
-      "title": "This Corrosion",
       "minimumDemand": 850.0,
       "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
-      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "title": "This Corrosion",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Fun:12:0:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "6c0c1cd0b870b23c9b98e7ac2c61ce13eef652971f02959c3b5d0c8000f1977c",
+      "minimumDemand": 400,
+      "reason": "Owner reports Patience is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Patience",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Tricky:29:2:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "25bdaf1ef204498cf3e57b5e5d7a02c6276cb145e7b4610579e75526d5172f6f",
+      "minimumDemand": 620,
+      "reason": "Owner reports Rainbow Island is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Rainbow Island",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "26:Fun:27:4:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "a65f05fbe6948367b272ed0f5a429d3ae7ece1059b125fe2e6c5d838de409f98",
+      "minimumDemand": 430,
+      "reason": "Owner reports Let's be careful out there is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Let's be careful out there",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "lm_set08.dat#5",
+        "packID": "fan:lldb-48"
+      },
+      "initialHash": "721a3ab6899bc0f3509753e47818cb086b4486727acc8580ae8b64f2ade794d9",
+      "minimumDemand": 600,
+      "reason": "Owner reports Going their separate ways is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+      "sourceRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+      "title": "Going their separate ways",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "34:Tricky:5:3:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "0cc092d3f208ea916e87c58a88b955fedc396174c836b4fdd76ccb8d32c4b306",
+      "minimumDemand": 440,
+      "reason": "Owner reports Careless clicking costs lives is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "1a631bb955e279f426b591db4fa984122e4e2149e41b75daa01eeb9f77dbe769",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Careless clicking costs lives",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "59:Tricky:30:1:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "7bf776a1e6166d1fcf8ab3ed1d1c54e543e857e0b923ddd3c007910762826a53",
+      "minimumDemand": 650,
+      "reason": "Owner reports The Crankshaft is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "The Crankshaft",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "40:Wild:1:9:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "initialHash": "c28ce3f2e3c208196002074954f4e5f388adcdd99c037256326725241a9ee7ca",
+      "minimumDemand": 630,
+      "reason": "Owner reports PoP YoR ToP!!! is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "a8674c5ac05993c5cbcffad3532716b66a97d22bdbd646135f27421a124f8bb0",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "PoP YoR ToP!!!",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "47:Tricky:18:9:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "initialHash": "b906807883d7f1a492d1a1bc4ad1db0c733f9f6fcd98719fc6f011d2c4e5eec7",
+      "minimumDemand": 640,
+      "reason": "Owner reports It's Lemmingentry Watson is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "eafb71148b883c684ee6bd6592fa924bf947731d2242308a0e336e94469b7cb3",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "It's Lemmingentry Watson",
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "evidence": "Negative player difficulty feedback, reaffirmed 2026-10-15. A successful native replay does not overrule it.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "45:Wild:6:7:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "initialHash": "72b2f435bea52b2e8f9c71271ad2df9f3c451884df4fe1a706f18c22c5634f4d",
+      "minimumDemand": 700,
+      "reason": "Owner reports Just A Quicky is too hard for its early position. Keep it after easier teaching and combination practice. Later position is an editorial precaution, not measured human difficulty.",
+      "replayRevision": "aa3ed780db841adea36c2339a609578676564b91df57ed6f9b7a1db75fd60951",
+      "requiredPreparation": [
+        "separate a worker from the crowd",
+        "contain and release the crowd with temporary terrain",
+        "combine building and destructive skills",
+        "plan a route with no spare used skills"
+      ],
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Just A Quicky",
+      "verdict": "tooHardForEarlyJourney"
     }
   ],
-  "rule": "Reported advanced routes and verified engine-quirk concepts have a late-Expert floor. New ordinary-route evidence requires an explicit placement review."
+  "rule": "Reported advanced routes and verified engine-quirk concepts have a late-Expert floor. New ordinary-route evidence requires an explicit placement review.",
+  "version": "route-safety-2"
 }

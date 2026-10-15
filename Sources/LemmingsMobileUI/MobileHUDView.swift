@@ -104,10 +104,10 @@ import UIKit
 
     required init?(coder: NSCoder) { nil }
 
-    func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize) {
+    func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil) {
         minimapView.isHidden = layout?.minimapFrame == nil
         guard !minimapView.isHidden else { return }
-        minimapView.image = Self.image(frame)
+        minimapView.image = image ?? Self.image(frame)
         minimapView.visible = Self.cgRect(visible)
         minimapView.levelSize = CGSize(width: levelSize.width, height: levelSize.height)
     }

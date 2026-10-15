@@ -20,6 +20,9 @@ struct Source: Encodable {
     let population: Int
     let required: Int
     let releaseRate: Int
+    let minimumReleaseRate: Int
+    let maximumReleaseRate: Int
+    let hatchCount: Int
     let timeLimitTicks: Int
     let skills: [String: Int]
     let interactiveVisibility: [Visibility]?
@@ -108,8 +111,13 @@ for row in rows {
             .map { String(format: "%02x", $0) }.joined()
         sources.append(.init(identity: id, sourceRevision: row.entry.sourceRevision, levelDigest: digest,
             population: level.lemmingCount, required: level.saveRequirement, releaseRate: level.releaseRate,
+            minimumReleaseRate: min(99, max(0, level.releaseRate)), maximumReleaseRate: 99,
+            hatchCount: min(4, level.objects.filter { $0.id == 1 }.count),
             timeLimitTicks: level.timeLimitMinutes * 60 * ClassicDOSRules.ticksPerSecond,
             skills: Dictionary(uniqueKeysWithValues: level.skills.map { ($0.key.rawValue, $0.value) }), interactiveVisibility: interactiveVisibility))
+        if sources.count % 100 == 0 {
+            FileHandle.standardOutput.write(Data("Verified \(sources.count)/\(rows.count) source resources.\n".utf8))
+        }
     } catch { failures.append("\(row.entry.identity.packID)/\(row.entry.identity.levelID): \(error)") }
 }
 let output = URL(fileURLWithPath: args[3])

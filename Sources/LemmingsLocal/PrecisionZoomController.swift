@@ -53,6 +53,19 @@ enum PrecisionZoomScrollOutcome: Equatable {
     func remaining(_ kind: PrecisionZoomKind) -> Int {
         storageError == nil ? ledger.remaining(kind, earnings: earnings) : 0
     }
+    /// Read another result owner's balance without changing the active attempt.
+    func remaining(_ kind: PrecisionZoomKind, profileID: String) -> Int {
+        if self.profileID == profileID { return remaining(kind) }
+        let saved: PrecisionZoomLedger
+        if let data = defaults.data(forKey: Self.key(profileID)) {
+            guard let decoded = try? JSONDecoder().decode(PrecisionZoomLedger.self, from: data) else { return 0 }
+            saved = decoded
+        } else { saved = PrecisionZoomLedger() }
+        let score = TrolleyCareerScore(profileID: profileID,
+            attempts: ArcadeStore.shared.records.trolley.attempts, assisted: false)
+        let earned = suppliedEarnings?(profileID) ?? .init(careerStars: score.stars, threeStarLevels: score.threeStarLevels)
+        return saved.remaining(kind, earnings: earned)
+    }
     @discardableResult func toggle(_ kind: PrecisionZoomKind) -> Bool {
         guard storageError == nil, ledger.toggle(kind, earnings: earnings) else { return false }
         persist()

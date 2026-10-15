@@ -9,8 +9,8 @@ public enum MobilePauseArt {
     public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat, height: CGFloat,
                                       television: Bool = false) -> CGFloat {
         let preferred = MobileSettingsArt.interfaceScale(size, width: width, television: television)
-        guard width > height else { return preferred }
         if television { return min(preferred, max(1, floor(min(width / 560, height / 240)))) }
+        guard width > height else { return preferred }
         return min(preferred, max(1, min(width / 560, height / 240)))
     }
 
@@ -25,15 +25,16 @@ public enum MobilePauseArt {
         return page
     }
 
-    public static func layout(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat) -> GameFrontEnd.Layout {
+    public static func layout(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat,
+                              television: Bool = false) -> GameFrontEnd.Layout {
         let width = max(280, width)
         let boardWidth = min(960, width - 28)
         let x = (width - boardWidth) / 2
         let inner = boardWidth - 32
         let left = x + 16
         let wide = inner >= 560
-        let compact = wide && minimumHeight < 520
-        let sideBySide = wide && width > minimumHeight
+        let compact = wide && (television || minimumHeight < 520)
+        let sideBySide = wide && (television || width > minimumHeight)
         let heading = CGRect(x: left, y: 26, width: inner, height: compact ? 32 : 44)
         let subtitle = CGRect(x: left, y: heading.maxY + 2, width: inner, height: max(compact ? 20 : 24, textHeight(page.subtitle, width: inner, lineHeight: 22)))
         var y = subtitle.maxY + 10

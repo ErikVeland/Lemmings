@@ -45,7 +45,6 @@ extension MobileGameViewController {
         tvTargetLock.clear(); highlightedTarget = nil
         playfieldView.gameViewport = viewport
         ensureTVPointer()
-        highlightedTarget = previewPoint.flatMap(target)
         renderCurrentFrame(force: true)
     }
 
@@ -72,9 +71,7 @@ extension MobileGameViewController {
         tvPointerPoint = CGPoint(x: min(view.bounds.maxX - 2, max(2, point.x + dx)),
                                  y: min(view.bounds.maxY - 2, max(2, point.y + dy)))
         ensureTVPointer()
-        highlightedTarget = previewPoint.flatMap(target)
         renderCurrentFrame(force: true)
-        updateTVPointer()
     }
 
     func updateTVPointer() {

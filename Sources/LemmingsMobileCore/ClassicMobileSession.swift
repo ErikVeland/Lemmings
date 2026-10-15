@@ -308,6 +308,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func tick() {
+        cachedRender = nil
         if isReadOnly {
             let next = simulation.tickCount + 1
             for event in playbackEvents[next] ?? [] where event.afterTick != true {
@@ -373,6 +374,7 @@ public final class ClassicMobileSession: MobileGameSession {
 
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
+        cachedRender = nil
         guard !isReadOnly, ClassicSkill.allCases.indices.contains(control) else { return false }
         let accepted = history.assign(ClassicSkill.allCases[control], to: target) == .assigned
         if accepted {
@@ -385,6 +387,7 @@ public final class ClassicMobileSession: MobileGameSession {
 
     @discardableResult
     public func adjustReleaseRate(by delta: Int) -> Bool {
+        cachedRender = nil
         guard !isReadOnly, delta != 0, !simulation.isComplete else { return false }
         let before = simulation.releaseRate
         history.setReleaseRate(before + delta)
@@ -393,6 +396,7 @@ public final class ClassicMobileSession: MobileGameSession {
 
     @discardableResult
     public func beginEndRun() -> Bool {
+        cachedRender = nil
         guard !isReadOnly, !simulation.isComplete, !simulation.isNuking, beforeEndRun == nil else { return false }
         beforeEndRun = history
         history.beginNuke()
@@ -402,6 +406,7 @@ public final class ClassicMobileSession: MobileGameSession {
 
     @discardableResult
     public func undoEndRun() -> Bool {
+        cachedRender = nil
         guard let beforeEndRun else { return false }
         history = beforeEndRun
         terrainFrame = nil
@@ -415,7 +420,16 @@ public final class ClassicMobileSession: MobileGameSession {
     private var ghostReplay: ClassicDOSReplay?
     private var solutionGhost: ClassicSolutionGhost?
     private var ghostFrames: [String: SolutionGhostPixels] = [:]
-    public var ghostSolutionEnabled = false
+    private struct SpriteKey: Hashable {
+        let pose: ClassicLemmingPose
+        let left: Bool
+        let phase: Int
+        let climber: Bool
+        let floater: Bool
+    }
+    private var spriteFrames: [SpriteKey: MobileSpriteHighlight] = [:]
+    private var cachedRender: (selection: MobileTargetSelection?, frame: MobilePixelFrame)?
+    public var ghostSolutionEnabled = false { didSet { cachedRender = nil } }
     public var hasGhostSolution: Bool { solutionGhost != nil }
     public var ghostSolutionTick: Int? { solutionGhost?.simulation.tickCount }
 
@@ -452,6 +466,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        if let cachedRender, cachedRender.selection == highlight { return cachedRender.frame }
         guard let renderedLevel else { throw MobileSessionError.frameUnavailable }
         let scale = nativeScene == nil ? 1 : 2
         let width = renderedLevel.width * scale, height = renderedLevel.height * scale
@@ -462,17 +477,14 @@ public final class ClassicMobileSession: MobileGameSession {
         var pixels = [UInt8](nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame))
         drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
-        if let assets, palette.count >= 8 {
+        if assets != nil, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
                 if lemming.action == .exploding,
                    !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
                        enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
-                if nativeScene != nil, let sprite = spriteHighlight(lemming) {
+                if let sprite = spriteHighlight(lemming) {
                     Self.composite([UInt8](sprite.frame.rgba), sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
-                        atX: Int(sprite.rect.x * 2), y: Int(sprite.rect.y * 2), into: &pixels, width: width, height: height)
-                } else {
-                    Self.draw(lemming, assets: assets, palette: palette, backpacks: settings?.showClassicSkillBackpacks == true, into: &pixels,
-                          width: width, height: height)
+                        atX: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)), into: &pixels, width: width, height: height)
                 }
             }
         }
@@ -492,7 +504,9 @@ public final class ClassicMobileSession: MobileGameSession {
                 for channel in 0..<3 { pixels[offset + channel] = UInt8((Int(pixels[offset + channel]) * 15 + 127) / 255 * 17) }
             }
         }
-        return try MobilePixelFrame(width: width, height: height, rgba: Data(pixels))
+        let frame = try MobilePixelFrame(width: width, height: height, rgba: Data(pixels))
+        cachedRender = (highlight, frame)
+        return frame
     }
 
     public func checkpointPayload() throws -> Data {
@@ -515,6 +529,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func restoreCheckpointPayload(_ data: Data) throws {
+        cachedRender = nil
         terrainFrame = nil
         let checkpoint = try JSONDecoder().decode(Checkpoint.self, from: data)
         guard [1, 2].contains(checkpoint.version) else { throw MobileCheckpointError.version }
@@ -543,6 +558,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     @discardableResult public func rewind(seconds: Double) -> Bool {
+        cachedRender = nil
         terrainFrame = nil
         beforeEndRun = nil
         soundCues.removeAll(keepingCapacity: true)
@@ -559,6 +575,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     @discardableResult public func stepBackward() -> Bool {
+        cachedRender = nil
         terrainFrame = nil
         beforeEndRun = nil
         soundCues.removeAll(keepingCapacity: true)
@@ -626,6 +643,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func seekReplay(to target: Int) -> Bool {
+        cachedRender = nil
         guard isReadOnly, target >= replayInitial.tickCount, target <= (playbackEndTick ?? Int.max) else { return false }
         if target < simulation.tickCount { resetReplay() }
         while simulation.tickCount < target, !simulation.isComplete { tick() }
@@ -665,7 +683,11 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func applySettings(_ settings: ClassicSettings) {
+        cachedRender = nil
         let changed = self.settings?.graphics != settings.graphics
+        if changed || self.settings?.showClassicSkillBackpacks != settings.showClassicSkillBackpacks {
+            spriteFrames.removeAll(keepingCapacity: true)
+        }
         self.settings = settings
         ghostFrames.removeAll(keepingCapacity: true)
         guard changed else { return }
@@ -703,9 +725,39 @@ public final class ClassicMobileSession: MobileGameSession {
         return soundCues
     }
 
-    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll() }
+    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll(); spriteFrames.removeAll(); cachedRender = nil }
 
     private func spriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
+        guard let assets else { return nil }
+        let pose = Self.pose(for: lemming.action)
+        let left = lemming.direction == .left
+        let direction: ClassicSpriteDirection = left ? .left : .right
+        guard let animation = assets.animation(for: pose, direction: direction)
+            ?? assets.animation(for: pose, direction: .none), !animation.frames.isEmpty else { return nil }
+        let phase = nativeScene != nil && nativeArtwork?.lemming(pose: pose, left: left, tick: lemming.animationFrame) != nil
+            ? ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: left, tick: lemming.animationFrame)
+            : abs(lemming.animationFrame) % animation.frames.count
+        let key = SpriteKey(pose: pose, left: left, phase: phase,
+            climber: lemming.hasClimber, floater: lemming.hasFloater)
+        let sprite: MobileSpriteHighlight
+        if let cached = spriteFrames[key] { sprite = cached }
+        else {
+            guard let generated = makeSpriteHighlight(lemming) else { return nil }
+            sprite = .init(frame: generated.frame,
+                rect: .init(x: generated.rect.x - Double(lemming.foot.x), y: generated.rect.y - Double(lemming.foot.y),
+                    width: generated.rect.width, height: generated.rect.height),
+                cacheKey: generated.cacheKey, time: nil)
+            if spriteFrames.count >= 512 { spriteFrames.removeAll(keepingCapacity: true) }
+            spriteFrames[key] = sprite
+        }
+        let reduced = settings?.reduceMotion == true || settings?.reduceFlashes == true
+        return .init(frame: sprite.frame,
+            rect: .init(x: sprite.rect.x + Double(lemming.foot.x), y: sprite.rect.y + Double(lemming.foot.y),
+                width: sprite.rect.width, height: sprite.rect.height),
+            cacheKey: sprite.cacheKey, time: reduced ? nil : Double(simulation.tickCount) / ticksPerSecond)
+    }
+
+    private func makeSpriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
         guard let assets, palette.count >= 8 else { return nil }
         let pose = Self.pose(for: lemming.action)
         let direction: ClassicSpriteDirection = lemming.direction == .left ? .left : .right
@@ -785,36 +837,6 @@ public final class ClassicMobileSession: MobileGameSession {
         case .ohNo: return .ohNo
         case .exploding: return .explosion
         }
-    }
-
-    private static func draw(
-        _ lemming: ClassicDOSLemming,
-        assets: ClassicMainDATAssets,
-        palette: [ClassicRGBColor],
-        backpacks: Bool,
-        into destination: inout [UInt8],
-        width: Int,
-        height: Int
-    ) {
-        let pose = pose(for: lemming.action)
-        let direction: ClassicSpriteDirection = lemming.direction == .left ? .left : .right
-        guard let animation = assets.animation(for: pose, direction: direction)
-                ?? assets.animation(for: pose, direction: .none),
-              !animation.frames.isEmpty else { return }
-        let frame = animation.frames[abs(lemming.animationFrame) % animation.frames.count]
-        guard let source = try? frame.rgba(using: palette) else { return }
-        let pack = backpacks ? backpackPixels(source, width: frame.width, height: frame.height,
-            lemming: lemming, pose: pose) : (pixels: [UInt8](source), width: frame.width, padding: 0)
-        composite(
-            pack.pixels,
-            sourceWidth: pack.width,
-            sourceHeight: frame.height,
-            atX: lemming.foot.x + animation.offsetX - pack.padding,
-            y: lemming.foot.y + animation.offsetY,
-            into: &destination,
-            width: width,
-            height: height
-        )
     }
 
     private static func backpackPixels(_ source: Data, width: Int, height: Int,

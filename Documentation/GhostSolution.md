@@ -1,9 +1,17 @@
 # Ghost solution
 
-Classic offers a default-off **Ghost solution** checkbox beneath the shared
-Your game / Solution selector on Mac, iOS and tvOS. It appears after the existing
-full-solution reveal confirmation. The whole stone row is one input target.
-Its checked shape, accessible value and focus state distinguish on, off and focus.
+Classic offers default-off **Ghost solution** controls after the existing
+full-solution reveal confirmation. Mac keeps a checkbox beneath the Your game /
+Solution selector. iOS uses a full-width toggle in the paused replay panel.
+tvOS uses large, focusable rows beside that panel. The whole ghost row is one
+input target. The switch position, On/Off value and focus border distinguish its states.
+
+On Mac, the whole selector uses the system arrow, including the gaps between
+Your game, Solution and Ghost solution. Hover clears the gameplay reticle and
+skill badge. Gameplay restores the selected cursor when the pointer leaves the
+selector. The policy applies with pointer confinement on or off and with flat
+or CRT presentation. Switching display modes retains the selector above the
+active playfield.
 
 The overlay uses sharp, translucent blue silhouettes with an outline from the
 current sprite artwork. Draw ghosts behind the live lemmings, before camera and
@@ -33,6 +41,26 @@ Lemmings 2 and 3 retain their existing coaching and checkpoint flows. They do no
 offer this toggle because their verified-solution adapters and data are absent.
 Recorded movies cannot provide simulation sprites.
 
+## Touch and remote controls
+
+Replay choices appear in the paused or Ready panel on iOS and tvOS. They hide
+during gameplay and other subpages, so they cannot cover assignment targets.
+The ghost row belongs to Your game. The retained Solution view keeps its own
+position and transport controls.
+
+- iOS keeps Your game / Solution above a full-width, 56-point Ghost solution row.
+  Its On/Off value and moving pixel switch make the state visible. The entire
+  row accepts touch, including the label, state and switch.
+- tvOS puts wide Your game, Solution and Ghost solution rows beside the pause
+  overview. At 2×, the mode rows are 96 points high and the ghost row is 112.
+  The selected view has an underline. Focus has a white border. Native remote
+  focus and controller navigation share the same row order and action targets.
+
+Closing the panel clears selector focus and resets its activation gate. Opening
+it requires a neutral press before TV activation. Toggling preserves the live
+attempt, pause or Ready state, retained solution position and player ownership.
+Returning to a Ready handover still requires Ready. Replays remain explicit Play actions.
+
 ## Validation
 
 - Shared cursor tests compare scheduled and after-tick actions, release-rate
@@ -43,14 +71,27 @@ Recorded movies cannot provide simulation sprites.
 - `Tools/IOSMenuAudit` with `--ghost-solution` verifies unchanged live checkpoints,
   silent ghost seeking, retained study position, opaque live sprite priority,
   rewind, retry and changed-level rejection. Ten on/off renders cover narrow
-  phone, phone, landscape, iPad and TV sizes and checkbox bounds.
-- The retained-solution pause audit adds the checkbox row to the live selector.
-  Forty pause renders and input checks cover both modes, start/move/end states
-  and the smaller body area beneath the expanded selector.
+  phone, phone, landscape, iPad and TV sizes. Gameplay captures contain no replay controls.
+- The retained-solution pause audit uses the same selector geometry and bitmap
+  renderer as UIKit. Fifty-six captures cover narrow phone, phone, landscape,
+  iPad, 1080p TV, 720p TV and TV safe areas. Checks cover both views, on/off and
+  focus states, complete labels, contained targets, non-overlap and reachable
+  TV actions. TV previews and counters stay above the action shelf, including
+  720p. Representative renders were inspected.
+- UIKit selector tests check native target frames, full-row hit testing,
+  displayed scaling, accessibility values, unavailable/hidden activation,
+  focus destinations and neutral-press consumption. They are SDK typechecked for iOS and tvOS. Native
+  touch and Siri Remote event delivery remain device checks.
 - The native Mac retained-solution check presses the actual checkbox and checks
   its hit target. Offscreen, muted captures verify sprites and checkbox artwork.
   It checks running/paused toggles, retained study position, live rewind, Hot Seat
   Ready state, same-owner retry and different-owner invalidation.
+- The Mac system-pointer checks pass for Original and Modern cursors in flat
+  and CRT views. They cover both mode buttons, the ghost row, gaps, clearing the
+  gameplay pointer and restoring it over terrain. Switching display modes keeps
+  the selector attached. The CRT fixture loads a source frame before input checks.
+- Cursor-region checks cover visible and hidden groups, disabled controls,
+  bare terrain and flipped coordinates. Checks use the muted, offscreen runner.
 - The Mac app and shared frontends compile for Apple silicon Mac, iOS and tvOS.
 
 Native checks run through `Tools/UITestRunner/run.py` in its default offscreen,

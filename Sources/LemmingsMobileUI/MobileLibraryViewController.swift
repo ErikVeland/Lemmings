@@ -484,8 +484,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                 preview: true, footerColumns: 2)
             if let preview = selectedPreview {
                 canvas.preview = MobileBitmapRenderer.image(preview.frame)
-                canvas.previewSource = CGRect(x: max(0, min(Double(max(0, preview.frame.width - 320)), preview.origin.x)),
-                                              y: 0, width: Double(min(320, preview.frame.width)), height: Double(preview.frame.height))
+                let source = preview.sourceRect
+                canvas.previewSource = CGRect(x: source.x, y: source.y, width: source.width, height: source.height)
             }
         case .journey:
             canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
@@ -588,9 +588,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
               let loader = previewLoader, let preview = try? await loader.load(index, settings: mobileSettings.classic),
               !Task.isCancelled, game == nil, !preparingLevel,
               let image = MobileBitmapRenderer.image(preview.frame) else { return nil }
-        let width = min(320, image.width)
-        let x = max(0, min(image.width - width, Int(preview.origin.x)))
-        return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
+        let source = preview.sourceRect
+        return image.cropping(to: CGRect(x: source.x, y: source.y, width: source.width, height: source.height))
     }
     func navigate(_ next: Route) {
         confirmingRecordsReset = false

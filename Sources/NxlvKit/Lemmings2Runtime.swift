@@ -453,12 +453,17 @@ public struct Lemmings2Runtime: Sendable {
         lemming.state = state == .walking && lemming.runner ? .running : state; lemming.age = 0; lemming.work = 0
     }
     public func canAssign(slot: Int, to id: Int) -> Bool {
-        guard !isComplete, !isNuking, supplies.indices.contains(slot), supplies[slot] > 0,
-              let lem = lemmings.first(where: { $0.id == id && $0.active }),
-              ![.exiting,.exploding,.trapped,.cannonLoading,.catapultLoading,.teleporting,.switchingValve,.trapDying].contains(lem.state) else { return false }
+        guard assignmentSlotAvailable(slot), let lem = lemmings.first(where: { $0.id == id }) else { return false }
+        return canAssign(skill: configuration.skills[slot], to: lem)
+    }
+    /// Evaluate shared supply and projectile limits once for the whole crowd.
+    public func assignmentResults(slot: Int) -> [Bool] {
+        guard assignmentSlotAvailable(slot) else { return Array(repeating: false, count: lemmings.count) }
         let skill = configuration.skills[slot]
-        guard Lemmings2SkillRules.permits(skill,during:lem.state) else { return false }
-        if lem.state == .magnoBooting && lem.pose > 7 && skill != .bomber { return false }
+        return lemmings.map { canAssign(skill: skill, to: $0) }
+    }
+    private func assignmentSlotAvailable(_ slot: Int) -> Bool {
+        guard !isComplete, !isNuking, supplies.indices.contains(slot), supplies[slot] > 0 else { return false }
         if [.thrower,.spearer,.bazooka,.mortar].contains(configuration.skills[slot]),
            projectiles.count + lemmings.filter({ [.throwing,.spearing,.firingBazooka,.firingMortar].contains($0.state) }).count >= 10 { return false }
         if configuration.skills[slot] == .laserBlaster && lemmings.contains(where: { $0.state == .lasering }) { return false }
@@ -466,7 +471,14 @@ public struct Lemmings2Runtime: Sendable {
         if configuration.skills[slot] == .archer && lemmings.contains(where:{$0.state == .arching}) { return false }
         if configuration.skills[slot] == .roper && (rope != nil || lemmings.contains { $0.state == .roping }) { return false }
         if [.filler, .sandPourer, .gluePourer].contains(configuration.skills[slot]), fillStreams.count >= 4 { return false }
-        switch configuration.skills[slot] {
+        return true
+    }
+    private func canAssign(skill: Skill, to lem: Lemming) -> Bool {
+        guard lem.active,
+              ![.exiting,.exploding,.trapped,.cannonLoading,.catapultLoading,.teleporting,.switchingValve,.trapDying].contains(lem.state),
+              Lemmings2SkillRules.permits(skill,during:lem.state) else { return false }
+        if lem.state == .magnoBooting && lem.pose > 7 && skill != .bomber { return false }
+        switch skill {
         case .unused: return false
         case .surfer: return isWater(lem.x,lem.y) && lem.state != .surfing
         case .kayaker: return isWater(lem.x,lem.y) && ![.kayaking,.kayakPacking].contains(lem.state)

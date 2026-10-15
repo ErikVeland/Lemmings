@@ -44,7 +44,7 @@ import LemmingsMobileCore
     @Test func settingsRefreshThePausedPlayfieldImmediately() async throws {
         try await withGame { game in
             game.pausePlay(showControls: false)
-            let state = try game.session.checkpointPayload()
+            let state = game.session.snapshot
             for display in ClassicDisplayMode.allCases {
                 var settings = game.gameSettings
                 settings.classic.display = display
@@ -54,7 +54,7 @@ import LemmingsMobileCore
                 #expect(game.playfieldView.displaySettings == settings.classic)
                 #expect(game.gameSettings == settings)
                 #expect(game.playState.phase == .ready)
-                #expect(try game.session.checkpointPayload() == state)
+                #expect(game.session.snapshot == state)
             }
         }
     }

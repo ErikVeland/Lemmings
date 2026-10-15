@@ -92,6 +92,9 @@ public struct ClassicMacArtwork: Sendable {
     /// SHPD includes masks and construction pixels between animation runs.
     /// Explicit ranges avoid treating those images as animation frames.
     public func lemming(pose: ClassicLemmingPose, left: Bool, tick: Int) -> Frame? {
+        frame(1400, Self.lemmingFrameIndex(pose: pose, left: left, tick: tick))
+    }
+    public static func lemmingFrameIndex(pose: ClassicLemmingPose, left: Bool, tick: Int) -> Int {
         let start: Int, count: Int
         switch pose {
         case .walking: start = left ? 9 : 0; count = 8
@@ -114,7 +117,7 @@ public struct ClassicMacArtwork: Sendable {
         case .shrugging: start = left ? 329 : 321; count = 8
         case .ohNo: start = 337; count = 16
         }
-        return frame(1400, start + abs(tick % count))
+        return start + abs(tick % count)
     }
 }
 

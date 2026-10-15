@@ -179,6 +179,9 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
    * Applies the cursor policy after mouse events and pointer-capture warps.
    */
   func updateSystemCursor(at viewPoint: CGPoint) {
+    if GameCursor.isOverSystemControl(at: viewPoint, in: self) {
+      NSCursor.arrow.set(); onMouseExited?(); return
+    }
     GameCursor.update(
       at: sourcePoint(from: viewPoint),
       hidingInside: gameplayCursorRect)
@@ -264,6 +267,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   override func mouseMoved(with event: NSEvent) {
     let viewPoint = convert(event.locationInWindow, from: nil)
     updateSystemCursor(at: viewPoint)
+    guard !GameCursor.isOverSystemControl(at: viewPoint, in: self) else { return }
     guard let point = sourcePoint(from: viewPoint)
     else { onMouseExited?(); return }
     onMouseMoved?(point)

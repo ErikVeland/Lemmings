@@ -22,9 +22,11 @@ import UIKit
     private var wasMenu = true
     private var inputPreferences = TVPreferences()
     private var preferenceBytes: Data?
+    private let buttonEvents = TVControllerButtonEvents()
 
     init(adapter: MobileInputAdapter) { self.adapter = adapter }
     func reset() {
+        buttonEvents.stop()
         applyTimeline(timeline.reset())
         bindings.reset(); lastTime = 0
         touchpadClick.reset()
@@ -36,7 +38,7 @@ import UIKit
         feedbackPad = nil; feedbackTier = nil
     }
 
-    func poll(at time: Double) {
+    func poll(at time: Double, buttonState: Set<ControllerBindings.Button>? = nil) {
         guard let adapter else { return }
         let settings = adapter.settings()
         let profileID = adapter.settingsProfileID()
@@ -93,14 +95,18 @@ import UIKit
             reset()
         }
         guard let owner else { return }
+        buttonEvents.observe(owner) { [weak self, weak owner] state in
+            guard let self, let owner, self.owner === owner else { return }
+            self.poll(at: ProcessInfo.processInfo.systemUptime, buttonState: state)
+        }
         remotePausePressed = owner.microGamepad?.buttonX.isPressed == true
         menuPressed = owner.extendedGamepad?.buttonMenu.isPressed == true
         let shuffleTouchpad = touchpadClick.update(pressed: MobileInputAdapter.touchpadPressed(on: owner), active: true)
         owner.microGamepad?.allowsRotation = false
         owner.microGamepad?.reportsAbsoluteDpadValues = true
-        let elapsed = min(0.05, max(0, lastTime == 0 ? 0 : time - lastTime))
-        lastTime = time
-        let roles = ControllerBindings.remap(pressed(owner), using: settings.controllerMappings)
+        let elapsed = buttonState == nil ? min(0.05, max(0, lastTime == 0 ? 0 : time - lastTime)) : 0
+        if buttonState == nil { lastTime = time }
+        let roles = ControllerBindings.remap(buttonState ?? buttonEvents.pressedButtons, using: settings.controllerMappings)
         let actions = bindings.update(pressed: roles)
         applyTimeline(timeline.update(pressed: roles, at: time, speed: adapter.controllerSpeed()))
         if bindings.menuRequested { adapter.onGameMenu?(); reset(); return }
@@ -110,6 +116,7 @@ import UIKit
             adapter.perform(action)
             if adapter.isMenu() { reset(); return }
         }
+        guard buttonState == nil else { return }
         if let pad = owner.extendedGamepad {
             updateFeedback(pad: pad, settings: settings)
             let aim = settings.controllerSwapSticks ? pad.rightThumbstick : pad.leftThumbstick
@@ -155,25 +162,7 @@ import UIKit
     }
 
     private func pressed(_ controller: GCController) -> Set<ControllerBindings.Button> {
-        if let pad = controller.extendedGamepad {
-            let inputs: [(ControllerBindings.Button, GCControllerButtonInput?)] = [
-                (.a, pad.buttonA), (.b, pad.buttonB), (.x, pad.buttonX), (.y, pad.buttonY),
-                (.leftShoulder, pad.leftShoulder), (.rightShoulder, pad.rightShoulder),
-                (.leftTrigger, pad.leftTrigger), (.rightTrigger, pad.rightTrigger),
-                (.up, pad.dpad.up), (.down, pad.dpad.down), (.left, pad.dpad.left), (.right, pad.dpad.right),
-                (.menu, pad.buttonMenu), (.options, pad.buttonOptions),
-                (.leftStick, pad.leftThumbstickButton), (.rightStick, pad.rightThumbstickButton)
-            ]
-            let result = Set(inputs.compactMap { $0.1?.isPressed == true ? $0.0 : nil })
-            return result
-        }
-        guard let pad = controller.microGamepad else { return [] }
-        let centre = controller.physicalInputProfile.buttons[GCInputDirectionalCenterButton] ?? pad.buttonA
-        var result = Set<ControllerBindings.Button>()
-        if centre.isPressed { result.insert(.a) }
-        if pad.buttonX.isPressed { result.insert(.b) }
-        if pad.buttonMenu.isPressed { result.insert(.menu) }
-        return result
+        TVControllerButtonEvents.pressed(controller)
     }
 
     private func moving(_ controller: GCController) -> Bool {

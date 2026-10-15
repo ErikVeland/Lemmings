@@ -464,6 +464,15 @@ import NxlvKit
         guard storageError == nil else { records = previous; return false }
         return true
     }
+    /// Return a skip when preparing the next journey lesson could not be saved.
+    @discardableResult public func returnLevelSkip(on level: ArcadeLevel, profileID: String) -> Bool {
+        guard canWrite, storageError == nil, records.hasSkipped(level, profileID: profileID) else { return false }
+        let previous = records
+        guard records.returnLevelSkip(on: level, profileID: profileID) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
+    }
     @discardableResult public func record(_ run: ArcadeRun) -> ArcadeReport? {
         guard canWrite else { return nil }
         let previous = records
