@@ -135,9 +135,11 @@ only. It includes styles, lemming sprites, all standard skills, terrain masks,
 gadgets, special effects, zombies, Superlemming, pack progress and recovery.
 
 The pinned 1.7 runnable gate passed for its 794-level corpus. The three bundled
-CE packs list 788 levels. These are different test scopes. Seventy-five bundled
-levels need community styles, and exact-version winning replay evidence covers
-158 levels. The runnable pass does not close the new bundle gate. See
+CE packs list 788 levels. These are different test scopes. The 26 bundled DMA
+styles resolve the listed style-directory references for 713 levels. The other
+75 need one or more of 44 player-supplied community styles. Exact-version winning replay evidence covers
+158 levels. The runnable pass does not close the bundle gate or prove rights to
+ship the missing styles. See
 [release scope](ReleaseScope.md) for the remaining bundle work.
 
 The executable development plan is in the [1.7 NeoLemmix roadmap](1.7Roadmap.md).
