@@ -165,13 +165,14 @@ but each tribe chain ends with one survivor and a Bronze talisman. The golden
 talisman and 30-survivor ark conditions remain open.
 
 The 15 October L3 Mole direction and patrol corrections match the captured
-starting directions and no-input patrols in Shadow 7 and Egyptian 13. A
-current-source scan passes 86/90 standalone routes and 313/326 carried input
-sets. The four failed standalone routes are Shadow 7 and Egyptian 6, 13 and
-29. Thirteen carried fixtures fail across those same levels. A refreshed
-Shadow 13 route passes with ten saved and no losses. The prior 90-route and
-campaign proof applies to the earlier engine state. Keep the L3 bundled gate
-open until replacement witnesses pass the strict gates.
+starting directions and no-input patrols in Shadow 7 and Egyptian 13. The
+current strict audit double-replays 394/416 fixtures; four standalone outcomes
+and 18 carried identities fail. Five Shadow 13 carried inputs still win when
+rebased. Thirteen other carried schedules across Shadow 7 and Egyptian 6, 13
+and 29 do not win. A refreshed standalone Shadow 13 route passes with ten
+saved and no losses. The prior 90-route and campaign proof applies to the
+earlier engine state. Keep the L3 bundled gate open until replacement
+witnesses pass the strict gates.
 
 Continue the separate validation work:
 
