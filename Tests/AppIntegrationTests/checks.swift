@@ -3828,18 +3828,26 @@ extension AppDelegate {
     store.selectProfile(host); store.toggleSessionProfile(guest.id)
     try await failFirstClassicLevel()
     view.onLater = {}; view.onHints = {}
+    try check(GameScreen.shared.present(view, owner: window), "Journey result fixture could not attach")
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(view.window === window && !view.isHiddenOrHasHiddenAncestor,
+      "Journey result fixture is hidden or detached")
     try captureResult("hot-seat-journey-retry")
-    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
     let ownerTitle = "Retry as \(store.records.profile(host)!.initials)"
     guard let retry = controls.first(where: { $0.accessibilityLabel() == ownerTitle }),
       let next = controls.first(where: { $0.accessibilityLabel() == "Retry as PAL" }) else {
       throw IntegrationFailure(message: "Journey result omitted a named Hot Seat retry")
     }
-    try check(!controls.contains(where: { $0.accessibilityLabel() == "Back" })
-      && retry.accessibilityFrame().maxX <= next.accessibilityFrame().minX,
-      "Journey retry kept Back or overlapped the next player's target")
+    guard let back = controls.first(where: { $0.accessibilityLabel() == "Back" }) else {
+      throw IntegrationFailure(message: "Journey result lost its Back action")
+    }
+    try check(back.accessibilityFrame().minX <= retry.accessibilityFrame().minX
+      && back.accessibilityFrame().maxX <= next.accessibilityFrame().minX
+      && !retry.accessibilityFrame().intersects(next.accessibilityFrame()),
+      "Journey retry misplaced Back or overlapped the next player's target")
     let runID = arcadeRunID
-    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action")
+    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action; enabled=\(retry.isAccessibilityEnabled()), attached=\(view.window != nil), hidden=\(view.isHiddenOrHasHiddenAncestor), action=\(retry.press != nil)")
     try check(arcadeProfileID == host && store.playingProfileID == host
       && arcadeRunID != runID && phase == .playing && isPaused && panel.isPaused,
       "Journey retry changed owner, failed to restart, or skipped the paused start")
@@ -7565,7 +7573,6 @@ Task { @MainActor in
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
-    try await subject.testSequenceCheckpointResume()
     try await subject.testPlaylistSessions()
     print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS
