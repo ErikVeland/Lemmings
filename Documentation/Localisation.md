@@ -1,12 +1,10 @@
 # Interface localisation
 
-English is the source language. No translated language pack is enabled yet.
-First-wave draft translations for Spanish (Latin America), German, French,
-Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål are stored in
-`Tools/Localisation/drafts/`. These drafts are not part of the app bundle.
-Per-locale `.review.json` files record the latest checkpoint and remaining work.
-Review and complete a locale before you move it into
-`Sources/NxlvKit/Resources/Localization.bundle` or enable it.
+English is the source language. Seven AI draft translations are available in
+the app for in-app testing: Spanish (Latin America), German, French, Brazilian
+Portuguese, Italian, Dutch and Norwegian Bokmål. These packs are not approved
+for release. Per-locale `.review.json` files record the latest checkpoint and
+remaining work. Complete language and platform review before release.
 The shared layer serves Mac, iOS and tvOS, including Classic, NeoLemmix,
 Lemmings 2 and Lemmings 3.
 
@@ -20,11 +18,11 @@ compile a subset of shared files.
 
 ## Translation handover
 
-The current task is to finish and validate all seven language packs across
-Classic, Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. Keep all
-seven disabled until all seven packs pass the language and platform gates. The user authorised
-parallel language reviewers. Their checkpoint files describe partial review,
-not approval to enable a language.
+The current task is to test all seven language packs across Classic,
+Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The user authorised
+in-app testing before release approval. The packs contain AI translations and
+still need human language review and platform acceptance. Their checkpoint
+files describe draft status, not approval for release.
 
 Read `AGENTS.md`, `Documentation/UIPrinciples.md` and the
 [localisation architecture](../ARCHITECTURE.md#localisation) first.
@@ -35,14 +33,10 @@ Inspect the current checkout before resetting, staging or committing files.
 
 ### Current checkpoint
 
-The 15 October 2026 catalogue at `1ef4abe1` contains 3,116 text keys and eight
-plural keys. Recount after source changes. The first local candidate generation
-completed for all seven locales against an older 2,927-text-key snapshot.
-Those candidates therefore contain stale keys and lack later additions.
-At this checkpoint each candidate lacks 199 current text keys and contains
-10 obsolete keys. Compare key sets rather than subtracting entry counts.
-The original drafts contained 458 entries. Review checkpoints can supersede
-that number. The runtime bundle still contains only `en.lproj`.
+The current catalogue contains 3,118 text keys and eight plural keys. Each
+draft has full structural coverage. The runtime bundle includes the seven
+drafts for testing. Check the review files before you treat any translation as
+approved.
 
 | Locale | Language | Reviewer checkpoint |
 | --- | --- | --- |
@@ -84,6 +78,7 @@ handover. This does not establish translated gameplay or device acceptance.
 | `Tools/Localisation/drafts/<locale>.json` | Translation values keyed by the exact English message. Edit values, not keys or numbered placeholders. |
 | `Tools/Localisation/drafts/<locale>.plurals.json` | Plural key to category/value mapping. This is staging data, not an Apple `.stringsdict` file. |
 | `Tools/Localisation/drafts/<locale>.review.json` | Reviewed scope, remaining gaps, deliberately unchanged terms and validation evidence. State partial review explicitly. |
+| `Tools/Localisation/install_drafts_for_testing.py` | Exports complete draft text and plural files to the runtime bundle for in-app testing. |
 | `Tools/Localisation/captions.tsv` | Shared game actions and skill vocabulary. Apply the locale column and check uppercase variants. Do not overwrite context-specific wording blindly. |
 | `Tools/Localisation/unchanged.json` | Optional shared allowlist for deliberately unchanged text. Format: locale, then English key, then a reason. The validator does not read this information from review files. |
 | `Tools/Localisation/l2-original-text.json` | Original L2 text inventory and bank references. Review this inventory before treating it as complete content localisation. |
@@ -258,29 +253,28 @@ long player names, zero/one/many counts, narrow phone widths, tablet panes and
 TV safe areas. Handovers must remain paused until Ready. Preserve engine limits:
 mobile L2/L3 have no release-rate control, and L3 has no nuke.
 
-There is no staged-JSON promotion script yet. Once a pack passes review,
-export its text to `<locale>.lproj/Interface.strings`. Convert its plural JSON
-to the Apple `.stringsdict` structure described below. Verify the generated
-files with `plutil` and rerun the catalogue, runtime and render checks. Confirm
-Mac and shared iOS/tvOS packaging include both tables. Only then add the locale
-to each app's generated or checked-in `CFBundleLocalizations` metadata.
-Adding a non-English `.lproj` to the runtime bundle can enable selection even
-before metadata is updated. Keep unapproved packs outside that bundle.
+Run `python3 Tools/Localisation/install_drafts_for_testing.py
+--for-in-app-testing` to export the seven JSON drafts to Apple `.strings` and
+`.stringsdict` tables. The app and localisation bundle list all eight supported
+locales. The app follows the operating system's preferred language at launch.
+Use the per-app language setting on Mac or iPhone/iPad to check a locale.
+These resources are for testing. Complete the human language and platform
+reviews before release.
 
 ### Remaining integration work
 
-- Finish linguistic review and the catalogue delta for all seven packs.
-- Complete plural files and merge justified unchanged-text reviews.
+- Complete human linguistic review for all seven packs.
+- Test all eight plural keys with Foundation's locale selection.
 - Review original L2 text grouping. The current inventory splits authored
   carriage-return lines, including incomplete sentence fragments. Preserve
   credits and complete sentences before final translation.
 - Check original L2 bank text and baked menu pictures, story screens and other
   imported lettering. String coverage does not replace an artwork pass.
 - Audit remaining computed captions, hint fragments and count-dependent text.
-- Add temporary-bundle language tests and actual-locale render coverage.
+- Run actual-locale resolver tests and translated render checks.
 - Rerun native regressions and both mobile SDK checks for the final source.
 - Record physical touch, remote focus, VoiceOver and complete device journeys
-  separately. Keep every unvalidated pack disabled.
+  separately. Keep the packs marked as drafts until each release gate passes.
 
 ## Authoring
 
@@ -326,14 +320,11 @@ The explicit exemptions list preserves identifiers and original content titles.
 The source check catches direct UI assignments and common control constructors.
 It does not prove coverage of all computed text or imported game content.
 
-Create each chosen language's `.lproj` directory in the same bundle. Keep English
-keys stable and translate values. Both Mac bundle scripts and the shared iOS/TV
-asset packager copy this bundle. SwiftPM copies it as an NxlvKit resource.
-When enabling a language, declare it in each app's `CFBundleLocalizations`
-metadata so the system can offer per-app language selection. List only languages
-that have passed their font, artwork and interface checks.
-System preferred languages select the bundle at app startup. Unsupported
-languages use English. Incomplete language packs use English for missing keys.
+Keep English keys stable and translate values. Mac bundle scripts and the
+shared iOS/TV asset packager copy this bundle. SwiftPM copies it as an NxlvKit
+resource. App metadata declares all testing locales so the system can offer
+per-app language selection. Complete language and platform reviews before
+release. Unsupported languages use English. Missing messages fall back to English.
 
 ## Layout and artwork limits
 

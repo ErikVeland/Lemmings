@@ -1,0 +1,140 @@
+{
+  "schema": "classic-content-baseline-recheck-v1",
+  "checkedDate": "2026-10-15",
+  "repositoryRevision": "41b7b0f5233a70c8b862070d73107b9f19bca1fb",
+  "engineSourceFingerprint": "842df65a84c5598a939c8a517595d7dd8304c81e8ff5219c2a4ecea013086f1e",
+  "testedApplication": {
+    "bundleIdentifier": "academy.glasscode.lemmings",
+    "version": "1.9.1",
+    "build": "76",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources"
+  },
+  "contentBaseline": {
+    "manifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "version": "1.9.7",
+    "build": 82,
+    "expectedFiles": 18371,
+    "expectedBytes": 2284443803
+  },
+  "resourceComparison": {
+    "matching": 14507,
+    "missing": 3830,
+    "different": 34,
+    "extra": 1,
+    "byTopLevel": {
+      "AmigaArtwork": {
+        "matching": 3158,
+        "missing": 0,
+        "different": 0
+      },
+      "AppIcon.icns": {
+        "matching": 0,
+        "missing": 0,
+        "different": 1
+      },
+      "GameCenter": {
+        "matching": 1,
+        "missing": 0,
+        "different": 0
+      },
+      "Hints": {
+        "matching": 1,
+        "missing": 0,
+        "different": 1
+      },
+      "LevelPacks": {
+        "matching": 537,
+        "missing": 0,
+        "different": 0
+      },
+      "Localization.bundle": {
+        "matching": 0,
+        "missing": 3,
+        "different": 0
+      },
+      "MacArtwork": {
+        "matching": 4237,
+        "missing": 3809,
+        "different": 4
+      },
+      "MacMusic": {
+        "matching": 32,
+        "missing": 0,
+        "different": 0
+      },
+      "MenuArtwork": {
+        "matching": 0,
+        "missing": 1,
+        "different": 0
+      },
+      "Music": {
+        "matching": 649,
+        "missing": 0,
+        "different": 0
+      },
+      "NeoLemmix": {
+        "matching": 4010,
+        "missing": 0,
+        "different": 0
+      },
+      "Ports": {
+        "matching": 1307,
+        "missing": 0,
+        "different": 0
+      },
+      "PrivacyInfo.xcprivacy": {
+        "matching": 0,
+        "missing": 1,
+        "different": 0
+      },
+      "Progression": {
+        "matching": 1,
+        "missing": 0,
+        "different": 2
+      },
+      "Sounds": {
+        "matching": 1,
+        "missing": 0,
+        "different": 0
+      },
+      "Trolley": {
+        "matching": 573,
+        "missing": 16,
+        "different": 26
+      }
+    },
+    "extraPaths": [
+      "Third Party Notices.md"
+    ]
+  },
+  "routeAndQuestChecks": {
+    "command": "zsh Scripts/verify-official-classic.sh --include-conversions",
+    "officialRoutes": 292,
+    "conversionRoutes": 60,
+    "totalRoutes": 352,
+    "campaignQuestLevels": 352,
+    "recoveries": 1056,
+    "progressResumes": 352,
+    "chapterTransitions": 6,
+    "negativeConversionChecks": "passed",
+    "status": "passed"
+  },
+  "limits": [
+    "Ports and LevelPacks match the 1.9.7 build 82 manifest exactly.",
+    "The installed application is 1.9.1 build 76, not the 1.9.7 build 82 package or a 2.0 candidate.",
+    "The complete Resources tree has missing and different files. This check does not certify 2.0 artwork, package contents, signing or distribution."
+  ],
+  "currentMainReplayRerun": {
+    "mainRevision": "eb6d58d7d86597ab0114f364d6707aa050bdb80e",
+    "verifierSourceRevision": "41b7b0f5233a70c8b862070d73107b9f19bca1fb",
+    "verifiedUnchangedPaths": [
+      "Sources/NxlvKit/*.swift",
+      "Tools/ClassicCompletion",
+      "Tools/OfficialClassicQuest",
+      "Tests/ClassicFamilyCompletionTests",
+      "Scripts/verify-official-classic.sh"
+    ],
+    "execution": "Reran the prebuilt Verify and Quest binaries against the installed resource tree. The generated quest JSON matches the committed quest evidence.",
+    "status": "passed"
+  }
+}

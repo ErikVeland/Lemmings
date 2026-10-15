@@ -30,7 +30,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 - [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
-- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven staged language packs, review workflow and enablement gates.
+- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven in-app test languages, review workflow and release gates.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
@@ -81,16 +81,18 @@ closure rule and status.
 
 ## Translation work
 
-The shipped interface remains English. Spanish (Latin America), German, French,
-Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål are being prepared.
-Drafts and machine-generated candidates are not approved language packs.
+English, Spanish (Latin America), German, French, Brazilian Portuguese,
+Italian, Dutch and Norwegian Bokmål are available in the app for localisation
+testing. The seven translated packs are AI drafts and still need human language
+review and platform acceptance before release.
 
 Start with the [translation handover](Documentation/Localisation.md#translation-handover)
 and the [localisation architecture](ARCHITECTURE.md#localisation).
 Review the locale checkpoint files under `Tools/Localisation/drafts/` before
-editing. Complete the linguistic, plural, font, layout and cross-platform checks
-before copying a locale into the runtime bundle or declaring it in app metadata.
-Coverage checks alone do not authorise enablement.
+editing. Use `python3 Tools/Localisation/install_drafts_for_testing.py
+--for-in-app-testing` to refresh the test bundle. Complete the linguistic,
+plural, font, layout and cross-platform checks before release. Coverage checks
+alone do not approve a language pack.
 
 ## Requirements
 

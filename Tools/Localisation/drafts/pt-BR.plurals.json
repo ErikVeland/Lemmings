@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld comando • Os atalhos se aplicam no contexto indicado. Esc fecha esta ajuda.",
+    "other": "%ld comandos • Os atalhos se aplicam no contexto indicado. Esc fecha esta ajuda."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemmings"
+  },
+  "count.levels": {
+    "one": "%ld fase",
+    "other": "%ld fases"
+  },
+  "count.packs": {
+    "one": "%ld pacote",
+    "other": "%ld pacotes"
+  },
+  "count.rescueGoal": {
+    "one": "Resgate %ld lemming e conclua a fase.",
+    "other": "Resgate %ld lemmings e conclua a fase."
+  },
+  "count.savedLemmings": {
+    "one": "Você salvou %ld lemming",
+    "other": "Você salvou %ld lemmings"
+  },
+  "count.secondStarGoal": {
+    "one": "Salve %ld lemming e conclua a fase para ganhar a segunda estrela.",
+    "other": "Salve %ld lemmings e conclua a fase para ganhar a segunda estrela."
+  },
+  "count.thirdStarGoal": {
+    "one": "Salve %ld lemming e conclua a fase para ganhar a terceira estrela.",
+    "other": "Salve %ld lemmings e conclua a fase para ganhar a terceira estrela."
+  }
+}

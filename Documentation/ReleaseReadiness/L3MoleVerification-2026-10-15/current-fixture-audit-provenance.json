@@ -1,29 +1,73 @@
 {
-  "auditExecutableSHA256": "ec329f270d24801e682edbdbf380d84dfa123d0e649b15c238e961025be2d948",
+  "auditExecutableSHA256": "0968fb0d580bdab84c019d3ed48b381f9735af31365520d729cf9d0473b51696",
+  "binarySourceCommit": "41b7b0f5233a70c8b862070d73107b9f19bca1fb",
   "counts": {
     "rebasedRouteOutcomes": {
-      "exact": 394,
-      "rebased-win": 5,
+      "exact": 399,
+      "rebased-win": 0,
       "route-fails": 17
     },
-    "strictExactDoubleReplays": 394,
-    "strictFailures": 22,
+    "strictExactDoubleReplays": 399,
+    "strictFailures": 17,
     "totalFixtures": 416
   },
   "exitCode": 1,
-  "exitCodeMeaning": "Expected: strict fixture identity failures remain.",
-  "gitCommit": "57d3490a7ec768456b08e528c22ed1f70d50fb8b",
-  "recordedAtUTC": "2026-10-15T01:56:57+00:00",
-  "reportSHA256": "d559f2d47878da96c11a400d8ede065fde5f3e6a69e8557c4769478f323a098b",
+  "exitCodeMeaning": "Expected: 17 route schedules do not win under the current runtime.",
+  "gitCommit": "eb6d58d7d86597ab0114f364d6707aa050bdb80e",
+  "recordedAtUTC": "2026-10-15T04:04:37+00:00",
+  "reportSHA256": "96e83007d9a985826f1216b8afbe9f473b5d6f6c45af68ba78d5ce22d7ad8504",
   "resourceFileCount": 561,
   "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
   "resourceTreeSHA256": "9ee43eb9251989be21d4513ee1c48a3463f6e2035cb3dc62f1b3987d566313a9",
-  "runCommand": "L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=\"/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD\" zsh Scripts/audit-l3-fixtures.sh <report.json>",
-  "runtimeLibrarySHA256": "09321aef399ef5a2384dbc0370699a6fed37aabb148d9e39823d867c510a3aac",
+  "routeIdentityRepairs": [
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
+      "population": 1,
+      "replayedTwiceBeforePromotion": true,
+      "reserves": 0,
+      "saved": 1,
+      "ticks": 119
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
+      "population": 21,
+      "replayedTwiceBeforePromotion": true,
+      "reserves": 11,
+      "saved": 10,
+      "ticks": 443
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
+      "population": 22,
+      "replayedTwiceBeforePromotion": true,
+      "reserves": 12,
+      "saved": 10,
+      "ticks": 443
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
+      "population": 25,
+      "replayedTwiceBeforePromotion": true,
+      "reserves": 15,
+      "saved": 10,
+      "ticks": 443
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
+      "population": 26,
+      "replayedTwiceBeforePromotion": true,
+      "reserves": 16,
+      "saved": 10,
+      "ticks": 443
+    }
+  ],
+  "runCommand": "L3_PORTS_ROOT=\"/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD\" L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures .build/l3-fixture-audit/Audit current-fixture-audit.json",
+  "runtimeLibrarySHA256": "3327eeb6e1cab6fb3024fbae2f2f7d2d77b85ade8fde8145ae1e6b4514803b11",
   "schemaVersion": 1,
   "sourceFiles": {
     "Sources/NxlvKit/Lemmings3Runtime.swift": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
     "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
     "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
-  }
+  },
+  "sourceUnchangedAtCurrentMain": true
 }

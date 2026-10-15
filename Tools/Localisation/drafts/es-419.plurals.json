@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld comando • Los atajos se aplican según el contexto indicado. Esc cierra esta guía.",
+    "other": "%ld comandos • Los atajos se aplican según el contexto indicado. Esc cierra esta guía."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemmings"
+  },
+  "count.levels": {
+    "one": "%ld nivel",
+    "other": "%ld niveles"
+  },
+  "count.packs": {
+    "one": "%ld paquete",
+    "other": "%ld paquetes"
+  },
+  "count.rescueGoal": {
+    "one": "Rescata a %ld lemming y completa el nivel.",
+    "other": "Rescata a %ld lemmings y completa el nivel."
+  },
+  "count.savedLemmings": {
+    "one": "Rescataste %ld lemming",
+    "other": "Rescataste %ld lemmings"
+  },
+  "count.secondStarGoal": {
+    "one": "Rescata a %ld lemming y completa el nivel para conseguir la segunda estrella.",
+    "other": "Rescata a %ld lemmings y completa el nivel para conseguir la segunda estrella."
+  },
+  "count.thirdStarGoal": {
+    "one": "Rescata a %ld lemming y completa el nivel para conseguir la tercera estrella.",
+    "other": "Rescata a %ld lemmings y completa el nivel para conseguir la tercera estrella."
+  }
+}
