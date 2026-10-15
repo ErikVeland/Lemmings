@@ -584,11 +584,12 @@ extension AppDelegate {
     let keys = GameplayKeyboard(window: host)
     keys.speedControl = GameSpeedControl()
     keys.modern = { false }; keys.controllerEnabled = { false }
-    try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+    try check(!keys.commandRows.contains { $0.keys == "Tab / Shift-Tab" || $0.group == "Controller" || $0.action == "Level goals and tiered hints" }, "Help advertised disabled controls")
     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
-    try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+    try check(keys.commandRows.contains { $0.keys == "Tab / Shift-Tab" }
+      && keys.commandRows.contains { $0.action == "Level goals and tiered hints" }, "Help omitted enabled controls")
     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
-    try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+    try check(!keys.commandRows.contains { $0.keys == "Hold F" || $0.keys == "Hold Shift" }, "Help advertised disabled speed modes")
     let savedSize = GameAccessibility.interfaceSize
     defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
     for size in ClassicInterfaceSize.allCases {
@@ -3359,7 +3360,7 @@ extension AppDelegate {
     _ = keyboard.handle(key(.keyDown, 112.1, text: "\u{1b}", code: 53))
     _ = keyboard.handle(key(.keyUp, 112.2))
     try check(controller.multiplier == 1, "F release restarted speed after Escape")
-    try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
+    try check(keyboard.commandRows.contains { $0.keys == "Hold F" }, "Keyboard help omitted the F hold")
     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
   }
@@ -7564,6 +7565,7 @@ Task { @MainActor in
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
+    try await subject.testSequenceCheckpointResume()
     try await subject.testPlaylistSessions()
     print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS
