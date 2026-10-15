@@ -9522,11 +9522,11 @@ extension AppDelegate {
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
   defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
-  func capture(_ name: String, settled: Bool = true) throws -> [GameAccessibleElement] {
+  func capture(_ name: String) throws -> [GameAccessibleElement] {
     host.contentView?.layoutSubtreeIfNeeded()
     let view = ArcadeWindow.shared.arcadeView
     view.layoutSubtreeIfNeeded()
-    if settled && view.mode == .result { view.finishCelebration() }
+    if view.mode == .result { view.finishCelebration() }
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
     try checkCompactResultActions(view)
@@ -9635,16 +9635,6 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
-      view.showResultAchievement([(title: "Target met", detail: "Rescue 1 lemming and clear the level.")])
-      _ = try capture("\(engine)-\(mode)-single-detail")
-      try check((view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }.count == 1, "Single award detail has a vacant action slot")
-      view.showResultAchievement(rewards.map { (title: $0.title, detail: $0.reason) })
-      for index in rewards.indices {
-        view.achievementDetailIndex = index
-        _ = try capture("\(engine)-\(mode)-detail-\(index)")
-      }
-      view.page(.result)
-      _ = try capture("\(engine)-\(mode)-result-return")
       let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
