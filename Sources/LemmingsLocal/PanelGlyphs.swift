@@ -11,7 +11,7 @@ enum PanelGlyph: String {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings, download
+  case settings, download, hourglass
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play

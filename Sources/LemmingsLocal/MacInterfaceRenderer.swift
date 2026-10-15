@@ -220,7 +220,8 @@ import NxlvKit
 
   /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.
   func menuLine(_ value: String, in rect: CGRect, face: ClassicMacUserInterface.Face = .small,
-                scale: Int = 1, alignment: NSTextAlignment = .center, alpha: CGFloat = 1, palette: Palette = .blue) {
+                scale: Int = 1, alignment: NSTextAlignment = .center, alpha: CGFloat = 1, palette: Palette = .blue,
+                numberPalette: Palette? = nil) {
     guard let font = font(face) else { return }
     let columns = max(0, Int(rect.width) / (font.cellWidth * scale))
     guard columns > 0 else { return }
@@ -229,7 +230,15 @@ import NxlvKit
     let width = width(of: line, face: face, scale: scale)
     let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - width : rect.midX - width / 2
     let top = CGFloat(font.verticalBounds(of: line).top * scale)
-    draw(line, face: face, at: CGPoint(x: x.rounded(), y: (rect.minY - top).rounded()), scale: scale, alpha: alpha, palette: palette)
+    let origin = CGPoint(x: x.rounded(), y: (rect.minY - top).rounded())
+    draw(line, face: face, at: origin, scale: scale, alpha: alpha, palette: palette)
+    if let numberPalette {
+      for (index, character) in line.enumerated() where character.isNumber || character == "," {
+        draw(String(character), face: face,
+          at: CGPoint(x: origin.x + CGFloat(index * font.cellWidth * scale), y: origin.y),
+          scale: scale, alpha: alpha, palette: numberPalette)
+      }
+    }
   }
 
   /// Preserves explicit lines and splits long words without dropping characters.

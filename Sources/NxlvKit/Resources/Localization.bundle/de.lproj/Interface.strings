@@ -3118,3 +3118,5 @@
 "{0}/{1} packs" = "{0}/{1} Pakete";
 "{0}: replay analysis failed: {1}" = "{0}: Wiedergabeanalyse fehlgeschlagen: {1}";
 "{0}{1} more to rescue for three stars." = "Noch {0}{1} retten für drei Sterne.";
+
+"Static home screen" = "Statischer Startbildschirm";

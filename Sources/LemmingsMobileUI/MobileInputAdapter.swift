@@ -19,7 +19,6 @@ import UIKit
     var onMenuPause: (() -> Void)?
     var onForcedPause: (() -> Void)?
     var onTimelinePark: (() -> Void)?
-    var onForwardScrub: ((Bool) -> Void)?
     var onGameMenu: (() -> Void)?
     var onDJShuffle: (() -> Void)?
     var settingsProfileID: () -> String = { MobileProfiles.defaultID }

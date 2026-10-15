@@ -136,14 +136,26 @@ for shared behaviour, engine-specific limits and validation status.
 
 Circle / B is the default pause/play button across Mac, iOS and TV. Square / X
 resets speed. Triangle / Y nukes or undoes the nuke where supported. Menu opens
-the game menu. At a speed above 1×, Play/Pause first resets speed and leaves play
+the game menu. On Mac and iOS, Play/Pause first resets fast speed and leaves play
 running. Release and press again to pause. R2 also consumes a fast-speed press
 as a reset. Its release cannot restore the previous fast speed.
 
-On TV, either trigger resets fast speed before a timeline action. At 1×, a
-trigger press parks play. Tap L2 / R2 to step backward / forward by one tick.
-Hold for 220 ms to scrub. Releasing leaves play paused. Circle resumes.
-Held input must return to neutral after a menu, handover or reset.
+On TV, Circle toggles planning pause/play immediately, including at fast speed.
+It resets speed when pausing and does not open the pause menu. Menu opens the
+pause menu. Circle uses normal Back navigation on menu pages. The native tvOS
+Back event for a gameplay Circle press is consumed with its release so UIKit
+cannot also open a menu.
+
+R2 uses the shared fast-forward pedal: tap toggles fast speed; hold ramps speed;
+release restores the selected speed. A press during planning resumes play.
+A fast-speed press resets to 1× while play continues. R2 never parks or steps the
+timeline and cannot bypass Ready, handover, interruption or result pages.
+DualSense resistance follows the active speed tier and respects the saved
+adaptive-trigger preference. Physical resistance still needs device validation.
+
+L2 retains tap-to-step-back and held rewind. At fast speed, L2 first resets to
+1× and requires release before rewinding. R2 stops held rewind before forward
+play. Held L2 cannot restart rewind until both triggers return to neutral.
 
 TV draws an aim reticle independently of the skill badge. It can move through
 the playfield and HUD. Cross / A uses the same visible HUD button bounds to

@@ -1,6 +1,6 @@
 import NxlvKit
 
-/// TV keeps the timeline on the triggers. Create/View supplies the extra-action layer.
+/// L2 rewinds, R2 fast-forwards, and Create/View supplies the extra-action layer.
 public struct TVControllerBindings {
     private var bindings = ControllerBindings()
     private var previous: Set<ControllerBindings.Button> = []
@@ -64,11 +64,13 @@ public struct TVControllerBindings {
     }
     public static let help = L10n.text("""
     Left stick: aim • Right stick: pan
-    Cross / A: select skill / assign • Circle / B: reset fast speed, then pause / play
+    Cross / A: select skill / assign • Circle / B: pause / play
     Square / X: reset speed • Triangle / Y: nuke / undo, where supported
     L1 / R1: previous / next skill
-    L2 / LT: tap step back, hold rewind • R2 / RT: tap step forward, hold scrub forward
-    At fast speed, either trigger resets to 1×. Release before using the timeline.
+    L2 / LT: tap step back, hold rewind • R2 / RT: fast-forward
+    R2 resumes a planning pause. It never pauses play.
+    Tap R2: toggle fast speed • Hold R2: ramp speed; release: previous speed
+    At fast speed, L2 resets to 1×. Release before using rewind.
     Options / Menu: menu • DualSense touchpad click: DJ shuffle
     D-pad left / right: minimum / maximum release rate, where supported
     D-pad up / down: release rate, where supported

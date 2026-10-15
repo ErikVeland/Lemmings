@@ -3118,3 +3118,5 @@
 "{0}/{1} packs" = "{0}/{1} pakker";
 "{0}: replay analysis failed: {1}" = "{0}: repriseanalysering mislyktes: {1}";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
+
+"Static home screen" = "Statisk startskjerm";

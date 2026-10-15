@@ -1,6 +1,6 @@
 import NxlvKit
 
-/// Tap for one frame. Hold to shuttle. Release parks the timeline at the edit point.
+/// L2 taps step backward and holds rewind. R2 hands control back to forward play.
 public struct TVTimelineTransport: Sendable {
     public enum Event: Equatable, Sendable { case resetSpeed, park, step(Int), scrub(Int, Bool) }
     private var primed = false
@@ -17,15 +17,14 @@ public struct TVTimelineTransport: Sendable {
     }
 
     public mutating func update(pressed: Set<ControllerBindings.Button>, at time: Double, speed: Double = 1) -> [Event] {
-        guard !pressed.contains(.options) else { return reset() }
+        guard !pressed.contains(.options), !pressed.contains(.rightTrigger) else { return reset() }
         guard primed else {
             if !pressed.contains(.leftTrigger) && !pressed.contains(.rightTrigger) { primed = true }
             previous = pressed
             return []
         }
         var events: [Event] = []
-        let requested: Int? = pressed.contains(.rightTrigger) && !previous.contains(.rightTrigger) ? 1
-            : pressed.contains(.leftTrigger) && !previous.contains(.leftTrigger) ? -1 : direction
+        let requested: Int? = pressed.contains(.leftTrigger) && !previous.contains(.leftTrigger) ? -1 : direction
         if requested != direction, requested != nil, speed > 1 {
             let stopped = reset()
             previous = pressed

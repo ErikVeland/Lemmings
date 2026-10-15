@@ -71,6 +71,24 @@ import Testing
         #expect((released.content.session as? PreparationSession)?.serial == 6)
     }
 
+    @Test func previewsRenderSelectedArtworkAndRefreshWithoutReplacingPreparedRun() async throws {
+        let loader = MobileMenuPreviewLoader { PreparationLibrary() }
+        var settings = ClassicSettings()
+        var frames = Set<Data>()
+        for source in [ClassicGraphicsSource.amiga, .macintosh, .macintoshMonochrome, .dosVGA, .amiga] {
+            settings.graphics = source
+            let preview = try await loader.load(0, settings: settings)
+            #expect(preview.frame.rgba.first == PreparationSession.artworkPixel(source))
+            #expect(preview.snapshot.tick == 0)
+            #expect(try await loader.load(0, settings: settings).frame == preview.frame)
+            frames.insert(preview.frame.rgba)
+        }
+        #expect(frames.count == 4)
+        let prepared = try await loader.prepare(0, settings: settings)
+        #expect((prepared.content.session as? PreparationSession)?.serial == 1)
+        #expect((prepared.content.session as? PreparationSession)?.preparedOffMain == true)
+    }
+
     @Test func savedRunRestoresOnWorkerAndRejectsChangedData() async throws {
         let loader = MobileMenuPreviewLoader { PreparationLibrary() }
         let checkpoint = MobileCheckpointEnvelope(runID: UUID(), engine: "fixture", engineFingerprint: "engine",
@@ -134,20 +152,33 @@ private final class PreparationSession: MobileGameSession {
     let ticksPerSecond = 17.0
     var tickCount = 0
     var preparedOffMain = false, restoredOffMain = false
+    private var graphics = ClassicGraphicsSource.dosVGA
+    static func artworkPixel(_ source: ClassicGraphicsSource) -> UInt8 {
+        switch source {
+        case .dosVGA: 1
+        case .amiga: 2
+        case .macintosh: 3
+        case .macintoshMonochrome: 4
+        default: 5
+        }
+    }
     init(index: Int, serial: Int) { levelIndex = index; self.serial = serial }
     var snapshot: MobileGameSnapshot {
         .init(tick: tickCount, released: 0, total: 10, saved: 0, required: 5, remainingSeconds: nil,
               releaseRate: 50, isComplete: false, didWin: false, isEndingRun: false, skills: [])
     }
     func tick() { tickCount += 1 }
-    func applySettings(_ settings: ClassicSettings) { preparedOffMain = !Thread.isMainThread }
+    func applySettings(_ settings: ClassicSettings) {
+        preparedOffMain = !Thread.isMainThread
+        graphics = settings.graphics
+    }
     func targetCandidates(for control: Int) -> [MobileTargetCandidate] { [] }
     func assign(control: Int, to target: Int) -> Bool { false }
     func adjustReleaseRate(by delta: Int) -> Bool { false }
     func beginEndRun() -> Bool { false }
     func undoEndRun() -> Bool { false }
     func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
-        try .init(width: 8, height: 8, rgba: Data(repeating: 0, count: 8 * 8 * 4))
+        try .init(width: 8, height: 8, rgba: Data(repeating: Self.artworkPixel(graphics), count: 8 * 8 * 4))
     }
     func checkpointPayload() throws -> Data { Data([UInt8(tickCount)]) }
     func restoreCheckpointPayload(_ data: Data) throws { tickCount = Int(data[0]); restoredOffMain = !Thread.isMainThread }

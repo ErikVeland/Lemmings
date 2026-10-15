@@ -35,8 +35,8 @@ def source_manifest():
     for name in (*PARITY_RESOURCES, "MenuArtwork"):
         files += [p for p in (ROOT / "Resources" / name).rglob("*") if p.is_file()]
     result = {str(p.relative_to(ROOT)): digest(p) for p in sorted(set(files))}
-    from artwork import FAMILIES, inputs
-    mac = Path(os.environ.get("IOS_MAC_ARTWORK_DIR", ROOT / ".build/mac-artwork/export/lemmings")).parent
+    from artwork import FAMILIES, inputs, mac_root
+    mac = mac_root(os.environ.get("IOS_MAC_ARTWORK_DIR", ROOT / ".build/mac-artwork/export/lemmings"))
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
     for kind, artwork_root in (("MacArtworkInput", mac), ("AmigaArtworkInput", amiga)):
         for family in (*FAMILIES, *("monochrome/" + family for family in FAMILIES)):

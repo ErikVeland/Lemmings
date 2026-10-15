@@ -56,6 +56,7 @@ import NxlvKit
   private var remapRole: NSPopUpButton?
   private var interfaceSizePopUp: NSPopUpButton?
   private var reduceMotionCheck: NSButton?
+  private var staticHomeScreenCheck: NSButton?
   private var reduceFlashesCheck: NSButton?
   private var showSongInfoCheck: NSButton?
   private var fadeMenuButtonCheck: NSButton?
@@ -587,6 +588,10 @@ import NxlvKit
     fadeMenu.setAccessibilityLabel(L10n.text("Fade Menu button"))
     fadeMenu.state = settings.fadeMenuButton ? .on : .off
     fadeMenuButtonCheck = fadeMenu
+    let staticHome = GameCheckButton(title: L10n.text("Static home screen"), target: self, action: #selector(staticHomeScreenChanged))
+    staticHome.setAccessibilityLabel(L10n.text("Static home screen"))
+    staticHome.state = settings.staticHomeScreen ? .on : .off
+    staticHomeScreenCheck = staticHome
     let motion = GameCheckButton(title: L10n.text("Reduce added motion"), target: self, action: #selector(reduceMotionChanged))
     motion.state = settings.reduceMotion ? .on : .off
     reduceMotionCheck = motion
@@ -598,7 +603,7 @@ import NxlvKit
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
     interfaceSizePopUp = size
     return groupedPane([
-      (L10n.text("Interface"), [(L10n.text("UI size"), size), ("", songInfo), ("", fadeMenu)]),
+      (L10n.text("Interface"), [(L10n.text("UI size"), size), ("", songInfo), ("", fadeMenu), ("", staticHome)]),
       (L10n.text("Added effects"), [(L10n.text("Motion"), motion), (L10n.text("Flashes"), reducedFlashes)]),
     ])
   }
@@ -740,6 +745,7 @@ import NxlvKit
     controllerTapCheck?.isEnabled = settings.controllerEnabled
     controllerSwapCheck?.isEnabled = settings.controllerEnabled
     reduceMotionCheck?.state = settings.reduceMotion ? .on : .off
+    staticHomeScreenCheck?.state = settings.staticHomeScreen ? .on : .off
     reduceFlashesCheck?.state = settings.reduceFlashes ? .on : .off
     showSongInfoCheck?.state = settings.showSongInfo ? .on : .off
     fadeMenuButtonCheck?.state = settings.fadeMenuButton ? .on : .off
@@ -807,6 +813,7 @@ import NxlvKit
     applied.controllerMappings = settings.controllerMappings
     applied.interfaceSize = settings.interfaceSize
     applied.reduceMotion = settings.reduceMotion
+    applied.staticHomeScreen = settings.staticHomeScreen
     applied.reduceFlashes = settings.reduceFlashes
     applied.showSongInfo = settings.showSongInfo
     applied.fadeMenuButton = settings.fadeMenuButton
@@ -905,6 +912,11 @@ import NxlvKit
 
   @objc private func pointerCaptureChanged(_ sender: NSButton) {
     settings.confinePointer = sender.state == .on
+    changed()
+  }
+
+  @objc private func staticHomeScreenChanged(_ sender: NSButton) {
+    settings.staticHomeScreen = sender.state == .on
     changed()
   }
 

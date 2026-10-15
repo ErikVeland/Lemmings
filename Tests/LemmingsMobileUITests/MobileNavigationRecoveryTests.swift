@@ -41,6 +41,24 @@ import LemmingsMobileCore
         }
     }
 
+    @Test func settingsRefreshThePausedPlayfieldImmediately() async throws {
+        try await withGame { game in
+            game.pausePlay(showControls: false)
+            let state = try game.session.checkpointPayload()
+            for display in ClassicDisplayMode.allCases {
+                var settings = game.gameSettings
+                settings.classic.display = display
+                settings.classic.graphics = .macintoshMonochrome
+                settings.classic.hdEffectsEnabled.toggle()
+                game.applyGameSettings(settings)
+                #expect(game.playfieldView.displaySettings == settings.classic)
+                #expect(game.gameSettings == settings)
+                #expect(game.playState.phase == .ready)
+                #expect(try game.session.checkpointPayload() == state)
+            }
+        }
+    }
+
     @Test func anImmediateEndShowsResultsAndSubpageBackRestoresThem() async throws {
         try await withGame { game in
             #expect(game.session.beginEndRun())

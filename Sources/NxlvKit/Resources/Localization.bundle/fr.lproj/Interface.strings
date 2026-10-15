@@ -3118,3 +3118,5 @@
 "{0}/{1} packs" = "{0}/{1} packs";
 "{0}: replay analysis failed: {1}" = "{0} : échec de l’analyse du rejeu : {1}";
 "{0}{1} more to rescue for three stars." = "Encore {0}{1} à sauver pour obtenir trois étoiles.";
+
+"Static home screen" = "Écran d’accueil statique";

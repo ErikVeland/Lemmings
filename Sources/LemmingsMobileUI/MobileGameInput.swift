@@ -75,7 +75,6 @@ extension MobileGameViewController {
         adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
         #if os(tvOS)
         adapter.onTimelinePark = { [weak self] in self?.pauseForPlanning() }
-        adapter.onForwardScrub = { [weak self] in self?.setTVForwardScrub($0) }
         #endif
         adapter.onMenuPause = { [weak self] in
             guard let self else { return }
@@ -285,15 +284,6 @@ extension MobileGameViewController {
     }
 
     func setControllerSpeedInput(held: Bool) {
-        if held && speed > 1 {
-            performCommand(.speedReset)
-            controllerSpeedResetConsumed = true
-            return
-        }
-        if controllerSpeedResetConsumed {
-            if !held { controllerSpeedResetConsumed = false }
-            return
-        }
         #if os(tvOS)
         if held {
             guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
@@ -304,6 +294,15 @@ extension MobileGameViewController {
             }
         }
         #endif
+        if held && speed > 1 {
+            performCommand(.speedReset)
+            controllerSpeedResetConsumed = true
+            return
+        }
+        if controllerSpeedResetConsumed {
+            if !held { controllerSpeedResetConsumed = false }
+            return
+        }
         setSpeedInput(.controller, held: held)
     }
 
@@ -338,7 +337,7 @@ extension MobileGameViewController {
         guard let library = parent as? MobileLibraryViewController else { return }
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
         overlayCanvas.page = soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
-            : group.map { library.settingsPage($0, inGame: true) } ?? MobileSettingsArt.groups(inGame: true)
+            : group.map { library.settingsPage($0, inGame: true) } ?? library.settingsGroupsPage(inGame: true)
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
             if id == "home" { self.pausePlay(showControls: true) }
@@ -359,10 +358,8 @@ extension MobileGameViewController {
                 else { libraries.download(pack) }
                 self.showInGameSettings(.audio, soundtrack: true)
             } else if library.handleSettings(id) {
-                self.gameSettings = library.mobileSettings
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
-                self.session.applySettings(library.mobileSettings.classic)
-                self.renderCurrentFrame(force: true)
+                self.applyGameSettings(library.mobileSettings)
                 self.showInGameSettings(group, mappings: mappings)
             }
         }

@@ -13,10 +13,20 @@ extension MobileLibraryViewController {
         set { newValue.save(to: .standard, profileID: settingsProfileID) }
     }
 
-    func settingsGroupsPage() -> GameFrontEnd.Page { MobileSettingsArt.groups() }
+    func settingsGroupsPage(inGame: Bool = false) -> GameFrontEnd.Page {
+        #if os(tvOS)
+        MobileSettingsArt.groups(inGame: inGame, television: true)
+        #else
+        MobileSettingsArt.groups(inGame: inGame)
+        #endif
+    }
     func controllerMappingsPage() -> GameFrontEnd.Page {
         #if os(tvOS)
-        MobileSettingsArt.controllerMappings(mobileSettings, television: true)
+        var page = MobileSettingsArt.controllerMappings(mobileSettings, television: true)
+        page.rows += page.footer.filter { !$0.isBackNavigation }
+        page.footer.removeAll { !$0.isBackNavigation }
+        page.televisionGrid = true
+        return page
         #else
         MobileSettingsArt.controllerMappings(mobileSettings)
         #endif
@@ -26,6 +36,7 @@ extension MobileLibraryViewController {
                                sharing: AnonymousTelemetry.shared.sharesCounts,
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame)
         #if os(tvOS)
+        page.televisionGrid = true
         if group == .controller {
             let input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
             page.rows += [.init("setting.tvAim", L10n.text("Aim sensitivity: \(Int(input.aimSensitivity * 100))%")),
@@ -39,7 +50,7 @@ extension MobileLibraryViewController {
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
             let status = libraries.failure ?? (libraries.isDownloading ? L10n.text("Downloading...") : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
-            return .init(title: L10n.text("Soundtrack"), subtitle: status,
+            var page = GameFrontEnd.Page(title: L10n.text("Soundtrack"), subtitle: status,
                                 rows: packs.map { pack in
                                     let included = libraries.isBundled(pack)
                                     let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }
@@ -48,6 +59,10 @@ extension MobileLibraryViewController {
                                                  enabled: !included, selected: included || libraries.isInstalled(pack))
                                 },
                                 footer: [.init("settingsGroup.audio", L10n.text("Back"))])
+            #if os(tvOS)
+            page.televisionGrid = true
+            #endif
+            return page
     }
 
     func insightsPage() -> GameFrontEnd.Page {
@@ -130,6 +145,7 @@ extension MobileLibraryViewController {
             case "djShuffleScope": settings.djShuffleScope = cycle(settings.djShuffleScope, SoundtrackCatalogue.ShuffleScope.allCases)
             case "uiSize": settings.classic.interfaceSize = cycle(settings.classic.interfaceSize, ClassicInterfaceSize.allCases)
             case "songInfo": settings.classic.showSongInfo.toggle()
+            case "staticHome": settings.classic.staticHomeScreen.toggle()
             case "motion": settings.classic.reduceMotion.toggle()
             case "flashes": settings.classic.reduceFlashes.toggle()
             case "telemetry": AnonymousTelemetry.shared.setSharing(!AnonymousTelemetry.shared.sharesCounts)

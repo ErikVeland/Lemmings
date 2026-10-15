@@ -17,6 +17,7 @@ public struct GameFrontEnd {
         public var enabled: Bool
         public var primary: Bool
         public var selected: Bool
+        public var busy = false
         public var portrait: Int?
         public var backNavigation: Bool?
         public var gameLogo: GameLogo?
@@ -67,6 +68,8 @@ public struct GameFrontEnd {
         }
         public var preview: Bool
         public var pause: MobilePauseSummary? = nil
+        public var televisionGrid = false
+        public var televisionPageIndex = 0
         public var result = false
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
@@ -97,6 +100,7 @@ public struct GameFrontEnd {
     }
 
     public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false) -> Layout {
+        if page.televisionGrid { return TVMenuPresentation.settingsLayout(page, width: width, height: minimumHeight) }
         if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight) }
         if page.home {
@@ -385,7 +389,7 @@ public struct GameFrontEnd {
                 context.stroke(target.frame.insetBy(dx: 1, dy: 1))
             } else if page.home, ["settings", "whatsNew"].contains(action.id) {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
-                let glyph: PanelGlyphArt = action.id == "settings" ? .settings : .download
+                let glyph: PanelGlyphArt = action.id == "settings" ? .settings : action.busy ? .hourglass : .download
                 let well = GameStoneArt.well(target.frame, pixel: 1).insetBy(dx: 2, dy: 2)
                 let scale = glyph.scale(fitting: well.size)
                 if let image = glyph.cgImage(scale: scale) {

@@ -769,8 +769,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updates.onChange = { [weak self] in
       guard let self else { return }
       self.playfield.overlayAvailableUpdate = self.updates.availableVersion.map {
-        L10n.text("Version \($0) \((self.updates.isDownloaded ? L10n.text("ready to install") : L10n.text("available to download")))")
+        let state = self.updates.isDownloading ? L10n.text("Downloading")
+          : self.updates.isUpdateRequested ? L10n.text("Loading")
+          : self.updates.isDownloaded ? L10n.text("ready to install") : L10n.text("available to download")
+        return L10n.text("Version \($0) \(state)")
       }
+      self.playfield.overlayUpdateIsBusy = self.updates.isBusy
       self.playfield.needsDisplay = true
     }
     updates.start()
@@ -1296,6 +1300,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.modernControlsEnabled = settings.modernControlsEnabled
     panel.counterStyle = settings.counterStyle
     playfield.reduceMotion = settings.reduceMotion
+    playfield.staticHomeScreen = settings.staticHomeScreen
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
     playfield.gameplayCursorStyle = settings.gameplayCursorStyle
@@ -1378,6 +1383,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
     playfield.reduceMotion = settings.reduceMotion
+    playfield.staticHomeScreen = settings.staticHomeScreen
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
     playfield.gameplayCursorStyle = settings.gameplayCursorStyle
@@ -7299,7 +7305,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Menus animate even though the level clock is stopped.
     if phase != .playing, playfield.overlayShowsLemmings {
       playfield.advanceHomeBackdrop(seconds: elapsed)
-      if !settings.reduceMotion && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion { playfield.overlayFrame &+= 1 }
+      if !playfield.menuMotionReduced { playfield.overlayFrame &+= 1 }
       playfield.needsDisplay = true
     }
     if tubeIsActive {

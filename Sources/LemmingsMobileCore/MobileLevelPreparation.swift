@@ -53,6 +53,7 @@ public actor MobileMenuPreviewLoader {
     private let makeLibrary: @Sendable () throws -> any MobileGameLibrary
     private var library: (any MobileGameLibrary)?
     private var frames: [Int: MobileMenuPreview] = [:]
+    private var previewSettings: ClassicSettings?
     private var prepared: [Int: MobileLevelContent] = [:]
     private var recent: [Int] = []
 
@@ -100,18 +101,21 @@ public actor MobileMenuPreviewLoader {
     private func loadOnWorker(_ index: Int, settings: ClassicSettings,
                               cancellation: MobilePreparationCancellation) throws -> MobileMenuPreview {
         try cancellation.check()
+        if previewSettings != settings {
+            frames.removeAll()
+            previewSettings = settings
+        }
         if let cached = frames[index] { return cached }
         let opened = try library ?? makeLibrary()
         library = opened
         try cancellation.check()
-        let content = try opened.loadLevel(at: index)
+        let content = try prepared[index] ?? opened.loadLevel(at: index)
         try cancellation.check()
         let session = content.session
+        session.applySettings(settings)
+        try cancellation.check()
         let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
                                         origin: session.initialCameraOrigin, snapshot: session.snapshot)
-        try cancellation.check()
-        // The preview keeps its existing source pixels. Prepare gameplay artwork on this worker.
-        session.applySettings(settings)
         try cancellation.check()
         recent.removeAll { $0 == index }; recent.append(index)
         prepared[index] = content

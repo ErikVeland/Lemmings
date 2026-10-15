@@ -134,6 +134,13 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
       try check(keyboard.handle(event(.keyDown, key: key, code: code, modifiers: flags)) != nil
         && paused() == before, name + " intercepted a modified shortcut")
     }
+    NSApp.sendEvent(event(.keyDown, key: key, code: code))
+    try check(paused() != before, name + " lost pause in the AppKit event route")
+    NSApp.sendEvent(event(.keyDown, key: key, code: code, repeated: true))
+    NSApp.sendEvent(event(.keyUp, key: key, code: code))
+    try check(paused() != before, name + " repeated or released pause through AppKit")
+    NSApp.sendEvent(event(.keyDown, key: key, code: code))
+    try check(paused() == before, name + " lost resume in the AppKit event route")
   }
   let editor = NSTextView(frame: host.contentView!.bounds)
   host.contentView!.addSubview(editor); host.makeFirstResponder(editor)
@@ -147,6 +154,47 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   try check(keyboard.handle(event(.keyDown, key: " ", code: 49)) != nil && paused() == before,
     name + " intercepted a menu or handover")
   print("PASS \(name) shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing")
+}
+
+extension AppDelegate {
+  fileprivate func testNeoPauseKeyboard() throws {
+    if window == nil { buildInterface() }
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
+    GameScreen.shared.dismissAll()
+    var terrain = try NeoLemmixTerrain(width: 320, height: 96)
+    for x in 0..<320 { terrain.setSolid(true, x: x, y: 48) }
+    let configuration = try NeoLemmixConfiguration(totalLemmings: 1, requiredToSave: 1,
+      spawnInterval: 4, entrances: [], preplacedLemmings: [.init(position: .init(x: 20, y: 48))],
+      skills: [.walker: .infinite])
+    prepareLibrary(preservingMusic: false, resumeMusic: false)
+    flow = nil
+    adopt(NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: terrain, configuration: configuration),
+      width: 320, height: 96))
+    phase = .playing; playfield.phase = .playing; panel.isMenuMode = false
+    playfield.startCountdown.cancel(); isPaused = false; panel.isPaused = false
+    defer { gameplayKeyboard?.bind(to: window) }
+    try validatePauseKeyboard(gameplayKeyboard!, name: "NeoLemmix", paused: { self.isPaused })
+    let originalWindow = window!
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
+      styleMask: [], backing: .buffered, defer: false)
+    window = host
+    gameplayKeyboard?.bind(to: host)
+    defer { window = originalWindow }
+    for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
+      func send(_ type: NSEvent.EventType, repeated: Bool = false) {
+        NSApp.sendEvent(NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: host.windowNumber, context: nil, characters: key, charactersIgnoringModifiers: key,
+          isARepeat: repeated, keyCode: code)!)
+      }
+      send(.keyDown)
+      try check(isPaused, "NeoLemmix pause was lost between the installed keyboard monitors")
+      send(.keyDown, repeated: true); send(.keyUp)
+      try check(isPaused, "NeoLemmix pause repeated or resumed on release")
+      send(.keyDown)
+      try check(!isPaused, "NeoLemmix resume was lost between the installed keyboard monitors")
+    }
+    print("PASS NeoLemmix Space/P through both installed AppKit monitors")
+  }
 }
 
 /// Capture the actual native sprite and terrain at both ends of the halo pulse.
@@ -3956,6 +4004,72 @@ extension AppDelegate {
     arcadeAutoPresent = false
     ArcadeStore.shared = ArcadeStore(file: FileManager.default.temporaryDirectory.appendingPathComponent("arcade-integration-\(UUID().uuidString).json"))
   }
+  fileprivate func testHomeUpdateFeedback() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let previousFlow = flow
+    let previousFanScreen = fanScreen
+    let previousFanPlaying = fanPlaying
+    let previousWindowFrame = window.frame
+    let previousUpdateAction = playfield.onUpdate
+    defer {
+      flow = previousFlow
+      fanScreen = previousFanScreen
+      fanPlaying = previousFanPlaying
+      window.setFrame(previousWindowFrame, display: false)
+      playfield.overlayAvailableUpdate = nil
+      playfield.overlayUpdateIsBusy = false
+      playfield.onUpdate = previousUpdateAction
+    }
+    flow = ClassicGameFlow(ranks: [ClassicRank(name: "Fun", levelIndices: [0])])
+    fanScreen = .off
+    fanPlaying = false
+    renderScreen()
+    var updatesOpened = 0
+    playfield.onUpdate = { updatesOpened += 1 }
+    for width in [900, 1120] {
+      window.setContentSize(CGSize(width: width, height: 720))
+      window.contentView?.layoutSubtreeIfNeeded()
+      var idlePixels: Data?
+      var idleTarget: CGRect?
+      for (state, busy) in [("available", false), ("loading", true), ("downloading", true), ("ready", false)] {
+        playfield.overlayUpdateIsBusy = busy
+        playfield.overlayAvailableUpdate = "Version 1.7 " + state
+        guard let capture = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds) else {
+          throw IntegrationFailure(message: "Update state capture failed")
+        }
+        playfield.displayIgnoringOpacity(playfield.bounds, in: NSGraphicsContext(bitmapImageRep: capture)!)
+        let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+        guard let target = controls.first(where: { $0.accessibilityLabel()?.contains("Version 1.7 " + state) == true }) else {
+          throw IntegrationFailure(message: "Update state lost its accessible label")
+        }
+        try check(playfield.bounds.contains(target.localFrame)
+          && controls.filter { $0 !== target && $0.accessibilityRole() == .button }
+            .allSatisfy { !$0.localFrame.intersects(target.localFrame) },
+          "Update state clipped or overlapped another target")
+        let pixels = capture.cgImage!.cropping(to: CGRect(
+          x: target.localFrame.minX * CGFloat(capture.pixelsWide) / playfield.bounds.width,
+          y: target.localFrame.minY * CGFloat(capture.pixelsHigh) / playfield.bounds.height,
+          width: target.localFrame.width * CGFloat(capture.pixelsWide) / playfield.bounds.width,
+          height: target.localFrame.height * CGFloat(capture.pixelsHigh) / playfield.bounds.height))!.dataProvider!.data! as Data
+        if state == "available" { idlePixels = pixels; idleTarget = target.localFrame }
+        try check(target.localFrame == idleTarget, "Update feedback moved the input target")
+        try check(busy ? pixels != idlePixels : pixels == idlePixels,
+          "Update feedback did not change or restore the visible glyph")
+        let previousOpened = updatesOpened
+        try check(target.accessibilityPerformPress(), "Update feedback lost accessibility activation")
+        playfield.handleClick(at: CGPoint(x: target.localFrame.midX, y: target.localFrame.midY))
+        try check(playfield.activateHomeSelection(playfield.homeActionCount - 1),
+          "Update feedback lost keyboard activation")
+        try check(updatesOpened == previousOpened + 3, "Update input methods diverged during feedback")
+        try capture.representation(using: .png, properties: [:])!.write(to:
+          URL(fileURLWithPath: ".build/home-update-\(state)-\(width).png"))
+      }
+    }
+    window.setContentSize(CGSize(width: 900, height: 620))
+    window.contentView?.layoutSubtreeIfNeeded()
+    print("PASS update arrow/hourglass renders and stable mouse, keyboard and accessibility targets at two Mac sizes")
+  }
   fileprivate func testHomeSettingsButton() throws {
     if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
@@ -7356,6 +7470,7 @@ Task { @MainActor in
     print("Exit and immediate-progress integration tests passed.")
     #elseif UPDATE_TESTS
     try await testUpdateRequests()
+    try subject.testHomeUpdateFeedback()
     try subject.testHomeSettingsButton()
     print("Update integration tests passed.")
     #elseif COLLECTION_TESTS
@@ -7596,6 +7711,7 @@ Task { @MainActor in
     print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS
     try subject.testPauseKeyRelease()
+    try subject.testNeoPauseKeyboard()
     let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
     try pauseL2.testPauseKeyboard()
     let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
@@ -8282,9 +8398,13 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   try check(updates.availableVersion == nil, "A no-update check retained a discovery reminder")
 
   // The icon followed by the menu must preserve one request during a silent download.
+  var clickChanges = 0
+  updates.onChange = { clickChanges += 1 }
   updates.showUpdate()
   updates.showUpdate()
   updates.start()
+  try check(updates.isUpdateRequested && updates.isBusy && clickChanges == 2,
+    "A busy updater did not acknowledge the icon click immediately")
   try check(checker.checks == 0 && checker.rejectedChecks == 0 && checker.observations == 1,
     "Busy update clicks were sent to Sparkle or registered duplicate observers")
   checker.canCheckForUpdates = false
@@ -8300,7 +8420,7 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   var changes = 0
   updates.onChange = { changes += 1 }
   updates.updateWillBePresented(item, downloaded: false, automaticallyShowNotes: false)
-  try check(updates.availableVersion == "1.8.6" && !updates.isDownloaded && changes == 1,
+  try check(updates.availableVersion == "1.8.6" && !updates.isDownloaded && !updates.isBusy && changes == 1,
     "The ready alert did not publish its download reminder")
   updates.standardUserDriverWillFinishUpdateSession()
   try check(updates.availableVersion == nil && !updates.isDownloaded && changes == 2,
@@ -8341,7 +8461,32 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   updates.standardUserDriverWillFinishUpdateSession()
   checker.canCheckForUpdates = true
   try check(checker.checks == 6, "Failed automatic notes started an unrequested retry")
-  print("PASS hourly checks, startup alerts, discovery/download reminders, busy icon/menu checks, automatic notes, session cleanup and retry without restart")
+  try check(updates.responds(to: NSSelectorFromString("updater:willDownloadUpdate:withRequest:"))
+    && updates.responds(to: NSSelectorFromString("updater:didDownloadUpdate:"))
+    && updates.responds(to: NSSelectorFromString("updater:failedToDownloadUpdate:error:"))
+    && updates.responds(to: NSSelectorFromString("userDidCancelDownload:")),
+    "Sparkle cannot deliver download state callbacks")
+  let request = NSMutableURLRequest(url: item.fileURL!)
+  updates.updater(nativeUpdater, willDownloadUpdate: item, with: request)
+  try check(updates.isDownloading && updates.isBusy && !updates.isDownloaded,
+    "Starting a download did not show its busy state")
+  updates.showUpdate()
+  try check(updates.isDownloading && updates.isBusy, "A repeat click erased active download feedback")
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  try check(updates.isDownloading, "Repeated discovery erased active download feedback")
+  updates.updater(nativeUpdater, didDownloadUpdate: item)
+  try check(updates.isDownloaded && !updates.isBusy, "A completed download retained its busy state")
+  updates.updater(nativeUpdater, willDownloadUpdate: item, with: request)
+  updates.userDidCancelDownload(nativeUpdater)
+  try check(!updates.isBusy && !updates.isDownloaded, "A cancelled download retained its busy state")
+  updates.updater(nativeUpdater, willDownloadUpdate: item, with: request)
+  updates.updater(nativeUpdater, failedToDownloadUpdate: item, error: URLError(.notConnectedToInternet))
+  try check(!updates.isBusy && updates.availableVersion != nil,
+    "A failed download could not return to the update action")
+  updates.updater(nativeUpdater, willDownloadUpdate: item, with: request)
+  updates.standardUserDriverWillFinishUpdateSession()
+  try check(!updates.isBusy && updates.availableVersion == nil, "Session cleanup retained download feedback")
+  print("PASS immediate click/download feedback, completion/cancellation/failure, hourly checks, busy icon/menu requests, automatic notes and session cleanup")
 }
 
 

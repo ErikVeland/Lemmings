@@ -94,33 +94,36 @@ struct TVControllerBindingsTests {
             #expect(input.update(pressed: [button]).isEmpty)
         }
     }
-    @Test func shuttleTapsStepsHoldsParkAndHandoverRequiresNeutral() {
+    @Test func rewindParksButForwardNeverParksOrSteps() {
         var transport = TVTimelineTransport()
         #expect(transport.update(pressed: [.leftTrigger], at: 0).isEmpty)
         #expect(transport.update(pressed: [.leftTrigger], at: 1).isEmpty)
         #expect(transport.update(pressed: [], at: 2).isEmpty)
         #expect(transport.update(pressed: [.leftTrigger], at: 3) == [.park])
         #expect(transport.update(pressed: [], at: 3.1) == [.step(-1)])
-        #expect(transport.update(pressed: [.rightTrigger], at: 4) == [.park])
-        #expect(transport.update(pressed: [], at: 4.1) == [.step(1)])
+        #expect(transport.update(pressed: [.rightTrigger], at: 4).isEmpty)
+        #expect(transport.update(pressed: [], at: 4.1).isEmpty)
         #expect(transport.update(pressed: [.leftTrigger], at: 5) == [.park])
         #expect(transport.update(pressed: [.leftTrigger], at: 5.3) == [.scrub(-1, true)])
-        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6) == [.scrub(-1, false), .park])
-        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6.3) == [.scrub(1, true)])
-        #expect(transport.update(pressed: [.leftTrigger], at: 7) == [.scrub(1, false)])
+        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6) == [.scrub(-1, false)])
+        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6.3).isEmpty)
+        #expect(transport.update(pressed: [.leftTrigger], at: 7).isEmpty)
         #expect(transport.update(pressed: [.leftTrigger], at: 8).isEmpty)
         #expect(transport.update(pressed: [], at: 9).isEmpty)
         #expect(transport.reset().isEmpty)
     }
 
-    @Test func fastTriggerPressOnlyResetsSpeedAndRequiresReleaseBeforeScrubbing() {
-        for trigger in [ControllerBindings.Button.leftTrigger, .rightTrigger] {
-            var transport = TVTimelineTransport()
-            _ = transport.update(pressed: [], at: 0)
-            #expect(transport.update(pressed: [trigger], at: 1, speed: 3) == [.resetSpeed])
-            #expect(transport.update(pressed: [trigger], at: 2, speed: 1).isEmpty)
-            #expect(transport.update(pressed: [], at: 3).isEmpty)
-            #expect(transport.update(pressed: [trigger], at: 4) == [.park])
+    @Test func fastRewindResetsSpeedButForwardNeverSendsAPause() {
+        var transport = TVTimelineTransport()
+        _ = transport.update(pressed: [], at: 0)
+        #expect(transport.update(pressed: [.leftTrigger], at: 1, speed: 3) == [.resetSpeed])
+        #expect(transport.update(pressed: [.leftTrigger], at: 2, speed: 1).isEmpty)
+        #expect(transport.update(pressed: [], at: 3).isEmpty)
+        #expect(transport.update(pressed: [.leftTrigger], at: 4) == [.park])
+        for speed in GameplaySpeed.steps {
+            #expect(transport.update(pressed: [.rightTrigger], at: 5, speed: speed).isEmpty)
+            #expect(transport.update(pressed: [.rightTrigger], at: 6, speed: speed).isEmpty)
+            #expect(transport.update(pressed: [], at: 7, speed: speed).isEmpty)
         }
     }
 

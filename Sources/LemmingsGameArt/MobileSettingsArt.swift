@@ -18,10 +18,12 @@ public enum MobileSettingsArt {
         }
         return min(CGFloat(size.scale), max(1, width / 280))
     }
-    public static func groups(inGame: Bool = false) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.map {
+    public static func groups(inGame: Bool = false, television: Bool = false) -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
+        page.televisionGrid = television
+        return page
     }
 
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
@@ -83,6 +85,7 @@ public enum MobileSettingsArt {
         case .accessibility:
             rows = [choice("uiSize", L10n.text("UI size"), c.interfaceSize.title),
                     toggle("songInfo", L10n.text("Show song info"), c.showSongInfo),
+                    toggle("staticHome", L10n.text("Static home screen"), c.staticHomeScreen),
                     toggle("motion", L10n.text("Reduce motion"), c.reduceMotion),
                     toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
         case .privacy:
@@ -135,9 +138,9 @@ public enum MobileSettingsArt {
     }
     private static func roleTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {
         if television && button == .leftTrigger { return L10n.text("Rewind") }
-        if television && button == .rightTrigger { return L10n.text("Step forward / scrub") }
+        if television && button == .rightTrigger { return L10n.text("Fast-forward") }
         if television && button == .options { return L10n.text("Help / extra actions") }
-        if television && button == .b { return L10n.text("Reset fast speed / pause / play") }
+        if television && button == .b { return L10n.text("Pause / play") }
         if television && button == .x { return L10n.text("Reset speed") }
         if television && button == .y { return L10n.text("Nuke / undo") }
         if television && button == .left { return L10n.text("Minimum release rate") }

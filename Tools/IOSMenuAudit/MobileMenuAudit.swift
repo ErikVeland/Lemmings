@@ -11,6 +11,7 @@ import NxlvKit
         return .invalidTargets
     }
     @MainActor static func main() async throws {
+        let staticHome = CommandLine.arguments.last == "--static-home"
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
         let pause = CommandLine.arguments.last == "--pause"
         let ghostSolution = CommandLine.arguments.last == "--ghost-solution"
@@ -25,7 +26,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -33,6 +34,7 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if staticHome { try checkStaticHome(typography: typography, output: output); return }
         if regionalBrand { try checkRegionalBrand(typography: typography, resources: content, output: output); return }
         if homeScenery { try await checkHomeScenery(typography: typography, content: content, output: output); return }
         if buildChanges { try checkBuildChanges(typography: typography, manifest: content, output: output); return }

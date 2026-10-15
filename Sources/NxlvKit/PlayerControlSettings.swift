@@ -8,6 +8,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
     public var controllerMappings: [String: String]
     public var interfaceSize: ClassicInterfaceSize
     public var reduceMotion: Bool
+    public var staticHomeScreen: Bool
     public var reduceFlashes: Bool
     public var showSongInfo: Bool
     public var fadeMenuButton: Bool
@@ -19,9 +20,29 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         controllerMappings = ControllerBindings.validatedMapping(settings.controllerMappings)
         interfaceSize = settings.interfaceSize
         reduceMotion = settings.reduceMotion
+        staticHomeScreen = settings.staticHomeScreen
         reduceFlashes = settings.reduceFlashes
         showSongInfo = settings.showSongInfo
         fadeMenuButton = settings.fadeMenuButton
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case controllerEnabled, controllerTapSpeed, controllerSwapSticks, controllerMappings
+        case interfaceSize, reduceMotion, staticHomeScreen, reduceFlashes, showSongInfo, fadeMenuButton
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        controllerEnabled = try values.decode(Bool.self, forKey: .controllerEnabled)
+        controllerTapSpeed = try values.decode(Bool.self, forKey: .controllerTapSpeed)
+        controllerSwapSticks = try values.decode(Bool.self, forKey: .controllerSwapSticks)
+        controllerMappings = try values.decode([String: String].self, forKey: .controllerMappings)
+        interfaceSize = try values.decode(ClassicInterfaceSize.self, forKey: .interfaceSize)
+        reduceMotion = try values.decode(Bool.self, forKey: .reduceMotion)
+        staticHomeScreen = try values.decodeIfPresent(Bool.self, forKey: .staticHomeScreen) ?? false
+        reduceFlashes = try values.decode(Bool.self, forKey: .reduceFlashes)
+        showSongInfo = try values.decode(Bool.self, forKey: .showSongInfo)
+        fadeMenuButton = try values.decode(Bool.self, forKey: .fadeMenuButton)
     }
 
     public func applying(to settings: ClassicSettings) -> ClassicSettings {
@@ -32,6 +53,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         value.controllerMappings = ControllerBindings.validatedMapping(controllerMappings)
         value.interfaceSize = interfaceSize
         value.reduceMotion = reduceMotion
+        value.staticHomeScreen = staticHomeScreen
         value.reduceFlashes = reduceFlashes
         value.showSongInfo = showSongInfo
         value.fadeMenuButton = fadeMenuButton

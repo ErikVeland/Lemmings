@@ -9,22 +9,37 @@ import UIKit
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: L10n.text("Lemmings")) {
         didSet {
-            if oldValue.title != page.title { focusedID = nil }
+            if oldValue.title != page.title { focusedID = nil; televisionPageIndex = 0 }
             rebuild()
         }
     }
     var playerName: String? { didSet { if oldValue != playerName { rebuild() } } }
     var playerRole = MobileTurnArt.Role.current { didSet { if oldValue != playerRole { rebuild() } } }
     var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
+    private var televisionPageIndex = 0
+    private var televisionViewport = CGSize.zero
+    private var televisionScaleCache: (page: GameFrontEnd.Page, width: CGFloat, height: CGFloat, preferred: CGFloat, scale: CGFloat)?
     private var displayedPage: GameFrontEnd.Page {
-        if page.home && boxesHome { return page }
-        return MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+        var result = page.home && boxesHome ? page
+            : MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+        #if os(tvOS)
+        if result.home { result = TVMenuPresentation.homePage(result) }
+        if result.televisionGrid, televisionViewport.width > 0 {
+            let scale = interfaceScale(width: televisionViewport.width, viewportHeight: televisionViewport.height)
+            result = TVMenuPresentation.settingsPage(result, index: televisionPageIndex,
+                width: televisionViewport.width / scale, height: televisionViewport.height / scale)
+        }
+        #endif
+        return result
     }
     var boxesHome = false {
         didSet { if boxesHome != oldValue { setNeedsLayout(); setNeedsDisplay() } }
     }
     private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat) -> GameFrontEnd.Layout {
-        GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight, boxedHome: boxesHome)
+        #if os(tvOS)
+        if page.home { return TVMenuPresentation.homeLayout(page, width: width, height: minimumHeight) }
+        #endif
+        return GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight, boxedHome: boxesHome)
     }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
@@ -97,6 +112,15 @@ import UIKit
         let setting = MobileSettings.current(from: .standard).classic.interfaceSize
         let height = viewportHeight ?? (superview as? UIScrollView)?.bounds.height ?? bounds.height
         #if os(tvOS)
+        if page.home {
+            return televisionScale(MobileSettingsArt.interfaceScale(setting, width: width, television: true),
+                page: TVMenuPresentation.homePage(page), width: width, height: height)
+        }
+        if page.televisionGrid {
+            let preferred = MobileSettingsArt.interfaceScale(setting, width: width, television: true)
+            let source = MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+            return televisionScale(preferred, page: source, width: width, height: height)
+        }
         return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height, television: true)
             : MobileSettingsArt.interfaceScale(setting, width: width, television: true)
         #else
@@ -104,7 +128,24 @@ import UIKit
             : MobileSettingsArt.interfaceScale(setting, width: width)
         #endif
     }
+    #if os(tvOS)
+    private func televisionScale(_ preferred: CGFloat, page: GameFrontEnd.Page, width: CGFloat, height: CGFloat) -> CGFloat {
+        if let cached = televisionScaleCache, cached.page == page, cached.width == width,
+           cached.height == height, cached.preferred == preferred { return cached.scale }
+        let scale = page.home ? TVMenuPresentation.homeScale(preferred, page: page, width: width, height: height)
+            : TVMenuPresentation.settingsScale(preferred, page: page, width: width, height: height)
+        televisionScaleCache = (page, width, height, preferred, scale)
+        return scale
+    }
+    #endif
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
+        #if os(tvOS)
+        let viewport = CGSize(width: width, height: minimumHeight)
+        if televisionViewport != viewport {
+            televisionViewport = viewport
+            if page.televisionGrid { rebuild() }
+        }
+        #endif
         let scale = interfaceScale(width: width, viewportHeight: minimumHeight)
         let size = layoutPage(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
@@ -114,7 +155,11 @@ import UIKit
         let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
+        #if os(tvOS)
+        let minimumHeight = televisionViewport.height > 0 ? televisionViewport.height : bounds.height
+        #else
         let minimumHeight = page.pause != nil ? (superview as? UIScrollView)?.bounds.height ?? bounds.height : bounds.height
+        #endif
         var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale)
         if page.pause != nil, let scroll = superview as? UIScrollView {
             layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
@@ -151,6 +196,8 @@ import UIKit
         pageLayout = nil
         tvActivation.reset()
         onPageChanged?()
+        let page = displayedPage
+        if page.televisionGrid { televisionPageIndex = page.televisionPageIndex }
         let actions = page.rows + page.orderedFooter
         if !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
             focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL").uppercased() })?.id
@@ -191,7 +238,7 @@ import UIKit
                 #if os(tvOS)
                 guard !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
                 #endif
-                self.onAction?(action.id)
+                self.dispatch(action.id)
             }, for: .gameActivation)
             button.addAction(UIAction { [weak self] _ in
                 self?.highlighted = action.id; self?.setNeedsDisplay()
@@ -209,7 +256,7 @@ import UIKit
         #endif
     }
     func moveFocus(_ offset: Int) {
-        let enabled = (pageLayout?.targets.map(\.action) ?? (page.rows + page.orderedFooter)).filter(\.enabled)
+        let enabled = (pageLayout?.targets.map(\.action) ?? (displayedPage.rows + displayedPage.orderedFooter)).filter(\.enabled)
         guard !enabled.isEmpty else { return }
         let current = enabled.firstIndex { $0.id == focusedID }
         let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
@@ -227,7 +274,7 @@ import UIKit
         setNeedsDisplay()
     }
     func focusAction(_ id: String) {
-        guard (page.rows + page.orderedFooter).contains(where: { $0.id == id && $0.enabled }) else { return }
+        guard (displayedPage.rows + displayedPage.orderedFooter).contains(where: { $0.id == id && $0.enabled }) else { return }
         focusedID = id; highlighted = id
         #if os(tvOS)
         setNeedsFocusUpdate()
@@ -235,10 +282,23 @@ import UIKit
         setNeedsDisplay()
     }
     func activateFocused() {
+        let page = displayedPage
         let actions = page.rows + page.orderedFooter
         guard let action = actions.first(where: { $0.id == focusedID && $0.enabled })
                 ?? actions.first(where: { $0.primary && $0.enabled }) else { return }
-        onAction?(action.id)
+        dispatch(action.id)
+    }
+    private func dispatch(_ id: String) {
+        #if os(tvOS)
+        if id == TVMenuPresentation.previousID || id == TVMenuPresentation.nextID {
+            televisionPageIndex = max(0, televisionPageIndex + (id == TVMenuPresentation.nextID ? 1 : -1))
+            focusedID = id
+            rebuild()
+            setNeedsFocusUpdate()
+            return
+        }
+        #endif
+        onAction?(id)
     }
     func scrollInput(delta: CGFloat) {
         guard let scroll = superview as? UIScrollView else { return }

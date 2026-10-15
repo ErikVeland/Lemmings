@@ -1,5 +1,11 @@
 # UI clarity
 
+Mac Home changes the update arrow to a pixel hourglass immediately after an
+update request and while an update downloads. Keep its mouse, keyboard and
+accessibility actions available in the same bounds. Its accessible name reports
+loading, downloading or ready to install. Completion, cancellation, failure and
+session cleanup clear the busy state.
+
 Mac gameplay shows the saved percentage alongside the rescue counters. Use the
 engine's level total and round down to whole percent. Classic and NeoLemmix keep
 the Home count and add the percentage in parentheses. L2 uses a blue Saved
@@ -99,7 +105,8 @@ playfield, with the Mac's font size relative to zoom. The touch magnifier uses
 the same native text. Countdown text follows the sprite and adds no input surface.
 Use large green lettering for page titles,
 small green lettering for section headings and player names,
-and small blue lettering for controls, body text and quantities. Keep control
+and small blue lettering for controls, body text and quantities. Home's local and
+global saved totals use green digits and separators, with blue labels. Keep control
 captions blue when selected, primary, hovered or focused. Use borders,
 underlines and directional markers for those states. Mixed lines retain
 their roles: player initials are green, while v, Next:, counts and status text
@@ -713,8 +720,10 @@ TV keeps the aim reticle visible during planning and rewind. The skill badge
 remains offset from the aim point. A root overlay carries the reticle over HUD
 controls and projects playfield input through the CRT mapping. It has no input
 surface. Cross activates the shared HUD button bounds. Keep the controller's
-Circle pause/play loop separate from Menu navigation. Fast play first returns
-to 1× before pause or timeline control. See [controller QoL](ControllerQoL.md)
+Circle pause/play loop separate from Menu navigation. TV Circle resets speed
+and toggles planning pause/play immediately. R2 resumes
+planning and controls fast-forward without parking play. L2 resets fast speed
+before rewind. See [controller QoL](ControllerQoL.md)
 for trigger and engine limits.
 
 ## Failure navigation
@@ -781,8 +790,9 @@ use the existing source loaders and object artwork.
 
 The camera eases from the opening view towards the exit and back. Clamp it to
 the full level image. Use the existing menu clock and a maximum speed of three
-level pixels per second. The game's Reduce Motion setting and macOS Reduce
-Motion both freeze the camera and marching animation.
+level pixels per second. Accessibility offers a separate Static home screen choice, saved per player. It
+freezes the camera and marching animation without changing gameplay effects.
+The game's Reduce Motion setting and macOS Reduce Motion also freeze both.
 
 Focused, muted offscreen checks pass for Classic, Lemmings 2 and Lemmings 3.
 They cover exact last-played scenery, random and missing-content fallbacks,
@@ -798,14 +808,15 @@ manual checks.
 iPad and the normal TV app use the same bounded Home box and scenery flow.
 Leave spare height around the box. Wide layouts use three columns for the six
 Classic/fan libraries and a separate row for the sequel logos. Keep the selected
-interface size and scroll when the contents cannot fit. Player identity stays
+interface size on iPad and scroll when its contents cannot fit. TV uses its
+fixed landscape layout and the largest fitting whole-pixel scale. Player identity stays
 above the footer without a duplicate Next caption under the logo. Portrait
 phones retain their existing Home presentation.
 
 The backdrop occupies a separate, non-interactive view behind the menu. Keep
 one uploaded bitmap and move its image layer with nearest-neighbour sampling.
-Reuse the existing menu display link. Pause the camera for the game or system
-Reduce Motion setting, an inactive scene or a covering page. Resume without
+Reuse the existing menu display link. Pause the camera for Static home screen, the game or system Reduce Motion
+setting, an inactive scene or a covering page. Resume without
 catch-up movement. The backdrop adds no touch, controller or accessibility target.
 
 Save a small scenery reference after a successful level start, scoped to the

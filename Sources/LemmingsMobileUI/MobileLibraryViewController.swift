@@ -327,6 +327,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
         canvas.frame = CGRect(origin: .zero, size: size)
         scrollView.contentSize = size
+        #if os(tvOS)
+        scrollView.isScrollEnabled = !canvas.page.home && !canvas.page.televisionGrid
+        if !scrollView.isScrollEnabled { scrollView.contentOffset = .zero }
+        #endif
         game?.view.frame = view.bounds
     }
     private func rememberHomeBackdrop(_ session: any MobileGameSession, at index: Int) {
@@ -385,7 +389,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         homeBackdropView.advance(at: now,
             active: usesHomeBox && route == .home && game == nil && presentedViewController == nil
                 && view.window?.windowScene?.activationState == .foregroundActive,
-            reduceMotion: mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled)
+            reduceMotion: mobileSettings.classic.staticHomeScreen || mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled)
     }
 
     func rebuild() {

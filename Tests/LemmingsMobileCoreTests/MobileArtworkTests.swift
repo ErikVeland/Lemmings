@@ -26,10 +26,25 @@ struct MobileArtworkTests {
         let bundle = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: bundle, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: bundle) }
-        try FileManager.default.createSymbolicLink(at: bundle.appendingPathComponent("MacArtwork"), withDestinationURL: Self.root.appendingPathComponent(".build/mac-artwork/export"))
+        let macRoot = Self.root.appendingPathComponent(".build/mac-artwork/export/lemmings")
+            .resolvingSymlinksInPath().deletingLastPathComponent()
+        try FileManager.default.createSymbolicLink(at: bundle.appendingPathComponent("MacArtwork"), withDestinationURL: macRoot)
         try FileManager.default.createSymbolicLink(at: bundle.appendingPathComponent("AmigaArtwork"), withDestinationURL: Self.root.appendingPathComponent(".build/amiga-artwork/export"))
         let game = ClassicMobileSession(simulation: simulation, renderedLevel: rendered, assets: assets, palette: palette,
             levelIdentifier: "fixture", levelIndex: 0, authoredLevel: level, ground: ground, artworkFamily: "lemmings", artworkRoot: bundle)
+        for _ in 0..<120 { game.tick() }
+        let runningState = try game.checkpointPayload()
+        var switchedFrames = Set<Data>()
+        for source in [ClassicGraphicsSource.amiga, .macintosh, .macintoshMonochrome, .dosVGA, .amiga] {
+            var settings = ClassicSettings(); settings.graphics = source; settings.colorDepth = .full
+            game.applySettings(settings)
+            let frame = try game.render(highlight: nil)
+            #expect(frame.width == rendered.width * (source == .dosVGA ? 1 : 2))
+            #expect(try game.checkpointPayload() == runningState)
+            switchedFrames.insert(frame.rgba)
+        }
+        #expect(switchedFrames.count == 4)
+        #expect(game.rewind(seconds: Double(game.snapshot.tick) / game.ticksPerSecond))
         for (source, kind) in [(ClassicGraphicsSource.macintosh, "MacArtwork"), (.amiga, "AmigaArtwork"), (.macintoshMonochrome, "MacArtwork/monochrome")] {
             var settings = ClassicSettings(); settings.graphics = source; settings.colorDepth = .full
             game.applySettings(settings)

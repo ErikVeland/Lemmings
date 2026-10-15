@@ -22,6 +22,9 @@ extension SPUUpdater: AppUpdateChecking {
     var onChange: (() -> Void)?
     private(set) var availableVersion: String?
     private(set) var isDownloaded = false
+    private(set) var isDownloading = false
+    private(set) var isUpdateRequested = false
+    var isBusy: Bool { isDownloading || isUpdateRequested }
     private var automaticNotesVersion: String?
     private var pendingCheck = false
     private var pendingAutomaticCheck = false
@@ -43,7 +46,11 @@ extension SPUUpdater: AppUpdateChecking {
         availabilityObservation = checker.observeAvailability { [weak self] in self?.performPendingCheck() }
     }
 
-    func showUpdate() { requestCheck(userInitiated: true) }
+    func showUpdate() {
+        isUpdateRequested = true
+        onChange?()
+        requestCheck(userInitiated: true)
+    }
 
     private func requestCheck(userInitiated: Bool) {
         start()
@@ -73,6 +80,7 @@ extension SPUUpdater: AppUpdateChecking {
             automaticallyShowNotes: !handleShowingUpdate && !state.userInitiated && state.stage != .notDownloaded)
     }
     func updateWillBePresented(_ update: SUAppcastItem, downloaded: Bool, automaticallyShowNotes: Bool) {
+        isUpdateRequested = false
         // Refresh the discovery reminder with the alert's download state.
         setAvailable(update, downloaded: downloaded)
         if automaticallyShowNotes, automaticNotesVersion != update.versionString {
@@ -90,6 +98,25 @@ extension SPUUpdater: AppUpdateChecking {
         if error != nil { clear() }
     }
     func updaterDidNotFindUpdate(_ updater: SPUUpdater) { clear() }
+    func updater(_ updater: SPUUpdater, willDownloadUpdate item: SUAppcastItem, with request: NSMutableURLRequest) {
+        isUpdateRequested = false
+        isDownloading = true
+        setAvailable(item, downloaded: false)
+    }
+    func updater(_ updater: SPUUpdater, didDownloadUpdate item: SUAppcastItem) {
+        isUpdateRequested = false
+        setAvailable(item, downloaded: true)
+    }
+    func updater(_ updater: SPUUpdater, failedToDownloadUpdate item: SUAppcastItem, error: Error) {
+        isUpdateRequested = false
+        isDownloading = false
+        setAvailable(item, downloaded: false)
+    }
+    func userDidCancelDownload(_ updater: SPUUpdater) {
+        isUpdateRequested = false
+        isDownloading = false
+        onChange?()
+    }
     func updater(_ updater: SPUUpdater, userDidMake choice: SPUUserUpdateChoice,
         forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {
         if choice == .skip { clear() }
@@ -98,11 +125,14 @@ extension SPUUpdater: AppUpdateChecking {
         guard !item.isInformationOnlyUpdate, item.fileURL != nil else { clear(); return }
         availableVersion = item.displayVersionString
         isDownloaded = downloaded
+        if downloaded { isDownloading = false }
         onChange?()
     }
     private func clear() {
         availableVersion = nil
         isDownloaded = false
+        isDownloading = false
+        isUpdateRequested = false
         automaticNotesVersion = nil
         pendingAutomaticCheck = false
         onChange?()

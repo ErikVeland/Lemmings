@@ -161,7 +161,7 @@ struct MobileGameTurn {
     private var endRunArmedUntil = 0.0
     var isChoosingToolDirection: Bool { pendingL3Use != nil }
     #if os(tvOS)
-    var tvForwardScrubbing = false
+    private var tvControllerBackPress = false
     var tvPointerPoint: CGPoint?
     let tvPointerView = MobileTVPointerView()
     var tvCameraMode = false
@@ -359,7 +359,15 @@ struct MobileGameTurn {
             return
         }
         if presses.contains(where: { $0.type == .menu }) {
-            if GCController.controllers().contains(where: { $0.extendedGamepad?.buttonMenu.isPressed == true || $0.microGamepad?.buttonMenu.isPressed == true }) { return }
+            // tvOS also delivers Circle as a native Back press. Gameplay polling owns it.
+            if overlay.isHidden, GCController.controllers().contains(where: { $0.extendedGamepad?.buttonB.isPressed == true }) {
+                tvControllerBackPress = true
+                return
+            }
+            if GCController.controllers().contains(where: { $0.extendedGamepad?.buttonMenu.isPressed == true || $0.microGamepad?.buttonMenu.isPressed == true }) {
+                tvControllerBackPress = true
+                return
+            }
             if solutionGame != nil { returnToSolutionGame(); return }
             if isChoosingToolDirection { completeL3ToolDirection(nil) }
             else if !overlay.isHidden { overlayCanvas.goBack() }
@@ -373,11 +381,22 @@ struct MobileGameTurn {
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        #if os(tvOS)
+        if tvControllerBackPress, presses.contains(where: { $0.type == .menu }) {
+            tvControllerBackPress = false
+            let remaining = presses.filter { $0.type != .menu }
+            if !remaining.isEmpty { super.pressesEnded(remaining, with: event) }
+            return
+        }
+        #endif
         let handled = inputAdapter.ended(presses)
         super.pressesEnded(presses.subtracting(handled), with: event)
     }
 
     override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        #if os(tvOS)
+        tvControllerBackPress = false
+        #endif
         _ = inputAdapter.ended(presses)
         inputAdapter.reset()
         super.pressesCancelled(presses, with: event)
@@ -528,20 +547,6 @@ struct MobileGameTurn {
             }
             return
         }
-        #if os(tvOS)
-        if tvForwardScrubbing {
-            guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { setTVForwardScrub(false); return }
-            clock.speed = 3
-            let ticks = clock.advance(at: link.timestamp)
-            clock.speed = speed
-            for _ in 0..<ticks where !session.snapshot.isComplete { _ = session.stepForward() }
-            effects.update(session: session, viewport: playfieldView.gameViewport)
-            renderCurrentFrame(force: ticks > 0)
-            updateHUD()
-            if session.snapshot.isComplete { setTVForwardScrub(false); presentCompletion() }
-            return
-        }
-        #endif
         if endRunArmedUntil > 0, link.timestamp > endRunArmedUntil {
             endRunArmedUntil = 0
             updateHUD()
@@ -613,7 +618,9 @@ struct MobileGameTurn {
             if speed > 1 || inputSpeed.isHeld {
                 inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime)
                 updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
+                #if !os(tvOS)
                 return
+                #endif
             }
             if session.isReadOnly, session.snapshot.isComplete {
                 _ = session.rewind(seconds: Double(session.snapshot.tick) / session.ticksPerSecond)
@@ -1473,6 +1480,21 @@ struct MobileGameTurn {
         clock.maximumCatchUpTicks = max(budget.maximumCatchUpTicks, speedCatchUp)
     }
 
+    func applyGameSettings(_ settings: MobileSettings) {
+        applyPresentationSettings(settings)
+        (retainedSolution ?? solutionGame)?.applyPresentationSettings(settings)
+    }
+
+    private func applyPresentationSettings(_ settings: MobileSettings) {
+        gameSettings = settings
+        session.applySettings(settings.classic)
+        playfieldView.displaySettings = settings.classic
+        hudArtworkSource = nil
+        renderCurrentFrame(force: true)
+        updateHUD()
+        view.setNeedsLayout()
+    }
+
     func updateHUD(layout: MobileHUDLayout? = nil, snapshot: MobileGameSnapshot? = nil) {
         let snapshot = snapshot ?? session.snapshot
         MobileMusic.shared.update(snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
@@ -1765,22 +1787,6 @@ struct MobileGameTurn {
         resumePlay()
     }
 
-    #if os(tvOS)
-    func setTVForwardScrub(_ held: Bool) {
-        guard held != tvForwardScrubbing else { return }
-        if held {
-            guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
-            setRewindHeld(false)
-            pauseForPlanning()
-        }
-        tvForwardScrubbing = held
-        clock.suspend()
-        if !held { saveCheckpoint(reason: .periodic) }
-        updateHUD()
-    }
-
-    #endif
-
     func setRewindHeld(_ held: Bool) {
         guard held != rewindHeld else { return }
         if held {
@@ -1941,6 +1947,10 @@ struct MobileGameTurn {
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
         overlayCanvas.frame = CGRect(origin: .zero, size: size)
         overlay.contentSize = size
+        #if os(tvOS)
+        overlay.isScrollEnabled = !overlayCanvas.page.televisionGrid
+        if !overlay.isScrollEnabled { overlay.contentOffset = .zero }
+        #endif
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {

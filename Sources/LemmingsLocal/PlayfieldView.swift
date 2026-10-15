@@ -125,6 +125,10 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
+  var staticHomeScreen = false
+  var menuMotionReduced: Bool {
+    reduceMotion || (staticHomeScreen && isHomeScreen) || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+  }
   var reduceMotion = false {
     didSet {
       if reduceMotion { speedTrails.reset() }
@@ -284,6 +288,7 @@ struct ReticleFeedback {
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
   var overlayAvailableUpdate: String?
+  var overlayUpdateIsBusy = false
   var onUpdate: (() -> Void)?
   private var overlayFooterButtons: [CGRect] = []
   private func activateFooterButton(_ index: Int) {
@@ -982,7 +987,7 @@ struct ReticleFeedback {
   }
 
   func advanceHomeBackdrop(seconds: TimeInterval) {
-    guard usesHomeLayout, !reduceMotion, !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else { return }
+    guard usesHomeLayout, !menuMotionReduced else { return }
     homeBackdropElapsed += max(0, seconds)
   }
 
@@ -1018,7 +1023,8 @@ struct ReticleFeedback {
     NSGraphicsContext.restoreGraphicsState()
   }
 
-  private var usesHomeLayout: Bool { overlayTitle == L10n.text("LEMMINGS") && overlayProfileInitials != nil && macInterface != nil }
+  private var isHomeScreen: Bool { overlayTitle == L10n.text("LEMMINGS") && overlayProfileInitials != nil }
+  private var usesHomeLayout: Bool { isHomeScreen && macInterface != nil }
   private var homeViewport: CGRect {
     CGRect(x: 0, y: 0, width: bounds.width,
       height: max(1, bounds.height - (overlayShowsLemmings ? 64 : 0) - (overlaySavedCounts == nil ? 0 : 40)))
@@ -1034,7 +1040,10 @@ struct ReticleFeedback {
     var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists"))]
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
-    for index in footer.indices { footer[index].selected = overlayHighlight == rows.count + index }
+    for index in footer.indices {
+      footer[index].selected = overlayHighlight == rows.count + index
+      footer[index].busy = footer[index].id == "whatsNew" && overlayUpdateIsBusy
+    }
     let page = GameFrontEnd.Page(title: L10n.text("Lemmings"), home: true, rows: rows, footer: footer,
       footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
     let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
@@ -1122,7 +1131,8 @@ struct ReticleFeedback {
       highlighted: hovered, fillsCanvas: false, in: context)
     context.restoreGState()
     if let overlaySavedCounts {
-      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1, palette: .blue)
+      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1,
+        palette: .blue, numberPalette: .green)
     }
     if overlayShowsLemmings { drawMarchingLemmings() }
   }
@@ -1294,7 +1304,8 @@ struct ReticleFeedback {
       GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel,
         backdrop: PanelGlyph.rock.image(fitting: update.size))
       let well = GameStoneButton.well(update, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
-      if let image = PanelGlyph.download.image(fitting: well.size) {
+      let glyph: PanelGlyph = overlayUpdateIsBusy ? .hourglass : .download
+      if let image = glyph.image(fitting: well.size) {
         image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -1338,7 +1349,7 @@ struct ReticleFeedback {
     }
     if let overlaySavedCounts {
       drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(layout),
-        face: .small, scale: max(1, Int(scale)), palette: .blue)
+        face: .small, scale: max(1, Int(scale)), palette: .blue, numberPalette: .green)
       y += 40 * scale
     }
     if let retryTitle = overlayHandoverRetryTitle {
@@ -1396,9 +1407,9 @@ struct ReticleFeedback {
   /// Draw the original glyphs on whole pixels and keep long text inside its band.
   private func drawMenuGameText(_ text: String, in rect: CGRect,
     face: ClassicMacUserInterface.Face, scale: Int, wrap: Bool = false,
-    palette: MacInterfaceRenderer.Palette = .blue) {
+    palette: MacInterfaceRenderer.Palette = .blue, numberPalette: MacInterfaceRenderer.Palette? = nil) {
     guard let macInterface, let font = macInterface.font(face) else {
-      GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect)
+      GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, palette: palette, numberPalette: numberPalette)
       return
     }
     let height = font.height(of: MacInterfaceRenderer.menuText(text), scale: scale)
@@ -1414,7 +1425,7 @@ struct ReticleFeedback {
         ? String(line.prefix(max(0, columns - 3))) + "..." : line
       macInterface.menuLine(value,
         in: CGRect(x: rect.minX, y: top + CGFloat(index * height),
-          width: rect.width, height: CGFloat(height)), face: face, scale: scale, palette: palette)
+          width: rect.width, height: CGFloat(height)), face: face, scale: scale, palette: palette, numberPalette: numberPalette)
     }
     NSGraphicsContext.restoreGraphicsState()
   }

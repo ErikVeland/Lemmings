@@ -228,6 +228,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var controllerSwapSticks: Bool
     public var interfaceSize: ClassicInterfaceSize
     public var reduceMotion: Bool
+    public var staticHomeScreen: Bool
     public var reduceFlashes: Bool
     public var showSongInfo: Bool
     public var fadeMenuButton: Bool
@@ -286,6 +287,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         controllerMappings: [String: String] = [:],
         interfaceSize: ClassicInterfaceSize = .standard,
         reduceMotion: Bool = false,
+        staticHomeScreen: Bool = false,
         reduceFlashes: Bool = false,
         showSongInfo: Bool = true,
         fadeMenuButton: Bool = true,
@@ -330,6 +332,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.controllerMappings = ControllerBindings.validatedMapping(controllerMappings)
         self.interfaceSize = interfaceSize
         self.reduceMotion = reduceMotion
+        self.staticHomeScreen = staticHomeScreen
         self.reduceFlashes = reduceFlashes
         self.showSongInfo = showSongInfo
         self.fadeMenuButton = fadeMenuButton
@@ -407,6 +410,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         controllerMappings = ControllerBindings.validatedMapping((try? values.decodeIfPresent([String: String].self, forKey: .controllerMappings)) ?? [:])
         interfaceSize = (try? values.decodeIfPresent(ClassicInterfaceSize.self, forKey: .interfaceSize)) ?? .standard
         reduceMotion = try values.decodeIfPresent(Bool.self, forKey: .reduceMotion) ?? false
+        staticHomeScreen = try values.decodeIfPresent(Bool.self, forKey: .staticHomeScreen) ?? false
         reduceFlashes = try values.decodeIfPresent(Bool.self, forKey: .reduceFlashes) ?? false
         showSongInfo = try values.decodeIfPresent(Bool.self, forKey: .showSongInfo) ?? true
         fadeMenuButton = try values.decodeIfPresent(Bool.self, forKey: .fadeMenuButton) ?? true

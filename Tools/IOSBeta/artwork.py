@@ -50,11 +50,17 @@ def copy_into_app(source, destination):
     shutil.copyfile(ROOT / "Resources/MenuArtwork/ultimate.png", menu_art / "ultimate.png")
     shutil.copyfile(ROOT / "Resources/MenuArtwork/lemmings-chronicles.pcx", menu_art / "lemmings-chronicles.pcx")
     # The Xcode option remains a single-family path; siblings carry the other releases.
-    mac = Path(source).parent if source else ROOT / ".build/mac-artwork/export"
+    mac = mac_root(source)
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
     for kind, root in (("MacArtwork", mac), ("AmigaArtwork", amiga)):
         for family in (*FAMILIES, *("monochrome/" + family for family in FAMILIES)):
             copy_family(root / family, destination.parent.parent / kind / family)
+
+
+def mac_root(source=""):
+    # A family can be linked to an existing export. Its siblings live beside the target.
+    family = Path(source) if source else ROOT / ".build/mac-artwork/export/lemmings"
+    return family.resolve().parent
 
 
 def main():

@@ -23,10 +23,18 @@
     rebuildLevelCatalogue(discovery)
     let folder = URL(fileURLWithPath: ".build/home-backdrop-renders")
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try testStaticHomeScreenControl(folder: folder)
     let clockProbe = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 900, height: 620))
     clockProbe.setHomeBackdrop(LevelPreviewBitmap(width: 1600, height: 160,
       rgba: Data(repeating: 255, count: 1600 * 160 * 4), start: CGPoint(x: 160, y: 80),
       goal: CGPoint(x: 1440, y: 80)))
+    clockProbe.overlayTitle = L10n.text("LEMMINGS"); clockProbe.overlayProfileInitials = "AB"
+    clockProbe.staticHomeScreen = true
+    try check(clockProbe.menuMotionReduced, "Static Home animated the fallback Home artwork")
+    clockProbe.overlayTitle = "Other page"
+    if !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+      try check(!clockProbe.menuMotionReduced, "Static Home reduced motion on another page")
+    }
     let opening = clockProbe.homeBackdropSource(at: 0)!
     let destination = CGPoint(x: 1440, y: 80)
     let travel = destination.x - opening.width / 2 - opening.minX
@@ -78,6 +86,12 @@
           try check(hypot(later.midX - goal.x, later.midY - goal.y) < hypot(start.midX - goal.x, start.midY - goal.y),
             "\(engine) Home camera moved away from the exit")
         }
+        probe.staticHomeScreen = true
+        try check(probe.menuMotionReduced && !probe.reduceMotion && probe.hdEffectsEnabled,
+          "Static Home changed gameplay effects or left marchers animated")
+        probe.advanceHomeBackdrop(seconds: 30)
+        try check(probe.homeBackdropElapsed == 0, "Static Home animated scenery")
+        probe.staticHomeScreen = false
         probe.reduceMotion = true
         probe.advanceHomeBackdrop(seconds: 30)
         try check(probe.homeBackdropElapsed == 0, "Reduce Motion animated Home scenery")
@@ -148,6 +162,54 @@
     refreshHomeBackdrop()
     try check(homeBackdropTask == nil && random === playfield.homeBackdropImage,
       "Home reselected random scenery during a menu refresh")
-    print("PASS Classic/L2/L3 full-map scenery, last played/random selection, exit pan, Reduce Motion, 24 compact/large renders and input targets")
+    print("PASS Classic/L2/L3 full-map scenery, last played/random selection, exit pan, Static Home, Reduce Motion, 24 compact/large renders and input targets")
   }
+
+  private func testStaticHomeScreenControl(folder: URL) throws {
+    let preferences = SettingsWindow(settings: ClassicSettings(music: .silent, soundVolume: 0), options: settingsOptions())
+    preferences.show()
+    defer { GameScreen.shared.dismissAll() }
+    guard let page = GameScreen.shared.controllerPage(in: window) else {
+      throw IntegrationFailure(message: "Missing Settings page")
+    }
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    guard let tabs = descendants(page).compactMap({ $0 as? NSTabView }).first,
+      let control = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Static home screen" }) else {
+      throw IntegrationFailure(message: "Missing Static Home control")
+    }
+    tabs.selectTabViewItem(at: 5)
+    page.layoutSubtreeIfNeeded()
+    control.scrollToVisible(control.bounds)
+    try check(control.state == .off && control.accessibilityLabel() == "Static home screen",
+      "Static Home default or accessibility name is wrong")
+    for enabled in [false, true] {
+      if enabled { try check(control.accessibilityPerformPress(), "Static Home accessibility press failed") }
+      page.layoutSubtreeIfNeeded()
+      try check(preferences.current.staticHomeScreen == enabled && !preferences.current.reduceMotion,
+        "Static Home control changed Reduce Motion")
+      let image = ReplayFrameCapture.image(size: page.bounds.size) { ReplayFrameCapture.draw(page, in: page.bounds) }!
+      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent("static-home-\(enabled).png"))
+      for point in [CGPoint(x: 10, y: control.bounds.midY), CGPoint(x: control.bounds.maxX - 8, y: control.bounds.midY)] {
+        try check(page.hitTest(control.convert(point, to: page)) === control,
+          "Static Home checkbox or caption is outside its input target")
+      }
+    }
+    window.makeFirstResponder(control)
+    let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
+      isARepeat: false, keyCode: 49)!
+    try check(GameScreen.shared.handleDialogKey(space) && !preferences.current.staticHomeScreen,
+      "Static Home keyboard activation failed")
+    let location = control.convert(CGPoint(x: control.bounds.maxX - 8, y: control.bounds.midY), to: nil)
+    let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!
+    let up = NSEvent.mouseEvent(with: .leftMouseUp, location: location, modifierFlags: [], timestamp: 1.1,
+      windowNumber: window.windowNumber, context: nil, eventNumber: 2, clickCount: 1, pressure: 0)!
+    NSApp.postEvent(up, atStart: true)
+    control.mouseDown(with: down)
+    try check(preferences.current.staticHomeScreen, "Static Home caption click failed")
+    print("PASS Static Home native off/on renders, caption/checkbox targets, accessibility and keyboard activation")
+  }
+
 }

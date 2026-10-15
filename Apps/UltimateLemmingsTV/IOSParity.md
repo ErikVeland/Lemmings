@@ -100,8 +100,9 @@ fallback. SDK compilation and the Xcode app build do not establish parity alone.
 ## Home scenery
 
 The 15 October Home update shares the iPad menu box, scenery reference and camera
-with the normal TV app. Keep TV's existing interface scales, native focus and
-scroll-to-focus behaviour. The backdrop has no input surface. It retains one
+with the normal TV app. TV now fits Home to its safe viewport at a whole-pixel scale, with saved
+play on the left, libraries on the right and a fixed footer. Native focus uses
+the same target geometry. The backdrop has no input surface. It retains one
 bitmap and moves its layer with nearest-neighbour sampling through the existing
 menu clock. System/game Reduce Motion and inactive scenes hold the camera.
 Scenery references follow the selected profile and solo/Hot Seat scope. They do

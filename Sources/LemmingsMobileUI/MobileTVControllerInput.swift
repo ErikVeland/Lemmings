@@ -12,8 +12,8 @@ import UIKit
     private var bindings = TVControllerBindings()
     private var timeline = TVTimelineTransport()
     private var rewindHeld = false
-    private var pausePressed = false
     private var menuPressed = false
+    private var remotePausePressed = false
     private var touchpadClick = ControllerButtonEdge()
     private var preferenceKey: String?
     private var feedbackPad: GCDualSenseGamepad?
@@ -68,12 +68,12 @@ import UIKit
             return
         }
         if adapter.isMenu() {
-            let pause = devices.contains { pressed($0).contains(.b) }
+            let remotePause = devices.contains { $0.microGamepad?.buttonX.isPressed == true }
+            if remotePause && !remotePausePressed { adapter.onMenuPause?() }
+            remotePausePressed = remotePause
             let menu = devices.contains { $0.extendedGamepad?.buttonMenu.isPressed == true }
             if menu && !menuPressed { adapter.onGameMenu?() }
             menuPressed = menu
-            if pause && !pausePressed { adapter.onMenuPause?() }
-            pausePressed = pause
             if let active = devices.first(where: { !pressed($0).isEmpty || moving($0) }) { lastMenuDevice = active }
             if devices.allSatisfy({ pressed($0).isEmpty }) { adapter.onMenuNeutral?() }
             reset()
@@ -93,7 +93,7 @@ import UIKit
             reset()
         }
         guard let owner else { return }
-        pausePressed = ControllerBindings.remap(pressed(owner), using: settings.controllerMappings).contains(.b)
+        remotePausePressed = owner.microGamepad?.buttonX.isPressed == true
         menuPressed = owner.extendedGamepad?.buttonMenu.isPressed == true
         let shuffleTouchpad = touchpadClick.update(pressed: MobileInputAdapter.touchpadPressed(on: owner), active: true)
         owner.microGamepad?.allowsRotation = false
@@ -106,7 +106,6 @@ import UIKit
         if bindings.menuRequested { adapter.onGameMenu?(); reset(); return }
         if bindings.shuffleRequested || shuffleTouchpad { adapter.onDJShuffle?() }
         for action in actions {
-            if case .boost = action { continue }
             if action == .pause { applyTimeline(timeline.reset()) }
             adapter.perform(action)
             if adapter.isMenu() { reset(); return }
@@ -136,14 +135,13 @@ import UIKit
             case .step(let direction): adapter?.onCommand?(.step(direction))
             case .scrub(let direction, let held):
                 if direction < 0 { rewindHeld = held; adapter?.onRewindHeld?(held) }
-                else { adapter?.onForwardScrub?(held) }
             }
         }
     }
 
     private func updateFeedback(pad: GCExtendedGamepad, settings: ClassicSettings) {
         guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted",
-              adapter?.triggerFeedbackEnabled() == true, inputPreferences.triggerFeedback != false, settings.variableSpeedEnabled,
+              adapter?.triggerFeedbackEnabled() == true, inputPreferences.triggerFeedback != false,
               (settings.controllerMappings[ControllerBindings.Button.rightTrigger.rawValue] ?? "rightTrigger") == "rightTrigger",
               let dual = pad as? GCDualSenseGamepad else { clearFeedback(); return }
         let tier = adapter?.controllerSpeed() ?? 1

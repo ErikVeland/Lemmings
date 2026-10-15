@@ -395,6 +395,36 @@ private func testHDEffectsPreference() throws {
     print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
 }
 
+private func testStaticHomeScreen() throws {
+    let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+    try require(!old.staticHomeScreen, "Older settings changed Home behaviour")
+    var value = ClassicSettings(staticHomeScreen: true)
+    try require(!value.reduceMotion && value.speedEffectsEnabled && value.cinematicExplosionsEnabled,
+      "Static Home changed gameplay effects")
+    value.applyExperiencePreset(modern: false)
+    value.applyExperiencePreset(modern: true)
+    try require(value.staticHomeScreen, "Presets erased Static Home")
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(value))
+    try require(restored.staticHomeScreen && !restored.reduceMotion, "Static Home did not persist independently")
+    var personal = PlayerControlSettings(value)
+    personal.controllerSwapSticks = true
+    let encoded = try JSONEncoder().encode(personal)
+    var legacy = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+    legacy.removeValue(forKey: "staticHomeScreen")
+    let migrated = try JSONDecoder().decode(PlayerControlSettings.self, from: JSONSerialization.data(withJSONObject: legacy))
+    try require(!migrated.staticHomeScreen && migrated.controllerSwapSticks,
+      "Older player settings lost personal choices")
+    let suite = "StaticHomeTests.\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    personal.save(to: defaults, profileID: "first")
+    let first = PlayerControlSettings.load(from: defaults, profileID: "first", legacy: old).applying(to: old)
+    let second = PlayerControlSettings.load(from: defaults, profileID: "second", legacy: old).applying(to: value)
+    try require(first.staticHomeScreen && !second.staticHomeScreen && !first.reduceMotion,
+      "Static Home leaked between players")
+    print("PASS independent Static Home, legacy migration, profiles, persistence and presets")
+}
+
 private func testReducedEffects() throws {
     let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"musicVolume\":0.25}".utf8))
     try require(!old.reduceMotion && !old.reduceFlashes && old.musicVolume == 0.25, "Older settings lost their values")
@@ -416,6 +446,7 @@ private func testReducedEffects() throws {
 }
 
 do {
+    try testStaticHomeScreen()
     try testTargetingPresetsAndIconMigration()
     for size in ClassicInterfaceSize.allCases {
         var settings = ClassicSettings()

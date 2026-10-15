@@ -307,7 +307,8 @@ import LemmingsGameArt
 @MainActor enum GamePixelText {
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
-                   preservesCase: Bool = false, color: NSColor? = nil) {
+                   preservesCase: Bool = false, color: NSColor? = nil,
+                   numberPalette: MacInterfaceRenderer.Palette? = nil) {
     let source = text.replacingOccurrences(of: "×", with: "X")
     let normalized = preservesCase ? source.precomposedStringWithCanonicalMapping : BitmapLatinGlyphs.uppercase(source, locale: L10n.interface.locale)
     let bounds = GamePixelTypography.verticalBounds(of: normalized)
@@ -323,6 +324,11 @@ import LemmingsGameArt
       : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).setFill()
     let highlightedIndex = highlighted.flatMap { normalized.firstIndex(of: $0) }.map { normalized.distance(from: normalized.startIndex, to: $0) }
     for (index, character) in normalized.enumerated() {
+      if let numberPalette {
+        let ink = character.isNumber || character == "," ? numberPalette : palette
+        (ink == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+          : ink == .monochrome ? .white : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
+      }
       if highlighted != nil && palette != .monochrome {
         (index == highlightedIndex
           ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)

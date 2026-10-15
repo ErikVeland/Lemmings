@@ -9,7 +9,7 @@ public enum PanelGlyphArt: String, Sendable {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings, download, menu, mobileMenu, reveal, dismiss
+  case settings, download, hourglass, menu, mobileMenu, reveal, dismiss
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -80,6 +80,13 @@ public enum PanelGlyphArt: String, Sendable {
         ".####.###.####.",
         "..##..###..##..",
         "......###......",
+      ]
+    case .hourglass:
+      return [
+        "#############", "#############", "..#.......#..", "..#.#####.#..",
+        "...#.###.#...", "....#.#.#....", ".....###.....", ".....###.....",
+        "....#.#.#....", "...#..#..#...", "..#..###..#..", "..#.#####.#..",
+        "#############", "#############",
       ]
     case .download:
       return [
@@ -162,7 +169,7 @@ public enum PanelGlyphArt: String, Sendable {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings, .download, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward:
+    case .play, .fastForward, .undo, .settings, .download, .hourglass, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }
