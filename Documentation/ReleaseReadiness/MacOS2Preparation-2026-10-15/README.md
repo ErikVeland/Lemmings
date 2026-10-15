@@ -85,13 +85,15 @@ conversions. The full quest passed 1,056 recoveries, 352 progress resumes and
 six chapter transitions. See the [Classic content recheck](classic-content-recheck.json)
 and the updated [quest evidence](../ClassicConversionQuest.json).
 
-The initial replay run records source revision `41b7b0f5`. Current `main` is
-`eb6d58d7`. I reran the prebuilt route and quest verifiers on current `main`;
-all 352 routes, the full quest and its negative checks pass. The generated quest
-JSON matches the committed evidence. No `Sources/NxlvKit/*.swift` files or
-Classic verifier files changed between the binary source revision and current
-`main`. The host still cannot rebuild these tools because its Swift compiler and
-SDK versions do not match. The [current-main replay record](classic-content-recheck.json)
+The initial replay run records source revision `41b7b0f5`. The rerun used
+`main` at `eb6d58d7`; the worktree is now at `0e3ac4a7` after a
+localisation-only commit. That commit did not change engine or verifier
+sources. I reran the prebuilt route and quest verifiers at `eb6d58d7`; all 352
+routes, the full quest and its negative checks pass. The generated quest JSON
+matches the committed evidence. No `Sources/NxlvKit/*.swift` files or Classic
+verifier files changed between the binary source revision and the rerun. The
+host still cannot rebuild these tools because its Swift compiler and SDK
+versions do not match. The [current-main replay record](classic-content-recheck.json)
 keeps the run and binary source revisions separate.
 
 The host app used for this check identifies as 1.9.1 build 76. Its full
@@ -108,7 +110,8 @@ accepted dependency result.
 
 ## Open bundled-closure work
 
-- Repair the affected L3 standalone and carried routes. The current strict gate
+- Repair the four L3 standalone and thirteen carried routes that still fail.
+  Five Shadow 13 identities now replay exactly. The current strict gate still
   stops at Shadow 7; prior 90/90 proof belongs to the earlier engine state.
 - Prove L2 golden talismans and ark prerequisites, then verify ending playback.
 - Close all bundled fan routes and source-behaviour comparisons.
