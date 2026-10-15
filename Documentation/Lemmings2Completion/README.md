@@ -18,17 +18,24 @@ chain ends with one survivor and a Bronze talisman, so the gate correctly fails
 the ark prerequisites. The evidence does not prove a golden talisman or an ark
 ending.
 
-The worktree is now at `main` revision `fc2c59e6`. Review from the last
-source replay found no L2 runtime, level data, solver or completion-gate
-changes. A fresh build from this revision passed the 120-route gate, 70
-carry-over variants and all twelve ten-level chains against the installed L2
-resources. The event suite passed all 120 routes and rejected refused,
-off-viewport and out-of-order events. The strict ark gate still fails because
-each tribe ends with one survivor and a Bronze talisman. A Gold talisman and
-30 survivors per tribe remain open. The fresh verifier hash is
-`fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91`. The fresh
-`libNxlvKit.dylib` hash is
-`5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067`.
+The worktree now matches `origin/main` at revision `fc52cac4`. A fresh
+current-source build passed the 120-route gate, 70 carry-over variants and all
+twelve ten-level chains against the staged 218-file build 83 app payload. The
+event suite passed all 120 routes and rejected refused, off-viewport and
+out-of-order events. The Lemmings 2 runtime suite also passed against this
+payload. It includes a regression check for the crowd assignment query.
+
+The build uses Xcode 26.6 and Swift 6.3.3. A temporary source copy disables
+optimisation only for `ClassicDOSSimulation.handleJumping`, to work around the
+documented compiler failure. `Lemmings2Runtime.swift` matches current `main`
+byte for byte. The current library hash is
+`2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607`. The
+current route verifier hash is
+`d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0`.
+
+The strict ark gate still fails because each tribe ends with one survivor and a
+Bronze talisman. A Gold talisman and 30 survivors per tribe remain open. The
+payload replay audit records the source revision, build hashes and commands.
 
 The route gate also passed against the 218-file L2 app payload staged from the
 exact build 83 archive extraction. Every staged file matches the retained

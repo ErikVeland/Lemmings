@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "date": "2026-10-15",
+  "date": "2026-10-16",
   "release": {
     "version": "2.0",
     "build": 83,
@@ -44,24 +44,29 @@
     "stagedPayloadRoot": "/private/tmp/lemmings-bundled-closure/Lemm2-app-payload"
   },
   "runtime": {
-    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "sourceCommit": "fc52cac4bc27e9d196f3cdfa348ac36571426f94",
     "sourceEquivalence": "engine-content-equivalence-current-main.json: engineGameplaySources is empty versus build 83",
-    "runtimeSourceSHA256": "650b5bf3f9fec062a274cf3bd7559cc58cb0fbf94367764c0229395acdd04d3d",
-    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
-    "completionVerifierSHA256": "fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91",
-    "eventVerifierSHA256": "00c9e468d8768b7a5735283915403326172fcf83b0bfdb4732274114f13a4325",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "librarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "completionVerifierSHA256": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
+    "eventVerifierSHA256": "51b052f741f70ad9370bb25f5cca0ffcf5a9cc8a9eede128d507881580d6bb6d",
+    "runtimeTestsSHA256": "58f12ea3c6d5d57394f38087116020be32b6376ead86363218d8492534c0e951",
+    "runtimeTestSourceSHA256": "ef9e4c8bc438771443222ad2ff727baec3b3c3e1df04d649c805b0e33b67b54f",
+    "buildMethod": "Optimised Xcode 26.6 Swift 6.3.3 build from current NxlvKit sources. A temporary copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings2Runtime.swift matches the current worktree byte for byte.",
     "commands": [
-      ".build/l2-completion/events <payload-root>",
-      ".build/l2-completion/verify <payload-root> --require-all"
+      ".build/l2-current-main-20261016/events <payload-root>",
+      ".build/l2-current-main-20261016/verify <payload-root> --require-all",
+      ".build/l2-current-main-20261016/runtime-tests <payload-root>"
     ],
     "payloadReplayResultLogs": {
-      "events": "/private/tmp/l2-build83-payload-events.log",
-      "routes": "/private/tmp/l2-build83-payload-routes.log",
-      "ark": "/private/tmp/l2-build83-payload-ark.log"
+      "events": "/private/tmp/l2-current-main-20261016-events.log",
+      "routes": "/private/tmp/l2-current-main-20261016-routes.log",
+      "ark": "/private/tmp/l2-current-main-20261016-ark.log"
     }
   },
   "result": {
     "routeGate": "passed",
+    "runtimeSuite": "passed against the staged app payload; includes crowd assignment results regression coverage",
     "standaloneRoutes": 120,
     "carryOverVariants": 70,
     "doubleReplay": true,

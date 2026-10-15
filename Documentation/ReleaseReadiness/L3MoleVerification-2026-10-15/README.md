@@ -50,10 +50,10 @@ checks pass. The bundled L3 route gate remains open. The installed app is 1.9.1
 build 76, and its L3 files match the 1.9.7 build 82 `Ports` baseline. Replay
 evidence and route gaps cause the gate failure. See the [content recheck](../MacOS2Preparation-2026-10-15/classic-content-recheck.json).
 
-### Current-main route searches
+### 15 October route searches
 
-The latest current-main audit still reports 399 of 416 fixtures passing. I
-rebuilt the L3 solver against the audited runtime library and searched from
+The 15 October audit reports 399 of 416 fixtures passing. I rebuilt the L3
+solver against that audited runtime library and searched from
 retained route prefixes for levels 206, 213 and 229. The searches used 120
 seconds and a beam width of 1,024. None found a winning route. Level 206 was
 searched from ticks 424 and 630. Level 213 was searched from tick 750. Level
@@ -65,13 +65,33 @@ These searches did not change any fixture. They do not show that these levels
 are unsolvable. The four standalone route failures and thirteen carried route
 failures remain open.
 
-The audit ran when `main` was at `eb6d58d7`. The worktree is now at
-`0e3ac4a7` after a localisation-only commit. That commit did not change L3
-engine or verifier sources. The diagnostic audit uses a prebuilt verifier and
-runtime library from `41b7b0f5`; the L3 engine and verifier Swift sources did
-not change between those revisions. The selected Swift 6.3.3 compiler does
-not match the installed SDK, so this checkout cannot rebuild the tools used
-for the rerun.
+These solver probes predate the 16 October current-main audit below. They have
+not been repeated against the current runtime source.
+
+The 15 October audit ran when `main` was at `eb6d58d7`. Its diagnostic audit
+used a prebuilt verifier and runtime library from `41b7b0f5`. The selected
+Swift 6.3.3 compiler did not match that run's SDK, so that checkout could not
+rebuild those tools. The current-main rerun below uses a matching Xcode 26.6
+toolchain and fresh binaries.
+
+### 16 October build 83 payload audit
+
+I rebuilt the diagnostic audit from current `main` revision `fc52cac4` and ran
+it against the staged build 83 L3 resources. All 561 files in the retained
+bundle manifest match by path, size and SHA-256. The full extraction contains
+15 files outside that manifest. The fresh audit report is identical to the
+retained report: 399 of 416 fixtures replay twice, and 17 input schedules do
+not win. The four standalone gaps are Shadow 7 and Egyptian 6, 13 and 29. The
+other 13 gaps are carried schedules across Shadow 7 and Egyptian 6, 13 and 29.
+
+The strict route gate still stops at Shadow 7. The strict campaign gate still
+stops at carried fixture `107-1.json`. The current L3 source hash is
+`54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1`. The
+current library hash is
+`2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607`. The
+[audit provenance](current-fixture-audit-provenance.json) records the build,
+resource manifest and verifier hashes. This confirms the route count. It does
+not close the 17 routes or prove original-engine fidelity.
 
 I also tested two seeded repairs for Shadow 7 with the current runtime library.
 The first resumed from the retained route at tick 1,580 with a 1,024-wide beam

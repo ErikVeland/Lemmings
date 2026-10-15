@@ -688,6 +688,25 @@ func testAssignmentClearance() throws {
     print("PASS native Jumper, Hopper, Shimmier and Diver assignment clearance")
 }
 
+func testAssignmentResults() throws {
+    var game = try fixture()
+    for _ in 0..<80 { game.step() }
+    check(game.lemmings.count == 3, "Assignment-results fixture did not release all lemmings")
+    for slot in game.configuration.skills.indices {
+        let results = game.assignmentResults(slot: slot)
+        check(results.count == game.lemmings.count, "Assignment results did not match the crowd size")
+        for (index, lemming) in game.lemmings.enumerated() {
+            check(results[index] == game.canAssign(slot: slot, to: lemming.id),
+                  "Crowd assignment result differed for slot \(slot), lemming \(lemming.id)")
+        }
+    }
+    check(game.assignmentResults(slot: -1) == Array(repeating: false, count: game.lemmings.count),
+          "Invalid assignment slot did not reject the whole crowd")
+    check(game.assignmentResults(slot: game.configuration.skills.count) == Array(repeating: false, count: game.lemmings.count),
+          "Out-of-range assignment slot did not reject the whole crowd")
+    print("PASS crowd assignment results match individual assignment checks")
+}
+
 func testAdvancedMovement() throws {
     func make(_ skill: Lemmings2Runtime.Skill, ceiling: Bool = false, wall: Bool = false) throws -> Lemmings2Runtime {
         let w = 512, h = 240
@@ -1771,6 +1790,7 @@ do {
     try testExplosionFrames()
     testShimmyEdges()
     try testAssignmentClearance()
+    try testAssignmentResults()
     try testAdvancedMovement()
     try testMultipleEntrances()
     try testInteractiveObjects()
