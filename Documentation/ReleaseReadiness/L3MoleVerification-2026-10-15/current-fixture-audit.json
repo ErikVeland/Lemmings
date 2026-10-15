@@ -1,0 +1,2991 @@
+{
+  "results": [
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/001.json",
+      "level": 1,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/002.json",
+      "level": 2,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/003.json",
+      "level": 3,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/004.json",
+      "level": 4,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/005.json",
+      "level": 5,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/006.json",
+      "level": 6,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/007.json",
+      "level": 7,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/008.json",
+      "level": 8,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/009.json",
+      "level": 9,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/010.json",
+      "level": 10,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/011.json",
+      "level": 11,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/012.json",
+      "level": 12,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/013.json",
+      "level": 13,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/014.json",
+      "level": 14,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/015.json",
+      "level": 15,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/016.json",
+      "level": 16,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/017.json",
+      "level": 17,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/018.json",
+      "level": 18,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/019.json",
+      "level": 19,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/020.json",
+      "level": 20,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/021.json",
+      "level": 21,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/022.json",
+      "level": 22,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/023.json",
+      "level": 23,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/024.json",
+      "level": 24,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/025.json",
+      "level": 25,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/026.json",
+      "level": 26,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/027.json",
+      "level": 27,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/028.json",
+      "level": 28,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/029.json",
+      "level": 29,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/030.json",
+      "level": 30,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/101.json",
+      "level": 101,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/102.json",
+      "level": 102,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/103.json",
+      "level": 103,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/104.json",
+      "level": 104,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/105.json",
+      "level": 105,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/106.json",
+      "level": 106,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+      "level": 107,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/108.json",
+      "level": 108,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/109.json",
+      "level": 109,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/110.json",
+      "level": 110,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/111.json",
+      "level": 111,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/112.json",
+      "level": 112,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
+      "level": 113,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/114.json",
+      "level": 114,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/115.json",
+      "level": 115,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/116.json",
+      "level": 116,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/117.json",
+      "level": 117,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/118.json",
+      "level": 118,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/119.json",
+      "level": 119,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/120.json",
+      "level": 120,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/121.json",
+      "level": 121,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/122.json",
+      "level": 122,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/123.json",
+      "level": 123,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/124.json",
+      "level": 124,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/125.json",
+      "level": 125,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/126.json",
+      "level": 126,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/127.json",
+      "level": 127,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/128.json",
+      "level": 128,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/129.json",
+      "level": 129,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/130.json",
+      "level": 130,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/201.json",
+      "level": 201,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/202.json",
+      "level": 202,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/203.json",
+      "level": 203,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/204.json",
+      "level": 204,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/205.json",
+      "level": 205,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+      "level": 206,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/207.json",
+      "level": 207,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/208.json",
+      "level": 208,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/209.json",
+      "level": 209,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/210.json",
+      "level": 210,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/211.json",
+      "level": 211,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/212.json",
+      "level": 212,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/213.json",
+      "level": 213,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/214.json",
+      "level": 214,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/215.json",
+      "level": 215,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/216.json",
+      "level": 216,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/217.json",
+      "level": 217,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/218.json",
+      "level": 218,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/219.json",
+      "level": 219,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/220.json",
+      "level": 220,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/221.json",
+      "level": 221,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/222.json",
+      "level": 222,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/223.json",
+      "level": 223,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/224.json",
+      "level": 224,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/225.json",
+      "level": 225,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/226.json",
+      "level": 226,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/227.json",
+      "level": 227,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/228.json",
+      "level": 228,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+      "level": 229,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/230.json",
+      "level": 230,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/003-22.json",
+      "level": 3,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/004-22.json",
+      "level": 4,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/005-22.json",
+      "level": 5,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/005-24.json",
+      "level": 5,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-13.json",
+      "level": 6,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-20.json",
+      "level": 6,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-22.json",
+      "level": 6,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-24.json",
+      "level": 6,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-13.json",
+      "level": 7,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-20.json",
+      "level": 7,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-22.json",
+      "level": 7,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-24.json",
+      "level": 7,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-5.json",
+      "level": 7,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-1.json",
+      "level": 8,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-13.json",
+      "level": 8,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-20.json",
+      "level": 8,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-22.json",
+      "level": 8,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-24.json",
+      "level": 8,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/009-13.json",
+      "level": 9,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/009-25.json",
+      "level": 9,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-13.json",
+      "level": 10,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-20.json",
+      "level": 10,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-22.json",
+      "level": 10,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-25.json",
+      "level": 10,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/011-22.json",
+      "level": 11,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/011-25.json",
+      "level": 11,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/012-23.json",
+      "level": 12,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/012-26.json",
+      "level": 12,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/013-23.json",
+      "level": 13,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/013-26.json",
+      "level": 13,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/014-25.json",
+      "level": 14,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/014-28.json",
+      "level": 14,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/015-26.json",
+      "level": 15,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/015-29.json",
+      "level": 15,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/016-26.json",
+      "level": 16,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/016-32.json",
+      "level": 16,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/017-26.json",
+      "level": 17,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/017-32.json",
+      "level": 17,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/018-26.json",
+      "level": 18,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/018-32.json",
+      "level": 18,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/019-26.json",
+      "level": 19,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/019-32.json",
+      "level": 19,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/020-28.json",
+      "level": 20,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/020-34.json",
+      "level": 20,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/021-28.json",
+      "level": 21,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/021-36.json",
+      "level": 21,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/022-36.json",
+      "level": 22,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/023-36.json",
+      "level": 23,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/024-36.json",
+      "level": 24,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/024-38.json",
+      "level": 24,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/025-38.json",
+      "level": 25,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/026-40.json",
+      "level": 26,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/027-31.json",
+      "level": 27,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/027-42.json",
+      "level": 27,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-22.json",
+      "level": 28,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-33.json",
+      "level": 28,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-44.json",
+      "level": 28,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-13.json",
+      "level": 29,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-24.json",
+      "level": 29,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-35.json",
+      "level": 29,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-46.json",
+      "level": 29,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-15.json",
+      "level": 30,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-26.json",
+      "level": 30,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-37.json",
+      "level": 30,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-4.json",
+      "level": 30,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-48.json",
+      "level": 30,
+      "passed": true,
+      "population": 48,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/102-19.json",
+      "level": 102,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/103-15.json",
+      "level": 103,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/103-19.json",
+      "level": 103,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-15.json",
+      "level": 104,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-19.json",
+      "level": 104,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-5.json",
+      "level": 104,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-1.json",
+      "level": 105,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-15.json",
+      "level": 105,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-16.json",
+      "level": 105,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-2.json",
+      "level": 105,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-21.json",
+      "level": 105,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-22.json",
+      "level": 105,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-1.json",
+      "level": 106,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-10.json",
+      "level": 106,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-11.json",
+      "level": 106,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-17.json",
+      "level": 106,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-21.json",
+      "level": 106,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-22.json",
+      "level": 106,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-23.json",
+      "level": 106,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-1.json",
+      "level": 107,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-22.json",
+      "level": 107,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-23.json",
+      "level": 107,
+      "passed": false,
+      "population": 23,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-1.json",
+      "level": 108,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-22.json",
+      "level": 108,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-23.json",
+      "level": 108,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-1.json",
+      "level": 109,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-22.json",
+      "level": 109,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-23.json",
+      "level": 109,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-1.json",
+      "level": 110,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-23.json",
+      "level": 110,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-24.json",
+      "level": 110,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-25.json",
+      "level": 110,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-2.json",
+      "level": 111,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-21.json",
+      "level": 111,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-22.json",
+      "level": 111,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-25.json",
+      "level": 111,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-26.json",
+      "level": 111,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-2.json",
+      "level": 112,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-21.json",
+      "level": 112,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-22.json",
+      "level": 112,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-25.json",
+      "level": 112,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-26.json",
+      "level": 112,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
+      "level": 113,
+      "passed": false,
+      "population": 1,
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 0,
+        "saved": 1,
+        "stateHash": "fa1dd3ff2e1dbf4a036f6d32d9a3f42479753fad5a09f5c8b45224729e64b96a",
+        "ticks": 119
+      },
+      "routeStatus": "rebased-win"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
+      "level": 113,
+      "passed": false,
+      "population": 21,
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 11,
+        "saved": 10,
+        "stateHash": "2512108d885d14d007c0972da8c7e39a19bc37a31fa1695df9e21ff28b35f337",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
+      "level": 113,
+      "passed": false,
+      "population": 22,
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 12,
+        "saved": 10,
+        "stateHash": "166594c59ead7bc80f2999f1caf63ded9f7cbd54998706e409373704107fa365",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
+      "level": 113,
+      "passed": false,
+      "population": 25,
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 15,
+        "saved": 10,
+        "stateHash": "ba217bedf8616640b94f55358a67e7abadfc7f7fadb5bc1155e6c6ce0b9010da",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
+      "level": 113,
+      "passed": false,
+      "population": 26,
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 16,
+        "saved": 10,
+        "stateHash": "88dad53fcccc8906e2ee8b3ffa8426b5e5c3b2adeef3192cb92e27e5d19a5182",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-1.json",
+      "level": 114,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-21.json",
+      "level": 114,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-22.json",
+      "level": 114,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-25.json",
+      "level": 114,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-26.json",
+      "level": 114,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-1.json",
+      "level": 115,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-22.json",
+      "level": 115,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-25.json",
+      "level": 115,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-26.json",
+      "level": 115,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-27.json",
+      "level": 115,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-1.json",
+      "level": 116,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-13.json",
+      "level": 116,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-16.json",
+      "level": 116,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-17.json",
+      "level": 116,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-27.json",
+      "level": 116,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-28.json",
+      "level": 116,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-29.json",
+      "level": 116,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-1.json",
+      "level": 117,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-27.json",
+      "level": 117,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-29.json",
+      "level": 117,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-30.json",
+      "level": 117,
+      "passed": true,
+      "population": 30,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-31.json",
+      "level": 117,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-8.json",
+      "level": 117,
+      "passed": true,
+      "population": 8,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-1.json",
+      "level": 118,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-29.json",
+      "level": 118,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-30.json",
+      "level": 118,
+      "passed": true,
+      "population": 30,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-31.json",
+      "level": 118,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-1.json",
+      "level": 119,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-2.json",
+      "level": 119,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-21.json",
+      "level": 119,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-37.json",
+      "level": 119,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-38.json",
+      "level": 119,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-39.json",
+      "level": 119,
+      "passed": true,
+      "population": 39,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-1.json",
+      "level": 120,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-2.json",
+      "level": 120,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-21.json",
+      "level": 120,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-37.json",
+      "level": 120,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-41.json",
+      "level": 120,
+      "passed": true,
+      "population": 41,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-42.json",
+      "level": 120,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-43.json",
+      "level": 120,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-12.json",
+      "level": 121,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-28.json",
+      "level": 121,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-42.json",
+      "level": 121,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-43.json",
+      "level": 121,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-44.json",
+      "level": 121,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-20.json",
+      "level": 122,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-34.json",
+      "level": 122,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-43.json",
+      "level": 122,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-44.json",
+      "level": 122,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-45.json",
+      "level": 122,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-18.json",
+      "level": 123,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-32.json",
+      "level": 123,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-41.json",
+      "level": 123,
+      "passed": true,
+      "population": 41,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-42.json",
+      "level": 123,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-44.json",
+      "level": 123,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-19.json",
+      "level": 124,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-28.json",
+      "level": 124,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-42.json",
+      "level": 124,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-43.json",
+      "level": 124,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-45.json",
+      "level": 124,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-5.json",
+      "level": 124,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-10.json",
+      "level": 125,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-19.json",
+      "level": 125,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-33.json",
+      "level": 125,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-34.json",
+      "level": 125,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-44.json",
+      "level": 125,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-46.json",
+      "level": 125,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-12.json",
+      "level": 126,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-26.json",
+      "level": 126,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-27.json",
+      "level": 126,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-3.json",
+      "level": 126,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-37.json",
+      "level": 126,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-44.json",
+      "level": 126,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-46.json",
+      "level": 126,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-18.json",
+      "level": 127,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-19.json",
+      "level": 127,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-2.json",
+      "level": 127,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-29.json",
+      "level": 127,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-38.json",
+      "level": 127,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-4.json",
+      "level": 127,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-45.json",
+      "level": 127,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-47.json",
+      "level": 127,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-1.json",
+      "level": 128,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-10.json",
+      "level": 128,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-20.json",
+      "level": 128,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-29.json",
+      "level": 128,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-38.json",
+      "level": 128,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-45.json",
+      "level": 128,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-47.json",
+      "level": 128,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-9.json",
+      "level": 128,
+      "passed": true,
+      "population": 9,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-10.json",
+      "level": 129,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-20.json",
+      "level": 129,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-29.json",
+      "level": 129,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-38.json",
+      "level": 129,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-40.json",
+      "level": 129,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-47.json",
+      "level": 129,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-49.json",
+      "level": 129,
+      "passed": true,
+      "population": 49,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-9.json",
+      "level": 129,
+      "passed": true,
+      "population": 9,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-40.json",
+      "level": 130,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-47.json",
+      "level": 130,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-49.json",
+      "level": 130,
+      "passed": true,
+      "population": 49,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-1.json",
+      "level": 203,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-11.json",
+      "level": 203,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-22.json",
+      "level": 203,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-1.json",
+      "level": 204,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-11.json",
+      "level": 204,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-2.json",
+      "level": 204,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-22.json",
+      "level": 204,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-1.json",
+      "level": 205,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-11.json",
+      "level": 205,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-22.json",
+      "level": 205,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-1.json",
+      "level": 206,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-11.json",
+      "level": 206,
+      "passed": false,
+      "population": 11,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-22.json",
+      "level": 206,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-23.json",
+      "level": 206,
+      "passed": false,
+      "population": 23,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-12.json",
+      "level": 207,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-2.json",
+      "level": 207,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-21.json",
+      "level": 207,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-23.json",
+      "level": 207,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-24.json",
+      "level": 207,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-1.json",
+      "level": 208,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-21.json",
+      "level": 208,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-23.json",
+      "level": 208,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-24.json",
+      "level": 208,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-4.json",
+      "level": 208,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-5.json",
+      "level": 208,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-1.json",
+      "level": 209,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-15.json",
+      "level": 209,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-17.json",
+      "level": 209,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-18.json",
+      "level": 209,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-19.json",
+      "level": 209,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-5.json",
+      "level": 209,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-1.json",
+      "level": 210,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-19.json",
+      "level": 210,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-20.json",
+      "level": 210,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-21.json",
+      "level": 210,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-7.json",
+      "level": 210,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-1.json",
+      "level": 211,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-19.json",
+      "level": 211,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-20.json",
+      "level": 211,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-21.json",
+      "level": 211,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-7.json",
+      "level": 211,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-1.json",
+      "level": 212,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-19.json",
+      "level": 212,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-20.json",
+      "level": 212,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-21.json",
+      "level": 212,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-7.json",
+      "level": 212,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-1.json",
+      "level": 213,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-21.json",
+      "level": 213,
+      "passed": false,
+      "population": 21,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-22.json",
+      "level": 213,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-8.json",
+      "level": 213,
+      "passed": false,
+      "population": 8,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/214-1.json",
+      "level": 214,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/214-13.json",
+      "level": 214,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-1.json",
+      "level": 215,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-13.json",
+      "level": 215,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-16.json",
+      "level": 215,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-19.json",
+      "level": 215,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-1.json",
+      "level": 216,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-13.json",
+      "level": 216,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-16.json",
+      "level": 216,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-17.json",
+      "level": 216,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-19.json",
+      "level": 216,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-1.json",
+      "level": 217,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-13.json",
+      "level": 217,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-16.json",
+      "level": 217,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-17.json",
+      "level": 217,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-2.json",
+      "level": 218,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-21.json",
+      "level": 218,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-3.json",
+      "level": 218,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-4.json",
+      "level": 218,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-6.json",
+      "level": 218,
+      "passed": true,
+      "population": 6,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-2.json",
+      "level": 219,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-21.json",
+      "level": 219,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-29.json",
+      "level": 219,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-3.json",
+      "level": 219,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-4.json",
+      "level": 219,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-6.json",
+      "level": 219,
+      "passed": true,
+      "population": 6,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-1.json",
+      "level": 220,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-13.json",
+      "level": 220,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-2.json",
+      "level": 220,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-21.json",
+      "level": 220,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-29.json",
+      "level": 220,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-3.json",
+      "level": 220,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-13.json",
+      "level": 221,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-2.json",
+      "level": 221,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-21.json",
+      "level": 221,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-31.json",
+      "level": 221,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-5.json",
+      "level": 221,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/222-2.json",
+      "level": 222,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/222-32.json",
+      "level": 222,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-1.json",
+      "level": 223,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-23.json",
+      "level": 223,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-33.json",
+      "level": 223,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-14.json",
+      "level": 224,
+      "passed": true,
+      "population": 14,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-24.json",
+      "level": 224,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-35.json",
+      "level": 224,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-14.json",
+      "level": 225,
+      "passed": true,
+      "population": 14,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-24.json",
+      "level": 225,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-35.json",
+      "level": 225,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-4.json",
+      "level": 225,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-1.json",
+      "level": 226,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-15.json",
+      "level": 226,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-38.json",
+      "level": 226,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-5.json",
+      "level": 226,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-15.json",
+      "level": 227,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-38.json",
+      "level": 227,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-5.json",
+      "level": 227,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/228-16.json",
+      "level": 228,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/228-39.json",
+      "level": 228,
+      "passed": true,
+      "population": 39,
+      "routeStatus": "exact"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-15.json",
+      "level": 229,
+      "passed": false,
+      "population": 15,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-43.json",
+      "level": 229,
+      "passed": false,
+      "population": 43,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/230-16.json",
+      "level": 230,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/230-44.json",
+      "level": 230,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    }
+  ],
+  "schemaVersion": 1
+}

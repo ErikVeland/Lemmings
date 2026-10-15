@@ -11,7 +11,7 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | Strict audit: 394/416 fixtures double-replay. Of 326 carried routes, 313 still win when rebased; five more have stale identity hashes but remain winnable. | Repair four standalone routes and 13 carried schedules that no longer win. Rebase the five winnable Shadow 13 fixtures, then rerun all 90 routes and the carried chains. |
+| Lemmings 3 | Strict audit: 394/416 fixtures double-replay. Of 326 carried routes, 313 still win when rebased, including five with stale identity hashes. | Repair four standalone routes and 13 carried schedules that no longer win. Rebase the five winnable Shadow 13 fixtures, then rerun all 90 routes and the carried chains. |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.

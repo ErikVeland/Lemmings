@@ -1,0 +1,29 @@
+{
+  "auditExecutableSHA256": "ec329f270d24801e682edbdbf380d84dfa123d0e649b15c238e961025be2d948",
+  "counts": {
+    "rebasedRouteOutcomes": {
+      "exact": 394,
+      "rebased-win": 5,
+      "route-fails": 17
+    },
+    "strictExactDoubleReplays": 394,
+    "strictFailures": 22,
+    "totalFixtures": 416
+  },
+  "exitCode": 1,
+  "exitCodeMeaning": "Expected: strict fixture identity failures remain.",
+  "gitCommit": "57d3490a7ec768456b08e528c22ed1f70d50fb8b",
+  "recordedAtUTC": "2026-10-15T01:56:57+00:00",
+  "reportSHA256": "d559f2d47878da96c11a400d8ede065fde5f3e6a69e8557c4769478f323a098b",
+  "resourceFileCount": 561,
+  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+  "resourceTreeSHA256": "9ee43eb9251989be21d4513ee1c48a3463f6e2035cb3dc62f1b3987d566313a9",
+  "runCommand": "L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=\"/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD\" zsh Scripts/audit-l3-fixtures.sh <report.json>",
+  "runtimeLibrarySHA256": "09321aef399ef5a2384dbc0370699a6fed37aabb148d9e39823d867c510a3aac",
+  "schemaVersion": 1,
+  "sourceFiles": {
+    "Sources/NxlvKit/Lemmings3Runtime.swift": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
+    "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
+    "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+  }
+}

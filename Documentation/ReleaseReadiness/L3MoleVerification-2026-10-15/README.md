@@ -18,13 +18,23 @@ stopping at the first failure. Of 416 fixtures, 394 pass twice and 22 fail:
 
 The earlier fail-fast result did not expose Egyptian 29. Five carried Shadow 13
 input schedules still win when rebased and double-replayed under the patrol
-runtime. The other 17 failing schedules do not win. These failures do not prove
-that any level is impossible.
+runtime. The other 17 schedules—four standalone and thirteen carried—do not
+win under the current runtime. These failures do not prove that any level is
+impossible.
 
 See `baseline-fixture-audit.json`, `baseline-double-replay-audit.log`,
 `baseline-fixture-audit.log` and `baseline-provenance.json`. The diagnostic audit
 checks retained fixture identity and deterministic winning outcomes. The strict
 campaign gate additionally checks full coverage and linked survivor accounting.
+
+The audit was rerun from checkout `57d3490a` against the installed resource-only
+L3 bundle. The updated report separates strict fixture identity from whether
+the recorded inputs still win after rebasing. It confirms 394 exact
+double-replays, five rebased wins and 17 route failures. The five rebased wins
+are the stale-identity Shadow 13 fixtures; the 17 route failures are the four
+standalone gaps and thirteen carried schedules. See the [current fixture
+audit](current-fixture-audit.json) and [audit provenance](current-fixture-audit-provenance.json)
+for the report, source and tool hashes, and resource-tree fingerprint.
 
 Run the exhaustive audit with:
 
@@ -66,6 +76,8 @@ through 244, including the ricochets and tunnel crossing. See
 `prototype-steel-comparison.json`. This proves the sampled trajectory in this
 case. It does not establish the full excavation mask, a player-built brick
 trigger, long travel outside terrain, water interactions or destruction.
+Run `python3 Scripts/verify-l3-mole-trace.py` to verify the 53 source/native
+coordinate pairs and the baseline runtime fingerprint.
 
 `mole-prototype.patch` contains the isolated proposal against the baseline
 runtime hash recorded in `baseline-provenance.json`. It has not been applied
