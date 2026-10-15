@@ -15,6 +15,12 @@ Classic, The Tribes, Chronicles and supported NeoLemmix sessions use the shared 
 
 Retry actions, result rewards and earned Level Skips use clearer grouping and consistent pixel artwork. Shared HUD presentation improves the player, score, clock and statistics layout in the mobile and TV source. This download updates Macintosh only.
 
+## Journey and language support
+
+The Learning journey uses the updated teaching order while preserving completed lessons and saved ownership. Tamil bitmap lettering joins the shared interface. New result, resource and Hot Seat labels have entries in all eight translated language tables. Human language and full-screen reviews remain open.
+
+Rescue proofs and Classic hints are refreshed against the current source fingerprint. The refresh retains all 294 exact-condition certificates and 315 best-known rescue targets.
+
 ## Compatibility and known limits
 
 The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.
