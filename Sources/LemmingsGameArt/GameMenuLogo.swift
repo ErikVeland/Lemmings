@@ -6,6 +6,7 @@ import NxlvKit
 /// Places the Ultimate badge across the original logo's upper-left L.
 public enum GameMenuLogo {
     public static let resolutionScale: CGFloat = 2
+    public enum Layer { case combined, lemmings, ultimate }
 
     public static func logicalSize(of image: CGImage) -> CGSize {
         CGSize(width: CGFloat(image.width) / resolutionScale, height: CGFloat(image.height) / resolutionScale)
@@ -23,6 +24,12 @@ public enum GameMenuLogo {
     }
 
     public static func image(for logo: ClassicMacArtwork.Frame, letteringURL: URL? = nil) -> CGImage? {
+        image(for: logo, letteringURL: letteringURL, layer: .combined)
+    }
+
+    /// Export aligned transparent surfaces for platforms with layered app icons.
+    public static func image(for logo: ClassicMacArtwork.Frame, letteringURL: URL? = nil,
+                             layer: Layer) -> CGImage? {
         guard let provider = CGDataProvider(data: logo.rgba as CFData),
               let original = CGImage(width: logo.width, height: logo.height,
                 bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: logo.width * 4,
@@ -34,6 +41,7 @@ public enum GameMenuLogo {
         guard let url, let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let lettering = CGImageSourceCreateImageAtIndex(source, 0, nil)
         else {
+            guard layer != .ultimate else { return nil }
             guard let context = canvas(width: logo.width, height: logo.height) else { return nil }
             context.interpolationQuality = .none
             context.draw(original, in: CGRect(x: 0, y: 0, width: logo.width, height: logo.height))
@@ -56,11 +64,13 @@ public enum GameMenuLogo {
         else { return nil }
         // Draw original pixels at their native size. Only the new lettering is sampled.
         context.interpolationQuality = .none
-        context.draw(original, in: CGRect(x: leftPadding, y: 0, width: logo.width, height: logo.height))
+        if layer != .ultimate {
+            context.draw(original, in: CGRect(x: leftPadding, y: 0, width: logo.width, height: logo.height))
+        }
         context.interpolationQuality = .high
         context.translateBy(x: CGFloat(leftPadding) + anchor.x, y: anchor.y)
         context.rotate(by: angle)
-        context.draw(lettering, in: wordRect)
+        if layer != .lemmings { context.draw(lettering, in: wordRect) }
         return context.makeImage()
     }
 

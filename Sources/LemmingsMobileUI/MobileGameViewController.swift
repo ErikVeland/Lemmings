@@ -1585,7 +1585,7 @@ typealias MobileGameOverlay = UIScrollView
             deathCounter: FailureMoodDecision.deathCounter(saved: snapshot.saved,
                 active: session.activeLemmingCount, unreleased: snapshot.total - snapshot.released,
                 required: snapshot.required, total: snapshot.total,
-                isComplete: snapshot.isComplete, didWin: snapshot.didWin))
+                isComplete: snapshot.isComplete, didWin: snapshot.didWin), engineIdentifier: session.engineIdentifier)
         hud.update(
             layout: resolved,
             snapshot: snapshot,

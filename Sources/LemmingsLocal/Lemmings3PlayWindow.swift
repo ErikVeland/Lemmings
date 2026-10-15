@@ -1445,6 +1445,9 @@ import NxlvKit
                 rewindCount: usedRewind ? 1 : 0, destructiveSkillCount: TrolleyCapture.destructiveCount(toolUses), buildVersion: TrolleyCapture.buildVersion,
                 additionalStatistics: ["reserve": Double(game.reserve), "engineLost": Double(game.lost),
                                        "timeRemaining": Double(game.remainingSeconds)].merging(Dictionary(uniqueKeysWithValues: toolUses.map { ("tool." + $0.key, Double($0.value)) }), uniquingKeysWith: { _, b in b })))
+        ArcadeStore.shared.preserveHotSeatGhost(run: run, sessionID: arcadeHotSeatID,
+            initial: .lemmings3(initial), final: .lemmings3(game),
+            commands: recoveryInputs.map(LeaderboardActionReplay.Command.l3))
         arcadeReport = (recordsCampaignProgress || onSequenceContinue != nil)
             ? ArcadeStore.shared.record(run)
             : ArcadeStore.shared.previewReport(for: run)
@@ -1554,7 +1557,15 @@ import NxlvKit
         })
     }
     var onSequenceResult: ((Bool) -> Void)?
+    private var ghostAttemptID: UUID?
+    private func refreshHotSeatGhosts() {
+        guard ghostAttemptID != arcadeRunID else { return }
+        ghostAttemptID = arcadeRunID
+        canvas.hotSeatGhosts = ArcadeStore.shared.hotSeatGhosts(initial: .lemmings3(initial),
+            level: arcadeLevel, playerID: arcadeProfileID, sessionID: arcadeHotSeatID)
+    }
     private func refresh() {
+        refreshHotSeatGhosts()
         if let manualCarrierID,
            !game.lemmings.contains(where: { $0.id == manualCarrierID && $0.active && $0.tool != nil }) {
             self.manualCarrierID = nil
@@ -1617,7 +1628,9 @@ import NxlvKit
     }
 }
 
-@MainActor private final class Lemmings3Canvas: NSView {
+@MainActor private final class Lemmings3Canvas: NSView, HotSeatGhostRendering {
+    var hotSeatGhosts: HotSeatGhostPlayback?
+    private let hotSeatGhostSprites = ReplayGhostSprites()
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
@@ -1965,6 +1978,7 @@ import NxlvKit
     }
 
     func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL, terrainStyle: Int, resetPresentation: Bool = true) throws {
+        hotSeatGhostSprites.clear()
         if resetPresentation {
             hdrOverlay?.clear()
             isFastForward = false
@@ -2114,10 +2128,10 @@ import NxlvKit
                 y: playfieldRect.minY + 12), scale: bounds.width >= 960 ? 2 : 1)
         }
     }
-    private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {
-        var selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed && menuRows == nil
+    private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool, hotSeatColour: ReplayGhostColour? = nil) {
+        var selectedID = !ghostsOnly && hotSeatColour == nil && !GameCursor.gameplaySuppressed && menuRows == nil
             ? manualCarrierID ?? assignmentHighlight.target ?? pointerTarget : nil
-        if !ghostsOnly {
+        if !ghostsOnly && hotSeatColour == nil {
             if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed, menuRows == nil {
                 let now = ProcessInfo.processInfo.systemUptime
                 selectionFade.set(selectedID, at: now)
@@ -2142,6 +2156,14 @@ import NxlvKit
                     pixelSize: CGSize(width: zoom, height: zoom))
                 continue
             }
+            if let hotSeatColour {
+                let rect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
+                    width: sprite.size.width * zoom, height: sprite.size.height * zoom)
+                hotSeatGhostSprites.draw(sprite, key: "\(animation)-\((lem.state == .blocking ? 0 : lem.age) % frames.count)",
+                    colour: hotSeatColour, in: rect)
+                continue
+            }
             drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
@@ -2164,7 +2186,7 @@ import NxlvKit
                 GameTypography.annotation(label, at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom), palette: .blue)
             }
         }
-        if lemmingSelectionStyle == .modern, let selectedSprite {
+        if hotSeatColour == nil, lemmingSelectionStyle == .modern, let selectedSprite {
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: playfieldRect,
                 time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings3Runtime.ticksPerSecond)
@@ -2237,6 +2259,11 @@ import NxlvKit
             } else {
                 NSColor.cyan.setFill()
                 NSBezierPath(ovalIn: rect).fill()
+            }
+        }
+        for frame in hotSeatGhosts?.frames(at: game.tick) ?? [] {
+            if case .lemmings3(let ghost) = frame.state {
+                drawLemmings(ghost, ghostsOnly: false, hotSeatColour: frame.colour)
             }
         }
         drawLemmings(game, ghostsOnly: false)

@@ -522,6 +522,13 @@ import NxlvKit
         }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    #if HOT_SEAT_GHOST_TESTS
+    func hotSeatGhostTestContext() -> LeaderboardReplayContext? {
+        timer?.invalidate(); timer = nil
+        prepareBriefing(); startLevel(); canvas.startCountdown.cancel()
+        return leaderboardReplayContext()
+    }
+    #endif
     #if APP_INTEGRATION_TESTS
     func testGameplayQuickControls() throws {
         timer?.invalidate(); timer = nil; paused = true
@@ -1230,7 +1237,15 @@ import NxlvKit
         sounds.play([Lemmings2SoundRequest(supplemental: .actionRejected).positioned(x: lem.x, y: lem.y)])
     }
     func playReadySound() { sounds.playInterface(.ready) }
+    private var ghostAttemptID: UUID?
+    private func refreshHotSeatGhosts() {
+        guard ghostAttemptID != arcadeRunID, let initial else { return }
+        ghostAttemptID = arcadeRunID
+        canvas.hotSeatGhosts = ArcadeStore.shared.hotSeatGhosts(initial: .lemmings2(initial),
+            level: arcadeLevel, playerID: arcadeProfileID, sessionID: arcadeHotSeatID)
+    }
     private func refreshGame(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+        refreshHotSeatGhosts()
         let nuking = (screen == .playing || screen == .results) && game?.isNuking == true && canvas.hdEffectsEnabled
         let allPopped = game.map { game in
             game.isComplete || game.lemmings.filter(\.active).allSatisfy {
@@ -1711,6 +1726,9 @@ import NxlvKit
             telemetry: TrolleyTelemetry(released: game.released, nukeCount: nukeCount, rewindCount: usedRewind && undoCount == 0 ? 1 : 0, undoCount: undoCount,
                 destructiveSkillCount: TrolleyCapture.destructiveCount(used), buildVersion: TrolleyCapture.buildVersion,
                 additionalStatistics: ["goldRequirement": Double(max(1, game.configuration.total - level.allowedLossesForGold))]))
+        if let initial { ArcadeStore.shared.preserveHotSeatGhost(run: run, sessionID: arcadeHotSeatID,
+            initial: .lemmings2(initial), final: .lemmings2(game),
+            commands: recoveryInputs.map(LeaderboardActionReplay.Command.l2)) }
         arcadeReport = (recordsCampaignProgress || onSequenceContinue != nil)
             ? ArcadeStore.shared.record(run)
             : ArcadeStore.shared.previewReport(for: run)
@@ -2151,7 +2169,9 @@ import NxlvKit
     }
 }
 
-@MainActor private final class Lemmings2Canvas: NSView {
+@MainActor private final class Lemmings2Canvas: NSView, HotSeatGhostRendering {
+    var hotSeatGhosts: HotSeatGhostPlayback?
+    private let hotSeatGhostSprites = ReplayGhostSprites()
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
@@ -2516,6 +2536,7 @@ import NxlvKit
     }
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
+        hotSeatGhostSprites.clear()
         if resetPresentation {
             explosionTimeline.reset()
             selectionFade.reset()
@@ -2621,11 +2642,11 @@ import NxlvKit
         } : []
         speedTrails.update(tick: game?.tick ?? 0, enabled: usesSpeedEffects, actors: actors)
     }
-    private func drawLemmings(_ game: Lemmings2Runtime, ghostsOnly: Bool) {
+    private func drawLemmings(_ game: Lemmings2Runtime, ghostsOnly: Bool, hotSeatColour: ReplayGhostColour? = nil) {
         let palette = game.configuration.palette
-        var selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed
+        var selectedID = !ghostsOnly && hotSeatColour == nil && !GameCursor.gameplaySuppressed
             ? assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil) : nil
-        if !ghostsOnly {
+        if !ghostsOnly && hotSeatColour == nil {
             if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed {
                 let now = ProcessInfo.processInfo.systemUptime
                 selectionFade.set(selectedID, at: now)
@@ -2823,7 +2844,7 @@ import NxlvKit
             case .shrugging:
                 name = "LM7B"; offsetX = lem.direction > 0 ? -9 : -8; offsetY = -13; phase = lem.age % 8
             case .exploding:
-                if ghostsOnly { continue }
+                if ghostsOnly || hotSeatColour != nil { continue }
                 if lem.age >= 16 {
                     if lem.age == 16, let flash = sprites["EXPLOSION"]?.first {
                         drawImage(flash.image,x:CGFloat(lem.x-13+flash.x),y:CGFloat(lem.y-14+flash.y))
@@ -2856,6 +2877,14 @@ import NxlvKit
                     width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
                 speedTrails.drawBehind(actor: lem.id, sprite: sprite.image, in: rect, motion: motion,
                     pixelSize: CGSize(width: zoom, height: zoom * 1.2), mirrored: mirrored)
+                continue
+            }
+            if let hotSeatColour {
+                let rect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
+                    width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
+                hotSeatGhostSprites.draw(sprite.image, key: "\(name)-\(index)", colour: hotSeatColour,
+                    in: rect, mirrored: mirrored)
                 continue
             }
             drawImage(sprite.image, x: CGFloat(lem.x + offsetX + sprite.x),
@@ -2911,7 +2940,7 @@ import NxlvKit
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
             }
         }
-        if lemmingSelectionStyle == .modern, let selectedSprite {
+        if hotSeatColour == nil, lemmingSelectionStyle == .modern, let selectedSprite {
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: gameplayRect,
                 mirrored: selectedSprite.mirrored,
@@ -3084,6 +3113,11 @@ import NxlvKit
         for lem in game.lemmings where lem.state == .poleVaulting {
             for point in lem.pole {
                 drawPoint(point.x, point.y, artwork: poleArt)
+            }
+        }
+        for frame in hotSeatGhosts?.frames(at: game.tick) ?? [] {
+            if case .lemmings2(let ghost) = frame.state {
+                drawLemmings(ghost, ghostsOnly: false, hotSeatColour: frame.colour)
             }
         }
         drawLemmings(game, ghostsOnly: false)

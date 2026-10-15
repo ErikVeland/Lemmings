@@ -13,7 +13,7 @@ annotation beside its existing status overlay. L3 keeps the percentage beside
 Save and draws its percent symbol with the shared bitmap renderer.
 Muted offscreen checks cover Classic bitmap fixtures at 0%, 50% and 100% across
 three widths, native L2/L3 zero-save renders and sequel timeline targets. Separate
-NeoLemmix and nonzero sequel renders remain unchecked. Mobile HUDs are unchanged.
+NeoLemmix and nonzero sequel renders remain unchecked. Mobile HUDs use the shared status strip described below.
 
 The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
@@ -65,7 +65,8 @@ environment and still needs device verification.
   after changing layout. A successful compile does not establish usability.
 
 iOS and tvOS keep the player profile visible in solo and Hot Seat play. The HUD
-shows the profile portrait and green name above its counters. Solo uses the
+shows the profile portrait and green name at the left of a single status line,
+with rescue progress at the right. Solo uses the
 attempt's settings profile; Hot Seat uses the attempt owner. Menu headers,
 pause/results and level browsing retain the same identity. Classic, Lemmings 2
 and Lemmings 3 use the shared controller. Headless, muted checks cover 99 Classic
@@ -944,15 +945,29 @@ manual checks.
 
 ## Fixed TV menus
 
-TV gameplay keeps player identity and complete Mac status information above the
+TV gameplay keeps player identity and shared Mac status information above the
 playfield in all three engines. Show released/total, rescued/required, saved
 percentage rounded down, time, actual deaths, deaths remaining before failure
 or SAFE, supported release rate, speed and the current pause/end state. L3 also
 shows reserves. Draw the skull with the shared bitmap glyph because the shipped
-menu font has no skull. Keep the existing control targets and iOS HUD geometry.
-The muted offscreen TV gate checks 96 HUD renders, text fit, visible skull
-pixels, target bounds and L3 extra-death rewind. iOS/tvOS SDK compilation passes.
-Physical television readability, native focus and VoiceOver remain device checks.
+menu font has no skull.
+
+iOS and tvOS share one 44-point status row above the playfield. Anchor the player
+portrait and green name at the left, with green rescue counts and whole saved
+percentage at the right. Use larger score lettering on wide TVs and compact
+bitmap lettering on phones. Keep the clock beside the score. Spread supporting
+blue statistics through the remaining space in priority order, without wrapping.
+Narrow screens keep the player, rescue score and clock first. Full statistics
+remain available through accessibility. Preserve all control targets. A system
+occlusion or screen division retains its existing unobstructed status bank.
+
+The muted offscreen HUD gate checks 256 phone, iPad and TV renders, complete
+visible fields, a shared baseline, non-overlapping targets, visible skull pixels
+and L3 extra-death rewind. Another 99 renders cover solo and Hot Seat identity,
+all profile portraits, compact and reserved-region layouts. Seven layout
+regressions pass. Classic, L2 and L3 use native playfield fixtures; NeoLemmix
+uses synthetic status fixtures. Physical television readability, touch, native
+focus, VoiceOver and composited CRT output remain device checks.
 
 TV Home uses a fixed landscape board: saved play and Journey on the left,
 Classic/fan libraries on the right, sequel logos beneath them, and footer actions

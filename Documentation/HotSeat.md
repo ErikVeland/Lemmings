@@ -56,6 +56,34 @@ only resume in their matching shared campaign. Solo recovery cannot load them.
 A player/session mismatch preserves the run and asks you to resume its session.
 It does not report changed game rules or offer to discard that valid run.
 
+## Previous-player ghosts on Mac
+
+When another player retries the same level, their live attempt includes a silent
+ghost of each earlier player's latest completed turn, including losses. Each
+player has a distinct translucent colour. The current player's own earlier
+attempt is excluded. Ghosts use the shipped sprites and stay behind live lemmings.
+They add no input targets, skill effects, labels or sound.
+
+Ghosts follow simulation time through speed changes, paused steps and rewind.
+They disappear at the end of their recorded turn and return when rewound.
+Each ghost owns its engine and terrain, so its bridges and tunnels can differ
+from the live level. The overlay cannot affect collisions, skills or records.
+
+Classic, NeoLemmix, Lemmings 2 and Lemmings 3 share the archive and playback.
+Ghosts are scoped to the Hot Seat session, level conditions and exact starting
+state. They survive relaunching that session. New sessions and solo play start
+without these ghosts. Removed players are excluded. A different starting
+population or changed level data does not reuse an incompatible turn.
+Ready handovers keep their existing pause and explicit Ready action.
+L2 ghosts show the primary lemming sprite. Separate equipment, projectiles and
+blast particles are omitted. L3 uses the same provisional animation mapping as
+the live renderer.
+
+Watch replay and saved replay movies include the ghosts visible during that
+attempt. Existing movies keep their recorded pixels. Leaderboard action replays
+remain individual runs. iOS and tvOS do not yet attach this Hot Seat archive;
+their existing Classic solution ghost is separate.
+
 ## Playlists and shuffle
 
 Starting a playlist or shuffle during Hot Seat offers **New solo**, **New Hot Seat**
@@ -106,3 +134,13 @@ solution completed by two people does not become one person's individual record.
 - `TEST_SCOPE=learning Scripts/run-app-integration-tests.sh`: fresh solo and
   Hot Seat journeys after prior profile progress, session ownership, Holiday
   terrain in Floating Down!, graphics changes and the journey HUD position.
+
+- `zsh Scripts/run-hot-seat-ghost-tests.sh`: muted, offscreen checks for Classic,
+  L2 and L3 ghost timelines, two earlier players, latest-turn replacement,
+  archive reload, current-owner exclusion, fresh sessions, solo play, deleted
+  players, changed data and invalid commands. Native captures check three
+  colours, multiple ghosts, unchanged input surfaces and movie-frame inclusion.
+  Representative captures were inspected. A separate synthetic cursor check
+  also passed for NeoLemmix. Native NeoLemmix artwork and composited CRT/HDR
+  output remain unchecked for this feature. MP4 export uses the existing
+  encoder; this check verifies its source frames rather than decoding a new MP4.

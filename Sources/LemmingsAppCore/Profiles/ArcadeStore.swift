@@ -353,9 +353,11 @@ import NxlvKit
                 folder.appendingPathComponent("Replays/\($0.id.uuidString).actions.json")
             }
         let recoveryStore = recoveryStore
+        let ghostArchive = hotSeatGhostArchive
         let cleanup: @Sendable () -> String? = {
             do {
                 try recoveryStore.discard(profileID: id)
+                try ghostArchive.remove(playerID: id)
                 for url in replayURLs where FileManager.default.fileExists(atPath: url.path) {
                     try FileManager.default.removeItem(at: url)
                 }
@@ -557,6 +559,36 @@ import NxlvKit
             try? records.acceptTrolleyMaximum(proof, conditions: conditions, assisted: assisted)
         }
     }
+    private var hotSeatGhostArchive: HotSeatGhostArchive {
+        HotSeatGhostArchive(directory: file.deletingLastPathComponent().appendingPathComponent("Hot Seat Ghosts"))
+    }
+
+    public func hotSeatGhosts(initial: ActionReplayState, level: ArcadeLevel?, playerID: String,
+                              sessionID: String?) -> HotSeatGhostPlayback? {
+        guard let sessionID, sessionID == hotSeatID, hotSeatIsActive,
+              let conditions = level?.conditions, let hash = try? initial.hash() else { return nil }
+        let attempts = hotSeatGhostArchive.attempts(sessionID: sessionID, conditions: conditions.fingerprint,
+            initialHash: hash, excluding: playerID, players: sessionProfileIDs)
+        let rosterColours = attempts.compactMap { attempt -> HotSeatGhostAttempt? in
+            guard let slot = sessionProfileIDs.firstIndex(of: attempt.playerID) else { return nil }
+            return .init(playerID: attempt.playerID,
+                colour: ReplayGhostColour.allCases[slot % ReplayGhostColour.allCases.count], replay: attempt.replay)
+        }
+        return HotSeatGhostPlayback(attempts: rosterColours, initial: initial)
+    }
+
+    public func preserveHotSeatGhost(run: ArcadeRun, sessionID: String?, initial: ActionReplayState,
+                                     final: ActionReplayState, commands: [LeaderboardActionReplay.Command]) {
+        guard canWrite, storageError == nil, let sessionID, sessionID == hotSeatID,
+              let slot = sessionProfileIDs.firstIndex(of: run.profileID) else { return }
+        do {
+            let replay = try LeaderboardActionReplay.capture(run: run, initial: initial, final: final, commands: commands)
+            let colour = ReplayGhostColour.allCases[slot % ReplayGhostColour.allCases.count]
+            try hotSeatGhostArchive.save(.init(playerID: run.profileID, colour: colour, replay: replay),
+                                         sessionID: sessionID, players: sessionProfileIDs)
+        } catch { NSLog("Hot Seat ghost not retained: %@", error.localizedDescription) }
+    }
+
     /// Action files are small sidecars keyed by an existing, immutable attempt.
     public func actionReplayURL(attemptID: UUID) -> URL? {
         guard records.trolley.attempts.contains(where: { $0.id == attemptID }) else { return nil }

@@ -108,6 +108,26 @@ struct MobileAdaptiveLayoutTests {
         #expect(layout.interface.controlFrames.allSatisfy { !$0.intersects(.init(x: 589, y: 0, width: 16, height: 834)) })
     }
 
+    @Test func mobileAndTVKeepStatusInOneRowAboveAllThreeGames() {
+        let poses = [MobileSize(width: 320, height: 568), .init(width: 844, height: 390),
+                     .init(width: 768, height: 1024), .init(width: 1920, height: 1080)]
+        for size in poses {
+            for (engine, rate, skills) in [("classic", true, 8), ("lemmings2", false, 8), ("lemmings3", false, 5)] {
+                for television in [false, true] {
+                    let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
+                        hasRate: rate, skillCount: skills, supportsRewind: true, hasPlayer: true,
+                        engineIdentifier: engine, showsMenuButton: !television, television: television)
+                    let status = layout.interface.statusFrame
+                    #expect(layout.canPlay)
+                    #expect(status.minY == layout.interface.safeFrame.minY)
+                    #expect(status.height == 44)
+                    #expect(status.maxY == layout.interface.playfieldFrame.minY)
+                    #expect(layout.interface.controlFrames.allSatisfy { !$0.intersects(status) })
+                }
+            }
+        }
+    }
+
     @Test func menusStayClearOfDivisionAndOcclusionWhileScrolling() {
         let safe = MobileRect(x: 20, y: 24, width: 1154, height: 790)
         let regions: [MobileReservedRegion] = [

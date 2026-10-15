@@ -70,6 +70,24 @@ public struct ClassicSolutionGhost: Sendable {
     }
 }
 
+/// Stable roster colours shared by every Hot Seat engine and renderer.
+public enum ReplayGhostColour: Int, CaseIterable, Codable, Sendable {
+    case blue, pink, orange, green, violet, yellow, red, silver
+
+    public var rgb: (UInt8, UInt8, UInt8) {
+        switch self {
+        case .blue: (105, 220, 255)
+        case .pink: (255, 120, 220)
+        case .orange: (255, 165, 70)
+        case .green: (95, 255, 145)
+        case .violet: (180, 135, 255)
+        case .yellow: (245, 240, 80)
+        case .red: (255, 100, 100)
+        case .silver: (210, 220, 230)
+        }
+    }
+}
+
 /// A sharp, translucent silhouette with a separate outline. No terrain pixels.
 public struct SolutionGhostPixels: Sendable {
     public let rgba: Data
@@ -77,7 +95,7 @@ public struct SolutionGhostPixels: Sendable {
     public let height: Int
     public let padding: Int
 
-    public init(rgba source: Data, width: Int, height: Int, pixelScale: Int = 1) {
+    public init(rgba source: Data, width: Int, height: Int, pixelScale: Int = 1, colour: ReplayGhostColour = .blue) {
         padding = max(1, pixelScale)
         self.width = width + padding * 2
         self.height = height + padding * 2
@@ -92,9 +110,10 @@ public struct SolutionGhostPixels: Sendable {
                     || solid(x, y - padding) || solid(x, y + padding))
                 guard inside || edge else { continue }
                 let offset = ((y + padding) * self.width + x + padding) * 4
-                pixels[offset] = edge ? 185 : 105
-                pixels[offset + 1] = 220
-                pixels[offset + 2] = 255
+                let (r, g, b) = colour.rgb
+                pixels[offset] = edge ? UInt8(min(255, Int(r) + 80)) : r
+                pixels[offset + 1] = g
+                pixels[offset + 2] = b
                 pixels[offset + 3] = edge ? 150 : 76
             } }
         }

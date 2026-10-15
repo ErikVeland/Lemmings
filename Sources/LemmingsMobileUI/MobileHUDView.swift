@@ -148,9 +148,10 @@ import UIKit
         statusIdentity.isHidden = false
         statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).counters
         let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
-                engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic", paused: paused, speed: speed)
+            engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
+            paused: paused, speed: speed)
         statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
-                .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
+            .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
