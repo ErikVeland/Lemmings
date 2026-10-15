@@ -1095,6 +1095,7 @@ extension AppDelegate {
       guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { throw IntegrationFailure(message: "No result render") }
       view.cacheDisplay(in: view.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(name + ".png"))
+      try checkCompactResultActions(view)
       let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
       if view.mode == .result, let primary = buttons.first(where: { $0.accessibilityLabel() == view.primaryResultTitle
         || (view.cleared && ($0.accessibilityLabel() ?? "").hasPrefix(view.continueTitle)) }) {
@@ -3936,6 +3937,7 @@ extension AppDelegate {
     let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/skip-ui")
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
+    try checkCompactResultActions(view)
     return view.accessibilityLabel() ?? ""
   }
   fileprivate func testHotSeatJourneyRetry() async throws {
@@ -7741,6 +7743,8 @@ Task { @MainActor in
     #elseif EARNED_REWARD_TESTS
     try testEarnedRewardPresentation()
     try await subject.testResultNavigation()
+    try await subject.testLevelSkipResult()
+    try await subject.testLearningLevelSkips()
     print("Earned reward presentation and result navigation integration tests passed.")
     #elseif LEVEL_SKIP_TESTS
     try testPrecisionRewardResults()
@@ -9440,6 +9444,36 @@ extension AppDelegate {
   print("PASS nine native Zoom/Level Skip badge renders, active outlines, accessible balances and geometry")
 }
 
+@MainActor private func checkCompactResultActions(_ view: ArcadeView) throws {
+  guard [.result, .earnedRewards, .achievement].contains(view.mode) else { return }
+  let elements = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+  let scale = min(GamePageLayout.scale(in: view.bounds.size), view.bounds.height / view.pageContentHeight)
+  let offset = CGPoint(x: (view.bounds.width - 1120 * scale) / 2, y: (view.bounds.height - view.pageContentHeight * scale) / 2)
+  func logical(_ rect: CGRect) -> CGRect {
+    CGRect(x: (rect.minX - offset.x) / scale, y: (rect.minY - offset.y) / scale, width: rect.width / scale, height: rect.height / scale)
+  }
+  let controls = elements.filter { $0.accessibilityRole() == .button }.map { ($0.accessibilityLabel() ?? "", logical($0.localFrame)) }
+  let footerY: CGFloat
+  switch view.mode {
+  case .result: footerY = view.resultActionsY
+  case .earnedRewards: footerY = view.earnedRewardsFooterY
+  default: footerY = view.achievementFooterY
+  }
+  for y in [footerY, footerY - 52] {
+    let row = controls.filter { abs($0.1.minY - y) < 0.5 }.sorted { $0.1.minX < $1.1.minX }
+    guard !row.isEmpty else { continue }
+    try check(abs(row.first!.1.minX - 64) < 0.5 && abs(row.last!.1.maxX - 1056) < 0.5, "End-of-level row has an empty edge slot")
+    for index in 1..<row.count {
+      try check(abs(row[index].1.minX - row[index - 1].1.maxX - 16) < 1, "End-of-level row has a navigation hole")
+    }
+  }
+  try check(view.pageContentHeight - (footerY + 48) <= 51, "End-of-level panel reserves space below its actions")
+  if view.mode == .earnedRewards {
+    let lastReason = elements.filter { entry in view.savedEarnedRewards.contains { $0.reason == entry.accessibilityLabel() } }.map { logical($0.localFrame).maxY }.max()!
+    try check(footerY - lastReason <= 78, "Reward actions are detached from their content")
+  }
+}
+
 @MainActor private func testEarnedRewardPresentation() throws {
   let previous = ArcadeStore.shared
   let directory = FileManager.default.temporaryDirectory.appendingPathComponent("earned-rewards-\(UUID())")
@@ -9454,6 +9488,7 @@ extension AppDelegate {
     if view.mode == .result { view.finishCelebration() }
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    try checkCompactResultActions(view)
     let children = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
     try check(children.allSatisfy { view.bounds.contains($0.localFrame) }, "Reward text or input target was clipped: " + name)
     let controls = children.filter { $0.accessibilityRole() == .button }
@@ -9539,6 +9574,16 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
+      view.showResultAchievement([(title: "Target met", detail: "Rescue 1 lemming and clear the level.")])
+      _ = try capture("\(engine)-\(mode)-single-detail")
+      try check((view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }.count == 1, "Single award detail has a vacant action slot")
+      view.showResultAchievement(rewards.map { (title: $0.title, detail: $0.reason) })
+      for index in rewards.indices {
+        view.achievementDetailIndex = index
+        _ = try capture("\(engine)-\(mode)-detail-\(index)")
+      }
+      view.page(.result)
+      _ = try capture("\(engine)-\(mode)-result-return")
       let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
@@ -9555,6 +9600,13 @@ extension AppDelegate {
       ArcadeWindow.shared.showResult(preview, owner: host, retry: {}, next: {}, replay: { _ in })
       try check(view.mode == .result && view.savedEarnedRewards.isEmpty, "An unsaved preview claimed earned rewards")
       _ = try capture("\(engine)-\(mode)-preview")
+      let singleConditions = TrolleyConditions(gameID: engine, packID: "earned-rewards", levelID: "single", levelFingerprint: "single", rulesetVersion: "test", physicsMode: "test", population: 10, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+      let singleLevel = ArcadeLevel(id: "single", title: "One award", game: engine, rules: "test", total: 10, required: 1, conditions: singleConditions)
+      let single = store.record(.init(profileID: owner, level: singleLevel, saved: 1, didWin: true, skills: ["builder": 1, "digger": 1], seconds: 10))!
+      ArcadeWindow.shared.showResult(single, owner: host, retry: {}, next: {}, replay: { _ in })
+      try check(view.mode == .earnedRewards && view.savedEarnedRewards.count == 1, "Single award fixture did not produce one award")
+      _ = try capture("\(engine)-\(mode)-single-reward")
+      try check((view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }.count == 1, "One-page reward receipt reserved a second action slot")
       let rewound = store.record(.init(profileID: owner, level: level(engine, 4), saved: 1, didWin: true,
         skills: [:], seconds: 10, assisted: true, telemetry: .init(released: 1, rewindCount: 1)))!
       let assisted = ResultAwards.earnedRewards(report: rewound, celebration: .init(report: rewound, history: store.records.trolley))

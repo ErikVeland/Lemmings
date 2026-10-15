@@ -2,6 +2,17 @@
 
 **Status: shared frontend connected; acceptance gate open.**
 
+Baseline: the local iOS and tvOS source on 14 October 2026. The checkout has
+uncommitted changes. This record describes the current implementation and its
+validation boundaries, rather than a shipped TV release.
+
+Full applicable iOS parity remains required. The normal TV entry point now uses
+`LemmingsMobileApplication` and `MobileLibraryViewController`. It shares the
+mobile game controller, native libraries, models, bitmap pages, settings,
+collections, records, teaching, audio and service orchestration. Supplying
+explicit `TVLibrarySource` fixtures still opens the original TV development
+shell. That diagnostic path is not the normal application or the parity baseline.
+
 ## Gameplay status parity with Mac
 
 The normal TV frontend reserves a top strip for player identity, released/total,
@@ -14,16 +25,14 @@ count includes extra lemmings that started on the map. Rewind refreshes counts
 from the restored runtime. Existing HUD controls retain their bounds, and iOS
 retains its existing compact status presentation.
 
-Baseline: the local iOS and tvOS source on 14 October 2026. The checkout has
-uncommitted changes. This record describes the current implementation and its
-validation boundaries, rather than a shipped TV release.
-
-Full applicable iOS parity remains required. The normal TV entry point now uses
-`LemmingsMobileApplication` and `MobileLibraryViewController`. It shares the
-mobile game controller, native libraries, models, bitmap pages, settings,
-collections, records, teaching, audio and service orchestration. Supplying
-explicit `TVLibrarySource` fixtures still opens the original TV development
-shell. That diagnostic path is not the normal application or the parity baseline.
+`Scripts/run-tv-console-checks.sh` includes 96 synthetic HUD captures at 720p,
+1080p and 4K across Classic, NeoLemmix, L2 and L3. They check complete text,
+0/1/50/100% values, visible skull pixels, SAFE/failure, pause/speed/nuke states,
+unchanged control geometry and activation centres. A native L3 fixture verifies
+extra-lemming deaths and their restoration on rewind. Representative renders
+were inspected. Both SDK modules and application entry points compile. All
+native checks run offscreen with muted audio. Physical television readability,
+UIKit focus delivery and VoiceOver remain device checks.
 
 ## Current source coverage
 

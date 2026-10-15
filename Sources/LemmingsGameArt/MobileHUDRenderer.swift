@@ -559,8 +559,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             for (index, line) in lines.enumerated() {
                 let row = CGRect(x: frame.minX + 8, y: frame.minY + CGFloat(index) * frame.height / 2,
                     width: frame.width - 16, height: frame.height / 2)
-                GamePixelTypography.draw(line, in: row, context: context, typography: typography,
-                    palette: snapshot.didWin ? .green : .blue, maximumScale: 1)
+                drawTelevisionStatus(line, in: row, context: context)
             }
             return
         }
@@ -580,6 +579,31 @@ public enum MobileHUDAction: Equatable, Sendable {
         GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,
                              palette: snapshot.didWin ? .green : .blue, maximumScale: 1,
                              alignment: panelMode ? .left : .center)
+    }
+
+    private func drawTelevisionStatus(_ text: String, in row: CGRect, context: CGContext) {
+        let palette: GamePixelTypography.Palette = snapshot.didWin ? .green : .blue
+        guard text.contains("💀"), let typography, let font = typography.font(.small) else {
+            GamePixelTypography.draw(text, in: row, context: context, typography: typography,
+                palette: palette, maximumScale: 1)
+            return
+        }
+        let width = typography.width(of: GameMenuTypography.menuText(text), face: .small, scale: 1)
+        let left = floor(row.midX - width / 2)
+        let parts = text.components(separatedBy: "💀")
+        var x = left
+        for (index, part) in parts.enumerated() {
+            let partWidth = typography.width(of: GameMenuTypography.menuText(part), face: .small, scale: 1)
+            GamePixelTypography.draw(part, in: CGRect(x: x, y: row.minY, width: partWidth, height: row.height),
+                context: context, typography: typography, palette: palette, maximumScale: 1, alignment: .left)
+            x += partWidth
+            if index < parts.count - 1 {
+                // The authored menu font has no skull. Reuse the shared pixel glyph in its cell.
+                GamePixelTypography.draw("💀", in: CGRect(x: x, y: row.minY, width: CGFloat(font.cellWidth), height: row.height),
+                    context: context, typography: nil, palette: palette, maximumScale: 2, bitmapOnly: true)
+                x += CGFloat(font.cellWidth)
+            }
+        }
     }
 
     public static func televisionStatusLines(snapshot: MobileGameSnapshot, details: StatusDetails?,

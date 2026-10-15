@@ -1,20 +1,20 @@
 {
   "candidatePool": 1721,
-  "estimatedPlacements": 109,
+  "estimatedPlacements": 0,
   "fan": 2,
-  "largestReferenceGap": 10.0,
+  "largestReferenceGap": 4.0,
   "levels": 227,
   "limits": "Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.",
   "official": 225,
   "pendingReview": 1636,
-  "placementPolicy": "teaching-curriculum-2",
-  "pressureFlaggedRoutes": 125,
+  "placementPolicy": "teaching-curriculum-3",
+  "pressureFlaggedRoutes": 122,
   "reportedWalls": 11,
   "stages": {
-    "Difficult": 14,
-    "Expert": 169,
+    "Difficult": 22,
+    "Expert": 160,
     "Fun": 30,
-    "Intermediate": 14
+    "Intermediate": 15
   },
-  "version": "learning-28"
+  "version": "learning-29"
 }

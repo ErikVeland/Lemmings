@@ -93,6 +93,24 @@ import NxlvKit
                         playerName: "ABC", statusDetails: details).draw(in: context, bounds: CGRect(x: 0, y: 0, width: width, height: height))
                     guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(
                         output.appendingPathComponent(label + ".png") as CFURL, "public.png" as CFString, 1, nil) else { throw Failure.check("PNG") }
+                    if let skull = lines[1].range(of: "💀"), let font = typography.font(.small) {
+                        let lineWidth = typography.width(of: GameMenuTypography.menuText(lines[1]), face: .small, scale: 1)
+                        let prefix = lines[1].distance(from: lines[1].startIndex, to: skull.lowerBound)
+                        let glyphRect = CGRect(x: floor(header.midX - lineWidth / 2) + Double(prefix * font.cellWidth),
+                            y: header.minY + 48, width: Double(font.cellWidth), height: 28)
+                        guard let glyph = image.cropping(to: glyphRect),
+                            let sample = CGContext(data: nil, width: font.cellWidth, height: 28, bitsPerComponent: 8,
+                                bytesPerRow: font.cellWidth * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+                            throw Failure.check(label + " skull crop")
+                        }
+                        sample.draw(glyph, in: CGRect(x: 0, y: 0, width: font.cellWidth, height: 28))
+                        guard let data = sample.data else { throw Failure.check(label + " skull pixels") }
+                        let pixels = Array(UnsafeBufferPointer(start: data.assumingMemoryBound(to: UInt8.self), count: font.cellWidth * 28 * 4))
+                        try check(stride(from: 0, to: pixels.count - 3, by: 4).contains {
+                            pixels[$0 + 2] > pixels[$0 + 1] && pixels[$0 + 1] > pixels[$0]
+                        }, label + " skull has visible blue pixels")
+                    }
                     CGImageDestinationAddImage(destination, image, nil)
                     try check(CGImageDestinationFinalize(destination), label + " PNG")
                     captures += 1

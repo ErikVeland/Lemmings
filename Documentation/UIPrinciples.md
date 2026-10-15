@@ -494,6 +494,19 @@ one Zoom per three no-Rewind stars and one Superzoom per three distinct no-Rewin
 three-star levels. Repeated clears do not add credit. Preview results do not claim
 a saved reward.
 
+
+Mac level-end pages use complete action rows. Divide the row among the actions
+that exist, with consistent gaps and no vacant button slots. Group review actions
+above the final row. Keep Back left and the primary next action right. Include
+Back on successful results as well as failures. Learning journeys retain Hints,
+Try later, Level Skip and the named Hot Seat retry actions.
+
+Measure and wrap the result identity before placing the rescue summary. Omit the
+status row when it has no content. Size reward receipts and achievement details
+to their measured text and cards, with balances and navigation directly below.
+A single action fills its row. Keep drawing, keyboard, mouse and accessibility
+bounds in agreement when the panel height changes.
+
 Earned rewards need an explicit award moment. Mac results automatically open a
 bitmap Rewards earned page for each newly saved award-bearing attempt. Show the
 attempt owner, each award's name and its earning reason. Zooms, Superzooms and
@@ -921,6 +934,16 @@ and the localisation catalogue pass. Physical VoiceOver and device input remain
 manual checks.
 
 ## Fixed TV menus
+
+TV gameplay keeps player identity and complete Mac status information above the
+playfield in all three engines. Show released/total, rescued/required, saved
+percentage rounded down, time, actual deaths, deaths remaining before failure
+or SAFE, supported release rate, speed and the current pause/end state. L3 also
+shows reserves. Draw the skull with the shared bitmap glyph because the shipped
+menu font has no skull. Keep the existing control targets and iOS HUD geometry.
+The muted offscreen TV gate checks 96 HUD renders, text fit, visible skull
+pixels, target bounds and L3 extra-death rewind. iOS/tvOS SDK compilation passes.
+Physical television readability, native focus and VoiceOver remain device checks.
 
 TV Home uses a fixed landscape board: saved play and Journey on the left,
 Classic/fan libraries on the right, sequel logos beneath them, and footer actions

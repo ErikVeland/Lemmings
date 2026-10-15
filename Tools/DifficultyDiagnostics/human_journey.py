@@ -433,6 +433,36 @@ def fills_reviewed_gap(item, selected):
                for left, right in zip(official, official[1:]))
 
 
+def apply_course_plan(selected):
+    """Apply the reviewed whole-course order, including deliberate recovery lessons."""
+    course = read(OUT / 'course-plan.json')
+    by_id = {key(item['row']): item for item in selected}
+    chapters = {chapter['id']: chapter for chapter in course['chapters']}
+    entries = course['lessons']
+    assert len(entries) == len({key(entry) for entry in entries})
+    result = []
+    for lesson in entries:
+        assert key(lesson) in by_id, f'Missing reviewed course lesson: {lesson["title"]}'
+        item = by_id[key(lesson)]
+        assert item['row']['entry']['sourceRevision'] == lesson['sourceRevision']
+        assert item['context']['replayRevision'] == lesson['replayRevision']
+        assert item['context']['quotaTimingVerified'], f'Missing native quota timing: {lesson["title"]}'
+        assert lesson['position'] >= teaching_floor(item['row']['entry'])
+        if item.get('reportedWall'):
+            assert lesson['position'] >= item['reportedWall']['minimumDemand'], f'Player wall moved too early: {lesson["title"]}'
+        placement = item['placement']
+        previous = placement.copy()
+        placement.update(position=lesson['position'], lower=lesson['position'], upper=lesson['position'],
+            basis='userPlaytest' if placement['basis'] == 'userPlaytest' else 'teachingCurriculum',
+            adjustment=lesson['reason'], comparisonPlacement=previous,
+            courseChapter=lesson['chapter'], learningRole=lesson['role'])
+        item['course'] = lesson
+        item['chapter'] = chapters[lesson['chapter']]
+        result.append(item)
+    # New estimates remain review candidates until a course role and transition are authored.
+    return result
+
+
 def build(pool, witnesses, resources, reference, reviews):
     additions = read(OUT / 'required-additions.json')
     required = {key(r) for r in additions}
@@ -441,6 +471,8 @@ def build(pool, witnesses, resources, reference, reviews):
     exclusions = read(ROOT / 'Resources/Progression/exclusions.json')
     excluded = {key(r) for r in exclusions}
     references = {r['reference']: r for r in reference}
+    quota_proofs = {key(proof): proof for proof in read(OUT / 'native-replay-validation.json')
+                    if proof['passed'] and proof.get('firstQuotaTick') is not None}
     rejected = {(key(r), r['sourceRevision'], r['replayRevision']) for r in read(OUT / 'replay-rejections.json')}
     by_title = collections.defaultdict(list)
     contexts, candidates, pending, selected, variant_holds = {}, {}, [], [], {}
@@ -457,7 +489,11 @@ def build(pool, witnesses, resources, reference, reviews):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'excluded or missing exact source/winning replay evidence'})
             continue
-        context = solution_context(row, witness, source)
+        proof = quota_proofs.get(ident)
+        if proof and (proof['sourceRevision'] != row['entry']['sourceRevision']
+                      or proof['replayRevision'] != row['profile']['key']['replayRevision']):
+            proof = None
+        context = solution_context(row, witness, source, proof)
         if any(value < 0 for value in context['spareUsedSkills'].values()):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'replay assignment count exceeds inventory; successful-input audit required'})
@@ -676,6 +712,7 @@ def build(pool, witnesses, resources, reference, reviews):
         if item['row']['official'] or fills_reviewed_gap(item, selected):
             selected = [r for r in selected if key(r['row']) != key(item['row'])] + [item]
     selected = apply_teaching_plan(selected, candidates, contexts, resource_by_id, references)
+    selected = apply_course_plan(selected)
     assert sum(item['row']['official'] for item in selected) >= .8 * len(selected), 'The golden path must remain official-heavy'
     assert not any(not item['row']['official'] and item['placement']['basis'] == 'solutionEstimate' for item in selected)
     admitted = {key(item['row']): item for item in selected}
@@ -688,8 +725,7 @@ def build(pool, witnesses, resources, reference, reviews):
                 'included with port counterpart evidence; human variant review still needed' if item['placement']['basis'] == 'reduxPortCounterpart' else
                 'included official variant with cautious estimated placement; human review still needed')
             row['placement'] = item['placement']
-    selected.sort(key=lambda r: (r['placement']['position'], r['tiePosition'], key(r['row'])))
-    selected = smooth_pressure_ties(selected)
+    assert all(a['placement']['position'] <= b['placement']['position'] for a, b in zip(selected, selected[1:]))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []
     practiced = set()
@@ -712,7 +748,9 @@ def build(pool, witnesses, resources, reference, reviews):
                            'teachingPhase': item.get('teaching', {}).get('phase'),
                            'difficultyVerdict': item.get('reportedWall', {}).get('verdict'),
                            'requiredPreparation': item.get('reportedWall', {}).get('requiredPreparation', []),
-                           'humanPressureAxes': dict(zip(['rescue', 'usedToolScarcity', 'minimumReleaseRate', 'hatches', 'assignmentDensity', 'skillChains'], pressure_dimensions(context))),
+                           'courseChapter': item['chapter'], 'learningRole': item['course']['role'],
+                           'placementReason': item['course']['reason'],
+                           'humanPressureAxes': dict(zip(['rescue', 'availableToolScarcity', 'minimumReleaseRate', 'hatches', 'assignmentDensity', 'skillChains', 'precision', 'quotaDeadline'], pressure_dimensions(context))),
                            'reference': item['reference'], 'placement': placement, 'context': context,
                            'variantDifferences': item['variantDifferences'], 'risks': risks(context),
                            'comparisons': item.get('comparisons', [])})
@@ -724,7 +762,7 @@ def build(pool, witnesses, resources, reference, reviews):
         transitions[-1]['pressureWarnings'] = placement.get('pressureWarnings', [])
         practiced.update(concepts)
     manifest = {'version': VERSION, 'placementPolicy': POLICY, 'lessons': lessons}
-    plan = {'version': 'curriculum-11', 'poolSize': len(pool), 'targetSize': len(selected),
+    plan = {'version': 'curriculum-12', 'poolSize': len(pool), 'targetSize': len(selected),
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,

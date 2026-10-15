@@ -510,7 +510,7 @@ import NxlvKit
         text(subtitle ?? level?.game ?? L10n.text("Ultimate Lemmings"), 96, 106, 928, alignment: .center)
     }
     func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
-    private func back() {
+    func back() {
         if mode == .earnedRewards { returnFromEarnedRewards(); return }
         if mode == .result, let onMenu { onMenu(); return }
         if mode == .hotSeat { closeSession(); return }

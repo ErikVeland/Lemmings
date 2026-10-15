@@ -52,7 +52,7 @@ import NxlvKit
             font.menuParagraph(award.title, in: heading, alignment: .left, face: .large, palette: .green)
         } else { GamePixelText.draw(award.title, in: heading) }
         paragraph(award.detail, body)
-        var actions = [ResultAction(title: L10n.text("Back to result"), primary: achievementDetails.count == 1) { [weak self] in self?.page(.result) }]
+        var actions = [ResultAction(title: report == nil ? L10n.text("Back") : L10n.text("Back to result"), primary: achievementDetails.count == 1) { [weak self] in self?.back() }]
         if achievementDetails.count > 1 {
             actions.append(ResultAction(title: L10n.text("Next award") + " \(achievementDetailIndex + 1)/\(achievementDetails.count) >", primary: true) { [weak self] in
                 guard let self else { return }

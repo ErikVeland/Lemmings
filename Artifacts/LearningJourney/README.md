@@ -68,202 +68,202 @@ Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Ch
 | 26 | Gentle 9 | Thunder-Lemmings are go! | Fun | teachingCurriculum |
 | 27 | Gentle 8 | Not just a pretty Lemming | Fun | teachingCurriculum |
 | 28 | Zany 19 | Gone With The Lemming | Fun | teachingCurriculum |
-| 29 | Gentle 8 | Lemming Productions Present... | Fun | teachingCurriculum |
+| 29 | Gentle 2 | Lemming Productions Present... | Fun | teachingCurriculum |
 | 30 | Gentle 17 | Custom built for Lemmings | Fun | teachingCurriculum |
-| 31 | Gentle 11 | Keep your hair on Mr. Lemming | Intermediate | teachingCurriculum |
-| 32 | Gentle 30 | Not as complicated as it looks | Intermediate | teachingCurriculum |
-| 33 | Quirky 31 | As long as you try your best | Intermediate | teachingCurriculum |
-| 34 | Quirky 20 | Smile if you love lemmings | Intermediate | teachingCurriculum |
-| 35 | Gentle 6 | Let's block and blow | Intermediate | teachingCurriculum |
-| 36 | Gentle 17 | You Live and Lem | Intermediate | teachingCurriculum |
-| 37 | Manic 19 | We are now at LEMCON ONE | Intermediate | teachingCurriculum |
-| 38 | Gentle 16 | A Beast of a level | Intermediate | teachingCurriculum |
-| 39 | Manic 3 | If only they could fly | Intermediate | teachingCurriculum |
-| 40 | Gentle 16 | worra lorra lemmings | Intermediate | teachingCurriculum |
-| 41 | Gentle 25 | Origins and Lemmings | Intermediate | teachingCurriculum |
-| 42 | Gentle 22 | Lock up your Lemmings | Intermediate | teachingCurriculum |
-| 43 | Gentle 7 | Lemming sanctuary in sight | Intermediate | teachingCurriculum |
-| 44 | Gentle 7 | What an AWESOME level | Intermediate | teachingCurriculum |
-| 45 | Gentle 25 | Don't let your eyes deceive you | Difficult | solutionEstimate |
-| 46 | Gentle 20 | Patience | Difficult | userPlaytest |
-| 47 | Quirky 14 | Meeting Adjourned | Difficult | teachingCurriculum |
-| 48 | Gentle 22 | Let's be careful out there | Difficult | userPlaytest |
-| 49 | Zany 22 | SNOW JOKE | Difficult | reduxClassicCounterpart |
-| 50 | Gentle 26 | Careless clicking costs lives | Difficult | userPlaytest |
-| 51 | Zany 30 | Got anything....Lemmingy??? | Difficult | reduxClassicCounterpart |
-| 52 | Quirky 1 | Follow the leader... | Difficult | solutionEstimate |
-| 53 | Gentle 7 | King of the castle | Difficult | solutionEstimate |
-| 54 | Zany 26 | MENACING !! | Difficult | solutionEstimate |
-| 55 | Zany 10 | Diet Lemmingaid | Difficult | solutionEstimate |
-| 56 | Gentle 3 | Ozone friendly Lemmings | Difficult | solutionEstimate |
-| 57 | Gentle 26 | The Art Gallery | Difficult | solutionEstimate |
-| 58 | Manic 14 | Come on over to my place | Difficult | reduxClassicCounterpart |
-| 59 | Gentle 2 | Dr Lemminggood | Expert | solutionEstimate |
-| 60 | Gentle 7 | Pea Soup | Expert | solutionEstimate |
-| 61 | Manic 7 | Bomboozal | Expert | solutionEstimate |
-| 62 | Gentle 7 | Everyone turn left (Part two) | Expert | solutionEstimate |
-| 63 | Zany 21 | The Chain with no name | Expert | solutionEstimate |
-| 64 | Zany 21 | Mutiny On The Bounty | Expert | teachingCurriculum |
-| 65 | Manic 2 | The Lemming Funhouse | Expert | teachingCurriculum |
-| 66 | Manic 7 | Down the tube | Expert | teachingCurriculum |
-| 67 | Manic 8 | Is this a circus? | Expert | teachingCurriculum |
-| 68 | Manic 9 | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Expert | teachingCurriculum |
-| 69 | Quirky 11 | Lemming Friendly | Expert | solutionEstimate |
-| 70 | Zany 21 | It`s all a matter of timing | Expert | solutionEstimate |
-| 71 | Gentle 7 | Oh No! It`s the 4TH DIMENSION! | Expert | solutionEstimate |
-| 72 | Zany 10 | Flow Control | Expert | teachingCurriculum |
-| 73 | Manic 3 | If at first you don`t succeed.. | Expert | teachingCurriculum |
-| 74 | Quirky 1 | Luvly Jubly | Expert | solutionEstimate |
-| 75 | Quirky 18 | They just keep on coming | Expert | solutionEstimate |
-| 76 | Quirky 22 | The Far Side | Expert | teachingCurriculum |
-| 77 | Zany 5 | Watch out, there`s traps about | Expert | teachingCurriculum |
-| 78 | Quirky 31 | Cascade | Expert | teachingCurriculum |
-| 79 | Quirky 11 | DON`T PANIC | Expert | teachingCurriculum |
-| 80 | Manic 10 | ROCKY VI | Expert | teachingCurriculum |
-| 81 | Quirky 26 | Take care, Sweetie | Expert | teachingCurriculum |
-| 82 | Zany 18 | KEEP ON TRUCKING | Expert | teachingCurriculum |
-| 83 | Manic 24 | The race against cliches | Expert | teachingCurriculum |
-| 84 | Manic 11 | With a twist of lemming please | Expert | teachingCurriculum |
-| 85 | Gentle 6 | Last Lemming To Lemmingcentral | Expert | solutionEstimate |
-| 86 | Manic 15 | THE SILENCE OF THE LEMMINGS | Expert | teachingCurriculum |
-| 87 | Manic 13 | Upsidedown World | Expert | teachingCurriculum |
-| 88 | Manic 19 | Poles Apart | Expert | teachingCurriculum |
-| 89 | Quirky 20 | Perseverance | Expert | teachingCurriculum |
-| 90 | Zany 18 | Feel the heat! | Expert | solutionEstimate |
-| 91 | Gentle 30 | Turn around young lemmings! | Expert | teachingCurriculum |
-| 92 | Manic 17 | Just a Minute... | Expert | teachingCurriculum |
-| 93 | Gentle 31 | Doomsday | Expert | teachingCurriculum |
-| 94 | Manic 6 | Chill out! | Expert | teachingCurriculum |
-| 95 | Quirky 18 | One way or another | Expert | teachingCurriculum |
-| 96 | Quirky 27 | The Island of the Wicker people | Expert | teachingCurriculum |
-| 97 | Zany 3 | Last one out is a rotten egg! | Expert | teachingCurriculum |
-| 98 | Gentle 24 | Rainbow Island | Expert | userPlaytest |
-| 99 | Manic 29 | Just a Minute (Part Two) | Expert | reduxClassicCounterpart |
-| 100 | Quirky 9 | Exodus! | Expert | teachingCurriculum |
-| 101 | Gentle 32 | Going their separate ways | Expert | userPlaytest |
-| 102 | Zany 19 | Postcard from Lemmingland | Expert | teachingCurriculum |
-| 103 | Zany 23 | ONWARD AND UPWARD | Expert | teachingCurriculum |
-| 104 | Zany 26 | Across The Gap | Expert | teachingCurriculum |
-| 105 | Quirky 30 | Izzie Wizzie lemmings get busy | Expert | teachingCurriculum |
-| 106 | Quirky 32 | And then there were four.... | Expert | teachingCurriculum |
-| 107 | Quirky 1 | PoP YoR ToP!!! | Expert | userPlaytest |
-| 108 | Manic 26 | Triple Trouble | Expert | teachingCurriculum |
-| 109 | Zany 20 | Dolly Dimple | Expert | teachingCurriculum |
-| 110 | Manic 18 | The gate trap Lemmings. | Expert | teachingCurriculum |
-| 111 | Zany 3 | A BeastII of a level | Expert | solutionEstimate |
-| 112 | Gentle 24 | Almost Nearly Virtual Reality | Expert | solutionEstimate |
-| 113 | Zany 30 | PoP TiL YoU DrOp! | Expert | solutionEstimate |
-| 114 | Quirky 2 | It's Lemmingentry Watson | Expert | userPlaytest |
-| 115 | Lunatic 1 | It`s hero time! | Expert | reduxClassicCounterpart |
-| 116 | Manic 32 | Temple of Love | Expert | teachingCurriculum |
-| 117 | Manic 5 | Synchronised Lemming | Expert | teachingCurriculum |
-| 118 | Manic 4 | No world without you | Expert | teachingCurriculum |
-| 119 | Zany 24 | I have a cunning plan | Expert | teachingCurriculum |
-| 120 | Gentle 3 | All or Nothing | Expert | solutionEstimate |
-| 121 | Gentle 3 | Quote: "That`s a good level" | Expert | solutionEstimate |
-| 122 | Gentle 3 | Now get out of that! | Expert | solutionEstimate |
-| 123 | Gentle 3 | The Crossroads | Expert | solutionEstimate |
-| 124 | Lunatic 2 | The Boiler Room | Expert | reduxClassicCounterpart |
-| 125 | Gentle 25 | The Crankshaft | Expert | userPlaytest |
-| 126 | Lunatic 3 | Anxiety | Expert | reduxClassicCounterpart |
-| 127 | Zany 22 | Have an ice day | Expert | solutionEstimate |
-| 128 | Lunatic 4 | No added colours or Lemmings | Expert | reduxClassicCounterpart |
-| 129 | Quirky 11 | Mind the step..... | Expert | solutionEstimate |
-| 130 | Lunatic 5 | There`s madness in the method | Expert | reduxClassicCounterpart |
-| 131 | Manic 5 | You Take the High Road | Expert | solutionEstimate |
-| 132 | Gentle 25 | Here's one I prepared earlier | Expert | solutionEstimate |
-| 133 | Quirky 1 | This should be a doddle! | Expert | solutionEstimate |
-| 134 | Quirky 1 | The Lemming Learning Curve | Expert | solutionEstimate |
-| 135 | Lunatic 8 | Lemming about town | Expert | reduxClassicCounterpart |
-| 136 | Manic 7 | Many Lemmings make level work | Expert | solutionEstimate |
-| 137 | Lunatic 9 | Evacuating a coal mine | Expert | reduxClassicCounterpart |
-| 138 | Quirky 11 | NO PROBLEM | Expert | solutionEstimate |
-| 139 | Lunatic 10 | Be more than just a number | Expert | reduxClassicCounterpart |
-| 140 | Quirky 11 | Watch right or left (Part two) | Expert | solutionEstimate |
-| 141 | Lunatic 5 | Higgledy Piggledy | Expert | solutionEstimate |
-| 142 | Manic 10 | Watch your step | Expert | solutionEstimate |
-| 143 | Lunatic 12 | Water processing plant | Expert | reduxClassicCounterpart |
-| 144 | Quirky 6 | Just A Quicky | Expert | userPlaytest |
-| 145 | Quirky 1 | LeMming ToMato KetchUp fAcilitY | Expert | solutionEstimate |
-| 146 | Quirky 22 | Inroducing SUPERLEMMING | Expert | solutionEstimate |
-| 147 | Lunatic 14 | Move on in two separate groups. | Expert | reduxClassicCounterpart |
-| 148 | Manic 14 | A ladder would be handy | Expert | solutionEstimate |
-| 149 | Gentle 24 | How on Earth? | Expert | solutionEstimate |
-| 150 | Manic 14 | How do I dig up the way? | Expert | solutionEstimate |
-| 151 | Gentle 16 | Here is Mr.Lemming's house | Expert | solutionEstimate |
-| 152 | Manic 15 | Spiral staircase | Expert | solutionEstimate |
-| 153 | Lunatic 17 | Creature Discomforts | Expert | reduxClassicCounterpart |
-| 154 | Lunatic 13 | No Problemming! | Expert | solutionEstimate |
-| 155 | Gentle 17 | Turn around and look. | Expert | solutionEstimate |
-| 156 | Manic 2 | Take a running jump..... | Expert | solutionEstimate |
-| 157 | Zany 30 | It`s a trade off | Expert | solutionEstimate |
-| 158 | Manic 10 | A TOWERING PROBLEM | Expert | solutionEstimate |
-| 159 | Manic 7 | Five Alive | Expert | solutionEstimate |
-| 160 | Lunatic 13 | Tightrope City | Expert | solutionEstimate |
-| 161 | Manic 2 | Lemming Express | Expert | solutionEstimate |
-| 162 | Lunatic 18 | Scaling the Heights | Expert | reduxClassicCounterpart |
-| 163 | Manic 15 | DIGGING FOR VICTORY | Expert | solutionEstimate |
-| 164 | Manic 19 | Livin` On The Edge | Expert | solutionEstimate |
-| 165 | Manic 19 | Inside the bone | Expert | solutionEstimate |
-| 166 | Manic 19 | Ice Ice Lemming | Expert | solutionEstimate |
-| 167 | Gentle 16 | Lend a helping hand.... | Expert | solutionEstimate |
-| 168 | Lunatic 12 | Tribute to M.C.Escher | Expert | solutionEstimate |
-| 169 | Manic 19 | Ice Station Lemming | Expert | solutionEstimate |
-| 170 | Manic 18 | Curse of the Pharaohs | Expert | solutionEstimate |
-| 171 | Lunatic 21 | The Steel Mines of Kessel | Expert | reduxClassicCounterpart |
-| 172 | Quirky 32 | There's a lot of them about | Expert | solutionEstimate |
-| 173 | Gentle 25 | The ascending pillar scenario | Expert | solutionEstimate |
-| 174 | Gentle 20 | From The Boundary Line | Expert | solutionEstimate |
-| 175 | Gentle 25 | The Fast Food Kitchen... | Expert | solutionEstimate |
-| 176 | Lunatic 23 | The Great Lemming Caper | Expert | reduxClassicCounterpart |
-| 177 | Gentle 4 | LOoK BeFoRe YoU LeAp! | Expert | solutionEstimate |
-| 178 | Lunatic 21 | Lemming Hotel | Expert | solutionEstimate |
-| 179 | Lunatic 10 | Down, along, up. In that order | Expert | solutionEstimate |
-| 180 | Manic 26 | Walk the web rope | Expert | solutionEstimate |
-| 181 | Quirky 9 | And now, the end is near... | Expert | solutionEstimate |
-| 182 | Manic 10 | Every Lemming for himself!!! | Expert | solutionEstimate |
-| 183 | Lunatic 28 | Lemmings in a situation | Expert | reduxClassicCounterpart |
-| 184 | Lunatic 29 | Save Me | Expert | reduxClassicCounterpart |
-| 185 | Lunatic 31 | I am A.T. | Expert | reduxClassicCounterpart |
-| 186 | Lunatic 32 | Fall and no life (Part Two) | Expert | reduxClassicCounterpart |
-| 187 | Zany 19 | One way digging to freedom | Expert | solutionEstimate |
-| 188 | Zany 23 | POOR WEE CREATURES! | Expert | solutionEstimate |
-| 189 | Gentle 25 | Lemming Drops | Expert | solutionEstimate |
-| 190 | Quirky 30 | Lemmingology | Expert | solutionEstimate |
-| 191 | Gentle 16 | All the 6`s ........ | Expert | solutionEstimate |
-| 192 | Lunatic 1 | Konbanwa Lemming san | Expert | solutionEstimate |
-| 193 | Gentle 16 | Have a nice day! | Expert | solutionEstimate |
-| 194 | Gentle 25 | Pillars of Hercules | Expert | solutionEstimate |
-| 195 | Gentle 25 | Been there, seen it, done it | Expert | solutionEstimate |
-| 196 | Quirky 30 | Stepping Stones | Expert | solutionEstimate |
-| 197 | Manic 6 | Nightmare on Lem street | Expert | solutionEstimate |
-| 198 | Lunatic 21 | Time to get up! | Expert | solutionEstimate |
-| 199 | Lunatic 2 | Mary Poppins` land | Expert | solutionEstimate |
-| 200 | Lunatic 2 | Two heads are better... | Expert | solutionEstimate |
-| 201 | Zany 18 | Lemmingdelica | Expert | solutionEstimate |
-| 202 | Gentle 7 | Heaven can wait (we hope!!!!) | Expert | solutionEstimate |
-| 203 | Zany 18 | We all fall down | Expert | solutionEstimate |
-| 204 | Zany 18 | 24 hour Lemathon | Expert | solutionEstimate |
-| 205 | Lunatic 31 | Rules to fall | Expert | solutionEstimate |
-| 206 | Manic 26 | Lemmings in the attic | Expert | solutionEstimate |
-| 207 | Lunatic 3 | Suicidal Tendencies | Expert | solutionEstimate |
-| 208 | Manic 14 | HIGHLAND FLING | Expert | solutionEstimate |
-| 209 | Quirky 6 | ROCKY ROAD | Expert | solutionEstimate |
-| 210 | Quirky 6 | Lemming Rhythms | Expert | solutionEstimate |
-| 211 | Lunatic 2 | It`s a tight fit! | Expert | solutionEstimate |
-| 212 | Lunatic 8 | Just a minute (Part Three) | Expert | solutionEstimate |
-| 213 | Lunatic 8 | The Stack | Expert | solutionEstimate |
-| 214 | Lunatic 3 | It`s the price you have to pay | Expert | solutionEstimate |
-| 215 | Lunatic 13 | Time waits for no Lemming | Expert | userPlaytest |
-| 216 | Lunatic 13 | This Corrosion | Expert | userPlaytest |
-| 217 | Lunatic 21 | Steel Works | Expert | solutionEstimate |
-| 218 | Lunatic 21 | Lemming Head | Expert | solutionEstimate |
-| 219 | Zany 23 | SPAM,SPAM,SPAM,EGG AND LEMMING | Expert | solutionEstimate |
-| 220 | Lunatic 14 | Be sure to be a builder. | Expert | solutionEstimate |
-| 221 | Lunatic 32 | Welcome to the party, pal! | Expert | solutionEstimate |
-| 222 | Lunatic 29 | SUNSOFT Special | Expert | solutionEstimate |
-| 223 | Lunatic 14 | Out, away from the tune | Expert | solutionEstimate |
-| 224 | Zany 22 | Going up....... | Expert | solutionEstimate |
-| 225 | Lunatic 21 | Call in the bomb squad | Expert | solutionEstimate |
-| 226 | Gentle 31 | Libra | Expert | solutionEstimate |
-| 227 | Lunatic 29 | The Prison! | Expert | solutionEstimate |
+| 31 | Gentle 17 | You Live and Lem | Intermediate | teachingCurriculum |
+| 32 | Quirky 20 | Smile if you love lemmings | Intermediate | teachingCurriculum |
+| 33 | Zany 18 | We all fall down | Intermediate | teachingCurriculum |
+| 34 | Gentle 11 | Keep your hair on Mr. Lemming | Intermediate | teachingCurriculum |
+| 35 | Manic 19 | We are now at LEMCON ONE | Intermediate | teachingCurriculum |
+| 36 | Gentle 22 | Lock up your Lemmings | Intermediate | teachingCurriculum |
+| 37 | Manic 3 | If only they could fly | Intermediate | teachingCurriculum |
+| 38 | Gentle 16 | worra lorra lemmings | Intermediate | teachingCurriculum |
+| 39 | Gentle 25 | Origins and Lemmings | Intermediate | teachingCurriculum |
+| 40 | Gentle 16 | A Beast of a level | Intermediate | teachingCurriculum |
+| 41 | Gentle 6 | Let's block and blow | Intermediate | teachingCurriculum |
+| 42 | Gentle 30 | Not as complicated as it looks | Intermediate | teachingCurriculum |
+| 43 | Quirky 31 | As long as you try your best | Intermediate | teachingCurriculum |
+| 44 | Gentle 7 | Lemming sanctuary in sight | Intermediate | teachingCurriculum |
+| 45 | Gentle 7 | What an AWESOME level | Intermediate | teachingCurriculum |
+| 46 | Quirky 1 | This should be a doddle! | Difficult | teachingCurriculum |
+| 47 | Manic 14 | A ladder would be handy | Difficult | teachingCurriculum |
+| 48 | Gentle 25 | Here's one I prepared earlier | Difficult | teachingCurriculum |
+| 49 | Lunatic 1 | Konbanwa Lemming san | Difficult | teachingCurriculum |
+| 50 | Manic 26 | Lemmings in the attic | Difficult | teachingCurriculum |
+| 51 | Gentle 25 | Don't let your eyes deceive you | Difficult | teachingCurriculum |
+| 52 | Gentle 20 | Patience | Difficult | userPlaytest |
+| 53 | Gentle 22 | Let's be careful out there | Difficult | userPlaytest |
+| 54 | Gentle 26 | Careless clicking costs lives | Difficult | userPlaytest |
+| 55 | Quirky 14 | Meeting Adjourned | Difficult | teachingCurriculum |
+| 56 | Zany 22 | SNOW JOKE | Difficult | teachingCurriculum |
+| 57 | Gentle 7 | King of the castle | Difficult | teachingCurriculum |
+| 58 | Quirky 1 | Follow the leader... | Difficult | teachingCurriculum |
+| 59 | Gentle 3 | Ozone friendly Lemmings | Difficult | teachingCurriculum |
+| 60 | Zany 10 | Diet Lemmingaid | Difficult | teachingCurriculum |
+| 61 | Zany 30 | Got anything....Lemmingy??? | Difficult | teachingCurriculum |
+| 62 | Gentle 26 | The Art Gallery | Difficult | teachingCurriculum |
+| 63 | Manic 14 | Come on over to my place | Difficult | teachingCurriculum |
+| 64 | Quirky 30 | Lemmingology | Difficult | teachingCurriculum |
+| 65 | Gentle 25 | Lemming Drops | Difficult | teachingCurriculum |
+| 66 | Zany 26 | MENACING !! | Difficult | teachingCurriculum |
+| 67 | Manic 19 | Ice Ice Lemming | Difficult | teachingCurriculum |
+| 68 | Gentle 2 | Dr Lemminggood | Expert | teachingCurriculum |
+| 69 | Zany 18 | Lemmingdelica | Expert | teachingCurriculum |
+| 70 | Gentle 7 | Pea Soup | Expert | teachingCurriculum |
+| 71 | Gentle 7 | Everyone turn left (Part two) | Expert | teachingCurriculum |
+| 72 | Manic 26 | Walk the web rope | Expert | teachingCurriculum |
+| 73 | Lunatic 21 | Steel Works | Expert | teachingCurriculum |
+| 74 | Zany 22 | Going up....... | Expert | teachingCurriculum |
+| 75 | Gentle 25 | Been there, seen it, done it | Expert | teachingCurriculum |
+| 76 | Lunatic 21 | The Steel Mines of Kessel | Expert | teachingCurriculum |
+| 77 | Zany 10 | Flow Control | Expert | teachingCurriculum |
+| 78 | Gentle 3 | Quote: "That`s a good level" | Expert | teachingCurriculum |
+| 79 | Zany 30 | It`s a trade off | Expert | teachingCurriculum |
+| 80 | Gentle 24 | How on Earth? | Expert | teachingCurriculum |
+| 81 | Zany 21 | The Chain with no name | Expert | teachingCurriculum |
+| 82 | Zany 21 | Mutiny On The Bounty | Expert | teachingCurriculum |
+| 83 | Manic 8 | Is this a circus? | Expert | teachingCurriculum |
+| 84 | Manic 19 | Inside the bone | Expert | teachingCurriculum |
+| 85 | Zany 18 | 24 hour Lemathon | Expert | teachingCurriculum |
+| 86 | Quirky 11 | DON`T PANIC | Expert | teachingCurriculum |
+| 87 | Lunatic 3 | Anxiety | Expert | teachingCurriculum |
+| 88 | Quirky 2 | It's Lemmingentry Watson | Expert | userPlaytest |
+| 89 | Gentle 16 | Here is Mr.Lemming's house | Expert | teachingCurriculum |
+| 90 | Quirky 11 | Mind the step..... | Expert | teachingCurriculum |
+| 91 | Lunatic 2 | The Boiler Room | Expert | teachingCurriculum |
+| 92 | Manic 19 | Livin` On The Edge | Expert | teachingCurriculum |
+| 93 | Quirky 11 | Lemming Friendly | Expert | teachingCurriculum |
+| 94 | Lunatic 12 | Tribute to M.C.Escher | Expert | teachingCurriculum |
+| 95 | Manic 10 | Watch your step | Expert | teachingCurriculum |
+| 96 | Lunatic 18 | Scaling the Heights | Expert | teachingCurriculum |
+| 97 | Lunatic 8 | Lemming about town | Expert | teachingCurriculum |
+| 98 | Lunatic 3 | Suicidal Tendencies | Expert | teachingCurriculum |
+| 99 | Manic 15 | Spiral staircase | Expert | teachingCurriculum |
+| 100 | Zany 22 | Have an ice day | Expert | teachingCurriculum |
+| 101 | Manic 14 | How do I dig up the way? | Expert | teachingCurriculum |
+| 102 | Quirky 18 | They just keep on coming | Expert | teachingCurriculum |
+| 103 | Quirky 6 | Lemming Rhythms | Expert | teachingCurriculum |
+| 104 | Gentle 24 | Almost Nearly Virtual Reality | Expert | teachingCurriculum |
+| 105 | Lunatic 21 | Call in the bomb squad | Expert | teachingCurriculum |
+| 106 | Manic 7 | Bomboozal | Expert | teachingCurriculum |
+| 107 | Manic 2 | Take a running jump..... | Expert | teachingCurriculum |
+| 108 | Lunatic 5 | Higgledy Piggledy | Expert | teachingCurriculum |
+| 109 | Manic 14 | HIGHLAND FLING | Expert | teachingCurriculum |
+| 110 | Manic 10 | A TOWERING PROBLEM | Expert | teachingCurriculum |
+| 111 | Quirky 11 | Watch right or left (Part two) | Expert | teachingCurriculum |
+| 112 | Gentle 17 | Turn around and look. | Expert | teachingCurriculum |
+| 113 | Gentle 3 | Now get out of that! | Expert | teachingCurriculum |
+| 114 | Manic 7 | Down the tube | Expert | teachingCurriculum |
+| 115 | Manic 2 | The Lemming Funhouse | Expert | teachingCurriculum |
+| 116 | Quirky 26 | Take care, Sweetie | Expert | teachingCurriculum |
+| 117 | Lunatic 5 | There`s madness in the method | Expert | teachingCurriculum |
+| 118 | Gentle 3 | All or Nothing | Expert | teachingCurriculum |
+| 119 | Zany 30 | PoP TiL YoU DrOp! | Expert | teachingCurriculum |
+| 120 | Gentle 16 | Lend a helping hand.... | Expert | teachingCurriculum |
+| 121 | Gentle 7 | Oh No! It`s the 4TH DIMENSION! | Expert | teachingCurriculum |
+| 122 | Zany 21 | It`s all a matter of timing | Expert | teachingCurriculum |
+| 123 | Gentle 6 | Last Lemming To Lemmingcentral | Expert | teachingCurriculum |
+| 124 | Quirky 1 | LeMming ToMato KetchUp fAcilitY | Expert | teachingCurriculum |
+| 125 | Gentle 4 | LOoK BeFoRe YoU LeAp! | Expert | teachingCurriculum |
+| 126 | Quirky 32 | There's a lot of them about | Expert | teachingCurriculum |
+| 127 | Manic 19 | Ice Station Lemming | Expert | teachingCurriculum |
+| 128 | Gentle 25 | The Fast Food Kitchen... | Expert | teachingCurriculum |
+| 129 | Zany 5 | Watch out, there`s traps about | Expert | teachingCurriculum |
+| 130 | Quirky 31 | Cascade | Expert | teachingCurriculum |
+| 131 | Quirky 32 | And then there were four.... | Expert | teachingCurriculum |
+| 132 | Manic 18 | The gate trap Lemmings. | Expert | teachingCurriculum |
+| 133 | Manic 26 | Triple Trouble | Expert | teachingCurriculum |
+| 134 | Gentle 24 | Rainbow Island | Expert | userPlaytest |
+| 135 | Quirky 1 | PoP YoR ToP!!! | Expert | userPlaytest |
+| 136 | Lunatic 14 | Move on in two separate groups. | Expert | teachingCurriculum |
+| 137 | Quirky 1 | The Lemming Learning Curve | Expert | teachingCurriculum |
+| 138 | Manic 7 | Many Lemmings make level work | Expert | teachingCurriculum |
+| 139 | Manic 9 | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Expert | teachingCurriculum |
+| 140 | Manic 11 | With a twist of lemming please | Expert | teachingCurriculum |
+| 141 | Gentle 2 | Rules to fall | Expert | teachingCurriculum |
+| 142 | Zany 18 | KEEP ON TRUCKING | Expert | teachingCurriculum |
+| 143 | Manic 19 | Poles Apart | Expert | teachingCurriculum |
+| 144 | Quirky 20 | Perseverance | Expert | teachingCurriculum |
+| 145 | Manic 13 | Upsidedown World | Expert | teachingCurriculum |
+| 146 | Manic 32 | Temple of Love | Expert | teachingCurriculum |
+| 147 | Quirky 18 | One way or another | Expert | teachingCurriculum |
+| 148 | Manic 6 | Chill out! | Expert | teachingCurriculum |
+| 149 | Quirky 27 | The Island of the Wicker people | Expert | teachingCurriculum |
+| 150 | Zany 3 | Last one out is a rotten egg! | Expert | teachingCurriculum |
+| 151 | Lunatic 12 | Water processing plant | Expert | teachingCurriculum |
+| 152 | Lunatic 3 | It`s the price you have to pay | Expert | teachingCurriculum |
+| 153 | Gentle 32 | Going their separate ways | Expert | userPlaytest |
+| 154 | Quirky 9 | Exodus! | Expert | teachingCurriculum |
+| 155 | Zany 19 | Postcard from Lemmingland | Expert | teachingCurriculum |
+| 156 | Gentle 25 | The Crankshaft | Expert | userPlaytest |
+| 157 | Quirky 6 | Just A Quicky | Expert | userPlaytest |
+| 158 | Quirky 30 | Izzie Wizzie lemmings get busy | Expert | teachingCurriculum |
+| 159 | Gentle 25 | The ascending pillar scenario | Expert | teachingCurriculum |
+| 160 | Zany 26 | Across The Gap | Expert | teachingCurriculum |
+| 161 | Lunatic 4 | No added colours or Lemmings | Expert | teachingCurriculum |
+| 162 | Quirky 1 | Luvly Jubly | Expert | teachingCurriculum |
+| 163 | Lunatic 13 | No Problemming! | Expert | teachingCurriculum |
+| 164 | Lunatic 10 | Be more than just a number | Expert | teachingCurriculum |
+| 165 | Gentle 3 | The Crossroads | Expert | teachingCurriculum |
+| 166 | Zany 18 | Feel the heat! | Expert | teachingCurriculum |
+| 167 | Gentle 30 | Turn around young lemmings! | Expert | teachingCurriculum |
+| 168 | Manic 29 | Just a Minute (Part Two) | Expert | teachingCurriculum |
+| 169 | Manic 17 | Just a Minute... | Expert | teachingCurriculum |
+| 170 | Manic 3 | If at first you don`t succeed.. | Expert | teachingCurriculum |
+| 171 | Gentle 7 | Heaven can wait (we hope!!!!) | Expert | teachingCurriculum |
+| 172 | Manic 6 | Nightmare on Lem street | Expert | teachingCurriculum |
+| 173 | Gentle 25 | From The Boundary Line | Expert | teachingCurriculum |
+| 174 | Manic 7 | Five Alive | Expert | teachingCurriculum |
+| 175 | Lunatic 13 | Tightrope City | Expert | teachingCurriculum |
+| 176 | Manic 2 | Lemming Express | Expert | teachingCurriculum |
+| 177 | Zany 24 | I have a cunning plan | Expert | teachingCurriculum |
+| 178 | Zany 3 | A BeastII of a level | Expert | teachingCurriculum |
+| 179 | Quirky 6 | ROCKY ROAD | Expert | teachingCurriculum |
+| 180 | Quirky 11 | NO PROBLEM | Expert | teachingCurriculum |
+| 181 | Manic 10 | ROCKY VI | Expert | teachingCurriculum |
+| 182 | Zany 23 | ONWARD AND UPWARD | Expert | teachingCurriculum |
+| 183 | Manic 15 | THE SILENCE OF THE LEMMINGS | Expert | teachingCurriculum |
+| 184 | Manic 5 | You Take the High Road | Expert | teachingCurriculum |
+| 185 | Manic 10 | Every Lemming for himself!!! | Expert | teachingCurriculum |
+| 186 | Lunatic 32 | Fall and no life (Part Two) | Expert | teachingCurriculum |
+| 187 | Manic 18 | Curse of the Pharaohs | Expert | teachingCurriculum |
+| 188 | Zany 20 | Dolly Dimple | Expert | teachingCurriculum |
+| 189 | Lunatic 2 | It`s a tight fit! | Expert | teachingCurriculum |
+| 190 | Lunatic 1 | It`s hero time! | Expert | teachingCurriculum |
+| 191 | Manic 24 | The race against cliches | Expert | teachingCurriculum |
+| 192 | Lunatic 8 | Just a minute (Part Three) | Expert | teachingCurriculum |
+| 193 | Lunatic 28 | Lemmings in a situation | Expert | teachingCurriculum |
+| 194 | Manic 5 | Synchronised Lemming | Expert | teachingCurriculum |
+| 195 | Manic 4 | No world without you | Expert | teachingCurriculum |
+| 196 | Gentle 31 | Doomsday | Expert | teachingCurriculum |
+| 197 | Gentle 16 | All the 6`s ........ | Expert | teachingCurriculum |
+| 198 | Lunatic 17 | Creature Discomforts | Expert | teachingCurriculum |
+| 199 | Manic 15 | DIGGING FOR VICTORY | Expert | teachingCurriculum |
+| 200 | Zany 19 | One way digging to freedom | Expert | teachingCurriculum |
+| 201 | Quirky 22 | The Far Side | Expert | teachingCurriculum |
+| 202 | Zany 23 | POOR WEE CREATURES! | Expert | teachingCurriculum |
+| 203 | Gentle 16 | Have a nice day! | Expert | teachingCurriculum |
+| 204 | Gentle 25 | Pillars of Hercules | Expert | teachingCurriculum |
+| 205 | Quirky 30 | Stepping Stones | Expert | teachingCurriculum |
+| 206 | Lunatic 21 | Time to get up! | Expert | teachingCurriculum |
+| 207 | Lunatic 2 | Mary Poppins` land | Expert | teachingCurriculum |
+| 208 | Lunatic 2 | Two heads are better... | Expert | teachingCurriculum |
+| 209 | Lunatic 8 | The Stack | Expert | teachingCurriculum |
+| 210 | Lunatic 21 | Lemming Head | Expert | teachingCurriculum |
+| 211 | Zany 23 | SPAM,SPAM,SPAM,EGG AND LEMMING | Expert | teachingCurriculum |
+| 212 | Lunatic 14 | Be sure to be a builder. | Expert | teachingCurriculum |
+| 213 | Lunatic 32 | Welcome to the party, pal! | Expert | teachingCurriculum |
+| 214 | Lunatic 29 | SUNSOFT Special | Expert | teachingCurriculum |
+| 215 | Lunatic 14 | Out, away from the tune | Expert | teachingCurriculum |
+| 216 | Lunatic 23 | The Great Lemming Caper | Expert | teachingCurriculum |
+| 217 | Lunatic 21 | Lemming Hotel | Expert | teachingCurriculum |
+| 218 | Lunatic 10 | Down, along, up. In that order | Expert | teachingCurriculum |
+| 219 | Quirky 9 | And now, the end is near... | Expert | teachingCurriculum |
+| 220 | Lunatic 9 | Evacuating a coal mine | Expert | teachingCurriculum |
+| 221 | Lunatic 29 | Save Me | Expert | teachingCurriculum |
+| 222 | Quirky 22 | Inroducing SUPERLEMMING | Expert | teachingCurriculum |
+| 223 | Lunatic 31 | I am A.T. | Expert | teachingCurriculum |
+| 224 | Gentle 31 | Libra | Expert | teachingCurriculum |
+| 225 | Lunatic 29 | The Prison! | Expert | teachingCurriculum |
+| 226 | Lunatic 13 | Time waits for no Lemming | Expert | userPlaytest |
+| 227 | Lunatic 13 | This Corrosion | Expert | userPlaytest |
