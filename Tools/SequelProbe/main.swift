@@ -29,10 +29,13 @@ do {
         throw NSError(domain: "Usage: SequelProbe DATA_ROOT [OUTPUT.png]", code: 1)
     }
     let root = URL(fileURLWithPath: CommandLine.arguments[1])
+    let isL3DataRoot = FileManager.default.fileExists(atPath: root.appendingPathComponent("L3CD.EXE").path)
+        || (FileManager.default.fileExists(atPath: root.appendingPathComponent("LEVELS/LEVEL001.DAT").path)
+            && FileManager.default.fileExists(atPath: root.appendingPathComponent("LEVELS/PERM001.OBS").path))
     if CommandLine.arguments.contains("--sprites") {
         var frames: [(Int, Int, [UInt8], [Bool])] = []
         let palette: [UInt8]
-        if FileManager.default.fileExists(atPath: root.appendingPathComponent("L3CD.EXE").path) {
+        if isL3DataRoot {
             let creature = CommandLine.arguments.first { $0.hasPrefix("--creature=") }.flatMap { Int($0.dropFirst(11)) }
             let prefix = creature.map { String(format: "GRAPHICS/CREAT%03d", $0) } ?? "GRAPHICS/TRIBE004"
             let bank = try Lemmings3Sprites(
@@ -72,7 +75,7 @@ do {
         try writePNG(width: width, height: height, rgba: rgba, to: CommandLine.arguments[2])
         exit(0)
     }
-    if FileManager.default.fileExists(atPath: root.appendingPathComponent("L3CD.EXE").path) {
+    if isL3DataRoot {
         let option = CommandLine.arguments.first { $0.hasPrefix("--level=") }
         let number = option.flatMap { Int($0.dropFirst(8)) } ?? 1
         guard (1...999).contains(number) else { throw SequelDataError.invalid("Choose a native L3 level file number from 1 to 999.") }
