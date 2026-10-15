@@ -18,13 +18,23 @@ stopping at the first failure. Of 416 fixtures, 394 pass twice and 22 fail:
 
 The earlier fail-fast result did not expose Egyptian 29. Five carried Shadow 13
 input schedules still win when rebased and double-replayed under the patrol
-runtime. The other 17 failing schedules do not win. These failures do not prove
-that any level is impossible.
+runtime. The other 17 schedules—four standalone and thirteen carried—do not
+win under the current runtime. These failures do not prove that any level is
+impossible.
 
 See `baseline-fixture-audit.json`, `baseline-double-replay-audit.log`,
 `baseline-fixture-audit.log` and `baseline-provenance.json`. The diagnostic audit
 checks retained fixture identity and deterministic winning outcomes. The strict
 campaign gate additionally checks full coverage and linked survivor accounting.
+
+The audit was rerun from checkout `57d3490a` against the installed resource-only
+L3 bundle. The updated report separates strict fixture identity from whether
+the recorded inputs still win after rebasing. It confirms 394 exact
+double-replays, five rebased wins and 17 route failures. The five rebased wins
+are the stale-identity Shadow 13 fixtures; the 17 route failures are the four
+standalone gaps and thirteen carried schedules. See the [current fixture
+audit](current-fixture-audit.json) and [audit provenance](current-fixture-audit-provenance.json)
+for the report, source and tool hashes, and resource-tree fingerprint.
 
 Run the exhaustive audit with:
 
@@ -50,7 +60,7 @@ excavation. A lemming-built brick trigger is still unverified.
 
 Read-only actor samples now identify the original logic counter, actor position
 and animation state. `original-steel-actor-trace.json` records ticks 7 through
-244; setup and actor cleanup samples are excluded. The original actor is 16
+244; setup and samples without a valid actor record are excluded. The original actor is 16
 pixels wide and 18 pixels high. Its source left/top position maps to native
 centre/feet by adding `(8,18)`.
 
@@ -66,6 +76,8 @@ through 244, including the ricochets and tunnel crossing. See
 `prototype-steel-comparison.json`. This proves the sampled trajectory in this
 case. It does not establish the full excavation mask, a player-built brick
 trigger, long travel outside terrain, water interactions or destruction.
+Run `python3 Scripts/verify-l3-mole-trace.py` to verify the 53 source/native
+coordinate pairs and the baseline runtime fingerprint.
 
 `mole-prototype.patch` contains the isolated proposal against the baseline
 runtime hash recorded in `baseline-provenance.json`. It has not been applied
@@ -80,15 +92,15 @@ No Mole runtime change, route replacement or campaign closure is claimed yet.
 
 The owner confirmed on 15 October that another Codex agent is working on
 `main` on a separate machine. This chat cannot directly message that session.
-The proposed split is:
+The owner assigned this split on 15 October:
 
 - The other agent owns production Mole runtime changes and L3 route fixtures.
 - This chat owns original-engine verification, exhaustive fixture diagnostics
   and the final gate rerun after the runtime and route repairs are available.
 
 This chat will not edit `Sources/NxlvKit/Lemmings3Runtime.swift` or either L3
-fixture directory while that work is in progress. The split is a handoff
-proposal, not a claimed acknowledgement from the other agent. The other agent
+fixture directory while that work is in progress. The owner confirmed the split in this chat. The other session is not directly
+accessible from this machine. The other agent
 should pull this record before further route searches: the pending source
 behaviour correction can change replay timing again.
 
@@ -103,3 +115,41 @@ After a fresh complete NxlvKit build, run `Scripts/audit-l3-fixtures.sh`,
 specified by `Documentation/CampaignCompletion/README.md`. Retain the source
 revision and runtime hash with each result. All mechanical tests remain
 headless and muted.
+
+## Repeated original-engine follow-up
+
+Two additional controlled DOS cases repeat without position differences in
+samples validated in both runs. See `original-followup-traces.json`.
+
+| Case | Samples compared | Result |
+| --- | ---: | --- |
+| Left-facing steel contact | 329 | Contact starts a down-right burrow. Early movement mirrors the right-facing case. |
+| Open gap beneath the tunnel | 344 | Burrowing transitions to a fall, lands and returns to patrol. |
+
+The air-gap case removes source TEMP objects 343/345 in the central region
+listed in the trace record. At tick 167 the mapped position is `(120,152)`.
+Ticks 168–172 contain the transition. At ticks 173–182 the mapped horizontal
+position stays at 112 while the feet descend four pixels per tick from 156
+to 192. Patrol resumes on the floor. Continuing through an earlier tunnel
+and falling into an open gap are distinct observed cases. The exact test and
+animation phase that chooses the transition still need comparison.
+
+Position agreement does not establish excavation-mask agreement.
+`original-tunnel-edge-check.json` records four unobscured counterexamples at
+tick 62 in the controlled baseline steel case. The source clears `(198,112)`
+and `(199,113)`, which the private rectangle proposal retains. The proposal
+clears `(184,118)` and `(192,114)`, which remain terrain in the source.
+The observed edge is consistent with the source 8×2 attribute grid. The exact
+brush algorithm is still open. Do not apply the proposal as a complete source
+fidelity correction on the strength of its matching trajectory.
+
+The [original manual](https://db.hfsplay.fr/files/2018/10/06/c9f24f28-42dd-4046-aa9b-1d0b7622142e.pdf),
+printed pages 25, 31 and 35, documents Use and Drop, directional brick/spade
+selection and using placed bricks to redirect a harmless Mole. These are
+source instructions. A verified gameplay capture of the built-brick trigger
+is still required. The manual PDF, original binary and raw captures stay in
+the ignored reference directory.
+
+No runtime or route fixture changes were made by this chat. The full campaign
+gate will be rerun against a fresh source build after the other agent's runtime
+and route repairs reach `main`.
