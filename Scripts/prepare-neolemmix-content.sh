@@ -133,6 +133,15 @@ def level_style_references(text):
         references.add(style.lower())
     return references, valid
 
+# The pinned Original pack omits its two bundled Xmas subgroups from the parent index.
+# Keep all six physical levels reachable through the native pack browser.
+xmas_parent = staging / 'levels/Original_Lemmings/levels.nxmi'
+xmas_group = xmas_parent.parent / 'XmasLemmings/levels.nxmi'
+if xmas_parent.is_file() and xmas_group.is_file():
+    index = xmas_parent.read_text()
+    if not re.search(r'^\s*FOLDER\s+XmasLemmings\s*$', index, re.MULTILINE | re.IGNORECASE):
+        xmas_parent.write_text(index.rstrip() + '\n\n$GROUP\n  NAME Xmas Lemmings\n  FOLDER XmasLemmings\n$END\n')
+
 levels = staging / 'levels'
 packs, available = [], 0
 for pack in sorted(p for p in levels.iterdir() if p.is_dir()):
