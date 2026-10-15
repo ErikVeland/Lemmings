@@ -9448,7 +9448,9 @@ extension AppDelegate {
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
   defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
   func capture(_ name: String) throws -> [GameAccessibleElement] {
+    host.contentView?.layoutSubtreeIfNeeded()
     let view = ArcadeWindow.shared.arcadeView
+    view.layoutSubtreeIfNeeded()
     if view.mode == .result { view.finishCelebration() }
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
@@ -9537,7 +9539,7 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
-      let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
+      let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
         windowNumber: host.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!)

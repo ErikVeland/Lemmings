@@ -9,15 +9,13 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0"
-    static let subtitle = L10n.text("Original Macintosh 1-bit graphics")
+    static let notesVersion = "2.0.1"
+    static let subtitle = L10n.text("Journey and control improvements")
     static let sections = [
-        (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
-        (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),
-        (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
-        (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause.")),
-        (L10n.text("Music and performance"), L10n.text("Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys.")),
-        (L10n.text("Bitmap lettering"), L10n.text("Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text.")),
+        (L10n.text("Learning journey"), L10n.text("The revised journey prepares techniques before harder puzzles. Existing journeys update unvisited lessons while preserving completed levels, player ownership and saved progress.")),
+        (L10n.text("Pause and quick controls"), L10n.text("Pause, speed reset and frame stepping follow the selected control settings across Classic, The Tribes and Chronicles. Gameplay menus preserve pause and Hot Seat Ready states.")),
+        (L10n.text("Rewards earned"), L10n.text("Results show newly earned Zooms, Superzooms and Level Skips together. Open Rewards earned to review the reasons without advancing the level or changing the player.")),
+        (L10n.text("Ghost solution controls"), L10n.text("The Classic solution selector uses the system pointer across its buttons, checkbox and gaps. Returning to the playfield restores the gameplay cursor.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ]
     private let defaults: UserDefaults
