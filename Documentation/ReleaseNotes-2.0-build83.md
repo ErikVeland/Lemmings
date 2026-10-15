@@ -1,6 +1,7 @@
 # Ultimate Lemmings 2.0 for Macintosh — the art of one bit
 
 Build: 83
+Release commit: 1b4daa28adee3f3b05399e61775c1be201caf349
 Release base: v1.9.6
 
 The flagship of this Macintosh release is the original 1-bit artwork, with a matching black-and-white gameplay panel. These notes cover changes since 1.9.6, including the 1.9.7 improvements.

@@ -1,0 +1,79 @@
+{
+  "de": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "8f2f976a26b5d3810ef0fc25ff64a740d236db93ecdfd162a0deb85eaf312e25",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "es-419": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "8d8b89843f1e3cf4523db8dfb3e65332318c0e585f639195d8553eedc89c8de9",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "fr": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "8a26b749f995f4f34d5fd4188709287f7b8fbd0ea590928e92e9941bd18bf9cd",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "it": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "14bb17e405fe16323665d7014a404353793a6170c747de1a0fec72d1155e17dc",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "nb": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "d388557e729d6dc7a189ab6078b480e159705fc069d08cb5311e37c0130222e9",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "nl": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "96ffa91bee67db4aa427c29adfa5fb487d82bc13f58726ccd970e3896c39cdb8",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  },
+  "pt-BR": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "273000587062e78b94dabc4c9facd967aae834d50e07ac8274eebc32dd7dcd5f",
+    "text_keys": 3118,
+    "total_plural_keys": 8,
+    "total_text_keys": 3118
+  }
+}

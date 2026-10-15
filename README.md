@@ -1,8 +1,9 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The current release shell is for macOS. Version 1.3 added an iPhone/iPad
-development target. Version 2.0 targets a full iOS release for iPad, iPhone and iPhone Duo,
+The current macOS release is 2.0, led by the original Macintosh 1-bit graphics.
+Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
+work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
 native interpreters and does not run DOS code through an emulator. Commercial
 game data is not committed to this repository;
@@ -15,11 +16,11 @@ before distributing a build.
 
 ## Download
 
-Download [1.9.7 build 82](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.7),
+Download [2.0 build 83](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0),
 the current signed and notarised macOS release for Apple silicon and Intel.
 Installed copies update automatically. Read the
-[1.9.7 notes](Documentation/ReleaseNotes-1.9.7-build82.md),
-[release evidence](Documentation/ReleaseReadiness/1.9.7-build82/README.md) and
+[2.0 notes](Documentation/ReleaseNotes-2.0-build83.md),
+[release evidence](Documentation/ReleaseReadiness/2.0-build83/README.md) and
 the [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite
@@ -84,17 +85,17 @@ winning replay evidence covers 158 levels. See
 ## Translation work
 
 English, Spanish (Latin America), German, French, Brazilian Portuguese,
-Italian, Dutch and Norwegian Bokmål are available in the app for localisation
-testing. The seven translated packs are AI drafts and still need human language
-review and platform acceptance before release.
+Italian, Dutch and Norwegian Bokmål are included in Macintosh 2.0. The seven
+added language packs are AI-assisted drafts. Human language review and complete
+translated-screen and device validation remain open.
 
 Start with the [translation handover](Documentation/Localisation.md#translation-handover)
 and the [localisation architecture](ARCHITECTURE.md#localisation).
 Review the locale checkpoint files under `Tools/Localisation/drafts/` before
 editing. Use `python3 Tools/Localisation/install_drafts_for_testing.py
---for-in-app-testing` to refresh the test bundle. Complete the linguistic,
-plural, font, layout and cross-platform checks before release. Coverage checks
-alone do not approve a language pack.
+--for-in-app-testing` to refresh the runtime bundle. The owner approved inclusion in Macintosh 2.0.
+Complete the linguistic, font, layout and cross-platform checks before claiming
+fully reviewed language support. Structural coverage alone does not establish it.
 
 ## Requirements
 

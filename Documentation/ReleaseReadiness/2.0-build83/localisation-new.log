@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-2.0-current/source/Tools/Localisation/catalogue.py", line 130, in <module>
+    main()
+    ~~~~^^
+  File "/Users/veland/Lemmings/.build/release-2.0-current/source/Tools/Localisation/catalogue.py", line 122, in main
+    validate_translations({r['key'] for r in data['messages'] if r['kind'] == 'text'}, {r['key'] for r in data['messages'] if r['kind'] == 'plural'})
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/veland/Lemmings/.build/release-2.0-current/source/Tools/Localisation/catalogue.py", line 71, in validate_translations
+    raise ValueError(f'{locale.name}: {len(missing)} missing texts; ' + '; '.join(errors[:5]))
+ValueError: de.lproj: 1 missing texts; Unknown text key: 'Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.'
+Installed 7 draft locales for in-app testing. Human review remains required.
+4307 message uses; 3126 translation keys; 0 direct UI literals to review
+es-419: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+de: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+fr: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+pt-BR: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+it: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+nl: 3118/3118 texts; 8/8 plurals; 0 errors; PASS
+nb: 3118/3118 texts; 8/8 plurals; 0 errors; PASS

@@ -1,0 +1,10 @@
+PASS shipped de: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped en: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped es-419: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped fr: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped it: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped nb: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped nl: 3118 runtime strings, eight native plural tables and language matching
+PASS shipped pt-BR: 3118 runtime strings, eight native plural tables and language matching
+PASS localised shipping bundle: 24944 strings and 320 plural resolutions
+4307 message uses; 3126 translation keys; 0 direct UI literals to review

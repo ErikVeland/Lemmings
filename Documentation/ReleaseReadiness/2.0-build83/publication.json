@@ -1,0 +1,49 @@
+{
+  "version": "2.0",
+  "build": 83,
+  "sourceCommit": "1b4daa28adee3f3b05399e61775c1be201caf349",
+  "universal": true,
+  "developerIDSigning": true,
+  "notarised": true,
+  "notaries": {
+    "standard": {
+      "status": "Accepted",
+      "id": "f1f49fda-475e-4f4d-8ed8-a97b94645634",
+      "message": "Processing complete"
+    },
+    "slim": {
+      "status": "Accepted",
+      "message": "Processing complete",
+      "id": "0c83e3f5-f515-4c5b-8d5a-f2c0d2fcd785"
+    }
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.0-build83.zip",
+      "path": "/Users/veland/Lemmings/.build/release-2.0-current/updates/UltimateLemmings-2.0-build83.zip",
+      "size": 2053746420,
+      "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-2.0-build83-slim.zip",
+      "path": "/Users/veland/Lemmings/.build/release-2.0-current/downloads/UltimateLemmings-2.0-build83-slim.zip",
+      "size": 269690356,
+      "sha256": "2614c67e111c7a2bfb0bef62ec9fcd051e9bd4dce7b7740208b57668822d92a1",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "authorisation": "Owner requested release of Macintosh 2.0 and explicitly selected existing classifications with documented limits on 15 October 2026. Publication follows fresh candidate and package validation.",
+  "deltaRemoteDigestVerified": true,
+  "releaseNotesVerified": true,
+  "rawFeedVerified": true,
+  "rawFeedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.0",
+  "publishedAt": "2026-10-15T05:16:48Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true
+}

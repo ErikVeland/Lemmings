@@ -1,0 +1,8 @@
+{
+  "baseRelease": "v1.9.7",
+  "preservedShippingMusic": true,
+  "unchangedPackagingAndPreparationSource": true,
+  "matchingSourceAndPlaybackParameters": 422,
+  "candidateAuditUsesPreservedShippingSoundtrack": true,
+  "reason": "Preserve verified shipping recordings when source recordings and playback parameters are unchanged."
+}

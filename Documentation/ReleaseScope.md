@@ -1,10 +1,11 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The README lists 1.9.7 build 82 as the current public Mac release. The latest
-tracked distribution record in this checkout is 1.9.6 build 81. The 1.9.7
-publication record is not present here, so this document does not claim that
-build 82 passed the distribution gates.
+The current public Macintosh release is 2.0 build 83. Its universal packages
+are signed, notarised and accepted by Gatekeeper. The signed update feed and
+build-82 delta are live and verified. See the [2.0 distribution evidence](ReleaseReadiness/2.0-build83/README.md).
+The owner approved existing classifications with documented limits for this
+release. The stricter bundled-content closure remains open.
 
 The owner set a stricter bundled-content closure rule on 15 October 2026. Every
 bundled level needs a verified winning replay, and every bundled engine needs
@@ -28,8 +29,8 @@ open-ended and uses per-engine, per-version support claims. See the
 
 | Bundled set | Current evidence | Open closure work |
 | --- | --- | --- |
-| Official Classic and Oh Yes! | Current-source recheck passes all 352 routes and the full quest against game data whose 1,307 `Ports` files match the 1.9.7 build 82 manifest. | Finish any remaining variant-specific source checks and verify the final 2.0 app candidate. The test host app is 1.9.1 build 76. |
-| Classic fan packs | The 15 October audit freezes 6,020 levels in 535 packs. All 535 archive hashes match the retained 1.9.7 build 82 resource manifest. Current native audit: 2,399 winning routes, 3,600 levels without a matching candidate and 21 candidate or historical replay failures. The two extra October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Resolve the 3,621 route gaps, close source-behaviour checks for bundled content, then freeze and verify the final release manifest. |
+| Official Classic and Oh Yes! | Current-source recheck passes all 352 routes and the full quest against game data whose 1,307 `Ports` files match the 1.9.7 build 82 manifest. | Finish any remaining variant-specific source checks. The 2.0 build 83 candidate has verified resources and retained plus focused regression evidence. |
+| Classic fan packs | The 15 October audit freezes 6,020 levels in 535 packs. All 535 archive hashes match the retained 1.9.7 build 82 resource manifest. Current native audit: 2,399 winning routes, 3,600 levels without a matching candidate and 21 candidate or historical replay failures. The two extra October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Resolve the 3,621 route gaps and close source-behaviour checks for bundled content. The released build has a frozen distribution manifest. |
 | Lemmings 2 | Current-main replay and runtime reruns pass 120/120 routes, 70 carry-over variants, all twelve full chains and the installed-data runtime suite. Cavelems saves 59, 36, 17, 4, 2, 2, 1, 1, 1 and 1. All tribes still end with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. |
 | Lemmings 3 | Current audit: 399/416 fixtures double-replay. Five Shadow 13 carried identities are refreshed. Four standalone outcomes and 13 carried schedules still fail. Source evidence has 673 repeatable samples for left-facing burrowing and a fall into an open gap. An isolated prototype matches 53 sampled positions, but four terrain-edge samples contradict its rectangular carve. | Recover four standalone routes and 13 carried schedules, then rerun the full 90-route and campaign gates. Verify the exact excavation mask, built-brick trigger and remaining source rules. Close environmental effects, movie audio, story transitions, recovery and release checks. |
 | NeoLemmix CE | The bundled three-pack set has 788 levels. The 26 bundled DMA styles resolve the listed style-directory references for 713 levels. The other 75 need one or more of 44 player-supplied community styles. Exact-version winning replay evidence covers 158 levels. | Clear distribution rights for the 44 community styles, then bundle and verify them. Prove a winning route for all 788 levels and source behaviour for every advertised feature. Keep player imports open-ended under per-engine and per-version support claims. |

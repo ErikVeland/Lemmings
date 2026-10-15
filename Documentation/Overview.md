@@ -8,7 +8,7 @@ universe roadmap](ContentUniverseRoadmap.md) for the long-term 2D content scope.
 
 Ultimate Lemmings is an unofficial native port of the original Lemmings games.
 The release baseline is macOS. Version 1.3 added an iPhone/iPad development
-target, and 2.0 is the planned mobile release. It is not affiliated with, endorsed by, or licensed by Sony Interactive
+target, and the separate mobile 2.0 release remains in development. Macintosh 2.0 adds original 1-bit artwork and shared control and recovery improvements. It is not affiliated with, endorsed by, or licensed by Sony Interactive
 Entertainment, which holds the Lemmings rights today. See
 [README.md](../README.md) and `THIRD_PARTY_NOTICES.md` for the full notice.
 This document is a status summary, not a product announcement.
@@ -97,9 +97,11 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-The README lists 1.9.7 build 82 as the current public Mac release. The latest
-tracked distribution record found in this checkout is for 1.9.6 build 81, so
-build 82 still needs a linked publication record. The 2.0 source connects all
+Macintosh 2.0 build 83 is public, with signed and notarised universal packages,
+a verified update feed and a signed build-82 delta. See the
+[2.0 distribution evidence](ReleaseReadiness/2.0-build83/README.md). The owner
+approved the existing release classifications with documented limits. Full
+bundled-content closure remains open. The 2.0 source connects all
 three native games and supported NeoLemmix to mobile sessions. Its signed build
 12 contains Classic only. Real-data fidelity, full package, physical-device,
 accessibility and distribution gates remain open. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).

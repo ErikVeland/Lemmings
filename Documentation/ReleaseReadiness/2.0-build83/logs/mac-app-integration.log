@@ -1,0 +1,139 @@
+/Users/veland/Lemmings/.build/release-2.0-current/source/Sources/LemmingsLocal/ReleaseWelcome.swift:52:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+50 |         scroll.hasHorizontalScroller = false
+51 |         scroll.drawsBackground = false
+52 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+53 |         scroll.scrollerStyle = .overlay
+54 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:6411:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6409 |       openPanel.canChooseFiles = true
+ 6410 |       openPanel.canChooseDirectories = false
+ 6411 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6412 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6413 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:7764:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7762 |       openPanel.canChooseFiles = true
+ 7763 |       openPanel.canChooseDirectories = false
+ 7764 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7765 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 7766 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:8513:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8511 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8512 |       guard let self else { return }
+ 8513 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8514 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8515 |     }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9638:91: error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9636 |     keys.speedControl = GameSpeedControl()
+ 9637 |     keys.modern = { false }; keys.controllerEnabled = { false }
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+      |                                                                                           `- error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9638:21: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9636 |     keys.speedControl = GameSpeedControl()
+ 9637 |     keys.modern = { false }; keys.controllerEnabled = { false }
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+      |                     `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9638:67: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9636 |     keys.speedControl = GameSpeedControl()
+ 9637 |     keys.modern = { false }; keys.controllerEnabled = { false }
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+      |                                                                   `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9638:100: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9636 |     keys.speedControl = GameSpeedControl()
+ 9637 |     keys.modern = { false }; keys.controllerEnabled = { false }
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+      |                                                                                                    `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9640:57: error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+      |                                                         `- error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9640:20: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+      |                    `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9640:65: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9638 |     try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+ 9639 |     keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+      |                                                                 `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9642:50: error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+      |                                                  `- error: cannot convert value of type '_' to expected argument type 'Bool'
+ 9643 |     let savedSize = GameAccessibility.interfaceSize
+ 9644 |     defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9642:21: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+      |                     `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9643 |     let savedSize = GameAccessibility.interfaceSize
+ 9644 |     defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:9642:59: error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9640 |     try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+ 9641 |     keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+ 9642 |     try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+      |                                                           `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+ 9643 |     let savedSize = GameAccessibility.interfaceSize
+ 9644 |     defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:12413:33: error: cannot convert value of type '_' to expected argument type 'Bool'
+12411 |     _ = keyboard.handle(key(.keyUp, 112.2))
+12412 |     try check(controller.multiplier == 1, "F release restarted speed after Escape")
+12413 |     try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
+      |                                 `- error: cannot convert value of type '_' to expected argument type 'Bool'
+12414 |     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
+12415 |     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:12413:24: error: value of type 'GameplayKeyboard' has no member 'helpText'
+12411 |     _ = keyboard.handle(key(.keyUp, 112.2))
+12412 |     try check(controller.multiplier == 1, "F release restarted speed after Escape")
+12413 |     try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
+      |                        `- error: value of type 'GameplayKeyboard' has no member 'helpText'
+12414 |     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
+12415 |     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/app-integration-tests-arm64/main.swift:17281:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17279 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+17280 |     "Sparkle could not deliver session cleanup callbacks")
+17281 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17282 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+17283 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>

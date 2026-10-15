@@ -1,0 +1,10 @@
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+FAIL IntegrationFailure(message: "Ghost sprites were not drawn at the live tick")

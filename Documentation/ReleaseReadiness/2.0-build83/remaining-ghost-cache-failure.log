@@ -1,0 +1,45 @@
+Sources/LemmingsLocal/ReleaseWelcome.swift:52:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+50 |         scroll.hasHorizontalScroller = false
+51 |         scroll.drawsBackground = false
+52 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+53 |         scroll.scrollerStyle = .overlay
+54 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/remaining-integration/main.swift:6411:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6409 |       openPanel.canChooseFiles = true
+ 6410 |       openPanel.canChooseDirectories = false
+ 6411 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6412 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6413 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/remaining-integration/main.swift:7764:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7762 |       openPanel.canChooseFiles = true
+ 7763 |       openPanel.canChooseDirectories = false
+ 7764 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7765 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 7766 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/remaining-integration/main.swift:8513:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8511 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8512 |       guard let self else { return }
+ 8513 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8514 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8515 |     }
+
+/Users/veland/Lemmings/.build/release-2.0-current/source/.build/remaining-integration/main.swift:17297:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17295 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+17296 |     "Sparkle could not deliver session cleanup callbacks")
+17297 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17298 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+17299 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+FAIL IntegrationFailure(message: "Ghost sprites were not drawn at the live tick")
