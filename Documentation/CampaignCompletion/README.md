@@ -11,7 +11,7 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | The strict rerun stops at Shadow 7. Egyptian 6 and Egyptian 13 still have no winning route under the current Mole patrol. | Repair affected standalone and carried routes. Then rerun all 90 standalone levels and the carried chains. |
+| Lemmings 3 | Current source scan: 86/90 standalone routes replay; 313/326 carried-input routes still win under the corrected runtime. | Repair Shadow 7 and Egyptian 6, 13 and 29, plus their 13 affected carried fixtures. Then rerun all 90 standalone levels and the carried chains. |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -52,10 +52,14 @@ engine parity and a played three-tribe finale need separate checks.
 The 13 October 2026 native gate passed all ninety standalone routes and all
 326 carried fixtures. The 15 October Mole direction and patrol corrections
 invalidated route witnesses. The current manifest check passes. A refreshed
-Shadow 13 route now passes with ten saved and no losses. The strict route gate
-still stops at Shadow 7. Egyptian 6 and 13's old inputs no longer produce a
-win, and carried fixture `107-1.json` fails identity. Earlier route and
-survivor results do not close the current route gate.
+Shadow 13 route now passes with ten saved and no losses. A current-source scan
+of all 90 standalone fixtures found four failures: Shadow 7 and Egyptian 6,
+13 and 29. The other 86 routes replay. A current-rule replay of all 326 carried
+fixtures found 313 winning input sets and 13 failures, all attached to those
+same four levels: `107-1`, `107-22`, `107-23`; `206-1`, `206-11`, `206-22`,
+`206-23`; `213-1`, `213-8`, `213-21`, `213-22`; and `229-15`, `229-43`.
+The campaign chain results and the old 50-survivor endings remain historical
+until replacement witnesses pass the strict gate.
 
 A 15 October follow-up searched Shadow 7 at its one-lemming carried population
 for 120 seconds from the start and for another 120 seconds from the accepted
@@ -66,6 +70,13 @@ The solver's new engine-refresh seed mode then ran another 120-second search on
 each of these three cases from a current-runtime prefix. It found no winning
 route. The mode checks the exact level-data hash and population, drops refused
 inputs from the prefix and double-replays any route it returns.
+
+A follow-up attempted to refresh the old standalone and carried inputs for all
+four affected levels. None won under the corrected runtime. Egyptian 29 also
+had a 120-second current-runtime search, seeded through tick 1500 from its old
+route, with beam 1024 and 8-pixel tool-site sampling. It expanded 1,261,162
+candidates and found no win. Its route remains open; this bounded search does
+not show that the level is unsolvable.
 
 Two further Shadow 7 searches at the one-lemming carried population each ran
 for 600 seconds with tool-site sampling at 16 pixels. The refreshed-seed search
