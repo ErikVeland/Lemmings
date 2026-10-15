@@ -20,6 +20,9 @@
 "#{0} of {1}{2}" = "#{0} av {1}{2}";
 "( with Fiat X1/9 red wedge shaped car, hence Chris \"Wedgey\" Stanley)" = "(med den røde, kileformede Fiat X1/9-en – derav Chris «Wedgey» Stanley)";
 "+ New player" = "+ Ny spiller";
+"+1 LEVEL SKIP" = "+1 bretthopp";
+"+{0} SUPERZOOM" = "+{0} Superzoom";
+"+{0} ZOOM" = "+{0} Zoom";
 "+{0} extra" = "+{0} ekstra";
 ", / .: Step back / forward" = ", / .: Gå ett trinn tilbake / fram";
 ", selected" = ", valgt";
@@ -389,6 +392,7 @@
 "Career progress" = "Karrierefremgang";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "Karriereframdrift. {0} stjerner, pluss {1} i dette forsøket. {2} ulike brett fullført. {3} brett med tre stjerner. {4}{5}";
 "Career stars" = "Karrierestjerner";
+"Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "Karrierestjerner: {0} til {1}. Én Zoom per 3 stjerner uten tilbakespoling eller angring.";
 "Cavelems" = "Hulelemminger";
 "Centre entrance" = "Sentrer på inngangen";
 "Centre entrance. H or Home." = "Sentrer på inngangen. H eller Home.";
@@ -515,6 +519,8 @@
 "Clear with one skill type. This run used {0}." = "Fullfør med én type ferdighet. Dette forsøket brukte {0}.";
 "Clear with {0} more play styles." = "Fullfør med {0} flere spillestiler.";
 "Cleared" = "Fullført";
+"Cleared the level using one skill type." = "Fullførte brettet med bare én type ferdighet.";
+"Cleared the level without assigning a skill." = "Fullførte brettet uten å tildele en ferdighet.";
 "Cleared without assigning a skill." = "Fullført uten å tildele ferdigheter.";
 "Clears" = "Fullføringer";
 "Click or Return to practise" = "Klikk eller trykk Enter for å øve";
@@ -609,6 +615,7 @@
 "Could not save completed lesson: {0}" = "Kunne ikke lagre fullført leksjon: {0}";
 "Could not save the input route: {0}" = "Kunne ikke lagre inndata-ruten: {0}";
 "Could not show the talisman: {0}" = "Kunne ikke vise talismanen: {0}";
+"Could not sync journey: {0}" = "Kunne ikke synkronisere reisen: {0}";
 "Counters" = "Tellere";
 "Counting levels..." = "Teller brett …";
 "Counts" = "Tellinger";
@@ -818,8 +825,8 @@
 "FLOAT" = "SVEV";
 "FLOATER" = "FALLSKJERMHOPPER";
 "FOR MANY GENERATION WE HAVE LIVED HERE" = "I MANGE GENERASJONER HAR VI BODD HER";
-"Fade Menu button" = "Ton ned menyknappen";
-"Fade Menu during play. Turn this off to keep the button visible." = "Ton ned menyen under spilling. Slå dette av for å holde knappen synlig.";
+"Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible." = "Ton ned Meny, Innstillinger og Grafikk under spilling. Slå dette av for å holde knappene synlige.";
+"Fade gameplay buttons" = "Ton ned spillknapper";
 "Fails" = "Mislykkede forsøk";
 "Faithful" = "Trofast";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Trofast beholder kildens opprinnelige lyd. Moderne bruker den forbedrede musikkbehandlingen.";
@@ -859,6 +866,7 @@
 "Finish one below a verified maximum." = "Fullfør med ett mindre enn et bekreftet maksimum.";
 "Finish run" = "Fullfør forsøket";
 "Finished {0} from {1}." = "Fullførte {0} av {1}.";
+"First clear of this level. Rescued {0}; target {1}." = "Første fullføring av dette brettet. Reddet: {0}; mål: {1}.";
 "Fix records" = "Reparer rekorder";
 "Flame Thrower" = "Flammekaster";
 "Flashes" = "Blink";
@@ -1366,6 +1374,7 @@
 "Macintosh Sound Manager 22 kHz PCM" = "Macintosh Sound Manager PCM, 22 kHz";
 "Macintosh artwork could not be applied to this level." = "Kunne ikke bruke Macintosh-grafikken på dette brettet.";
 "Macintosh sound resources" = "Macintosh-lydressurser";
+"Macintosh-style 2x" = "Macintosh-stil 2x";
 "Macintosh-style 2× artwork" = "Macintosh-grafikk 2×";
 "Magic Carpet" = "Flygende teppe";
 "Magno Booter" = "Magnetstøvler";
@@ -1526,12 +1535,15 @@
 "Next Level" = "Neste brett";
 "Next award" = "Neste utmerkelse";
 "Next eligible lemming" = "Neste tilgjengelige lemming";
+"Next graphics" = "Neste grafikk";
+"Next graphics (F2)" = "Neste grafikk (F2)";
 "Next level" = "Neste brett";
 "Next level >" = "Neste brett >";
 "Next move" = "Neste trekk";
 "Next new moves to the next new award. " = "Neste nyhet før neste nye utmerkelse. ";
 "Next new {0}/{1} >" = "Neste nyhet {0}/{1} >";
 "Next page" = "Neste side";
+"Next rewards" = "Neste belønninger";
 "Next skill" = "Neste ferdighet";
 "Next successful skill use. Control-Right." = "Neste vellykkede bruk av ferdighet. Control-høyre.";
 "Next turn: {0}" = "Neste tur: {0}";
@@ -1668,6 +1680,7 @@
 "Original Macintosh" = "Opprinnelig Macintosh";
 "Original Macintosh 1-bit graphics" = "Opprinnelig Macintosh-grafikk i 1 bit";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Den opprinnelige svart-hvitt-grafikken for Macintosh gir moderne Macer de intrikate rastreringsmønstrene fra originalen. Velg Macintosh (1-bit) under Grafikkinnstillinger for Classic-grafikk og matchende monokrome spillkontroller.";
+"Original PC" = "Opprinnelig PC-grafikk";
 "Original inputs" = "Opprinnelige inndata";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
 "Original movie" = "Originalfilm";
@@ -1844,6 +1857,7 @@
 "Previous move" = "Forrige trekk";
 "Previous page" = "Forrige side";
 "Previous record: {0}. New record: {1}." = "Forrige rekord: {0}. Ny rekord: {1}.";
+"Previous rewards" = "Forrige belønninger";
 "Previous skill" = "Forrige ferdighet";
 "Previous successful skill use. Control-Left." = "Forrige vellykkede ferdighetsbruk. Control-venstre.";
 "Previous unassigned" = "Forrige uten ferdighet";
@@ -1895,6 +1909,7 @@
 "RETRY" = "PRØV IGJEN";
 "RETRY LEVEL" = "PRØV BRETTET IGJEN";
 "REVIEW" = "SE GJENNOM";
+"REWARDS EARNED" = "OPPTJENTE BELØNNINGER";
 "REWIND" = "SPOL TILBAKE";
 "REWIND CAREER" = "SPOL TILBAKE I KARRIEREN";
 "RIFF" = "RIFF";
@@ -1987,7 +2002,9 @@
 "Rescue target out of reach" = "Redningsmålet er utenfor rekkevidde";
 "Rescue {0} and clear the level. Saved {1}." = "Redd {0} og fullfør brettet. Reddet {1}.";
 "Rescued" = "Reddet";
+"Rescued all {0} lemmings." = "Reddet alle {0} lemminger.";
 "Rescued {0} of {1}  ({2}%)" = "Reddet {0} av {1}  ({2}%)";
+"Rescued {0}, up from your previous best of {1}." = "Reddet {0}, opp fra din forrige rekord på {1}.";
 "Rescued: {0}. Required: {1}. {2}" = "Reddet: {0}. Påkrevd: {1}. {2}";
 "Reset" = "Tilbakestill";
 "Reset button mappings" = "Tilbakestill knapptilordning";
@@ -2046,6 +2063,8 @@
 "Revisit" = "Besøk igjen";
 "Revisit  {0}" = "Besøk igjen  {0}";
 "Revisit ({0})" = "Besøk igjen ({0})";
+"Rewards earned ({0}) >" = "Opptjente belønninger ({0}) >";
+"Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Belønninger opptjent av {0}. {1} {2}. Side {3} av {4}. Escape går tilbake til resultatet.";
 "Rewind" = "Spol tilbake";
 "Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Tilbakespoling aktiv, {0} tikk bakover. Hold inne punktum for å spole framover. Escape avbryter.";
 "Rewind one second." = "Spol ett sekund tilbake.";
@@ -2214,6 +2233,7 @@
 "Session not started" = "Økten ble ikke startet";
 "Set a first record, then improve its skill count." = "Sett en første rekord, og forbedre deretter antallet ferdigheter.";
 "Settings" = "Innstillinger";
+"Settings (⌘,)" = "Innstillinger (⌘,)";
 "Settings sections" = "Innstillingsdeler";
 "Settings…" = "Innstillinger…";
 "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sju ekstra språkpakker følger språkinnstillingen på Macen. De originale punktgrafikkskriftene støtter vesteuropeisk tekst med aksenter.";
@@ -2278,6 +2298,7 @@
 "Skip" = "Hopp over";
 "Skip as {0} ({1})" = "Hopp over som {0} ({1})";
 "Skip level ({0})" = "Hopp over brett ({0})";
+"Skips {0}" = "Brett å hoppe over {0}";
 "Slider" = "Glider";
 "Slot {0}" = "Spor {0}";
 "Slower" = "Saktere";
@@ -2713,6 +2734,8 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes mente at fred og trygghet var avgjørende. Felles regler og myndighet beskytter folk mot konflikt.";
 "Three-star" = "Tre stjerner";
 "Three-star levels" = "Brett med tre stjerner";
+"Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "Brett med tre stjerner: {0} til {1}. Én mulighet til å hoppe over et brett per 3 forskjellige brett uten tilbakespoling eller angring.";
+"Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "Brett med tre stjerner: {0} til {1}. Én Superzoom per 3 forskjellige brett uten tilbakespoling eller angring.";
 "Three-star rescue" = "Tre-stjerners redning";
 "Thrower" = "Kaster";
 "Tick {0}. {1}: {2}. Skills used: {3}" = "Tikk {0}. {1}: {2}. Ferdigheter brukt: {3}";
@@ -2845,6 +2868,7 @@
 "Use the right stick to aim and the left stick to move the camera." = "Bruk høyre spak til å sikte og venstre spak til å flytte kameraet.";
 "Use tool" = "Bruk verktøy";
 "Used" = "Brukt";
+"Used {0} skills instead of {1}, with at least as many rescued." = "Brukte {0} ferdigheter i stedet for {1}, med minst like mange reddet.";
 "V / S" = "V / S";
 "V Replay  S Save movie" = "V Reprise  S Lagre film";
 "V WATCH REPLAY  *  S SAVE MOVIE" = "V SE REPRISE  *  S LAGRE FILM";
@@ -2871,6 +2895,7 @@
 "View / Options" = "View / Options";
 "View play counts and music use for this Mac, and shared totals when the service is available." = "Vis antall spill og musikkbruk for denne Macen, samt delte totaler når tjenesten er tilgjengelig.";
 "View play insights" = "Vis spillinnsikt";
+"View result" = "Vis resultat";
 "Viewing as {0}. Scores belong to a different local player." = "Viser som {0}. Poengsummene tilhører en annen lokal spiller.";
 "Viewing worldwide scores. {0} holds this Mac's worldwide place. This player keeps local records." = "Viser verdensomspennende poengsummer. {0} har denne Macens plassering i verden. Denne spilleren beholder lokale rekorder.";
 "Volume" = "Volum";
@@ -2949,8 +2974,9 @@
 "Zoom active" = "Zoom aktiv";
 "Zoom off" = "Zoom av";
 "Zoom on / off at cursor" = "Zoom på / av ved markøren";
+"Zoom {0}   Superzoom {1}   Level Skips {2}" = "Zoom {0}   Superzoom {1}   Brett å hoppe over {2}";
 "Zoom {0}×" = "Zoom {0}×";
-"Zoom, {0} remaining. Superzoom, {1} remaining. {2}" = "Zoom, {0} igjen. Superzoom, {1} igjen. {2}";
+"Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "Zoom, {0} igjen. Superzoom, {1} igjen. {2} muligheter til å hoppe over et brett. {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2×. Shift+Z: 4×. Trykk for å bytte.";
 "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" = "[ / ]  Fokuser på lemminger uten ferdighet\n\\      Fokuser på siste tildeling\nEnter Gjenta siste ferdighet";
 "[ / ]: Unassigned lemming" = "[ / ]: Lemming uten ferdighet";
@@ -3111,7 +3137,8 @@
 "{0} {1}. No replacement was chosen." = "{0} {1}. Ingen erstatning ble valgt.";
 "{0} {1}s" = "{0} {1} s";
 "{0} — {1} {2} — Beta" = "{0} — {1} {2} — Beta";
-"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15} {16} Local Most Saved: {17}. Enter: {18}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{19}{20}" = "{0}s forsøk. {1}. {2}. {3} {4}{5} av 3 stjerner i dette forsøket. Tid: {6}. Raskeste fullføring: {7}. Beste brettresultat: {8} stjerner. {9} {10}. Nye brettprestasjoner: {11}. {12} Karriere: {13} stjerner, pluss {14}. {15} {16} Lokal Flest reddet: {17}. Enter: {18}. R prøver igjen. N prøver igjen som neste spiller i økten. P åpner Hot Seat-oppsett. Hele verden åpner fellesskapets poengtavler. V åpner reprise. B åpner rekorder. A åpner prestasjoner. G åpner brettmål. C åpner karriereframdrift. D åpner detaljer. Escape går tilbake.{19}{20}";
+"{0}'s attempt" = "{0}s forsøk";
+"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15}. {16} {17} Local Most Saved: {18}. Enter: {19}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{20}{21}" = "{0}s forsøk. {1}. {2}. {3} {4}{5} av 3 stjerner i dette forsøket. Tid: {6}. Raskeste fullføring: {7}. Beste brettresultat: {8} stjerner. {9} {10}. Nye brettprestasjoner: {11}. {12} Karriere: {13} stjerner, pluss {14}. {15}. {16} {17} Lokal Flest reddet: {18}. Enter: {19}. R prøver igjen. N prøver igjen som neste spiller i økten. P åpner Hot Seat-oppsett. Hele verden åpner fellesskapets poengtavler. V åpner reprise. B åpner rekorder. A åpner prestasjoner. G åpner brettmål. C åpner karriereframdrift. D åpner detaljer. Escape går tilbake.{20}{21}";
 "{0}'s turn" = "{0}s tur";
 "{0}, hold for pause menu" = "{0}, hold inne for pausemeny";
 "{0}, {1} remaining{2}" = "{0}, {1} igjen{2}";

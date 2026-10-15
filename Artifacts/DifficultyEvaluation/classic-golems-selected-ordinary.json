@@ -1,5 +1,5 @@
 {
-  "description": "Selected exact-bundle Golems wins. Most use ordinary player assignments; three use source replay assignment rules. Source headers and native outcomes are separate, and full physics parity is unverified.",
+  "description": "Selected exact-bundle Golems wins. Most use ordinary player assignments; three use source replay assignment rules. Source headers and native outcomes are separate, and full physics parity is unverified. The recorded route claims are historical; four rows failed current installed-bundle replay recheck at fc2c59e6.",
   "records": [
     {
       "identity": {
@@ -954,7 +954,12 @@
       "nativeCompletionTick": 1937,
       "difficultyScore": 463.4470371272371,
       "probeRuns": 10,
-      "sourceURL": "https://lldb.camanis.net/level/245/6"
+      "sourceURL": "https://lldb.camanis.net/level/245/6",
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": "engine refused to queue builder for lemming 22 at tick 953"
+      }
     },
     {
       "identity": {
@@ -1130,7 +1135,12 @@
       "nativeCompletionTick": 1465,
       "difficultyScore": 436.6764396430261,
       "probeRuns": 10,
-      "sourceURL": "https://lldb.camanis.net/level/246/6"
+      "sourceURL": "https://lldb.camanis.net/level/246/6",
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab"
+      }
     },
     {
       "identity": {
@@ -2456,7 +2466,12 @@
       "nativeCompletionTick": 1937,
       "difficultyScore": 464.84703712723706,
       "probeRuns": 10,
-      "sourceURL": "https://lldb.camanis.net/level/245/6"
+      "sourceURL": "https://lldb.camanis.net/level/245/6",
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": "engine refused to queue builder for lemming 22 at tick 953"
+      }
     },
     {
       "identity": {
@@ -2588,7 +2603,12 @@
       "nativeCompletionTick": 1465,
       "difficultyScore": 436.6764396430261,
       "probeRuns": 10,
-      "sourceURL": "https://lldb.camanis.net/level/497/6"
+      "sourceURL": "https://lldb.camanis.net/level/497/6",
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab"
+      }
     },
     {
       "identity": {
@@ -3988,5 +4008,46 @@
       "probeRuns": 10,
       "sourceURL": "https://lldb.camanis.net/level/485/10"
     }
-  ]
+  ],
+  "currentReleaseBundleRecheck": {
+    "date": "2026-10-15",
+    "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; not an exact 2.0 release package",
+    "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "verifier": "Scripts/verify-golems-phase-alternatives.sh selected-routes-only mode",
+    "passed": 3,
+    "checked": 7,
+    "failedRoutes": [
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "observation": "engine refused to queue builder for lemming 22 at tick 953",
+        "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+        "observation": "engine refused to queue builder for lemming 22 at tick 953",
+        "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+      },
+      {
+        "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+        "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+        "routeStatus": "selected-ordinary replay still fails its historical expected-state hash; the refreshed published-source phase-shift replay passes strict verification"
+      },
+      {
+        "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+        "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+        "routeStatus": "selected-ordinary replay still fails its historical expected-state hash; the refreshed published-source phase-shift replay passes strict verification"
+      }
+    ],
+    "interpretation": "The three original selected-pack checks pass. All four selected-ordinary records fail their current check. The two Deep Deep Down identities now have strict winning published-source phase-shift replays with refreshed runtime hashes. The two Magical World identities still need winning routes. The stored full-corpus count has not been rerun after the Deep Deep Down refresh. Exact 2.0 package verification remains open."
+  },
+  "freshBuild": {
+    "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "toolchain": "Xcode 26.6, Swift 6.3.3",
+    "verifierSHA256": "3ade1a95124126063ba21686486039c631aa9f99cda6e312865cad2fdda4340a",
+    "nxlvKitLibrarySHA256": "c90b1fa0df0c363a5fdefe9975ae88b700278b85d1ddbcc66c530f9afa27f18c",
+    "strictDirectRoutes": "64/68 passed",
+    "additionalProfileReplays": "5/5 passed",
+    "selectedGolemsRows": "3/7 passed"
+  }
 }

@@ -31,6 +31,26 @@ class IOSBetaContentTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             content.stage(self.source, self.destination)
 
+    def test_tv_build_replaces_an_old_journey_with_current_shared_order(self):
+        project_root = MODULE_PATH.parents[2]
+        project = project_root / 'Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/project.pbxproj'
+        self.assertIn('Tools/IOSBeta/content.py', project.read_text())
+        incoming = self.root / 'Resources'
+        (incoming / 'Progression').mkdir(parents=True)
+        current = (project_root / 'Resources/Progression/learning.json').read_bytes()
+        (incoming / 'Progression/learning.json').write_bytes(current)
+        app = self.root / 'TV.app'
+        (app / 'Progression').mkdir(parents=True)
+        (app / 'Progression/learning.json').write_text('{"version":"learning-23"}')
+        with patch.dict('os.environ', {'IOS_GAME_CENTER_ACTIVATION': ''}):
+            content.copy_parity_resources(incoming, app)
+        self.assertEqual((app / 'Progression/learning.json').read_bytes(), current)
+        manifest = json.loads(current)
+        index = next(i for i, lesson in enumerate(manifest['lessons'])
+                     if lesson['entry']['identity']['levelID'] == '45:Wild:6:7:5')
+        self.assertGreater(index, 80)
+        self.assertEqual(manifest['lessons'][index]['stage'], 'Expert')
+
     def test_rejects_missing_duplicate_and_linked_inputs(self):
         (self.source / "main.dat").unlink()
         with self.assertRaises(ValueError):

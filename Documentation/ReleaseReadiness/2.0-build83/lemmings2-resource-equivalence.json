@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "baselineVersion": "1.9.7",
+  "baselineBuild": 82,
+  "baselinePurpose": "Proposed content baseline for macOS 2.0; not a 2.0 application candidate",
+  "resourceBundleVersion": "1.9.1",
+  "resourceBundleBuild": "76",
+  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+  "manifest": "/Users/erikveland/.codex/worktrees/8cea/Lemmings/Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+  "manifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+  "resourcePrefix": "Ports/Lemm2/",
+  "expectedFiles": 218,
+  "actualFiles": 218,
+  "matchedFiles": 218,
+  "missingFiles": [],
+  "unexpectedFiles": [],
+  "changedFiles": [],
+  "resourceTreeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f",
+  "matches": true
+}

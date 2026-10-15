@@ -53,16 +53,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/ta.json",
-    "sha256": "3a2fc9f0e8b1db3da633d371a517d3134beedf2c98a1c0bbc866632d68f95bbb",
-    "entry_count": 3133,
+    "sha256": "2f4b8ff537435e6dc8e57fd501de898bb895f80b800ae1d5cf13fd21c767096b",
+    "entry_count": 3160,
     "modified_by_this_worker": true,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "text_count": 3133,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "text_count": 3160,
     "plural_count": 8
   },
   "candidate": {
@@ -255,10 +255,10 @@
     "z - {0}": "Lowercase z identifies the Zoom binding and its remaining-use count."
   },
   "validation": {
-    "text_keys": 3133,
+    "text_keys": 3160,
     "plural_keys": 8,
-    "missing_text": 0,
-    "missing_plurals": 0,
+    "missing_text": [],
+    "missing_plurals": [],
     "placeholder_errors": 0,
     "count_format_errors": 0,
     "unjustified_identical_english_values": 0,
@@ -266,7 +266,12 @@
     "unexpected_non_ascii_characters": [],
     "source_translation_newline_count_differences": 0,
     "source_note": "Non-ASCII output contains Tamil plus ×, •, …, ·, —, −, › and →. No ZWJ, ZWNJ, replacement characters or other scripts occur. This inventory is not a bitmap glyph-coverage or shaping check.",
-    "runtime_tamil_glyph_coverage": "All installed text and plural forms pass the runtime sequence coverage check."
+    "runtime_tamil_glyph_coverage": "All installed text and plural forms pass the runtime sequence coverage check.",
+    "total_text_keys": 3160,
+    "total_plural_keys": 8,
+    "errors": [],
+    "sha256": "2f4b8ff537435e6dc8e57fd501de898bb895f80b800ae1d5cf13fd21c767096b",
+    "complete": true
   },
   "remaining_work": [
     "A fluent Tamil reviewer must check every message, the complete game glossary, all original L2 story fragments, rescue counts, player ownership, time units and philosophical award terminology.",
@@ -280,7 +285,7 @@
     "purpose": "In-app testing of an unapproved AI draft.",
     "strings_path": "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.strings",
     "stringsdict_path": "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.stringsdict",
-    "strings_sha256": "0e7fa573167c7ad16c76d53398df50146e837bb48a5c64d562fd13ab86782579",
+    "strings_sha256": "7e3c4d17615b3b07b4af38ba023639387130b2cfbb3360a5b9dfb73cba00881a",
     "stringsdict_sha256": "20478306132a658a57d3dea10b738d5c41201689ea723804d282ba3d1af5e73b"
   },
   "local_integration_checks": {
@@ -314,12 +319,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "3a2fc9f0e8b1db3da633d371a517d3134beedf2c98a1c0bbc866632d68f95bbb",
-    "runtime_strings_sha256": "0e7fa573167c7ad16c76d53398df50146e837bb48a5c64d562fd13ab86782579",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "2f4b8ff537435e6dc8e57fd501de898bb895f80b800ae1d5cf13fd21c767096b",
+    "runtime_strings_sha256": "7e3c4d17615b3b07b4af38ba023639387130b2cfbb3360a5b9dfb73cba00881a",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

@@ -36,7 +36,7 @@ import UIKit
     }
     private var automaticallyFitsViewport: Bool
     private let initialCameraFocus: MobilePoint?
-    private var bitmap: CGImage?
+    private(set) var bitmap: CGImage?
     private var tubeViewport: MobileViewport?
     private let tubeSurface = MobileBitmapSurface()
     private let tube = MobileCRTView(tubeDevice: true)
@@ -63,6 +63,7 @@ import UIKit
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
     private let failureMood = FailureMoodTransition()
+    private var failureAmount: CGFloat = 0
     #if os(iOS)
     private let completionGlow = RescueCelebrationTransition()
     #endif
@@ -101,7 +102,12 @@ import UIKit
         decoration.isOpaque = false
         decoration.backgroundColor = .clear
         addSubview(decoration)
-        failureMood.onChange = { [weak self] value in self?.decoration.failureAmount = value }
+        failureMood.onChange = { [weak self] value in
+            guard let self else { return }
+            self.failureAmount = value
+            self.tube?.failureAmount = value
+            self.setNeedsDisplay()
+        }
         #if os(iOS)
         completionGlow.onChange = { [weak self] value in
             guard let self else { return }
@@ -292,6 +298,8 @@ import UIKit
         guard tube?.isHidden != false, let context = UIGraphicsGetCurrentContext(), let bitmap else { return }
         let drawStarted = ProcessInfo.processInfo.systemUptime
         defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "bitmap") }
+        context.setFillColor(CGColor(gray: 0, alpha: 1))
+        context.fill(bounds)
         MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
@@ -301,6 +309,7 @@ import UIKit
         }
         _ = drawExplosionCores(viewport: gameViewport, context: context)
         drawCursorBadge(viewport: gameViewport, context: context)
+        FailureMoodArt.draw(in: bounds, amount: failureAmount, context: context)
     }
 
     override func layoutSubviews() {
@@ -558,20 +567,12 @@ import UIKit
 extension MobilePlayfieldView: UIPointerInteractionDelegate {}
 #endif
 @MainActor private final class MobilePlayfieldDecoration: UIView {
-    var failureAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }
     var rescueAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
         #if os(iOS)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         RescueCelebration.draw(in: bounds, amount: rescueAmount, context: context)
         #endif
-        guard failureAmount > 0 else { return }
-        context.setBlendMode(.color)
-        context.setFillColor(CGColor(gray: 0.28, alpha: 0.72 * failureAmount))
-        context.fill(bounds)
-        context.setBlendMode(.normal)
-        context.setFillColor(CGColor(gray: 0, alpha: 0.26 * failureAmount))
-        context.fill(bounds)
     }
 }
 #endif

@@ -2,6 +2,11 @@
   "changes": [
     "Build number and date on Home",
     "Latest changes on first launch",
-    "Local rebuild detection"
+    "Local rebuild detection",
+    "More reliable lemming clicks during play",
+    "Circle stays with gameplay controls",
+    "Faster crowd targeting and sprite rendering",
+    "Fewer repeated Classic playfield redraws",
+    "Funeral mood desaturates without a pale overlay"
   ]
 }

@@ -20,6 +20,9 @@
 "#{0} of {1}{2}" = "#{0} von {1}{2}";
 "( with Fiat X1/9 red wedge shaped car, hence Chris \"Wedgey\" Stanley)" = "(mit dem keilförmigen roten Fiat X1/9, daher Chris „Wedgey“ Stanley)";
 "+ New player" = "+ Neuer Spieler";
+"+1 LEVEL SKIP" = "+1 Levelsprung";
+"+{0} SUPERZOOM" = "+{0} Superzoom";
+"+{0} ZOOM" = "+{0} Zoom";
 "+{0} extra" = "+{0} zusätzlich";
 ", / .: Step back / forward" = ", / .: Schritt zurück / vor";
 ", selected" = ", ausgewählt";
@@ -389,6 +392,7 @@
 "Career progress" = "Karrierefortschritt";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "Karrierefortschritt. {0} Sterne, davon {1} in diesem Lauf. {2} verschiedene Level geschafft. {3} Level mit drei Sternen. {4}{5}";
 "Career stars" = "Karrieresterne";
+"Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "Karrieresterne: {0} bis {1}. Ein Zoom für je 3 Sterne ohne Zurückspulen oder Rückgängigmachen.";
 "Cavelems" = "Höhlenlemminge";
 "Centre entrance" = "Eingang zentrieren";
 "Centre entrance. H or Home." = "Eingang zentrieren. H oder Pos1.";
@@ -515,6 +519,8 @@
 "Clear with one skill type. This run used {0}." = "Schaffe das Level mit einem Fähigkeitstyp. In diesem Lauf hast du {0} verwendet.";
 "Clear with {0} more play styles." = "Schaffe das Level mit {0} weiteren Spielstilen.";
 "Cleared" = "Geschafft";
+"Cleared the level using one skill type." = "Level mit nur einer Fähigkeitsart abgeschlossen.";
+"Cleared the level without assigning a skill." = "Level ohne Zuweisung einer Fähigkeit abgeschlossen.";
 "Cleared without assigning a skill." = "Ohne Fähigkeitszuweisung geschafft.";
 "Clears" = "Abschlüsse";
 "Click or Return to practise" = "Klicken oder Eingabetaste zum Üben";
@@ -609,6 +615,7 @@
 "Could not save completed lesson: {0}" = "Abgeschlossene Lektion konnte nicht gespeichert werden: {0}";
 "Could not save the input route: {0}" = "Eingaberoute konnte nicht gespeichert werden: {0}";
 "Could not show the talisman: {0}" = "Der Talisman konnte nicht angezeigt werden: {0}";
+"Could not sync journey: {0}" = "Reise konnte nicht synchronisiert werden: {0}";
 "Counters" = "Zähler";
 "Counting levels..." = "Level werden gezählt …";
 "Counts" = "Zahlen";
@@ -818,8 +825,8 @@
 "FLOAT" = "SCHWEBEN";
 "FLOATER" = "Fallschirmspringer";
 "FOR MANY GENERATION WE HAVE LIVED HERE" = "VIELE GENERATIONEN LANG LEBTEN WIR HIER";
-"Fade Menu button" = "Menütaste ausblenden";
-"Fade Menu during play. Turn this off to keep the button visible." = "Menü während des Spiels ausblenden. Deaktiviere dies, damit die Taste sichtbar bleibt.";
+"Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible." = "Menü, Einstellungen und Grafik während des Spiels ausblenden. Deaktiviere dies, damit die Tasten sichtbar bleiben.";
+"Fade gameplay buttons" = "Spieltasten ausblenden";
 "Fails" = "Fehlschläge";
 "Faithful" = "Originalgetreu";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Originalgetreu behält den Originalklang bei. Modern verwendet die erweiterte Musikbearbeitung.";
@@ -859,6 +866,7 @@
 "Finish one below a verified maximum." = "Beende ein Level mit einem Ergebnis, das eins unter dem nachgewiesenen Maximum liegt.";
 "Finish run" = "Lauf abschließen";
 "Finished {0} from {1}." = "{0} von {1} abgeschlossen.";
+"First clear of this level. Rescued {0}; target {1}." = "Erster Abschluss dieses Levels. Gerettet: {0}; Ziel: {1}.";
 "Fix records" = "Rekorde reparieren";
 "Flame Thrower" = "Flammenwerfer";
 "Flashes" = "Blitze";
@@ -1366,6 +1374,7 @@
 "Macintosh Sound Manager 22 kHz PCM" = "Macintosh Sound Manager 22-kHz-PCM";
 "Macintosh artwork could not be applied to this level." = "Macintosh-Grafik konnte für dieses Level nicht angewendet werden.";
 "Macintosh sound resources" = "Macintosh-Soundressourcen";
+"Macintosh-style 2x" = "Macintosh-Stil 2x";
 "Macintosh-style 2× artwork" = "Artwork im Macintosh-Stil 2×";
 "Magic Carpet" = "Fliegender Teppich";
 "Magno Booter" = "Magnetstiefler";
@@ -1526,12 +1535,15 @@
 "Next Level" = "Nächstes Level";
 "Next award" = "Nächste Auszeichnung";
 "Next eligible lemming" = "Nächster Lemming, der eine Fähigkeit erhalten kann";
+"Next graphics" = "Nächste Grafik";
+"Next graphics (F2)" = "Nächste Grafik (F2)";
 "Next level" = "Nächstes Level";
 "Next level >" = "Nächstes Level >";
 "Next move" = "Nächster Zug";
 "Next new moves to the next new award. " = "Noch ein Zug bis zur nächsten neuen Auszeichnung. ";
 "Next new {0}/{1} >" = "Nächster neuer Wert {0}/{1} >";
 "Next page" = "Nächste Seite";
+"Next rewards" = "Nächste Belohnungen";
 "Next skill" = "Nächste Fähigkeit";
 "Next successful skill use. Control-Right." = "Nächster erfolgreicher Fähigkeitseinsatz. Ctrl-Rechts.";
 "Next turn: {0}" = "Nächster Zug: {0}";
@@ -1668,6 +1680,7 @@
 "Original Macintosh" = "Original-Macintosh";
 "Original Macintosh 1-bit graphics" = "Originale 1-Bit-Grafik des Macintosh";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Die ursprüngliche Schwarz-Weiß-Grafik des Macintosh bringt ihre aufwendigen Dithering-Muster auf moderne Macs. Wähle in den Grafikeinstellungen „Macintosh (1 Bit)“ für Classic-Grafik und passende monochrome Spielsteuerung.";
+"Original PC" = "Original-PC";
 "Original inputs" = "Originalsteuerung";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Ursprüngliche Hauptplattform. Mit bekannten digitalisierten Sprachsamples und geteiltem Bildschirm für zwei Spieler.";
 "Original movie" = "Originalfilm";
@@ -1844,6 +1857,7 @@
 "Previous move" = "Vorheriger Zug";
 "Previous page" = "Vorherige Seite";
 "Previous record: {0}. New record: {1}." = "Vorheriger Rekord: {0}. Neuer Rekord: {1}.";
+"Previous rewards" = "Vorherige Belohnungen";
 "Previous skill" = "Vorherige Fähigkeit";
 "Previous successful skill use. Control-Left." = "Vorheriger erfolgreicher Fähigkeitseinsatz. Ctrl-Links.";
 "Previous unassigned" = "Vorheriger ohne Fähigkeit";
@@ -1895,6 +1909,7 @@
 "RETRY" = "Erneut versuchen";
 "RETRY LEVEL" = "LEVEL ERNEUT VERSUCHEN";
 "REVIEW" = "PRÜFEN";
+"REWARDS EARNED" = "VERDIENTE BELOHNUNGEN";
 "REWIND" = "Zurückspulen";
 "REWIND CAREER" = "KARRIERE ZURÜCKSPULEN";
 "RIFF" = "RIFF";
@@ -1987,7 +2002,9 @@
 "Rescue target out of reach" = "Rettungsziel unerreichbar";
 "Rescue {0} and clear the level. Saved {1}." = "Rette {0} Lemminge und schaffe das Level. Gerettet: {1}.";
 "Rescued" = "Gerettet";
+"Rescued all {0} lemmings." = "Alle {0} Lemminge gerettet.";
 "Rescued {0} of {1}  ({2}%)" = "Gerettet: {0} von {1}  ({2}%)";
+"Rescued {0}, up from your previous best of {1}." = "{0} gerettet, gegenüber deinem bisherigen Bestwert von {1}.";
 "Rescued: {0}. Required: {1}. {2}" = "Gerettet: {0}. Erforderlich: {1}. {2}";
 "Reset" = "Zurücksetzen";
 "Reset button mappings" = "Tastenbelegung zurücksetzen";
@@ -2046,6 +2063,8 @@
 "Revisit" = "Erneut besuchen";
 "Revisit  {0}" = "Erneut besuchen  {0}";
 "Revisit ({0})" = "Erneut besuchen ({0})";
+"Rewards earned ({0}) >" = "Verdiente Belohnungen ({0}) >";
+"Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Von {0} verdiente Belohnungen. {1} {2}. Seite {3} von {4}. Escape kehrt zum Ergebnis zurück.";
 "Rewind" = "Zurückspulen";
 "Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Zurückspulen aktiv, {0} Takte zurück. Satzzeichen halten, um vorwärts zu blättern. Escape bricht ab.";
 "Rewind one second." = "Eine Sekunde zurückspulen.";
@@ -2214,6 +2233,7 @@
 "Session not started" = "Sitzung nicht gestartet";
 "Set a first record, then improve its skill count." = "Stelle einen ersten Rekord auf und verbessere danach die Zahl der eingesetzten Fähigkeiten.";
 "Settings" = "Einstellungen";
+"Settings (⌘,)" = "Einstellungen (⌘,)";
 "Settings sections" = "Einstellungsbereiche";
 "Settings…" = "Einstellungen …";
 "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sieben zusätzliche Sprachpakete folgen der Spracheinstellung deines Mac. Die originalen Bitmap-Schriften unterstützen westeuropäische Texte mit Akzenten.";
@@ -2278,6 +2298,7 @@
 "Skip" = "Überspringen";
 "Skip as {0} ({1})" = "Als {0} überspringen ({1})";
 "Skip level ({0})" = "Level überspringen ({0})";
+"Skips {0}" = "Überspringen {0}";
 "Slider" = "Rutscher";
 "Slot {0}" = "Platz {0}";
 "Slower" = "Langsamer";
@@ -2713,6 +2734,8 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes hielt Frieden und Sicherheit für unverzichtbar. Gemeinsame Regeln und Autorität schützen Menschen vor Konflikten.";
 "Three-star" = "Drei Sterne";
 "Three-star levels" = "Level mit drei Sternen";
+"Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "Level mit drei Sternen: {0} bis {1}. Einmal Level überspringen für je 3 verschiedene Level ohne Zurückspulen oder Rückgängigmachen.";
+"Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "Level mit drei Sternen: {0} bis {1}. Ein Superzoom für je 3 verschiedene Level ohne Zurückspulen oder Rückgängigmachen.";
 "Three-star rescue" = "Drei-Sterne-Rettung";
 "Thrower" = "Werfer";
 "Tick {0}. {1}: {2}. Skills used: {3}" = "Takt {0}. {1}: {2}. Verwendete Fähigkeiten: {3}";
@@ -2845,6 +2868,7 @@
 "Use the right stick to aim and the left stick to move the camera." = "Mit dem rechten Stick zielen und mit dem linken Stick die Kamera bewegen.";
 "Use tool" = "Werkzeug benutzen";
 "Used" = "Verwendet";
+"Used {0} skills instead of {1}, with at least as many rescued." = "Mit {0} statt {1} Fähigkeiten mindestens ebenso viele gerettet.";
 "V / S" = "V / S";
 "V Replay  S Save movie" = "V Replay  S Film speichern";
 "V WATCH REPLAY  *  S SAVE MOVIE" = "V REPLAY  *  S FILM SPEICHERN";
@@ -2871,6 +2895,7 @@
 "View / Options" = "Ansicht / Optionen";
 "View play counts and music use for this Mac, and shared totals when the service is available." = "Spielzahlen und Musiknutzung für diesen Mac sowie gemeinsame Gesamtzahlen anzeigen, sofern der Dienst verfügbar ist.";
 "View play insights" = "Spielübersicht anzeigen";
+"View result" = "Ergebnis ansehen";
 "Viewing as {0}. Scores belong to a different local player." = "Ansicht als {0}. Die Punktzahlen gehören einem anderen lokalen Spieler.";
 "Viewing worldwide scores. {0} holds this Mac's worldwide place. This player keeps local records." = "Weltweite Punktzahlen werden angezeigt. {0} belegt den weltweiten Platz dieses Mac. Dieser Spieler behält lokale Rekorde.";
 "Volume" = "Lautstärke";
@@ -2949,8 +2974,9 @@
 "Zoom active" = "Zoom aktiv";
 "Zoom off" = "Zoom aus";
 "Zoom on / off at cursor" = "Zoom am Zeiger ein / aus";
+"Zoom {0}   Superzoom {1}   Level Skips {2}" = "Zoom {0}   Superzoom {1}   Level überspringen {2}";
 "Zoom {0}×" = "Zoom {0}×";
-"Zoom, {0} remaining. Superzoom, {1} remaining. {2}" = "Zoom: noch {0}. Superzoom: noch {1}. {2}";
+"Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "Zoom: noch {0}. Superzoom: noch {1}. {2}-mal Level überspringen. {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2×. Umschalt+Z: 4×. Klicken zum Wechseln.";
 "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" = "[ / ]  Lemminge ohne Fähigkeit fokussieren\n\\      Letzte Zuweisung fokussieren\nEingabe Letzte Fähigkeit wiederholen";
 "[ / ]: Unassigned lemming" = "[ / ]: Lemming ohne Fähigkeit";
@@ -3111,7 +3137,8 @@
 "{0} {1}. No replacement was chosen." = "{0} {1}. Es wurde kein Ersatz ausgewählt.";
 "{0} {1}s" = "{0} {1} s";
 "{0} — {1} {2} — Beta" = "{0} — {1} {2} — Beta";
-"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15} {16} Local Most Saved: {17}. Enter: {18}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{19}{20}" = "Versuch von {0}. {1}. {2}. {3} {4}{5} von 3 Sternen in diesem Lauf. Zeit: {6}. Schnellster Abschluss: {7}. Bestes Levelergebnis: {8} Sterne. {9} {10}. Neue Levelauszeichnungen: {11}. {12} Karriere: {13} Sterne, plus {14}. {15} {16} Lokale Auszeichnung „Meiste gerettet“: {17}. Eingabe: {18}. R versucht es erneut. N startet einen erneuten Versuch mit dem nächsten Spieler. P öffnet die Hot-Seat-Einrichtung. „Weltweit“ öffnet Community-Bestenlisten. V öffnet die Wiedergabe. B öffnet Rekorde. A öffnet Erfolge. G öffnet Levelziele. C öffnet den Karrierefortschritt. D öffnet Details. Escape geht zurück.{19}{20}";
+"{0}'s attempt" = "Versuch von {0}";
+"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15}. {16} {17} Local Most Saved: {18}. Enter: {19}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{20}{21}" = "Versuch von {0}. {1}. {2}. {3} {4}{5} von 3 Sternen in diesem Lauf. Zeit: {6}. Schnellster Abschluss: {7}. Bestes Levelergebnis: {8} Sterne. {9} {10}. Neue Levelauszeichnungen: {11}. {12} Karriere: {13} Sterne, plus {14}. {15}. {16} {17} Lokale Auszeichnung „Meiste gerettet“: {18}. Eingabe: {19}. R versucht es erneut. N startet einen erneuten Versuch mit dem nächsten Spieler. P öffnet die Hot-Seat-Einrichtung. „Weltweit“ öffnet Community-Bestenlisten. V öffnet die Wiedergabe. B öffnet Rekorde. A öffnet Erfolge. G öffnet Levelziele. C öffnet den Karrierefortschritt. D öffnet Details. Escape geht zurück.{20}{21}";
 "{0}'s turn" = "Zug von {0}";
 "{0}, hold for pause menu" = "{0}, für Pausenmenü halten";
 "{0}, {1} remaining{2}" = "{0}, {1} verbleibend{2}";

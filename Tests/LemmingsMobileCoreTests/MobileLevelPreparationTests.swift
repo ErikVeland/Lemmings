@@ -89,6 +89,17 @@ import Testing
         #expect((prepared.content.session as? PreparationSession)?.preparedOffMain == true)
     }
 
+    @Test func nativePreviewCropKeepsTheSameLevelCoordinates() throws {
+        let session = PreparationSession(index: 0, serial: 1)
+        let frame = try MobilePixelFrame(width: 3200, height: 320, rgba: Data(repeating: 0, count: 3200 * 320 * 4))
+        let preview = MobileMenuPreview(frame: frame, origin: .init(x: 100, y: 0),
+                                        snapshot: session.snapshot, renderScale: 2)
+        #expect(preview.sourceRect == .init(x: 200, y: 0, width: 640, height: 320))
+        let edge = MobileMenuPreview(frame: frame, origin: .init(x: 2000, y: 0),
+                                     snapshot: session.snapshot, renderScale: 2)
+        #expect(edge.sourceRect == .init(x: 2560, y: 0, width: 640, height: 320))
+    }
+
     @Test func savedRunRestoresOnWorkerAndRejectsChangedData() async throws {
         let loader = MobileMenuPreviewLoader { PreparationLibrary() }
         let checkpoint = MobileCheckpointEnvelope(runID: UUID(), engine: "fixture", engineFingerprint: "engine",

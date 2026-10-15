@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "release": {
+    "version": "2.0",
+    "build": 83,
+    "sourceCommit": "1b4daa28adee3f3b05399e61775c1be201caf349",
+    "publicURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.0",
+    "fullArchiveSHA256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "slimArchiveSHA256": "2614c67e111c7a2bfb0bef62ec9fcd051e9bd4dce7b7740208b57668822d92a1",
+    "archiveDigestVerified": true,
+    "signatureAndNotaryVerified": true
+  },
+  "currentMain": {
+    "commit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "diffFromRelease": {
+      "engineGameplaySources": [],
+      "portsDataSources": [],
+      "otherNxlvKitSources": [
+        "Sources/NxlvKit/ClassicSettings.swift",
+        "Sources/NxlvKit/PlayerControlSettings.swift"
+      ],
+      "localisationResources": "Seven runtime language tables and matching metadata."
+    }
+  },
+  "releaseBuildEvidence": {
+    "candidateInputs": "candidate-inputs.json",
+    "unchangedGameDataInputs": 1307,
+    "resourcesMatchSource": true,
+    "productionSourceEquivalence": "production-source-equivalence.json",
+    "engineAndGameplaySourcesUnchanged": true,
+    "nonLocalisationResourcesUnchanged": true,
+    "freshAudit": "fresh-audit.json",
+    "freshChecksPassed": 55,
+    "freshChecksFailed": 0,
+    "fullClosureClaimed": false,
+    "referencedInputManifest": "inputs.json",
+    "referencedInputManifestPresentInCheckout": false
+  },
+  "fullClassicFanAudit": {
+    "record": "../ClassicFanBundleAudit-2026-10-15.json",
+    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourceSet": "Exact extracted full build 83 package resources for the direct runtime replay audit; the earlier audit used installed build 76 resources.",
+    "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "archives": 535,
+    "levels": 6020,
+    "winningRoutes": 2399,
+    "levelsWithoutVerifiedRoute": 3621,
+    "loadDecodeRenderFailures": 0,
+    "inputManifestDrift": [],
+    "runtimeReplayExecutedAgainstExtractedBuild83Archive": true,
+    "exactBuild83FanArchiveBytesVerified": true,
+    "exactPackageAudit": "classic-fan-package-audit.json",
+    "exactPackageReplayAudit": "classic-fan-build83-replay.json"
+  },
+  "interpretation": "The public archive identity, all LevelPacks inputs and the complete fan replay result are verified against build 83. The full build 83 package replay audit confirms 2,399 winning routes, 3,600 levels without a matching candidate, 21 failed replay levels and no load/decode/render failures. The strict route gate remains open for 3,621 levels. The slim NeoLemmix archive also has a direct resource audit. The build 83 L2 app payload was staged from the exact archive extraction using the 218 files in the release input manifest; all files match by path, size and SHA-256. The L2 route, carry-over, chain and event gates passed against this payload. The archive extraction contained 14 original DOS interpreter/support files that the app packager excludes. L2 ark and source-behaviour gaps remain open. L3 source behaviour, campaign, ending and carried-route gaps remain open until their own evidence passes.",
+  "neoLemmixSlimArchiveAudit": "neolemmix-bundle-audit.json",
+  "lemmings2CurrentMainAudit": {
+    "record": "../../Lemmings2Completion/README.md",
+    "resourceEquivalenceRecord": "lemmings2-resource-equivalence.json",
+    "currentSourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "currentRuntimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "runtimeSourcesMatchBuild83": "currentMain.diffFromRelease.engineGameplaySources is empty",
+    "resourceEquivalence": {
+      "installedTree": "Ultimate Lemmings 1.9.1 build 76",
+      "baseline": "1.9.7 build 82 hashed bundle-inputs.json",
+      "filesMatched": 218,
+      "missing": 0,
+      "unexpected": 0,
+      "changed": 0,
+      "build83Bridge": "candidate-inputs.json records unchanged proof inputs and resourcesMatchSource=true; production-source-equivalence.json records nonLocalisationResourcesUnchanged=true and engineAndGameplaySourcesUnchanged=true."
+    },
+    "directBuild83ArchiveReplay": false,
+    "completionGate": {
+      "standaloneRoutes": "120/120 passed",
+      "carryOverVariants": 70,
+      "continuousTenLevelChains": 12,
+      "remaining": "Every tribe ends with one survivor and a Bronze talisman. The 30-survivor and golden-talisman ark requirement remains open."
+    },
+    "openWork": [
+      "Verify source-engine behaviour for advertised L2 rules.",
+      "Reach and verify the golden-talisman ark ending with at least 30 survivors from each tribe."
+    ],
+    "transitiveBuild83ResourceAndRuntimeEquivalence": true,
+    "packagePayloadReplayRecord": "lemmings2-build83-payload-replay.json",
+    "build83AppPayload": {
+      "filesMatchedToBuild82Manifest": 218,
+      "missing": 0,
+      "unexpected": 0,
+      "changed": 0,
+      "treeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f",
+      "extraArchiveExtractionFilesExcludedByPackager": 14,
+      "replay": {
+        "standaloneRoutes": 120,
+        "carryOverVariants": 70,
+        "continuousTenLevelChains": 12,
+        "eventSuitePassed": true
+      },
+      "strictArk": "open"
+    },
+    "directBuild83PayloadReplay": true
+  }
+}

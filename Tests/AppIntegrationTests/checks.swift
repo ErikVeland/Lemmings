@@ -157,7 +157,7 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
-  fileprivate func testNeoPauseKeyboard() throws {
+  fileprivate func testNeoPauseKeyboard() async throws {
     if window == nil { buildInterface() }
     if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
@@ -180,6 +180,17 @@ extension AppDelegate {
     window = host
     gameplayKeyboard?.bind(to: host)
     defer { window = originalWindow }
+    let field = PlayfieldView(frame: host.contentView!.bounds)
+    let launchButton = GameButton(title: "Start", target: nil, action: nil)
+    host.contentView!.addSubview(field)
+    host.contentView!.addSubview(launchButton)
+    host.makeFirstResponder(launchButton)
+    gameplayKeyboard?.focusGameplay(field)
+    try check(host.firstResponder === field, "Gameplay did not take focus on launch")
+    // AppKit can restore the launching control after its action returns.
+    host.makeFirstResponder(launchButton)
+    try await Task.sleep(nanoseconds: 20_000_000)
+    try check(host.firstResponder === field, "Gameplay lost focus after the launch action returned")
     for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
       func send(_ type: NSEvent.EventType, repeated: Bool = false) {
         NSApp.sendEvent(NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
@@ -194,6 +205,14 @@ extension AppDelegate {
       try check(!isPaused, "NeoLemmix resume was lost between the installed keyboard monitors")
     }
     print("PASS NeoLemmix Space/P through both installed AppKit monitors")
+    let active = gameplayKeyboard!.active
+    defer { gameplayKeyboard?.active = active }
+    gameplayKeyboard?.focusGameplay(field)
+    gameplayKeyboard?.active = { false }
+    host.makeFirstResponder(launchButton)
+    try await Task.sleep(nanoseconds: 20_000_000)
+    try check(host.firstResponder === launchButton, "Deferred gameplay focus stole menu or Ready focus")
+    print("PASS immediate/deferred gameplay focus and menu/Ready focus preservation")
   }
 }
 
@@ -1069,6 +1088,7 @@ extension AppDelegate {
     let captures = URL(fileURLWithPath: ".build/result-navigation")
     try FileManager.default.createDirectory(at: captures, withIntermediateDirectories: true)
     func render(_ name: String) throws {
+      if view.mode == .earnedRewards { view.returnFromEarnedRewards() }
       if view.mode == .result { view.finishCelebration() }
       window.contentView?.layoutSubtreeIfNeeded()
       view.layoutSubtreeIfNeeded()
@@ -2169,6 +2189,8 @@ extension AppDelegate {
     loadNxlv(file)
     guard let live = session as? NeoLemmixSession else { throw IntegrationFailure(message: "Neo file did not load") }
     try check(phase == .playing && !panel.isMenuMode, "Opening a Neo file left the game in its menu")
+    try check(window.firstResponder === (tubeIsActive ? crtView : playfield),
+      "Opening a Neo file left keyboard focus on a menu control")
     for _ in 0..<4 { live.tick() }
     saveRunCheckpoint(immediately: true)
     guard let disk = try recoveryStore.latest(profileID: arcadeProfileID), disk.neo != nil else {
@@ -2794,6 +2816,46 @@ extension AppDelegate {
     let ghostTarget = ghostToggle.convert(ghostToggle.bounds, to: window.contentView!)
     let ghostHit = window.contentView!.hitTest(CGPoint(x: ghostTarget.midX, y: ghostTarget.midY))
     try check(ghostHit === ghostToggle || ghostHit?.isDescendant(of: ghostToggle) == true, "Ghost toggle is blocked")
+    // Both cursor styles must yield to the whole selector, including its gaps.
+    let pointerSelector = ghostToggle.superview as! SolutionSwitchView
+    let oldDisplay = settings.display, oldCursorStyle = playfield.gameplayCursorStyle
+    defer { settings.display = oldDisplay; playfield.gameplayCursorStyle = oldCursorStyle; applyDisplayMode() }
+    for display in [ClassicDisplayMode.flat, .monitor] {
+      settings.display = display; applyDisplayMode()
+      window.contentView?.layoutSubtreeIfNeeded()
+      if display == .monitor {
+        try check(tubeIsActive, "CRT pointer check needs a Metal device")
+        guard let frame = composeNativeFrame() else { throw IntegrationFailure(message: "Missing CRT cursor fixture frame") }
+        crtView.setSource(frame)
+      }
+      let surface: NSView = tubeIsActive ? crtView : playfield
+      for style in [GameplayCursorStyle.modern, .original] {
+        playfield.gameplayCursorStyle = style
+        for point in [CGPoint(x: 40, y: 24), CGPoint(x: 160, y: 24),
+                      CGPoint(x: 240, y: 24), CGPoint(x: 160, y: 52), CGPoint(x: 160, y: 78)] {
+          let local = surface.convert(point, from: pointerSelector)
+          try check(GameCursor.isOverSystemControl(at: local, in: surface), "Selector lost its system pointer region")
+          let event = NSEvent.mouseEvent(with: .mouseMoved, location: pointerSelector.convert(point, to: nil),
+            modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil,
+            eventNumber: 0, clickCount: 0, pressure: 0)!
+          GameCursor.invisible.set()
+          if tubeIsActive { crtView.mouseMoved(with: event) }
+          else { playfield.mouseMoved(with: event) }
+          try check(NSCursor.current == NSCursor.arrow && playfield.edgeScrollVector == nil,
+            "Selector hover hid the arrow or retained a gameplay pointer")
+          pointerSelector.cursorUpdate(with: event)
+          try check(NSCursor.current == NSCursor.arrow, "Selector cursor tracking did not restore the system arrow")
+        }
+        let terrain = CGPoint(x: surface.bounds.midX, y: surface.bounds.midY)
+        try check(!GameCursor.isOverSystemControl(at: terrain, in: surface), "Terrain remained a system pointer region")
+        let event = NSEvent.mouseEvent(with: .mouseMoved, location: surface.convert(terrain, to: nil), modifierFlags: [],
+          timestamp: 2, windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 0, pressure: 0)!
+        if tubeIsActive { crtView.mouseMoved(with: event) } else { playfield.mouseMoved(with: event) }
+        try check(NSCursor.current == GameCursor.invisible && playfield.edgeScrollVector != nil,
+          "Leaving selector: display=\(display), style=\(style), phase=\(playfield.phase), suppressed=\(GameCursor.gameplaySuppressed), arrow=\(NSCursor.current == NSCursor.arrow), edge=\(String(describing: playfield.edgeScrollVector)), bounds=\(surface.bounds)")
+      }
+    }
+    settings.display = .flat; applyDisplayMode()
     ghostToggle.performClick(nil)
     try check(playfield.ghostSolutionEnabled && isPaused && replay.paused, "Ghost toggle changed a pause state")
     playfield.phase = .playing
@@ -3917,7 +3979,118 @@ extension AppDelegate {
     print("PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner")
   }
 
+  fileprivate func testLearningLevelSkips() async throws {
+    let priorArcade = ArcadeStore.shared, priorCache = playlistStoreCache
+    let priorSequence = sequencePlaylistStore, priorSettings = settings
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("journey-skips-\(UUID())")
+    let defaultsName = "journey-skips-\(UUID())"
+    let defaults = UserDefaults(suiteName: defaultsName)!
+    defer {
+      returnToLibrary(); GameScreen.shared.dismissAll()
+      ArcadeStore.shared = priorArcade; playlistStoreCache = priorCache; sequencePlaylistStore = priorSequence
+      settings = priorSettings; defaults.removePersistentDomain(forName: defaultsName)
+      try? FileManager.default.removeItem(at: directory)
+    }
+    settings.applyExperiencePreset(modern: true); settings.music = .silent
+    loadContent()
+    guard let journey = LearningJourneyLibrary.journey,
+          let discovery = await makeLevelBrowserDiscoveryTask().value else { throw IntegrationFailure(message: "Missing journey catalogue") }
+    rebuildLevelCatalogue(discovery)
+    let destination = journey.lessons[0].entry
+    for engine in [LevelSourceEngine.classic, .lemmings2, .lemmings3] {
+      let entry = try LevelPlaylistEntry(identity: .init(engine: engine, packID: "skip-test", levelID: "failed"),
+        catalogueRevision: "test", sourceRevision: "test", packNameSnapshot: "Skip test", levelNameSnapshot: "Failed lesson", levelNumberSnapshot: 1)
+      for mode in 0..<3 {
+        print("CHECK journey Skip \(engine), mode \(mode)")
+        returnToLibrary(); GameScreen.shared.dismissAll()
+        defaults.removePersistentDomain(forName: defaultsName)
+        let arcade = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil, defaults: defaults)
+        ArcadeStore.shared = arcade
+        let owner = arcade.records.activeProfileID
+        var guest: ArcadeProfile?
+        if mode > 0 {
+          guest = arcade.addProfile(initials: "PAL", portrait: 2, select: false)!
+          arcade.toggleSessionProfile(guest!.id)
+          arcade.turnPolicy = mode == 1 ? .everyLevel : .atFirstFail
+        }
+        let file = directory.appendingPathComponent("\(engine)-\(mode).json")
+        let store = try LevelPlaylistStore(file: file); try store.add(journey.playlist())
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+          pool: .init(id: LearningJourney.version, summary: "Skip test"), entries: [entry, destination])
+        try store.startRun(run, hotSeatID: arcade.hotSeatID)
+        playlistStoreCache = (owner, store); sequencePlaylistStore = store
+        if engine == .classic {
+          gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+          selectDataSet(); loadLevel(at: 30)
+          flow?.selectLevel(rank: 1, position: 0); flow?.beginPlaying(); renderScreen()
+          setSequencePlayingIdentity(entry.identity)
+          session = FinalTickSession(win: false); session?.tick()
+          arcadeLevel = rewardFixtureLevel("lemmings"); arcadeRunID = UUID(); arcadeReport = nil
+          finishSessionIfNeeded(); arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
+        } else if engine == .lemmings2 {
+          try check(openNativeL2(selection: .init(tribe: 0, level: 0), sequenceRunID: run.id, sequenceIdentity: entry.identity), "L2 journey did not open")
+          try nativeL2Window!.testExitAndSequenceResult(won: false)
+        } else {
+          try check(openNativeL3(selection: .init(tribe: .classic, level: 0), sequenceRunID: run.id, sequenceIdentity: entry.identity), "L3 journey did not open")
+          try nativeL3Window!.testExitAndSequenceResult(won: false)
+        }
+        let view = ArcadeWindow.shared.arcadeView
+        try check(view.offersSkip && view.canSpendSkip && view.availableSkips == 1,
+          "\(engine) journey loss hid its earned Skip")
+        for width in [900, 1600] {
+          window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
+          let label = try captureResult("journey-\(engine)-\(mode)-\(width)")
+          try check(label.contains("Level Skips 1") && label.contains("Superzoom"), "Journey loss hid its resource balances")
+          let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
+          guard let skip = controls.first(where: { $0.accessibilityLabel() == view.skipTitle }) else { throw IntegrationFailure(message: "Journey Skip has no input target") }
+          try check(skip.isAccessibilityEnabled() && view.bounds.contains(skip.localFrame), "Journey Skip target was disabled or clipped")
+          try check(controls.filter { $0 !== skip }.allSatisfy { !skip.localFrame.intersects($0.localFrame) }, "Journey Skip overlaps another action")
+        }
+        if mode == 0 {
+          let competing = try LevelPlaylistStore(file: file); try competing.recordVisit(entry)
+          view.skipLevel()
+          try check(arcade.records.levelSkips(profileID: owner).available == 1 && store.activeRun == run
+            && arcade.playingProfileID == owner, "Failed journey save spent a skip or moved the turn")
+          let reloaded = try LevelPlaylistStore(file: file)
+          playlistStoreCache = (owner, reloaded); sequencePlaylistStore = reloaded
+          let actions = learningResultActions(runID: run.id, level: entry.identity)!
+          view.onPrepareSkip = actions.prepareSkip
+          view.onSkip = { ArcadeWindow.shared.close(); actions.skip() }
+        }
+        let failedLevel = view.report!.run.level
+        if mode == 0 {
+          let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+            windowNumber: window.windowNumber, context: nil, characters: "k", charactersIgnoringModifiers: "k", isARepeat: false, keyCode: 40)!
+          view.keyDown(with: event)
+        } else {
+          let skip = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == view.skipTitle }!
+          if mode == 1 { try check(skip.accessibilityPerformPress(), "Journey Skip accessibility action failed") }
+          else {
+            let point = view.convert(CGPoint(x: skip.localFrame.midX, y: skip.localFrame.midY), to: nil)
+            view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
+              windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
+          }
+        }
+        let arrived = try await waitUntil(12) { self.sequencePlayingIdentity == destination.identity && self.levelBrowserLaunchTask == nil }
+        try check(arrived, "\(engine) Skip did not load the next journey lesson")
+        let restored = try LevelPlaylistStore(file: file)
+        try check(restored.activeRun?.currentIndex == 1 && !restored.learningProgress.completed.contains(entry.identity)
+          && restored.learningProgress.later.contains(entry.identity), "Skipped lesson was lost or marked solved")
+        try check(arcade.records.levelSkips(profileID: owner).available == 0 && arcade.records.hasSkipped(failedLevel, profileID: owner), "Journey Skip did not charge its attempt owner once")
+        if let guest {
+          try check(arcade.playingProfileID == guest.id && arcade.records.levelSkips(profileID: guest.id).spent == 0,
+            "Journey Skip charged the guest or failed to pass the turn")
+          try check(isPaused && panel.isPaused && session?.currentTick == 0
+            && GameScreen.shared.controllerPage(in: window)?.accessibilityLabel()?.contains("PAL's turn") == true, "Journey handover did not wait at Ready")
+        }
+      }
+    }
+    print("PASS Classic/L2/L3 Learning Skip: solo, both Hot Seat rules, owner pays, saved revisit, failed-save refund, Ready, keyboard/mouse/accessibility, 18 renders")
+  }
+
   fileprivate func testLevelSkipResult() async throws {
+    if window == nil { buildInterface() }
+    settings.applyExperiencePreset(modern: true)
     let previousStore = ArcadeStore.shared
     defer { ArcadeStore.shared = previousStore; arcadeAutoPresent = false }
     let view = ArcadeWindow.shared.arcadeView
@@ -3926,6 +4099,10 @@ extension AppDelegate {
     try await failFirstClassicLevel()
     try check(view.availableSkips == 0 && !(try captureResult("solo-no-skips")).contains("K skips"),
       "A player without skips was offered one")
+    try captureResult("solo-zero-skips")
+    let zeroSkip = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Skip level (0)" }
+    try check(zeroSkip != nil && zeroSkip?.isAccessibilityEnabled() == false
+      && zeroSkip?.accessibilityPerformPress() == false, "Zero Skip was hidden or accepted input")
     let unmoved = flow?.screen
     view.skipLevel()
     try check(flow?.screen == unmoved, "Skip moved the campaign without a skip to spend")
@@ -7437,7 +7614,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
+    #if !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -7449,7 +7626,10 @@ Task { @MainActor in
     #endif
     #endif
     #endif
-    #if HOME_BACKDROP_TESTS
+    #if QUICK_CONTROLS_TESTS
+    try subject.testGameplayQuickControls()
+    print("Gameplay quick controls integration tests passed.")
+    #elseif HOME_BACKDROP_TESTS
     try await subject.testHomeBackdrop()
     #elseif MAC_FIDELITY_TESTS
     try await subject.testMacintoshFidelity()
@@ -7558,6 +7738,16 @@ Task { @MainActor in
     #elseif NEO_RECOVERY_TESTS
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
+    #elseif EARNED_REWARD_TESTS
+    try testEarnedRewardPresentation()
+    try await subject.testResultNavigation()
+    print("Earned reward presentation and result navigation integration tests passed.")
+    #elseif LEVEL_SKIP_TESTS
+    try testPrecisionRewardResults()
+    try testLevelSkipBadges()
+    try await subject.testLevelSkipResult()
+    try await subject.testLearningLevelSkips()
+    print("Level Skip result and Learning journey integration tests passed.")
     #elseif LEARNING_TESTS
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
@@ -7711,7 +7901,8 @@ Task { @MainActor in
     print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS
     try subject.testPauseKeyRelease()
-    try subject.testNeoPauseKeyboard()
+    try await subject.testNeoPauseKeyboard()
+    try subject.testNeoRunRecovery()
     let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
     try pauseL2.testPauseKeyboard()
     let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
@@ -8536,6 +8727,7 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
       host.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
       ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in }, menu: {})
       let result = ArcadeWindow.shared.arcadeView
+      if result.mode == .earnedRewards { result.returnFromEarnedRewards() }
       result.finishCelebration()
       let image = ReplayFrameCapture.image(size: result.bounds.size) { ReplayFrameCapture.draw(result, in: result.bounds) }!
       try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
@@ -8543,6 +8735,7 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
       let label = result.accessibilityLabel() ?? ""
       try check(label.contains("+1 ZOOM") && label.contains("+1 SUPERZOOM") == (index == 2),
         engine + " result did not announce the actual new uses")
+      try check(label.contains("+1 SKIP") == (index == 2) && label.contains("Level Skips \(index == 2 ? 1 : 0)"), engine + " result hid its Level Skip reward or balance")
       let rewardRows = result.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
         .filter { $0.accessibilityLabel()?.contains("+1 ZOOM") == true }
       try check(!rewardRows.isEmpty && rewardRows.allSatisfy { result.bounds.contains($0.localFrame) },
@@ -9226,4 +9419,146 @@ extension AppDelegate {
   }
   keyboard.removeNavigationControl()
   print("PASS catalogue song/source names, variant changes, Now Playing bitmap renders, expiry, accessibility, silence and pointer pass-through")
+}
+
+@MainActor private func testLevelSkipBadges() throws {
+  let size = CGSize(width: 660, height: 330)
+  let image = ReplayFrameCapture.image(size: size) {
+    NSColor.darkGray.setFill(); CGRect(origin: .zero, size: size).fill()
+    for (column, active) in [nil, PrecisionZoomKind.zoom, .superzoom].enumerated() {
+      for (row, count) in [0, 4, 123].enumerated() {
+        let status = PrecisionZoomStatus(zoom: count, superzoom: count, skips: count, active: active, isEmpty: false)
+        precondition(status.accessibility.contains("\(count) Level Skips"))
+        let drawn = status.draw(at: CGPoint(x: 12 + column * 220, y: 12 + row * 105), scale: 2)
+        precondition(drawn == status.size(scale: 2) && drawn.height == 74 && drawn.width < 210)
+      }
+    }
+  }!
+  let folder = URL(fileURLWithPath: ".build/skip-ui")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("resource-badges.png"))
+  print("PASS nine native Zoom/Level Skip badge renders, active outlines, accessible balances and geometry")
+}
+
+@MainActor private func testEarnedRewardPresentation() throws {
+  let previous = ArcadeStore.shared
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent("earned-rewards-\(UUID())")
+  let folder = URL(fileURLWithPath: ".build/earned-reward-renders")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
+  defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
+  func capture(_ name: String) throws -> [GameAccessibleElement] {
+    let view = ArcadeWindow.shared.arcadeView
+    if view.mode == .result { view.finishCelebration() }
+    let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    let children = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    try check(children.allSatisfy { view.bounds.contains($0.localFrame) }, "Reward text or input target was clipped: " + name)
+    let controls = children.filter { $0.accessibilityRole() == .button }
+    for (index, control) in controls.enumerated() {
+      try check(controls.dropFirst(index + 1).allSatisfy { !control.localFrame.intersects($0.localFrame) }, "Reward controls overlap: " + name)
+    }
+    return children
+  }
+  func level(_ engine: String, _ number: Int) -> ArcadeLevel {
+    let c = TrolleyConditions(gameID: engine, packID: "earned-rewards", levelID: "level-\(number)",
+      levelFingerprint: "reward-\(number)", rulesetVersion: "test", physicsMode: "test", population: 1,
+      rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+    let title = engine == "lemmings3" && number == 2
+      ? "A long level title keeps every word visible while the reward cards move down and paginate below it without covering the earning reasons or the navigation controls"
+      : "Reward lesson \(number)"
+    return .init(id: c.levelID, title: title, game: engine, rules: "test", total: 1, required: 1, conditions: c)
+  }
+  for engine in ["lemmings", "lemmings2", "lemmings3"] {
+    for mode in 0..<3 {
+      let defaultsName = "earned-rewards-\(UUID())"
+      let defaults = UserDefaults(suiteName: defaultsName)!
+      defer { defaults.removePersistentDomain(forName: defaultsName) }
+      let store = ArcadeStore(file: directory.appendingPathComponent("\(engine)-\(mode).json"), bundledProofs: nil, defaults: defaults)
+      ArcadeStore.shared = store
+      let owner = store.records.activeProfileID
+      if mode > 0 {
+        let guest = store.addProfile(initials: "PAL", portrait: 2, select: false)!
+        store.toggleSessionProfile(guest.id)
+        store.turnPolicy = mode == 1 ? .everyLevel : .atFirstFail
+      }
+      var report: ArcadeReport!
+      for number in 0..<3 {
+        try store.acceptMaximum(.init(value: 1, status: .verified, source: "Reward test",
+          date: Date(timeIntervalSince1970: 500), buildVersion: "test"), conditions: level(engine, number).conditions!, assisted: false)
+        report = store.record(.init(profileID: owner, level: level(engine, number), saved: 1, didWin: true,
+          skills: [:], seconds: 10, telemetry: .init(released: 1)))!
+      }
+      let celebration = TrolleyCelebration(report: report, history: store.records.trolley)
+      let rewards = ResultAwards.earnedRewards(report: report, celebration: celebration)
+      try check(celebration.newAwards.contains { $0.award == .targetApprentice }, "Reward fixture did not earn its named career milestone")
+      try check(rewards.contains { $0.title == "+1 ZOOM" && $0.reason.contains("6 to 9") && $0.reason.contains("per 3") }, "Zoom award lacks its actual milestone and criterion")
+      try check(rewards.contains { $0.title == "+1 SUPERZOOM" && $0.reason.contains("2 to 3") && $0.reason.contains("distinct") }, "Superzoom award lacks its reason")
+      try check(rewards.contains { $0.title == "+1 LEVEL SKIP" && $0.reason.contains("without rewind or undo") }, "Skip award lacks its reason")
+      try check(rewards.contains { $0.title == "EVERYONE HOME" && $0.reason.contains("all 1") }, "Level award lacks the achieved rescue")
+      try check(celebration.newAwards.allSatisfy { award in rewards.contains { $0.title == award.award.title && $0.reason == award.award.detail } }, "A new named career award was hidden behind a count")
+      var next = 0, retries = 0
+      ArcadeWindow.shared.showResult(report, owner: host, retry: { retries += 1 }, next: { next += 1 }, replay: { _ in })
+      let view = ArcadeWindow.shared.arcadeView
+      try check(view.mode == .earnedRewards && view.celebrationTask == nil, "Saved \(engine) rewards did not appear immediately without a timer")
+      for width in [640, 900, 1600] {
+        host.setContentSize(CGSize(width: width, height: width == 640 ? 480 : width == 900 ? 620 : 1000))
+        view.earnedRewardPage = 0
+        var shown: [String] = []
+        for index in view.earnedRewardPages.indices {
+          view.earnedRewardPage = index
+          let children = try capture("\(engine)-\(mode)-\(width)-page-\(index)")
+          shown += children.compactMap { $0.accessibilityLabel() }
+        }
+        try check(rewards.allSatisfy { shown.contains($0.title) && shown.contains($0.reason) }, "A reward or reason was omitted from the receipt pages")
+      }
+      view.earnedRewardPage = 0
+      _ = try capture("\(engine)-\(mode)-input")
+      // Gameplay shortcuts cannot spend rewards, replay, retry or pass a turn from this page.
+      for key in ["r", "k", "n", "v", "p"] {
+        view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: host.windowNumber, context: nil, characters: key, charactersIgnoringModifiers: key, isARepeat: false, keyCode: 0)!)
+      }
+      try check(next == 0 && retries == 0 && store.playingProfileID == owner && view.mode == .earnedRewards, "Reward receipt triggered a gameplay action or handover")
+      let pages = view.earnedRewardPages.count
+      for _ in 0..<pages {
+        let children = try capture("\(engine)-\(mode)-activation-\(view.earnedRewardPage)")
+        let title = view.earnedRewardPage + 1 < pages ? "Next rewards" : "View result"
+        let control = children.first { $0.accessibilityLabel() == title }!
+        if mode == 0 {
+          view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+            windowNumber: host.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!)
+        } else if mode == 1 { try check(control.accessibilityPerformPress(), "Reward receipt accessible action failed") }
+        else {
+          let point = view.convert(CGPoint(x: control.localFrame.midX, y: control.localFrame.midY), to: nil)
+          view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
+            windowNumber: host.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
+        }
+      }
+      try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
+      _ = try capture("\(engine)-\(mode)-result")
+      let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
+      try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
+      view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+        windowNumber: host.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!)
+      try check(view.mode == .result, "Escape did not return from rewards to the result")
+      ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in })
+      try check(view.mode == .result, "The same saved result announced its rewards twice")
+      let repeatReport = store.record(.init(profileID: owner, level: level(engine, 2), saved: 1, didWin: true,
+        skills: [:], seconds: 10, telemetry: .init(released: 1)))!
+      let repeated = ResultAwards.earnedRewards(report: repeatReport, celebration: .init(report: repeatReport, history: store.records.trolley))
+      try check(repeated.isEmpty, "A repeated clear fabricated an award")
+      let preview = store.previewReport(for: .init(profileID: owner, level: level(engine, 3), saved: 1, didWin: true,
+        skills: [:], seconds: 10, telemetry: .init(released: 1)))!
+      ArcadeWindow.shared.showResult(preview, owner: host, retry: {}, next: {}, replay: { _ in })
+      try check(view.mode == .result && view.savedEarnedRewards.isEmpty, "An unsaved preview claimed earned rewards")
+      _ = try capture("\(engine)-\(mode)-preview")
+      let rewound = store.record(.init(profileID: owner, level: level(engine, 4), saved: 1, didWin: true,
+        skills: [:], seconds: 10, assisted: true, telemetry: .init(released: 1, rewindCount: 1)))!
+      let assisted = ResultAwards.earnedRewards(report: rewound, celebration: .init(report: rewound, history: store.records.trolley))
+      try check(!assisted.contains { $0.title.hasPrefix("+") }, "A rewound clear announced spendable rewards")
+      GameScreen.shared.dismissAll(); store.endHotSeat()
+    }
+  }
+  print("PASS earned reward receipts: automatic once, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
 }

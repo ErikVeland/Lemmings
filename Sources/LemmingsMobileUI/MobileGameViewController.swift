@@ -24,7 +24,18 @@ struct MobileGameTurn {
     let choices: (Bool) -> [(label: String, choice: MobileHotSeat.Choice)]
 }
 
-@MainActor final class MobileGameViewController: UIViewController, UIScrollViewDelegate {
+#if os(tvOS)
+typealias MobileGameControllerBase = GCEventViewController
+@MainActor final class MobileGameOverlay: UIScrollView {
+    var onVisibilityChanged: (() -> Void)?
+    override var isHidden: Bool { didSet { if oldValue != isHidden { onVisibilityChanged?() } } }
+}
+#else
+typealias MobileGameControllerBase = UIViewController
+typealias MobileGameOverlay = UIScrollView
+#endif
+
+@MainActor final class MobileGameViewController: MobileGameControllerBase, UIScrollViewDelegate {
     lazy var inputAdapter = makeInputAdapter()
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
@@ -115,7 +126,7 @@ struct MobileGameTurn {
     let playfieldView: MobilePlayfieldView
     let hud = MobileHUDView()
     private let touchLoupe = MobileTouchLoupe()
-    let overlay = UIScrollView()
+    let overlay = MobileGameOverlay()
     let overlayCanvas = MobileMenuCanvas()
     private var overlayActions: [() -> Void] = []
     private var latestFrame: MobilePixelFrame?
@@ -157,6 +168,7 @@ struct MobileGameTurn {
     private var lastRenderedTick = -1
     var pollingController = false
     private var controllerRenderPending = false
+    private var controllerHUDPending = false
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
     var isChoosingToolDirection: Bool { pendingL3Use != nil }
@@ -167,12 +179,18 @@ struct MobileGameTurn {
     var tvCameraMode = false
     var tvTargetLock = TVTargetLock()
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
-        if hasSolutionPair, solutionSelector.focusedIndex != nil { return [solutionSelector] }
+        if !solutionSelector.isHidden, solutionSelector.focusedIndex != nil { return [solutionSelector] }
         if !overlay.isHidden { return [overlayCanvas] }
         return isChoosingToolDirection ? [hud] : [playfieldView]
     }
     #endif
-    private var pendingL3Use: (target: Int, control: Int, selection: MobileTargetSelection)?
+    private var pendingL3Use: (target: Int, control: Int, selection: MobileTargetSelection)? {
+        didSet {
+            #if os(tvOS)
+            if isViewLoaded { updateTVInputRouting() }
+            #endif
+        }
+    }
     private var selectionFade = SelectionFade<Int>()
     private var completionPresented = false
     private var lastPlayfieldFrame: CGRect?
@@ -185,6 +203,7 @@ struct MobileGameTurn {
     private let replayTitle = MobileReplayTitleView()
     private let replayMoves = MobileReplayMoveView()
     let solutionSelector = MobileSolutionSwitchView()
+    private var solutionPanelContentFrame: CGRect?
     private var retainedSolution: MobileGameViewController?
     private weak var solutionGame: MobileGameViewController?
     private var solutionReturnReady = false
@@ -248,6 +267,10 @@ struct MobileGameTurn {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        #if os(tvOS)
+        overlay.onVisibilityChanged = { [weak self] in self?.updateTVInputRouting() }
+        updateTVInputRouting()
+        #endif
         view.backgroundColor = .black
         view.addSubview(playfieldView)
         view.addSubview(hud)
@@ -348,17 +371,25 @@ struct MobileGameTurn {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         becomeFirstResponder()
+        #if os(tvOS)
+        updateTVInputRouting()
+        #endif
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         #if os(tvOS)
         if presses.contains(where: { $0.type == .playPause }) {
+            if !controllerUserInteractionEnabled { return }
             if GCController.controllers().contains(where: { $0.microGamepad?.buttonX.isPressed == true }) { return }
             if overlay.isHidden { handle(.pause) }
             else if overlayCanvas.page.pause != nil { resumeSelectedView() }
             return
         }
         if presses.contains(where: { $0.type == .menu }) {
+            if !controllerUserInteractionEnabled {
+                tvControllerBackPress = true
+                return
+            }
             // tvOS also delivers Circle as a native Back press. Gameplay polling owns it.
             if overlay.isHidden, GCController.controllers().contains(where: { $0.extendedGamepad?.buttonB.isPressed == true }) {
                 tvControllerBackPress = true
@@ -396,6 +427,8 @@ struct MobileGameTurn {
     override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         #if os(tvOS)
         tvControllerBackPress = false
+        // Game Controller owns gameplay buttons and their release events.
+        if overlay.isHidden && !isChoosingToolDirection && presses.allSatisfy({ $0.key == nil }) { return }
         #endif
         _ = inputAdapter.ended(presses)
         inputAdapter.reset()
@@ -448,7 +481,7 @@ struct MobileGameTurn {
         layoutSolutionSelector()
         layoutReplayMoves()
         replayTitle.position(in: playfieldView.frame)
-        if hasSolutionPair { replayTitle.frame.origin.y = max(replayTitle.frame.minY, solutionSelector.frame.maxY + 8) }
+        if !solutionSelector.isHidden { replayTitle.frame.origin.y = max(replayTitle.frame.minY, solutionSelector.frame.maxY + 8) }
         if session.isReadOnly, layout.portrait != nil { replayTitle.frame.origin.y += 48 }
         countdownLabel.frame = CGRect(x: playfieldView.frame.midX - 44, y: playfieldView.frame.midY - 44, width: 88, height: 88)
         let replayWidth = min(MobileReplaySkillArt.size.width, max(0, playfieldView.frame.width - 16))
@@ -473,6 +506,10 @@ struct MobileGameTurn {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        #if os(tvOS)
+        inputAdapter.reset()
+        controllerUserInteractionEnabled = true
+        #endif
         displayLink?.invalidate()
         displayLink = nil
         suspendAudio()
@@ -486,9 +523,20 @@ struct MobileGameTurn {
     }
 
     @objc private func displayFrame(_ link: CADisplayLink) {
+        #if os(tvOS)
+        updateTVInputRouting()
+        #endif
         let frameStarted = ProcessInfo.processInfo.systemUptime
         defer {
-            if controllerRenderPending { renderCurrentFrame(force: true) }
+            #if os(tvOS)
+            pollingController = false
+            playfieldView.deferFrameUpdates = false
+            #endif
+            let candidates = controllerRenderPending ? renderCurrentFrame(force: true) : nil
+            if controllerHUDPending {
+                controllerHUDPending = false
+                updateHUD(candidates: candidates)
+            }
             MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame")
             framePacing.observe(at: link.timestamp, cpuSeconds: MobileDevicePerformance.cpuFrameCost,
                 gpuSeconds: MobileDevicePerformance.gpuFrameCost,
@@ -498,8 +546,10 @@ struct MobileGameTurn {
         pollingController = true
         playfieldView.deferFrameUpdates = true
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
+        #if !os(tvOS)
         pollingController = false
         playfieldView.deferFrameUpdates = false
+        #endif
         updateInputSpeed(at: link.timestamp)
         MobileMusic.shared.advance()
         playfieldView.setSpeedEffects(multiplier: speed, active: !paused && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
@@ -564,8 +614,8 @@ struct MobileGameTurn {
         if !snapshot.isComplete { clock.deferTicks(ticks - advanced) }
         // Catch-up ticks accumulate cues; spatial placement and scheduling run once per frame.
         effects.update(session: session, viewport: playfieldView.gameViewport)
-        renderCurrentFrame(force: true)
-        updateHUD(snapshot: snapshot)
+        let candidates = renderCurrentFrame(force: true)
+        updateHUD(snapshot: snapshot, candidates: candidates)
         if snapshot.isComplete {
             presentCompletion()
         } else if snapshot.tick - lastCheckpointTick >= Int(ceil(session.ticksPerSecond * 5)) {
@@ -839,15 +889,15 @@ struct MobileGameTurn {
         playfieldView.gameViewport = viewport
     }
 
-    func renderCurrentFrame(force: Bool) {
+    @discardableResult func renderCurrentFrame(force: Bool) -> [MobileTargetCandidate]? {
         #if os(tvOS)
         ensureTVPointer()
         updateTVPointer()
         #endif
-        if pollingController { controllerRenderPending = controllerRenderPending || force; return }
+        if pollingController { controllerRenderPending = controllerRenderPending || force; return nil }
         let snapshot = session.snapshot
         let tick = snapshot.tick
-        guard force || tick != lastRenderedTick else { return }
+        guard force || tick != lastRenderedTick else { return nil }
         controllerRenderPending = false
         var needsCandidates = previewPoint != nil || gameSettings.classic.showReticleCount
         #if os(tvOS)
@@ -880,7 +930,8 @@ struct MobileGameTurn {
             updateTVPointer()
             #endif
             playfieldView.cursorPoint = previewPoint.map { playfieldView.gameViewport.levelPoint(fromView: $0) }
-            playfieldView.cursorIcon = session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
+            playfieldView.cursorIcon = hudArtworkSource == gameSettings.classic.graphics && hud.skillIcons.indices.contains(selectedControl)
+                ? hud.skillIcons[selectedControl] : session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
             let cursorSkill = snapshot.skills.indices.contains(selectedControl) ? snapshot.skills[selectedControl] : nil
             playfieldView.cursorSkillName = cursorSkill?.name ?? ""
             if fanMode { playfieldView.cursorIcon = nil; playfieldView.cursorSkillName = L10n.text("Fan") }
@@ -903,12 +954,12 @@ struct MobileGameTurn {
             playfieldView.failed = snapshot.isComplete ? !snapshot.didWin : (snapshot.saved + session.activeLemmingCount + max(0, snapshot.total - snapshot.released) < snapshot.required)
             try playfieldView.update(frame: frame)
             if !overlay.isHidden, overlayCanvas.page.preview {
-                overlayCanvas.preview = MobileBitmapRenderer.image(frame)
+                overlayCanvas.preview = playfieldView.bitmap
                 let visible = playfieldView.gameViewport.visibleLevelRect
                 overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
             }
             hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
-                              levelSize: session.levelSize)
+                              levelSize: session.levelSize, image: playfieldView.bitmap)
             if previewInput == .touch, let point = previewPoint, let target = highlightedTarget {
                 let finger = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view)
                 let field = playfieldView.frame
@@ -926,12 +977,14 @@ struct MobileGameTurn {
                 touchLoupe.isHidden = true
             }
             lastRenderedTick = tick
+            return needsCandidates ? candidates : nil
         } catch {
             pausePlay(showControls: false)
             showOverlay(
                 title: error.localizedDescription,
                 actions: [(L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() })]
             )
+            return nil
         }
     }
 
@@ -1107,6 +1160,7 @@ struct MobileGameTurn {
         clock.suspend()
         playfieldView.cancelInteraction()
         overlay.isHidden = true
+        layoutSolutionSelector()
         overlay.accessibilityViewIsModal = false
         playfieldView.isUserInteractionEnabled = true
         hud.isUserInteractionEnabled = true
@@ -1495,7 +1549,10 @@ struct MobileGameTurn {
         view.setNeedsLayout()
     }
 
-    func updateHUD(layout: MobileHUDLayout? = nil, snapshot: MobileGameSnapshot? = nil) {
+    func updateHUD(layout: MobileHUDLayout? = nil, snapshot: MobileGameSnapshot? = nil, candidates: [MobileTargetCandidate]? = nil) {
+        #if os(tvOS)
+        if pollingController { controllerHUDPending = true; return }
+        #endif
         let snapshot = snapshot ?? session.snapshot
         MobileMusic.shared.update(snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
@@ -1515,13 +1572,13 @@ struct MobileGameTurn {
             panel: session.panelFrame,
             readOnly: session.isReadOnly
         )
-        updatePlayfieldAccessibility(snapshot: snapshot)
+        updatePlayfieldAccessibility(snapshot: snapshot, candidates: candidates)
     }
 
     /** Keeps non-visual target selection and assignment available to assistive input. */
-    private func updatePlayfieldAccessibility(snapshot: MobileGameSnapshot? = nil) {
+    private func updatePlayfieldAccessibility(snapshot: MobileGameSnapshot? = nil, candidates: [MobileTargetCandidate]? = nil) {
         let snapshot = snapshot ?? session.snapshot
-        let candidates = session.targetCandidates(for: selectedControl)
+        let candidates = (candidates ?? session.targetCandidates(for: selectedControl))
             .filter { $0.assignment == .eligible }
             .sorted { $0.id < $1.id }
         let skillName = snapshot.skills.indices.contains(selectedControl)
@@ -1693,7 +1750,7 @@ struct MobileGameTurn {
         }
         replay.solutionGame = self
         replay.pausePlay(showControls: false)
-        replay.gameSettings = gameSettings
+        replay.applyPresentationSettings(gameSettings)
         replay.musicContext = musicContext
         replay.inputAdapter.reset()
         replay.solutionSelector.resetActivation()
@@ -1720,28 +1777,31 @@ struct MobileGameTurn {
     }
 
     func toggleGhostSolution() {
-        guard solutionGame == nil, let classic = session as? ClassicMobileSession, classic.hasGhostSolution else { return }
+        guard !solutionSelector.isHidden, solutionGame == nil,
+              let classic = session as? ClassicMobileSession, classic.hasGhostSolution else { return }
         classic.ghostSolutionEnabled.toggle()
         solutionSelector.ghostEnabled = classic.ghostSolutionEnabled
         renderCurrentFrame(force: true)
     }
 
     private func layoutSolutionSelector() {
-        solutionSelector.isHidden = !hasSolutionPair
-        guard hasSolutionPair else { return }
+        let visible = hasSolutionPair && !overlay.isHidden
+            && (overlayCanvas.page.pause != nil || playState.phase == .ready)
+        solutionSelector.isHidden = !visible
+        solutionSelector.accessibilityElementsHidden = !visible
+        guard visible else {
+            solutionSelector.focusedIndex = nil; solutionSelector.resetActivation()
+            solutionPanelContentFrame = nil
+            return
+        }
         let region = MobileSystemRegions.menuFrame(in: view)
-        #if os(tvOS)
-        let scale: CGFloat = 2
-        #else
-        let scale: CGFloat = 1
-        #endif
-        let width = min(region.width - 16, SolutionSwitchArt.size.width * scale)
         let classic = session as? ClassicMobileSession
         solutionSelector.showsGhost = solutionGame == nil && classic?.hasGhostSolution == true
         solutionSelector.ghostEnabled = classic?.ghostSolutionEnabled == true
-        let height: CGFloat = solutionSelector.showsGhost ? 100 : 48
-        solutionSelector.frame = CGRect(x: region.midX - width / 2, y: region.minY + 8, width: width, height: height * scale)
-        solutionSelector.bounds.size = CGSize(width: width / scale, height: height)
+        let presentation = MobileSolutionSelectorArt.presentation(in: region,
+            showsGhost: solutionSelector.showsGhost, style: MobileSolutionSwitchView.style)
+        solutionSelector.apply(presentation)
+        solutionPanelContentFrame = presentation.content
         solutionSelector.mode = solutionGame == nil ? .game : .solution
         playfieldView.blockedInputFrames.append(playfieldView.convert(solutionSelector.frame, from: view))
         view.bringSubviewToFront(solutionSelector)
@@ -1771,7 +1831,7 @@ struct MobileGameTurn {
         completionPresented = false
         renderCurrentFrame(force: true)
         if showPlayfield {
-            overlay.isHidden = true; overlay.accessibilityViewIsModal = false
+            overlay.isHidden = true; layoutSolutionSelector(); overlay.accessibilityViewIsModal = false
             playfieldView.isUserInteractionEnabled = true; hud.isUserInteractionEnabled = true
             playfieldView.accessibilityElementsHidden = false; hud.accessibilityElementsHidden = false
             inputAdapter.reset()
@@ -1896,6 +1956,10 @@ struct MobileGameTurn {
             overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
         }
         overlay.isHidden = false
+        if wasHidden {
+            solutionSelector.focusedIndex = nil
+            solutionSelector.resetActivation()
+        }
         overlay.accessibilityViewIsModal = !hasSolutionPair
         playfieldView.isUserInteractionEnabled = false
         hud.isUserInteractionEnabled = false
@@ -1937,12 +2001,9 @@ struct MobileGameTurn {
     private func layoutOverlay() {
         guard !overlay.isHidden else { return }
         var region = MobileSystemRegions.menuFrame(in: view)
-        if hasSolutionPair {
-            layoutSolutionSelector()
-            let top = solutionSelector.frame.maxY + 8
-            region.size.height = max(44, region.maxY - top)
-            region.origin.y = top
-        }
+        layoutSolutionSelector()
+        overlay.accessibilityViewIsModal = solutionSelector.isHidden
+        if let content = solutionPanelContentFrame { region = content }
         overlay.frame = region
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
         overlayCanvas.frame = CGRect(origin: .zero, size: size)

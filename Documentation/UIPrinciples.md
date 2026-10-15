@@ -18,6 +18,14 @@ NeoLemmix and nonzero sequel renders remain unchecked. Mobile HUDs are unchanged
 The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
+The iOS/tvOS funeral mood desaturates the playfield pixels directly. Flat mode
+draws over its opaque game canvas; CRT uses its existing saturation/brightness
+uniforms. Do not use a grey sibling UIView to blend with a Metal surface.
+The fade preserves black and adds no input target, Metal pass or source upload.
+Muted flat-render checks and inspected gameplay captures verify desaturation,
+dimming and exact recovery. Headless Metal output is unavailable in this
+environment and still needs device verification.
+
 - Use the game's bitmap artwork and pixel controls throughout game pages and HUDs.
   Menu lettering must not depend on the selected level graphics.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
@@ -260,14 +268,35 @@ Space and P toggle pause once per press during gameplay in all three engines,
 including imported fan levels. Key repeat and key release do not toggle pause.
 Text entry and menu/handover actions retain their own Space handling.
 
-Gameplay Menu fades after three seconds, with a 0.6-second fade. Hover or keyboard
-focus reveals it. Its 88 × 44 input target stays active. Reduced motion hides it
+Mac gameplay groups Graphics, the Settings cog and Menu at the upper-right.
+Command-comma opens Settings and holds gameplay while its page is open. F2 or
+Graphics cycles installed Classic artwork without restarting the run. NeoLemmix
+cycles PC and Macintosh artwork. Lemmings 2 and 3 switch between Original PC and
+Macintosh-style artwork. Cycling overrides the current shuffled artwork and
+keeps Shuffle enabled for future levels. The tooltip and accessible value name
+the current source. Shortcuts ignore repeats, text entry, menus and handovers.
+
+The gameplay buttons fade after three seconds, with a 0.6-second fade. Hover or
+keyboard focus reveals each button. Their input targets stay active: Menu is
+88 × 44, Settings is 44 × 44 and Graphics is 112 × 44. Reduced motion hides them
 without animation. Results and handovers keep their navigation actions visible.
-Accessibility offers Fade Menu button. Turning it off keeps Menu visible during
-play in Classic, Lemmings 2 and Lemmings 3, including with reduced motion enabled.
+Accessibility offers Fade gameplay buttons. Turning it off keeps the controls
+visible in Classic, Lemmings 2 and Lemmings 3, including with reduced motion enabled.
+`TEST_SCOPE=quick-controls` passes muted, offscreen checks for the three engines
+at 640, 900 and 1600 points, with 72 bitmap captures. Checks cover input targets,
+status clearance, Settings access, graphics cycling, disabled controls, fading,
+hover, focus, shortcut guards, run preservation and Classic shuffle/wraparound.
+Representative renders were inspected. NeoLemmix-specific graphics cycling,
+CRT rendering and physical keyboard delivery remain separate manual checks.
 Q and Escape use the same
 return-to-library path, keeping the saved run and its owner. Command-Q retains
 the app's quit action. Dialogs and text entry keep their own input handling.
+Classic and NeoLemmix restore keyboard focus to the displayed playfield after
+the launch action returns, including CRT mode. Space must work without a
+playfield click. Deferred focus must leave menus and Ready handovers in control.
+Muted, offscreen native checks cover immediate and deferred focus, NeoLemmix
+file loading, and Space/P press, repeat, release and resume in all four engines.
+Physical keyboard delivery in the rebuilt app remains a manual check.
 Journey wins save at completion; Next level advances the queue and turn.
 Hot Seat Resume actions name every participating profile in turn order, using
 the same roster lettering as the library badge. Solo Resume keeps its owner.
@@ -356,6 +385,12 @@ after the confirmed reveal. Use the current sprite silhouettes with a sharp
 translucent outline, behind the real lemmings. Follow live simulation ticks and
 rewinds without moving the retained study replay. Toggling preserves pause and
 Ready states. See [Ghost solution](GhostSolution.md) for ownership and validation.
+On iOS, the paused replay panel uses a full-width Ghost solution toggle with
+an On/Off value and a moving pixel switch. tvOS uses wide, stacked rows beside
+the pause overview. Selection has an underline and focus has a white border.
+Keep these controls in paused or Ready panels, outside active gameplay. Closing
+the panel clears selector focus and activation. Hidden controls cannot consume
+controller actions. Keep the whole ghost row as one native touch/focus target.
 
 The curated journey excludes known hidden-exit puzzles and unsuitable introductory
 lessons in `Resources/Progression/exclusions.json`. Original campaigns and fan packs
@@ -458,6 +493,20 @@ bitmap lettering, including accessibility. Credit follows existing thresholds:
 one Zoom per three no-Rewind stars and one Superzoom per three distinct no-Rewind
 three-star levels. Repeated clears do not add credit. Preview results do not claim
 a saved reward.
+
+Earned rewards need an explicit award moment. Mac results automatically open a
+bitmap Rewards earned page for each newly saved award-bearing attempt. Show the
+attempt owner, each award's name and its earning reason. Zooms, Superzooms and
+Level Skips include the actual career counter change and the applicable threshold.
+Level awards state the achieved rescue or skill use. Career awards show their
+criteria. Paginate measured cards without clipping or automatic dismissal.
+
+View result and Escape return to the result without retrying, advancing a level
+or passing the Hot Seat turn. Keep gameplay shortcuts inactive on the reward
+page. The result retains a Rewards earned action to reopen all reasons. Announce
+each saved attempt automatically only once per app session. Repeated clears and
+unsaved previews do not claim new rewards. Reduced motion uses the same static
+page. Normal star chimes start when the player reaches the result.
 
 ## Records level browsing and music notices
 
@@ -838,6 +887,12 @@ touch, VoiceOver, remote focus delivery and physical TV compositing/performance
 remain device checks. NeoLemmix and fan scenery use existing loaders but were
 not included in the native scenery fixtures.
 
+Static home screen checks cover saved settings, older preferences, profile
+isolation and presets. Muted offscreen checks pass for two native Mac setting
+renders, mouse/keyboard/accessibility activation, Classic/L2/L3 scenery and 18
+phone, tablet and TV setting renders. Mac, iOS and tvOS source builds pass.
+Physical device input and composited display output remain manual checks.
+
 ## Regional Lemmings 3 branding
 
 Use The Lemmings Chronicles for the US device region and All New World of
@@ -854,3 +909,26 @@ containment, hit testing and non-overlap. Artwork packaging retains the exact
 US source file. Mac source typechecking, iOS/tvOS SDK modules, app entry points
 and the localisation catalogue pass. Physical VoiceOver and device input remain
 manual checks.
+
+## Fixed TV menus
+
+TV Home uses a fixed landscape board: saved play and Journey on the left,
+Classic/fan libraries on the right, sequel logos beneath them, and footer actions
+along the bottom. Player identity and compact build/status text remain visible.
+Choose the largest whole-pixel scale that fits the safe viewport and disable
+scrolling on Home. Keep the scenery behind the bounded board.
+
+TV settings use two-column pages with complete captions. Keep Back at bottom-left
+and Previous/Next in fixed footer slots. Groups, individual settings, controller
+remapping and soundtrack libraries share this layout. Keep every setting and
+Reset action reachable. Retain native focus, accessibility names, selection
+underlines and disabled states. Cache fit measurements between page changes.
+
+`Scripts/run-tv-console-checks.sh` passes the muted, offscreen controller
+regressions, 153 Classic/L2/L3 experience checks and 250 TV bitmap captures.
+The captures include 178 settings pages, safe-area and full 1080p views, 4K safe
+areas, all interface sizes, three saved destinations, Hot Seat names, build/status
+text, disabled controls and target geometry. Representative renders were inspected.
+iOS and tvOS SDK modules and app entry points compile. Physical DualSense
+resistance, native UIKit focus delivery, VoiceOver and TV compositing remain
+device checks. The diagnostic TV shell retains its separate input implementation.

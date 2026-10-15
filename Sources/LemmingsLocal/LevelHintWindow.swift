@@ -37,6 +37,17 @@ import NxlvKit
         gameSelector?.ghostEnabled = source.ghostSolutionEnabled
     }
 
+    func reattachSolutionSelector(to owner: NSWindow) {
+        guard retainedOwner === owner, let selector = gameSelector, let root = owner.contentView else { return }
+        if selector.superview !== root {
+            selector.removeFromSuperview()
+            root.addSubview(selector, positioned: .above, relativeTo: nil)
+        }
+        selector.frame = CGRect(x: max(8, (root.bounds.width - 320) / 2),
+            y: root.isFlipped ? 8 : max(0, root.bounds.height - 108), width: 320, height: 100)
+        selector.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
+    }
+
     func selectSolutionMode(_ mode: SolutionReplayMode) {
         guard let replay = solutionWindow, let owner = retainedOwner else { return }
         if mode == .solution, GameScreen.shared.contains(replay.page) { return }
@@ -75,6 +86,7 @@ import NxlvKit
             selector.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
             selector.onSelect = { [weak self] mode in self?.selectSolutionMode(mode) }
             selector.onToggleGhost = { [weak self] in self?.toggleGhostSolution() }
+            selector.onPointerEntered = { [weak source] in source?.clearPointer() }
             root.addSubview(selector, positioned: .above, relativeTo: nil)
             gameSelector = selector
         }

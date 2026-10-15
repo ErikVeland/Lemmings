@@ -1,0 +1,86 @@
+{
+  "schema": "neolemmix-build83-bundle-audit-v1",
+  "auditDate": "2026-10-15",
+  "release": {
+    "version": "2.0",
+    "build": 83,
+    "asset": "UltimateLemmings-2.0-build83-slim.zip",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83-slim.zip",
+    "sha256": "2614c67e111c7a2bfb0bef62ec9fcd051e9bd4dce7b7740208b57668822d92a1",
+    "matchesPublicationRecord": true
+  },
+  "resourceComparison": {
+    "baseline": "../MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "baselineNeoLemmixFiles": 4010,
+    "candidateFilesMatchedBySizeAndSHA256": 4010,
+    "missingOrChangedFiles": 0,
+    "neoLemmixManifestSHA256": "40f17efcbca881c101d55dd904bdd1a21c663080eccd4d7fffcc4835034adc38",
+    "matchesBuild82Manifest": true
+  },
+  "levels": {
+    "physicalFiles": 794,
+    "manifestEntries": 794,
+    "uniqueManifestTargets": 794,
+    "unreferencedFiles": 0,
+    "missingManifestTargets": 0,
+    "manifestLevelCount": 794,
+    "packs": [
+      {
+        "directory": "Lemmings_Redux",
+        "levelFiles": 160,
+        "manifestEntries": 160,
+        "styleReadyBySectionScan": 156
+      },
+      {
+        "directory": "NeoLemmix_Introduction_Pack",
+        "levelFiles": 120,
+        "manifestEntries": 120,
+        "styleReadyBySectionScan": 65
+      },
+      {
+        "directory": "Original_Lemmings",
+        "levelFiles": 514,
+        "manifestEntries": 514,
+        "styleReadyBySectionScan": 498
+      }
+    ]
+  },
+  "styles": {
+    "bundledDMADirectories": 26,
+    "archiveManifestDMAStyleLevels": 718,
+    "sourceEquivalentSectionScanDMAStyleResolvedLevels": 719,
+    "levelsWithMissingStyleDirectories": 75,
+    "distinctMissingStyleReferences": 44,
+    "missingLevelIdentitiesMatchPriorNativeInventory": 75,
+    "manifestGeneratorOvercount": 1,
+    "manifestGeneratorCause": "The raw line scan counted the *GROUP terrain marker as a style dependency.",
+    "missingStyleIdentityCount": 75,
+    "missingStyleIdentitySetSHA256": "def792590a9ca43b17f27e4a3fd7417437abc615389cb1fe52c42cbd6513be9f",
+    "priorInventory": "../MacOS2Preparation-2026-10-15/neo-style-inventory.json"
+  },
+  "validation": {
+    "sectionScan": "A structural scan follows NxlvStyleResolver rules for themes, backgrounds, terrain placements, terrain groups and gadgets. It ignores the *GROUP terrain marker. All 75 missing-level identities match the earlier native inventory.",
+    "preparationScript": "Replayed the revised manifest generator against level and style resources extracted from this exact archive. It reports 794 levels and 719 DMA-style-resolved levels.",
+    "nativeExecutableScan": "Not rerun because the installed Swift compiler and SDK versions do not match.",
+    "previousTestExpectation": "BundledGameResourcesTests expected 788 levels and 713 ready levels. This worktree now expects 794 and 719, and checks all physical files against pack-manifest entries.",
+    "previousReleaseAudit": "The retained build 83 fresh audit predates this exact-archive reconciliation. Its earlier bundled-resource pass did not audit these extracted resources."
+  },
+  "completion": {
+    "exactVersionReplayEvidenceLevels": 158,
+    "openWork": [
+      "Resolve rights for the 44 style references used by 75 of the 794 bundled levels. Keep those levels in bundled closure scope.",
+      "Verify winning routes for every bundled level.",
+      "Complete source-behaviour checks for the advertised NeoLemmix rules.",
+      "Rebuild and audit a package with the corrected level and style-ready counts."
+    ],
+    "rightsInventory": "neolemmix-style-rights-inventory.json"
+  },
+  "rightsReview": {
+    "record": "neolemmix-style-rights-inventory.json",
+    "pinnedLicenseSHA256": "dced3de612c59dad45d8716268f318796477ab20ea4a4b74b44101afa999e4ec",
+    "rightsHolderListedForStyleCount": 26,
+    "unlistedStyleReferenceCount": 18,
+    "allRightsCleared": false,
+    "contacted": false
+  }
+}

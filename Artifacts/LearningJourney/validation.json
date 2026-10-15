@@ -1,14 +1,22 @@
 {
   "checks": [
     "Exact source revisions and native winning replay identities required",
-    "Redux file hashes and community order pinned",
+    "Redux file hashes and comparison order pinned; counterpart positions cannot bypass teaching boundaries",
+    "Authored teaching lessons pin exact source and replay revisions",
+    "Simple practice requires at most two used skills, no job changes or narrow timing, and spare skills and rescues",
+    "Tame practice requires 20 of every skill, release rate 1 and a 50% rescue target",
+    "Native source export records hatch count and actual minimum/maximum release rates",
+    "Every context records rescue fraction, tool availability and reserves, assignments per tick/second and simultaneous worker demand",
+    "Equal-position lessons avoid simultaneous jumps across rescue, scarcity, minimum rate, hatches, assignment density and skill chains",
+    "Player-reported early walls keep explicit too-hard verdicts and later placement floors",
+    "Unreviewed near-full-rescue routes with complex chains, narrow timing or exhausted combined stock stay in Expert",
     "At least 80% official levels; no fixed-size padding",
     "Unreviewed fan estimates never enter the golden path",
     "Seasonal levels need exact human difficulty review",
     "Reviewed fan bridges stay inside a real gap without introducing unpractised skills",
-    "No fabricated human reviews or score clamps; official variant floors remain editorial",
-    "Adjacent reference gaps are checked without changing any placement score"
+    "Original measured replay scores remain unchanged; teaching placements are explicit editorial decisions",
+    "Adjacent teaching position gaps are checked; passing does not establish human difficulty"
   ],
-  "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
-  "policy": "redux-calibrated-3"
+  "limits": "Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.",
+  "policy": "teaching-curriculum-2"
 }

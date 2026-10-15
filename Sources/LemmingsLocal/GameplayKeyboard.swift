@@ -113,37 +113,74 @@ import NxlvKit
         button.toolTip = L10n.text("Return to library (Esc or Q)")
         return button
     }()
+    private lazy var settingsButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
+        button.title = L10n.text("Settings"); button.glyph = .settings
+        button.target = self; button.action = #selector(openSettings)
+        button.setAccessibilityLabel(L10n.text("Settings"))
+        button.toolTip = L10n.text("Settings (⌘,)")
+        return button
+    }()
+    private lazy var graphicsButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
+        button.title = L10n.text("Graphics"); button.target = self; button.action = #selector(cycleGraphics)
+        button.setAccessibilityLabel(L10n.text("Next graphics"))
+        return button
+    }()
+    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton] }
     @objc private func openMainMenu() { mainMenu?() }
-    func removeNavigationControl() { navigationButton.resetAppearance(); navigationButton.removeFromSuperview(); nowPlayingNotice.removeFromSuperview() }
+    @objc private func openSettings() { settings?() }
+    @objc private func cycleGraphics() {
+        guard graphicsAvailable() else { return }
+        nextGraphics?()
+        refreshNavigationControl()
+    }
+    func removeNavigationControl() {
+        navigationButtons.forEach { $0.resetAppearance(); $0.removeFromSuperview() }
+        nowPlayingNotice.removeFromSuperview()
+    }
     func navigationFrame(in view: NSView) -> CGRect? {
-        guard !navigationButton.isHidden, let root = navigationButton.superview,
-              view.window === root.window else { return nil }
-        return view.convert(navigationButton.frame, from: root)
+        navigationButtons.compactMap { button -> CGRect? in
+            guard !button.isHidden, let root = button.superview, view.window === root.window else { return nil }
+            return view.convert(button.frame, from: root)
+        }.reduce(nil) { $0?.union($1) ?? $1 }
     }
     func refreshNavigationControl(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard let root = window?.contentView else { return }
         let visible = mainMenu != nil && ownsController() && navigationAvailable()
             && window?.attachedSheet == nil && !GameScreen.shared.isPresented
         let menuFrame = CGRect(x: max(0, root.bounds.maxX - 100),
-            y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
+            y: root.isFlipped ? 64 : max(0, root.bounds.maxY - 108), width: 88, height: 44)
+        settingsButton.frame = CGRect(x: menuFrame.minX - 52, y: menuFrame.minY, width: 44, height: 44)
+        graphicsButton.frame = CGRect(x: settingsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
+        navigationButton.frame = menuFrame
+        let controlsFrame = menuFrame.union(settingsButton.frame).union(graphicsButton.frame)
         var noticeArea = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
-        if visible, noticeArea.intersects(menuFrame) {
-            noticeArea.size.width = max(0, min(noticeArea.maxX, menuFrame.minX - 8) - noticeArea.minX)
+        if visible, noticeArea.intersects(controlsFrame) {
+            noticeArea.size.width = max(0, min(noticeArea.maxX, controlsFrame.minX - 8) - noticeArea.minX)
         }
         if nowPlayingNotice.superview !== root { nowPlayingNotice.removeFromSuperview(); root.addSubview(nowPlayingNotice) }
         nowPlayingNotice.update(track: playingTrack(), at: now,
             visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
             reduceMotion: navigationReduceMotion(), enabled: showSongInfo(),
             area: noticeArea, flipped: root.isFlipped)
-        guard visible else { navigationButton.isHidden = true; navigationButton.resetAppearance(); return }
-        if navigationButton.superview !== root {
-            navigationButton.removeFromSuperview()
-            root.addSubview(navigationButton)
-            navigationButton.resetAppearance()
+        for button in navigationButtons {
+            let available = button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
+            guard visible && available else { button.isHidden = true; button.resetAppearance(); continue }
+            if button.superview !== root {
+                button.removeFromSuperview(); root.addSubview(button); button.resetAppearance()
+            }
+            button.isHidden = false
+            button.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
         }
-        navigationButton.frame = menuFrame
-        navigationButton.isHidden = false
-        navigationButton.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
+        let canCycle = graphicsAvailable()
+        if graphicsButton.isEnabled != canCycle { graphicsButton.isEnabled = canCycle }
+        let name = graphicsName()
+        let tooltip = L10n.text("Next graphics (F2)") + ": " + name
+        if graphicsButton.toolTip != tooltip {
+            graphicsButton.setAccessibilityValue(name)
+            graphicsButton.toolTip = tooltip
+        }
     }
     var engineCommands: () -> [KeyboardCommand] = { [] }
     var skillNames: () -> [String] = { [] }
@@ -152,6 +189,9 @@ import NxlvKit
     var contextCommands: () -> [KeyboardCommand] = { [] }
     var hints: (() -> Void)?
     var settings: (() -> Void)?
+    var nextGraphics: (() -> Void)?
+    var graphicsAvailable: () -> Bool = { true }
+    var graphicsName: () -> String = { "" }
     var retry: (() -> Void)?
     var openRetainedSolution: () -> Bool = { false }
     var precisionZoom: ((PrecisionZoomKind) -> Void)?
@@ -188,6 +228,22 @@ import NxlvKit
     }
     func bind(to window: NSWindow) { speedControl?.cancelInput(); pressedF = false; self.window = window }
 
+    /// Restore gameplay focus after AppKit finishes the menu action that started it.
+    func focusGameplay(_ view: NSView) {
+        func focus() {
+            guard let window, view.window === window, active(), ownsController(),
+                  window.attachedSheet == nil, !GameScreen.shared.isPresented else { return }
+            window.makeFirstResponder(view)
+        }
+        focus()
+        DispatchQueue.main.async { [weak self, weak view] in
+            guard let self, let view, let window = self.window, view.window === window,
+                  self.active(), self.ownsController(), window.attachedSheet == nil,
+                  !GameScreen.shared.isPresented else { return }
+            window.makeFirstResponder(view)
+        }
+    }
+
     // Kept separate from the monitor so input routing can be tested with real events.
     func handle(_ event: NSEvent) -> NSEvent? {
         let now = event.timestamp
@@ -208,6 +264,12 @@ import NxlvKit
               !(window.firstResponder is NSTextView) else { return event }
         if event.type == .keyDown, active(), ownsController(),
            event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
+           event.charactersIgnoringModifiers == ",", let settings {
+            if !event.isARepeat { settings() }
+            return nil
+        }
+        if event.type == .keyDown, active(), ownsController(),
+           event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
            event.charactersIgnoringModifiers?.lowercased() == "z", let step {
             if !event.isARepeat { step(-1) }
             return nil
@@ -226,6 +288,10 @@ import NxlvKit
             return event
         }
         guard event.type == .keyDown else { return event }
+        if event.keyCode == 120, ownsController(), nextGraphics != nil {
+            if !event.isARepeat { cycleGraphics() }
+            return nil
+        }
         // Handle pause before AppKit sends Space to the focused control or canvas.
         let sharedCommand = GameplayCommands.command(key: event.keyCode == 122 ? "f1" : (event.charactersIgnoringModifiers ?? ""),
             shift: event.modifierFlags.contains(.shift))
@@ -449,6 +515,8 @@ import NxlvKit
         rows += [.init(keys: "Escape / Q", action: L10n.text("Save run and return to library"), group: gameplay),
                  .init(keys: "?", action: L10n.text("Controls help"), group: gameplay)]
         if step != nil { rows.append(.init(keys: "⌘Z", action: L10n.text("Rewind one tick"), group: gameplay)) }
+        if settings != nil { rows.append(.init(keys: "⌘,", action: L10n.text("Settings"), group: gameplay)) }
+        if nextGraphics != nil { rows.append(.init(keys: "F2", action: L10n.text("Next graphics"), group: gameplay)) }
         if djShuffle != nil { rows.append(.init(keys: "J", action: L10n.text("DJ shuffle"), group: gameplay)) }
         if hints != nil { rows.append(.init(keys: "Slash / I / F1", action: L10n.text("Level goals and tiered hints"), group: gameplay)) }
         if rate != nil { rows.append(.init(keys: "− / +", action: L10n.text("Release rate"), group: gameplay)) }

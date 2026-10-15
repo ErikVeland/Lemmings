@@ -26,16 +26,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/nl.json",
-    "sha256": "e0f3d300dc9b02300fc776d0ebab21eca970ec66c67d5140dba9b9036b91550f",
-    "entry_count": 3133,
+    "sha256": "09e388d7c888f9bb30317da0e504d8dfc09a8772967f385cc2c14537cd27a403",
+    "entry_count": 3160,
     "modified_by_this_worker": true,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "text_count": 3133,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "text_count": 3160,
     "plural_count": 8
   },
   "candidate": {
@@ -296,7 +296,16 @@
       "Device/platform acceptance"
     ],
     "ui_windows_opened": false,
-    "audio_played": false
+    "audio_played": false,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "09e388d7c888f9bb30317da0e504d8dfc09a8772967f385cc2c14537cd27a403",
+    "complete": true
   },
   "handover_snapshot": {
     "date": "2026-10-15",
@@ -349,12 +358,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "e0f3d300dc9b02300fc776d0ebab21eca970ec66c67d5140dba9b9036b91550f",
-    "runtime_strings_sha256": "7db1c6ca290fd389d95df01878ce771a733f7f365f2528ba5e877af8e352fab1",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "09e388d7c888f9bb30317da0e504d8dfc09a8772967f385cc2c14537cd27a403",
+    "runtime_strings_sha256": "20256aabc915a0fcf3bea263bd015ada4bbadcb799d93dc958bdf148f341fc5b",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

@@ -6,18 +6,38 @@ import UIKit
 
 @MainActor final class MobileSolutionSwitchView: UIView {
     var mode = SolutionReplayMode.game { didSet { updateSelection() } }
-    var showsGhost = false { didSet { ghostButton.isHidden = !showsGhost; setNeedsLayout(); setNeedsDisplay() } }
+    var showsGhost = false { didSet {
+        ghostButton.isHidden = !showsGhost
+        if !showsGhost { focusedGhost = false }
+        setNeedsLayout(); setNeedsDisplay()
+    } }
     var ghostEnabled = false { didSet { updateSelection() } }
     var onToggleGhost: (() -> Void)?
-    var focusedGhost = false
+    var focusedGhost = false { didSet { setNeedsDisplay() } }
     var focusedIndex: Int? {
         get { focusedGhost ? 2 : focusedMode.map { $0 == .game ? 0 : 1 } }
-        set { focusedGhost = newValue == 2; focusedMode = newValue == 0 ? .game : newValue == 1 ? .solution : nil }
+        set { focusedGhost = newValue == 2 && showsGhost; focusedMode = newValue == 0 ? .game : newValue == 1 ? .solution : nil }
     }
     private let ghostButton = MobileFocusButton(type: .custom)
-    private var switchFrame: CGRect { CGRect(x: 0, y: 0, width: bounds.width, height: 48) }
+    static var style: MobileSolutionSelectorArt.Style {
+        #if os(tvOS)
+        .television
+        #else
+        .touch
+        #endif
+    }
+    var controlLayout: MobileSolutionSelectorArt.Layout {
+        MobileSolutionSelectorArt.layout(width: bounds.width, showsGhost: showsGhost, style: Self.style)
+    }
+    func apply(_ presentation: MobileSolutionSelectorArt.Presentation) {
+        transform = CGAffineTransform(scaleX: presentation.scale, y: presentation.scale)
+        bounds = CGRect(x: 0, y: 0, width: presentation.controls.width / presentation.scale,
+            height: presentation.controls.height / presentation.scale)
+        center = CGPoint(x: presentation.controls.midX, y: presentation.controls.midY)
+        setNeedsLayout()
+    }
     var onSelect: ((SolutionReplayMode) -> Void)?
-    var focusedMode: SolutionReplayMode?
+    var focusedMode: SolutionReplayMode? { didSet { setNeedsDisplay() } }
     private var buttons: [UIButton] = []
     private var activation = TVActivationGate()
     func observeNeutral() { activation.observeNeutral() }
@@ -25,6 +45,7 @@ import UIKit
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
+        layer.magnificationFilter = .nearest
         for value in SolutionReplayMode.allCases {
             let button = MobileFocusButton(type: .custom)
             button.accessibilityLabel = value == .game ? L10n.text("Your game") : L10n.text("Solution")
@@ -42,13 +63,14 @@ import UIKit
     }
     required init?(coder: NSCoder) { nil }
     func activate(_ value: SolutionReplayMode) {
+        guard !isHidden else { return }
         #if os(tvOS)
         guard activation.consume() else { return }
         #endif
         onSelect?(value)
     }
     func activateGhost() {
-        guard showsGhost else { return }
+        guard !isHidden, showsGhost else { return }
         #if os(tvOS)
         guard activation.consume() else { return }
         #endif
@@ -64,12 +86,14 @@ import UIKit
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (button, frame) in zip(buttons, SolutionSwitchArt.frames(in: switchFrame)) { button.frame = frame }
-        ghostButton.frame = CGRect(x: 0, y: 56, width: bounds.width, height: GhostSolutionArt.height)
+        let layout = controlLayout
+        for (button, frame) in zip(buttons, layout.modes) { button.frame = frame }
+        ghostButton.frame = layout.ghost ?? .zero
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
-        focusedGhost && showsGhost ? [ghostButton] : [buttons[focusedMode == .game ? 0 : 1]]
+        guard !isHidden else { return [] }
+        return focusedGhost && showsGhost ? [ghostButton] : [buttons[(focusedMode ?? mode) == .game ? 0 : 1]]
     }
     override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         focusedGhost = context.nextFocusedView === ghostButton
@@ -81,12 +105,8 @@ import UIKit
     #endif
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        SolutionSwitchArt.draw(mode: mode, focused: focusedMode, in: switchFrame,
-            typography: MobileGameArt.typography, context: context)
-        if showsGhost {
-            GhostSolutionArt.draw(enabled: ghostEnabled, focused: focusedGhost, in: ghostButton.frame,
-                typography: MobileGameArt.typography, context: context)
-        }
+        MobileSolutionSelectorArt.draw(mode: mode, ghostEnabled: ghostEnabled, focusedIndex: focusedIndex,
+            layout: controlLayout, typography: MobileGameArt.typography, context: context)
     }
 }
 #endif

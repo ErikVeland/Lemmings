@@ -2,6 +2,7 @@ import Foundation
 import LemmingsMobileCore
 import LemmingsTVCore
 import NxlvKit
+import GameController
 
 @main struct TVExperienceTests {
     enum Failure: Error { case check(String) }
@@ -11,6 +12,79 @@ import NxlvKit
         func check(_ condition: @autoclosure () -> Bool, _ name: String) throws {
             guard condition() else { throw Failure.check(name) }; count += 1
         }
+        for remote in [false, true] {
+            let device = remote ? GCController.withMicroGamepad() : GCController.withExtendedGamepad()
+            let select = device.extendedGamepad?.buttonA ?? device.microGamepad!.buttonA
+            let selectGesture = select.preferredSystemGestureState
+            let back = device.extendedGamepad?.buttonB ?? device.microGamepad!.buttonX
+            let backGesture = back.preferredSystemGestureState
+            let events = TVControllerButtonEvents()
+            var input = TVControllerBindings()
+            _ = input.update(pressed: [])
+            var actions: [ControllerBindings.Action] = []
+            events.observe(device) { state in
+                actions += input.update(pressed: state)
+            }
+            try check(back.preferredSystemGestureState == .disabled, "Gameplay claims Circle before system Back, remote=\(remote)")
+            for _ in 0..<100 {
+                select.setValue(1)
+                actions += input.update(pressed: events.pressedButtons)
+                select.setValue(0)
+                actions += input.update(pressed: events.pressedButtons)
+            }
+            for _ in 0..<10 { await Task.yield() }
+            try check(actions == Array(repeating: .assign, count: 100), "Short native clicks survive without display polling, remote=\(remote)")
+            try check(input.update(pressed: events.pressedButtons).isEmpty,
+                "Polling cannot duplicate captured clicks, remote=\(remote)")
+            select.setValue(1)
+            actions += input.update(pressed: events.pressedButtons)
+            for _ in 0..<10 { await Task.yield() }
+            try check(actions.count == 101, "Polling and callbacks share one press, remote=\(remote)")
+            try check(input.update(pressed: events.pressedButtons).isEmpty,
+                "A held click cannot repeat through polling, remote=\(remote)")
+            let staleHandler = select.pressedChangedHandler
+            events.stop()
+            try check(select.pressedChangedHandler == nil, "Menu or suspension removes callbacks, remote=\(remote)")
+            try check(select.preferredSystemGestureState == selectGesture && back.preferredSystemGestureState == backGesture,
+                "Menus restore previous system gestures, remote=\(remote)")
+            let before = actions.count
+            input.reset()
+            _ = input.update(pressed: TVControllerButtonEvents.pressed(device))
+            events.observe(device) { state in
+                actions += input.update(pressed: state)
+            }
+            staleHandler?(select, 1, true)
+            try check(actions.count == before, "Previous callback cannot cross a handover, remote=\(remote)")
+            try check(input.update(pressed: TVControllerButtonEvents.pressed(device)).isEmpty,
+                "Reattached held Select stays suppressed, remote=\(remote)")
+            select.setValue(0); select.setValue(1); select.setValue(0)
+            for _ in 0..<10 { await Task.yield() }
+            try check(actions.count == before + 1 && actions.last == .assign,
+                "Fresh click works after handover release, remote=\(remote)")
+            if let pad = device.extendedGamepad {
+                events.stop()
+                let mapping = ControllerBindings.swapping([:], physical: .x, role: .a)
+                events.observe(device) { state in
+                    actions += input.update(pressed: ControllerBindings.remap(state, using: mapping))
+                }
+                pad.buttonX.setValue(1); pad.buttonX.setValue(0)
+                for _ in 0..<10 { await Task.yield() }
+                try check(actions.count == before + 2 && actions.last == .assign, "Remapped native button assigns once")
+                if let options = pad.buttonOptions {
+                    events.stop()
+                    input.reset(); _ = input.update(pressed: [])
+                    let chordStart = actions.count
+                    events.observe(device) { state in actions += input.update(pressed: state) }
+                    options.setValue(1)
+                    select.setValue(1); select.setValue(0)
+                    options.setValue(0)
+                    for _ in 0..<10 { await Task.yield() }
+                    try check(Array(actions.dropFirst(chordStart)) == [.repeatAssignment],
+                        "Short modified click retains the repeat-assignment chord")
+                }
+            }
+            events.stop()
+        }
         let classic = try ClassicMobileLibrary(directory: root.appendingPathComponent("Sources/Ports/lemmings_dos_1991-07-30"))
         let factories: [() throws -> MobileLevelContent] = [
             { try classic.loadLevel(at: 0) },
@@ -18,6 +92,35 @@ import NxlvKit
             { .init(summary: .init(index: 0, rank: "Classic", number: 1, title: "L3 fixture"), session: Lemmings3MobileSession(runtime: try l3(), engineFingerprint: "l3", levelIdentifier: "l3/1", levelIndex: 0, levelFingerprint: "l3-level")) }
         ]
         for (index, factory) in factories.enumerated() {
+            let clickSession = try factory().session
+            var clickTarget: (control: Int, actor: MobileTargetCandidate)?
+            for _ in 0..<300 {
+                for control in clickSession.snapshot.skills.indices {
+                    if let actor = clickSession.targetCandidates(for: control).first(where: { $0.assignment == .eligible }) {
+                        clickTarget = (control, actor); break
+                    }
+                }
+                if clickTarget != nil { break }
+                clickSession.tick()
+            }
+            guard let clickTarget else { throw Failure.check("Missing native click fixture \(index)") }
+            let clickDevice = GCController.withExtendedGamepad()
+            let clickEvents = TVControllerButtonEvents()
+            var clickBindings = TVControllerBindings()
+            _ = clickBindings.update(pressed: [])
+            var assigned = 0
+            let clickTick = clickSession.snapshot.tick
+            clickEvents.observe(clickDevice) { state in
+                for action in clickBindings.update(pressed: state) where action == .assign {
+                    if clickSession.assign(control: clickTarget.control, to: clickTarget.actor.id) { assigned += 1 }
+                }
+            }
+            clickDevice.extendedGamepad!.buttonA.setValue(1)
+            clickDevice.extendedGamepad!.buttonA.setValue(0)
+            for _ in 0..<10 { await Task.yield() }
+            try check(assigned == 1, "Native short click assigns immediately in engine \(index)")
+            try check(clickSession.snapshot.tick == clickTick, "Click does not advance paused physics \(index)")
+            clickEvents.stop()
             let content = try factory()
             let game = try TVGameExperience(content: content, owner: "host", scope: "hotseat.fixture")
             let initialSkill = content.session.snapshot.skills[game.selectedControl]

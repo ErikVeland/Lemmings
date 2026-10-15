@@ -1,0 +1,50 @@
+{
+  "schema": "classic-fan-build83-package-replay-v1",
+  "auditDate": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "releasePackage": {
+    "asset": "UltimateLemmings-2.0-build83.zip",
+    "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "resourceSet": "Resources extracted from the exact public full build 83 archive",
+    "fanArchives": 535,
+    "fanLevels": 6020,
+    "archiveFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9"
+  },
+  "runtime": {
+    "auditExecutableSHA256": "e8f7278c8b349a4b57b835df7e9aa40f65d80332c7837f494a2d4298866a7dd5",
+    "nxlvKitLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "classicValidationSourceSHA256": "48162cce37e90355295db6e7af0c1b133f3b5000cb6b53eae50e1f001066c75d",
+    "classicDOSSimulationSourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "fanLevelLibrarySourceSHA256": "ff9aee22136fa20c31793ee5f25fd8a4fda86f298cfa984b59c23e89a8859e43",
+    "execution": "Four-way partitioned replay audit using the current-main retained Audit binary and NxlvKit library."
+  },
+  "results": {
+    "officialAndConversionRoutes": 352,
+    "fanWinningReplays": 2399,
+    "fanWithoutMatchingWinningCandidate": 3600,
+    "fanFailedReplayLevels": 21,
+    "fanLevelsWithoutVerifiedRoute": 3621,
+    "fanLoadDecodeRenderFailures": 0,
+    "defaultAuditPassed": true,
+    "strictFanRouteGatePassed": false,
+    "strictFanRouteGateMissingWins": 3621
+  },
+  "evidenceFiles": {
+    "summary": {
+      "path": "classic-fan-build83-replay-summary.json",
+      "sha256": "602f1ed0ad29f2d1b386ff49d25dd578a513b99e14a8623e219ab66d92dcd4ac"
+    },
+    "levels": {
+      "path": "classic-fan-build83-replay-levels.jsonl",
+      "sha256": "932eec36ff8bec31087bbc6237a4dab38352c29cb0b23f4afb1823edc80e2143",
+      "rows": 6372,
+      "rowScope": "6,020 fan levels plus 352 official and conversion campaign levels."
+    },
+    "packs": {
+      "path": "classic-fan-build83-replay-packs.json",
+      "sha256": "7846889630472d8f9680cc89c54641e812f938a942e28031bb275ca9a8a8886d",
+      "rows": 535
+    }
+  },
+  "interpretation": "The exact build 83 full-package resources were used for the full native decode, render, smoke and replay audit. The 2,399 winning route results match the earlier full-corpus audit. The default audit passes its load/render and available-witness checks. Strict bundled route completion remains open because 3,621 fan levels have no verified winning route. A bounded search or smoke run does not prove that a level is impossible."
+}

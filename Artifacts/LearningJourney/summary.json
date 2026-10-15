@@ -1,18 +1,20 @@
 {
   "candidatePool": 1721,
-  "estimatedPlacements": 139,
+  "estimatedPlacements": 109,
   "fan": 2,
-  "largestReferenceGap": 9.0,
+  "largestReferenceGap": 10.0,
   "levels": 227,
-  "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
+  "limits": "Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.",
   "official": 225,
   "pendingReview": 1636,
-  "placementPolicy": "redux-calibrated-3",
+  "placementPolicy": "teaching-curriculum-2",
+  "pressureFlaggedRoutes": 125,
+  "reportedWalls": 11,
   "stages": {
-    "Difficult": 45,
-    "Expert": 139,
-    "Fun": 20,
-    "Intermediate": 23
+    "Difficult": 14,
+    "Expert": 169,
+    "Fun": 30,
+    "Intermediate": 14
   },
-  "version": "learning-23"
+  "version": "learning-28"
 }

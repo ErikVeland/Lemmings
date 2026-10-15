@@ -27,7 +27,7 @@ shell. That diagnostic path is not the normal application or the parity baseline
 | Pause/results | Shared frozen overview, counts, loss allowance, time, supplies, track identity, results, awards and named next actions. Resume remains pinned on the shared pause page. | UIKit scrolling/focus, result variants and VoiceOver. |
 | Replay | Shared supported recording, read-only playback, skill-use history and movie export. TV exports movies through the LAN transfer instead of a share sheet. | Physical playback, movie download and cancellation. Sequel verified-solution/movie capabilities remain bounded by the shared session APIs. |
 | Records/services | Shared records, achievements, community boards, Game Center adapter, telemetry consent and Play Insights. TV declares the Game Center entitlement. | TV App Store Connect/provisioning, production boards, account consent and live service journeys. No production account settings were changed. |
-| Settings | Shared groups, presets, graphics, display/effects, accessibility, soundtrack and controller remapping. TV retains sensitivity/dead-zone choices. Standard/Large/Extra Large use distinct whole-pixel menu scales. New TV preferences select continuous skill changes. | Physical runtime effects, long menus and accessible focus. |
+| Settings | Shared groups, presets, graphics, display/effects, accessibility, soundtrack and controller remapping. TV retains sensitivity/dead-zone choices. Standard/Large/Extra Large use distinct whole-pixel menu scales. New TV preferences select continuous skill changes. | Physical runtime effects and accessible focus. |
 | Audio | Shared Adaptive DJ, soundtrack selection/downloads, native sound banks, track notices, pause/speed/rewind and interruption rules. TV builds bundle all soundtrack libraries by default. | Audible comparison needs an explicit request. Engine/data limits remain shared with iOS. |
 | Recovery/cloud | Shared owner/session-scoped checkpoints and session navigation. Legacy TV profiles, portraits, solo/shared completion, rosters, exact turns, preferences and the surviving checkpoint migrate once. Old data is retained, and an existing shared run is not overwritten. Shared cloud-library/recovery-code routes are available; TV transfers recovery keys over LAN. | Live cloud linking and purge recovery. Cloud library sync does not back up complete checkpoint payloads or all local collection files. TV adds an explicit off-device save backup/restore adapter; transfer and purge recovery need physical acceptance. |
 | Accessibility/lifecycle | Shared accessible action names, interruption pause and explicit Resume. TV uses native focus over the same bitmap targets. Large transfer pages scroll to keep Back reachable. | Physical VoiceOver, system keyboard, background/termination/reconnect and sofa readability. |
@@ -97,6 +97,25 @@ Use `Tools/UITestRunner/run.py` in offscreen, muted mode for native checks.
 Do not launch a foreground/secondary-display test or audible playback as a
 fallback. SDK compilation and the Xcode app build do not establish parity alone.
 
+## Graphics changes
+
+Graphics choices refresh the active shared game controller, playfield display,
+HUD skill artwork, minimap and retained solution view immediately, including
+while paused. Classic previews use the selected artwork and its render scale.
+Artwork packaging resolves a linked Macintosh family before finding sibling
+families and monochrome banks. L2, L3 and NeoLemmix retain their native mobile
+artwork renderers. Shared display settings refresh across those engines, but
+Classic machine artwork substitution remains a Classic-engine feature.
+Physical TV graphics switching and CRT compositing still require device checks.
+
+The focused muted checks pass 29 Swift tests and six packaging/build-tool tests.
+Four inspected gameplay captures switch artwork at tick 120 without changing
+the simulation. HUD targets retain their bounds without overlap across all four
+artwork choices at 720p, 1080p and 4K. iOS/tvOS modules and entry points compile, and the tvOS UIKit
+settings regression typechecks. That UIKit regression has not run on a device.
+The broader `--current-fixes` menu audit fails its replay-overlay target overlap
+check at `Tools/IOSMenuAudit/current-fixes.swift:79`. It is not a passing gate.
+
 ## Home scenery
 
 The 15 October Home update shares the iPad menu box, scenery reference and camera
@@ -116,3 +135,39 @@ Classic/L2/L3 scenery, scoped references, missing/random fallback, reduced-motio
 and inactive clocks, camera bounds and exit return. iOS/tvOS SDK modules and app
 entry points compile. Native UIKit focus delivery, physical remote/VoiceOver,
 layer compositing and frame timing remain open device acceptance checks.
+
+## Fixed TV menus and transport
+
+The normal TV frontend uses a fixed Home board with saved play on the left,
+libraries on the right, full-width player identity and build/status text, and a
+fixed footer. It selects the largest fitting whole-pixel scale and disables Home
+scrolling. Settings groups, controls, remapping and soundtrack libraries use a
+paged two-column grid, with Back at bottom-left and Previous/Next in fixed slots.
+All shared iOS settings and Reset remain reachable.
+
+Circle toggles planning pause/play directly. Its native Back press and release
+cannot also open the pause menu. Menu owns that menu. R2 uses fast-forward and
+resumes an existing planning pause, including after held rewind. It never parks
+play and cannot accept Ready or another menu. DualSense trigger resistance follows
+the selected speed tier. L2 retains backward step/rewind and neutral-input gates.
+These paths use the shared Classic/L2/L3 game controller.
+
+The muted, offscreen console gate passes 250 bitmap captures, controller
+regressions and 153 native-engine experience checks. Both SDK source/module and
+app entry-point checks pass. Run `Scripts/run-tv-console-checks.sh` for the native
+render/input gate. Physical controller resistance, UIKit focus/VoiceOver and
+television compositing remain open acceptance checks. The fixture-only diagnostic
+shell retains its separate input and layout implementation.
+
+The crowd/input follow-up routes gameplay exclusively through
+`GCEventViewController` and restores UIKit focus synchronously for menus and the
+L3 direction picker. Gameplay claims its controller's system gestures, then
+restores their previous settings. The TV Run scheme selects Release optimisation.
+Shared Classic sprite caching, L2 batch eligibility, L3 read-only eligibility
+and reused bitmap/target data reduce crowd work without changing input targets,
+physics, ownership or handovers. Both iOS and tvOS SDK checks pass. The 181 TV
+experience checks, native sequel rule suites, 80-actor fixtures and exact pixel
+comparisons pass offscreen and muted. Host timings do not establish sustained
+Apple TV 4K frame rate. Physical Circle/Back routing, VoiceOver, controller
+reconnection and CPU/GPU timing remain device acceptance checks. See
+[Apple TV experience](../../Documentation/AppleTVExperience.md) for measurements.

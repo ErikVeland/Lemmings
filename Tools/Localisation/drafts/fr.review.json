@@ -18,12 +18,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/fr.json",
-    "text_count": 3133,
+    "text_count": 3160,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "9c5084c890327878e383d34930df2541883284cd4c45bd157826074c8f65b010",
-    "entry_count": 3133
+    "sha256": "fe4980d887d2f2245a33829bf2896d1b604e4fab04227dc735da2ec5990dbd9a",
+    "entry_count": 3160
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/fr.json",
@@ -33,9 +33,9 @@
     "note": "The ignored machine-generated candidate was not merged; translations were drafted from the current English catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3133,
+    "text_count": 3160,
     "plural_count": 8,
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302"
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -239,7 +239,16 @@
     ],
     "ui_windows_opened": false,
     "audio_played": false,
-    "enabled_for_runtime": false
+    "enabled_for_runtime": false,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "fe4980d887d2f2245a33829bf2896d1b604e4fab04227dc735da2ec5990dbd9a",
+    "complete": true
   },
   "remaining_work": [
     "Human reviewer to check existing and newly drafted French, tone, glossary consistency, L2 fragments, and plural use in context.",
@@ -282,12 +291,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "9c5084c890327878e383d34930df2541883284cd4c45bd157826074c8f65b010",
-    "runtime_strings_sha256": "b8464e74b8f34c6df077e88a9fe407e1d50cf7edd48dc71f82889e7433922214",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "fe4980d887d2f2245a33829bf2896d1b604e4fab04227dc735da2ec5990dbd9a",
+    "runtime_strings_sha256": "84801e4d93735e70fdfe054df0b0fbe66e48fda8f7208e10d34de62d3726809b",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

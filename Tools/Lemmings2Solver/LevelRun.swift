@@ -31,23 +31,24 @@ func witness(_ candidate: Candidate, level: Lemmings2Level, population: Int) -> 
 func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2TerrainMasks, population: Int,
                 seed: [Lemmings2TimedEvent], limits base: SearchLimits, depth: Int? = nil) throws -> LevelResult {
     let start = try Lemmings2Runtime(level: level, style: style, masks: masks, total: population)
+    let started = Date()
+    let deadline = started.addingTimeInterval(base.budgetSeconds)
     var limits = base
     // Decision density on a run that follows the seed, or on a run without input. A dense level
     // points to detector tuning.
-    let passive = decisionCount(start: start, seed: seed, limits: limits)
+    let passive = decisionCount(start: start, seed: seed, limits: limits, until: deadline)
     let density = String(format: "%.1f", Double(passive.points) * 100 / Double(max(1, passive.ticks)))
     // Search from the seed. Each better route becomes the next seed while budget remains, because
     // one search explores changes near one seed line.
-    let started = Date()
     var current = seed
     var best: Candidate?, bestPartial: Candidate?
     var winners: [Int: Candidate] = [:]
     var points = 0, fallback = 0, expanded = 0, rounds = 0
-    while true {
+    while Date() < deadline {
         rounds += 1
-        let line = decisionCount(start: start, seed: current, limits: limits)
+        let line = decisionCount(start: start, seed: current, limits: limits, until: deadline)
         limits.maxDepth = depth ?? line.points + 40
-        limits.budgetSeconds = base.budgetSeconds - Date().timeIntervalSince(started)
+        limits.budgetSeconds = deadline.timeIntervalSinceNow
         guard limits.budgetSeconds > 0 else { break }
         let report = search(from: start, seed: current, bounds: AimBounds(level: level), limits: limits)
         points += report.decisionPoints; fallback += report.fallbackPoints; expanded += report.expanded
@@ -73,7 +74,7 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
     let summary = "density \(density) per 100 ticks, decision points \(points) (fallback \(fallback)), expanded \(expanded), \(rounds) rounds to beam \(limits.beamWidth), \(Int(Date().timeIntervalSince(started))) s"
     guard let best else {
         return LevelResult(status: .unsolved, witness: nil,
-            partial: bestPartial.map { witness(finish($0), level: level, population: population) },
+            partial: bestPartial.map { witness(finish($0, until: deadline), level: level, population: population) },
             winners: [], summary: summary)
     }
     let route = witness(best, level: level, population: population)

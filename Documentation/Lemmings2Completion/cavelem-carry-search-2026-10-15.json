@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "resourceRoot": ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+  "runtimeLibrary": {
+    "path": ".build/l2-completion/libNxlvKit.dylib",
+    "sha256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  },
+  "solver": {
+    "path": "/private/tmp/l2-solver-deadline-check-current",
+    "sha256": "2dd53aba383cb61b7abc8280bd311122e9047b5c8bd079214c5ee581d59f47bf",
+    "compiler": "Xcode 26.6, Swift 6.3.3"
+  },
+  "searches": [
+    {
+      "tribe": "Cavelems",
+      "level": 2,
+      "seed": "Tests/Lemmings2CompletionTests/Chains/cavelem-02.json",
+      "seedSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361",
+      "population": 59,
+      "acceptedSaved": 36,
+      "budgetSeconds": 240,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 891960,
+      "expanded": 891959,
+      "rounds": 1,
+      "result": "No improvement. The solver replay-verified the same 36-of-59 route twice.",
+      "output": ".build/l2-solver/current-cavelem02-cell4/cavelem-02.json",
+      "outputSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361"
+    },
+    {
+      "tribe": "Cavelems",
+      "level": 3,
+      "seed": "Tests/Lemmings2CompletionTests/Chains/cavelem-03.json",
+      "seedSHA256": "cd60fc875f9696f689032ed06b3ef3472fd9909eeabc8cd186dc6947ffd218f9",
+      "population": 36,
+      "acceptedSaved": 17,
+      "budgetSeconds": 360,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 1371469,
+      "expanded": 1371468,
+      "rounds": 1,
+      "result": "No improvement. The solver replay-verified the same 17-of-36 route twice.",
+      "output": ".build/l2-solver/current-cavelem03-cell4/cavelem-03.json",
+      "outputSHA256": "cd60fc875f9696f689032ed06b3ef3472fd9909eeabc8cd186dc6947ffd218f9"
+    },
+    {
+      "tribe": "Cavelems",
+      "level": 3,
+      "seed": "Tests/Lemmings2CompletionTests/Chains/cavelem-03.json",
+      "seedSHA256": "cd60fc875f9696f689032ed06b3ef3472fd9909eeabc8cd186dc6947ffd218f9",
+      "population": 36,
+      "acceptedSaved": 17,
+      "budgetSeconds": 360,
+      "beamWidth": 4096,
+      "cell": 2,
+      "refire": 24,
+      "decisionPoints": 1707556,
+      "expanded": 1707555,
+      "rounds": 1,
+      "result": "No improvement. The solver replay-verified the same 17-of-36 route twice.",
+      "output": ".build/l2-solver/current-cavelem03-cell2-refire24/cavelem-03.json",
+      "outputSHA256": "cd60fc875f9696f689032ed06b3ef3472fd9909eeabc8cd186dc6947ffd218f9"
+    },
+    {
+      "tribe": "Cavelems",
+      "level": 4,
+      "seed": "Tests/Lemmings2CompletionTests/Chains/cavelem-04.json",
+      "seedSHA256": "bf745df541c57d473733a2eba8d9d0a3f16e4411890dff62ccd3437e6a1bcf17",
+      "population": 17,
+      "acceptedSaved": 4,
+      "budgetSeconds": 240,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 24,
+      "decisionPoints": 674494,
+      "expanded": 674493,
+      "rounds": 1,
+      "result": "No improvement. The solver replay-verified the same 4-of-17 route twice.",
+      "output": ".build/l2-solver/current-cavelem04-cell4-refire24/cavelem-04.json",
+      "outputSHA256": "bf745df541c57d473733a2eba8d9d0a3f16e4411890dff62ccd3437e6a1bcf17"
+    }
+  ],
+  "remaining": "Cavelems still finishes with one survivor and a Bronze talisman. These searches do not prove that a higher-survivor route is impossible. The ark requirement remains open."
+}

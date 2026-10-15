@@ -101,8 +101,8 @@ extension MobileGameViewController {
         adapter.onMenuMove = { [weak self] in self?.moveSolutionMenuFocus($0) }
         adapter.onMenuActivate = { [weak self] in
             guard let self else { return }
-            if self.solutionSelector.focusedGhost { self.solutionSelector.activateGhost() }
-            else if let mode = self.solutionSelector.focusedMode { self.solutionSelector.activate(mode) }
+            if !self.solutionSelector.isHidden, self.solutionSelector.focusedGhost { self.solutionSelector.activateGhost() }
+            else if !self.solutionSelector.isHidden, let mode = self.solutionSelector.focusedMode { self.solutionSelector.activate(mode) }
             else { self.overlayCanvas.activateFocused() }
         }
         adapter.onMenuBack = { [weak self] in
@@ -264,7 +264,7 @@ extension MobileGameViewController {
     }
 
     private func moveSolutionMenuFocus(_ delta: Int) {
-        guard hasSolutionPair else { overlayCanvas.moveFocus(delta); return }
+        guard !solutionSelector.isHidden else { overlayCanvas.moveFocus(delta); return }
         let actions = (overlayCanvas.page.rows + overlayCanvas.page.orderedFooter).filter(\.enabled)
         let selectorCount = solutionSelector.showsGhost ? 3 : 2
         let current = solutionSelector.focusedIndex

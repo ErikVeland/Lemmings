@@ -162,9 +162,72 @@ that sync. The retained solver found no better route in these probes:
 
 The current chain loses survivors later. Highland 2 carries only three forward,
 and Beach 3 carries one from 42. These searches do not prove that a better
-route is impossible. The strict current-main gate replayed all 120 standalone
+route is impossible. The 15 October strict gate replayed all 120 standalone
 routes, 70 carry-over variants and twelve ten-level chains. It still fails the
-ark check because every tribe ends with one survivor.
+ark check because every tribe ends with one survivor. The latest successful
+gate revision is recorded in the [completion report](README.md).
+
+Two additional Highland 2 probes on 15 October tested different search lines.
+An unseeded 300-second search with beam 4,096, cell 8 and refire 150 found no
+win after 436,351 expansions. A 600-second search from the verified 3-of-60
+chain witness, with beam 4,096, cell 8 and refire 75, returned the same route
+after 1,089,933 expansions. These bounded searches did not improve the route;
+the 30-survivor ark condition remains open.
+
+After `main` advanced from `b8f11a21` to `3cf456ea`, a 240-second search varied
+the seeded Runner/Jumper timing grid at cell 4 and refire 24. The L2 runtime,
+level data and completion tools did not change in that update. The solver
+expanded 590,072 candidates and replay-verified the same 3-of-60 Bronze route
+in 4,500 ticks. It did not improve the Highland chain. The source-guided
+Runner/Jumper timing change remains an unproven route lead, not DOS parity
+evidence. At that review point, main through `fc2c59e6` had no later L2
+runtime, level-data, solver or completion-tool changes; the probe itself remains
+evidence from `3cf456ea`. The current-main solver deadline correction is recorded
+below.
+
+### Solver deadline correction on current main
+
+A later narrow-beam Highland 2 probe remained active after its 600-second
+budget. Code review found that the solver checked time between beam rounds, but
+not within a candidate advance or action expansion. I stopped that run before
+it returned a result; it is not evidence of a win or an unsolved level. I changed
+the solver to use one deadline for seed profiling, candidate expansion and
+partial-route finishing.
+
+I rebuilt the solver against the fresh `NxlvKit` library from `fc2c59e6` and
+ran a 10-second seeded check. The solver returned the accepted 3-of-60 route in
+4,500 ticks. The report used 10 search seconds; process wall time was 11.71
+seconds, including startup and two replay checks. A deeper 180-second search
+with beam 4 reached six rounds and 108,925 expansions. It returned the same
+route. The strict ark condition remains open. See the
+[deadline recheck record](search-budget-recheck-2026-10-15.json).
+
+### Current-main Cavelems carry searches
+
+I rebuilt the solver against the current-main L2 library and repeated the
+Cavelems Level 2 and Level 3 searches with cell 4 and refire 75. The Level 2
+search used the verified 36-of-59 route. It returned the same route after
+891,959 expansions in 240 seconds. The Level 3 search used the verified
+17-of-36 route. It returned the same route after 1,371,468 expansions in
+360 seconds. The solver replay-verified both results twice. Neither search
+improved the carried population. All tribes still end with one survivor and a
+Bronze talisman. A separate 360-second Level 3 search at cell 2 and refire 24
+expanded 1,707,555 candidates and kept the same route. A 240-second search for
+Level 4 at population 17 also kept the accepted 4-of-17 Bronze route. These
+searches do not prove that a higher-survivor route is impossible. See the
+[search record](cavelem-carry-search-2026-10-15.json).
+
+### Current-worktree Beach 3 carry probe
+
+A 120-second search from the accepted 1-of-42 Beach 3 route used beam 4,096,
+cell 2 and refire 24. It expanded 443,181 candidates and returned the same
+route, verified twice by the solver. The exact candidate bytes match the accepted
+seed. The solver source includes worktree edits based on main `fc2c59e6`. It used
+the installed 1.9.1 build 76 resource tree. The seed level fingerprint matched,
+but the run does not prove full resource-set equivalence or audit the exact
+build 83 package. The bounded search does not show that a better route is
+impossible, and Beach still carries one survivor from Level 3. See the
+[search record](beach-carry-search-2026-10-15.json).
 
 ## Commands
 

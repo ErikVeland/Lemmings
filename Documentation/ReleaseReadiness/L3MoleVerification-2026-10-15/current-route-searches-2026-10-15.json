@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+  "runtimeLibrary": {
+    "path": ".build/l3-closure-current/libNxlvKit.dylib",
+    "sha256": "3327eeb6e1cab6fb3024fbae2f2f7d2d77b85ade8fde8145ae1e6b4514803b11"
+  },
+  "solver": {
+    "path": ".build/l3-solver-current/solver",
+    "sha256": "4ba167a7c443e89d795ea9c4af4415127afdf0f7dc94cd47e4aac35e7a13ddad",
+    "compiler": "Xcode 26.6, Swift 6.3.3"
+  },
+  "searches": [
+    {
+      "level": 206,
+      "sourceFixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+      "sourceFixtureSHA256": "ac4b394feea0ddf4feebffc053764f6a06e474dbc469c23132c2fffa8f62d7e3",
+      "seedPath": ".build/l3-solver-current/206-seed.json",
+      "seedSHA256": "96356b542bf694290e53fd55f0451d30e91ca56f5abbc57c88bc035dab1f5b5d",
+      "population": 20,
+      "seedThroughTick": 424,
+      "budgetSeconds": 120,
+      "beamWidth": 1024,
+      "expanded": 1452747,
+      "result": "No winning route. Best partial saved 0 and lost 0."
+    },
+    {
+      "level": 206,
+      "sourceFixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+      "sourceFixtureSHA256": "ac4b394feea0ddf4feebffc053764f6a06e474dbc469c23132c2fffa8f62d7e3",
+      "seedPath": ".build/l3-solver-current/206-seed.json",
+      "seedSHA256": "96356b542bf694290e53fd55f0451d30e91ca56f5abbc57c88bc035dab1f5b5d",
+      "population": 20,
+      "seedThroughTick": 630,
+      "budgetSeconds": 120,
+      "beamWidth": 1024,
+      "expanded": 1668354,
+      "result": "No winning route. Best partial saved 0 and lost 0."
+    },
+    {
+      "level": 213,
+      "sourceFixture": "Tests/Lemmings3CompletionTests/Fixtures/213.json",
+      "sourceFixtureSHA256": "1985102683d3501ad4effd563115d45a71f2cf85d8f0a528f8e964bbc02483ea",
+      "seedPath": ".build/l3-solver-current/213-seed.json",
+      "seedSHA256": "27267250c8071b4b51278b39299f29a6a2b1958feaba37b5a3e50743e32be70f",
+      "population": 20,
+      "seedThroughTick": 750,
+      "budgetSeconds": 120,
+      "beamWidth": 1024,
+      "expanded": 1371029,
+      "rounds": 2,
+      "result": "No winning route. Best partial saved 0 and lost 0."
+    },
+    {
+      "level": 229,
+      "sourceFixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+      "sourceFixtureSHA256": "fc4eddbc9b818e2bf8aed34a275c2e8bb27f64fd705a6ccae395d5b9b318c650",
+      "seedPath": ".build/l3-solver-current/229-seed.json",
+      "seedSHA256": "5027b7dc000055e07e32d12498788eb493631899de10cea835ac1907f470fa24",
+      "population": 20,
+      "seedThroughTick": 1560,
+      "budgetSeconds": 120,
+      "beamWidth": 1024,
+      "expanded": 1156724,
+      "result": "No winning route. Best partial saved 0 and lost 0."
+    }
+  ],
+  "remaining": "These searches did not change any fixtures. They do not prove that the levels are unsolvable. The four standalone routes and thirteen carried schedules remain open."
+}

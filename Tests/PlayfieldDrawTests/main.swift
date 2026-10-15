@@ -1516,9 +1516,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let natural = PrecisionZoomScrollGesture.normalizedDeltas(horizontal: 0, vertical: -8,
     directionInvertedFromDevice: true)
   try require(natural.vertical == 8, "Natural scrolling reversed the physical Zoom direction")
-  let status = PrecisionZoomStatus(zoom: 3, superzoom: 12, active: .zoom, isEmpty: false)
+  let status = PrecisionZoomStatus(zoom: 3, superzoom: 12, skips: 4, active: .zoom, isEmpty: false)
   try require(status.accessibility ==
-    "Zoom, 3 remaining. Superzoom, 12 remaining. Zoom active",
+    "Zoom, 3 remaining. Superzoom, 12 remaining. 4 Level Skips. Zoom active",
     "The compact Zoom badges lost their accessible description")
   let image = NSImage(size: CGSize(width: 180, height: 90))
   image.lockFocus()
@@ -1526,7 +1526,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   CGRect(x: 0, y: 0, width: 180, height: 90).fill()
   let size = status.draw(at: CGPoint(x: 8, y: 8), scale: 2)
   image.unlockFocus()
-  try require(size.height == 48 && size.width > 0, "The two Zoom badge rows were not laid out")
+  try require(size.height == 74 && size.width > 0, "The Zoom and Level Skip badge rows were not laid out")
   let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
     .deletingLastPathComponent().deletingLastPathComponent()
     .appendingPathComponent(".build/precision-zoom-badges.png")

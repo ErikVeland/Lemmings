@@ -16,16 +16,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/it.json",
-    "sha256": "c7e36c44d5d81737221b3053f864f4d5b202912e07096cd4fcf2e029461b1aa5",
-    "entry_count": 3133,
+    "sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "entry_count": 3160,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
     "modified_by_this_worker": true
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "text_count": 3133,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "text_count": 3160,
     "plural_count": 8
   },
   "candidate": {
@@ -223,7 +223,16 @@
       "Foundation plural-rule verification.",
       "Rendered UI, accessibility or physical-device acceptance."
     ],
-    "enabled_for_runtime": false
+    "enabled_for_runtime": false,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "complete": true
   },
   "handover_snapshot": {
     "date": "2026-10-15",
@@ -322,12 +331,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "c7e36c44d5d81737221b3053f864f4d5b202912e07096cd4fcf2e029461b1aa5",
-    "runtime_strings_sha256": "0ef20b31afccb5e57e24198dd3f9ee3821b63c3e933f6e39985b9548c6d3585a",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "runtime_strings_sha256": "88a0c6e19ab72ea1dfe422b1335b4c00da4ff468b5fa018f8bc24b3dbfc7c1d8",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

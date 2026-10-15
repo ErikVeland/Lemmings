@@ -4,8 +4,15 @@ import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import GameController
 
 extension MobileGameViewController {
+    /// Gameplay owns controller buttons. Menus and the L3 picker use native focus.
+    func updateTVInputRouting() {
+        let usesUIKit = !overlay.isHidden || isChoosingToolDirection || !lifecycle.isForeground
+            || lifecycle.isInterrupted || !gameSettings.classic.controllerEnabled || GCController.controllers().isEmpty
+        if controllerUserInteractionEnabled != usesUIKit { controllerUserInteractionEnabled = usesUIKit }
+    }
     func refreshTVTarget(control: Int) {
         if tvTargetLock.id != nil {
             highlightedTarget = tvTargetLock.resolve(candidates: session.targetCandidates(for: control),

@@ -1,8 +1,9 @@
 #if os(macOS)
 import AppKit
 
-/// The Menu keeps its input target while its stone artwork fades out.
+/// Gameplay controls keep their input targets while their stone artwork fades out.
 @MainActor final class GameplayMenuButton: GameButton {
+    var glyph: PanelGlyph?
     private var shownAt: TimeInterval?
     private var wasAutoHiding = false
     private(set) var isHovered = false
@@ -67,7 +68,18 @@ import AppKit
         context.saveGState()
         context.setAlpha(artworkOpacity)
         context.beginTransparencyLayer(auxiliaryInfo: nil)
-        super.draw(dirtyRect)
+        if let glyph {
+            GameStoneButton.draw(bounds, selected: isHighlighted || isHovered, pixel: 1,
+                backdrop: PanelGlyph.rock.image(fitting: bounds.size))
+            let well = GameStoneButton.well(bounds, pixel: 1).insetBy(dx: 4, dy: 4)
+            if let image = glyph.image(fitting: well.size) {
+                image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2),
+                    y: floor(well.midY - image.size.height / 2), width: image.size.width, height: image.size.height),
+                    from: .zero, operation: .sourceOver, fraction: isEnabled ? 1 : 0.45,
+                    respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            }
+            GameControlText.focus(self)
+        } else { super.draw(dirtyRect) }
         context.endTransparencyLayer()
         context.restoreGState()
     }

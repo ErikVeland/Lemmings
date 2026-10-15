@@ -1,5 +1,5 @@
 {
-  "description": "Second directed -1 native tick trial on 26 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct levels had strict native winning replays and ten-probe scores. Attempt failures remain recorded. These alternatives do not change the default-mechanics ledger and native wins do not prove full source physics parity.",
+  "description": "Second directed -1 native tick trial on 26 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct levels had strict native winning replays and ten-probe scores. Attempt failures remain recorded. These alternatives do not change the default-mechanics ledger and native wins do not prove full source physics parity. Original counters describe the archived trial. Current installed-bundle replay status is recorded in currentReleaseBundleRecheck; this is not an exact 2.0 package check.",
   "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
   "directAttempts": 26,
   "directWinningInputs": 17,
@@ -153,14 +153,14 @@
       "mechanics": "golems",
       "clock": "golems",
       "nativeTickOffsetFromSource": -1,
-      "nativeReplaySHA256": "f6633808896910ea09c397e2bc6d539276d8f116b6e8fb9216652586f55f36b7",
+      "nativeReplaySHA256": "5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584",
       "nativeSaved": 38,
       "required": 36,
       "nativeCompletionTick": 1465,
       "difficultyScore": 436.6764396430261,
       "probeRuns": 10,
-      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f6633808896910ea09c397e2bc6d539276d8f116b6e8fb9216652586f55f36b7.json",
-      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f6633808896910ea09c397e2bc6d539276d8f116b6e8fb9216652586f55f36b7.profile.json",
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584.profile.json",
       "sourceOriginIdentity": {
         "engine": "classic",
         "levelID": "Martin Zurlinden 03.dat#5",
@@ -173,7 +173,28 @@
       "sourceActionDerivation": "verified one-tick conversion from archived published replay",
       "sourceActionDerivationVerified": true,
       "sourceOutcomeParity": true,
-      "transferFromAnotherBundledPack": false
+      "transferFromAnotherBundledPack": false,
+      "currentReleaseBundleRecheck": {
+        "status": "passed",
+        "date": "2026-10-15",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": {
+          "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+          "replaySHA256": "5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584",
+          "strictReplay": "passed",
+          "didWin": true,
+          "saved": 38,
+          "required": 36,
+          "ticks": 1465,
+          "terminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "sourceOutcome": "38 saved at source header tick 1466; action payload SHA-256 matches the published LLDB record",
+          "scopeLimit": "installed 1.9.1 build 76 resources; source per-state parity and exact 2.0 package remain unverified"
+        },
+        "selectedOrdinaryRouteRecheck": {
+          "status": "failed",
+          "observation": "historical selected-ordinary replay retains old expected stateHash f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e; refreshed published-source replay above passes strict verification"
+        }
+      }
     },
     {
       "identity": {
@@ -255,14 +276,14 @@
       "mechanics": "golems",
       "clock": "golems",
       "nativeTickOffsetFromSource": -1,
-      "nativeReplaySHA256": "9eeb1c6646f57da4cb2faa9882fe1606612f7950e40ec66de38cd876292a4ec5",
+      "nativeReplaySHA256": "9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52",
       "nativeSaved": 38,
       "required": 36,
       "nativeCompletionTick": 1465,
       "difficultyScore": 436.6764396430261,
       "probeRuns": 10,
-      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9eeb1c6646f57da4cb2faa9882fe1606612f7950e40ec66de38cd876292a4ec5.json",
-      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9eeb1c6646f57da4cb2faa9882fe1606612f7950e40ec66de38cd876292a4ec5.profile.json",
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52.profile.json",
       "sourceOriginIdentity": {
         "engine": "classic",
         "levelID": "MARTPCK3.DAT#5",
@@ -275,7 +296,28 @@
       "sourceActionDerivation": "verified one-tick conversion from archived published replay",
       "sourceActionDerivationVerified": true,
       "sourceOutcomeParity": true,
-      "transferFromAnotherBundledPack": false
+      "transferFromAnotherBundledPack": false,
+      "currentReleaseBundleRecheck": {
+        "status": "passed",
+        "date": "2026-10-15",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": {
+          "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+          "replaySHA256": "9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52",
+          "strictReplay": "passed",
+          "didWin": true,
+          "saved": 38,
+          "required": 36,
+          "ticks": 1465,
+          "terminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "sourceOutcome": "38 saved at source header tick 1466; action payload SHA-256 matches the published LLDB record",
+          "scopeLimit": "installed 1.9.1 build 76 resources; source per-state parity and exact 2.0 package remain unverified"
+        },
+        "selectedOrdinaryRouteRecheck": {
+          "status": "failed",
+          "observation": "historical selected-ordinary replay retains old expected stateHash f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e; refreshed published-source replay above passes strict verification"
+        }
+      }
     },
     {
       "identity": {
@@ -783,5 +825,101 @@
       "nativeCompletionTick": 1199,
       "didWin": true
     }
-  ]
+  ],
+  "currentReleaseBundleRecheck": {
+    "date": "2026-10-15",
+    "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; not an exact 2.0 release package",
+    "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "verifier": "Scripts/verify-golems-phase-alternatives.sh",
+    "result": "failed",
+    "strictDirectRoutes": {
+      "passed": 66,
+      "checked": 68
+    },
+    "otherReplays": {
+      "golemsProfile": {
+        "passed": 5,
+        "checked": 5
+      },
+      "selectedGolemsPack": {
+        "passed": 3,
+        "checked": 7
+      }
+    },
+    "failedRoutes": [
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "expectedSaved": 40,
+        "actualSaved": 20,
+        "routeCoverageImpact": "fresh verified route required; the selected-ordinary witness for this identity also fails the current replay check"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+        "expectedSaved": 40,
+        "actualSaved": 20,
+        "routeCoverageImpact": "fresh verified route required; the selected-ordinary witness for this identity also fails the current replay check"
+      },
+      {
+        "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+        "expectedTerminalStateHash": "f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e",
+        "actualTerminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+        "selectedOrdinaryReplay": "failed with a historical expected-state hash",
+        "refreshedSourceActionReplay": {
+          "status": "strict pass",
+          "replaySHA256": "5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584",
+          "outcome": "38/36 in 1465 ticks"
+        },
+        "routeCoverageImpact": "a current strict winning route is recorded; per-state parity against the source engine remains unverified"
+      },
+      {
+        "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+        "expectedTerminalStateHash": "f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e",
+        "actualTerminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+        "selectedOrdinaryReplay": "failed with a historical expected-state hash",
+        "refreshedSourceActionReplay": {
+          "status": "strict pass",
+          "replaySHA256": "9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52",
+          "outcome": "38/36 in 1465 ticks"
+        },
+        "routeCoverageImpact": "a current strict winning route is recorded; per-state parity against the source engine remains unverified"
+      }
+    ],
+    "interpretation": "This focused check is against the locally installed 1.9.1 build 76 resource set, not the exact 2.0 package. Two source-rule phase-shift replays for Magical World still save 20/40. Two Deep Deep Down source-action replays now pass strict verification after their runtime-generated expected state hashes were refreshed; their 38/36 saved counts and one-tick source-header offsets match the published input, but per-state source parity is not measured. Four historical selected-ordinary rows still fail: two Builder rejections and two stale expected hashes. The full current-source audit reran all 6,020 bundled levels at the same commit. It confirms 2,399 strict fan-route wins, 3,600 levels without matching candidates and 21 failed replay levels. Exact 2.0 package verification remains open.",
+    "selectedOrdinaryRouteRecheck": {
+      "passed": 3,
+      "checked": 7,
+      "failedRoutes": [
+        {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        },
+        {
+          "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        },
+        {
+          "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+          "observation": "historical selected-ordinary expected stateHash f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e differs from current result c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "routeStatus": "selected-ordinary row fails; refreshed published-source phase-shift replay passes strict verification"
+        },
+        {
+          "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+          "observation": "historical selected-ordinary expected stateHash f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e differs from current result c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "routeStatus": "selected-ordinary row fails; refreshed published-source phase-shift replay passes strict verification"
+        }
+      ]
+    },
+    "freshBuild": {
+      "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "toolchain": "Xcode 26.6, Swift 6.3.3",
+      "verifierSHA256": "3ade1a95124126063ba21686486039c631aa9f99cda6e312865cad2fdda4340a",
+      "nxlvKitLibrarySHA256": "c90b1fa0df0c363a5fdefe9975ae88b700278b85d1ddbcc66c530f9afa27f18c",
+      "strictDirectRoutes": "66/68 passed",
+      "additionalProfileReplays": "5/5 passed",
+      "selectedGolemsRows": "3/7 passed"
+    }
+  }
 }

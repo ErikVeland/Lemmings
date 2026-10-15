@@ -21,7 +21,8 @@ extension MenuAudit {
         var renders = 0
         for (pose, viewport) in [("phone", CGSize(width: 390, height: 763)), ("narrow", CGSize(width: 320, height: 548)),
                                   ("landscape", CGSize(width: 756, height: 369)), ("ipad", CGSize(width: 1112, height: 814)),
-                                  ("tv", CGSize(width: 1920, height: 1080))] {
+                                  ("tv", CGSize(width: 1920, height: 1080)), ("tv-hd", CGSize(width: 1280, height: 720)),
+                                  ("tv-safe", CGSize(width: 1920, height: 1080))] {
             for mode in SolutionReplayMode.allCases {
                 for (index, tick) in states.enumerated() {
                     guard replay.seekReplay(to: tick) else { throw invalidTargets(line: #line) }
@@ -37,25 +38,43 @@ extension MenuAudit {
                            .init("previous", "Previous move", enabled: moves.target(from: tick, direction: -1) != nil),
                            .init("next", "Next move", enabled: moves.target(from: tick, direction: 1) != nil),
                            .init("play", session.snapshot.isComplete ? "Replay" : "Play", primary: true)]
-                    let selectorScale: CGFloat = pose == "tv" ? 2 : 1
-                    let selectorWidth = min(viewport.width - 16, 320 * selectorScale)
-                    let selectorHeight: CGFloat = mode == .game ? 100 : 48
-                    let selector = CGRect(x: (viewport.width - selectorWidth) / 2, y: 8, width: selectorWidth, height: selectorHeight * selectorScale)
-                    let switchFrame = CGRect(x: selector.minX, y: selector.minY, width: selector.width, height: 48 * selectorScale)
-                    let bodyHeight = viewport.height - selector.maxY - 8
-                    let scale = MobilePauseArt.interfaceScale(.standard, width: viewport.width, height: bodyHeight, television: pose == "tv")
-                    let page = MobilePauseArt.page(summary, actions: actions)
-                    let base = GameFrontEnd.layout(page, width: viewport.width / scale, minimumHeight: bodyHeight / scale)
-                    let layout = MobilePauseArt.pinningFooter(base, viewport: CGRect(x: 0, y: 0, width: viewport.width / scale, height: bodyHeight / scale))
-                    for (value, frame) in zip(SolutionReplayMode.allCases, SolutionSwitchArt.frames(in: switchFrame)) {
-                        guard frame.height >= 44, frame.width >= 44,
-                              SolutionSwitchArt.mode(at: CGPoint(x: frame.midX, y: frame.midY), in: switchFrame) == value,
-                              typography.width(of: value == .game ? "Your game" : "Solution", face: .small, scale: 1) <= frame.width - 16 else { throw invalidTargets(line: #line) }
-                    }
-                    let selectorBounds = CGRect(x: 0, y: 0, width: selector.width / selectorScale, height: 48)
-                    guard SolutionSwitchArt.mode(at: CGPoint(x: selectorBounds.midX, y: selectorBounds.midY), in: selectorBounds) == nil
+                    let style: MobileSolutionSelectorArt.Style = pose.hasPrefix("tv") ? .television : .touch
+                    let region = pose == "tv-safe" ? CGRect(x: 96, y: 54, width: 1728, height: 972)
+                        : CGRect(origin: .zero, size: viewport)
+                    let presentation = MobileSolutionSelectorArt.presentation(in: region,
+                        showsGhost: mode == .game, style: style)
+                    let selector = presentation.controls, selectorScale = presentation.scale
+                    let selectorLayout = MobileSolutionSelectorArt.layout(width: selector.width / selectorScale,
+                        showsGhost: mode == .game, style: style)
+                    let body = presentation.content
+                    guard region.contains(selector), region.contains(body), !selector.intersects(body)
                     else { throw invalidTargets(line: #line) }
+                    let bodyHeight = body.height
+                    let scale = MobilePauseArt.interfaceScale(.standard, width: body.width, height: bodyHeight, television: pose.hasPrefix("tv"))
+                    let page = MobilePauseArt.page(summary, actions: actions)
+                    let base = MobilePauseArt.layout(page, width: body.width / scale,
+                        minimumHeight: bodyHeight / scale, television: pose.hasPrefix("tv"))
+                    let layout = MobilePauseArt.pinningFooter(base, viewport: CGRect(x: 0, y: 0, width: body.width / scale, height: bodyHeight / scale))
+                    if pose.hasPrefix("tv"), let shelf = layout.targets.map(\.frame.minY).min() {
+                        guard layout.preview.maxY < shelf,
+                              layout.details.prefix(11).allSatisfy({ $0.maxY < shelf })
+                        else { throw invalidTargets(line: #line) }
+                    }
+                    for (targetIndex, frame) in selectorLayout.targets.enumerated() {
+                        guard frame.height * selectorScale >= 44, frame.width * selectorScale >= 44,
+                              CGRect(origin: .zero, size: selectorLayout.size).contains(frame),
+                              !selectorLayout.targets.enumerated().contains(where: { $0.offset != targetIndex && $0.element.intersects(frame) })
+                        else { throw invalidTargets(line: #line) }
+                    }
+                    if let ghost = selectorLayout.ghost {
+                        guard ghost.width == selectorLayout.size.width,
+                              typography.width(of: "Ghost solution", face: .small, scale: 1) <= ghost.width - 128
+                        else { throw invalidTargets(line: #line) }
+                    }
                     for target in layout.targets {
+                        if pose.hasPrefix("tv") {
+                            guard target.frame.maxY * scale <= bodyHeight else { throw invalidTargets(line: #line) }
+                        }
                         guard GameTextLayout.height(target.action.title, width: target.frame.width - (target.action.primary ? 48 : 24)) <= target.frame.height - 8,
                               layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
                         else { throw invalidTargets(line: #line) }
@@ -66,14 +85,12 @@ extension MenuAudit {
                     context.translateBy(x: 0, y: viewport.height); context.scaleBy(x: 1, y: -1)
                     context.saveGState()
                     context.translateBy(x: selector.minX, y: selector.minY); context.scaleBy(x: selectorScale, y: selectorScale)
-                    SolutionSwitchArt.draw(mode: mode, in: CGRect(x: 0, y: 0, width: selector.width / selectorScale, height: 48), typography: typography, context: context)
-                    if mode == .game {
-                        let ghostFrame = CGRect(x: 0, y: 56, width: selector.width / selectorScale, height: 44)
-                        guard typography.width(of: "Ghost solution", face: .small, scale: 1) <= ghostFrame.width - 52 else { throw invalidTargets(line: #line) }
-                        GhostSolutionArt.draw(enabled: index % 2 == 1, in: ghostFrame, typography: typography, context: context)
-                    }
+                    MobileSolutionSelectorArt.draw(mode: mode, ghostEnabled: index % 2 == 1,
+                        focusedIndex: pose.hasPrefix("tv") && index > 0
+                            ? (index == 2 && mode == .game ? 2 : min(index - 1, selectorLayout.targets.count - 1)) : nil,
+                        layout: selectorLayout, typography: typography, context: context)
                     context.restoreGState()
-                    context.translateBy(x: 0, y: selector.maxY + 8); context.scaleBy(x: scale, y: scale)
+                    context.translateBy(x: body.minX, y: body.minY); context.scaleBy(x: scale, y: scale)
                     let frame = MobileBitmapRenderer.image(try session.render(highlight: nil))
                     GameFrontEnd.draw(page, layout: layout, typography: typography, preview: frame, in: context)
                     guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(

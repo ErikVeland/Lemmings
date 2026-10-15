@@ -6,6 +6,47 @@ import Testing
 
 struct MobileLearningTests {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    @Test func oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() throws {
+        let temporary = try AppStorage.temporary(named: "tv-journey-wall")
+        defer { temporary.removeTemporaryFiles() }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        // The actual learning-23 opening bundled in the older TV generation.
+        let oldIDs = ["0:Fun:1:9:1", "Ji Hoon Heaven 1.DAT#5", "1:Fun:2:9:5", "2:Fun:3:9:6",
+            "3:Fun:4:9:2", "4:Fun:5:9:3", "5:Fun:6:9:4", "6:Fun:7:9:7", "4:Tame:5:10:4",
+            "13:Tame:14:11:5", "3:Tame:4:10:3", "10:Fun:11:4:2", "21:Fun:22:1:3", "20:Fun:21:8:4",
+            "34:Tricky:5:3:1", "51:Tricky:22:0:6", "42:Mega Drive Sunsoft:13:0:42", "lm_set08.dat#5",
+            "40:Wild:1:9:2", "47:Tricky:18:9:5", "45:Wild:6:7:5"]
+        let opening = try oldIDs.map { id in try #require(journey.lessons.first { $0.entry.identity.levelID == id }?.entry) }
+        let past = Set(opening.map(\.identity))
+        let entries = opening + journey.lessons.map(\.entry).filter { !past.contains($0.identity) }
+        var state = MobileLearningState()
+        state.run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-23", summary: LearningJourney.title), entries: entries, currentIndex: 20)
+        state.progress.record(opening[0].identity, won: true)
+        state.record(won: false)
+        let original = state
+        var seats = MobileHotSeatStore()
+        let started = seats.start(roster: .init(host: "host", players: ["guest"]))
+        var seat = try #require(started)
+        seat.pass(to: "guest"); seats.update(seat)
+        func files(_ scope: String) -> MobileStorage {
+            .init(directory: temporary.applicationSupport.appendingPathComponent(scope))
+        }
+        try files(seat.scope).save(state, name: "learning")
+        state = try #require(files(seat.scope).load(MobileLearningState.self, name: "learning"))
+        state.run = try journey.migrating(try #require(state.run))
+        try files(seat.scope).save(state, name: "learning")
+        let restored = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files))
+        #expect(restored.seat == seat && restored.seat?.turn == "guest")
+        #expect(restored.state.progress == original.progress)
+        #expect(restored.state.run?.id == original.run?.id)
+        #expect(restored.state.run?.currentIndex == 20)
+        #expect(Array(try #require(restored.state.run).entries.prefix(20)) == Array(entries.prefix(20)))
+        #expect(restored.state.run?.currentEntry.levelNameSnapshot == "Intsy-Wintsy...Lemming?")
+        #expect(try #require(restored.state.run).entries.dropFirst(20).lastIndex { $0.identity == opening[20].identity }! > 80)
+    }
     @Test func oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() throws {
         let journey = try #require(LearningJourneyLibrary.journey(storage: AppStorage(applicationSupport: root, resources: root.appendingPathComponent("Resources"), defaults: .standard)))
         let solo = journey.lessons[0].entry

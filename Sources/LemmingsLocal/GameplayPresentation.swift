@@ -358,13 +358,15 @@ import LemmingsGameArt
 struct PrecisionZoomStatus: Equatable {
   var zoom = 0
   var superzoom = 0
+  var skips = 0
   var active: PrecisionZoomKind?
   var isEmpty = true
 
-  init(zoom: Int = 0, superzoom: Int = 0, active: PrecisionZoomKind? = nil,
+  init(zoom: Int = 0, superzoom: Int = 0, skips: Int = 0, active: PrecisionZoomKind? = nil,
        isEmpty: Bool = true) {
     self.zoom = zoom
     self.superzoom = superzoom
+    self.skips = skips
     self.active = active
     self.isEmpty = isEmpty
   }
@@ -372,32 +374,48 @@ struct PrecisionZoomStatus: Equatable {
   var accessibility: String {
     guard !isEmpty else { return "" }
     let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
-    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)")
+    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(state)")
+  }
+
+  private var rows: [(String, PrecisionZoomKind?)] {
+    [(L10n.text("z - \(zoom)"), .zoom),
+     (L10n.text("Z - \(superzoom)"), .superzoom),
+     (L10n.text("Skips \(skips)"), nil)]
+  }
+
+  private var metrics: (width: Int, rowHeight: Int) {
+    let widths = rows.map { GamePixelTypography.width(of: $0.0) }
+    let heights = rows.map { row in
+      let bounds = GamePixelTypography.verticalBounds(of: row.0)
+      return bounds.bottom - bounds.top
+    }
+    return ((widths.max() ?? 1) + 9, max(11, (heights.max() ?? 7) + 4))
   }
 
   func size(scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count)
-    return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
-                  height: 24 * scale)
+    let metrics = self.metrics
+    return CGSize(width: CGFloat(metrics.width) * scale,
+                  height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
   }
 
   @MainActor @discardableResult
   func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let rows = [(L10n.text("z - \(zoom)"), PrecisionZoomKind.zoom),
-                (L10n.text("Z - \(superzoom)"), PrecisionZoomKind.superzoom)]
-    let badgeSize = size(scale: scale)
+    let rows = self.rows
+    let metrics = self.metrics
+    let badgeSize = CGSize(width: CGFloat(metrics.width) * scale,
+                           height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
     let width = badgeSize.width
-    let rowHeight = 11 * scale
+    let rowHeight = CGFloat(metrics.rowHeight) * scale
     for (index, row) in rows.enumerated() {
       let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
                         width: width, height: rowHeight)
       NSColor.black.withAlphaComponent(0.8).setFill()
       rect.fill()
-      if active == row.1 {
+      if let kind = row.1, active == kind {
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
         NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
@@ -405,7 +423,7 @@ struct PrecisionZoomStatus: Equatable {
         NSGraphicsContext.restoreGraphicsState()
       }
       GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
-        maxScale: scale, palette: active == row.1 ? .green : .blue, preservesCase: true)
+        maxScale: scale, palette: row.1 != nil && active == row.1 ? .green : .blue, preservesCase: row.1 != nil)
     }
     return badgeSize
   }

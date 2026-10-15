@@ -3,9 +3,47 @@
 ## Meaning and scope
 
 The golden path uses an official-heavy selection with no fixed level-count quota.
-Redux supplies the official reference order. Unmatched mainline official variants
-use a cautious upper estimate and retail-rank floor. Measured replay scores stay
-unchanged. Fan bridges need an exact human solution review, comparable reference
+An explicit teaching plan protects the opening from replay estimates and Redux
+counterpart positions. Its 30 beginner lessons cover the original skill tutorials,
+Cellbash, simple native routes and all 20 Tame levels. Fourteen combination and
+building lessons follow before constrained retail puzzles. The exact sources, replays,
+teaching phases and reasons are pinned in `Artifacts/LearningJourney/teaching-plan.json`.
+
+Simple practice requires at most two used skill types, no job changes or measured
+narrow timing, spare used skills and a rescue margin. The Tame levels supply 20
+of every skill, release rate 1 and a 50% rescue target. Elaborate stored replays
+must not push these lessons behind constrained puzzles. Exact builder-only
+routes for Lemming sanctuary in sight and What an AWESOME level add intermediate
+building practice with spare builders, rescue margins and no measured narrow actions.
+Other Tricky and Crazy puzzles start in Difficult. Wild starts at 420, Taxing at 480, and Mayhem, Wicked, Havoc and the
+Sunsoft campaign in Expert. These are editorial safeguards, not measured human
+difficulty. Exact novice discovery and the easiest routes still need playtesting.
+
+The placement pass now uses rescue fraction, available skill types and quantities,
+used-tool reserves, minimum release rate, hatch count, assignments per tick and
+second, distinct worker demand and skill chains. Native source export records
+all hatch counts and release limits. Classic cannot reduce release below the
+authored starting rate. Hatches share one global spawn clock, so extra hatches
+increase coordination demand without multiplying spawn frequency.
+
+Unreviewed routes move to Expert when several pressures combine: near-full rescue
+with exhausted stock or repeated skill changes, a fast minimum rate with little
+recovery margin, multiple hatches with combined work, or dense command bursts
+with tight tools, rescue or timing. Same-tick assignments can use Pause and do
+not prove that physically simultaneous clicks are required. Equal-position
+lessons avoid simultaneous increases across several pressure axes.
+
+Player-reported walls have explicit `tooHardForEarlyJourney` verdicts and later
+placement floors in `Artifacts/LearningJourney/route-safety.json`. They remain
+in the Journey, with easier practice before them. `difficulty-walls.json`
+records the current positions, warning signs, preparation gaps and easier lessons.
+Just A Quicky requires 100% rescue and exhausts four used skill stocks in its
+recorded route. It belongs in Expert, with crowd separation, temporary containment
+and combined route planning prepared beforehand.
+
+Redux supplies comparisons for later puzzles. Unmatched mainline official variants
+use a cautious upper estimate. Measured replay scores stay unchanged.
+Fan bridges need an exact human solution review, comparable reference
 bounds and a real gap between official lessons. Machine estimates alone cannot
 admit fan or NeoLemmix puzzles. Simple artwork and short replays can conceal hard
 discovery or a tricky intended solution.
@@ -14,8 +52,9 @@ Xmas and Holiday levels require an exact human difficulty review before admissio
 Seasonal ranks and matching Redux titles do not certify beginner suitability.
 The owner-confirmed Cellbash practice and official Macintosh port counterpart
 remain explicit exceptions. Reported official walls retain their later placements.
-Older saved journeys remove unvisited retired levels while keeping past visits,
-completed records, run identity and player or Hot Seat ownership. The path uses
+Older saved journeys restore the teaching order of all unvisited lessons,
+including a current puzzle that moved later. They remove unvisited retired levels
+while keeping past visits, completed records, run identity and player or Hot Seat ownership. The path uses
 Classic mechanics. Lemmings 2 and Lemmings 3 retain their own campaigns and queues.
 
 Current selection and evidence are in `Artifacts/LearningJourney`. Reproduce the

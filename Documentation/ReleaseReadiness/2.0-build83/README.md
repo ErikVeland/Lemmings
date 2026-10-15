@@ -85,12 +85,37 @@ again. See [Downloads verification](downloads-final.json).
 
 ## Retained limits
 
-The stricter bundled-content closure remains open. Fan content retains 3,621
-route gaps. Seventy-five bundled NeoLemmix levels reference missing styles,
-and exact-version winning evidence covers 158 levels. L2's golden-talisman ark
-ending, L3 carried-route repair, source-engine fidelity and exposed media/story
-transitions remain unfinished. This release does not claim full campaign or
-bundle closure beyond the accepted existing classifications.
+The stricter bundled-content closure remains open. The full build 83 archive
+passed a replay audit across all 535 fan archives.
+Two additional current-library searches targeted bundled `Lemming Roast` and
+`Only practice`. Neither produced a route. A five-minute continuation from the
+tick-439 `Only practice` state reached tick 834, with 21 released, six lost and
+15 active; it still saved none. A further continuation reached tick 867, with 22
+released, nine lost and 13 active, also with no saves. The one-skill sweep expired
+before it covered all candidates. The strict count remains 3,621 levels without
+verified wins. See the
+[targeted search record](classic-fan-targeted-searches-2026-10-15.json).
+The audit confirms 2,399 wins and 3,621 levels without verified routes. The
+exact build 83 slim archive contains 794 NeoLemmix levels. A source-equivalent
+style scan resolves 719 levels. The other 75 still need community styles. The
+pinned licence does not record rights for those assets. Keep them in bundled
+closure scope while rights are resolved. Exact-version winning evidence covers
+158 levels. The released manifest reports 718. The old resource test expected
+788/713. Current source corrects these counts, but the released package does
+not. Rebuild and audit a package after style rights are resolved. See the
+[Classic fan replay audit](classic-fan-build83-replay.json), [Classic package
+audit](classic-fan-package-audit.json), [NeoLemmix bundle
+audit](neolemmix-bundle-audit.json) and [style rights inventory](neolemmix-style-rights-inventory.json).
+The build 83 L2 app payload now has direct replay evidence. Its 218 staged
+payload files match the retained build 82 manifest and installed build 76 tree.
+The package extraction also contained 14 original DOS interpreter/support files
+that the app packager excludes. The payload route, carry-over, chain and event
+gates pass. The golden-talisman ark ending and source-engine comparisons remain
+open. See the [L2 payload replay](lemmings2-build83-payload-replay.json) and
+[resource equivalence audit](lemmings2-resource-equivalence.json). L3 carried-route repair,
+source-engine fidelity and exposed media/story transitions also remain
+unfinished. This release does not claim full campaign or bundle closure beyond
+the accepted existing classifications.
 
 Physical controller and VoiceOver journeys, audible listening, foreground
 shipping-app launch, minimum-OS and Intel hardware, HDR appearance and live

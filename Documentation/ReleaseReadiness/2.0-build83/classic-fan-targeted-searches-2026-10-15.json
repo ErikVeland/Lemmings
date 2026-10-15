@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "releasePackage": {
+    "asset": "UltimateLemmings-2.0-build83.zip",
+    "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "resources": "/private/tmp/lemmings-bundled-closure/Resources"
+  },
+  "runtime": {
+    "solver": "Tools/ClassicSolver source; retained optimized executable",
+    "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+    "runtimeLibrary": "current-main NxlvKit",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  },
+  "levels": [
+    {
+      "identity": "0003-Anatol00.zip/Anatol00.dat#4",
+      "title": "Lemming Roast",
+      "initialHash": "38e1145c71551b2d7bb9e87991b21a9162646351e443705dd209f2b9035a35c0",
+      "statusBeforeSearch": "rendered-and-smoke-tested-only",
+      "archiveSHA256": "69b7e2e0e7acd0be7f709333e5bdf05749719d47796966d6f461661ee429861f",
+      "attempts": [
+        {
+          "kind": "beam-search",
+          "seconds": 180,
+          "width": 4096,
+          "directExitDistance": true,
+          "rescueQuotaDistance": true,
+          "expanded": 472054,
+          "result": "No win; best state saved 0 of 58 at tick 314 with 10 released, 0 lost and 10 active."
+        }
+      ]
+    },
+    {
+      "identity": "0005-Mikepak00.zip/Mikepak00.dat#0",
+      "title": "Only practice",
+      "initialHash": "c1fe3232b71458dacd0af831335025e4841a96649d13cfade3cf69e6256099fa",
+      "statusBeforeSearch": "rendered-and-smoke-tested-only",
+      "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+      "attempts": [
+        {
+          "kind": "beam-search",
+          "seconds": 120,
+          "width": 2048,
+          "preferProgress": true,
+          "rescueQuotaDistance": true,
+          "expanded": 327786,
+          "result": "No win; best state saved 0 of 30 at tick 364 with 9 released, 1 lost and 8 active."
+        },
+        {
+          "kind": "single-skill-sweep",
+          "seconds": 120,
+          "assignmentsCompleted": 6480,
+          "assignmentsStarted": 6481,
+          "deadlineExpired": true,
+          "lastWaitingTick": 293,
+          "result": "No win before the deadline; the sweep did not cover its full candidate set."
+        },
+        {
+          "kind": "beam-search-continuation",
+          "prefixReachedTick": 439,
+          "seconds": 300,
+          "width": 512,
+          "directExitDistance": true,
+          "rescueQuotaDistance": true,
+          "expanded": 650010,
+          "result": "No win; best state reached tick 834 with 21 released, 6 lost and 15 active."
+        },
+        {
+          "kind": "beam-search-continuation",
+          "prefixReachedTick": 834,
+          "seconds": 190,
+          "width": 512,
+          "directExitDistance": true,
+          "rescueQuotaDistance": true,
+          "expanded": 516941,
+          "result": "No win; best state reached tick 867 with 22 released, 9 lost and 13 active. Search stopped at its internal limit."
+        }
+      ]
+    }
+  ],
+  "outcome": "No verified route was found. The bundled route count remains 2,399 of 6,020, with 3,621 levels without verified wins.",
+  "limits": "These searches do not prove either level is unsolvable. The Only practice one-skill sweep did not cover its full candidate set. No route fixture or engine source changed."
+}

@@ -33,10 +33,11 @@ source += '\nlet suite = TVControllerBindingsTests()\n' + '\n'.join(f'suite.{met
 source += '\nprint("PASS TV controller, Circle, Menu, boost, rewind takeover, neutral handover and preferences")\n'
 Path(sys.argv[1]).write_text(source)
 PY
-for entry in "$build_dir/main.swift" Tests/TVExperienceTests/main.swift Tools/TVConsoleAudit/main.swift; do
+for entry in "$build_dir/main.swift" Tests/TVExperienceTests/main.swift Tools/TVConsoleAudit/main.swift Tests/TVPerformanceTests/main.swift; do
     task_name="${entry:h:t}"
     task_flags=()
     if [[ "$entry" != "$build_dir/main.swift" ]]; then task_flags=(-parse-as-library); fi
+    if [[ "$entry" == Tests/TVPerformanceTests/main.swift ]]; then task_flags+=(-O); fi
     swiftc -swift-version 6 "${task_flags[@]}" -module-cache-path "$build_dir/ModuleCache" \
         -I "$build_dir/Modules" -L "$build_dir" "${task_libraries[@]}" \
         -Xlinker -rpath -Xlinker "$build_dir" "$entry" -o "$build_dir/$task_name-tests"

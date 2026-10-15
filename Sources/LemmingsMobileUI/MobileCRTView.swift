@@ -30,6 +30,7 @@ import UIKit
     private var bloomDirty = true
     private var bloomGamma: Float = .nan
     var selection: LemmingSelectionEffect?
+    var failureAmount: CGFloat = 0 { didSet { if oldValue != failureAmount { setNeedsDisplay() } } }
     private var selectionRenderer: LemmingSelectionRenderer?
     private(set) var tubeSettings = CRTSettings.amiga1084
 
@@ -210,6 +211,8 @@ import UIKit
         submissionDeferred = false
         let source = slot.source, flash = slot.flash
         let budget = MobileDevicePerformance.presentation
+        uniform.saturation = tubeSettings.saturation * FailureMoodArt.saturation(failureAmount)
+        uniform.brightness = tubeSettings.brightness * FailureMoodArt.brightness(failureAmount)
         uniform.bloomAmount = budget.bloomAllowed ? tubeSettings.bloomAmount : 0
         #if os(tvOS)
         uniform.bloomAmount = budget.televisionBloomAllowed ? tubeSettings.bloomAmount : 0

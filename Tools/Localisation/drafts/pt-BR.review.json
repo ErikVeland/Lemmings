@@ -20,16 +20,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/pt-BR.json",
-    "sha256": "923e2e49860a877d8e79f39b268363886f62708457d4478b31c9f0424c1dc261",
-    "entry_count": 3133,
+    "sha256": "c7ddd814d8a05dc7e9e9cfa9fd9e25ef8bb500c439ded669c32821af3b4468e6",
+    "entry_count": 3160,
     "missing_current_text_count": 0,
     "unknown_text_key_count": 0,
     "obsolete_key_count": 0
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "text_count": 3133,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "text_count": 3160,
     "plural_count": 8
   },
   "candidate": {
@@ -231,7 +231,16 @@
     "missing_plural_count": 0,
     "placeholder_or_format_errors": 0,
     "unchanged_text_review_required": 0,
-    "note": "Structural validator passes for pt-BR: 3,130/3,130 text keys and 8/8 plural entries. AI output remains unapproved; validation does not establish linguistic, font, layout, accessibility or platform acceptance."
+    "note": "Structural validator passes for pt-BR: 3,130/3,130 text keys and 8/8 plural entries. AI output remains unapproved; validation does not establish linguistic, font, layout, accessibility or platform acceptance.",
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "c7ddd814d8a05dc7e9e9cfa9fd9e25ef8bb500c439ded669c32821af3b4468e6",
+    "complete": true
   },
   "remaining_work": [
     "The unchanged-text reasons have been integrated into Tools/Localisation/unchanged.json and the pack validator now passes.",
@@ -313,12 +322,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "923e2e49860a877d8e79f39b268363886f62708457d4478b31c9f0424c1dc261",
-    "runtime_strings_sha256": "6b7a0bab93d78b2becd3d8abc739384e02f183c484cbccb71204e7a76c13da62",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "c7ddd814d8a05dc7e9e9cfa9fd9e25ef8bb500c439ded669c32821af3b4468e6",
+    "runtime_strings_sha256": "6e63da8781c06da6ea274ad07dabc1639cab8e18a5cb8eef21a755597cc75980",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

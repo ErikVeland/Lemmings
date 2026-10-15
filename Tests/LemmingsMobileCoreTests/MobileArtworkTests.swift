@@ -33,14 +33,14 @@ struct MobileArtworkTests {
         let game = ClassicMobileSession(simulation: simulation, renderedLevel: rendered, assets: assets, palette: palette,
             levelIdentifier: "fixture", levelIndex: 0, authoredLevel: level, ground: ground, artworkFamily: "lemmings", artworkRoot: bundle)
         for _ in 0..<120 { game.tick() }
-        let runningState = try game.checkpointPayload()
+        let runningState = try #require(JSONSerialization.jsonObject(with: game.checkpointPayload()) as? NSDictionary)
         var switchedFrames = Set<Data>()
         for source in [ClassicGraphicsSource.amiga, .macintosh, .macintoshMonochrome, .dosVGA, .amiga] {
             var settings = ClassicSettings(); settings.graphics = source; settings.colorDepth = .full
             game.applySettings(settings)
             let frame = try game.render(highlight: nil)
             #expect(frame.width == rendered.width * (source == .dosVGA ? 1 : 2))
-            #expect(try game.checkpointPayload() == runningState)
+            #expect(try JSONSerialization.jsonObject(with: game.checkpointPayload()) as? NSDictionary == runningState)
             switchedFrames.insert(frame.rgba)
         }
         #expect(switchedFrames.count == 4)

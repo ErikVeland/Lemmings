@@ -173,12 +173,14 @@
       throw IntegrationFailure(message: "Missing Settings page")
     }
     func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
-    guard let tabs = descendants(page).compactMap({ $0 as? NSTabView }).first,
-      let control = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Static home screen" }) else {
-      throw IntegrationFailure(message: "Missing Static Home control")
+    guard let tabs = descendants(page).compactMap({ $0 as? NSTabView }).first else {
+      throw IntegrationFailure(message: "Missing Settings tabs")
     }
     tabs.selectTabViewItem(at: 5)
     page.layoutSubtreeIfNeeded()
+    guard let control = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Static home screen" }) else {
+      throw IntegrationFailure(message: "Missing Static Home control")
+    }
     control.scrollToVisible(control.bounds)
     try check(control.state == .off && control.accessibilityLabel() == "Static home screen",
       "Static Home default or accessibility name is wrong")
@@ -187,8 +189,9 @@
       page.layoutSubtreeIfNeeded()
       try check(preferences.current.staticHomeScreen == enabled && !preferences.current.reduceMotion,
         "Static Home control changed Reduce Motion")
-      let image = ReplayFrameCapture.image(size: page.bounds.size) { ReplayFrameCapture.draw(page, in: page.bounds) }!
-      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(
         to: folder.appendingPathComponent("static-home-\(enabled).png"))
       for point in [CGPoint(x: 10, y: control.bounds.midY), CGPoint(x: control.bounds.maxX - 8, y: control.bounds.midY)] {
         try check(page.hitTest(control.convert(point, to: page)) === control,

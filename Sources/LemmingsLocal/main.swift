@@ -1089,7 +1089,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// already enlarged picture produces one scan line per screen row instead of
   /// one per game row, which is both wrong and invisible.
   private func applyDisplayMode() {
-    defer { GameScreen.shared.reattach() }
+    defer {
+      if !sequelIsActive { LevelHintWindow.shared.reattachSolutionSelector(to: window) }
+      GameScreen.shared.reattach()
+    }
     guard !sequelIsActive else { return }
     // The tube stands in for the screen the game was played on, so it applies
     // to the game. Menus stay flat.
@@ -1275,8 +1278,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   ///
   /// Only the parts the engine can honour today are acted on. A control that
   /// changed nothing would be worse than one that is absent.
-  private func apply(_ updated: ClassicSettings) {
-    let artworkChanged = settings.graphics != updated.graphics
+  private func apply(_ updated: ClassicSettings, forceArtworkRefresh: Bool = false) {
+    let artworkChanged = forceArtworkRefresh || settings.graphics != updated.graphics
     let musicChanged = settings.music != updated.music || settings.shuffleMusic != updated.shuffleMusic
     let djPoolChanged = settings.djIncludesOtherSoundtracks != updated.djIncludesOtherSoundtracks
     let classicUnlockChanged = settings.unlockAllClassicLevels != updated.unlockAllClassicLevels
@@ -1536,6 +1539,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             runID: sequenceRunID) ?? true
         }
         setSequencePlayingIdentity(sequenceIdentity)
+        next.learningResultActions = learningResultActions(runID: sequenceRunID, level: sequenceIdentity)
       }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
@@ -1603,6 +1607,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             runID: sequenceRunID) ?? true
         }
         setSequencePlayingIdentity(sequenceIdentity)
+        next.learningResultActions = learningResultActions(runID: sequenceRunID, level: sequenceIdentity)
       }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
@@ -2460,6 +2465,27 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// The artwork in force, which is the shuffled choice when there is one.
   private var activeGraphics: ClassicGraphicsSource { levelGraphics ?? settings.graphics }
+  private var gameplayGraphics: [ClassicGraphicsSource] {
+    let available = settingsOptions().graphics
+    if session is NeoLemmixSession {
+      return available.filter { $0 == .dosVGA || $0 == .macintosh }
+    }
+    return available
+  }
+
+  private func cycleGameplayGraphics() {
+    let choices = gameplayGraphics
+    guard choices.count > 1 else { return }
+    let current = session is NeoLemmixSession
+      ? (playfield.neoMacArtworkEnabled ? ClassicGraphicsSource.macintosh : .dosVGA) : activeGraphics
+    let next = choices[((choices.firstIndex(of: current) ?? -1) + 1) % choices.count]
+    var updated = settings
+    updated.graphics = next
+    // Override this level's shuffled artwork. Future levels still honour Shuffle.
+    levelGraphics = nil
+    apply(updated, forceArtworkRefresh: true)
+    settingsWindow?.update(options: settingsOptions(), settings: settings)
+  }
   private var musicTitle: ClassicTitle? {
     guard !fanPlaying, currentNxlvURL == nil,
       dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return nil }
@@ -4588,9 +4614,36 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func showLearningHints() {
     guard isLearningJourneyActive else { return }
+    if let nativeL2Window { nativeL2Window.showLearningHints(); return }
+    if let nativeL3Window { nativeL3Window.showLearningHints(); return }
     if session?.isComplete == true { retry() }
     isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
     showLevelHints()
+  }
+
+  private func learningResultActions(runID: UUID, level: LevelCatalogueIdentity) -> LearningJourneyResultActions? {
+    guard isLearningJourneyActive, let store = sequencePlaylistStore,
+          store.activeRun?.id == runID, store.activeRun?.currentEntry.identity == level else { return nil }
+    var advanced = false
+    return LearningJourneyResultActions(prepareSkip: { [weak self] in
+      guard let self, self.sequencePlaylistStore === store,
+            self.isLearningJourneyActive, store.activeRun?.id == runID,
+            store.activeRun?.currentEntry.identity == level else { throw LevelPlaylistStore.Failure.invalidDocument }
+      advanced = try store.advanceLearningJourney(runID: runID, won: false)
+    }, skip: { [weak self] in
+      guard let self else { return }
+      // The result has already charged the attempt owner and passed the turn.
+      do { try self.saveCloudLearning(store) }
+      catch { self.setStatus(L10n.text("Could not sync journey: \(error.localizedDescription)")) }
+      if advanced { self.sequencePlaylistStore = store; self.startActiveSequence() }
+      else {
+        self.returnToLibrary()
+        do { try store.setActiveRun(nil) }
+        catch { self.setStatus(error.localizedDescription) }
+        self.presentLearningJourney()
+      }
+    }, later: { [weak self] in self?.deferLearningLevel(runID: runID, level: level) },
+       hints: { [weak self] in self?.showLearningHints() })
   }
 
   private func deferLearningLevel(runID: UUID, level: LevelCatalogueIdentity) {
@@ -6649,6 +6702,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       fitClassicDisplay()
       playfield.needsDisplay = true; panel.needsDisplay = true
       window.title = L10n.text("Ultimate Lemmings — \(level.title)")
+      applyDisplayMode()
+      gameplayKeyboard?.focusGameplay(tubeIsActive ? crtView : playfield)
       return true
     } catch {
       setStatus(L10n.text("NeoLemmix error: \(error)"))
@@ -6822,7 +6877,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Draws whichever screen the game is on.
   private func renderScreen() {
-    defer { applyDisplayMode() }
+    let previousPhase = phase
+    defer {
+      applyDisplayMode()
+      if previousPhase != .playing, phase == .playing {
+        gameplayKeyboard?.focusGameplay(tubeIsActive ? crtView : playfield)
+      }
+    }
     guard let flow else { return }
     playfield.overlayShowsSettingsButton = false
     if !sequelIsActive {
@@ -7550,7 +7611,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused
       && session?.isComplete == false && !GameScreen.shared.isPresented
     guard let point = pointerCapture.update(in: root, active: active) else { return }
-    if gameplayKeyboard?.navigationFrame(in: root)?.contains(point) == true {
+    if GameCursor.isOverSystemControl(at: point, in: root)
+      || gameplayKeyboard?.navigationFrame(in: root)?.contains(point) == true {
       NSCursor.arrow.set(); playfield.clearPointer(); return
     }
     if tubeIsActive {
@@ -8214,7 +8276,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.setPrecisionZoom(wallet.active != nil, at: point)
     speedControl.bulletTimeActive = wallet.active == .superzoom
     playfield.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
-      superzoom: wallet.remaining(.superzoom), active: wallet.active, isEmpty: false)
+      superzoom: wallet.remaining(.superzoom),
+            skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
+            active: wallet.active, isEmpty: false)
   }
 
   private func setZoom(_ value: Double) {
@@ -8292,6 +8356,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let title = session?.didWin == true
         ? (run.currentIndex + 1 < run.entries.count ? L10n.text("Next level") : L10n.text("Finish run"))
         : L10n.text("Retry level")
+      let learning = learningResultActions(runID: run.id, level: run.currentEntry.identity)
       ArcadeWindow.shared.showResult(
         arcadeReport,
         owner: window,
@@ -8304,8 +8369,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         rewardVolume: effects.muted ? 0 : effects.volume,
         rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
         continueHandlesHandover: true,
-        later: isLearningJourneyActive ? { [weak self] in self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) } : nil,
-        hints: isLearningJourneyActive ? { [weak self] in self?.showLearningHints() } : nil,
+        skip: settings.modernControlsEnabled ? learning?.skip : nil,
+        prepareSkip: learning?.prepareSkip,
+        later: learning?.later, hints: learning?.hints,
         menu: { [weak self] in self?.returnToLibrary() })
       return
     }
@@ -8513,6 +8579,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return true
     }
     keyboard.settings = { [weak self] in self?.showSettings() }
+    keyboard.nextGraphics = { [weak self] in self?.cycleGameplayGraphics() }
+    keyboard.graphicsAvailable = { [weak self] in (self?.gameplayGraphics.count ?? 0) > 1 }
+    keyboard.graphicsName = { [weak self] in
+      guard let self else { return "" }
+      let source = self.session is NeoLemmixSession
+        ? (self.playfield.neoMacArtworkEnabled ? ClassicGraphicsSource.macintosh : .dosVGA) : self.activeGraphics
+      return source.displayName
+    }
     keyboard.djShuffle = { [weak self] in self?.shuffleMusic() }
     keyboard.pauseOnInterruption = { [weak self] in self?.settings.pauseOnInterruption ?? true }
     keyboard.onInterruption = { [weak self] in self?.interruptGameplay() }

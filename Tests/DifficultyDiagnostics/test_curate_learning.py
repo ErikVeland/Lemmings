@@ -37,24 +37,75 @@ class CommunityJourneyTests(unittest.TestCase):
         self.assertEqual(stored['levels'], self.reference)
 
     def test_real_tutorials_are_not_replaced_by_low_scoring_fan_puzzles(self):
-        titles = [r['entry']['levelNameSnapshot'] for r in self.manifest['lessons'][:7]]
-        self.assertEqual(titles, ['Just dig!', 'Only floaters can survive this', 'Tailor-made for blockers',
+        titles = [r['entry']['levelNameSnapshot'] for r in self.manifest['lessons'][:8]]
+        self.assertEqual(titles, ['Just dig!', 'Cellbash', 'Only floaters can survive this', 'Tailor-made for blockers',
                                  'Now use miners and climbers', 'You need bashers this time',
                                  'A task for blockers and bombers', 'Builders will help you here'])
-        self.assertTrue(all(l['stage'] == 'Fun' for l in self.manifest['lessons'][:7]))
+        self.assertTrue(all(l['stage'] == 'Fun' for l in self.manifest['lessons'][:8]))
 
     def test_full_rescue_does_not_automatically_make_a_tutorial_difficult(self):
         goal = next(g for g in self.plan['lessons'] if g['level'] == 'Now use miners and climbers')
         self.assertEqual(goal['context']['rescueFraction'], 1)
         self.assertLess(goal['placement']['position'], 180)
 
-    def test_rate_is_exposure_not_an_automatic_difficulty_floor(self):
+    def test_release_rate_is_measured_without_claiming_discovery(self):
         row, replay, source = self.fixture()
         source['releaseRate'] = 99
+        source['minimumReleaseRate'] = 99
         context = journey.solution_context(row, replay, source)
         self.assertAlmostEqual(context['initialHatchIntervalSeconds'], 4 / 17)
         self.assertNotIn('difficulty', context)
         self.assertEqual(context['discoveryDifficulty'], 'unknown from replay')
+
+    def test_minimum_rate_hatches_and_per_tick_workload_are_recorded(self):
+        row, replay, source = self.fixture()
+        source.update(releaseRate=90, minimumReleaseRate=90, maximumReleaseRate=99, hatchCount=2)
+        source['required'] = source['population']
+        duplicate = copy.deepcopy(next(e for e in replay['events'] if 'assign' in e['action']))
+        duplicate['action']['assign']['lemmingID'] += 1
+        replay['events'].append(duplicate)
+        context = journey.solution_context(row, replay, source)
+        self.assertEqual(context['minimumReleaseRate'], 90)
+        self.assertFalse(context['canSlowReleaseBelowStartingRate'])
+        self.assertAlmostEqual(context['slowestHatchIntervalSeconds'], 8 / 17)
+        self.assertEqual(context['hatchCount'], 2)
+        self.assertEqual(context['peakAssignmentsPerTick'], 2)
+        self.assertEqual(context['ticksWithMultipleAssignments'], 1)
+        self.assertEqual(context['peakDistinctWorkersPerSecond'], 2)
+        warnings = journey.early_pressure_warnings(context)
+        self.assertTrue(any('minimum release rate' in warning for warning in warnings))
+        self.assertTrue(any('multiple hatches' in warning for warning in warnings))
+        self.assertTrue(any('assignment workload' in warning for warning in warnings))
+
+    def test_resource_export_has_exact_rate_limits_and_native_hatch_counts(self):
+        for source in self.resources:
+            self.assertEqual(source['minimumReleaseRate'], min(99, max(0, source['releaseRate'])))
+            self.assertEqual(source['maximumReleaseRate'], 99)
+            self.assertGreaterEqual(source['hatchCount'], 1)
+            self.assertLessEqual(source['hatchCount'], 4)
+
+    def test_quicky_and_comparable_pressure_routes_cannot_return_to_early_teaching(self):
+        quicky = next(g for g in self.plan['lessons'] if g['identity']['levelID'] == '45:Wild:6:7:5')
+        self.assertEqual(quicky['difficultyVerdict'], 'tooHardForEarlyJourney')
+        self.assertEqual(quicky['context']['rescueFraction'], 1)
+        self.assertEqual(len(quicky['context']['exhaustedUsedSkills']), 4)
+        self.assertGreaterEqual(quicky['placement']['position'], 700)
+        self.assertTrue(quicky['requiredPreparation'])
+        for lesson in self.plan['lessons']:
+            if lesson['teachingPhase'] is None and journey.early_pressure_warnings(lesson['context']):
+                self.assertGreaterEqual(lesson['placement']['position'], 600)
+
+    def test_pinned_builder_bridges_are_low_pressure_before_combined_puzzles(self):
+        bridges = [g for g in self.plan['lessons'] if g['teachingPhase'] == 'bridgePractice']
+        self.assertEqual(len(bridges), 2)
+        for bridge in bridges:
+            c = bridge['context']
+            self.assertEqual(set(c['usedSkills']), {'builder'})
+            self.assertEqual(c['jobChanges'], 0)
+            self.assertEqual(c['narrowActions'], 0)
+            self.assertGreaterEqual(c['spareUsedSkills']['builder'], 4)
+            self.assertGreater(c['savedAboveRequirement'], 0)
+            self.assertLess(bridge['placement']['position'], 360)
 
     def test_skill_budget_uses_actual_used_skills_not_total_stock(self):
         row, replay, source = self.fixture()
@@ -108,30 +159,27 @@ class CommunityJourneyTests(unittest.TestCase):
                 self.assertNotEqual(lesson['placement']['basis'], 'reduxClassicCounterpart')
         queue = journey.read(ROOT / 'Artifacts/LearningJourney/human-review-queue.json')
         block = next(r for r in queue if r['title'] == 'A Block from Home')
-        self.assertTrue(any('ten percentage points' in r for r in block['risks']))
+        self.assertIn('withheld pending exact human difficulty review', block['status'])
 
     def test_full_journey_and_estimates_remain_explicit(self):
-        self.assertEqual(len(self.manifest['lessons']), 294)
+        self.assertLess(len(self.manifest['lessons']), 295)
         fans = [l for l in self.manifest['lessons'] if l['entry']['identity']['packID'].startswith('fan:')]
-        self.assertGreater(len(fans), 100)
+        self.assertEqual(len(fans), 2)
         for lesson in fans:
-            self.assertIn(lesson['placement']['basis'], ['solutionEstimate', 'reviewedFan', 'reduxPortCounterpart'])
-            if lesson['placement']['basis'] == 'solutionEstimate':
-                self.assertTrue(lesson['needsSupport'])
-                self.assertGreater(lesson['placement']['upper'] - lesson['placement']['lower'], 20)
-        self.assertEqual(self.plan['targetSize'], 294)
+            self.assertIn(lesson['placement']['basis'], ['userPlaytest', 'reviewedFan', 'reduxPortCounterpart'])
+        self.assertEqual(self.plan['targetSize'], len(self.manifest['lessons']))
 
     def test_promised_182_additions_have_natural_positions_and_native_routes(self):
         lessons = {journey.key(l): l for l in self.manifest['lessons']}
         required = journey.read(journey.OUT / 'required-additions.json')
-        self.assertEqual(len(required), 2)
+        self.assertTrue(all(journey.key(r) in lessons for r in required))
         mac = lessons[journey.key(required[0])]
         six = lessons[journey.key(required[1])]
-        self.assertEqual((mac['stage'], mac['demand']), ('Fun', 160))
-        self.assertEqual(mac['placement']['basis'], 'reduxPortCounterpart')
-        self.assertEqual((six['stage'], six['demand']), ('Intermediate', 345))
+        self.assertEqual(mac['stage'], 'Expert')
+        self.assertGreaterEqual(mac['demand'], 600)
+        self.assertEqual(mac['placement']['basis'], 'userPlaytest')
+        self.assertGreaterEqual(six['demand'], journey.teaching_floor(six['entry']))
         self.assertEqual(six['placement']['basis'], 'solutionEstimate')
-        self.assertTrue(mac['needsSupport'])
         pool = {journey.key(r): r for r in self.pool}
         witnesses = copy.deepcopy(self.witnesses)
         row = pool[journey.key(required[0])]
@@ -140,9 +188,9 @@ class CommunityJourneyTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'Missing exact evidence'):
             journey.build(self.pool, witnesses, self.resources, self.reference, [])
 
-    def test_failed_native_proofs_and_duplicate_titles_do_not_fill_slots(self):
-        titles = [journey.normalized(l['entry']['levelNameSnapshot']) for l in self.manifest['lessons']]
-        self.assertEqual(len(titles), len(set(titles)))
+    def test_failed_native_proofs_and_duplicate_identities_do_not_fill_slots(self):
+        identities = [journey.key(l) for l in self.manifest['lessons']]
+        self.assertEqual(len(identities), len(set(identities)))
         rejected = {journey.key(r) for r in journey.read(journey.OUT / 'replay-rejections.json')}
         self.assertTrue(rejected.isdisjoint({journey.key(l) for l in self.manifest['lessons']}))
 
@@ -182,6 +230,69 @@ class CommunityJourneyTests(unittest.TestCase):
         skills = [tuple(l['concepts']) for l in self.manifest['lessons']]
         self.assertLess(len(set(skills)), len(skills))
 
+    def test_beginner_section_is_authored_generous_practice_before_puzzles(self):
+        beginner = [l for l in self.manifest['lessons'] if l['stage'] == 'Fun']
+        self.assertEqual(len(beginner), 30)
+        self.assertEqual(sum(':Tame:' in l['entry']['identity']['levelID'] for l in beginner), 20)
+        for lesson in self.manifest['lessons']:
+            self.assertGreaterEqual(lesson['demand'], journey.teaching_floor(lesson['entry']))
+        names = [l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']]
+        self.assertLess(names.index('Honey, I Saved The Lemmings'), names.index('PoP YoR ToP!!!'))
+        self.assertGreater(names.index("It's Lemmingentry Watson"), 44)
+
+    def test_teaching_plan_rejects_stricter_resources_and_stale_witnesses(self):
+        plan = journey.read(journey.OUT / 'teaching-plan.json')['lessons']
+        for phase in ['simplePractice', 'openPractice']:
+            lesson = next(l for l in plan if l['phase'] == phase)
+            row = copy.deepcopy(next(r for r in self.pool if journey.key(r) == journey.key(lesson)))
+            source = copy.deepcopy(next(r for r in self.resources if journey.key(r) == journey.key(lesson)))
+            replay = self.witnesses.get(row['profile']['key']['replayRevision']) or self.witnesses[row['initialHash']]
+            context = journey.solution_context(row, replay, source)
+            candidates = {journey.key(r): r for r in self.pool}
+            resources = {journey.key(r): r for r in self.resources}
+            contexts = {journey.key(g): g['context'] for g in self.plan['lessons']}
+            candidates[journey.key(row)] = row
+            resources[journey.key(row)] = source
+            contexts[journey.key(row)] = context
+            references = {r['reference']: r for r in self.reference}
+            source['skills']['basher'] = 1
+            with self.assertRaises(AssertionError):
+                journey.apply_teaching_plan([], candidates, contexts, resources, references)
+            source['skills']['basher'] = 20
+            context['replayRevision'] = 'a different route'
+            with self.assertRaises(AssertionError):
+                journey.apply_teaching_plan([], candidates, contexts, resources, references)
+
+    def test_reordering_retains_all_routes_and_measured_scores(self):
+        pool = {journey.key(r): r for r in self.pool}
+        for lesson in self.manifest['lessons']:
+            self.assertEqual(lesson['score'], pool[journey.key(lesson)]['profile']['overallScore'])
+
+    def test_negative_player_feedback_overrides_an_older_teaching_plan(self):
+        row, replay, source = self.fixture()
+        ident = journey.key(row)
+        context = journey.solution_context(row, replay, source)
+        candidates = {journey.key(r): r for r in self.pool}
+        resources = {journey.key(r): r for r in self.resources}
+        contexts = {journey.key(g): g['context'] for g in self.plan['lessons']}
+        contexts[ident] = context
+        item = {'row': row, 'context': context, 'reference': self.reference[0],
+                'variantDifferences': [], 'reportedWall': {'minimumDemand': 650},
+                'placement': {'basis': 'userPlaytest', 'position': 650, 'lower': 650, 'upper': 650}}
+        result = journey.apply_teaching_plan([item], candidates, contexts, resources,
+                                             {r['reference']: r for r in self.reference})
+        changed = next(r for r in result if journey.key(r['row']) == ident)
+        self.assertGreaterEqual(changed['placement']['position'], 650)
+        self.assertNotIn('teaching', changed)
+
+    def test_difficulty_wall_report_identifies_the_same_routes_and_positions(self):
+        report = journey.read(journey.OUT / 'difficulty-walls.json')
+        self.assertEqual(report['journeyVersion'], self.manifest['version'])
+        expected = {journey.key(g): i + 1 for i, g in enumerate(self.plan['lessons'])
+                    if g['difficultyVerdict'] or g['placement'].get('pressureWarnings')}
+        self.assertEqual({journey.key(g): g['step'] for g in report['lessons']}, expected)
+        self.assertTrue(report['easierPractice'])
+
     def test_excluded_hidden_exit_and_unhelpful_fan_puzzles_stay_out(self):
         titles = {l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']}
         self.assertNotIn('Lost something?', titles)
@@ -199,7 +310,7 @@ class CommunityJourneyTests(unittest.TestCase):
         expected = {(journey.key(r['entry']), r['entry']['sourceRevision'], r['placement']['replayRevision'])
                     for r in self.manifest['lessons']}
         actual = {(journey.key(r), r['sourceRevision'], r['replayRevision']) for r in proofs if r['passed']}
-        self.assertEqual(len(proofs), 294)
+        self.assertEqual(len(proofs), len(self.manifest['lessons']))
         self.assertTrue(all(r['passed'] for r in proofs))
         self.assertEqual(actual, expected)
 

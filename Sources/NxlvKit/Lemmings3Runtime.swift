@@ -332,8 +332,30 @@ public struct Lemmings3Runtime: Sendable {
         x >= 0 && y >= 0 && x < configuration.width && y < configuration.height &&
         attributes[y * configuration.width + x] & 0x20 != 0
     }
+    /// Read eligibility without copying the runtime or changing a lemming.
+    public func canAssign(_ action: Action, to lemming: Lemming) -> Bool {
+        guard !isComplete else { return false }
+        if action == .walker && [.climbing, .shimmying].contains(lemming.state) { return true }
+        if action == .walker && lemming.state == .swimming {
+            return lemming.tool == .swimmer && lemming.quantity >= 2
+        }
+        guard [.walking, .blocking, .building, .digging].contains(lemming.state), isSolid(lemming.x, lemming.y) else { return false }
+        switch action {
+        case .blocker: return lemming.state != .blocking
+        case .use: return canUseTool(lemming, direction: lemming.direction > 0 ? .right : .left)
+        case .drop: return lemming.tool != nil
+        case .walker, .jumper: return true
+        }
+    }
+    public func canUseTool(_ lemming: Lemming, direction: Direction) -> Bool {
+        guard !isComplete, [.walking, .blocking, .building, .digging].contains(lemming.state),
+              let tool = lemming.tool, lemming.quantity > 0,
+              [.bricks, .spade, .sucker, .shimmy, .bomb, .grenade, .hadoken].contains(tool),
+              isSolid(lemming.x, lemming.y), !(tool == .bricks && direction == .down) else { return false }
+        return !(tool == .sucker || tool == .shimmy) || lemming.mobilityTool == nil
+    }
     @discardableResult public mutating func assign(_ action: Action, to id: Int) -> Bool {
-        guard !isComplete, let index = lemmings.firstIndex(where: { $0.id == id }) else { return false }
+        guard let index = lemmings.firstIndex(where: { $0.id == id }), canAssign(action, to: lemmings[index]) else { return false }
         if action == .walker && [.climbing, .shimmying].contains(lemmings[index].state) {
             lemmings[index].state = .falling; lemmings[index].age = 0; lemmings[index].fall = 0
             lemmings[index].mobilityTool = nil; lemmings[index].mobilityTicks = 0
@@ -379,11 +401,8 @@ public struct Lemmings3Runtime: Sendable {
         isComplete = true
     }
     @discardableResult public mutating func useTool(to id: Int, direction: Direction) -> Bool {
-        guard !isComplete, let index = lemmings.firstIndex(where: { $0.id == id }),
-              [.walking, .blocking, .building, .digging].contains(lemmings[index].state),
-              let tool = lemmings[index].tool, lemmings[index].quantity > 0,
-              [.bricks, .spade, .sucker, .shimmy, .bomb, .grenade, .hadoken].contains(tool),
-              isSolid(lemmings[index].x, lemmings[index].y), !(tool == .bricks && direction == .down) else { return false }
+        guard let index = lemmings.firstIndex(where: { $0.id == id }),
+              canUseTool(lemmings[index], direction: direction), let tool = lemmings[index].tool else { return false }
         if tool == .hadoken {
             distract(index)
             let lem = lemmings[index]

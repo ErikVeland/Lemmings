@@ -1,0 +1,28 @@
+{
+  "lemmings": {
+    "winning-replay": 120
+  },
+  "ohNoMoreLemmings": {
+    "winning-replay": 100
+  },
+  "xmasLemmings1991": {
+    "winning-replay": 4
+  },
+  "xmasLemmings1992": {
+    "winning-replay": 4
+  },
+  "holidayLemmings1993": {
+    "winning-replay": 32
+  },
+  "holidayLemmings1994": {
+    "winning-replay": 32
+  },
+  "ohYesMoreLemmings": {
+    "winning-replay": 60
+  },
+  "fan": {
+    "winning-replay": 2399,
+    "rendered-and-smoke-tested-only": 3600,
+    "replay-failed": 21
+  }
+}

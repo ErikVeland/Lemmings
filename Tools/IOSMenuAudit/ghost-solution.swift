@@ -40,7 +40,7 @@ extension MenuAudit {
             live.ghostSolutionEnabled = enabled
             let frame = try live.render(highlight: nil)
             let image = MobileBitmapRenderer.image(frame)!
-            for (name, size, scale) in [("narrow", CGSize(width: 320, height: 548), CGFloat(1)),
+            for (name, size, _) in [("narrow", CGSize(width: 320, height: 548), CGFloat(1)),
                                         ("phone", CGSize(width: 390, height: 763), CGFloat(1)),
                                         ("landscape", CGSize(width: 756, height: 369), CGFloat(1)),
                                         ("ipad", CGSize(width: 1112, height: 814), CGFloat(1)),
@@ -52,14 +52,7 @@ extension MenuAudit {
                 let viewport = MobileViewport(levelSize: live.levelSize, viewSize: .init(width: size.width, height: size.height),
                     origin: live.initialCameraOrigin, zoom: name == "tv" ? 4 : 3)
                 MobileBitmapRenderer.draw(image, viewport: viewport, in: context)
-                let width = min(size.width - 16, 320 * scale)
-                context.translateBy(x: (size.width - width) / 2, y: 8); context.scaleBy(x: scale, y: scale)
-                let switchRect = CGRect(x: 0, y: 0, width: width / scale, height: 48)
-                let toggle = CGRect(x: 0, y: 56, width: width / scale, height: 44)
-                guard toggle.height >= 44, toggle.width >= 44, !toggle.intersects(switchRect),
-                      typography.width(of: "Ghost solution", face: .small, scale: 1) <= toggle.width - 52 else { throw invalidTargets(line: #line) }
-                SolutionSwitchArt.draw(mode: .game, in: switchRect, typography: typography, context: context)
-                GhostSolutionArt.draw(enabled: enabled, in: toggle, typography: typography, context: context)
+                // Replay choices live in the paused panel. Gameplay keeps only the ghost sprites.
                 let destination = CGImageDestinationCreateWithURL(output.appendingPathComponent("\(name)-ghost-\(enabled).png") as CFURL,
                     "public.png" as CFString, 1, nil)!
                 CGImageDestinationAddImage(destination, context.makeImage()!, nil)

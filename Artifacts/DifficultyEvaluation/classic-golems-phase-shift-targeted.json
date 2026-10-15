@@ -1,5 +1,5 @@
 {
-  "description": "Directed -1 native tick trial on 33 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct direct wins were strictly replayed and scored. Two further wins were verified on exact levels in a second bundled pack using matching-titled source actions. These are alternatives until the app selects the same mechanics. Native wins do not prove full source physics parity.",
+  "description": "Directed -1 native tick trial on 33 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct direct wins were strictly replayed and scored. Two further wins were verified on exact levels in a second bundled pack using matching-titled source actions. These are alternatives until the app selects the same mechanics. Native wins do not prove full source physics parity. Original counters describe the archived trial. Current installed-bundle replay status is recorded in currentReleaseBundleRecheck; this is not an exact 2.0 package check.",
   "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
   "directAttempts": 33,
   "directWinningInputs": 15,
@@ -174,7 +174,56 @@
       "sourceActionDerivation": "verified one-tick conversion from archived published replay",
       "sourceActionDerivationVerified": true,
       "sourceOutcomeParity": true,
-      "transferFromAnotherBundledPack": false
+      "transferFromAnotherBundledPack": false,
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "date": "2026-10-15",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "expectedSaved": 40,
+          "actualSaved": 20,
+          "actualOutcome": {
+            "didWin": false,
+            "saved": 20,
+            "lost": 20,
+            "required": 40,
+            "ticks": 1840,
+            "stateHash": "ed8e30ffd65ff9e6f8d4fefd5c305acb71d257a7014739629ae252bbe0a8185c",
+            "initialStateHashMatched": true,
+            "lossPattern": "IDs 0, 2, ..., 38 fell at (667,164); IDs 1, 3, ..., 39 exited at (560,112), except lemming 22 fell at (656,164)."
+          },
+          "builderTimingSweep": {
+            "eventIndexes": [
+              3,
+              4,
+              71,
+              74,
+              76,
+              77
+            ],
+            "originalTicks": [
+              248,
+              272,
+              500,
+              723,
+              953,
+              1176
+            ],
+            "individualTickOffsetsTested": {
+              "minimum": -40,
+              "maximum": 40,
+              "step": 1
+            },
+            "result": "No single Builder-event offset improved the saved count above 20."
+          },
+          "routeCoverageImpact": "no winning native route; the published source-rule replay saves 20/40 and the selected ordinary replay rejects a Builder assignment"
+        },
+        "selectedOrdinaryRouteRecheck": {
+          "status": "failed",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953"
+        }
+      }
     },
     {
       "identity": {
@@ -548,7 +597,22 @@
       "sourceActionDerivation": "verified one-tick conversion from archived published replay",
       "sourceActionDerivationVerified": true,
       "sourceOutcomeParity": false,
-      "transferFromAnotherBundledPack": true
+      "transferFromAnotherBundledPack": true,
+      "currentReleaseBundleRecheck": {
+        "status": "failed",
+        "date": "2026-10-15",
+        "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "observation": {
+          "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+          "expectedSaved": 40,
+          "actualSaved": 20,
+          "routeCoverageImpact": "fresh verified route required; selected-ordinary witness also failed current replay check"
+        },
+        "selectedOrdinaryRouteRecheck": {
+          "status": "failed",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953"
+        }
+      }
     }
   ],
   "attempts": [
@@ -921,5 +985,115 @@
       "nativeCompletionTick": 1732,
       "didWin": true
     }
-  ]
+  ],
+  "currentReleaseBundleRecheck": {
+    "date": "2026-10-15",
+    "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; not an exact 2.0 release package",
+    "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "verifier": "Scripts/verify-golems-phase-alternatives.sh",
+    "result": "failed",
+    "strictDirectRoutes": {
+      "passed": 66,
+      "checked": 68
+    },
+    "otherReplays": {
+      "golemsProfile": {
+        "passed": 5,
+        "checked": 5
+      },
+      "selectedGolemsPack": {
+        "passed": 3,
+        "checked": 7
+      }
+    },
+    "failedRoutes": [
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "expectedSaved": 40,
+        "actualSaved": 20,
+        "routeCoverageImpact": "still open: direct source-rule replay saves 20/40, and the selected ordinary replay rejects Builder for lemming 22 at tick 953"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+        "expectedSaved": 40,
+        "actualSaved": 20,
+        "routeCoverageImpact": "still open: direct source-rule replay saves 20/40, and the selected ordinary replay rejects Builder for lemming 22 at tick 953"
+      }
+    ],
+    "interpretation": "The full-corpus audit remains 2,399/6,020 winning routes. The two Deep Deep Down copies already pass through verified-fan replays; their refreshed source-action phase-shift replays also pass strict verification but add no newly covered level. The two Magical World copies remain unresolved. A 120-second source-prefix continuation search found no route. The selected-ordinary replay records remain invalid for four rows, but only the Magical World levels lack any verified winning route. Exact 2.0 package verification and source-state parity remain open.",
+    "selectedOrdinaryRouteRecheck": {
+      "passed": 3,
+      "checked": 7,
+      "failedRoutes": [
+        {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        },
+        {
+          "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        },
+        {
+          "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+          "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        },
+        {
+          "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+          "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "routeStatus": "no current verified witness in the reviewed phase-shift and selected-ordinary ledgers"
+        }
+      ]
+    },
+    "freshBuild": {
+      "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "toolchain": "Xcode 26.6, Swift 6.3.3",
+      "verifierSHA256": "3ade1a95124126063ba21686486039c631aa9f99cda6e312865cad2fdda4340a",
+      "nxlvKitLibrarySHA256": "c90b1fa0df0c363a5fdefe9975ae88b700278b85d1ddbcc66c530f9afa27f18c",
+      "strictDirectRoutes": "64/68 passed",
+      "additionalProfileReplays": "5/5 passed",
+      "selectedGolemsRows": "3/7 passed"
+    },
+    "refreshedWinningAlternatives": [
+      {
+        "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+        "replaySHA256": "5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584",
+        "status": "strict pass; 38/36 in 1465 ticks",
+        "coverage": "level already passes in verified-fan-replays; this is an alternate witness"
+      },
+      {
+        "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+        "replaySHA256": "9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52",
+        "status": "strict pass; 38/36 in 1465 ticks",
+        "coverage": "level already passes in verified-fan-replays; this is an alternate witness"
+      }
+    ],
+    "selectedOrdinaryRecordFailures": {
+      "passed": 3,
+      "checked": 7,
+      "failedCount": 4,
+      "interpretation": "The selected-ordinary files remain stale or rejected. Their two Deep Deep Down identities have other strict winning witnesses; only the two Magical World identities remain without a win."
+    },
+    "followUpSearches": [
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "method": "ClassicSolver continuation search with the published Golems source-action opening forced through tick 360",
+        "prefixSourceReplaySHA256": "8ea1eae09d7cd7689b90e8cc6133df0fcdfcd814451bf0d613ca7cb684995afd",
+        "prefixThroughTick": 360,
+        "forcedInputCount": 52,
+        "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+        "seconds": 120,
+        "beamWidth": 1024,
+        "ranking": "balanced",
+        "fallback": 24,
+        "refire": 24,
+        "expanded": 318707,
+        "result": "no win; best saved 0/40",
+        "limit": "bounded search only; does not prove the level impossible"
+      }
+    ]
+  }
 }

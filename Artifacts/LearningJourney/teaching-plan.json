@@ -1,0 +1,608 @@
+{
+  "lessons": [
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Fun:1:9:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 5,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "2465bd0927556f786e0804f86d4884c105bbdd03043684163ed4bbe5851817a1",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Just dig!"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Fun:2:9:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 10,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "af565532453e78c49449688a9b375b5a62e298ae683f770794a1afb2504f90c6",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Only floaters can survive this"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Fun:3:9:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 15,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "5a5de0d60caeb6318b00ea76c5e2d35d804457958e8f1edf4bfe679dca4bb042",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Tailor-made for blockers"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Fun:4:9:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 20,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Now use miners and climbers"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Fun:5:9:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 25,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "1081f365263b5e98fdf3bac9c7f54f9f95cb5c4f5a51c258869e6f1d302fe3e0",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "You need bashers this time"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Fun:6:9:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 30,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "50c19af4e7be89ce7e81be7394c8e074c22ea85e9aa2fa4c87ac614e6032a01f",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "A task for blockers and bombers"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Fun:7:9:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "tutorial",
+      "position": 35,
+      "reason": "Original skill tutorial; keep the skill introduction sequence.",
+      "replayRevision": "482793d74cdd349dc82f469ec1e2a7caa6cd698dc3eacdf1a1de5073eb8d62fc",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Builders will help you here"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Tame:4:10:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 45,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "2d17bdaf65e3838d7648b0ef9c324902eddd3c519b05af5b2f558c1e03b295d6",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Downwardly Mobile Lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Tame:6:10:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 52,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "6b01471b14322682468279524360f3efc9c66fe153a41ec78219ab328d1dda81",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Intsy-Wintsy...Lemming?"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Tame:10:11:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 59,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "bfa23db0918a652a752bab4e73a8c09eba6f82e5749530a3e2eca4f62dd9af96",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "New Lemmings On The Block"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "16:Tame:17:12:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 66,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Honey, I Saved The Lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Tame:12:11:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 73,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "3bb889bb9ef184debd1dff9bb1f6cdfd77e6558c11917caee7249cf6941d6c46",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Citizen Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Tame:18:12:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 80,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "f3c28669dde9af8ea5f71e6c617c586e85e9659d75d21a534ac50fde5f4c9835",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Lemmings For Presidents!"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "13:Tame:14:11:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "simplePractice",
+      "position": 87,
+      "reason": "Repeat familiar skills with a simple native route, spare skills and a generous rescue margin.",
+      "replayRevision": "cebe37c3dc66c9da70c6498c4c033339fd8c1ce91c5b7b41b97c3a826ca699b2",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Get a little extra help"
+    },
+    {
+      "focus": "Practise: Basher",
+      "identity": {
+        "engine": "classic",
+        "levelID": "24:Fun:25:6:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "simplePractice",
+      "position": 95,
+      "reason": "Repeat bashing with spare skills and a generous rescue margin.",
+      "replayRevision": "05235c8258b98e53bb9d46c0c09db79ad4d05dad1c7a33d97743863acc50919d",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Lemmings Lemmings everywhere"
+    },
+    {
+      "focus": "Practise: Builder + Basher",
+      "identity": {
+        "engine": "classic",
+        "levelID": "18:Fun:19:5:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "simplePractice",
+      "position": 105,
+      "reason": "Practise a longer bridge with spare builders, slow assignments and a generous rescue margin.",
+      "replayRevision": "bce560b74f7dc55ea9073bba209d25d58f786b1cbd3b3c6e821e83ed465a5827",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Take good care of my Lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Tame:1:10:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 110,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "ee43d6930ea52ed800512413cfec0b697c5a01a8a1cebdef2523f3963445548a",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Down And Out Lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Tame:2:10:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 115,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "f6537b84f479abfe495efb0e0b2f9acdc43f3b55b67d88b70762cb7d6f7be519",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Rent-a-Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Tame:3:10:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 120,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "2179fc80377be6e6d2058df40462539a95da68dfb9cfebe4fbaabe60dce704f5",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Undercover Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Tame:5:10:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 125,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "19a44536ba89397cd5e2cf11860f7acd67df06c23614f056abd63ae48b958209",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Snuggle up to a Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Tame:7:10:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 130,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "06d749e2261143fa5a09aabb313c0019fc358367d466d909449c7c47076c2128",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Who`s That Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Tame:8:10:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 135,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "f2d933f49c3b2f3e3d23f07091ab887be1b5a578d93609940d58f37e41fbdaca",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Dangerzone"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "8:Tame:9:11:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 140,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "e8ea2cda6a7790a099478c46531ef67d902c1c1caff73398a31e9a9db4cdf989",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "And now this..."
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "10:Tame:11:11:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 145,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "2f3fe6fa39333a4f612fccb9b7691accec3670cc7b93dc77d67c560e2fff30dd",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "With Compliments"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Tame:13:11:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 150,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "e03b810e829e9c4a13d1f084ab47d0425a24657f74f5dcd6bcf5fafe3a25b584",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Thunder-Lemmings are go!"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "14:Tame:15:11:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 155,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "e46e348e6481e3588e3f63cfdbc70d5e3e59cf58cd37be8da50f7a9a417b4865",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Not just a pretty Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "15:Tame:16:11:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 160,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "99f22c55461e722c46cf2168bd130afd360611a67f88789173371abbf82505c9",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Gone With The Lemming"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "18:Tame:19:12:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 165,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "65cf59821526b7fc474a1bcf4c55cef39a46868ef3aba5075e00a83d58c2471c",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Lemming Productions Present..."
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "19:Tame:20:12:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "phase": "openPractice",
+      "position": 170,
+      "reason": "Original Tame practice: 20 of every skill, release rate 1 and a 50% rescue target. Replay complexity does not establish the simplest route.",
+      "replayRevision": "7a050c141e2d048120a359bfec84c6b8f8a25d69f4b546bf93448dc0caeaab75",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Custom built for Lemmings"
+    },
+    {
+      "focus": "Practise: Digger + Builder",
+      "identity": {
+        "engine": "classic",
+        "levelID": "10:Fun:11:4:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 180,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "12e339442a8d3798c3b7556881c50ba8fd7b4c4318ed6d3de8d118a8972bc9d0",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Keep your hair on Mr. Lemming"
+    },
+    {
+      "focus": "Practise: Builder + Basher",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Fun:8:0:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 190,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "1187207f784b0490d83b358ae9e43cc8a2c5a8165ca7672532a44755af2f0e80",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Not as complicated as it looks"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "8:Fun:9:1:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 200,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "806b6420ecbfc7325529efc40eb646680d5423745342f6f895c5233ebb1e5488",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "As long as you try your best"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Fun:10:3:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 210,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "ceaa9e1aa054b9a6ec4c1d8378a63bec389653a63a0f0281275842d498086ed7",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Smile if you love lemmings"
+    },
+    {
+      "focus": "Practise: Bomber",
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Fun:18:4:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 220,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "3a90d40344d96b56bab874715c1334304604d4da7acdd07c35dff188245e068d",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Let's block and blow"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "20:Fun:21:8:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 250,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "41fcd30f4adb503083da9bb19f22a4fb7f98ff60a3b08ddf26373d2e4b91680a",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "You Live and Lem"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "19:Fun:20:6:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 260,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "e9dbfc847f4fca7b6b950314a667061e9e9d929033a1562423401f918b77337b",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "We are now at LEMCON ONE"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "21:Fun:22:1:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 270,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "2bd21f87cfdca610d6a96d730f4ebf4024a10f8ab4e0642b01a7260da2452679",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "A Beast of a level"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "27:Fun:28:6:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 300,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "a4cfc8e8a04d4f98f32b3ba3e0a1c7099ab50d2be55e262393cf3e434fb20f03",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "If only they could fly"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "28:Fun:29:6:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 310,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "4d69a9347d5a219997ae28503fe69293ef29def750a7f003d8e12e82e78a1690",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "worra lorra lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "13:Fun:14:1:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 320,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "7359e9a60df8912414a91493f4cf3256fd9768e3efdb514547bce2186348ffd4",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Origins and Lemmings"
+    },
+    {
+      "focus": "",
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Fun:30:8:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "combinations",
+      "position": 330,
+      "reason": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
+      "replayRevision": "bd04d797766fc1f01f8465da4d91bf84f92aa1edf3a841aa5bb09c55de026b57",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Lock up your Lemmings"
+    },
+    {
+      "focus": "Practise: Builder",
+      "identity": {
+        "engine": "classic",
+        "levelID": "37:Tricky:8:4:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "bridgePractice",
+      "position": 345,
+      "reason": "Repeat longer bridge construction before constrained combinations. The exact native route uses only builders, keeps spare builders and a rescue margin, and has no measured narrow action or worker skill changes. Editorial bridge selection; not a novice playtest.",
+      "replayRevision": "bac121a8f199375e390e157e57cfc656b3edb0ae1878e97c578c94e844a8744b",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Lemming sanctuary in sight"
+    },
+    {
+      "focus": "Practise: Builder",
+      "identity": {
+        "engine": "classic",
+        "levelID": "74:Taxing:15:0:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "phase": "bridgePractice",
+      "position": 355,
+      "reason": "Repeat longer bridge construction before constrained combinations. The exact native route uses only builders, keeps spare builders and a rescue margin, and has no measured narrow action or worker skill changes. Editorial bridge selection; not a novice playtest.",
+      "replayRevision": "422dccaeef83807f0b3687c04e9523eca766f75a0b0cb46768360ff186774227",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "What an AWESOME level"
+    }
+  ],
+  "meaning": "Authored teaching order from exact Classic resources and native routes. Editorial selection, not a claim of human difficulty calibration.",
+  "version": "teaching-plan-2"
+}

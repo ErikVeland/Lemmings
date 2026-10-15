@@ -11,21 +11,29 @@ playing well, and the same rules apply in Classic, Lemmings 2 and Lemmings 3.
 - The balance comes from recorded Trolley attempts. Only spent skips are stored,
   in `ArcadeRecords.skippedLevels`.
 
-The result screen shows **+1 SKIP** on the career card for the run that earns a
-skip. The career page shows the balance and three pips. Filled pips count the
+The Mac gameplay badges show the Level Skip balance beside Zoom and Superzoom.
+Every result, including a loss or rewound run, shows all three balances together.
+A newly earned skip automatically opens Rewards earned with **+1 LEVEL SKIP**,
+the qualifying level-count change and the three-level rule. View result returns
+to the result without moving the level or changing the Hot Seat turn.
+The result also shows **+1 SKIP** beside newly earned Zooms and Superzooms, with
+a Rewards earned action to reopen the reasons.
+The career page shows the balance and three pips. Filled pips count the
 three-star levels toward the next skip. Outlined pips show the levels still needed.
 
 ## Spend
 
-**Skip level (N)** appears on a failed result when all these conditions are true:
+**Skip level (N)** appears on an eligible failed result, including at zero.
+At zero, the button stays visible and disabled. Spending requires all these conditions:
 
-1. The level is part of a Classic rank, an L2 tribe or an L3 tribe.
-2. The level is not the game's final Classic level or the last level of an L2 or L3 tribe.
+1. The level is part of a Classic rank, an L2 tribe, an L3 tribe or a Learning journey.
+2. A campaign level is not the game's final Classic level or the last level of an L2 or L3 tribe.
+   The last Learning lesson can be skipped back to the journey hub.
 3. The attempt owner has at least one skip.
 4. Modern controls are on. Old school hides Skip with the other modern controls.
    Earned skips stay saved and return with Modern or Custom.
 
-Playlists, shuffle, fan packs and level-browser practice never offer Skip.
+Other playlists, shuffle, fan packs outside Learning, and level-browser practice never offer Skip.
 They already let the player choose another level.
 
 The result screen spends the skip first and saves the records. If the save fails,
@@ -33,6 +41,19 @@ the campaign does not move and the skip stays unspent. The game then opens the
 next level. The skipped level stays unbeaten. It gives no medal, no rank or tribe
 completion and no campaign pass. An L2 skip carries the whole population forward.
 An L3 skip keeps the current population. Press K to skip from the keyboard.
+
+## Learning journeys
+
+Classic and both sequel engines use the same Learning result actions. A skip
+advances the saved journey once, records the lesson under Try later and leaves
+it unsolved. Try later and Hints remain available. A journey save conflict keeps
+the result open, returns the charged skip and preserves the current turn.
+Cloud sync failure does not reverse a locally saved journey advance.
+
+In Hot Seat, the result charges its attempt owner and passes the turn once under
+both house rules. The next engine opens behind its normal paused Ready handover.
+The shipped curriculum currently contains Classic lessons. Native L2/L3 fixtures
+check the same callbacks and shared saved-journey flow.
 
 ## Refund
 
@@ -51,8 +72,19 @@ behind the Ready page under both house rules.
   refund on a pass, and the result flag for an earned skip.
 - `Tests/ClassicGameFlowTests`, `Tests/Lemmings2RuntimeTests`,
   `Tests/Lemmings3RuntimeTests`: campaign moves and finale guards for each engine.
-- `Tests/AppIntegrationTests` (`testLevelSkipResult`): Classic zero state, solo
-  skip, Hot Seat payer and handover.
+- `TEST_SCOPE=level-skips Scripts/run-app-integration-tests.sh`: campaign zero
+  state, solo skip, Hot Seat payer, Classic/L2/L3 Learning losses, both house
+  rules, saved revisit state, journey-save conflict refunds, paused Ready,
+  compact/large renders and mouse/keyboard/accessibility targets.
+- `Tests/PlayfieldDrawTests`: three resource badge rows and accessible balances.
 
-The L2 and L3 result wiring shares the tested result-screen action. No automated
-test drives a full L2 or L3 skip through the play windows.
+The focused Mac suite passed offscreen with all audio muted. It includes 18
+Learning result captures at compact and large sizes, six reward result captures,
+nine badge states and campaign zero/owned/earned/Hot Seat states. Representative
+Classic/L2/L3 losses, earned rewards and resource badges were visually inspected.
+
+Native L2/L3 Learning checks load each play window, complete a synthetic losing
+simulation and use its production result wiring. Their ordinary campaign Skip
+actions still lack a complete automated play-window traversal. iOS/tvOS resource
+UI and journey skips are unchanged. Foreground gameplay and VoiceOver remain
+manual checks.

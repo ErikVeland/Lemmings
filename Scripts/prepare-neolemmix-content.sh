@@ -76,6 +76,63 @@ for name in stock_sounds:
     shutil.copy2(sample, sound_target / sample.name)
     sound_hashes[sample.name] = hashlib.sha256(sample.read_bytes()).hexdigest()
 
+def parse_sections(text):
+    root = {'keyword': '', 'lines': {}, 'children': []}
+    stack = [root]
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith('#') or line.startswith(';'):
+            continue
+        match = re.match(r'^\$([A-Z_]+)\b', line, re.IGNORECASE)
+        if match and match.group(1).upper() != 'END':
+            section = {'keyword': match.group(1).upper(), 'lines': {}, 'children': []}
+            stack[-1]['children'].append(section)
+            stack.append(section)
+            continue
+        if re.match(r'^\$END\b', line, re.IGNORECASE):
+            if len(stack) > 1:
+                stack.pop()
+            continue
+        match = re.match(r'^([A-Z_]+)\s+(.+?)\s*$', line, re.IGNORECASE)
+        if match:
+            stack[-1]['lines'][match.group(1).lower()] = match.group(2)
+    return root
+
+def descendants(section, keyword):
+    found = [section] if section['keyword'] == keyword else []
+    for child in section['children']:
+        found.extend(descendants(child, keyword))
+    return found
+
+def level_style_references(text):
+    root = parse_sections(text)
+    references = set()
+    valid = True
+    theme = root['lines'].get('theme', '').lower()
+    if theme:
+        references.add(theme)
+    background = root['lines'].get('background', '').split(':')
+    if root['lines'].get('background'):
+        if len(background) == 2 and all(background):
+            references.add(background[0].lower())
+        else:
+            valid = False
+
+    gadgets = [section for section in root['children'] if section['keyword'] == 'GADGET']
+    if not gadgets:
+        gadgets = [section for section in root['children'] if section['keyword'] == 'OBJECT']
+    placements = descendants(root, 'TERRAIN') + gadgets
+    for section in placements:
+        style = section['lines'].get('style') or section['lines'].get('collection')
+        piece = section['lines'].get('piece')
+        if style and style.upper() == '*GROUP':
+            continue
+        if not style or not piece:
+            valid = False
+            continue
+        references.add(style.lower())
+    return references, valid
+
 levels = staging / 'levels'
 packs, available = [], 0
 for pack in sorted(p for p in levels.iterdir() if p.is_dir()):
@@ -83,8 +140,8 @@ for pack in sorted(p for p in levels.iterdir() if p.is_dir()):
     for level in pack.rglob('*.nxlv'):
         total += 1
         text = level.read_text(errors='replace')
-        refs = {m.lower() for m in re.findall(r'(?im)^\s*(?:THEME|STYLE|COLLECTION)\s+(\S+)', text)}
-        ready += bool(refs) and refs <= set(dma)
+        refs, valid = level_style_references(text)
+        ready += valid and bool(refs) and refs <= set(dma)
     packs.append({'directory': pack.name, 'levels': total, 'dmaStyleLevels': ready})
     available += ready
 manifest = {

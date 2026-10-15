@@ -22,30 +22,81 @@ struct LearningJourneyTests {
         #expect(journey.lessons[1].entry.levelNameSnapshot == "Cellbash")
         #expect(journey.lessons[1].placement?.basis == "userPlaytest")
         #expect(journey.lessons.contains { $0.entry.identity.levelID == "lm_set08.dat#5"
-            && $0.placement?.basis == "reduxPortCounterpart" })
+            && $0.placement?.basis == "userPlaytest" })
         #expect(journey.lessons.contains { $0.entry.identity.levelID == "50:Tricky:21:0:5" })
         for name in ["Come back!", "Stop, Block and Blow", "The COVOX Level", "Something Wrong?"] {
             #expect(!journey.lessons.contains { $0.entry.levelNameSnapshot == name })
         }
     }
 
-    @Test func reportedOfficialWallsKeepTheirFloorsAndDeferSavedAttempts() throws {
+    @Test func generousPracticePrecedesRestrictedPuzzles() throws {
+        let journey = try bundledJourney()
+        let beginner = journey.lessons.prefix { $0.stage == .fun }
+        #expect(beginner.count == 30)
+        #expect(beginner.filter { $0.entry.identity.packID == "ohNoMoreLemmings-DLVEL-100"
+            && $0.entry.identity.levelID.contains(":Tame:") }.count == 20)
+        #expect(beginner.allSatisfy { LearningJourney.teachingMinimumDemand(for: $0.entry) == 0 })
+        #expect(journey.lessons[11].entry.levelNameSnapshot == "Honey, I Saved The Lemmings")
+        let watson = try #require(journey.lessons.firstIndex { $0.entry.identity.levelID == "47:Tricky:18:9:5" })
+        #expect(watson > 44 && journey.lessons[watson].stage == .expert)
+
+        // An earlier counterpart position cannot bypass the protected practice section.
+        var lessons = journey.lessons
+        let index = try #require(lessons.firstIndex { $0.entry.identity.levelID == "51:Tricky:22:0:6" })
+        let old = lessons[index]
+        let placement = try #require(old.placement)
+        #expect(LearningRouteSafety.minimumDemand(for: old.entry) == 0)
+        let misplaced = LearningJourney.Lesson(entry: old.entry, objective: old.objective, score: old.score,
+            intrinsicDemand: old.intrinsicDemand, demand: 175, stage: .fun,
+            preparationGaps: [], concepts: old.concepts, introduced: [], focus: old.focus,
+            needsSupport: false, placement: .init(basis: "reduxClassicCounterpart", reference: placement.reference,
+                sourceURL: placement.sourceURL, position: 175, lower: 165, upper: 185,
+                sourceRevision: placement.sourceRevision, replayRevision: placement.replayRevision))
+        lessons.remove(at: index)
+        lessons.insert(misplaced, at: 30)
+        #expect(throws: LevelPlaylistError.self) {
+            try LearningJourney(version: journey.version, lessons: lessons,
+                placementPolicy: journey.placementPolicy).validated()
+        }
+    }
+
+    @Test func migrationRestoresPracticeBeforeAnUnreportedCurrentWall() throws {
+        let journey = try bundledJourney()
+        var previous = journey.lessons.map(\.entry)
+        let wall = try #require(previous.firstIndex { $0.identity.levelID == "42:Mega Drive Sunsoft:13:0:42" })
+        previous.insert(previous.remove(at: wall), at: 8)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-26", summary: "Previous journey"), entries: previous, currentIndex: 8)
+        let migrated = try #require(try journey.migrating(run))
+        #expect(migrated.id == run.id && migrated.currentIndex == run.currentIndex)
+        #expect(Array(migrated.entries.prefix(8)) == Array(run.entries.prefix(8)))
+        #expect(migrated.currentEntry == journey.lessons[8].entry)
+        #expect(Set(migrated.entries.map(\.identity)) == Set(run.entries.map(\.identity)))
+        #expect(try journey.migrating(migrated) == migrated)
+    }
+
+    @Test func reportedWallsKeepTheirFloorsAndDeferSavedAttempts() throws {
         let journey = try bundledJourney()
         for (levelID, demand, stage) in [
-            ("11:Fun:12:0:7", 237.5, LearningJourney.Stage.intermediate),
-            ("58:Tricky:29:2:0", 257.5, .intermediate),
-            ("26:Fun:27:4:6", 287.5, .intermediate),
-            ("59:Tricky:30:1:7", 377.5, .difficult)] {
+            ("11:Fun:12:0:7", 400.0, LearningJourney.Stage.difficult),
+            ("58:Tricky:29:2:0", 620.0, .expert),
+            ("26:Fun:27:4:6", 430.0, .difficult),
+            ("lm_set08.dat#5", 600.0, .expert),
+            ("34:Tricky:5:3:1", 440.0, .difficult),
+            ("59:Tricky:30:1:7", 650.0, .expert),
+            ("40:Wild:1:9:2", 630.0, .expert),
+            ("47:Tricky:18:9:5", 640.0, .expert),
+            ("45:Wild:6:7:5", 700.0, .expert)] {
             let index = try #require(journey.lessons.firstIndex { $0.entry.identity.levelID == levelID })
             let lesson = journey.lessons[index]
-            #expect(lesson.demand == demand && lesson.stage == stage)
+            #expect(lesson.demand >= demand && lesson.stage == stage)
             #expect(lesson.placement?.basis == "userPlaytest")
-            #expect(lesson.demand == LearningRouteSafety.minimumDemand(for: lesson.entry))
+            #expect(lesson.demand >= LearningJourney.teachingMinimumDemand(for: lesson.entry))
             var previous = journey.lessons.map(\.entry)
             previous.insert(previous.remove(at: index), at: 12)
             for current in [0, 11, 12, 13, index, previous.count - 1] {
                 let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
-                    pool: .init(id: "learning-22", summary: "Previous journey"),
+                    pool: .init(id: "learning-27", summary: "Previous journey"),
                     entries: previous, currentIndex: current)
                 let migrated = try #require(try journey.migrating(run))
                 #expect(migrated.id == run.id && migrated.currentIndex == current)

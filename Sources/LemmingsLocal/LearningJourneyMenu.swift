@@ -3,6 +3,14 @@ import AppKit
 import LemmingsAppCore
 import NxlvKit
 
+/// Shared result actions for Classic and both sequel journey engines.
+@MainActor struct LearningJourneyResultActions {
+    var prepareSkip: () throws -> Void
+    var skip: () -> Void
+    var later: () -> Void
+    var hints: () -> Void
+}
+
 @MainActor enum LearningJourneyMenu {
     static func hub(next: LearningJourney.Lesson?, solved: Int, total: Int, later: Int,
                     resume: Bool, restoresCheckpoint: Bool = false,

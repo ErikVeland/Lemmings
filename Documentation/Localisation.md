@@ -317,6 +317,17 @@ reviews before release.
   These checks do not establish human language, tiny-label legibility, physical
   input, VoiceOver or device acceptance.
 
+### Main integration — 16 October 2026
+
+The merged catalogue contains 3,160 text keys and eight plural keys per locale.
+All eight packs and the source audit pass structural checks. The Mac app and
+TV SDK build pass. Eighteen bitmap previews cover the picker and Gameplay page
+at phone, tablet and TV widths in English and Tamil. The live resolver changes
+language immediately, and restoring the entry choice undoes the preview.
+The earlier 48-test run preceded live language selection. No automated tests
+were added or rerun for this settings change. Physical input, VoiceOver and
+native language approval remain separate checks.
+
 ## Authoring
 
 Use complete messages:

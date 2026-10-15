@@ -21,7 +21,7 @@ extension MenuAudit {
         let families: [GameFrontEnd.Action] = [
             .init("family.classic", "Classic Lemmings  10/120"), .init("family.ohNo", "Oh No! More Lemmings  24/100"),
             .init("family.holiday", "Holiday Lemmings  3/72"), .init("family.ohYes", "Oh Yes! More Lemmings  0/60"),
-            .init("family.fan", "Fan Lemmings  0/6022"), .init("neolemmix", "NeoLemmix  2/788"),
+            .init("family.fan", "Fan Lemmings  0/6022"), .init("neolemmix", "NeoLemmix  2/794"),
             .init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         let devices: [(String, CGSize, Bool)] = [("ipad-landscape", CGSize(width: 1366, height: 1024), false),
             ("ipad-portrait", CGSize(width: 1024, height: 1366), false),

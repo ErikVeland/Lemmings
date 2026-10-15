@@ -16,6 +16,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/VerifyGolemsPhaseAlternatives" \
   "$project_dir/Tools/DifficultyDiagnostics/VerifyGolemsPhaseAlternatives/main.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift"
 

@@ -26,7 +26,8 @@ zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build
 # Keep the checks in the same file so production members can remain private.
 cat "$project_dir/Sources/LemmingsLocal/main.swift" \
   "$project_dir/Tests/AppIntegrationTests/checks.swift" \
-  "$project_dir/Tests/AppIntegrationTests/home-backdrop.swift" > "$build_dir/main.swift"
+  "$project_dir/Tests/AppIntegrationTests/home-backdrop.swift" \
+  "$project_dir/Tests/AppIntegrationTests/gameplay-quick-controls.swift" > "$build_dir/main.swift"
 sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
 test_app="$build_dir/AppIntegrationTests.app"
@@ -41,6 +42,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == quick-controls ]]; then test_flags+=(-D QUICK_CONTROLS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == home-backdrop ]]; then test_flags+=(-D HOME_BACKDROP_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == nuke ]]; then test_flags+=(-D NUKE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == mac-fidelity ]]; then test_flags+=(-D MAC_FIDELITY_TESTS); fi
@@ -79,6 +81,8 @@ if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL
 if [[ "${TEST_SCOPE:-all}" == content-browser ]]; then test_flags+=(-D CONTENT_BROWSER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == earned-rewards ]]; then test_flags+=(-D EARNED_REWARD_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == level-skips ]]; then test_flags+=(-D LEVEL_SKIP_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == learning ]]; then test_flags+=(-D LEARNING_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == celebration ]]; then test_flags+=(-D CELEBRATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == menu-records-track ]]; then test_flags+=(-D MENU_RECORDS_TRACK_TESTS); fi

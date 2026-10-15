@@ -31,6 +31,14 @@ extension ArcadeRecords {
                                 spent: skippedLevels[profileID]?.count ?? 0)
     }
 
+    /// Return a charged skip if preparing the next lesson failed.
+    @discardableResult public mutating func returnLevelSkip(on level: ArcadeLevel, profileID: String) -> Bool {
+        guard hasSkipped(level, profileID: profileID) else { return false }
+        skippedLevels[profileID]?.removeAll { $0 == TrolleyCareerScore.levelKey(level) }
+        if skippedLevels[profileID]?.isEmpty == true { skippedLevels[profileID] = nil }
+        return true
+    }
+
     public func hasSkipped(_ level: ArcadeLevel, profileID: String) -> Bool {
         skippedLevels[profileID]?.contains(TrolleyCareerScore.levelKey(level)) == true
     }
