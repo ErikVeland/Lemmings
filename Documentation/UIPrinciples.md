@@ -895,6 +895,14 @@ fixed landscape layout and the largest fitting whole-pixel scale. Player identit
 above the footer without a duplicate Next caption under the logo. Portrait
 phones retain their existing Home presentation.
 
+iOS Home puts progress fractions below their action titles at every interface
+size, including wide iPad layouts and saved playlist runs. Keep the title and
+count in one input target. The footer action is named Playlists.
+Muted, windowless checks cover 567 layouts across nine languages, six mobile
+viewports and the shared TV board, including selected and disabled states.
+They verify separate count lines, caption bounds, target sizes, hit testing,
+non-overlap and inactive gaps. Physical touch and VoiceOver remain device checks.
+
 The backdrop occupies a separate, non-interactive view behind the menu. Keep
 one uploaded bitmap and move its image layer with nearest-neighbour sampling.
 Reuse the existing menu display link. Pause the camera for Static home screen, the game or system Reduce Motion

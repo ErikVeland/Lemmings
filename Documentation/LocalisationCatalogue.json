@@ -3501,7 +3501,6 @@
   "Collections / Playlists": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:18",
       "Sources/LemmingsLocal/PlayfieldView.swift:1047"
     ]
   },
@@ -8057,7 +8056,7 @@
   "Lemmings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:16",
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:18",
       "Sources/LemmingsLocal/PlayfieldView.swift:1054",
       "Sources/LemmingsLocal/ReplayWindow.swift:123",
       "Sources/LemmingsLocal/ReplayWindow.swift:16",
@@ -11714,6 +11713,7 @@
   "Playlists": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:20",
       "Sources/LemmingsLocal/PlayfieldView.swift:261",
       "Sources/LemmingsLocal/main.swift:2801",
       "Sources/LemmingsLocal/main.swift:3306",
@@ -12004,7 +12004,7 @@
   "Profiles": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:17",
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:19",
       "Sources/LemmingsLocal/PlayfieldView.swift:1047"
     ]
   },
@@ -12499,7 +12499,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:86",
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:17",
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:19",
       "Sources/LemmingsLocal/PlayfieldView.swift:1047",
       "Sources/LemmingsLocal/PlayfieldView.swift:261",
       "Sources/LemmingsLocal/ResultLayout.swift:76"
@@ -14405,7 +14405,7 @@
   "Settings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:19",
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:21",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:22",
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:80",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:118",
@@ -18719,7 +18719,7 @@
   "What's New": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileHomeArt.swift:19"
+      "Sources/LemmingsGameArt/MobileHomeArt.swift:21"
     ]
   },
   "What's New…": {
