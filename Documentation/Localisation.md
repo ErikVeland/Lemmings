@@ -1,6 +1,11 @@
 # Interface localisation
 
 English is the source language. No translated language pack is enabled yet.
+First-wave draft translations for Spanish (Latin America), German, French,
+Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål are stored in
+`Tools/Localisation/drafts/`. These drafts are not part of the app bundle.
+They cover 458 messages per locale. Review and complete a locale before you
+move it into `Sources/NxlvKit/Resources/Localization.bundle` or enable it.
 The shared layer serves Mac, iOS and tvOS, including Classic, NeoLemmix,
 Lemmings 2 and Lemmings 3.
 
