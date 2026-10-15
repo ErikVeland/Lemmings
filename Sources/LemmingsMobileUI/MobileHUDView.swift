@@ -48,6 +48,8 @@ import UIKit
     var playerName: String?
     var playerPortrait: CGImage?
     private let playerIdentity = UIView()
+    private let statusIdentity = UIView()
+    var statusDetails: MobileHUDRenderer.StatusDetails?
     private let toolDirectionPicker = MobileToolDirectionPickerView()
     private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
@@ -84,6 +86,11 @@ import UIKit
         playerIdentity.isUserInteractionEnabled = false
         playerIdentity.isHidden = true
         addSubview(playerIdentity)
+        statusIdentity.isAccessibilityElement = true
+        statusIdentity.accessibilityTraits = .staticText
+        statusIdentity.isUserInteractionEnabled = false
+        statusIdentity.isHidden = true
+        addSubview(statusIdentity)
         addSubview(toolDirectionPicker)
         toolDirectionPicker.onChoice = { [weak self] direction in self?.onToolDirection?(direction) }
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(minimapTouched(_:)))
@@ -138,6 +145,14 @@ import UIKit
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
         playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
+        statusIdentity.isHidden = !layout.television
+        if layout.television {
+            statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).counters
+            let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
+                engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic", paused: paused, speed: speed)
+            statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
+                .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
+        }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -207,7 +222,7 @@ import UIKit
         for button in buttons.reversed() where button.superview === self && button.frame.contains(point) {
             return button.hitTest(convert(point, to: button), with: event)
         }
-        if layout?.portrait != nil, let status = layout?.interface.statusFrame,
+        if layout?.portrait != nil || layout?.television == true, let status = layout?.interface.statusFrame,
            point.y <= status.maxY { return self }
         return nil
     }
@@ -234,7 +249,7 @@ import UIKit
         guard let layout, let snapshot else { return nil }
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails)
     }
 
     private func rebuildButtons() {

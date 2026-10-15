@@ -2,6 +2,18 @@
 
 **Status: shared frontend connected; acceptance gate open.**
 
+## Gameplay status parity with Mac
+
+The normal TV frontend reserves a top strip for player identity, released/total,
+rescued/required and whole-percent rescued, time, actual deaths and the Mac's
+shared deaths-before-failure counter. The counter changes to SAFE when the
+rescue target is met. Release rate appears only on engines that expose it.
+Speed, planning pause, nuke and completion/failure states stay in that strip.
+L3 also shows its reserve and moves its status above the playfield. Its death
+count includes extra lemmings that started on the map. Rewind refreshes counts
+from the restored runtime. Existing HUD controls retain their bounds, and iOS
+retains its existing compact status presentation.
+
 Baseline: the local iOS and tvOS source on 14 October 2026. The checkout has
 uncommitted changes. This record describes the current implementation and its
 validation boundaries, rather than a shipped TV release.

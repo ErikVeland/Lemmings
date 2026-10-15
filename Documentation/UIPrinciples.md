@@ -505,8 +505,18 @@ View result and Escape return to the result without retrying, advancing a level
 or passing the Hot Seat turn. Keep gameplay shortcuts inactive on the reward
 page. The result retains a Rewards earned action to reopen all reasons. Announce
 each saved attempt automatically only once per app session. Repeated clears and
-unsaved previews do not claim new rewards. Reduced motion uses the same static
+unsaved previews do not open an earned-reward page. Reduced motion uses the same static
 page. Normal star chimes start when the player reaches the result.
+
+The muted, offscreen `TEST_SCOPE=earned-rewards` Mac suite passes for Classic,
+Lemmings 2 and Lemmings 3, solo play and both Hot Seat rules. It checks actual
+resource milestones and a named career award, every reward and reason across
+pages, compact/large layouts, long titles, mouse/keyboard/accessibility targets,
+reopening and one-time presentation. It preserves ownership and verifies repeat,
+preview and rewind guards. Existing result navigation, Records, Worldwide and
+Hot Seat setup/return checks also pass. Representative currency, named-award and
+long-title captures were inspected. Physical VoiceOver and controller delivery
+remain manual checks. iOS/tvOS result presentation is unchanged.
 
 ## Records level browsing and music notices
 

@@ -20,8 +20,8 @@ REFERENCE = ROOT / 'Content/NeoLemmix/levels/Lemmings_Redux'
 SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
-POLICY = 'teaching-curriculum-2'
-VERSION = 'learning-28'
+POLICY = 'teaching-curriculum-3'
+VERSION = 'learning-29'
 MAINLINE_PACKS = {'lemmings-LEVEL-120', 'ohNoMoreLemmings-DLVEL-100',
                   'ohYesMoreLemmings-OHYES-60'}
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -96,9 +96,13 @@ def valid_witness(row, replay):
                 and all((0 if e.get('afterTick') else 1) <= e['tick'] <= expected['ticks'] for e in replay['events']))
 
 
-def solution_context(row, replay, resource):
+def solution_context(row, replay, resource, quota=None):
     """Keep execution, spare resources and unknown discovery separate."""
-    events = sorted(replay['events'], key=lambda e: (e['tick'], e.get('afterTick', False)))
+    quota_tick = quota.get('firstQuotaTick') if quota else None
+    def before_quota(event):
+        return quota_tick is None or event['tick'] < quota_tick or event['tick'] == quota_tick and not event.get('afterTick')
+    events = sorted((e for e in replay['events'] if before_quota(e)), key=lambda e: (e['tick'], e.get('afterTick', False)))
+    relevant_sequences = {index for index, event in enumerate(replay['events']) if before_quota(event)}
     assignments = [e for e in events if 'assign' in e['action']]
     counts = collections.Counter(e['action']['assign']['skill'] for e in assignments)
     workers = collections.defaultdict(list)
@@ -111,6 +115,7 @@ def solution_context(row, replay, resource):
     finite = [skill for skill in counts if skills.get(skill, 0) < 99]
     exhausted = [skill for skill in finite if spare[skill] == 0]
     ticks = replay['expected']['ticks']
+    useful_ticks = quota_tick if quota_tick is not None else ticks
     deadline = resource['timeLimitTicks'] or None
     precision = row['profile'].get('precision') or {}
     burst = max((sum(e['tick'] <= other['tick'] < e['tick'] + 34 for other in assignments)
@@ -124,6 +129,11 @@ def solution_context(row, replay, resource):
     rate = resource['releaseRate']
     minimum_rate = resource.get('minimumReleaseRate', min(99, max(0, rate)))
     hatch_ticks = 4 + (99 - min(99, max(0, rate))) // 2
+    available = [count for count in skills.values() if count > 0]
+    source_scarcity = (1 - min(20, sum(available) / max(1, len(available))) / 20) * 65 + sum(count <= 2 for count in available) / max(1, len(available)) * 35
+    if quota:
+        assert counts == {skill: skills.get(skill, 0) - remaining for skill, remaining in quota['toolsRemainingAtQuota'].items()
+                          if skills.get(skill, 0) > remaining}, 'Recorded commands disagree with native successful tool use before quota'
     return {'assignments': len(assignments), 'workers': len(workers), 'jobChanges': changes,
             'usedSkills': dict(sorted(counts.items())), 'spareUsedSkills': spare,
             'exhaustedUsedSkills': exhausted, 'peakAssignmentsInTwoSeconds': burst,
@@ -134,7 +144,8 @@ def solution_context(row, replay, resource):
             'totalAvailableSkills': sum(min(99, max(0, count)) for count in skills.values()),
             'scarceAvailableSkills': sorted(skill for skill, count in skills.items() if 0 < count <= 2),
             'usedSkillUtilisation': {skill: counts[skill] / max(1, skills.get(skill, 0)) for skill in sorted(counts)},
-            'assignmentDemandEvidence': 'Recorded witness commands; a route may use redundant skills. Pause can separate commands at one simulation tick.',
+            'sourceToolScarcity': round(source_scarcity, 3),
+            'assignmentDemandEvidence': 'Native-verified successful assignments before the rescue quota' if quota else 'Recorded witness commands; quota timing is unmeasured',
             'population': resource['population'], 'required': resource['required'],
             'allowedLosses': resource['population'] - resource['required'],
             'savedAboveRequirement': replay['expected']['saved'] - resource['required'],
@@ -145,10 +156,12 @@ def solution_context(row, replay, resource):
             'canSlowReleaseBelowStartingRate': minimum_rate < rate,
             'hatchCount': resource.get('hatchCount'),
             'completionSeconds': ticks / 17,
-            'remainingSeconds': (deadline - ticks) / 17 if deadline else None,
+            'firstQuotaTick': quota_tick, 'quotaTimingVerified': quota_tick is not None,
+            'remainingSeconds': (deadline - useful_ticks) / 17 if deadline else None,
+            'remainingSecondsAtReplayEnd': (deadline - ticks) / 17 if deadline else None,
             'timingProbeComplete': precision.get('completed', False),
-            'probedAssignments': len(precision.get('actions', [])),
-            'narrowActions': len(row['profile'].get('criticalActions', [])),
+            'probedAssignments': sum(action['sequence'] in relevant_sequences for action in precision.get('actions', [])),
+            'narrowActions': sum(sequence in relevant_sequences for sequence in row['profile'].get('criticalActions', [])),
             'spatialToleranceMeasured': bool(precision.get('selectionOutcomes')),
             'discoveryDifficulty': 'unknown from replay',
             'replayRevision': row['profile']['key']['replayRevision']}
@@ -313,12 +326,14 @@ def early_pressure_warnings(context):
 def pressure_dimensions(context):
     """Comparable pressure axes for transition ordering, not a discovery score."""
     return [context['rescueFraction'] * 100,
-            max(context['usedSkillUtilisation'].values(), default=0) * 100,
+            context['sourceToolScarcity'],
             context['minimumReleaseRate'],
             max(0, (context.get('hatchCount') or 1) - 1) * 100 / 3,
             min(100, max(0, context['peakAssignmentsPerTick'] - 1) * 35
                 + max(0, context['peakAssignmentsPerSecond'] - 1) * 10),
-            min(100, context['jobChanges'] * 10)]
+            min(100, context['jobChanges'] * 10),
+            min(100, context['narrowActions'] * 25),
+            max(0, 120 - context['remainingSeconds']) * 100 / 120 if context['remainingSeconds'] is not None else 0]
 
 
 def smooth_pressure_ties(selected):
@@ -327,7 +342,7 @@ def smooth_pressure_ties(selected):
     for _, group in itertools.groupby(selected, key=lambda item: item['placement']['position']):
         remaining = list(group)
         while remaining:
-            previous = pressure_dimensions(result[-1]['context']) if result else [0] * 6
+            previous = pressure_dimensions(result[-1]['context']) if result else [0] * 8
             def cost(item):
                 rises = [max(0, a - b) for a, b in zip(pressure_dimensions(item['context']), previous)]
                 return (sum(rise > 20 for rise in rises), max(rises), sum(rises),

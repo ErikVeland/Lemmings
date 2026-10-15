@@ -18,6 +18,8 @@ struct Proof: Encodable {
     let replayRevision: String
     let passed: Bool
     let detail: String
+    var firstQuotaTick: Int? = nil
+    var toolsRemainingAtQuota: [String: Int]? = nil
 }
 let args = CommandLine.arguments
 precondition(args.count == 5, "Usage: JourneyReplays RESOURCES MANIFEST SOLUTIONS OUTPUT")
@@ -84,10 +86,18 @@ for lesson in manifest.lessons {
         guard lesson.placement.replayRevision == digest || lesson.placement.replayRevision == "SHA256 digest: " + digest else {
             throw LevelPlaylistError.invalidEntry
         }
-        let result = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+        var firstQuotaTick: Int?
+        var toolsRemainingAtQuota: [String: Int]?
+        let result = try ClassicDOSReplayPlayer.run(replay, simulation: base, observe: { simulation in
+            if firstQuotaTick == nil, simulation.savedCount >= simulation.configuration.requiredToSave {
+                firstQuotaTick = simulation.tickCount
+                toolsRemainingAtQuota = Dictionary(uniqueKeysWithValues: simulation.skills.map { ($0.key.rawValue, $0.value) })
+            }
+        })
         guard result.didWin else { throw LevelPlaylistError.invalidEntry }
         proofs.append(.init(identity: id, title: entry.levelNameSnapshot, sourceRevision: entry.sourceRevision, replayRevision: lesson.placement.replayRevision, passed: true,
-            detail: "\(result.saved)/\(result.required) saved at tick \(result.ticks); exact final state verified"))
+            detail: "\(result.saved)/\(result.required) saved at tick \(result.ticks); exact final state verified",
+            firstQuotaTick: firstQuotaTick, toolsRemainingAtQuota: toolsRemainingAtQuota))
     } catch {
         proofs.append(.init(identity: id, title: entry.levelNameSnapshot, sourceRevision: entry.sourceRevision, replayRevision: lesson.placement.replayRevision, passed: false, detail: String(describing: error)))
     }

@@ -18,6 +18,19 @@ public enum MobileHUDAction: Equatable, Sendable {
 
 /// UIKit and the audit tool draw the same pixels and route the same input rectangles.
 @MainActor public final class MobileHUDRenderer {
+    /// The controller supplies the Mac's shared failure decision using live engine counts.
+    public struct StatusDetails {
+        public let lost: Int
+        public let deathCounter: String
+        public let accessibility: String
+
+        public init(lostCount: Int,
+                    deathCounter: (visible: String, accessibility: String)) {
+            lost = max(0, lostCount)
+            self.deathCounter = deathCounter.visible
+            accessibility = deathCounter.accessibility
+        }
+    }
     public struct Item {
         public let action: MobileHUDAction
         public let frame: CGRect
@@ -44,9 +57,10 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
+    private let statusDetails: StatusDetails?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
@@ -54,6 +68,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         self.playerName = playerName
         self.playerPortrait = playerPortrait
         self.counterStyle = counterStyle
+        self.statusDetails = statusDetails
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                              paused: paused, speed: speed, endRunArmed: endRunArmed)
@@ -121,6 +136,10 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.setShouldAntialias(false)
         context.interpolationQuality = .none
         let statusFrame = Self.cgRect(layout.interface.statusFrame)
+        if layout.television {
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: statusFrame.maxY))
+        }
         if let panel = layout.panel {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(CGRect(x: 0, y: panel.frame.minY, width: bounds.width, height: bounds.height - panel.frame.minY))
@@ -518,7 +537,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     /// Player identity and counters share the opaque HUD strip, away from gameplay input.
     public static func statusFrames(layout: MobileHUDLayout, hasPlayer: Bool) -> (player: CGRect?, counters: CGRect) {
         var frame = cgRect(layout.interface.statusFrame)
-        if layout.panel != nil {
+        if layout.panel != nil && !layout.television {
             // The final navigation targets sit to the right of the status strip.
             // Use layout geometry because the actual skill count varies by engine.
             let navigationCount = (layout.supportsRewind ? 3 : 1) + (layout.showsMenuButton ? 1 : 0)
@@ -533,6 +552,18 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawStatus(in frame: CGRect, panelMode: Bool, context: CGContext) {
+        if layout.television {
+            let lines = Self.televisionStatusLines(snapshot: snapshot, details: statusDetails,
+                engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic",
+                paused: paused, speed: speed)
+            for (index, line) in lines.enumerated() {
+                let row = CGRect(x: frame.minX + 8, y: frame.minY + CGFloat(index) * frame.height / 2,
+                    width: frame.width - 16, height: frame.height / 2)
+                GamePixelTypography.draw(line, in: row, context: context, typography: typography,
+                    palette: snapshot.didWin ? .green : .blue, maximumScale: 1)
+            }
+            return
+        }
         let time: String
         if let remaining = snapshot.remainingSeconds {
             time = String(format: "%d:%02d", remaining / 60, remaining % 60)
@@ -549,6 +580,24 @@ public enum MobileHUDAction: Equatable, Sendable {
         GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,
                              palette: snapshot.didWin ? .green : .blue, maximumScale: 1,
                              alignment: panelMode ? .left : .center)
+    }
+
+    public static func televisionStatusLines(snapshot: MobileGameSnapshot, details: StatusDetails?,
+                                            engineIdentifier: String, paused: Bool, speed: Double) -> [String] {
+        let percent = snapshot.saved * 100 / max(1, snapshot.total)
+        let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
+        var counts = [L10n.text("OUT \(snapshot.released)/\(snapshot.total)"),
+                      L10n.text("HOME \(snapshot.saved)/\(snapshot.required)") + " (\(percent)%)"]
+        if engineIdentifier == "lemmings3" { counts.append(L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))")) }
+        counts.append(L10n.text("TIME \(time)"))
+        var state: [String] = []
+        if let details { state += [L10n.text("LOST \(details.lost)"), details.deathCounter] }
+        if let rate = snapshot.releaseRate { state.append(L10n.text("RATE \(rate)")) }
+        state.append(L10n.text("SPEED \(speedLabel(speed))"))
+        if snapshot.isComplete { state.append(snapshot.didWin ? L10n.text("COMPLETE") : L10n.text("FAILED")) }
+        else if paused { state.append(L10n.text("PAUSED")) }
+        if snapshot.isEndingRun { state.append(L10n.text("NUKING")) }
+        return [counts.joined(separator: "   "), state.joined(separator: "   ")]
     }
 
     private static func speedLabel(_ speed: Double) -> String {

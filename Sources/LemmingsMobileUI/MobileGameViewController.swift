@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsAppCore
+import LemmingsAudio
 import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
@@ -626,8 +627,10 @@ typealias MobileGameOverlay = UIScrollView
     private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
         #if os(tvOS)
         let showsMenuButton = false
+        let television = true
         #else
         let showsMenuButton = true
+        let television = false
         #endif
         return MobileHUDLayout.make(
             container: MobileSize(width: view.bounds.width, height: view.bounds.height),
@@ -638,7 +641,7 @@ typealias MobileGameOverlay = UIScrollView
             supportsRewind: session.supportsRewind,
             hasPlayer: true,
             engineIdentifier: session.engineIdentifier,
-            showsMenuButton: showsMenuButton
+            showsMenuButton: showsMenuButton, television: television
         )
     }
 
@@ -1562,6 +1565,13 @@ typealias MobileGameOverlay = UIScrollView
             hudArtworkSource = gameSettings.classic.graphics
         }
         hud.counterStyle = gameSettings.classic.counterStyle
+        #if os(tvOS)
+        hud.statusDetails = .init(lostCount: session.lostLemmingCount,
+            deathCounter: FailureMoodDecision.deathCounter(saved: snapshot.saved,
+                active: session.activeLemmingCount, unreleased: snapshot.total - snapshot.released,
+                required: snapshot.required, total: snapshot.total,
+                isComplete: snapshot.isComplete, didWin: snapshot.didWin))
+        #endif
         hud.update(
             layout: resolved,
             snapshot: snapshot,

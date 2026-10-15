@@ -4,7 +4,7 @@ project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/tv-console/runtime"
 mkdir -p "$build_dir/Modules" "$build_dir/ModuleCache" "$build_dir/Sources" "$build_dir/resources"
 cd "$project_dir"
-task_modules=(NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsTVCore LemmingsGameArt)
+task_modules=(NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsTVCore LemmingsGameArt LemmingsAudio)
 for module in $task_modules; do
     rm -rf "$build_dir/Sources/$module"
     cp -R "Sources/$module" "$build_dir/Sources/$module"
@@ -33,7 +33,7 @@ source += '\nlet suite = TVControllerBindingsTests()\n' + '\n'.join(f'suite.{met
 source += '\nprint("PASS TV controller, Circle, Menu, boost, rewind takeover, neutral handover and preferences")\n'
 Path(sys.argv[1]).write_text(source)
 PY
-for entry in "$build_dir/main.swift" Tests/TVExperienceTests/main.swift Tools/TVConsoleAudit/main.swift Tests/TVPerformanceTests/main.swift; do
+for entry in "$build_dir/main.swift" Tests/TVExperienceTests/main.swift Tools/TVConsoleAudit/main.swift Tools/TVHUDAudit/main.swift Tests/TVPerformanceTests/main.swift; do
     task_name="${entry:h:t}"
     task_flags=()
     if [[ "$entry" != "$build_dir/main.swift" ]]; then task_flags=(-parse-as-library); fi
