@@ -1,0 +1,33 @@
+UI test windows: offscreen; audio: muted
+PASS persisted Classic/L2/L3 three-star precision rewards, wallet balances, bitmap captions and accessibility at compact/large sizes
+PASS nine native Zoom/Level Skip badge renders, active outlines, accessible balances and geometry
+PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over
+CHECK journey Skip classic, mode 0
+CHECK journey Skip classic, mode 1
+CHECK journey Skip classic, mode 2
+CHECK journey Skip lemmings2, mode 0
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+CHECK journey Skip lemmings2, mode 1
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+CHECK journey Skip lemmings2, mode 2
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+CHECK journey Skip lemmings3, mode 0
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+CHECK journey Skip lemmings3, mode 1
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+CHECK journey Skip lemmings3, mode 2
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+PASS Classic/L2/L3 Learning Skip: solo, both Hot Seat rules, owner pays, saved revisit, failed-save refund, Ready, keyboard/mouse/accessibility, 18 renders
+PASS 2.0.1 native scope: level-skips

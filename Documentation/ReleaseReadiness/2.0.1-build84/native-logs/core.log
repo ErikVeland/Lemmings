@@ -1,0 +1,21 @@
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips
+PASS mouse Start new Hot Seat, saved session retention and confirmed profile switch
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS active sequences guard navigation and pending starts can be cancelled
+PASS 2.0.1 native scope: core

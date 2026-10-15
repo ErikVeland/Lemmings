@@ -29,12 +29,13 @@ Both paths run the same simulation and produce the same win.
 ## Content status
 
 The official Classic and conversion routes pass at 352/352. L2 has routes for
-all 120 levels. The prior L3 engine state passed all 90 routes and all three
-linked campaigns. The 15 October Mole direction and patrol corrections
-invalidated affected standalone and carried witnesses. The strict route gate
-stops at Shadow 7. Shadow 13 now has a refreshed winning route; Egyptian 6 and
-13 still have no winning route under the current Mole patrol. L3 route closure
-remains open. See
+all 120 levels. Its current-main replay passes against the staged build 83 app
+payload, but the ark ending and original-engine comparisons remain open. The
+prior L3 engine state passed all 90 routes and all three linked campaigns. The
+15 October Mole direction and patrol corrections invalidated affected route
+witnesses. The current audit passes 399/416 fixtures and stops at Shadow 7.
+Shadow 7 and Egyptian 6, 13 and 29 lack standalone wins. Thirteen carried
+schedules also fail. L3 route closure remains open. See
 [release scope](ReleaseScope.md) for the current status.
 
 A full native audit replayed all 6,020 fan levels from the exact build 83 resources. It recorded 2,399 winning routes, 3,600 levels without matching candidates and 21 failed replay levels. It found no load, decode or render failures. The strict route gate still has 3,621 levels without verified wins. Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical World” copies remain without winning routes. The October CSV lists two imported `fan:lldb-595` levels outside the bundle. Imported packs remain open-ended. See [release scope](ReleaseScope.md) for the closure work.

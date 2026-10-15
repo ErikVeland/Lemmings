@@ -1,0 +1,14 @@
+UI test windows: offscreen; audio: muted
+PASS Snuggle completion loads the unopened next fan pack in Solo and Hot Seat
+PASS all 227 journey lessons resolve and pass session preflight
+PASS community placement validation and saved Solo/Hot Seat migration
+PASS saved Solo journey is offered after a new Hot Seat; Continue confirms resumption and Back preserves the session
+PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS classic Solo exact checkpoint, queue, ownership and paused recovery
+PASS lemmings2 Solo exact checkpoint, queue, ownership and paused recovery
+PASS lemmings3 Solo exact checkpoint, queue, ownership and paused recovery
+PASS classic Hot Seat exact checkpoint, queue, ownership and paused recovery
+PASS lemmings2 Hot Seat exact checkpoint, queue, ownership and paused recovery
+PASS lemmings3 Hot Seat exact checkpoint, queue, ownership and paused recovery
+PASS 2.0.1 native scope: learning

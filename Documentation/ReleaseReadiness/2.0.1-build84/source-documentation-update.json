@@ -1,0 +1,9 @@
+{
+  "compiledAndTestedSourceCommit": "ca53335499ea80af8ed1b47eef4194a13009e961",
+  "releaseSourceCommit": "cb1772afe76b97fac18e7c2460c2254006473f31",
+  "changedFiles": [
+    "Tests/Lemmings2CompletionTests/Alternatives/README.md"
+  ],
+  "productionAndTestCodeByteIdentical": true,
+  "reason": "Correct documentation of the preserved improved witness. No code, resources, inputs or packages changed."
+}

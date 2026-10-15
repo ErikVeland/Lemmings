@@ -1,0 +1,11 @@
+{
+  "productionSourceUnchangedSinceRegressionStart": true,
+  "checkedFiles": 499,
+  "expectedPostAuditChanges": [
+    "Resources/Trolley engine fingerprint refreshed after native witness replays",
+    "Cavelem continuous route restored and improved witness preserved separately",
+    "NeoLemmix parent index repaired to expose six already bundled Xmas levels",
+    "release notes source commit stamp updated"
+  ],
+  "uncontrolledProductionSourceDrift": []
+}

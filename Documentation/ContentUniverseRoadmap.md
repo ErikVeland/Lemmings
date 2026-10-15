@@ -165,19 +165,20 @@ witnesses. The strict route gate stops at Shadow 7. Original-engine parity,
 route repair, media and release checks remain open. See the
 [1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
 
-The 15 October strict L2 ending check replays all routes and carry-over variants,
-but each tribe chain ends with one survivor and a Bronze talisman. The golden
-talisman and 30-survivor ark conditions remain open.
+The 16 October current-main L2 replay passes all 120 routes, 70 carry-over
+variants, twelve chains and event checks against the exact staged build 83 app
+payload. Each tribe still ends with one survivor and a Bronze talisman. The
+golden talisman, 30-survivor ark condition and original-engine comparison remain
+open.
 
 The 15 October L3 Mole direction and patrol corrections match the captured
 starting directions and no-input patrols in Shadow 7 and Egyptian 13. The
-current strict audit double-replays 394/416 fixtures; four standalone outcomes
-and 18 carried identities fail. Five Shadow 13 carried inputs still win when
-rebased. Thirteen other carried schedules across Shadow 7 and Egyptian 6, 13
-and 29 do not win. A refreshed standalone Shadow 13 route passes with ten
-saved and no losses. The prior 90-route and campaign proof applies to the
-earlier engine state. Keep the L3 bundled gate open until replacement
-witnesses pass the strict gates.
+current strict audit double-replays 399/416 fixtures. Four standalone routes
+and 13 carried schedules fail: the standalone gaps are Shadow 7 and Egyptian
+6, 13 and 29. Five Shadow 13 carried inputs were refreshed and now pass. The
+13 carried gaps are in Shadow 7 and Egyptian 6, 13 and 29. The prior 90-route
+and campaign proof applies to the earlier engine state. Keep the L3 bundled
+gate open until replacement witnesses pass the strict gates.
 
 Continue the separate validation work:
 

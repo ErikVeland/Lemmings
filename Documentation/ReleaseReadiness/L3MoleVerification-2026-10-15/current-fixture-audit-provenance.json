@@ -1,6 +1,6 @@
 {
-  "auditExecutableSHA256": "0968fb0d580bdab84c019d3ed48b381f9735af31365520d729cf9d0473b51696",
-  "binarySourceCommit": "41b7b0f5233a70c8b862070d73107b9f19bca1fb",
+  "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+  "binarySourceCommit": "fc52cac4bc27e9d196f3cdfa348ac36571426f94",
   "counts": {
     "rebasedRouteOutcomes": {
       "exact": 399,
@@ -13,12 +13,21 @@
   },
   "exitCode": 1,
   "exitCodeMeaning": "Expected: 17 route schedules do not win under the current runtime.",
-  "gitCommit": "eb6d58d7d86597ab0114f364d6707aa050bdb80e",
-  "recordedAtUTC": "2026-10-15T04:04:37+00:00",
+  "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+  "gitCommit": "fc52cac4bc27e9d196f3cdfa348ac36571426f94",
+  "recordedAtUTC": "2026-10-15T14:58:01+00:00",
   "reportSHA256": "96e83007d9a985826f1216b8afbe9f473b5d6f6c45af68ba78d5ce22d7ad8504",
   "resourceFileCount": 561,
-  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+  "resourceRoot": "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD",
   "resourceTreeSHA256": "9ee43eb9251989be21d4513ee1c48a3463f6e2035cb3dc62f1b3987d566313a9",
+  "resourceManifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+  "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+  "resourceFilesMatched": 561,
+  "resourceExtractionFiles": 576,
+  "resourceMissing": 0,
+  "resourceUnexpected": 15,
+  "resourceChanged": 0,
+  "resourceInterpretation": "All 561 manifest-selected L3 app resources match the staged build 83 extraction by path, size and SHA-256. The extraction also has 15 files outside the retained app manifest.",
   "routeIdentityRepairs": [
     {
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
@@ -61,13 +70,16 @@
       "ticks": 443
     }
   ],
-  "runCommand": "L3_PORTS_ROOT=\"/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD\" L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures .build/l3-fixture-audit/Audit current-fixture-audit.json",
-  "runtimeLibrarySHA256": "3327eeb6e1cab6fb3024fbae2f2f7d2d77b85ade8fde8145ae1e6b4514803b11",
+  "runCommand": "L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures .build/l3-current-main-20261016/Audit .build/l3-current-main-20261016/current-audit.json",
+  "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
   "schemaVersion": 1,
   "sourceFiles": {
-    "Sources/NxlvKit/Lemmings3Runtime.swift": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
+    "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
     "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
     "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
   },
-  "sourceUnchangedAtCurrentMain": true
+  "sourceMatchesCurrentMain": true,
+  "sourceChangedSincePreviousAudit": true,
+  "normalisedFreshReportMatchesRetainedReport": true,
+  "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly."
 }

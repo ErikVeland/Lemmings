@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS Static Home native off/on renders, caption/checkbox targets, accessibility and keyboard activation
+PASS Classic/L2/L3 full-map scenery, last played/random selection, exit pan, Static Home, Reduce Motion, 24 compact/large renders and input targets
+PASS 2.0.1 native scope: home-backdrop

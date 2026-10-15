@@ -1,0 +1,47 @@
+[
+  {
+    "scope": "quick-controls",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/quick-controls.log"
+  },
+  {
+    "scope": "rewards",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/rewards.log"
+  },
+  {
+    "scope": "level-skips",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/level-skips.log"
+  },
+  {
+    "scope": "learning",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/learning.log"
+  },
+  {
+    "scope": "solution-switch",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/solution-switch.log"
+  },
+  {
+    "scope": "release-notes",
+    "passed": false,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/release-notes.log"
+  },
+  {
+    "scope": "home-backdrop",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/home-backdrop.log"
+  },
+  {
+    "scope": "hot-seat",
+    "passed": false,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/hot-seat.log"
+  },
+  {
+    "scope": "core",
+    "passed": true,
+    "log": "/Users/veland/Lemmings/.build/release-2.0.1/native-logs/core.log"
+  }
+]

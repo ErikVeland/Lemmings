@@ -1,0 +1,232 @@
+{
+  "checks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/shared-library.log"
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AudioMatrixTests.log"
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicGameFlowTests.log"
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSoundCueTests.log"
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSettingsTests.log"
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NxlvStyleResolverTests.log"
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NxlvRendererTests.log"
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSRewindTests.log"
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NeoLemmixSimulationTests.log"
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSReplayTests.log"
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ProTrackerTests.log"
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PercussionTests.log"
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AdaptiveDJDirectorTests.log"
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSSimulationRegressions.log"
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings2IntroTests.log"
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/FLICTests.log"
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings3SoundTests.log"
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/UnifiedGameTests.log"
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PlatformProfileTests.log"
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSagaTests.log"
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AmigaSoundTests.log"
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AmigaVersusTests.log"
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PlatformExclusiveTests.log"
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NeoLemmixEndToEnd.log"
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "failed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/BundledGameResourcesTests.log"
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ModernEngineTests.log"
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings3RuntimeTests.log"
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PortableTests.log"
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/SequelDataTests.log"
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings2RuntimeTests.log"
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/save-recovery.log"
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/run-recovery-files.log"
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/cross-build-recovery.log"
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/fan-library.log"
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/preserved-solution-manifests.log"
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/audit-integrity.log"
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/package-closure.log"
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/automatic-updates.log"
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/classic-panel-art.log"
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/fan-pruning.log"
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/retained-rescue-targets.log"
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/hint-catalogue.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "failed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/pointer-capture.log"
+    }
+  ],
+  "interrupted": true,
+  "reason": "Filesystem filled during pointer-capture check. Earlier logs retained. Known resource-index failure and unfinished checks receive explicit reruns.",
+  "sourceCommit": "ca53335499ea80af8ed1b47eef4194a13009e961"
+}
