@@ -2750,17 +2750,26 @@ extension AppDelegate {
     func captureGhost(_ enabled: Bool) -> Data {
       playfield.ghostSolutionEnabled = enabled
       playfield.needsDisplay = true
-      let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
-      playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+      // Render explicitly. A hidden backing layer can retain its cached image.
+      let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(playfield.bounds.width),
+        pixelsHigh: Int(playfield.bounds.height), bitsPerSample: 8, samplesPerPixel: 4,
+        hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+      NSGraphicsContext.saveGraphicsState()
+      NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+      let context = NSGraphicsContext.current!.cgContext
+      context.translateBy(x: 0, y: playfield.bounds.height); context.scaleBy(x: 1, y: -1)
+      playfield.draw(playfield.bounds)
+      NSGraphicsContext.restoreGraphicsState()
       return bitmap.representation(using: .png, properties: [:])!
     }
     let plainFrame = captureGhost(false), ghostFrame = captureGhost(true)
-    try check(plainFrame != ghostFrame && playfield.solutionGhost?.simulation.tickCount == live.currentTick,
-      "Ghost sprites were not drawn at the live tick")
+    print("Ghost render: different=\(plainFrame != ghostFrame), liveTick=\(live.currentTick), ghostTick=\(playfield.solutionGhost?.simulation.tickCount ?? -1), title=\(playfield.overlayTitle ?? "nil"), hidden=\(playfield.isHiddenOrHasHiddenAncestor), active=\(playfield.solutionGhost?.simulation.lemmings.filter(\.isActive).count ?? -1), image=\(playfield.levelImage != nil)")
     let ghostOutput = URL(fileURLWithPath: ".build/ghost-mac-renders")
     try FileManager.default.createDirectory(at: ghostOutput, withIntermediateDirectories: true)
     try plainFrame.write(to: ghostOutput.appendingPathComponent("live.png"))
     try ghostFrame.write(to: ghostOutput.appendingPathComponent("ghost.png"))
+    try check(plainFrame != ghostFrame && playfield.solutionGhost?.simulation.tickCount == live.currentTick,
+      "Ghost sprites were not drawn at the live tick")
     let selector = ghostToggle.superview!
     let selectorBitmap = selector.bitmapImageRepForCachingDisplay(in: selector.bounds)!
     selector.cacheDisplay(in: selector.bounds, to: selectorBitmap)
