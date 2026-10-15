@@ -32,6 +32,7 @@ import NxlvKit
      * Controls whether this run can update campaign, recovery, replay and verified records.
      */
     var recordsCampaignProgress = true
+    var sequenceRecovery: SequenceRunRecovery?
     private var usesSharedWindow = false
 
     /// Attach the engine after loading succeeds, so a failed load leaves the current game intact.
@@ -1486,7 +1487,7 @@ import NxlvKit
         else { showGameMenu() }
     }
     func saveCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
-        guard recordsCampaignProgress else { return }
+        guard recordsCampaignProgress || sequenceRecovery != nil else { return }
         let engine = RunRecovery.bundledEngine
         let now = ProcessInfo.processInfo.systemUptime
         guard !engine.isEmpty, game.tick >= 0, !game.isComplete,
@@ -1505,6 +1506,7 @@ import NxlvKit
         checkpoint.l3 = L3RunRecovery(progress: progress, inputs: recoveryInputs,
           skillAssignments: skillAssignments, toolUses: toolUses)
         checkpoint.hotSeatID = arcadeHotSeatID
+        checkpoint.sequence = sequenceRecovery
         recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
             prepareStateHash: { L3RunRecovery.stateHash(captured) }) { [weak self] error in
             self?.message = L10n.text("Run recovery save failed: \(error)")
@@ -1557,7 +1559,7 @@ import NxlvKit
                 userPausedMusic = false
                 try? music.resumeOutput(); dj.resumeOutput()
             }
-            if recordsCampaignProgress {
+            if recordsCampaignProgress || sequenceRecovery != nil {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
             runMovie.finish(); recorded = true

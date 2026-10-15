@@ -4,6 +4,15 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileLevelSourceTests {
+    @Test func preparationFailureRemainsVisibleUntilTheNextRequest() {
+        let level = MobileLevelSummary(index: 0, rank: "Classic", number: 1, title: "Level",
+                                       origin: .official, packName: "Lemmings 2")
+        let error = "The attempt was not saved."
+        #expect(level.selectionSubtitle(rankCount: 10, status: "Loading...") == "Loading...")
+        #expect(level.selectionSubtitle(rankCount: 10, status: error) == error)
+        #expect(level.selectionSubtitle(rankCount: 10).contains("Classic  1/10"))
+        #expect(level.selectionSubtitle(rankCount: 10).contains("Official / Lemmings 2"))
+    }
     @Test func oldSummariesRemainReadableWithoutInventingAnOrigin() throws {
         let data = Data(#"{"index":0,"rank":"Fun","number":1,"title":"Just dig!"}"#.utf8)
         let level = try JSONDecoder().decode(MobileLevelSummary.self, from: data)

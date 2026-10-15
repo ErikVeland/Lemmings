@@ -56,6 +56,7 @@ if [[ "${TEST_SCOPE:-all}" == action-replay ]]; then test_flags+=(-D ACTION_REPL
 if [[ "${TEST_SCOPE:-all}" == result-navigation ]]; then test_flags+=(-D RESULT_NAVIGATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == sequence-recovery ]]; then test_flags+=(-D SEQUENCE_RECOVERY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi

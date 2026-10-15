@@ -392,7 +392,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                         s.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
             } ?? []
             canvas.page = .init(title: level.title,
-                                subtitle: loading ? L10n.text("Loading...") : level.sourceLabel + L10n.text("\n\(level.rank == level.packName ? L10n.text("Level") : level.rank)  \(level.number)/\(rank.count)"),
+                                subtitle: level.selectionSubtitle(rankCount: rank.count, status: subtitle),
                                 details: stats,
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", L10n.text("< Rank")), .init("rankNext", L10n.text("Rank >"))] : [])
                                     + [.init("previous", L10n.text("< Level"), enabled: rankIndex > 0),
@@ -488,6 +488,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private func syncPages() {
         inputLink?.isPaused = game != nil
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
+        browser.statusText = loading ? L10n.text("Loading...") : notice
+        browser.isLoading = loading
         let available = MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300
         let show = game == nil && route == .levels && coverBrowser && library != nil
@@ -766,7 +768,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             await previous?.value
         }
         let generation = UUID(); previewGeneration = generation
-        loading = true; rebuild()
+        notice = ""; loading = true; rebuild()
         previewTask = Task {
             do {
                 let preview = try await previewLoader.load(index, settings: mobileSettings.classic)
@@ -990,7 +992,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         stopMenuPreviews()
         let cancelledPreviews = previewDrain
         let generation = UUID(); previewGeneration = generation
-        preparingLevel = true; loading = true; rebuild()
+        notice = ""; preparingLevel = true; loading = true; rebuild()
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
         fanCountGeneration = UUID(); fanCountsTask = nil

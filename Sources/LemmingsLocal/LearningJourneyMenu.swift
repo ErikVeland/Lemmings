@@ -5,11 +5,12 @@ import NxlvKit
 
 @MainActor enum LearningJourneyMenu {
     static func hub(next: LearningJourney.Lesson?, solved: Int, total: Int, later: Int,
-                    resume: Bool, play: @escaping () -> Void, revisit: @escaping () -> Void) -> GameMenuPage {
+                    resume: Bool, restoresCheckpoint: Bool = false,
+                    play: @escaping () -> Void, revisit: @escaping () -> Void) -> GameMenuPage {
         let page = GameMenuPage(title: LearningJourney.title, subtitle: next.map { "\($0.stage.rawValue) • \($0.focus)" } ?? L10n.text("Journey explored"))
         let status = "Solved \(solved)/\(total)" + (later > 0 ? L10n.text("   •   Later \(later)") : "")
         page.setDetail([next?.entry.levelNameSnapshot, status].compactMap { $0 }.joined(separator: "\n\n"))
-        let primary = page.addPrimaryAction(next == nil ? L10n.text("Revisit") : resume ? L10n.text("Continue") : L10n.text("Let's play")) {
+        let primary = page.addPrimaryAction(next == nil ? L10n.text("Revisit") : restoresCheckpoint ? L10n.text("Resume") : resume ? L10n.text("Continue") : L10n.text("Let's play")) {
             if next == nil { revisit() } else { play() }
         }
         primary.isEnabled = next != nil || later > 0

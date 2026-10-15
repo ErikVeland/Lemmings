@@ -5494,6 +5494,129 @@ extension AppDelegate {
     print("PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3")
   }
 
+  fileprivate func testSequenceCheckpointResume() async throws {
+    if window == nil { buildInterface() }
+    returnToLibrary()
+    let previousStore = ArcadeStore.shared, previousCache = playlistStoreCache
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("sequence-resume-\(UUID())")
+    let defaults = UserDefaults(suiteName: "sequence-resume-\(UUID())")!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary(); ArcadeStore.shared = previousStore; playlistStoreCache = previousCache
+      sequencePlaylistStore = nil; GameScreen.shared.dismissAll()
+      try? FileManager.default.removeItem(at: directory)
+    }
+    let host = arcade.records.activeProfileID
+    _ = arcade.addProfile(initials: "PAL", portrait: 2)
+    arcade.selectProfile(host)
+    loadContent()
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value,
+      let journey = LearningJourneyLibrary.journey else { throw IntegrationFailure(message: "Missing sequence fixture content") }
+    rebuildLevelCatalogue(discovery)
+    let output = URL(fileURLWithPath: ".build/journey-resume-renders")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func capture(_ name: String, _ view: NSView) throws {
+      view.layoutSubtreeIfNeeded()
+      guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+        throw IntegrationFailure(message: "No resume render bounds")
+      }
+      view.displayIgnoringOpacity(view.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
+    func buttons(_ view: NSView) -> [NSButton] {
+      (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+    }
+    func waitForLaunch() async throws {
+      for _ in 0..<1500 where levelBrowserLaunchTask != nil || playlistFanLoadTask != nil || levelBrowserLoadTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(levelBrowserLaunchTask == nil && playlistFanLoadTask == nil && levelBrowserLoadTask == nil,
+        "Sequence recovery preparation did not finish")
+    }
+    for shared in [false, true] {
+      arcade.endHotSeat()
+      if shared { arcade.prepareHotSeat(); try check(arcade.startNewHotSeat(), "Hot Seat fixture did not start") }
+      let seat = arcade.hotSeatID
+      for engine: LevelSourceEngine in [.classic, .lemmings2, .lemmings3] {
+        returnToLibrary()
+        let entry: LevelPlaylistEntry
+        if engine == .classic { entry = journey.lessons[0].entry }
+        else {
+          guard let level = levelCatalogue.packs.filter({ $0.engine == engine }).flatMap(\.levels).first(where: \.isAvailable) else {
+            throw IntegrationFailure(message: "Missing sequel resume fixture")
+          }
+          entry = try playlistEntry(for: level.identity)
+        }
+        let store = try LevelPlaylistStore(file: directory.appendingPathComponent("\(shared)-\(engine.rawValue).json"))
+        let playlistID = engine == .classic ? LearningJourney.playlistID : UUID()
+        try store.add(LevelPlaylist(id: playlistID, name: "Resume test", entries: [entry]))
+        let run = try LevelSequenceRun(source: .playlist(playlistID),
+          pool: .init(id: "resume-test", summary: "Resume test"), entries: [entry])
+        try store.startRun(run, hotSeatID: seat)
+        playlistStoreCache = (host, store); sequencePlaylistStore = store
+        startActiveSequence(); try await waitForLaunch()
+        if shared {
+          guard let ready = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(ready).first(where: { $0.title.hasPrefix("Ready,") }) else {
+            throw IntegrationFailure(message: "Fresh shared sequence skipped Ready")
+          }
+          button.performClick(nil)
+        }
+        if engine == .classic {
+          if phase == .briefing { advancePhase() }
+          for _ in 0..<100 { session?.tick() }
+          panel.selectedSkillIndex = 2
+        } else if engine == .lemmings2 { nativeL2Window!.testRecoveryAdvance(ticks: 100) }
+        else { nativeL3Window!.testRecoveryAdvance(ticks: 100) }
+        saveRunCheckpoint(immediately: true)
+        guard let before = try sequenceCheckpoint(for: run, hotSeatID: seat) else {
+          throw IntegrationFailure(message: "Sequence checkpoint missing for " + engine.rawValue)
+        }
+        try check(before.tick == 100 && before.sequence?.runID == run.id, "Sequence checkpoint lost position")
+        returnToLibrary()
+        try check(homeMenuItems().first?.title.hasPrefix("RESUME") == true,
+          "Home did not offer checkpoint resume")
+        try capture("home-\(engine.rawValue)-\(shared)", playfield)
+        // Restore through the Home action, including its guarded preparation.
+        launchChoice = 0; advancePhase(); try await waitForLaunch()
+        try check(sequencePlayingIdentity == entry.identity && store.activeRun == run
+          && arcade.hotSeatID == seat && arcade.playingProfileID == before.profileID,
+          "Resume moved the queue or changed its owner")
+        if shared {
+          guard let ready = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(ready).first(where: { $0.title.hasPrefix("Ready,") }) else {
+            throw IntegrationFailure(message: "Restored Hot Seat skipped Ready")
+          }
+          try check(button.isEnabled && ready.bounds.contains(button.frame), "Ready has no valid target")
+          try capture("ready-\(engine.rawValue)", ready)
+          button.performClick(nil)
+        }
+        if engine == .classic {
+          try check(isPaused && session?.currentTick == 100 && arcadeRunID == before.runID
+            && !playfield.startCountdown.isActive, "Classic resumed at a fresh or running state")
+          presentLearningJourney()
+          guard let hub = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(hub).first(where: { $0.title == "Resume" }) else {
+            throw IntegrationFailure(message: "Journey hub did not offer Resume")
+          }
+          try check(button.isEnabled && hub.bounds.contains(button.frame), "Journey Resume has no valid target")
+          try capture("hub-\(shared)", hub)
+          GameScreen.shared.dismissAll()
+        }
+        saveRunCheckpoint(immediately: true)
+        let after = try sequenceCheckpoint(for: run, hotSeatID: seat)
+        try check(after?.runID == before.runID && after?.tick == before.tick
+          && after?.stateHash == before.stateHash && after?.selectedSkill == before.selectedSkill,
+          "Recovered sequence changed its attempt, state or selected action: " + engine.rawValue)
+        try check(nativeL2Window?.recordsCampaignProgress != true && nativeL3Window?.recordsCampaignProgress != true,
+          "Recovered playlist started writing campaign progress")
+        try capture("restored-\(engine.rawValue)-\(shared)", window.contentView!)
+        print("PASS \(engine.rawValue) \(shared ? "Hot Seat" : "Solo") exact checkpoint, queue, ownership and paused recovery")
+      }
+    }
+  }
+
   fileprivate func testSequenceNavigationGuards() throws {
     GameScreen.shared.dismissAll()
     if resumeSavedRunItem == nil { buildMenu() }
@@ -7168,7 +7291,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS
+    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -7291,6 +7414,9 @@ Task { @MainActor in
     try subject.testBundledNeoLemmixPacks()
     try await subject.testNeoLemmixPackBrowser()
     print("NeoLemmix pack integration tests passed.")
+    #elseif SEQUENCE_RECOVERY_TESTS
+    try await subject.testSequenceCheckpointResume()
+    print("Sequence checkpoint integration tests passed.")
     #elseif SESSION_TESTS
     try await subject.testPlaylistSessions()
     try subject.testSequenceNavigationGuards()
