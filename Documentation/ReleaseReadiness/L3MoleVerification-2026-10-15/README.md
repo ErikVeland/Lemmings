@@ -76,8 +76,10 @@ through 244, including the ricochets and tunnel crossing. See
 `prototype-steel-comparison.json`. This proves the sampled trajectory in this
 case. It does not establish the full excavation mask, a player-built brick
 trigger, long travel outside terrain, water interactions or destruction.
-Run `python3 Scripts/verify-l3-mole-trace.py` to verify the 53 source/native
-coordinate pairs and the baseline runtime fingerprint.
+Run `python3 Scripts/verify-l3-mole-trace.py` to check the 53 source/native
+coordinate pairs, the runtime fingerprint, both repeated traces and all four
+tunnel-edge counterexamples. The verifier also confirms that both source traces
+use the same executable.
 
 `mole-prototype.patch` contains the isolated proposal against the baseline
 runtime hash recorded in `baseline-provenance.json`. It has not been applied

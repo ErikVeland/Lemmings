@@ -1,5 +1,6 @@
 """Reject changed evidence and incomplete release closure."""
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,6 +11,24 @@ spec.loader.exec_module(audit)
 
 
 class AuditTests(unittest.TestCase):
+    def test_fan_audit_matches_retained_release_manifest(self):
+        repository = Path(__file__).resolve().parents[2]
+        readiness = repository / "Documentation/ReleaseReadiness"
+        fan_audit = json.loads((readiness / "ClassicFanBundleAudit-2026-10-15.json").read_text())
+        release_manifest = json.loads((readiness / "MacOS2Preparation-2026-10-15/bundle-inputs.json").read_text())
+        archives = fan_audit["bundle"]["archives"]
+        files = release_manifest["files"]
+
+        self.assertEqual(len(archives), 535)
+        self.assertEqual(fan_audit["bundle"]["levelCount"], 6020)
+        self.assertEqual(release_manifest["baselineVersion"], "1.9.7")
+        self.assertEqual(release_manifest["baselineBuild"], 82)
+        for archive in archives:
+            with self.subTest(archive=archive["archive"]):
+                resource = files.get("LevelPacks/" + archive["archive"])
+                self.assertIsNotNone(resource)
+                self.assertEqual(resource["sha256"], archive["sha256"])
+
     def test_classic_scope_keeps_shared_and_unknown_gates(self):
         gates = [
             {"area": "Classic", "status": "open", "scopes": ["all", "classic-1.0"]},
