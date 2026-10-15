@@ -9464,7 +9464,10 @@ extension AppDelegate {
     let c = TrolleyConditions(gameID: engine, packID: "earned-rewards", levelID: "level-\(number)",
       levelFingerprint: "reward-\(number)", rulesetVersion: "test", physicsMode: "test", population: 1,
       rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
-    return .init(id: c.levelID, title: "Reward lesson \(number)", game: engine, rules: "test", total: 1, required: 1, conditions: c)
+    let title = engine == "lemmings3" && number == 2
+      ? "A long level title keeps every word visible while the reward cards move down and paginate below it without covering the earning reasons or the navigation controls"
+      : "Reward lesson \(number)"
+    return .init(id: c.levelID, title: title, game: engine, rules: "test", total: 1, required: 1, conditions: c)
   }
   for engine in ["lemmings", "lemmings2", "lemmings3"] {
     for mode in 0..<3 {

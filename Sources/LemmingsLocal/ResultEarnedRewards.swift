@@ -20,13 +20,17 @@ import NxlvKit
             + achievementTextHeight(reward.reason, width: 886) + 28
     }
 
+    private var earnedRewardsStartY: CGFloat {
+        146 + achievementTextHeight(report?.run.level.title ?? "", width: 960) + 12
+    }
+
     var earnedRewardPages: [[ResultAwards.EarnedReward]] {
         var pages: [[ResultAwards.EarnedReward]] = []
         var rows: [ResultAwards.EarnedReward] = []
         var height: CGFloat = 0
         for reward in savedEarnedRewards {
             let next = rewardHeight(reward) + 12
-            if !rows.isEmpty, height + next > 394 {
+            if !rows.isEmpty, height + next > max(100, 568 - earnedRewardsStartY) {
                 pages.append(rows); rows = []; height = 0
             }
             rows.append(reward); height += next
@@ -49,8 +53,13 @@ import NxlvKit
         title(L10n.text("REWARDS EARNED"), x: 80, y: 48, width: 960, height: 40)
         text(L10n.text("\(player.initials)'s attempt"), 80, 100, 720, height: 26, palette: .green)
         text("\(earnedRewardPage + 1)/\(pages.count)", 840, 100, 200, alignment: .right, height: 26)
-        text(report?.run.level.title ?? "", 80, 134, 960, height: 26, alpha: 0.8)
-        var y: CGFloat = 178
+        let levelTitle = report?.run.level.title ?? ""
+        let levelTitleRect = CGRect(x: 80, y: 134, width: 960,
+                                    height: achievementTextHeight(levelTitle, width: 960))
+        if let font { font.menuParagraph(levelTitle, in: levelTitleRect, alignment: .left) }
+        else { GamePixelText.draw(levelTitle, in: levelTitleRect) }
+        registerAchievementText(levelTitle, rect: levelTitleRect)
+        var y = earnedRewardsStartY
         for reward in pages[earnedRewardPage] {
             let height = rewardHeight(reward)
             let card = CGRect(x: 64, y: y, width: 992, height: height)
