@@ -30,6 +30,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 - [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
+- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven staged language packs, review workflow and enablement gates.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
@@ -77,6 +78,19 @@ pinned NeoLemmix runnable gate passed 794 levels. The separate 788-level bundle 
 75 levels without bundled styles and exact-version winning replay evidence for
 158 levels. See [release scope](Documentation/ReleaseScope.md) for the current
 closure rule and status.
+
+## Translation work
+
+The shipped interface remains English. Spanish (Latin America), German, French,
+Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål are being prepared.
+Drafts and machine-generated candidates are not approved language packs.
+
+Start with the [translation handover](Documentation/Localisation.md#translation-handover)
+and the [localisation architecture](ARCHITECTURE.md#localisation).
+Review the locale checkpoint files under `Tools/Localisation/drafts/` before
+editing. Complete the linguistic, plural, font, layout and cross-platform checks
+before copying a locale into the runtime bundle or declaring it in app metadata.
+Coverage checks alone do not authorise enablement.
 
 ## Requirements
 

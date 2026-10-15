@@ -1,0 +1,103 @@
+{
+  "locale": "it",
+  "checkpoint_date": "2026-10-15",
+  "status": "not_reviewed",
+  "language_approved": false,
+  "enabled_for_runtime": false,
+  "reviewed_scope": {
+    "contextual_text_keys": [],
+    "plural_keys": [],
+    "verified_translation_edits": [],
+    "note": "The translation worker was interrupted before saved draft changes. This resumed session only inspected file availability, JSON structure, key coverage and hashes for handover; it did not begin linguistic review."
+  },
+  "draft": {
+    "path": "Tools/Localisation/drafts/it.json",
+    "sha256": "c39cc443f3eea22454c551b814a2230ab85d288ad42a56e347ba39b2acdd41a7",
+    "entry_count": 458,
+    "modified_by_this_worker": false,
+    "missing_current_text_count": 2664,
+    "obsolete_key_count": 6
+  },
+  "catalogue": {
+    "path": "Documentation/LocalisationCatalogue.json",
+    "sha256": "cb1597e02bbb23f777cb15824881436de54e9b9975d525888c227d348eee6721",
+    "text_count": 3116,
+    "plural_count": 8
+  },
+  "candidate": {
+    "path": ".build/localisation-tools/candidates/it.json",
+    "available_locally": true,
+    "sha256": "1ab3421cf4f625aa09cde9461c26cbf37f0b87a6250ee1154f60861dbd75bf8a",
+    "entry_count": 2927,
+    "generation_snapshot_text_count": 2927,
+    "machine_generated": true,
+    "linguistically_reviewed": false,
+    "merged_into_draft": false,
+    "missing_current_text_count": 199,
+    "obsolete_key_count": 10,
+    "portability_note": "Candidate is disposable ignored build output and will not travel with Git; preserve it separately if needed."
+  },
+  "plurals": {
+    "path": "Tools/Localisation/drafts/it.plurals.json",
+    "exists": false,
+    "reviewed": false,
+    "missing_keys": [
+      "count.commands",
+      "count.lemmings",
+      "count.levels",
+      "count.packs",
+      "count.rescueGoal",
+      "count.savedLemmings",
+      "count.secondStarGoal",
+      "count.thirdStarGoal"
+    ]
+  },
+  "intentionally_unchanged": {},
+  "unchanged_review_note": "No deliberately unchanged terms were verified or submitted by this worker. Empty mapping is not approval of identical-English entries already present in drafts or candidates.",
+  "remaining_work": [
+    "No contextual linguistic review was completed in this worker session; review every existing draft and candidate value before approval.",
+    "Merge useful candidate translations selectively, preserving any subsequently verified draft changes. The candidate is machine-generated and is not language-approved.",
+    "Compare with the current catalogue, remove obsolete keys and translate missing keys; the candidate predates the current catalogue.",
+    "Read source references for context. Apply the locale column in Tools/Localisation/captions.tsv to exact and uppercase keys with context-specific review.",
+    "Review placeholders, full-message grammar, informal tone, skill vocabulary, player ownership, retry/continue and paused Ready handovers across Classic, Lemmings 2 and Lemmings 3.",
+    "Create and review every plural entry, preserving exactly one %ld per category and checking native locale selection.",
+    "Review original Lemmings 2 narrative grouping and preserve brands, credit names, identifiers and interpolated player values.",
+    "Review identical-English values individually, then submit justified unchanged keys and reasons to the integration worker for Tools/Localisation/unchanged.json.",
+    "Run structural validation and actual-locale glyph, layout, accessibility and input-target checks on Mac, iOS and tvOS; keep the pack disabled until all applicable gates pass."
+  ],
+  "validation": {
+    "performed": [
+      "Parsed the current catalogue, draft and local candidate as JSON.",
+      "Recorded SHA-256 hashes, entry counts and current-catalogue coverage counts."
+    ],
+    "not_performed": [
+      "Full linguistic review",
+      "Glossary application",
+      "Plural completion",
+      "Placeholder and untranslated-English validator run",
+      "Native render or input-target verification",
+      "Device acceptance"
+    ],
+    "ui_windows_opened": false,
+    "audio_played": false
+  },
+  "handover_snapshot": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "cb1597e02bbb23f777cb15824881436de54e9b9975d525888c227d348eee6721",
+    "catalogue_text_count": 3116,
+    "catalogue_plural_count": 8,
+    "draft_sha256": "c39cc443f3eea22454c551b814a2230ab85d288ad42a56e347ba39b2acdd41a7",
+    "draft_entry_count": 458,
+    "draft_missing_current_text_count": 2664,
+    "draft_obsolete_key_count": 6,
+    "candidate_sha256": "1ab3421cf4f625aa09cde9461c26cbf37f0b87a6250ee1154f60861dbd75bf8a",
+    "candidate_entry_count": 2927,
+    "candidate_missing_current_text_count": 199,
+    "candidate_obsolete_key_count": 10,
+    "candidate_invalid_placeholder_count": 9,
+    "plural_staging_file_exists": false,
+    "bundled_runtime_locale_exists": false,
+    "structural_validation_result": "incomplete",
+    "linguistic_approval": false
+  }
+}

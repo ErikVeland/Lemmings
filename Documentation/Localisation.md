@@ -4,8 +4,9 @@ English is the source language. No translated language pack is enabled yet.
 First-wave draft translations for Spanish (Latin America), German, French,
 Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål are stored in
 `Tools/Localisation/drafts/`. These drafts are not part of the app bundle.
-They cover 458 messages per locale. Review and complete a locale before you
-move it into `Sources/NxlvKit/Resources/Localization.bundle` or enable it.
+Per-locale `.review.json` files record the latest checkpoint and remaining work.
+Review and complete a locale before you move it into
+`Sources/NxlvKit/Resources/Localization.bundle` or enable it.
 The shared layer serves Mac, iOS and tvOS, including Classic, NeoLemmix,
 Lemmings 2 and Lemmings 3.
 
@@ -16,6 +17,270 @@ help, notifications and accessibility messages use the same catalogue.
 Resolve messages before measuring text or building input targets.
 Standalone compiler scripts include the same localisation source when they
 compile a subset of shared files.
+
+## Translation handover
+
+The current task is to finish and validate all seven language packs across
+Classic, Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. Keep all
+seven disabled until all seven packs pass the language and platform gates. The user authorised
+parallel language reviewers. Their checkpoint files describe partial review,
+not approval to enable a language.
+
+Read `AGENTS.md`, `Documentation/UIPrinciples.md` and the
+[localisation architecture](../ARCHITECTURE.md#localisation) first.
+TV work also follows `Apps/UltimateLemmingsTV/AGENTS.md` and `IOSParity.md`.
+Preserve concurrent changes. Localisation changes are spread across commits,
+including `b2856b52` and `1ef4abe1`, rather than one isolated feature commit.
+Inspect the current checkout before resetting, staging or committing files.
+
+### Current checkpoint
+
+The 15 October 2026 catalogue at `1ef4abe1` contains 3,116 text keys and eight
+plural keys. Recount after source changes. The first local candidate generation
+completed for all seven locales against an older 2,927-text-key snapshot.
+Those candidates therefore contain stale keys and lack later additions.
+At this checkpoint each candidate lacks 199 current text keys and contains
+10 obsolete keys. Compare key sets rather than subtracting entry counts.
+The original drafts contained 458 entries. Review checkpoints can supersede
+that number. The runtime bundle still contains only `en.lproj`.
+
+| Locale | Language | Reviewer checkpoint |
+| --- | --- | --- |
+| `es-419` | Spanish, Latin America | `Tools/Localisation/drafts/es-419.review.json` |
+| `de` | German | `Tools/Localisation/drafts/de.review.json` |
+| `fr` | French | `Tools/Localisation/drafts/fr.review.json` |
+| `pt-BR` | Portuguese, Brazil | `Tools/Localisation/drafts/pt-BR.review.json` |
+| `it` | Italian | `Tools/Localisation/drafts/it.review.json` |
+| `nl` | Dutch | `Tools/Localisation/drafts/nl.review.json` |
+| `nb` | Norwegian Bokmål | `Tools/Localisation/drafts/nb.review.json` |
+
+A missing checkpoint means that review has not been recorded. A candidate or
+populated JSON file alone does not establish review. Check each checkpoint's
+scope, remaining issues and file hash before continuing. Coordinate one writer
+per locale. Keep shared source, catalogue and `unchanged.json` updates with one
+integration worker.
+
+Source fixes already present include:
+
+- The L2 artwork lookup table no longer passes through translation.
+- TV skill captions and target accessibility status use translated messages.
+- Keyboard help uses structured commands instead of parsing translated prose.
+- TV transfer captions are separate from HTML, JavaScript, HTTP and path data.
+- Journey captions translate at display time while saved identities remain stable.
+- More counts use native plural tables. Blank text falls back to English.
+- Sequel fonts support additional typographic punctuation without changing ASCII glyphs.
+- The catalogue checker rejects known technical-data mistakes and incomplete bundled tables.
+
+The expanded source state needs a fresh full localisation regression run.
+Earlier focused tests passed, but they predate some bank-text, plural and font
+changes. The catalogue check and six Python validator tests passed during the
+handover. This does not establish translated gameplay or device acceptance.
+
+### Files and formats
+
+| File | Use |
+| --- | --- |
+| `Documentation/LocalisationCatalogue.json` | Current English keys, message kind and source references. Read the source around a reference before translating an ambiguous key. |
+| `Tools/Localisation/drafts/<locale>.json` | Translation values keyed by the exact English message. Edit values, not keys or numbered placeholders. |
+| `Tools/Localisation/drafts/<locale>.plurals.json` | Plural key to category/value mapping. This is staging data, not an Apple `.stringsdict` file. |
+| `Tools/Localisation/drafts/<locale>.review.json` | Reviewed scope, remaining gaps, deliberately unchanged terms and validation evidence. State partial review explicitly. |
+| `Tools/Localisation/captions.tsv` | Shared game actions and skill vocabulary. Apply the locale column and check uppercase variants. Do not overwrite context-specific wording blindly. |
+| `Tools/Localisation/unchanged.json` | Optional shared allowlist for deliberately unchanged text. Format: locale, then English key, then a reason. The validator does not read this information from review files. |
+| `Tools/Localisation/l2-original-text.json` | Original L2 text inventory and bank references. Review this inventory before treating it as complete content localisation. |
+| `.build/localisation-tools/candidates/<locale>.json` | Disposable machine candidates. Not included in Git or the app. Preserve any useful candidate before moving to another machine. |
+
+Example staged plural entry:
+
+```json
+{
+  "count.levels": {
+    "one": "%ld niveau",
+    "other": "%ld niveaux",
+    "many": "%ld niveaux"
+  }
+}
+```
+
+Every category must retain exactly one `%ld`. Use the locale's native rules,
+including zero and large counts. Preserve literal percent signs as `%%`.
+Do not insert `{0}` arguments into a plural format. The current plural API
+supplies one integer only.
+
+Example deliberately unchanged text:
+
+```json
+{
+  "fr": {
+    "Lemmings": "Original game title"
+  }
+}
+```
+
+Do not allowlist a whole pack to suppress untranslated-English errors.
+Brand names, hardware abbreviations and authored identifiers need individual
+reasons. Shared English words may be valid translations, but still need review.
+
+### Resume the translation work
+
+1. Read each locale's review checkpoint and inspect its current diff.
+2. Refresh the English catalogue after settling source changes:
+
+   ```sh
+   python3 Tools/Localisation/catalogue.py
+   python3 Tools/Localisation/catalogue.py --check --audit
+   ```
+
+3. Compare every draft with the current catalogue. Remove obsolete keys and
+   translate missing keys. Preserve existing reviewed values.
+4. Apply and review `captions.tsv` vocabulary. Check primary actions, Ready,
+   retry, resume, Hot Seat ownership and destructive/undo wording first.
+5. Review all remaining messages in their source context. Preserve argument
+   meaning, negation, time units, key bindings and complete sentences.
+6. Complete every plural entry. Test zero, one, two and large counts with
+   Foundation's actual locale selection.
+7. Merge justified unchanged-text entries into `unchanged.json`.
+8. Run the structural checks below. Read every reported issue and missing key.
+9. Inspect actual translated renders and input targets across the engine and
+   platform matrix. Record checks that cannot run headlessly.
+10. Update each review checkpoint with the exact draft hash and remaining gaps.
+    Promote the seven packs only after all pass the applicable checks.
+
+Machine candidates contain known semantic errors. Examples include Norwegian
+Start translated as “Slutt”, German eligible as “beihilfefähig”, Spanish player
+as “reproductor”, and Dutch Builder as “Bouwmachine”. Placeholder checks do not
+detect these errors. A nonempty translation is not evidence of correctness.
+
+### Optional local candidate generation
+
+`generate_drafts.py` uses local OPUS models through Transformers. It does not
+send app text to a translation service. Its Python packages and model weights
+are optional development dependencies, not application requirements.
+Use a separate Python environment with `transformers<5`, `torch`,
+`sentencepiece` and `sacremoses`. The existing local environment is
+`.build/localisation-venv/` and model root is `.build/localisation-tools/models/`.
+Neither directory travels with Git.
+
+To prepare another machine, use a Python version supported by PyTorch. This
+checkout used Python 3.12:
+
+```sh
+python3.12 -m venv .build/localisation-venv
+.build/localisation-venv/bin/python -m pip install \
+  'transformers>=4.50,<5' torch sentencepiece sacremoses
+.build/localisation-venv/bin/python - <<'PY'
+from pathlib import Path
+from huggingface_hub import snapshot_download
+
+root = Path('.build/localisation-tools/models')
+files = ['config.json', 'generation_config.json', 'tokenizer_config.json',
+         'vocab.json', 'source.spm', 'target.spm', 'pytorch_model.bin', 'README.md']
+for name in ['opus-mt-en-ROMANCE', 'opus-mt-en-gem']:
+    snapshot_download('Helsinki-NLP/' + name, local_dir=root / name,
+                      allow_patterns=files)
+PY
+```
+
+The model root contains `opus-mt-en-ROMANCE` and `opus-mt-en-gem`. Obtain them
+from their Helsinki-NLP repositories. Their model cards describe the language
+codes and licences:
+[Romance model](https://huggingface.co/Helsinki-NLP/opus-mt-en-ROMANCE),
+[Germanic model](https://huggingface.co/Helsinki-NLP/opus-mt-en-gem).
+The current tool uses `es_MX` as a starting candidate for `es-419` and `pt_BR`
+for Brazilian Portuguese. Regional and game terminology still require review.
+
+```sh
+.build/localisation-venv/bin/python Tools/Localisation/generate_drafts.py \
+  --model-root .build/localisation-tools/models --languages de
+```
+
+**Preserve reviewed work before rerunning this tool.** It reads the draft,
+then overlays an existing candidate file. A stale candidate can therefore
+replace reviewed values in its output. Move that locale's old candidate to a
+backup name first. Generate missing material, inspect the diff, and merge only
+the required values into the maintained draft. Never copy a regenerated
+candidate over a reviewed pack without comparison.
+
+The generator translates individual lines and writes each locale at the end.
+It does not review full-message grammar, write plural files, apply the glossary,
+approve a pack, or install runtime resources. Long messages can lose arguments.
+Inspect the matching `.issues.json` file and the validator report.
+
+### Validation and enablement
+
+Run these from the repository root:
+
+```sh
+python3 -m unittest discover -s Tools/Localisation -p 'test_*.py'
+python3 Tools/Localisation/catalogue.py --check --audit
+python3 Tools/Localisation/validate.py \
+  --report .build/localisation-tools/pack-validation.json
+```
+
+`validate.py` returns nonzero while any pack is structurally incomplete. Its
+report lists missing text, missing plurals and errors per language. It detects
+duplicate JSON keys, unknown keys, blank values, invalid placeholders,
+unreviewed identical English values and unsafe count formats. Its `complete`
+field covers those checks only. It does not consume `.review.json` or prove
+language quality, glyph coverage, layout, accessibility or platform acceptance.
+
+Run native checks through the muted, offscreen runner:
+
+```sh
+export LEMMINGS_TEST_WINDOWS=offscreen
+export LEMMINGS_TEST_AUDIO=muted
+export CLANG_MODULE_CACHE_PATH="$PWD/.build/localisation-module-cache"
+export SWIFTPM_MODULECACHE_OVERRIDE="$CLANG_MODULE_CACHE_PATH"
+python3 Tools/UITestRunner/run.py swift test --disable-sandbox --jobs 2 \
+  --filter 'InterfaceLocalisationTests|BitmapLatinGlyphTests|SequelLatinFontTests|LocalisationLayoutTests|BitmapLatinRenderTests|SequelLatinRenderTests|FooterNavigationTests'
+LEMMINGS_TEST_LANGUAGE=en-XA python3 Tools/UITestRunner/run.py \
+  swift test --disable-sandbox --jobs 2 --filter SequelLatinFontTests
+```
+
+The second command exercises the L2 artwork regression under text expansion.
+Existing render tests cover representative captions and shared layouts. They
+do not yet constitute seven complete translated application journeys. Staged
+JSON cannot be selected through `LEMMINGS_TEST_LANGUAGE` until a test harness
+loads it as a temporary localisation bundle. Build that fixture path before
+claiming end-to-end language coverage. Do not enable an incomplete pack merely
+to make a render test select it.
+
+Validate Mac, iOS and tvOS source compilation after runtime changes.
+`Scripts/check-tvos-sdk.sh` compiles TV modules and the app entry point.
+`Scripts/check-1.3-mobile.sh --require-sdk` is the broader iOS gate and requires
+an available Simulator runtime. Read it before running. Report unavailable
+headless checks instead of switching to visible windows or device tests.
+SDK compilation alone does not establish native focus, touch or VoiceOver.
+
+For every locale, check Classic/L2/L3 Home, selection, briefing, Ready, pause,
+results, retry/continue, saved-run resume, Hot Seat handover, hints, help,
+settings and accessibility. Include disabled/selected/focused actions,
+long player names, zero/one/many counts, narrow phone widths, tablet panes and
+TV safe areas. Handovers must remain paused until Ready. Preserve engine limits:
+mobile L2/L3 have no release-rate control, and L3 has no nuke.
+
+There is no staged-JSON promotion script yet. Once a pack passes review,
+export its text to `<locale>.lproj/Interface.strings`. Convert its plural JSON
+to the Apple `.stringsdict` structure described below. Verify the generated
+files with `plutil` and rerun the catalogue, runtime and render checks. Confirm
+Mac and shared iOS/tvOS packaging include both tables. Only then add the locale
+to each app's generated or checked-in `CFBundleLocalizations` metadata.
+Adding a non-English `.lproj` to the runtime bundle can enable selection even
+before metadata is updated. Keep unapproved packs outside that bundle.
+
+### Remaining integration work
+
+- Finish linguistic review and the catalogue delta for all seven packs.
+- Complete plural files and merge justified unchanged-text reviews.
+- Review original L2 text grouping. The current inventory splits authored
+  carriage-return lines, including incomplete sentence fragments. Preserve
+  credits and complete sentences before final translation.
+- Check original L2 bank text and baked menu pictures, story screens and other
+  imported lettering. String coverage does not replace an artwork pass.
+- Audit remaining computed captions, hint fragments and count-dependent text.
+- Add temporary-bundle language tests and actual-locale render coverage.
+- Rerun native regressions and both mobile SDK checks for the final source.
+- Record physical touch, remote focus, VoiceOver and complete device journeys
+  separately. Keep every unvalidated pack disabled.
 
 ## Authoring
 
@@ -104,16 +369,17 @@ Other scripts, Latin letters outside this repertoire and right-to-left layout
 remain unsupported. Preserve the complete translated Unicode message in
 accessibility text.
 
-Original menu pictures, story animations and lettering baked into imported
-artwork are not translated by the string catalogue. Lemmings 2 also has text
-inside its original banks. These need a separate content/artwork pass for each
-chosen language. Computed journey focus text, hint fragments, keyboard-help
-parsing and remaining count-dependent sentences need a language-specific review.
+Original menu pictures and lettering baked into imported artwork are not
+translated by the string catalogue. Some original L2 bank and story text now
+uses the explicit inventory and `originalL2Text` lookup. That path still needs
+sentence grouping, credit-name and rendered-script validation. Baked artwork
+needs a separate pass for each chosen language. Computed captions, hint
+fragments and remaining count-dependent sentences need a language-specific review.
 Do not describe the source scan as complete language support.
 
 ## Validation
 
-Six focused tests cover English catalogue round trips, language matching,
+Focused tests cover English catalogue round trips, language matching,
 missing-message fallback, reordered arguments, invalid placeholders, count
 plurals, unchanged player data and stable settings/skill identifiers.
 Windowless expanded-text renders cover phone, tablet and desktop sizes with
