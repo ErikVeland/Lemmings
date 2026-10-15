@@ -1,5 +1,3 @@
-/* Draft localisation. For in-app testing only. */
-
 "\n\nKeep {0} available for later." = "\n\nபின்னர் பயன்படுத்த {0} வைத்திருங்கள்.";
 "\n\nRelease rate in this example:\n" = "\n\nஇந்த எடுத்துக்காட்டின் வெளியீட்டு வீதம்:\n";
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nஇந்த மாற்றங்கள் கூட்ட இடைவெளியை மாற்றும். மாற்றும் நேரமும் முக்கியம். ஒவ்வொரு குறியிடத்திலும் இடைநிறுத்தி பணியாளரையும் திசையையும் சரிபார்க்கவும்.";
@@ -126,7 +124,6 @@
 "ASSIGN & FOCUS" = "ஒதுக்கு மற்றும் கவனப்படுத்து";
 "ATTRACTOR" = "ஈர்ப்பவர்";
 "AWARD" = "விருது";
-"AWARDS" = "விருதுகள்";
 "About Ultimate Lemmings" = "Ultimate Lemmings பற்றி";
 "Above and beyond" = "மேலே மற்றும் அப்பால்";
 "Absolute maximum" = "முழுமையான அதிகபட்சம்";
@@ -319,7 +316,6 @@
 "Beta" = "சோதனைப் பதிப்பு";
 "Beyond the darkness to a new land" = "இருளுக்கு அப்பால் புதிய நிலத்திற்கு";
 "Bindings" = "விசை ஒதுக்கீடுகள்";
-"Bitmap lettering" = "பிட்மேப் எழுத்துரு";
 "Blocker" = "தடுப்பவர்";
 "Blocker turnaround" = "தடுப்பவரால் திரும்புதல்";
 "Bomb" = "வெடிகுண்டு";
@@ -392,6 +388,7 @@
 "Career progress" = "விளையாட்டு வாழ்நாள் முன்னேற்றம்";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "தொழில் முன்னேற்றம். {0} நட்சத்திரங்கள், பிளஸ் {1} இந்த ரன். {2} வேறுபட்ட நிலைகள் சுத்தம். {3} மூன்று நட்சத்திர நிலைகள். {4} {5}";
 "Career stars" = "விளையாட்டு வாழ்நாள் நட்சத்திரங்கள்";
+"Career stars {0} > {1}" = "விளையாட்டு நட்சத்திரங்கள் {0} > {1}";
 "Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "விளையாட்டு வாழ்நாள் நட்சத்திரங்கள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் பெறும் ஒவ்வொரு 3 நட்சத்திரங்களுக்கும் ஒரு பெரிதாக்கப் பயன்பாடு கிடைக்கும்.";
 "Cavelems" = "குகை லெம்மிங்கள்";
 "Centre entrance" = "நுழைவாயிலை மையப்படுத்து";
@@ -483,7 +480,6 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Classic ஓவியம்";
-"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "Classic ஒரு பதிவு தீர்வு நீல லெம்மிங் உருவங்களாக overlay முடியும். விருப்ப overlay உங்கள் முயற்சி மாற்றாமல் விளையாட, இடைநிறுத்த மற்றும் பின்னோக்கி திரும்புகிறது.";
 "Classic effects" = "Classic விளைவுகள்";
 "Classic skill counters" = "Classic திறன் எண்ணிகள்";
 "Classic tribe movie" = "Classic குலக் காணொளி";
@@ -591,7 +587,6 @@
 "Controller button" = "கட்டுப்படுத்திப் பொத்தான்";
 "Controller buttons" = "கட்டுப்படுத்திப் பொத்தான்கள்";
 "Controls" = "கட்டுப்பாடுகள்";
-"Controls and help" = "கட்டுப்பாடுகளும் உதவியும்";
 "Controls help" = "கட்டுப்பாடுகள் உதவி";
 "Copied" = "நகலெடுக்கப்பட்டது";
 "Copy" = "நகலெடு";
@@ -733,6 +728,7 @@
 "Each teleporter needs a paired receiver." = "ஒவ்வொரு தொலைதொடர்பவருக்கும் ஒரு ஜோடி பெற்ற ரிசீவர் தேவை.";
 "Each zone must have a positive width and height." = "ஒவ்வொரு மண்டலமும் ஒரு நேர்மறையான அகலமும் உயரமும் இருக்க வேண்டும்.";
 "Earlier" = "முன்னர்";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "Hot Seat மீண்டும் முயற்சிகளில் முந்தைய வீரர்களின் கடைசி முயற்சிகள் வண்ண நிழல்களாகத் தோன்றும். அவை பின்னோக்கிச் செல்லுதலைப் பின்பற்றி மீள்பதிவு காணொளிகளிலும் தோன்றும்.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "பின்னோக்காமல் பெறும் ஒவ்வொரு 3 நட்சத்திரங்களுக்கும் பெரிதாக்கம் கிடைக்கும். பின்னோக்காமல் மூன்று நட்சத்திரங்கள் பெறும் ஒவ்வொரு 3 நிலைகளுக்கும் மிகைப் பெரிதாக்கம் கிடைக்கும்.";
 "Earn the same play style on 5 distinct cleared levels." = "5 வெவ்வேறு க்ளைர் நிலைகளில் அதே விளையாட்டு பாணியை சம்பாதிக்கவும்.";
 "Earned" = "பெறப்பட்டது";
@@ -776,6 +772,8 @@
 "Estimated solution burden" = "மதிப்பிடப்பட்ட தீர்வு சுமை";
 "Evacuate all our tribes?" = "எங்கள் பழங்குடிகள் அனைத்தையும் வெளியேற்ற?";
 "Evaluators" = "மதிப்பீட்டாளர்கள்";
+"Every 3 career stars" = "ஒவ்வொரு 3 விளையாட்டு நட்சத்திரங்களுக்கும்";
+"Every 3 distinct levels" = "ஒவ்வொரு 3 தனித்தனி நிலைகளுக்கும்";
 "Every achievement earned. What a rescue!" = "ஒவ்வொரு சாதனையும் பெற்றது. என்ன ஒரு மீட்பு!";
 "Every level" = "ஒவ்வொரு நிலையும்";
 "Every rating is finished." = "ஒவ்வொரு மதிப்பீடு முடிந்துவிட்டது.";
@@ -804,6 +802,7 @@
 "F / Speed: toggle fast-forward" = "F / வேகம்: வேகமான முன்னேற்றத்தை மாற்று";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / வேகம்: வேகமான முன்னேற்றத்தை மாற்று\nF அழுத்திப் பிடி: 10× வரை உயர்த்து; விட்டால்: வேகம் நீடிக்கும்\nShift, வேகம் அல்லது RT அழுத்திப் பிடி: தற்காலிக வேக உயர்வு; விட்டால்: முந்தைய வேகம்\nவேக அம்புகள் அல்லது Shift+[ / Shift+]: 1×, 2×, 3×, 5× அல்லது 10× வேகத்தை அமை\nF அல்லது கட்டுப்படுத்தியின் B: உடனே 1× வேகத்திற்குத் திரும்பு";
 "F: Fast speed" = "F: வேகமான வேகம்";
+"FAILED" = "தோல்வி";
 "FAILED — press R" = "தோல்வி — R அழுத்தவும்";
 "FALLER" = "தோல்வி";
 "FAN" = "ரசிகர்";
@@ -930,7 +929,6 @@
 "Genesis Title Screen" = "Genesis Title Screen";
 "Genesis Tricky Theme" = "Genesis Tricky Theme";
 "Ghost solution" = "நிழல் தீர்வு";
-"Ghost solutions" = "நிழல் தீர்வுகள்";
 "Glider" = "சறுக்கிப் பறப்பவர்";
 "Glider, then goal" = "சறுக்கிப் பறப்பவர், பின்னர் இலக்கு";
 "Glue Pourer" = "பசை ஊற்றுபவர்";
@@ -952,6 +950,7 @@
 "HINT {0} OF {1}" = "குறிப்பு {0} OF {1}";
 "HOISTER" = "தூக்குபவர்";
 "HOLD" = "அழுத்திப் பிடி";
+"HOME {0}/{1}" = "காப்பாற்றியவை {0}/{1}";
 "HOOK" = "கொக்கி";
 "HOPPER" = "துள்ளுபவர்";
 "HOT SEAT WAS NOT SAVED" = "மாறிமுறை ஆட்டம் சேமிக்கப்படவில்லை";
@@ -985,6 +984,8 @@
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
 "Hot Seat" = "மாறிமுறை";
+"Hot Seat and result improvements" = "Hot Seat மற்றும் முடிவு மேம்பாடுகள்";
+"Hot Seat ghosts" = "Hot Seat நிழல்கள்";
 "Hot Seat player HUD" = "மாறிமுறை வீரர் நிலைக்காட்சி";
 "Hot Seat starts" = "மாறிமுறைத் தொடக்கங்கள்";
 "Hot Seat: {0}" = "மாறிமுறை: {0}";
@@ -1151,7 +1152,6 @@
 "Keep trying" = "தொடர்ந்து முயற்சி செய்யுங்கள்";
 "Keyboard commands" = "விசைப்பலகைக் கட்டளைகள்";
 "Keyboard commands…" = "விசைப்பலகைக் கட்டளைகள்…";
-"Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause." = "விசைப்பலகை உதவி செயலில் உள்ள விளையாட்டு மற்றும் அமைப்புகளைப் பின்பற்றுகிறது. கேமரா இயக்கம் மூன்று சொந்த விளையாட்டுகளிலும் கர்சரை நிலைக்கு நங்கூரமாக வைத்திருக்கிறது. கட்டுப்பாட்டாளர் வேக மீட்டமைப்பு இடைவெளியை விட முன்னுரிமை பெறுகிறது.";
 "Keyboard overlay. The level is paused. Escape closes the overlay." = "விசைப்பலகை உதவித் திரை. நிலை இடைநிறுத்தப்பட்டுள்ளது. Escape இந்தத் திரையை மூடும்.";
 "Keys" = "விசைகள்";
 "L1 / LB" = "L1 / LB";
@@ -1209,6 +1209,7 @@
 "LB / left shoulder" = "LB / இடது தோள்";
 "LEFT" = "இடது";
 "LEFT STICK: AIM  /  RIGHT STICK: CAMERA" = "இடது: இலக்கு / வலது: கேமரா";
+"LEFT {0}" = "மீதம் {0}";
 "LEM" = "எல்இஎம்";
 "LEMMING" = "லெம்மிங்";
 "LEMMING MYTHOS" = "லெம்மிங் தொன்மம்";
@@ -1222,12 +1223,14 @@
 "LEVEL DESIGN" = "நிலை வடிவமைப்பு";
 "LEVEL ENDED\n{0} SAVED" = "நிலை முடிந்தது\n{0} மீட்கப்பட்டது";
 "LEVEL NOT AVAILABLE" = "நிலை கிடைக்கவில்லை";
+"LEVEL SKIP" = "நிலையைத் தவிர்";
 "LEVEL STARTS" = "நிலைத் தொடக்கங்கள்";
 "LEVEL {0} OF {1}" = "{1} இல் நிலை {0}";
 "LEVEL {0}/{1}" = "நிலை {0}/{1}";
 "LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS" = "மிகவும் தோல்வியுற்ற அல்லது முடிவில்லாத தொடக்கங்களுடன் நிலைகள்";
 "LIBRARY" = "நூலகம்";
 "LOOK AROUND" = "சுற்றிப் பார்";
+"LOST {0}" = "இழந்தவை {0}";
 "LT / left trigger" = "LT / இடது துப்பாக்கி";
 "Language" = "மொழி";
 "Large (125%)" = "பெரியது (125%)";
@@ -1281,6 +1284,7 @@
 "Level Records…" = "நிலைப் பதிவுகள்…";
 "Level Select" = "நிலையைத் தேர்ந்தெடு";
 "Level Select…" = "நிலையைத் தேர்ந்தெடு…";
+"Level Skips" = "நிலைத் தவிர்ப்புகள்";
 "Level access" = "நிலை அணுகல்";
 "Level cleared at or just above the minimum." = "குறைந்தபட்ச அளவுக்கு அல்லது அதற்கு மேலே உள்ள அளவு.";
 "Level cleared despite substantial losses." = "கணிசமான இழப்புகள் இருந்தபோதிலும் நிலை சரி செய்யப்பட்டது.";
@@ -1468,7 +1472,6 @@
 "Movie export is unavailable." = "திரைப்பட ஏற்றுமதி செய்ய முடியாது.";
 "Movie writing could not start." = "காணொளி எழுதுவதைத் தொடங்க முடியவில்லை.";
 "Music" = "இசை";
-"Music and performance" = "இசை மற்றும் நிகழ்ச்சி";
 "Music downloaded" = "இசை பதிவிறக்கப்பட்டது";
 "Music muted" = "இசை ஒலியடக்கப்பட்டது";
 "Music off" = "இசை முடக்கம்";
@@ -1620,7 +1623,6 @@
 "ORIGINAL MOVIES" = "அசல் திரைப்படங்கள்";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "எங்கள் வழிகாட்டல் தலிஸ்மன் பிளவுபட்டது";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "நம் வாழ்வில் செல்வமும் பலன் கிடைத்துள்ளது";
-"OUT {0}  HOME {1}/{2}  {3}" = "வெளியே {0} HOME {1}/ {2} {3}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "வெளியே {0} சேமிக்க {1} இடது {2} இழந்து {3}";
 "OUT {0}/{1}" = "வெளியே {0}/{1}";
 "OVERVIEW" = "மேலோட்டம்";
@@ -1678,8 +1680,6 @@
 "Original" = "அசல்";
 "Original Lemmings 3 movie" = "அசல் Lemmings 3 காணொளி";
 "Original Macintosh" = "அசல் Macintosh";
-"Original Macintosh 1-bit graphics" = "அசல் Macintosh 1-பிட் கிராபிக்ஸ்";
-"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "அசல் Macintosh கருப்பு மற்றும் வெள்ளை கலைப்படைப்பு அதன் சிக்கலான திசைதிருப்பலை நவீன மேக்ஸுக்கு கொண்டுவருகிறது. Classic கலைப்படைப்பு மற்றும் ஒற்றை நிற விளையாட்டு கட்டுப்பாடுகளுக்கு கிராபிக்ஸ் அமைப்புகளில் Macintosh (1 பிட்) ஐத் தேர்வுசெய்க.";
 "Original PC" = "அசல் PC";
 "Original inputs" = "அசல் உள்ளீடுகள்";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "அசல் முன்னணி மேடையில். சின்னமான டிஜிட்டல் குரல் மாதிரிகள் மற்றும் 2 வீரர் பிளவு திரையை உள்ளடக்கியது.";
@@ -1890,6 +1890,7 @@
 "RANK >" = "தரவரிசை >";
 "RATE +" = "வீதம் +";
 "RATE -" = "வீதம் -";
+"RATE {0}" = "வேகம் {0}";
 "RAYMOND USHER" = "RAYMOND USHER";
 "RB / right shoulder" = "RB / வலது தோள்";
 "READY" = "தயார்";
@@ -2017,6 +2018,7 @@
 "Restore TV saves?" = "TV சேமிப்புகளை மீட்டமைக்கவா?";
 "Restore recovery key" = "மீட்பு விசை மீட்டெடுக்கவும்";
 "Restore the default gameplay actions for every controller button." = "ஒவ்வொரு கட்டுப்பாட்டு பொத்தானிற்கும் இயல்புநிலை விளையாட்டு நடவடிக்கைகளை மீட்டெடுக்கவும்.";
+"Results and rewards" = "முடிவுகளும் பரிசுகளும்";
 "Resume" = "தொடர்";
 "Resume  {0}/{1}" = "தொடக்கம் {0}/{1}";
 "Resume Hot Seat run" = "மாறிமுறை ஆட்டத்தைத் தொடர்";
@@ -2028,7 +2030,6 @@
 "Resume session" = "அமர்வைத் தொடர்";
 "Resume session?" = "அமர்வைத் தொடரவா?";
 "Resume solo run" = "தனி ஆட்டத்தைத் தொடர்";
-"Resume your journey" = "உங்கள் பயணத்தைத் தொடர்";
 "Resume {0}  {1}/{2}" = "தொடக்கம் {0} {1}/{2}";
 "Reticule" = "குறிவட்டம்";
 "Reticule count" = "குறிவட்ட எண்ணிக்கை";
@@ -2036,6 +2037,7 @@
 "Retry" = "மீண்டும் முயல்";
 "Retry - " = "மீண்டும் முயற்சி - ";
 "Retry a clear: save more, or match it with fewer skills or less time." = "மீண்டும் முயற்சி செய்யுங்கள்: அதிக சேமிப்பு, அல்லது குறைவான திறன்களுடன் அல்லது குறைவான நேரத்துடன் பொருத்துங்கள்.";
+"Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles." = "மீண்டும் முயற்சி செயல்களும் பெற்ற பரிசுகளும் தெளிவாகத் தொகுக்கப்பட்டுள்ளன. Classic, The Tribes, Chronicles ஆகியவற்றில் ஒரே மாதிரியான கட்டுப்பாடுகள் உள்ளன.";
 "Retry as {0}" = "{0} என மீண்டும் முயற்சிக்கவும்";
 "Retry last level as {0}" = "{0} என கடைசி நிலை மீண்டும் முயற்சிக்கவும்";
 "Retry level" = "நிலையை மீண்டும் முயல்";
@@ -2155,6 +2157,7 @@
 "STONE" = "கல்";
 "STUNNED" = "அதிர்ச்சியடைந்தேன்";
 "SUPERLEM" = "சூப்பர்லெம்";
+"SUPERZOOM" = "பெரும் பெரிதாக்கம்";
 "SURFER" = "அலைச்சறுக்கு வீரர்";
 "SWIM" = "நீச்சல்";
 "SWIMMER" = "நீந்துபவர்";
@@ -2236,7 +2239,6 @@
 "Settings (⌘,)" = "அமைப்புகள் (⌘,)";
 "Settings sections" = "அமைப்புப் பிரிவுகள்";
 "Settings…" = "அமைப்புகள்…";
-"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "ஏழு கூடுதல் மொழி தொகுப்புகள் உங்கள் மேக்கின் மொழி அமைப்பை பின்பற்றுகின்றன. அசல் பிட்மேப் எழுத்துருக்கள் மேற்கத்திய லத்தீன் உரையை ஆதரிக்கின்றன.";
 "Shadow" = "நிழல்";
 "Shadow tribe movie" = "நிழல் குலக் காணொளி";
 "Share as {0}" = "{0} ஆகப் பகிர்";
@@ -2247,7 +2249,6 @@
 "Shared campaign" = "பகிரப்பட்ட பிரச்சாரம்";
 "Shared campaign revisions conflict." = "பகிரப்பட்ட பிரச்சார திருத்தங்கள் மோதல்.";
 "Shared play counts" = "பகிர்ந்த விளையாட்டு எண்ணிக்கைகள்";
-"Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys." = "பகிரப்பட்ட பின்னோக்கி ஆடியோ, இசை மீட்பு மற்றும் ரெண்டரிங் கேச் Classic, தி ட்ரிப்ஸ் மற்றும் க்ரோனிக்கள் ஆகியவற்றில் விளையாட்டை மேம்படுத்துகின்றன. பொருத்தமான சுயவிவரங்கள் மாறிமுறை பயணங்கள் உட்பட புதிய சேமிக்கப்பட்ட முன்னேற்றங்களை மீட்டெடுக்க முடியும்.";
 "Shared saves/replays" = "பகிரப்பட்ட சேமிப்பு/பதிப்பு";
 "Shared: {0} days" = "பகிர்ந்தது: {0} நாட்கள்";
 "Shares daily use, results, lemmings saved, solo or Hot Seat play, and music use. No names, IDs, pack names or replays are sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "தினசரிப் பயன்பாடு, முடிவுகள், மீட்கப்பட்ட லெம்மிங்கள், தனி அல்லது மாறிமுறை ஆட்டம் மற்றும் இசைப் பயன்பாடு பகிரப்படும். பெயர்கள், அடையாள எண்கள், தொகுப்புப் பெயர்கள் அல்லது மறு இயக்கங்கள் அனுப்பப்படாது.\n\nசேவை உரிமையாளர் மீளமைக்கும் வரை பகிர்ந்த மீட்பு மொத்தம் இருக்கும். அனுப்பும்போது சேவை உங்கள் பிணைய முகவரியைக் காணும்.";
@@ -2298,6 +2299,7 @@
 "Skip" = "கடந்து செல்லுங்கள்";
 "Skip as {0} ({1})" = "{0} ({1})";
 "Skip level ({0})" = "ஸ்கிப் நிலை ({0})";
+"Skips" = "தவிர்ப்புகள்";
 "Skips {0}" = "தவிர்ப்புகள் {0}";
 "Slider" = "வழுக்குபவர்";
 "Slot {0}" = "இடம் {0}";
@@ -2401,7 +2403,6 @@
 "Superlem" = "சூப்பர்லெம்";
 "Superzoom" = "மிகைப் பெரிதாக்கம்";
 "Superzoom active" = "மிகைப் பெரிதாக்கம் செயலில் உள்ளது";
-"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "ஆதரிக்கப்பட்ட பயணங்கள் மற்றும் வரிசை பிளேலிஸ்ட்கள் சேமிக்கப்பட்ட முயற்சி, தேர்ந்தெடுக்கப்பட்ட நடவடிக்கை மற்றும் கேமராவை மீட்டெடுக்கின்றன. Classic, தி ட்ரிப்ஸ் அண்ட் க்ரோனிக்கல்ஸ் மீண்டும் நிறுத்தப்பட்டது. மாறிமுறை தயாராக காத்திருக்கிறது.";
 "Surfer" = "அலைச்சறுக்கு வீரர்";
 "Swap sticks" = "குச்சிகளை மாற்று";
 "Swimmer" = "நீந்துபவர்";
@@ -2426,6 +2427,7 @@
 "THROWER" = "வீசுபவர்";
 "TIME" = "நேரம்";
 "TIME & SPEED" = "நேரமும் வேகமும்";
+"TIME {0}" = "நேரம் {0}";
 "TIME {0}:{1}" = "நேரம் {0}:{1}";
 "TOOLS HELD" = "கையில் உள்ள கருவிகள்";
 "TRIBE  {0}" = "குலம்  {0}";
@@ -2539,7 +2541,6 @@
 "The archive has more than one member named {0}." = "காப்பகத்தில் {0} என்ற பெயரில் ஒன்றுக்கு மேற்பட்ட உறுப்பினர்கள் உள்ளனர்.";
 "The archive has no member named {0}." = "காப்பகத்தில் {0} என்று பெயரிடப்பட்ட உறுப்பினர் இல்லை.";
 "The archive member {0} is too large." = "காப்பக உறுப்பினர் {0} மிகப்பெரியது.";
-"The art of one bit" = "ஒரு பிட் கலை";
 "The attempt was not saved." = "முயற்சி சேமிக்கப்படவில்லை.";
 "The cloud player is invalid." = "மேகச் சேமிப்பு வீரர் செல்லாது.";
 "The cloud progress format does not match." = "மேகத்தின் முன்னேற்ற வடிவம் பொருந்தாது.";
@@ -2734,6 +2735,7 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "தாமஸ் ஹாப்ஸ் சமாதானத்தையும் பாதுகாப்பையும் மிக முக்கியமாகக் கருதினார். பகிரப்பட்ட விதிகள் மற்றும் அதிகாரம் மக்களை மோதல்களிலிருந்து பாதுகாக்கின்றன.";
 "Three-star" = "மூன்று நட்சத்திரங்கள்";
 "Three-star levels" = "மூன்று நட்சத்திர நிலைகள்";
+"Three-star levels {0} > {1}" = "மூன்று நட்சத்திர நிலைகள் {0} > {1}";
 "Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "மூன்று நட்சத்திர நிலைகள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் மூன்று நட்சத்திரங்கள் பெற்ற ஒவ்வொரு 3 வெவ்வேறு நிலைகளுக்கும் நிலையைத் தவிர்க்கும் ஒரு வாய்ப்பு கிடைக்கும்.";
 "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "மூன்று நட்சத்திர நிலைகள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் மூன்று நட்சத்திரங்கள் பெற்ற ஒவ்வொரு 3 வெவ்வேறு நிலைகளுக்கும் ஒரு மிகைப் பெரிதாக்கப் பயன்பாடு கிடைக்கும்.";
 "Three-star rescue" = "மூன்று நட்சத்திர மீட்பு";
@@ -2974,7 +2976,6 @@
 "Zoom active" = "பெரிதாக்கம் செயலில் உள்ளது";
 "Zoom off" = "பெரிதாக்கம் முடக்கப்பட்டது";
 "Zoom on / off at cursor" = "இடச்சுட்டியில் பெரிதாக்கத்தை இயக்கு / முடக்கு";
-"Zoom {0}   Superzoom {1}   Level Skips {2}" = "பெரிதாக்கம் {0}   மிகைப் பெரிதாக்கம் {1}   நிலைத் தவிர்ப்புகள் {2}";
 "Zoom {0}×" = "பெரிதாக்கம் {0}×";
 "Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "பெரிதாக்கம் {0} மீதமுள்ளது. மிகைப் பெரிதாக்கம் {1} மீதமுள்ளது. {2} நிலைத் தவிர்ப்புகள். {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2x. Shift+Z: 4x. சுழற்சி செய்ய கிளிக் செய்யவும்.";
@@ -3153,7 +3154,6 @@
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Rewinds: {2}. W பின்வாங்கும் வடிகட்டிகளை மாற்றுகிறது. {3} உள்ளூர் பதிவுகள். Escape திரும்புகிறது. A சாதனைகளைத் திறக்கிறது. D ரன் விவரங்களைத் திறக்கிறது.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} மீட்கப்பட்டது, {4} தேவை. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 இந்த ரன் - {1}/3 தனிப்பட்ட சிறந்த";
-"{0}/{1} Next >" = "{0}/{1} அடுத்து >";
 "{0}/{1} across {2} titles: {3}" = "{0}/{1} {2} தலைப்புகளில்: {3}";
 "{0}/{1} earned" = "{0}/{1} பெறப்பட்டது";
 "{0}/{1} levels passed in this rating." = "{0}/{1} அளவுகள் இந்த மதிப்பீட்டில் கடந்துவிட்டன.";

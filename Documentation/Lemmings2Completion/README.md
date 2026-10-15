@@ -18,12 +18,16 @@ chain ends with one survivor and a Bronze talisman, so the gate correctly fails
 the ark prerequisites. The evidence does not prove a golden talisman or an ark
 ending.
 
-The worktree now matches `origin/main` at revision `fc52cac4`. A fresh
-current-source build passed the 120-route gate, 70 carry-over variants and all
-twelve ten-level chains against the staged 218-file build 83 app payload. The
-event suite passed all 120 routes and rejected refused, off-viewport and
-out-of-order events. The Lemmings 2 runtime suite also passed against this
-payload. It includes a regression check for the crowd assignment query.
+The fresh payload replay ran at `fc52cac4`, when the worktree matched
+`origin/main`. The worktree has since advanced to `d537e822`. The L2 runtime,
+completion verifier, event verifier and fixtures did not change between those
+revisions. The current runtime suite was rebuilt and passed against the staged
+218-file build 83 app payload. It includes a regression check for the crowd
+assignment query.
+
+The recorded payload replay passed the 120-route gate, 70 carry-over variants
+and all twelve ten-level chains. The event suite passed all 120 routes and
+rejected refused, off-viewport and out-of-order events.
 
 The build uses Xcode 26.6 and Swift 6.3.3. A temporary source copy disables
 optimisation only for `ClassicDOSSimulation.handleJumping`, to work around the

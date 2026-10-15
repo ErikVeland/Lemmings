@@ -249,6 +249,8 @@ def main():
                                LEMMINGS_PERFORMANCE_OUTPUT=str(base / "performance.json"))))
         checks.append(run("sequel-views", [["zsh", "Scripts/run-sequel-mac-artwork-tests.sh"]]))
         checks.append(run("arcade-records", [["zsh", "Scripts/run-arcade-records-tests.sh"]]))
+        checks.append(run("hot-seat-ghosts", [["zsh", "Scripts/run-hot-seat-ghost-tests.sh"]],
+                          dict(os.environ, LEMMINGS_TEST_RESOURCES=str(app / "Contents/Resources"))))
     else:
         checks.append(dict(name="replay-movies", status="not-run", reason="Use --app."))
         checks.append(dict(name="mac-app-integration", status="not-run", reason="Use --app. Separate app evidence must match the final source."))
@@ -256,6 +258,7 @@ def main():
         checks.append(dict(name="local-performance-measurement", status="not-run", reason="Use --app. Short local measurements do not certify sustained throughput or hardware."))
         checks.append(dict(name="sequel-views", status="not-run", reason="Use --app."))
         checks.append(dict(name="arcade-records", status="not-run", reason="Use --app."))
+        checks.append(dict(name="hot-seat-ghosts", status="not-run", reason="Use --app."))
     after = manifest(input_paths(app))
     drift = sorted(key for key in set(before) | set(after) if before.get(key) != after.get(key))
     all_gates = json.loads((ROOT / "Documentation/ReleaseReadiness/gates.json").read_text())

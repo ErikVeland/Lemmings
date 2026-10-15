@@ -9,15 +9,11 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.1"
-    static let subtitle = L10n.text("Journey and control improvements")
+    static let notesVersion = "2.0.2"
+    static let subtitle = L10n.text("Hot Seat and result improvements")
     static let sections = [
-        (L10n.text("Learning journey"), L10n.text("The revised journey prepares techniques before harder puzzles. Existing journeys update unvisited lessons while preserving completed levels, player ownership and saved progress.")),
-        (L10n.text("Pause and quick controls"), L10n.text("Pause, speed reset and frame stepping follow the selected control settings across Classic, The Tribes and Chronicles. Gameplay menus preserve pause and Hot Seat Ready states.")),
-        (L10n.text("Rewards earned"), L10n.text("Results show newly earned Zooms, Superzooms and Level Skips together. Open Rewards earned to review the reasons without advancing the level or changing the player.")),
-        (L10n.text("Ghost solution controls"), L10n.text("The Classic solution selector uses the system pointer across its buttons, checkbox and gaps. Returning to the playfield restores the gameplay cursor.")),
-        (L10n.text("Sequel targeting"), L10n.text("The Tribes and Chronicles check skill eligibility without copying the whole runtime. Existing campaign and Beta classifications remain unchanged.")),
-        (L10n.text("Localisation and content"), L10n.text("Updated interface text and corrected bundled level counts accompany the existing language packs. Human language review and remaining community-style dependencies stay open.")),
+        (L10n.text("Hot Seat ghosts"), L10n.text("Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.")),
+        (L10n.text("Results and rewards"), L10n.text("Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ]
     private let defaults: UserDefaults

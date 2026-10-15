@@ -1,5 +1,3 @@
-/* Draft localisation. For in-app testing only. */
-
 "\n\nKeep {0} available for later." = "\n\nMantenha {0} disponível para usar depois.";
 "\n\nRelease rate in this example:\n" = "\n\nFrequência de saída neste exemplo:\n";
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nEstas mudanças afetam o espaçamento do grupo. O momento também importa. Pause em cada marca para verificar o trabalhador e a direção.";
@@ -126,7 +124,6 @@
 "ASSIGN & FOCUS" = "ATRIBUIR E FOCAR";
 "ATTRACTOR" = "ANIMADOR";
 "AWARD" = "PRÊMIO";
-"AWARDS" = "PRÊMIOS";
 "About Ultimate Lemmings" = "Sobre o Ultimate Lemmings";
 "Above and beyond" = "Além do esperado";
 "Absolute maximum" = "Máximo absoluto";
@@ -319,7 +316,6 @@
 "Beta" = "Beta";
 "Beyond the darkness to a new land" = "Além da escuridão, em direção a uma nova terra";
 "Bindings" = "Vínculos";
-"Bitmap lettering" = "Letras em bitmap";
 "Blocker" = "Bloqueador";
 "Blocker turnaround" = "Retorno do Bloqueador";
 "Bomb" = "Bomba";
@@ -392,6 +388,7 @@
 "Career progress" = "Progresso da carreira";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "Progresso da carreira. {0} estrelas, mais {1} nesta partida. {2} fases diferentes concluídas. {3} fases com três estrelas. {4}{5}";
 "Career stars" = "Estrelas da carreira";
+"Career stars {0} > {1}" = "Estrelas da carreira {0} > {1}";
 "Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "Estrelas da carreira: de {0} a {1}. Um Zoom a cada 3 estrelas sem rebobinar nem desfazer.";
 "Cavelems" = "Cavernícolas";
 "Centre entrance" = "Centralizar na entrada";
@@ -483,7 +480,6 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Arte do Classic";
-"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "O Classic pode sobrepor à partida uma solução gravada como silhuetas azuis de lemmings. A sobreposição opcional acompanha a partida, a pausa e o retrocesso sem alterar sua tentativa.";
 "Classic effects" = "Efeitos do Classic";
 "Classic skill counters" = "Contadores de habilidades do Classic";
 "Classic tribe movie" = "Vídeo da tribo clássica";
@@ -591,7 +587,6 @@
 "Controller button" = "Botão do comando";
 "Controller buttons" = "Botões do comando";
 "Controls" = "Controles";
-"Controls and help" = "Controles e ajuda";
 "Controls help" = "Ajuda de controles";
 "Copied" = "Copiado";
 "Copy" = "Copiar";
@@ -733,6 +728,7 @@
 "Each teleporter needs a paired receiver." = "Cada teletransportador precisa de um receptor correspondente.";
 "Each zone must have a positive width and height." = "Cada zona deve ter largura e altura maiores que zero.";
 "Earlier" = "Anterior";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "As últimas tentativas dos jogadores anteriores aparecem como fantasmas coloridos ao tentar novamente no Hot Seat. Eles acompanham o retrocesso e aparecem nos vídeos de replay.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Ganhe um Zoom a cada 3 estrelas sem retrocesso; Superzoom a cada 3 fases com três estrelas sem retrocesso";
 "Earn the same play style on 5 distinct cleared levels." = "Obtenha o mesmo estilo de jogo em 5 fases diferentes concluídas.";
 "Earned" = "Conquistado";
@@ -776,6 +772,8 @@
 "Estimated solution burden" = "Esforço estimado para resolver";
 "Evacuate all our tribes?" = "Evacuar todas as nossas tribos?";
 "Evaluators" = "Avaliadores";
+"Every 3 career stars" = "A cada 3 estrelas da carreira";
+"Every 3 distinct levels" = "A cada 3 níveis diferentes";
 "Every achievement earned. What a rescue!" = "Todas as conquistas obtidas. Que resgate!";
 "Every level" = "Todos os níveis";
 "Every rating is finished." = "Todas as classificações foram concluídas.";
@@ -804,6 +802,7 @@
 "F / Speed: toggle fast-forward" = "F / Velocidade: alternar avanço rápido";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / Velocidade: alternar avanço rápido\nMantenha F pressionado: acelere até 10×; solte para manter a velocidade\nMantenha Shift, Velocidade ou RT pressionado: impulso temporário; solte para voltar à velocidade anterior\nSetas de velocidade ou Shift+[ / Shift+]: aplicar 1×, 2×, 3×, 5× ou 10×\nF ou botão B do controle: voltar imediatamente a 1×";
 "F: Fast speed" = "F: Velocidade rápida";
+"FAILED" = "FALHOU";
 "FAILED — press R" = "FALHOU — pressione R";
 "FALLER" = "CAIDOR";
 "FAN" = "FÃ";
@@ -930,7 +929,6 @@
 "Genesis Title Screen" = "Tela de título Genesis";
 "Genesis Tricky Theme" = "Tema Difícil Genesis";
 "Ghost solution" = "Solução fantasma";
-"Ghost solutions" = "Soluções fantasma";
 "Glider" = "Planador";
 "Glider, then goal" = "Planador e depois objetivo";
 "Glue Pourer" = "Despejador de cola";
@@ -952,6 +950,7 @@
 "HINT {0} OF {1}" = "DICA {0} DE {1}";
 "HOISTER" = "LEVANTADOR";
 "HOLD" = "SEGURE";
+"HOME {0}/{1}" = "SALVOS {0}/{1}";
 "HOOK" = "GANCHO";
 "HOPPER" = "SALTITANTE";
 "HOT SEAT WAS NOT SAVED" = "O HOT SEAT NÃO FOI SALVO";
@@ -985,6 +984,8 @@
 "Hopper" = "Saltitante";
 "Host" = "Anfitrião";
 "Hot Seat" = "Hot Seat";
+"Hot Seat and result improvements" = "Melhorias no Hot Seat e nos resultados";
+"Hot Seat ghosts" = "Fantasmas do Hot Seat";
 "Hot Seat player HUD" = "HUD do jogador no Hot Seat";
 "Hot Seat starts" = "Partidas de Hot Seat";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1151,7 +1152,6 @@
 "Keep trying" = "Continue a tentar";
 "Keyboard commands" = "Comandos de teclado";
 "Keyboard commands…" = "Comandos do teclado…";
-"Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause." = "A ajuda do teclado acompanha o jogo ativo e suas configurações. O movimento da câmera mantém o cursor ancorado ao nível nos três jogos nativos. O comando do controle para redefinir a velocidade tem prioridade sobre a pausa.";
 "Keyboard overlay. The level is paused. Escape closes the overlay." = "Sobreposição do teclado. O nível está em pausa. Escape fecha a sobreposição.";
 "Keys" = "Teclas";
 "L1 / LB" = "L1 / LB";
@@ -1209,6 +1209,7 @@
 "LB / left shoulder" = "LB / botão superior esquerdo";
 "LEFT" = "ESQUERDA";
 "LEFT STICK: AIM  /  RIGHT STICK: CAMERA" = "ALAVANCA ESQUERDA: MIRAR  /  ALAVANCA DIREITA: CÂMERA";
+"LEFT {0}" = "RESTAM {0}";
 "LEM" = "LEM";
 "LEMMING" = "LEMMING";
 "LEMMING MYTHOS" = "MITO DOS LEMMINGS";
@@ -1222,12 +1223,14 @@
 "LEVEL DESIGN" = "DESIGN DE FASE";
 "LEVEL ENDED\n{0} SAVED" = "FASE ENCERRADA\n{0} SALVOS";
 "LEVEL NOT AVAILABLE" = "NÍVEL INDISPONÍVEL";
+"LEVEL SKIP" = "PULAR NÍVEL";
 "LEVEL STARTS" = "INÍCIOS DE FASE";
 "LEVEL {0} OF {1}" = "FASE {0} DE {1}";
 "LEVEL {0}/{1}" = "FASE {0}/{1}";
 "LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS" = "FASES COM MAIS INÍCIOS FALHOS OU INCOMPLETOS";
 "LIBRARY" = "BIBLIOTECA";
 "LOOK AROUND" = "OLHAR À VOLTA";
+"LOST {0}" = "PERDIDOS {0}";
 "LT / left trigger" = "LT / gatilho esquerdo";
 "Language" = "Idioma";
 "Large (125%)" = "Grande (125%)";
@@ -1281,6 +1284,7 @@
 "Level Records…" = "Recordes de nível…";
 "Level Select" = "Seleção de fase";
 "Level Select…" = "Seleção de fase…";
+"Level Skips" = "Pulos de nível";
 "Level access" = "Acesso à fase";
 "Level cleared at or just above the minimum." = "Fase concluída no mínimo ou pouco acima dele.";
 "Level cleared despite substantial losses." = "Fase concluída apesar de muitas perdas.";
@@ -1468,7 +1472,6 @@
 "Movie export is unavailable." = "A exportação de vídeo não está disponível.";
 "Movie writing could not start." = "Não foi possível iniciar a gravação do vídeo.";
 "Music" = "Música";
-"Music and performance" = "Música e desempenho";
 "Music downloaded" = "Música baixada";
 "Music muted" = "Música silenciada";
 "Music off" = "Música desativada";
@@ -1620,7 +1623,6 @@
 "ORIGINAL MOVIES" = "VÍDEOS ORIGINAIS";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "NOSSO TALISMÃ ORIENTADOR FOI DIVIDIDO";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "NOSSAS VIDAS FORAM RICAS E FRUTÍFERAS";
-"OUT {0}  HOME {1}/{2}  {3}" = "FORA {0}  EM CASA {1}/{2}  {3}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "FORA {0} SALVOS {1} RESTAM {2} PERDIDOS {3}";
 "OUT {0}/{1}" = "FORA {0}/{1}";
 "OVERVIEW" = "VISÃO GERAL";
@@ -1678,8 +1680,6 @@
 "Original" = "Original";
 "Original Lemmings 3 movie" = "Vídeo original de Lemmings 3";
 "Original Macintosh" = "Macintosh original";
-"Original Macintosh 1-bit graphics" = "Gráficos originais de 1 bit do Macintosh";
-"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "A arte original em preto e branco do Macintosh traz seu padrão complexo de pontilhamento para os Macs modernos. Escolha Macintosh (1 bit) em Gráficos para usar a arte do Classic e os controles monocromáticos correspondentes durante o jogo.";
 "Original PC" = "PC original";
 "Original inputs" = "Controles originais";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Plataforma principal original. Inclui as icônicas amostras de voz digitalizadas e tela dividida para dois jogadores.";
@@ -1890,6 +1890,7 @@
 "RANK >" = "CLASSIFICAÇÃO >";
 "RATE +" = "FREQUÊNCIA +";
 "RATE -" = "FREQUÊNCIA -";
+"RATE {0}" = "RITMO {0}";
 "RAYMOND USHER" = "RAYMOND USHER";
 "RB / right shoulder" = "RB / botão superior direito";
 "READY" = "PRONTO";
@@ -2017,6 +2018,7 @@
 "Restore TV saves?" = "Restaurar jogos salvos da TV?";
 "Restore recovery key" = "Restaurar chave de recuperação";
 "Restore the default gameplay actions for every controller button." = "Restaurar as ações de jogo padrão para todos os botões do controle.";
+"Results and rewards" = "Resultados e recompensas";
 "Resume" = "Retomar";
 "Resume  {0}/{1}" = "Retomar  {0}/{1}";
 "Resume Hot Seat run" = "Retomar partida de Hot Seat";
@@ -2028,7 +2030,6 @@
 "Resume session" = "Retomar sessão";
 "Resume session?" = "Retomar sessão?";
 "Resume solo run" = "Retomar partida solo";
-"Resume your journey" = "Retome sua jornada";
 "Resume {0}  {1}/{2}" = "Retomar {0}  {1}/{2}";
 "Reticule" = "Mira";
 "Reticule count" = "Quantidade de miras";
@@ -2036,6 +2037,7 @@
 "Retry" = "Tentar novamente";
 "Retry - " = "Tentar de novo - ";
 "Retry a clear: save more, or match it with fewer skills or less time." = "Tente novamente uma fase concluída: salve mais lemmings ou iguale o resultado usando menos habilidades ou menos tempo.";
+"Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles." = "As ações para tentar novamente e as recompensas recebidas têm agrupamento mais claro e controles consistentes em Classic, The Tribes e Chronicles.";
 "Retry as {0}" = "Tentar novamente como {0}";
 "Retry last level as {0}" = "Tentar novamente a última fase como {0}";
 "Retry level" = "Repetir nível";
@@ -2155,6 +2157,7 @@
 "STONE" = "PEDRA";
 "STUNNED" = "ATORDOADO";
 "SUPERLEM" = "SUPERLEM";
+"SUPERZOOM" = "Superzoom";
 "SURFER" = "SURFISTA";
 "SWIM" = "NADAR";
 "SWIMMER" = "NADADOR";
@@ -2236,7 +2239,6 @@
 "Settings (⌘,)" = "Configurações (⌘,)";
 "Settings sections" = "Seções dos ajustes";
 "Settings…" = "Ajustes…";
-"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sete pacotes de idioma adicionais seguem o ajuste de idioma do seu Mac. As fontes bitmap originais aceitam texto latino ocidental com acentos.";
 "Shadow" = "Shadow";
 "Shadow tribe movie" = "Vídeo da tribo Shadow";
 "Share as {0}" = "Compartilhar como {0}";
@@ -2247,7 +2249,6 @@
 "Shared campaign" = "Campanha compartilhada";
 "Shared campaign revisions conflict." = "As revisões da campanha compartilhada estão em conflito.";
 "Shared play counts" = "Contagens de partidas compartilhadas";
-"Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys." = "O áudio compartilhado ao retroceder, a recuperação da música e os caches de renderização melhoram a experiência em Classic, The Tribes e Chronicles. Perfis correspondentes podem recuperar progresso salvo mais recente, inclusive jornadas no Hot Seat.";
 "Shared saves/replays" = "Jogos salvos/replays compartilhados";
 "Shared: {0} days" = "Compartilhado: {0} dias";
 "Shares daily use, results, lemmings saved, solo or Hot Seat play, and music use. No names, IDs, pack names or replays are sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Compartilha o uso diário, os resultados, os lemmings salvos, as partidas solo ou de Hot Seat e o uso de música. Nenhum nome, ID, nome de pacote ou replay é enviado.\n\nO total compartilhado de resgates permanece até que o responsável pelo serviço o redefina. O serviço vê seu endereço de rede durante o envio.";
@@ -2298,6 +2299,7 @@
 "Skip" = "Pular";
 "Skip as {0} ({1})" = "Pular como {0} ({1})";
 "Skip level ({0})" = "Pular fase ({0})";
+"Skips" = "Pulos";
 "Skips {0}" = "Pulos {0}";
 "Slider" = "Deslizador";
 "Slot {0}" = "Posição {0}";
@@ -2401,7 +2403,6 @@
 "Superlem" = "Superlem";
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom ativo";
-"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "Jornadas compatíveis e playlists de sequência restauram a tentativa salva, a ação selecionada e a câmera. Classic, The Tribes e Chronicles são retomados pausados. No Hot Seat, aguarde até Pronto.";
 "Surfer" = "Surfista";
 "Swap sticks" = "Trocar alavancas";
 "Swimmer" = "Nadador";
@@ -2426,6 +2427,7 @@
 "THROWER" = "ARREMESSADOR";
 "TIME" = "TEMPO";
 "TIME & SPEED" = "TEMPO E VELOCIDADE";
+"TIME {0}" = "TEMPO {0}";
 "TIME {0}:{1}" = "TEMPO {0}:{1}";
 "TOOLS HELD" = "FERRAMENTAS CARREGADAS";
 "TRIBE  {0}" = "TRIBO  {0}";
@@ -2539,7 +2541,6 @@
 "The archive has more than one member named {0}." = "O arquivo contém mais de um item chamado {0}.";
 "The archive has no member named {0}." = "O arquivo não contém um item chamado {0}.";
 "The archive member {0} is too large." = "O item {0} do arquivo é grande demais.";
-"The art of one bit" = "A arte de um bit";
 "The attempt was not saved." = "A tentativa não foi salva.";
 "The cloud player is invalid." = "O jogador na nuvem é inválido.";
 "The cloud progress format does not match." = "O formato do progresso na nuvem não corresponde.";
@@ -2734,6 +2735,7 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes considerava a paz e a segurança essenciais. Regras e autoridades compartilhadas protegem as pessoas contra conflitos.";
 "Three-star" = "Três estrelas";
 "Three-star levels" = "Fases com três estrelas";
+"Three-star levels {0} > {1}" = "Níveis de três estrelas {0} > {1}";
 "Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "Fases com três estrelas: de {0} a {1}. Um pulo de fase a cada 3 fases diferentes sem rebobinar nem desfazer.";
 "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "Fases com três estrelas: de {0} a {1}. Um Superzoom a cada 3 fases diferentes sem rebobinar nem desfazer.";
 "Three-star rescue" = "Salvamento de três estrelas";
@@ -2974,7 +2976,6 @@
 "Zoom active" = "Zoom ativo";
 "Zoom off" = "Zoom desativado";
 "Zoom on / off at cursor" = "Ativar / desativar Zoom no cursor";
-"Zoom {0}   Superzoom {1}   Level Skips {2}" = "Zoom {0}   Superzoom {1}   Pulos de fase {2}";
 "Zoom {0}×" = "Zoom {0}×";
 "Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "Zoom, restam {0}. Superzoom, restam {1}. {2} pulos de fase. {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2×. Shift+Z: 4×. Clique para alternar.";
@@ -3153,7 +3154,6 @@
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Retrocessos: {2}. W troca o filtro de retrocesso. {3} recordes locais. Escape volta. A abre as conquistas. D abre os detalhes da partida.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} resgatados, {4} necessários. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 nesta partida   -   {1}/3 melhor resultado";
-"{0}/{1} Next >" = "{0}/{1} Próximo >";
 "{0}/{1} across {2} titles: {3}" = "{0}/{1} em {2} títulos: {3}";
 "{0}/{1} earned" = "{0}/{1} conquistados";
 "{0}/{1} levels passed in this rating." = "{0}/{1} fases concluídas nesta classificação.";

@@ -1,5 +1,3 @@
-/* Draft localisation. For in-app testing only. */
-
 "\n\nKeep {0} available for later." = "\n\nHold {0} tilgjengelig til senere.";
 "\n\nRelease rate in this example:\n" = "\n\nUtslippsfart i dette eksempelet:\n";
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nDisse endringene påvirker avstanden i flokken. Tidspunktet betyr også noe. Sett på pause ved hvert merke og sjekk arbeider og retning.";
@@ -126,7 +124,6 @@
 "ASSIGN & FOCUS" = "TILDEL OG FOKUSER";
 "ATTRACTOR" = "UNDERHOLDER";
 "AWARD" = "UTMERKELSE";
-"AWARDS" = "UTMERKELSER";
 "About Ultimate Lemmings" = "Om Ultimate Lemmings";
 "Above and beyond" = "Utover forventningene";
 "Absolute maximum" = "Absolutt maksimum";
@@ -319,7 +316,6 @@
 "Beta" = "Beta";
 "Beyond the darkness to a new land" = "Gjennom mørket til et nytt land";
 "Bindings" = "Tastebindinger";
-"Bitmap lettering" = "Punktgrafikkskrift";
 "Blocker" = "Blokkerer";
 "Blocker turnaround" = "Blokkererens snupunkt";
 "Bomb" = "Bombe";
@@ -392,6 +388,7 @@
 "Career progress" = "Karrierefremgang";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "Karriereframdrift. {0} stjerner, pluss {1} i dette forsøket. {2} ulike brett fullført. {3} brett med tre stjerner. {4}{5}";
 "Career stars" = "Karrierestjerner";
+"Career stars {0} > {1}" = "Karrierestjerner {0} > {1}";
 "Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "Karrierestjerner: {0} til {1}. Én Zoom per 3 stjerner uten tilbakespoling eller angring.";
 "Cavelems" = "Hulelemminger";
 "Centre entrance" = "Sentrer på inngangen";
@@ -483,7 +480,6 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Classic-grafikk";
-"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "Classic kan vise en innspilt løsning som blå lemmingsilhuetter over brettet. Dette valgfrie overlegget følger spilling, pause og tilbakespoling uten å endre forsøket ditt.";
 "Classic effects" = "Classic-effekter";
 "Classic skill counters" = "Classic-ferdighetstellere";
 "Classic tribe movie" = "Film av klassisk stamme";
@@ -591,7 +587,6 @@
 "Controller button" = "Kontrollerknapp";
 "Controller buttons" = "Kontrollerknapper";
 "Controls" = "Kontroller";
-"Controls and help" = "Kontroller og hjelp";
 "Controls help" = "Kontrollhjelp";
 "Copied" = "Kopiert";
 "Copy" = "Kopier";
@@ -733,6 +728,7 @@
 "Each teleporter needs a paired receiver." = "Hver teleportør trenger en tilhørende mottaker.";
 "Each zone must have a positive width and height." = "Hver sone må ha positiv bredde og høyde.";
 "Earlier" = "Tidligere";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "De siste forsøkene til tidligere spillere vises som fargede spøkelser ved nye Hot Seat-forsøk. De følger tilbakespolingen og vises i opptaksfilmene.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Tjen Zoom for hver tredje stjerne uten tilbakespoling; Superzoom for hvert tredje brett med tre stjerner uten tilbakespoling";
 "Earn the same play style on 5 distinct cleared levels." = "Oppnå samme spillestil på 5 ulike fullførte brett.";
 "Earned" = "Opptjent";
@@ -776,6 +772,8 @@
 "Estimated solution burden" = "Anslått løsningsarbeid";
 "Evacuate all our tribes?" = "Evakuere alle stammene våre?";
 "Evaluators" = "Evaluerere";
+"Every 3 career stars" = "Hver 3. karrierestjerne";
+"Every 3 distinct levels" = "Hvert 3. ulike nivå";
 "Every achievement earned. What a rescue!" = "Alle prestasjoner oppnådd. For en redning!";
 "Every level" = "Alle brett";
 "Every rating is finished." = "Alle kategorier er fullført.";
@@ -804,6 +802,7 @@
 "F / Speed: toggle fast-forward" = "F / Hastighet: slå hurtigspoling av/på";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / Hastighet: slå hurtigspoling av/på\nHold F: øk gradvis til 10×; slipp: behold farten\nHold Shift, Hastighet eller RT: midlertidig fartsøkning; slipp: forrige fart\nFartspiler eller Shift+[ / Shift+]: velg 1×, 2×, 3×, 5× eller 10×\nF eller B på kontrolleren: gå umiddelbart tilbake til 1×";
 "F: Fast speed" = "F: Høy fart";
+"FAILED" = "MISLYKTES";
 "FAILED — press R" = "MISLYKTES — trykk R";
 "FALLER" = "FALLER";
 "FAN" = "FAN";
@@ -930,7 +929,6 @@
 "Genesis Title Screen" = "Genesis-tittelskjerm";
 "Genesis Tricky Theme" = "Genesis-vanskelig-tema";
 "Ghost solution" = "Spøkelsesløsning";
-"Ghost solutions" = "Spøkelsesløsninger";
 "Glider" = "Glider";
 "Glider, then goal" = "Glider, deretter mål";
 "Glue Pourer" = "Limheller";
@@ -952,6 +950,7 @@
 "HINT {0} OF {1}" = "TIPS {0} AV {1}";
 "HOISTER" = "HEISER";
 "HOLD" = "HOLD";
+"HOME {0}/{1}" = "REDDET {0}/{1}";
 "HOOK" = "KROK";
 "HOPPER" = "SPRETTER";
 "HOT SEAT WAS NOT SAVED" = "HOT SEAT BLE IKKE LAGRET";
@@ -985,6 +984,8 @@
 "Hopper" = "Spretter";
 "Host" = "Vert";
 "Hot Seat" = "Hot Seat";
+"Hot Seat and result improvements" = "Forbedringer i Hot Seat og resultater";
+"Hot Seat ghosts" = "Hot Seat-spøkelser";
 "Hot Seat player HUD" = "Hot Seat-spillerens HUD";
 "Hot Seat starts" = "Hot Seat-start";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1151,7 +1152,6 @@
 "Keep trying" = "Fortsett å prøve";
 "Keyboard commands" = "Tastaturkommandoer";
 "Keyboard commands…" = "Tastaturkommandoer…";
-"Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause." = "Tastaturhjelpen følger det aktive spillet og innstillingene. Når kameraet flyttes, forblir pekeren forankret til nivået i alle de tre innebygde spillene. Tilbakestilling av hastigheten med kontrolleren prioriteres foran pause.";
 "Keyboard overlay. The level is paused. Escape closes the overlay." = "Tastaturoverlegg. Brettet er satt på pause. Escape lukker overlegget.";
 "Keys" = "Taster";
 "L1 / LB" = "L1 / LB";
@@ -1209,6 +1209,7 @@
 "LB / left shoulder" = "LB / venstre skulder";
 "LEFT" = "VENSTRE";
 "LEFT STICK: AIM  /  RIGHT STICK: CAMERA" = "VENSTRE SPAK: SIKT  /  HØYRE SPAK: KAMERA";
+"LEFT {0}" = "IGJEN {0}";
 "LEM" = "LEM";
 "LEMMING" = "LEMMING";
 "LEMMING MYTHOS" = "LEMMING-MYTOLOGI";
@@ -1222,12 +1223,14 @@
 "LEVEL DESIGN" = "BRETTDESIGN";
 "LEVEL ENDED\n{0} SAVED" = "BRETT AVSLUTTET\n{0} REDDET";
 "LEVEL NOT AVAILABLE" = "BRETT IKKE TILGJENGELIG";
+"LEVEL SKIP" = "HOPP OVER NIVÅ";
 "LEVEL STARTS" = "BRETTSTARTER";
 "LEVEL {0} OF {1}" = "BRETT {0} AV {1}";
 "LEVEL {0}/{1}" = "BRETT {0}/{1}";
 "LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS" = "BRETT MED FLEST MISLYKKEDE ELLER UFULLFØRTE STARTER";
 "LIBRARY" = "BIBLIOTEK";
 "LOOK AROUND" = "SE DEG RUNDT";
+"LOST {0}" = "TAPT {0}";
 "LT / left trigger" = "LT / venstre avtrekker";
 "Language" = "Språk";
 "Large (125%)" = "Stor (125%)";
@@ -1281,6 +1284,7 @@
 "Level Records…" = "Banerekorder…";
 "Level Select" = "Velg brett";
 "Level Select…" = "Velg brett …";
+"Level Skips" = "Nivåhopp";
 "Level access" = "Tilgang til brett";
 "Level cleared at or just above the minimum." = "Brett fullført på eller så vidt over minstekravet.";
 "Level cleared despite substantial losses." = "Brett fullført til tross for store tap.";
@@ -1468,7 +1472,6 @@
 "Movie export is unavailable." = "Filmekportering er ikke tilgjengelig.";
 "Movie writing could not start." = "Kunne ikke starte filmskrivingen.";
 "Music" = "Musikk";
-"Music and performance" = "Musikk og ytelse";
 "Music downloaded" = "Musikk lastet ned";
 "Music muted" = "Musikk dempet";
 "Music off" = "Musikk av";
@@ -1620,7 +1623,6 @@
 "ORIGINAL MOVIES" = "ORIGINALFILMER";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "VÅR LEDENDE TALISMAN BLE DELT";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "LIVENE VÅRE HAR VÆRT RIKT OG FRUKTBART";
-"OUT {0}  HOME {1}/{2}  {3}" = "UTE {0}  HJEMME {1}/{2}  {3}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "UTE {0} REDD {1} IGJEN {2} TAPT {3}";
 "OUT {0}/{1}" = "UTE {0}/{1}";
 "OVERVIEW" = "OVERSIKT";
@@ -1678,8 +1680,6 @@
 "Original" = "Original";
 "Original Lemmings 3 movie" = "Opprinnelig Lemmings 3-film";
 "Original Macintosh" = "Opprinnelig Macintosh";
-"Original Macintosh 1-bit graphics" = "Opprinnelig Macintosh-grafikk i 1 bit";
-"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Den opprinnelige svart-hvitt-grafikken for Macintosh gir moderne Macer de intrikate rastreringsmønstrene fra originalen. Velg Macintosh (1-bit) under Grafikkinnstillinger for Classic-grafikk og matchende monokrome spillkontroller.";
 "Original PC" = "Opprinnelig PC-grafikk";
 "Original inputs" = "Opprinnelige inndata";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
@@ -1890,6 +1890,7 @@
 "RANK >" = "RANGERING >";
 "RATE +" = "ØK FART";
 "RATE -" = "SENK FART";
+"RATE {0}" = "TAKT {0}";
 "RAYMOND USHER" = "RAYMOND USHER";
 "RB / right shoulder" = "RB / høyre skulder";
 "READY" = "KLAR";
@@ -2017,6 +2018,7 @@
 "Restore TV saves?" = "Gjenopprette TV-lagringer?";
 "Restore recovery key" = "Gjenopprettingsnøkkel";
 "Restore the default gameplay actions for every controller button." = "Gjenopprett standardhandlingene for hver kontrollerknapp.";
+"Results and rewards" = "Resultater og belønninger";
 "Resume" = "Fortsett";
 "Resume  {0}/{1}" = "Fortsett  {0}/{1}";
 "Resume Hot Seat run" = "Fortsett Hot Seat-forsøk";
@@ -2028,7 +2030,6 @@
 "Resume session" = "Fortsett økt";
 "Resume session?" = "Fortsette økten?";
 "Resume solo run" = "Fortsett soloforsøk";
-"Resume your journey" = "Fortsett reisen din";
 "Resume {0}  {1}/{2}" = "Fortsett {0}  {1}/{2}";
 "Reticule" = "Siktemerke";
 "Reticule count" = "Antall siktemerker";
@@ -2036,6 +2037,7 @@
 "Retry" = "Prøv igjen";
 "Retry - " = "Prøv igjen – ";
 "Retry a clear: save more, or match it with fewer skills or less time." = "Prøv et fullført brett på nytt: redd flere, eller slå resultatet med færre ferdigheter eller kortere tid.";
+"Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles." = "Handlinger for nye forsøk og opptjente belønninger er tydeligere gruppert, med lik betjening i Classic, The Tribes og Chronicles.";
 "Retry as {0}" = "Prøv igjen som {0}";
 "Retry last level as {0}" = "Prøv forrige brett på nytt som {0}";
 "Retry level" = "Prøv brettet igjen";
@@ -2155,6 +2157,7 @@
 "STONE" = "STEIN";
 "STUNNED" = "OMTÅKET";
 "SUPERLEM" = "SUPERLEM";
+"SUPERZOOM" = "Superzoom";
 "SURFER" = "SURFER";
 "SWIM" = "SVØM";
 "SWIMMER" = "SVØMMER";
@@ -2236,7 +2239,6 @@
 "Settings (⌘,)" = "Innstillinger (⌘,)";
 "Settings sections" = "Innstillingsdeler";
 "Settings…" = "Innstillinger…";
-"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sju ekstra språkpakker følger språkinnstillingen på Macen. De originale punktgrafikkskriftene støtter vesteuropeisk tekst med aksenter.";
 "Shadow" = "Skygge";
 "Shadow tribe movie" = "Film av skyggestammen";
 "Share as {0}" = "Del som {0}";
@@ -2247,7 +2249,6 @@
 "Shared campaign" = "Delt kampanje";
 "Shared campaign revisions conflict." = "Versjonene av den delte kampanjen er i konflikt.";
 "Shared play counts" = "Delte antall spill";
-"Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys." = "Felles lyd ved tilbakespoling, gjenoppretting av musikk og gjengivingsbuffere forbedrer spillingen i Classic, The Tribes og Chronicles. Profiler som samsvarer, kan gjenopprette nyere lagret framdrift, også for Hot Seat-reiser.";
 "Shared saves/replays" = "Delte lagringer/repriser";
 "Shared: {0} days" = "Delt: {0} dager";
 "Shares daily use, results, lemmings saved, solo or Hot Seat play, and music use. No names, IDs, pack names or replays are sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Deler daglig bruk, resultater, reddede lemminger, solospill eller Hot Seat-spill og musikkbruk. Ingen navn, ID-er, pakkenavn eller repriser sendes.\n\nDet delte antallet reddede lemminger blir stående til tjenesteeieren nullstiller det. Tjenesten ser nettverksadressen din når dataene sendes.";
@@ -2298,6 +2299,7 @@
 "Skip" = "Hopp over";
 "Skip as {0} ({1})" = "Hopp over som {0} ({1})";
 "Skip level ({0})" = "Hopp over brett ({0})";
+"Skips" = "Hopp";
 "Skips {0}" = "Brett å hoppe over {0}";
 "Slider" = "Glider";
 "Slot {0}" = "Spor {0}";
@@ -2401,7 +2403,6 @@
 "Superlem" = "Superlem";
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom aktiv";
-"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "Støttede reiser og sekvensspillelister gjenoppretter det lagrede forsøket, den valgte handlingen og kameravisningen. Classic, The Tribes og Chronicles gjenopptas på pause. Hot Seat venter på Klar.";
 "Surfer" = "Surfer";
 "Swap sticks" = "Bytt styrespaker";
 "Swimmer" = "Svømmer";
@@ -2426,6 +2427,7 @@
 "THROWER" = "KASTER";
 "TIME" = "TID";
 "TIME & SPEED" = "TID OG HASTIGHET";
+"TIME {0}" = "TID {0}";
 "TIME {0}:{1}" = "TID {0}:{1}";
 "TOOLS HELD" = "VERKTØY HOLDT";
 "TRIBE  {0}" = "STAMME  {0}";
@@ -2539,7 +2541,6 @@
 "The archive has more than one member named {0}." = "Arkivet har flere enn ett element med navnet {0}.";
 "The archive has no member named {0}." = "Arkivet har ikke noe element med navnet {0}.";
 "The archive member {0} is too large." = "Arkivelementet {0} er for stort.";
-"The art of one bit" = "Kunsten med én bit";
 "The attempt was not saved." = "Forsøket ble ikke lagret.";
 "The cloud player is invalid." = "Skyspilleren er ugyldig.";
 "The cloud progress format does not match." = "Formatet på skyframdriften samsvarer ikke.";
@@ -2734,6 +2735,7 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes mente at fred og trygghet var avgjørende. Felles regler og myndighet beskytter folk mot konflikt.";
 "Three-star" = "Tre stjerner";
 "Three-star levels" = "Brett med tre stjerner";
+"Three-star levels {0} > {1}" = "Trestjernersnivåer {0} > {1}";
 "Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "Brett med tre stjerner: {0} til {1}. Én mulighet til å hoppe over et brett per 3 forskjellige brett uten tilbakespoling eller angring.";
 "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "Brett med tre stjerner: {0} til {1}. Én Superzoom per 3 forskjellige brett uten tilbakespoling eller angring.";
 "Three-star rescue" = "Tre-stjerners redning";
@@ -2974,7 +2976,6 @@
 "Zoom active" = "Zoom aktiv";
 "Zoom off" = "Zoom av";
 "Zoom on / off at cursor" = "Zoom på / av ved markøren";
-"Zoom {0}   Superzoom {1}   Level Skips {2}" = "Zoom {0}   Superzoom {1}   Brett å hoppe over {2}";
 "Zoom {0}×" = "Zoom {0}×";
 "Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "Zoom, {0} igjen. Superzoom, {1} igjen. {2} muligheter til å hoppe over et brett. {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2×. Shift+Z: 4×. Trykk for å bytte.";
@@ -3153,7 +3154,6 @@
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Tilbakespolinger: {2}. W bytter tilbakespolingsfilter. {3} lokale rekorder. Escape går tilbake. A åpner prestasjoner. D åpner forsøksdetaljer.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} reddet, {4} påkrevd. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 i dette forsøket   –   {1}/3 personlig rekord";
-"{0}/{1} Next >" = "{0}/{1} Neste >";
 "{0}/{1} across {2} titles: {3}" = "{0}/{1} på tvers av {2} titler: {3}";
 "{0}/{1} earned" = "{0}/{1} opptjent";
 "{0}/{1} levels passed in this rating." = "{0}/{1} brett fullført med denne vurderingen.";
