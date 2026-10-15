@@ -36,6 +36,39 @@ standalone gaps and thirteen carried schedules. See the [current fixture
 audit](current-fixture-audit.json) and [audit provenance](current-fixture-audit-provenance.json)
 for the report, source and tool hashes, and resource-tree fingerprint.
 
+## Current-main recheck
+
+On 15 October 2026, I rebuilt `NxlvKit` from `main` revision `41b7b0f5` and
+reran both gates against
+`/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD`. The
+three source files named in the provenance record have the same hashes as this
+checkout. The exhaustive audit matches the committed report after normalising
+the absolute fixture paths. It confirms 394 exact double-replays, five rebased
+Shadow 13 wins and 17 schedules that still fail.
+
+The strict `--require-all` gate still fails at carried fixture `107-1.json`.
+The campaign manifest check passes for 322 fixtures, and the negative gate
+checks pass. The bundled L3 route gate remains open. The installed app is 1.9.1
+build 76, and its L3 files match the 1.9.7 build 82 `Ports` baseline. Replay
+evidence and route gaps cause the gate failure. See the [content recheck](../MacOS2Preparation-2026-10-15/classic-content-recheck.json).
+
+The checkout is now at `main` revision `eb6d58d7`. I reran the prebuilt strict
+verifier against the installed bundle. It replays through L3 level 106, then
+fails on the known following carried route. The verifier was built from source
+revision `41b7b0f5`; the L3 engine source, fixture and verifier files are
+unchanged at current `main`. The checkout cannot rebuild them because its
+selected Swift 6.3.3 compiler does not match the installed SDK, and the Xcode
+toolchain used for the earlier build is unavailable at the configured path.
+
+To repeat the current-source campaign check, build `NxlvKit` into the selected
+library directory, then run:
+
+```sh
+L3_TEST_LIBRARY_DIR="$PWD/.build/l3-closure-current" \
+L3_PORTS_ROOT="/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD" \
+  zsh Scripts/verify-l3-completion.sh --require-all
+```
+
 Run the exhaustive audit with:
 
 ```sh

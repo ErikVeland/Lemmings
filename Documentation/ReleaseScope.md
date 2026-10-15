@@ -16,19 +16,21 @@ limits. See the [gate register](ReleaseReadiness/gates.json).
 
 ## Bundled content closure
 
-On 15 October 2026, the owner set a stricter rule for bundled content. The
-release must freeze an exact content manifest. Every included level must load,
-render, run and have a verified winning replay. Each engine must also pass
+On 15 October 2026, the owner set a stricter bundled-content closure target.
+Full closure requires an exact content manifest, load/render/run evidence and a
+verified winning replay for every included level. Each engine must also pass
 source-behaviour comparisons for its advertised rules. Campaign transitions,
 endings, media, saves and recovery must pass when the bundle exposes them.
-Imported content remains open-ended and uses per-engine, per-version support
-claims. See the [content roadmap](ContentUniverseRoadmap.md).
+Build 83 later deferred full closure as a release prerequisite while retaining
+the recorded game classifications and limits. Imported content remains
+open-ended and uses per-engine, per-version support claims. See the
+[content roadmap](ContentUniverseRoadmap.md).
 
 | Bundled set | Current evidence | Open closure work |
 | --- | --- | --- |
-| Official Classic and Oh Yes! | 352/352 winning routes. | Tie the frozen bundle manifest to the source-engine evidence for each included variant. |
+| Official Classic and Oh Yes! | Current-source recheck passes all 352 routes and the full quest against game data whose 1,307 `Ports` files match the 1.9.7 build 82 manifest. | Finish any remaining variant-specific source checks and verify the final 2.0 app candidate. The test host app is 1.9.1 build 76. |
 | Classic fan packs | The 15 October audit freezes 6,020 levels in 535 packs. All 535 archive hashes match the retained 1.9.7 build 82 resource manifest. Current native audit: 2,399 winning routes, 3,600 levels without a matching candidate and 21 candidate or historical replay failures. The two extra October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Resolve the 3,621 route gaps, close source-behaviour checks for bundled content, then freeze and verify the final release manifest. |
-| Lemmings 2 | 120/120 routes, 70 carry-over variants and twelve full chains pass. A new Cavelems sequence saves 59, 36, 17, 4, 2, 2, 1, 1, 1 and 1. All tribes end with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. |
+| Lemmings 2 | Current-main replay and runtime reruns pass 120/120 routes, 70 carry-over variants, all twelve full chains and the installed-data runtime suite. Cavelems saves 59, 36, 17, 4, 2, 2, 1, 1, 1 and 1. All tribes still end with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. |
 | Lemmings 3 | Strict current audit: 394/416 fixtures double-replay. Four standalone outcomes and 18 carried identities fail. Five Shadow 13 inputs still win when rebased; 13 carried schedules do not. Source evidence has 673 repeatable samples for left-facing burrowing and a fall into an open gap. An isolated prototype matches 53 sampled positions, but four terrain-edge samples contradict its rectangular carve. | Recover four standalone routes and 13 carried schedules; refresh five winnable Shadow 13 fixture identities, then rerun the full 90-route and campaign gates. Verify the exact excavation mask, built-brick trigger and remaining source rules. Close environmental effects, movie audio, story transitions, recovery and release checks. |
 | NeoLemmix CE | The pinned runnable gate passed 794 levels. The bundle lists 788 levels, but 75 lack bundled community styles. Exact-version winning replay evidence covers 158 levels. | Freeze a supported bundle manifest. Supply licensed styles or remove dependent levels, then prove a winning route for every included level and source behaviour for each advertised feature. |
 
