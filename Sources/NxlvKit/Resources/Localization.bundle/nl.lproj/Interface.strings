@@ -20,6 +20,9 @@
 "#{0} of {1}{2}" = "#{0} van {1}{2}";
 "( with Fiat X1/9 red wedge shaped car, hence Chris \"Wedgey\" Stanley)" = "(met de rode, wigvormige Fiat X1/9; vandaar Chris ‘Wedgey’ Stanley)";
 "+ New player" = "+ Nieuwe speler";
+"+1 LEVEL SKIP" = "+1 level overslaan";
+"+{0} SUPERZOOM" = "+{0} Superzoom";
+"+{0} ZOOM" = "+{0} Zoomen";
 "+{0} extra" = "+{0} extra";
 ", / .: Step back / forward" = ", / .: stap terug / vooruit";
 ", selected" = ", geselecteerd";
@@ -389,6 +392,7 @@
 "Career progress" = "Carrièrevoortgang";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "Carrièrevoortgang. {0} sterren, plus {1} in deze poging. {2} verschillende levels voltooid. {3} levels met drie sterren. {4}{5}";
 "Career stars" = "Carrièresterren";
+"Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "Carrièresterren: {0} tot {1}. Eén Zoom per 3 sterren zonder terugspoelen of ongedaan maken.";
 "Cavelems" = "Grotlemmings";
 "Centre entrance" = "Ingang centreren";
 "Centre entrance. H or Home." = "Ingang centreren. H of Home.";
@@ -515,6 +519,8 @@
 "Clear with one skill type. This run used {0}." = "Voltooi een level met één type vaardigheid. Deze poging gebruikte {0}.";
 "Clear with {0} more play styles." = "Voltooi levels met nog {0} speelstijlen.";
 "Cleared" = "Voltooid";
+"Cleared the level using one skill type." = "Het level voltooid met slechts één type vaardigheid.";
+"Cleared the level without assigning a skill." = "Het level voltooid zonder een vaardigheid toe te wijzen.";
 "Cleared without assigning a skill." = "Voltooid zonder vaardigheden toe te wijzen.";
 "Clears" = "Voltooide levels";
 "Click or Return to practise" = "Klik of druk op Enter om te oefenen";
@@ -609,6 +615,7 @@
 "Could not save completed lesson: {0}" = "De voltooide les kon niet worden opgeslagen: {0}";
 "Could not save the input route: {0}" = "Invoerroutine opslaan mislukt: {0}";
 "Could not show the talisman: {0}" = "De talisman kon niet worden weergegeven: {0}";
+"Could not sync journey: {0}" = "Traject kon niet worden gesynchroniseerd: {0}";
 "Counters" = "Tellers";
 "Counting levels..." = "Levels tellen…";
 "Counts" = "Aantallen";
@@ -818,8 +825,8 @@
 "FLOAT" = "ZWEVEN";
 "FLOATER" = "PARACHUTIST";
 "FOR MANY GENERATION WE HAVE LIVED HERE" = "VELE GENERATIES LANG HEBBEN WE HIER GELEEFD";
-"Fade Menu button" = "Knop Menu vervagen";
-"Fade Menu during play. Turn this off to keep the button visible." = "Laat Menu tijdens het spelen vervagen. Schakel dit uit om de knop zichtbaar te houden.";
+"Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible." = "Laat Menu, Instellingen en Afbeeldingen tijdens het spelen vervagen. Schakel dit uit om de knoppen zichtbaar te houden.";
+"Fade gameplay buttons" = "Spelknoppen vervagen";
 "Fails" = "Mislukkingen";
 "Faithful" = "Getrouw";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Getrouw behoudt het oorspronkelijke geluid. Modern past de verbeterde muziekbewerking toe.";
@@ -859,6 +866,7 @@
 "Finish one below a verified maximum." = "Voltooi het level met één lemming minder dan het geverifieerde maximum.";
 "Finish run" = "Poging afronden";
 "Finished {0} from {1}." = "{0} van {1} voltooid.";
+"First clear of this level. Rescued {0}; target {1}." = "Eerste voltooiing van dit level. Gered: {0}; doel: {1}.";
 "Fix records" = "Records herstellen";
 "Flame Thrower" = "Vlammenwerper";
 "Flashes" = "Lichtflitsen";
@@ -1366,6 +1374,7 @@
 "Macintosh Sound Manager 22 kHz PCM" = "Macintosh Sound Manager 22 kHz PCM";
 "Macintosh artwork could not be applied to this level." = "Macintosh-illustraties konden niet op dit level worden toegepast.";
 "Macintosh sound resources" = "Macintosh-geluidsbronnen";
+"Macintosh-style 2x" = "Macintosh-stijl 2x";
 "Macintosh-style 2× artwork" = "Macintosh-stijl artwork 2×";
 "Magic Carpet" = "Vliegend tapijt";
 "Magno Booter" = "Magneetlaarzen";
@@ -1526,12 +1535,15 @@
 "Next Level" = "Volgend level";
 "Next award" = "Volgende prijs";
 "Next eligible lemming" = "Volgende geschikte lemming";
+"Next graphics" = "Volgende grafische stijl";
+"Next graphics (F2)" = "Volgende grafische stijl (F2)";
 "Next level" = "Volgend level";
 "Next level >" = "Volgend niveau >";
 "Next move" = "Volgende zet";
 "Next new moves to the next new award. " = "Volgende nieuwe zetten tot de volgende nieuwe prijs. ";
 "Next new {0}/{1} >" = "Volgende nieuw {0}/{1} >";
 "Next page" = "Volgende pagina";
+"Next rewards" = "Volgende beloningen";
 "Next skill" = "Volgende vaardigheid";
 "Next successful skill use. Control-Right." = "Volgende geslaagde vaardigheidstoewijzing. Control-Rechts.";
 "Next turn: {0}" = "Volgende beurt: {0}";
@@ -1668,6 +1680,7 @@
 "Original Macintosh" = "Originele Macintosh";
 "Original Macintosh 1-bit graphics" = "Originele Macintosh-beeldweergave in 1-bit";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Originele zwart-witillustraties voor Macintosh brengen hun verfijnde ditherpatroon naar moderne Macs. Kies Macintosh (1-bit) bij de grafische instellingen voor Classic-illustraties en bijpassende monochrome spelbediening.";
+"Original PC" = "Originele pc";
 "Original inputs" = "Oorspronkelijke invoer";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Oorspronkelijk hoofdplatform. Bevat de bekende gedigitaliseerde stemfragmenten en een gedeeld scherm voor twee spelers.";
 "Original movie" = "Originele film";
@@ -1844,6 +1857,7 @@
 "Previous move" = "Vorige zet";
 "Previous page" = "Vorige pagina";
 "Previous record: {0}. New record: {1}." = "Vorig record: {0}. Nieuw record: {1}.";
+"Previous rewards" = "Vorige beloningen";
 "Previous skill" = "Vorige vaardigheid";
 "Previous successful skill use. Control-Left." = "Vorige geslaagde vaardigheidstoewijzing. Control-Links.";
 "Previous unassigned" = "Vorige zonder opdracht";
@@ -1895,6 +1909,7 @@
 "RETRY" = "OPNIEUW PROBEREN";
 "RETRY LEVEL" = "NIVEAU OPNIEUW";
 "REVIEW" = "BEOORDELEN";
+"REWARDS EARNED" = "VERDIENDE BELONINGEN";
 "REWIND" = "TERUGSPOELEN";
 "REWIND CAREER" = "CARRIÈRE TERUGSPOELEN";
 "RIFF" = "RIFF";
@@ -1987,7 +2002,9 @@
 "Rescue target out of reach" = "Reddingsdoel onbereikbaar";
 "Rescue {0} and clear the level. Saved {1}." = "Red {0} lemmings en voltooi het level. Gered: {1}.";
 "Rescued" = "Gered";
+"Rescued all {0} lemmings." = "Alle {0} lemmings gered.";
 "Rescued {0} of {1}  ({2}%)" = "{0} van {1} gered  ({2}%)";
+"Rescued {0}, up from your previous best of {1}." = "{0} gered, meer dan je vorige record van {1}.";
 "Rescued: {0}. Required: {1}. {2}" = "Gered: {0}. Vereist: {1}. {2}";
 "Reset" = "Resetten";
 "Reset button mappings" = "Knoptoewijzingen herstellen";
@@ -2046,6 +2063,8 @@
 "Revisit" = "Opnieuw bekijken";
 "Revisit  {0}" = "Opnieuw bekijken  {0}";
 "Revisit ({0})" = "Opnieuw bekijken ({0})";
+"Rewards earned ({0}) >" = "Verdiende beloningen ({0}) >";
+"Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Beloningen verdiend door {0}. {1} {2}. Pagina {3} van {4}. Escape keert terug naar het resultaat.";
 "Rewind" = "Terugspoelen";
 "Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Terugspoelen actief, {0} ticks terug. Houd punt ingedrukt om vooruit te spoelen. Escape annuleert.";
 "Rewind one second." = "Eén seconde terugspoelen.";
@@ -2214,6 +2233,7 @@
 "Session not started" = "Sessie niet gestart";
 "Set a first record, then improve its skill count." = "Zet een eerste record neer en verbeter daarna het aantal gebruikte vaardigheden.";
 "Settings" = "Instellingen";
+"Settings (⌘,)" = "Instellingen (⌘,)";
 "Settings sections" = "Instellingensecties";
 "Settings…" = "Instellingen…";
 "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Zeven extra taalpakketten volgen de taalinstelling van je Mac. De originele bitmaplettertypen ondersteunen West-Europese tekst met accenten.";
@@ -2278,6 +2298,7 @@
 "Skip" = "Overslaan";
 "Skip as {0} ({1})" = "Overslaan als {0} ({1})";
 "Skip level ({0})" = "Level overslaan ({0})";
+"Skips {0}" = "Overslaan {0}";
 "Slider" = "Glijder";
 "Slot {0}" = "Opslag {0}";
 "Slower" = "Langzamer";
@@ -2713,6 +2734,8 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes zag vrede en veiligheid als essentieel. Gedeelde regels en gezag beschermen mensen tegen conflicten.";
 "Three-star" = "Drie sterren";
 "Three-star levels" = "Levels met drie sterren";
+"Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "Levels met drie sterren: {0} tot {1}. Eén keer een level overslaan per 3 verschillende levels zonder terugspoelen of ongedaan maken.";
+"Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "Levels met drie sterren: {0} tot {1}. Eén Superzoom per 3 verschillende levels zonder terugspoelen of ongedaan maken.";
 "Three-star rescue" = "Redding met drie sterren";
 "Thrower" = "Werper";
 "Tick {0}. {1}: {2}. Skills used: {3}" = "Tick {0}. {1}: {2}. Gebruikte vaardigheden: {3}";
@@ -2845,6 +2868,7 @@
 "Use the right stick to aim and the left stick to move the camera." = "Gebruik de rechterstick om te richten en de linkerstick om de camera te bewegen.";
 "Use tool" = "Gereedschap gebruiken";
 "Used" = "Gebruikt";
+"Used {0} skills instead of {1}, with at least as many rescued." = "{0} vaardigheden gebruikt in plaats van {1}, met minstens evenveel geredde lemmings.";
 "V / S" = "V / S";
 "V Replay  S Save movie" = "V Replay  S Film opslaan";
 "V WATCH REPLAY  *  S SAVE MOVIE" = "V REPLAY BEKIJKEN  *  S FILM OPSLAAN";
@@ -2871,6 +2895,7 @@
 "View / Options" = "View / Options";
 "View play counts and music use for this Mac, and shared totals when the service is available." = "Bekijk spelaantallen en muziekgebruik voor deze Mac, en gedeelde totalen wanneer de dienst beschikbaar is.";
 "View play insights" = "Spelinzichten bekijken";
+"View result" = "Resultaat bekijken";
 "Viewing as {0}. Scores belong to a different local player." = "Weergegeven als {0}. Scores horen bij een andere lokale speler.";
 "Viewing worldwide scores. {0} holds this Mac's worldwide place. This player keeps local records." = "Wereldwijde scores worden weergegeven. {0} behoudt de wereldwijde plaats van deze Mac. Deze speler behoudt de lokale records.";
 "Volume" = "Volume";
@@ -2949,8 +2974,9 @@
 "Zoom active" = "Zoom actief";
 "Zoom off" = "Zoom uit";
 "Zoom on / off at cursor" = "Zoom op cursor in-/uitschakelen";
+"Zoom {0}   Superzoom {1}   Level Skips {2}" = "Zoom {0}   Superzoom {1}   Levels overslaan {2}";
 "Zoom {0}×" = "Zoom {0}×";
-"Zoom, {0} remaining. Superzoom, {1} remaining. {2}" = "Zoom, nog {0}. Superzoom, nog {1}. {2}";
+"Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "Zoom, nog {0}. Superzoom, nog {1}. {2} keer een level overslaan. {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2×. Shift+Z: 4×. Klik om te wisselen.";
 "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" = "[ / ]  Focus op lemmings zonder opdracht\n\\      Focus op laatste toewijzing\nReturn Laatste vaardigheid herhalen";
 "[ / ]: Unassigned lemming" = "[ / ]: lemming zonder opdracht";
@@ -3111,7 +3137,8 @@
 "{0} {1}. No replacement was chosen." = "{0} {1}. Er is geen vervanging gekozen.";
 "{0} {1}s" = "{0} {1}s";
 "{0} — {1} {2} — Beta" = "{0} — {1} {2} — Bèta";
-"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15} {16} Local Most Saved: {17}. Enter: {18}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{19}{20}" = "Poging van {0}. {1}. {2}. {3} {4}{5} van 3 sterren in deze poging. Tijd: {6}. Snelste voltooiing: {7}. Beste van het level: {8} sterren. {9} {10}. Nieuwe levelprijzen: {11}. {12} Carrière: {13} sterren, plus {14}. {15} {16} Lokaal Meest gered: {17}. Enter: {18}. R probeert opnieuw. N probeert opnieuw als de volgende speler in de sessie. P opent Hot Seat-instellingen. Wereldwijd opent communityranglijsten. V opent replay. B opent records. A opent prestaties. G opent leveldoelen. C opent carrièrevoortgang. D opent details. Escape gaat terug.{19}{20}";
+"{0}'s attempt" = "Poging van {0}";
+"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15}. {16} {17} Local Most Saved: {18}. Enter: {19}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{20}{21}" = "Poging van {0}. {1}. {2}. {3} {4}{5} van 3 sterren in deze poging. Tijd: {6}. Snelste voltooiing: {7}. Beste van het level: {8} sterren. {9} {10}. Nieuwe levelprijzen: {11}. {12} Carrière: {13} sterren, plus {14}. {15}. {16} {17} Lokaal Meest gered: {18}. Enter: {19}. R probeert opnieuw. N probeert opnieuw als de volgende speler in de sessie. P opent Hot Seat-instellingen. Wereldwijd opent communityranglijsten. V opent replay. B opent records. A opent prestaties. G opent leveldoelen. C opent carrièrevoortgang. D opent details. Escape gaat terug.{20}{21}";
 "{0}'s turn" = "Beurt van {0}";
 "{0}, hold for pause menu" = "{0}, houd ingedrukt voor pauzemenu";
 "{0}, {1} remaining{2}" = "{0}, nog {1}{2}";

@@ -8,8 +8,8 @@
   },
   "catalogue": {
     "plural_count": 8,
-    "text_count": 3133,
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302"
+    "text_count": 3160,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2"
   },
   "checkpoint_date": "2026-10-15",
   "deliberately_unchanged": [
@@ -560,11 +560,11 @@
   ],
   "draft": {
     "current_catalogue_text_count": 3130,
-    "entry_count": 3133,
+    "entry_count": 3160,
     "missing_catalogue_text_count": 0,
     "obsolete_key_count": 0,
     "path": "Tools/Localisation/drafts/es-419.json",
-    "sha256": "709e1b06a92d5c0ddd796ddbd04ea16bf6183fe94024753a78b12e314a81c606"
+    "sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c"
   },
   "draft_modified_by_this_reviewer": true,
   "handover_snapshot": {
@@ -660,12 +660,35 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "709e1b06a92d5c0ddd796ddbd04ea16bf6183fe94024753a78b12e314a81c606",
-    "runtime_strings_sha256": "c5bc5f0144ced4be092810a5249e5b3abf57b33541339dd0760445161d92d741",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c",
+    "runtime_strings_sha256": "8e506807e1d7b3fd08fcab39b1523bf9e4727c69f0f631d82af67fce0f69b521",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "validation": {
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c",
+    "complete": true
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

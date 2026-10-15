@@ -20,6 +20,9 @@
 "#{0} of {1}{2}" = "{1} இல் #{0}{2}";
 "( with Fiat X1/9 red wedge shaped car, hence Chris \"Wedgey\" Stanley)" = "(ஃபியட் X1/9 சிவப்பு விளிம்பு வடிவ கார், எனவே கிறிஸ் \"Wedgey\" ஸ்டான்லி)";
 "+ New player" = "+ புதிய வீரர்";
+"+1 LEVEL SKIP" = "+1 நிலைத் தவிர்ப்பு";
+"+{0} SUPERZOOM" = "+{0} மிகைப் பெரிதாக்கம்";
+"+{0} ZOOM" = "+{0} பெரிதாக்கம்";
 "+{0} extra" = "+{0} கூடுதல்";
 ", / .: Step back / forward" = ", / .: பின்னோக்கி / முன்னோக்கி";
 ", selected" = ", தேர்ந்தெடுக்கப்பட்டது";
@@ -389,6 +392,7 @@
 "Career progress" = "விளையாட்டு வாழ்நாள் முன்னேற்றம்";
 "Career progress. {0} stars, plus {1} this run. {2} distinct levels cleared. {3} three-star levels. {4}{5}" = "தொழில் முன்னேற்றம். {0} நட்சத்திரங்கள், பிளஸ் {1} இந்த ரன். {2} வேறுபட்ட நிலைகள் சுத்தம். {3} மூன்று நட்சத்திர நிலைகள். {4} {5}";
 "Career stars" = "விளையாட்டு வாழ்நாள் நட்சத்திரங்கள்";
+"Career stars: {0} to {1}. One Zoom per 3 stars without rewind or undo." = "விளையாட்டு வாழ்நாள் நட்சத்திரங்கள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் பெறும் ஒவ்வொரு 3 நட்சத்திரங்களுக்கும் ஒரு பெரிதாக்கப் பயன்பாடு கிடைக்கும்.";
 "Cavelems" = "குகை லெம்மிங்கள்";
 "Centre entrance" = "நுழைவாயிலை மையப்படுத்து";
 "Centre entrance. H or Home." = "நுழைவாயிலை மையப்படுத்து. H அல்லது Home.";
@@ -515,6 +519,8 @@
 "Clear with one skill type. This run used {0}." = "ஒரு திறன் வகை மூலம் தெளிவு. இந்த ரன் பயன்படுத்தப்படும் {0}.";
 "Clear with {0} more play styles." = "{0} மேலும் நாடக பாணிகள் கொண்டு தெளிவாக.";
 "Cleared" = "வெற்றி பெற்றது";
+"Cleared the level using one skill type." = "ஒரே வகைத் திறனைப் பயன்படுத்தி நிலையை வென்றது.";
+"Cleared the level without assigning a skill." = "திறனை ஒதுக்காமல் நிலையை வென்றது.";
 "Cleared without assigning a skill." = "திறனை ஒதுக்காமல் வென்றது.";
 "Clears" = "வெற்றிகள்";
 "Click or Return to practise" = "பயிற்சி செய்யச் சொடுக்கவும் அல்லது Return அழுத்தவும்";
@@ -609,6 +615,7 @@
 "Could not save completed lesson: {0}" = "முடிந்த பாடத்தை சேமிக்க முடியவில்லை: {0}";
 "Could not save the input route: {0}" = "உள்ளீட்டு பாதையை சேமிக்க முடியவில்லை: {0}";
 "Could not show the talisman: {0}" = "தாலிமன் காட்ட முடியவில்லை: {0}";
+"Could not sync journey: {0}" = "பயணத்தை ஒத்திசைக்க முடியவில்லை: {0}";
 "Counters" = "எண்ணிகள்";
 "Counting levels..." = "நிலைகள் எண்ணப்படுகின்றன...";
 "Counts" = "எண்ணிக்கைகள்";
@@ -818,8 +825,8 @@
 "FLOAT" = "கடற்படை";
 "FLOATER" = "மிதப்பவர்";
 "FOR MANY GENERATION WE HAVE LIVED HERE" = "பல தலைமுறைகளாக நாம் இங்கு வாழ்ந்து வருகிறோம்";
-"Fade Menu button" = "பளபளக்கும் மெனு பொத்தானை";
-"Fade Menu during play. Turn this off to keep the button visible." = "விளையாடும் போது Fade மெனு. பொத்தானை காணக்கூடியதாக வைத்திருக்க இதை அணைக்கவும்.";
+"Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible." = "விளையாட்டின்போது பட்டி, அமைப்புகள் மற்றும் வரைகலைப் பொத்தான்களை மங்கச் செய். பொத்தான்கள் தெரியும்படி வைத்திருக்க இதை முடக்கவும்.";
+"Fade gameplay buttons" = "விளையாட்டுப் பொத்தான்களை மங்கச் செய்";
 "Fails" = "தோல்விகள்";
 "Faithful" = "விசுவாசமுள்ளவர்கள்";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "விசுவாசமானது மூலத்தின் அசல் ஒலியை வைத்திருக்கிறது. நவீனமானது மேம்படுத்தப்பட்ட இசை சிகிச்சையை பயன்படுத்துகிறது.";
@@ -859,6 +866,7 @@
 "Finish one below a verified maximum." = "சரிபார்க்கப்பட்ட அதிகபட்ச அளவிற்குக் கீழே ஒரு முடிவைச் செய்யுங்கள்.";
 "Finish run" = "ஆட்டத்தை முடி";
 "Finished {0} from {1}." = "{0} {1} இலிருந்து முடிந்தது.";
+"First clear of this level. Rescued {0}; target {1}." = "இந்த நிலையில் முதல் வெற்றி. மீட்பு {0}. இலக்கு {1}.";
 "Fix records" = "பதிவுகளை சரிசெய்யவும்";
 "Flame Thrower" = "தீ வீசுபவர்";
 "Flashes" = "மின்னல்கள்";
@@ -1366,6 +1374,7 @@
 "Macintosh Sound Manager 22 kHz PCM" = "Macintosh ஒலி மேலாளர் 22 kHz PCM";
 "Macintosh artwork could not be applied to this level." = "இந்த நிலைக்கு Macintosh ஓவியத்தைப் பயன்படுத்த முடியவில்லை.";
 "Macintosh sound resources" = "Macintosh ஒலி வளங்கள்";
+"Macintosh-style 2x" = "Macintosh பாணி 2x";
 "Macintosh-style 2× artwork" = "Macintosh பாணியில் 2x கலைப்படைப்பு";
 "Magic Carpet" = "பறக்கும் கம்பளம்";
 "Magno Booter" = "காந்தக் காலணியாளர்";
@@ -1526,12 +1535,15 @@
 "Next Level" = "அடுத்த நிலை";
 "Next award" = "அடுத்த விருது";
 "Next eligible lemming" = "அடுத்த தகுதி பெறும் லிம்மிங்";
+"Next graphics" = "அடுத்த வரைகலை";
+"Next graphics (F2)" = "அடுத்த வரைகலை (F2)";
 "Next level" = "அடுத்த நிலை";
 "Next level >" = "அடுத்த நிலை >";
 "Next move" = "அடுத்த நகர்வு";
 "Next new moves to the next new award. " = "அடுத்த புதிய நகர்வுகள் அடுத்த புதிய விருதுக்கு. ";
 "Next new {0}/{1} >" = "அடுத்த புதிய {0}/{1} >";
 "Next page" = "அடுத்த பக்கம்";
+"Next rewards" = "அடுத்த வெகுமதிகள்";
 "Next skill" = "அடுத்த திறன்";
 "Next successful skill use. Control-Right." = "அடுத்த வெற்றிகரமான திறன் பயன்பாடு. Control-Right.";
 "Next turn: {0}" = "அடுத்த முறை: {0}";
@@ -1668,6 +1680,7 @@
 "Original Macintosh" = "அசல் Macintosh";
 "Original Macintosh 1-bit graphics" = "அசல் Macintosh 1-பிட் கிராபிக்ஸ்";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "அசல் Macintosh கருப்பு மற்றும் வெள்ளை கலைப்படைப்பு அதன் சிக்கலான திசைதிருப்பலை நவீன மேக்ஸுக்கு கொண்டுவருகிறது. Classic கலைப்படைப்பு மற்றும் ஒற்றை நிற விளையாட்டு கட்டுப்பாடுகளுக்கு கிராபிக்ஸ் அமைப்புகளில் Macintosh (1 பிட்) ஐத் தேர்வுசெய்க.";
+"Original PC" = "அசல் PC";
 "Original inputs" = "அசல் உள்ளீடுகள்";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "அசல் முன்னணி மேடையில். சின்னமான டிஜிட்டல் குரல் மாதிரிகள் மற்றும் 2 வீரர் பிளவு திரையை உள்ளடக்கியது.";
 "Original movie" = "அசல் திரைப்படம்";
@@ -1844,6 +1857,7 @@
 "Previous move" = "முந்தைய நடவடிக்கை";
 "Previous page" = "முந்தைய பக்கம்";
 "Previous record: {0}. New record: {1}." = "முந்தைய பதிவு: {0}. புதிய பதிவு: {1}.";
+"Previous rewards" = "முந்தைய வெகுமதிகள்";
 "Previous skill" = "முந்தைய திறன்";
 "Previous successful skill use. Control-Left." = "முந்தைய வெற்றிகரமான திறன் பயன்பாடு. Control-Left.";
 "Previous unassigned" = "முந்தைய ஒதுக்கப்படாதவர்";
@@ -1895,6 +1909,7 @@
 "RETRY" = "மீண்டும் முயல்";
 "RETRY LEVEL" = "நிலையை மீண்டும் முயல்";
 "REVIEW" = "விமர்சனம்";
+"REWARDS EARNED" = "பெற்ற வெகுமதிகள்";
 "REWIND" = "பின்னோக்கு";
 "REWIND CAREER" = "மறுபயன்பாட்டு வாழ்க்கை";
 "RIFF" = "RIFF";
@@ -1987,7 +2002,9 @@
 "Rescue target out of reach" = "மீட்பு இலக்கு அடைய முடியாதது";
 "Rescue {0} and clear the level. Saved {1}." = "மீட்பு {0} மற்றும் நிலை சுத்தம். சேமிக்கப்படும் {1}.";
 "Rescued" = "மீட்கப்பட்டது";
+"Rescued all {0} lemmings." = "{0} லெம்மிங்களையும் மீட்டது.";
 "Rescued {0} of {1}  ({2}%)" = "மீட்கப்பட்ட {0} {1} ({2}%)";
+"Rescued {0}, up from your previous best of {1}." = "முந்தைய சிறந்த மீட்பான {1} இலிருந்து {0} ஆக உயர்ந்தது.";
 "Rescued: {0}. Required: {1}. {2}" = "மீட்பு: {0}. தேவை: {1}. {2}";
 "Reset" = "மீளமை";
 "Reset button mappings" = "மீட்டமை பொத்தான்கள் வரைபடங்கள்";
@@ -2046,6 +2063,8 @@
 "Revisit" = "மறுபரிசீலனை";
 "Revisit  {0}" = "மறுபரிசீலனை {0}";
 "Revisit ({0})" = "மறுபரிசீலனை ({0})";
+"Rewards earned ({0}) >" = "பெற்ற வெகுமதிகள் ({0}) >";
+"Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "{0} பெற்ற வெகுமதிகள். {1} {2}. {4} இல் பக்கம் {3}. Escape முடிவிற்குத் திரும்பும்.";
 "Rewind" = "பின்னோக்கு";
 "Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "பின்னோக்கு செயலில் உள்ளது. {0} நேரப்படிகள் பின்னே. முற்றுப்புள்ளி விசையை அழுத்திப் பிடித்தால் தொடர்ந்து முன்னேறும். Escape ரத்து செய்யும்.";
 "Rewind one second." = "ஒரு நொடி பின்னோக்கு.";
@@ -2214,6 +2233,7 @@
 "Session not started" = "அமர்வு தொடங்கவில்லை";
 "Set a first record, then improve its skill count." = "முதலில் ஒரு சாதனையை அமைத்து, பின்னர் அதன் திறன் எண்ணிக்கையை மேம்படுத்தவும்.";
 "Settings" = "அமைப்புகள்";
+"Settings (⌘,)" = "அமைப்புகள் (⌘,)";
 "Settings sections" = "அமைப்புப் பிரிவுகள்";
 "Settings…" = "அமைப்புகள்…";
 "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "ஏழு கூடுதல் மொழி தொகுப்புகள் உங்கள் மேக்கின் மொழி அமைப்பை பின்பற்றுகின்றன. அசல் பிட்மேப் எழுத்துருக்கள் மேற்கத்திய லத்தீன் உரையை ஆதரிக்கின்றன.";
@@ -2278,6 +2298,7 @@
 "Skip" = "கடந்து செல்லுங்கள்";
 "Skip as {0} ({1})" = "{0} ({1})";
 "Skip level ({0})" = "ஸ்கிப் நிலை ({0})";
+"Skips {0}" = "தவிர்ப்புகள் {0}";
 "Slider" = "வழுக்குபவர்";
 "Slot {0}" = "இடம் {0}";
 "Slower" = "மெதுவாக";
@@ -2713,6 +2734,8 @@
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "தாமஸ் ஹாப்ஸ் சமாதானத்தையும் பாதுகாப்பையும் மிக முக்கியமாகக் கருதினார். பகிரப்பட்ட விதிகள் மற்றும் அதிகாரம் மக்களை மோதல்களிலிருந்து பாதுகாக்கின்றன.";
 "Three-star" = "மூன்று நட்சத்திரங்கள்";
 "Three-star levels" = "மூன்று நட்சத்திர நிலைகள்";
+"Three-star levels: {0} to {1}. One Level Skip per 3 distinct levels without rewind or undo." = "மூன்று நட்சத்திர நிலைகள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் மூன்று நட்சத்திரங்கள் பெற்ற ஒவ்வொரு 3 வெவ்வேறு நிலைகளுக்கும் நிலையைத் தவிர்க்கும் ஒரு வாய்ப்பு கிடைக்கும்.";
+"Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind or undo." = "மூன்று நட்சத்திர நிலைகள்: {0} இலிருந்து {1}. பின்னோக்கையோ மீட்டெடுப்பையோ பயன்படுத்தாமல் மூன்று நட்சத்திரங்கள் பெற்ற ஒவ்வொரு 3 வெவ்வேறு நிலைகளுக்கும் ஒரு மிகைப் பெரிதாக்கப் பயன்பாடு கிடைக்கும்.";
 "Three-star rescue" = "மூன்று நட்சத்திர மீட்பு";
 "Thrower" = "வீசுபவர்";
 "Tick {0}. {1}: {2}. Skills used: {3}" = "{0}. {1}: {2}. பயன்படுத்திய திறன்கள்: {3}";
@@ -2845,6 +2868,7 @@
 "Use the right stick to aim and the left stick to move the camera." = "கேமராவை நகர்த்த வலது தண்டு மற்றும் இடது தண்டு பயன்படுத்தவும்.";
 "Use tool" = "கருவியைப் பயன்படுத்து";
 "Used" = "பயன்படுத்தப்பட்டது";
+"Used {0} skills instead of {1}, with at least as many rescued." = "மீட்பு எண்ணிக்கையைக் குறைக்காமல் {1} திறன்களுக்குப் பதிலாக {0} திறன்கள் பயன்படுத்தப்பட்டன.";
 "V / S" = "V / S";
 "V Replay  S Save movie" = "V மறு இயக்கம்  S காணொளியைச் சேமி";
 "V WATCH REPLAY  *  S SAVE MOVIE" = "V WATCH REPLAY * S SAVE MOVIE";
@@ -2871,6 +2895,7 @@
 "View / Options" = "காட்சி / விருப்பங்கள்";
 "View play counts and music use for this Mac, and shared totals when the service is available." = "இந்த மேக்கிற்கான நாடக எண்ணிக்கையையும் இசை பயன்பாட்டையும், சேவையின் போது பகிரப்பட்ட மொத்த எண்ணிக்கையையும் காண்க.";
 "View play insights" = "விளையாட்டுப் புள்ளிவிவரங்களைக் காண்";
+"View result" = "முடிவைப் பார்";
 "Viewing as {0}. Scores belong to a different local player." = "{0} ஆகப் பார்க்கிறீர்கள். மதிப்பெண்கள் வேறொரு உள்ளூர் வீரருடையவை.";
 "Viewing worldwide scores. {0} holds this Mac's worldwide place. This player keeps local records." = "உலகளாவிய மதிப்பெண்களைக் காண்கிறீர்கள். இந்த Mac இன் உலகளாவிய இடத்தை {0} வைத்துள்ளார். இந்த வீரர் உள்ளூர் பதிவுகளை வைத்திருக்கிறார்.";
 "Volume" = "ஒலியளவு";
@@ -2949,8 +2974,9 @@
 "Zoom active" = "பெரிதாக்கம் செயலில் உள்ளது";
 "Zoom off" = "பெரிதாக்கம் முடக்கப்பட்டது";
 "Zoom on / off at cursor" = "இடச்சுட்டியில் பெரிதாக்கத்தை இயக்கு / முடக்கு";
+"Zoom {0}   Superzoom {1}   Level Skips {2}" = "பெரிதாக்கம் {0}   மிகைப் பெரிதாக்கம் {1}   நிலைத் தவிர்ப்புகள் {2}";
 "Zoom {0}×" = "பெரிதாக்கம் {0}×";
-"Zoom, {0} remaining. Superzoom, {1} remaining. {2}" = "Zoom, {0} மீதமுள்ள. Superzoom, {1} மீதமுள்ள. {2}";
+"Zoom, {0} remaining. Superzoom, {1} remaining. {2} Level Skips. {3}" = "பெரிதாக்கம் {0} மீதமுள்ளது. மிகைப் பெரிதாக்கம் {1} மீதமுள்ளது. {2} நிலைத் தவிர்ப்புகள். {3}";
 "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2x. Shift+Z: 4x. சுழற்சி செய்ய கிளிக் செய்யவும்.";
 "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" = "[ / ]  திறன் ஒதுக்கப்படாத லெம்மிங்களைக் கவனப்படுத்து\n\\      கடைசி ஒதுக்கீட்டைக் கவனப்படுத்து\nReturn கடைசித் திறனை மீண்டும் ஒதுக்கு";
 "[ / ]: Unassigned lemming" = "[ / ]: திறன் ஒதுக்கப்படாத லெம்மிங்";
@@ -3111,7 +3137,8 @@
 "{0} {1}. No replacement was chosen." = "{0} {1}. மாற்று எதுவும் தேர்ந்தெடுக்கப்படவில்லை.";
 "{0} {1}s" = "{0} {1} நொடி";
 "{0} — {1} {2} — Beta" = "{0} — {1} {2} — சோதனைப் பதிப்பு";
-"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15} {16} Local Most Saved: {17}. Enter: {18}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{19}{20}" = "{0} முயற்சி. {1}. {2}. {3} {4} {5} 3 நட்சத்திரங்கள் இந்த ரன். நேரம்: {6}. வேகமாக தெளிவு: {7}. நிலை சிறந்த: {8} நட்சத்திரங்கள். {9} {10}. புதிய நிலை விருதுகள்: {11}. {12} தொழில்: {13} நட்சத்திரங்கள், பிளஸ் {14}. {15} {16} உள்ளூர் மிகச் சேமிக்கப்பட்ட: {17}. Enter: {18}. R மீண்டும் முயற்சிக்கிறது. N அடுத்த அமர்வு வீரராக மீண்டும் முயற்சிக்கிறது. P மாறிமுறை அமைப்பைத் திறக்கிறது. உலகளவில் சமூக முன்னணி பலகைகளைத் திறக்கிறது. V மீண்டும் விளையாடுவதைத் திறக்கிறது. B பதிவுகளைத் திறக்கிறது. A சாதனைகளைத் திறக்கிறது. G இலக்குகளைத் திறக்கிறது. C தொழில் முன்னேற்றத்தைத் திறக்கிறது. D விவரங்களைத் திறக்கிறது. Escape திருப்பித் தருகிறது. {19}{20}";
+"{0}'s attempt" = "{0} இன் முயற்சி";
+"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. Time: {6}. Fastest clear: {7}. Level best: {8} stars. {9} {10}. New level awards: {11}. {12} Career: {13} stars, plus {14}. {15}. {16} {17} Local Most Saved: {18}. Enter: {19}. R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.{20}{21}" = "{0} இன் முயற்சி. {1}. {2}. {3} இந்த ஆட்டத்தில் 3 இல் {4}{5} நட்சத்திரங்கள். நேரம்: {6}. வேகமான வெற்றி: {7}. நிலையின் சிறந்தது: {8} நட்சத்திரங்கள். {9} {10}. புதிய நிலை விருதுகள்: {11}. {12} விளையாட்டு வாழ்நாள்: {13} நட்சத்திரங்கள், பிளஸ் {14}. {15}. {16} {17} உள்ளூர் அதிகபட்ச மீட்பு: {18}. Enter: {19}. R மீண்டும் முயற்சிக்கிறது. N அடுத்த அமர்வு வீரராக மீண்டும் முயற்சிக்கிறது. P மாறிமுறை அமைப்பைத் திறக்கிறது. உலகளவில் சமூகத் தரவரிசைகளைத் திறக்கிறது. V மறு இயக்கத்தைத் திறக்கிறது. B பதிவுகளைத் திறக்கிறது. A சாதனைகளைத் திறக்கிறது. G இலக்குகளைத் திறக்கிறது. C விளையாட்டு வாழ்நாள் முன்னேற்றத்தைத் திறக்கிறது. D விவரங்களைத் திறக்கிறது. Escape பின்னே செல்லும். {20}{21}";
 "{0}'s turn" = "{0} இன் முறை";
 "{0}, hold for pause menu" = "{0}, இடைநிறுத்தப் பட்டிக்கு அழுத்திப் பிடி";
 "{0}, {1} remaining{2}" = "{0}, {1} மீதமுள்ளது{2}";

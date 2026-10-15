@@ -377,24 +377,39 @@ struct PrecisionZoomStatus: Equatable {
     return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(state)")
   }
 
+  private var rows: [(String, PrecisionZoomKind?)] {
+    [(L10n.text("z - \(zoom)"), .zoom),
+     (L10n.text("Z - \(superzoom)"), .superzoom),
+     (L10n.text("Skips \(skips)"), nil)]
+  }
+
+  private var metrics: (width: Int, rowHeight: Int) {
+    let widths = rows.map { GamePixelTypography.width(of: $0.0) }
+    let heights = rows.map { row in
+      let bounds = GamePixelTypography.verticalBounds(of: row.0)
+      return bounds.bottom - bounds.top
+    }
+    return ((widths.max() ?? 1) + 9, max(11, (heights.max() ?? 7) + 4))
+  }
+
   func size(scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count, L10n.text("Skips \(skips)").count)
-    return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
-                  height: 37 * scale)
+    let metrics = self.metrics
+    return CGSize(width: CGFloat(metrics.width) * scale,
+                  height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
   }
 
   @MainActor @discardableResult
   func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let rows: [(String, PrecisionZoomKind?)] = [(L10n.text("z - \(zoom)"), .zoom),
-                (L10n.text("Z - \(superzoom)"), .superzoom),
-                (L10n.text("Skips \(skips)"), nil)]
-    let badgeSize = size(scale: scale)
+    let rows = self.rows
+    let metrics = self.metrics
+    let badgeSize = CGSize(width: CGFloat(metrics.width) * scale,
+                           height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
     let width = badgeSize.width
-    let rowHeight = 11 * scale
+    let rowHeight = CGFloat(metrics.rowHeight) * scale
     for (index, row) in rows.enumerated() {
       let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
                         width: width, height: rowHeight)

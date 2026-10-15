@@ -19,12 +19,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/de.json",
-    "text_count": 3133,
+    "text_count": 3160,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "84d73cb70df5528c22add6b0103f77ed9670b7a341d78983483245fb2202f6d1",
-    "entry_count": 3133
+    "sha256": "d36b902613d186236908f37b6d35a1794af9c2a0cfa83f0c3506418d3a8d5c94",
+    "entry_count": 3160
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/de.json",
@@ -35,9 +35,9 @@
     "note": "The staged machine candidate and local OPUS model were unavailable in this checkout; translations were completed directly from the catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3133,
+    "text_count": 3160,
     "plural_count": 8,
-    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302"
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -266,7 +266,16 @@
     "validator_report": "German pack PASS: 3,130/3,130 text keys and 8/8 plural keys; 183 English-identical entries have individual shared allowlist reasons. Human linguistic approval and device acceptance remain pending.",
     "linguistic_review_complete": false,
     "render_checks_run": false,
-    "device_checks_run": false
+    "device_checks_run": false,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "d36b902613d186236908f37b6d35a1794af9c2a0cfa83f0c3506418d3a8d5c94",
+    "complete": true
   },
   "handover_snapshot": {
     "date": "2026-10-15",
@@ -319,12 +328,24 @@
   },
   "live_language_settings": {
     "date": "2026-10-16",
-    "text_count": 3133,
-    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
-    "draft_sha256": "84d73cb70df5528c22add6b0103f77ed9670b7a341d78983483245fb2202f6d1",
-    "runtime_strings_sha256": "5ae025c36b59b6500709e6d3eaebf640f50e51fe77f8ab316149ca52f68397bd",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "d36b902613d186236908f37b6d35a1794af9c2a0cfa83f0c3506418d3a8d5c94",
+    "runtime_strings_sha256": "9359470cf10a65f8abdb7b05a841062319954e4cd4a2c1b6100afca35b50df37",
     "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
     "human_language_approved": false,
     "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }
