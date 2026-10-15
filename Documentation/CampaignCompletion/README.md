@@ -11,7 +11,7 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | Strict audit: 394/416 fixtures double-replay. Of 326 carried routes, 313 still win when rebased, including five with stale identity hashes. | Repair four standalone routes and 13 carried schedules that no longer win. Rebase the five winnable Shadow 13 fixtures, then rerun all 90 routes and the carried chains. |
+| Lemmings 3 | Current audit: 399/416 fixtures double-replay. Five Shadow 13 identities are refreshed. Four standalone and 13 carried schedules still fail. | Recover the 17 failed routes, then rerun all 90 routes and the carried chains. Verify original-engine parity, media and the campaign finale. |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -39,7 +39,8 @@ game's End Run action after rescuing at least one lemming. Reserves are reported
 separately; they are not counted as rescues. These are standalone winning
 witnesses, not original-engine equivalence proofs.
 
-The separate [L3 chain evidence](l3-chain-evidence.json) replays each tribe from
+The separate [L3 chain evidence](l3-chain-evidence.json) records an earlier
+engine state. It must be regenerated after the current route repairs. It replays each tribe from
 its first level with the population carried from the preceding result. It uses
 population-specific fixtures when a standalone input schedule does not work at
 the carried population. `zsh Scripts/verify-l3-campaign.sh` checks the
@@ -51,17 +52,16 @@ engine parity and a played three-tribe finale need separate checks.
 
 The 13 October 2026 native gate passed all ninety standalone routes and all
 326 carried fixtures. The 15 October Mole direction and patrol corrections
-invalidated route witnesses. The current manifest check passes. A refreshed
-Shadow 13 standalone route now passes with ten saved and no losses. The
-current-source exhaustive audit double-replays all 416 retained fixtures:
-394 pass and 22 fail strict identity or outcome checks. Four standalone routes
-fail: Shadow 7 and Egyptian 6, 13 and 29. Eighteen carried fixtures have stale
-initial-state identities. Five Shadow 13 inputs (`113-1`, `113-21`, `113-22`,
-`113-25`, `113-26`) still win twice when rebased. The other thirteen carried
-schedules do not win: `107-1`, `107-22`, `107-23`; `206-1`, `206-11`, `206-22`,
-`206-23`; `213-1`, `213-8`, `213-21`, `213-22`; and `229-15`, `229-43`.
-Campaign and 50-survivor results remain historical until replacement
-witnesses pass the strict gate. See the [L3 Mole verification record](../ReleaseReadiness/L3MoleVerification-2026-10-15/README.md).
+invalidated route witnesses. The current fixture hash manifest passes for its
+322 fixed-input Classic-family and L3 fixtures. The exhaustive audit now double-
+replays 399 of 416 retained fixtures. The 17 route failures are four
+standalone routes—Shadow 7 and Egyptian 6, 13 and 29—and thirteen carried
+schedules: `107-1`, `107-22`, `107-23`; `206-1`, `206-11`, `206-22`, `206-23`;
+`213-1`, `213-8`, `213-21`, `213-22`; and `229-15`, `229-43`. The five
+carried Shadow 13 routes (`113-1`, `113-21`, `113-22`, `113-25`, `113-26`)
+were refreshed from retained inputs and now double-replay exactly. Current
+campaign and 50-survivor results remain unproved until replacement witnesses
+pass the strict gate. See the [L3 Mole verification record](../ReleaseReadiness/L3MoleVerification-2026-10-15/README.md).
 
 A 15 October follow-up searched Shadow 7 at its one-lemming carried population
 for 120 seconds from the start and for another 120 seconds from the accepted
@@ -73,10 +73,10 @@ each of these three cases from a current-runtime prefix. It found no winning
 route. The mode checks the exact level-data hash and population, drops refused
 inputs from the prefix and double-replays any route it returns.
 
-A follow-up attempted to refresh the old standalone and carried inputs for all
-four affected levels. None of the thirteen stale schedules won. The five
-Shadow 13 inputs still win, but their strict fixture identities need refresh.
-Egyptian 29 also had a 120-second current-runtime search, seeded through tick
+A 15 October follow-up attempted to refresh the old standalone and carried
+inputs for all four affected levels. None of the thirteen stale schedules won.
+The five Shadow 13 inputs won and have since been refreshed. Egyptian 29 also
+had a 120-second current-runtime search, seeded through tick
 1500 from its old route, with beam 1024 and 8-pixel tool-site sampling. It
 expanded 1,261,162 candidates and found no win. Its route remains open; this
 bounded search does not show that the level is unsolvable.
@@ -93,6 +93,12 @@ A third 600-second unseeded Shadow 7 search used a 4,096-candidate beam,
 8-pixel tool-site sampling and fewer-inputs-first ranking. It expanded
 7,973,530 candidates without a win; its best partial saved zero and lost zero.
 This bounded search also leaves solvability open.
+
+After the Shadow 13 refresh, two further current-runtime searches resumed the
+Shadow 7 route before its tick-1,590 Mole action and after its tick-1,666
+Jumper action. With 120-second budgets, they expanded 1,492,739 and 1,380,463
+candidates. Neither found a route. These bounded searches do not prove that
+Shadow 7 is unsolvable.
 
 `Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
 After deliberately adding or improving a fixture, run

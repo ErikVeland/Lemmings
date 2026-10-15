@@ -1401,79 +1401,39 @@
       "routeStatus": "exact"
     },
     {
-      "failure": "L3 replay identity, initial state or input order differs.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
       "level": 113,
-      "passed": false,
+      "passed": true,
       "population": 1,
-      "rebasedOutcome": {
-        "lost": 0,
-        "reserves": 0,
-        "saved": 1,
-        "stateHash": "fa1dd3ff2e1dbf4a036f6d32d9a3f42479753fad5a09f5c8b45224729e64b96a",
-        "ticks": 119
-      },
-      "routeStatus": "rebased-win"
+      "routeStatus": "exact"
     },
     {
-      "failure": "L3 replay identity, initial state or input order differs.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
       "level": 113,
-      "passed": false,
+      "passed": true,
       "population": 21,
-      "rebasedOutcome": {
-        "lost": 0,
-        "reserves": 11,
-        "saved": 10,
-        "stateHash": "2512108d885d14d007c0972da8c7e39a19bc37a31fa1695df9e21ff28b35f337",
-        "ticks": 443
-      },
-      "routeStatus": "rebased-win"
+      "routeStatus": "exact"
     },
     {
-      "failure": "L3 replay identity, initial state or input order differs.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
       "level": 113,
-      "passed": false,
+      "passed": true,
       "population": 22,
-      "rebasedOutcome": {
-        "lost": 0,
-        "reserves": 12,
-        "saved": 10,
-        "stateHash": "166594c59ead7bc80f2999f1caf63ded9f7cbd54998706e409373704107fa365",
-        "ticks": 443
-      },
-      "routeStatus": "rebased-win"
+      "routeStatus": "exact"
     },
     {
-      "failure": "L3 replay identity, initial state or input order differs.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
       "level": 113,
-      "passed": false,
+      "passed": true,
       "population": 25,
-      "rebasedOutcome": {
-        "lost": 0,
-        "reserves": 15,
-        "saved": 10,
-        "stateHash": "ba217bedf8616640b94f55358a67e7abadfc7f7fadb5bc1155e6c6ce0b9010da",
-        "ticks": 443
-      },
-      "routeStatus": "rebased-win"
+      "routeStatus": "exact"
     },
     {
-      "failure": "L3 replay identity, initial state or input order differs.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
       "level": 113,
-      "passed": false,
+      "passed": true,
       "population": 26,
-      "rebasedOutcome": {
-        "lost": 0,
-        "reserves": 16,
-        "saved": 10,
-        "stateHash": "88dad53fcccc8906e2ee8b3ffa8426b5e5c3b2adeef3192cb92e27e5d19a5182",
-        "ticks": 443
-      },
-      "routeStatus": "rebased-win"
+      "routeStatus": "exact"
     },
     {
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-1.json",

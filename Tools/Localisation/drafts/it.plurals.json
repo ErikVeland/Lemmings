@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld comando • Le scorciatoie si applicano nel contesto indicato. Esc chiude questa guida.",
+    "other": "%ld comandi • Le scorciatoie si applicano nel contesto indicato. Esc chiude questa guida."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemming"
+  },
+  "count.levels": {
+    "one": "%ld livello",
+    "other": "%ld livelli"
+  },
+  "count.packs": {
+    "one": "%ld pacchetto",
+    "other": "%ld pacchetti"
+  },
+  "count.rescueGoal": {
+    "one": "Salva %ld lemming e completa il livello.",
+    "other": "Salva %ld lemming e completa il livello."
+  },
+  "count.savedLemmings": {
+    "one": "Salvati %ld lemming",
+    "other": "Salvati %ld lemming"
+  },
+  "count.secondStarGoal": {
+    "one": "Salva %ld lemming e completa il livello per ottenere la seconda stella.",
+    "other": "Salva %ld lemming e completa il livello per ottenere la seconda stella."
+  },
+  "count.thirdStarGoal": {
+    "one": "Salva %ld lemming e completa il livello per ottenere la terza stella.",
+    "other": "Salva %ld lemming e completa il livello per ottenere la terza stella."
+  }
+}

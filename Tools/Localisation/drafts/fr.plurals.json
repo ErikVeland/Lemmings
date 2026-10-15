@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld commande • Les raccourcis dépendent du contexte indiqué. Échap ferme ce guide.",
+    "other": "%ld commandes • Les raccourcis dépendent du contexte indiqué. Échap ferme ce guide."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemmings"
+  },
+  "count.levels": {
+    "one": "%ld niveau",
+    "other": "%ld niveaux"
+  },
+  "count.packs": {
+    "one": "%ld pack",
+    "other": "%ld packs"
+  },
+  "count.rescueGoal": {
+    "one": "Sauve %ld lemming et termine le niveau.",
+    "other": "Sauve %ld lemmings et termine le niveau."
+  },
+  "count.savedLemmings": {
+    "one": "Tu as sauvé %ld lemming",
+    "other": "Tu as sauvé %ld lemmings"
+  },
+  "count.secondStarGoal": {
+    "one": "Sauve %ld lemming et termine le niveau pour gagner la deuxième étoile.",
+    "other": "Sauve %ld lemmings et termine le niveau pour gagner la deuxième étoile."
+  },
+  "count.thirdStarGoal": {
+    "one": "Sauve %ld lemming et termine le niveau pour gagner la troisième étoile.",
+    "other": "Sauve %ld lemmings et termine le niveau pour gagner la troisième étoile."
+  }
+}
