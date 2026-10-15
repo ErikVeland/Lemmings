@@ -611,10 +611,10 @@ controller/touch and television readability still require manual validation.
 
 ## iPad landscape home
 
-Wide tablet home menus place the moss cap and stone base at the menu area's
-top and bottom edges. Use spare height to enlarge the original bitmap logo and
-space the action rows. Keep touch targets and lettering at the selected interface
-size. Compact panes retain scrolling when the content cannot fit.
+Wide tablet Home menus keep the moss cap and stone base on a bounded, centred
+box. Leave spare height around the box for level scenery. Keep touch targets
+and lettering at the selected interface size. Compact panes retain scrolling
+when the content cannot fit.
 
 Windowless, muted checks cover 84 home states across three interface sizes,
 including saved runs, loading, disabled actions, tablet landscape and portrait,
@@ -658,8 +658,8 @@ Classic and fan libraries use equal horizontal and vertical gaps. Lemmings 2
 and Lemmings 3 occupy a separate row with their shipped title artwork and
 accessible game names. Profiles, Records and Collections / Playlists share one
 three-column footer. Portrait phones retain one column and scrolling. Spare
-landscape height enlarges the main logo and separates groups, without stretching
-the gaps inside the library grid.
+landscape height stays around the bounded menu box. Keep the gaps inside the
+library grid consistent.
 
 Resume journey returns to a saved journey. Resume level opens an independently
 saved attempt. Journey map opens the progression hub. Mac uses Resume
@@ -707,3 +707,113 @@ surface. Cross activates the shared HUD button bounds. Keep the controller's
 Circle pause/play loop separate from Menu navigation. Fast play first returns
 to 1× before pause or timeline control. See [controller QoL](ControllerQoL.md)
 for trigger and engine limits.
+
+## Failure navigation
+
+iOS and TV results keep Back to the level library and Menu to Home alongside
+Retry or the named Hot Seat action. Back retains the bottom-left target and the
+primary action stays bottom-right. A result-save error retains both navigation
+actions. Normal exits follow the Hot Seat house rule. A save-error exit retains
+the unresolved checkpoint and current turn.
+Mac results retain Back and Menu, including the Hot Seat Try later variant.
+
+Sequel mobile results without ranking conditions save local records without
+ranking telemetry. Classic retains its supported ranking telemetry. Failure
+regressions cover saved and reopened records across all three engines. Bitmap
+checks cover 54 phone, tablet and TV layouts, including save errors and Hot Seat.
+Native Mac checks cover 12 solo/Hot Seat loss variants, accessible actions,
+mouse targets and keyboard activation.
+The Mac source build and iOS/tvOS SDK module builds pass. Physical touch,
+VoiceOver and remote focus remain device checks.
+
+## Navigation and recovery
+
+Source review covers the Mac menu constructors and the shared mobile and TV
+routes: libraries, journeys, collections, profiles, Hot Seats, settings, imports,
+cloud saves, records, hints, replays, results and startup recovery. A visible Mac
+Back control gets a default dismissal action. Required Ready handovers retain
+their explicit boundary. Hardware Back uses a safe visible choice on welcome,
+consent and skill-pause pages.
+
+Save and handover errors offer Retry, Back and an independent Menu exit. Error
+exits retain unresolved saves and ownership. Cancelling a save prevents its late
+completion from leaving the game. Returning from help or errors restores Ready
+or the completed result, and an immediate End Run opens results. Late hints and
+cancelled exports cannot replace the player's new page. Menus retain standard
+controller input when gameplay controllers are disabled. Library-only settings
+stay in the library. Records repair confirms a reset and preserves unreadable
+files. TV migration errors allow Continue without marking migration complete.
+Long startup and transfer errors update their scrolling input surface.
+
+Run `zsh Scripts/run-navigation-recovery-tests.sh` for the muted, offscreen gate.
+It passes 44 focused tests, 81 page states, 1,458 layouts and 486 bitmap renders
+across six screen sizes and all interface sizes. The larger menu audit also
+passes 441 pages, 60 HUD states, 18 native artwork states, six cover states and
+three unfold frames. It checks that scrolling can reveal each action, including
+compact Home and long errors, and retains disabled-control and gap checks.
+iOS and tvOS SDK compilation passes. Five UIKit navigation regression cases
+typecheck on both SDKs but have not run on devices. Physical touch, remote focus,
+VoiceOver and complete content-corpus simulation remain validation gaps.
+
+## Mac Home scenery
+
+Mac Home keeps its bitmap menu in a bounded, centred box. Large windows leave
+level scenery visible around it. Compact windows retain scrolling, complete
+captions and the same mouse, keyboard and accessibility targets. Saved counts
+sit below the box. Marching lemmings reuse the front-end artwork when no game
+has been loaded.
+
+Use the selected player's last played level as scenery when available. If that
+level is missing or there is no history, keep one randomly chosen level until
+the destination or player changes. Render the scenery separately from gameplay.
+Opening Home must not create an attempt or add a Recently Played visit.
+Classic, Lemmings 2, Lemmings 3, catalogue NeoLemmix levels and Classic fan packs
+use the existing source loaders and object artwork.
+
+The camera eases from the opening view towards the exit and back. Clamp it to
+the full level image. Use the existing menu clock and a maximum speed of three
+level pixels per second. The game's Reduce Motion setting and macOS Reduce
+Motion both freeze the camera and marching animation.
+
+Focused, muted offscreen checks pass for Classic, Lemmings 2 and Lemmings 3.
+They cover exact last-played scenery, random and missing-content fallbacks,
+unchanged play history, camera bounds, exit travel and return, Reduce Motion,
+24 bitmap captures from 900×620 to 5110×2878, mouse targets, accessibility bounds
+and keyboard selection reveal. The Mac source compiles. NeoLemmix and fan-pack
+scenery reuse their preview loaders but were not included in these native
+fixtures. Physical VoiceOver navigation and composited CRT appearance remain
+manual checks.
+
+## iPad and TV Home scenery
+
+iPad and the normal TV app use the same bounded Home box and scenery flow.
+Leave spare height around the box. Wide layouts use three columns for the six
+Classic/fan libraries and a separate row for the sequel logos. Keep the selected
+interface size and scroll when the contents cannot fit. Player identity stays
+above the footer without a duplicate Next caption under the logo. Portrait
+phones retain their existing Home presentation.
+
+The backdrop occupies a separate, non-interactive view behind the menu. Keep
+one uploaded bitmap and move its image layer with nearest-neighbour sampling.
+Reuse the existing menu display link. Pause the camera for the game or system
+Reduce Motion setting, an inactive scene or a covering page. Resume without
+catch-up movement. The backdrop adds no touch, controller or accessibility target.
+
+Save a small scenery reference after a successful level start, scoped to the
+selected profile and solo/Hot Seat session. Reopen artwork on a worker without
+restoring a checkpoint, ticking physics or recording a visit. Classic and native
+L2/L3 use their real exits. NeoLemmix uses its resolved entrance and exit zones.
+Older matching checkpoints and Classic recents seed this reference. Missing
+content or no history selects random installed scenery. Keep that choice across
+menu redraws until its source, player or session changes.
+
+Windowless, muted checks pass for 126 Home captures across iPad portrait,
+landscape, small and Split View panes, TV safe areas, 1080p and 4K canvases,
+and all three interface sizes. They cover Classic/L2/L3 scenery identity,
+scoped references, missing/random fallback, target bounds and non-overlap,
+selected/disabled actions, footer scrolling, camera limits and return, and the
+reduced-motion/inactive clock. iOS and tvOS SDK modules and app entry points
+compile. These checks use the shared render and target geometry. Native UIKit
+touch, VoiceOver, remote focus delivery and physical TV compositing/performance
+remain device checks. NeoLemmix and fan scenery use existing loaders but were
+not included in the native scenery fixtures.

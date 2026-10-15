@@ -16,7 +16,16 @@ import UIKit
     var playerName: String? { didSet { if oldValue != playerName { rebuild() } } }
     var playerRole = MobileTurnArt.Role.current { didSet { if oldValue != playerRole { rebuild() } } }
     var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
-    private var displayedPage: GameFrontEnd.Page { MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName) }
+    private var displayedPage: GameFrontEnd.Page {
+        if page.home && boxesHome { return page }
+        return MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+    }
+    var boxesHome = false {
+        didSet { if boxesHome != oldValue { setNeedsLayout(); setNeedsDisplay() } }
+    }
+    private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat) -> GameFrontEnd.Layout {
+        GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight, boxedHome: boxesHome)
+    }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
     var revealedStars = 3 { didSet { setNeedsDisplay() } }
@@ -97,7 +106,7 @@ import UIKit
     }
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
         let scale = interfaceScale(width: width, viewportHeight: minimumHeight)
-        let size = GameFrontEnd.layout(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
+        let size = layoutPage(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
     override func layoutSubviews() {
@@ -106,7 +115,7 @@ import UIKit
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
         let minimumHeight = page.pause != nil ? (superview as? UIScrollView)?.bounds.height ?? bounds.height : bounds.height
-        var layout = GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale)
+        var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale)
         if page.pause != nil, let scroll = superview as? UIScrollView {
             layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
                 width: scroll.bounds.width / scale, height: scroll.bounds.height / scale))
@@ -238,7 +247,7 @@ import UIKit
         scroll.setContentOffset(CGPoint(x: scroll.contentOffset.x, y: min(maximum, max(minimum, scroll.contentOffset.y + delta))), animated: false)
     }
     func goBack() {
-        if let action = page.footer.last(where: { $0.enabled && $0.isBackNavigation }) {
+        if let action = page.backAction {
             onAction?(action.id)
         }
     }
@@ -249,7 +258,7 @@ import UIKit
         context.saveGState()
         defer { context.restoreGState() }
         context.scaleBy(x: scale, y: scale)
-        let layout = pageLayout ?? GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
+        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
         guard let typography = MobileGameArt.typography else {
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
@@ -260,7 +269,7 @@ import UIKit
             return
         }
         GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
-                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, in: context)
+                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), in: context)
         if let resultStars, !layout.preview.isEmpty {
             let preview = layout.preview
             let pixel: CGFloat = preview.width >= 400 ? 3 : 2

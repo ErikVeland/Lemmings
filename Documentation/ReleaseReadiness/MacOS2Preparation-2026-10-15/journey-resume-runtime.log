@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS classic Solo exact checkpoint, queue, ownership and paused recovery
+PASS lemmings2 Solo exact checkpoint, queue, ownership and paused recovery
+PASS lemmings3 Solo exact checkpoint, queue, ownership and paused recovery
+PASS classic Hot Seat exact checkpoint, queue, ownership and paused recovery
+PASS lemmings2 Hot Seat exact checkpoint, queue, ownership and paused recovery
+PASS lemmings3 Hot Seat exact checkpoint, queue, ownership and paused recovery
+Sequence checkpoint integration tests passed.

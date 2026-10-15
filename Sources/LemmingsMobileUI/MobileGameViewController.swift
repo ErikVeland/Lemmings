@@ -9,6 +9,7 @@ import GameController
 
 @MainActor enum MobileGameExitAction {
     case library
+    case menu
     case retry
     case next
 }
@@ -132,6 +133,7 @@ struct MobileGameTurn {
     private var appliedFrameRate = 0
     private var checkpointSaveTask: Task<Void, Never>?
     private var checkpointSaveGeneration = UUID()
+    private var leaveRequestID = UUID()
     var playState = MobilePlayState()
     var paused: Bool { playState.isPaused }
     var speed = 1.0
@@ -668,6 +670,7 @@ struct MobileGameTurn {
             updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         }
         updateHUD()
+        if session.snapshot.isComplete, !session.isReadOnly { presentCompletion() }
     }
 
     @discardableResult
@@ -969,6 +972,18 @@ struct MobileGameTurn {
         pauseGameplayAudio()
         updateHUD()
         guard showControls else { return }
+        if session.snapshot.isComplete, !session.isReadOnly {
+            if completionPresented { returnToResult() }
+            else { presentCompletion() }
+            return
+        }
+        if playState.phase == .ready {
+            showOverlay(title: summary.title, actions: [
+                (session.isReadOnly ? L10n.text("PLAY") : turn == nil ? L10n.text("START") : L10n.text("READY"), { [weak self] in self?.resumePlay() }),
+                (L10n.text("BACK"), { [weak self] in self?.leaveToLibrary() }),
+            ])
+            return
+        }
         #if os(tvOS)
         tvCameraMode = false
         showOverlay(title: L10n.text("PAUSED"), actions: [
@@ -1133,17 +1148,17 @@ struct MobileGameTurn {
             }
             // The level is over, so the turn passes by the house rule even when the player leaves.
             let following = turn.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
-            actions.append((L10n.text("LIBRARY"), { [weak self] in self?.finish(.library, handingTo: following) }))
+            actions.append((L10n.text("BACK"), { [weak self] in self?.finish(.library, handingTo: following) }))
         } else if snapshot.didWin {
             actions = [
                 (L10n.text("NEXT LEVEL"), { [weak self] in self?.finish(.next) }),
                 (L10n.text("RETRY"), { [weak self] in self?.finish(.retry) }),
-                (L10n.text("LIBRARY"), { [weak self] in self?.finish(.library) }),
+                (L10n.text("BACK"), { [weak self] in self?.finish(.library) }),
             ]
         } else {
             actions = [
                 (L10n.text("RETRY"), { [weak self] in self?.finish(.retry) }),
-                (L10n.text("LIBRARY"), { [weak self] in self?.finish(.library) }),
+                (L10n.text("BACK"), { [weak self] in self?.finish(.library) }),
             ]
         }
         if !snapshot.didWin, canDefer {
@@ -1162,16 +1177,24 @@ struct MobileGameTurn {
             actions.append((L10n.text("REVIEW"), { [weak self] in self?.showReplay(document: data) }))
             actions.append((L10n.text("SHARE MOVIE"), { [weak self] in self?.shareReplayMovie(document: data) }))
         }
-        if recordSaveError != nil {
-            showOverlay(title: recordSaveError ?? L10n.text("SAVE FAILED"), actions: [(L10n.text("TRY AGAIN"), { [weak self] in
-                guard let self else { return }
-                self.completionPresented = false
-                self.presentCompletion()
-            })])
-            return
-        }
+        let following = turn?.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
+        actions.append((L10n.text("MENU"), { [weak self] in self?.finish(.menu, handingTo: following) }))
         completionTitle = result
         completionActions = actions
+        if let recordSaveError {
+            completionTitle = recordSaveError
+            completionActions = [
+                (L10n.text("TRY AGAIN"), { [weak self] in
+                    guard let self else { return }
+                    self.completionPresented = false
+                    self.presentCompletion()
+                }),
+                (L10n.text("BACK"), { [weak self] in self?.finish(.library, handingTo: following) }),
+                (L10n.text("MENU"), { [weak self] in self?.finish(.menu, handingTo: following) }),
+            ]
+            returnToResult()
+            return
+        }
         showOverlay(title: result, actions: actions, results: true)
         startResultCelebration()
     }
@@ -1197,27 +1220,31 @@ struct MobileGameTurn {
     func resetTransition() { transitionInFlight = false }
 
     private func finish(_ action: MobileGameExitAction, handingTo player: String? = nil) {
-        guard recordSaveError == nil, !transitionInFlight else { return }
-        if action == .retry { MobileMusic.shared.vinylStop() }
-        if let player, onHandover?(player) == false {
-            showOverlay(title: L10n.text("HOT SEAT WAS NOT SAVED"), actions: [(L10n.text("TRY AGAIN"), { [weak self] in self?.finish(action, handingTo: player) })])
+        guard !transitionInFlight else { return }
+        if recordSaveError != nil {
+            if action == .library || action == .menu { leaveKeepingCheckpoint(action) }
             return
         }
+        if action == .retry { MobileMusic.shared.vinylStop() }
         transitionInFlight = true
         celebrationTask?.cancel(); celebrationTask = nil
         displayLink?.isPaused = true
         suspendAudio()
         effects.stop()
-        if action == .library { MobileMusic.shared.stop() }
+        if action == .library || action == .menu { MobileMusic.shared.stop() }
         Task { [self] in
             do {
+                await checkpointSaveTask?.value
                 try await checkpointStore.retire(runID: runID)
+                if let player, onHandover?(player) == false {
+                    resetTransition()
+                    showRecoveryOverlay(title: L10n.text("HOT SEAT WAS NOT SAVED")) { [weak self] in self?.finish(action, handingTo: player) }
+                    return
+                }
                 onExit?(action)
             } catch {
                 resetTransition()
-                showCustomOverlay(title: L10n.text("RUN WAS NOT CLOSED"), details: [], actions: [
-                    (L10n.text("TRY AGAIN"), { [weak self] in self?.finish(action) }),
-                ])
+                showRecoveryOverlay(title: L10n.text("RUN WAS NOT CLOSED")) { [weak self] in self?.finish(action, handingTo: player) }
             }
         }
     }
@@ -1233,7 +1260,14 @@ struct MobileGameTurn {
             finish(.library)
             return
         }
-        showOverlay(title: L10n.text("SAVING..."), actions: [])
+        let request = UUID()
+        leaveRequestID = request
+        showOverlay(title: L10n.text("SAVING..."), actions: [(L10n.text("CANCEL"), { [weak self] in
+            guard let self else { return }
+            self.leaveRequestID = UUID()
+            self.displayLink?.isPaused = false
+            self.pausePlay(showControls: true)
+        })])
         do {
             let encoding = try makeCheckpoint()
             let previousSave = checkpointSaveTask
@@ -1241,24 +1275,18 @@ struct MobileGameTurn {
                 do {
                     await previousSave?.value
                     let envelope = try await encoding.value
+                    guard leaveRequestID == request else { return }
                     try await checkpointStore.save(envelope)
+                    guard leaveRequestID == request else { return }
                     MobileMusic.shared.stop()
                     onExit?(.library)
                 } catch {
-                    displayLink?.isPaused = false
-                    showOverlay(
-                        title: error.localizedDescription,
-                        actions: [
-                            (L10n.text("TRY AGAIN"), { [weak self] in self?.leaveToLibrary() }),
-                            (L10n.text("RESUME"), { [weak self] in self?.resumePlay() }),
-                        ]
-                    )
+                    guard leaveRequestID == request else { return }
+                    showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary() }
                 }
             }
         } catch {
-            displayLink?.isPaused = false
-            showOverlay(title: error.localizedDescription,
-                        actions: [(L10n.text("RESUME"), { [weak self] in self?.resumePlay() })])
+            showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary() }
         }
     }
 
@@ -1544,7 +1572,40 @@ struct MobileGameTurn {
     }
 
     func returnToResult() {
-        showOverlay(title: completionTitle, actions: completionActions, results: true)
+        guard completionPresented else { pausePlay(showControls: true); return }
+        guard !completionActions.isEmpty else {
+            showRecoveryOverlay(title: L10n.text("SAVE FAILED")) { [weak self] in
+                self?.completionPresented = false
+                self?.presentCompletion()
+            }
+            return
+        }
+        if recordSaveError != nil { showCustomOverlay(title: completionTitle, details: [], actions: completionActions) }
+        else { showOverlay(title: completionTitle, actions: completionActions, results: true) }
+    }
+
+    func showRecoveryOverlay(title: String, retry: @escaping () -> Void) {
+        displayLink?.isPaused = false
+        showCustomOverlay(title: title, details: [], actions: [])
+        overlayCanvas.page = GameRecoveryArt.page(title: title)
+        overlayCanvas.onAction = { [weak self] id in
+            guard let self else { return }
+            switch id {
+            case "retry": retry()
+            case "back": self.pausePlay(showControls: true)
+            case "menu": self.leaveKeepingCheckpoint(.menu)
+            default: break
+            }
+        }
+        layoutOverlay()
+    }
+
+    private func leaveKeepingCheckpoint(_ destination: MobileGameExitAction) {
+        leaveRequestID = UUID()
+        displayLink?.isPaused = true
+        suspendAudio()
+        MobileMusic.shared.stop()
+        onExit?(destination)
     }
 
     func showReplay(document: Data, solution: Bool = false) {
@@ -1761,6 +1822,7 @@ struct MobileGameTurn {
     }
 
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false, pauseOverview: Bool = false) {
+        hintRequestID = UUID()
         replayMoves.isHidden = true
         cancelPendingL3ToolDirection()
         playfieldView.suspendVisualEffects()

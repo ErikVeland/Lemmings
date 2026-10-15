@@ -25,12 +25,25 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     #endif
     private let scrollView = UIScrollView()
+    private let homeBackdropView = MobileHomeBackdropView()
+    private let homeBackdropLoader = MobileHomeBackdropLoader()
+    private var homeBackdropTask: Task<Void, Never>?
+    private var homeBackdropKey: String?
+    private var usesHomeBox: Bool {
+        #if os(tvOS)
+        true
+        #else
+        UIDevice.current.userInterfaceIdiom == .pad
+        #endif
+    }
+    private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }
     let canvas = MobileMenuCanvas()
     private let unfold = MobileUnfoldView()
     private var previousSize = CGSize.zero
     let browser = MobileLevelBrowserView()
     var browserShown = false
     var route = Route.home
+    var confirmingRecordsReset = false
     #if os(tvOS)
     let tvBuildInfo = MobileBuildInfo.current()
     #endif
@@ -164,6 +177,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        view.addSubview(homeBackdropView)
         scrollView.backgroundColor = .black
         scrollView.alwaysBounceVertical = false
         scrollView.addSubview(canvas)
@@ -306,6 +320,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         previousSize = view.bounds.size
         browser.frame = view.bounds
+        homeBackdropView.frame = view.bounds
+        canvas.boxesHome = usesHomeBox
         syncPages()
         scrollView.frame = MobileSystemRegions.menuFrame(in: view)
         let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
@@ -313,6 +329,65 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         scrollView.contentSize = size
         game?.view.frame = view.bounds
     }
+    private func rememberHomeBackdrop(_ session: any MobileGameSession, at index: Int) {
+        let kind: MobileGameDataKind = session.engineIdentifier == "lemmings2" ? .lemmings2
+            : session.engineIdentifier == "lemmings3" ? .lemmings3
+            : session.engineIdentifier == "neolemmix" ? .neoLemmix : .classic
+        let identity = favouriteIdentity(index)
+        let reference = MobileHomeBackdropReference(kind: kind, pack: identity?.pack,
+            level: identity?.level ?? session.levelIdentifier)
+        try? storage.save(reference, name: homeBackdropName)
+    }
+
+    private func refreshHomeBackdrop() {
+        let shown = usesHomeBox && route == .home && game == nil
+        homeBackdropView.isHidden = !shown
+        scrollView.backgroundColor = shown ? .clear : .black
+        scrollView.isOpaque = !shown
+        canvas.backgroundColor = shown ? .clear : .black
+        canvas.isOpaque = !shown
+        guard shown else {
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
+            if homeBackdropTask != nil { homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil }
+            return
+        }
+        let preferred = storage.load(MobileHomeBackdropReference.self, name: homeBackdropName)
+            ?? pendingCheckpoint.flatMap { saved -> MobileHomeBackdropReference? in
+                guard checkpointMatchesSession(saved), recents.entries.isEmpty || ["lemmings2", "lemmings3", "neolemmix"].contains(saved.engine) else { return nil }
+                return MobileHomeBackdropReference(kind: saved.engine == "lemmings2" ? .lemmings2
+                    : saved.engine == "lemmings3" ? .lemmings3 : saved.engine == "neolemmix" ? .neoLemmix : .classic,
+                    pack: catalogue?.pack(forLevelIdentifier: saved.levelIdentifier)?.id, level: saved.levelIdentifier)
+            }
+        let recent = recents.entries.first
+        let native = Dictionary(uniqueKeysWithValues: MobileGameDataKind.allCases.filter { $0 != .classic }.compactMap { kind in
+            store?.resolvedDataDirectory(for: kind).map { (kind, $0) }
+        })
+        let classic = (library as? ClassicMobileLibrary)?.directory ?? store?.resolvedDataDirectory(for: .classic)
+        let key = profiles.activeID + ":" + homeBackdropName + ":" + (preferred.map { "\($0.kind.rawValue):\($0.pack ?? ""): \($0.level)" }
+            ?? recent.map { $0.pack + ":" + $0.level } ?? "random")
+            + String(describing: mobileSettings.classic.graphics) + String(describing: mobileSettings.classic.colorDepth)
+            + (catalogue?.portsRoot.path ?? "") + (classic?.path ?? "") + native.values.map(\.path).sorted().joined(separator: ":")
+        guard homeBackdropKey != key else { return }
+        homeBackdropTask?.cancel(); homeBackdropKey = key
+        homeBackdropView.show(nil)
+        let ports = catalogue?.portsRoot, fan = catalogue?.fanFolders ?? [], storage = storage, settings = mobileSettings.classic
+        homeBackdropTask = Task { [weak self, homeBackdropLoader] in
+            let scenery = try? await homeBackdropLoader.load(preferred: preferred, recent: recent, ports: ports,
+                fanFolders: fan, native: native, classicDirectory: classic, storage: storage, settings: settings,
+                neoLibrary: { try NeoLemmixMobileLibrary(directory: $0, storage: $1) })
+            guard !Task.isCancelled, let self, self.homeBackdropKey == key else { return }
+            self.homeBackdropTask = nil
+            self.homeBackdropView.show(scenery)
+        }
+    }
+
+    func advanceHomeBackdrop(at now: TimeInterval) {
+        homeBackdropView.advance(at: now,
+            active: usesHomeBox && route == .home && game == nil && presentedViewController == nil
+                && view.window?.windowScene?.activationState == .foregroundActive,
+            reduceMotion: mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled)
+    }
+
     func rebuild() {
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
@@ -487,6 +562,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     /// iPad keeps the Mac carousel in both orientations. Narrow panes use the stacked page.
     private func syncPages() {
         inputLink?.isPaused = game != nil
+        refreshHomeBackdrop()
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
         browser.statusText = loading ? L10n.text("Loading...") : notice
         browser.isLoading = loading
@@ -513,6 +589,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
     func navigate(_ next: Route) {
+        confirmingRecordsReset = false
         #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.
         let welcomeRoutes: [Route] = [.home, .whatsNew, .effectsWelcome, .telemetryConsent]
@@ -783,6 +860,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     private func reloadLibrary() {
+        homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil
         let store = store
         let directory = Bundle.main.resourceURL?.appendingPathComponent("BetaGameData", isDirectory: true)
         openLibrary({ try store?.loadLibrary(bundledDirectory: directory) }) { [self] loaded in
@@ -1083,10 +1161,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     do { try self.recordLearningResult(snapshot) }
                     catch { return ([], error.localizedDescription) }
                 }
-                let run = ArcadeRun(id: attemptID, profileID: ownerID, level: recordLevel,
-                    saved: snapshot.saved, didWin: snapshot.didWin, skills: session.assignedSkills,
-                    seconds: Double(snapshot.tick) / session.ticksPerSecond, assisted: session.usedRewind,
-                    telemetry: self.mobileTelemetry(session: session, snapshot: snapshot))
+                let run = MobileGameResult.capture(id: attemptID, profileID: ownerID,
+                    level: recordLevel, session: session)
                 return self.recordMobileCompletion(run, session: session)
             }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
@@ -1108,11 +1184,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             next.onExit = { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .library:
+                case .library, .menu:
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
-                    self.game = nil; self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
+                    self.game = nil
+                    if action == .menu { self.navigate(.home) }
+                    self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
                     self.measureMobileFanPacks()
                     #if os(iOS)
                     self.cloudProgress.requestSync()
@@ -1136,7 +1214,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             addChild(next); next.view.frame = view.bounds
             next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.addSubview(next.view); next.didMove(toParent: self)
-            game = next; syncPages()
+            game = next
+            rememberHomeBackdrop(content.session, at: index)
+            syncPages()
             previous?.willMove(toParent: nil); previous?.view.removeFromSuperview(); previous?.removeFromParent()
             #if os(iOS)
             setNeedsUpdateOfHomeIndicatorAutoHidden()

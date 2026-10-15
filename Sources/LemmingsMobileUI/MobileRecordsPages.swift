@@ -20,8 +20,11 @@ extension MobileLibraryViewController {
     }
 
     func recordsPage(subtitle: String) -> GameFrontEnd.Page {
-        MobileCareerArt.recordsPage(records: arcadeStore.records, profileID: profiles.activeID,
-                                    profileName: profiles.active.name, subtitle: subtitle)
+        if confirmingRecordsReset { return GameRecoveryArt.recordsReset(arcadeStore.storageError ?? "") }
+        var page = MobileCareerArt.recordsPage(records: arcadeStore.records, profileID: profiles.activeID,
+                                    profileName: profiles.active.name, subtitle: arcadeStore.storageError ?? subtitle)
+        if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
+        return page
     }
     func recordLevelPage(_ key: String, subtitle: String) -> GameFrontEnd.Page {
         MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: profiles.activeID,
@@ -42,6 +45,18 @@ extension MobileLibraryViewController {
 
     func handleRecords(_ id: String) -> Bool {
         switch id {
+        case "recordsFix":
+            if arcadeStore.reloadRecords() { _ = saveProfiles() }
+            else { confirmingRecordsReset = true }
+            rebuild()
+        case "recordsResetCancel": confirmingRecordsReset = false; rebuild()
+        case "recordsResetConfirm":
+            guard confirmingRecordsReset else { return true }
+            if arcadeStore.startNewRecords() {
+                confirmingRecordsReset = false
+                _ = saveProfiles()
+            }
+            rebuild()
         case "records": navigate(.records)
         case "achievements": navigate(.achievements)
         default:

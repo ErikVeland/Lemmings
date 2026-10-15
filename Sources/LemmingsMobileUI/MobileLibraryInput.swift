@@ -38,6 +38,7 @@ extension MobileLibraryViewController {
     }
     @objc func pollLibraryInput(_ link: CADisplayLink) {
         libraryInput.poll(context: ObjectIdentifier(canvas), at: link.timestamp)
+        advanceHomeBackdrop(at: link.timestamp)
     }
 }
 #endif

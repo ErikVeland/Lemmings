@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-15",
+  "windowMode": "offscreen",
+  "audio": "muted",
+  "journeyFlowPassed": true,
+  "checkpointPathsPassed": 6,
+  "cameraAndPausedStateExplicitlyChecked": true,
+  "checkoutDrift": [
+    "Sources/LemmingsLocal/LevelPreviewStore.swift",
+    "Sources/LemmingsLocal/PlayfieldView.swift",
+    "Sources/LemmingsLocal/main.swift",
+    "Tests/AppIntegrationTests/checks.swift"
+  ],
+  "recoveryFunctionsMatchLiveSource": {
+    "saveRunCheckpoint": true,
+    "restoreSequenceCheckpoint": true,
+    "sequenceCheckpoint": true,
+    "startActiveSequence": true,
+    "startResolvedActiveSequence": true,
+    "resumeSequenceSession": true,
+    "resumeHomeSequence": true,
+    "homeMenuItems": true,
+    "adopt": true
+  },
+  "compiledModules": {
+    "libLemmingsGameArt.dylib": "943777b8884f0aa82affaa10de10d04331d68debd99e96e90f30b4815f3f6847",
+    "libLemmingsTVCore.dylib": "9b0b86968fbb5dc7ff548cd2c5b3df0723f7314227addfd3f944d9c188d265ed",
+    "libLemmingsAudio.dylib": "bd2ac2fe5f9ad25efa868b67017ee9662a9f348927ad70d0ad5d495409db37f1",
+    "libLemmingsMobileCore.dylib": "914b75068019dea5a53f9c9cfda20075d6c9ee777541afc87a048a7f7bee1e6c",
+    "libLemmingsAppCore.dylib": "f7a90fa857f4b1fb482e616b86e1c1b0cb98691677ecee7d7bc085663fad18dd",
+    "libNxlvKit.dylib": "55f7708f486dd52d786470ab7fdf805d417631e5031987ddaae05ae7b6cf3251"
+  },
+  "limit": "The run uses frozen Mac UI sources and retained compiled modules. Concurrent Home backdrop work is outside this validation. Freeze the final integrated source and rerun the release audit before distribution."
+}

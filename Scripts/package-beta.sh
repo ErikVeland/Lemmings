@@ -120,11 +120,11 @@ fi
 echo "==> Checking the signature"
 codesign --verify --deep --strict --verbose=1 "$app_dir"
 
-if [[ "$release_scope" == classic-1.0 ]]; then
-  echo "==> Requiring fresh Classic 1.0 closure for this candidate"
-  python3 "$project_dir/Tools/ReleaseReadiness/audit.py" --scope classic-1.0 \
+if [[ "$release_scope" == classic-1.0 || "$release_scope" == macos-2.0 ]]; then
+  echo "==> Requiring fresh $release_scope closure for this candidate"
+  python3 "$project_dir/Tools/ReleaseReadiness/audit.py" --scope "$release_scope" \
     --require-closure --app --app-bundle "$app_dir" \
-    --out "$build_dir/classic-closure-$(date +%Y%m%d-%H%M%S)"
+    --out "$build_dir/release-closure-$(date +%Y%m%d-%H%M%S)"
 fi
 
 echo "==> Compressing"

@@ -168,6 +168,11 @@ let changed = try LevelPlaylistEntry(id: entry.id, identity: entry.identity,
     levelNameSnapshot: "Just dig!", levelNumberSnapshot: 1)
 try check(try store.latest(profileID: "player", sequence: .init(runID: sequence.runID, entry: changed)) == nil,
     "Changed content borrowed the checkpoint")
+let relabelled = try LevelPlaylistEntry(identity: entry.identity,
+    catalogueRevision: "new-catalogue", sourceRevision: entry.sourceRevision, packNameSnapshot: "Classic",
+    levelNameSnapshot: "Updated caption", levelNumberSnapshot: 1)
+try check(try store.latest(profileID: "player", sequence: .init(runID: sequence.runID, entry: relabelled))?.runID == journey.runID,
+    "A catalogue update stranded the same saved level")
 try check(try store.latest(profileID: "other", sequence: sequence) == nil,
     "Another player borrowed the checkpoint")
 var shared = run(tick: 40, savedAt: 600)

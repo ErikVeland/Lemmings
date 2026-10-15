@@ -9,25 +9,32 @@ public enum MobileInformationArt {
                                                         L10n.text("Old school"), L10n.text("Original inputs"), L10n.text("Classic effects")],
               footer: [.init("welcomeOriginal", L10n.text("Old school")), .init("welcomeModern", L10n.text("Modern"), primary: true)])
         page.detailHeadings = [0, 3]
+        page.backActionID = "welcomeOriginal"
         return page
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
-        .init(title: L10n.text("What's new in \(version)"),
+        var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
               details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
                         L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
+        page.backActionID = "welcomeContinue"
+        return page
     }
     public static func whatsNew(build: MobileBuildInfo) -> GameFrontEnd.Page {
-        GameFrontEnd.Page(title: L10n.text("Latest build"),
+        var page = GameFrontEnd.Page(title: L10n.text("Latest build"),
             subtitle: [build.label, build.dateLabel].filter { !$0.isEmpty }.joined(separator: "\n"),
             details: (build.changes.isEmpty ? [L10n.text("No build changes supplied.")]
                    : build.changes.map { L10n.text(InterfaceMessage(stringLiteral: $0)) }),
             footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
+        page.backActionID = "welcomeContinue"
+        return page
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        .init(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
+        var page = GameFrontEnd.Page(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
               L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("No names or IDs"), L10n.text("No pack names"), L10n.text("No replays"), L10n.text("Service sees IP")],
               footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share counts"), primary: true)])
+        page.backActionID = "telemetryNo"
+        return page
     }
     public static func insights(counts: [String: Int], shared: Bool, days: Int,
                                 sharingAvailable: Bool, loading: Bool = false, notice: String = "") -> GameFrontEnd.Page {

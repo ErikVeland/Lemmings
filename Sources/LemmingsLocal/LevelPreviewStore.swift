@@ -3,11 +3,13 @@ import CryptoKit
 import Foundation
 import NxlvKit
 
-/// A fixed-size, top-to-bottom RGBA8 level preview.
+/// Top-to-bottom RGBA8 scenery. Browser previews use a fixed 320 by 160 crop.
 struct LevelPreviewBitmap: Sendable {
     let width: Int
     let height: Int
     let rgba: Data
+    var start: CGPoint = .zero
+    var goal: CGPoint? = nil
 
     var byteCount: Int { rgba.count }
 }
@@ -123,6 +125,15 @@ struct LevelPreviewRequest: Sendable {
 /// Keeps a bounded set of previews and coalesces concurrent requests.
 actor LevelPreviewStore {
     static let shared = LevelPreviewStore()
+
+    /// Full scenery uses the same source checks and object assembly as browser previews.
+    nonisolated static func backdrop(for request: LevelPreviewRequest) async throws -> LevelPreviewBitmap {
+        let task = Task.detached(priority: .utility) {
+            let fingerprint = try LevelPreviewRenderer.dependencyFingerprint(for: request)
+            return try LevelPreviewRenderer.render(request, expectedDependencyFingerprint: fingerprint, fullScene: true)
+        }
+        return try await withTaskCancellationHandler { try await task.value } onCancel: { task.cancel() }
+    }
 
     private struct CacheEntry {
         let bitmap: LevelPreviewBitmap
@@ -349,7 +360,8 @@ private enum LevelPreviewRenderer {
 
     static func render(
         _ request: LevelPreviewRequest,
-        expectedDependencyFingerprint: String?
+        expectedDependencyFingerprint: String?,
+        fullScene: Bool = false
     ) throws -> LevelPreviewBitmap {
         try Task.checkCancellation()
         let bitmap: LevelPreviewBitmap
@@ -359,28 +371,28 @@ private enum LevelPreviewRenderer {
                 dataSet: dataSet,
                 root: root,
                 levelIndex: levelIndex,
-                sourceFingerprint: sourceFingerprint)
+                sourceFingerprint: sourceFingerprint, fullScene: fullScene)
         case let .fanClassic(pack, entry, archiveFingerprint, portsRoot):
             bitmap = try renderFanClassic(
                 pack: pack,
                 entry: entry,
                 archiveFingerprint: archiveFingerprint,
-                portsRoot: portsRoot)
+                portsRoot: portsRoot, fullScene: fullScene)
         case let .neolemmix(level, styles, expectedSourceRevision):
             bitmap = try renderNeoLemmix(
                 levelURL: level,
                 stylesRoot: styles,
-                expectedSourceRevision: expectedSourceRevision)
+                expectedSourceRevision: expectedSourceRevision, fullScene: fullScene)
         case let .lemmings2(root, selection, expectedLevelID):
             bitmap = try renderLemmings2(
                 root: root,
                 selection: selection,
-                expectedLevelID: expectedLevelID)
+                expectedLevelID: expectedLevelID, fullScene: fullScene)
         case let .lemmings3(root, selection, expectedLevelID):
             bitmap = try renderLemmings3(
                 root: root,
                 selection: selection,
-                expectedLevelID: expectedLevelID)
+                expectedLevelID: expectedLevelID, fullScene: fullScene)
         }
         try Task.checkCancellation()
         if let expectedDependencyFingerprint,
@@ -474,7 +486,8 @@ private enum LevelPreviewRenderer {
     private static func renderNeoLemmix(
         levelURL: URL,
         stylesRoot: URL,
-        expectedSourceRevision: String
+        expectedSourceRevision: String,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         let data = try read(levelURL)
         guard digest(data) == expectedSourceRevision,
@@ -497,14 +510,18 @@ private enum LevelPreviewRenderer {
             sourceWidth: rendered.width,
             sourceHeight: rendered.height,
             x: level.startX,
-            y: level.startY)
+            y: level.startY, fullScene: fullScene,
+            goal: rendered.gadgets.first { $0.effect == .exit || $0.effect == .lockedExit }.map {
+                CGPoint(x: $0.x + $0.width / 2, y: $0.y + $0.height / 2)
+            })
     }
 
     private static func renderClassic(
         dataSet: ClassicDataSet,
         root: URL,
         levelIndex: Int,
-        sourceFingerprint: String?
+        sourceFingerprint: String?,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         try validateDirectory(root, dataSet: dataSet, fingerprint: sourceFingerprint)
         guard dataSet.campaign.levels.indices.contains(levelIndex) else {
@@ -533,7 +550,7 @@ private enum LevelPreviewRenderer {
             level: entry.level,
             ground: ground,
             special: special,
-            mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank))
+            mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank), fullScene: fullScene)
         try validateDirectory(root, dataSet: dataSet, fingerprint: sourceFingerprint)
         return bitmap
     }
@@ -542,7 +559,8 @@ private enum LevelPreviewRenderer {
         pack: URL,
         entry: FanLevelLibrary.Entry,
         archiveFingerprint: String,
-        portsRoot: URL
+        portsRoot: URL,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
             throw LevelPreviewError.contentChanged
@@ -565,7 +583,7 @@ private enum LevelPreviewRenderer {
             ground: ground,
             special: special,
             mechanics: FanLevelLibrary.mechanics(for: pack, entry: entry),
-            objectSemantics: .forFanLevel(level, groundSet: ground))
+            objectSemantics: .forFanLevel(level, groundSet: ground), fullScene: fullScene)
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
             throw LevelPreviewError.contentChanged
         }
@@ -589,7 +607,8 @@ private enum LevelPreviewRenderer {
         ground: ClassicGroundSet,
         special: ClassicSpecialGraphic?,
         mechanics: ClassicDOSMechanics,
-        objectSemantics: ClassicObjectSemantics = .dos
+        objectSemantics: ClassicObjectSemantics = .dos,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         let rendered = try ClassicLevelRenderer.render(
             level,
@@ -606,13 +625,17 @@ private enum LevelPreviewRenderer {
             sourceWidth: rendered.width,
             sourceHeight: rendered.height,
             x: level.startX,
-            y: 0)
+            y: 0, fullScene: fullScene,
+            goal: simulation.configuration.triggers.first { $0.effect == .exit }.map {
+                CGPoint(x: ($0.bounds.x1 + $0.bounds.x2) / 2, y: ($0.bounds.y1 + $0.bounds.y2) / 2)
+            })
     }
 
     private static func renderLemmings2(
         root: URL,
         selection: Lemmings2PlayWindow.LevelSelection,
-        expectedLevelID: String
+        expectedLevelID: String,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         try Task.checkCancellation()
         guard Lemmings2Campaign.tribeNames.indices.contains(selection.tribe),
@@ -631,16 +654,18 @@ private enum LevelPreviewRenderer {
         let style = try Lemmings2Style(data: Data(contentsOf:
             root.appendingPathComponent("STYLES/\(styleName).DAT")))
         let terrain = try Lemmings2Terrain(level: level, style: style)
-        let scene = try lemmings2ScenePixels(
-            terrain: terrain,
-            objects: Lemmings2Objects(level: level, style: style))
+        let objects = try Lemmings2Objects(level: level, style: style)
+        let scene = try lemmings2ScenePixels(terrain: terrain, objects: objects)
         try Task.checkCancellation()
         return try crop(
             rgba: try indexedRGBA(pixels: scene, palette: style.palette),
             sourceWidth: terrain.image.width,
             sourceHeight: terrain.image.height,
             x: level.screenX,
-            y: level.screenY)
+            y: level.screenY, fullScene: fullScene,
+            goal: objects.parts.first { $0.type == 3 && $0.trigger != nil }?.trigger.map {
+                CGPoint(x: $0.x + $0.width / 2, y: $0.y + $0.height / 2)
+            })
     }
 
     private static func lemmings2ScenePixels(
@@ -675,7 +700,8 @@ private enum LevelPreviewRenderer {
     private static func renderLemmings3(
         root: URL,
         selection: Lemmings3PlayWindow.LevelSelection,
-        expectedLevelID: String
+        expectedLevelID: String,
+        fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         try Task.checkCancellation()
         guard (0..<30).contains(selection.level) else {
@@ -705,13 +731,22 @@ private enum LevelPreviewRenderer {
             style: style,
             permanent: permanent,
             temporary: temporary)
+        var goal: CGPoint?
+        for placed in permanent.placements {
+            guard let definition = style.permanent.objects[placed.identifier], definition.flags == 0x4001,
+                  let tags = try? style.permanent.attributes(object: placed.identifier),
+                  let cell = tags.firstIndex(where: { $0 & 0x4000 != 0 }) else { continue }
+            goal = CGPoint(x: placed.x + cell % definition.columns * 8 + 4,
+                y: placed.y + cell / definition.columns * 2 + 1)
+            break
+        }
         try Task.checkCancellation()
         return try crop(
             rgba: Data(scene.image.rgba()),
             sourceWidth: scene.image.width,
             sourceHeight: scene.image.height,
             x: level.screenX,
-            y: level.screenY)
+            y: level.screenY, fullScene: fullScene, goal: goal)
     }
 
     private static func validateDirectory(
@@ -776,13 +811,19 @@ private enum LevelPreviewRenderer {
         sourceWidth: Int,
         sourceHeight: Int,
         x: Int,
-        y: Int
+        y: Int,
+        fullScene: Bool = false,
+        goal: CGPoint? = nil
     ) throws -> LevelPreviewBitmap {
         guard sourceWidth > 0, sourceHeight > 0,
               sourceWidth <= Int.max / sourceHeight,
               sourceWidth * sourceHeight <= Int.max / 4,
               rgba.count == sourceWidth * sourceHeight * 4 else {
             throw LevelPreviewError.invalidBitmap
+        }
+        if fullScene {
+            return LevelPreviewBitmap(width: sourceWidth, height: sourceHeight, rgba: rgba,
+                start: CGPoint(x: x + width / 2, y: y + height / 2), goal: goal)
         }
         let originX = min(max(0, x), max(0, sourceWidth - width))
         let originY = min(max(0, y), max(0, sourceHeight - height))

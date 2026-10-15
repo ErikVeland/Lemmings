@@ -776,7 +776,7 @@ extension AppDelegate {
     keyboard.controllerMenuAction(.cancel)
     try check(!GameScreen.shared.isPresented, "B did not close Settings")
     keyboard.controllerEnabled = { false }
-    try check(!keyboard.controllerIsAvailable(applicationActive: true), "Disabled controller stayed active")
+    try check(!keyboard.controllerPlaying, "Disabled controller stayed active during gameplay")
     keyboard.controllerEnabled = { true }; keyboard.ownsController = { false }
     try check(!keyboard.controllerIsAvailable(applicationActive: true), "An inactive engine claimed controller input")
     keyboard.ownsController = { true }
@@ -4796,13 +4796,16 @@ extension AppDelegate {
         + view.subviews.flatMap(labels)
     }
     guard let savedJourney = store.resumableLearningJourney(hotSeatID: arcade.hotSeatID),
-          let continueJourney = buttons(hub).first(where: { $0.title == "Continue" }) else {
+          let continueJourney = buttons(hub).first(where: { ["Continue", "Resume"].contains($0.title) }) else {
       throw IntegrationFailure(message: "The new Hot Seat could not find the saved Solo journey")
     }
     let freshHotSeat = arcade.hotSeatID, runBeforePrompt = store.activeRun
     try check(labels(hub).contains(where: { $0.contains(savedJourney.run.currentEntry.levelNameSnapshot) })
       && savedJourney.hotSeatID == nil,
       "The hub did not show the saved Solo journey's current lesson")
+    let hasCheckpoint = try sequenceCheckpoint(for: savedJourney.run, hotSeatID: savedJourney.hotSeatID) != nil
+    try check(continueJourney.title == (hasCheckpoint ? "Resume" : "Continue"),
+      "The saved journey action did not describe its checkpoint destination")
     continueJourney.performClick(nil)
     guard let resumePrompt = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
       throw IntegrationFailure(message: "Continue did not open the saved-session prompt")
@@ -5552,7 +5555,7 @@ extension AppDelegate {
         let playlistID = engine == .classic ? LearningJourney.playlistID : UUID()
         try store.add(LevelPlaylist(id: playlistID, name: "Resume test", entries: [entry]))
         let run = try LevelSequenceRun(source: .playlist(playlistID),
-          pool: .init(id: "resume-test", summary: "Resume test"), entries: [entry])
+          pool: .init(id: engine == .classic ? LearningJourney.version : "resume-test", summary: "Resume test"), entries: [entry])
         try store.startRun(run, hotSeatID: seat)
         playlistStoreCache = (host, store); sequencePlaylistStore = store
         startActiveSequence(); try await waitForLaunch()
@@ -5603,11 +5606,16 @@ extension AppDelegate {
           try check(button.isEnabled && hub.bounds.contains(button.frame), "Journey Resume has no valid target")
           try capture("hub-\(shared)", hub)
           GameScreen.shared.dismissAll()
+        } else if engine == .lemmings2 {
+          try check(nativeL2Window?.testRecoveryIsPaused == true, "L2 checkpoint recovery resumed play")
+        } else {
+          try check(nativeL3Window?.testRecoverySnapshot.paused == true, "L3 checkpoint recovery resumed play")
         }
         saveRunCheckpoint(immediately: true)
         let after = try sequenceCheckpoint(for: run, hotSeatID: seat)
         try check(after?.runID == before.runID && after?.tick == before.tick
-          && after?.stateHash == before.stateHash && after?.selectedSkill == before.selectedSkill,
+          && after?.stateHash == before.stateHash && after?.selectedSkill == before.selectedSkill
+          && after?.scrollX == before.scrollX && after?.scrollY == before.scrollY,
           "Recovered sequence changed its attempt, state or selected action: " + engine.rawValue)
         try check(nativeL2Window?.recordsCampaignProgress != true && nativeL3Window?.recordsCampaignProgress != true,
           "Recovered playlist started writing campaign progress")
@@ -7291,7 +7299,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
+    #if !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -7303,7 +7311,9 @@ Task { @MainActor in
     #endif
     #endif
     #endif
-    #if MAC_FIDELITY_TESTS
+    #if HOME_BACKDROP_TESTS
+    try await subject.testHomeBackdrop()
+    #elseif MAC_FIDELITY_TESTS
     try await subject.testMacintoshFidelity()
     print("Macintosh fidelity integration tests passed.")
     #elseif MENU_RECORDS_TRACK_TESTS
@@ -7409,6 +7419,7 @@ Task { @MainActor in
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
+    try await subject.testSequenceCheckpointResume()
     print("Learning journey integration tests passed.")
     #elseif NEO_PACK_TESTS
     try subject.testBundledNeoLemmixPacks()

@@ -131,6 +131,7 @@ import Darwin
         page.details = [L10n.text("Open this address on another device:"), address]
         page.footer = [.init("back", L10n.text("Back"))]
         canvas.page = page
+        view.setNeedsLayout()
     }
 
     @MainActor private final class Request {

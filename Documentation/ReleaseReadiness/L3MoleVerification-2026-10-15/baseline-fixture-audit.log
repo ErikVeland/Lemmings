@@ -1,0 +1,28 @@
+FAIL Tests/Lemmings3CompletionTests/Fixtures 107.json error L3 replay did not consume every input and reproduce its winning outcome. current 0 11 10 2300 kept 3 of 3
+FAIL Tests/Lemmings3CompletionTests/Fixtures 206.json error L3 replay identity, initial state or input order differs. current 0 11 10 9660 kept 11 of 11
+FAIL Tests/Lemmings3CompletionTests/Fixtures 213.json error L3 replay identity, initial state or input order differs. current 0 11 10 4140 kept 9 of 9
+FAIL Tests/Lemmings3CompletionTests/Fixtures 229.json error L3 replay identity, initial state or input order differs. current 0 13 9 3191 kept 25 of 55
+FAIL Tests/Lemmings3CampaignTests/Fixtures 107-1.json error L3 replay identity, initial state or input order differs. current 0 2 0 9660 kept 2 of 2
+FAIL Tests/Lemmings3CampaignTests/Fixtures 107-22.json error L3 replay identity, initial state or input order differs. current 0 11 12 9660 kept 5 of 5
+FAIL Tests/Lemmings3CampaignTests/Fixtures 107-23.json error L3 replay identity, initial state or input order differs. current 0 11 13 9660 kept 5 of 5
+FAIL Tests/Lemmings3CampaignTests/Fixtures 113-1.json error L3 replay identity, initial state or input order differs. current 1 0 0 119 kept 3 of 3
+CANDIDATE 113-1.json
+FAIL Tests/Lemmings3CampaignTests/Fixtures 113-21.json error L3 replay identity, initial state or input order differs. current 10 0 11 443 kept 30 of 30
+CANDIDATE 113-21.json
+FAIL Tests/Lemmings3CampaignTests/Fixtures 113-22.json error L3 replay identity, initial state or input order differs. current 10 0 12 443 kept 30 of 30
+CANDIDATE 113-22.json
+FAIL Tests/Lemmings3CampaignTests/Fixtures 113-25.json error L3 replay identity, initial state or input order differs. current 10 0 15 443 kept 30 of 30
+CANDIDATE 113-25.json
+FAIL Tests/Lemmings3CampaignTests/Fixtures 113-26.json error L3 replay identity, initial state or input order differs. current 10 0 16 443 kept 30 of 30
+CANDIDATE 113-26.json
+FAIL Tests/Lemmings3CampaignTests/Fixtures 206-1.json error L3 replay identity, initial state or input order differs. current 0 2 0 9660 kept 2 of 2
+FAIL Tests/Lemmings3CampaignTests/Fixtures 206-11.json error L3 replay identity, initial state or input order differs. current 0 11 1 9660 kept 11 of 11
+FAIL Tests/Lemmings3CampaignTests/Fixtures 206-22.json error L3 replay identity, initial state or input order differs. current 0 11 12 9660 kept 11 of 11
+FAIL Tests/Lemmings3CampaignTests/Fixtures 206-23.json error L3 replay identity, initial state or input order differs. current 0 11 13 9660 kept 11 of 11
+FAIL Tests/Lemmings3CampaignTests/Fixtures 213-1.json error L3 replay identity, initial state or input order differs. current 0 2 0 4140 kept 9 of 9
+FAIL Tests/Lemmings3CampaignTests/Fixtures 213-21.json error L3 replay identity, initial state or input order differs. current 0 11 11 4140 kept 9 of 9
+FAIL Tests/Lemmings3CampaignTests/Fixtures 213-22.json error L3 replay identity, initial state or input order differs. current 0 11 12 1300 kept 10 of 10
+FAIL Tests/Lemmings3CampaignTests/Fixtures 213-8.json error L3 replay identity, initial state or input order differs. current 0 9 0 4140 kept 9 of 9
+FAIL Tests/Lemmings3CampaignTests/Fixtures 229-15.json error L3 replay identity, initial state or input order differs. current 0 13 4 3191 kept 25 of 55
+FAIL Tests/Lemmings3CampaignTests/Fixtures 229-43.json error L3 replay identity, initial state or input order differs. current 0 13 32 3191 kept 25 of 55
+TOTAL 394 strict passes 22 failures 5 double-replayed winning refresh candidates

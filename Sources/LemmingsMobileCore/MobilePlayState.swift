@@ -27,7 +27,7 @@ public struct MobilePlayState: Equatable, Sendable {
     }
 
     public mutating func suspend() {
-        guard phase != .completed else { return }
+        guard phase != .completed, phase != .ready else { return }
         phase = .suspended
     }
 

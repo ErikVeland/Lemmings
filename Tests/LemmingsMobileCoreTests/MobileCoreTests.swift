@@ -1,5 +1,6 @@
 import Darwin
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 import Testing
 @testable import LemmingsMobileCore
@@ -318,6 +319,8 @@ struct MobileCoreTests {
 
     @Test func planningDoesNotBypassReadyInterruptionOrResults() {
         var state = MobilePlayState()
+        state.suspend()
+        #expect(state.phase == .ready)
         #expect(state.isPaused && !state.canEdit && !state.canStep)
         #expect(state.pauseForPlanning() == false)
         #expect(state.resume(isForeground: false, isInterrupted: false) == false)
@@ -1223,6 +1226,42 @@ struct MobileCoreTests {
             payload: payload,
             savedAt: Date(timeIntervalSince1970: Double(tick))
         )
+    }
+
+    @MainActor @Test func completedResultsSaveAndReopenAcrossAllEngines() throws {
+        let sessions: [any MobileGameSession] = [
+            ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "classic/fixture", levelIndex: 0),
+            Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "l2/fixture", levelIndex: 0, levelFingerprint: "l2"),
+            Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "l3/fixture", levelIndex: 0, levelFingerprint: "l3"),
+        ]
+        let storage = try AppStorage.temporary(named: "mobile-result-" + UUID().uuidString)
+        defer { storage.removeTemporaryFiles() }
+        let file = storage.applicationSupport.appendingPathComponent("records.json")
+        let store = ArcadeStore(storage: storage, file: file, bundledProofs: nil)
+        for session in sessions {
+            #expect(session.beginEndRun())
+            for _ in 0..<500 where !session.snapshot.isComplete { session.tick() }
+            #expect(session.snapshot.isComplete)
+            #expect(!session.snapshot.didWin)
+            let snapshot = session.snapshot
+            let conditions: TrolleyConditions? = session is ClassicMobileSession ? .init(
+                gameID: "classic", packID: "fixture", levelID: "1", levelFingerprint: session.levelFingerprint,
+                rulesetVersion: "v1", physicsMode: "classic", population: snapshot.total,
+                rescueRequirement: snapshot.required, startingSkills: [:], timeLimitSeconds: nil) : nil
+            let level = ArcadeLevel(id: session.levelIdentifier, title: "Fixture", game: session.engineIdentifier,
+                rules: session.engineFingerprint, total: snapshot.total, required: snapshot.required, conditions: conditions)
+            let id = UUID(), owner = store.records.activeProfileID
+            #expect(store.beginAttempt(id: id, profileID: owner, level: level, previousID: nil))
+            let run = MobileGameResult.capture(id: id, profileID: owner, level: level, session: session)
+            #expect((run.telemetry != nil) == (conditions != nil))
+            #expect(run.saved == snapshot.saved && run.didWin == snapshot.didWin)
+            #expect(run.skills == session.assignedSkills && run.assisted == session.usedRewind)
+            #expect(store.record(run) != nil)
+            #expect(store.storageError == nil)
+            let reopened = ArcadeStore(storage: storage, file: file, bundledProofs: nil)
+            #expect(reopened.records.runs.contains { $0.id == id && $0.profileID == owner })
+            #expect(reopened.records.trolley.attempts.contains { $0.id == id } == (conditions != nil))
+        }
     }
 
     private static func classicSimulation() throws -> ClassicDOSSimulation {

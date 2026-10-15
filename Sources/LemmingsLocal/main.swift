@@ -377,6 +377,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelBrowserLevelSelections: [String: String] = [:]
   private var levelBrowserLoadTask: Task<Void, Never>?
   private var levelBrowserDiscoveryTask: Task<LevelBrowserDiscovery?, Never>?
+  private var homeBackdropTask: Task<Void, Never>?
+  private var homeBackdropKey: String?
   private var levelBrowserWarmTask: Task<LevelBrowserDiscovery?, Never>?
   private var levelBrowserWarmGeneration = UUID()
   private var preparedLevelBrowserDiscovery: LevelBrowserDiscovery?
@@ -2889,7 +2891,53 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func refreshHomeBackdrop() {
+    guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive,
+          !GameScreen.shared.isPresented else { return }
+    let profile = ArcadeStore.shared.playingProfileID
+    let recent = try? LevelCollections.store(profileID: profile).recentlyPlayed.first
+    let key = profile + ":" + (recent?.id.uuidString ?? "random")
+    guard homeBackdropKey != key else { return }
+    homeBackdropTask?.cancel()
+    homeBackdropKey = key
+    let prepared = preparedLevelBrowserDiscovery
+    let discoveryTask = prepared == nil ? (levelBrowserWarmTask ?? makeLevelBrowserDiscoveryTask()) : nil
+    homeBackdropTask = Task { [weak self] in
+      let discovery = await discoveryTask?.value ?? prepared
+      guard !Task.isCancelled, let self, self.homeBackdropKey == key, let discovery,
+            self.flow?.screen == .title, !self.sequelIsActive else { return }
+      guard !GameScreen.shared.isPresented else {
+        self.homeBackdropKey = nil; self.homeBackdropTask = nil; return
+      }
+      self.rebuildLevelCatalogue(discovery)
+      var preferred = recent.flatMap { self.levelPreviewRequests[$0.identity] }
+      if preferred == nil, let recent, let pack = self.levelBrowserFanPacks[recent.identity.packID],
+         let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") {
+        let catalogueRevision = Self.levelCatalogueRevision
+        preferred = await Task.detached(priority: .utility) {
+          guard let revision = FanLevelLibrary.archiveFingerprint(pack),
+                let entry = try? FanLevelLibrary.validatedEntries(in: pack).first(where: {
+                  $0.file + "#\($0.section ?? -1)" == recent.identity.levelID
+                }) else { return nil as LevelPreviewRequest? }
+          return LevelPreviewRequest(identity: recent.identity, catalogueRevision: catalogueRevision,
+            source: .fanClassic(pack: pack, entry: entry, archiveFingerprint: revision, portsRoot: ports))
+        }.value
+      }
+      // Missing or changed imports fall back to scenery that can still be rendered.
+      let requests = (preferred.map { [$0] } ?? []) + self.levelPreviewRequests.values.shuffled()
+      for request in requests {
+        guard !Task.isCancelled, self.homeBackdropKey == key else { return }
+        guard let bitmap = try? await LevelPreviewStore.backdrop(for: request) else { continue }
+        guard !Task.isCancelled, self.homeBackdropKey == key else { return }
+        self.playfield.setHomeBackdrop(bitmap)
+        break
+      }
+      if self.homeBackdropKey == key { self.homeBackdropTask = nil }
+    }
+  }
+
   private func stopMenuWorkForGameplay() {
+    if homeBackdropTask != nil { homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil }
     FanLevelLibrary.Progress.cancelMeasurement()
     levelBrowserWarmGeneration = UUID()
     levelBrowserWarmTask?.cancel(); levelBrowserWarmTask = nil
@@ -6777,9 +6825,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     switch flow.screen {
     case .title:
-      if playfield.levelImage == nil, let entry = campaign?.levels.first {
-        buildLevel(entry)
-      }
       // Fan browsing sits over the title screen rather than replacing it.
       if fanScreen != .off {
         renderFanScreen()
@@ -6812,6 +6857,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayHighlight = launchChoice
       showHomeSavedCounts()
       refreshHomeSavedCountsIfNeeded()
+      refreshHomeBackdrop()
 
     case .rankSelect:
       phase = .briefing
@@ -7208,6 +7254,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshTurnDisplay()
     refreshProgressText()
     refreshHomeSavedCountsIfNeeded(at: now)
+    refreshHomeBackdrop()
     // Limit catch-up after sleep or a long modal interaction.
     let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
     lastStepTime = now
@@ -7251,7 +7298,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     applyEdgeScroll()
     // Menus animate even though the level clock is stopped.
     if phase != .playing, playfield.overlayShowsLemmings {
-      playfield.overlayFrame &+= 1
+      playfield.advanceHomeBackdrop(seconds: elapsed)
+      if !settings.reduceMotion && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion { playfield.overlayFrame &+= 1 }
       playfield.needsDisplay = true
     }
     if tubeIsActive {

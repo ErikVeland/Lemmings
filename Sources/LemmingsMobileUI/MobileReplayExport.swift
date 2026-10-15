@@ -61,13 +61,18 @@ extension MobileGameViewController {
                     case let .failure(error):
                         self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
                             (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document) }),
+                            (L10n.text("BACK"), { [weak self] in self?.returnToResult() }),
                             (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
                         ])
                     }
                 }
             } catch {
                 recorder.discard()
-                self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [(L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() })])
+                guard !cancelled.cancelled else { return }
+                self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
+                    (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document) }),
+                    (L10n.text("BACK"), { [weak self] in self?.returnToResult() }),
+                ])
             }
         }
     }

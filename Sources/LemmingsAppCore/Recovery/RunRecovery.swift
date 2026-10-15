@@ -116,6 +116,10 @@ public struct SequenceRunRecovery: Codable, Equatable, Sendable {
     public init(runID: UUID, entry: LevelPlaylistEntry) {
         self.runID = runID; self.entry = entry
     }
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.runID == rhs.runID && lhs.entry.identity == rhs.entry.identity
+            && lhs.entry.sourceRevision == rhs.entry.sourceRevision
+    }
 }
 
 public struct FanRunRecovery: Codable, Sendable {

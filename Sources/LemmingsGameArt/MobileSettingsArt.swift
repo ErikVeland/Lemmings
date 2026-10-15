@@ -6,8 +6,10 @@ import NxlvKit
 /// UIKit and the headless menu audit use the same settings pages and action identifiers.
 public enum MobileSettingsArt {
     public static func skillSelectionPauseChoice() -> GameFrontEnd.Page {
-        .init(title: L10n.text("Skill selection"), subtitle: L10n.text("Keep pausing?"),
+        var page = GameFrontEnd.Page(title: L10n.text("Skill selection"), subtitle: L10n.text("Keep pausing?"),
               footer: [.init("1", L10n.text("Keep pausing")), .init("0", L10n.text("Turn off"), primary: true)], footerColumns: 1)
+        page.backActionID = "1"
+        return page
     }
     /// Compact panes retain a full-width canvas when the requested lettering size cannot fit.
     public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat, television: Bool = false) -> CGFloat {
@@ -16,15 +18,15 @@ public enum MobileSettingsArt {
         }
         return min(CGFloat(size.scale), max(1, width / 280))
     }
-    public static func groups() -> GameFrontEnd.Page {
+    public static func groups(inGame: Bool = false) -> GameFrontEnd.Page {
         .init(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
-        } + [.init("data", L10n.text("Game Data"))], footer: [.init("home", L10n.text("Back"))])
+        } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
     }
 
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
                             sharing: Bool = false, sharingAvailable: Bool = false,
-                            displayAvailable: Bool = false) -> GameFrontEnd.Page {
+                            displayAvailable: Bool = false, inGame: Bool = false) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
@@ -33,7 +35,7 @@ public enum MobileSettingsArt {
         func choice(_ id: String, _ title: String, _ value: String, enabled: Bool = true) -> Action {
             .init("setting." + id, title + ": " + value, enabled: enabled)
         }
-        let rows: [Action]
+        var rows: [Action]
         switch group {
         case .gameplay:
             rows = [choice("preset", L10n.text("Preset"), c.experiencePreset.title),
@@ -88,6 +90,7 @@ public enum MobileSettingsArt {
                     .init("cloudSaves", L10n.text("Cloud saves")),
                     .init("playInsights", L10n.text("Play Insights"))]
         }
+        if inGame { rows.removeAll { $0.id == "cloudSaves" } }
         return .init(title: group.title, rows: rows, footer: [.init("settings", L10n.text("Back"))])
     }
 

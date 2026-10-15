@@ -21,10 +21,10 @@ extension MobileLibraryViewController {
         MobileSettingsArt.controllerMappings(mobileSettings)
         #endif
     }
-    func settingsPage(_ group: MobileSettingsGroup) -> GameFrontEnd.Page {
+    func settingsPage(_ group: MobileSettingsGroup, inGame: Bool = false) -> GameFrontEnd.Page {
         var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
-                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true)
+                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame)
         #if os(tvOS)
         if group == .controller {
             let input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)

@@ -22,7 +22,9 @@ import NxlvKit
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
         let bundledGames = CommandLine.arguments.last == "--bundled-games"
         let buildChanges = CommandLine.arguments.last == "--build-changes"
-        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges ? 5 : 4) else { throw Failure.invalidArguments }
+        let navigation = CommandLine.arguments.last == "--navigation"
+        let homeScenery = CommandLine.arguments.last == "--home-scenery"
+        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -30,7 +32,9 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if homeScenery { try await checkHomeScenery(typography: typography, content: content, output: output); return }
         if buildChanges { try checkBuildChanges(typography: typography, manifest: content, output: output); return }
+        if navigation { try checkNavigation(typography: typography, output: output); return }
         if skillPause { try checkSkillPause(typography: typography, output: output); return }
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
@@ -143,12 +147,6 @@ import NxlvKit
         for (device, size) in devices {
             for (state, page) in pages {
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
-                if device.hasPrefix("ipad"), page.home || page.result {
-                    guard layout.size.height <= size.height else {
-                        FileHandle.standardError.write(Data("\(device) \(state): content \(layout.size.height) exceeds \(size.height)\n".utf8))
-                        throw invalidTargets(line: #line)
-                    }
-                }
                 guard Set(layout.targets.map { $0.action.id }).count == layout.targets.count,
                       layout.targets.filter({ $0.action.primary && $0.action.enabled }).count <= 1 else { throw Failure.invalidTargets }
                 if !page.home, let primary = layout.targets.first(where: {
@@ -156,13 +154,16 @@ import NxlvKit
                         && page.footer.contains($0.action)
                 }) {
                     guard layout.targets.allSatisfy({ $0.frame.maxY <= primary.frame.maxY }),
-                          abs(primary.frame.maxX - (layout.board.maxX - (page.result || page.pause != nil ? 16 : 20))) < 1.01,
+                          abs(primary.frame.maxX - (layout.board.maxX - (page.pause != nil ? 16 : 20))) < 1.01,
                           footerNavigationIsValid(page, layout: layout)
                     else { throw Failure.invalidTargets }
                 }
                 for target in layout.targets {
+                    let scrollY = min(max(0, layout.size.height - size.height), max(0, target.frame.midY - size.height / 2))
+                    let viewport = CGRect(x: 0, y: scrollY, width: size.width, height: size.height)
                     guard target.frame.width >= 44, target.frame.height >= 44,
                           CGRect(origin: .zero, size: layout.size).contains(target.frame),
+                          viewport.contains(target.frame),
                           layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
                     else { throw Failure.invalidTargets }
                 }

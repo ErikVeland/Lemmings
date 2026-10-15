@@ -28,7 +28,7 @@ import NxlvKit
     var onSequenceContinue: ((Bool) -> Bool)?
     var sequenceContinueTitle = L10n.text("Next level")
     /**
-     * Controls whether this run can update campaign, recovery, replay and verified records.
+     * Controls whether this run can update campaign, replay and verified records.
      */
     var recordsCampaignProgress = true
     var sequenceRecovery: SequenceRunRecovery?
@@ -521,6 +521,7 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    var testRecoveryIsPaused: Bool { paused }
     func testRecoveryAdvance(ticks: Int) {
         timer?.invalidate(); timer = nil
         if screen == .briefing { startLevel() }

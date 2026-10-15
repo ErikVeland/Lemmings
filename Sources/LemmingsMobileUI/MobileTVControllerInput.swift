@@ -47,10 +47,20 @@ import UIKit
             preferenceBytes = bytes
             inputPreferences = TVPreferences.inputPreferences(from: .standard, profileID: profileID)
         }
-        let devices = GCController.controllers().filter {
-            $0.microGamepad != nil || ($0.extendedGamepad != nil && settings.controllerEnabled)
-        }
         guard adapter.isActive() else { reset(); return }
+        if !adapter.isMenu(), !settings.controllerEnabled {
+            let menu = GCController.controllers().contains {
+                $0.extendedGamepad?.buttonMenu.isPressed == true || $0.extendedGamepad?.buttonOptions?.isPressed == true
+            }
+            if menu && !menuPressed { adapter.onGameMenu?() }
+            menuPressed = menu
+            owner = nil
+            reset()
+            return
+        }
+        let devices = GCController.controllers().filter {
+            $0.microGamepad != nil || ($0.extendedGamepad != nil && (adapter.isMenu() || settings.controllerEnabled))
+        }
         if let owner, !devices.contains(where: { $0 === owner }) {
             self.owner = nil
             reset()
@@ -58,7 +68,7 @@ import UIKit
             return
         }
         if adapter.isMenu() {
-            let pause = devices.contains { ControllerBindings.remap(pressed($0), using: settings.controllerMappings).contains(.b) }
+            let pause = devices.contains { pressed($0).contains(.b) }
             let menu = devices.contains { $0.extendedGamepad?.buttonMenu.isPressed == true }
             if menu && !menuPressed { adapter.onGameMenu?() }
             menuPressed = menu

@@ -17,7 +17,11 @@ import UIKit
         view.backgroundColor = .black
         view.addSubview(scrollView)
         scrollView.addSubview(canvas)
-        canvas.onAction = { [weak self] _ in self?.migrate() }
+        canvas.onAction = { [weak self] id in
+            guard let self, !self.migrating, self.content == nil else { return }
+            if id == "continue" { self.openLibrary() }
+            else if id == "retry" { self.migrate() }
+        }
         migrate()
     }
 
@@ -43,21 +47,30 @@ import UIKit
                 try await TVMobileMigration.migrate(defaults: .standard, players: .standard(profile: "_players"),
                     legacyCheckpoint: MobileCheckpointStore(url: old),
                     destination: MobileCheckpointStore(url: store.checkpointURL))
-                let library = MobileLibraryViewController()
-                addChild(library)
-                library.view.frame = view.bounds
-                view.addSubview(library.view)
-                library.didMove(toParent: self)
-                content = library
-                canvas.isHidden = true
+                openLibrary()
+            } catch {
+                canvas.page = GameRecoveryArt.migrationFailure(error.localizedDescription)
+                view.setNeedsLayout()
+                view.layoutIfNeeded()
+                scrollView.setContentOffset(.zero, animated: false)
                 setNeedsFocusUpdate()
                 updateFocusIfNeeded()
-            } catch {
-                canvas.page = .init(title: L10n.text("Saved data could not be opened"), details: [error.localizedDescription],
-                                    footer: [.init("retry", L10n.text("Retry"), primary: true)])
             }
             migrating = false
         }
+    }
+
+    private func openLibrary() {
+        guard content == nil else { return }
+        let library = MobileLibraryViewController()
+        addChild(library)
+        library.view.frame = view.bounds
+        view.addSubview(library.view)
+        library.didMove(toParent: self)
+        content = library
+        canvas.isHidden = true
+        setNeedsFocusUpdate()
+        updateFocusIfNeeded()
     }
 }
 #endif

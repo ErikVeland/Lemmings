@@ -64,6 +64,25 @@ Existing game classifications and the separate mobile/TV gates remain in force.
 See the [release evidence](ReleaseReadiness/1.9.7-build82/README.md) and
 [1.9.7 notes](ReleaseNotes-1.9.7-build82.md).
 
+## macOS 2.0 preparation
+
+The owner requested macOS 2.0 journey checkpoint resume and campaign/bundle
+release readiness on 15 October 2026. Mac release acceptance is separate from
+the iOS launch gates. The new `macos-2.0` audit and packaging scope requires
+the relevant Mac P0 gates, including bundled engine and content closure.
+It requires all official Classic and conversion routes, bundled fan winning
+routes, strict L3 standalone and carried campaigns, and L2 ark prerequisites.
+NeoLemmix dependencies, exact-version routes, source-engine fidelity and ending
+playback remain part of the open bundle gate.
+
+The retained full 1.9.7 resource bundle provides a hashed content baseline, not
+an application candidate for 2.0. All 535 fan archive hashes match the 15 October
+bundle audit. This inventory match does not close the 3,621 fan route gaps.
+See [Mac preparation evidence](ReleaseReadiness/MacOS2Preparation-2026-10-15/README.md).
+Keep version/build changes, source freeze, final candidate checks, universal
+packaging, signing, notarisation, downloaded update and save migration tied to
+the eventual 2.0 candidate.
+
 ## iOS 2.0 launch scope
 
 On 10 October 2026, the owner confirmed a full iOS release for iPad, iPhone and

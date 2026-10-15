@@ -98,11 +98,6 @@ extension MobileLibraryViewController {
                      rules: "classic-dos-v1", total: snapshot.total, required: snapshot.required, conditions: conditions)
     }
 
-    func mobileTelemetry(session: any MobileGameSession, snapshot: MobileGameSnapshot) -> TrolleyTelemetry {
-        .init(released: snapshot.released, nukeCount: session.nukeCount, rewindCount: session.rewindCount, undoCount: session.undoCount,
-              destructiveSkillCount: TrolleyCapture.destructiveCount(session.assignedSkills), buildVersion: TrolleyCapture.buildVersion)
-    }
-
     func rankingsPage(subtitle: String) -> GameFrontEnd.Page {
         let rankings = mobileRankings
         let community = rankings.provider == .community

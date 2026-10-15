@@ -24,7 +24,19 @@ class AuditTests(unittest.TestCase):
     def test_classic_campaign_requires_missing_routes(self):
         self.assertIn("--require-all", audit.campaign_command("classic-1.0"))
         self.assertIn("--classic-only", audit.campaign_command("classic-1.0"))
-        self.assertNotIn("--require-all", audit.campaign_command("all"))
+        self.assertIn("--require-all", audit.campaign_command("all"))
+        self.assertIn("--require-all", audit.campaign_command("macos-2.0"))
+        self.assertNotIn("--require-all", audit.campaign_command("minor"))
+
+    def test_mac_scope_requires_bundle_closure_without_mobile_acceptance(self):
+        gates = [
+            {"area": "Bundled engine and content closure", "status": "open", "scopes": ["all", "macos-2.0"]},
+            {"area": "iOS devices", "status": "open", "scopes": ["all"]},
+            {"area": "New unclassified blocker", "status": "open"},
+        ]
+        selected = audit.scoped_gates(gates, "macos-2.0")
+        self.assertEqual([g["area"] for g in selected], ["Bundled engine and content closure", "New unclassified blocker"])
+        self.assertEqual(audit.exit_status([{"status": "passed"}], [], selected, True), 2)
 
     def test_closure_requires_all_checks_and_gates(self):
         passed = [{"status": "passed"}]

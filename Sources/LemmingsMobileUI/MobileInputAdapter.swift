@@ -40,6 +40,7 @@ import UIKit
     private var context: ObjectIdentifier?
     private var lastPoll = 0.0
     private var touchpadClick = ControllerButtonEdge()
+    private var disabledMenuButton = ControllerButtonEdge()
 
     func reset() {
         onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
@@ -55,12 +56,22 @@ import UIKit
         #if os(tvOS)
         tvInput.poll(at: now)
         #else
-        guard isActive(), settings().controllerEnabled else {
+        guard isActive() else {
+            _ = disabledMenuButton.update(pressed: false, active: false)
             reset()
             activeController = nil
             controllerConnection.reset()
             return
         }
+        if !isMenu(), !settings().controllerEnabled {
+            let pressed = GCController.controllers().contains {
+                $0.extendedGamepad?.buttonMenu.isPressed == true || $0.extendedGamepad?.buttonOptions?.isPressed == true
+            }
+            if disabledMenuButton.update(pressed: pressed, active: true) { onGameMenu?() }
+            reset()
+            return
+        }
+        _ = disabledMenuButton.update(pressed: false, active: false)
         let controllers = GCController.controllers().filter { $0.extendedGamepad != nil }
         if let activeController,
            !controllers.contains(where: { $0 === activeController }) {
@@ -94,7 +105,7 @@ import UIKit
             (.up, pad.dpad.up), (.down, pad.dpad.down), (.left, pad.dpad.left), (.right, pad.dpad.right),
         ]
         for (button, input) in buttons where input?.isPressed == true { pressed.insert(button) }
-        pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings)
+        if !isMenu() { pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings) }
         for action in bindings.update(pressed: pressed, inMenu: isMenu()) { perform(action) }
         let left = settings().controllerSwapSticks ? pad.rightThumbstick : pad.leftThumbstick
         let right = settings().controllerSwapSticks ? pad.leftThumbstick : pad.rightThumbstick
@@ -196,16 +207,16 @@ import UIKit
     }
     private static func name(_ key: UIKey) -> String {
         switch key.keyCode {
-        case .keyboardEscape: L10n.text("escape")
-        case .keyboardReturnOrEnter, .keypadEnter: L10n.text("return")
-        case .keyboardTab: L10n.text("tab")
-        case .keyboardHome: L10n.text("home")
-        case .keyboardEnd: L10n.text("end")
-        case .keyboardLeftArrow: L10n.text("left")
-        case .keyboardRightArrow: L10n.text("right")
-        case .keyboardUpArrow: L10n.text("up")
-        case .keyboardDownArrow: L10n.text("down")
-        case .keyboardF1: L10n.text("f1")
+        case .keyboardEscape: "escape"
+        case .keyboardReturnOrEnter, .keypadEnter: "return"
+        case .keyboardTab: "tab"
+        case .keyboardHome: "home"
+        case .keyboardEnd: "end"
+        case .keyboardLeftArrow: "left"
+        case .keyboardRightArrow: "right"
+        case .keyboardUpArrow: "up"
+        case .keyboardDownArrow: "down"
+        case .keyboardF1: "f1"
         default: key.charactersIgnoringModifiers.lowercased()
         }
     }

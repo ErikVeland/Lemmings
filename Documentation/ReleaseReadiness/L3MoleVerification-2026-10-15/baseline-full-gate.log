@@ -1,0 +1,41 @@
+PASS 322 campaign fixture hashes and coverage manifest
+PASS L3 same-level refresh, double replay, verifier integration and changed-source rejection
+PASS 1 saved 10 lost 0 reserve 10
+PASS 2 saved 12 lost 0 reserve 10
+PASS 3 saved 10 lost 0 reserve 10
+PASS 4 saved 12 lost 0 reserve 10
+PASS 5 saved 10 lost 0 reserve 10
+PASS 6 saved 10 lost 0 reserve 10
+PASS 7 saved 10 lost 0 reserve 10
+PASS 8 saved 11 lost 1 reserve 10
+PASS 9 saved 10 lost 1 reserve 10
+PASS 10 saved 10 lost 2 reserve 10
+PASS 11 saved 11 lost 0 reserve 10
+PASS 12 saved 10 lost 0 reserve 10
+PASS 13 saved 12 lost 1 reserve 10
+PASS 14 saved 11 lost 1 reserve 10
+PASS 15 saved 13 lost 0 reserve 10
+PASS 16 saved 10 lost 2 reserve 10
+PASS 17 saved 10 lost 0 reserve 10
+PASS 18 saved 10 lost 0 reserve 10
+PASS 19 saved 12 lost 0 reserve 10
+PASS 20 saved 12 lost 0 reserve 10
+PASS 21 saved 2 lost 8 reserve 10
+PASS 22 saved 10 lost 0 reserve 10
+PASS 23 saved 12 lost 1 reserve 10
+PASS 24 saved 10 lost 0 reserve 10
+PASS 25 saved 12 lost 0 reserve 10
+PASS 26 saved 12 lost 0 reserve 10
+PASS 27 saved 12 lost 0 reserve 10
+PASS 28 saved 12 lost 0 reserve 10
+PASS 29 saved 12 lost 0 reserve 10
+PASS 30 saved 12 lost 0 reserve 10
+PASS 101 saved 10 lost 0 reserve 10
+PASS 102 saved 10 lost 0 reserve 10
+PASS 103 saved 10 lost 0 reserve 10
+PASS 104 saved 12 lost 0 reserve 10
+PASS 105 saved 11 lost 0 reserve 10
+PASS 106 saved 10 lost 0 reserve 10
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: L3 replay did not consume every input and reproduce its winning outcome.
+PASS L3 missing fixture, population, level hash, level number, outcome, rejected input, ordering and strict-scope gates
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: Carried fixture 107-1.json failed: L3 replay identity, initial state or input order differs.

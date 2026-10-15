@@ -68,7 +68,7 @@ def scoped_gates(gates, scope):
 
 def campaign_command(scope):
     command = ["zsh", "Scripts/verify-campaign-completion.sh", "--classic-only"]
-    if scope == "classic-1.0":
+    if scope in ("classic-1.0", "all", "macos-2.0"):
         command.append("--require-all")
     return command
 
@@ -79,7 +79,7 @@ def main():
     parser.add_argument("--app", action="store_true", help="Also run the complete macOS app and sequel view checks")
     parser.add_argument("--app-bundle", type=Path, default=ROOT / ".build/local/Ultimate Lemmings.app",
                         help="Resource bundle for fresh tests. Use a candidate inside this checkout.")
-    parser.add_argument("--scope", choices=["minor", "all", "classic-1.0"], default="minor",
+    parser.add_argument("--scope", choices=["minor", "all", "classic-1.0", "macos-2.0"], default="minor",
                         help="Minor skips full-campaign replay runs and checks preserved route manifests. All runs every campaign route.")
     parser.add_argument("--require-closure", action="store_true", help="Fail while any tracked release gate is still open")
     args = parser.parse_args()
@@ -144,9 +144,9 @@ def main():
             if name in ["ClassicGameFlowTests", "ClassicDOSSimulationRegressions", "ClassicDOSRewindTests", "ClassicDOSReplayTests"]:
                 arguments = [ROOT / "Content/lemming1.pc"]
             if name in ["Lemmings2RuntimeTests", "Lemmings2IntroTests"]:
-                arguments = [ROOT / "Sources/Ports/Lemm2"]
+                arguments = [ports / "Lemm2"]
             if name == "Lemmings3RuntimeTests":
-                arguments = [ROOT / "Sources/Ports/LEM3CD"]
+                arguments = [ports / "LEM3CD"]
             if name == "UnifiedGameTests":
                 arguments = [app / "Contents/Resources"]
             if name == "BundledGameResourcesTests":
@@ -183,7 +183,7 @@ def main():
             environment = dict(os.environ, CAMPAIGN_TEST_LIBRARY_DIR=str(library),
                                CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
             checks.append(run("additional-campaign-solutions", [campaign_command(args.scope)], environment))
-        if args.scope == "classic-1.0":
+        if args.scope in ("classic-1.0", "all", "macos-2.0"):
             quest_verifier = library / "OfficialClassicQuest"
             checks.append(run("official-classic-quest", [
                 compile_command(ROOT / "Tools/OfficialClassicQuest/main.swift", quest_verifier,
@@ -198,19 +198,27 @@ def main():
             corpus_verifier = library / "ClassicCorpus"
             checks.append(run("classic-fan-conversion-completion", [
                 compile_command(ROOT / "Tools/ClassicValidation/main.swift", corpus_verifier,
-                                [ROOT / "Sources/LemmingsLocal/FanLevelLibrary.swift"]),
+                                [ROOT / "Sources/LemmingsLocal/GameAssetCache.swift",
+                                 ROOT / "Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift",
+                                 ROOT / "Sources/LemmingsLocal/FanLevelLibrary.swift"]),
                 [sys.executable, "Tools/ClassicValidation/parallel.py", corpus_verifier,
                  app / "Contents/Resources", corpus, ROOT, "4"]]))
+            if args.scope in ("all", "macos-2.0"):
+                checks.append(run("bundled-fan-winning-routes", [[sys.executable,
+                    "Tools/ClassicValidation/report.py", "--require-fan-routes",
+                    app / "Contents/Resources", corpus]]))
         if args.scope != "minor":
-            checks.append(run("l3-solutions", [["zsh", "Scripts/verify-l3-completion.sh"]],
-                              dict(os.environ, L3_TEST_LIBRARY_DIR=str(library))))
+            strict_bundle = args.scope in ("all", "macos-2.0")
+            checks.append(run("l3-solutions", [["zsh", "Scripts/verify-l3-completion.sh",
+                                               *(["--require-all"] if strict_bundle else [])]],
+                              dict(os.environ, L3_TEST_LIBRARY_DIR=str(library), L3_PORTS_ROOT=str(ports / "LEM3CD"))))
             l2_verifier, l2_negative = library / "L2Completion", library / "L2CompletionNegative"
-            l2_data = ROOT / "Sources/Ports/Lemm2"
+            l2_data = ports / "Lemm2"
             checks.append(run("l2-solutions", [
                 [sys.executable, "Tests/Lemmings2CompletionTests/test_chains.py"],
                 [sys.executable, "Tools/Lemmings2Completion/report.py", "--check"],
                 compile_command(ROOT / "Tools/Lemmings2Completion/main.swift", l2_verifier),
-                [l2_verifier, l2_data],
+                [l2_verifier, l2_data, *(["--require-ark"] if strict_bundle else [])],
                 [sys.executable, "Tests/Lemmings2CompletionTests/test_chain_gate.py", l2_verifier, l2_data],
                 compile_command(ROOT / "Tests/Lemmings2CompletionTests/negative.swift", l2_negative),
                 [l2_negative, l2_data]]))
@@ -234,6 +242,8 @@ def main():
         checks.append(run("replay-movies", [["zsh", "Scripts/run-replay-movie-tests.sh"]],
                           dict(os.environ, REPLAY_TEST_LIBRARY_DIR=str(library))))
         checks.append(run("mac-app-integration", [["zsh", "Scripts/run-app-integration-tests.sh"]]))
+        checks.append(run("mac-sequence-checkpoint-recovery", [["zsh", "Scripts/run-app-integration-tests.sh"]],
+                          dict(os.environ, TEST_SCOPE="sequence-recovery")))
         checks.append(run("local-performance-measurement", [["zsh", "Scripts/run-app-integration-tests.sh"]],
                           dict(os.environ, TEST_SCOPE="performance", TEST_OPTIMIZE="1",
                                LEMMINGS_PERFORMANCE_OUTPUT=str(base / "performance.json"))))
@@ -242,6 +252,7 @@ def main():
     else:
         checks.append(dict(name="replay-movies", status="not-run", reason="Use --app."))
         checks.append(dict(name="mac-app-integration", status="not-run", reason="Use --app. Separate app evidence must match the final source."))
+        checks.append(dict(name="mac-sequence-checkpoint-recovery", status="not-run", reason="Use --app."))
         checks.append(dict(name="local-performance-measurement", status="not-run", reason="Use --app. Short local measurements do not certify sustained throughput or hardware."))
         checks.append(dict(name="sequel-views", status="not-run", reason="Use --app."))
         checks.append(dict(name="arcade-records", status="not-run", reason="Use --app."))

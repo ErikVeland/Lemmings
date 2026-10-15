@@ -1,0 +1,23 @@
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CompletionTests/Fixtures/107.json: L3 replay did not consume every input and reproduce its winning outcome.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CompletionTests/Fixtures/206.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CompletionTests/Fixtures/213.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CompletionTests/Fixtures/229.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/107-1.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/107-22.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/107-23.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/113-1.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/113-21.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/113-22.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/113-25.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/113-26.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/206-1.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/206-11.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/206-22.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/206-23.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/213-1.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/213-21.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/213-22.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/213-8.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/229-15.json: L3 replay identity, initial state or input order differs.
+FAIL /Users/veland/Lemmings/Tests/Lemmings3CampaignTests/Fixtures/229-43.json: L3 replay identity, initial state or input order differs.
+Audited 416 retained L3 fixtures: 394 passed twice; 22 failed.

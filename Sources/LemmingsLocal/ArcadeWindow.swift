@@ -466,7 +466,8 @@ import NxlvKit
     func resultActions(y: CGFloat = 505) {
         if !cleared, onLater != nil {
             if nextSessionPlayer != nil {
-                button(L10n.text("Retry as \(player.initials)"), CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
+                link(L10n.text("Retry as \(player.initials)"), CGRect(x: 64, y: y - 52, width: 250, height: 36)) { [weak self] in self?.onRetry?() }
+                button(L10n.text("Back"), CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onClose?() }
                 button(L10n.text("Hints"), CGRect(x: 332, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
                 button(L10n.text("Try later"), CGRect(x: 518, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
                 button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }

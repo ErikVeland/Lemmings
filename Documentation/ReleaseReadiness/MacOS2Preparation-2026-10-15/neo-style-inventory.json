@@ -1,0 +1,619 @@
+{
+  "levelCount" : 788,
+  "limitation" : "Checks native decoded style references against directories in the frozen content baseline. Does not prove rendering, mechanics, routes or distribution rights.",
+  "missing" : [
+    {
+      "level" : "xC1BCFC14C1BCFC14",
+      "pack" : "neolemmix:da6568ec5abf5aed12fd4bdb",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A Beast of a level"
+    },
+    {
+      "level" : "xDBA6E230DBA6E230",
+      "pack" : "neolemmix:da6568ec5abf5aed12fd4bdb",
+      "styles" : [
+        "special"
+      ],
+      "title" : "MENACING !!"
+    },
+    {
+      "level" : "xCBB73390CBB73390",
+      "pack" : "neolemmix:da6568ec5abf5aed12fd4bdb",
+      "styles" : [
+        "special"
+      ],
+      "title" : "What an AWESOME level"
+    },
+    {
+      "level" : "xC1BD398CC1BD398C",
+      "pack" : "neolemmix:da6568ec5abf5aed12fd4bdb",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A BeastII of a level"
+    },
+    {
+      "level" : "x7385D2D84343BCFC",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_lr2_mona"
+      ],
+      "title" : "A New Coat Of Paint"
+    },
+    {
+      "level" : "x1A174C676F76AB61",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_davinci",
+        "gigalem_lagoon",
+        "namida_garden",
+        "namida_honeycomb",
+        "namida_space",
+        "namida_wasteland"
+      ],
+      "title" : "Trap Roulette"
+    },
+    {
+      "level" : "x2A08023731E9FEB6",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_davinci"
+      ],
+      "title" : "Pick Them Up And Push Them Down"
+    },
+    {
+      "level" : "x5308EE125ECCF830",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_clockwork"
+      ],
+      "title" : "Split And Splat"
+    },
+    {
+      "level" : "x51A3620945E5787D",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_lab",
+        "namida_wasteland"
+      ],
+      "title" : "Gravity Lab"
+    },
+    {
+      "level" : "x4BD1040F6530B03C",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_wasteland",
+        "ray_spooky"
+      ],
+      "title" : "Night Of The Living Lems"
+    },
+    {
+      "level" : "x7E775625331C0D09",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "flopsy_starlight"
+      ],
+      "title" : "Neutral Response"
+    },
+    {
+      "level" : "x3D28C8FA333303CF",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gronkling_minimal"
+      ],
+      "title" : "With Minimal Efforts"
+    },
+    {
+      "level" : "x1E56011F12DAB7BE",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_circuit",
+        "namida_sky"
+      ],
+      "title" : "Weightless"
+    },
+    {
+      "level" : "x3F15A9371B05692B",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "proxima_metroid"
+      ],
+      "title" : "Distance Control"
+    },
+    {
+      "level" : "x3F5641FD327518A9",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gigalem_skymd"
+      ],
+      "title" : "King Of The Sky"
+    },
+    {
+      "level" : "x4DCCFB1E721A896D",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "l2_polar"
+      ],
+      "title" : "Backup Wall"
+    },
+    {
+      "level" : "x30C5CE92385B55BA",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ichotolot_dune"
+      ],
+      "title" : "Top-Down Approach"
+    },
+    {
+      "level" : "x7DFD06E377BCA2C4",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ichotolot_dune"
+      ],
+      "title" : "Reacharound"
+    },
+    {
+      "level" : "x3A29E9F94BD6F24D",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "flopsy_sandopolis",
+        "flopsy_scrapbrain"
+      ],
+      "title" : "Scrap The Buttons!"
+    },
+    {
+      "level" : "x621C38712EB0E3E3",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_abstract"
+      ],
+      "title" : "Airdrop Incoming!"
+    },
+    {
+      "level" : "x499FFC0B34B5558C",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_metal"
+      ],
+      "title" : "Fly Traps"
+    },
+    {
+      "level" : "x7FA68C6522A6338F",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "zanzindorf_kiwi"
+      ],
+      "title" : "Delaying The Inevitable"
+    },
+    {
+      "level" : "x50E9AB7864C8BAC9",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_chalk"
+      ],
+      "title" : "Chalk Walk"
+    },
+    {
+      "level" : "x731CC68A55E75DE7",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_halloween"
+      ],
+      "title" : "The Graveyard"
+    },
+    {
+      "level" : "x68178B1E23825576",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ray_biolab"
+      ],
+      "title" : "Laboratory Of Explosions"
+    },
+    {
+      "level" : "x38CBFBDC38EA3F0B",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ray_spooky"
+      ],
+      "title" : "Containment Breach!"
+    },
+    {
+      "level" : "x7F73A0E55FE88D14",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_lr2_build",
+        "dex_lr2_jungle"
+      ],
+      "title" : "Slider's Sacrifice"
+    },
+    {
+      "level" : "x5D917D442AAC6FD5",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_lr2_build",
+        "dex_lr2_mona"
+      ],
+      "title" : "Blastcrawler"
+    },
+    {
+      "level" : "x3646C5752B324029",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_lr2_industry"
+      ],
+      "title" : "Oil Processing Plant"
+    },
+    {
+      "level" : "x07FB670226B1F305",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gigalem_lagoon"
+      ],
+      "title" : "Hidden Crystalline Temple"
+    },
+    {
+      "level" : "x539A4FF811350020",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_lab"
+      ],
+      "title" : "Lab Workout"
+    },
+    {
+      "level" : "x695A85DF69C87F8C",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_psychedelic"
+      ],
+      "title" : "Counterclockwise"
+    },
+    {
+      "level" : "x027AC6AD0DCA4E1D",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gigalem_purplemd"
+      ],
+      "title" : "Keep A Tight Grasp!"
+    },
+    {
+      "level" : "x45A758240AE730BD",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "willlem_lemminas"
+      ],
+      "title" : "Cunning Cycle"
+    },
+    {
+      "level" : "x00EA9A26DE984BC7",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_space"
+      ],
+      "title" : "Infinity"
+    },
+    {
+      "level" : "x3BF6AC091E408178",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_mineshaft"
+      ],
+      "title" : "Platstop"
+    },
+    {
+      "level" : "x795E83C24456A8CE",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gronkling_cyber"
+      ],
+      "title" : "Steps And Pixels"
+    },
+    {
+      "level" : "x06FFD4C88FF7965A",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "sqron_turrican2wall"
+      ],
+      "title" : "Concentrated Force"
+    },
+    {
+      "level" : "x5A4793982E642018",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "zanzindorf_glacier"
+      ],
+      "title" : "Blocked In Your Favor"
+    },
+    {
+      "level" : "x0BDF2D792228D690",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_davinci"
+      ],
+      "title" : "Fancy Fencer"
+    },
+    {
+      "level" : "x14E3D7A913E2FD57",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "flopsy_starlight"
+      ],
+      "title" : "Stepping Up To The Stars"
+    },
+    {
+      "level" : "x724F96B42F609C2B",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_halloween"
+      ],
+      "title" : "Shocking Interruption"
+    },
+    {
+      "level" : "x066414FE5E20D558",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "sms_crystal"
+      ],
+      "title" : "Overruled"
+    },
+    {
+      "level" : "x079476151B7E5C90",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "sms_fire"
+      ],
+      "title" : "Pressure Management"
+    },
+    {
+      "level" : "x03658F6D260F8C9D",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_davinci"
+      ],
+      "title" : "Higher Levels Of Wisdom"
+    },
+    {
+      "level" : "x32F9C78E7A196679",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "plom_bastemp"
+      ],
+      "title" : "Walking Over Dead Bodies"
+    },
+    {
+      "level" : "x70F5EDF24027F38C",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ray_eldorado"
+      ],
+      "title" : "Curse Of The Gold"
+    },
+    {
+      "level" : "x0AB5EE791FD0600F",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "gronkling_minimal"
+      ],
+      "title" : "Checkerboard's Crossing"
+    },
+    {
+      "level" : "x3D78015F11739EC8",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_abstract"
+      ],
+      "title" : "Between A Stone And A Hard Place"
+    },
+    {
+      "level" : "x466AC75B262000E4",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "zanzindorf_kiwi"
+      ],
+      "title" : "Shimmichanga"
+    },
+    {
+      "level" : "x13F35C48569FE0E2",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "proxima_metroid"
+      ],
+      "title" : "Saving Two Lems With One Bomb"
+    },
+    {
+      "level" : "x34AF885C2F7A9427",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ray_food"
+      ],
+      "title" : "Jump The Sausage!"
+    },
+    {
+      "level" : "x65954C3D05FEA015",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_bridge"
+      ],
+      "title" : "Welcome To The Sliderdance!"
+    },
+    {
+      "level" : "x03AFAD3C4477389B",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "zanzindorf_cloud"
+      ],
+      "title" : "Stacker Of The Sky"
+    },
+    {
+      "level" : "x7E99A7AD558CA0D4",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "dex_lr2_jungle"
+      ],
+      "title" : "Caught And Released"
+    },
+    {
+      "level" : "x04CCA79B0985B3D2",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_space"
+      ],
+      "title" : "A Different Kind Of Space"
+    },
+    {
+      "level" : "x51BBAC207DAD15A6",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "namida_bridge",
+        "sqron_turrican2wall"
+      ],
+      "title" : "Just As He Was About To Fall"
+    },
+    {
+      "level" : "x415E79B3616B9C59",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "ichotolot_dune"
+      ],
+      "title" : "Edges Of Glory"
+    },
+    {
+      "level" : "x04EF1FBC76E21E0E",
+      "pack" : "neolemmix:76024b8efe706ce25ed0db60",
+      "styles" : [
+        "flopsy_scrapbrain"
+      ],
+      "title" : "Victory Lap"
+    },
+    {
+      "level" : "xC1BD3995C1BD3995",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A Beast of a level"
+    },
+    {
+      "level" : "xDBA72CCBDBA72CCB",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "MENACING !!"
+    },
+    {
+      "level" : "xCBB73390CBB73390",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "What an AWESOME level"
+    },
+    {
+      "level" : "xCD343462CD343462",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "Call in the bomb squad"
+    },
+    {
+      "level" : "xC1BD398CC1BD398C",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A BeastII of a level"
+    },
+    {
+      "level" : "x9A48D01A9A48D01A",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "Save Me"
+    },
+    {
+      "level" : "x9EEB5BA29EEB5BA2",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "PoP YoR ToP!!!"
+    },
+    {
+      "level" : "x8E87A8B38E87A8B3",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "The Prima Publishing Level"
+    },
+    {
+      "level" : "xBDB28C35BDB28C35",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "The COVOX Level"
+    },
+    {
+      "level" : "xC1BCFC14C1BCFC14",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A Beast of a level"
+    },
+    {
+      "level" : "xDBA6E230DBA6E230",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "MENACING !!"
+    },
+    {
+      "level" : "xCBB68C6CCBB68C6C",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "What an AWESOME level"
+    },
+    {
+      "level" : "xC1BD0041C1BD0041",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "A BeastII of a level"
+    },
+    {
+      "level" : "xD8A5E2F1D8A5E2F1",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "SUNSOFT Special"
+    },
+    {
+      "level" : "xDFAB8341DFAB8341",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "Sixes Not!"
+    },
+    {
+      "level" : "x9F96BCFE9F96BCFE",
+      "pack" : "neolemmix:0a3060938231e8a564672939",
+      "styles" : [
+        "special"
+      ],
+      "title" : "The Apple Computer Level"
+    }
+  ],
+  "missingStyleLevels" : 75
+}

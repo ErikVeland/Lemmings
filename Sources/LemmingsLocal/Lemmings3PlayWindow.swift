@@ -29,7 +29,7 @@ import NxlvKit
     var onSequenceContinue: ((Bool) -> Bool)?
     var sequenceContinueTitle = L10n.text("Next level")
     /**
-     * Controls whether this run can update campaign, recovery, replay and verified records.
+     * Controls whether this run can update campaign, replay and verified records.
      */
     var recordsCampaignProgress = true
     var sequenceRecovery: SequenceRunRecovery?

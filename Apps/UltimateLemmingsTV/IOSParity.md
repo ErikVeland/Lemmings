@@ -96,3 +96,22 @@ not dispatch native UIKit focus events or establish physical TV acceptance.
 Use `Tools/UITestRunner/run.py` in offscreen, muted mode for native checks.
 Do not launch a foreground/secondary-display test or audible playback as a
 fallback. SDK compilation and the Xcode app build do not establish parity alone.
+
+## Home scenery
+
+The 15 October Home update shares the iPad menu box, scenery reference and camera
+with the normal TV app. Keep TV's existing interface scales, native focus and
+scroll-to-focus behaviour. The backdrop has no input surface. It retains one
+bitmap and moves its layer with nearest-neighbour sampling through the existing
+menu clock. System/game Reduce Motion and inactive scenes hold the camera.
+Scenery references follow the selected profile and solo/Hot Seat scope. They do
+not restore or mutate a saved run. Classic, L2 and L3 supply their actual exits;
+NeoLemmix uses the resolved session zones. Missing scenery falls back to a random
+installed level. The original fixture-only TV development shell is unchanged.
+
+Windowless, muted Home checks pass for 126 iPad/TV captures at three interface
+sizes, including TV safe areas and scrolling footer targets. They exercise full
+Classic/L2/L3 scenery, scoped references, missing/random fallback, reduced-motion
+and inactive clocks, camera bounds and exit return. iOS/tvOS SDK modules and app
+entry points compile. Native UIKit focus delivery, physical remote/VoiceOver,
+layer compositing and frame timing remain open device acceptance checks.

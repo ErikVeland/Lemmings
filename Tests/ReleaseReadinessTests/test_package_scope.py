@@ -32,6 +32,20 @@ class PackageScopeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'New blocker'):
             package_scope({'CFBundleShortVersionString': '1.0'}, gates)
 
+    def test_two_zero_requires_mac_bundle_closure_and_keeps_ios_separate(self):
+        gates = [
+            {'area': 'Classic', 'status': 'closed', 'scopes': ['classic-1.0', 'all', 'macos-2.0']},
+            {'area': 'Bundled engine and content closure', 'status': 'open', 'scopes': ['all', 'macos-2.0']},
+            {'area': 'iOS acceptance', 'status': 'open', 'scopes': ['all']},
+        ]
+        with self.assertRaisesRegex(ValueError, 'macOS 2.0 packaging blocked: Bundled engine'):
+            package_scope({'CFBundleShortVersionString': '2.0'}, gates)
+        gates[1]['status'] = 'closed'
+        self.assertEqual(package_scope({'CFBundleShortVersionString': '2.0'}, gates), 'macos-2.0')
+        gates.append({'area': 'Unclassified blocker', 'status': 'open'})
+        with self.assertRaisesRegex(ValueError, 'Unclassified blocker'):
+            package_scope({'CFBundleShortVersionString': '2.0'}, gates)
+
     def test_invalid_version_or_missing_gates_fails_closed(self):
         for version in ['', '1.0-beta', None]:
             with self.assertRaises(ValueError):

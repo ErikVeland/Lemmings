@@ -143,6 +143,9 @@ import LemmingsGameArt
               window.contentView != nil else { return false }
         if !pages.isEmpty, gameWindow !== window { dismissAll() }
         gameWindow = window
+        if let page = view as? GameMenuPage, page.onBack == nil, !page.controllerBackButton.isHidden {
+            page.onBack = { [weak page] in if let page { self.dismiss(page) } }
+        }
         updateCursor(suppressed: true)
         onNavigate?()
         onPresent?()

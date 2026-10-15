@@ -325,11 +325,11 @@ import NxlvKit
         controllerIsAvailable(applicationActive: NSApp.isActive)
     }
     func controllerIsAvailable(applicationActive: Bool) -> Bool {
-        guard controllerEnabled(), ownsController(), applicationActive, let window,
+        guard ownsController(), applicationActive, let window,
               window.isKeyWindow || window.attachedSheet?.isKeyWindow == true else { return false }
         return active() || menuActive() || window.attachedSheet != nil || GameScreen.shared.controllerPage(in: window) != nil
     }
-    var controllerPlaying: Bool { controllerAvailable && controllerMenuRoot == nil && active() }
+    var controllerPlaying: Bool { controllerEnabled() && controllerAvailable && controllerMenuRoot == nil && active() }
     var controllerMenuRoot: NSView? {
         guard let window else { return nil }
         return window.attachedSheet?.contentView ?? GameScreen.shared.controllerPage(in: window)

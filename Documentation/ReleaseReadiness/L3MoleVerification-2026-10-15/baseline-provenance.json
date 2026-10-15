@@ -1,0 +1,47 @@
+{
+  "allRetainedFixtures": 416,
+  "audio": "muted",
+  "desktopWindows": 0,
+  "doubleReplayPasses": 394,
+  "failedCarriedFixtures": [
+    "107-1.json",
+    "107-22.json",
+    "107-23.json",
+    "113-1.json",
+    "113-21.json",
+    "113-22.json",
+    "113-25.json",
+    "113-26.json",
+    "206-1.json",
+    "206-11.json",
+    "206-22.json",
+    "206-23.json",
+    "213-1.json",
+    "213-21.json",
+    "213-22.json",
+    "213-8.json",
+    "229-15.json",
+    "229-43.json"
+  ],
+  "failedStandaloneLevels": [
+    107,
+    206,
+    213,
+    229
+  ],
+  "failures": 22,
+  "fullCampaignGatePassed": false,
+  "gitCommit": "69d3be77ead0bff47fb9d8b893dfb635df77c3de",
+  "runtimeChangedDuringBaseline": false,
+  "schemaVersion": 1,
+  "sourceFidelityClosed": false,
+  "sourceFiles": {
+    "Sources/NxlvKit/Lemmings3Runtime.swift": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
+    "Tools/Lemmings3Completion/Audit.swift": "973894df6716323b3d1dc60470266b43ce42cc138434e767c31c79083afe72f4",
+    "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+  },
+  "tools": {
+    ".build/l3-fixture-audit/Audit": "73b87b2ae0b1ac61cdb2a1387d5b6548fe7fdec39a86cce43877bace2ce30083",
+    ".build/l3-solver/libNxlvKit.dylib": "7065b46dd5a87601150abea3a5dad3f84951071dee711ac650d994370131ee73"
+  }
+}

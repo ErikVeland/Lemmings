@@ -47,6 +47,13 @@ public struct GameFrontEnd {
         public var rows: [Action]
         public var details: [String]
         public var footer: [Action]
+        /// Hardware Back can choose a safe, visible action on a required-choice page.
+        public var backActionID: String?
+        public var backAction: Action? {
+            let actions = rows + footer
+            if let backActionID { return actions.first { $0.id == backActionID && $0.enabled } }
+            return footer.last { $0.enabled && $0.isBackNavigation }
+        }
         public var detailHeadings: Set<Int> = []
         public var detailTitles: Set<Int> = []
         /// Forward actions finish the footer, including when the grid wraps.
@@ -89,10 +96,13 @@ public struct GameFrontEnd {
         }
     }
 
-    public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+    public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false) -> Layout {
         if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight) }
-        if page.home { return homeLayout(page, width: width, minimumHeight: minimumHeight) }
+        if page.home {
+            if boxedHome { return boxedHomeLayout(page, width: width, minimumHeight: minimumHeight) }
+            return homeLayout(page, width: width, minimumHeight: minimumHeight)
+        }
         let width = max(280, width)
         let inset: CGFloat = width < 600 ? 14 : 32
         let boardWidth = min(1032, width - inset * 2)
@@ -158,14 +168,26 @@ public struct GameFrontEnd {
                       details: details, targets: targets)
     }
 
-    private static func homeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+    private static func boxedHomeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+        let content = homeLayout(page, width: min(1100, width),
+            minimumHeight: min(620, max(0, minimumHeight - 48)), compact: true)
+        let offset = CGPoint(x: floor((width - content.size.width) / 2),
+            y: max(0, floor((minimumHeight - content.size.height) / 2)))
+        func move(_ rect: CGRect) -> CGRect { rect.offsetBy(dx: offset.x, dy: offset.y) }
+        return Layout(size: CGSize(width: width, height: max(minimumHeight, content.size.height)),
+            board: move(content.board), heading: move(content.heading), subtitle: move(content.subtitle),
+            preview: .zero, details: [], targets: content.targets.map { Target(action: $0.action, frame: move($0.frame)) },
+            initials: move(content.initials))
+    }
+
+    private static func homeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, compact: Bool = false) -> Layout {
         let width = max(280, width)
         let boardWidth = min(1100, width - 24), x = (width - boardWidth) / 2
         let inner = boardWidth - 24
         let portraitPhone = width < 600 && width < minimumHeight
         let columns = portraitPhone ? 1 : 2
-        let gap: CGFloat = portraitPhone ? 8 : 12
-        let groupGap: CGFloat = 24
+        let gap: CGFloat = portraitPhone || compact ? 8 : 12
+        let groupGap: CGFloat = compact ? 12 : 24
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerGrid = GameFooterGrid(actions: footer, columns: portraitPhone ? 1 : 3,
@@ -185,10 +207,10 @@ public struct GameFrontEnd {
         var y = subtitle.maxY + 16
         for (section, actions) in sections.enumerated() {
             if section > 0 { y += groupGap }
-            let sectionColumns = actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3 : columns
+            let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3 : columns
             let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
             let logos = actions.allSatisfy { $0.gameLogo != nil }
-            let rowHeight = logos ? CGFloat(112) : max(44, actions.map {
+            let rowHeight = logos ? CGFloat(compact ? 64 : 112) : max(44, actions.map {
                 GameTextLayout.height($0.title, width: (actions.count == 1 ? inner : cell) - 48) + 8
             }.max() ?? 44)
             for start in stride(from: 0, to: actions.count, by: sectionColumns) {
@@ -301,11 +323,11 @@ public struct GameFrontEnd {
 
     public static func draw(_ page: Page, layout: Layout, typography: GameMenuTypography,
                             preview: CGImage? = nil, previewSource: CGRect? = nil,
-                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, in context: CGContext) {
+                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, fillsCanvas: Bool = true, in context: CGContext) {
         context.saveGState()
         defer { context.restoreGState() }
         context.setFillColor(CGColor(gray: 0, alpha: 1))
-        context.fill(CGRect(origin: .zero, size: layout.size))
+        context.fill(fillsCanvas ? CGRect(origin: .zero, size: layout.size) : layout.board)
         GameMenuFrameArt.draw(in: context, board: layout.board)
         if page.home, let image = typography.menuLogo {
             let size = GameMenuLogo.logicalSize(of: image)

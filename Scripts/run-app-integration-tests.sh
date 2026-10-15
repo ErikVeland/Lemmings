@@ -25,7 +25,8 @@ zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build
   "$test_arch-apple-macos12.3" "${optimization_flags[@]}"
 # Keep the checks in the same file so production members can remain private.
 cat "$project_dir/Sources/LemmingsLocal/main.swift" \
-  "$project_dir/Tests/AppIntegrationTests/checks.swift" > "$build_dir/main.swift"
+  "$project_dir/Tests/AppIntegrationTests/checks.swift" \
+  "$project_dir/Tests/AppIntegrationTests/home-backdrop.swift" > "$build_dir/main.swift"
 sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
 test_app="$build_dir/AppIntegrationTests.app"
@@ -40,6 +41,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == home-backdrop ]]; then test_flags+=(-D HOME_BACKDROP_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == nuke ]]; then test_flags+=(-D NUKE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == mac-fidelity ]]; then test_flags+=(-D MAC_FIDELITY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == exit-progress ]]; then test_flags+=(-D EXIT_PROGRESS_TESTS); fi

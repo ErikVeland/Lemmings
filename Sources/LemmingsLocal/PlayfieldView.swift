@@ -217,7 +217,7 @@ struct ReticleFeedback {
     }
     if usesHomeLayout, let initials = overlayProfileInitials {
       let home = homeOverlay()
-      let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale))
+      let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale, layout: home.layout))
       if !rect.isEmpty {
         items.append(accessibleElements.element(id: "home-players", owner: owner,
           label: L10n.text("Active players: \(initials)"), frame: transform(rect)))
@@ -870,7 +870,7 @@ struct ReticleFeedback {
 
     // A menu can appear before any level is loaded, so the overlay must not
     // depend on there being a picture behind it.
-    if let levelImage {
+    if let levelImage, !usesHomeLayout {
       viewport.viewSize = bounds.size
       viewport.levelSize = CGSize(width: Double(levelImage.width) / imageScale, height: Double(levelImage.height) / imageScale)
       viewport.clamp()
@@ -945,6 +945,61 @@ struct ReticleFeedback {
     let board: CGRect
   }
 
+  private(set) var homeBackdropImage: CGImage?
+  private var homeBackdropStart = CGPoint.zero
+  private var homeBackdropGoal: CGPoint?
+  private(set) var homeBackdropElapsed: TimeInterval = 0
+
+  func setHomeBackdrop(_ bitmap: LevelPreviewBitmap) {
+    guard let provider = CGDataProvider(data: bitmap.rgba as CFData),
+      let image = CGImage(width: bitmap.width, height: bitmap.height, bitsPerComponent: 8,
+        bitsPerPixel: 32, bytesPerRow: bitmap.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+        decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
+    homeBackdropImage = image
+    homeBackdropStart = bitmap.start
+    homeBackdropGoal = bitmap.goal
+    homeBackdropElapsed = 0
+    needsDisplay = true
+  }
+
+  func advanceHomeBackdrop(seconds: TimeInterval) {
+    guard usesHomeLayout, !reduceMotion, !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else { return }
+    homeBackdropElapsed += max(0, seconds)
+  }
+
+  /// Ease from the opening view towards the exit and back, at no more than three level pixels per second.
+  func homeBackdropSource(at elapsed: TimeInterval) -> CGRect? {
+    guard let image = homeBackdropImage else { return nil }
+    let scale = max(bounds.width / CGFloat(image.width), bounds.height / CGFloat(image.height))
+    let size = CGSize(width: min(CGFloat(image.width), bounds.width / scale),
+      height: min(CGFloat(image.height), bounds.height / scale))
+    func origin(_ point: CGPoint) -> CGPoint {
+      CGPoint(x: min(max(0, point.x - size.width / 2), CGFloat(image.width) - size.width),
+        y: min(max(0, point.y - size.height / 2), CGFloat(image.height) - size.height))
+    }
+    let start = origin(homeBackdropStart)
+    let goal = origin(homeBackdropGoal ?? homeBackdropStart)
+    let distance = hypot(goal.x - start.x, goal.y - start.y)
+    let duration = max(60, distance * .pi / 6)
+    let amount = (1 - cos(max(0, elapsed) * .pi / duration)) / 2
+    return CGRect(x: start.x + (goal.x - start.x) * amount,
+      y: start.y + (goal.y - start.y) * amount, width: size.width, height: size.height)
+  }
+
+  private func drawHomeBackdrop() {
+    guard let image = homeBackdropImage, let source = homeBackdropSource(at: homeBackdropElapsed) else { return }
+    let scale = bounds.width / source.width
+    NSGraphicsContext.saveGraphicsState()
+    NSBezierPath(rect: bounds).addClip()
+    NSGraphicsContext.current?.imageInterpolation = .none
+    NSImage(cgImage: image, size: .zero).draw(in: CGRect(x: -source.minX * scale, y: -source.minY * scale,
+      width: CGFloat(image.width) * scale, height: CGFloat(image.height) * scale),
+      from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    NSColor.black.withAlphaComponent(0.28).setFill(); bounds.fill()
+    NSGraphicsContext.restoreGraphicsState()
+  }
+
   private var usesHomeLayout: Bool { overlayTitle == L10n.text("LEMMINGS") && overlayProfileInitials != nil && macInterface != nil }
   private var homeViewport: CGRect {
     CGRect(x: 0, y: 0, width: bounds.width,
@@ -964,11 +1019,14 @@ struct ReticleFeedback {
     for index in footer.indices { footer[index].selected = overlayHighlight == rows.count + index }
     let page = GameFrontEnd.Page(title: L10n.text("Lemmings"), home: true, rows: rows, footer: footer,
       footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
-    let scale = max(1, floor(min(bounds.width / 1100, homeViewport.height / 700)))
-    return (page, GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: homeViewport.height / scale), scale)
+    let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
+    return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
+      minimumHeight: min(700, homeViewport.height / scale)), scale)
   }
-  private func homeFrame(_ frame: CGRect, scale: CGFloat) -> CGRect {
-    frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(dx: 0, dy: -homeScrollOffset)
+  private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
+    return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(
+      dx: floor((bounds.width - layout.size.width * scale) / 2),
+      dy: max(0, floor((homeViewport.height - layout.size.height * scale) / 2)) - homeScrollOffset)
   }
   var homeActionCount: Int { usesHomeLayout ? homeOverlay().layout.targets.count : overlayLines.count }
   func activateHomeSelection(_ index: Int) -> Bool {
@@ -1017,7 +1075,7 @@ struct ReticleFeedback {
     if homePreviousSelection != overlayHighlight || homePreviousViewport != homeViewport.size,
        let index = overlayHighlight, (home.page.rows + home.page.footer).indices.contains(index),
        let target = home.layout.targets.first(where: { $0.action.id == (home.page.rows + home.page.footer)[index].id }) {
-      let frame = homeFrame(target.frame, scale: home.scale)
+      let frame = homeFrame(target.frame, scale: home.scale, layout: home.layout)
       if frame.minY < 8 { homeScrollOffset = max(0, homeScrollOffset + frame.minY - 8) }
       if frame.maxY > homeViewport.maxY - 8 { homeScrollOffset += frame.maxY - homeViewport.maxY + 8 }
     }
@@ -1025,24 +1083,25 @@ struct ReticleFeedback {
     homePreviousViewport = homeViewport.size
     homeScrollOffset = min(max(0, home.layout.size.height * home.scale - homeViewport.height), max(0, homeScrollOffset))
     overlayLineRects = home.page.rows.compactMap { row in
-      home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale) }
+      home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     overlayFooterButtons = ["players", "records", "playlists"].compactMap { id in
-      home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale) }
+      home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     let hovered = cursorViewPoint.flatMap { point in
-      home.layout.targets.first { homeFrame($0.frame, scale: home.scale).contains(point) }?.action.id
+      home.layout.targets.first { homeFrame($0.frame, scale: home.scale, layout: home.layout).contains(point) }?.action.id
     } ?? overlayHighlight.flatMap { index in
       let actions = home.page.rows + home.page.footer
       return actions.indices.contains(index) ? actions[index].id : nil
     }
-    NSColor.black.setFill(); bounds.fill()
+    drawHomeBackdrop()
     context.saveGState()
     context.clip(to: homeViewport)
-    context.translateBy(x: 0, y: -homeScrollOffset)
+    let origin = homeFrame(.zero, scale: home.scale, layout: home.layout).origin
+    context.translateBy(x: origin.x, y: origin.y)
     context.scaleBy(x: home.scale, y: home.scale)
     GameFrontEnd.draw(home.page, layout: home.layout, typography: GameMenuTypography(interface: macInterface.interface),
-      highlighted: hovered, in: context)
+      highlighted: hovered, fillsCanvas: false, in: context)
     context.restoreGState()
     if let overlaySavedCounts {
       drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1, palette: .blue)
@@ -1092,7 +1151,10 @@ struct ReticleFeedback {
   }
 
   private func overlaySavedCountsFrame(_ layout: OverlayLayout) -> CGRect {
-    if usesHomeLayout { return CGRect(x: 24, y: homeViewport.maxY + 4, width: bounds.width - 48, height: 32) }
+    if usesHomeLayout {
+      let home = homeOverlay(), board = homeFrame(home.layout.board, scale: home.scale, layout: home.layout)
+      return CGRect(x: board.minX, y: min(bounds.height - 96, board.maxY + 8), width: board.width, height: 32)
+    }
     return CGRect(x: layout.board.minX + 20 * layout.scale,
       y: layout.board.minY + 23 * layout.scale + layout.headerHeight
         + layout.rowHeights.reduce(0, +),
@@ -1103,7 +1165,7 @@ struct ReticleFeedback {
     guard overlayShowsSettingsButton else { return nil }
     if usesHomeLayout {
       let home = homeOverlay()
-      return home.layout.targets.first { $0.action.id == "settings" }.map { homeFrame($0.frame, scale: home.scale) }
+      return home.layout.targets.first { $0.action.id == "settings" }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     let layout = layout ?? overlayLayout()
     let side = max(44, 48 * layout.scale)
@@ -1118,7 +1180,7 @@ struct ReticleFeedback {
     guard overlayAvailableUpdate != nil, overlayShowsSettingsButton else { return nil }
     if usesHomeLayout {
       let home = homeOverlay()
-      return home.layout.targets.first { $0.action.id == "whatsNew" }.map { homeFrame($0.frame, scale: home.scale) }
+      return home.layout.targets.first { $0.action.id == "whatsNew" }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     let layout = layout ?? overlayLayout()
     let side = max(44, 48 * layout.scale)
@@ -1845,7 +1907,7 @@ struct ReticleFeedback {
   }
 
   private func drawMarchingLemmings() {
-    if let macArtwork {
+    if let macArtwork = macArtwork ?? interfaceArtwork {
       let scale = max(1.5, min(3, bounds.width / 900))
       let spacing = 32 * scale
       var x = -spacing + (CGFloat(overlayFrame) * scale / 3).truncatingRemainder(dividingBy: spacing)

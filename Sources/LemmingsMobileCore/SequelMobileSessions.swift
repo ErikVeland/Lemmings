@@ -24,6 +24,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         var undoCount: Int? = nil
     }
 
+    public var goalPoint: MobilePoint {
+        guard let point = initial.configuration.exits.first else { return entrancePoint }
+        return .init(x: Double(point.x + point.width / 2), y: Double(point.y + point.height / 2))
+    }
+
     public let engineIdentifier = "lemmings2"
     public let engineFingerprint: String
     public let levelIdentifier: String
@@ -342,6 +347,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let inputs: [Input]
         var rewindCount: Int? = nil
         var usedRewind: Bool? = nil
+    }
+
+    public var goalPoint: MobilePoint {
+        guard let point = initial.configuration.exits.first else { return entrancePoint }
+        return .init(x: Double(point.x + 4), y: Double(point.y + 1))
     }
 
     public let engineIdentifier = "lemmings3"
@@ -664,6 +674,15 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         var usedRewind: Bool? = nil
         var nukeCount: Int? = nil
         var undoCount: Int? = nil
+    }
+
+    public var entrancePoint: MobilePoint {
+        guard let point = initial.configuration.entrances.first?.position else { return .init(x: 160, y: 80) }
+        return .init(x: Double(point.x), y: Double(point.y))
+    }
+    public var goalPoint: MobilePoint {
+        guard let zone = initial.configuration.zones.first(where: { $0.effect == .exit || $0.effect == .lockedExit }) else { return entrancePoint }
+        return .init(x: Double(zone.bounds.x + zone.bounds.width / 2), y: Double(zone.bounds.y + zone.bounds.height / 2))
     }
 
     public let engineIdentifier = "neolemmix"

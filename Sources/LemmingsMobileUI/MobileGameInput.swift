@@ -338,7 +338,7 @@ extension MobileGameViewController {
         guard let library = parent as? MobileLibraryViewController else { return }
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
         overlayCanvas.page = soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
-            : group.map { library.settingsPage($0) } ?? MobileSettingsArt.groups()
+            : group.map { library.settingsPage($0, inGame: true) } ?? MobileSettingsArt.groups(inGame: true)
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
             if id == "home" { self.pausePlay(showControls: true) }

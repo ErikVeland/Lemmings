@@ -88,18 +88,20 @@ import NxlvKit
     // The hardware reader and deterministic input checks use this same dispatch path.
     func processButtons(_ pressed: Set<ControllerBindings.Button>, at now: TimeInterval, playing: Bool) {
         guard let keyboard else { return }
+        let navigationInput = !keyboard.controllerEnabled() && keyboard.active() && !keyboard.menuActive()
+            && keyboard.controllerMenuRoot == nil ? pressed.intersection([.menu, .options]) : pressed
         let mapping = playing ? ControllerBindings.validatedMapping(keyboard.controllerMappings()) : [:]
         if playing != wasActive || context != keyboard.controllerContext || mapping != previousMapping {
             stopBoost(at: now); bindings.reset()
             touchpadClick.reset()
         }
         previousMapping = mapping
-        let pressed = ControllerBindings.remap(pressed, using: mapping)
+        let pressed = ControllerBindings.remap(navigationInput, using: mapping)
         keyboard.controllerRewindHeld(playing && pressed.contains(.leftTrigger) && pressed.contains(.b))
         wasActive = playing; context = keyboard.controllerContext
         let wasFast = keyboard.speedControl?.isFast == true
         for action in bindings.update(pressed: pressed, inMenu: !playing) {
-            guard keyboard.controllerEnabled(), keyboard.ownsController() else { stopBoost(at: now); break }
+            guard (!playing || keyboard.controllerEnabled()), keyboard.ownsController() else { stopBoost(at: now); break }
             if action != .boost(false) { receivedInput = true }
             if !playing {
                 stopBoost(at: now); keyboard.controllerMenuAction(action); break
