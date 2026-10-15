@@ -43,10 +43,11 @@ generator="$distribution_root/bin/generate_appcast"
   print -u2 "FAILED: Sparkle generate_appcast was not found: $generator"
   exit 1
 }
+delta_base_count="$(python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" base-count)"
 
 args=(
   --maximum-versions 0
-  --maximum-deltas 5
+  --maximum-deltas "$delta_base_count"
   --download-url-prefix "$download_url_prefix"
   --release-notes-url-prefix "$download_url_prefix"
   --link "https://github.com/ErikVeland/Lemmings/releases"

@@ -12,6 +12,7 @@ from xml.etree import ElementTree
 
 SPARKLE_NAMESPACE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 SPARKLE_VERSION = "2.7.3"
+DELTA_BASE_COUNT = 5
 RELEASE_VERSION_PATTERN = re.compile(r"(?:1\.[789]|2\.0)(?:\.\d+)?")
 REQUIRED_SCRIPTS = (
     "Scripts/ensure-sparkle.sh",
@@ -59,7 +60,31 @@ def validate_info_plist(path):
     return version, build
 
 
-def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale_release=False):
+def item_build(item):
+    enclosure = item.find("enclosure")
+    return int(item.findtext(f"{{{SPARKLE_NAMESPACE}}}version") or enclosure.get(
+        f"{{{SPARKLE_NAMESPACE}}}version"))
+
+
+def required_delta_items(items, build):
+    return sorted((item for item in items if item_build(item) < build),
+                  key=item_build, reverse=True)[:DELTA_BASE_COUNT]
+
+
+def validate_delta_coverage(items, build):
+    matches = [item for item in items if item_build(item) == build]
+    if len(matches) != 1:
+        raise ValueError("The feed needs exactly one entry for the target build.")
+    bases = {int(delta.get(f"{{{SPARKLE_NAMESPACE}}}deltaFrom")) for delta in
+             matches[0].findall(f"{{{SPARKLE_NAMESPACE}}}deltas/enclosure")}
+    missing = [str(item_build(item)) for item in required_delta_items(items, build)
+               if item_build(item) not in bases]
+    if missing:
+        raise ValueError("Missing deltas from recent shipped builds: " + ", ".join(missing) + ".")
+
+
+def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale_release=False,
+                     require_delta_coverage=False):
     root = ElementTree.parse(path).getroot()
     if root.tag != "rss":
         raise ValueError("The appcast root must be rss.")
@@ -98,6 +123,8 @@ def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale
             length = delta.get("length", "")
             if not length.isdigit() or int(length) <= 0:
                 raise ValueError("Delta enclosure needs a positive length.")
+    if require_delta_coverage:
+        validate_delta_coverage(items, max(item_build(item) for item in items))
     if expected_release is not None:
         releases = []
         for item in items:
@@ -137,7 +164,8 @@ def validate_repository(root, allow_empty=False, allow_stale_release=False):
             raise ValueError(f"Required release script is not executable: {relative}")
     items = validate_appcast(root / "appcast.xml", allow_empty=allow_empty,
                              expected_release=(version, build),
-                             allow_stale_release=allow_stale_release)
+                             allow_stale_release=allow_stale_release,
+                             require_delta_coverage=True)
     return version, build, items
 
 

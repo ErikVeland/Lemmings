@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keep the previous shipped archive available and require its signed delta."""
+"""Stage recent shipped archives and require direct signed deltas for skipped versions."""
 
 import argparse
 from pathlib import Path
@@ -12,17 +12,12 @@ from xml.etree import ElementTree as ET
 import zipfile
 from xml.sax.saxutils import escape
 
-from automatic_updates import SPARKLE_NAMESPACE as NS, validate_appcast
+from automatic_updates import (DELTA_BASE_COUNT, SPARKLE_NAMESPACE as NS, item_build,
+                               required_delta_items, validate_appcast, validate_delta_coverage)
 
 
 def build_of(item):
-    enclosure = item.find("enclosure")
-    return int(item.findtext(f"{{{NS}}}version") or enclosure.get(f"{{{NS}}}version"))
-
-
-def previous_item(items, build):
-    older = [item for item in items if build_of(item) < build]
-    return max(older, key=build_of) if older else None
+    return item_build(item)
 
 
 def archive_build(archive):
@@ -40,29 +35,33 @@ def prepare_base(root, updates, feed, explicit=None):
         raise ValueError("No full update archive is ready.")
     build = max(archive_build(archive) for archive in archives)
     items = ET.parse(feed).getroot().findall("./channel/item") if feed.exists() else []
-    previous = previous_item(items, build)
-    if previous is None:
-        return
-    enclosure = previous.find("enclosure")
-    name = Path(unquote(urlparse(enclosure.get("url")).path)).name
-    candidates = ([explicit] if explicit else
-                  [updates / name, root / ".build/updates" / name,
-                   *sorted((root / ".build").glob(f"release-*/updates/{name}"))])
-    archive = next((path for path in candidates if path and path.is_file()), None)
-    if archive is None:
-        raise ValueError(f"Missing shipped build {build_of(previous)} archive. "
-                         "Set PREVIOUS_UPDATE_ZIP to its full signed ZIP; a delta is required.")
-    if archive.name != name or str(archive.stat().st_size) != enclosure.get("length"):
-        raise ValueError("The previous archive name or length differs from the published feed.")
-    if archive_build(archive) != build_of(previous):
-        raise ValueError("The previous archive contains the wrong application build.")
-    target = updates / name
-    if archive.resolve() != target.resolve():
-        # APFS clones avoid copying gigabytes of unchanged soundtrack data.
-        result = subprocess.run(["cp", "-c", str(archive), str(target)], capture_output=True)
-        if result.returncode:
-            shutil.copy2(archive, target)
-    print(f"Delta base: shipped build {build_of(previous)} ({name})")
+    bases = required_delta_items(items, build)
+    ready = []
+    for index, previous in enumerate(bases):
+        enclosure = previous.find("enclosure")
+        name = Path(unquote(urlparse(enclosure.get("url")).path)).name
+        candidates = ([explicit] if explicit and index == 0 else
+                      [updates / name, root / ".build/updates" / name,
+                       *sorted((root / ".build").glob(f"release-*/updates/{name}"))])
+        available = [path for path in candidates if path and path.is_file()]
+        if not available:
+            raise ValueError(f"Missing shipped build {build_of(previous)} archive. "
+                             "Place its full signed ZIP in the update directory. "
+                             "PREVIOUS_UPDATE_ZIP can override the latest base; all recent bases are required.")
+        archive = next((path for path in available if path.name == name
+                        and str(path.stat().st_size) == enclosure.get("length")), None)
+        if archive is None:
+            raise ValueError(f"Shipped build {build_of(previous)} archive name or length differs from the published feed.")
+        if archive_build(archive) != build_of(previous):
+            raise ValueError(f"Shipped build {build_of(previous)} archive contains the wrong application build.")
+        ready.append((archive, updates / name, build_of(previous)))
+    for archive, target, base in ready:
+        if archive.resolve() != target.resolve():
+            # APFS clones avoid copying gigabytes of unchanged soundtrack data.
+            result = subprocess.run(["cp", "-c", str(archive), str(target)], capture_output=True)
+            if result.returncode:
+                shutil.copy2(archive, target)
+        print(f"Delta base: shipped build {base} ({target.name})")
 
 
 def delta_assets(feed, build, directory):
@@ -72,10 +71,7 @@ def delta_assets(feed, build, directory):
     if len(matches) != 1:
         raise ValueError("The feed needs exactly one entry for the target build.")
     deltas = matches[0].findall(f"{{{NS}}}deltas/enclosure")
-    previous = previous_item(items, build)
-    if previous is not None and not any(
-            delta.get(f"{{{NS}}}deltaFrom") == str(build_of(previous)) for delta in deltas):
-        raise ValueError(f"Missing delta from previous shipped build {build_of(previous)}.")
+    validate_delta_coverage(items, build)
     paths = []
     for delta in deltas:
         name = Path(unquote(urlparse(delta.get("url")).path)).name
@@ -138,6 +134,7 @@ def normalize_delta_names(feed, build, directory):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("base-count")
     prepare = sub.add_parser("prepare")
     prepare.add_argument("root", type=Path)
     prepare.add_argument("updates", type=Path)
@@ -156,7 +153,9 @@ def main():
     normalize.add_argument("build", type=int)
     normalize.add_argument("directory", type=Path)
     args = parser.parse_args()
-    if args.command == "prepare":
+    if args.command == "base-count":
+        print(DELTA_BASE_COUNT)
+    elif args.command == "prepare":
         prepare_base(args.root, args.updates, args.feed, args.previous)
     elif args.command == "preserve":
         preserve_published_items(args.previous, args.generated, args.build)
