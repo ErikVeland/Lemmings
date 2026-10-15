@@ -1,10 +1,12 @@
 # Interface localisation
 
-English is the source language. Seven AI draft translations are available in
-the app for in-app testing: Spanish (Latin America), German, French, Brazilian
-Portuguese, Italian, Dutch and Norwegian Bokmål. These packs are not approved
-for release. Per-locale `.review.json` files record the latest checkpoint and
-remaining work. Complete language and platform review before release.
+English is the source language. Macintosh 2.0 includes seven additional language
+packs: Spanish (Latin America), German, French, Brazilian Portuguese, Italian,
+Dutch and Norwegian Bokmål. The owner requested their inclusion in a fresh
+release build on 15 October 2026 and instructed reuse of passed tests.
+These are AI-assisted drafts with full structural coverage. Human language
+review and complete translated-screen and device validation remain open.
+Per-locale `.review.json` files retain their checkpoint and remaining work.
 The shared layer serves Mac, iOS and tvOS, including Classic, NeoLemmix,
 Lemmings 2 and Lemmings 3.
 
@@ -18,11 +20,10 @@ compile a subset of shared files.
 
 ## Translation handover
 
-The current task is to test all seven language packs across Classic,
-Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The user authorised
-in-app testing before release approval. The packs contain AI translations and
+The continuing validation task covers all seven language packs across Classic,
+Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The owner has authorised their inclusion in Macintosh 2.0. The packs contain AI translations and
 still need human language review and platform acceptance. Their checkpoint
-files describe draft status, not approval for release.
+files describe language-review status and do not claim completed human review.
 
 Read `AGENTS.md`, `Documentation/UIPrinciples.md` and the
 [localisation architecture](../ARCHITECTURE.md#localisation) first.

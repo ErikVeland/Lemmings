@@ -2652,6 +2652,12 @@ extension AppDelegate {
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
     selectDataSet(); loadLevel(at: 0)
     phase = .playing; playfield.startCountdown.cancel(); isPaused = false
+    // Enter the real playing flow so asynchronous Home work cannot replace the game render.
+    flow?.selectLevel(rank: 0, position: 0, recordsCampaignProgress: false)
+    flow?.beginPlaying()
+    renderScreen()
+    try check(flow?.screen.isPlaying == true && playfield.overlayTitle == nil,
+      "Ghost fixture did not enter the gameplay render path")
     let live = session as! ClassicSession
     let liveHash = ClassicDOSReplayRecorder.stateHash(of: live.simulation)
     let run = arcadeRunID, owner = arcadeProfileID, seat = arcadeHotSeatID
@@ -2747,17 +2753,26 @@ extension AppDelegate {
     func captureGhost(_ enabled: Bool) -> Data {
       playfield.ghostSolutionEnabled = enabled
       playfield.needsDisplay = true
-      let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
-      playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+      // Render explicitly. A hidden backing layer can retain its cached image.
+      let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(playfield.bounds.width),
+        pixelsHigh: Int(playfield.bounds.height), bitsPerSample: 8, samplesPerPixel: 4,
+        hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+      NSGraphicsContext.saveGraphicsState()
+      NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+      let context = NSGraphicsContext.current!.cgContext
+      context.translateBy(x: 0, y: playfield.bounds.height); context.scaleBy(x: 1, y: -1)
+      playfield.draw(playfield.bounds)
+      NSGraphicsContext.restoreGraphicsState()
       return bitmap.representation(using: .png, properties: [:])!
     }
     let plainFrame = captureGhost(false), ghostFrame = captureGhost(true)
-    try check(plainFrame != ghostFrame && playfield.solutionGhost?.simulation.tickCount == live.currentTick,
-      "Ghost sprites were not drawn at the live tick")
+    print("Ghost render: different=\(plainFrame != ghostFrame), liveTick=\(live.currentTick), ghostTick=\(playfield.solutionGhost?.simulation.tickCount ?? -1), title=\(playfield.overlayTitle ?? "nil"), hidden=\(playfield.isHiddenOrHasHiddenAncestor), active=\(playfield.solutionGhost?.simulation.lemmings.filter(\.isActive).count ?? -1), image=\(playfield.levelImage != nil)")
     let ghostOutput = URL(fileURLWithPath: ".build/ghost-mac-renders")
     try FileManager.default.createDirectory(at: ghostOutput, withIntermediateDirectories: true)
     try plainFrame.write(to: ghostOutput.appendingPathComponent("live.png"))
     try ghostFrame.write(to: ghostOutput.appendingPathComponent("ghost.png"))
+    try check(plainFrame != ghostFrame && playfield.solutionGhost?.simulation.tickCount == live.currentTick,
+      "Ghost sprites were not drawn at the live tick")
     let selector = ghostToggle.superview!
     let selectorBitmap = selector.bitmapImageRepForCachingDisplay(in: selector.bounds)!
     selector.cacheDisplay(in: selector.bounds, to: selectorBitmap)
@@ -3828,18 +3843,26 @@ extension AppDelegate {
     store.selectProfile(host); store.toggleSessionProfile(guest.id)
     try await failFirstClassicLevel()
     view.onLater = {}; view.onHints = {}
+    try check(GameScreen.shared.present(view, owner: window), "Journey result fixture could not attach")
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(view.window === window && !view.isHiddenOrHasHiddenAncestor,
+      "Journey result fixture is hidden or detached")
     try captureResult("hot-seat-journey-retry")
-    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
     let ownerTitle = "Retry as \(store.records.profile(host)!.initials)"
     guard let retry = controls.first(where: { $0.accessibilityLabel() == ownerTitle }),
       let next = controls.first(where: { $0.accessibilityLabel() == "Retry as PAL" }) else {
       throw IntegrationFailure(message: "Journey result omitted a named Hot Seat retry")
     }
-    try check(!controls.contains(where: { $0.accessibilityLabel() == "Back" })
-      && retry.accessibilityFrame().maxX <= next.accessibilityFrame().minX,
-      "Journey retry kept Back or overlapped the next player's target")
+    guard let back = controls.first(where: { $0.accessibilityLabel() == "Back" }) else {
+      throw IntegrationFailure(message: "Journey result lost its Back action")
+    }
+    try check(back.accessibilityFrame().minX <= retry.accessibilityFrame().minX
+      && back.accessibilityFrame().maxX <= next.accessibilityFrame().minX
+      && !retry.accessibilityFrame().intersects(next.accessibilityFrame()),
+      "Journey retry misplaced Back or overlapped the next player's target")
     let runID = arcadeRunID
-    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action")
+    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action; enabled=\(retry.isAccessibilityEnabled()), attached=\(view.window != nil), hidden=\(view.isHiddenOrHasHiddenAncestor), action=\(retry.press != nil)")
     try check(arcadeProfileID == host && store.playingProfileID == host
       && arcadeRunID != runID && phase == .playing && isPaused && panel.isPaused,
       "Journey retry changed owner, failed to restart, or skipped the paused start")
@@ -7349,6 +7372,10 @@ Task { @MainActor in
     #elseif RELEASE_NOTES_TESTS
     try await subject.testSequelReleaseStatus()
     try subject.testScrollableReleaseNotes()
+    #elseif RELEASE_REMAINING_TESTS
+    try await subject.testRetainedSolutionSwitching()
+    try await subject.testSequenceCheckpointResume()
+    print("Remaining release integration tests passed.")
     #elseif SOLUTION_SWITCH_TESTS
     try await subject.testRetainedSolutionSwitching()
     #elseif SOLUTION_AUDIO_TESTS
@@ -7565,7 +7592,6 @@ Task { @MainActor in
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
-    try await subject.testSequenceCheckpointResume()
     try await subject.testPlaylistSessions()
     print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS

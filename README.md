@@ -30,7 +30,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 - [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
-- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven in-app test languages, review workflow and release gates.
+- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven added languages, review workflow and remaining validation.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.

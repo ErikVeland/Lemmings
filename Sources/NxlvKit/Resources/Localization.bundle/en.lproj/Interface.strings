@@ -4986,9 +4986,6 @@
 /* Sources/LemmingsLocal/ReleaseWelcome.swift:15 */
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.";
 
-/* Sources/LemmingsLocal/ReleaseWelcome.swift:20 */
-"Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress." = "Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.";
-
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:9 */
 "Original inputs" = "Original inputs";
 
@@ -6632,6 +6629,9 @@
 
 /* Sources/LemmingsLocal/main.swift:955 */
 "Settings…" = "Settings…";
+
+/* Sources/LemmingsLocal/ReleaseWelcome.swift:20 */
+"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text.";
 
 /* Sources/NxlvKit/Lemmings3ClassicCampaign.swift:8; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MAP.IFF:1 */
 "Shadow" = "Shadow";

@@ -43,9 +43,9 @@ Ghosts follow their recorded terrain, so their bridges and tunnels can differ fr
 - Matching profiles can recover newer shared progress, including saved Hot Seat journeys. Recovery preserves ownership and visited levels.
 - Background level preparation retains caller cancellation.
 
-## Original fonts and translation preparation
+## Seven added languages and original fonts
 
-Classic and sequel bitmap fonts support accented Western Latin text, including composed and combining forms. Localisation catalogues and draft translations have expanded. **The shipped interface remains English. No translated language pack is enabled.**
+The app now includes Spanish (Latin America), German, French, Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål, alongside English. It follows your Mac’s preferred app language. Classic and sequel bitmap fonts support accented Western Latin text, including composed and combining forms. These language packs are AI-assisted drafts. Human language review and complete translated-screen validation remain open.
 
 ## Release scope and known limits
 

@@ -10647,12 +10647,6 @@
       "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
     ]
   },
-  "Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
-    ]
-  },
   "Original inputs": {
     "kind": "text",
     "references": [
@@ -14225,6 +14219,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:955"
+    ]
+  },
+  "Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Shadow": {

@@ -1662,7 +1662,6 @@
 "Original Macintosh" = "Original-Macintosh";
 "Original Macintosh 1-bit graphics" = "Originale 1-Bit-Grafik des Macintosh";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Die ursprüngliche Schwarz-Weiß-Grafik des Macintosh bringt ihre aufwendigen Dithering-Muster auf moderne Macs. Wähle in den Grafikeinstellungen „Macintosh (1 Bit)“ für Classic-Grafik und passende monochrome Spielsteuerung.";
-"Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress." = "Originale Bitmap-Schriften unterstützen Namen und Texte mit Akzentzeichen aus dem westeuropäischen lateinischen Zeichensatz. Die Oberfläche bleibt auf Englisch. Die Übersetzung ist in Arbeit.";
 "Original inputs" = "Originalsteuerung";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Ursprüngliche Hauptplattform. Mit bekannten digitalisierten Sprachsamples und geteiltem Bildschirm für zwei Spieler.";
 "Original movie" = "Originalfilm";
@@ -2211,6 +2210,7 @@
 "Settings" = "Einstellungen";
 "Settings sections" = "Einstellungsbereiche";
 "Settings…" = "Einstellungen …";
+"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sieben zusätzliche Sprachpakete folgen der Spracheinstellung deines Mac. Die originalen Bitmap-Schriften unterstützen westeuropäische Texte mit Akzenten.";
 "Shadow" = "Schatten";
 "Shadow tribe movie" = "Film des Schattenstamms";
 "Share as {0}" = "Als {0} teilen";

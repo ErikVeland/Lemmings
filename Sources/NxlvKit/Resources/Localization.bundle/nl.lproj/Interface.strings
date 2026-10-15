@@ -1662,7 +1662,6 @@
 "Original Macintosh" = "Originele Macintosh";
 "Original Macintosh 1-bit graphics" = "Originele Macintosh-beeldweergave in 1-bit";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Originele zwart-witillustraties voor Macintosh brengen hun verfijnde ditherpatroon naar moderne Macs. Kies Macintosh (1-bit) bij de grafische instellingen voor Classic-illustraties en bijpassende monochrome spelbediening.";
-"Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress." = "De oorspronkelijke bitmaplettertypen ondersteunen geaccentueerde West-Latijnse namen en tekst. De interface is nog Engels. Er wordt aan de vertaling gewerkt.";
 "Original inputs" = "Oorspronkelijke invoer";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Oorspronkelijk hoofdplatform. Bevat de bekende gedigitaliseerde stemfragmenten en een gedeeld scherm voor twee spelers.";
 "Original movie" = "Originele film";
@@ -2211,6 +2210,7 @@
 "Settings" = "Instellingen";
 "Settings sections" = "Instellingensecties";
 "Settings…" = "Instellingen…";
+"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Zeven extra taalpakketten volgen de taalinstelling van je Mac. De originele bitmaplettertypen ondersteunen West-Europese tekst met accenten.";
 "Shadow" = "Schaduw";
 "Shadow tribe movie" = "Film van de schaduwstam";
 "Share as {0}" = "Delen als {0}";
