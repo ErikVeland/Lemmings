@@ -1,0 +1,25 @@
+{
+  "version": "2.0",
+  "build": 83,
+  "platform": "macOS",
+  "date": "2026-10-15",
+  "authorisation": "Use existing classifications and document limits",
+  "authorisationContext": "Direct owner reply to the release scope question in this chat. The existing request authorises releasing Macintosh 2.0.",
+  "classifications": {
+    "Classic": "Complete",
+    "The Tribes": "Complete",
+    "Chronicles": "Beta",
+    "NeoLemmix": "Beta"
+  },
+  "deferredGateAreas": [
+    "Sequel fidelity",
+    "Save and interruption recovery",
+    "Input and accessibility",
+    "Performance and hardware",
+    "Release package",
+    "Bundled engine and content closure"
+  ],
+  "deferredGateMeaning": "The listed open or partial milestones remain open. Candidate regression and distribution verification remain required. This is an acceptance of recorded limits, not evidence that full closure passed.",
+  "validationScope": "Fresh minor audit plus focused changed-behaviour checks. L3 Beta route failures are documented rather than presented as complete campaign proof.",
+  "fullBundleClosureClaimed": false
+}

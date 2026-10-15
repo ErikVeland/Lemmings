@@ -110,6 +110,52 @@ final class MacMonochromeUITests: XCTestCase {
             try backpackSheet(artwork: mono, to: output.appendingPathComponent("backpack-poses.png"), extended: true)
             let santa = try ClassicMacArtwork(directory: artworkRoot.appendingPathComponent("monochrome/xmas"))
             try backpackSheet(artwork: santa, to: output.appendingPathComponent("backpack-santa.png"), extended: true)
+
+            let panel = PanelView(frame: CGRect(x: 0, y: 0, width: 960, height: 160))
+            panel.interfaceArtwork = colour
+            panel.macArtwork = mono
+            let graphics = try XCTUnwrap(assets.panel)
+            let panelBytes = graphics.rgba(using: ClassicLemmingPalette.panelVGA)
+            let provider = try XCTUnwrap(CGDataProvider(data: panelBytes as CFData))
+            panel.panelImage = try XCTUnwrap(CGImage(width: graphics.width, height: graphics.height,
+                bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: graphics.width * 4,
+                space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent))
+            for width in [900, 1280, 1600] {
+                panel.frame.size.width = CGFloat(width)
+                panel.session = ClassicSession(simulation: simulation, width: rendered.width, height: rendered.height)
+                panel.selectedSkillIndex = 0
+                panel.isPaused = false
+                panel.isFastForward = false
+                var pressed: PanelButton?
+                panel.onButton = { pressed = $0 }
+                let controls = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+                let floater = try XCTUnwrap(controls.first { $0.accessibilityLabel()?.hasPrefix("Floater,") == true })
+                XCTAssertTrue(panel.bounds.contains(floater.localFrame))
+                panel.handleClick(at: CGPoint(x: floater.localFrame.midX, y: floater.localFrame.midY))
+                XCTAssertEqual(pressed, .skill(1))
+                let before = try bitmap(panel)
+                panel.selectedSkillIndex = 1
+                XCTAssertNotEqual(try bitmap(panel), before)
+                try capture(panel, to: output.appendingPathComponent("panel-\(width)-selected.png"))
+                panel.isPaused = true
+                panel.isFastForward = true
+                try capture(panel, to: output.appendingPathComponent("panel-\(width)-paused.png"))
+                let resumed = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+                XCTAssertTrue(resumed.contains { $0.accessibilityLabel() == "Resume" })
+                XCTAssertTrue(resumed.contains { $0.accessibilityLabel() == "Return to normal speed" })
+                panel.session = ClassicSession(simulation: initial, width: rendered.width, height: rendered.height)
+                let unavailable = try XCTUnwrap(panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+                    .first { $0.accessibilityLabel() == "Rewind two seconds" })
+                XCTAssertFalse(unavailable.isAccessibilityEnabled())
+                var timelinePressed = false
+                panel.timeline.perform = { _ in timelinePressed = true }
+                pressed = nil
+                panel.handleClick(at: CGPoint(x: unavailable.localFrame.midX, y: unavailable.localFrame.midY))
+                XCTAssertNil(pressed)
+                XCTAssertFalse(timelinePressed)
+                try capture(panel, to: output.appendingPathComponent("panel-\(width)-unavailable.png"))
+            }
         }
     }
 

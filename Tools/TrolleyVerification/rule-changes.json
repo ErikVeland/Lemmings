@@ -6,5 +6,13 @@
     "review": "Documentation/ReleaseReadiness/OhNoMechanics.md",
     "gameIDs": ["ohNoMoreLemmings", "xmasLemmings1991", "xmasLemmings1992", "holidayLemmings1993", "holidayLemmings1994"],
     "ranks": {"ohYesMoreLemmings": ["Oh No! More Lemmings Versus"]}
+  },
+  {
+    "id": "l3-mole-direction-patrol-2.0",
+    "date": "2026-10-15",
+    "reason": "Mole direction and patrol corrections change Chronicles outcomes. Revalidate targets under the new ruleset. Old ruleset records remain historical and cannot certify a new-engine rescue goal. Failed routes remain Beta gaps.",
+    "review": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
+    "gameIDs": ["lemmings3"],
+    "rulesetTransition": {"from": "l3-native-preview-v1", "to": "l3-native-preview-v2"}
   }
 ]

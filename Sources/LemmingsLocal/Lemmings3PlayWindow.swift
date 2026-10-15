@@ -87,7 +87,7 @@ import NxlvKit
         let c = game.configuration
         let conditions = TrolleyConditions(gameID: "lemmings3", packID: "chronicles", levelID: String(number),
             levelFingerprint: hash + ":" + TrolleyCapture.contentFingerprint(root: dataRoot),
-            rulesetVersion: "l3-native-preview-v1", physicsMode: "l3-native-preview-v1",
+            rulesetVersion: "l3-native-preview-v2", physicsMode: "l3-native-preview-v2",
             population: c.total + c.extras.count, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: Double(c.timeLimit),
             modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
                         "reserves": String(c.total), "extras": String(c.extras.count)])

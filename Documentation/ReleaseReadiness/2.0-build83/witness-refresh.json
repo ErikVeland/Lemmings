@@ -1,0 +1,45 @@
+{
+  "engineSourceFingerprint": "842df65a84c5598a939c8a517595d7dd8304c81e8ff5219c2a4ecea013086f1e",
+  "auditSearchEnabled": false,
+  "classicWinningLevels": 352,
+  "tribesWinningConfigurations": 171,
+  "chroniclesWinningStandaloneLevels": 86,
+  "chroniclesRuleset": "l3-native-preview-v2",
+  "chroniclesGaps": [
+    {
+      "tribe": "Shadow",
+      "level": 7,
+      "reason": [
+        "L3 replay did not consume every input and reproduce its winning outcome."
+      ]
+    },
+    {
+      "tribe": "Egyptian",
+      "level": 6,
+      "reason": [
+        "L3 replay identity, initial state or input order differs."
+      ]
+    },
+    {
+      "tribe": "Egyptian",
+      "level": 13,
+      "reason": [
+        "L3 replay identity, initial state or input order differs."
+      ]
+    },
+    {
+      "tribe": "Egyptian",
+      "level": 29,
+      "reason": [
+        "L3 replay identity, initial state or input order differs."
+      ]
+    }
+  ],
+  "unchangedRulesPublishedTargetsRetained": true,
+  "proofs": 294,
+  "rescueRecords": 315,
+  "hintEntries": 350,
+  "hintCampaignIdentities": 352,
+  "hintDuplicateFingerprints": 2,
+  "legacyChroniclesRecords": "Earlier-rules witnesses remain historical. New ruleset outcomes were replayed twice; missing witnesses are excluded from the active catalogue."
+}

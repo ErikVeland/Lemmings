@@ -4,6 +4,24 @@ Status: journey checkpoint resume implemented. Release closure remains open.
 Updated 15 October 2026. This record covers Mac preparation, separately from
 the iOS 2.0 launch gates.
 
+## Macintosh 2.0 release request
+
+The owner requested Macintosh 2.0 and announcement posts on 15 October.
+The proposed [build-83 release notes](../../ReleaseNotes-2.0-build83.md) lead
+with the original 1-bit graphics and cover changes since 1.9.6. The BBCode and
+new-player Reddit drafts are saved outside the repository in
+`~/Documents/Ultimate Lemmings/Posts`.
+
+The [announcement preflight](announcement-preflight.json) records the current
+source and the package-scope rejection. Sequel fidelity, save recovery, input
+and accessibility, performance and hardware, release packaging, and bundled
+engine/content closure remain open or partial. That preflight preceded the
+owner's scope decision. The owner then approved using the existing
+classifications and documenting limits. See the
+[build-83 acceptance record](../2.0-build83/acceptance.json) and
+[candidate evidence](../2.0-build83/README.md). The posts contain release-day
+wording and must wait until the final release and download link are verified.
+
 ## Journey and playlist recovery
 
 Mac sequences now save their attempts instead of suppressing checkpoint writes.

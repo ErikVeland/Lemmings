@@ -9,15 +9,16 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9.7"
-    static let subtitle = L10n.text("Ghost solutions, clearer controls and bitmap lettering")
+    static let notesVersion = "2.0"
+    static let subtitle = L10n.text("Original Macintosh 1-bit graphics")
     static let sections = [
+        (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
+        (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),
         (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
-        (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. In-game annotations identify controls. Hot Seat retries and handovers wait for Ready across Classic, The Tribes and Chronicles.")),
-        (L10n.text("Saves and records"), L10n.text("Matching profiles recover newer shared progress, including Hot Seat journeys. Result help explains awards. Live cross-device sync still needs device verification.")),
-        (L10n.text("Bitmap lettering"), L10n.text("Original bitmap fonts retain accented Western Latin letters in menus, names and sequel panels. Localisation groundwork is included. The interface remains English.")),
-        (L10n.text("Music recovery"), L10n.text("If an incoming journey track stops, the outgoing track returns to full volume while the game remains paused.")),
-        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta."))
+        (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause.")),
+        (L10n.text("Music and performance"), L10n.text("Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys.")),
+        (L10n.text("Bitmap lettering"), L10n.text("Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.")),
+        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ]
     private let defaults: UserDefaults
     private let build: Int

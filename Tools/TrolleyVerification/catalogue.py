@@ -95,13 +95,21 @@ def superseded_by_rule_change(previous, rows, changes):
     """A reviewed rule change retires a target only where it changed the level."""
     conditions = previous["conditions"]
     game, rank = conditions.get("gameID"), previous.get("rank")
-    if not any(game in change["gameIDs"] or rank in change.get("ranks", {}).get(game, []) for change in changes):
-        return False
-    return any(row.get("conditions")
-               and row["conditions"].get("gameID") == game
-               and row["conditions"].get("levelID") == conditions.get("levelID")
-               and row["conditions"].get("levelFingerprint") != conditions.get("levelFingerprint")
-               for row in rows)
+    for change in changes:
+        if game not in change["gameIDs"] and rank not in change.get("ranks", {}).get(game, []):
+            continue
+        for row in rows:
+            current = row.get("conditions")
+            if not current or current.get("gameID") != game or current.get("levelID") != conditions.get("levelID"):
+                continue
+            versions = change.get("rulesetTransition")
+            if versions:
+                if (conditions.get("rulesetVersion") == versions["from"]
+                        and current.get("rulesetVersion") == versions["to"]):
+                    return True
+            elif current.get("levelFingerprint") != conditions.get("levelFingerprint"):
+                return True
+    return False
 
 
 def require_retained_targets(rows, published, changes=()):

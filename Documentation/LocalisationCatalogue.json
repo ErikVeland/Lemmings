@@ -1105,7 +1105,7 @@
   "All New World of Lemmings": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Brand.swift:16"
+      "Sources/NxlvKit/Lemmings3Brand.swift:22"
     ]
   },
   "All career milestones earned!": {
@@ -2030,7 +2030,7 @@
   "Bitmap lettering": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Blocker": {
@@ -3076,7 +3076,7 @@
   "Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "Classic effects": {
@@ -3554,7 +3554,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Complete": {
@@ -3687,7 +3687,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1469",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:248",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:85",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:86",
       "Sources/LemmingsLocal/main.swift:8302",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
@@ -3758,7 +3758,7 @@
   "Controls and help": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Controls help": {
@@ -5906,13 +5906,7 @@
   "Ghost solutions": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
-    ]
-  },
-  "Ghost solutions, clearer controls and bitmap lettering": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "Glider": {
@@ -6339,12 +6333,6 @@
       "Sources/NxlvKit/SkillVocabulary.swift:36",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1"
-    ]
-  },
-  "If an incoming journey track stops, the outgoing track returns to full volume while the game remains paused.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controller settings.": {
@@ -7289,10 +7277,10 @@
       "Sources/LemmingsLocal/main.swift:1030"
     ]
   },
-  "Keyboard help follows the active game and settings. In-game annotations identify controls. Hot Seat retries and handovers wait for Ready across Classic, The Tribes and Chronicles.": {
+  "Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Keyboard overlay. The level is paused. Escape closes the overlay.": {
@@ -8922,12 +8910,6 @@
       "Sources/LemmingsLocal/ResultCelebrationView.swift:201"
     ]
   },
-  "Matching profiles recover newer shared progress, including Hot Seat journeys. Result help explains awards. Live cross-device sync still needs device verification.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
-    ]
-  },
   "Maximum": {
     "kind": "text",
     "references": [
@@ -9338,6 +9320,12 @@
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1"
     ]
   },
+  "Music and performance": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+    ]
+  },
   "Music downloaded": {
     "kind": "text",
     "references": [
@@ -9366,12 +9354,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1817"
-    ]
-  },
-  "Music recovery": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Music style": {
@@ -10653,10 +10635,22 @@
       "Sources/NxlvKit/ClassicSettings.swift:197"
     ]
   },
-  "Original bitmap fonts retain accented Western Latin letters in menus, names and sequel panels. Localisation groundwork is included. The interface remains English.": {
+  "Original Macintosh 1-bit graphics": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
+    ]
+  },
+  "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
+    ]
+  },
+  "Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Original inputs": {
@@ -12450,7 +12444,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:53"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:54"
     ]
   },
   "Release rate": {
@@ -12887,6 +12881,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:191"
+    ]
+  },
+  "Resume your journey": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
   "Resume {0}  {1}/{2}": {
@@ -13959,12 +13959,6 @@
       "Sources/LemmingsMobileUI/MobileSettingsPages.swift:56"
     ]
   },
-  "Saves and records": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
-    ]
-  },
   "Scale the playfield in whole pixel steps to keep pixel edges crisp.": {
     "kind": "text",
     "references": [
@@ -14295,6 +14289,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:56"
+    ]
+  },
+  "Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Shared saves/replays": {
@@ -15273,6 +15273,12 @@
       "Sources/LemmingsLocal/GameplayPresentation.swift:363"
     ]
   },
+  "Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+    ]
+  },
   "Surfer": {
     "kind": "text",
     "references": [
@@ -15868,7 +15874,7 @@
   "The Lemmings Chronicles": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Brand.swift:17"
+      "Sources/NxlvKit/Lemmings3Brand.swift:23"
     ]
   },
   "The Minimal Harm Strategist": {
@@ -16106,6 +16112,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ZipArchive.swift:19"
+    ]
+  },
+  "The art of one bit": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
     ]
   },
   "The attempt was not saved.": {
@@ -17843,10 +17855,10 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:42"
     ]
   },
-  "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta.": {
+  "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Unknown": {
@@ -18461,7 +18473,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:45"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:46"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {

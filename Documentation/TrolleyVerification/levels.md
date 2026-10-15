@@ -270,7 +270,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Beach 9: Sand Blaster | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-18-60.json) |
 | Beach 9: Sand Blaster (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-18-1.json) |
 | Beach 10: Surf Lem ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-19-60.json) |
-| Cavelems 1: Audex Powder | 60 | 1 | 52 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
+| Cavelems 1: Audex Powder | 60 | 1 | 59 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
 | Cavelems 2: Successive division | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-21-60.json) |
 | Cavelems 2: Successive division (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-21-1.json) |
 | Cavelems 3: Mortal men doomed to die | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-22-60.json) |
@@ -571,14 +571,14 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Egyptian 3: Egyptian 3 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-203.json) |
 | Egyptian 4: Egyptian 4 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-204.json) |
 | Egyptian 5: Egyptian 5 | 21 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-205.json) |
-| Egyptian 6: Egyptian 6 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-206.json) |
+| Egyptian 6: Egyptian 6 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 7: Egyptian 7 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-207.json) |
 | Egyptian 8: Egyptian 8 | 20 | 1 | 5 | — | — | [Observed](witnesses/lemmings3-208.json) |
 | Egyptian 9: Egyptian 9 | 24 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-209.json) |
 | Egyptian 10: Egyptian 10 | 21 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-210.json) |
 | Egyptian 11: Egyptian 11 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-211.json) |
 | Egyptian 12: Egyptian 12 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-212.json) |
-| Egyptian 13: Egyptian 13 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-213.json) |
+| Egyptian 13: Egyptian 13 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 14: Egyptian 14 | 23 | 1 | 13 | — | — | [Observed](witnesses/lemmings3-214.json) |
 | Egyptian 15: Egyptian 15 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-215.json) |
 | Egyptian 16: Egyptian 16 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-216.json) |
@@ -594,7 +594,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Egyptian 26: Egyptian 26 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-226.json) |
 | Egyptian 27: Egyptian 27 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-227.json) |
 | Egyptian 28: Egyptian 28 | 24 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-228.json) |
-| Egyptian 29: Egyptian 29 | 22 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-229.json) |
+| Egyptian 29: Egyptian 29 | 22 | 1 | — | — | — | No witness collected |
 | Egyptian 30: Egyptian 30 | 26 | 1 | 16 | — | — | [Observed](witnesses/lemmings3-230.json) |
 | Shadow 1: Shadow 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-101.json) |
 | Shadow 2: Shadow 2 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-102.json) |
@@ -602,7 +602,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Shadow 4: Shadow 4 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-104.json) |
 | Shadow 5: Shadow 5 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-105.json) |
 | Shadow 6: Shadow 6 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-106.json) |
-| Shadow 7: Shadow 7 | 21 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-107.json) |
+| Shadow 7: Shadow 7 | 21 | 1 | — | — | — | No witness collected |
 | Shadow 8: Shadow 8 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-108.json) |
 | Shadow 9: Shadow 9 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-109.json) |
 | Shadow 10: Shadow 10 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-110.json) |

@@ -66,6 +66,15 @@ See the [release evidence](ReleaseReadiness/1.9.7-build82/README.md) and
 
 ## macOS 2.0 preparation
 
+For Macintosh 2.0 build 83, the owner approved using the existing release
+classifications and documenting limits on 15 October 2026. This supersedes
+the stricter bundled-content closure prerequisite for this release only.
+Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta.
+The six deferred milestone areas retain their recorded open or partial status.
+Fresh candidate regressions, universal packaging and distribution verification
+remain required. See the [acceptance record](ReleaseReadiness/2.0-build83/acceptance.json)
+and [candidate evidence](ReleaseReadiness/2.0-build83/README.md).
+
 The owner requested macOS 2.0 journey checkpoint resume and campaign/bundle
 release readiness on 15 October 2026. Mac release acceptance is separate from
 the iOS launch gates. The new `macos-2.0` audit and packaging scope requires

@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "a5ad17961c01c4e925b76ae49a0adf7dda5709cd66be06497b0b8a9bc8c560fd",
+  "engineSourceFingerprint": "842df65a84c5598a939c8a517595d7dd8304c81e8ff5219c2a4ecea013086f1e",
   "exhaustive": false,
-  "generatedAt": "2026-10-14T11:31:10Z",
+  "generatedAt": "2026-10-15T03:19:36Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -18497,7 +18497,7 @@
       }
     },
     {
-      "bestSaved": 52,
+      "bestSaved": 59,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "1094544c5d82d3fe95d445af818e5944ac5b63185951a49ce365444526a6d380:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -18523,7 +18523,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 8,
+      "lossesInBestSolution": 1,
       "notes": [
         "The medal loss allowance is not an optimality proof."
       ],
@@ -18537,13 +18537,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 8,
+        "lost": 1,
         "path": "witnesses/lemmings2-20-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 52,
-        "sha256": "9f84c1734d11b5ca37d4c71121206bbe61f32ad07e2c5da11cf370b170e65357",
-        "ticks": 1752
+        "saved": 59,
+        "sha256": "98a77915145ea1db61a8dfa6bd982a853a0d021688271320dfa8fca7df96cdd8",
+        "ticks": 1794
       }
     },
     {
@@ -25659,11 +25659,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -25704,11 +25704,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -25749,11 +25749,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -25794,11 +25794,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -25839,11 +25839,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -25884,11 +25884,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -25929,11 +25929,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -25974,11 +25974,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26019,11 +26019,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26064,11 +26064,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26109,11 +26109,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26154,11 +26154,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26199,11 +26199,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 23,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -26244,11 +26244,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 150
       },
@@ -26289,11 +26289,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 23,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -26334,11 +26334,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -26379,11 +26379,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -26424,11 +26424,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26469,11 +26469,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -26514,11 +26514,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -26559,11 +26559,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 270
       },
@@ -26604,11 +26604,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 200
       },
@@ -26649,11 +26649,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 23,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 210
       },
@@ -26694,11 +26694,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -26739,11 +26739,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26784,11 +26784,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26829,11 +26829,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 340
       },
@@ -26874,11 +26874,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26919,11 +26919,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -26964,11 +26964,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27009,11 +27009,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27054,11 +27054,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27099,11 +27099,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27144,11 +27144,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27189,11 +27189,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 150
       },
@@ -27222,51 +27222,6 @@
       }
     },
     {
-      "bestSaved": 11,
-      "conditions": {
-        "gameID": "lemmings3",
-        "levelFingerprint": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
-        "levelID": "206",
-        "modifiers": {
-          "extras": "1",
-          "releaseDelay": "46",
-          "releaseInterval": "23",
-          "reserves": "20"
-        },
-        "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
-        "population": 21,
-        "rescueRequirement": 1,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
-        "startingSkills": {},
-        "timeLimitSeconds": 420
-      },
-      "gameID": "lemmings3",
-      "lossesInBestSolution": 0,
-      "notes": [
-        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
-      ],
-      "number": 6,
-      "population": 21,
-      "rank": "Egyptian",
-      "required": 1,
-      "status": "REPLAY_RECORD",
-      "testedCandidates": 1,
-      "title": "Egyptian 6",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/lemmings3-206.json",
-        "released": 11,
-        "retainedReserves": 10,
-        "saved": 11,
-        "sha256": "ac4b394feea0ddf4feebffc053764f6a06e474dbc469c23132c2fffa8f62d7e3",
-        "ticks": 2949
-      }
-    },
-    {
       "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
@@ -27279,11 +27234,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -27324,11 +27279,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 210
       },
@@ -27369,11 +27324,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 24,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27414,11 +27369,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27459,11 +27414,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27504,11 +27459,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27537,51 +27492,6 @@
       }
     },
     {
-      "bestSaved": 1,
-      "conditions": {
-        "gameID": "lemmings3",
-        "levelFingerprint": "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
-        "levelID": "213",
-        "modifiers": {
-          "extras": "1",
-          "releaseDelay": "51",
-          "releaseInterval": "44",
-          "reserves": "20"
-        },
-        "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
-        "population": 21,
-        "rescueRequirement": 1,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
-        "startingSkills": {},
-        "timeLimitSeconds": 180
-      },
-      "gameID": "lemmings3",
-      "lossesInBestSolution": 20,
-      "notes": [
-        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
-      ],
-      "number": 13,
-      "population": 21,
-      "rank": "Egyptian",
-      "required": 1,
-      "status": "REPLAY_RECORD",
-      "testedCandidates": 1,
-      "title": "Egyptian 13",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 20,
-        "path": "witnesses/lemmings3-213.json",
-        "released": 21,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "1985102683d3501ad4effd563115d45a71f2cf85d8f0a528f8e964bbc02483ea",
-        "ticks": 4140
-      }
-    },
-    {
       "bestSaved": 13,
       "conditions": {
         "gameID": "lemmings3",
@@ -27594,11 +27504,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 23,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 303
       },
@@ -27639,11 +27549,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 210
       },
@@ -27684,11 +27594,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 120
       },
@@ -27729,11 +27639,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 24,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -27774,11 +27684,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 28,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27819,11 +27729,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 180
       },
@@ -27864,11 +27774,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27909,11 +27819,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -27954,11 +27864,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -27999,11 +27909,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 270
       },
@@ -28044,11 +27954,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -28089,11 +27999,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 23,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28134,11 +28044,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 120
       },
@@ -28179,11 +28089,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 180
       },
@@ -28224,11 +28134,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 24,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 180
       },
@@ -28257,51 +28167,6 @@
       }
     },
     {
-      "bestSaved": 11,
-      "conditions": {
-        "gameID": "lemmings3",
-        "levelFingerprint": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
-        "levelID": "229",
-        "modifiers": {
-          "extras": "2",
-          "releaseDelay": "46",
-          "releaseInterval": "23",
-          "reserves": "20"
-        },
-        "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
-        "population": 22,
-        "rescueRequirement": 1,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
-        "startingSkills": {},
-        "timeLimitSeconds": 420
-      },
-      "gameID": "lemmings3",
-      "lossesInBestSolution": 1,
-      "notes": [
-        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
-      ],
-      "number": 29,
-      "population": 22,
-      "rank": "Egyptian",
-      "required": 1,
-      "status": "REPLAY_RECORD",
-      "testedCandidates": 1,
-      "title": "Egyptian 29",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 1,
-        "path": "witnesses/lemmings3-229.json",
-        "released": 12,
-        "retainedReserves": 10,
-        "saved": 11,
-        "sha256": "fc4eddbc9b818e2bf8aed34a275c2e8bb27f64fd705a6ccae395d5b9b318c650",
-        "ticks": 3191
-      }
-    },
-    {
       "bestSaved": 16,
       "conditions": {
         "gameID": "lemmings3",
@@ -28314,11 +28179,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 26,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -28359,11 +28224,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -28404,11 +28269,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -28449,11 +28314,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -28494,11 +28359,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -28539,11 +28404,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28584,11 +28449,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28620,51 +28485,6 @@
       "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
-        "levelFingerprint": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
-        "levelID": "107",
-        "modifiers": {
-          "extras": "1",
-          "releaseDelay": "46",
-          "releaseInterval": "23",
-          "reserves": "20"
-        },
-        "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
-        "population": 21,
-        "rescueRequirement": 1,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
-        "startingSkills": {},
-        "timeLimitSeconds": 420
-      },
-      "gameID": "lemmings3",
-      "lossesInBestSolution": 1,
-      "notes": [
-        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
-      ],
-      "number": 7,
-      "population": 21,
-      "rank": "Shadow",
-      "required": 1,
-      "status": "REPLAY_RECORD",
-      "testedCandidates": 1,
-      "title": "Shadow 7",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 1,
-        "path": "witnesses/lemmings3-107.json",
-        "released": 11,
-        "retainedReserves": 10,
-        "saved": 10,
-        "sha256": "2fd92176a69045cbab47ede18879501e0a545bc163e8144f4b4ac251c9986103",
-        "ticks": 9660
-      }
-    },
-    {
-      "bestSaved": 10,
-      "conditions": {
-        "gameID": "lemmings3",
         "levelFingerprint": "0ce2317ff01990c6072fc502fdc1ff0f89f46b6eefab68941b8fe9aa3e987496:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
         "levelID": "108",
         "modifiers": {
@@ -28674,11 +28494,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28719,11 +28539,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 180
       },
@@ -28764,11 +28584,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -28809,11 +28629,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 200
       },
@@ -28854,11 +28674,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28899,11 +28719,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -28927,7 +28747,7 @@
         "released": 10,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "8604ef0b6f667f3f10dad521a1d7538f4aacf397a6132f9214e14c25b1078547",
+        "sha256": "aab438365fd97ed3722b2d5aeda6dd7bf032dc786e220e4917a99bb70d4f8935",
         "ticks": 443
       }
     },
@@ -28944,11 +28764,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 150
       },
@@ -28989,11 +28809,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 140
       },
@@ -29034,11 +28854,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 180
       },
@@ -29079,11 +28899,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 280
       },
@@ -29124,11 +28944,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 28,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 150
       },
@@ -29169,11 +28989,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 24,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -29214,11 +29034,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -29259,11 +29079,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -29304,11 +29124,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 60
       },
@@ -29349,11 +29169,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },
@@ -29394,11 +29214,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -29439,11 +29259,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -29484,11 +29304,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -29529,11 +29349,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 20,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 420
       },
@@ -29574,11 +29394,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 22,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 240
       },
@@ -29619,11 +29439,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 300
       },
@@ -29664,11 +29484,11 @@
           "reserves": "20"
         },
         "packID": "chronicles",
-        "physicsMode": "l3-native-preview-v1",
+        "physicsMode": "l3-native-preview-v2",
         "population": 21,
         "rescueRequirement": 1,
         "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "l3-native-preview-v1",
+        "rulesetVersion": "l3-native-preview-v2",
         "startingSkills": {},
         "timeLimitSeconds": 360
       },

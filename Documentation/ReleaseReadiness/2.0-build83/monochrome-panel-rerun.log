@@ -1,0 +1,114 @@
+UI test windows: offscreen; audio: muted
+warning: '--skip-update' option is deprecated and will be removed in a future release
+Building for debugging...
+[Computing dependencies]
+[1 / 6] LemmingsAppCore
+[2 / 6] LemmingsLocalTests-product
+[4 / 8] LemmingsLocalTests-product
+[9 / 11] LemmingsLocalTests-product
+[11 / 11] LemmingsLocalTests-product
+Build complete! (3.38 sec.)
+Test Suite 'Selected tests' started at 2026-10-15 13:23:52.482.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-15 13:23:52.484.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-15 13:23:52.485.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:52.485.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+Test Suite 'Selected tests' started at 2026-10-15 13:23:52.615.
+Test Suite 'LemmingsTVCoreTests.xctest' started at 2026-10-15 13:23:52.616.
+Test Suite 'LemmingsTVCoreTests.xctest' passed at 2026-10-15 13:23:52.616.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:52.617.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-15 13:23:52.733.
+Test Suite 'LemmingsMobileUITests.xctest' started at 2026-10-15 13:23:52.734.
+Test Suite 'LemmingsMobileUITests.xctest' passed at 2026-10-15 13:23:52.734.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:52.734.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-15 13:23:52.855.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-15 13:23:52.856.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-15 13:23:52.856.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:52.856.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-15 13:23:52.940.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-15 13:23:52.941.
+Test Suite 'CursorCameraTests' started at 2026-10-15 13:23:52.941.
+Test Case '-[LemmingsLocalTests.CursorCameraTests testAnchoredZoomCanReachEveryLevelEdgeAtEachEngineScale]' started.
+Test Case '-[LemmingsLocalTests.CursorCameraTests testAnchoredZoomCanReachEveryLevelEdgeAtEachEngineScale]' passed (0.002 seconds).
+Test Case '-[LemmingsLocalTests.CursorCameraTests testClassicRenderedZoomScrollsVerticallyAndKeepsPointerAtInput]' started.
+Test Case '-[LemmingsLocalTests.CursorCameraTests testClassicRenderedZoomScrollsVerticallyAndKeepsPointerAtInput]' passed (0.163 seconds).
+Test Suite 'CursorCameraTests' passed at 2026-10-15 13:23:53.107.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.165 (0.166) seconds
+Test Suite 'FooterNavigationTests' started at 2026-10-15 13:23:53.107.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testBackKeepsItsCornerAsActionsAndColumnsChange]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testBackKeepsItsCornerAsActionsAndColumnsChange]' passed (1.601 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testDisabledGameplayControllersStillOperateMenus]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testDisabledGameplayControllersStillOperateMenus]' passed (0.093 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testMacMessagesKeepBackFixedAndRetainKeyboardAndMouseTargets]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testMacMessagesKeepBackFixedAndRetainKeyboardAndMouseTargets]' passed (0.016 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testNativeLossHasBackMenuAndWorkingRetryAcrossAllGames]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testNativeLossHasBackMenuAndWorkingRetryAcrossAllGames]' passed (0.911 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testRenderedColumnFooters]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testRenderedColumnFooters]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testReplayAndMovieReturnControlsLeadTheirRows]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testReplayAndMovieReturnControlsLeadTheirRows]' passed (0.009 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testRequiredChoicesHaveSafeHardwareBackAndGameSettingsHaveNoUnwiredRoutes]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testRequiredChoicesHaveSafeHardwareBackAndGameSettingsHaveNoUnwiredRoutes]' passed (0.001 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testResultFailureNavigationRendersAndKeepsBackAndRetryInTheirCorners]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testResultFailureNavigationRendersAndKeepsBackAndRetryInTheirCorners]' passed (0.649 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testResultHomeAndPinnedPauseUseTheSameNavigationRule]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testResultHomeAndPinnedPauseUseTheSameNavigationRule]' passed (0.022 seconds).
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testVisibleBackGetsADismissActionAndHiddenReadyKeepsItsBoundary]' started.
+Test Case '-[LemmingsLocalTests.FooterNavigationTests testVisibleBackGetsADismissActionAndHiddenReadyKeepsItsBoundary]' passed (0.011 seconds).
+Test Suite 'FooterNavigationTests' passed at 2026-10-15 13:23:56.421.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 3.313 (3.314) seconds
+Test Suite 'MacMonochromeUITests' started at 2026-10-15 13:23:56.421.
+Test Case '-[LemmingsLocalTests.MacMonochromeUITests testArtworkChoiceAndRenderedGameplay]' started.
+/Users/veland/Lemmings/.build/release-2.0-current/source/Sources/LemmingsLocal/GameScreen.swift:181: warning: -[LemmingsLocalTests.MacMonochromeUITests testArtworkChoiceAndRenderedGameplay] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.MacMonochromeUITests testArtworkChoiceAndRenderedGameplay]' passed (3.162 seconds).
+Test Suite 'MacMonochromeUITests' passed at 2026-10-15 13:23:59.582.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.162 (3.162) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-15 13:23:59.582.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 6.640 (6.641) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:59.583.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 6.640 (6.643) seconds
+Test Suite 'Selected tests' started at 2026-10-15 13:23:59.803.
+Test Suite 'LemmingsAppCoreTests.xctest' started at 2026-10-15 13:23:59.804.
+Test Suite 'LemmingsAppCoreTests.xctest' passed at 2026-10-15 13:23:59.804.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-15 13:23:59.805.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MacMonochromeTests started.
+􀟈  Suite MacMonochromeBackpackTests started.
+􀟈  Test allPosesKeepForegroundAndBinaryPatterns() started.
+􀟈  Test fallbackDitherKeepsMasksAndAuthoredBlackAndWhite() started.
+􀟈  Test artworkChoiceRequiresInstalledBanksAndSurvivesSaving() started.
+􀟈  Test suppliedBanksKeepBinaryPixelsAndEveryAnimation() started.
+􀟈  Test terrainAndObjectsCoverEachCampaignStyle() started.
+􁁛  Test fallbackDitherKeepsMasksAndAuthoredBlackAndWhite() passed after 0.001 seconds.
+􁁛  Test artworkChoiceRequiresInstalledBanksAndSurvivesSaving() passed after 0.003 seconds.
+􁁛  Test suppliedBanksKeepBinaryPixelsAndEveryAnimation() passed after 1.613 seconds.
+􁁛  Test allPosesKeepForegroundAndBinaryPatterns() passed after 2.520 seconds.
+􁁛  Suite MacMonochromeBackpackTests passed after 2.520 seconds.
+􁁛  Test terrainAndObjectsCoverEachCampaignStyle() passed after 7.463 seconds.
+􁁛  Suite MacMonochromeTests passed after 7.463 seconds.
+􁁛  Test run with 5 tests in 2 suites passed after 7.463 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCursorCameraTests started.
+􀟈  Test centreOutsideLetterboxAndInvalidTimeDoNotScroll() started.
+􀟈  Test edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􀟈  Test case passing 1 argument aspect → 1.2 to edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􀟈  Test case passing 1 argument aspect → 1.0 to edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􁁛  Test centreOutsideLetterboxAndInvalidTimeDoNotScroll() passed after 0.001 seconds.
+􁁛  Test edgesScrollBothAxesAndRespectLevelBounds(aspect:) with 2 test cases passed after 0.001 seconds.
+􁁛  Suite MobileCursorCameraTests passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.

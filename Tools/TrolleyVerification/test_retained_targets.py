@@ -3,6 +3,26 @@ from catalogue import require_retained_targets
 
 
 class RetainedTargetsTests(unittest.TestCase):
+    def test_explicit_ruleset_transition_retires_only_old_rules(self):
+        change = [{"gameIDs": ["lemmings3"],
+                   "rulesetTransition": {"from": "old", "to": "new"}}]
+        def row(game, version, saved):
+            return {"conditions": {"gameID": game, "levelID": "1",
+                                   "levelFingerprint": "unchanged", "rulesetVersion": version},
+                    "witness": {"saved": saved}, "title": "Example"}
+        previous = row("lemmings3", "old", 50)
+        require_retained_targets([row("lemmings3", "new", 1)], [previous], change)
+        unknown = row("lemmings3", "new", 0)
+        unknown["witness"] = None
+        require_retained_targets([unknown], [previous], change)
+        for current in [[], [row("lemmings3", "old", 1)], [row("lemmings3", "future", 1)],
+                        [row("lemmings2", "new", 1)]]:
+            with self.assertRaises(ValueError):
+                require_retained_targets(current, [previous], change)
+        with self.assertRaises(ValueError):
+            require_retained_targets([row("lemmings2", "new", 1)],
+                                     [row("lemmings2", "old", 50)], change)
+
     def test_missing_and_lower_targets_fail(self):
         original = {"conditions": {"levelID": "level-1"}, "witness": {"saved": 50}, "title": "Example"}
         require_retained_targets([original], [original])

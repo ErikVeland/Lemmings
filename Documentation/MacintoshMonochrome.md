@@ -29,8 +29,10 @@ use ordered monochrome dithering. Original black and white pixels remain exact.
 Xmas '91 and Holiday '93 use the same later seasonal artwork families as the
 existing colour option. Their edition-specific graphics are not established.
 
-Menu lettering and shared stone controls retain the shipped colour interface.
-The selection, pointer and optional HD effects retain their selected settings.
+The Classic gameplay panel uses monochrome stone, bitmap lettering and control
+symbols. The selected skill inverts its stone background. Main menu lettering
+retains the shipped colour interface. The selection, pointer and optional HD
+effects retain their selected settings.
 The existing **Show skill backpacks** preference also applies to monochrome
 sprites. Climbers use diagonal dithering, Floaters use horizontal stripes, and
 lemmings with both skills use a checker pattern. All marker pixels remain black
