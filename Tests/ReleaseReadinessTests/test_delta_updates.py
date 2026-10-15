@@ -8,7 +8,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "Tools/ReleaseReadiness"))
-from automatic_updates import SPARKLE_NAMESPACE as NS, validate_appcast
+from automatic_updates import SPARKLE_NAMESPACE as NS, validate_appcast, validate_delta_coverage
 from delta_updates import delta_assets, prepare_base, preserve_published_items, normalize_delta_names
 
 
@@ -72,8 +72,89 @@ class DeltaUpdateTests(unittest.TestCase):
 
     def test_missing_delta_from_latest_shipped_build_stops_publication(self):
         self.write_feed(**{f"{{{NS}}}deltaFrom": "74"})
-        with self.assertRaisesRegex(ValueError, "previous shipped build 75"):
+        with self.assertRaisesRegex(ValueError, "recent shipped builds: 75"):
             delta_assets(self.feed, 76, self.updates)
+
+    def add_base(self, build):
+        archive = self.root / f".build/release-{build}/updates/base{build}.zip"
+        archive.parent.mkdir(parents=True)
+        self.zip(archive, build)
+        tree = ET.parse(self.feed)
+        item = ET.SubElement(tree.find("channel"), "item")
+        ET.SubElement(item, f"{{{NS}}}version").text = str(build)
+        ET.SubElement(item, f"{{{NS}}}shortVersionString").text = "1.8"
+        ET.SubElement(item, "enclosure", {
+            "url": f"https://example.invalid/{archive.name}", "length": str(archive.stat().st_size),
+            f"{{{NS}}}edSignature": "signed"})
+        tree.write(self.feed)
+        return archive
+
+    def add_delta(self, build):
+        patch = self.updates / f"76-from{build}.delta"
+        patch.write_bytes(b"patch")
+        tree = ET.parse(self.feed)
+        deltas = tree.find(f"./channel/item/{{{NS}}}deltas")
+        ET.SubElement(deltas, "enclosure", {
+            "url": f"https://example.invalid/{patch.name}", "length": "5",
+            f"{{{NS}}}edSignature": "signed", f"{{{NS}}}deltaFrom": str(build)})
+        tree.write(self.feed)
+        return patch
+
+    def test_stages_five_recent_releases_despite_build_gaps_and_feed_order(self):
+        archives = [self.add_base(build) for build in (60, 70, 65, 73, 68)]
+        prepare_base(self.root, self.updates, self.feed)
+        self.assertTrue((self.updates / "base.zip").is_file())
+        for archive in archives:
+            staged = self.updates / archive.name
+            if archive.name == "base60.zip":
+                self.assertFalse(staged.exists())
+            else:
+                self.assertEqual(staged.read_bytes(), archive.read_bytes())
+
+    def test_missing_skipped_version_archive_stops_generation(self):
+        self.add_base(73).unlink()
+        with self.assertRaisesRegex(ValueError, "Missing shipped build 73 archive"):
+            prepare_base(self.root, self.updates, self.feed)
+
+    def test_explicit_latest_archive_does_not_replace_older_bases(self):
+        older = self.add_base(73)
+        explicit = self.root / "external/base.zip"
+        explicit.parent.mkdir()
+        explicit.write_bytes(self.base.read_bytes())
+        self.base.unlink()
+        prepare_base(self.root, self.updates, self.feed, explicit)
+        self.assertEqual((self.updates / "base.zip").read_bytes(), explicit.read_bytes())
+        self.assertEqual((self.updates / older.name).read_bytes(), older.read_bytes())
+
+    def test_latest_only_delta_cannot_publish_when_users_can_skip_a_version(self):
+        self.add_base(73)
+        with self.assertRaisesRegex(ValueError, "recent shipped builds: 73"):
+            delta_assets(self.feed, 76, self.updates)
+        with self.assertRaisesRegex(ValueError, "recent shipped builds: 73"):
+            validate_appcast(self.feed, require_delta_coverage=True)
+
+    def test_requires_all_five_recent_deltas_but_does_not_rewrite_historical_items(self):
+        for build in (60, 70, 65, 73, 68):
+            self.add_base(build)
+        patches = [self.patch] + [self.add_delta(build) for build in (73, 70, 68)]
+        with self.assertRaisesRegex(ValueError, "recent shipped builds: 65"):
+            delta_assets(self.feed, 76, self.updates)
+        patches.append(self.add_delta(65))
+        self.assertEqual(delta_assets(self.feed, 76, self.updates), patches)
+        self.assertEqual(validate_appcast(self.feed, require_delta_coverage=True), 7)
+        # Historical entries can retain their original, smaller delta coverage.
+        items = ET.parse(self.feed).findall("./channel/item")
+        validate_delta_coverage(items, 76)
+
+    def test_first_release_needs_no_delta_base(self):
+        tree = ET.parse(self.feed)
+        channel = tree.find("channel")
+        channel.remove(channel[1])
+        channel[0].remove(channel[0].find(f"{{{NS}}}deltas"))
+        tree.write(self.feed)
+        prepare_base(self.root, self.updates, self.feed)
+        self.assertEqual(delta_assets(self.feed, 76, self.updates), [])
+        self.assertEqual(validate_appcast(self.feed, require_delta_coverage=True), 1)
 
     def test_missing_delta_file_stops_publication(self):
         self.patch.unlink()

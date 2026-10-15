@@ -76,10 +76,13 @@ soundtrack downloads at any time.
 
 1. Freeze the source and assets.
 2. Run `Scripts/build-and-notarise.sh` without publication.
-   Keep the previous shipped full ZIP available. `generate-appcast.sh` finds it
-   in the update directory or `.build/release-*/updates`. For another location,
-   set `PREVIOUS_UPDATE_ZIP` to that ZIP. Generation stops if the previous published
-   build is unavailable. Sparkle generates and signs the delta beside the full ZIP.
+   Keep full ZIPs for the five most recent published builds available.
+   `generate-appcast.sh` stages them from the update directory or
+   `.build/release-*/updates`. Put archives from other locations in the update
+   directory. `PREVIOUS_UPDATE_ZIP` can override the latest base's location.
+   Generation stops if any required base is unavailable. Sparkle generates and
+   signs a direct delta from each base to the new build beside the full ZIP.
+   Use all available bases when fewer than five releases precede the new build.
 3. Check the printed ZIPs, stamped notes, signed appcast and release gates.
 4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT`, `RELEASE_NOTES_PATH`
    and `DOWNLOAD_ZIP` from the package run. `DOWNLOAD_ZIP` is the notarised slim
@@ -88,7 +91,10 @@ soundtrack downloads at any time.
 6. For public tests, create a GitHub prerelease with the exact tag and frozen commit.
 7. Publish both ZIPs and every delta referenced by the new item before updating
    `main/appcast.xml`. The publication script checks the delta files and sizes,
-   requires a delta from the previous published build, and uploads those assets.
+   requires deltas from the five most recent published builds, and uploads those assets.
+   The data-independent release check also rejects missing recent bases in the
+   newest feed entry. Sparkle does not chain intermediate patches, so retaining
+   older feed entries alone does not cover users who skip versions.
    Generation preserves earlier feed entries, download URLs, signatures and notes.
    Delta filenames use ASCII letters, digits and hyphens so GitHub retains them.
 
