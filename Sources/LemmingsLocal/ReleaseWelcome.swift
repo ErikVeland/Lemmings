@@ -16,6 +16,8 @@ import NxlvKit
         (L10n.text("Pause and quick controls"), L10n.text("Pause, speed reset and frame stepping follow the selected control settings across Classic, The Tribes and Chronicles. Gameplay menus preserve pause and Hot Seat Ready states.")),
         (L10n.text("Rewards earned"), L10n.text("Results show newly earned Zooms, Superzooms and Level Skips together. Open Rewards earned to review the reasons without advancing the level or changing the player.")),
         (L10n.text("Ghost solution controls"), L10n.text("The Classic solution selector uses the system pointer across its buttons, checkbox and gaps. Returning to the playfield restores the gameplay cursor.")),
+        (L10n.text("Sequel targeting"), L10n.text("The Tribes and Chronicles check skill eligibility without copying the whole runtime. Existing campaign and Beta classifications remain unchanged.")),
+        (L10n.text("Localisation and content"), L10n.text("Updated interface text and corrected bundled level counts accompany the existing language packs. Human language review and remaining community-style dependencies stay open.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ]
     private let defaults: UserDefaults
