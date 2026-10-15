@@ -1,14 +1,9 @@
 {
   "images" : [
     {
-      "filename" : "Logo-1x.png",
+      "filename" : "Depth-1x.png",
       "idiom" : "tv",
       "scale" : "1x"
-    },
-    {
-      "filename" : "Logo-2x.png",
-      "idiom" : "tv",
-      "scale" : "2x"
     }
   ],
   "info" : {

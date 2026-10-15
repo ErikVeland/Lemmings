@@ -1,0 +1,18 @@
+{
+  "images" : [
+    {
+      "filename" : "Depth-1x.png",
+      "idiom" : "tv",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Depth-2x.png",
+      "idiom" : "tv",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "author" : "academy.glasscode.lemmings.tvos",
+    "version" : 1
+  }
+}

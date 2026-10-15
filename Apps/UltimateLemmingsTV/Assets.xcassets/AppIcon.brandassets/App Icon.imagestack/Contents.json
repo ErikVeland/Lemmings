@@ -5,10 +5,16 @@
   },
   "layers" : [
     {
-      "filename" : "Logo.imagestacklayer"
+      "filename" : "Lemming.imagestacklayer"
     },
     {
-      "filename" : "Lemming.imagestacklayer"
+      "filename" : "Ultimate.imagestacklayer"
+    },
+    {
+      "filename" : "Lemmings.imagestacklayer"
+    },
+    {
+      "filename" : "Depth.imagestacklayer"
     },
     {
       "filename" : "Background.imagestacklayer"

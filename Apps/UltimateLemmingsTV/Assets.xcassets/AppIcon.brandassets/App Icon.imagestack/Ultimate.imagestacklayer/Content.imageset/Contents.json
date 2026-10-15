@@ -1,9 +1,14 @@
 {
   "images" : [
     {
-      "filename" : "Logo-1x.png",
+      "filename" : "Ultimate-1x.png",
       "idiom" : "tv",
       "scale" : "1x"
+    },
+    {
+      "filename" : "Ultimate-2x.png",
+      "idiom" : "tv",
+      "scale" : "2x"
     }
   ],
   "info" : {
