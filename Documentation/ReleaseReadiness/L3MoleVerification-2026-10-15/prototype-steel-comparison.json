@@ -1,0 +1,444 @@
+{
+  "status": "isolated prototype; production unchanged",
+  "sampleIntervalTicks": 4,
+  "firstTick": 36,
+  "lastTick": 244,
+  "samplesCompared": 53,
+  "coordinateDifferences": 0,
+  "baselineRuntimeSHA256": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
+  "prototypeRuntimeSHA256": "476d05ac6501f628b20f318f0e08f5a53bad9b7d1284119df0959da2d824ab2b",
+  "prototypeLibrarySHA256": "7cf1e6afababe54f94b6c87a93c61290eaf42ba228c24bef1e7194fe7431ddbd",
+  "limitations": [
+    "One controlled steel case",
+    "Sampled positions only; full excavation mask unverified",
+    "Player-built brick trigger unverified",
+    "Transition out of terrain, water and destruction unverified",
+    "Full production module build and regression tests still required"
+  ],
+  "samples": [
+    {
+      "tick": 36,
+      "nativeX": 190,
+      "nativeY": 113,
+      "sourceX": 190,
+      "sourceY": 113,
+      "matches": true
+    },
+    {
+      "tick": 40,
+      "nativeX": 182,
+      "nativeY": 117,
+      "sourceX": 182,
+      "sourceY": 117,
+      "matches": true
+    },
+    {
+      "tick": 44,
+      "nativeX": 174,
+      "nativeY": 121,
+      "sourceX": 174,
+      "sourceY": 121,
+      "matches": true
+    },
+    {
+      "tick": 48,
+      "nativeX": 166,
+      "nativeY": 125,
+      "sourceX": 166,
+      "sourceY": 125,
+      "matches": true
+    },
+    {
+      "tick": 52,
+      "nativeX": 158,
+      "nativeY": 129,
+      "sourceX": 158,
+      "sourceY": 129,
+      "matches": true
+    },
+    {
+      "tick": 56,
+      "nativeX": 150,
+      "nativeY": 133,
+      "sourceX": 150,
+      "sourceY": 133,
+      "matches": true
+    },
+    {
+      "tick": 60,
+      "nativeX": 142,
+      "nativeY": 137,
+      "sourceX": 142,
+      "sourceY": 137,
+      "matches": true
+    },
+    {
+      "tick": 64,
+      "nativeX": 134,
+      "nativeY": 141,
+      "sourceX": 134,
+      "sourceY": 141,
+      "matches": true
+    },
+    {
+      "tick": 68,
+      "nativeX": 126,
+      "nativeY": 145,
+      "sourceX": 126,
+      "sourceY": 145,
+      "matches": true
+    },
+    {
+      "tick": 72,
+      "nativeX": 118,
+      "nativeY": 149,
+      "sourceX": 118,
+      "sourceY": 149,
+      "matches": true
+    },
+    {
+      "tick": 76,
+      "nativeX": 110,
+      "nativeY": 153,
+      "sourceX": 110,
+      "sourceY": 153,
+      "matches": true
+    },
+    {
+      "tick": 80,
+      "nativeX": 102,
+      "nativeY": 157,
+      "sourceX": 102,
+      "sourceY": 157,
+      "matches": true
+    },
+    {
+      "tick": 84,
+      "nativeX": 94,
+      "nativeY": 161,
+      "sourceX": 94,
+      "sourceY": 161,
+      "matches": true
+    },
+    {
+      "tick": 88,
+      "nativeX": 86,
+      "nativeY": 165,
+      "sourceX": 86,
+      "sourceY": 165,
+      "matches": true
+    },
+    {
+      "tick": 92,
+      "nativeX": 78,
+      "nativeY": 169,
+      "sourceX": 78,
+      "sourceY": 169,
+      "matches": true
+    },
+    {
+      "tick": 96,
+      "nativeX": 70,
+      "nativeY": 173,
+      "sourceX": 70,
+      "sourceY": 173,
+      "matches": true
+    },
+    {
+      "tick": 100,
+      "nativeX": 62,
+      "nativeY": 175,
+      "sourceX": 62,
+      "sourceY": 175,
+      "matches": true
+    },
+    {
+      "tick": 104,
+      "nativeX": 54,
+      "nativeY": 171,
+      "sourceX": 54,
+      "sourceY": 171,
+      "matches": true
+    },
+    {
+      "tick": 108,
+      "nativeX": 46,
+      "nativeY": 167,
+      "sourceX": 46,
+      "sourceY": 167,
+      "matches": true
+    },
+    {
+      "tick": 112,
+      "nativeX": 38,
+      "nativeY": 163,
+      "sourceX": 38,
+      "sourceY": 163,
+      "matches": true
+    },
+    {
+      "tick": 116,
+      "nativeX": 30,
+      "nativeY": 159,
+      "sourceX": 30,
+      "sourceY": 159,
+      "matches": true
+    },
+    {
+      "tick": 120,
+      "nativeX": 26,
+      "nativeY": 155,
+      "sourceX": 26,
+      "sourceY": 155,
+      "matches": true
+    },
+    {
+      "tick": 124,
+      "nativeX": 34,
+      "nativeY": 151,
+      "sourceX": 34,
+      "sourceY": 151,
+      "matches": true
+    },
+    {
+      "tick": 128,
+      "nativeX": 42,
+      "nativeY": 147,
+      "sourceX": 42,
+      "sourceY": 147,
+      "matches": true
+    },
+    {
+      "tick": 132,
+      "nativeX": 50,
+      "nativeY": 143,
+      "sourceX": 50,
+      "sourceY": 143,
+      "matches": true
+    },
+    {
+      "tick": 136,
+      "nativeX": 58,
+      "nativeY": 139,
+      "sourceX": 58,
+      "sourceY": 139,
+      "matches": true
+    },
+    {
+      "tick": 140,
+      "nativeX": 66,
+      "nativeY": 135,
+      "sourceX": 66,
+      "sourceY": 135,
+      "matches": true
+    },
+    {
+      "tick": 144,
+      "nativeX": 74,
+      "nativeY": 131,
+      "sourceX": 74,
+      "sourceY": 131,
+      "matches": true
+    },
+    {
+      "tick": 148,
+      "nativeX": 82,
+      "nativeY": 133,
+      "sourceX": 82,
+      "sourceY": 133,
+      "matches": true
+    },
+    {
+      "tick": 152,
+      "nativeX": 90,
+      "nativeY": 137,
+      "sourceX": 90,
+      "sourceY": 137,
+      "matches": true
+    },
+    {
+      "tick": 156,
+      "nativeX": 98,
+      "nativeY": 141,
+      "sourceX": 98,
+      "sourceY": 141,
+      "matches": true
+    },
+    {
+      "tick": 160,
+      "nativeX": 106,
+      "nativeY": 145,
+      "sourceX": 106,
+      "sourceY": 145,
+      "matches": true
+    },
+    {
+      "tick": 164,
+      "nativeX": 114,
+      "nativeY": 149,
+      "sourceX": 114,
+      "sourceY": 149,
+      "matches": true
+    },
+    {
+      "tick": 168,
+      "nativeX": 122,
+      "nativeY": 153,
+      "sourceX": 122,
+      "sourceY": 153,
+      "matches": true
+    },
+    {
+      "tick": 172,
+      "nativeX": 130,
+      "nativeY": 157,
+      "sourceX": 130,
+      "sourceY": 157,
+      "matches": true
+    },
+    {
+      "tick": 176,
+      "nativeX": 138,
+      "nativeY": 161,
+      "sourceX": 138,
+      "sourceY": 161,
+      "matches": true
+    },
+    {
+      "tick": 180,
+      "nativeX": 146,
+      "nativeY": 165,
+      "sourceX": 146,
+      "sourceY": 165,
+      "matches": true
+    },
+    {
+      "tick": 184,
+      "nativeX": 154,
+      "nativeY": 169,
+      "sourceX": 154,
+      "sourceY": 169,
+      "matches": true
+    },
+    {
+      "tick": 188,
+      "nativeX": 162,
+      "nativeY": 173,
+      "sourceX": 162,
+      "sourceY": 173,
+      "matches": true
+    },
+    {
+      "tick": 192,
+      "nativeX": 170,
+      "nativeY": 177,
+      "sourceX": 170,
+      "sourceY": 177,
+      "matches": true
+    },
+    {
+      "tick": 196,
+      "nativeX": 178,
+      "nativeY": 181,
+      "sourceX": 178,
+      "sourceY": 181,
+      "matches": true
+    },
+    {
+      "tick": 200,
+      "nativeX": 186,
+      "nativeY": 185,
+      "sourceX": 186,
+      "sourceY": 185,
+      "matches": true
+    },
+    {
+      "tick": 204,
+      "nativeX": 194,
+      "nativeY": 189,
+      "sourceX": 194,
+      "sourceY": 189,
+      "matches": true
+    },
+    {
+      "tick": 208,
+      "nativeX": 202,
+      "nativeY": 191,
+      "sourceX": 202,
+      "sourceY": 191,
+      "matches": true
+    },
+    {
+      "tick": 212,
+      "nativeX": 210,
+      "nativeY": 187,
+      "sourceX": 210,
+      "sourceY": 187,
+      "matches": true
+    },
+    {
+      "tick": 216,
+      "nativeX": 218,
+      "nativeY": 183,
+      "sourceX": 218,
+      "sourceY": 183,
+      "matches": true
+    },
+    {
+      "tick": 220,
+      "nativeX": 226,
+      "nativeY": 179,
+      "sourceX": 226,
+      "sourceY": 179,
+      "matches": true
+    },
+    {
+      "tick": 224,
+      "nativeX": 234,
+      "nativeY": 175,
+      "sourceX": 234,
+      "sourceY": 175,
+      "matches": true
+    },
+    {
+      "tick": 228,
+      "nativeX": 242,
+      "nativeY": 171,
+      "sourceX": 242,
+      "sourceY": 171,
+      "matches": true
+    },
+    {
+      "tick": 232,
+      "nativeX": 250,
+      "nativeY": 167,
+      "sourceX": 250,
+      "sourceY": 167,
+      "matches": true
+    },
+    {
+      "tick": 236,
+      "nativeX": 258,
+      "nativeY": 163,
+      "sourceX": 258,
+      "sourceY": 163,
+      "matches": true
+    },
+    {
+      "tick": 240,
+      "nativeX": 266,
+      "nativeY": 159,
+      "sourceX": 266,
+      "sourceY": 159,
+      "matches": true
+    },
+    {
+      "tick": 244,
+      "nativeX": 274,
+      "nativeY": 155,
+      "sourceX": 274,
+      "sourceY": 155,
+      "matches": true
+    }
+  ]
+}

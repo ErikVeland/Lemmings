@@ -1,0 +1,84 @@
+--- a/Sources/NxlvKit/Lemmings3Runtime.swift
++++ b/Sources/NxlvKit/Lemmings3Runtime.swift
+@@ -559,7 +559,7 @@
+             var creature = creatures[index]
+             creature.age += 1; creature.cooldown = max(0, creature.cooldown - 1)
+             if creature.kind == .mole {
+-                if creature.age % 3 != 0 { moveMole(&creature) }
++                if creature.digDirection.dy != 0 || creature.age % 3 != 0 { moveMole(&creature) }
+             } else if creature.age % 2 == 0 {
+                 if creature.kind == .buzzard {
+                     let target = lemmings.filter { $0.active && ![.exiting, .drowning, .trapped].contains($0.state) }
+@@ -614,26 +614,52 @@
+         }
+     }
+     private mutating func moveMole(_ creature: inout Creature) {
+-        // Original captures show a horizontal patrol that turns when its body
+-        // would overlap more solid terrain. Mole excavation remains unverified.
+-        let direction = creature.direction
+-        let nextX = creature.x + direction * 2
+-        func overlap(at x: Int) -> Int {
+-            var count = 0
+-            for y in (creature.y - 16)..<creature.y {
+-                for cellX in (x - 4)..<(x + 4) {
+-                    if !inBounds(cellX, y) || isSolid(cellX, y) { count += 1 }
+-                }
+-            }
+-            return count
+-        }
+-        if overlap(at: nextX) > overlap(at: creature.x) {
+-            creature.direction = -direction
+-            creature.digDirection = direction > 0 ? .left : .right
+-            return
+-        }
+-        creature.x = nextX
+-        creature.digDirection = direction > 0 ? .right : .left
++        func cells(x: Int, y: Int) -> [(Int, Int)] {
++            ((y - 18)..<y).flatMap { py in ((x - 8)..<(x + 8)).map { ($0, py) } }
++        }
++        func protected(_ body: [(Int, Int)]) -> Bool {
++            body.contains { x, y in
++                guard inBounds(x, y) else { return true }
++                let i = y * configuration.width + x
++                return attributes[i] & 0x40 != 0 || configuration.backgroundAttributes[i] & 0x20 != 0 ||
++                    (attributes[i] & 0x2000 != 0 && terrainEdits[i] == true)
++            }
++        }
++        func diagonal(_ dx: Int, _ dy: Int) -> Direction {
++            dy > 0 ? (dx > 0 ? .downRight : .downLeft) : (dx > 0 ? .upRight : .upLeft)
++        }
++        if creature.digDirection.dy == 0 {
++            let groundY = creature.y + 2
++            if !isSolid(creature.x, creature.y) && isSolid(creature.x, groundY) { creature.y = groundY }
++            let nextX = creature.x + creature.direction * 2
++            let current = cells(x: creature.x, y: creature.y)
++            let next = cells(x: nextX, y: creature.y)
++            if protected(next) && !protected(current) {
++                creature.direction *= -1
++                creature.digDirection = diagonal(creature.direction, 1)
++                creature.cooldown = 11
++                return
++            } else {
++                if next.filter({ isSolid($0.0, $0.1) }).count > current.filter({ isSolid($0.0, $0.1) }).count {
++                    creature.direction *= -1
++                } else { creature.x = nextX }
++                creature.digDirection = creature.direction > 0 ? .right : .left
++                return
++            }
++        }
++        guard creature.cooldown == 0 else { return }
++        var dx = creature.digDirection.dx, dy = creature.digDirection.dy
++        if protected(cells(x: creature.x + dx * 2, y: creature.y)) { dx *= -1 }
++        if protected(cells(x: creature.x, y: creature.y + dy)) { dy *= -1 }
++        let nextX = creature.x + dx * 2, nextY = creature.y + dy
++        let next = cells(x: nextX, y: nextY)
++        creature.direction = dx; creature.digDirection = diagonal(dx, dy)
++        guard !protected(next) else { return }
++        for (x, y) in next where inBounds(x, y) && isSolid(x, y) {
++            let i = y * configuration.width + x
++            attributes[i] = configuration.backgroundAttributes[i]; terrainEdits[i] = false
++        }
++        creature.x = nextX; creature.y = nextY
+     }
+     public mutating func step() {
+         guard !isComplete else { return }

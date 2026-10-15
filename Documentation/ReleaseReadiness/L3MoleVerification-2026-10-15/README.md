@@ -48,10 +48,58 @@ at `(200,96)` and `(200,104)` to the copied temporary placements. The original
 Mole then excavates a diagonal tunnel. A static brick-object case did not show
 excavation. A lemming-built brick trigger is still unverified.
 
-The first diagonal movement segment is consistent with two horizontal pixels
-and one vertical pixel per native logic tick. This is a spatial and cadence
-comparison, not an exact original logic tick trace. Later ricochets, the full
-collision mask and the transition out of digging remain under investigation.
-A private prototype is not production runtime or route evidence.
+Read-only actor samples now identify the original logic counter, actor position
+and animation state. `original-steel-actor-trace.json` records ticks 7 through
+244; setup and actor cleanup samples are excluded. The original actor is 16
+pixels wide and 18 pixels high. Its source left/top position maps to native
+centre/feet by adding `(8,18)`.
+
+In this controlled case, patrol settles the feet from 110 to 112. Steel contact
+starts the reaction at tick 26; the first diagonal movement occurs at tick 36.
+Burrowing then moves two horizontal pixels and one vertical pixel on every
+logic tick. Ricochets reflect the obstructed axis. The Mole continues through
+its previously excavated tunnel. Stopping as soon as its body reaches empty
+cells does not match this trace.
+
+An isolated native prototype matches every fourth-tick position from tick 36
+through 244, including the ricochets and tunnel crossing. See
+`prototype-steel-comparison.json`. This proves the sampled trajectory in this
+case. It does not establish the full excavation mask, a player-built brick
+trigger, long travel outside terrain, water interactions or destruction.
+
+`mole-prototype.patch` contains the isolated proposal against the baseline
+runtime hash recorded in `baseline-provenance.json`. It has not been applied
+to production. Its full fixture audit has 393 passes and 23 failures; rebasing
+old inputs yields six winning refresh candidates, including standalone Shadow
+13. That refresh saves four and loses six, so it is not a lossless campaign
+repair. No candidate has been promoted.
 
 No Mole runtime change, route replacement or campaign closure is claimed yet.
+
+## Coordination across machines
+
+The owner confirmed on 15 October that another Codex agent is working on
+`main` on a separate machine. This chat cannot directly message that session.
+The proposed split is:
+
+- The other agent owns production Mole runtime changes and L3 route fixtures.
+- This chat owns original-engine verification, exhaustive fixture diagnostics
+  and the final gate rerun after the runtime and route repairs are available.
+
+This chat will not edit `Sources/NxlvKit/Lemmings3Runtime.swift` or either L3
+fixture directory while that work is in progress. The split is a handoff
+proposal, not a claimed acknowledgement from the other agent. The other agent
+should pull this record before further route searches: the pending source
+behaviour correction can change replay timing again.
+
+Baseline failures include Egyptian 29, not just Shadow 7 and Egyptian 6/13.
+Use `baseline-provenance.json` for all 22 exact fixture names. Refresh identity
+only when the accepted input schedule still wins twice. Regenerate the linked
+campaign evidence only after new routes pass; the prior 90-level proof applies
+to its recorded runtime, not automatically to a changed runtime.
+
+After a fresh complete NxlvKit build, run `Scripts/audit-l3-fixtures.sh`,
+`Scripts/verify-l3-completion.sh --require-all` and the full campaign gate
+specified by `Documentation/CampaignCompletion/README.md`. Retain the source
+revision and runtime hash with each result. All mechanical tests remain
+headless and muted.
