@@ -82,6 +82,18 @@ import Testing
             preferences: .init(values: ["cleared/release/lemmings": .completed([1])]))
         let transport = ProgressTransport()
         transport.cloud.files[GameCenterProgressSync.fileName(owner: cloudOwner)] = [try JSONEncoder().encode(first), try JSONEncoder().encode(other)]
+        // Check the transport boundary before the service turns errors into user-facing state.
+        var merged = first
+        do {
+            for data in transport.cloud.files[GameCenterProgressSync.fileName(owner: cloudOwner)]! {
+                let decoded = try GameProgressArchive.decode(data, owner: cloudOwner)
+                try merged.merge(decoded)
+            }
+            var restored = store.records
+            try restored.mergeCloudRecords(merged.records, profileID: owner)
+        } catch {
+            Issue.record("Cloud conflict boundary: \(String(describing: error))")
+        }
         let service = GameCenterProgressSync(store: store, defaults: storage.defaults, transport: transport)
         await service.syncNow(); await service.syncNow()
         #expect(service.state == .idle, "Conflict sync state: \(String(describing: service.state))")
