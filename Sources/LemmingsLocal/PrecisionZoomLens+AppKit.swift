@@ -46,6 +46,21 @@ struct AnimatedPrecisionZoomLens {
         transform.transformStruct = elements
         transform.concat()
     }
+
+    func clampedCamera(_ camera: CGPoint, playfield: CGRect, scaleX: CGFloat, scaleY: CGFloat,
+                       level: CGRect) -> CGPoint {
+        let first = source(playfield.origin)
+        let last = source(CGPoint(x: playfield.maxX, y: playfield.maxY))
+        return CGPoint(
+            x: CursorCamera.clampedOrigin(camera.x,
+                sourceMinimum: (first.x - playfield.minX) / scaleX,
+                sourceMaximum: (last.x - playfield.minX) / scaleX,
+                levelMinimum: level.minX, levelMaximum: level.maxX),
+            y: CursorCamera.clampedOrigin(camera.y,
+                sourceMinimum: (first.y - playfield.minY) / scaleY,
+                sourceMaximum: (last.y - playfield.minY) / scaleY,
+                levelMinimum: level.minY, levelMaximum: level.maxY))
+    }
 }
 
 @MainActor final class PrecisionZoomAnimation {

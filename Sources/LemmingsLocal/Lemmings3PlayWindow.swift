@@ -92,7 +92,7 @@ import NxlvKit
             modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
                         "reserves": String(c.total), "extras": String(c.extras.count)])
         return ArcadeLevel(id: "l3:" + hash, title: "\(campaign.tribe.title) \(campaign.index + 1)",
-            game: L10n.text("Lemmings 3"), rules: L10n.text("L3 native beta v1"),
+            game: Lemmings3Brand.current.displayName, rules: L10n.text("L3 native beta v1"),
             total: c.total + c.extras.count, required: 1, conditions: conditions)
     }
     private let warningSound = SoundEffectPlayer()
@@ -292,7 +292,7 @@ import NxlvKit
             self.warningSound.setViewport(self.canvas.soundViewport)
         }
 
-        window.title = L10n.text("Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
+        window.title = L10n.text("\(Lemmings3Brand.current.displayName) — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
         window.delegate = self; window.isReleasedWhenClosed = false
         window.minSize = NSSize(width: 850, height: 540)
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
@@ -1081,7 +1081,7 @@ import NxlvKit
                 UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey(
                     "nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
             }
-            window?.title = L10n.text("Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Beta")
+            window?.title = L10n.text("\(Lemmings3Brand.current.displayName) — \(tribe.title) \(campaign.index + 1) — Beta")
             restart()
         } catch {
             message = String(describing: error); refresh()
@@ -1118,7 +1118,7 @@ import NxlvKit
         let scene = try Lemmings3Scene(level: level, style: style, permanent: perm, temporary: temp)
         try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         campaign = proposed; initial = replacement; freshInitial = replacement; save()
-        window?.title = L10n.text("Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
+        window?.title = L10n.text("\(Lemmings3Brand.current.displayName) — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
         restart()
     }
     private func assign(x: Int, y: Int) {
@@ -1218,7 +1218,7 @@ import NxlvKit
         canvas.needsDisplay = true
     }
     private func showOriginalMovies() {
-        let page = GameMenuPage(title: L10n.text("Original movies"), subtitle: L10n.text("Lemmings 3"))
+        let page = GameMenuPage(title: L10n.text("Original movies"), subtitle: Lemmings3Brand.current.displayName)
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         for (index, movie) in OriginalMoviePlayer.Movie.allCases.enumerated() {
             page.addListAction(movie.title, at: index) { [weak self] in self?.playOriginalMovie(movie) }
@@ -1310,7 +1310,7 @@ import NxlvKit
                let entry = try? LevelPlaylistEntry(identity: .init(engine: .lemmings3,
                  packID: "chronicles-\(campaign.tribe.rawValue)", levelID: "\(campaign.index):\(levelID)"),
                  catalogueRevision: LevelCollections.catalogueRevision, sourceRevision: revision,
-                 packNameSnapshot: L10n.text("The Chronicles - \(campaign.tribe.title)"),
+                 packNameSnapshot: "\(Lemmings3Brand.current.displayName) - \(campaign.tribe.title)",
                  levelNameSnapshot: "\(campaign.tribe.title) \(campaign.index + 1)", levelNumberSnapshot: campaign.index + 1) {
                 LevelCollections.record(entry, profileID: arcadeProfileID, attemptID: arcadeRunID)
             }
@@ -1335,7 +1335,7 @@ import NxlvKit
             ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
                 level: arcadeLevel, previousID: previousAttemptID)
         }
-        runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: L10n.text("Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)"))
+        runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "\(Lemmings3Brand.current.displayName) - \(campaign.tribe.title) \(campaign.index + 1)")
         userPausedMusic = false
         playLevelMusic()
         try? music.resumeOutput(); dj.resumeOutput()
@@ -1583,7 +1583,7 @@ import NxlvKit
         let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
-        canvas.setAccessibilityLabel(L10n.text("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish."))
+        canvas.setAccessibilityLabel(L10n.text("\(Lemmings3Brand.current.displayName). \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish."))
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -2379,7 +2379,8 @@ import NxlvKit
         let transform = NSAffineTransform(); transform.translateX(by: screenOrigin.x, yBy: screenOrigin.y); transform.scale(by: zoom); transform.concat()
         NSGraphicsContext.current?.imageInterpolation = .none
         NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 320, height: 12).fill()
-        let status = L10n.text("OUT \(game.released) SAVE \(game.saved) LEFT \(game.reserve) LOST \(game.lost)")
+        let saved = "\(game.saved) \(game.saved * 100 / max(1, game.configuration.total))%"
+        let status = L10n.text("OUT \(game.released) SAVE \(saved) LEFT \(game.reserve) LOST \(game.lost)")
         art.text(menuRows == nil ? status + " " + deathCountdownText : status, x: 2, y: 3, scale: 0.65)
         if !readOnlyReplay { art.text(L10n.text("MENU"), x: 286, y: 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -2463,6 +2464,13 @@ import NxlvKit
     }
     func restoreCamera(x: CGFloat, y: CGFloat) { pan(x - cameraX, y - cameraY) }
     fileprivate func pan(_ x: CGFloat, _ y: CGFloat) {
+        if precisionLens.active {
+            let camera = precisionLens.clampedCamera(CGPoint(x: cameraX + x, y: cameraY + y),
+                playfield: playfieldRect, scaleX: zoom, scaleY: zoom,
+                level: CGRect(x: 0, y: 0, width: mapWidth, height: mapHeight))
+            cameraX = camera.x; cameraY = camera.y; needsDisplay = true
+            return
+        }
         cameraX = max(0, min(CGFloat(max(0, mapWidth - 320)), cameraX + x))
         cameraY = max(0, min(CGFloat(max(0, mapHeight - 160)), cameraY + y)); needsDisplay = true
     }

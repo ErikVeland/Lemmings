@@ -247,6 +247,16 @@ remain silent; listening acceptance requires a separate explicit request.
 
 ## Build and validation
 
+The aim cursor scrolls the camera near each playfield edge in Classic,
+Lemmings 2 and Lemmings 3. Corners scroll both axes. Scrolling continues while
+planning, with the cursor fixed and the simulation paused. The top and side
+safe-area borders retain edge scrolling. HUD targets,
+letterbox margins, menus, Ready handovers and suspended play do not scroll.
+The shared frontend and historical diagnostic frontend use the same viewport
+edge calculation. Muted headless checks cover all three engines, camera bounds
+and target geometry. Physical remote/controller edge scrolling remains a
+device check.
+
 Open `Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj` and build the
 `UltimateLemmingsTV` scheme. Classic development content uses
 `TV_LOCAL_CLASSIC_DATA_DIR`; packaged content uses `TV_BETA_CONTENT_DIR`.

@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 public struct MobileViewport: Codable, Equatable, Sendable {
     public var levelSize: MobileSize
@@ -97,6 +98,18 @@ public struct MobileViewport: Codable, Equatable, Sendable {
         origin.x -= viewDelta.x / max(0.1, zoom * pixelAspect)
         origin.y -= viewDelta.y / max(0.1, zoom)
         clamp()
+    }
+
+    /// Scrolls beneath a stationary cursor at any visible playfield edge.
+    @discardableResult public mutating func scrollAtEdge(_ point: MobilePoint, seconds: Double) -> Bool {
+        guard seconds.isFinite, seconds > 0 else { return false }
+        let frame = contentFrame
+        let velocity = CursorCamera.edgeVelocity(at: CGPoint(x: point.x, y: point.y),
+            in: CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height))
+        let previous = origin
+        let elapsed = min(0.05, seconds)
+        pan(viewDelta: .init(x: -velocity.x * elapsed, y: -velocity.y * elapsed))
+        return origin != previous
     }
 
     /// Changes scale without moving the level pixel below the gesture anchor.

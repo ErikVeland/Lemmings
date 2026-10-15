@@ -27,6 +27,28 @@ import UIKit
 }
 
 extension MobileGameViewController {
+    func advanceTVPointerScrolling(seconds: Double) {
+        guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted,
+              !isChoosingToolDirection, let point = tvPointerPoint else { return }
+        guard hud.pointerAction(at: hud.convert(point, from: view)) == nil else { return }
+        let local = playfieldView.convert(point, from: view)
+        guard !playfieldView.blockedInputFrames.contains(where: { $0.contains(local) }) else { return }
+        // Keep scrolling through the TV safe-area border, above and beside the playfield.
+        // The area below the playfield belongs to the HUD.
+        guard local.y <= playfieldView.bounds.maxY else { return }
+        let edgePoint = MobilePoint(
+            x: min(playfieldView.bounds.maxX, max(playfieldView.bounds.minX, local.x)),
+            y: max(playfieldView.bounds.minY, local.y))
+        var viewport = playfieldView.gameViewport
+        guard viewport.scrollAtEdge(edgePoint, seconds: seconds) else { return }
+        playfieldView.stopAutomaticFitting()
+        tvTargetLock.clear(); highlightedTarget = nil
+        playfieldView.gameViewport = viewport
+        ensureTVPointer()
+        highlightedTarget = previewPoint.flatMap(target)
+        renderCurrentFrame(force: true)
+    }
+
     func ensureTVPointer() {
         guard overlay.isHidden, playState.canEdit else { tvPointerView.isHidden = true; return }
         guard !view.bounds.isEmpty, !playfieldView.bounds.isEmpty else { return }

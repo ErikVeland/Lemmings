@@ -10,6 +10,8 @@ struct Viewport: Equatable {
   var zoom = 3.0
   var levelSize = CGSize(width: 1, height: 1)
   var viewSize = CGSize(width: 1, height: 1)
+  var cameraMagnification: CGFloat = 1
+  var cameraAnchor = CGPoint.zero
 
   /// Level pixels visible across the view.
   var visibleSize: CGSize {
@@ -20,6 +22,20 @@ struct Viewport: Equatable {
   var maximumScrollY: Double { max(0, levelSize.height - visibleSize.height) }
 
   mutating func clamp() {
+    if cameraMagnification > 1.0001 {
+      let first = CGPoint(x: cameraAnchor.x * (1 - 1 / cameraMagnification),
+                          y: cameraAnchor.y * (1 - 1 / cameraMagnification))
+      let offset = contentOffset
+      scrollX = CursorCamera.clampedOrigin(scrollX,
+        sourceMinimum: (first.x - offset.x) / zoom,
+        sourceMaximum: (first.x + viewSize.width / cameraMagnification - offset.x) / zoom,
+        levelMinimum: 0, levelMaximum: levelSize.width)
+      scrollY = CursorCamera.clampedOrigin(scrollY,
+        sourceMinimum: (first.y - offset.y) / zoom,
+        sourceMaximum: (first.y + viewSize.height / cameraMagnification - offset.y) / zoom,
+        levelMinimum: 0, levelMaximum: levelSize.height)
+      return
+    }
     scrollX = min(max(0, scrollX), maximumScrollX)
     scrollY = min(max(0, scrollY), maximumScrollY)
   }
@@ -441,6 +457,8 @@ struct ReticleFeedback {
         guard let self else { return }
         let delta = self.precisionLens.transition(toMagnification: magnification, at: point,
           scaleX: self.viewport.zoom, scaleY: self.viewport.zoom)
+        self.viewport.cameraMagnification = magnification
+        self.viewport.cameraAnchor = point
         self.viewport.scroll(dx: delta.x, dy: delta.y)
         self.onViewportChanged?()
         self.needsDisplay = true
@@ -1456,6 +1474,7 @@ struct ReticleFeedback {
     let logical = viewport.visibleLevelRect
     let visible = CGRect(x: logical.minX * imageScale, y: logical.minY * imageScale,
       width: logical.width * imageScale, height: logical.height * imageScale)
+      .intersection(CGRect(x: 0, y: 0, width: image.width, height: image.height))
     let crop = Self.levelCropRect(
       visible: visible, imageScale: imageScale,
       imageSize: CGSize(width: image.width, height: image.height))

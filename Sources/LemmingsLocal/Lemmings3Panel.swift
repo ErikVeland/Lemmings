@@ -62,6 +62,16 @@ import NxlvKit
         var cursor = x
         for character in text {
             defer { cursor += CGFloat(font.bitmap.advance(for: character)) * scale }
+            if character == "%" {
+                NSGraphicsContext.saveGraphicsState()
+                let transform = NSAffineTransform()
+                transform.translateX(by: cursor, yBy: y)
+                transform.scale(by: scale)
+                transform.concat()
+                GamePixelText.draw("%", in: CGRect(x: 0, y: 0, width: 8, height: 8), maxScale: 1, palette: .green)
+                NSGraphicsContext.restoreGraphicsState()
+                continue
+            }
             if character == "💀" {
                 GamePixelText.draw("💀", in: CGRect(x: cursor, y: y, width: 8 * scale, height: 8 * scale), maxScale: scale, palette: .green)
                 continue

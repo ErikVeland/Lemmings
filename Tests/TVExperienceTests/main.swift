@@ -68,6 +68,25 @@ import NxlvKit
             game.step()
             try check(content.session.snapshot.tick == pausedTick + 1, "One forward step \(index)")
             game.setCamera(.precision)
+            game.centre(entrance: true)
+            game.aim(dx: -game.pointer.x + 1, dy: -game.pointer.y + 1)
+            game.pan(dx: 100_000, dy: 100_000)
+            let edgePointer = game.pointer
+            let edgeCamera = game.viewport.origin
+            game.advancePointer(at: 100)
+            game.advancePointer(at: 100.05)
+            try check(game.viewport.origin.x < edgeCamera.x && game.viewport.origin.y < edgeCamera.y,
+                "Stationary cursor scrolls left and up while planning \(index)")
+            try check(game.pointer == edgePointer && game.session.snapshot.tick == pausedTick + 1,
+                "Edge scrolling retains pointer and paused tick \(index)")
+            let planningCamera = game.viewport.origin
+            game.advancePointer(at: 100.1, enabled: false)
+            try check(game.viewport.origin == planningCamera, "Menus block edge scrolling \(index)")
+            game.aim(dx: game.viewport.viewSize.width - game.pointer.x - 1,
+                dy: game.viewport.viewSize.height - game.pointer.y - 1)
+            game.advancePointer(at: 100.15)
+            try check(game.viewport.origin.x > planningCamera.x && game.viewport.origin.y > planningCamera.y,
+                "Stationary cursor scrolls right and down \(index)")
             let draft = try game.prepareCheckpoint()
             game.step()
             let saved = try await Task.detached { try draft.encode() }.value
@@ -82,6 +101,9 @@ import NxlvKit
                 throw Failure.check("Foreign owner accepted")
             } catch MobileSessionError.changedLevel { count += 1 }
             game.suspend(inactive: true)
+            let suspendedCamera = game.viewport.origin
+            game.advancePointer(at: 200)
+            try check(game.viewport.origin == suspendedCamera, "Suspension blocks edge scrolling \(index)")
             try check(!game.resume(), "Inactive cannot resume \(index)")
             game.becameActive(); try check(game.play.phase == .suspended, "Foreground remains paused \(index)")
             try check(game.resume(), "Explicit foreground resume \(index)")

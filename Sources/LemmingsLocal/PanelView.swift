@@ -50,7 +50,90 @@ enum PanelButton: Equatable {
   var visibleLevelRect = CGRect.zero { didSet { if oldValue != visibleLevelRect { needsDisplay = true } } }
 
   /// The original status bar, when the imported data provides it.
-  var macArtwork: ClassicMacArtwork?
+  var macArtwork: ClassicMacArtwork? {
+    didSet { cacheMacSkillImages(); cacheMonochromeRock(); needsDisplay = true }
+  }
+  private var macSkillImages: [NSImage?] = []
+  private var monochromeRock: CGImage?
+  private var monochromeRockImages: [Int: NSImage] = [:]
+  private var isMonochrome: Bool { macArtwork?.monochrome == true }
+  private var panelPalette: MacInterfaceRenderer.Palette { isMonochrome ? .monochrome : .blue }
+
+  private func cacheMonochromeRock() {
+    monochromeRock = nil
+    monochromeRockImages.removeAll()
+    guard isMonochrome, let art = macArtwork, let bank = art.bank(named: "Charset0"),
+      let source = art.frame(bank, 95), source.width >= 66, source.height >= 44,
+      let image = source.makeNSImage()?.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+    // A dark part of the original rock leaves the white skill silhouettes readable.
+    monochromeRock = image.cropping(to: CGRect(x: 38, y: 0, width: 28, height: 44))
+  }
+
+  private func rockImage(fitting size: CGSize) -> NSImage? {
+    if isMonochrome {
+      let steps = max(1, min(Int(size.width) / 14, Int(size.height) / 22))
+      if let hit = monochromeRockImages[steps] { return hit }
+      guard let monochromeRock else { return PanelGlyph.rock.monochromeImage(fitting: size) }
+      let image = NSImage(cgImage: monochromeRock, size: CGSize(width: 14 * steps, height: 22 * steps))
+      monochromeRockImages[steps] = image
+      return image
+    }
+    return usesMacStyleControls ? PanelGlyph.rock.macImage(fitting: size) : PanelGlyph.rock.image(fitting: size)
+  }
+
+  private func controlImage(_ glyph: PanelGlyph, fitting size: CGSize) -> NSImage? {
+    if isMonochrome { return glyph.monochromeImage(fitting: size) }
+    return usesMacStyleControls ? glyph.macImage(fitting: size) : glyph.image(fitting: size)
+  }
+
+  private func cacheMacSkillImages() {
+    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
+      .building, .bashing, .mining, .digging]
+    macSkillImages = poses.enumerated().map { index, pose in
+      guard let source = macArtwork?.lemming(pose: pose, left: false, tick: index == 2 ? 12 : 0),
+        let image = source.makeNSImage(),
+        let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+      // The 1-bit frames pad their rows to different widths. Centre visible pixels.
+      var left = source.width, top = source.height, right = -1, bottom = -1
+      source.rgba.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
+        for y in 0..<source.height { for x in 0..<source.width {
+          guard bytes[(y * source.width + x) * 4 + 3] > 0 else { continue }
+          left = min(left, x); right = max(right, x)
+          top = min(top, y); bottom = max(bottom, y)
+        } }
+      }
+      guard right >= left, bottom >= top,
+        let crop = bitmap.cropping(to: CGRect(x: left, y: top,
+          width: right - left + 1, height: bottom - top + 1)) else { return nil }
+      if isMonochrome {
+        // A one-pixel black edge separates the shipped sprite from white rock dots.
+        let width = crop.width + 2, height = crop.height + 2
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        source.rgba.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
+          for y in top...bottom { for x in left...right {
+            let from = (y * source.width + x) * 4
+            guard bytes[from + 3] > 0 else { continue }
+            for dy in 0...2 { for dx in 0...2 {
+              pixels[((y - top + dy) * width + x - left + dx) * 4 + 3] = 255
+            } }
+          } }
+          for y in top...bottom { for x in left...right {
+            let from = (y * source.width + x) * 4
+            guard bytes[from + 3] > 0 else { continue }
+            let to = ((y - top + 1) * width + x - left + 1) * 4
+            for channel in 0..<4 { pixels[to + channel] = bytes[from + channel] }
+          } }
+        }
+        guard let provider = CGDataProvider(data: Data(pixels) as CFData),
+          let outlined = CGImage(width: width, height: height, bitsPerComponent: 8,
+            bitsPerPixel: 32, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+        return NSImage(cgImage: outlined, size: CGSize(width: width, height: height))
+      }
+      return NSImage(cgImage: crop, size: CGSize(width: crop.width, height: crop.height))
+    }
+  }
   var usesMacStyleControls = false { didSet { needsDisplay = true } }
   var counterStyle: ClassicCounterStyle = .game { didSet { needsDisplay = true } }
   /// The release's own character set, used for every label on the bar. It
@@ -366,6 +449,12 @@ enum PanelButton: Equatable {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    let context = NSGraphicsContext.current?.cgContext
+    context?.saveGState()
+    defer { context?.restoreGState() }
+    if isMonochrome { context?.setShouldAntialias(false) }
+    timeline.monochrome = isMonochrome
+    timeline.rock = isMonochrome ? { [weak self] size in self?.rockImage(fitting: size) } : nil
     // Fill the view's own area, not the dirty rectangle. These views share one
     // window-sized backing layer, so AppKit passes a rectangle that covers the
     // whole window. A fill of that rectangle paints over the playfield above.
@@ -404,16 +493,14 @@ enum PanelButton: Equatable {
     guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
     // Match the skill sockets' bevel so the speed box reads as the same stone.
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
-      bevelPixel: max(1, panelScale / 2), backdrop: usesMacStyleControls
-        ? PanelGlyph.rock.macImage(fitting: frame.size)
-        : PanelGlyph.rock.image(fitting: frame.size),
+      bevelPixel: max(1, panelScale / 2), backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome,
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
   private func drawClassicPanel() {
     guard let panelImage else { return }
     NSGraphicsContext.current?.imageInterpolation = .none
-    if let macArtwork { drawMacPanel(macArtwork); return }
+    if macArtwork != nil { drawMacPanel(); return }
     NSImage(cgImage: panelImage, size: NSSize(width: panelImage.width, height: panelImage.height))
       .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
 
@@ -444,31 +531,38 @@ enum PanelButton: Equatable {
     outline.stroke()
   }
 
-  private func drawMacPanel(_ artwork: ClassicMacArtwork) {
-    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
-      .building, .bashing, .mining, .digging]
+  private func drawMacPanel() {
+    // All poses use the same source-pixel scale. Tools and the umbrella must
+    // fit without making their lemmings smaller than the compact poses.
+    let images = macSkillImages.compactMap { $0 }
+    let largest = CGSize(width: images.map(\.size.width).max() ?? 1,
+      height: images.map(\.size.height).max() ?? 1)
+    let fit = buttonFrames.compactMap { button, frame -> CGFloat? in
+      guard case .skill = button else { return nil }
+      let box = frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale)
+      return min(box.width / largest.width, box.height / largest.height)
+    }.min() ?? 1
+    let deviceScale = max(1, abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(
+      CGSize(width: 1, height: 0)).width ?? 1))
+    let scale = fit * deviceScale >= 1 ? floor(fit * deviceScale) / deviceScale : fit
     for (button, frame) in buttonFrames {
       let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
         || (button == .fastForward && isFastForward) || (button == .nuke && session?.canUndoNuke == true)
       drawStoneButton(frame, selected: selected)
-      if case let .skill(index) = button, let source = artwork.lemming(
-        pose: poses[index], left: false, tick: index == 2 ? 12 : 0), let image = source.makeNSImage() {
+      if case let .skill(index) = button, let image = macSkillImages[safe: index] ?? nil {
         let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 2 * panelScale,
           width: frame.width - 4 * panelScale, height: frame.height - 4 * panelScale)
-        let scale = min(box.width / image.size.width, box.height / image.size.height)
         let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-        image.draw(in: CGRect(x: box.midX - size.width / 2, y: box.maxY - size.height,
+        image.draw(in: CGRect(x: floor(box.midX - size.width / 2), y: floor(box.maxY - size.height),
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
-          fraction: 1, respectFlipped: true, hints: nil)
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         glyph.isOriginalTile,
-        let image = usesMacStyleControls ? glyph.macImage(fitting: frame.size) : glyph.image(fitting: frame.size) {
+        let image = controlImage(glyph, fitting: frame.size) {
         GameStoneButton.drawTile(image, in: frame, pixel: max(1, panelScale / 2))
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
-        let image = usesMacStyleControls ? glyph.macImage(
-          fitting: frame.insetBy(
-            dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) : glyph.image(
+        let image = controlImage(glyph,
           fitting: frame.insetBy(
             dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
@@ -487,7 +581,7 @@ enum PanelButton: Equatable {
         drawGameLabel(symbol.replacingOccurrences(of: "−", with: "-"), in: frame.insetBy(dx: 4 * panelScale, dy: 4 * panelScale))
       }
     }
-    NSColor(calibratedWhite: 0.42, alpha: 1).setStroke()
+    (isMonochrome ? NSColor.white : NSColor(calibratedWhite: 0.42, alpha: 1)).setStroke()
     NSBezierPath(rect: minimapFrame).stroke()
   }
 
@@ -495,8 +589,7 @@ enum PanelButton: Equatable {
   /// Every panel socket shows Amiga panel rock behind its glyph.
   private func drawStoneButton(_ frame: CGRect, selected: Bool) {
     GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2),
-      backdrop: usesMacStyleControls ? PanelGlyph.rock.macImage(fitting: frame.size)
-        : PanelGlyph.rock.image(fitting: frame.size))
+      backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome)
   }
 
   private func drawSkillLabels() {
@@ -532,7 +625,7 @@ enum PanelButton: Equatable {
       if macScale > 0 {
         _ = drawMacLabel(name, centeredIn: box, scale: macScale, highlighted: key)
       } else {
-        GamePixelText.draw(name, in: box, maxScale: pixelScale, highlighted: key)
+        GamePixelText.draw(name, in: box, maxScale: pixelScale, highlighted: key, palette: panelPalette)
       }
       if let key, !name.contains(key) {
         let badge = CGRect(x: frame.maxX - 6 * panelScale, y: frame.minY + 2 * panelScale,
@@ -568,10 +661,10 @@ enum PanelButton: Equatable {
         width: frame.width, height: 9 * panelScale)
       NSColor.black.setFill()
       box.fill()
-      if counterStyle == .macintosh,
+      if !isMonochrome, counterStyle == .macintosh,
         (macInterface ?? GameMenuArtwork.renderer())?.drawCounter(value, in: box, panelScale: panelScale) == true { continue }
       if drawMacLabel(value, centeredIn: box) { continue }
-      GamePixelText.draw(value, in: box)
+      GamePixelText.draw(value, in: box, palette: panelPalette)
     }
   }
 
@@ -662,9 +755,9 @@ enum PanelButton: Equatable {
       NSGraphicsContext.current?.imageInterpolation = .none
       NSImage(cgImage: terrainImage, size: levelSize).draw(
         in: CGRect(origin: origin, size: drawn), from: .zero,
-        operation: .sourceOver, fraction: 0.8, respectFlipped: true, hints: nil)
+        operation: .sourceOver, fraction: isMonochrome ? 1 : 0.8, respectFlipped: true, hints: nil)
     }
-    NSColor.systemGreen.setFill()
+    (isMonochrome ? NSColor.white : NSColor.systemGreen).setFill()
     for lemming in session.lemmings {
       let dot = CGRect(
         x: origin.x + CGFloat(lemming.x) * scale - 1,
@@ -678,7 +771,7 @@ enum PanelButton: Equatable {
       y: origin.y + visibleLevelRect.minY * scale,
       width: visibleLevelRect.width * scale,
       height: visibleLevelRect.height * scale).intersection(CGRect(origin: origin, size: drawn))
-    NSColor.white.withAlphaComponent(0.8).setStroke()
+    NSColor.white.withAlphaComponent(isMonochrome ? 1 : 0.8).setStroke()
     let outline = NSBezierPath(rect: window)
     outline.lineWidth = 1
     outline.stroke()
@@ -701,7 +794,7 @@ enum PanelButton: Equatable {
 
   /// Draws panel text in the game font, and in the pixel font only when the game font is missing a character.
   private func drawGameLabel(_ text: String, in box: CGRect, maxPixelScale: CGFloat = 3) {
-    if !drawMacLabel(text, centeredIn: box) { GamePixelText.draw(text, in: box, maxScale: maxPixelScale) }
+    if !drawMacLabel(text, centeredIn: box) { GamePixelText.draw(text, in: box, maxScale: maxPixelScale, palette: panelPalette) }
   }
 
   private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0, highlighted: Character? = nil) -> Bool {
@@ -715,13 +808,13 @@ enum PanelButton: Equatable {
     guard scale >= 1 else { return false }
     let top = box.midY - CGFloat(font.height(of: upper, scale: scale)) / 2 - CGFloat(font.verticalBounds(of: upper).top * scale)
     macInterface.drawCentered(
-      upper, face: .small, centerX: box.midX, top: top, scale: scale)
+      upper, face: .small, centerX: box.midX, top: top, scale: scale, palette: panelPalette)
     if let highlighted, let index = upper.firstIndex(of: highlighted) {
       let x = box.midX - macInterface.width(of: upper, face: .small, scale: scale) / 2
         + CGFloat(upper.distance(from: upper.startIndex, to: index) * font.cellWidth * scale)
       macInterface.draw(String(highlighted), face: .small,
         at: CGPoint(x: x, y: top),
-        scale: scale, palette: .green)
+        scale: scale, palette: isMonochrome ? .monochrome : .green)
     }
     return true
   }
@@ -731,14 +824,14 @@ enum PanelButton: Equatable {
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
     let text = gameText(statusText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text) {
-      macInterface.draw(text, face: .small, at: CGPoint(x: inset, y: y), scale: 1)
+      macInterface.draw(text, face: .small, at: CGPoint(x: inset, y: y), scale: 1, palette: panelPalette)
     } else {
       let naturalWidth = CGFloat(max(1, text.count) * 6)
       let width = statusTextWidth()
       NSGraphicsContext.saveGraphicsState()
       NSBezierPath(rect: box).addClip()
       GamePixelText.draw(text, in: CGRect(x: inset, y: y, width: width, height: 20),
-        maxScale: width / naturalWidth)
+        maxScale: width / naturalWidth, palette: panelPalette)
       NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
@@ -764,7 +857,7 @@ enum PanelButton: Equatable {
       let width = macInterface.width(of: text, face: .small, scale: 1)
       let x = bounds.width - inset - width
       guard x > inset + statusTextWidth() + 12 else { return }
-      macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
+      macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1, palette: panelPalette)
       return
     }
     // The original artwork has no Macintosh interface font. Without this the
@@ -773,7 +866,7 @@ enum PanelButton: Equatable {
     let width = CGFloat(text.count * 6)
     let x = bounds.width - inset - width
     guard x > inset + statusTextWidth() + 12 else { return }
-    GamePixelText.draw(text, in: CGRect(x: x, y: box.minY, width: width, height: box.height), maxScale: 1)
+    GamePixelText.draw(text, in: CGRect(x: x, y: box.minY, width: width, height: box.height), maxScale: 1, palette: panelPalette)
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.

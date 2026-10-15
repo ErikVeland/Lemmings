@@ -21,13 +21,13 @@ public enum SpeedPanelArt {
     /// The pixel size of the stone bevel and the label inset for a given box height.
     public static func pixel(forHeight height: CGFloat) -> CGFloat { max(1, floor(height / 24)) }
 
-    public static func drawArrow(in context: CGContext, box: CGRect, pointsRight: Bool) {
+    public static func drawArrow(in context: CGContext, box: CGRect, pointsRight: Bool, monochrome: Bool = false) {
         let step = max(1, floor(min(box.width / 8, box.height / 12)))
         let rows = pointsRight ? ["#..", ".#.", "..#", ".#.", "#.."] : ["..#", ".#.", "#..", ".#.", "..#"]
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
-        context.setFillColor(CGColor(srgbRed: 0.8007, green: 0.8956, blue: 0.6815, alpha: 1))
+        context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1) : CGColor(srgbRed: 0.8007, green: 0.8956, blue: 0.6815, alpha: 1))
         for (y, row) in rows.enumerated() {
             for (x, mark) in row.enumerated() where mark == "#" {
                 context.fill(CGRect(x: floor(box.midX - 1.5 * step) + CGFloat(x) * step,

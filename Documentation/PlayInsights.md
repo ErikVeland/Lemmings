@@ -2,7 +2,8 @@
 
 Play insights are in the macOS app menu and in **Settings > Privacy**. The page
 shows this Mac's counts without a service. Shared counts need an HTTPS service
-and an owner access token. The app does not include a service address by default.
+and an owner access token. The macOS, iOS and tvOS app configurations use
+`https://glasscode.academy/lemmings-api` by default.
 The home screen shows lemmings saved on this Mac and, when the player shares
 counts and the service responds, a shared total. A dash means the shared total
 is unavailable; it does not mean zero.
@@ -94,8 +95,9 @@ the network. Get privacy and security review before public collection.
    resets them. Update the collector before distributing an app that sends
    installation registrations. The existing database adds the new total without
    requiring player or device identifiers.
-4. Build the app with `LEMMINGS_TELEMETRY_URL=https://your-https-hostname
-   zsh Scripts/build-local-app.sh`. The build adds the URL to `Info.plist`.
+4. Use the configured service, or override it with
+   `LEMMINGS_TELEMETRY_URL=https://your-https-hostname zsh Scripts/build-local-app.sh`.
+   The build adds the override to `Info.plist`.
    Check that each release variant uses the same current source and contains the
    intended URL. Never put the owner token in the bundle.
 5. Test opt-in, opt-out, retry, win, fail, Hot Seat, soundtrack selection and
@@ -103,9 +105,22 @@ the network. Get privacy and security review before public collection.
    dashboard token rejection and the database columns before publication.
    Repeat the visible and keyboard-accessible page checks in a bundled app.
 
-Without steps 1–4, shared counts and the **Load shared** action are unavailable.
-The home screen shows the local saved count and a dash for the global total.
-No collector is deployed by this repository.
+Without a configured service address, shared counts and the **Load shared**
+action are unavailable. The home screen shows the local saved count and a dash
+for the global total. Building the app does not deploy collector updates.
+Deploy the collector separately whenever the event protocol changes.
+
+The live collector was updated on 15 October 2026 to accept
+`installation_opt_in` and return `optedInInstalls`. The previous collector
+rejected these events and omitted the total, which displayed as **N/A**.
+Source and database backups are on the host under
+`/var/backups/lemmings-telemetry/20261015T013859Z-install-counter`.
+All six collector tests passed on the host. A public HTTPS registration returned
+204 and raised the dashboard total from 0 to 1. The temporary event was then
+removed, leaving the real total at 0. Both 7-day and 30-day dashboards returned
+the install total, and the lifetime saved total remained 9,364. Updated apps
+with sharing enabled can retry pending registrations on their next launch or
+activity. Earlier installs cannot be reconstructed from daily activity totals.
 
 The event endpoint intentionally accepts fixed-schema requests without a player
 identity or secret in the app. A caller can forge counts. Proxy rate limits can
@@ -125,3 +140,7 @@ repeat consent, relaunches, opt-out and failed delivery. Offscreen checks render
 the Mac dashboard and the shared phone, tablet and TV bitmap layouts, including
 an unavailable total from an older collector. Native iOS/tvOS device acceptance
 and delivery to a deployed HTTPS collector remain separate checks.
+
+The iOS and tvOS telemetry address was added to their app configurations on
+15 October 2026. Earlier builds without that address cannot offer sharing or
+send registrations. Those installations need a new build before they can opt in.

@@ -125,6 +125,7 @@ import UIKit
     @objc private func frame(_ link: CADisplayLink) {
         input.poll(at: link.timestamp, context: context, menu: !menu.isHidden)
         guard let game else { return }
+        game.advancePointer(at: link.timestamp, enabled: menu.isHidden && !busy)
         if game.advance(at: link.timestamp) { audio.update(game) }
         if game.play.phase == .completed, resultHandledRunID != game.runID { completed(); return }
         if menu.isHidden { playfield.refresh() }
@@ -156,7 +157,7 @@ import UIKit
         case .games:
             page.title = L10n.text("Choose a game")
             page.rows = ["classic", "lemmings2", "lemmings3"].map { id in
-                .init("source." + id, id == "classic" ? L10n.text("Lemmings") : id == "lemmings2" ? L10n.text("Lemmings 2") : L10n.text("Lemmings 3"),
+                .init("source." + id, id == "classic" ? L10n.text("Lemmings") : id == "lemmings2" ? L10n.text("Lemmings 2") : Lemmings3Brand.current.displayName,
                     enabled: sources.contains(where: { $0.id == id }), primary: id == "classic")
             }
             page.subtitle = sources.isEmpty ? L10n.text("Game data unavailable") : ""

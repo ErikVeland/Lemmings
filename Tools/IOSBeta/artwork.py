@@ -48,6 +48,7 @@ def copy_into_app(source, destination):
     menu_art = destination.parent.parent / "MenuArtwork"
     menu_art.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ROOT / "Resources/MenuArtwork/ultimate.png", menu_art / "ultimate.png")
+    shutil.copyfile(ROOT / "Resources/MenuArtwork/lemmings-chronicles.pcx", menu_art / "lemmings-chronicles.pcx")
     # The Xcode option remains a single-family path; siblings carry the other releases.
     mac = Path(source).parent if source else ROOT / ".build/mac-artwork/export"
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))

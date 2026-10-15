@@ -497,6 +497,9 @@ struct MobileGameTurn {
         playfieldView.advanceVisualEffects()
         let elapsed = lastVisibleTimestamp.map { min(0.1, max(0, link.timestamp - $0)) } ?? 0
         lastVisibleTimestamp = link.timestamp
+        #if os(tvOS)
+        if !countdown.isActive { advanceTVPointerScrolling(seconds: elapsed) }
+        #endif
         if countdown.isActive {
             _ = countdown.advance(seconds: elapsed, visible: overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted && !paused)
             countdownLabel.text = countdown.number.map(String.init) ?? ""

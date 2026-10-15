@@ -130,7 +130,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .fan: return L10n.text("Fan Lemmings")
       case .neolemmix: return L10n.text("NeoLemmix")
       case .lemmings2: return L10n.text("Lemmings 2")
-      case .lemmings3: return L10n.text("Lemmings 3")
+      case .lemmings3: return Lemmings3Brand.current.displayName
       }
     }
 
@@ -946,7 +946,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "")
     recordedRoutes.target = self
     appMenu.addItem(recordedRoutes)
-    let nativeL3 = NSMenuItem(title: L10n.text("Play Lemmings 3: Chronicles Beta…"), action: #selector(chooseNativeL3), keyEquivalent: "3")
+    let nativeL3 = NSMenuItem(title: L10n.text("Play \(Lemmings3Brand.current.displayName) Beta…"), action: #selector(chooseNativeL3), keyEquivalent: "3")
     nativeL3.keyEquivalentModifierMask = [.command, .shift]
     nativeL3.target = self
     appMenu.addItem(nativeL3)
@@ -1591,7 +1591,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
-      window.title = L10n.text("Lemmings 3 — The Chronicles")
+      window.title = Lemmings3Brand.current.displayName
       window.resizeIncrements = NSSize(width: 1, height: 1)
       window.minSize = NSSize(width: 1050, height: 680)
       next.present()
@@ -3116,7 +3116,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
               expectedLevelID: level.levelID))
           return LevelCatalogueEntry(
             identity: identity,
-            packName: L10n.text("The Chronicles - \(tribe.title)"),
+            packName: "\(Lemmings3Brand.current.displayName) - \(tribe.title)",
             levelName: "\(tribe.title) \(level.selection.level + 1)",
             number: level.selection.level + 1,
             status: .beta,
@@ -3125,7 +3125,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let pack = LevelCataloguePack(
           engine: .lemmings3,
           id: packID,
-          name: "The Chronicles - \(tribe.title)",
+          name: "\(Lemmings3Brand.current.displayName) - \(tribe.title)",
           status: .beta,
           levels: tribeLevels)
         packs.append(pack)
@@ -7592,7 +7592,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let session else { return }
     var parts = [
       L10n.text("Out \(session.released)/\(session.total)"),
-      L10n.text("Home \(session.saved)/\(session.required)"),
+      L10n.text("Home \(session.saved)/\(session.required)") + " (\(session.saved * 100 / max(1, session.total))%)",
       "\(session.rateLabel) \(session.rate)",
     ]
     let deathCounter = FailureMoodDecision.deathCounter(

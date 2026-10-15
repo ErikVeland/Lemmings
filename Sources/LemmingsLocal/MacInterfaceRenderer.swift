@@ -28,7 +28,7 @@ import NxlvKit
 /// through this look like the game rather than like an application, and they
 /// stay sharp because every glyph is placed at a whole-number scale.
 @MainActor final class MacInterfaceRenderer {
-  enum Palette: String { case blue, green }
+  enum Palette: String { case blue, green, monochrome }
 
   let interface: ClassicMacUserInterface
   private let menuLogo: NSImage?
@@ -256,6 +256,14 @@ import NxlvKit
     let key = palette.rawValue + ":" + key
     if let cached = cache[key] { return cached }
     var pixels = frame.rgba
+    if palette == .monochrome {
+      pixels.withUnsafeMutableBytes { (bytes: UnsafeMutableRawBufferPointer) in
+        for i in stride(from: 0, to: bytes.count, by: 4) {
+          let value: UInt8 = max(bytes[i], bytes[i + 1], bytes[i + 2]) >= 128 ? 255 : 0
+          bytes[i] = value; bytes[i + 1] = value; bytes[i + 2] = value
+        }
+      }
+    }
     if palette == .green {
       // Rotate the blue ramp into grass green. Preserve the original bevel,
       // neutral highlights, dark outline and alpha without filtering pixels.

@@ -25,7 +25,7 @@ public enum MobileGameDataKind: String, CaseIterable, Codable, Equatable, Sendab
         switch self {
         case .classic: L10n.text("Classic Lemmings")
         case .lemmings2: L10n.text("Lemmings 2")
-        case .lemmings3: L10n.text("Lemmings 3")
+        case .lemmings3: Lemmings3Brand.current.displayName
         case .neoLemmix: L10n.text("NeoLemmix")
         }
     }

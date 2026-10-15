@@ -6,17 +6,28 @@ import NxlvKit
 public final class GameHomeLogoArt: @unchecked Sendable {
     public static let bundled = GameHomeLogoArt(resources: Bundle.main.resourceURL)
     private let images: [GameFrontEnd.GameLogo: CGImage]
+    private let chronicles: CGImage?
+    private let brand: Lemmings3Brand?
 
-    public init(resources: URL?) {
+    public init(resources: URL?, brand: Lemmings3Brand? = nil) {
         var images: [GameFrontEnd.GameLogo: CGImage] = [:]
+        var chronicles: CGImage?
         if let resources {
             images[.lemmings2] = try? Self.lemmings2(resources.appendingPathComponent("Ports/Lemm2"))
-            images[.lemmings3] = try? Self.lemmings3(resources.appendingPathComponent("Ports/LEM3CD/FRONT/LOGO.PCX"))
+            images[.lemmings3] = try? Self.lemmings3(resources.appendingPathComponent("Ports/LEM3CD/FRONT/LOGO.PCX"),
+                crop: CGRect(x: 16, y: 34, width: 288, height: 154))
+            chronicles = try? Self.lemmings3(resources.appendingPathComponent("MenuArtwork/lemmings-chronicles.pcx"),
+                crop: CGRect(x: 55, y: 61, width: 222, height: 144))
         }
         self.images = images
+        self.chronicles = chronicles
+        self.brand = brand
     }
 
-    public func image(_ game: GameFrontEnd.GameLogo) -> CGImage? { images[game] }
+    public func image(_ game: GameFrontEnd.GameLogo) -> CGImage? {
+        if game == .lemmings3, (brand ?? .current) == .chronicles { return chronicles }
+        return images[game]
+    }
 
     private static func bitmap(width: Int, height: Int, pixels: [UInt8], palette: [UInt8], transparent: UInt8? = nil) -> CGImage? {
         guard pixels.count == width * height, palette.count == 1024 else { return nil }
@@ -42,7 +53,7 @@ public final class GameHomeLogoArt: @unchecked Sendable {
             .cropping(to: CGRect(x: 74, y: 0, width: 215, height: 107))
     }
 
-    private static func lemmings3(_ url: URL) throws -> CGImage? {
+    private static func lemmings3(_ url: URL, crop: CGRect) throws -> CGImage? {
         let bytes = [UInt8](try Data(contentsOf: url))
         guard bytes.count > 897, bytes[0] == 10, bytes[2] == 1, bytes[3] == 8, bytes[65] == 1,
               bytes[bytes.count - 769] == 12 else { return nil }
@@ -70,6 +81,6 @@ public final class GameHomeLogoArt: @unchecked Sendable {
             return [bytes[offset], bytes[offset + 1], bytes[offset + 2], 255]
         }
         return bitmap(width: width, height: height, pixels: pixels, palette: palette, transparent: 0)?
-            .cropping(to: CGRect(x: 16, y: 34, width: 288, height: 154))
+            .cropping(to: crop)
     }
 }

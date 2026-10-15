@@ -44,6 +44,32 @@ enum PanelGlyph: String {
 
   @MainActor private static var cache: [String: NSImage] = [:]
 
+  /// Keep control silhouettes white over the original 1-bit rock.
+  @MainActor func monochromeImage(fitting box: CGSize) -> NSImage? {
+    let steps = max(1, art.scale(fitting: box))
+    let key = "mono-\(rawValue)-\(steps)"
+    if let hit = Self.cache[key] { return hit }
+    let width = rows.first?.count ?? 0, height = rows.count
+    guard width > 0 else { return nil }
+    var pixels = [UInt8](repeating: 0, count: width * height * 4)
+    for (y, row) in rows.enumerated() { for (x, mark) in row.enumerated() {
+      guard let colour = palette[mark] else { continue }
+      if isOriginalTile && self != .rock && "9abcde".contains(mark) { continue }
+      let p = (y * width + x) * 4
+      let white = self == .pause || !isOriginalTile
+      pixels[p..<p + 4] = [white ? 255 : colour.0, white ? 255 : colour.1, white ? 255 : colour.2, 255]
+    } }
+    let rgba = ClassicMacScene.monochromeRGBA(Data(pixels), width: width)
+    guard let provider = CGDataProvider(data: rgba as CFData),
+      let bitmap = CGImage(width: width, height: height, bitsPerComponent: 8,
+        bitsPerPixel: 32, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+        provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+    let image = NSImage(cgImage: bitmap, size: CGSize(width: pixelSize.width * steps, height: height * steps))
+    Self.cache[key] = image
+    return image
+  }
+
   /**
    * Recreates the panel art at Macintosh scale without changing its logical size.
    */
@@ -184,17 +210,17 @@ enum PanelGlyph: String {
     /// panel can match its neighbouring sockets without moving the label or arrows.
     /// `text` draws the speed label. A panel with a game font passes its own; the default is the pixel font.
     static func draw(in rect: CGRect, label: String, active: Bool, bevelPixel: CGFloat? = nil,
-        backdrop: NSImage? = nil, text: ((String, CGRect) -> Void)? = nil) {
+        backdrop: NSImage? = nil, monochrome: Bool = false, text: ((String, CGRect) -> Void)? = nil) {
         let text = text ?? { GamePixelText.draw($0, in: $1, maxScale: .greatestFiniteMagnitude) }
         let boxes = SpeedPanelArt.boxes(in: rect)
         let pixel = SpeedPanelArt.pixel(forHeight: rect.height)
-        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop)
+        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop, monochrome: monochrome)
         for (index, box) in boxes.enumerated() {
             if index == 1 {
                 // The label always names the speed the game is running at now.
                 text(label, box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel))
             } else if let context = NSGraphicsContext.current?.cgContext {
-                SpeedPanelArt.drawArrow(in: context, box: box, pointsRight: index == 2)
+                SpeedPanelArt.drawArrow(in: context, box: box, pointsRight: index == 2, monochrome: monochrome)
             }
         }
     }
@@ -217,11 +243,11 @@ enum PanelGlyph: String {
   }
 
   /// `backdrop` replaces the flat well colour, for example with panel rock.
-  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil) {
+  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil, monochrome: Bool = false) {
     guard let context = NSGraphicsContext.current?.cgContext else { return }
-    GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel)
+    GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel, monochrome: monochrome)
     if let backdrop { drawTile(backdrop, in: frame, pixel: pixel) }
-    GameStoneArt.drawAccent(in: context, frame: frame, selected: selected, pixel: pixel)
+    GameStoneArt.drawAccent(in: context, frame: frame, selected: selected, pixel: pixel, monochrome: monochrome)
   }
 }
 #endif

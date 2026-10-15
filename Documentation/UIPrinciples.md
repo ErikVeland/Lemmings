@@ -1,5 +1,14 @@
 # UI clarity
 
+Mac gameplay shows the saved percentage alongside the rescue counters. Use the
+engine's level total and round down to whole percent. Classic and NeoLemmix keep
+the Home count and add the percentage in parentheses. L2 uses a blue Saved
+annotation beside its existing status overlay. L3 keeps the percentage beside
+Save and draws its percent symbol with the shared bitmap renderer.
+Muted offscreen checks cover Classic bitmap fixtures at 0%, 50% and 100% across
+three widths, native L2/L3 zero-save renders and sequel timeline targets. Separate
+NeoLemmix and nonzero sequel renders remain unchecked. Mobile HUDs are unchanged.
+
 The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
@@ -817,3 +826,20 @@ compile. These checks use the shared render and target geometry. Native UIKit
 touch, VoiceOver, remote focus delivery and physical TV compositing/performance
 remain device checks. NeoLemmix and fan scenery use existing loaders but were
 not included in the native scenery fixtures.
+
+## Regional Lemmings 3 branding
+
+Use The Lemmings Chronicles for the US device region and All New World of
+Lemmings elsewhere, including an unknown region. Read the region independently
+of the interface language. Mac, iPad and TV share this rule for Home artwork,
+game names and accessibility labels. Decode both original title logos with
+their authored palettes and nearest-neighbour sampling. Keep save identifiers,
+content fingerprints and storage paths independent of the displayed title.
+
+The muted, windowless `--regional-brand` menu audit passes 36 captures across
+Mac, iPad and TV sizes and all three interface sizes. It checks both original
+logos, regional and language independence, accessible action names, target
+containment, hit testing and non-overlap. Artwork packaging retains the exact
+US source file. Mac source typechecking, iOS/tvOS SDK modules, app entry points
+and the localisation catalogue pass. Physical VoiceOver and device input remain
+manual checks.

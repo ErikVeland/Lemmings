@@ -105,6 +105,7 @@ public struct TVGameCapabilities: Equatable, Sendable {
     private var countdown = GameplayStartCountdown()
     private var needsCountdown = true
     private var presentationTime: Double?
+    private var pointerTime: Double?
     public var startNumber: Int? { countdown.number }
     public var awaitsFirstStart: Bool { needsCountdown && play.phase == .ready }
 
@@ -206,6 +207,14 @@ public struct TVGameCapabilities: Equatable, Sendable {
         guard canInteract, dx.isFinite, dy.isFinite else { return }
         if abs(dx) + abs(dy) > 0.01 { lockedActor = nil }
         pointer = bounded(.init(x: pointer.x + dx, y: pointer.y + dy)); refreshTarget()
+    }
+
+    public func advancePointer(at time: Double, enabled: Bool = true) {
+        let elapsed = pointerTime.map { max(0, time - $0) } ?? 0
+        pointerTime = time
+        guard enabled, canInteract, viewport.scrollAtEdge(pointer, seconds: elapsed) else { return }
+        lockedActor = nil
+        refreshTarget()
     }
 
     public func pan(dx: Double, dy: Double) {

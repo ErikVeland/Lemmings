@@ -26,6 +26,8 @@ import NxlvKit
         }
     }
     var frame = CGRect.zero
+    var monochrome = false
+    var rock: ((CGSize) -> NSImage?)?
     var enabled: (Action) -> Bool = { _ in false }
     var perform: (Action) -> Void = { _ in }
     private let accessibility = GameAccessibleElements()
@@ -40,17 +42,28 @@ import NxlvKit
         for action in Action.allCases {
             let box = rect(for: action)
             GameStoneButton.draw(box, selected: false, pixel: 1,
-                backdrop: PanelGlyph.rock.image(fitting: box.size))
-            let alpha: CGFloat = enabled(action) ? 1 : 0.3
-            if let image = action.glyph?.image(fitting: box.insetBy(dx: 4, dy: 4).size) {
+                backdrop: rock?(box.size) ?? PanelGlyph.rock.image(fitting: box.size), monochrome: monochrome)
+            let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3
+            let size = box.insetBy(dx: 4, dy: 4).size
+            if let image = monochrome ? action.glyph?.monochromeImage(fitting: size) : action.glyph?.image(fitting: size) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
                     fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             } else {
                 NSGraphicsContext.saveGraphicsState()
                 NSGraphicsContext.current?.cgContext.setAlpha(alpha)
-                GamePixelText.draw(L10n.text("HINT"), in: box.insetBy(dx: 4, dy: 4), maxScale: 2)
+                GamePixelText.draw(L10n.text("HINT"), in: box.insetBy(dx: 4, dy: 4), maxScale: 2, palette: monochrome ? .monochrome : .blue)
                 NSGraphicsContext.restoreGraphicsState()
+            }
+            if monochrome && !enabled(action), let context = NSGraphicsContext.current?.cgContext {
+                context.saveGState()
+                context.setFillColor(CGColor(gray: 0, alpha: 1))
+                for y in Int(box.minY + 4)..<max(Int(box.minY + 4), Int(box.maxY - 4)) {
+                    for x in stride(from: Int(box.minX + 4) + y % 2, to: Int(box.maxX - 4), by: 2) {
+                        context.fill(CGRect(x: x, y: y, width: 1, height: 1))
+                    }
+                }
+                context.restoreGState()
             }
         }
     }

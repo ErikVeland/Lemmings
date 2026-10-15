@@ -421,7 +421,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
             } + [.init("neolemmix", hasNeoLemmixData ? L10n.text("NeoLemmix Preview") : L10n.text("Import NeoLemmix data")),
                  .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
-                 .init("l3", hasLemmings3Data ? L10n.text("Lemmings 3") : L10n.text("Import Lemmings 3 data"), enabled: true, gameLogo: .lemmings3)]
+                 .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
             let journey = bundledJourney
             let journeyTitle = L10n.text("Journey map  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name

@@ -31,7 +31,7 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
         case .lemmings2TheTribes: return L10n.text("Lemmings 2: The Tribes")
         case .holidayLemmings1993: return L10n.text("Holiday Lemmings 1993")
         case .ohYesMoreLemmings: return L10n.text("Oh Yes! More Lemmings!")
-        case .lemmings3TheChronicles: return L10n.text("Lemmings 3: The Chronicles")
+        case .lemmings3TheChronicles: return Lemmings3Brand.current.displayName
         case .holidayLemmings1994: return L10n.text("Holiday Lemmings 1994")
         }
     }

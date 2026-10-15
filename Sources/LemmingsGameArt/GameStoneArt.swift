@@ -20,7 +20,10 @@ public enum GameStoneArt {
     }
 
     /// Bevel, rim and well. A caller may paint artwork into the well before `drawAccent`.
-    public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat) {
+    public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false) {
+        let light = monochrome ? CGColor(gray: 1, alpha: 1) : Self.light
+        let stone = monochrome ? CGColor(gray: 1, alpha: 1) : Self.stone
+        let shadow = monochrome ? CGColor(gray: 0, alpha: 1) : Self.shadow
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
@@ -44,7 +47,7 @@ public enum GameStoneArt {
         fill(inner.insetBy(dx: -pixel, dy: -pixel), shadow)
         fill(CGRect(x: inner.minX, y: inner.maxY, width: inner.width, height: pixel), light)
         fill(CGRect(x: inner.maxX, y: inner.minY, width: pixel, height: inner.height), light)
-        fill(inner, selected ? wellSelected : wellIdle)
+        fill(inner, monochrome ? CGColor(gray: 0, alpha: 1) : selected ? wellSelected : wellIdle)
     }
 
     /// Draws an original panel tile at the scale that fills the whole button, cropped to the
@@ -77,12 +80,12 @@ public enum GameStoneArt {
     }
 
     /// The moss line along the foot of a selected socket.
-    public static func drawAccent(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat) {
+    public static func drawAccent(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false) {
         guard selected else { return }
         let inner = well(frame, pixel: pixel)
         context.saveGState()
         context.setShouldAntialias(false)
-        context.setFillColor(accent)
+        context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1) : accent)
         context.fill(CGRect(x: inner.minX + pixel, y: inner.maxY - 2 * pixel,
                             width: inner.width - 2 * pixel, height: pixel))
         context.restoreGState()

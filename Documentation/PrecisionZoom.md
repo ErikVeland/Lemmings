@@ -26,6 +26,11 @@ transports; Z no longer rewinds. Controller rewind controls are unchanged.
 Horizontal scrolling and Shift-scroll still pan the camera. Scrolling over
 the control panel does not activate Zoom.
 
+While zoomed, hold the cursor near any playfield edge to scroll in that
+direction. Corners scroll both axes. Classic, Lemmings 2 and Lemmings 3 clamp
+the camera to the visible zoomed area, so the top, bottom and side edges remain
+reachable. Switching Zoom off restores the normal camera limits.
+
 The ledger is saved per profile after each activation and at the end of a run.
 A restored run keeps its active effect and spent uses. If the saved ledger is
 unreadable, Zoom is disabled so the game does not grant extra uses. Removing a
@@ -44,3 +49,9 @@ panel stays the same size, pointer selection matches the displayed target,
 zoom-out holds the cursor target, wheel and touch scrolls start at most one
 use per gesture, and retry and failure update the count as described above.
 Check Classic in both flat and CRT modes.
+
+Cursor-camera regression checks cover anchored zoom bounds at Classic/L3 and
+L2 pixel scales, Classic bitmap renders at the top and bottom, unchanged pointer
+positions, and TV scrolling in all three engines. They run offscreen with muted
+audio. Mac and tvOS SDK compilation pass. Physical TV input, composited CRT
+output and zoomed native Mac sequel renders remain manual validation gaps.

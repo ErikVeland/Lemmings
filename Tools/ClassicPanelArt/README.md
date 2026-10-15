@@ -27,6 +27,21 @@ the tile is rebuilt, not recovered.
 The Pause and Nuke tiles draw at the scale that fills the button. The stone
 bevel covers their outer rock edge.
 
+Classic Macintosh skill buttons crop transparent sprite padding and share one
+source-pixel scale across all eight poses. The widest tool pose and tallest
+umbrella set the fit. Visible artwork stays centred on a common bottom edge,
+with whole display-pixel scaling and nearest-neighbour sampling. Colour and
+1-bit artwork use the same rule. Button bounds, counts and selection stay in
+their existing positions. L2 and L3 retain their authored panel tiles.
+
+Mac Classic's 1-bit mode also uses the original dithered rock from `Charset0`
+frame 95. The 28×44 crop at (38,0) keeps the background dark behind the white
+lemmings. A one-pixel black sprite edge separates them from the rock dots.
+Bevels, control silhouettes, counters, captions, speed arrows and
+selection underlines use black and white. Disabled timeline symbols use a
+checker stipple. Colour modes retain their existing artwork. L2 and L3 do not
+offer Classic's 1-bit artwork option.
+
 The 16-colour display palette was matched to the user's reference. It is an
 approximation, not a recovered original hardware palette. The image shapes are
 direct source pixels, not new illustrations. The discarded DOS variant had

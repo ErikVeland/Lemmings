@@ -2961,6 +2961,10 @@ import NxlvKit
                 at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 16 + badgeSize.height)) }
             if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
                 at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 12), palette: .blue) }
+            if let game {
+                GameTypography.annotation(L10n.text("Saved \(game.saved * 100 / max(1, game.configuration.total))%"),
+                    at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 30), palette: .blue)
+            }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 RewindTransportCue.draw(origin: CGPoint(x: gameplayRect.minX + 12,
                     y: gameplayRect.minY + 16 + badgeSize.height),
@@ -3194,6 +3198,15 @@ import NxlvKit
     }
     private func clampCamera() {
         guard let game else { return }
+        if precisionLens.active {
+            let camera = precisionLens.clampedCamera(CGPoint(x: cameraX, y: cameraY),
+                playfield: gameplayRect, scaleX: zoom, scaleY: zoom * 1.2,
+                level: CGRect(x: cameraBounds.left, y: cameraBounds.top,
+                    width: max(0, min(cameraBounds.right + 320, CGFloat(game.configuration.width)) - cameraBounds.left),
+                    height: max(0, min(cameraBounds.bottom + 160, CGFloat(game.configuration.height)) - cameraBounds.top)))
+            cameraX = camera.x; cameraY = camera.y
+            return
+        }
         cameraX = CGFloat(viewport.clampedX(Double(cameraX), minimum: Double(cameraBounds.left),
             maximum: Double(cameraBounds.right), levelWidth: Double(game.configuration.width)))
         let bottom = max(cameraBounds.top, min(cameraBounds.bottom, CGFloat(game.configuration.height - 160)))
