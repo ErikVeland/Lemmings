@@ -11,6 +11,14 @@
   "source": {
     "extractedL2Root": "/private/tmp/lemmings-bundled-closure/Resources/Ports/Lemm2",
     "extractedFiles": 232,
+    "originalEngineReference": {
+      "path": "Ports/Lemm2/L2.EXE",
+      "sha256": "39be1bacc603219959d295830763f948ab65a42937e1b129e787c2f71df4ead5",
+      "presentInFullArchiveExtraction": true,
+      "excludedFromAppPayload": true,
+      "behaviourCapture": false
+    },
+    "excludedReferenceManifest": "lemmings2-reference-excluded-files-2026-10-16.json",
     "appPackagerExcludedFiles": [
       "AUTORUN.RKO",
       "BOBS256.RKO",
@@ -1719,6 +1727,37 @@
       "expectedFailure": true,
       "message": "Strict ark completion requires a golden talisman and at least 30 survivors from every tribe."
     }
+  },
+  "currentMainRecheck": {
+    "head": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "baselineCommit": "d537e822e3363d65fb7b9e7bfd879e59ce3a07e1",
+    "comparison": "git diff --name-only d537e822e3363d65fb7b9e7bfd879e59ce3a07e1..HEAD -- Sources/NxlvKit/Lemmings2*.swift Tools/Lemmings2Solver Tools/Lemmings2Completion Tests/Lemmings2CompletionTests Tests/Lemmings2RuntimeTests",
+    "changedFiles": [],
+    "currentRuntimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "currentRuntimeTestSourceSHA256": "c2c872d02cca392c21949de2bc0bc9f23382cd13c585e658029b344e416a4cd4",
+    "executionRerun": {
+      "commands": [
+        ".build/l2-current-main-20261016/verify /private/tmp/lemmings-bundled-closure/Lemm2-app-payload --require-all",
+        ".build/l2-current-main-20261016/events /private/tmp/lemmings-bundled-closure/Lemm2-app-payload",
+        ".build/l2-current-main-20261016/runtime-tests /private/tmp/lemmings-bundled-closure/Lemm2-app-payload"
+      ],
+      "binarySHA256": {
+        "verify": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
+        "events": "51b052f741f70ad9370bb25f5cca0ffcf5a9cc8a9eede128d507881580d6bb6d",
+        "runtimeTests": "58f12ea3c6d5d57394f38087116020be32b6376ead86363218d8492534c0e951"
+      },
+      "exitCodes": {
+        "verify": 0,
+        "events": 0,
+        "runtimeTests": 0
+      },
+      "results": {
+        "verify": "120 routes, 70 carry-over variants and all 12 chains passed. The ark gate remains open: every tribe has one survivor and a Bronze talisman.",
+        "events": "120 route event replays passed. Version 2 rejected refused, off-viewport and out-of-order events. Lenient replay dropped invalid events without a trace.",
+        "runtimeTests": "The L2 runtime suite passed, including native walking, rescue, inventory, terrain, replay and nuke checks."
+      }
+    },
+    "interpretation": "The recorded payload replay applies to the current L2 runtime, solver, verifier and test source. This source comparison does not close original-engine behaviour or ark completion."
   },
   "verificationScope": "This replay covers the manifest-selected 218-file L2 app payload and its runtime outcomes. It does not verify the signed app archive layout, notarisation, or release distribution. The 14 original interpreter/support files found in the full resource extraction are excluded by the app packager and are outside this native-engine replay.",
   "remaining": [

@@ -83,6 +83,8 @@ bundle manifest match by path, size and SHA-256. The full extraction contains
 retained report: 399 of 416 fixtures replay twice, and 17 input schedules do
 not win. The four standalone gaps are Shadow 7 and Egyptian 6, 13 and 29. The
 other 13 gaps are carried schedules across Shadow 7 and Egyptian 6, 13 and 29.
+The current-main revision `4fe7328a` has no changes to the runtime, replay,
+audit or solver sources used for this run.
 
 The strict route gate still stops at Shadow 7. The strict campaign gate still
 stops at carried fixture `107-1.json`. The current L3 source hash is
@@ -250,3 +252,21 @@ not the L3 runtime or trace verifier. This does not close the excavation-mask
 or built-brick trigger gaps. See the
 [current parity recheck](current-source-parity-recheck-2026-10-15.json) for the
 source and verifier hashes.
+
+## Current-main trace recheck, 16 October
+
+At `4fe7328a`, the whole runtime file hash changed after the previous recheck.
+The change adds action-eligibility helpers and refactors assignment guards.
+The Mole update and movement source region still matches the trace baseline.
+The verifier now checks that region, then passes all 53 primary positions, 673
+samples across two repeated source traces, and four tunnel-edge witnesses.
+This result confirms the recorded movement only. It does not close the
+excavation-mask, trigger or complete Mole behaviour gaps. See the
+[16 October parity recheck](current-source-parity-recheck-2026-10-16.json) for
+the source and verifier hashes from that check.
+
+After a fresh fetch, the worktree matched remote `main` at `c38831f3`. I reran
+the verifier at that revision. It passed all 53 primary positions, both source
+traces with 673 samples and all four tunnel-edge checks. The runtime hash and
+Mole movement region still match the recorded values. The mask, brick trigger
+and complete Mole rules remain open.

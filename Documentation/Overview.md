@@ -93,11 +93,11 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-Macintosh 2.0 build 83 is public, with signed and notarised universal packages,
-a verified update feed and a signed build-82 delta. See the
-[2.0 distribution evidence](ReleaseReadiness/2.0-build83/README.md). The owner
-approved the existing release classifications with documented limits. Full
-bundled-content closure remains open. The 2.0 source connects all
+Macintosh 2.0.2 build 85 was published on 15 October. See the
+[release notes](ReleaseNotes-2.0.2-build85.md) and
+[distribution evidence](ReleaseReadiness/2.0.2-build85/README.md). It retains
+the published classifications and limits. Full bundled-content closure remains
+open. The 2.0 source connects all
 three native games and supported NeoLemmix to mobile sessions. Its signed build
 12 contains Classic only. Real-data fidelity, full package, physical-device,
 accessibility and distribution gates remain open. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
@@ -110,8 +110,11 @@ packs and the Oh My! All Lemmings! learning journey. 1.7.1 fixed journey session
 
 **1.7: NeoLemmix compatibility gate passed.** The pinned evidence covers 794
 levels, the 160-level Redux replay corpus, source final-state comparisons and
-selected live visual captures. The exact bundled set still needs its own hashed
-level-and-style inventory. See the [1.7 roadmap](1.7Roadmap.md).
+selected live visual captures. The bundled archive audit and style-rights
+inventory now cover the exact set. Build 84 indexes all 794 levels; 719 resolve
+with the bundled DMA styles, while 75 still need 44 community styles. Their
+rights and the full winning-route gate remain open. See the [1.7 roadmap](1.7Roadmap.md)
+and [current release scope](ReleaseScope.md).
 
 **1.8: Mac polish.** Sharper pixel rendering, NeoLemmix sound effects and
 reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.

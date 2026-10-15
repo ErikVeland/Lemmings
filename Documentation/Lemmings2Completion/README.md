@@ -11,19 +11,32 @@ The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
 variants and all twelve continuous tribe chains. Every witness passed two fresh
 replays with matching saved counts, ticks and state hashes.
 
-The latest strict gate replay passed on 15 October 2026 at `main` revision
-`061e1b99` with Xcode 26.6. Strict ark mode replayed all 120 routes and 70
-carry-over variants twice, then replayed all twelve ten-level chains. Every
-chain ends with one survivor and a Bronze talisman, so the gate correctly fails
-the ark prerequisites. The evidence does not prove a golden talisman or an ark
-ending.
+On 15 October 2026, the route replay at `main` revision `061e1b99` verified all
+120 routes, 70 carry-over variants and twelve ten-level chains. This route
+result does not prove ark completion. Each chain ended with one survivor and a
+Bronze talisman, so the ark prerequisites remained open.
 
 The fresh payload replay ran at `fc52cac4`, when the worktree matched
-`origin/main`. The worktree has since advanced to `d537e822`. The L2 runtime,
-completion verifier, event verifier and fixtures did not change between those
-revisions. The current runtime suite was rebuilt and passed against the staged
-218-file build 83 app payload. It includes a regression check for the crowd
+`origin/main`. The worktree has since advanced to `c38831f3`. The L2 runtime,
+solver, completion verifier, event verifier and fixtures still match the
+recorded payload run. The runtime suite was rebuilt at `d537e822` and passed
+against the staged 218-file build 83 app payload. The current test source
+still matches that build. It includes a regression check for the crowd
 assignment query.
+
+At current `main` `c38831f3`, I reran the route, event and runtime test binaries
+against the exact 218-file build 83 payload. All three commands exited 0. The
+route verifier passed all 120 routes, 70 carry-over variants and twelve chains.
+The event verifier passed its valid and invalid event checks. The runtime suite
+passed. See the [payload replay record](../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json)
+for command and binary hashes. These checks do not close source-engine parity
+or the Gold ark requirements.
+
+A direct current-main rerun against the locally installed L2 tree also passed
+all three checks. The app identifies as 1.9.1 build 76. Its 218 L2 files match
+the retained manifest. This does not recheck the 2.0.2 build 85 shipping
+package. The ark and original-DOS behaviour gates remain open. See the
+[build 76 recheck record](installed-build76-l2-recheck-2026-10-16.json).
 
 The recorded payload replay passed the 120-route gate, 70 carry-over variants
 and all twelve ten-level chains. The event suite passed all 120 routes and
@@ -52,6 +65,12 @@ the event suite. It still fails the ark prerequisites. See the [payload replay
 audit](../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json)
 and [resource equivalence audit](../ReleaseReadiness/2.0-build83/lemmings2-resource-equivalence.json).
 
+The full build 83 extraction has 232 L2 files. The app payload uses 218. The
+app packager excludes 14 DOS files. I recorded their sizes and hashes in the
+[reference-file manifest](../ReleaseReadiness/2.0-build83/lemmings2-reference-excluded-files-2026-10-16.json).
+The manifest confirms which files the app omits. It does not prove gameplay
+parity with the original DOS engine.
+
 A 15 October Cavelems route update now chains all ten levels from 60 lemmings.
 It records 59 saved on Level 1, then 36, 17, 4, 2, 2, 1, 1, 1 and 1. The
 strict route gate verifies the new routes twice. The ark gate remains open.
@@ -66,6 +85,33 @@ Seeded searches also found 13 of 34 on Level 4 and 10 of 13 on Level 5. Neither
 a seeded nor unseeded Level 6 search found a route at population 10. Those
 candidates are not in the accepted chain; the verified ten-level chain remains
 unchanged. See the [ark reconnection search record](cavelem-ark-reconnection-search-2026-10-16.json).
+
+A 16 October current-main follow-up searched Cavelems Level 6 at population 13
+for 300 seconds with a beam of 8,192. It found no route. A seeded Level 5
+search reproduced the existing 10-of-13 route. A wider Classic Level 2 search
+also reproduced its accepted 13-of-60 route. All inputs matched the 218-file
+build 83 app payload. No route or chain fixture changed. See the [current-main
+search record](ark-reconnection-search-2026-10-16-current-main.json).
+
+Two further unseeded Cavelems Level 4 searches used the carried population of
+34, a beam of 8,192 and a 300-second budget. The standard 4-pixel grid expanded
+1,014,578 candidates; the 2-pixel grid with a 24-tick refire interval expanded
+1,126,648. Neither found a win; the 13-of-34 witness remains the best retained
+Level 4 route. The accepted chain did not change. See the [wider Level 4 search
+record](cavelem04-beam8192-search-2026-10-16.json).
+
+A seeded search at the same population used the 2-pixel grid and 24-tick
+refire interval. It reproduced the retained 13-of-34 Bronze route byte for
+byte after 782,183 expansions. It did not improve the route or change the
+accepted chain. A follow-up with a 4-pixel grid reached 755,516 expansions
+and reproduced the same route byte for byte. A search with the solver's
+standard 8-pixel grid and 50-tick refire interval expanded 771,657 candidates
+and also reproduced the seed. See the [seeded Level 4 search record](cavelem04-seeded-beam8192-search-2026-10-16.json).
+
+A further 300-second Cavelems Level 6 search at population 10 used beam 8,192
+and depth 80. It expanded 692,245 candidates and found no win. This raises the
+search bound but does not prove the level unsolvable. The ark remains open,
+and each accepted chain still ends with one survivor.
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |

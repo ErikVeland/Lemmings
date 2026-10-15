@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+  "runtimeSource": {
+    "path": "Sources/NxlvKit/Lemmings3Runtime.swift",
+    "sha256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "moleMovementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e"
+  },
+  "verifier": {
+    "path": "Scripts/verify-l3-mole-trace.py",
+    "sha256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "command": "python3 Scripts/verify-l3-mole-trace.py",
+    "result": "passed"
+  },
+  "comparison": {
+    "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/prototype-steel-comparison.json",
+    "sha256": "3dd7d02cb54f363f29e28a58e7e8c6a6aa5dcae561fa8d597c7d9251318973b5",
+    "movementRegionMatchesTraceBaseline": true
+  },
+  "evidence": {
+    "primaryTrace": {
+      "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-steel-actor-trace.json",
+      "sha256": "a2aa3550fbcf3b33376bedd7a8056d5ddf0609a520927f62cc6cb3e14281a33b",
+      "nativePositionsCompared": 53,
+      "firstTick": 36,
+      "lastTick": 244,
+      "coordinateDifferences": 0
+    },
+    "repeatedSourceTraces": {
+      "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json",
+      "sha256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+      "cases": 2,
+      "samples": 673,
+      "repeatPositionDifferences": 0
+    },
+    "tunnelEdgeCheck": {
+      "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-tunnel-edge-check.json",
+      "sha256": "4a8b1340e1ff78bcc7f54a2e96be55742eb87980f9417c2a33e2b81d735abebe",
+      "witnesses": 4,
+      "sourceOnlyClears": 2,
+      "prototypeOnlyClears": 2
+    }
+  },
+  "sourceChangeReview": "The runtime file changed after the prior recheck. The change adds L3 action-eligibility helpers and refactors assignment guards. The Mole update and movement region hash matches the trace baseline.",
+  "currentMainReverification": {
+    "worktreeHEAD": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "command": "python3 Scripts/verify-l3-mole-trace.py",
+    "verifierSHA256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "runtimeSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "moleMovementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
+    "result": "Passed 53 positions, two repeated traces with 673 samples, and four tunnel-edge checks.",
+    "remaining": "This verifies sampled motion only. The excavation mask, player-built brick trigger and complete Mole rules remain open."
+  },
+  "remaining": "The position traces verify partial Mole motion. The excavation mask, trigger conditions and complete Mole rules remain unverified. Four tunnel-edge witnesses still reject the rectangular carve proposal."
+}

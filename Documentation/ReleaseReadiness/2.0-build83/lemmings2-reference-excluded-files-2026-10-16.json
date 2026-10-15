@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Hash manifest for L2 interpreter and support files omitted from the native app payload.",
+  "release": {
+    "version": "2.0",
+    "build": 83,
+    "asset": "UltimateLemmings-2.0-build83.zip",
+    "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "archiveDigestRecord": "engine-content-equivalence-current-main.json"
+  },
+  "source": {
+    "extractedRoot": "/private/tmp/lemmings-bundled-closure/Resources/Ports/Lemm2",
+    "extractedFiles": 232,
+    "appPayloadFiles": 218,
+    "excludedFilesExpected": 14,
+    "excludedFilesPresent": 14,
+    "excludedFilesMatched": 14,
+    "entries": [
+      {
+        "path": "AUTORUN.RKO",
+        "bytes": 968,
+        "sha256": "49579d828f0605a8f171b317cc0bdadea80223f48f4224ee696e309912bf85d9"
+      },
+      {
+        "path": "BOBS256.RKO",
+        "bytes": 9803,
+        "sha256": "3c95683fc97832ae5a2973b03e5dd5523c787dcc2f64535f8a4338ba795aed61"
+      },
+      {
+        "path": "BOOT.RKB",
+        "bytes": 33,
+        "sha256": "fe58768a25425e00a527a71d0b3347d5a86ed399cc87d94aced7438bb14e28bb"
+      },
+      {
+        "path": "EDITOR.RKB",
+        "bytes": 116,
+        "sha256": "dbf4e3b9f0b308cfd22ecc727ef368b186b01e6f016604277672cd4bef62c666"
+      },
+      {
+        "path": "GAL.RKO",
+        "bytes": 21648,
+        "sha256": "9ef07f6469f2975fdba245bddfb8cffa373e49b4b7fb11730b38f40399f6c8f5"
+      },
+      {
+        "path": "INSTALL.EXE",
+        "bytes": 42976,
+        "sha256": "65a1d55f808d896217ac6a75518a7e9f5795346e0a244e04b78fd5eff8866f50"
+      },
+      {
+        "path": "L2-FIX.COM",
+        "bytes": 1013,
+        "sha256": "06c6592e0f888ec7d65b5419de616c4d3f2309cf52888acced768d5985e4b856"
+      },
+      {
+        "path": "L2.EXE",
+        "bytes": 6716,
+        "sha256": "39be1bacc603219959d295830763f948ab65a42937e1b129e787c2f71df4ead5"
+      },
+      {
+        "path": "L2.INI",
+        "bytes": 131,
+        "sha256": "d80d5fdb7d296416725ca5c16c0e6c721ff6dab296426b56f17be03ac78837b9"
+      },
+      {
+        "path": "L2.RKO",
+        "bytes": 51303,
+        "sha256": "83c1aa3b6a41eeb96d2f9b16165830655631a6d93ae51cbc0688192978108d67"
+      },
+      {
+        "path": "LOAD.RKO",
+        "bytes": 9816,
+        "sha256": "246e177e8035f2dd4d6d12818ba23df2ec584a604e717c95c0f60bb6b0bbe732"
+      },
+      {
+        "path": "PROCESS.RKO",
+        "bytes": 53909,
+        "sha256": "fe84176acd4f1f27f2c11c7d5c4393269bf8c7c4a6d8de3c5e5f9151a787e27e"
+      },
+      {
+        "path": "TEXT.RKO",
+        "bytes": 649,
+        "sha256": "5f81fee85bdac8f2ad2defd0b988c5ea7dcaa983245b98223b71308ef38d7cfd"
+      },
+      {
+        "path": "VGA.RKO",
+        "bytes": 41842,
+        "sha256": "c18f839d66c7755461381fa6b4c4a0ace6d4bea729bc37ca6c665b61c2796866"
+      }
+    ],
+    "scope": "This manifest covers the 14 paths listed by the app packager exclusion policy. It does not establish gameplay parity."
+  }
+}

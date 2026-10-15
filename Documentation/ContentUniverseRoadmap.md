@@ -134,14 +134,19 @@ The gate requires real packs and reference replays, not synthetic fixtures
 only. It includes styles, lemming sprites, all standard skills, terrain masks,
 gadgets, special effects, zombies, Superlemming, pack progress and recovery.
 
-The pinned 1.7 runnable gate passed for its 794-level corpus. The exact build
-83 slim archive contains 794 levels. A source-equivalent scan resolves 719 with
-the 26 bundled DMA styles. The other 75 need 44 community styles. Exact-version
-winning replay evidence covers 158 levels. The released manifest reports 718,
-and the old resource test expected 788/713. Current source corrects the counts,
-but the released package does not. The current bundled-closure rule keeps all
-794 levels in scope. Obtain rights for the missing styles, then rebuild and
-audit a package with all bundled levels resolved. See the [archive audit](ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
+The pinned 1.7 runnable gate passed for its 794-level corpus. Macintosh 2.0.2
+build 85 passes the bundled-resource check for all 794 indexed levels, with all
+719 levels supported by the 26 bundled DMA styles resolving. The 75 remaining
+levels need 44 community styles, and exact-version winning replay evidence
+covers 158 levels. Build 85 includes the staging fix that adds the existing
+Xmas group to the Original parent index; its check now passes the 794/719 count
+and resolves every counted ready level. No additional community styles are
+distributed, so the 75 style dependencies and their rights remain open. Keep
+all 794 levels in bundled closure scope. Obtain permission for those styles
+before adding them to the package, then audit all bundled routes and source
+rules. See the [build 85 release evidence](ReleaseReadiness/2.0.2-build85/README.md),
+[build 84 content inventory](ReleaseReadiness/2.0.1-build84/neo-content.json),
+[archive audit](ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
 [style rights inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
 and [release scope](ReleaseScope.md).
 
@@ -169,7 +174,10 @@ The 16 October current-main L2 replay passes all 120 routes, 70 carry-over
 variants, twelve chains and event checks against the exact staged build 83 app
 payload. Each tribe still ends with one survivor and a Bronze talisman. The
 golden talisman, 30-survivor ark condition and original-engine comparison remain
-open.
+open. Follow-up searches found no Cavelems Level 6 route from population 10 or
+13. They reproduced the current Level 5 route at 10/13 and Classic Level 2 at
+13/60. The accepted chains did not change. These bounded searches do not prove
+that better routes are impossible. See the [current-main follow-up record](Lemmings2Completion/ark-reconnection-search-2026-10-16-current-main.json).
 
 The 15 October L3 Mole direction and patrol corrections match the captured
 starting directions and no-input patrols in Shadow 7 and Egyptian 13. The

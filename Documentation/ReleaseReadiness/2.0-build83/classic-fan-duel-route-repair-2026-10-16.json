@@ -1,0 +1,218 @@
+{
+  "schema": "classic-fan-targeted-route-repair-v1",
+  "date": "2026-10-16",
+  "scope": "Investigate the failed bundled replay for I Challenge You to a Duel! in the exact build 83 archive.",
+  "provenance": {
+    "sourceCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+    "releaseArchiveFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "pack": "0024-ISteve04.zip",
+    "packSHA256": "4d59f847602022ca5bfd404856df7c1b6d0c90213fed6c6a59c4ee73550205c1",
+    "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "runtimeSourcesUnchangedSince": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "runtimeSourceComparison": [
+      "Sources/NxlvKit/ClassicDOSSimulation.swift",
+      "Sources/NxlvKit/ClassicDOSReplay.swift",
+      "Sources/NxlvKit/FanLevelLibrary.swift",
+      "Tools/ClassicSolver/main.swift"
+    ]
+  },
+  "level": {
+    "identity": "fan:lldb-24/ISteve04.dat#9",
+    "title": "I Challenge You to a Duel!",
+    "initialStateHash": "8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e",
+    "bundledAuditMatches": 1,
+    "storedCandidate": "Artifacts/LearningJourney/candidate-solutions.json#8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e",
+    "storedOutcome": {
+      "saved": 8,
+      "required": 8,
+      "ticks": 2827
+    },
+    "exactPackageFailure": "Engine refused to queue builder for lemming 0 at tick 943."
+  },
+  "searches": [
+    {
+      "method": "Continue the stored route after its first five inputs",
+      "budgetSeconds": 120,
+      "elapsedSeconds": 122,
+      "beamWidth": 4096,
+      "fallback": 48,
+      "refire": 24,
+      "ranking": [
+        "balanced",
+        "rescue-quota-distance",
+        "direct-exit-distance"
+      ],
+      "adaptiveRate": true,
+      "expanded": 280631,
+      "result": "No win; best saved 0/8."
+    },
+    {
+      "method": "Search from the exact level start",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 125,
+      "beamWidth": 1024,
+      "fallback": 48,
+      "refire": 24,
+      "ranking": [
+        "balanced",
+        "rescue-quota-distance",
+        "direct-exit-distance"
+      ],
+      "adaptiveRate": true,
+      "expanded": 291536,
+      "terminal": {
+        "tick": 271,
+        "released": 8,
+        "lost": 0,
+        "active": 8,
+        "saved": 0
+      },
+      "partialSHA256": "ca51c56574ee8197f5b1d7fa4916134b80c97f7ffc65eb2b9b125834e32551de",
+      "result": "No winning route."
+    }
+  ],
+  "outcome": "No replacement witness was found. The level remains one of the 21 failed replays and has no verified win.",
+  "limits": "These bounded searches do not prove the level impossible. They do not establish original-engine parity. The full build 83 audit remains authoritative for the 6,020-level coverage count.",
+  "currentMainFollowUp": {
+    "worktreeHEAD": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "releaseContentReference": "Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+    "target": {
+      "identity": "fan:lldb-24/ISteve04.dat#9",
+      "title": "I Challenge You to a Duel!",
+      "initialStateHash": "8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e",
+      "archiveSHA256": "4d59f847602022ca5bfd404856df7c1b6d0c90213fed6c6a59c4ee73550205c1"
+    },
+    "sources": {
+      "paths": {
+        "Sources/NxlvKit/ClassicDOSSimulation.swift": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+        "Sources/NxlvKit/ClassicDOSReplay.swift": "ca2474227cadb26125b7622d8bdbe117a972c4448e0fdab977c8753d1f0b08ea",
+        "Sources/LemmingsLocal/FanLevelLibrary.swift": "ff9aee22136fa20c31793ee5f25fd8a4fda86f298cfa984b59c23e89a8859e43",
+        "Tools/ClassicSolver/main.swift": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b"
+      },
+      "changedSinceBuild85Source": [],
+      "candidateSolutionsJSONSHA256": "95e53224b4839f827aa563305d7502000619aebd7cb21373563878ea4e00d607"
+    },
+    "replayComparison": {
+      "storedCandidateExpected": {
+        "didWin": true,
+        "released": 8,
+        "required": 8,
+        "saved": 8,
+        "stateHash": "4863bfcfc2940cf548e7054fc5352884289bb7422cf41a23a76f91563cb9e364",
+        "ticks": 2827
+      },
+      "ordinaryRules": "Rejected Builder assignment to lemming 0 at tick 943.",
+      "golemsFallingBuilderSourceRules": "Rejected the same assignment at tick 943. Adding replay metadata does not fix this route.",
+      "stateAtFailure": {
+        "tick": 942,
+        "lemmingID": 0,
+        "action": "splatting",
+        "x": 461,
+        "y": 137,
+        "active": false,
+        "builderSupplyRemaining": 4
+      },
+      "targetedReplays": {
+        "post943ActorSubstitutionsTried": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "earlyFloaterAndClimberActorVariantsTried": 8,
+        "winningRoutes": 0,
+        "post943ActorSubstitutions": {
+          "actorIDsTried": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "completedVariants": 5,
+          "winningRoutes": 0,
+          "bestSaved": 0,
+          "completedTicks": 7142,
+          "otherVariants": "Two later actor substitutions failed on later Bashers."
+        },
+        "earlyFloaterAndClimberActorVariants": {
+          "variantsTried": 8,
+          "completedVariants": 2,
+          "winningRoutes": 0,
+          "bestSaved": 0,
+          "completedTicks": 7142,
+          "otherVariants": "Six variants failed on later assignments or on the original tick-943 Builder."
+        }
+      }
+    },
+    "outcome": "The stored route is not valid in the current engine. The source-rule metadata does not repair it. Two wider searches and focused actor substitutions found no route. The level remains without a verified win. These bounded results do not prove it is impossible.",
+    "limits": [
+      "The candidate solution is an old replay record, not a source-engine capture.",
+      "This check diagnoses one route candidate only and does not prove the level is impossible.",
+      "No production source or fixture changed."
+    ],
+    "solver": {
+      "binaryPath": ".build/classic-fan-current/ClassicSolver",
+      "binarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+      "simulationSourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+      "replaySourceSHA256": "ca2474227cadb26125b7622d8bdbe117a972c4448e0fdab977c8753d1f0b08ea",
+      "solverSourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22",
+      "allFourSourcesUnchangedSinceBuild85": true
+    },
+    "alternativeSearches": [
+      {
+        "mode": "prefer-progress from level start",
+        "options": {
+          "beamWidth": 8192,
+          "seconds": 300,
+          "fallback": 48,
+          "refire": 12,
+          "adaptiveRate": true,
+          "rescueQuotaDistance": true,
+          "directExitDistance": true
+        },
+        "expanded": 764513,
+        "bestSaved": 0,
+        "terminal": {
+          "tick": 131,
+          "released": 8,
+          "lost": 0,
+          "active": 8,
+          "complete": false
+        },
+        "exitCode": 1,
+        "result": "UNSOLVED"
+      },
+      {
+        "mode": "prefer-progress from stored prefix",
+        "prefixSHA256": "cb7385d101a79ec50589e6f8e831aa2692501297d85ac3b84bcb4cf16f702a35",
+        "prefixInputs": [
+          "release rate 1 at tick 233",
+          "Builder lemming 1 at tick 233",
+          "Basher lemming 3 at tick 257",
+          "Floater lemming 1 at tick 325",
+          "Climber lemming 0 at tick 396"
+        ],
+        "options": {
+          "beamWidth": 8192,
+          "seconds": 300,
+          "fallback": 24,
+          "refire": 12,
+          "adaptiveRate": false,
+          "rescueQuotaDistance": true,
+          "directExitDistance": true
+        },
+        "expanded": 927166,
+        "bestSaved": 0,
+        "exitCode": 1,
+        "result": "UNSOLVED"
+      }
+    ]
+  }
+}

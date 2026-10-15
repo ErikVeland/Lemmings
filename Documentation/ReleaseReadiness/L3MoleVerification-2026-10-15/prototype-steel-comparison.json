@@ -6,6 +6,7 @@
   "samplesCompared": 53,
   "coordinateDifferences": 0,
   "baselineRuntimeSHA256": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb",
+  "moleMovementSourceSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
   "prototypeRuntimeSHA256": "476d05ac6501f628b20f318f0e08f5a53bad9b7d1284119df0959da2d824ab2b",
   "prototypeLibrarySHA256": "7cf1e6afababe54f94b6c87a93c61290eaf42ba228c24bef1e7194fe7431ddbd",
   "limitations": [
