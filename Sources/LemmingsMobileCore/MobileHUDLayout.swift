@@ -67,11 +67,11 @@ public struct MobileHUDLayout: Equatable, Sendable {
         var layout = makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
             skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
             hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
-        if television { layout = televisionLayout(layout) }
+        layout = topStatusLayout(layout, television: television)
         guard !showsMenuButton else { return layout }
         let original = layout.interface
         // Console navigation comes from Back or Options/Menu, with no HUD target.
-        let status = layout.portrait != nil
+        let status = original.statusFrame.minY == original.safeFrame.minY
             ? MobileRect(x: original.statusFrame.x, y: original.statusFrame.y,
                          width: original.safeFrame.width, height: original.statusFrame.height)
             : original.statusFrame
@@ -84,12 +84,20 @@ public struct MobileHUDLayout: Equatable, Sendable {
             isDiorama: layout.isDiorama, showsMenuButton: false, television: layout.television)
     }
 
-    /// TV keeps the complete status above the playfield, including the native L3 panel.
-    private static func televisionLayout(_ layout: MobileHUDLayout) -> MobileHUDLayout {
+    /// One broadcast-style row above gameplay, shared by all mobile engines.
+    private static func topStatusLayout(_ layout: MobileHUDLayout, television: Bool) -> MobileHUDLayout {
         let original = layout.interface
+        guard !original.controlFrames.isEmpty else { return layout }
         let safe = original.safeFrame
-        let status = MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: 76)
         let oldStatus = original.statusFrame
+        let top = MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: rowHeight)
+        // Split screens and system occlusions retain their existing unobstructed bank.
+        guard layout.reservedRegions.allSatisfy({ !top.intersects($0.frame) }) else { return layout }
+        let menu = original.controlFrames.last
+        let menuAtTop = menu.map { $0.minY == safe.minY } ?? false
+        let status = MobileRect(x: top.x, y: top.y,
+            width: top.width - (menuAtTop ? 48 : 0), height: top.height)
+        // Reclaim the old status row only when it sat directly below the playfield.
         let bottom = oldStatus.minY == original.playfieldFrame.maxY
             ? oldStatus.maxY : original.playfieldFrame.maxY
         let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: safe,
@@ -99,7 +107,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
             compactScale: layout.compactScale, speedArrows: layout.speedArrows,
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
-            isDiorama: layout.isDiorama, television: true)
+            isDiorama: layout.isDiorama, television: television)
     }
 
     private static func makeTouchLayout(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,

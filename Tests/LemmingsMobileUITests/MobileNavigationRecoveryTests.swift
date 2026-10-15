@@ -37,8 +37,9 @@ import LemmingsMobileCore
         var renders = 0
         try await withGame(rendered: { renders += 1 }) { game in
             game.gameSettings.pauseToAssign = false
-            #expect(game.playState.resume(isForeground: true, isInterrupted: false))
-            #expect(game.playState.pauseForPlanning())
+            let resumed = game.playState.resume(isForeground: true, isInterrupted: false)
+            let planning = game.playState.pauseForPlanning()
+            #expect(resumed && planning)
             game.overlay.isHidden = true
             let tick = game.session.snapshot.tick
             let before = renders
@@ -62,7 +63,8 @@ import LemmingsMobileCore
             let selected = game.selectedControl
             game.processTVControllerButtonEvent { game.performCommand(.skill(1)) }
             #expect(game.selectedControl == selected && game.playState.phase == .ready)
-            #expect(game.playState.resume(isForeground: true, isInterrupted: false))
+            let resumed = game.playState.resume(isForeground: true, isInterrupted: false)
+            #expect(resumed)
             game.overlay.isHidden = true
             _ = game.lifecycle.handle(.becameInactive)
             game.processTVControllerButtonEvent { game.performCommand(.skill(1)) }

@@ -5,6 +5,8 @@ import NxlvKit
 
 @MainActor extension ArcadeView {
     func finishCelebration() {
+        perkGlowTask?.cancel(); perkGlowTask = nil
+        glowingPerks = []; perkGlowAmount = 0
         celebrationGeneration = UUID()
         celebrationTask?.cancel(); celebrationTask = nil; rewardChimes.stop()
         celebrationFocusObservers.forEach { NotificationCenter.default.removeObserver($0) }
@@ -37,7 +39,10 @@ import NxlvKit
             for star in 1...celebration.goals.stars {
                 do { try await Task.sleep(nanoseconds: 180_000_000) } catch { return }
                 guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return }
-                if animate { self.revealedStars = star; self.stampedStar = star; self.needsDisplay = true }
+                if animate {
+                    self.revealedStars = star; self.stampedStar = star
+                    self.glowPerkCounters(at: star); self.needsDisplay = true
+                }
                 self.rewardChimes.play(star: star, ornament: ornament && star == celebration.goals.stars) { [weak self] in
                     guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return 0 }
                     return self.rewardVolumeProvider?() ?? self.rewardVolume
@@ -96,10 +101,6 @@ import NxlvKit
             }
         }
         if let resultStatus { text(resultStatus, 80, 253 + resultSummaryOffset, 960, alignment: .center, height: 26) }
-        else if earnedPerks.isEmpty && !savedEarnedRewards.isEmpty {
-            link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"), CGRect(x: 80, y: resultCardsY - 38, width: 960, height: 32), alignment: .left, palette: .green) { [weak self] in self?.showEarnedRewards() }
-        }
-        drawEarnedPerks()
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         let history = ArcadeStore.shared.records.trolley
@@ -145,29 +146,15 @@ import NxlvKit
         GameStyle.fill(CGRect(x: 566, y: resultCardsY, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         link("\(report?.run.assisted == true ? L10n.text("REWIND CAREER") : L10n.text("CAREER"))  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
              CGRect(x: 582, y: resultCardsY + 7, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
-        text(resultBalanceText, 582, resultCardsY + 35, 442, height: 22)
-        let rewards = precisionRewardText(c)
+        drawPerkCounters(in: CGRect(x: 582, y: resultCardsY + 35, width: 442, height: 22))
         let new = c.newAwards
-        if !rewards.isEmpty && earnedPerks.isEmpty {
-            link(rewards + " >", CGRect(x: 582, y: resultCardsY + 56, width: 442, height: 24), alignment: .left, palette: .green) { [weak self] in self?.showEarnedRewards() }
-            if !new.isEmpty {
-                link("\(new.count) NEW \(new.count == 1 ? L10n.text("AWARD") : L10n.text("AWARDS")) >", CGRect(x: 582, y: resultCardsY + 82, width: 442, height: 28), alignment: .left) { [weak self] in self?.showNewAwards() }
+        if !savedEarnedRewards.isEmpty {
+            if let award = new.first?.award {
+                resultCareerAwardLink(award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 22))
             } else if let next = c.nextCareerGoal {
-                resultCareerAwardLink(next.award, in: CGRect(x: 582, y: resultCardsY + 82, width: 442, height: 28))
+                resultCareerAwardLink(next.award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 22))
             }
-        } else if !new.isEmpty {
-            let selected = new[featuredAwardIndex % new.count]
-            achievementLink(L10n.text("NEW: \(selected.award.title) >"), in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 22),
-                            title: selected.award.title, detail: ResultAwards.explanation(for: selected.award)) { [weak self] in
-                let ordered = [selected] + new.filter { $0.award != selected.award }
-                self?.showResultAchievement(ordered.map { ($0.award.title, ResultAwards.explanation(for: $0.award)) })
-            }
-            link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: resultCardsY + 82, width: new.count > 1 ? 266 : 442, height: 28), alignment: .left) { [weak self] in self?.showNewAwards() }
-            if new.count > 1 {
-                link(L10n.text("\(featuredAwardIndex % new.count + 1)/\(new.count) Next >"), CGRect(x: 861, y: resultCardsY + 82, width: 163, height: 28)) { [weak self] in
-                    self?.featuredAwardIndex += 1; self?.needsDisplay = true
-                }
-            }
+            link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"), CGRect(x: 582, y: resultCardsY + 82, width: 442, height: 28), alignment: .left) { [weak self] in self?.showEarnedRewards() }
         } else if let next = c.nextCareerGoal {
             resultCareerAwardLink(next.award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 24))
             text(next.status, 582, resultCardsY + 85, 442, height: 20)
@@ -175,9 +162,7 @@ import NxlvKit
         } else { text(L10n.text("All career milestones earned!"), 582, resultCardsY + 75, 442) }
     }
     var resultBalanceText: String {
-        let wallet = PrecisionZoomController.shared
-        let skips = ArcadeStore.shared.records.levelSkips(profileID: player.id).available
-        return L10n.text("Zoom \(wallet.remaining(.zoom, profileID: player.id))   Superzoom \(wallet.remaining(.superzoom, profileID: player.id))   Level Skips \(skips)")
+        perkCounters.map(\.label).joined(separator: "   ")
     }
     private func resultCareerAwardLink(_ award: TrolleyAchievement, in rect: CGRect) {
         let detail = ResultAwards.explanation(for: award)

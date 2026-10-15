@@ -1581,13 +1581,11 @@ typealias MobileGameOverlay = UIScrollView
             hudArtworkSource = gameSettings.classic.graphics
         }
         hud.counterStyle = gameSettings.classic.counterStyle
-        #if os(tvOS)
         hud.statusDetails = .init(lostCount: session.lostLemmingCount,
             deathCounter: FailureMoodDecision.deathCounter(saved: snapshot.saved,
                 active: session.activeLemmingCount, unreleased: snapshot.total - snapshot.released,
                 required: snapshot.required, total: snapshot.total,
                 isComplete: snapshot.isComplete, didWin: snapshot.didWin))
-        #endif
         hud.update(
             layout: resolved,
             snapshot: snapshot,

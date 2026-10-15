@@ -59,7 +59,7 @@ import NxlvKit
                     try check(layout.interface.controlFrames == baseline.interface.controlFrames
                         && layout.minimapFrame == baseline.minimapFrame && layout.panel == baseline.panel,
                         label + " existing controls retain their bounds")
-                    try check(!baseline.television && baseline.interface.statusFrame.height == 44, label + " mobile header is unchanged")
+                    try check(!baseline.television && baseline.interface.statusFrame.height == 44 && header.height == 44, label + " single-row header")
                     try check(header.minY == layout.interface.safeFrame.minY && header.maxY == layout.interface.playfieldFrame.minY,
                               label + " status stays above gameplay")
                     try check(lines[0].contains("(\(saved * 100 / 80)%)") && lines[1].contains(death.visible), label + " percent and Mac failure count")
@@ -83,7 +83,17 @@ import NxlvKit
                                   label + " unambiguous activation centre")
                     }
                     let identity = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
-                    try check(identity.player?.height == 20 && identity.counters.height == 56, label + " owner and counters")
+                    try check(identity.player?.height == 44 && identity.counters.height == 44
+                        && identity.player?.midY == identity.counters.midY, label + " owner and counters share one line")
+                    let fields = MobileHUDRenderer.statusFields(in: identity.counters, snapshot: snapshot, details: details,
+                        engineIdentifier: engine, paused: paused, speed: speed, typography: typography)
+                    try check(fields.contains { $0.id == "score" && $0.text.contains("(\(saved * 100 / 80)%)") }, label + " visible rescue score")
+                    try check(fields.contains { $0.id == "time" } && fields.contains { $0.id == "allowance" }, label + " visible clock and failure allowance")
+                    for (index, field) in fields.enumerated() {
+                        try check(identity.counters.contains(field.frame), label + " contained status field")
+                        try check(field.frame.midY == identity.counters.midY, label + " single baseline")
+                        try check(!fields.dropFirst(index + 1).contains { field.frame.intersects($0.frame) }, label + " separate stats")
+                    }
                     guard let context = CGContext(data: nil, width: Int(width), height: Int(height), bitsPerComponent: 8,
                         bytesPerRow: Int(width) * 4, space: CGColorSpaceCreateDeviceRGB(),
                         bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.check("Bitmap") }
@@ -93,23 +103,13 @@ import NxlvKit
                         playerName: "ABC", statusDetails: details).draw(in: context, bounds: CGRect(x: 0, y: 0, width: width, height: height))
                     guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(
                         output.appendingPathComponent(label + ".png") as CFURL, "public.png" as CFString, 1, nil) else { throw Failure.check("PNG") }
-                    if let skull = lines[1].range(of: "💀"), let font = typography.font(.small) {
-                        let lineWidth = typography.width(of: GameMenuTypography.menuText(lines[1]), face: .small, scale: 1)
-                        let prefix = lines[1].distance(from: lines[1].startIndex, to: skull.lowerBound)
-                        let glyphRect = CGRect(x: floor(header.midX - lineWidth / 2) + Double(prefix * font.cellWidth),
-                            y: header.minY + 48, width: Double(font.cellWidth), height: 28)
-                        guard let glyph = image.cropping(to: glyphRect),
-                            let sample = CGContext(data: nil, width: font.cellWidth, height: 28, bitsPerComponent: 8,
-                                bytesPerRow: font.cellWidth * 4, space: CGColorSpaceCreateDeviceRGB(),
-                                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
-                            throw Failure.check(label + " skull crop")
-                        }
-                        sample.draw(glyph, in: CGRect(x: 0, y: 0, width: font.cellWidth, height: 28))
-                        guard let data = sample.data else { throw Failure.check(label + " skull pixels") }
-                        let pixels = Array(UnsafeBufferPointer(start: data.assumingMemoryBound(to: UInt8.self), count: font.cellWidth * 28 * 4))
+                    if let allowance = fields.first(where: { $0.id == "allowance" }), allowance.text.contains("💀") {
+                        guard let glyph = image.cropping(to: allowance.frame), let provider = glyph.dataProvider,
+                              let bytes = provider.data else { throw Failure.check(label + " allowance crop") }
+                        let pixels = Array(bytes as Data)
                         try check(stride(from: 0, to: pixels.count - 3, by: 4).contains {
                             pixels[$0 + 2] > pixels[$0 + 1] && pixels[$0 + 1] > pixels[$0]
-                        }, label + " skull has visible blue pixels")
+                        }, label + " visible blue death allowance")
                     }
                     CGImageDestinationAddImage(destination, image, nil)
                     try check(CGImageDestinationFinalize(destination), label + " PNG")

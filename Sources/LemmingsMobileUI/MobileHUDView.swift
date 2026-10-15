@@ -145,14 +145,12 @@ import UIKit
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
         playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
-        statusIdentity.isHidden = !layout.television
-        if layout.television {
-            statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).counters
-            let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
+        statusIdentity.isHidden = false
+        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).counters
+        let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
                 engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic", paused: paused, speed: speed)
-            statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
+        statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
                 .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
-        }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -222,8 +220,9 @@ import UIKit
         for button in buttons.reversed() where button.superview === self && button.frame.contains(point) {
             return button.hitTest(convert(point, to: button), with: event)
         }
-        if layout?.portrait != nil || layout?.television == true, let status = layout?.interface.statusFrame,
-           point.y <= status.maxY { return self }
+        if let layout, layout.interface.statusFrame.minY == layout.interface.safeFrame.minY,
+           point.y <= layout.interface.statusFrame.maxY { return self }
+        if let status = layout?.interface.statusFrame, Self.cgRect(status).contains(point) { return self }
         return nil
     }
 

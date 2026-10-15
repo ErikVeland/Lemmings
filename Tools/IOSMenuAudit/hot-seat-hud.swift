@@ -52,10 +52,11 @@ extension MenuAudit {
                 }
                 let identityText = name ?? ""
                 if let player = frames.player {
-                    let identity = MobileHUDRenderer.playerFrames(in: player, name: identityText, portrait: icon, typography: typography)
+                    let compact = frames.counters.width < 440
+                    let identity = MobileHUDRenderer.playerFrames(in: player, name: identityText, portrait: icon, typography: compact ? nil : typography)
                     guard let portraitFrame = identity.portrait, player.contains(portraitFrame), player.contains(identity.name),
                           !portraitFrame.intersects(identity.name),
-                          typography.width(of: GameMenuTypography.menuText(identityText), face: .small, scale: 1) <= identity.name.width else { throw Failure.invalidTargets }
+                          (compact ? CGFloat(GamePixelTypography.width(of: identityText)) : typography.width(of: GameMenuTypography.menuText(identityText), face: .small, scale: 1)) <= identity.name.width else { throw Failure.invalidTargets }
                     guard cg(layout.interface.safeFrame).contains(player), !player.intersects(frames.counters),
                           !player.intersects(cg(layout.interface.playfieldFrame)),
                           regions.allSatisfy({ !player.intersects(cg($0.frame)) }) else { throw Failure.invalidTargets }

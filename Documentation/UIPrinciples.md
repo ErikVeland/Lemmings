@@ -509,36 +509,26 @@ bounds in agreement when the panel height changes. Anchor the action row at the
 same bottom position across result, reward and achievement pages. Short panels
 shrink above the actions, so pagination does not move the navigation targets.
 
-Earned perks belong to the Mac result's star celebration. Open the result first.
-Place a complete row of pixel-art perk cards directly below the stars. Each card
-shows the new quantity, the perk name, the career counter change and the threshold.
-Use a magnifier for Zoom, a plus magnifier for Superzoom and a skip arrow with an
-end bar for Level Skip. Pending cards use a dim outline. The earning star fills
-the icon and gold reward edge. Retain the awarded cards after the animation.
-Do not animate balances or grant credit from presentation code.
+Mac results keep Zoom, Superzoom and Level Skip balances as three compact counts
+in the Career panel. Keep all three visible after success and failure. Do not
+add perk cards, banners, confetti panels or an automatic reward-detail page.
+When an earning star arrives, update its count and apply one brief gold glow to
+the number. Let the glow fade in place without moving controls or hiding counts.
+Keep criteria and earning reasons behind the existing Rewards earned action.
 
-Reveal Zoom when a newly improved star crosses the next career-star threshold.
-Reveal Superzoom and Level Skip with the third star that crosses the distinct
-three-star-level threshold. Keep the attempt owner visible in Hot Seat. Animate
-new perks only on the first presentation of a saved attempt. Reopening an old
-result keeps its perk cards filled. Reduced motion and cancelled animations show
-the final state immediately. No resource card appears for a preview, an assisted
-run or a repeat that earned no new credit.
+Animate the display only. Credit remains in the saved records. The count shows
+the balance before this attempt until its earning star arrives, then the saved
+balance. Glow only on the first presentation of a newly saved award. Reopened
+results, reduced motion, loss of focus and cancelled animations show the final
+counts without a glow. Keep the attempt owner's balances in Hot Seat. Returning
+from details never retries, advances or passes a turn.
 
-The Rewards earned action and each perk card open the full award details.
-Show the attempt owner, every award name and its earning reason. Level awards
-state the achieved rescue or skill use. Career awards show their criteria.
-Paginate measured cards without clipping or automatic dismissal. Returning to
-the result does not replay the celebration, retry, advance or pass a Hot Seat turn.
-Keep gameplay shortcuts inactive on the detail page. The normal star chimes run
-with the initial result. Keep one primary next action and stable navigation.
-
-Muted offscreen checks also verify complete action rows, disabled Skip targets,
-short and multi-page awards, single-action details, long result titles and compact
-and large renders. Native Learning journey failures pass in all three engines,
-solo play and both Hot Seat rules. Representative results, rewards and details
-were visually inspected. Mac source compilation passes. Physical VoiceOver and
-controller delivery remain manual checks. This layout change is Mac-only.
+The passive-count regression passes across all three games, solo play and both
+Hot Seat rules. It checks the displayed before/after balances, exact earning
+stars, glow completion, reduced motion, cancellation, one-time presentation and
+unchanged credit and ownership. The final count spacing compiles and its compact
+and large renders were inspected. Counts are static accessibility values, with
+no additional button targets. Physical VoiceOver remains a manual check.
 
 The muted, offscreen `TEST_SCOPE=earned-rewards` Mac suite passes for Classic,
 Lemmings 2 and Lemmings 3, solo play and both Hot Seat rules. It checks actual

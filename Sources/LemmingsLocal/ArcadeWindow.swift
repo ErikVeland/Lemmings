@@ -152,6 +152,9 @@ import NxlvKit
     var onReadySound: (() -> Void)?
     var revealedStars = 3
     var stampedStar: Int?
+    var glowingPerks: Set<EarnedPerk.Kind> = []
+    var perkGlowAmount: CGFloat = 0
+    var perkGlowTask: Task<Void, Never>?
     var featuredAwardIndex = 0
     var careerPage = 0
     var boardScope = BoardScope.level
