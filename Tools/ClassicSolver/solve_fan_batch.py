@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--adaptive-rate", action="store_true")
     parser.add_argument("--prefer-progress", action="store_true")
     parser.add_argument("--balanced-ranking", action="store_true")
+    parser.add_argument("--rescue-quota-distance", action="store_true")
     parser.add_argument("--rollout-single", action="store_true")
     parser.add_argument("--fallback", type=int, default=170)
     parser.add_argument("--refire", type=int, default=120)
@@ -96,6 +97,7 @@ def main():
                 and old.get("adaptiveRate", False) == args.adaptive_rate
                 and old.get("preferProgress", False) == args.prefer_progress
                 and old.get("balancedRanking", False) == args.balanced_ranking
+                and old.get("rescueQuotaDistance", False) == args.rescue_quota_distance
                 and old.get("rolloutSingle", False) == args.rollout_single
                 and old.get("fallback", 170) == args.fallback
                 and old.get("refire", 120) == args.refire
@@ -126,6 +128,8 @@ def main():
             command.append("--prefer-progress")
         if args.balanced_ranking:
             command.append("--balanced-ranking")
+        if args.rescue_quota_distance:
+            command.append("--rescue-quota-distance")
         if args.rollout_single:
             command.append("--rollout-single")
         if args.save_partials:
@@ -142,6 +146,7 @@ def main():
                   "adaptiveRate": args.adaptive_rate,
                   "preferProgress": args.prefer_progress,
                   "balancedRanking": args.balanced_ranking,
+                  "rescueQuotaDistance": args.rescue_quota_distance,
                   "rolloutSingle": args.rollout_single,
                   "fallback": args.fallback, "refire": args.refire,
                   "savePartials": args.save_partials,

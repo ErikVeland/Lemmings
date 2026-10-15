@@ -77,7 +77,8 @@ Use `--rescue-quota-distance` when a level needs only some of its lemmings.
 The distance score then uses the nearest number still needed to meet the
 rescue target. This keeps a promising worker from being penalised for other
 lemmings far from the exit. It changes search order only and may be combined
-with `--prefer-progress`; record both options with each attempt.
+with `--prefer-progress`; record both options with each attempt. The fan batch
+driver accepts `--rescue-quota-distance` and includes it in its resume key.
 Use `--balanced-ranking` for a targeted search that reserves half the beam for
 each ranking. This can retain a route that sacrifices a lemming to open terrain
 while preserving routes that keep more lemmings alive. It cannot be combined
