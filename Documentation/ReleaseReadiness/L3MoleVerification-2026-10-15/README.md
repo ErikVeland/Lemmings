@@ -93,6 +93,14 @@ current library hash is
 resource manifest and verifier hashes. This confirms the route count. It does
 not close the 17 routes or prove original-engine fidelity.
 
+I also reran all four failing standalone routes with the current-source solver.
+Each search used a 120-second budget, a 1,024-candidate beam, eight-pixel
+tool-site sampling and paired actors. Egyptian 29 resumed from its retained
+input through tick 1,560, then refreshed that prefix under the current runtime.
+No search found a route, and no fixture changed. These bounds do not show that
+any level is impossible. See
+[`current-main-searches-2026-10-16.json`](current-main-searches-2026-10-16.json).
+
 I also tested two seeded repairs for Shadow 7 with the current runtime library.
 The first resumed from the retained route at tick 1,580 with a 1,024-wide beam
 and 8-pixel tool-site sampling. It expanded 1,492,739 candidates in 120
