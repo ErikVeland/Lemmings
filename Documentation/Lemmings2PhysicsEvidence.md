@@ -1,12 +1,16 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 15 October 2026. All twelve tribes, 51 skills, 15 object types
-and four practice maps are enabled. The strict completion gate verified all 120
-winning routes and 70 carry-over variants twice, with continuous ten-level
-chains for all twelve tribes. The focused runtime check passed 52 synthetic
-regression checks; this does not claim a fresh pass of the full data runtime suite.
-See the [completion evidence](Lemmings2Completion/README.md) for the current
-route proof and validation limits. **Original-engine equivalence and release
+Status checked on 15 October 2026 at `main` revision `67dd4356`. All twelve
+tribes, 51 skills, 15 object types and four practice maps are enabled. The strict
+completion gate verified all 120 winning routes and 70 carry-over variants
+twice, with continuous ten-level chains for all twelve tribes. The runtime suite
+passed its synthetic checks and a full run with the installed L2 resource bundle
+under Xcode 26.6. It loaded and advanced all 120 campaign levels, all ten
+Classic levels and all four practice maps. It also reproduced all 120 route
+fixtures and checked campaign progress and recorded carry-over chains. This
+confirms that the native runtime reads the shipped L2 data. It does not prove
+original-engine equivalence. See the [completion evidence](Lemmings2Completion/README.md)
+for route proof and validation limits. **Original-engine equivalence and release
 validation remain separate work.**
 
 On 15 October, the strict ark check replayed all 120 routes and 70 carry-over
@@ -133,6 +137,24 @@ zsh Scripts/run-lemmings2-runtime-tests.sh
 zsh Scripts/run-sequel-data-tests.sh
 zsh Scripts/build-native-l2.sh
 ```
+
+The runtime script uses `Sources/Ports/Lemm2` when that directory exists. This
+worktree does not contain that data. To repeat the data-backed runtime checks
+with the installed app bundle, first build the test binary with the runtime
+script, then pass the installed resource path to that binary:
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+  CLANG_MODULE_CACHE_PATH="$PWD/.build/module-cache-l2-runtime" \
+  SWIFT_MODULE_CACHE_PATH="$PWD/.build/module-cache-l2-runtime" \
+  zsh Scripts/run-lemmings2-runtime-tests.sh
+.build/l2-runtime-tests/RuntimeTests \
+  "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2"
+```
+
+The 15 October 2026 run passed with Xcode 26.6 at `main` revision `67dd4356`.
+The installed app bundle supplies the data for that run. The command does not
+prove that the source tree embeds or packages the same data.
 
 `Tests/Lemmings2CompletionTests/Fixtures/classic-01.json` contains twenty timed
 skill assignments for the local `LEVEL000.DAT`. The test starts the unmodified
