@@ -84,7 +84,8 @@ import Testing
         transport.cloud.files[GameCenterProgressSync.fileName(owner: cloudOwner)] = [try JSONEncoder().encode(first), try JSONEncoder().encode(other)]
         let service = GameCenterProgressSync(store: store, defaults: storage.defaults, transport: transport)
         await service.syncNow(); await service.syncNow()
-        #expect(service.state == .idle && transport.writes == 1)
+        #expect(service.state == .idle, "Conflict sync state: \(String(describing: service.state))")
+        #expect(transport.writes == 1)
         #expect(store.records.trolley.attempts.count == 2)
         #expect(store.records.stats(level: local.level, profileID: owner, assisted: false).attempts == 2)
         #expect(store.records.stats(level: local.level, profileID: owner, assisted: false).clears == 2)
