@@ -80,6 +80,8 @@
   },
   "sourceMatchesCurrentMain": true,
   "sourceChangedSincePreviousAudit": true,
+  "sourceRecheckedAtCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+  "sourceUnchangedSinceAudit": true,
   "normalisedFreshReportMatchesRetainedReport": true,
   "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly."
 }

@@ -1,7 +1,8 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The current macOS release is 2.0.2, with Hot Seat ghosts, clearer results and refreshed hints.
+The current macOS release is 2.0.2 build 85, with Hot Seat ghosts, clearer
+results and refreshed Classic hints.
 Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
 work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
@@ -83,13 +84,16 @@ audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-build83-replay.jso
 [package audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-package-audit.json)
 and [2.0 evidence bridge](Documentation/ReleaseReadiness/2.0-build83/engine-content-equivalence-current-main.json).
 
-The pinned NeoLemmix runnable gate passed 794 levels. The exact build 83 slim
-archive also contains 794 manifest-listed levels. A section scan resolves 719
-levels with the 26 bundled DMA styles. The other 75 need 44 community styles.
-Their rights remain unresolved, and all 794 levels stay in closure scope. The
-current source corrects the manifest and test counts. The released package still
-needs a rebuild and audit. Exact-version winning replay evidence covers 158
-levels. See the [NeoLemmix package audit](Documentation/ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
+The pinned NeoLemmix runnable gate passed 794 levels. Macintosh 2.0.2 build 85
+passes the bundled-resource check for all 794 indexed levels and resolves all
+719 levels supported by the 26 bundled DMA styles. The other 75 need 44
+community styles whose rights remain unresolved. All 794 levels stay in
+bundled closure scope. Build 85 includes the packaging fix that links the
+existing Xmas group into the parent index. Exact-version winning replay
+evidence covers 158 levels; route and source-rule closure remain open. See the
+[2.0.2 release evidence](Documentation/ReleaseReadiness/2.0.2-build85/README.md),
+[2.0.1 content audit](Documentation/ReleaseReadiness/2.0.1-build84/neo-content.json),
+[NeoLemmix package audit](Documentation/ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
 [style rights inventory](Documentation/ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
 and [release scope](Documentation/ReleaseScope.md).
 

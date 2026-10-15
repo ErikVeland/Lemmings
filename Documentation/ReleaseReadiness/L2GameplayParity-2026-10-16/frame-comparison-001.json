@@ -1,0 +1,381 @@
+{
+  "schema": "l2-original-gameplay-frame-comparison-v1",
+  "date": "2026-10-16",
+  "status": "source countdown aligned; selected WALKER.DAT positions match; precise source tick and broader actor parity remain open",
+  "release": "2.0 build 83",
+  "source": {
+    "executable": "Resources/Ports/Lemm2/L2.EXE",
+    "executableSHA256": "39be1bacc603219959d295830763f948ab65a42937e1b129e787c2f71df4ead5",
+    "level": "Resources/Ports/Lemm2/LEVELS/LEVEL010.DAT",
+    "levelSHA256": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3",
+    "game": "Beach level 10, Quad Quirks on the Quay!",
+    "dosbox": "DOSBox Staging 0.83.0, headless, muted, 20,000 cycles",
+    "syntheticInput": "The original candidate screenshot came from an earlier run with a centre-screen click at 12 seconds. In a later render-timestamped run, a click at (130,495) reached the Beach 10 briefing, while a click at (480,360) left the briefing visible through 17.974 seconds. Neither run proves a no-input gameplay comparison.",
+    "capture": {
+      "surface": "SDL_UpdateTexture input, 320x200 RGB24",
+      "frame": 35,
+      "displayClock": "8:36",
+      "screenshot": "source-frame-035.png",
+      "screenshotSHA256": "ff2366dde41b0a78d245fd5786fe7045a791b52df37211d93ae561714e245fa9",
+      "rawVideoSHA256": "6e55b669a14f028393e2ea4b8605158b8c0f47bf4c91d840148f3412b5f64684",
+      "spriteMatcher": {
+        "toolSource": "Tools/SequelTrace/main.swift",
+        "toolSourceSHA256": "6ac2dbd392a80d8d39656bba3c7155db91a80e6b639923865a8e88b7909f41f7",
+        "matchedAnimation": "LM5C",
+        "matchedFrames": [
+          6,
+          14,
+          22
+        ],
+        "pixelOrigin": [
+          204,
+          87
+        ],
+        "frameAnchorOrigin": [
+          204,
+          86
+        ],
+        "matchRecordSHA256": "529138221535a27e2d9f0ab4b178a0adde92c298870b0adb4d2a25ef3358b4f7"
+      }
+    }
+  },
+  "native": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "runtimeSource": "Sources/NxlvKit/Lemmings2Runtime.swift",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "level": "LEVEL010.DAT",
+    "levelScreenOrigin": [
+      0,
+      0
+    ],
+    "simulationTick": 360,
+    "remainingSeconds": 516,
+    "released": 15,
+    "walkingActorsTrace": "native-tick-360-walking-actors.txt",
+    "walkingActorsTraceSHA256": "29d91e9e6996f6d319214fc88c7abfac6787985812bd89ee37a0be632a736a1b",
+    "probeSourceSHA256": "8a22bf3e097c9330c0a2e8689e7f7d13dd5ae234beec8fbb81826ad8cfea605e",
+    "probeBinarySHA256": "598d66f96c08aacaa5ded23c01cf35297675a0123b39e4acbcccdba72ba0a826"
+  },
+  "observation": "The renderer-preserving source capture shows 8:36. A native no-input replay and the production WALKER.DAT frame geometry produce exact 26/26 visible-pixel matches at source coordinates (288,66) for a candidate native lemming 11 position during the 8:36 countdown window, and at (304,56) for lemming 11 during 8:34. The original capture has no DOS tick or actor ID, so these are sample-level position matches, not a full identity or timing proof. The earlier LM5C fallback match at (287,66) was not an actor identification.",
+  "captureLimits": [
+    "The SDL interposer saved texture input and returned without calling SDL_UpdateTexture. It also skipped normal presentation, so wall-clock pacing may differ from an ordinary run.",
+    "The synthetic click that dismissed the level briefing may also have reached gameplay. This is not a verified no-input source run.",
+    "The display clock has one-second resolution. The capture has no per-frame simulation-tick timestamp.",
+    "The pixel matcher finds identical frame pixels. It does not prove actor identity, direction or skill. Three stored animation frames produced the same match.",
+    "The screenshot shows one source frame. It does not prove route, campaign, assignment-rule or whole-engine parity.",
+    "The renderer capture samples pixel centres from the 960x720 SDL renderer output to make a 320x200 image. It calls the original SDL_RenderPresent after capture. It does not capture the DOS emulated tick or assign source actor identities.",
+    "The native trace estimates LM5C fallback draw positions. The production renderer uses WALKER.DAT for .walking actors when that file is present, so fallback positions cannot prove production-renderer parity."
+  ],
+  "nextEvidence": "Record the original DOS simulation tick and actor identity for the sampled frames, then continue the same comparison through 8:33 and across skill, exit and terrain interactions. The current match covers selected ordinary-walker pixels only.",
+  "followUpCapture": {
+    "run": "render-timestamped source capture, 2026-10-16, run 5",
+    "input": [
+      {
+        "hostMonotonicMs": 8000,
+        "action": "left click",
+        "windowCoordinates": [
+          130,
+          495
+        ]
+      },
+      {
+        "hostMonotonicMs": 12000,
+        "action": "left click",
+        "windowCoordinates": [
+          480,
+          360
+        ]
+      }
+    ],
+    "observations": [
+      {
+        "hostMonotonicMs": 7017,
+        "frame": 492,
+        "scene": "title screen"
+      },
+      {
+        "hostMonotonicMs": 11040,
+        "frame": 774,
+        "scene": "Beach 10 briefing"
+      },
+      {
+        "hostMonotonicMs": 12070,
+        "frame": 846,
+        "scene": "Beach 10 briefing"
+      },
+      {
+        "hostMonotonicMs": 17974,
+        "frame": 1260,
+        "scene": "Beach 10 briefing"
+      }
+    ],
+    "briefingScreenshot": "briefing-run5-frame-846.png",
+    "briefingScreenshotSHA256": "9b7ce4e21c6bb006d2bd72279d6ed753c8f93ac6a05bc1cac0f79fa0024c7f86",
+    "renderTiming": "render-timing-run5.csv",
+    "renderTimingSHA256": "8cf250478163efe782ddc2e27a02150f7ede54837bb2a80c1d39a872cd3275e6",
+    "captureMethod": "SDL_RenderReadPixels every sixth SDL_RenderPresent call; the interposer did not call the original SDL_RenderPresent.",
+    "result": "The Play click reached the Beach 10 briefing. The centre click was followed by at least 5.9 seconds of captured briefing frames; no gameplay frame was observed. This run does not resolve whether the centre click had any hidden gameplay effect, and it provides no simulation-tick timestamps.",
+    "additionalAttempt": {
+      "run": "render-timestamped source capture, 2026-10-16, run 6",
+      "input": {
+        "hostMonotonicMs": 12000,
+        "action": "Return key down/up",
+        "delivery": "SDL key events pushed in the same render callback"
+      },
+      "observations": [
+        {
+          "hostMonotonicMs": 12068,
+          "frame": 846,
+          "scene": "Beach 10 briefing"
+        },
+        {
+          "hostMonotonicMs": 17976,
+          "frame": 1260,
+          "scene": "Beach 10 briefing"
+        },
+        {
+          "hostMonotonicMs": 39977,
+          "frame": 2802,
+          "scene": "Beach 10 briefing"
+        }
+      ],
+      "briefingScreenshot": "briefing-run6-frame-1260.png",
+      "briefingScreenshotSHA256": "0540f686cd6d425c052d7791c661f0b8aa0a4e92bf4d1be5a81c36841bbc79c3",
+      "renderTiming": "render-timing-run6.csv",
+      "renderTimingSHA256": "908ec99964999ad5e1419a6b5dfa488e5bd1e557b14f2e38a2625a37d7ec3d25",
+      "result": "The briefing remained visible through approximately 40 seconds. The manual identifies Return as fast-forward, so this was not a valid test of briefing transition. No conclusion about level entry follows from this attempt.",
+      "captureMethod": "SDL_RenderReadPixels every sixth SDL_RenderPresent call; the interposer did not call the original SDL_RenderPresent.",
+      "documentedControl": "Return is listed as fast-forward in the manual; run 6 did not test a documented start action."
+    },
+    "pauseAttempt": {
+      "run": "render-timestamped source capture, 2026-10-16, run 7",
+      "input": {
+        "hostMonotonicMs": 12000,
+        "action": "P key down/up",
+        "documentedRole": "Pause toggle"
+      },
+      "observations": [
+        {
+          "hostMonotonicMs": 13008,
+          "frame": 912,
+          "scene": "Beach 10 briefing"
+        },
+        {
+          "hostMonotonicMs": 17975,
+          "frame": 1260,
+          "scene": "Beach 10 briefing"
+        },
+        {
+          "hostMonotonicMs": 39975,
+          "frame": 2802,
+          "scene": "Beach 10 briefing"
+        }
+      ],
+      "renderTiming": "render-timing-run7.csv",
+      "renderTimingSHA256": "158b09b4916a610c39362e57e6743ec887a4461e93ba318d39117e7082057830",
+      "screenshot": "briefing-run6-frame-1260.png",
+      "screenshotSHA256": "0540f686cd6d425c052d7791c661f0b8aa0a4e92bf4d1be5a81c36841bbc79c3",
+      "result": "The briefing pixels are identical to run 6 at frame 1260. This establishes only that the displayed scene was unchanged after the injected pause key. It does not establish that a normal pause action is the documented level-start control."
+    }
+  },
+  "controlReference": {
+    "title": "Lemmings 2: The Tribes manual",
+    "url": "https://www.abandonwaredos.com/docawd.php?idg=1644&sf=lemmings2manual.txt&sg=Lemmings+2:+The+Tribes&st=manual",
+    "relevantText": "The quick-command section assigns Return to fast-forward; the pause section says to reselect Pause or click another icon to commence play.",
+    "use": "Return in run 6 was not a valid briefing-transition test."
+  },
+  "validatedGameplayCapture": {
+    "run": "render-timestamped source capture, 2026-10-16, run 12",
+    "sourceFiles": {
+      "executableSHA256": "39be1bacc603219959d295830763f948ab65a42937e1b129e787c2f71df4ead5",
+      "levelSHA256": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3"
+    },
+    "input": [
+      {
+        "hostMonotonicMs": 8000,
+        "action": "left click at window coordinates (130,495)",
+        "holdMs": 50,
+        "result": "title selection opened the Beach 10 briefing"
+      },
+      {
+        "hostMonotonicMs": 12000,
+        "action": "left click at window coordinates (480,360)",
+        "holdMs": 50,
+        "result": "entered the live Beach 10 level screen"
+      }
+    ],
+    "laterInputs": "None after the second click.",
+    "observations": [
+      {
+        "frame": 1260,
+        "hostMonotonicMs": 17974,
+        "scene": "live Beach 10 level; actors visible",
+        "screenshot": "gameplay-run12-frame-1260.png",
+        "screenshotSHA256": "e7d209205a9bfed7bc11dec8832ecba9900cb6cbb67fa47a91dd9529698cff00",
+        "hostElapsedSinceGameplayClickMs": 5974
+      },
+      {
+        "frame": 2526,
+        "hostMonotonicMs": 36038,
+        "scene": "live Beach 10 level; actors visible",
+        "screenshot": "gameplay-run12-frame-2526.png",
+        "screenshotSHA256": "df9ccea802d4e2acbe396cff76174de76978882a9f648b5a3fdb0c8fdc076085",
+        "hostElapsedSinceGameplayClickMs": 24038
+      }
+    ],
+    "renderTiming": "render-timing-run12.csv",
+    "renderTimingSHA256": "b299c8025eeff0883c411a252493e9e21ddae9cd0e1d8b4700f538e9d6a850a9",
+    "captureMethod": "SDL_RenderReadPixels every sixth SDL_RenderPresent call; the interposer did not call the original SDL_RenderPresent.",
+    "limit": "The capture records renderer-frame numbers and host time, not the emulated simulation tick or exact in-game countdown at each frame. It establishes the input path to live gameplay, but it does not align either screenshot to native tick 360.",
+    "timingInterpretation": {
+      "gameplayClickHostMonotonicMs": 12000,
+      "firstSampleElapsedHostMs": 5974,
+      "limitation": "This is elapsed host time only. The DOS capture did not record the in-game countdown or emulated simulation tick, so it cannot be aligned to native tick 360."
+    }
+  },
+  "clockAlignedCapture": {
+    "run": "renderer-preserving source capture, 2026-10-16, run 13",
+    "sourceFiles": {
+      "executableSHA256": "39be1bacc603219959d295830763f948ab65a42937e1b129e787c2f71df4ead5",
+      "levelSHA256": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3"
+    },
+    "input": [
+      {
+        "hostMonotonicThresholdMs": 8000,
+        "action": "left click at window coordinates (130,495)",
+        "holdMs": 50,
+        "result": "opened the Beach 10 briefing"
+      },
+      {
+        "hostMonotonicThresholdMs": 12000,
+        "action": "left click at window coordinates (480,360)",
+        "holdMs": 50,
+        "result": "entered live Beach 10 gameplay"
+      }
+    ],
+    "sample": "source-renderer-run13-samples.csv",
+    "sampleMethod": "SDL_RenderReadPixels at the centre of each source pixel from the 960x720 renderer output. The interposer then called the original SDL_RenderPresent. Host time was recorded on each renderer frame.",
+    "alignedSourceSample": {
+      "frame": 2450,
+      "hostMonotonicMs": 35137,
+      "displayedCountdown": "8:36",
+      "screenshot": "source-renderer-run13-frame-2450.png",
+      "screenshotSHA256": "bcaa1a6c2e253c06ca34c4ca051a2fb6b4f431b5cf1f3ea4b553a2c009b596b9",
+      "pixelMatches": [
+        {
+          "animation": "LM5C",
+          "frames": [
+            5,
+            9,
+            17
+          ],
+          "origin": [
+            287,
+            66
+          ]
+        },
+        {
+          "animation": "LM40",
+          "frames": [
+            2
+          ],
+          "origin": [
+            210,
+            84
+          ]
+        }
+      ]
+    },
+    "nativeComparison": {
+      "tick": 360,
+      "remainingSeconds": 516,
+      "released": 15,
+      "trace": "native-tick-360-walking-actors.txt",
+      "traceActor11StatePosition": [
+        282,
+        82
+      ],
+      "nonProductionFallbackEstimate": [
+        273,
+        73
+      ],
+      "productionRenderer": {
+        "source": "Sources/LemmingsLocal/Lemmings2PlayWindow.swift",
+        "sourceSHA256": "e8307daa07423ad2391c67f554753f3183052df98112e27bb9a8760e784bc068",
+        "walkingSprite": "WALKER.DAT",
+        "walkerAssetSHA256": "bdaac25a91c19b3a0e25e1ed2c31c9f5c8fd1f953aefe50b25b3f31859d05208",
+        "selection": "Uses WALKER frames for .walking actors when the asset is loaded. LM5C is the fallback when WALKER frames are unavailable."
+      }
+    },
+    "walkerWindowComparison": {
+      "tool": "Tools/SequelTrace/walker-window-match.swift",
+      "toolSHA256": "15f5239c450f043ef1f31f58e369c1612f24f6fc7f5df6fd35d459dbd38c9630",
+      "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+      "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+      "walkerDecoderSourceSHA256": "b71f3e272fad942629e9b8a2ac05a1e484a95da1b293f2bc9f45b5b646a38a8a",
+      "walkerAssetSHA256": "bdaac25a91c19b3a0e25e1ed2c31c9f5c8fd1f953aefe50b25b3f31859d05208",
+      "beachStyleAssetSHA256": "37334550b5c9337c25be4f57dd07fd9e04e268741d61a65d358ea07876048a1c",
+      "build85ContentBridge": "../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+      "pixelTolerancePerChannel": 3,
+      "nativeClockWindows": "Native remainingSeconds is timeLimit - tick / 15. Countdown 8:36 covers ticks 360-374; 8:34 covers ticks 390-404; 8:33 covers ticks 405-419.",
+      "matches": [
+        {
+          "sourceFrame": "source-renderer-run13-frame-2450.png",
+          "sourceFrameSHA256": "bcaa1a6c2e253c06ca34c4ca051a2fb6b4f431b5cf1f3ea4b553a2c009b596b9",
+          "displayedCountdown": "8:36",
+          "nativeActorCandidate": 11,
+          "nativeTick": 373,
+          "nativePosition": [
+            295,
+            76
+          ],
+          "direction": 1,
+          "walkerPhase": 5,
+          "drawOrigin": [
+            288,
+            66
+          ],
+          "exactPixels": 26,
+          "opaquePixels": 26,
+          "output": "walker-match-2450.txt",
+          "outputSHA256": "921ff08eb5aec12aaf922a3ec947a0b6c7a42a546eb3dfaa76e1644c67574a7e"
+        },
+        {
+          "sourceFrame": "source-renderer-run13-frame-2520.png",
+          "sourceFrameSHA256": "2f55886672eda2eca57857c82c6e7cafd240145dff2158cf4ee493d52b240eb0",
+          "displayedCountdown": "8:34",
+          "nativeActorCandidate": 11,
+          "nativeTick": 391,
+          "nativePosition": [
+            313,
+            66
+          ],
+          "direction": 1,
+          "walkerPhase": 7,
+          "drawOrigin": [
+            304,
+            56
+          ],
+          "exactPixels": 26,
+          "opaquePixels": 26,
+          "output": "walker-match-2520.txt",
+          "outputSHA256": "76e2d86acc6d4a9dbc18d3417070a7c08ccf101d7d38fc252b178ab28e8211db"
+        }
+      ],
+      "thirdSample": {
+        "sourceFrame": "source-renderer-run13-frame-2590.png",
+        "displayedCountdown": "8:33",
+        "result": "The matcher reports additional exact WALKER matches in the native countdown window. It does not provide a tracked match to native actor 11 for this frame.",
+        "output": "walker-match-2590.txt",
+        "outputSHA256": "ddaa28b48d0bfcb2e417b06c55bdf0de2558595278970513d281576da9271463"
+      },
+      "identityLimit": "The DOS frames do not contain native actor IDs or emulated ticks. Actor 11 is a native candidate based on the shared countdown interval and exact sprite position; the source-side identity remains inferred.",
+      "method": "Replay Beach 10 without inputs through every native tick sharing the source frame's displayed countdown. Use the production renderer's WALKER phase and draw offsets, then compare every opaque WALKER.DAT palette pixel at the predicted source coordinates. RGB input was extracted from each retained source PNG with ImageMagick.",
+      "classification": "Two selected source frames contain exact WALKER.DAT pixel matches at positions predicted for native actor 11. This supports local sprite-position parity; it does not prove exact DOS tick alignment or full engine parity."
+    },
+    "classification": "countdown aligned; selected ordinary-walker pixels match; exact DOS tick, source actor identity and broader gameplay parity remain open",
+    "limitations": "The source captures record displayed countdowns, not DOS simulation ticks or actor IDs. The matcher searches all fifteen native ticks associated with each displayed second. It uses the production walker decoder, frame phase and offsets, but compares underlying source palette pixels rather than a full Mac-rendered app frame. A positive match establishes selected pixel geometry only.",
+    "pixelMatchesInterpretation": "The earlier LM5C VLEMMS template matches did not identify actors. The WALKER.DAT comparison found exact source-palette pixels at predicted native draw positions for two selected frames."
+  }
+}

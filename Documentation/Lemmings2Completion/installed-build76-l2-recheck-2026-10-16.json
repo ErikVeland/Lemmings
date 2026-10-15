@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Current-main L2 route, event and runtime recheck against the locally installed app resource tree.",
+  "source": {
+    "commit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "verifierSHA256": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
+    "eventVerifierSHA256": "51b052f741f70ad9370bb25f5cca0ffcf5a9cc8a9eede128d507881580d6bb6d",
+    "runtimeTestsSHA256": "58f12ea3c6d5d57394f38087116020be32b6376ead86363218d8492534c0e951"
+  },
+  "target": {
+    "kind": "local installed application",
+    "path": "/Applications/Ultimate Lemmings.app",
+    "version": "1.9.1",
+    "build": 76,
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "L2.EXE bundled": false
+  },
+  "payloadIdentity": {
+    "manifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "matchedFiles": 218,
+    "expectedFiles": 218,
+    "missing": 0,
+    "unexpected": 0,
+    "changed": 0,
+    "treeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f"
+  },
+  "checks": {
+    "routeVerifier": {
+      "exitCode": 0,
+      "routes": 120,
+      "carryOverVariants": 70,
+      "continuousChains": 12,
+      "arkPrerequisites": "open"
+    },
+    "eventVerifier": {
+      "exitCode": 0,
+      "routes": 120,
+      "rejectsRefusedOffViewportAndOutOfOrder": true
+    },
+    "runtimeTests": {
+      "exitCode": 0,
+      "result": "passed"
+    }
+  },
+  "limits": [
+    "The local target is 1.9.1 build 76. It is not the 2.0.2 build 85 shipping package.",
+    "The runs confirm this matching L2 resource tree only. They do not prove original DOS behaviour.",
+    "Each tribe still ends with one survivor and a Bronze talisman. The Gold ark requirements remain open."
+  ]
+}

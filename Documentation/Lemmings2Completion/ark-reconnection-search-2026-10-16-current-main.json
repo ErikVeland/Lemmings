@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "scope": "Search for higher-survivor L2 routes on the exact build 83 app payload.",
+  "provenance": {
+    "sourceCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+    "previousPayloadReplayCommit": "fc52cac4bc27e9d196f3cdfa348ac36571426f94",
+    "l2RuntimeUnchangedSincePayloadReplay": true,
+    "solverSourcesUnchangedSincePayloadReplay": true,
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "solver": {
+      "path": ".build/l2-current-main-20261016/solver",
+      "sha256": "40b9aaaef9fd4dfc04e430c858b70057bd7bcbca3fe59a60301c1bf24f9201cc",
+      "sourceSHA256": {
+        "main.swift": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+        "Search.swift": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+        "LevelRun.swift": "1ba8ea4ce6cbd7c3f7c625b9d41c7dcbabb06775cee32d6b1ef2955b53ae08d4"
+      }
+    },
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "resourcePayload": {
+      "root": "/private/tmp/lemmings-bundled-closure/Lemm2-app-payload",
+      "manifest": "../ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+      "manifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+      "filesExpected": 218,
+      "filesActual": 218,
+      "filesMatched": 218,
+      "missing": 0,
+      "unexpected": 0,
+      "changed": 0,
+      "treeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f"
+    },
+    "payloadReplayAudit": "../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json"
+  },
+  "searches": [
+    {
+      "level": "cavelem-06",
+      "population": 13,
+      "seed": "none",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 300,
+      "beamWidth": 8192,
+      "cell": 4,
+      "refire": 50,
+      "decisionPoints": 685464,
+      "expanded": 685463,
+      "result": "No winning route; best partial saved 0/13.",
+      "partialSHA256": "17a094121483e4b94ede2696f6d57abfc02b92665e4978518eb585c323ba39ed"
+    },
+    {
+      "level": "cavelem-05",
+      "population": 13,
+      "seed": "Documentation/Lemmings2Completion/candidates/2026-10-16/cavelem-05-pop13.json",
+      "seedSHA256": "c2e745d330d8ed2fb8e60d5ccdda94630154ae43543baf0db7a2c1b9fd483c64",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 302,
+      "beamWidth": 8192,
+      "cell": 4,
+      "refire": 50,
+      "decisionPoints": 712234,
+      "expanded": 712233,
+      "result": "Reproduced the same 10/13 Silver route. No improvement.",
+      "candidateSHA256": "c2e745d330d8ed2fb8e60d5ccdda94630154ae43543baf0db7a2c1b9fd483c64"
+    },
+    {
+      "level": "classic-02",
+      "population": 60,
+      "seed": "Tests/Lemmings2CompletionTests/Fixtures/classic-02.json",
+      "seedSHA256": "3e7f3d5fa75ab09c632e40c2858c85d416ef170928e85cd235b3b03ae2cf93e5",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 300,
+      "beamWidth": 8192,
+      "cell": 4,
+      "refire": 50,
+      "decisionPoints": 1289172,
+      "expanded": 1289171,
+      "result": "Reproduced the same 13/60 Bronze route. No improvement.",
+      "candidateSHA256": "3e7f3d5fa75ab09c632e40c2858c85d416ef170928e85cd235b3b03ae2cf93e5"
+    },
+    {
+      "level": "cavelem-06",
+      "population": 10,
+      "seed": "none",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 300,
+      "beamWidth": 8192,
+      "depth": 80,
+      "cell": 4,
+      "refire": 50,
+      "decisionPoints": 692245,
+      "expanded": 692245,
+      "result": "No winning route; best partial saved 0/10. The search reached one round to beam width 8192.",
+      "partialSHA256": "46713e275831c35b6f7faac9d329c45648af15f076e03ace543a8778638a9fad"
+    }
+  ],
+  "acceptedChainChanged": false,
+  "outcome": "No replacement route was found. The accepted Cavelems chain remains unchanged and still ends with one survivor. Classic 2 also retains its 13/60 route.",
+  "limits": "These bounded searches do not prove that better routes are impossible. They verify route-search outcomes in the current native runtime, not original-engine parity or the L2 ark ending."
+}

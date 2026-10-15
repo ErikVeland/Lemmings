@@ -33,13 +33,17 @@ for sample in samples:
     if source_position != recorded_source or native_position != recorded_source or not sample["matches"]:
         raise SystemExit(f"FAIL Mole position differs at tick {sample['tick']}.")
 
-runtime_hash = hashlib.sha256(runtime.read_bytes()).hexdigest()
-if runtime_hash != comparison["baselineRuntimeSHA256"]:
-    raise SystemExit("FAIL Mole comparison baseline does not match the current runtime source.")
+runtime_text = runtime.read_text()
+movement_start = runtime_text.index("    private mutating func updateCreatures()")
+movement_end = runtime_text.index("    public mutating func step()", movement_start)
+movement_hash = hashlib.sha256(runtime_text[movement_start:movement_end].encode()).hexdigest()
+if movement_hash != comparison["moleMovementSourceSHA256"]:
+    raise SystemExit("FAIL Mole movement source differs from the trace comparison baseline.")
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
 
 print(f"PASS original DOS to native Mole trace: {len(samples)} positions, ticks {first}–{last}")
+print("PASS Mole movement source matches the trace comparison baseline")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")

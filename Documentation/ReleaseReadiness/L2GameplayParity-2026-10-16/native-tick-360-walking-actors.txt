@@ -1,0 +1,16 @@
+tick=360 remaining=516 released=15
+id=0,x=247,y=27,age=124,phase=10,anchor=0,1,draw=238,18
+id=1,x=386,y=216,age=210,phase=8,anchor=0,1,draw=377,207
+id=2,x=119,y=207,age=153,phase=7,anchor=0,1,draw=110,198
+id=3,x=265,y=90,age=238,phase=12,anchor=0,1,draw=256,81
+id=4,x=243,y=22,age=40,phase=6,anchor=0,1,draw=234,13
+id=5,x=337,y=216,age=126,phase=12,anchor=0,1,draw=328,207
+id=6,x=50,y=216,age=69,phase=11,anchor=0,1,draw=41,207
+id=7,x=349,y=57,age=154,phase=8,anchor=0,1,draw=340,48
+id=8,x=201,y=16,age=133,phase=11,anchor=0,1,draw=192,7
+id=9,x=421,y=220,age=42,phase=8,anchor=0,1,draw=412,211
+id=10,x=129,y=178,age=18,phase=8,anchor=0,1,draw=120,169
+id=11,x=282,y=82,age=70,phase=12,anchor=0,1,draw=273,73
+id=12,x=117,y=45,age=49,phase=7,anchor=0,1,draw=108,36
+id=13,x=402,y=184,age=30,phase=12,anchor=0,1,draw=393,175
+id=14,x=53,y=176,age=1,phase=7,anchor=0,1,draw=44,167

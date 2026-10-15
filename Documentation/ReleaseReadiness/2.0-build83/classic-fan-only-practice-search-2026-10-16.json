@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+  "bundle": {
+    "release": "2.0 build 83",
+    "resourceRoot": "/private/tmp/lemmings-bundled-closure/Resources",
+    "archive": "LevelPacks/0005-Mikepak00.zip",
+    "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+    "initialStateHash": "c1fe3232b71458dacd0af831335025e4841a96649d13cfade3cf69e6256099fa",
+    "identity": "0005-Mikepak00.zip/Mikepak00.dat#0",
+    "title": "Only practice"
+  },
+  "runtime": {
+    "sourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "unchangedSinceBuild83AuditSource": true,
+    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  },
+  "solver": {
+    "sourcePath": "Tools/ClassicSolver/main.swift",
+    "sourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "binaryPath": ".build/classic-fan-current/ClassicSolver",
+    "binarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "command": "ClassicSolver fan:<bundle>/LevelPacks/0005-Mikepak00.zip 1 <output> --resources <bundle> --member 'Mikepak00.dat#0' --golems-clock --adaptive-rate --balanced-ranking --rescue-quota-distance --direct-exit-distance --width 1024 --seconds 300 --fallback 150 --refire 100"
+  },
+  "level": {
+    "lemmings": 40,
+    "required": 30,
+    "initialReleaseRate": 30,
+    "skills": {
+      "climber": 10,
+      "floater": 10,
+      "bomber": 10,
+      "blocker": 10,
+      "builder": 10,
+      "basher": 10,
+      "miner": 10,
+      "digger": 10
+    }
+  },
+  "search": {
+    "budgetSeconds": 300,
+    "beamWidth": 1024,
+    "fallbackTicks": 150,
+    "refireTicks": 100,
+    "adaptiveRate": true,
+    "balancedRanking": true,
+    "rescueQuotaDistance": true,
+    "directExitDistance": true,
+    "expanded": 470620,
+    "result": "No win. Best candidate saved 0 of 30 at tick 349 with 40 released, one lost and 39 active."
+  },
+  "additionalSearches": [
+    {
+      "mode": "rollout-single",
+      "budgetSeconds": 300,
+      "beamWidth": 256,
+      "fallbackTicks": 100,
+      "refireTicks": 60,
+      "rescueQuotaDistance": true,
+      "directExitDistance": true,
+      "singleSkillRollouts": 2272,
+      "expanded": 601063,
+      "waitingRouteTick": 2137,
+      "bestState": {
+        "tick": 609,
+        "released": 15,
+        "lost": 0,
+        "active": 15,
+        "saved": 0
+      },
+      "deadlineExpired": true,
+      "result": "No win in the explored rollout branches. The search stopped before it covered the full waiting timeline."
+    }
+  ],
+  "currentMainFollowUp": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "resourceRoot": "/private/tmp/lemmings-bundled-closure/Resources",
+    "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+    "initialStateHash": "c1fe3232b71458dacd0af831335025e4841a96649d13cfade3cf69e6256099fa",
+    "solver": {
+      "path": ".build/classic-fan-current/ClassicSolver",
+      "sha256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+      "sourcePath": "Tools/ClassicSolver/main.swift",
+      "sourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+      "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+    },
+    "command": ".build/classic-fan-current/ClassicSolver fan:/private/tmp/lemmings-bundled-closure/Resources/LevelPacks/0005-Mikepak00.zip 1 /private/tmp/only-practice-current-focus.json --resources /private/tmp/lemmings-bundled-closure/Resources --member 'Mikepak00.dat#0' --golems-clock --adaptive-rate --balanced-ranking --rescue-quota-distance --direct-exit-distance --width 8192 --seconds 300 --fallback 100 --refire 60 --focus-workers 4",
+    "budgetSeconds": 300,
+    "beamWidth": 8192,
+    "fallbackTicks": 100,
+    "refireTicks": 60,
+    "adaptiveRate": true,
+    "balancedRanking": true,
+    "focusWorkers": 4,
+    "focusedActorIDs": [0, 1, 2, 3],
+    "expanded": 722810,
+    "bestState": {
+      "tick": 267,
+      "released": 19,
+      "lost": 1,
+      "active": 18,
+      "saved": 0
+    },
+    "result": "No win. The best candidate saved 0 of 30.",
+    "outcome": "The search assigned skills only to actor IDs 0 through 3, so it covered a narrower decision set than the earlier full-actor search. It did not improve the earlier tick-349 search. The verified fan-route count remains 2,399 of 6,020, with 3,621 bundled levels without verified wins."
+  },
+  "fullActorFollowUp": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "resourceRoot": "/private/tmp/lemmings-bundled-closure/Resources",
+    "archive": "LevelPacks/0005-Mikepak00.zip",
+    "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+    "initialStateHash": "c1fe3232b71458dacd0af831335025e4841a96649d13cfade3cf69e6256099fa",
+    "identity": "0005-Mikepak00.zip/Mikepak00.dat#0",
+    "title": "Only practice",
+    "population": 40,
+    "required": 30,
+    "solver": {
+      "path": ".build/classic-fan-current/ClassicSolver",
+      "sha256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+      "sourcePath": "Tools/ClassicSolver/main.swift",
+      "sourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22",
+      "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+    },
+    "command": ".build/classic-fan-current/ClassicSolver fan:/private/tmp/lemmings-bundled-closure/Resources/LevelPacks/0005-Mikepak00.zip 1 /private/tmp/onlypractice-focus40-current.json --resources /private/tmp/lemmings-bundled-closure/Resources --member 'Mikepak00.dat#0' --golems-clock --adaptive-rate --balanced-ranking --rescue-quota-distance --direct-exit-distance --width 8192 --seconds 300 --fallback 100 --refire 60 --focus-workers 40",
+    "budgetSeconds": 300,
+    "beamWidth": 8192,
+    "fallbackTicks": 100,
+    "refireTicks": 60,
+    "adaptiveRate": true,
+    "balancedRanking": true,
+    "focusWorkers": 40,
+    "focusedActorIDs": "0 through 39",
+    "expanded": 576145,
+    "bestState": {
+      "tick": 187,
+      "released": 25,
+      "lost": 0,
+      "active": 25,
+      "saved": 0
+    },
+    "result": "UNSOLVED. No win. Best saved 0 of 30.",
+    "limits": "The bounded beam search covered all 40 actor IDs but not every possible timing and skill sequence. It does not prove that the level is impossible. The level still has no verified winning replay."
+  },
+  "fullActorProgressFirstFollowUp": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+    "initialStateHash": "c1fe3232b71458dacd0af831335025e4841a96649d13cfade3cf69e6256099fa",
+    "identity": "0005-Mikepak00.zip/Mikepak00.dat#0",
+    "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "solverSourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "command": ".build/classic-fan-current/ClassicSolver fan:/private/tmp/lemmings-bundled-closure/Resources/LevelPacks/0005-Mikepak00.zip 1 /private/tmp/onlypractice-progress40-current.json --resources /private/tmp/lemmings-bundled-closure/Resources --member 'Mikepak00.dat#0' --golems-clock --adaptive-rate --prefer-progress --rescue-quota-distance --direct-exit-distance --width 8192 --seconds 300 --fallback 100 --refire 60 --focus-workers 40",
+    "budgetSeconds": 300,
+    "beamWidth": 8192,
+    "fallbackTicks": 100,
+    "refireTicks": 60,
+    "adaptiveRate": true,
+    "ranking": "prefer-progress",
+    "focusWorkers": 40,
+    "focusedActorIDs": "0 through 39",
+    "expanded": 684056,
+    "bestState": {
+      "tick": 171,
+      "released": 21,
+      "lost": 0,
+      "active": 21,
+      "saved": 0
+    },
+    "result": "UNSOLVED. No win. Best saved 0 of 30.",
+    "limits": "This bounded beam search covered all 40 actor IDs but not every possible timing and skill sequence. It does not prove that the level is impossible. The level still has no verified winning replay."
+  },
+  "pairSweep": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "command": ".build/classic-fan-current/ClassicSolver fan:/private/tmp/lemmings-bundled-closure/Resources/LevelPacks/0005-Mikepak00.zip 1 /private/tmp/only-practice-builder-basher.json --resources /private/tmp/lemmings-bundled-closure/Resources --member 'Mikepak00.dat#0' --golems-clock --sweep-pair builder,basher --first-from 0 --first-through 180 --second-gap-min 1 --second-gap-max 30 --seconds 180 --rescue-quota-distance --direct-exit-distance --fallback 100 --refire 60",
+    "population": 40,
+    "required": 30,
+    "fixedReleaseRate": 30,
+    "firstSkill": "builder",
+    "secondSkill": "basher",
+    "firstTickWindow": [0, 180],
+    "secondSkillGap": [1, 30],
+    "budgetSeconds": 180,
+    "elapsedSeconds": 180,
+    "firstAssignments": 129,
+    "secondAssignments": 8199,
+    "completedContinuations": 8198,
+    "coveredThroughTick": 148,
+    "result": "No win. The best candidate saved 0 of 30; it reached tick 148 with three released, none lost and three active.",
+    "limits": "The deadline stopped the sweep before it covered the full first-skill tick window. This result only covers the tested Builder-then-Basher branches and does not show that the level has no winning route."
+  },
+  "outcome": "No route fixture or winning replay was produced. Two five-minute current-main follow-ups covered all 40 actors with balanced and progress-first rankings, and neither found a win. The bundled route count remains 2399 of 6020, with 3621 levels without verified wins.",
+  "limits": "The bounded searches do not prove that the level is impossible. The rollout search tests only one-skill branches and did not cover the full waiting timeline. The two full-actor follow-ups cover both recorded rankings, but not all possible timing and skill sequences. These searches do not change the route count or establish engine parity beyond the tested native runtime."
+}

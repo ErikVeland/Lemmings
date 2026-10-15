@@ -1,0 +1,118 @@
+{
+  "schema": "classic-fan-magical-world-route-repair-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+  "scope": "Search for current-engine winning routes for both bundled copies of It's a Magical World, using the retained route input through tick 880 as a seed.",
+  "releaseContent": {
+    "searchPayload": "Macintosh 2.0 build 83 full archive extraction",
+    "currentRelease": "Macintosh 2.0.2 build 85",
+    "resourceEquivalence": "../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+    "sharedLevelPacksPathHashesMatch": true,
+    "releaseArchiveFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9"
+  },
+  "runtime": {
+    "simulationSource": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+    "simulationSourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "replaySource": "Sources/NxlvKit/ClassicDOSReplay.swift",
+    "replaySourceSHA256": "ca2474227cadb26125b7622d8bdbe117a972c4448e0fdab977c8753d1f0b08ea",
+    "fanLibrarySource": "Sources/LemmingsLocal/FanLevelLibrary.swift",
+    "fanLibrarySourceSHA256": "ff9aee22136fa20c31793ee5f25fd8a4fda86f298cfa984b59c23e89a8859e43",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  },
+  "solver": {
+    "source": "Tools/ClassicSolver/main.swift",
+    "sourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "binary": ".build/classic-fan-current/ClassicSolver",
+    "binarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "promotion": false
+  },
+  "seededSearch": {
+    "seedThroughTick": 880,
+    "seedInputCount": 76,
+    "seedInputsSource": "Existing retained candidate replay; the refused Builder assignment at tick 953 and all later commands were excluded.",
+    "parameters": {
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "clock": "Golems",
+      "adaptiveReleaseRate": true,
+      "balancedRanking": true,
+      "rescueQuotaDistance": true,
+      "directExitDistance": true,
+      "fallbackTicks": 100,
+      "refireTicks": 60
+    },
+    "exactPrefixes": [
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5, level 6",
+        "path": "magical-world-llbd245-prefix-t880.json",
+        "sha256": "c2a215995fb1f49b7a728aa14c6147ae02327b2686731640cb148296733bd391"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4, level 5",
+        "path": "magical-world-llbd496-prefix-t880.json",
+        "sha256": "c2a215995fb1f49b7a728aa14c6147ae02327b2686731640cb148296733bd391"
+      }
+    ]
+  },
+  "levels": [
+    {
+      "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+      "title": "It's a Magical World",
+      "archive": "LevelPacks/0245-MazuLems-02.zip",
+      "archiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "levelNumber": 6,
+      "initialStateHash": "8e3d5c2356eab0313daae09cc12df78d3aecffe687d602b59afb0566dd15d1e8",
+      "retainedCandidate": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/326a41b6edb5686b5ecda9ac441513ade4bc30ecbd745862eeb899d00aebb434.json",
+      "retainedCandidateSHA256": "326a41b6edb5686b5ecda9ac441513ade4bc30ecbd745862eeb899d00aebb434",
+      "result": "no winning route",
+      "bestSaved": 0,
+      "required": 40,
+      "expanded": 688533,
+      "elapsedSeconds": 300
+    },
+    {
+      "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+      "title": "It's a Magical World",
+      "archive": "LevelPacks/0496-MARTPCK2.zip",
+      "archiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+      "levelNumber": 5,
+      "initialStateHash": "17f9b84298d41c916aacc750bcbeccd18fa98b8c2c564999445d46d6d9ebf1da",
+      "retainedCandidate": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/28ec3ca7727b7577447fa44fea5100185a7c2de4d863560287092df6f8e69bba.json",
+      "retainedCandidateSHA256": "28ec3ca7727b7577447fa44fea5100185a7c2de4d863560287092df6f8e69bba",
+      "result": "no winning route",
+      "bestSaved": 0,
+      "required": 40,
+      "expanded": 699472,
+      "elapsedSeconds": 300
+    }
+  ],
+  "additionalSearches": [
+    {
+      "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+      "method": "Search from the exact level start without a forced prefix",
+      "parameters": {
+        "budgetSeconds": 300,
+        "beamWidth": 8192,
+        "clock": "Golems",
+        "adaptiveReleaseRate": true,
+        "balancedRanking": true,
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "fallbackTicks": 100,
+        "refireTicks": 60
+      },
+      "result": "no winning route",
+      "bestSaved": 0,
+      "required": 40,
+      "expanded": 709892,
+      "elapsedSeconds": 300,
+      "terminal": {
+        "tick": 166,
+        "released": 5,
+        "lost": 0,
+        "active": 5
+      }
+    }
+  ],
+  "outcome": "No search found a winning replay. Both copies remain bundled and unresolved. The bounded searches do not prove that either level is impossible, and no production route or engine change was made."
+}

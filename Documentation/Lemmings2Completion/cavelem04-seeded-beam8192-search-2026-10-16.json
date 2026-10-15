@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "scope": "Seeded Cavelems Level 4 search at the carried population using the exact build 83 app payload.",
+  "provenance": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "solverPath": ".build/l2-current-main-20261016/solver",
+    "solverSHA256": "40b9aaaef9fd4dfc04e430c858b70057bd7bcbca3fe59a60301c1bf24f9201cc",
+    "solverSourceSHA256": {
+      "main.swift": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+      "Search.swift": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+      "LevelRun.swift": "1ba8ea4ce6cbd7c3f7c625b9d41c7dcbabb06775cee32d6b1ef2955b53ae08d4"
+    },
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "resourceManifest": "../ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "resourceFilesMatched": 218,
+    "resourceFilesMissing": 0,
+    "resourceFilesChanged": 0
+  },
+  "search": {
+    "command": ".build/l2-current-main-20261016/solver level '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2' cavelem-04 --population 34 --seed Documentation/Lemmings2Completion/candidates/2026-10-16/cavelem-04-pop34.json --beam 8192 --depth 100 --budget 300 --cell 2 --refire 24 --out .build/l2-current-main-20261016/cavelem04-p34-seeded-cell2-refire24",
+    "seedSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+    "population": 34,
+    "beamWidth": 8192,
+    "depth": 100,
+    "budgetSeconds": 300,
+    "elapsedSeconds": 308,
+    "cellPixels": 2,
+    "refireTicks": 24,
+    "decisionPoints": 782184,
+    "expanded": 782183,
+    "beamReachedWidthRounds": 1,
+    "result": "Reproduced the seeded 13-of-34 Bronze route at 1210 ticks with 2330 events. No improvement.",
+    "candidateSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+    "candidateMatchesSeed": true
+  },
+  "acceptedChainChanged": false,
+  "followUpSearches": [
+    {
+      "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+      "command": ".build/l2-current-main-20261016/solver level '/private/tmp/lemmings-bundled-closure/Lemm2-app-payload' cavelem-04 --population 34 --seed Documentation/Lemmings2Completion/candidates/2026-10-16/cavelem-04-pop34.json --beam 8192 --depth 100 --budget 300 --cell 4 --refire 24 --out .build/l2-current-main-20261016/cavelem04-p34-seeded-cell4-refire24",
+      "seedSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+      "population": 34,
+      "beamWidth": 8192,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "elapsedSeconds": 305,
+      "cellPixels": 4,
+      "refireTicks": 24,
+      "decisionPoints": 755517,
+      "expanded": 755516,
+      "beamReachedWidthRounds": 1,
+      "result": "Reproduced the seeded 13-of-34 Bronze route at 1210 ticks with 2330 events. No improvement.",
+      "candidatePath": ".build/l2-current-main-20261016/cavelem04-p34-seeded-cell4-refire24/cavelem-04.json",
+      "candidateSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+      "candidateMatchesSeed": true
+    },
+    {
+      "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+      "command": ".build/l2-current-main-20261016/solver level '/private/tmp/lemmings-bundled-closure/Lemm2-app-payload' cavelem-04 --population 34 --seed Documentation/Lemmings2Completion/candidates/2026-10-16/cavelem-04-pop34.json --beam 8192 --depth 100 --budget 300 --cell 8 --refire 50 --out .build/l2-current-main-20261016/cavelem04-p34-seeded-cell8-refire50",
+      "seedSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+      "population": 34,
+      "beamWidth": 8192,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "elapsedSeconds": 300,
+      "cellPixels": 8,
+      "refireTicks": 50,
+      "decisionPoints": 771657,
+      "expanded": 771657,
+      "beamReachedWidthRounds": 1,
+      "result": "Reproduced the seeded 13-of-34 Bronze route at 1210 ticks with 2330 events. No improvement.",
+      "candidatePath": ".build/l2-current-main-20261016/cavelem04-p34-seeded-cell8-refire50/cavelem-04.json",
+      "candidateSHA256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+      "candidateMatchesSeed": true
+    }
+  ],
+  "outcome": "The seeded search reproduced the retained Level 4 witness byte for byte. It did not improve the route or change the accepted chain.",
+  "limits": "This bounded search does not prove that a higher-survivor route is impossible. It verifies route replay in the current native runtime, not original-engine parity or the L2 ark ending."
+}

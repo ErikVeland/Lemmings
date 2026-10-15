@@ -240,6 +240,29 @@ existing ten-level chain and retained the new routes as separate candidates.
 The solver replay-verified each winning candidate twice. See the [search
 record](cavelem-ark-reconnection-search-2026-10-16.json).
 
+### Current-main ark route probes
+
+At `4fe7328a`, a 300-second Level 6 search at population 13 found no route.
+A seeded Level 5 search reproduced the same 10-of-13 route after 712,233
+expansions. A wider Classic Level 2 search also reproduced its accepted
+13-of-60 route after 1,289,171 expansions. The source and solver files did not
+change after the build 83 payload replay. All 218 input files matched the
+release manifest. These bounded searches do not prove that better routes are
+impossible. The ark gate remains open. See the [current-main search record](ark-reconnection-search-2026-10-16-current-main.json).
+
+At `c38831f3`, two unseeded Cavelems Level 4 searches at population 34 used a
+beam of 8,192 and a 300-second budget. The 4-pixel grid expanded 1,014,578
+candidates; the 2-pixel grid with 24-tick refire expanded 1,126,648. Neither
+found a win or improved the retained 13-of-34 witness. These bounds do not
+show that a higher-survivor route is impossible. See the [wider Level 4 search
+record](cavelem04-beam8192-search-2026-10-16.json).
+
+At `c38831f3`, a seeded Level 4 search at population 34 used beam 8,192,
+depth 100, a 2-pixel grid and a 24-tick refire interval. It expanded 782,183
+candidates and reproduced the retained 13-of-34 Bronze route byte for byte.
+It did not improve the route. See the [seeded Level 4 search
+record](cavelem04-seeded-beam8192-search-2026-10-16.json).
+
 ## Commands
 
 | Task | Command |

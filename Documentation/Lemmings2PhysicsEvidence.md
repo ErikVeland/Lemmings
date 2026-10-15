@@ -1,6 +1,6 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 15 October 2026 at `main` revision `eb6d58d7`. All twelve
+Status checked on 16 October 2026 at `main` revision `c38831f3`. All twelve
 tribes, 51 skills, 15 object types and four practice maps are enabled. The strict
 completion gate verified all 120 winning routes and 70 carry-over variants
 twice, with continuous ten-level chains for all twelve tribes. The runtime suite
@@ -13,12 +13,29 @@ original-engine equivalence. See the [completion evidence](Lemmings2Completion/R
 for route proof and validation limits. **Original-engine equivalence and release
 validation remain separate work.**
 
+The current-main route, event and runtime checks also pass against the exact
+218-file build 83 app payload. The payload check confirms content identity; it
+does not establish original-engine gameplay parity. See the [payload replay
+record](ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json).
+
+A 16 October source-frame comparison found a possible scene mismatch on Beach
+level 10. At countdown 8:36, the original capture contains a pixel-matched
+`LM5C` sprite at `(204, 87)`. The native runtime also reads 8:36 at tick 360,
+but its simulation trace and LM5C fallback-position probe report no sprite at
+that origin. The probe does not run the app's full WALKER renderer. The capture
+skips normal SDL updates and has no per-frame simulation timestamps. The
+synthetic click that dismissed the briefing may also have reached gameplay.
+Actor identity and cause remain unknown, so this observation does not support a
+runtime change. See the [frame comparison](ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json),
+[source frame](ReleaseReadiness/L2GameplayParity-2026-10-16/source-frame-035.png)
+and [native actor trace](ReleaseReadiness/L2GameplayParity-2026-10-16/native-tick-360-walking-actors.txt).
+
 On 15 October, the strict ark check replayed all 120 routes and 70 carry-over
 variants, then rejected the ending conditions. All twelve chains finish with
 one survivor and a Bronze talisman. None meets the golden-talisman and
 30-survivor requirements.
 
-## Current-main replay check
+## 15 October historical replay check
 
 On 15 October, I reran the strict route verifier and L2 runtime test binary
 against the installed game data while the checkout was at current `main`
@@ -169,14 +186,19 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
   "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2"
 ```
 
-The 15 October 2026 run passed with Xcode 26.6 at source revision `061e1b99`.
-Current `main` is `eb6d58d7`. The L2 runtime and fixtures are unchanged from
-the tested revision. The installed app identifies as 1.9.1 build 76. All
-1,307 `Ports` files in that app match the 1.9.7 build 82 resource manifest.
-The full app resource tree does not match that manifest. See the [content
+The installed build 76 runtime run on 15 October was at source revision
+`eb6d58d7`; it was a historical check, not the current-main result. On
+16 October, current `main` `c38831f3` passed the route, event and runtime
+checks against the exact 218-file build 83 app payload. The same current-main
+checks also passed against the installed 1.9.1 build 76 L2 resources. See the
+[build 83 payload replay](ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json)
+and [build 76 recheck](Lemmings2Completion/installed-build76-l2-recheck-2026-10-16.json).
+All 1,307 `Ports` files in the installed app match the 1.9.7 build 82 resource
+manifest, but the full app resource tree does not. See the [content
 recheck](ReleaseReadiness/MacOS2Preparation-2026-10-15/classic-content-recheck.json).
-The command does not prove that the source tree embeds or packages the same
-data.
+These checks establish runtime and resource results for the recorded inputs;
+they do not prove original-engine parity or that another package embeds the
+same data.
 
 `Tests/Lemmings2CompletionTests/Fixtures/classic-01.json` contains twenty timed
 skill assignments for the local `LEVEL000.DAT`. The test starts the unmodified

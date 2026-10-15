@@ -18,6 +18,34 @@ Two earlier CI runs failed the cloud-conflict case. Thirty direct repetitions pa
 
 The native checks cover Classic, L2 and L3 ghost timelines, session isolation, owner exclusion, rewind, input surfaces and movie-frame inclusion. The full replay-movie suite also passes. Representative ghost, result, reward and welcome renders were inspected. All automated native checks use the offscreen runner with muted audio. Foreground focus checks and the signed full-screen launch smoke were not run because the owner requires background testing. Physical controllers, VoiceOver, audible listening, Intel/minimum-OS hardware, composited CRT/HDR, language review and device acceptance retain their gaps.
 
+The bundled-resource check passes the NeoLemmix CE package counts: all 794
+levels are indexed, and all 719 levels supported by the 26 bundled DMA styles
+resolve. Staging adds the missing Xmas group to the Original parent index. This
+closes the bundled index and style-resolution check. The other 75 levels still
+need 44 community styles, whose rights are unresolved; route and source-rule
+closure remain open. The dedicated [build 84 content inventory](../2.0.1-build84/neo-content.json)
+records 158 exact-version winning routes, not full-corpus completion.
+
+A 16 October hash comparison checked the build 85 input manifest against the
+locally installed build 76 resource tree. All 1,307 Ports files and all 537
+LevelPacks files match. All 218 L2 files and all 561 L3 files match. Two
+NeoLemmix metadata files differ. The installed app is 1.9.1 build 76, so this
+comparison does not verify the build 85 app binary. See the [content
+comparison](bundled-content-equivalence-recheck-2026-10-16.json).
+
+The build 83 package audit matched all 537 `LevelPacks` files to its frozen
+input manifest by size and SHA-256. The build 85 manifest has the same 537
+paths and SHA-256 values, including all 535 fan archives. The 2,399 winning
+routes and 3,621 unresolved routes therefore apply to build 85 fan content.
+The unresolved routes and source-behaviour checks remain open.
+
+The Classic route recheck passes 292 official routes and 60 conversions. The
+full quest also passes all 352 levels. Its frozen baseline contains 1,307
+`Ports` files. Build 85 has the same paths and SHA-256 values. Current main
+changed only `MobileHomeArt.swift` since the build 85 source. No Classic
+gameplay source changed. See the [Classic content recheck](../MacOS2Preparation-2026-10-15/classic-content-recheck.json)
+and the [manifest comparison](bundled-content-equivalence-recheck-2026-10-16.json).
+
 The rescue refresh preserves 294 exact-condition certificates and 315 best-known targets. Current proofs and hints match the source fingerprint. All 649 Music files and 32 MacMusic files remain byte-identical to the retained soundtrack baseline. The minor audit preserves campaign fixture hashes. No simulation-rule change required a full campaign replay.
 
 ## Distribution

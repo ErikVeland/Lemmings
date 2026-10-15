@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Compare local installed game-content files with the published 2.0.2 build 85 input manifest and attach current-main L2 replay results to the exact L2 data hashes.",
+  "release": {
+    "version": "2.0.2",
+    "build": 85,
+    "sourceCommit": "f956df19bc4ebf4b484c6553eda3157a81a258ab",
+    "inputManifest": "final-inputs.json"
+  },
+  "localTarget": {
+    "path": "/Applications/Ultimate Lemmings.app",
+    "version": "1.9.1",
+    "build": 76,
+    "note": "This local app is 1.9.1 build 76. It is not the 2.0.2 build 85 app."
+  },
+  "resourceComparison": {
+    "Ports": {
+      "expectedFiles": 1307,
+      "actualFiles": 1307,
+      "missing": 0,
+      "extra": 0,
+      "changed": 0,
+      "changedExamples": []
+    },
+    "Lemmings2": {
+      "expectedFiles": 218,
+      "actualFiles": 218,
+      "missing": 0,
+      "extra": 0,
+      "changed": 0,
+      "changedExamples": []
+    },
+    "Lemmings3": {
+      "expectedFiles": 561,
+      "actualFiles": 561,
+      "missing": 0,
+      "extra": 0,
+      "changed": 0,
+      "changedExamples": []
+    },
+    "LevelPacks": {
+      "expectedFiles": 537,
+      "actualFiles": 537,
+      "missing": 0,
+      "extra": 0,
+      "changed": 0,
+      "changedExamples": []
+    },
+    "NeoLemmix": {
+      "expectedFiles": 4010,
+      "actualFiles": 4010,
+      "missing": 0,
+      "extra": 0,
+      "changed": 2,
+      "changedExamples": [
+        {
+          "path": "levels/Original_Lemmings/levels.nxmi",
+          "expectedSHA256": "76b5497c3ef624ffbc701ffd05df487d6e70766b9967a8c6c6a5489df3b14300",
+          "actualSHA256": "c86b792f5eb55ea265032a33add5e909cfd06097b4bc00a833df8232a37b59f5"
+        },
+        {
+          "path": "manifest.json",
+          "expectedSHA256": "bd753c3298f6638fd32afb5ac0bb07c6fafec19fa230a62b8f05a8bf9f36ff3e",
+          "actualSHA256": "40f17efcbca881c101d55dd904bdd1a21c663080eccd4d7fffcc4835034adc38"
+        }
+      ]
+    }
+  },
+  "currentMain": {
+    "commit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "changedSwiftFilesSinceBuild85Source": [
+      "Sources/LemmingsGameArt/MobileHomeArt.swift"
+    ],
+    "l2RuntimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "l2RuntimeTestSourceSHA256": "c2c872d02cca392c21949de2bc0bc9f23382cd13c585e658029b344e416a4cd4",
+    "l2ReplayAgainstLocalExactData": {
+      "routeVerifierSHA256": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
+      "eventVerifierSHA256": "51b052f741f70ad9370bb25f5cca0ffcf5a9cc8a9eede128d507881580d6bb6d",
+      "runtimeTestsSHA256": "58f12ea3c6d5d57394f38087116020be32b6376ead86363218d8492534c0e951",
+      "exitCodes": {
+        "routes": 0,
+        "events": 0,
+        "runtimeTests": 0
+      },
+      "results": {
+        "routes": 120,
+        "carryOverVariants": 70,
+        "continuousChains": 12,
+        "eventRoutes": 120,
+        "runtimeSuite": "passed",
+        "ark": "open"
+      }
+    }
+  },
+  "classicFanRouteAuditBridge": {
+    "frozenInputManifest": "../MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "build85InputManifest": "final-inputs.json",
+    "build83PackageAudit": "../2.0-build83/classic-fan-package-audit.json",
+    "build83ArchiveVerification": {
+      "record": "../2.0-build83/engine-content-equivalence-current-main.json",
+      "exactBuild83FanArchiveBytesVerified": true
+    },
+    "build83PackageMatchesFrozenInput": {
+      "files": 537,
+      "matchedBySizeAndSHA256": 537,
+      "missingChangedOrExtra": 0
+    },
+    "build85ManifestMatchesFrozenInput": {
+      "files": 537,
+      "matchedPathsAndSHA256": 537,
+      "missingExtraOrChanged": 0
+    },
+    "fanArchives": 535,
+    "replayAudit": "../2.0-build83/classic-fan-build83-replay.json",
+    "levels": 6020,
+    "winningRoutes": 2399,
+    "withoutVerifiedRoute": 3621,
+    "interpretation": "The build 83 package audit matched every LevelPacks file to the frozen input manifest by size and SHA-256. Build 85 has the same paths and hashes. The 2,399/3,621 route totals therefore apply to build 85 content. The 3,621 missing routes and source-behaviour gaps remain open."
+  },
+  "classicRouteAuditBridge": {
+    "frozenInputManifest": "../MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "build85InputManifest": "final-inputs.json",
+    "routeAndQuestRecheck": "../MacOS2Preparation-2026-10-15/classic-content-recheck.json",
+    "portsFiles": 1307,
+    "build85PathsAndSHA256MatchFrozenInput": 1307,
+    "routeResults": {
+      "officialRoutes": 292,
+      "conversionRoutes": 60,
+      "totalRoutes": 352,
+      "fullQuestLevels": 352,
+      "recoveries": 1056,
+      "progressResumes": 352,
+      "chapterTransitions": 6
+    },
+    "currentMainSwiftChangesSinceBuild85Source": [
+      "Sources/LemmingsGameArt/MobileHomeArt.swift"
+    ],
+    "interpretation": "The route and quest recheck uses the frozen Ports baseline. All 1,307 build 85 Ports paths and hashes match that baseline. Current main has no later Classic gameplay-source change. This proves the 352 routes and quest for build 85 content, not complete source-rule parity."
+  },
+  "scope": {
+    "proves": "The local L2 and L3 resource trees, Classic Ports and LevelPacks files match the corresponding build 85 manifest hashes. The build 83 fan-route audit applies to build 85 LevelPacks content, and the 352-route Classic quest applies to build 85 Ports content. Current-main L2 route, event and runtime checks pass against that byte-identical L2 resource tree.",
+    "doesNotProve": "This does not prove the local app binary is build 85, original-engine gameplay parity, full L3 completion, NeoLemmix full-corpus compatibility or bundled engine closure."
+  },
+  "remaining": [
+    "The 6,020-level bundled Classic fan corpus has 2,399 verified winning routes. The other 3,621 levels do not have verified winning routes.",
+    "L2 Golden Ark completion and original DOS behaviour parity remain open.",
+    "L3 has 17 failing route fixtures and source behaviour gaps.",
+    "NeoLemmix has two local metadata differences against the build 85 manifest. The build 85 release record reports 719 of 794 levels resolve through bundled styles, while 75 levels need community styles with unresolved rights.",
+    "NeoLemmix keeps all 794 indexed levels in closure scope. Seventy-five levels need 44 community styles with unresolved rights. Exact-version winning replays cover 158 levels."
+  ]
+}

@@ -95,14 +95,25 @@ released, nine lost and 13 active, also with no saves. The one-skill sweep expir
 before it covered all candidates. The strict count remains 3,621 levels without
 verified wins. See the
 [targeted search record](classic-fan-targeted-searches-2026-10-15.json).
-The audit confirms 2,399 wins and 3,621 levels without verified routes. The
-exact build 83 slim archive contains 794 NeoLemmix levels. A source-equivalent
-style scan resolves 719 levels. The other 75 still need community styles. The
-pinned licence does not record rights for those assets. Keep them in bundled
-closure scope while rights are resolved. Exact-version winning evidence covers
-158 levels. The released manifest reports 718. The old resource test expected
-788/713. Current source corrects these counts, but the released package does
-not. Rebuild and audit a package after style rights are resolved. See the
+Two current-main follow-ups then searched `Only practice` with all 40 actor IDs
+in scope for five minutes each. The balanced and progress-first rankings
+expanded 576,145 and 684,056 candidates. Neither found a win or saved any of
+the required 30. These searches cover all actors under both rankings, but they
+do not prove that the level is impossible. See the [full-actor search
+record](classic-fan-only-practice-search-2026-10-16.json).
+The audit confirms 2,399 wins and 3,621 levels without verified routes. A
+current-main continuation search for each bundled “It's a Magical World” copy
+used the retained route inputs through tick 880. Both 300-second searches found
+no winning route. A 300-second from-start search for the first copy also found
+no win after 709,892 expansions. Their exact prefixes, archive identities,
+hashes and limits are recorded in the [route repair evidence](classic-fan-magical-world-route-repair-2026-10-16.json).
+The bundled NeoLemmix package was later rechecked against public Macintosh 2.0.2
+build 85: it indexes 794 levels and resolves 719 with the 26 bundled DMA styles.
+The other 75 levels still need 44 community styles, and their rights remain
+uncleared. These levels remain in bundled closure scope. Exact-version winning
+evidence covers 158 levels. The build 84 count and older build 83 resource
+expectations are historical. See the [build 85 release evidence](../2.0.2-build85/README.md),
+[build 85 resource comparison](../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json),
 [Classic fan replay audit](classic-fan-build83-replay.json), [Classic package
 audit](classic-fan-package-audit.json), [NeoLemmix bundle
 audit](neolemmix-bundle-audit.json) and [style rights inventory](neolemmix-style-rights-inventory.json).

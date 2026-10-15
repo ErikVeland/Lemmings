@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "scope": "Search for an improved Cavelems Level 4 route at the 34-lemming carried population.",
+  "provenance": {
+    "sourceCommit": "c38831f3028da012c56cb6bf9522cb1117f144c5",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "solverPath": ".build/l2-current-main-20261016/solver",
+    "solverSHA256": "40b9aaaef9fd4dfc04e430c858b70057bd7bcbca3fe59a60301c1bf24f9201cc",
+    "solverSourceSHA256": {
+      "main.swift": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+      "Search.swift": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+      "LevelRun.swift": "1ba8ea4ce6cbd7c3f7c625b9b41c7dcbabb06775cee32d6b1ef2955b53ae08d4"
+    },
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "resourceManifest": "../ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "resourceFilesMatched": 218,
+    "resourceFilesMissing": 0,
+    "resourceFilesChanged": 0
+  },
+  "searches": [
+    {
+      "command": ".build/l2-current-main-20261016/solver level '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2' cavelem-04 --population 34 --beam 8192 --depth 100 --budget 300 --cell 4 --refire 75 --out .build/l2-current-main-20261016/cavelem04-p34-beam8192",
+      "population": 34,
+      "beamWidth": 8192,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "cellPixels": 4,
+      "refireTicks": 75,
+      "decisionPoints": 1014579,
+      "expanded": 1014578,
+      "beamReachedWidthRounds": 1,
+      "result": "No winning route; best partial saved 0 of 34.",
+      "existingCandidate": "The verified 13-of-34 route remains the best retained Level 4 witness; this search did not reproduce or improve it.",
+      "partialPath": ".build/l2-current-main-20261016/cavelem04-p34-beam8192/cavelem-04.partial.json",
+      "partialSHA256": "6ead859550a2deb8a7b1bb6cb351787758adcc7954bdddb644e7124e2950a6ba",
+      "partialExpectedSaved": 0,
+      "partialExpectedTicks": 269
+    },
+    {
+      "command": ".build/l2-current-main-20261016/solver level '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2' cavelem-04 --population 34 --beam 8192 --depth 100 --budget 300 --cell 2 --refire 24 --out .build/l2-current-main-20261016/cavelem04-p34-beam8192-cell2-refire24",
+      "population": 34,
+      "beamWidth": 8192,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "cellPixels": 2,
+      "refireTicks": 24,
+      "decisionPoints": 1126649,
+      "expanded": 1126648,
+      "beamReachedWidthRounds": 1,
+      "result": "No winning route; best partial saved 0 of 34.",
+      "existingCandidate": "The verified 13-of-34 route remains the best retained Level 4 witness; this finer-grid search did not reproduce or improve it.",
+      "partialPath": ".build/l2-current-main-20261016/cavelem04-p34-beam8192-cell2-refire24/cavelem-04.partial.json",
+      "partialSHA256": "fee5643b272903e4e5e150be9715daf30607760b9e46374ec7ff9ab859c5b7c3",
+      "partialExpectedSaved": 0,
+      "partialExpectedTicks": 269
+    }
+  ],
+  "outcome": "No improved route found. The accepted Cavelems chain and retained route witnesses are unchanged.",
+  "limits": "This unseeded bounded search does not prove the level unsolvable. It does not establish original-engine parity or meet the 30-survivor and Golden-talisman ark requirement."
+}
