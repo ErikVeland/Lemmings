@@ -8742,9 +8742,9 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
         engine + " result did not announce the actual new uses")
       try check(label.contains("+1 SKIP") == (index == 2) && label.contains("Level Skips \(index == 2 ? 1 : 0)"), engine + " result hid its Level Skip reward or balance")
       let rewardRows = result.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
-        .filter { $0.accessibilityLabel()?.contains("+1 ZOOM") == true }
-      try check(!rewardRows.isEmpty && rewardRows.allSatisfy { result.bounds.contains($0.localFrame) },
-        engine + " reward caption was missing or clipped")
+        .filter { element in ["Zoom ", "Superzoom ", "Level Skips "].contains { element.accessibilityLabel()?.hasPrefix($0) == true } }
+      try check(rewardRows.count == 3 && rewardRows.allSatisfy { result.bounds.contains($0.localFrame) },
+        engine + " passive perk count was missing or clipped")
       GameScreen.shared.dismissAll()
     }
   }
@@ -9502,6 +9502,7 @@ extension AppDelegate {
     for star in 0...3 {
       view.revealedStars = star
       try check(view.perkIsRevealed(zoom) == (star >= earningStar), "Zoom appeared on the wrong star")
+      try check(view.perkCounters.first?.value == (star >= earningStar ? 1 : 0), "Passive Zoom count did not update on the earning star")
     }
     view.finishCelebration(); host.contentView?.layoutSubtreeIfNeeded()
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
@@ -9509,10 +9510,12 @@ extension AppDelegate {
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("single-perk-star-\(earningStar).png"))
     try checkCompactResultActions(view)
-    let perk = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == "+1 ZOOM" }!
-    try check(view.bounds.contains(perk.localFrame) && perk.accessibilityPerformPress() && view.mode == .earnedRewards, "Single perk card lost its details target")
+    let children = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    try check(children.contains { $0.accessibilityRole() == .staticText && $0.accessibilityLabel() == "Zoom 1" }, "Passive Zoom count has no accessible value")
+    try check(!children.contains { $0.accessibilityRole() == .button && $0.accessibilityLabel() == "+1 ZOOM" }, "Passive counter still has an award-card target")
+
   }
-  print("PASS Zoom reveals on the exact first or second earning star; single-perk result and details target")
+  print("PASS Zoom reveals on the exact first or second earning star; passive counts and accessible values")
 }
 
 @MainActor private func testEarnedRewardPresentation() async throws {
@@ -9522,11 +9525,11 @@ extension AppDelegate {
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
   defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
-  func capture(_ name: String) throws -> [GameAccessibleElement] {
+  func capture(_ name: String, settled: Bool = true) throws -> [GameAccessibleElement] {
     host.contentView?.layoutSubtreeIfNeeded()
     let view = ArcadeWindow.shared.arcadeView
     view.layoutSubtreeIfNeeded()
-    if view.mode == .result { view.finishCelebration() }
+    if settled && view.mode == .result { view.finishCelebration() }
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
     try checkCompactResultActions(view)
@@ -9584,20 +9587,24 @@ extension AppDelegate {
       view.startCelebration(reduceMotion: false)
       _ = try capture("\(engine)-\(mode)-stars-0", settled: false)
       try check(view.earnedPerks.allSatisfy { !view.perkIsRevealed($0) }, "Perks appeared before their earning stars")
-      for _ in 0..<100 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 20_000_000) }
+      for _ in 0..<100 where view.celebrationTask != nil || view.perkGlowTask != nil { try await Task.sleep(nanoseconds: 20_000_000) }
       try check(view.mode == .result && view.celebrationTask == nil && view.earnedPerks.allSatisfy { view.perkIsRevealed($0) }, "Star celebration did not reveal every new perk on the result")
+      try check(view.glowingPerks.isEmpty && view.perkGlowAmount == 0, "Passive count glow did not settle")
       try check(next == 0 && retries == 0 && store.playingProfileID == owner && store.records.levelSkips(profileID: owner).available == balanceBefore, "Perk celebration changed ownership, progression or balances")
       for width in [640, 900, 1600] {
         host.setContentSize(CGSize(width: width, height: width == 640 ? 480 : width == 900 ? 620 : 1000))
         for star in 0...3 {
           view.revealedStars = star; view.stampedStar = star == 0 ? nil : star
+          view.glowingPerks = Set(view.earnedPerks.filter { $0.star == star }.map(\.kind))
+          view.perkGlowAmount = view.glowingPerks.isEmpty ? 0 : 1
           _ = try capture("\(engine)-\(mode)-\(width)-stars-\(star)", settled: false)
           try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) == (star >= $0.star) }, "Perk reveal does not match the earning star")
+          try check(view.perkCounters.map(\.value) == (star == 3 ? [3, 1, 1] : [2, 0, 0]), "Passive balances changed before or after the earning star")
         }
         view.finishCelebration()
       }
       view.startCelebration(reduceMotion: true)
-      try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) } && view.stampedStar == nil, "Reduced motion hid a perk or stamped it")
+      try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) } && view.stampedStar == nil && view.glowingPerks.isEmpty && view.perkGlowTask == nil, "Reduced motion hid a count or started a glow")
       view.showEarnedRewards()
       for width in [640, 900, 1600] {
         host.setContentSize(CGSize(width: width, height: width == 640 ? 480 : width == 900 ? 620 : 1000))
@@ -9666,5 +9673,5 @@ extension AppDelegate {
       GameScreen.shared.dismissAll(); store.endHotSeat()
     }
   }
-  print("PASS star-linked perk celebrations: automatic once, reduced motion, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
+  print("PASS passive perk counts and brief glow: automatic once, reduced motion, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
 }

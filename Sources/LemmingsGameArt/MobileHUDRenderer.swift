@@ -136,7 +136,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.setShouldAntialias(false)
         context.interpolationQuality = .none
         let statusFrame = Self.cgRect(layout.interface.statusFrame)
-        if layout.television {
+        if layout.interface.statusFrame.minY == layout.interface.safeFrame.minY {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: statusFrame.maxY))
         }
@@ -172,14 +172,15 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         let frames = Self.statusFrames(layout: layout, hasPlayer: playerName != nil)
         if let playerName, let player = frames.player {
-            let identity = Self.playerFrames(in: player, name: playerName, portrait: playerPortrait, typography: typography)
+            let compact = frames.counters.width < 440
+            let identity = Self.playerFrames(in: player, name: playerName, portrait: playerPortrait, typography: compact ? nil : typography)
             if let playerPortrait, let icon = identity.portrait {
                 GameStoneArt.drawImage(playerPortrait, in: icon, context: context)
             }
             GamePixelTypography.draw(playerName, in: identity.name, context: context,
-                typography: typography, palette: .green, maximumScale: 1, alignment: .left)
+                typography: compact ? nil : typography, palette: .green, maximumScale: 1, alignment: .left)
         }
-        drawStatus(in: frames.counters, panelMode: layout.panel != nil, context: context)
+        drawStatus(in: frames.counters, context: context)
     }
 
     public func drawSkills(in context: CGContext, clipped: Bool = true) {
@@ -518,7 +519,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
     }
 
-    /// Centre the player's existing profile portrait and name as one compact group.
+    /// Anchor the profile portrait and name at the leading corner.
     public static func playerFrames(in frame: CGRect, name: String, portrait: CGImage?,
                                     typography: GameMenuTypography?) -> (portrait: CGRect?, name: CGRect) {
         let row = frame.insetBy(dx: 6, dy: 0)
@@ -532,7 +533,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         let plain = GameMenuTypography.menuText(name)
         let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(GamePixelTypography.width(of: plain))
         let width = min(naturalWidth, max(0, row.width - iconSize.width - gap))
-        let x = floor(row.midX - (iconSize.width + gap + width) / 2)
+        let x = floor(row.minX)
         let icon = portrait.map { _ in CGRect(x: x, y: floor(row.midY - iconSize.height / 2),
                                               width: iconSize.width, height: iconSize.height) }
         return (icon, CGRect(x: x + iconSize.width + gap, y: row.minY, width: width, height: row.height))
@@ -550,59 +551,110 @@ public enum MobileHUDAction: Equatable, Sendable {
                 frame.size.width = max(0, navigation.minX - frame.minX - 4)
             }
         }
-        guard hasPlayer, frame.height >= 40 else { return (nil, frame) }
-        return (CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: 20),
-                CGRect(x: frame.minX, y: frame.minY + 20, width: frame.width, height: frame.height - 20))
+        guard hasPlayer else { return (nil, frame) }
+        let playerWidth = min(200, max(90, floor(frame.width * 0.28)))
+        return (CGRect(x: frame.minX, y: frame.minY, width: playerWidth, height: frame.height),
+                CGRect(x: frame.minX + playerWidth + 8, y: frame.minY,
+                       width: max(0, frame.width - playerWidth - 8), height: frame.height))
     }
 
-    private func drawStatus(in frame: CGRect, panelMode: Bool, context: CGContext) {
-        if layout.television {
-            let lines = Self.televisionStatusLines(snapshot: snapshot, details: statusDetails,
-                engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic",
-                paused: paused, speed: speed)
-            for (index, line) in lines.enumerated() {
-                let row = CGRect(x: frame.minX + 8, y: frame.minY + CGFloat(index) * frame.height / 2,
-                    width: frame.width - 16, height: frame.height / 2)
-                drawTelevisionStatus(line, in: row, context: context)
+    public struct StatusField {
+        public let id: String
+        public let text: String
+        public let frame: CGRect
+        public let palette: GamePixelTypography.Palette
+        public let bitmapOnly: Bool
+        public let scale: CGFloat
+    }
+
+    /// Prioritise rescue progress and the clock. Extra statistics use available horizontal space.
+    public static func statusFields(in frame: CGRect, snapshot: MobileGameSnapshot, details: StatusDetails?,
+                                    engineIdentifier: String, paused: Bool, speed: Double,
+                                    typography: GameMenuTypography?) -> [StatusField] {
+        let compact = frame.width < 440
+        let gap: CGFloat = compact ? 8 : 20
+        let row = frame.insetBy(dx: 6, dy: 2)
+        let percent = snapshot.saved * 100 / max(1, snapshot.total)
+        let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
+        let bitmap = compact || typography == nil
+        func width(_ text: String, scale: CGFloat = 1) -> CGFloat {
+            if bitmap { return CGFloat(GamePixelTypography.width(of: text)) * scale }
+            return typography?.width(of: GameMenuTypography.menuText(text), face: .small, scale: 1) ?? 0
+        }
+        let clock = compact ? time : L10n.text("TIME \(time)")
+        let clockWidth = width(clock)
+        let scoreScale: CGFloat = bitmap ? 2 : 1
+        var score = compact ? "\(snapshot.saved)/\(snapshot.required) \(percent)%"
+            : L10n.text("HOME \(snapshot.saved)/\(snapshot.required)") + " (\(percent)%)"
+        if width(score, scale: scoreScale) + clockWidth + gap > row.width {
+            score = "\(snapshot.saved)/\(snapshot.required)"
+        }
+        let scoreWidth = min(row.width, width(score, scale: scoreScale))
+        let scoreFrame = CGRect(x: row.maxX - scoreWidth, y: row.minY, width: scoreWidth, height: row.height)
+        var fields = [StatusField(id: "score", text: score, frame: scoreFrame, palette: .green,
+                                  bitmapOnly: bitmap, scale: scoreScale)]
+        let available = max(0, scoreFrame.minX - gap - row.minX)
+        guard available >= clockWidth else { return fields }
+        var candidates: [(String, String)] = [("time", clock)]
+        if snapshot.isComplete { candidates.append(("state", snapshot.didWin ? L10n.text("COMPLETE") : L10n.text("FAILED"))) }
+        else if snapshot.isEndingRun { candidates.append(("state", L10n.text("NUKING"))) }
+        else if paused { candidates.append(("state", L10n.text("PAUSED"))) }
+        if let details { candidates.append(("allowance", details.deathCounter)) }
+        candidates.append(("out", L10n.text("OUT \(snapshot.released)/\(snapshot.total)")))
+        if let details { candidates.append(("lost", L10n.text("LOST \(details.lost)"))) }
+        if engineIdentifier == "lemmings3" { candidates.append(("reserve", L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))"))) }
+        if let rate = snapshot.releaseRate { candidates.append(("rate", L10n.text("RATE \(rate)"))) }
+        candidates.append(("speed", L10n.text("SPEED \(speedLabel(speed))")))
+        var selected: [(String, String)] = []
+        var used: CGFloat = 0
+        for candidate in candidates {
+            let needed = width(candidate.1) + (selected.isEmpty ? 0 : gap)
+            if used + needed <= available { selected.append(candidate); used += needed }
+        }
+        // Stable groups read left to right, with the clock nearest the rescue score.
+        selected = selected.filter { $0.0 != "time" } + selected.filter { $0.0 == "time" }
+        let spacing = selected.count > 1 ? (available - selected.reduce(0) { $0 + width($1.1) }) / CGFloat(selected.count - 1) : 0
+        var x = selected.count == 1 ? row.minX + available - clockWidth : row.minX
+        for (id, text) in selected {
+            let extent = width(text)
+            fields.append(StatusField(id: id, text: text,
+                frame: CGRect(x: floor(x), y: row.minY, width: extent, height: row.height),
+                palette: .blue, bitmapOnly: bitmap, scale: 1))
+            x += extent + spacing
+        }
+        return fields
+    }
+
+    private func drawStatus(in frame: CGRect, context: CGContext) {
+        let fields = Self.statusFields(in: frame, snapshot: snapshot, details: statusDetails,
+            engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic",
+            paused: paused, speed: speed, typography: typography)
+        for field in fields {
+            if field.bitmapOnly {
+                GamePixelTypography.draw(field.text, in: field.frame, context: context, typography: nil,
+                    palette: field.palette, maximumScale: field.scale, bitmapOnly: true)
+            } else { drawStatusLabel(field.text, in: field.frame, palette: field.palette, context: context) }
+            if field.id == "score", snapshot.didWin {
+                context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
+                context.fill(CGRect(x: field.frame.minX, y: field.frame.maxY - 2, width: field.frame.width, height: 2))
             }
-            return
         }
-        let time: String
-        if let remaining = snapshot.remainingSeconds {
-            time = String(format: "%d:%02d", remaining / 60, remaining % 60)
-        } else {
-            time = "--:--"
-        }
-        let status = L10n.text("OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)")
-        if layout.portrait != nil {
-            drawGameLabel(status.replacingOccurrences(of: "  ", with: " "), in: frame.insetBy(dx: 4, dy: 2), context: context)
-            return
-        }
-        let available = frame
-        let inset = panelMode ? CGFloat(8) : 6
-        GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,
-                             palette: snapshot.didWin ? .green : .blue, maximumScale: 1,
-                             alignment: panelMode ? .left : .center)
     }
 
-    private func drawTelevisionStatus(_ text: String, in row: CGRect, context: CGContext) {
-        let palette: GamePixelTypography.Palette = snapshot.didWin ? .green : .blue
+    private func drawStatusLabel(_ text: String, in row: CGRect, palette: GamePixelTypography.Palette, context: CGContext) {
         guard text.contains("💀"), let typography, let font = typography.font(.small) else {
             GamePixelTypography.draw(text, in: row, context: context, typography: typography,
-                palette: palette, maximumScale: 1)
+                palette: palette, maximumScale: 1, alignment: .left)
             return
         }
-        let width = typography.width(of: GameMenuTypography.menuText(text), face: .small, scale: 1)
-        let left = floor(row.midX - width / 2)
+        var x = row.minX
         let parts = text.components(separatedBy: "💀")
-        var x = left
         for (index, part) in parts.enumerated() {
             let partWidth = typography.width(of: GameMenuTypography.menuText(part), face: .small, scale: 1)
             GamePixelTypography.draw(part, in: CGRect(x: x, y: row.minY, width: partWidth, height: row.height),
                 context: context, typography: typography, palette: palette, maximumScale: 1, alignment: .left)
             x += partWidth
             if index < parts.count - 1 {
-                // The authored menu font has no skull. Reuse the shared pixel glyph in its cell.
                 GamePixelTypography.draw("💀", in: CGRect(x: x, y: row.minY, width: CGFloat(font.cellWidth), height: row.height),
                     context: context, typography: nil, palette: palette, maximumScale: 2, bitmapOnly: true)
                 x += CGFloat(font.cellWidth)

@@ -5,7 +5,7 @@ import NxlvKit
 
 @MainActor extension ArcadeView {
     struct EarnedPerk {
-        enum Kind { case zoom, superzoom, skip }
+        enum Kind: Hashable { case zoom, superzoom, skip }
         let kind: Kind
         let name: String
         let quantity: Int
@@ -42,66 +42,67 @@ import NxlvKit
     }
 
     func perkIsRevealed(_ perk: EarnedPerk) -> Bool { !celebratesNewRewards || revealedStars >= perk.star }
-    var perkCardHeight: CGFloat { earnedPerks.count == 1 ? 78 : 108 }
-    var perkSectionHeight: CGFloat { 44 + perkCardHeight }
-    var perkSectionY: CGFloat { 247 + resultSummaryOffset + (resultStatus == nil ? 0 : 38) }
+    struct PerkCounter {
+        let kind: EarnedPerk.Kind
+        let name: String
+        let value: Int
+        var label: String { name + " " + String(value) }
+    }
 
-    func drawEarnedPerks() {
-        let perks = earnedPerks
-        guard !perks.isEmpty else { return }
-        text(L10n.text("NEW PERKS"), 80, perkSectionY, 620, height: 22, palette: .green)
-        link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"),
-             CGRect(x: 720, y: perkSectionY - 2, width: 320, height: 28), alignment: .right) { [weak self] in self?.showEarnedRewards() }
-        let frames = resultActionFrames(count: perks.count, y: perkSectionY + 32, height: perkCardHeight)
-        for (perk, frame) in zip(perks, frames) {
-            let earned = perkIsRevealed(perk)
-            let stamped = celebratesNewRewards && stampedStar == perk.star
-            GameStoneButton.draw(frame, selected: earned, pixel: 1)
-            GameStyle.fill(frame.insetBy(dx: 4, dy: 4), .black)
-            if earned { GameStyle.fill(frame.insetBy(dx: 4, dy: 4), GameStyle.gold.withAlphaComponent(0.09)) }
-            NSGraphicsContext.saveGraphicsState()
-            NSGraphicsContext.current?.cgContext.setAlpha(earned ? 1 : 0.28)
-            drawPerkIcon(perk.kind, at: CGPoint(x: frame.minX + 16, y: frame.minY + 10))
-            let quantity = CGRect(x: frame.minX + 62, y: frame.minY + 10, width: 72, height: 40)
-            title("+\(perk.quantity)", x: quantity.minX, y: quantity.minY, width: quantity.width, height: quantity.height)
-            text(perk.name, frame.minX + 144, frame.minY + 22, frame.width - 156, height: 22, palette: .green)
-            let reasonX = perks.count == 1 ? frame.midX : frame.minX + 16
-            let reasonY = frame.minY + (perks.count == 1 ? 16 : 56)
-            let reasonWidth = frame.maxX - reasonX - 16
-            text(perk.milestone, reasonX, reasonY, reasonWidth, height: 22)
-            text(perk.criterion, reasonX, reasonY + 23, reasonWidth, height: 22, alpha: 0.8)
-            NSGraphicsContext.restoreGraphicsState()
-            if earned {
-                GameStyle.fill(CGRect(x: frame.minX + 8, y: frame.maxY - 5, width: frame.width - 16, height: 2), GameStyle.gold)
-            }
-            if stamped {
-                GameStyle.gold.setStroke()
-                let edge = NSBezierPath(rect: frame.insetBy(dx: 2, dy: 2)); edge.lineWidth = 2; edge.stroke()
-            }
-            achievementTarget(perk.title, detail: perk.detail, in: frame) { [weak self] in self?.showEarnedRewards() }
+    var perkCounters: [PerkCounter] {
+        let wallet = PrecisionZoomController.shared
+        let balances: [(EarnedPerk.Kind, String, Int)] = [
+            (.zoom, L10n.text("Zoom"), wallet.remaining(.zoom, profileID: player.id)),
+            (.superzoom, L10n.text("Superzoom"), wallet.remaining(.superzoom, profileID: player.id)),
+            (.skip, L10n.text("Level Skips"), ArcadeStore.shared.records.levelSkips(profileID: player.id).available)
+        ]
+        let earned = earnedPerks
+        return balances.map { kind, name, balance in
+            let pending = earned.first { $0.kind == kind && !perkIsRevealed($0) }?.quantity ?? 0
+            return .init(kind: kind, name: name, value: max(0, balance - pending))
         }
     }
 
-    private func drawPerkIcon(_ kind: EarnedPerk.Kind, at origin: CGPoint) {
-        let rows: [String]
-        switch kind {
-        case .zoom, .superzoom:
-            rows = ["  ######    ", " ##    ##   ", "##      ##  ", "##      ##  ",
-                    "##      ##  ", "##      ##  ", " ##    ##   ", "  ######    ",
-                    "       ###  ", "        ### ", "         ###", "          ##"]
-        case .skip:
-            rows = ["##        ##", "####      ##", "######    ##", "########  ##",
-                    "########  ##", "######    ##", "####      ##", "##        ##",
-                    "            ", "            ", "            ", "            "]
-        }
-        for (y, row) in rows.enumerated() {
-            for (x, pixel) in row.enumerated() where pixel == "#" {
-                GameStyle.fill(CGRect(x: origin.x + CGFloat(x * 3), y: origin.y + CGFloat(y * 3), width: 3, height: 3), GameStyle.gold)
+    func glowPerkCounters(at star: Int) {
+        guard celebratesNewRewards else { return }
+        let kinds = earnedPerks.filter { $0.star == star }.map(\.kind)
+        guard !kinds.isEmpty else { return }
+        perkGlowTask?.cancel()
+        glowingPerks.formUnion(kinds); perkGlowAmount = 1
+        perkGlowTask = Task { @MainActor [weak self] in
+            for step in 1...18 {
+                do { try await Task.sleep(nanoseconds: 33_000_000) } catch { return }
+                guard let self, self.mode == .result else { return }
+                self.perkGlowAmount = 1 - CGFloat(step) / 18
+                self.needsDisplay = true
             }
+            self?.glowingPerks = []; self?.perkGlowTask = nil
         }
-        if kind == .superzoom {
-            GameStyle.fill(CGRect(x: origin.x + 12, y: origin.y + 6, width: 3, height: 12), GameStyle.accent)
-            GameStyle.fill(CGRect(x: origin.x + 8, y: origin.y + 10, width: 12, height: 3), GameStyle.accent)
+    }
+
+    func drawPerkCounters(in rect: CGRect) {
+        let counters = perkCounters
+        let width = (rect.width - 24) / 3
+        for (index, counter) in counters.enumerated() {
+            let frame = CGRect(x: rect.minX + CGFloat(index) * (width + 12), y: rect.minY, width: width, height: rect.height)
+            let digits = String(counter.value)
+            let numberWidth = max(14, (font?.width(of: digits, face: .small, scale: 1) ?? CGFloat(digits.count * 12)) + 6)
+            let number = CGRect(x: frame.maxX - numberWidth, y: frame.minY, width: numberWidth, height: frame.height)
+            let glowing = glowingPerks.contains(counter.kind) && perkGlowAmount > 0
+            if glowing {
+                GameStyle.fill(number.insetBy(dx: -4, dy: -3), GameStyle.gold.withAlphaComponent(0.10 * perkGlowAmount))
+                GameStyle.fill(number.insetBy(dx: -2, dy: -1), GameStyle.gold.withAlphaComponent(0.25 * perkGlowAmount))
+            }
+            let name = counter.kind == .skip ? L10n.text("Skips") : counter.name
+            let label = CGRect(x: frame.minX, y: frame.minY, width: frame.width - numberWidth - 4, height: frame.height)
+            if let font {
+                font.menuLine(name, in: label, alignment: .right)
+                font.menuLine(digits, in: number, alignment: .right, palette: glowing ? .green : .blue)
+            } else {
+                GamePixelText.draw(name, in: label)
+                GamePixelText.draw(digits, in: number, palette: glowing ? .green : .blue)
+            }
+            registerAchievementText(counter.label, rect: frame)
         }
     }
 }

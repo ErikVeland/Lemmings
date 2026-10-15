@@ -152,6 +152,18 @@ Menus, suspension, disconnects and leaving gameplay remove the callbacks.
 Reattachment primes held buttons before accepting a fresh click. UIKit gameplay
 press cancellation does not reset the separate Game Controller input stream.
 
+Button callbacks apply skill selection and assignments immediately, then leave
+playfield drawing, HUD refresh and periodic checkpoint capture to the next
+display frame. Several presses between frames keep their order and share one
+presentation update. Skill changes explicitly refresh the pointer badge while
+planning, without waiting for a physics tick. Classic, L2 and L3 share this path.
+Ready, suspension, controller ownership and the L3 direction picker retain their
+existing input gates. Physical button-to-display latency still needs TV testing.
+The two UIKit regression cases cover batched skill changes during planning and
+Ready/suspension gates. They typecheck with the TV SDK but have not run on a
+device. The muted, offscreen console gate passes 181 cross-engine experience
+checks and 347 menu/HUD captures. These checks do not measure physical latency.
+
 Muted, offscreen checks use snapshot gamepads and remotes for 100 short clicks
 each, polling overlap, held input, reattachment, stale callbacks, remapping and
 repeat assignment. Native short clicks also assign in Classic, Lemmings 2 and

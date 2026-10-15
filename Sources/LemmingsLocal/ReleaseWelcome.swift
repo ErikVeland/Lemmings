@@ -19,7 +19,7 @@ import NxlvKit
         (L10n.text("Sequel targeting"), L10n.text("The Tribes and Chronicles check skill eligibility without copying the whole runtime. Existing campaign and Beta classifications remain unchanged.")),
         (L10n.text("Localisation and content"), L10n.text("Updated interface text and corrected bundled level counts accompany the existing language packs. Human language review and remaining community-style dependencies stay open.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
-    ] }
+    ]
     private let defaults: UserDefaults
     private let build: Int
     private let version: String
