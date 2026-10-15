@@ -95,10 +95,11 @@ import NxlvKit
                 text("?", 798 + 3 * size, 149 + resultSummaryOffset + 2 * size, 5 * size, alignment: .center, height: 5 * size)
             }
         }
-        if let resultStatus { text(resultStatus, 80, resultCardsY - 32, 960, alignment: .center) }
-        else if !savedEarnedRewards.isEmpty {
+        if let resultStatus { text(resultStatus, 80, 253 + resultSummaryOffset, 960, alignment: .center, height: 26) }
+        else if earnedPerks.isEmpty && !savedEarnedRewards.isEmpty {
             link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"), CGRect(x: 80, y: resultCardsY - 38, width: 960, height: 32), alignment: .left, palette: .green) { [weak self] in self?.showEarnedRewards() }
         }
+        drawEarnedPerks()
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         let history = ArcadeStore.shared.records.trolley
@@ -147,7 +148,7 @@ import NxlvKit
         text(resultBalanceText, 582, resultCardsY + 35, 442, height: 22)
         let rewards = precisionRewardText(c)
         let new = c.newAwards
-        if !rewards.isEmpty {
+        if !rewards.isEmpty && earnedPerks.isEmpty {
             link(rewards + " >", CGRect(x: 582, y: resultCardsY + 56, width: 442, height: 24), alignment: .left, palette: .green) { [weak self] in self?.showEarnedRewards() }
             if !new.isEmpty {
                 link("\(new.count) NEW \(new.count == 1 ? L10n.text("AWARD") : L10n.text("AWARDS")) >", CGRect(x: 582, y: resultCardsY + 82, width: 442, height: 28), alignment: .left) { [weak self] in self?.showNewAwards() }

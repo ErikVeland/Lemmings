@@ -17468,78 +17468,87 @@
     {
       "comparisons": [
         {
-          "distance": 2.544,
-          "position": 515.0,
-          "reference": "Manic/Down_the_tube.nxlv"
+          "distance": 2.3276,
+          "position": 665.0,
+          "reference": "Lunatic/There's_madness_in_the_method.nxlv"
         },
         {
-          "distance": 2.9275,
-          "position": 30.0,
-          "reference": "Gentle/A_task_for_bombers.nxlv"
+          "distance": 2.4507,
+          "position": 520.0,
+          "reference": "Manic/Is_this_a_circus_.nxlv"
         },
         {
-          "distance": 3.0259,
-          "position": 170.0,
-          "reference": "Quirky/It's_Lemmingentry,_Watson.nxlv"
+          "distance": 2.716,
+          "position": 530.0,
+          "reference": "Manic/ROCKY_VI.nxlv"
         },
         {
-          "distance": 3.0605,
-          "position": 10.0,
-          "reference": "Gentle/Only_floaters_can_survive_this.nxlv"
+          "distance": 2.7601,
+          "position": 215.0,
+          "reference": "Quirky/DON'T_PANIC.nxlv"
         },
         {
-          "distance": 3.4176,
-          "position": 45.0,
-          "reference": "Gentle/Get_a_little_extra_help.nxlv"
+          "distance": 2.8073,
+          "position": 165.0,
+          "reference": "Quirky/PoP_YoR_ToP!!!.nxlv"
         }
       ],
       "context": {
-        "allowedLosses": 6,
+        "allowedLosses": 20,
         "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 5,
-        "availableSkillTypes": 1,
+        "assignments": 8,
+        "availableSkillTypes": 3,
         "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 76.05882352941177,
+        "completionSeconds": 105.88235294117646,
         "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "firstQuotaTick": 1290,
+        "exhaustedUsedSkills": [
+          "builder",
+          "basher"
+        ],
+        "firstQuotaTick": 1662,
         "hatchCount": 1,
-        "initialHatchIntervalSeconds": 0.7647058823529411,
-        "jobChanges": 0,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 2,
         "maximumReleaseRate": 99,
-        "minimumReleaseRate": 80,
-        "narrowActions": 0,
+        "minimumReleaseRate": 1,
+        "narrowActions": 2,
         "peakAssignmentsInTwoSeconds": 2,
-        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerSecond": 2,
         "peakAssignmentsPerTick": 1,
         "peakDistinctWorkersPerSecond": 1,
-        "population": 70,
-        "probedAssignments": 5,
+        "population": 80,
+        "probedAssignments": 8,
         "quotaTimingVerified": true,
-        "remainingSeconds": 44.11764705882353,
-        "remainingSecondsAtReplayEnd": 43.94117647058823,
-        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
-        "required": 64,
-        "rescueFraction": 0.9142857142857143,
-        "savedAboveRequirement": 1,
-        "scarceAvailableSkills": [],
-        "slowestHatchIntervalSeconds": 0.7647058823529411,
-        "sourceToolScarcity": 16.25,
+        "remainingSeconds": 142.23529411764707,
+        "remainingSecondsAtReplayEnd": 134.11764705882354,
+        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+        "required": 60,
+        "rescueFraction": 0.75,
+        "savedAboveRequirement": 12,
+        "scarceAvailableSkills": [
+          "basher",
+          "digger"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 77.5,
         "spareUsedSkills": {
-          "bomber": 10
+          "basher": 0,
+          "builder": 0
         },
         "spatialToleranceMeasured": false,
-        "startingReleaseRate": 80,
+        "startingReleaseRate": 1,
         "ticksWithMultipleAssignments": 0,
         "timingProbeComplete": false,
-        "totalAvailableSkills": 15,
+        "totalAvailableSkills": 10,
         "usedSkillUtilisation": {
-          "bomber": 0.3333333333333333
+          "basher": 1.0,
+          "builder": 1.0
         },
         "usedSkills": {
-          "bomber": 5
+          "basher": 2,
+          "builder": 6
         },
-        "workers": 5
+        "workers": 4
       },
       "courseChapter": {
         "end": 759,
@@ -17553,55 +17562,44 @@
       },
       "difficultyVerdict": null,
       "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 16.25,
+        "assignmentDensity": 10,
+        "availableToolScarcity": 77.5,
         "hatches": 0.0,
-        "minimumReleaseRate": 80,
-        "precision": 0,
-        "quotaDeadline": 63.23529411764706,
-        "rescue": 91.42857142857143,
-        "skillChains": 0
+        "minimumReleaseRate": 1,
+        "precision": 50,
+        "quotaDeadline": 0.0,
+        "rescue": 75.0,
+        "skillChains": 20
       },
       "identity": {
         "engine": "classic",
-        "levelID": "78:Taxing:19:4:3",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "49:Wild:10:2:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "learningRole": "practice",
-      "lesson": "Practise: Bomber",
-      "level": "Bomboozal",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"78:Taxing:19:4:3\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "lesson": "Practise: Basher + Builder",
+      "level": "Higgledy Piggledy",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
       "placement": {
         "adjustment": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
-          "adjustment": " Teaching policy: restricted puzzle ranks follow generous practice; Redux position cannot bypass this boundary.",
           "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 600,
-          "pressureWarnings": [
-            "fast minimum release rate with no slower crowd-management option"
-          ],
-          "previousBasis": "solutionEstimate",
-          "previousPosition": 540.0,
-          "reference": "Manic/Down_the_tube.nxlv",
-          "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "lower": 140.0,
+          "position": 695.0,
+          "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+          "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
           "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 600
+          "upper": 695.0
         },
         "courseChapter": "precision",
         "learningRole": "practice",
         "lower": 723.0,
         "position": 723.0,
-        "pressureWarnings": [
-          "fast minimum release rate with no slower crowd-management option"
-        ],
-        "previousBasis": "solutionEstimate",
-        "previousPosition": 540.0,
-        "reference": "Manic/Down_the_tube.nxlv",
-        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 723.0
       },
@@ -17609,29 +17607,32 @@
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Oh No! More Lemmings",
-        "number": 7,
-        "ordinal": 103,
+        "number": 5,
+        "ordinal": 133,
         "population": 20,
-        "rank": "Manic",
-        "rankIndex": 3,
-        "reference": "Manic/Down_the_tube.nxlv",
-        "required": 19,
-        "sha256": "2430edef597e1f3fcc753cad562d4accb525ab157bae2cedff6eda2e681080d4",
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+        "required": 20,
+        "sha256": "ff07212fb652ead5c9a45cce12cbd4bdff319d0eeee850be047522f1424ad86a",
         "skills": {
+          "basher": 2,
           "blocker": 2,
-          "bomber": 1,
-          "builder": 7,
-          "climber": 5
+          "builder": 1,
+          "climber": 2,
+          "miner": 2
         },
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 48,
+        "spawnInterval": 53,
         "timeLimitSeconds": null,
-        "title": "Down the tube"
+        "title": "There's madness in the method"
       },
       "requiredPreparation": [],
       "risks": [
         "incomplete timing probes",
-        "spatial tolerance unmeasured"
+        "spatial tolerance unmeasured",
+        "narrow measured timing",
+        "witness exhausts at least one used skill"
       ],
       "teachingPhase": null,
       "variantDifferences": []
@@ -17806,87 +17807,78 @@
     {
       "comparisons": [
         {
-          "distance": 2.3276,
-          "position": 665.0,
-          "reference": "Lunatic/There's_madness_in_the_method.nxlv"
+          "distance": 2.544,
+          "position": 515.0,
+          "reference": "Manic/Down_the_tube.nxlv"
         },
         {
-          "distance": 2.4507,
-          "position": 520.0,
-          "reference": "Manic/Is_this_a_circus_.nxlv"
+          "distance": 2.9275,
+          "position": 30.0,
+          "reference": "Gentle/A_task_for_bombers.nxlv"
         },
         {
-          "distance": 2.716,
-          "position": 530.0,
-          "reference": "Manic/ROCKY_VI.nxlv"
+          "distance": 3.0259,
+          "position": 170.0,
+          "reference": "Quirky/It's_Lemmingentry,_Watson.nxlv"
         },
         {
-          "distance": 2.7601,
-          "position": 215.0,
-          "reference": "Quirky/DON'T_PANIC.nxlv"
+          "distance": 3.0605,
+          "position": 10.0,
+          "reference": "Gentle/Only_floaters_can_survive_this.nxlv"
         },
         {
-          "distance": 2.8073,
-          "position": 165.0,
-          "reference": "Quirky/PoP_YoR_ToP!!!.nxlv"
+          "distance": 3.4176,
+          "position": 45.0,
+          "reference": "Gentle/Get_a_little_extra_help.nxlv"
         }
       ],
       "context": {
-        "allowedLosses": 20,
+        "allowedLosses": 6,
         "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 8,
-        "availableSkillTypes": 3,
+        "assignments": 5,
+        "availableSkillTypes": 1,
         "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 105.88235294117646,
+        "completionSeconds": 76.05882352941177,
         "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "builder",
-          "basher"
-        ],
-        "firstQuotaTick": 1662,
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": 1290,
         "hatchCount": 1,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 2,
+        "initialHatchIntervalSeconds": 0.7647058823529411,
+        "jobChanges": 0,
         "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 2,
+        "minimumReleaseRate": 80,
+        "narrowActions": 0,
         "peakAssignmentsInTwoSeconds": 2,
-        "peakAssignmentsPerSecond": 2,
+        "peakAssignmentsPerSecond": 1,
         "peakAssignmentsPerTick": 1,
         "peakDistinctWorkersPerSecond": 1,
-        "population": 80,
-        "probedAssignments": 8,
+        "population": 70,
+        "probedAssignments": 5,
         "quotaTimingVerified": true,
-        "remainingSeconds": 142.23529411764707,
-        "remainingSecondsAtReplayEnd": 134.11764705882354,
-        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
-        "required": 60,
-        "rescueFraction": 0.75,
-        "savedAboveRequirement": 12,
-        "scarceAvailableSkills": [
-          "basher",
-          "digger"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 77.5,
+        "remainingSeconds": 44.11764705882353,
+        "remainingSecondsAtReplayEnd": 43.94117647058823,
+        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+        "required": 64,
+        "rescueFraction": 0.9142857142857143,
+        "savedAboveRequirement": 1,
+        "scarceAvailableSkills": [],
+        "slowestHatchIntervalSeconds": 0.7647058823529411,
+        "sourceToolScarcity": 16.25,
         "spareUsedSkills": {
-          "basher": 0,
-          "builder": 0
+          "bomber": 10
         },
         "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
+        "startingReleaseRate": 80,
         "ticksWithMultipleAssignments": 0,
         "timingProbeComplete": false,
-        "totalAvailableSkills": 10,
+        "totalAvailableSkills": 15,
         "usedSkillUtilisation": {
-          "basher": 1.0,
-          "builder": 1.0
+          "bomber": 0.3333333333333333
         },
         "usedSkills": {
-          "basher": 2,
-          "builder": 6
+          "bomber": 5
         },
-        "workers": 4
+        "workers": 5
       },
       "courseChapter": {
         "end": 759,
@@ -17900,44 +17892,55 @@
       },
       "difficultyVerdict": null,
       "humanPressureAxes": {
-        "assignmentDensity": 10,
-        "availableToolScarcity": 77.5,
+        "assignmentDensity": 0,
+        "availableToolScarcity": 16.25,
         "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 50,
-        "quotaDeadline": 0.0,
-        "rescue": 75.0,
-        "skillChains": 20
+        "minimumReleaseRate": 80,
+        "precision": 0,
+        "quotaDeadline": 63.23529411764706,
+        "rescue": 91.42857142857143,
+        "skillChains": 0
       },
       "identity": {
         "engine": "classic",
-        "levelID": "49:Wild:10:2:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "78:Taxing:19:4:3",
+        "packID": "lemmings-LEVEL-120"
       },
       "learningRole": "practice",
-      "lesson": "Practise: Basher + Builder",
-      "level": "Higgledy Piggledy",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "lesson": "Practise: Bomber",
+      "level": "Bomboozal",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"78:Taxing:19:4:3\", \"packID\": \"lemmings-LEVEL-120\"}",
       "placement": {
         "adjustment": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
+          "adjustment": " Teaching policy: restricted puzzle ranks follow generous practice; Redux position cannot bypass this boundary.",
           "basis": "solutionEstimate",
-          "lower": 140.0,
-          "position": 695.0,
-          "reference": "Lunatic/There's_madness_in_the_method.nxlv",
-          "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "lower": 35,
+          "position": 600,
+          "pressureWarnings": [
+            "fast minimum release rate with no slower crowd-management option"
+          ],
+          "previousBasis": "solutionEstimate",
+          "previousPosition": 540.0,
+          "reference": "Manic/Down_the_tube.nxlv",
+          "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
           "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 695.0
+          "upper": 600
         },
         "courseChapter": "precision",
         "learningRole": "practice",
         "lower": 729.0,
         "position": 729.0,
-        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
-        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "pressureWarnings": [
+          "fast minimum release rate with no slower crowd-management option"
+        ],
+        "previousBasis": "solutionEstimate",
+        "previousPosition": 540.0,
+        "reference": "Manic/Down_the_tube.nxlv",
+        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 729.0
       },
@@ -17945,32 +17948,29 @@
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Oh No! More Lemmings",
-        "number": 5,
-        "ordinal": 133,
+        "number": 7,
+        "ordinal": 103,
         "population": 20,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
-        "required": 20,
-        "sha256": "ff07212fb652ead5c9a45cce12cbd4bdff319d0eeee850be047522f1424ad86a",
+        "rank": "Manic",
+        "rankIndex": 3,
+        "reference": "Manic/Down_the_tube.nxlv",
+        "required": 19,
+        "sha256": "2430edef597e1f3fcc753cad562d4accb525ab157bae2cedff6eda2e681080d4",
         "skills": {
-          "basher": 2,
           "blocker": 2,
-          "builder": 1,
-          "climber": 2,
-          "miner": 2
+          "bomber": 1,
+          "builder": 7,
+          "climber": 5
         },
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
+        "spawnInterval": 48,
         "timeLimitSeconds": null,
-        "title": "There's madness in the method"
+        "title": "Down the tube"
       },
       "requiredPreparation": [],
       "risks": [
         "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "witness exhausts at least one used skill"
+        "spatial tolerance unmeasured"
       ],
       "teachingPhase": null,
       "variantDifferences": []
@@ -19699,172 +19699,6 @@
     {
       "comparisons": [
         {
-          "distance": 2.1948,
-          "position": 470.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv"
-        },
-        {
-          "distance": 2.2081,
-          "position": 15.0,
-          "reference": "Gentle/Tailor-made_for_blockers.nxlv"
-        },
-        {
-          "distance": 3.0566,
-          "position": 85.0,
-          "reference": "Gentle/You_Live_and_Lem.nxlv"
-        },
-        {
-          "distance": 3.3104,
-          "position": 515.0,
-          "reference": "Manic/Down_the_tube.nxlv"
-        },
-        {
-          "distance": 3.3327,
-          "position": 45.0,
-          "reference": "Gentle/Get_a_little_extra_help.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 50,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 4,
-        "availableSkillTypes": 4,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 480.0,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "miner"
-        ],
-        "firstQuotaTick": 2717,
-        "hatchCount": 4,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 0,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 1,
-        "peakAssignmentsInTwoSeconds": 1,
-        "peakAssignmentsPerSecond": 1,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 1,
-        "population": 80,
-        "probedAssignments": 4,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 320.1764705882353,
-        "remainingSecondsAtReplayEnd": 0.0,
-        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
-        "required": 30,
-        "rescueFraction": 0.375,
-        "savedAboveRequirement": 10,
-        "scarceAvailableSkills": [
-          "blocker"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 26.625,
-        "spareUsedSkills": {
-          "miner": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 58,
-        "usedSkillUtilisation": {
-          "miner": 1.0
-        },
-        "usedSkills": {
-          "miner": 4
-        },
-        "workers": 3
-      },
-      "courseChapter": {
-        "end": 799,
-        "goal": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-        "id": "hatches",
-        "requires": [
-          "precision"
-        ],
-        "start": 760,
-        "title": "Coordinate entrances and groups"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 26.625,
-        "hatches": 100.0,
-        "minimumReleaseRate": 1,
-        "precision": 25,
-        "quotaDeadline": 0.0,
-        "rescue": 37.5,
-        "skillChains": 0
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "65:Wicked:6:9:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "introduction",
-      "lesson": "Practise: Miner",
-      "level": "PoP TiL YoU DrOp!",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 635.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-          "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 635.0
-        },
-        "courseChapter": "hatches",
-        "learningRole": "introduction",
-        "lower": 760.0,
-        "position": 760.0,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 760.0
-      },
-      "placementReason": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 30,
-        "ordinal": 94,
-        "population": 20,
-        "rank": "Zany",
-        "rankIndex": 2,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "required": 19,
-        "sha256": "6b4654ac3cd6beba48c4214d4e692ce7d8e54e0cd74e8c7b85ab1d6fe8ee1039",
-        "skills": {
-          "blocker": 2,
-          "bomber": 1,
-          "builder": 6,
-          "digger": 1
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Got anything... Lemmingy???"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [
-        {
           "distance": 2.1435,
           "position": 80.0,
           "reference": "Gentle/A_Beast_of_a_level.nxlv"
@@ -19982,7 +19816,7 @@
         "levelID": "63:Taxing:4:2:5",
         "packID": "lemmings-LEVEL-120"
       },
-      "learningRole": "recovery",
+      "learningRole": "introduction",
       "lesson": "Practise: Basher + Blocker",
       "level": "Lend a helping hand....",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"63:Taxing:4:2:5\", \"packID\": \"lemmings-LEVEL-120\"}",
@@ -20003,9 +19837,9 @@
           "upper": 740.0
         },
         "courseChapter": "hatches",
-        "learningRole": "recovery",
-        "lower": 762.294,
-        "position": 762.294,
+        "learningRole": "introduction",
+        "lower": 760.0,
+        "position": 760.0,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -20013,7 +19847,7 @@
         "replayRevision": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 762.294
+        "upper": 760.0
       },
       "placementReason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -20046,6 +19880,172 @@
       "risks": [
         "incomplete timing probes",
         "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 2.1948,
+          "position": 470.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv"
+        },
+        {
+          "distance": 2.2081,
+          "position": 15.0,
+          "reference": "Gentle/Tailor-made_for_blockers.nxlv"
+        },
+        {
+          "distance": 3.0566,
+          "position": 85.0,
+          "reference": "Gentle/You_Live_and_Lem.nxlv"
+        },
+        {
+          "distance": 3.3104,
+          "position": 515.0,
+          "reference": "Manic/Down_the_tube.nxlv"
+        },
+        {
+          "distance": 3.3327,
+          "position": 45.0,
+          "reference": "Gentle/Get_a_little_extra_help.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 50,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 4,
+        "availableSkillTypes": 4,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 480.0,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "miner"
+        ],
+        "firstQuotaTick": 2717,
+        "hatchCount": 4,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 0,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 1,
+        "narrowActions": 1,
+        "peakAssignmentsInTwoSeconds": 1,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 80,
+        "probedAssignments": 4,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 320.1764705882353,
+        "remainingSecondsAtReplayEnd": 0.0,
+        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+        "required": 30,
+        "rescueFraction": 0.375,
+        "savedAboveRequirement": 10,
+        "scarceAvailableSkills": [
+          "blocker"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 26.625,
+        "spareUsedSkills": {
+          "miner": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 58,
+        "usedSkillUtilisation": {
+          "miner": 1.0
+        },
+        "usedSkills": {
+          "miner": 4
+        },
+        "workers": 3
+      },
+      "courseChapter": {
+        "end": 799,
+        "goal": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+        "id": "hatches",
+        "requires": [
+          "precision"
+        ],
+        "start": 760,
+        "title": "Coordinate entrances and groups"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 26.625,
+        "hatches": 100.0,
+        "minimumReleaseRate": 1,
+        "precision": 25,
+        "quotaDeadline": 0.0,
+        "rescue": 37.5,
+        "skillChains": 0
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "65:Wicked:6:9:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Miner",
+      "level": "PoP TiL YoU DrOp!",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 35,
+          "position": 635.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+          "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 635.0
+        },
+        "courseChapter": "hatches",
+        "learningRole": "practice",
+        "lower": 762.294,
+        "position": 762.294,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 762.294
+      },
+      "placementReason": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 30,
+        "ordinal": 94,
+        "population": 20,
+        "rank": "Zany",
+        "rankIndex": 2,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "required": 19,
+        "sha256": "6b4654ac3cd6beba48c4214d4e692ce7d8e54e0cd74e8c7b85ab1d6fe8ee1039",
+        "skills": {
+          "blocker": 2,
+          "bomber": 1,
+          "builder": 6,
+          "digger": 1
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Got anything... Lemmingy???"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "narrow measured timing",
         "witness exhausts at least one used skill"
       ],
       "teachingPhase": null,
@@ -22201,6 +22201,166 @@
     {
       "comparisons": [],
       "context": {
+        "allowedLosses": 0,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 12,
+        "availableSkillTypes": 3,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 119.41176470588235,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "basher",
+          "builder",
+          "blocker"
+        ],
+        "firstQuotaTick": 2030,
+        "hatchCount": 4,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 6,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 3,
+        "peakAssignmentsPerSecond": 2,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 2,
+        "population": 50,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 60.588235294117645,
+        "remainingSecondsAtReplayEnd": 60.588235294117645,
+        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+        "required": 50,
+        "rescueFraction": 1.0,
+        "savedAboveRequirement": 0,
+        "scarceAvailableSkills": [
+          "blocker"
+        ],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 63.667,
+        "spareUsedSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "builder": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 12,
+        "usedSkillUtilisation": {
+          "basher": 1.0,
+          "blocker": 1.0,
+          "builder": 1.0
+        },
+        "usedSkills": {
+          "basher": 4,
+          "blocker": 1,
+          "builder": 7
+        },
+        "workers": 3
+      },
+      "courseChapter": {
+        "end": 799,
+        "goal": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+        "id": "hatches",
+        "requires": [
+          "precision"
+        ],
+        "start": 760,
+        "title": "Coordinate entrances and groups"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 10,
+        "availableToolScarcity": 63.667,
+        "hatches": 100.0,
+        "minimumReleaseRate": 50,
+        "precision": 0,
+        "quotaDeadline": 49.509803921568626,
+        "rescue": 100.0,
+        "skillChains": 60
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "52:Mega Drive Sunsoft:23:0:52",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Basher + Blocker",
+      "level": "Move on in two separate groups.",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"52:Mega Drive Sunsoft:23:0:52\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
+      "placement": {
+        "adjustment": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 700.0,
+          "position": 710.0,
+          "pressureWarnings": [
+            "near-full rescue with several exhausted used skill stocks",
+            "near-full rescue with repeated worker skill changes",
+            "multiple hatches with combined work and little rescue or tool margin"
+          ],
+          "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
+          "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 720.0
+        },
+        "courseChapter": "hatches",
+        "learningRole": "practice",
+        "lower": 792.118,
+        "position": 792.118,
+        "pressureWarnings": [
+          "near-full rescue with several exhausted used skill stocks",
+          "near-full rescue with repeated worker skill changes",
+          "multiple hatches with combined work and little rescue or tool margin"
+        ],
+        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
+        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 792.118
+      },
+      "placementReason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Genesis Lemmings",
+        "number": 14,
+        "ordinal": 142,
+        "population": 30,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
+        "required": 30,
+        "sha256": "29e4010a4593c45cb63daab949fb22f5ea3cada88d7fae3632a09cd609a31bcd",
+        "skills": {
+          "basher": 4,
+          "blocker": 1,
+          "builder": 7
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "Move on in two separate groups."
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different population",
+        "Classic retains a time limit"
+      ]
+    },
+    {
+      "comparisons": [],
+      "context": {
         "allowedLosses": 1,
         "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
         "assignments": 12,
@@ -22310,8 +22470,8 @@
         },
         "courseChapter": "hatches",
         "learningRole": "practice",
-        "lower": 792.118,
-        "position": 792.118,
+        "lower": 794.412,
+        "position": 794.412,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes",
           "fast minimum release rate with no slower crowd-management option",
@@ -22323,7 +22483,7 @@
         "replayRevision": "98a84c519b87aecef73b545ab3c6299fda4a634d8cbb0c22b6fbbf73f5bec6dc",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 792.118
+        "upper": 794.412
       },
       "placementReason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -22473,8 +22633,8 @@
         },
         "courseChapter": "hatches",
         "learningRole": "practice",
-        "lower": 794.412,
-        "position": 794.412,
+        "lower": 796.706,
+        "position": 796.706,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -22482,7 +22642,7 @@
         "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 794.412
+        "upper": 796.706
       },
       "placementReason": "Player-reported early wall. Prepare multi-hatch routing and faster release before this high-rescue three-hatch combination.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -22613,7 +22773,7 @@
         "levelID": "40:Wild:1:9:2",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "learningRole": "practice",
+      "learningRole": "challenge",
       "lesson": "Practise: Basher + Builder",
       "level": "PoP YoR ToP!!!",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"40:Wild:1:9:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
@@ -22635,9 +22795,9 @@
           "upper": 630
         },
         "courseChapter": "hatches",
-        "learningRole": "practice",
-        "lower": 796.706,
-        "position": 796.706,
+        "learningRole": "challenge",
+        "lower": 799.0,
+        "position": 799.0,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -22645,7 +22805,7 @@
         "replayRevision": "a8674c5ac05993c5cbcffad3532716b66a97d22bdbd646135f27421a124f8bb0",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 796.706
+        "upper": 799.0
       },
       "placementReason": "Player-reported early wall. Coordinate simpler entrances and groups first, then tackle four hatches with limited route tools.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -22681,166 +22841,6 @@
         "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
         "different rescue fraction",
         "different skill inventory",
-        "Classic retains a time limit"
-      ]
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 0,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 12,
-        "availableSkillTypes": 3,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 119.41176470588235,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "basher",
-          "builder",
-          "blocker"
-        ],
-        "firstQuotaTick": 2030,
-        "hatchCount": 4,
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 6,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 50,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 3,
-        "peakAssignmentsPerSecond": 2,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 2,
-        "population": 50,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 60.588235294117645,
-        "remainingSecondsAtReplayEnd": 60.588235294117645,
-        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-        "required": 50,
-        "rescueFraction": 1.0,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "blocker"
-        ],
-        "slowestHatchIntervalSeconds": 1.6470588235294117,
-        "sourceToolScarcity": 63.667,
-        "spareUsedSkills": {
-          "basher": 0,
-          "blocker": 0,
-          "builder": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 12,
-        "usedSkillUtilisation": {
-          "basher": 1.0,
-          "blocker": 1.0,
-          "builder": 1.0
-        },
-        "usedSkills": {
-          "basher": 4,
-          "blocker": 1,
-          "builder": 7
-        },
-        "workers": 3
-      },
-      "courseChapter": {
-        "end": 799,
-        "goal": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-        "id": "hatches",
-        "requires": [
-          "precision"
-        ],
-        "start": 760,
-        "title": "Coordinate entrances and groups"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 10,
-        "availableToolScarcity": 63.667,
-        "hatches": 100.0,
-        "minimumReleaseRate": 50,
-        "precision": 0,
-        "quotaDeadline": 49.509803921568626,
-        "rescue": 100.0,
-        "skillChains": 60
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Mega Drive Sunsoft:23:0:52",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "learningRole": "challenge",
-      "lesson": "Practise: Basher + Blocker",
-      "level": "Move on in two separate groups.",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"52:Mega Drive Sunsoft:23:0:52\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
-      "placement": {
-        "adjustment": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 700.0,
-          "position": 710.0,
-          "pressureWarnings": [
-            "near-full rescue with several exhausted used skill stocks",
-            "near-full rescue with repeated worker skill changes",
-            "multiple hatches with combined work and little rescue or tool margin"
-          ],
-          "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
-          "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 720.0
-        },
-        "courseChapter": "hatches",
-        "learningRole": "challenge",
-        "lower": 799.0,
-        "position": 799.0,
-        "pressureWarnings": [
-          "near-full rescue with several exhausted used skill stocks",
-          "near-full rescue with repeated worker skill changes",
-          "multiple hatches with combined work and little rescue or tool margin"
-        ],
-        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
-        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 799.0
-      },
-      "placementReason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Genesis Lemmings",
-        "number": 14,
-        "ordinal": 142,
-        "population": 30,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
-        "required": 30,
-        "sha256": "29e4010a4593c45cb63daab949fb22f5ea3cada88d7fae3632a09cd609a31bcd",
-        "skills": {
-          "basher": 4,
-          "blocker": 1,
-          "builder": 7
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "Move on in two separate groups."
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different population",
         "Classic retains a time limit"
       ]
     },
@@ -27357,6 +27357,168 @@
       "variantDifferences": []
     },
     {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 1,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 15,
+        "availableSkillTypes": 5,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 240.0,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "digger",
+          "blocker"
+        ],
+        "firstQuotaTick": 2948,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 5,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 1,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 30,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 66.58823529411765,
+        "remainingSecondsAtReplayEnd": 0.0,
+        "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
+        "required": 29,
+        "rescueFraction": 0.9666666666666667,
+        "savedAboveRequirement": 0,
+        "scarceAvailableSkills": [
+          "blocker",
+          "climber",
+          "digger",
+          "floater"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 80.65,
+        "spareUsedSkills": {
+          "blocker": 0,
+          "builder": 1,
+          "digger": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 19,
+        "usedSkillUtilisation": {
+          "blocker": 1.0,
+          "builder": 0.9230769230769231,
+          "digger": 1.0
+        },
+        "usedSkills": {
+          "blocker": 1,
+          "builder": 12,
+          "digger": 2
+        },
+        "workers": 5
+      },
+      "courseChapter": {
+        "end": 889,
+        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "id": "clocks",
+        "requires": [
+          "combined-plans"
+        ],
+        "start": 840,
+        "title": "Work under clocks and fast releases"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 80.65,
+        "hatches": 0.0,
+        "minimumReleaseRate": 1,
+        "precision": 0,
+        "quotaDeadline": 44.509803921568626,
+        "rescue": 96.66666666666667,
+        "skillChains": 50
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "81:Havoc:2:5:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Blocker + Builder",
+      "level": "Be more than just a number",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"81:Havoc:2:5:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 680.0,
+          "position": 690.0,
+          "pressureWarnings": [
+            "near-full rescue with several exhausted used skill stocks",
+            "near-full rescue with repeated worker skill changes"
+          ],
+          "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
+          "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 700.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 841.485,
+        "position": 841.485,
+        "pressureWarnings": [
+          "near-full rescue with several exhausted used skill stocks",
+          "near-full rescue with repeated worker skill changes"
+        ],
+        "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
+        "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 841.485
+      },
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 10,
+        "ordinal": 138,
+        "population": 30,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
+        "required": 30,
+        "sha256": "17927b7f859bbc83d8559669a61fe0e430caf39349c1a266a0c6a371564142ab",
+        "skills": {
+          "blocker": 1,
+          "builder": 13,
+          "climber": 2,
+          "digger": 2,
+          "floater": 1
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Be more than just a number"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different rescue fraction",
+        "Classic retains a time limit"
+      ]
+    },
+    {
       "comparisons": [
         {
           "distance": 2.36,
@@ -27480,13 +27642,13 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 841.485,
-        "position": 841.485,
+        "lower": 842.97,
+        "position": 842.97,
         "reference": "Lunatic/This_Corrosion.nxlv",
         "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 841.485
+        "upper": 842.97
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -27520,168 +27682,6 @@
       ],
       "teachingPhase": null,
       "variantDifferences": []
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 1,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 15,
-        "availableSkillTypes": 5,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 240.0,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "digger",
-          "blocker"
-        ],
-        "firstQuotaTick": 2948,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 5,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 2,
-        "peakAssignmentsPerSecond": 1,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 1,
-        "population": 30,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 66.58823529411765,
-        "remainingSecondsAtReplayEnd": 0.0,
-        "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
-        "required": 29,
-        "rescueFraction": 0.9666666666666667,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "blocker",
-          "climber",
-          "digger",
-          "floater"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 80.65,
-        "spareUsedSkills": {
-          "blocker": 0,
-          "builder": 1,
-          "digger": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 19,
-        "usedSkillUtilisation": {
-          "blocker": 1.0,
-          "builder": 0.9230769230769231,
-          "digger": 1.0
-        },
-        "usedSkills": {
-          "blocker": 1,
-          "builder": 12,
-          "digger": 2
-        },
-        "workers": 5
-      },
-      "courseChapter": {
-        "end": 889,
-        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "id": "clocks",
-        "requires": [
-          "combined-plans"
-        ],
-        "start": 840,
-        "title": "Work under clocks and fast releases"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 80.65,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 0,
-        "quotaDeadline": 44.509803921568626,
-        "rescue": 96.66666666666667,
-        "skillChains": 50
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "81:Havoc:2:5:3",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Blocker + Builder",
-      "level": "Be more than just a number",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"81:Havoc:2:5:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 680.0,
-          "position": 690.0,
-          "pressureWarnings": [
-            "near-full rescue with several exhausted used skill stocks",
-            "near-full rescue with repeated worker skill changes"
-          ],
-          "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
-          "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 700.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 842.97,
-        "position": 842.97,
-        "pressureWarnings": [
-          "near-full rescue with several exhausted used skill stocks",
-          "near-full rescue with repeated worker skill changes"
-        ],
-        "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
-        "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 842.97
-      },
-      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 10,
-        "ordinal": 138,
-        "population": 30,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/Be_more_than_just_a_number.nxlv",
-        "required": 30,
-        "sha256": "17927b7f859bbc83d8559669a61fe0e430caf39349c1a266a0c6a371564142ab",
-        "skills": {
-          "blocker": 1,
-          "builder": 13,
-          "climber": 2,
-          "digger": 2,
-          "floater": 1
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Be more than just a number"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different rescue fraction",
-        "Classic retains a time limit"
-      ]
     },
     {
       "comparisons": [
@@ -28207,151 +28207,6 @@
       "context": {
         "allowedLosses": 0,
         "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 3,
-        "availableSkillTypes": 5,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 57.1764705882353,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "firstQuotaTick": 972,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 2.823529411764706,
-        "jobChanges": 1,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 10,
-        "narrowActions": 1,
-        "peakAssignmentsInTwoSeconds": 1,
-        "peakAssignmentsPerSecond": 1,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 1,
-        "population": 50,
-        "probedAssignments": 3,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 2.823529411764706,
-        "remainingSecondsAtReplayEnd": 2.823529411764706,
-        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-        "required": 50,
-        "rescueFraction": 1.0,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "climber",
-          "floater"
-        ],
-        "slowestHatchIntervalSeconds": 2.823529411764706,
-        "sourceToolScarcity": 67.95,
-        "spareUsedSkills": {
-          "basher": 3,
-          "digger": 4
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 10,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 17,
-        "usedSkillUtilisation": {
-          "basher": 0.4,
-          "digger": 0.2
-        },
-        "usedSkills": {
-          "basher": 2,
-          "digger": 1
-        },
-        "workers": 2
-      },
-      "courseChapter": {
-        "end": 889,
-        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "id": "clocks",
-        "requires": [
-          "combined-plans"
-        ],
-        "start": 840,
-        "title": "Work under clocks and fast releases"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 67.95,
-        "hatches": 0.0,
-        "minimumReleaseRate": 10,
-        "precision": 25,
-        "quotaDeadline": 97.64705882352942,
-        "rescue": 100.0,
-        "skillChains": 10
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "116:Mayhem:27:8:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Basher + Digger",
-      "level": "Just a Minute (Part Two)",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"116:Mayhem:27:8:5\", \"packID\": \"lemmings-LEVEL-120\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 615.0,
-          "position": 625.0,
-          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
-          "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 635.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 848.909,
-        "position": 848.909,
-        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
-        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 848.909
-      },
-      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 29,
-        "ordinal": 125,
-        "population": 50,
-        "rank": "Manic",
-        "rankIndex": 3,
-        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
-        "required": 50,
-        "sha256": "4878e6ded70d72b0d674e79d1429065efc9e5192c3405619e104a19569f02b48",
-        "skills": {
-          "basher": 5,
-          "climber": 1,
-          "digger": 5,
-          "floater": 1
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 48,
-        "timeLimitSeconds": 60,
-        "title": "Just a Minute (Part Two)"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "less than 30 seconds spare on the witness"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different skill inventory"
-      ]
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 0,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
         "assignments": 9,
         "availableSkillTypes": 4,
         "canSlowReleaseBelowStartingRate": false,
@@ -28456,8 +28311,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 850.394,
-        "position": 850.394,
+        "lower": 848.909,
+        "position": 848.909,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes",
           "dense assignment workload with limited recovery margin"
@@ -28468,7 +28323,7 @@
         "replayRevision": "3e7311226f3ec242ec7e9255c3e169e71827b537bfaadce2291a1aba4fc6869b",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 850.394
+        "upper": 848.909
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -28499,6 +28354,151 @@
         "less than 30 seconds spare on the witness",
         "witness exhausts at least one used skill",
         "four or more assignments within two seconds"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different skill inventory"
+      ]
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 0,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 3,
+        "availableSkillTypes": 5,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 57.1764705882353,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": 972,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 2.823529411764706,
+        "jobChanges": 1,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 10,
+        "narrowActions": 1,
+        "peakAssignmentsInTwoSeconds": 1,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 50,
+        "probedAssignments": 3,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 2.823529411764706,
+        "remainingSecondsAtReplayEnd": 2.823529411764706,
+        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+        "required": 50,
+        "rescueFraction": 1.0,
+        "savedAboveRequirement": 0,
+        "scarceAvailableSkills": [
+          "climber",
+          "floater"
+        ],
+        "slowestHatchIntervalSeconds": 2.823529411764706,
+        "sourceToolScarcity": 67.95,
+        "spareUsedSkills": {
+          "basher": 3,
+          "digger": 4
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 10,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 17,
+        "usedSkillUtilisation": {
+          "basher": 0.4,
+          "digger": 0.2
+        },
+        "usedSkills": {
+          "basher": 2,
+          "digger": 1
+        },
+        "workers": 2
+      },
+      "courseChapter": {
+        "end": 889,
+        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "id": "clocks",
+        "requires": [
+          "combined-plans"
+        ],
+        "start": 840,
+        "title": "Work under clocks and fast releases"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 67.95,
+        "hatches": 0.0,
+        "minimumReleaseRate": 10,
+        "precision": 25,
+        "quotaDeadline": 97.64705882352942,
+        "rescue": 100.0,
+        "skillChains": 10
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "116:Mayhem:27:8:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Basher + Digger",
+      "level": "Just a Minute (Part Two)",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"116:Mayhem:27:8:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 615.0,
+          "position": 625.0,
+          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+          "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 635.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 850.394,
+        "position": 850.394,
+        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.394
+      },
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 29,
+        "ordinal": 125,
+        "population": 50,
+        "rank": "Manic",
+        "rankIndex": 3,
+        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+        "required": 50,
+        "sha256": "4878e6ded70d72b0d674e79d1429065efc9e5192c3405619e104a19569f02b48",
+        "skills": {
+          "basher": 5,
+          "climber": 1,
+          "digger": 5,
+          "floater": 1
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 48,
+        "timeLimitSeconds": 60,
+        "title": "Just a Minute (Part Two)"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "narrow measured timing",
+        "less than 30 seconds spare on the witness"
       ],
       "teachingPhase": null,
       "variantDifferences": [
@@ -30147,6 +30147,196 @@
     {
       "comparisons": [
         {
+          "distance": 4.0449,
+          "position": 650.0,
+          "reference": "Lunatic/The_Boiler_Room.nxlv"
+        },
+        {
+          "distance": 4.1727,
+          "position": 125.0,
+          "reference": "Gentle/The_Crankshaft.nxlv"
+        },
+        {
+          "distance": 4.6523,
+          "position": 510.0,
+          "reference": "Manic/Chill_out!.nxlv"
+        },
+        {
+          "distance": 4.8401,
+          "position": 800.0,
+          "reference": "Lunatic/Fall_and_no_life_(Part_Two).nxlv"
+        },
+        {
+          "distance": 4.858,
+          "position": 640.0,
+          "reference": "Manic/Temple_of_Love.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 0,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 21,
+        "availableSkillTypes": 5,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 45.94117647058823,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "climber",
+          "floater",
+          "builder"
+        ],
+        "firstQuotaTick": 781,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 11,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 1,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 18,
+        "peakAssignmentsPerSecond": 9,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 5,
+        "population": 10,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 14.058823529411764,
+        "remainingSecondsAtReplayEnd": 14.058823529411764,
+        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+        "required": 10,
+        "rescueFraction": 1.0,
+        "savedAboveRequirement": 0,
+        "scarceAvailableSkills": [
+          "blocker",
+          "bomber",
+          "builder"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 71.05,
+        "spareUsedSkills": {
+          "builder": 0,
+          "climber": 0,
+          "floater": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 23,
+        "usedSkillUtilisation": {
+          "builder": 1.0,
+          "climber": 1.0,
+          "floater": 1.0
+        },
+        "usedSkills": {
+          "builder": 1,
+          "climber": 10,
+          "floater": 10
+        },
+        "workers": 10
+      },
+      "courseChapter": {
+        "end": 889,
+        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "id": "clocks",
+        "requires": [
+          "combined-plans"
+        ],
+        "start": 840,
+        "title": "Work under clocks and fast releases"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 80,
+        "availableToolScarcity": 71.05,
+        "hatches": 0.0,
+        "minimumReleaseRate": 1,
+        "precision": 0,
+        "quotaDeadline": 88.2843137254902,
+        "rescue": 100.0,
+        "skillChains": 100
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "47:Wild:8:0:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Builder + Climber",
+      "level": "It`s a tight fit!",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 100.0,
+          "position": 825.0,
+          "pressureWarnings": [
+            "near-full rescue with several exhausted used skill stocks",
+            "near-full rescue with repeated worker skill changes",
+            "little deadline margin with combined skills and exhausted stock",
+            "dense assignment workload with limited recovery margin"
+          ],
+          "reference": "Lunatic/The_Boiler_Room.nxlv",
+          "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 825.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 865.242,
+        "position": 865.242,
+        "pressureWarnings": [
+          "near-full rescue with several exhausted used skill stocks",
+          "near-full rescue with repeated worker skill changes",
+          "little deadline margin with combined skills and exhausted stock",
+          "dense assignment workload with limited recovery margin"
+        ],
+        "reference": "Lunatic/The_Boiler_Room.nxlv",
+        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 865.242
+      },
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 2,
+        "ordinal": 130,
+        "population": 50,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/The_Boiler_Room.nxlv",
+        "required": 40,
+        "sha256": "47ccb1a614e182f70083029119cc7180d60cbfa0adda6593231a90897cf817c4",
+        "skills": {
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 30,
+          "climber": 10,
+          "floater": 5
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 38,
+        "timeLimitSeconds": null,
+        "title": "The Boiler Room"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "less than 30 seconds spare on the witness",
+        "witness exhausts at least one used skill",
+        "four or more assignments within two seconds"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [
+        {
           "distance": 1.6002,
           "position": 190.0,
           "reference": "Quirky/Just_a_Quicky.nxlv"
@@ -30285,8 +30475,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 865.242,
-        "position": 865.242,
+        "lower": 866.727,
+        "position": 866.727,
         "pressureWarnings": [
           "little deadline margin with combined skills and exhausted stock"
         ],
@@ -30294,7 +30484,7 @@
         "replayRevision": "7f032979b75b3fe7fe1a1410d0d4d12ebc2686119807135cf199b71a68239011",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 865.242
+        "upper": 866.727
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -30473,8 +30663,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 866.727,
-        "position": 866.727,
+        "lower": 868.212,
+        "position": 868.212,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -30484,7 +30674,7 @@
         "replayRevision": "29c0f0da0e3519cf6cc661329d8a727680fd9857695f5a8b45b0ea4df7168653",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 866.727
+        "upper": 868.212
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -30641,8 +30831,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 868.212,
-        "position": 868.212,
+        "lower": 869.697,
+        "position": 869.697,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "little deadline margin with combined skills and exhausted stock"
@@ -30653,7 +30843,7 @@
         "replayRevision": "0134cd3437e6cef163b9ad293d6b0589ce3bb09b8b03ef1ae5321fd31691fb15",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 868.212
+        "upper": 869.697
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -30827,8 +31017,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 869.697,
-        "position": 869.697,
+        "lower": 871.182,
+        "position": 871.182,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -30840,7 +31030,7 @@
         "replayRevision": "350ddba9aaa78c1cc56841bdc7ef49e5de104032cbc6b0d6ad6cb4dadb22709f",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 869.697
+        "upper": 871.182
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31004,8 +31194,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 871.182,
-        "position": 871.182,
+        "lower": 872.667,
+        "position": 872.667,
         "pressureWarnings": [
           "little deadline margin with combined skills and exhausted stock",
           "multiple hatches with combined work and little rescue or tool margin"
@@ -31016,7 +31206,7 @@
         "replayRevision": "b95c5e9582d282673a99ce8c52bff210abc69418b133cd854d2074de035ca09b",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 871.182
+        "upper": 872.667
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31200,8 +31390,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 872.667,
-        "position": 872.667,
+        "lower": 874.152,
+        "position": 874.152,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -31213,7 +31403,7 @@
         "replayRevision": "3b3cedf6ed8c7b3a0fc69dc3fd9cd6be0fcaa13309a5c43bfe6458630f4fa2b2",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 872.667
+        "upper": 874.152
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31391,8 +31581,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 874.152,
-        "position": 874.152,
+        "lower": 875.636,
+        "position": 875.636,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "little deadline margin with combined skills and exhausted stock",
@@ -31402,7 +31592,7 @@
         "replayRevision": "3d4fd83f07c26569b68b148673738bd1ffe71da3102b1c35fc7c41fbcbe11f16",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 874.152
+        "upper": 875.636
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31556,8 +31746,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 875.636,
-        "position": 875.636,
+        "lower": 877.121,
+        "position": 877.121,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -31567,7 +31757,7 @@
         "replayRevision": "68dc801dc705db0fb40103e7dd99dcb815b97a2e98d00a491021c032ba6683ed",
         "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 875.636
+        "upper": 877.121
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31748,8 +31938,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 877.121,
-        "position": 877.121,
+        "lower": 878.606,
+        "position": 878.606,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -31759,7 +31949,7 @@
         "replayRevision": "3981e3e1b646eec1b909fdcde54a627712d1424eeb56bb813e06c4b707b2d502",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 877.121
+        "upper": 878.606
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31909,8 +32099,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 878.606,
-        "position": 878.606,
+        "lower": 880.091,
+        "position": 880.091,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "fast minimum release rate with no slower crowd-management option",
@@ -31922,7 +32112,7 @@
         "replayRevision": "bba1f8ff11e7dead44e51200ef326850d3ed93dccfb6efff38ee79fa90d206f1",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 878.606
+        "upper": 880.091
       },
       "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -31958,196 +32148,6 @@
         "different population",
         "Classic retains a time limit"
       ]
-    },
-    {
-      "comparisons": [
-        {
-          "distance": 4.0449,
-          "position": 650.0,
-          "reference": "Lunatic/The_Boiler_Room.nxlv"
-        },
-        {
-          "distance": 4.1727,
-          "position": 125.0,
-          "reference": "Gentle/The_Crankshaft.nxlv"
-        },
-        {
-          "distance": 4.6523,
-          "position": 510.0,
-          "reference": "Manic/Chill_out!.nxlv"
-        },
-        {
-          "distance": 4.8401,
-          "position": 800.0,
-          "reference": "Lunatic/Fall_and_no_life_(Part_Two).nxlv"
-        },
-        {
-          "distance": 4.858,
-          "position": 640.0,
-          "reference": "Manic/Temple_of_Love.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 0,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 21,
-        "availableSkillTypes": 5,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 45.94117647058823,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "climber",
-          "floater",
-          "builder"
-        ],
-        "firstQuotaTick": 781,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 11,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 18,
-        "peakAssignmentsPerSecond": 9,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 5,
-        "population": 10,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 14.058823529411764,
-        "remainingSecondsAtReplayEnd": 14.058823529411764,
-        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-        "required": 10,
-        "rescueFraction": 1.0,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "blocker",
-          "bomber",
-          "builder"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 71.05,
-        "spareUsedSkills": {
-          "builder": 0,
-          "climber": 0,
-          "floater": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 23,
-        "usedSkillUtilisation": {
-          "builder": 1.0,
-          "climber": 1.0,
-          "floater": 1.0
-        },
-        "usedSkills": {
-          "builder": 1,
-          "climber": 10,
-          "floater": 10
-        },
-        "workers": 10
-      },
-      "courseChapter": {
-        "end": 889,
-        "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "id": "clocks",
-        "requires": [
-          "combined-plans"
-        ],
-        "start": 840,
-        "title": "Work under clocks and fast releases"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 80,
-        "availableToolScarcity": 71.05,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 0,
-        "quotaDeadline": 88.2843137254902,
-        "rescue": 100.0,
-        "skillChains": 100
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "47:Wild:8:0:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Builder + Climber",
-      "level": "It`s a tight fit!",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 100.0,
-          "position": 825.0,
-          "pressureWarnings": [
-            "near-full rescue with several exhausted used skill stocks",
-            "near-full rescue with repeated worker skill changes",
-            "little deadline margin with combined skills and exhausted stock",
-            "dense assignment workload with limited recovery margin"
-          ],
-          "reference": "Lunatic/The_Boiler_Room.nxlv",
-          "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 825.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 880.091,
-        "position": 880.091,
-        "pressureWarnings": [
-          "near-full rescue with several exhausted used skill stocks",
-          "near-full rescue with repeated worker skill changes",
-          "little deadline margin with combined skills and exhausted stock",
-          "dense assignment workload with limited recovery margin"
-        ],
-        "reference": "Lunatic/The_Boiler_Room.nxlv",
-        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 880.091
-      },
-      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 2,
-        "ordinal": 130,
-        "population": 50,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/The_Boiler_Room.nxlv",
-        "required": 40,
-        "sha256": "47ccb1a614e182f70083029119cc7180d60cbfa0adda6593231a90897cf817c4",
-        "skills": {
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 30,
-          "climber": 10,
-          "floater": 5
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 38,
-        "timeLimitSeconds": null,
-        "title": "The Boiler Room"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "less than 30 seconds spare on the witness",
-        "witness exhausts at least one used skill",
-        "four or more assignments within two seconds"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
     },
     {
       "comparisons": [],
@@ -33388,359 +33388,6 @@
     {
       "comparisons": [
         {
-          "distance": 2.7186,
-          "position": 80.0,
-          "reference": "Gentle/A_Beast_of_a_level.nxlv"
-        },
-        {
-          "distance": 2.7189,
-          "position": 310.0,
-          "reference": "Quirky/Izzie_Wizzie_lemmings_get_busy.nxlv"
-        },
-        {
-          "distance": 2.9533,
-          "position": 345.0,
-          "reference": "Zany/Watch_out,_there's_traps_about.nxlv"
-        },
-        {
-          "distance": 3.2448,
-          "position": 785.0,
-          "reference": "Lunatic/Save_Me.nxlv"
-        },
-        {
-          "distance": 3.418,
-          "position": 320.0,
-          "reference": "Quirky/And_then_there_were_four....nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 22,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 28,
-        "availableSkillTypes": 8,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 229.35294117647058,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "firstQuotaTick": 3780,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 1.1764705882352942,
-        "jobChanges": 19,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 66,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 2,
-        "peakAssignmentsPerSecond": 2,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 2,
-        "population": 66,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 137.64705882352942,
-        "remainingSecondsAtReplayEnd": 130.64705882352942,
-        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-        "required": 44,
-        "rescueFraction": 0.6666666666666666,
-        "savedAboveRequirement": 22,
-        "scarceAvailableSkills": [],
-        "slowestHatchIntervalSeconds": 1.1764705882352942,
-        "sourceToolScarcity": 0.0,
-        "spareUsedSkills": {
-          "basher": 51,
-          "blocker": 65,
-          "builder": 55,
-          "miner": 65
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 66,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 528,
-        "usedSkillUtilisation": {
-          "basher": 0.22727272727272727,
-          "blocker": 0.015151515151515152,
-          "builder": 0.16666666666666666,
-          "miner": 0.015151515151515152
-        },
-        "usedSkills": {
-          "basher": 15,
-          "blocker": 1,
-          "builder": 11,
-          "miner": 1
-        },
-        "workers": 3
-      },
-      "courseChapter": {
-        "end": 935,
-        "goal": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "id": "advanced-routes",
-        "requires": [
-          "clocks"
-        ],
-        "start": 900,
-        "title": "Consolidate advanced route planning"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 10,
-        "availableToolScarcity": 0.0,
-        "hatches": 0.0,
-        "minimumReleaseRate": 66,
-        "precision": 0,
-        "quotaDeadline": 0.0,
-        "rescue": 66.66666666666666,
-        "skillChains": 100
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "50:Tricky:21:0:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "learningRole": "recovery",
-      "lesson": "Practise: Basher + Blocker",
-      "level": "All the 6`s ........",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
-      "placement": {
-        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 55.0,
-          "position": 810.0,
-          "reference": "Gentle/A_Beast_of_a_level.nxlv",
-          "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 810.0
-        },
-        "courseChapter": "advanced-routes",
-        "learningRole": "recovery",
-        "lower": 901.4,
-        "position": 901.4,
-        "reference": "Gentle/A_Beast_of_a_level.nxlv",
-        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 901.4
-      },
-      "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Genesis Lemmings",
-        "number": 16,
-        "ordinal": 16,
-        "population": 50,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/A_Beast_of_a_level.nxlv",
-        "required": 50,
-        "sha256": "2364495d020f44b6e3417da778a29df46e4b7d3120e00b5574158136b45cd3de",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 10,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "A Beast of a level"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 5,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 26,
-        "availableSkillTypes": 8,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 180.0,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "blocker",
-          "basher",
-          "miner"
-        ],
-        "firstQuotaTick": 2045,
-        "hatchCount": 2,
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 6,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 50,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 4,
-        "peakAssignmentsPerSecond": 4,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 4,
-        "population": 20,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 59.705882352941174,
-        "remainingSecondsAtReplayEnd": 0.0,
-        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-        "required": 15,
-        "rescueFraction": 0.75,
-        "savedAboveRequirement": 3,
-        "scarceAvailableSkills": [
-          "basher",
-          "blocker",
-          "digger",
-          "miner"
-        ],
-        "slowestHatchIntervalSeconds": 1.6470588235294117,
-        "sourceToolScarcity": 65.031,
-        "spareUsedSkills": {
-          "basher": 0,
-          "blocker": 0,
-          "bomber": 4,
-          "builder": 1,
-          "climber": 1,
-          "digger": 1,
-          "miner": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 43,
-        "usedSkillUtilisation": {
-          "basher": 1.0,
-          "blocker": 1.0,
-          "bomber": 0.2,
-          "builder": 0.9,
-          "climber": 0.9,
-          "digger": 0.5,
-          "miner": 1.0
-        },
-        "usedSkills": {
-          "basher": 2,
-          "blocker": 2,
-          "bomber": 1,
-          "builder": 9,
-          "climber": 9,
-          "digger": 1,
-          "miner": 2
-        },
-        "workers": 12
-      },
-      "courseChapter": {
-        "end": 935,
-        "goal": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "id": "advanced-routes",
-        "requires": [
-          "clocks"
-        ],
-        "start": 900,
-        "title": "Consolidate advanced route planning"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 30,
-        "availableToolScarcity": 65.031,
-        "hatches": 33.333333333333336,
-        "minimumReleaseRate": 50,
-        "precision": 0,
-        "quotaDeadline": 50.24509803921569,
-        "rescue": 75.0,
-        "skillChains": 60
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "86:Havoc:7:5:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Basher + Blocker",
-      "level": "Creature Discomforts",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 715.0,
-          "position": 725.0,
-          "pressureWarnings": [
-            "multiple hatches with combined work and little rescue or tool margin",
-            "dense assignment workload with limited recovery margin"
-          ],
-          "reference": "Lunatic/Creature_Discomforts.nxlv",
-          "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 735.0
-        },
-        "courseChapter": "advanced-routes",
-        "learningRole": "practice",
-        "lower": 902.8,
-        "position": 902.8,
-        "pressureWarnings": [
-          "multiple hatches with combined work and little rescue or tool margin",
-          "dense assignment workload with limited recovery margin"
-        ],
-        "reference": "Lunatic/Creature_Discomforts.nxlv",
-        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 902.8
-      },
-      "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 17,
-        "ordinal": 145,
-        "population": 20,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/Creature_Discomforts.nxlv",
-        "required": 20,
-        "sha256": "cd03130faf4be43b54cb610eb52c6d590011e585129aa0004f126da0f4d431e6",
-        "skills": {
-          "basher": 2,
-          "blocker": 2,
-          "bomber": 5,
-          "builder": 10,
-          "climber": 10,
-          "digger": 2,
-          "floater": 10,
-          "miner": 2
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "Creature Discomforts"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill",
-        "four or more assignments within two seconds"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different rescue fraction",
-        "Classic retains a time limit",
-        "Classic bomber countdown needs additional execution review"
-      ]
-    },
-    {
-      "comparisons": [
-        {
           "distance": 1.228,
           "position": 555.0,
           "reference": "Manic/THE_SILENCE_OF_THE_LEMMINGS.nxlv"
@@ -33886,8 +33533,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 904.2,
-        "position": 904.2,
+        "lower": 901.4,
+        "position": 901.4,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -33897,7 +33544,7 @@
         "replayRevision": "b5c5a4a4657d4ad7a4cf6123dfd07cecfe9629b73f6feec2783f3f5a2a27996a",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 904.2
+        "upper": 901.4
       },
       "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -34078,8 +33725,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 905.6,
-        "position": 905.6,
+        "lower": 902.8,
+        "position": 902.8,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes"
@@ -34088,7 +33735,7 @@
         "replayRevision": "3ecc04eadff374d079fd5e740f91fba3b7f345536ca64676bab6ec16e2bb5171",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 905.6
+        "upper": 902.8
       },
       "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -34123,6 +33770,186 @@
       ],
       "teachingPhase": null,
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 5,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 26,
+        "availableSkillTypes": 8,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 180.0,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "blocker",
+          "basher",
+          "miner"
+        ],
+        "firstQuotaTick": 2045,
+        "hatchCount": 2,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 6,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 4,
+        "peakAssignmentsPerSecond": 4,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 4,
+        "population": 20,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 59.705882352941174,
+        "remainingSecondsAtReplayEnd": 0.0,
+        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+        "required": 15,
+        "rescueFraction": 0.75,
+        "savedAboveRequirement": 3,
+        "scarceAvailableSkills": [
+          "basher",
+          "blocker",
+          "digger",
+          "miner"
+        ],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 65.031,
+        "spareUsedSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 4,
+          "builder": 1,
+          "climber": 1,
+          "digger": 1,
+          "miner": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 43,
+        "usedSkillUtilisation": {
+          "basher": 1.0,
+          "blocker": 1.0,
+          "bomber": 0.2,
+          "builder": 0.9,
+          "climber": 0.9,
+          "digger": 0.5,
+          "miner": 1.0
+        },
+        "usedSkills": {
+          "basher": 2,
+          "blocker": 2,
+          "bomber": 1,
+          "builder": 9,
+          "climber": 9,
+          "digger": 1,
+          "miner": 2
+        },
+        "workers": 12
+      },
+      "courseChapter": {
+        "end": 935,
+        "goal": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "id": "advanced-routes",
+        "requires": [
+          "clocks"
+        ],
+        "start": 900,
+        "title": "Consolidate advanced route planning"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 30,
+        "availableToolScarcity": 65.031,
+        "hatches": 33.333333333333336,
+        "minimumReleaseRate": 50,
+        "precision": 0,
+        "quotaDeadline": 50.24509803921569,
+        "rescue": 75.0,
+        "skillChains": 60
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "86:Havoc:7:5:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Basher + Blocker",
+      "level": "Creature Discomforts",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 715.0,
+          "position": 725.0,
+          "pressureWarnings": [
+            "multiple hatches with combined work and little rescue or tool margin",
+            "dense assignment workload with limited recovery margin"
+          ],
+          "reference": "Lunatic/Creature_Discomforts.nxlv",
+          "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 735.0
+        },
+        "courseChapter": "advanced-routes",
+        "learningRole": "practice",
+        "lower": 904.2,
+        "position": 904.2,
+        "pressureWarnings": [
+          "multiple hatches with combined work and little rescue or tool margin",
+          "dense assignment workload with limited recovery margin"
+        ],
+        "reference": "Lunatic/Creature_Discomforts.nxlv",
+        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 904.2
+      },
+      "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 17,
+        "ordinal": 145,
+        "population": 20,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/Creature_Discomforts.nxlv",
+        "required": 20,
+        "sha256": "cd03130faf4be43b54cb610eb52c6d590011e585129aa0004f126da0f4d431e6",
+        "skills": {
+          "basher": 2,
+          "blocker": 2,
+          "bomber": 5,
+          "builder": 10,
+          "climber": 10,
+          "digger": 2,
+          "floater": 10,
+          "miner": 2
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "Creature Discomforts"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill",
+        "four or more assignments within two seconds"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different rescue fraction",
+        "Classic retains a time limit",
+        "Classic bomber countdown needs additional execution review"
+      ]
     },
     {
       "comparisons": [],
@@ -34242,8 +34069,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 907.0,
-        "position": 907.0,
+        "lower": 905.6,
+        "position": 905.6,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes"
         ],
@@ -34253,7 +34080,7 @@
         "replayRevision": "8178af2961d93b500691c362bff698387a404f706c8f5e7d47c986eba21eb943",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 907.0
+        "upper": 905.6
       },
       "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -34292,6 +34119,179 @@
         "different population",
         "Classic retains a time limit"
       ]
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 2.7186,
+          "position": 80.0,
+          "reference": "Gentle/A_Beast_of_a_level.nxlv"
+        },
+        {
+          "distance": 2.7189,
+          "position": 310.0,
+          "reference": "Quirky/Izzie_Wizzie_lemmings_get_busy.nxlv"
+        },
+        {
+          "distance": 2.9533,
+          "position": 345.0,
+          "reference": "Zany/Watch_out,_there's_traps_about.nxlv"
+        },
+        {
+          "distance": 3.2448,
+          "position": 785.0,
+          "reference": "Lunatic/Save_Me.nxlv"
+        },
+        {
+          "distance": 3.418,
+          "position": 320.0,
+          "reference": "Quirky/And_then_there_were_four....nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 22,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 28,
+        "availableSkillTypes": 8,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 229.35294117647058,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": 3780,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 1.1764705882352942,
+        "jobChanges": 19,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 66,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "peakAssignmentsPerSecond": 2,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 2,
+        "population": 66,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 137.64705882352942,
+        "remainingSecondsAtReplayEnd": 130.64705882352942,
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "required": 44,
+        "rescueFraction": 0.6666666666666666,
+        "savedAboveRequirement": 22,
+        "scarceAvailableSkills": [],
+        "slowestHatchIntervalSeconds": 1.1764705882352942,
+        "sourceToolScarcity": 0.0,
+        "spareUsedSkills": {
+          "basher": 51,
+          "blocker": 65,
+          "builder": 55,
+          "miner": 65
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 66,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 528,
+        "usedSkillUtilisation": {
+          "basher": 0.22727272727272727,
+          "blocker": 0.015151515151515152,
+          "builder": 0.16666666666666666,
+          "miner": 0.015151515151515152
+        },
+        "usedSkills": {
+          "basher": 15,
+          "blocker": 1,
+          "builder": 11,
+          "miner": 1
+        },
+        "workers": 3
+      },
+      "courseChapter": {
+        "end": 935,
+        "goal": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "id": "advanced-routes",
+        "requires": [
+          "clocks"
+        ],
+        "start": 900,
+        "title": "Consolidate advanced route planning"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 10,
+        "availableToolScarcity": 0.0,
+        "hatches": 0.0,
+        "minimumReleaseRate": 66,
+        "precision": 0,
+        "quotaDeadline": 0.0,
+        "rescue": 66.66666666666666,
+        "skillChains": 100
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "50:Tricky:21:0:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "learningRole": "recovery",
+      "lesson": "Practise: Basher + Blocker",
+      "level": "All the 6`s ........",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 55.0,
+          "position": 810.0,
+          "reference": "Gentle/A_Beast_of_a_level.nxlv",
+          "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 810.0
+        },
+        "courseChapter": "advanced-routes",
+        "learningRole": "recovery",
+        "lower": 907.0,
+        "position": 907.0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 907.0
+      },
+      "placementReason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Genesis Lemmings",
+        "number": 16,
+        "ordinal": 16,
+        "population": 50,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "required": 50,
+        "sha256": "2364495d020f44b6e3417da778a29df46e4b7d3120e00b5574158136b45cd3de",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 10,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "A Beast of a level"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": []
     },
     {
       "comparisons": [
@@ -37887,6 +37887,180 @@
     {
       "comparisons": [
         {
+          "distance": 3.523,
+          "position": 155.0,
+          "reference": "Gentle/Doomsday.nxlv"
+        },
+        {
+          "distance": 3.5304,
+          "position": 785.0,
+          "reference": "Lunatic/Save_Me.nxlv"
+        },
+        {
+          "distance": 3.7272,
+          "position": 745.0,
+          "reference": "Lunatic/The_Steel_Mines_of_Kessel.nxlv"
+        },
+        {
+          "distance": 3.7371,
+          "position": 345.0,
+          "reference": "Zany/Watch_out,_there's_traps_about.nxlv"
+        },
+        {
+          "distance": 3.9319,
+          "position": 725.0,
+          "reference": "Lunatic/Creature_Discomforts.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 12,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 18,
+        "availableSkillTypes": 2,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 123.94117647058823,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": 1976,
+        "hatchCount": 4,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 9,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 6,
+        "peakAssignmentsPerSecond": 4,
+        "peakAssignmentsPerTick": 2,
+        "peakDistinctWorkersPerSecond": 2,
+        "population": 60,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 183.76470588235293,
+        "remainingSecondsAtReplayEnd": 176.05882352941177,
+        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+        "required": 48,
+        "rescueFraction": 0.8,
+        "savedAboveRequirement": 3,
+        "scarceAvailableSkills": [],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 16.25,
+        "spareUsedSkills": {
+          "blocker": 6,
+          "bomber": 6
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 9,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 30,
+        "usedSkillUtilisation": {
+          "blocker": 0.6,
+          "bomber": 0.6
+        },
+        "usedSkills": {
+          "blocker": 9,
+          "bomber": 9
+        },
+        "workers": 9
+      },
+      "courseChapter": {
+        "end": 985,
+        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "id": "capstones",
+        "requires": [
+          "advanced-routes"
+        ],
+        "start": 940,
+        "title": "Finish with the hardest combinations"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 65,
+        "availableToolScarcity": 16.25,
+        "hatches": 100.0,
+        "minimumReleaseRate": 50,
+        "precision": 0,
+        "quotaDeadline": 0.0,
+        "rescue": 80.0,
+        "skillChains": 90
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "35:Mega Drive Sunsoft:6:0:35",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "learningRole": "introduction",
+      "lesson": "Practise: Blocker + Bomber",
+      "level": "Libra",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
+      "placement": {
+        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 130.0,
+          "position": 910.0,
+          "pressureWarnings": [
+            "multiple hatches with combined work and little rescue or tool margin"
+          ],
+          "reference": "Gentle/Doomsday.nxlv",
+          "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 910.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "introduction",
+        "lower": 940.0,
+        "position": 940.0,
+        "pressureWarnings": [
+          "multiple hatches with combined work and little rescue or tool margin"
+        ],
+        "reference": "Gentle/Doomsday.nxlv",
+        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 940.0
+      },
+      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Genesis Lemmings",
+        "number": 31,
+        "ordinal": 31,
+        "population": 30,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Doomsday.nxlv",
+        "required": 25,
+        "sha256": "534eed9a70ce5d51e13eb2c284e01960c1fd1578e06df033974fd02538320cec",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 20,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Doomsday"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "four or more assignments within two seconds"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [
+        {
           "distance": 1.5834,
           "position": 270.0,
           "reference": "Quirky/The_Far_Side.nxlv"
@@ -38005,7 +38179,7 @@
         "levelID": "61:Wicked:2:4:6",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "learningRole": "introduction",
+      "learningRole": "practice",
       "lesson": "Practise: Basher + Builder",
       "level": "Inroducing SUPERLEMMING",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"61:Wicked:2:4:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
@@ -38027,9 +38201,9 @@
           "upper": 710.0
         },
         "courseChapter": "capstones",
-        "learningRole": "introduction",
-        "lower": 940.0,
-        "position": 940.0,
+        "learningRole": "practice",
+        "lower": 949.0,
+        "position": 949.0,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes"
@@ -38038,7 +38212,7 @@
         "replayRevision": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 940.0
+        "upper": 949.0
       },
       "placementReason": "Special pacing is a separate challenge. Keep it behind ordinary routing, skill chains and fast-release practice.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -38070,335 +38244,6 @@
         "incomplete timing probes",
         "spatial tolerance unmeasured",
         "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 20,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 32,
-        "availableSkillTypes": 3,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 103.3529411764706,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "builder"
-        ],
-        "firstQuotaTick": 1230,
-        "hatchCount": 4,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 1,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 4,
-        "peakAssignmentsPerSecond": 3,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 3,
-        "population": 100,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 47.64705882352941,
-        "remainingSecondsAtReplayEnd": 16.647058823529413,
-        "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
-        "required": 80,
-        "rescueFraction": 0.8,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "bomber",
-          "builder"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 42.833,
-        "spareUsedSkills": {
-          "builder": 0,
-          "digger": 9
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 42,
-        "usedSkillUtilisation": {
-          "builder": 1.0,
-          "digger": 0.775
-        },
-        "usedSkills": {
-          "builder": 1,
-          "digger": 31
-        },
-        "workers": 31
-      },
-      "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "id": "capstones",
-        "requires": [
-          "advanced-routes"
-        ],
-        "start": 940,
-        "title": "Finish with the hardest combinations"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 20,
-        "availableToolScarcity": 42.833,
-        "hatches": 100.0,
-        "minimumReleaseRate": 1,
-        "precision": 0,
-        "quotaDeadline": 60.29411764705881,
-        "rescue": 80.0,
-        "skillChains": 10
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "58:Mega Drive Sunsoft:29:0:58",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Builder + Digger",
-      "level": "I am A.T.",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Mega Drive Sunsoft:29:0:58\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
-      "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 785.0,
-          "position": 795.0,
-          "pressureWarnings": [
-            "multiple hatches with combined work and little rescue or tool margin",
-            "dense assignment workload with limited recovery margin"
-          ],
-          "reference": "Lunatic/I_am_A.T..nxlv",
-          "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
-          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 805.0
-        },
-        "courseChapter": "capstones",
-        "learningRole": "practice",
-        "lower": 949.0,
-        "position": 949.0,
-        "pressureWarnings": [
-          "multiple hatches with combined work and little rescue or tool margin",
-          "dense assignment workload with limited recovery margin"
-        ],
-        "reference": "Lunatic/I_am_A.T..nxlv",
-        "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 949.0
-      },
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Genesis / SNES",
-        "number": 31,
-        "ordinal": 159,
-        "population": 100,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/I_am_A.T..nxlv",
-        "required": 100,
-        "sha256": "bf53a6934a71e5c1847da1a2cdff7123cfaa8493ee6799737ca04ffc735ff6b9",
-        "skills": {
-          "bomber": 1,
-          "builder": 1,
-          "digger": 40
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "I am A.T."
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill",
-        "four or more assignments within two seconds"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different rescue fraction",
-        "Classic retains a time limit"
-      ]
-    },
-    {
-      "comparisons": [
-        {
-          "distance": 3.523,
-          "position": 155.0,
-          "reference": "Gentle/Doomsday.nxlv"
-        },
-        {
-          "distance": 3.5304,
-          "position": 785.0,
-          "reference": "Lunatic/Save_Me.nxlv"
-        },
-        {
-          "distance": 3.7272,
-          "position": 745.0,
-          "reference": "Lunatic/The_Steel_Mines_of_Kessel.nxlv"
-        },
-        {
-          "distance": 3.7371,
-          "position": 345.0,
-          "reference": "Zany/Watch_out,_there's_traps_about.nxlv"
-        },
-        {
-          "distance": 3.9319,
-          "position": 725.0,
-          "reference": "Lunatic/Creature_Discomforts.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 12,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 18,
-        "availableSkillTypes": 2,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 123.94117647058823,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "firstQuotaTick": 1976,
-        "hatchCount": 4,
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 9,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 50,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 6,
-        "peakAssignmentsPerSecond": 4,
-        "peakAssignmentsPerTick": 2,
-        "peakDistinctWorkersPerSecond": 2,
-        "population": 60,
-        "probedAssignments": 10,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 183.76470588235293,
-        "remainingSecondsAtReplayEnd": 176.05882352941177,
-        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-        "required": 48,
-        "rescueFraction": 0.8,
-        "savedAboveRequirement": 3,
-        "scarceAvailableSkills": [],
-        "slowestHatchIntervalSeconds": 1.6470588235294117,
-        "sourceToolScarcity": 16.25,
-        "spareUsedSkills": {
-          "blocker": 6,
-          "bomber": 6
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "ticksWithMultipleAssignments": 9,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 30,
-        "usedSkillUtilisation": {
-          "blocker": 0.6,
-          "bomber": 0.6
-        },
-        "usedSkills": {
-          "blocker": 9,
-          "bomber": 9
-        },
-        "workers": 9
-      },
-      "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "id": "capstones",
-        "requires": [
-          "advanced-routes"
-        ],
-        "start": 940,
-        "title": "Finish with the hardest combinations"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 65,
-        "availableToolScarcity": 16.25,
-        "hatches": 100.0,
-        "minimumReleaseRate": 50,
-        "precision": 0,
-        "quotaDeadline": 0.0,
-        "rescue": 80.0,
-        "skillChains": 90
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "35:Mega Drive Sunsoft:6:0:35",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Blocker + Bomber",
-      "level": "Libra",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
-      "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 130.0,
-          "position": 910.0,
-          "pressureWarnings": [
-            "multiple hatches with combined work and little rescue or tool margin"
-          ],
-          "reference": "Gentle/Doomsday.nxlv",
-          "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 910.0
-        },
-        "courseChapter": "capstones",
-        "learningRole": "practice",
-        "lower": 958.0,
-        "position": 958.0,
-        "pressureWarnings": [
-          "multiple hatches with combined work and little rescue or tool margin"
-        ],
-        "reference": "Gentle/Doomsday.nxlv",
-        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 958.0
-      },
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Genesis Lemmings",
-        "number": 31,
-        "ordinal": 31,
-        "population": 30,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Doomsday.nxlv",
-        "required": 25,
-        "sha256": "534eed9a70ce5d51e13eb2c284e01960c1fd1578e06df033974fd02538320cec",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 20,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Doomsday"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "four or more assignments within two seconds"
       ],
       "teachingPhase": null,
       "variantDifferences": []
@@ -38535,13 +38380,13 @@
         },
         "courseChapter": "capstones",
         "learningRole": "practice",
-        "lower": 967.0,
-        "position": 967.0,
+        "lower": 958.0,
+        "position": 958.0,
         "reference": "Lunatic/Save_Me.nxlv",
         "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 967.0
+        "upper": 958.0
       },
       "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
       "purpose": "Later puzzle practice with community and variant evidence",
@@ -38574,6 +38419,161 @@
       ],
       "teachingPhase": null,
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 20,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 32,
+        "availableSkillTypes": 3,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 103.3529411764706,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "builder"
+        ],
+        "firstQuotaTick": 1230,
+        "hatchCount": 4,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 1,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 1,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 4,
+        "peakAssignmentsPerSecond": 3,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 3,
+        "population": 100,
+        "probedAssignments": 10,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 47.64705882352941,
+        "remainingSecondsAtReplayEnd": 16.647058823529413,
+        "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
+        "required": 80,
+        "rescueFraction": 0.8,
+        "savedAboveRequirement": 0,
+        "scarceAvailableSkills": [
+          "bomber",
+          "builder"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 42.833,
+        "spareUsedSkills": {
+          "builder": 0,
+          "digger": 9
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 42,
+        "usedSkillUtilisation": {
+          "builder": 1.0,
+          "digger": 0.775
+        },
+        "usedSkills": {
+          "builder": 1,
+          "digger": 31
+        },
+        "workers": 31
+      },
+      "courseChapter": {
+        "end": 985,
+        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "id": "capstones",
+        "requires": [
+          "advanced-routes"
+        ],
+        "start": 940,
+        "title": "Finish with the hardest combinations"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 20,
+        "availableToolScarcity": 42.833,
+        "hatches": 100.0,
+        "minimumReleaseRate": 1,
+        "precision": 0,
+        "quotaDeadline": 60.29411764705881,
+        "rescue": 80.0,
+        "skillChains": 10
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Mega Drive Sunsoft:29:0:58",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "learningRole": "practice",
+      "lesson": "Practise: Builder + Digger",
+      "level": "I am A.T.",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Mega Drive Sunsoft:29:0:58\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
+      "placement": {
+        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 785.0,
+          "position": 795.0,
+          "pressureWarnings": [
+            "multiple hatches with combined work and little rescue or tool margin",
+            "dense assignment workload with limited recovery margin"
+          ],
+          "reference": "Lunatic/I_am_A.T..nxlv",
+          "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
+          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 805.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "practice",
+        "lower": 967.0,
+        "position": 967.0,
+        "pressureWarnings": [
+          "multiple hatches with combined work and little rescue or tool margin",
+          "dense assignment workload with limited recovery margin"
+        ],
+        "reference": "Lunatic/I_am_A.T..nxlv",
+        "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 967.0
+      },
+      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Genesis / SNES",
+        "number": 31,
+        "ordinal": 159,
+        "population": 100,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/I_am_A.T..nxlv",
+        "required": 100,
+        "sha256": "bf53a6934a71e5c1847da1a2cdff7123cfaa8493ee6799737ca04ffc735ff6b9",
+        "skills": {
+          "bomber": 1,
+          "builder": 1,
+          "digger": 40
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "I am A.T."
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill",
+        "four or more assignments within two seconds"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different rescue fraction",
+        "Classic retains a time limit"
+      ]
     },
     {
       "comparisons": [],
@@ -38886,9 +38886,9 @@
       ]
     }
   ],
-  "limits": "Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.",
+  "limits": "Course positions are editorial ordinals, not measured difficulty scores. Every transition has a measured pressure review and earlier practice examples, but insight and special pacing still need novice playtesting. An elaborate witness need not be the easiest route. Native quota timing removes replay shutdown delay; it does not prove a fastest solution.",
   "poolSize": 1721,
-  "selectionPolicy": "Pinned skill tutorials, simple native routes and all 20 generous Tame lessons precede open Fun combinations and explicit building bridges. Player-reported walls remain marked too hard for early teaching. Unreviewed high-pressure witnesses move to Expert. Restricted retail puzzle ranks cannot bypass teaching boundaries through a Redux match; exact pinned low-pressure teaching routes can bridge a real gap. Later uncertain routes remain cautious estimates. Seasonal levels and fan bridges require exact human review, apart from recorded owner exceptions. No level-count quota.",
+  "selectionPolicy": "Every retained lesson has a pinned chapter, learning role and placement reason in the complete course plan. Skills, generous combinations, tool budgets, worker routes, precision and separate entrances prepare the later combined pressures, clocks and capstones. Required rescue timing and successful tool use come from exact native playback. Player-reported walls retain later floors. New estimates cannot silently enter the authored course. No fixed-size padding.",
   "targetSize": 227,
   "version": "curriculum-12"
 }

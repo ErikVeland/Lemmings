@@ -41,7 +41,8 @@ import NxlvKit
     var resultIdentityHeight: CGFloat { achievementTextHeight(resultIdentity, width: 960) }
     var resultSummaryOffset: CGFloat { max(0, resultIdentityHeight - 36) }
     var resultCardsY: CGFloat {
-        247 + resultSummaryOffset + (resultStatus != nil || !savedEarnedRewards.isEmpty ? 38 : 0)
+        if !earnedPerks.isEmpty { return perkSectionY + 142 }
+        return 247 + resultSummaryOffset + (resultStatus != nil || !savedEarnedRewards.isEmpty ? 38 : 0)
     }
     var resultActionsY: CGFloat {
         let hasReviewRow = cleared || onLater == nil || nextSessionPlayer != nil || offersSkip

@@ -11039,13 +11039,13 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 841.485,
-      "position": 841.485,
+      "lower": 842.97,
+      "position": 842.97,
       "reference": "Lunatic/This_Corrosion.nxlv",
       "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 841.485
+      "upper": 842.97
     },
     "risks": [
       "incomplete timing probes",
@@ -12810,9 +12810,9 @@
         "upper": 910.0
       },
       "courseChapter": "capstones",
-      "learningRole": "practice",
-      "lower": 958.0,
-      "position": 958.0,
+      "learningRole": "introduction",
+      "lower": 940.0,
+      "position": 940.0,
       "pressureWarnings": [
         "multiple hatches with combined work and little rescue or tool margin"
       ],
@@ -12820,7 +12820,7 @@
       "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
       "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 958.0
+      "upper": 940.0
     },
     "risks": [
       "incomplete timing probes",
@@ -13081,8 +13081,8 @@
       },
       "courseChapter": "advanced-routes",
       "learningRole": "practice",
-      "lower": 904.2,
-      "position": 904.2,
+      "lower": 901.4,
+      "position": 901.4,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
@@ -13092,7 +13092,7 @@
       "replayRevision": "b5c5a4a4657d4ad7a4cf6123dfd07cecfe9629b73f6feec2783f3f5a2a27996a",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 904.2
+      "upper": 901.4
     },
     "risks": [
       "incomplete timing probes",
@@ -13472,8 +13472,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 866.727,
-      "position": 866.727,
+      "lower": 868.212,
+      "position": 868.212,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
@@ -13483,7 +13483,7 @@
       "replayRevision": "29c0f0da0e3519cf6cc661329d8a727680fd9857695f5a8b45b0ea4df7168653",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 866.727
+      "upper": 868.212
     },
     "risks": [
       "incomplete timing probes",
@@ -16126,8 +16126,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 872.667,
-      "position": 872.667,
+      "lower": 874.152,
+      "position": 874.152,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
@@ -16139,7 +16139,7 @@
       "replayRevision": "3b3cedf6ed8c7b3a0fc69dc3fd9cd6be0fcaa13309a5c43bfe6458630f4fa2b2",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 872.667
+      "upper": 874.152
     },
     "risks": [
       "incomplete timing probes",
@@ -16393,8 +16393,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 880.091,
-      "position": 880.091,
+      "lower": 865.242,
+      "position": 865.242,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
@@ -16405,7 +16405,7 @@
       "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 880.091
+      "upper": 865.242
     },
     "risks": [
       "incomplete timing probes",
@@ -16885,8 +16885,8 @@
       },
       "courseChapter": "advanced-routes",
       "learningRole": "practice",
-      "lower": 905.6,
-      "position": 905.6,
+      "lower": 902.8,
+      "position": 902.8,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes"
@@ -16895,7 +16895,7 @@
       "replayRevision": "3ecc04eadff374d079fd5e740f91fba3b7f345536ca64676bab6ec16e2bb5171",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 905.6
+      "upper": 902.8
     },
     "risks": [
       "incomplete timing probes",
@@ -17012,13 +17012,13 @@
       },
       "courseChapter": "precision",
       "learningRole": "practice",
-      "lower": 729.0,
-      "position": 729.0,
+      "lower": 723.0,
+      "position": 723.0,
       "reference": "Lunatic/There's_madness_in_the_method.nxlv",
       "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 729.0
+      "upper": 723.0
     },
     "risks": [
       "incomplete timing probes",
@@ -17457,13 +17457,13 @@
       },
       "courseChapter": "advanced-routes",
       "learningRole": "recovery",
-      "lower": 901.4,
-      "position": 901.4,
+      "lower": 907.0,
+      "position": 907.0,
       "reference": "Gentle/A_Beast_of_a_level.nxlv",
       "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 901.4
+      "upper": 907.0
     },
     "risks": [
       "incomplete timing probes",
@@ -19470,9 +19470,9 @@
         "upper": 710.0
       },
       "courseChapter": "capstones",
-      "learningRole": "introduction",
-      "lower": 940.0,
-      "position": 940.0,
+      "learningRole": "practice",
+      "lower": 949.0,
+      "position": 949.0,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes"
@@ -19481,7 +19481,7 @@
       "replayRevision": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 940.0
+      "upper": 949.0
     },
     "risks": [
       "incomplete timing probes",
@@ -19730,9 +19730,9 @@
         "upper": 740.0
       },
       "courseChapter": "hatches",
-      "learningRole": "recovery",
-      "lower": 762.294,
-      "position": 762.294,
+      "learningRole": "introduction",
+      "lower": 760.0,
+      "position": 760.0,
       "pressureWarnings": [
         "multiple hatches with combined work and little rescue or tool margin"
       ],
@@ -19740,7 +19740,7 @@
       "replayRevision": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 762.294
+      "upper": 760.0
     },
     "risks": [
       "incomplete timing probes",
@@ -19990,13 +19990,13 @@
       },
       "courseChapter": "capstones",
       "learningRole": "practice",
-      "lower": 967.0,
-      "position": 967.0,
+      "lower": 958.0,
+      "position": 958.0,
       "reference": "Lunatic/Save_Me.nxlv",
       "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 967.0
+      "upper": 958.0
     },
     "risks": [
       "incomplete timing probes",
@@ -20207,14 +20207,14 @@
         "upper": 635.0
       },
       "courseChapter": "hatches",
-      "learningRole": "introduction",
-      "lower": 760.0,
-      "position": 760.0,
+      "learningRole": "practice",
+      "lower": 762.294,
+      "position": 762.294,
       "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
       "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 760.0
+      "upper": 762.294
     },
     "risks": [
       "incomplete timing probes",
@@ -20345,8 +20345,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 874.152,
-      "position": 874.152,
+      "lower": 875.636,
+      "position": 875.636,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "little deadline margin with combined skills and exhausted stock",
@@ -20356,7 +20356,7 @@
       "replayRevision": "3d4fd83f07c26569b68b148673738bd1ffe71da3102b1c35fc7c41fbcbe11f16",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 874.152
+      "upper": 875.636
     },
     "risks": [
       "incomplete timing probes",
@@ -21470,8 +21470,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 865.242,
-      "position": 865.242,
+      "lower": 866.727,
+      "position": 866.727,
       "pressureWarnings": [
         "little deadline margin with combined skills and exhausted stock"
       ],
@@ -21479,7 +21479,7 @@
       "replayRevision": "7f032979b75b3fe7fe1a1410d0d4d12ebc2686119807135cf199b71a68239011",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 865.242
+      "upper": 866.727
     },
     "risks": [
       "incomplete timing probes",
@@ -23084,8 +23084,8 @@
       },
       "courseChapter": "precision",
       "learningRole": "practice",
-      "lower": 723.0,
-      "position": 723.0,
+      "lower": 729.0,
+      "position": 729.0,
       "pressureWarnings": [
         "fast minimum release rate with no slower crowd-management option"
       ],
@@ -23095,7 +23095,7 @@
       "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 723.0
+      "upper": 729.0
     },
     "risks": [
       "incomplete timing probes",
@@ -26717,8 +26717,8 @@
       },
       "courseChapter": "clocks",
       "learningRole": "practice",
-      "lower": 877.121,
-      "position": 877.121,
+      "lower": 878.606,
+      "position": 878.606,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
@@ -26728,7 +26728,7 @@
       "replayRevision": "3981e3e1b646eec1b909fdcde54a627712d1424eeb56bb813e06c4b707b2d502",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 877.121
+      "upper": 878.606
     },
     "risks": [
       "incomplete timing probes",

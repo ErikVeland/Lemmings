@@ -207,7 +207,7 @@
   {
     "level": "Higgledy Piggledy",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 108
+    "step": 106
   },
   {
     "level": "HIGHLAND FLING",
@@ -247,7 +247,7 @@
   {
     "level": "PoP TiL YoU DrOp!",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 119
+    "step": 120
   },
   {
     "level": "Oh No! It`s the 4TH DIMENSION!",
@@ -282,7 +282,7 @@
   {
     "level": "PoP YoR ToP!!!",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"40:Wild:1:9:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 135
+    "step": 136
   },
   {
     "level": "The Lemming Learning Curve",
@@ -330,13 +330,13 @@
     "step": 160
   },
   {
-    "level": "No Problemming!",
-    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"30:Crazy:11:5:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "level": "Be more than just a number",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"81:Havoc:2:5:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
     "step": 163
   },
   {
-    "level": "Be more than just a number",
-    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"81:Havoc:2:5:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "level": "No Problemming!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"30:Crazy:11:5:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
     "step": 164
   },
   {
@@ -350,43 +350,43 @@
     "step": 176
   },
   {
+    "level": "It`s a tight fit!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 179
+  },
+  {
     "level": "ROCKY ROAD",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"70:Wicked:11:4:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 179
+    "step": 180
   },
   {
     "level": "NO PROBLEM",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"37:Crazy:18:3:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 180
+    "step": 181
   },
   {
     "level": "ROCKY VI",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"29:Crazy:10:5:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 181
+    "step": 182
   },
   {
     "level": "ONWARD AND UPWARD",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"52:Wild:13:4:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 182
+    "step": 183
   },
   {
     "level": "THE SILENCE OF THE LEMMINGS",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"54:Wild:15:4:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 183
+    "step": 184
   },
   {
     "level": "You Take the High Road",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"46:Wild:7:8:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 184
+    "step": 185
   },
   {
     "level": "Dolly Dimple",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"21:Crazy:2:1:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 188
-  },
-  {
-    "level": "It`s a tight fit!",
-    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
     "step": 189
   },
   {
@@ -405,13 +405,13 @@
     "step": 194
   },
   {
-    "level": "Creature Discomforts",
-    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 198
-  },
-  {
     "level": "DIGGING FOR VICTORY",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"36:Crazy:17:3:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 197
+  },
+  {
+    "level": "Creature Discomforts",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
     "step": 199
   },
   {
@@ -447,7 +447,7 @@
   {
     "level": "Inroducing SUPERLEMMING",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"61:Wicked:2:4:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 222
+    "step": 223
   },
   {
     "level": "Time waits for no Lemming",

@@ -5839,63 +5839,53 @@
     },
     {
       "concepts": [
-        "bomber"
+        "basher",
+        "builder"
       ],
       "demand": 723.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
-        "id": "F1C7E489-240C-4850-4554-A5B038BD64FA",
+        "id": "6A4DC88B-BF68-18E7-0414-12C4B7E0EA5C",
         "identity": {
           "engine": "classic",
-          "levelID": "78:Taxing:19:4:3",
-          "packID": "lemmings-LEVEL-120"
+          "levelID": "49:Wild:10:2:5",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
         },
-        "levelNameSnapshot": "Bomboozal",
-        "levelNumberSnapshot": 79,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+        "levelNameSnapshot": "Higgledy Piggledy",
+        "levelNumberSnapshot": 50,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
       },
-      "focus": "Practise: Bomber",
-      "intrinsicDemand": 83.78684874827513,
+      "focus": "Practise: Basher + Builder",
+      "intrinsicDemand": 316.87131039148613,
       "introduced": [],
       "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"78:Taxing:19:4:3\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
       "placement": {
         "adjustment": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
-          "adjustment": " Teaching policy: restricted puzzle ranks follow generous practice; Redux position cannot bypass this boundary.",
           "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 600,
-          "pressureWarnings": [
-            "fast minimum release rate with no slower crowd-management option"
-          ],
-          "previousBasis": "solutionEstimate",
-          "previousPosition": 540.0,
-          "reference": "Manic/Down_the_tube.nxlv",
-          "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "lower": 140.0,
+          "position": 695.0,
+          "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+          "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
           "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 600
+          "upper": 695.0
         },
         "courseChapter": "precision",
         "learningRole": "practice",
         "lower": 723.0,
         "position": 723.0,
-        "pressureWarnings": [
-          "fast minimum release rate with no slower crowd-management option"
-        ],
-        "previousBasis": "solutionEstimate",
-        "previousPosition": 540.0,
-        "reference": "Manic/Down_the_tube.nxlv",
-        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 723.0
       },
       "preparationGaps": [],
-      "score": 83.78684874827513,
+      "score": 316.87131039148613,
       "stage": "Expert"
     },
     {
@@ -5956,53 +5946,63 @@
     },
     {
       "concepts": [
-        "basher",
-        "builder"
+        "bomber"
       ],
       "demand": 729.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
-        "id": "6A4DC88B-BF68-18E7-0414-12C4B7E0EA5C",
+        "id": "F1C7E489-240C-4850-4554-A5B038BD64FA",
         "identity": {
           "engine": "classic",
-          "levelID": "49:Wild:10:2:5",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
+          "levelID": "78:Taxing:19:4:3",
+          "packID": "lemmings-LEVEL-120"
         },
-        "levelNameSnapshot": "Higgledy Piggledy",
-        "levelNumberSnapshot": 50,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+        "levelNameSnapshot": "Bomboozal",
+        "levelNumberSnapshot": 79,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
       },
-      "focus": "Practise: Basher + Builder",
-      "intrinsicDemand": 316.87131039148613,
+      "focus": "Practise: Bomber",
+      "intrinsicDemand": 83.78684874827513,
       "introduced": [],
       "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"78:Taxing:19:4:3\", \"packID\": \"lemmings-LEVEL-120\"}",
       "placement": {
         "adjustment": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
+          "adjustment": " Teaching policy: restricted puzzle ranks follow generous practice; Redux position cannot bypass this boundary.",
           "basis": "solutionEstimate",
-          "lower": 140.0,
-          "position": 695.0,
-          "reference": "Lunatic/There's_madness_in_the_method.nxlv",
-          "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "lower": 35,
+          "position": 600,
+          "pressureWarnings": [
+            "fast minimum release rate with no slower crowd-management option"
+          ],
+          "previousBasis": "solutionEstimate",
+          "previousPosition": 540.0,
+          "reference": "Manic/Down_the_tube.nxlv",
+          "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
           "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 695.0
+          "upper": 600
         },
         "courseChapter": "precision",
         "learningRole": "practice",
         "lower": 729.0,
         "position": 729.0,
-        "reference": "Lunatic/There's_madness_in_the_method.nxlv",
-        "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "pressureWarnings": [
+          "fast minimum release rate with no slower crowd-management option"
+        ],
+        "previousBasis": "solutionEstimate",
+        "previousPosition": 540.0,
+        "reference": "Manic/Down_the_tube.nxlv",
+        "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 729.0
       },
       "preparationGaps": [],
-      "score": 316.87131039148613,
+      "score": 83.78684874827513,
       "stage": "Expert"
     },
     {
@@ -6604,63 +6604,13 @@
     },
     {
       "concepts": [
-        "miner"
-      ],
-      "demand": 760.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "BC4BB19E-BFE0-53F8-B769-5510FFFF9B34",
-        "identity": {
-          "engine": "classic",
-          "levelID": "65:Wicked:6:9:4",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "PoP TiL YoU DrOp!",
-        "levelNumberSnapshot": 66,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Miner",
-      "intrinsicDemand": 233.05489017050266,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 635.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-          "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 635.0
-        },
-        "courseChapter": "hatches",
-        "learningRole": "introduction",
-        "lower": 760.0,
-        "position": 760.0,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 760.0
-      },
-      "preparationGaps": [],
-      "score": 233.05489017050266,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
         "basher",
         "blocker",
         "builder",
         "digger",
         "miner"
       ],
-      "demand": 762.294,
+      "demand": 760.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "290E2DCB-0BDC-3B70-473C-0291E7233E31",
@@ -6696,9 +6646,9 @@
           "upper": 740.0
         },
         "courseChapter": "hatches",
-        "learningRole": "recovery",
-        "lower": 762.294,
-        "position": 762.294,
+        "learningRole": "introduction",
+        "lower": 760.0,
+        "position": 760.0,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -6706,10 +6656,60 @@
         "replayRevision": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 762.294
+        "upper": 760.0
       },
       "preparationGaps": [],
       "score": 353.522985621683,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "miner"
+      ],
+      "demand": 762.294,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "BC4BB19E-BFE0-53F8-B769-5510FFFF9B34",
+        "identity": {
+          "engine": "classic",
+          "levelID": "65:Wicked:6:9:4",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "PoP TiL YoU DrOp!",
+        "levelNumberSnapshot": 66,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Miner",
+      "intrinsicDemand": 233.05489017050266,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 35,
+          "position": 635.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+          "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 635.0
+        },
+        "courseChapter": "hatches",
+        "learningRole": "practice",
+        "lower": 762.294,
+        "position": 762.294,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 762.294
+      },
+      "preparationGaps": [],
+      "score": 233.05489017050266,
       "stage": "Expert"
     },
     {
@@ -7466,11 +7466,73 @@
     {
       "concepts": [
         "basher",
+        "blocker",
+        "builder"
+      ],
+      "demand": 792.118,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "7DAE30BC-702F-76EC-9672-2D7897744A7A",
+        "identity": {
+          "engine": "classic",
+          "levelID": "52:Mega Drive Sunsoft:23:0:52",
+          "packID": "ohYesMoreLemmings-OHYES-60"
+        },
+        "levelNameSnapshot": "Move on in two separate groups.",
+        "levelNumberSnapshot": 53,
+        "packNameSnapshot": "Oh Yes! More Lemmings!",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 421.14236347027156,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"52:Mega Drive Sunsoft:23:0:52\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
+      "placement": {
+        "adjustment": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 700.0,
+          "position": 710.0,
+          "pressureWarnings": [
+            "near-full rescue with several exhausted used skill stocks",
+            "near-full rescue with repeated worker skill changes",
+            "multiple hatches with combined work and little rescue or tool margin"
+          ],
+          "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
+          "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 720.0
+        },
+        "courseChapter": "hatches",
+        "learningRole": "practice",
+        "lower": 792.118,
+        "position": 792.118,
+        "pressureWarnings": [
+          "near-full rescue with several exhausted used skill stocks",
+          "near-full rescue with repeated worker skill changes",
+          "multiple hatches with combined work and little rescue or tool margin"
+        ],
+        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
+        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 792.118
+      },
+      "preparationGaps": [],
+      "score": 421.14236347027156,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "basher",
         "builder",
         "climber",
         "digger"
       ],
-      "demand": 792.118,
+      "demand": 794.412,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "3812B3DA-DA88-8973-64B8-91DF60232963",
@@ -7512,8 +7574,8 @@
         },
         "courseChapter": "hatches",
         "learningRole": "practice",
-        "lower": 792.118,
-        "position": 792.118,
+        "lower": 794.412,
+        "position": 794.412,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes",
           "fast minimum release rate with no slower crowd-management option",
@@ -7525,7 +7587,7 @@
         "replayRevision": "98a84c519b87aecef73b545ab3c6299fda4a634d8cbb0c22b6fbbf73f5bec6dc",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 792.118
+        "upper": 794.412
       },
       "preparationGaps": [],
       "score": 341.86466085589245,
@@ -7537,7 +7599,7 @@
         "blocker",
         "builder"
       ],
-      "demand": 794.412,
+      "demand": 796.706,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "2893D56F-182A-8CA8-2600-230307847745",
@@ -7575,8 +7637,8 @@
         },
         "courseChapter": "hatches",
         "learningRole": "practice",
-        "lower": 794.412,
-        "position": 794.412,
+        "lower": 796.706,
+        "position": 796.706,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -7584,7 +7646,7 @@
         "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 794.412
+        "upper": 796.706
       },
       "preparationGaps": [],
       "score": 301.04710203236306,
@@ -7596,7 +7658,7 @@
         "builder",
         "miner"
       ],
-      "demand": 796.706,
+      "demand": 799.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "1491AFEF-7131-9CFF-10E5-C6DAB572C9F1",
@@ -7633,9 +7695,9 @@
           "upper": 630
         },
         "courseChapter": "hatches",
-        "learningRole": "practice",
-        "lower": 796.706,
-        "position": 796.706,
+        "learningRole": "challenge",
+        "lower": 799.0,
+        "position": 799.0,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin"
         ],
@@ -7643,72 +7705,10 @@
         "replayRevision": "a8674c5ac05993c5cbcffad3532716b66a97d22bdbd646135f27421a124f8bb0",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 796.706
-      },
-      "preparationGaps": [],
-      "score": 329.6606092436975,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "basher",
-        "blocker",
-        "builder"
-      ],
-      "demand": 799.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "7DAE30BC-702F-76EC-9672-2D7897744A7A",
-        "identity": {
-          "engine": "classic",
-          "levelID": "52:Mega Drive Sunsoft:23:0:52",
-          "packID": "ohYesMoreLemmings-OHYES-60"
-        },
-        "levelNameSnapshot": "Move on in two separate groups.",
-        "levelNumberSnapshot": 53,
-        "packNameSnapshot": "Oh Yes! More Lemmings!",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
-      },
-      "focus": "Practise: Basher + Blocker",
-      "intrinsicDemand": 421.14236347027156,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"52:Mega Drive Sunsoft:23:0:52\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
-      "placement": {
-        "adjustment": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 700.0,
-          "position": 710.0,
-          "pressureWarnings": [
-            "near-full rescue with several exhausted used skill stocks",
-            "near-full rescue with repeated worker skill changes",
-            "multiple hatches with combined work and little rescue or tool margin"
-          ],
-          "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
-          "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 720.0
-        },
-        "courseChapter": "hatches",
-        "learningRole": "challenge",
-        "lower": 799.0,
-        "position": 799.0,
-        "pressureWarnings": [
-          "near-full rescue with several exhausted used skill stocks",
-          "near-full rescue with repeated worker skill changes",
-          "multiple hatches with combined work and little rescue or tool margin"
-        ],
-        "reference": "Lunatic/Move_on_in_two_separate_groups..nxlv",
-        "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 799.0
       },
       "preparationGaps": [],
-      "score": 421.14236347027156,
+      "score": 329.6606092436975,
       "stage": "Expert"
     },
     {
@@ -9391,62 +9391,11 @@
     },
     {
       "concepts": [
-        "builder",
-        "floater"
-      ],
-      "demand": 841.485,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "6EC382F8-FB2A-D6CD-5F46-F78E76E5038B",
-        "identity": {
-          "engine": "classic",
-          "levelID": "30:Crazy:11:5:7",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "No Problemming!",
-        "levelNumberSnapshot": 31,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Builder + Floater",
-      "intrinsicDemand": 260.1643010019038,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"30:Crazy:11:5:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 60.0,
-          "position": 730.0,
-          "reference": "Lunatic/This_Corrosion.nxlv",
-          "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 730.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 841.485,
-        "position": 841.485,
-        "reference": "Lunatic/This_Corrosion.nxlv",
-        "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 841.485
-      },
-      "preparationGaps": [],
-      "score": 260.1643010019038,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
         "blocker",
         "builder",
         "digger"
       ],
-      "demand": 842.97,
+      "demand": 841.485,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "C5B4ABE8-69F6-7FFF-2AF1-C494471CCC20",
@@ -9484,8 +9433,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 842.97,
-        "position": 842.97,
+        "lower": 841.485,
+        "position": 841.485,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes"
@@ -9494,10 +9443,61 @@
         "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 842.97
+        "upper": 841.485
       },
       "preparationGaps": [],
       "score": 435.17999999999995,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "builder",
+        "floater"
+      ],
+      "demand": 842.97,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "6EC382F8-FB2A-D6CD-5F46-F78E76E5038B",
+        "identity": {
+          "engine": "classic",
+          "levelID": "30:Crazy:11:5:7",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "No Problemming!",
+        "levelNumberSnapshot": 31,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Builder + Floater",
+      "intrinsicDemand": 260.1643010019038,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"30:Crazy:11:5:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 60.0,
+          "position": 730.0,
+          "reference": "Lunatic/This_Corrosion.nxlv",
+          "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 730.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 842.97,
+        "position": 842.97,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 842.97
+      },
+      "preparationGaps": [],
+      "score": 260.1643010019038,
       "stage": "Expert"
     },
     {
@@ -9695,57 +9695,6 @@
       "demand": 848.909,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
-        "id": "4D13D06F-14B8-99B9-6040-D78A1A6FD674",
-        "identity": {
-          "engine": "classic",
-          "levelID": "116:Mayhem:27:8:5",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "Just a Minute (Part Two)",
-        "levelNumberSnapshot": 117,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Basher + Digger",
-      "intrinsicDemand": 212.30078431372547,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"116:Mayhem:27:8:5\", \"packID\": \"lemmings-LEVEL-120\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 615.0,
-          "position": 625.0,
-          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
-          "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 635.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 848.909,
-        "position": 848.909,
-        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
-        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 848.909
-      },
-      "preparationGaps": [],
-      "score": 212.30078431372547,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "basher",
-        "digger"
-      ],
-      "demand": 850.394,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
         "id": "7829D5F0-6FA8-8FF8-A64B-8043469DA10D",
         "identity": {
           "engine": "classic",
@@ -9784,8 +9733,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 850.394,
-        "position": 850.394,
+        "lower": 848.909,
+        "position": 848.909,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes",
           "dense assignment workload with limited recovery margin"
@@ -9796,10 +9745,61 @@
         "replayRevision": "3e7311226f3ec242ec7e9255c3e169e71827b537bfaadce2291a1aba4fc6869b",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 850.394
+        "upper": 848.909
       },
       "preparationGaps": [],
       "score": 312.0091058567772,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "basher",
+        "digger"
+      ],
+      "demand": 850.394,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "4D13D06F-14B8-99B9-6040-D78A1A6FD674",
+        "identity": {
+          "engine": "classic",
+          "levelID": "116:Mayhem:27:8:5",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "Just a Minute (Part Two)",
+        "levelNumberSnapshot": 117,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Basher + Digger",
+      "intrinsicDemand": 212.30078431372547,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"116:Mayhem:27:8:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 615.0,
+          "position": 625.0,
+          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+          "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 635.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 850.394,
+        "position": 850.394,
+        "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+        "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.394
+      },
+      "preparationGaps": [],
+      "score": 212.30078431372547,
       "stage": "Expert"
     },
     {
@@ -10369,12 +10369,76 @@
     },
     {
       "concepts": [
+        "builder",
+        "climber",
+        "floater"
+      ],
+      "demand": 865.242,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "A7945A19-B70C-E2DE-88C2-41365C76CCCE",
+        "identity": {
+          "engine": "classic",
+          "levelID": "47:Wild:8:0:7",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "It`s a tight fit!",
+        "levelNumberSnapshot": 48,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Builder + Climber",
+      "intrinsicDemand": 442.8715269241829,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 100.0,
+          "position": 825.0,
+          "pressureWarnings": [
+            "near-full rescue with several exhausted used skill stocks",
+            "near-full rescue with repeated worker skill changes",
+            "little deadline margin with combined skills and exhausted stock",
+            "dense assignment workload with limited recovery margin"
+          ],
+          "reference": "Lunatic/The_Boiler_Room.nxlv",
+          "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 825.0
+        },
+        "courseChapter": "clocks",
+        "learningRole": "practice",
+        "lower": 865.242,
+        "position": 865.242,
+        "pressureWarnings": [
+          "near-full rescue with several exhausted used skill stocks",
+          "near-full rescue with repeated worker skill changes",
+          "little deadline margin with combined skills and exhausted stock",
+          "dense assignment workload with limited recovery margin"
+        ],
+        "reference": "Lunatic/The_Boiler_Room.nxlv",
+        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 865.242
+      },
+      "preparationGaps": [],
+      "score": 442.8715269241829,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
         "basher",
         "builder",
         "digger",
         "miner"
       ],
-      "demand": 865.242,
+      "demand": 866.727,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "71F2D9B5-5DFF-740F-2C7B-9C81A126C73F",
@@ -10411,8 +10475,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 865.242,
-        "position": 865.242,
+        "lower": 866.727,
+        "position": 866.727,
         "pressureWarnings": [
           "little deadline margin with combined skills and exhausted stock"
         ],
@@ -10420,7 +10484,7 @@
         "replayRevision": "7f032979b75b3fe7fe1a1410d0d4d12ebc2686119807135cf199b71a68239011",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 865.242
+        "upper": 866.727
       },
       "preparationGaps": [],
       "score": 413.28622091580075,
@@ -10432,7 +10496,7 @@
         "builder",
         "miner"
       ],
-      "demand": 866.727,
+      "demand": 868.212,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "9174F18F-E8AF-6638-B183-194D79BB9044",
@@ -10471,8 +10535,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 866.727,
-        "position": 866.727,
+        "lower": 868.212,
+        "position": 868.212,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -10482,7 +10546,7 @@
         "replayRevision": "29c0f0da0e3519cf6cc661329d8a727680fd9857695f5a8b45b0ea4df7168653",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 866.727
+        "upper": 868.212
       },
       "preparationGaps": [],
       "score": 388.4762490626312,
@@ -10494,7 +10558,7 @@
         "bomber",
         "builder"
       ],
-      "demand": 868.212,
+      "demand": 869.697,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "EC01604E-021B-7B6F-9563-9DA701154596",
@@ -10535,8 +10599,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 868.212,
-        "position": 868.212,
+        "lower": 869.697,
+        "position": 869.697,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "little deadline margin with combined skills and exhausted stock"
@@ -10547,7 +10611,7 @@
         "replayRevision": "0134cd3437e6cef163b9ad293d6b0589ce3bb09b8b03ef1ae5321fd31691fb15",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 868.212
+        "upper": 869.697
       },
       "preparationGaps": [],
       "score": 310.7856935908495,
@@ -10562,7 +10626,7 @@
         "climber",
         "miner"
       ],
-      "demand": 869.697,
+      "demand": 871.182,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "A372FF08-E609-58DE-2C8C-89EBD4396774",
@@ -10604,8 +10668,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 869.697,
-        "position": 869.697,
+        "lower": 871.182,
+        "position": 871.182,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -10617,7 +10681,7 @@
         "replayRevision": "350ddba9aaa78c1cc56841bdc7ef49e5de104032cbc6b0d6ad6cb4dadb22709f",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 869.697
+        "upper": 871.182
       },
       "preparationGaps": [],
       "score": 507.9719888896569,
@@ -10631,7 +10695,7 @@
         "builder",
         "digger"
       ],
-      "demand": 871.182,
+      "demand": 872.667,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "5B33CE32-3AC0-AD03-8FCC-27030ACD172E",
@@ -10672,8 +10736,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 871.182,
-        "position": 871.182,
+        "lower": 872.667,
+        "position": 872.667,
         "pressureWarnings": [
           "little deadline margin with combined skills and exhausted stock",
           "multiple hatches with combined work and little rescue or tool margin"
@@ -10684,7 +10748,7 @@
         "replayRevision": "b95c5e9582d282673a99ce8c52bff210abc69418b133cd854d2074de035ca09b",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 871.182
+        "upper": 872.667
       },
       "preparationGaps": [],
       "score": 481.37289947320244,
@@ -10697,7 +10761,7 @@
         "climber",
         "digger"
       ],
-      "demand": 872.667,
+      "demand": 874.152,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "FDE2DDAB-78B6-B5F6-A67A-854249BE1357",
@@ -10738,8 +10802,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 872.667,
-        "position": 872.667,
+        "lower": 874.152,
+        "position": 874.152,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -10751,7 +10815,7 @@
         "replayRevision": "3b3cedf6ed8c7b3a0fc69dc3fd9cd6be0fcaa13309a5c43bfe6458630f4fa2b2",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 872.667
+        "upper": 874.152
       },
       "preparationGaps": [],
       "score": 383.34749418922576,
@@ -10764,7 +10828,7 @@
         "builder",
         "climber"
       ],
-      "demand": 874.152,
+      "demand": 875.636,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "AC518D70-F721-01FD-D1BC-7C1CCA564306",
@@ -10803,8 +10867,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 874.152,
-        "position": 874.152,
+        "lower": 875.636,
+        "position": 875.636,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "little deadline margin with combined skills and exhausted stock",
@@ -10814,7 +10878,7 @@
         "replayRevision": "3d4fd83f07c26569b68b148673738bd1ffe71da3102b1c35fc7c41fbcbe11f16",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 874.152
+        "upper": 875.636
       },
       "preparationGaps": [],
       "score": 360.25247186984905,
@@ -10827,7 +10891,7 @@
         "floater",
         "miner"
       ],
-      "demand": 875.636,
+      "demand": 877.121,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "A79DE9FF-F98C-9E9F-BF83-B786BE678985",
@@ -10866,8 +10930,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 875.636,
-        "position": 875.636,
+        "lower": 877.121,
+        "position": 877.121,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -10877,7 +10941,7 @@
         "replayRevision": "68dc801dc705db0fb40103e7dd99dcb815b97a2e98d00a491021c032ba6683ed",
         "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 875.636
+        "upper": 877.121
       },
       "preparationGaps": [],
       "score": 513.7639660138399,
@@ -10890,7 +10954,7 @@
         "builder",
         "digger"
       ],
-      "demand": 877.121,
+      "demand": 878.606,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "D0DE54E2-AA41-78DE-7260-5B1094CA50FB",
@@ -10929,8 +10993,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 877.121,
-        "position": 877.121,
+        "lower": 878.606,
+        "position": 878.606,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -10940,7 +11004,7 @@
         "replayRevision": "3981e3e1b646eec1b909fdcde54a627712d1424eeb56bb813e06c4b707b2d502",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 877.121
+        "upper": 878.606
       },
       "preparationGaps": [],
       "score": 314.49124892700513,
@@ -10952,7 +11016,7 @@
         "climber",
         "digger"
       ],
-      "demand": 878.606,
+      "demand": 880.091,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "E5918ED0-19CF-1E3E-F7A9-61D22DD456E3",
@@ -10994,8 +11058,8 @@
         },
         "courseChapter": "clocks",
         "learningRole": "practice",
-        "lower": 878.606,
-        "position": 878.606,
+        "lower": 880.091,
+        "position": 880.091,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "fast minimum release rate with no slower crowd-management option",
@@ -11007,74 +11071,10 @@
         "replayRevision": "bba1f8ff11e7dead44e51200ef326850d3ed93dccfb6efff38ee79fa90d206f1",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 878.606
-      },
-      "preparationGaps": [],
-      "score": 312.58981123790835,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "builder",
-        "climber",
-        "floater"
-      ],
-      "demand": 880.091,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "A7945A19-B70C-E2DE-88C2-41365C76CCCE",
-        "identity": {
-          "engine": "classic",
-          "levelID": "47:Wild:8:0:7",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "It`s a tight fit!",
-        "levelNumberSnapshot": 48,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Builder + Climber",
-      "intrinsicDemand": 442.8715269241829,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 100.0,
-          "position": 825.0,
-          "pressureWarnings": [
-            "near-full rescue with several exhausted used skill stocks",
-            "near-full rescue with repeated worker skill changes",
-            "little deadline margin with combined skills and exhausted stock",
-            "dense assignment workload with limited recovery margin"
-          ],
-          "reference": "Lunatic/The_Boiler_Room.nxlv",
-          "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 825.0
-        },
-        "courseChapter": "clocks",
-        "learningRole": "practice",
-        "lower": 880.091,
-        "position": 880.091,
-        "pressureWarnings": [
-          "near-full rescue with several exhausted used skill stocks",
-          "near-full rescue with repeated worker skill changes",
-          "little deadline margin with combined skills and exhausted stock",
-          "dense assignment workload with limited recovery margin"
-        ],
-        "reference": "Lunatic/The_Boiler_Room.nxlv",
-        "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 880.091
       },
       "preparationGaps": [],
-      "score": 442.8715269241829,
+      "score": 312.58981123790835,
       "stage": "Expert"
     },
     {
@@ -11552,128 +11552,11 @@
       "concepts": [
         "basher",
         "blocker",
-        "builder",
-        "miner"
-      ],
-      "demand": 901.4,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "7ABEEF99-3BD1-EF36-EA1E-9B2928EED986",
-        "identity": {
-          "engine": "classic",
-          "levelID": "50:Tricky:21:0:5",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "All the 6`s ........",
-        "levelNumberSnapshot": 51,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Basher + Blocker",
-      "intrinsicDemand": 374.3849403700874,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
-      "placement": {
-        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 55.0,
-          "position": 810.0,
-          "reference": "Gentle/A_Beast_of_a_level.nxlv",
-          "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 810.0
-        },
-        "courseChapter": "advanced-routes",
-        "learningRole": "recovery",
-        "lower": 901.4,
-        "position": 901.4,
-        "reference": "Gentle/A_Beast_of_a_level.nxlv",
-        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 901.4
-      },
-      "preparationGaps": [],
-      "score": 374.3849403700874,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "basher",
-        "blocker",
-        "bomber",
-        "builder",
-        "climber",
-        "digger",
-        "miner"
-      ],
-      "demand": 902.8,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "D333A59C-6655-76E0-89D7-35A5891DA390",
-        "identity": {
-          "engine": "classic",
-          "levelID": "86:Havoc:7:5:2",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "Creature Discomforts",
-        "levelNumberSnapshot": 87,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Basher + Blocker",
-      "intrinsicDemand": 517.8743315771402,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "reduxClassicCounterpart",
-          "lower": 715.0,
-          "position": 725.0,
-          "pressureWarnings": [
-            "multiple hatches with combined work and little rescue or tool margin",
-            "dense assignment workload with limited recovery margin"
-          ],
-          "reference": "Lunatic/Creature_Discomforts.nxlv",
-          "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 735.0
-        },
-        "courseChapter": "advanced-routes",
-        "learningRole": "practice",
-        "lower": 902.8,
-        "position": 902.8,
-        "pressureWarnings": [
-          "multiple hatches with combined work and little rescue or tool margin",
-          "dense assignment workload with limited recovery margin"
-        ],
-        "reference": "Lunatic/Creature_Discomforts.nxlv",
-        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 902.8
-      },
-      "preparationGaps": [],
-      "score": 517.8743315771402,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "basher",
-        "blocker",
         "bomber",
         "builder",
         "digger"
       ],
-      "demand": 904.2,
+      "demand": 901.4,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "2BA3D978-9776-E0AC-8101-1C89785D5A2A",
@@ -11712,8 +11595,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 904.2,
-        "position": 904.2,
+        "lower": 901.4,
+        "position": 901.4,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes",
@@ -11723,7 +11606,7 @@
         "replayRevision": "b5c5a4a4657d4ad7a4cf6123dfd07cecfe9629b73f6feec2783f3f5a2a27996a",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 904.2
+        "upper": 901.4
       },
       "preparationGaps": [],
       "score": 396.33545132870125,
@@ -11737,7 +11620,7 @@
         "digger",
         "floater"
       ],
-      "demand": 905.6,
+      "demand": 902.8,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "1497F9F4-FAEE-8AE1-CF36-52B08E100F88",
@@ -11775,8 +11658,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 905.6,
-        "position": 905.6,
+        "lower": 902.8,
+        "position": 902.8,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes"
@@ -11785,10 +11668,74 @@
         "replayRevision": "3ecc04eadff374d079fd5e740f91fba3b7f345536ca64676bab6ec16e2bb5171",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 905.6
+        "upper": 902.8
       },
       "preparationGaps": [],
       "score": 368.4217529156007,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "basher",
+        "blocker",
+        "bomber",
+        "builder",
+        "climber",
+        "digger",
+        "miner"
+      ],
+      "demand": 904.2,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "D333A59C-6655-76E0-89D7-35A5891DA390",
+        "identity": {
+          "engine": "classic",
+          "levelID": "86:Havoc:7:5:2",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "Creature Discomforts",
+        "levelNumberSnapshot": 87,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 517.8743315771402,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"86:Havoc:7:5:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "reduxClassicCounterpart",
+          "lower": 715.0,
+          "position": 725.0,
+          "pressureWarnings": [
+            "multiple hatches with combined work and little rescue or tool margin",
+            "dense assignment workload with limited recovery margin"
+          ],
+          "reference": "Lunatic/Creature_Discomforts.nxlv",
+          "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 735.0
+        },
+        "courseChapter": "advanced-routes",
+        "learningRole": "practice",
+        "lower": 904.2,
+        "position": 904.2,
+        "pressureWarnings": [
+          "multiple hatches with combined work and little rescue or tool margin",
+          "dense assignment workload with limited recovery margin"
+        ],
+        "reference": "Lunatic/Creature_Discomforts.nxlv",
+        "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 904.2
+      },
+      "preparationGaps": [],
+      "score": 517.8743315771402,
       "stage": "Expert"
     },
     {
@@ -11799,7 +11746,7 @@
         "digger",
         "miner"
       ],
-      "demand": 907.0,
+      "demand": 905.6,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "6DC30B2A-4BB5-4690-C22C-CA54B510BEE0",
@@ -11839,8 +11786,8 @@
         },
         "courseChapter": "advanced-routes",
         "learningRole": "practice",
-        "lower": 907.0,
-        "position": 907.0,
+        "lower": 905.6,
+        "position": 905.6,
         "pressureWarnings": [
           "near-full rescue with repeated worker skill changes"
         ],
@@ -11850,10 +11797,63 @@
         "replayRevision": "8178af2961d93b500691c362bff698387a404f706c8f5e7d47c986eba21eb943",
         "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 907.0
+        "upper": 905.6
       },
       "preparationGaps": [],
       "score": 417.09171568627454,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "basher",
+        "blocker",
+        "builder",
+        "miner"
+      ],
+      "demand": 907.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "7ABEEF99-3BD1-EF36-EA1E-9B2928EED986",
+        "identity": {
+          "engine": "classic",
+          "levelID": "50:Tricky:21:0:5",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "All the 6`s ........",
+        "levelNumberSnapshot": 51,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 374.3849403700874,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 55.0,
+          "position": 810.0,
+          "reference": "Gentle/A_Beast_of_a_level.nxlv",
+          "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 810.0
+        },
+        "courseChapter": "advanced-routes",
+        "learningRole": "recovery",
+        "lower": 907.0,
+        "position": 907.0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 907.0
+      },
+      "preparationGaps": [],
+      "score": 374.3849403700874,
       "stage": "Expert"
     },
     {
@@ -13026,13 +13026,70 @@
     },
     {
       "concepts": [
+        "blocker",
+        "bomber"
+      ],
+      "demand": 940.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "F2472D8E-0A90-7DC5-0C73-858A8C5BE81A",
+        "identity": {
+          "engine": "classic",
+          "levelID": "35:Mega Drive Sunsoft:6:0:35",
+          "packID": "ohYesMoreLemmings-OHYES-60"
+        },
+        "levelNameSnapshot": "Libra",
+        "levelNumberSnapshot": 36,
+        "packNameSnapshot": "Oh Yes! More Lemmings!",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
+      },
+      "focus": "Practise: Blocker + Bomber",
+      "intrinsicDemand": 287.44311126854427,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
+      "placement": {
+        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 130.0,
+          "position": 910.0,
+          "pressureWarnings": [
+            "multiple hatches with combined work and little rescue or tool margin"
+          ],
+          "reference": "Gentle/Doomsday.nxlv",
+          "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 910.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "introduction",
+        "lower": 940.0,
+        "position": 940.0,
+        "pressureWarnings": [
+          "multiple hatches with combined work and little rescue or tool margin"
+        ],
+        "reference": "Gentle/Doomsday.nxlv",
+        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 940.0
+      },
+      "preparationGaps": [],
+      "score": 287.44311126854427,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
         "basher",
         "builder",
         "climber",
         "digger",
         "miner"
       ],
-      "demand": 940.0,
+      "demand": 949.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "FD4808FB-481C-5993-2B47-F284D2F58C31",
@@ -13069,9 +13126,9 @@
           "upper": 710.0
         },
         "courseChapter": "capstones",
-        "learningRole": "introduction",
-        "lower": 940.0,
-        "position": 940.0,
+        "learningRole": "practice",
+        "lower": 949.0,
+        "position": 949.0,
         "pressureWarnings": [
           "near-full rescue with several exhausted used skill stocks",
           "near-full rescue with repeated worker skill changes"
@@ -13080,7 +13137,7 @@
         "replayRevision": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
         "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 940.0
+        "upper": 949.0
       },
       "preparationGaps": [],
       "score": 366.7278921568627,
@@ -13088,10 +13145,63 @@
     },
     {
       "concepts": [
+        "basher",
+        "blocker",
         "builder",
         "digger"
       ],
-      "demand": 949.0,
+      "demand": 958.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "63A2BC0B-B097-A37B-5B68-38A856CBD6D6",
+        "identity": {
+          "engine": "classic",
+          "levelID": "64:Taxing:5:2:6",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "The Prison!",
+        "levelNumberSnapshot": 65,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 349.1967884394126,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"64:Taxing:5:2:6\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 55.0,
+          "position": 940.0,
+          "reference": "Lunatic/Save_Me.nxlv",
+          "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
+          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 940.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "practice",
+        "lower": 958.0,
+        "position": 958.0,
+        "reference": "Lunatic/Save_Me.nxlv",
+        "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 958.0
+      },
+      "preparationGaps": [],
+      "score": 349.1967884394126,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "builder",
+        "digger"
+      ],
+      "demand": 967.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
         "id": "206A73E2-E55A-6BB4-C538-AC559BEE1F36",
@@ -13129,8 +13239,8 @@
         },
         "courseChapter": "capstones",
         "learningRole": "practice",
-        "lower": 949.0,
-        "position": 949.0,
+        "lower": 967.0,
+        "position": 967.0,
         "pressureWarnings": [
           "multiple hatches with combined work and little rescue or tool margin",
           "dense assignment workload with limited recovery margin"
@@ -13139,120 +13249,10 @@
         "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
         "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 949.0
-      },
-      "preparationGaps": [],
-      "score": 232.6196514554985,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "blocker",
-        "bomber"
-      ],
-      "demand": 958.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "F2472D8E-0A90-7DC5-0C73-858A8C5BE81A",
-        "identity": {
-          "engine": "classic",
-          "levelID": "35:Mega Drive Sunsoft:6:0:35",
-          "packID": "ohYesMoreLemmings-OHYES-60"
-        },
-        "levelNameSnapshot": "Libra",
-        "levelNumberSnapshot": 36,
-        "packNameSnapshot": "Oh Yes! More Lemmings!",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
-      },
-      "focus": "Practise: Blocker + Bomber",
-      "intrinsicDemand": 287.44311126854427,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
-      "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 130.0,
-          "position": 910.0,
-          "pressureWarnings": [
-            "multiple hatches with combined work and little rescue or tool margin"
-          ],
-          "reference": "Gentle/Doomsday.nxlv",
-          "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-          "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 910.0
-        },
-        "courseChapter": "capstones",
-        "learningRole": "practice",
-        "lower": 958.0,
-        "position": 958.0,
-        "pressureWarnings": [
-          "multiple hatches with combined work and little rescue or tool margin"
-        ],
-        "reference": "Gentle/Doomsday.nxlv",
-        "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-        "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 958.0
-      },
-      "preparationGaps": [],
-      "score": 287.44311126854427,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "basher",
-        "blocker",
-        "builder",
-        "digger"
-      ],
-      "demand": 967.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "63A2BC0B-B097-A37B-5B68-38A856CBD6D6",
-        "identity": {
-          "engine": "classic",
-          "levelID": "64:Taxing:5:2:6",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "The Prison!",
-        "levelNumberSnapshot": 65,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Basher + Blocker",
-      "intrinsicDemand": 349.1967884394126,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"64:Taxing:5:2:6\", \"packID\": \"lemmings-LEVEL-120\"}",
-      "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 55.0,
-          "position": 940.0,
-          "reference": "Lunatic/Save_Me.nxlv",
-          "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
-          "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 940.0
-        },
-        "courseChapter": "capstones",
-        "learningRole": "practice",
-        "lower": 967.0,
-        "position": 967.0,
-        "reference": "Lunatic/Save_Me.nxlv",
-        "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 967.0
       },
       "preparationGaps": [],
-      "score": 349.1967884394126,
+      "score": 232.6196514554985,
       "stage": "Expert"
     },
     {

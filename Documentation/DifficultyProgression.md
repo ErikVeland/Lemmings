@@ -2,64 +2,81 @@
 
 ## Meaning and scope
 
-The golden path uses an official-heavy selection with no fixed level-count quota.
-An explicit teaching plan protects the opening from replay estimates and Redux
-counterpart positions. Its 30 beginner lessons cover the original skill tutorials,
-Cellbash, simple native routes and all 20 Tame levels. Fourteen combination and
-building lessons follow before constrained retail puzzles. The exact sources, replays,
-teaching phases and reasons are pinned in `Artifacts/LearningJourney/teaching-plan.json`.
+The golden path has 227 lessons in 13 authored teaching chapters. The full order
+is pinned in `Artifacts/LearningJourney/course-plan.json`, with exact sources,
+winning replays, chapter goals, learning roles and placement reasons. Course
+positions are editorial ordinals. They are not measured human difficulty scores.
+Original measured replay scores remain unchanged.
+
+The opening has 30 beginner lessons: the original skill tutorials, Cellbash,
+simple native practice and all 20 Tame levels. Fifteen lessons then combine
+familiar skills before tighter budgets. The course continues through generous
+route planning, tool budgets, longer routes, small budgets, worker skill chains,
+timed assignments, hatch coordination, strict combinations, clocks, advanced
+routes and final challenges. Practice and recovery lessons sit between challenges.
+`teaching-plan.json` keeps the stricter evidence checks for the opening lessons.
 
 Simple practice requires at most two used skill types, no job changes or measured
-narrow timing, spare used skills and a rescue margin. The Tame levels supply 20
-of every skill, release rate 1 and a 50% rescue target. Elaborate stored replays
-must not push these lessons behind constrained puzzles. Exact builder-only
-routes for Lemming sanctuary in sight and What an AWESOME level add intermediate
-building practice with spare builders, rescue margins and no measured narrow actions.
-Other Tricky and Crazy puzzles start in Difficult. Wild starts at 420, Taxing at 480, and Mayhem, Wicked, Havoc and the
-Sunsoft campaign in Expert. These are editorial safeguards, not measured human
-difficulty. Exact novice discovery and the easiest routes still need playtesting.
+narrow timing, spare used skills and a rescue margin. Tame supplies 20 of every
+skill, release rate 1 and a 50% rescue target. Elaborate stored replays must not
+push these lessons behind constrained puzzles. We all fall down supplies slow,
+single-skill full-rescue practice at lesson 33. This should be a doddle! and
+A ladder would be handy provide generous construction practice at 46 and 47.
 
-The placement pass now uses rescue fraction, available skill types and quantities,
+The course review uses rescue fraction, available skill types and quantities,
 used-tool reserves, minimum release rate, hatch count, assignments per tick and
-second, distinct worker demand and skill chains. Native source export records
-all hatch counts and release limits. Classic cannot reduce release below the
-authored starting rate. Hatches share one global spawn clock, so extra hatches
-increase coordination demand without multiplying spawn frequency.
+second, distinct worker demand, worker skill chains and timing evidence. Available
+tool scarcity is separate from the amount consumed by one witness. Native source
+export records all hatch counts and release limits. Classic cannot reduce release
+below the authored starting rate. Hatches share one global spawn clock, so extra
+hatches increase coordination demand without multiplying spawn frequency.
+Same-tick assignments can use Pause. They do not establish physically simultaneous
+clicks or prove that the recorded execution is necessary.
 
-Unreviewed routes move to Expert when several pressures combine: near-full rescue
-with exhausted stock or repeated skill changes, a fast minimum rate with little
-recovery margin, multiple hatches with combined work, or dense command bursts
-with tight tools, rescue or timing. Same-tick assignments can use Pause and do
-not prove that physically simultaneous clicks are required. Equal-position
-lessons avoid simultaneous increases across several pressure axes.
+All 227 exact native replays record the first tick that reaches the rescue quota
+and the tools remaining at that tick. Successful tool consumption must match the
+recorded commands before quota. Later commands do not inflate useful workload.
+Deadline pressure uses the quota tick rather than replay shutdown. This corrects
+false deadline pressure in routes that had already won before running to timeout.
+
+`course-review.json` records all 227 transitions across eight pressure axes:
+rescue, available tool scarcity, minimum release rate, hatches, command density,
+worker skill chains, precision and deadline. After the foundations, a transition
+cannot raise more than two axes by over 30 points. A lesson cannot introduce more
+than two peaks over the pressure already encountered twice. Earlier examples
+share skills and comparable pressures. They indicate preparation, but do not
+prove that a player has learned a puzzle's hidden trick. These gates catch
+compound jumps. They do not certify novice discovery or special pacing.
 
 Player-reported walls have explicit `tooHardForEarlyJourney` verdicts and later
-placement floors in `Artifacts/LearningJourney/route-safety.json`. They remain
-in the Journey, with easier practice before them. `difficulty-walls.json`
-records the current positions, warning signs, preparation gaps and easier lessons.
-Just A Quicky requires 100% rescue and exhausts four used skill stocks in its
-recorded route. It belongs in Expert, with crowd separation, temporary containment
-and combined route planning prepared beforehand.
+placement floors in `route-safety.json`. They remain in the Journey, with easier
+practice before them. `difficulty-walls.json` records their current positions,
+warning signs and preparation gaps. Watson follows small-budget practice at 88.
+PoP YoR ToP!!! follows group coordination at 136. Just A Quicky follows strict
+combinations at 157, after worker routing, containment and skill-chain practice.
+Time waits for no Lemming and This Corrosion remain the closing pair.
 
-Redux supplies comparisons for later puzzles. Unmatched mainline official variants
-use a cautious upper estimate. Measured replay scores stay unchanged.
-Fan bridges need an exact human solution review, comparable reference
-bounds and a real gap between official lessons. Machine estimates alone cannot
-admit fan or NeoLemmix puzzles. Simple artwork and short replays can conceal hard
-discovery or a tricky intended solution.
+Redux provides comparison evidence. A retail rank alone must not hide useful
+easy practice. Fan bridges need an exact human solution review, comparable
+reference bounds and a real gap between official lessons. Machine estimates
+alone cannot admit fan or NeoLemmix puzzles. Simple artwork and short replays
+can conceal difficult discovery. Xmas and Holiday levels also require an exact
+human difficulty review. The owner-confirmed Cellbash practice and official
+Macintosh port counterpart remain explicit exceptions.
 
-Xmas and Holiday levels require an exact human difficulty review before admission.
-Seasonal ranks and matching Redux titles do not certify beginner suitability.
-The owner-confirmed Cellbash practice and official Macintosh port counterpart
-remain explicit exceptions. Reported official walls retain their later placements.
-Older saved journeys restore the teaching order of all unvisited lessons,
+Older built-in saved journeys restore the authored order of all unvisited lessons,
 including a current puzzle that moved later. They remove unvisited retired levels
-while keeping past visits, completed records, run identity and player or Hot Seat ownership. The path uses
-Classic mechanics. Lemmings 2 and Lemmings 3 retain their own campaigns and queues.
+while keeping past visits, completed records, run identity and player or Hot Seat
+ownership. Custom playlists and newer saved versions retain their order. The path
+uses Classic mechanics. Lemmings 2 and Lemmings 3 retain their own campaigns and
+queues. Mac, iOS and tvOS bundle the same current Journey data.
 
-Current selection and evidence are in `Artifacts/LearningJourney`. Reproduce the
-selection with `python3 Tools/DifficultyDiagnostics/human_journey.py` and check
-tracked outputs with `--check`. Native replay checks still require bundled assets.
+Current selection and evidence are in `Artifacts/LearningJourney`. Regenerate
+with `python3 Tools/DifficultyDiagnostics/human_journey.py`. Its `--check` option
+checks the manifest, curriculum, transition review and supporting outputs against
+the authored inputs. Native replay checks require bundled assets. A native win
+proves one route. Human insight, the easiest solution and the experience of a
+novice still require playtesting.
 
 The complete Classic replacement playlist and its per-level audit are in
 `Artifacts/ClassicProgression`. This later audit includes the compressed Classic

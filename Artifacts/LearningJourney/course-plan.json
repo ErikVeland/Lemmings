@@ -3074,40 +3074,10 @@
       "chapter": "advanced-routes",
       "identity": {
         "engine": "classic",
-        "levelID": "50:Tricky:21:0:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "position": 901.4,
-      "previousStep": 191,
-      "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-      "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
-      "role": "recovery",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "All the 6`s ........"
-    },
-    {
-      "chapter": "advanced-routes",
-      "identity": {
-        "engine": "classic",
-        "levelID": "86:Havoc:7:5:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 902.8,
-      "previousStep": 153,
-      "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
-      "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Creature Discomforts"
-    },
-    {
-      "chapter": "advanced-routes",
-      "identity": {
-        "engine": "classic",
         "levelID": "36:Crazy:17:3:4",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 904.2,
+      "position": 901.4,
       "previousStep": 163,
       "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "replayRevision": "b5c5a4a4657d4ad7a4cf6123dfd07cecfe9629b73f6feec2783f3f5a2a27996a",
@@ -3122,7 +3092,7 @@
         "levelID": "49:Tricky:20:0:3",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 905.6,
+      "position": 902.8,
       "previousStep": 187,
       "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "replayRevision": "3ecc04eadff374d079fd5e740f91fba3b7f345536ca64676bab6ec16e2bb5171",
@@ -3134,16 +3104,46 @@
       "chapter": "advanced-routes",
       "identity": {
         "engine": "classic",
+        "levelID": "86:Havoc:7:5:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 904.2,
+      "previousStep": 153,
+      "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+      "replayRevision": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+      "role": "practice",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Creature Discomforts"
+    },
+    {
+      "chapter": "advanced-routes",
+      "identity": {
+        "engine": "classic",
         "levelID": "101:Mayhem:12:7:0",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 907.0,
+      "position": 905.6,
       "previousStep": 76,
       "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
       "replayRevision": "8178af2961d93b500691c362bff698387a404f706c8f5e7d47c986eba21eb943",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "The Far Side"
+    },
+    {
+      "chapter": "advanced-routes",
+      "identity": {
+        "engine": "classic",
+        "levelID": "50:Tricky:21:0:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 907.0,
+      "previousStep": 191,
+      "reason": "Apply the learned tools to longer, less obvious layouts. Alternate complex challenges with familiar routes that retain recovery room. These placements remain editorial assessments of discovery.",
+      "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+      "role": "recovery",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "All the 6`s ........"
     },
     {
       "chapter": "advanced-routes",
