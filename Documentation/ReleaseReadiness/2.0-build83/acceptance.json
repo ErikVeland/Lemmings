@@ -21,5 +21,7 @@
   ],
   "deferredGateMeaning": "The listed open or partial milestones remain open. Candidate regression and distribution verification remain required. This is an acceptance of recorded limits, not evidence that full closure passed.",
   "validationScope": "Fresh minor audit plus focused changed-behaviour checks. L3 Beta route failures are documented rather than presented as complete campaign proof.",
-  "fullBundleClosureClaimed": false
+  "fullBundleClosureClaimed": false,
+  "localisationAuthorisation": "This has gone on so long that localisation finished. Make sure we use a new build with localisation included. No need to repeat passed tests.",
+  "validationReuse": "Owner instructed reuse of passed checks. Existing engine, input, resource, recovery and performance evidence is retained where code and data are unchanged. New language resources, resolver behaviour, rebuilt universal executable and final distribution receive focused verification."
 }

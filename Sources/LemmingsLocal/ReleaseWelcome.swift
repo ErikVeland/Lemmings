@@ -17,7 +17,7 @@ import NxlvKit
         (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
         (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. Camera movement keeps the cursor anchored to the level across all three native games. Controller speed reset takes priority over pause.")),
         (L10n.text("Music and performance"), L10n.text("Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys.")),
-        (L10n.text("Bitmap lettering"), L10n.text("Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress.")),
+        (L10n.text("Bitmap lettering"), L10n.text("Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ]
     private let defaults: UserDefaults

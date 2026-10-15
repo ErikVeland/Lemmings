@@ -1662,7 +1662,6 @@
 "Original Macintosh" = "Opprinnelig Macintosh";
 "Original Macintosh 1-bit graphics" = "Opprinnelig Macintosh-grafikk i 1 bit";
 "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Den opprinnelige svart-hvitt-grafikken for Macintosh gir moderne Macer de intrikate rastreringsmønstrene fra originalen. Velg Macintosh (1-bit) under Grafikkinnstillinger for Classic-grafikk og matchende monokrome spillkontroller.";
-"Original bitmap fonts support accented Western Latin names and text. The interface remains English. Translation work is in progress." = "De opprinnelige punktgrafikkskriftene støtter vestlige latinske navn og tekster med aksenter. Grensesnittet er fortsatt på engelsk. Oversettelsesarbeidet pågår.";
 "Original inputs" = "Opprinnelige inndata";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
 "Original movie" = "Originalfilm";
@@ -2211,6 +2210,7 @@
 "Settings" = "Innstillinger";
 "Settings sections" = "Innstillingsdeler";
 "Settings…" = "Innstillinger…";
+"Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text." = "Sju ekstra språkpakker følger språkinnstillingen på Macen. De originale punktgrafikkskriftene støtter vesteuropeisk tekst med aksenter.";
 "Shadow" = "Skygge";
 "Shadow tribe movie" = "Film av skyggestammen";
 "Share as {0}" = "Del som {0}";

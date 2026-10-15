@@ -7357,6 +7357,10 @@ Task { @MainActor in
     #elseif RELEASE_NOTES_TESTS
     try await subject.testSequelReleaseStatus()
     try subject.testScrollableReleaseNotes()
+    #elseif RELEASE_REMAINING_TESTS
+    try await subject.testRetainedSolutionSwitching()
+    try await subject.testSequenceCheckpointResume()
+    print("Remaining release integration tests passed.")
     #elseif SOLUTION_SWITCH_TESTS
     try await subject.testRetainedSolutionSwitching()
     #elseif SOLUTION_AUDIO_TESTS
