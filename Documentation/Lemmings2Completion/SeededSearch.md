@@ -229,6 +229,17 @@ build 83 package. The bounded search does not show that a better route is
 impossible, and Beach still carries one survivor from Level 3. See the
 [search record](beach-carry-search-2026-10-15.json).
 
+### 16 October Cavelems ark reconnection search
+
+An unseeded Level 3 search against the build 83 L2 app payload found a
+34-of-36 route, up from the accepted 17. Seeded searches found 13 of 34 on
+Level 4 and 10 of 13 on Level 5. Two 300-second Level 6 searches at population
+10—one seeded from the accepted 2-of-2 route and one unseeded—found no win.
+The new routes therefore do not form a verified longer chain. I preserved the
+existing ten-level chain and retained the new routes as separate candidates.
+The solver replay-verified each winning candidate twice. See the [search
+record](cavelem-ark-reconnection-search-2026-10-16.json).
+
 ## Commands
 
 | Task | Command |

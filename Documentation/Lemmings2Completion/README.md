@@ -49,6 +49,13 @@ It used the installed 1.9.1 build 76 resource tree and did not improve the route
 All 218 L2 resources match the build 82 manifest, which build 83 source-equivalence
 evidence links to the release package. See the resource audit linked above.
 
+On 16 October, a current solver search against the build 83 app payload found
+a Cavelems Level 3 route that saves 34 of 36, compared with the accepted 17.
+Seeded searches also found 13 of 34 on Level 4 and 10 of 13 on Level 5. Neither
+a seeded nor unseeded Level 6 search found a route at population 10. Those
+candidates are not in the accepted chain; the verified ten-level chain remains
+unchanged. See the [ark reconnection search record](cavelem-ark-reconnection-search-2026-10-16.json).
+
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
 | Classic | 10 | 10 |
