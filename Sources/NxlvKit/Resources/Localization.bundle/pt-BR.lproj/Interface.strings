@@ -132,6 +132,7 @@
 "Accessibility" = "Acessibilidade";
 "Achievement unlocked: {0}" = "Conquista desbloqueada: {0}";
 "Achievements" = "Conquistas";
+"Achievements across all levels. {0}" = "Conquistas em todas as fases. {0}";
 "Achievements earned" = "Conquistas alcançadas";
 "Achievements…" = "Conquistas…";
 "Across all recorded levels" = "Em todos os níveis registados";
@@ -223,6 +224,7 @@
 "Another app is saving records. Try again after it finishes." = "Outro app está salvando os recordes. Tente de novo quando terminar.";
 "Another app is saving this run. Try again." = "Outro app está salvando esta tentativa. Tente de novo.";
 "App menus" = "Menus do app";
+"Apply" = "Aplicar";
 "Apply a machine's artwork, music and sound choices together. Further changes select Custom." = "Aplique em conjunto as escolhas de arte, música e som de uma máquina. Se você fizer outras alterações, a opção Personalizado será selecionada.";
 "Arcade" = "Fliperama";
 "Arcade RGB Video Board 320x240" = "Placa de vídeo RGB de fliperama 320x240";
@@ -737,6 +739,7 @@
 "Egyptian Tribe" = "Tribo Egípcia";
 "Egyptian tribe movie" = "Vídeo da tribo egípcia";
 "Eligible fan levels" = "Fases de fãs disponíveis";
+"Eligible lemming {0} of {1}. Skill: {2}." = "Lemming apto {0} de {1}. Habilidade: {2}.";
 "Enable HD effects" = "Ativar efeitos HD";
 "Enable added explosions, flashes, speed streaks and ghost trails. Motion and flash reductions still apply." = "Ative explosões extras, clarões, rastros de velocidade e rastros fantasma. As reduções de movimento e clarões continuam valendo.";
 "Enable controller" = "Ativar controle";
@@ -1218,6 +1221,7 @@
 "LIBRARY" = "BIBLIOTECA";
 "LOOK AROUND" = "OLHAR À VOLTA";
 "LT / left trigger" = "LT / gatilho esquerdo";
+"Language" = "Idioma";
 "Large (125%)" = "Grande (125%)";
 "Large menu text" = "Texto grande nos menus";
 "Large remaining transition to {0}: {1}." = "Grande transição restante para {0}: {1}.";
@@ -1237,7 +1241,7 @@
 "Left" = "Esquerda";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "As setas esquerda e direita trocam as dicas. As setas para cima e para baixo rolam o texto.";
 "Left stick click" = "Clique do stick esquerdo";
-"Left stick: aim • Right stick: pan\nCross / A: select skill / assign • Circle / B: reset fast speed, then pause / play\nSquare / X: reset speed • Triangle / Y: nuke / undo, where supported\nL1 / R1: previous / next skill\nL2 / LT: tap step back, hold rewind • R2 / RT: tap step forward, hold scrub forward\nAt fast speed, either trigger resets to 1×. Release before using the timeline.\nOptions / Menu: menu • DualSense touchpad click: DJ shuffle\nD-pad left / right: minimum / maximum release rate, where supported\nD-pad up / down: release rate, where supported\nL3 / R3: entrance / exit\nCreate / View: controls help\nHold Create / View + L1 / R1: step back / forward\nHold Create / View + D-pad left / right: speed down / up\nHold Create / View + D-pad up / down: previous / next unassigned lemming\nHold Create / View + Triangle / Y: hints\nHold Create / View + Options / Menu: retry\nHold Create / View + Cross / A: repeat last assignment\nHold Create / View + Circle / B: focus last assignment\nHold Create / View + Square / X: reset speed\nHold Create / View + R3: settings\nHold Create / View + L3: DJ shuffle\nMenus: D-pad moves, Cross / A selects, Circle / B returns\nSiri Remote: centre assigns, Play/Pause pauses or plays, Back opens pause" = "Alavanca esquerda: mirar • Alavanca direita: mover\nCruz / A: selecionar habilidade / atribuir • Círculo / B: redefinir velocidade rápida e, depois, pausar / jogar\nQuadrado / X: redefinir velocidade • Triângulo / Y: bomba nuclear / desfazer, quando disponível\nL1 / R1: habilidade anterior / próxima\nL2 / LT: toque para voltar um passo, mantenha pressionado para retroceder • R2 / RT: toque para avançar um passo, mantenha pressionado para avançar continuamente\nNa velocidade rápida, qualquer gatilho volta a 1×. Solte antes de usar a linha do tempo.\nOptions / Menu: menu • Clique no touchpad do DualSense: embaralhar DJ\nD-pad esquerda / direita: frequência de saída mínima / máxima, quando disponível\nD-pad para cima / para baixo: frequência de saída, quando disponível\nL3 / R3: entrada / saída\nCreate / View: ajuda de controles\nMantenha Create / View + L1 / R1 pressionados: voltar / avançar um passo\nMantenha Create / View + D-pad esquerda / direita pressionados: diminuir / aumentar velocidade\nMantenha Create / View + D-pad para cima / para baixo pressionados: lemming sem habilidade atribuída anterior / próximo\nMantenha Create / View + Triângulo / Y pressionados: dicas\nMantenha Create / View + Options / Menu pressionados: tentar de novo\nMantenha Create / View + Cruz / A pressionados: repetir última atribuição\nMantenha Create / View + Círculo / B pressionados: focar na última atribuição\nMantenha Create / View + Quadrado / X pressionados: redefinir velocidade\nMantenha Create / View + R3 pressionados: ajustes\nMantenha Create / View + L3 pressionados: embaralhar DJ\nMenus: D-pad move, Cruz / A seleciona, Círculo / B volta\nSiri Remote: centro atribui, Play/Pause pausa ou inicia, Back abre a pausa";
+"Left stick: aim • Right stick: pan\nCross / A: select skill / assign • Circle / B: pause / play\nSquare / X: reset speed • Triangle / Y: nuke / undo, where supported\nL1 / R1: previous / next skill\nL2 / LT: tap step back, hold rewind • R2 / RT: fast-forward\nR2 resumes a planning pause. It never pauses play.\nTap R2: toggle fast speed • Hold R2: ramp speed; release: previous speed\nAt fast speed, L2 resets to 1×. Release before using rewind.\nOptions / Menu: menu • DualSense touchpad click: DJ shuffle\nD-pad left / right: minimum / maximum release rate, where supported\nD-pad up / down: release rate, where supported\nL3 / R3: entrance / exit\nCreate / View: controls help\nHold Create / View + L1 / R1: step back / forward\nHold Create / View + D-pad left / right: speed down / up\nHold Create / View + D-pad up / down: previous / next unassigned lemming\nHold Create / View + Triangle / Y: hints\nHold Create / View + Options / Menu: retry\nHold Create / View + Cross / A: repeat last assignment\nHold Create / View + Circle / B: focus last assignment\nHold Create / View + Square / X: reset speed\nHold Create / View + R3: settings\nHold Create / View + L3: DJ shuffle\nMenus: D-pad moves, Cross / A selects, Circle / B returns\nSiri Remote: centre assigns, Play/Pause pauses or plays, Back opens pause" = "Alavanca esquerda: mirar • Alavanca direita: mover\nCruz / A: selecionar habilidade / atribuir • Círculo / B: pausar / jogar\nQuadrado / X: redefinir velocidade • Triângulo / Y: bomba nuclear / desfazer, quando disponível\nL1 / R1: habilidade anterior / próxima\nL2 / LT: toque para voltar um passo, mantenha pressionado para retroceder • R2 / RT: avanço rápido\nR2 retoma o jogo após uma pausa de planejamento. R2 nunca pausa o jogo.\nToque em R2: ativar / desativar velocidade rápida • Mantenha R2 pressionado: aumentar a velocidade; solte: velocidade anterior\nNa velocidade rápida, L2 volta a 1×. Solte antes de retroceder.\nOptions / Menu: menu • Clique no touchpad do DualSense: embaralhar DJ\nD-pad esquerda / direita: frequência de saída mínima / máxima, quando disponível\nD-pad para cima / para baixo: frequência de saída, quando disponível\nL3 / R3: entrada / saída\nCreate / View: ajuda de controles\nMantenha Create / View + L1 / R1 pressionados: voltar / avançar um passo\nMantenha Create / View + D-pad esquerda / direita pressionados: diminuir / aumentar velocidade\nMantenha Create / View + D-pad para cima / para baixo pressionados: lemming sem habilidade atribuída anterior / próximo\nMantenha Create / View + Triângulo / Y pressionados: dicas\nMantenha Create / View + Options / Menu pressionados: tentar de novo\nMantenha Create / View + Cruz / A pressionados: repetir última atribuição\nMantenha Create / View + Círculo / B pressionados: focar na última atribuição\nMantenha Create / View + Quadrado / X pressionados: redefinir velocidade\nMantenha Create / View + R3 pressionados: ajustes\nMantenha Create / View + L3 pressionados: embaralhar DJ\nMenus: D-pad move, Cruz / A seleciona, Círculo / B volta\nSiri Remote: centro atribui, Play/Pause pausa ou inicia, Back abre a pausa";
 "Lemming mythos" = "Mitologia dos lemmings";
 "Lemming sprite '{0}' is ambiguous." = "O sprite de lemming '{0}' é ambíguo.";
 "Lemming sprite set '{0}' has multiple scheme.nxmi files." = "O conjunto de sprites de lemming '{0}' tem vários arquivos scheme.nxmi.";
@@ -1323,6 +1327,7 @@
 "Loading..." = "Carregando...";
 "Local best" = "Melhor local";
 "Local best: {0}. Aim for {1}." = "Melhor local: {0}. Tente alcançar {1}.";
+"Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}" = "Classificação local da carreira. Retrocessos {0}. Melhor número de estrelas por fase distinta. {1}";
 "Local players on this Mac." = "Jogadores locais neste Mac.";
 "Local records are not writable." = "Não é possível gravar recordes locais.";
 "Local saves are not writable." = "Não é possível gravar jogos salvos locais.";
@@ -1634,6 +1639,7 @@
 "Oh Yes! More Lemmings!" = "Oh Yes! More Lemmings!";
 "Oh dear!" = "Que pena!";
 "Old school" = "Clássico";
+"On" = "Ativado";
 "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games." = "Quando pausado, reproduza apenas a percussão isolada. As faixas sem uma parte rítmica param. Aplica-se aos três jogos.";
 "One Lemming left behind" = "Nenhum lemming para trás";
 "One Lemming left behind. Bring home {0}." = "Nenhum lemming para trás. Leve {0} para casa.";
@@ -1800,6 +1806,7 @@
 "Playlist not saved" = "A playlist não foi salva";
 "Playlist not started" = "A playlist não foi iniciada";
 "Playlist unavailable" = "Playlist indisponível";
+"Playlist {0}" = "Lista de reprodução {0}";
 "Playlists" = "Playlists";
 "Playlists  {0}" = "Playlists  {0}";
 "Playlists changed in another app. Close and reopen this app." = "As playlists foram alteradas em outro app. Feche e abra este app novamente.";
@@ -1984,7 +1991,6 @@
 "Rescued: {0}. Required: {1}. {2}" = "Resgatados: {0}. Necessários: {1}. {2}";
 "Reset" = "Redefinir";
 "Reset button mappings" = "Repor mapeamentos dos botões";
-"Reset fast speed / pause / play" = "Redefinir velocidade rápida / pausar / jogar";
 "Reset fast speed / pause / resume" = "Redefinir velocidade rápida / pausar / retomar";
 "Reset speed" = "Redefinir velocidade";
 "Restart" = "Reiniciar";
@@ -2336,12 +2342,12 @@
 "Start {0}" = "Iniciar {0}";
 "Started: {0}" = "Iniciado: {0}";
 "Starting transfer" = "Iniciando transferência";
+"Static home screen" = "Tela inicial estática";
 "Step +1" = "Avançar +1";
 "Step back" = "Voltar um passo";
 "Step back / forward where supported" = "Voltar / avançar um passo, quando disponível";
 "Step backward one tick" = "Voltar um ciclo";
 "Step forward" = "Avançar";
-"Step forward / scrub" = "Avançar / percorrer";
 "Step forward one tick" = "Avançar um ciclo";
 "Step one tick; hold to scrub; release to pause" = "Avançar um ciclo; mantenha pressionado para percorrer; solte para pausar";
 "Stick dead zone: {0}%" = "Zona morta da alavanca: {0}%";
@@ -2385,6 +2391,7 @@
 "Synced" = "Sincronizado";
 "Syncing" = "Sincronizando";
 "Syncing your saved records..." = "A sincronizar os recordes guardados…";
+"System default" = "Padrão do sistema";
 "TAKE TURNS ON THIS MAC" = "JOGAR À VEZ NESTE MAC";
 "TARGET MET" = "META ALCANÇADA";
 "TELEPORTER" = "TELETRANSPORTADOR";
@@ -2827,6 +2834,7 @@
 "Unterminated L2 sprite plane." = "Plano do sprite L2 sem término.";
 "Unused" = "Não usado";
 "Unverified" = "Não verificado";
+"Up" = "Cima";
 "Up-left" = "Cima à esquerda";
 "Up-right" = "Cima à direita";
 "Update" = "Atualizar";
@@ -2904,6 +2912,7 @@
 "Won: {0}" = "Venceu: {0}";
 "Worldwide" = "Global";
 "Worldwide Game Center leaderboard. {0} {1}{2}" = "Classificação global do Game Center. {0} {1}{2}";
+"Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}" = "Classificação mundial da comunidade. {0}. Retrocessos {1}. {2}. {3}";
 "Worldwide leaderboard" = "Classificação mundial";
 "Worldwide rankings are not enabled in this build. Local records are saved." = "As classificações mundiais não estão ativadas nesta versão. Os recordes locais são guardados.";
 "Xmas Lemmings 1991" = "Xmas Lemmings 1991";
@@ -2971,7 +2980,6 @@
 "final state differs {0}" = "o estado final difere em {0}";
 "for many seasons on an ark to" = "por muitas estações em uma arca para";
 "game folder" = "pasta do jogo";
-"hotseat" = "hotseat";
 "implausible pattern count {0}" = "quantidade improvável de padrões: {0}";
 "important." = "importante.";
 "initial state hash mismatch: expected {0}, got {1}" = "hash do estado inicial incompatível: esperado {0}, recebido {1}";
@@ -3015,6 +3023,7 @@
 "secondary animation for object '{0}:{1}'" = "animação secundária do objeto '{0}:{1}'";
 "section has {0} trailing bytes after four strips" = "a seção tem {0} bytes extras após quatro faixas";
 "section is shorter than the 40-byte header" = "a seção é menor que o cabeçalho de 40 bytes";
+"selected skill" = "habilidade selecionada";
 "silent" = "silencioso";
 "slot {0}" = "posição {0}";
 "spawn interval {0} lacks spawned count" = "o intervalo de saída {0} não tem uma contagem de lemmings liberados";
@@ -3038,6 +3047,8 @@
 "unexpected oracle replay {0}" = "replay de referência inesperado {0}";
 "unknown module tag '{0}'" = "tag de módulo desconhecida: '{0}'";
 "unlimited" = "ilimitado";
+"unused" = "não usados";
+"used" = "usados";
 "will do so once again." = "fará isso novamente.";
 "with" = "com";
 "with no name" = "sem nome";
@@ -3063,6 +3074,7 @@
 "{0} at tick {1}" = "{0} no ciclo {1}";
 "{0} complete" = "{0} concluído";
 "{0} eligible" = "{0} disponível";
+"{0} eligible lemmings. Skill: {1}." = "{0} lemmings aptos. Habilidade: {1}.";
 "{0} has invalid size {1}x{2}." = "{0} tem tamanho inválido {1}x{2}.";
 "{0} has invalid size {1}×{2}." = "{0} tem tamanho inválido {1}×{2}.";
 "{0} has no resource fork" = "{0} não tem uma bifurcação de recursos";
@@ -3105,8 +3117,11 @@
 "{0}, {1} remaining{2}" = "{0}, {1} restantes{2}";
 "{0}, {1} tracks, {2}" = "{0}, {1} faixas, {2}";
 "{0}, {1}{2}" = "{0}, {1}{2}";
+"{0}. Action replay. Space or P plays or pauses. Left and right seek one second." = "{0}. Replay de ações. Espaço ou P inicia ou pausa a reprodução. As setas esquerda e direita voltam ou avançam um segundo.";
 "{0}. Give {1} {2} at marker {3}, facing {4}." = "{0}. Atribua {1} {2} na marca {3}, voltado para {4}.";
 "{0}. Rewinds: {1}. W switches the rewind filter. {2} local records. {3} Press 1 to 9 to choose a board. Escape returns." = "{0}. Retrocessos: {1}. W troca o filtro de retrocesso. {2} recordes locais. {3} Pressione de 1 a 9 para escolher um tabuleiro. Escape volta.";
+"{0}. Select the play style for an explanation. Escape returns." = "{0}. Selecione o estilo de jogo para ver uma explicação. Escape volta.";
+"{0}. Show update and release notes" = "{0}. Mostrar atualização e notas da versão";
 "{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1} fase {2}. {3} salvos, {4} na reserva, {5} segundos. {6}. Selecionado {7}. {8} {9}. Espaço pausa. F altera a velocidade. Z ou rolar para cima aumenta o zoom. Rolar para baixo desativa o Zoom. Shift-Z ativa o Superzoom. {10} Escape volta ao menu principal. Clique duas vezes em Encerrar partida para finalizar.";
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Retrocessos: {2}. W troca o filtro de retrocesso. {3} recordes locais. Escape volta. A abre as conquistas. D abre os detalhes da partida.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} resgatados, {4} necessários. {5}.";
@@ -3118,5 +3133,3 @@
 "{0}/{1} packs" = "{0}/{1} pacotes";
 "{0}: replay analysis failed: {1}" = "{0}: falha na análise do replay: {1}";
 "{0}{1} more to rescue for three stars." = "Resgate mais {0}{1} para ganhar três estrelas.";
-
-"Static home screen" = "Tela inicial estática";

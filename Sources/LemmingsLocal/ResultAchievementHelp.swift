@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 @MainActor extension ArcadeView {
     func achievementLink(_ label: String, in rect: CGRect, title: String, detail: String,
@@ -23,11 +24,9 @@ import NxlvKit
     }
 
     func achievementTextHeight(_ value: String, width: CGFloat, face: ClassicMacUserInterface.Face = .small) -> CGFloat {
-        let cellWidth = font?.font(face)?.cellWidth ?? 12
         let bitmap = font?.font(face)
-        let lineHeight = max((bitmap?.cellHeight ?? 16) + 6,
-                             (bitmap?.height(of: MacInterfaceRenderer.menuText(value)) ?? 16) + 2)
-        return CGFloat(MacInterfaceRenderer.menuLines(value, columns: max(1, Int(width) / cellWidth)).count * lineHeight)
+        let lines = GameTextLayout.lines(value, width: width, face: face, font: bitmap)
+        return CGFloat(lines.count) * GameTextLayout.linePitch(value, face: face, font: bitmap)
     }
 
     func drawAchievementExplanation() {

@@ -2,7 +2,7 @@ import Foundation
 
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
-    public static let title = L10n.text("Oh My! All Lemmings!")
+    public static var title: String { L10n.text("Oh My! All Lemmings!") }
     public static let version = "learning-23"
     public static let communityPlacementPolicy = "redux-calibrated-3"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!

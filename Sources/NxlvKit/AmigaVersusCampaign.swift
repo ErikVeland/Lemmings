@@ -24,10 +24,10 @@ public enum AmigaVersusCampaign {
         public let records: Range<Int>
     }
 
-    public static let sources: [Source] = [
+    public static var sources: [Source] { [
         Source(family: "lemmings", title: L10n.text("Lemmings"), records: 80..<100),
         Source(family: "ohno", title: L10n.text("Oh No! More Lemmings"), records: 100..<110),
-    ]
+    ] }
 
     public struct Entry: Sendable {
         public let source: Source

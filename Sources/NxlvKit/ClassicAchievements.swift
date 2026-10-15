@@ -30,7 +30,7 @@ public struct ClassicAchievement: Equatable, Sendable {
 }
 
 public extension ClassicAchievement {
-    static let catalog: [ClassicAchievement] = [
+    static var catalog: [ClassicAchievement] { [
         ClassicAchievement(
             id: .firstRescue, title: L10n.text("The First Step"),
             detail: L10n.text("Pass your first level.")),
@@ -70,7 +70,7 @@ public extension ClassicAchievement {
         ClassicAchievement(
             id: .fullCanonComplete, title: L10n.text("Master of Lemmings"),
             detail: L10n.text("Complete the entire series from start to finish.")),
-    ]
+    ] }
 }
 
 /// Persistent ordered-run state and unlocked achievements.

@@ -84,13 +84,10 @@ public final class GameMenuTypography {
         context.interpolationQuality = .none
         context.setShouldAntialias(false)
         context.setAlpha(alpha)
-        var pen = origin.x
-        let step = CGFloat(font.cellWidth * scale)
-        for character in text {
-            defer { pen += step }
-            guard let glyph = font.glyph(for: character),
-                  let image = image(for: glyph, key: "\(face.rawValue)-\(character)", palette: palette) else { continue }
-            let rect = CGRect(x: pen + CGFloat(glyph.x * scale), y: origin.y + CGFloat(glyph.y * scale),
+        for item in font.layout(text) {
+            guard let glyph = item.glyph,
+                  let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette) else { continue }
+            let rect = CGRect(x: origin.x + CGFloat((item.x + glyph.x) * scale), y: origin.y + CGFloat(glyph.y * scale),
                               width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
             Self.draw(image, in: rect, context: context)
         }
@@ -100,11 +97,8 @@ public final class GameMenuTypography {
     public func menuLine(_ value: String, in rect: CGRect, context: CGContext, face: Face = .small, scale: Int = 1,
                          alignment: Alignment = .center, alpha: CGFloat = 1, palette: Palette = .blue) {
         guard let font = font(face) else { return }
-        let columns = max(0, Int(rect.width) / (font.cellWidth * scale))
-        guard columns > 0 else { return }
-        let plain = Self.menuText(value)
-        let line = plain.count <= columns ? plain
-            : String(plain.prefix(max(0, columns - 3))) + String(repeating: ".", count: min(3, columns))
+        let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font)
+        guard !line.isEmpty else { return }
         let width = width(of: line, face: face, scale: scale)
         let x: CGFloat
         switch alignment {
@@ -113,7 +107,8 @@ public final class GameMenuTypography {
         case .center: x = rect.midX - width / 2
         }
         let top = CGFloat(font.verticalBounds(of: line).top * scale)
-        draw(line, face: face, at: CGPoint(x: x.rounded(), y: (rect.minY - top).rounded()), scale: scale,
+        let left = CGFloat(font.horizontalBounds(of: line).left * scale)
+        draw(line, face: face, at: CGPoint(x: (x - left).rounded(), y: (rect.minY - top).rounded()), scale: scale,
              in: context, alpha: alpha, palette: palette)
     }
 
@@ -136,7 +131,10 @@ public final class GameMenuTypography {
             .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
             .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: L10n.text("ENTER"))
             .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
-        return String(plain.map { BitmapLatinGlyphs.supports($0) || $0 == "💀" ? $0 : "?" })
+        return BitmapTamilGlyphs.sequences(in: plain).map { sequence in
+            if BitmapTamilGlyphs.supports(sequence) { return sequence }
+            return sequence.count == 1 && sequence.allSatisfy { BitmapLatinGlyphs.supports($0) || $0 == "💀" } ? sequence : "?"
+        }.joined()
     }
 
     private static func draw(_ image: CGImage, in rect: CGRect, context: CGContext) {

@@ -10,8 +10,8 @@ import NxlvKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "2.0"
-    static let subtitle = L10n.text("Original Macintosh 1-bit graphics")
-    static let sections = [
+    static var subtitle: String { L10n.text("Original Macintosh 1-bit graphics") }
+    static var sections: [(String, String)] { [
         (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
         (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),
         (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
@@ -19,7 +19,7 @@ import NxlvKit
         (L10n.text("Music and performance"), L10n.text("Shared rewind audio, music recovery and rendering caches improve play across Classic, The Tribes and Chronicles. Matching profiles can recover newer saved progress, including Hot Seat journeys.")),
         (L10n.text("Bitmap lettering"), L10n.text("Seven added language packs follow your Mac's language setting. Original bitmap fonts support accented Western Latin text.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
-    ]
+    ] }
     private let defaults: UserDefaults
     private let build: Int
     private let version: String

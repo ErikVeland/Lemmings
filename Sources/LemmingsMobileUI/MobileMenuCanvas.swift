@@ -325,6 +325,11 @@ import UIKit
             for target in layout.targets {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))
+                if target.action.selected {
+                    context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
+                    context.fill(CGRect(x: target.frame.minX + 16, y: target.frame.maxY - 5,
+                                        width: max(0, target.frame.width - 32), height: 2))
+                }
             }
             return
         }

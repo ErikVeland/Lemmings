@@ -78,7 +78,7 @@ public struct ControllerBindings {
         }
         return actions
     }
-    public static let help = L10n.text("""
+    public static var help: String { L10n.text("""
     Controller (Xbox-style button names)
     Left stick: aim • Right stick: pan camera
     A: assign selected skill • B: reset fast speed, then pause / resume
@@ -100,5 +100,5 @@ public struct ControllerBindings {
     Hold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle
     Menus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs
     Right stick scrolls long pages. Release buttons before using a new page.
-    """)
+    """) }
 }

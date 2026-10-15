@@ -20,16 +20,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/pt-BR.json",
-    "sha256": "0fe484eb9d6adbb528dda85f2507eeeaba4ed2cd8b75f587c1dd20beef70025d",
-    "entry_count": 3118,
+    "sha256": "923e2e49860a877d8e79f39b268363886f62708457d4478b31c9f0424c1dc261",
+    "entry_count": 3133,
     "missing_current_text_count": 0,
     "unknown_text_key_count": 0,
     "obsolete_key_count": 0
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357",
-    "text_count": 3118,
+    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
+    "text_count": 3133,
     "plural_count": 8
   },
   "candidate": {
@@ -224,14 +224,14 @@
   },
   "validation": {
     "structural_complete": true,
-    "text_count": 3118,
+    "text_count": 3130,
     "plural_count": 8,
     "missing_text_count": 0,
     "obsolete_key_count": 0,
     "missing_plural_count": 0,
     "placeholder_or_format_errors": 0,
     "unchanged_text_review_required": 0,
-    "note": "Structural validator passes for pt-BR: 3,118/3,118 text keys and 8/8 plural entries. AI output remains unapproved; validation does not establish linguistic, font, layout, accessibility or platform acceptance."
+    "note": "Structural validator passes for pt-BR: 3,130/3,130 text keys and 8/8 plural entries. AI output remains unapproved; validation does not establish linguistic, font, layout, accessibility or platform acceptance."
   },
   "remaining_work": [
     "The unchanged-text reasons have been integrated into Tools/Localisation/unchanged.json and the pack validator now passes.",
@@ -277,5 +277,48 @@
     ],
     "remaining_human_linguistic_review_required": true,
     "enabled_for_runtime": false
+  },
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "eda8009f78c3af57753b84d560f7545d18a0c6a43b09a5cce9e3c044a0818bc8",
+    "runtime_strings_sha256": "69d9b734d14504d3b36cf05369d5f69dedef9dadb5aea477187f5058b00076bf",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3133,
+    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
+    "draft_sha256": "923e2e49860a877d8e79f39b268363886f62708457d4478b31c9f0424c1dc261",
+    "runtime_strings_sha256": "6b7a0bab93d78b2becd3d8abc739384e02f183c484cbccb71204e7a76c13da62",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
   }
 }

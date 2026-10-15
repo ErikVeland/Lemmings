@@ -3,7 +3,7 @@ import AppKit
 import LemmingsAppCore
 import NxlvKit
 
-/// Settings are a page inside the game. Choices apply immediately.
+/// Settings stay inside the game. Language choices preview without changing the active game.
 @MainActor final class SettingsWindow: NSObject {
   private var page: GameMenuPage?
   private let help = GameSettingsHelp()
@@ -11,7 +11,7 @@ import NxlvKit
   private var settings: ClassicSettings
   private let telemetry: AnonymousTelemetry
 
-  /// Called whenever a choice changes, so the game can follow immediately.
+  /// Called when profile settings change, so the game can follow immediately.
   var onChange: ((ClassicSettings) -> Void)?
 
   private var presetPopUp: NSPopUpButton?
@@ -55,6 +55,9 @@ import NxlvKit
   private var remapSource: NSPopUpButton?
   private var remapRole: NSPopUpButton?
   private var interfaceSizePopUp: NSPopUpButton?
+  private var languagePopUp: NSPopUpButton?
+  private var languagePage: GameMenuPage?
+  private var languageEntryPreference: InterfaceLanguage?
   private var reduceMotionCheck: NSButton?
   private var staticHomeScreenCheck: NSButton?
   private var reduceFlashesCheck: NSButton?
@@ -93,6 +96,13 @@ import NxlvKit
 
   func show() {
     if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page); return }
+    let page = makeSettingsPage()
+    self.page = page
+    rebuildSources()
+    GameScreen.shared.present(page, onDismiss: { [weak self] in self?.help.dismiss() })
+  }
+
+  private func makeSettingsPage() -> GameMenuPage {
     help.reset()
     let page = GameMenuPage(title: L10n.text("Settings"))
     page.onBack = { [weak self, weak page] in
@@ -116,9 +126,7 @@ import NxlvKit
       tabs.leadingAnchor.constraint(equalTo: page.body.leadingAnchor),
       tabs.trailingAnchor.constraint(equalTo: page.body.trailingAnchor)
     ])
-    self.page = page
-    rebuildSources()
-    GameScreen.shared.present(page, onDismiss: { [weak self] in self?.help.dismiss() })
+    return page
   }
 
   private func tab(_ label: String, _ view: NSView) -> NSTabViewItem {
@@ -274,6 +282,11 @@ import NxlvKit
   }
 
   private func gameplayPane() -> NSView {
+    let language = GamePopUpButton()
+    language.onShowChoices = { [weak self] in self?.showLanguagePicker() }
+    language.addItems(withTitles: L10n.languageOptions.map(\.title))
+    language.setAccessibilityLabel(L10n.text("Language"))
+    languagePopUp = language
     let experience = popUp(#selector(experienceChanged))
     experience.addItems(withTitles: ClassicExperiencePreset.allCases.map(\.title))
     experience.setAccessibilityLabel(L10n.text("Gameplay preset"))
@@ -326,7 +339,7 @@ import NxlvKit
     pointer.state = settings.confinePointer ? .on : .off
     pointerCaptureCheck = pointer
     return groupedPane([
-      (L10n.text("Play"), [(L10n.text("Preset"), experience), (L10n.text("Controls"), modern), (L10n.text("Speed"), variable), (L10n.text("Pause"), interruption), (L10n.text("Pointer"), pointer)]),
+      (L10n.text("Play"), [(L10n.text("Language"), language), (L10n.text("Preset"), experience), (L10n.text("Controls"), modern), (L10n.text("Speed"), variable), (L10n.text("Pause"), interruption), (L10n.text("Pointer"), pointer)]),
       (L10n.text("Skill targeting"), [("", targeting)]),
       (L10n.text("Pointer and selection"), [(L10n.text("Cursor"), cursor), (L10n.text("Skill icon"), iconSize), (L10n.text("Reticule"), count), (L10n.text("Selection"), selection), (L10n.text("Classic"), backpacks)]),
       (L10n.text("Level access"), [(L10n.text("Level Select"), levelSelection)]),
@@ -690,6 +703,7 @@ import NxlvKit
 
   /// Refills the source lists and reselects what is chosen.
   private func rebuildSources() {
+    refreshLanguageControls()
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     graphicsPopUp?.removeAllItems()
     counterStylePopUp?.selectItem(at: ClassicCounterStyle.allCases.firstIndex(of: settings.counterStyle) ?? 0)
@@ -760,6 +774,86 @@ import NxlvKit
   }
 
   // MARK: - Changes
+
+  private func refreshLanguageControls() {
+    let selected = L10n.currentLanguagePreference
+    languagePopUp?.selectItem(at: L10n.languageOptions.firstIndex(of: selected) ?? 0)
+  }
+
+  private func rebuildSettingsLanguage() {
+    guard let previous = page, GameScreen.shared.contains(previous) else { return }
+    let replacement = makeSettingsPage()
+    page = replacement
+    rebuildSources()
+    GameScreen.shared.replace(previous, with: replacement, focus: languagePopUp,
+                              onDismiss: { [weak self] in self?.help.dismiss() })
+  }
+
+  private func showLanguagePicker() {
+    if let languagePage, GameScreen.shared.contains(languagePage) {
+      GameScreen.shared.present(languagePage)
+      return
+    }
+    help.dismiss()
+    languageEntryPreference = L10n.currentLanguagePreference
+    let picker = makeLanguagePage()
+    languagePage = picker
+    GameScreen.shared.present(picker, onDismiss: { [weak self, weak picker] in
+      guard let self, self.languagePage === picker else { return }
+      self.finishLanguageSelection(apply: false)
+    })
+  }
+
+  private func makeLanguagePage() -> GameMenuPage {
+    let picker = GameMenuPage(title: L10n.text("Language"))
+    picker.onBack = { [weak self] in self?.finishLanguageSelection(apply: false) }
+    picker.addPrimaryAction(L10n.text("Apply")) { [weak self] in self?.finishLanguageSelection(apply: true) }
+    let scroll = NSScrollView(frame: picker.body.bounds)
+    scroll.autoresizingMask = [.width, .height]
+    scroll.hasVerticalScroller = true
+    scroll.drawsBackground = false
+    let list = NSView(frame: CGRect(x: 0, y: 0, width: 940, height: max(440, L10n.languageOptions.count * 44)))
+    for (index, option) in L10n.languageOptions.enumerated() {
+      let button = GameButton(title: option.title, target: self, action: #selector(previewLanguage))
+      button.tag = index
+      button.setButtonType(.radio)
+      let selected = option == L10n.currentLanguagePreference
+      button.state = selected ? .on : .off
+      button.setAccessibilityRole(.radioButton)
+      button.setAccessibilityValue(selected ? 1 : 0)
+      button.frame = CGRect(x: 6, y: list.bounds.height - CGFloat(index + 1) * 44, width: 920, height: 38)
+      list.addSubview(button)
+      if selected { picker.preferControllerControl(button) }
+    }
+    scroll.documentView = list
+    picker.body.addSubview(scroll)
+    scroll.contentView.scroll(to: CGPoint(x: 0, y: max(0, list.bounds.height - scroll.contentSize.height)))
+    return picker
+  }
+
+  @objc private func previewLanguage(_ sender: NSButton) {
+    guard languageEntryPreference != nil, let previous = languagePage,
+          L10n.languageOptions.indices.contains(sender.tag) else { return }
+    L10n.setLanguage(L10n.languageOptions[sender.tag])
+    rebuildSettingsLanguage()
+    let replacement = makeLanguagePage()
+    languagePage = replacement
+    GameScreen.shared.replace(previous, with: replacement, onDismiss: { [weak self, weak replacement] in
+      guard let self, self.languagePage === replacement else { return }
+      self.finishLanguageSelection(apply: false)
+    })
+  }
+
+  private func finishLanguageSelection(apply: Bool) {
+    guard let original = languageEntryPreference else { return }
+    if apply { InterfaceLanguagePreference.save(L10n.currentLanguagePreference, to: .standard) }
+    else { L10n.setLanguage(original) }
+    languageEntryPreference = nil
+    let picker = languagePage
+    languagePage = nil
+    rebuildSettingsLanguage()
+    if let picker { GameScreen.shared.dismiss(picker) }
+  }
 
   private func changed(customizeExperience: Bool = true) {
     help.dismiss()

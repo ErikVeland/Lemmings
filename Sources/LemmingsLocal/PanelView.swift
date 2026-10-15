@@ -606,14 +606,15 @@ enum PanelButton: Equatable {
       return nil
     }.min() ?? 0
     let labelHeight = 5 * panelScale
-    let longest = names.map(\.count).max() ?? 1
     let macScale: Int
     if let font = macInterface?.font(.small), names.allSatisfy({ font.covers($0) }) {
-      macScale = min(Int(labelWidth) / max(1, font.cellWidth * longest),
+      let longest = names.map { font.width(of: $0) }.max() ?? 1
+      macScale = min(Int(labelWidth) / max(1, longest),
                      Int(labelHeight) / max(1, font.height(of: names.joined())))
     } else { macScale = 0 }
     let pixelBounds = GamePixelTypography.verticalBounds(of: names.joined())
-    let pixelScale = max(1, min(3, floor(min(labelHeight / CGFloat(pixelBounds.bottom - pixelBounds.top), labelWidth / CGFloat(longest * 6)))))
+    let longestPixels = names.map { GamePixelTypography.width(of: $0) }.max() ?? 1
+    let pixelScale = max(1, min(3, floor(min(labelHeight / CGFloat(pixelBounds.bottom - pixelBounds.top), labelWidth / CGFloat(longestPixels)))))
     let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
     for (button, frame) in buttonFrames {
       guard case let .skill(index) = button, let name = names[safe: index] else { continue }
@@ -803,16 +804,18 @@ enum PanelButton: Equatable {
     let upper = gameText(text)
     guard font.covers(upper) else { return false }
     let fit = min(
-      Int(box.width) / max(1, font.cellWidth * max(1, upper.count)),
+      Int(box.width) / max(1, font.width(of: upper)),
       Int(box.height) / max(1, font.height(of: upper)))
     let scale = wanted > 0 ? wanted : fit
-    guard scale >= 1 else { return false }
+    guard scale >= 1, scale <= fit else { return false }
     let top = box.midY - CGFloat(font.height(of: upper, scale: scale)) / 2 - CGFloat(font.verticalBounds(of: upper).top * scale)
     macInterface.drawCentered(
       upper, face: .small, centerX: box.midX, top: top, scale: scale, palette: panelPalette)
     if let highlighted, let index = upper.firstIndex(of: highlighted) {
+      let prefix = font.layout(String(upper[..<index]))
+      let offset = prefix.last.map { $0.x + $0.advance } ?? 0
       let x = box.midX - macInterface.width(of: upper, face: .small, scale: scale) / 2
-        + CGFloat(upper.distance(from: upper.startIndex, to: index) * font.cellWidth * scale)
+        + CGFloat((offset - font.horizontalBounds(of: upper).left) * scale)
       macInterface.draw(String(highlighted), face: .small,
         at: CGPoint(x: x, y: top),
         scale: scale, palette: isMonochrome ? .monochrome : .green)
@@ -828,10 +831,10 @@ enum PanelButton: Equatable {
     let y = isMenuMode ? inset : panelFrame.maxY + 4
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
     let text = gameText(statusText)
-    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
-      macInterface.draw(text, face: .small, at: CGPoint(x: inset, y: y), scale: 1, palette: panelPalette)
+    if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= Int(box.height) {
+      macInterface.menuLine(text, in: box, alignment: .left, palette: panelPalette)
     } else {
-      let naturalWidth = CGFloat(max(1, text.count) * 6)
+      let naturalWidth = CGFloat(GamePixelTypography.width(of: text))
       let width = statusTextWidth()
       NSGraphicsContext.saveGraphicsState()
       NSBezierPath(rect: box).addClip()
@@ -844,10 +847,10 @@ enum PanelButton: Equatable {
 
   private func statusTextWidth() -> CGFloat {
     let text = gameText(statusText)
-    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+    if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= 20 {
       return macInterface.width(of: text, face: .small, scale: 1)
     }
-    let naturalWidth = CGFloat(max(1, text.count) * 6)
+    let naturalWidth = CGFloat(GamePixelTypography.width(of: text))
     let scale = max(1, min(2, floor((bounds.width - inset * 2) / naturalWidth)))
     return naturalWidth * scale
   }
@@ -858,17 +861,17 @@ enum PanelButton: Equatable {
   private func drawProgress(in box: CGRect, y: CGFloat) {
     guard !progressText.isEmpty else { return }
     let text = gameText(progressText)
-    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+    if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= Int(box.height) {
       let width = macInterface.width(of: text, face: .small, scale: 1)
       let x = bounds.width - inset - width
       guard x > inset + statusTextWidth() + 12 else { return }
-      macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1, palette: panelPalette)
+      macInterface.menuLine(text, in: CGRect(x: x, y: y, width: width, height: box.height), alignment: .left, palette: panelPalette)
       return
     }
     // The original artwork has no Macintosh interface font. Without this the
     // whole field silently drew nothing for every player using it, which is
     // most of them. Fall back to the same glyphs the status line uses.
-    let width = CGFloat(text.count * 6)
+    let width = CGFloat(GamePixelTypography.width(of: text))
     let x = bounds.width - inset - width
     guard x > inset + statusTextWidth() + 12 else { return }
     GamePixelText.draw(text, in: CGRect(x: x, y: box.minY, width: width, height: box.height), maxScale: 1, palette: panelPalette)

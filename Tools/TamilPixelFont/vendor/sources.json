@@ -1,0 +1,35 @@
+{
+  "retrieved": "2026-10-15",
+  "sources": [
+    {
+      "file": "NotoSansTamil-Bold.ttf",
+      "url": "https://notofonts.github.io/tamil/fonts/NotoSansTamil/hinted/ttf/NotoSansTamil-Bold.ttf",
+      "sha256": "1e1939113e3dcbb745324ffb6c666434f603623322ea0ced7c5608ae602968e7"
+    },
+    {
+      "file": "NotoSansTamilSupplement-Regular.ttf",
+      "url": "https://notofonts.github.io/tamil/fonts/NotoSansTamilSupplement/googlefonts/ttf/NotoSansTamilSupplement-Regular.ttf",
+      "sha256": "4fb2cd16897ed956bf1a8cb0c1cf4f737b4c37597c924e38c4a74751602960f0"
+    },
+    {
+      "file": "NotoSans-Bold.ttf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSans/NotoSans-Bold.ttf",
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "file": "OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/tamil/main/OFL.txt",
+      "sha256": "f8ff8ce7d0a81bf8d5e121c635ef027250c531f2fd37d5988b8dd6e45f19d7f1"
+    },
+    {
+      "file": "OFL-Latin.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/LICENSE",
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    },
+    {
+      "file": "UNICODE-LICENSE.txt",
+      "url": "https://www.unicode.org/license.txt",
+      "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+    }
+  ]
+}

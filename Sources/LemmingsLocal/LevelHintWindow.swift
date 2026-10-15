@@ -2,6 +2,7 @@
 import AppKit
 import LemmingsAppCore
 import LemmingsAudio
+import LemmingsGameArt
 import NxlvKit
 
 /// Hints move one tier per deliberate action. Reopening starts with the nudge.
@@ -325,13 +326,16 @@ import NxlvKit
         setAccessibilityRole(.staticText)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
-    private var cellWidth: Int { renderer?.font(face)?.cellWidth ?? 12 }
     private var lineHeight: Int {
-        max((renderer?.font(face)?.cellHeight ?? 14) + 6,
-            (renderer?.font(face)?.height(of: MacInterfaceRenderer.menuText(stringValue)) ?? 14) + 2)
+        if let font = renderer?.font(face) {
+            return max(font.cellHeight + 6, font.height(of: MacInterfaceRenderer.menuText(stringValue)) + 2)
+        }
+        let bounds = GamePixelTypography.verticalBounds(of: MacInterfaceRenderer.menuText(stringValue))
+        return max(20, bounds.bottom - bounds.top + 6)
     }
     func lines(width: CGFloat) -> [String] {
-        MacInterfaceRenderer.menuLines(stringValue, columns: max(1, Int(width) / cellWidth))
+        if let font = renderer?.font(face) { return GameTextLayout.lines(stringValue, width: width, face: face, font: font) }
+        return GamePixelTypography.lines(stringValue, width: width)
     }
     func requiredHeight(width: CGFloat) -> CGFloat { CGFloat(lines(width: width).count * lineHeight) }
     override func draw(_ dirtyRect: NSRect) {
@@ -340,8 +344,10 @@ import NxlvKit
             if let renderer, renderer.font(face) != nil {
                 renderer.menuLine(line, in: rect, face: face, alignment: .left, palette: face == .large ? .green : .blue)
             } else {
-                let width = CGFloat(line.count * 12)
-                GamePixelText.draw(line, in: CGRect(x: 0, y: rect.minY, width: width, height: 14))
+                if let context = NSGraphicsContext.current?.cgContext {
+                    GamePixelTypography.draw(line, in: rect, context: context, typography: nil,
+                        palette: face == .large ? .green : .blue, maximumScale: 1, alignment: .left, bitmapOnly: true)
+                }
             }
         }
     }

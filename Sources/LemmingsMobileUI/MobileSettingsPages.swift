@@ -12,6 +12,27 @@ extension MobileLibraryViewController {
         get { MobileSettings.load(from: .standard, profileID: settingsProfileID) }
         set { newValue.save(to: .standard, profileID: settingsProfileID) }
     }
+    var interfaceLanguage: InterfaceLanguage { L10n.currentLanguagePreference }
+
+    func beginLanguageSelection() {
+        if languageSelectionOriginal == nil { languageSelectionOriginal = interfaceLanguage }
+    }
+
+    func finishLanguageSelection(apply: Bool) {
+        guard let original = languageSelectionOriginal else { return }
+        if apply { InterfaceLanguagePreference.save(interfaceLanguage, to: .standard) }
+        else { L10n.setLanguage(original) }
+        languageSelectionOriginal = nil
+    }
+
+    func languagePage() -> GameFrontEnd.Page {
+        beginLanguageSelection()
+        var page = MobileSettingsArt.languages(selection: interfaceLanguage)
+        #if os(tvOS)
+        page.televisionGrid = true
+        #endif
+        return page
+    }
 
     func settingsGroupsPage(inGame: Bool = false) -> GameFrontEnd.Page {
         #if os(tvOS)
@@ -34,7 +55,8 @@ extension MobileLibraryViewController {
     func settingsPage(_ group: MobileSettingsGroup, inGame: Bool = false) -> GameFrontEnd.Page {
         var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
-                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame)
+                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
+                               language: interfaceLanguage)
         #if os(tvOS)
         page.televisionGrid = true
         if group == .controller {
@@ -89,6 +111,17 @@ extension MobileLibraryViewController {
         }
         if id == "controllerMappings" { navigate(.controllerMappings); return true }
         if id == "playInsights" { navigate(.playInsights); return true }
+        if id == "setting.language" { beginLanguageSelection(); navigate(.language); return true }
+        if id == "language.cancel" || id == "language.apply" {
+            finishLanguageSelection(apply: id == "language.apply")
+            navigate(.settingsGroup(.gameplay)); return true
+        }
+        if id.hasPrefix("language."), let language = InterfaceLanguage(rawValue: String(id.dropFirst(9))),
+           L10n.languageOptions.contains(language) {
+            beginLanguageSelection()
+            L10n.setLanguage(language)
+            rebuild(); return true
+        }
         var settings = mobileSettings
         if id == "mappingReset" { settings.classic.controllerMappings = [:] }
         else if id.hasPrefix("mapping."), let physical = ControllerBindings.Button(rawValue: String(id.dropFirst(8))) {

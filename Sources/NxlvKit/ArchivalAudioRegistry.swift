@@ -31,7 +31,7 @@ public struct ArchivalAudioRegistry: Sendable {
         }
     }
 
-    public static let soundtracks: [SoundTrackItem] = [
+    public static var soundtracks: [SoundTrackItem] { [
         SoundTrackItem(id: "amiga_mod", title: L10n.text("Amiga CoLD SToRAGE MODs"), platformId: "amiga", format: "ProTracker MOD"),
         SoundTrackItem(id: "dos_opl2", title: L10n.text("DOS AdLib OPL2 FM"), platformId: "dos_vga", format: "AdLib FM"),
         SoundTrackItem(id: "snes_spc", title: L10n.text("SNES Hiroyuki Masuno SPC"), platformId: "snes", format: "SPC700 ADPCM"),
@@ -41,7 +41,7 @@ public struct ArchivalAudioRegistry: Sendable {
         SoundTrackItem(id: "gb_papu", title: L10n.text("Game Boy PAPU Chiptunes"), platformId: "game_boy", format: "Game Boy PAPU"),
         SoundTrackItem(id: "c64_sid", title: L10n.text("Commodore 64 SID Chiptunes"), platformId: "c64", format: "MOS 6581 SID"),
         SoundTrackItem(id: "cd_audio", title: L10n.text("Redbook CD Studio Soundtrack"), platformId: "pce_cd", format: "Redbook CD Audio"),
-    ]
+    ] }
 
     public static let soundBanks: [SoundBankItem] = [
         SoundBankItem(id: "amiga_voice", name: "Amiga Digitised Voices (\"Oh No!\", \"Yippee!\")", platformId: "amiga", sampleRate: 22050),

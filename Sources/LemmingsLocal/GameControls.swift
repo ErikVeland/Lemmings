@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 #if canImport(NxlvKit)
 import NxlvKit
 #endif
@@ -11,7 +12,12 @@ import NxlvKit
             let height = renderer.height(of: text, face: role.face, scale: 1)
             renderer.menuLine(text, in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
                 face: role.face, alignment: alignment, alpha: enabled ? 1 : 0.45, palette: role.palette)
-        } else { GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1, palette: role.palette) }
+        } else if let context = NSGraphicsContext.current?.cgContext {
+            GamePixelTypography.draw(MacInterfaceRenderer.menuText(text), in: rect, context: context, typography: nil,
+                palette: role.palette == .blue ? .blue : .green, maximumScale: role == .title ? 3 : 1,
+                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                alpha: enabled ? 1 : 0.45, bitmapOnly: true)
+        }
     }
     static func focus(_ control: NSControl) {
         guard control.window?.firstResponder === control else { return }
@@ -29,8 +35,11 @@ import NxlvKit
     override func becomeFirstResponder() -> Bool { needsDisplay = true; return super.becomeFirstResponder() }
     override func resignFirstResponder() -> Bool { needsDisplay = true; return super.resignFirstResponder() }
     override var intrinsicContentSize: NSSize {
-        let width = GameMenuArtwork.renderer()?.width(of: MacInterfaceRenderer.menuText(title), face: .small, scale: 1) ?? CGFloat(title.count * 8)
-        let height = GameMenuArtwork.renderer()?.height(of: title, face: .small, scale: 1) ?? 18
+        let plain = MacInterfaceRenderer.menuText(title)
+        let width = GameMenuArtwork.renderer()?.width(of: plain, face: .small, scale: 1)
+            ?? ceil(CGFloat(GamePixelTypography.width(of: plain) + 1) * 4 / 3)
+        let bounds = GamePixelTypography.verticalBounds(of: plain)
+        let height = GameMenuArtwork.renderer()?.height(of: title, face: .small, scale: 1) ?? CGFloat(max(18, bounds.bottom - bounds.top + 4))
         return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, height + 4, super.intrinsicContentSize.height))
     }
     override var isFlipped: Bool { true }
@@ -85,10 +94,16 @@ import NxlvKit
     private var measuredWidth: CGFloat = 0
     override var isFlipped: Bool { true }
     override var intrinsicContentSize: NSSize {
-        guard let renderer = GameMenuArtwork.renderer(), let face = renderer.font(role.face) else { return NSSize(width: CGFloat(stringValue.count * 6), height: 13) }
-        let natural = renderer.width(of: MacInterfaceRenderer.menuText(stringValue), face: role.face, scale: 1)
         let width = preferredMaxLayoutWidth > 0 ? preferredMaxLayoutWidth : bounds.width > 0 ? bounds.width : 600
-        let lines = cell?.wraps == true ? MacInterfaceRenderer.menuLines(stringValue, columns: max(1, Int(width) / face.cellWidth)).count : 1
+        let plain = MacInterfaceRenderer.menuText(stringValue)
+        guard let renderer = GameMenuArtwork.renderer(), let face = renderer.font(role.face) else {
+            let glyphs = GamePixelTypography.verticalBounds(of: plain)
+            let lines = cell?.wraps == true ? GamePixelTypography.lines(stringValue, width: width).count : 1
+            return NSSize(width: CGFloat(GamePixelTypography.width(of: plain) + 1),
+                height: CGFloat(max(1, lines) * max(13, glyphs.bottom - glyphs.top + 6)))
+        }
+        let natural = renderer.width(of: plain, face: role.face, scale: 1)
+        let lines = cell?.wraps == true ? GameTextLayout.lines(stringValue, width: width, face: role.face, font: face).count : 1
         let spacing = max(face.cellHeight + 6, face.height(of: MacInterfaceRenderer.menuText(stringValue)) + 2)
         return NSSize(width: natural, height: CGFloat(max(1, lines) * spacing))
     }
@@ -99,6 +114,14 @@ import NxlvKit
     override func draw(_ dirtyRect: NSRect) {
         if cell?.wraps == true, let renderer = GameMenuArtwork.renderer(), bounds.height >= 32 {
             renderer.menuParagraph(stringValue, in: bounds, alignment: alignment, face: role.face, palette: role.palette, alpha: isEnabled ? 1 : 0.45)
+        } else if cell?.wraps == true, GameMenuArtwork.renderer() == nil {
+            let lines = GamePixelTypography.lines(stringValue, width: bounds.width)
+            let glyphs = GamePixelTypography.verticalBounds(of: MacInterfaceRenderer.menuText(stringValue))
+            let pitch = CGFloat(max(13, glyphs.bottom - glyphs.top + 6))
+            for (index, line) in lines.enumerated() {
+                GameControlText.draw(line, in: CGRect(x: bounds.minX, y: bounds.minY + CGFloat(index) * pitch,
+                    width: bounds.width, height: pitch), alignment: alignment, enabled: isEnabled, role: role)
+            }
         } else {
             GameControlText.draw(stringValue, in: bounds, alignment: alignment, enabled: isEnabled, role: role)
         }
@@ -181,6 +204,7 @@ import NxlvKit
 
 /// Choices open in a scrollable game page, including when activated by keyboard.
 @MainActor final class GamePopUpButton: NSPopUpButton {
+    var onShowChoices: (() -> Void)?
     override var acceptsFirstResponder: Bool { isEnabled }
     override func accessibilityPerformPress() -> Bool {
         guard isEnabled else { return false }
@@ -202,6 +226,7 @@ import NxlvKit
     }
     private func showChoices() {
         guard isEnabled, numberOfItems > 0, let window else { return }
+        if let onShowChoices { onShowChoices(); return }
         let page = GameMenuPage(title: accessibilityLabel() ?? L10n.text("Choose"))
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         let scroll = NSScrollView(frame: page.body.bounds)
@@ -299,31 +324,98 @@ import NxlvKit
 
 /// AppKit keeps text input, selection and undo; only game glyphs are painted.
 @MainActor final class GameFieldEditor: NSTextView {
-    private var cellWidth: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.cellWidth ?? 8) }
-    private var cellHeight: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.height(of: MacInterfaceRenderer.menuText(string)) ?? 14) }
+    private var bitmapFont: ClassicMacUserInterface.Font? { GameMenuArtwork.renderer()?.font(.small) }
+    private var cellWidth: CGFloat { CGFloat(bitmapFont?.cellWidth ?? 6) }
+    private var plain: String { MacInterfaceRenderer.menuText(string) }
+    private var tamil: Bool { BitmapTamilGlyphs.sequences(in: string).contains(where: BitmapTamilGlyphs.supports) }
+    private var vertical: (top: Int, bottom: Int) { bitmapFont?.verticalBounds(of: plain) ?? GamePixelTypography.verticalBounds(of: plain) }
+    private var cellHeight: CGFloat { CGFloat(max(14, vertical.bottom - vertical.top)) }
     private var textOrigin: CGPoint {
-        let top = GameMenuArtwork.renderer()?.font(.small)?.verticalBounds(of: MacInterfaceRenderer.menuText(string)).top ?? 0
-        return CGPoint(x: textContainerOrigin.x, y: bounds.midY - cellHeight / 2 - CGFloat(top))
+        let left = bitmapFont?.horizontalBounds(of: plain).left ?? GamePixelTypography.horizontalBounds(of: plain).left
+        return CGPoint(x: textContainerOrigin.x - CGFloat(left),
+            y: bounds.midY - CGFloat(vertical.bottom - vertical.top) / 2 - CGFloat(vertical.top))
     }
-    private func cellOffset(_ utf16Offset: Int) -> Int {
-        let prefix = (string as NSString).substring(to: min(utf16Offset, (string as NSString).length))
-        return prefix.count
+
+    private var insertionStops: [(index: Int, x: CGFloat)] {
+        let characters = Array(string)
+        var result: [(index: Int, x: CGFloat)] = [(0, 0)], characterIndex = 0, utf16 = 0, pen: CGFloat = 0
+        for sequence in BitmapTamilGlyphs.sequences(in: string) {
+            let count = min(sequence.count, characters.count - characterIndex)
+            guard count > 0 else { continue }
+            let visible = MacInterfaceRenderer.menuText(sequence)
+            let advance = bitmapFont.map { $0.layout(visible).reduce(0) { $0 + $1.advance } }
+                ?? GamePixelTypography.layout(visible).reduce(0) { $0 + $1.advance }
+            for index in 0..<count {
+                utf16 += String(characters[characterIndex + index]).utf16.count
+                result.append((utf16, pen + CGFloat(advance) * CGFloat(index + 1) / CGFloat(count)))
+            }
+            pen += CGFloat(advance)
+            characterIndex += count
+        }
+        return result
+    }
+
+    func bitmapInsertionX(atUTF16 offset: Int) -> CGFloat {
+        let stops = insertionStops
+        return stops.min { abs($0.index - offset) < abs($1.index - offset) }?.x ?? 0
+    }
+
+    func bitmapInsertionIndex(atX x: CGFloat) -> Int {
+        insertionStops.min { abs($0.x - x) < abs($1.x - x) }?.index ?? 0
+    }
+
+    override func characterIndexForInsertion(at point: NSPoint) -> Int {
+        tamil ? bitmapInsertionIndex(atX: point.x - textOrigin.x) : super.characterIndexForInsertion(at: point)
+    }
+
+    override func firstRect(forCharacterRange range: NSRange, actualRange: NSRangePointer?) -> NSRect {
+        guard tamil, range.location != NSNotFound else { return super.firstRect(forCharacterRange: range, actualRange: actualRange) }
+        let length = (string as NSString).length
+        let start = min(length, range.location), end = min(length, range.location + min(range.length, length - start))
+        actualRange?.pointee = NSRange(location: start, length: end - start)
+        let x = bitmapInsertionX(atUTF16: start), right = bitmapInsertionX(atUTF16: end)
+        let rect = CGRect(x: textOrigin.x + x, y: bounds.midY - cellHeight / 2, width: max(1, right - x), height: cellHeight)
+        return window?.convertToScreen(convert(rect, to: nil)) ?? rect
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        guard tamil else { super.mouseDown(with: event); return }
+        window?.makeFirstResponder(self)
+        let index = characterIndexForInsertion(at: convert(event.locationInWindow, from: nil))
+        let granularity: NSSelectionGranularity = event.clickCount > 2 ? .selectByParagraph : event.clickCount == 2 ? .selectByWord : .selectByCharacter
+        let proposed = NSRange(location: index, length: 0)
+        let selection = selectedRange()
+        let anchor = event.modifierFlags.contains(.shift)
+            ? NSRange(location: index < selection.location ? NSMaxRange(selection) : selection.location, length: 0)
+            : selectionRange(forProposedRange: proposed, granularity: granularity)
+        func select(_ index: Int) {
+            let edge = selectionRange(forProposedRange: NSRange(location: index, length: 0), granularity: granularity)
+            setSelectedRange(NSUnionRange(anchor, edge))
+            needsDisplay = true
+            _ = scrollToVisible(CGRect(x: textOrigin.x + bitmapInsertionX(atUTF16: index),
+                y: bounds.midY - cellHeight / 2, width: 2, height: cellHeight))
+        }
+        select(index)
+        while let next = window?.nextEvent(matching: [.leftMouseDragged, .leftMouseUp]) {
+            select(characterIndexForInsertion(at: convert(next.locationInWindow, from: nil)))
+            if next.type == .leftMouseUp { break }
+        }
     }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill(); bounds.fill()
         let selection = selectedRange()
         if selection.length > 0 {
             NSColor(calibratedRed: 0.08, green: 0.22, blue: 0.12, alpha: 1).setFill()
-            let first = cellOffset(selection.location), last = cellOffset(NSMaxRange(selection))
-            CGRect(x: textOrigin.x + CGFloat(first) * cellWidth, y: bounds.midY - cellHeight / 2,
-                width: CGFloat(last - first) * cellWidth, height: cellHeight).fill()
+            let first = bitmapInsertionX(atUTF16: selection.location), last = bitmapInsertionX(atUTF16: NSMaxRange(selection))
+            CGRect(x: textOrigin.x + first, y: bounds.midY - cellHeight / 2,
+                width: last - first, height: cellHeight).fill()
         }
         GameTypography.annotation(string, at: textOrigin, palette: .blue)
     }
     override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
         guard flag else { needsDisplay = true; return }
         NSColor.green.setFill()
-        CGRect(x: textOrigin.x + CGFloat(cellOffset(selectedRange().location)) * cellWidth,
+        CGRect(x: textOrigin.x + bitmapInsertionX(atUTF16: selectedRange().location),
             y: bounds.midY - cellHeight / 2, width: 1, height: cellHeight).fill()
     }
     func prepare() {

@@ -18,12 +18,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/fr.json",
-    "text_count": 3118,
+    "text_count": 3133,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "9b20d70b13f6cf80a2b292123fdcf4c00e568ae70baa0e7ecee2cbdfdd489564",
-    "entry_count": 3118
+    "sha256": "9c5084c890327878e383d34930df2541883284cd4c45bd157826074c8f65b010",
+    "entry_count": 3133
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/fr.json",
@@ -33,9 +33,9 @@
     "note": "The ignored machine-generated candidate was not merged; translations were drafted from the current English catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3118,
+    "text_count": 3133,
     "plural_count": 8,
-    "sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357"
+    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -246,5 +246,48 @@
     "Complete native glyph, layout, accessibility, gameplay-flow and device acceptance before enabling French at runtime."
   ],
   "language_approved": false,
-  "enabled_for_runtime": false
+  "enabled_for_runtime": false,
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "929bbb42ad617b4276c19f6eb50e305f2a556c293ec1d3c14af5b46cb36efaf9",
+    "runtime_strings_sha256": "e3c137c4c93c8d30c3c2d7155b30a75d4e9e8f5fdf3d759130f46596a54d13eb",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3133,
+    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
+    "draft_sha256": "9c5084c890327878e383d34930df2541883284cd4c45bd157826074c8f65b010",
+    "runtime_strings_sha256": "b8464e74b8f34c6df077e88a9fe407e1d50cf7edd48dc71f82889e7433922214",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
+  }
 }

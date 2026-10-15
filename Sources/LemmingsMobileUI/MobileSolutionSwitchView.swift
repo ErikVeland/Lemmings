@@ -55,7 +55,7 @@ import UIKit
         onToggleGhost?()
     }
     private func updateSelection() {
-        ghostButton.accessibilityValue = ghostEnabled ? "On" : L10n.text("Off")
+        ghostButton.accessibilityValue = ghostEnabled ? L10n.text("On") : L10n.text("Off")
         ghostButton.accessibilityTraits = ghostEnabled ? [.button, .selected] : .button
         for (value, button) in zip(SolutionReplayMode.allCases, buttons) {
             button.accessibilityTraits = value == mode ? [.button, .selected] : .button

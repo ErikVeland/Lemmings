@@ -24,7 +24,7 @@ def extract():
     if not binary.exists() or source.stat().st_mtime > binary.stat().st_mtime:
         sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-path'], text=True).strip()
         subprocess.run([str(compiler), '-sdk', sdk, '-module-cache-path', str(build / 'ModuleCache'), '-I', str(host), '-L', str(host), '-lSwiftParser', '-lSwiftSyntax', '-Xlinker', '-rpath', '-Xlinker', str(host), str(source), '-o', str(binary)], check=True)
-    files = sorted(str(p.relative_to(ROOT)) for module in MODULES for p in (ROOT / 'Sources' / module).rglob('*.swift') if p.name != 'InterfaceLocalisation.swift')
+    files = sorted(str(p.relative_to(ROOT)) for module in MODULES for p in (ROOT / 'Sources' / module).rglob('*.swift'))
     data = json.loads(subprocess.check_output([str(binary), *files], cwd=ROOT))
     original = json.loads(Path(__file__).with_name('l2-original-text.json').read_text())
     for key, references in original.items():

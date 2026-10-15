@@ -13,7 +13,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
 @MainActor final class MobileLibraryViewController: UIViewController {
     enum Route: Equatable {
-        case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), controllerMappings, playInsights, soundtrack, data
+        case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
         case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
@@ -43,6 +43,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let browser = MobileLevelBrowserView()
     var browserShown = false
     var route = Route.home
+    var languageSelectionOriginal: InterfaceLanguage?
     var confirmingRecordsReset = false
     #if os(tvOS)
     let tvBuildInfo = MobileBuildInfo.current()
@@ -509,6 +510,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = settingsGroupsPage(); canvas.preview = nil
         case let .settingsGroup(group):
             canvas.page = settingsPage(group); canvas.preview = nil
+        case .language:
+            canvas.page = languagePage(); canvas.preview = nil
         case .controllerMappings:
             canvas.page = controllerMappingsPage(); canvas.preview = nil
         case .playInsights:
@@ -593,6 +596,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
     func navigate(_ next: Route) {
+        if route == .language && next != .language { finishLanguageSelection(apply: false) }
         confirmingRecordsReset = false
         #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.

@@ -55,24 +55,29 @@ public enum MobilePauseArt {
         let columns = wide ? 4 : inner < 240 ? 1 : 2
         let gap: CGFloat = 12
         let cellWidth = floor((inner - CGFloat(columns - 1) * gap) / CGFloat(columns))
+        let fields = page.pause?.fields ?? []
+        let labelHeight = max(18, fields.map { textHeight($0.label, width: cellWidth - 12, lineHeight: 18) }.max() ?? 18)
+        let valueHeight = max(22, fields.map { textHeight($0.value, width: cellWidth - 12, lineHeight: 22) }.max() ?? 22)
+        let fieldHeight = max(48, labelHeight + valueHeight + 8)
         for index in 0..<8 {
             details.append(CGRect(x: left + CGFloat(index % columns) * (cellWidth + gap),
-                y: y + CGFloat(index / columns) * 56, width: cellWidth, height: 48))
+                y: y + CGFloat(index / columns) * (fieldHeight + 8), width: cellWidth, height: fieldHeight))
         }
-        y += CGFloat(8 / columns) * 56
+        y += CGFloat(8 / columns) * (fieldHeight + 8)
         let playHeight = textHeight(page.details[11], width: inner, lineHeight: 20)
         details.append(CGRect(x: left, y: y, width: inner, height: playHeight))
         y += playHeight + 16
         let supplies = page.pause?.supplies.count ?? 0
-        let longestSkill = CGFloat(page.pause?.supplies.map { $0.label.count }.max() ?? 0) * 12
-        let stockValueWidth = max(28, CGFloat(page.pause?.supplies.map { $0.value.count }.max() ?? 0) * 12)
+        let longestSkill = page.pause?.supplies.map { GameTextLayout.width(of: $0.label) }.max() ?? 0
+        let stockValueWidth = max(28, page.pause?.supplies.map { GameTextLayout.width(of: $0.value) }.max() ?? 0)
         let stockColumns = min(wide ? 4 : 2, max(1, Int((inner + 12) / (longestSkill + stockValueWidth + 16))))
         let stockWidth = floor((inner - CGFloat(stockColumns - 1) * 12) / CGFloat(stockColumns))
+        let stockHeight = max(24, page.pause?.supplies.map { textHeight($0.label, width: stockWidth - stockValueWidth - 4, lineHeight: 20) }.max() ?? 24)
         for index in 0..<supplies {
             details.append(CGRect(x: left + CGFloat(index % stockColumns) * (stockWidth + 12),
-                y: y + CGFloat(index / stockColumns) * 28, width: stockWidth, height: 24))
+                y: y + CGFloat(index / stockColumns) * (stockHeight + 4), width: stockWidth, height: stockHeight))
         }
-        if supplies > 0 { y += CGFloat(Int(ceil(Double(supplies) / Double(stockColumns)))) * 28 + 16 }
+        if supplies > 0 { y += CGFloat(Int(ceil(Double(supplies) / Double(stockColumns)))) * (stockHeight + 4) + 16 }
         for index in (12 + supplies)..<(15 + supplies) {
             let height = textHeight(page.details[index], width: inner - 24, lineHeight: 20)
             details.append(CGRect(x: left + 12, y: y, width: inner - 24, height: height))
@@ -80,7 +85,7 @@ public enum MobilePauseArt {
         }
         y += 20
         let desiredColumns = inner < 252 ? 1 : compact && inner >= 640 ? 4 : 2
-        let widestAction = page.footer.map { CGFloat(GameMenuTypography.menuText($0.title).count) * 12 + ($0.primary ? 48 : 24) }.max() ?? 44
+        let widestAction = page.footer.map { GameTextLayout.width(of: $0.title) + ($0.primary ? 48 : 24) }.max() ?? 44
         let grid = GameFooterGrid(actions: page.orderedFooter,
             columns: min(desiredColumns, max(1, Int((inner + 12) / (widestAction + 12)))),
             spanSingleAction: true, alignTrailing: false)
@@ -142,17 +147,18 @@ public enum MobilePauseArt {
         let fraction = summary.required > 0 ? min(1, CGFloat(summary.saved) / CGFloat(summary.required)) : 1
         context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
         context.fill(CGRect(x: well.minX, y: well.minY, width: floor(well.width * fraction), height: well.height))
+        let labelHeight = max(18, summary.fields.map { textHeight($0.label, width: boxes[3].width - 12, lineHeight: 18) }.max() ?? 18)
         for (index, field) in summary.fields.enumerated() {
             let box = boxes[index + 3]
             context.setFillColor(CGColor(srgbRed: 0.035, green: 0.065, blue: 0.045, alpha: 1))
             context.fill(box)
-            text(field.label, box: CGRect(x: box.minX + 6, y: box.minY + 3, width: box.width - 12, height: 18),
+            text(field.label, box: CGRect(x: box.minX + 6, y: box.minY + 3, width: box.width - 12, height: labelHeight),
                  typography: typography, context: context)
-            text(field.value, box: CGRect(x: box.minX + 6, y: box.minY + 23, width: box.width - 12, height: 22),
+            text(field.value, box: CGRect(x: box.minX + 6, y: box.minY + labelHeight + 5, width: box.width - 12, height: box.height - labelHeight - 8),
                  palette: .blue, typography: typography, context: context)
         }
         text(summary.playDetails, box: boxes[11], typography: typography, context: context)
-        let stockValueWidth = max(28, CGFloat(summary.supplies.map { $0.value.count }.max() ?? 0) * 12)
+        let stockValueWidth = max(28, summary.supplies.map { GameTextLayout.width(of: $0.value) }.max() ?? 0)
         for (index, stock) in summary.supplies.enumerated() {
             let box = boxes[12 + index]
             text(stock.label, box: CGRect(x: box.minX, y: box.minY, width: box.width - stockValueWidth - 4, height: box.height),
@@ -175,7 +181,7 @@ public enum MobilePauseArt {
     }
 
     private static func textHeight(_ text: String, width: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        CGFloat(max(1, lines(text, width: width).count)) * lineHeight
+        CGFloat(max(1, lines(text, width: width).count)) * max(lineHeight, GameTextLayout.glyphHeight(of: text))
     }
     private static func text(_ text: String, box: CGRect, palette: GamePixelTypography.Palette = .blue,
                              typography: GameMenuTypography, context: CGContext) {

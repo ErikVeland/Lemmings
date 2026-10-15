@@ -780,6 +780,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updates.start()
     migrateStandaloneSaves()
     buildMenu()
+    NotificationCenter.default.addObserver(self, selector: #selector(interfaceLanguageChanged),
+                                          name: L10n.languageDidChange, object: nil)
     buildInterface()
     startCloudProgress()
     AnonymousTelemetry.shared.onCountsChanged = { [weak self] in self?.homeSavedCountsChanged() }
@@ -1036,6 +1038,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     NSApplication.shared.helpMenu = helpMenu
 
     NSApplication.shared.mainMenu = mainMenu
+  }
+
+  @objc private func interfaceLanguageChanged() {
+    buildMenu()
+    rebuildNavigationMenus()
+    updateStatus()
+    for window in NSApplication.shared.windows { window.contentView?.needsDisplay = true }
   }
 
   @objc private func checkForUpdates(_ sender: Any?) {

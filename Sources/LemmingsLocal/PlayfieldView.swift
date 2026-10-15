@@ -206,7 +206,7 @@ struct ReticleFeedback {
     override func accessibilityChildren() -> [Any]? { accessibleControls(owner: self) }
   func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
     guard phase != .playing else {
-      let text = "Game playfield" + (turnInitials.map { ". \($0)'s turn" } ?? "")
+      let text = L10n.text("Game playfield") + (turnInitials.map { ". " + L10n.text("\($0)'s turn") } ?? "")
         + (precisionStatus.accessibility.isEmpty ? "" : ". " + precisionStatus.accessibility)
         + (deathCountdownAccessibilityText.isEmpty ? "" : ". " + deathCountdownAccessibilityText)
       return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
@@ -221,7 +221,7 @@ struct ReticleFeedback {
     }
     if let rect = overlayUpdateButtonFrame().map(visibleFrame), !rect.isEmpty, let label = overlayAvailableUpdate {
       items.append(accessibleElements.element(id: "update", owner: owner,
-        label: label + ". Show update and release notes", frame: transform(rect)) { [weak self] in self?.onUpdate?() })
+        label: L10n.text("\(label). Show update and release notes"), frame: transform(rect)) { [weak self] in self?.onUpdate?() })
     }
     for (index, line) in overlayLines.enumerated() {
       let rect = visibleFrame(overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds)
@@ -1146,23 +1146,31 @@ struct ReticleFeedback {
       max(1, bounds.height - marchHeight - 24)
         / (headerUnits + 106 + CGFloat(overlayLines.count) * 42 + savedCountUnits))
     let font = macInterface?.font(.small)
+    let title = MacInterfaceRenderer.menuText(overlayTitle ?? "")
+    let tamilTitle = BitmapTamilGlyphs.sequences(in: title).contains(where: BitmapTamilGlyphs.supports)
+    func headingHeight(at scale: CGFloat) -> CGFloat {
+      let minimum = tamilTitle ? CGFloat(macInterface?.font(.large)?.height(of: title) ?? 26) + 18 * scale : 0
+      return max(headerUnits * scale, minimum)
+    }
     func heights(at scale: CGFloat, width: CGFloat) -> [CGFloat] {
-      let columns = max(1, Int(width - 64 * scale) / (font?.cellWidth ?? 6))
       return overlayLines.map { line in
         let rows = overlayProfileInitials != nil && line.hasPrefix(L10n.text("RESUME"))
-          ? MacInterfaceRenderer.menuLines(line, columns: columns).count : 1
-        return rows > 1 ? max(42 * scale, CGFloat(rows * (font?.cellHeight ?? 7)) + 12 * scale) : 42 * scale
+          ? GameTextLayout.lines(line, width: width - 64 * scale, font: font).count : 1
+        let text = MacInterfaceRenderer.menuText(line)
+        let compact = GamePixelTypography.verticalBounds(of: text)
+        let textHeight = font?.height(of: text) ?? compact.bottom - compact.top
+        return max(42 * scale, CGFloat(rows * textHeight) + 12 * scale)
       }
     }
     let availableHeight = max(1, bounds.height - marchHeight - 24)
     for _ in 0..<8 {
       let width = min(bounds.width - 28 * scale, 900 * scale)
-      let height = (headerUnits + 106 + savedCountUnits) * scale + heights(at: scale, width: width).reduce(0, +)
+      let height = headingHeight(at: scale) + (106 + savedCountUnits) * scale + heights(at: scale, width: width).reduce(0, +)
       guard height > availableHeight else { break }
       scale *= availableHeight / height
     }
     let width = min(bounds.width - 28 * scale, 900 * scale)
-    let headerHeight = headerUnits * scale
+    let headerHeight = headingHeight(at: scale)
     let rowHeights = heights(at: scale, width: width)
     let height = (106 + savedCountUnits) * scale + rowHeights.reduce(0, +) + headerHeight
     let board = CGRect(
@@ -1238,7 +1246,6 @@ struct ReticleFeedback {
     GameMenuFrame.draw(board, scale: scale)
 
     // Use one face and scale for every row, fitted to the longest label.
-    let longest = overlayLines.map { MacInterfaceRenderer.menuText($0).count }.max() ?? 1
     let rowTextWidth = board.width - 64 * scale
     let rowTextHeight = rowHeight - 12 * scale
     var menuFace = ClassicMacUserInterface.Face.small
@@ -1248,8 +1255,9 @@ struct ReticleFeedback {
       for face in [ClassicMacUserInterface.Face.large, .small] {
         guard let font = macInterface.font(face) else { continue }
         let textHeight = font.height(of: MacInterfaceRenderer.menuText(overlayLines.joined()))
+        let longest = overlayLines.map { font.width(of: MacInterfaceRenderer.menuText($0)) }.max() ?? 1
         let fit = min(Int(rowTextHeight) / textHeight,
-          Int(rowTextWidth) / max(1, longest * font.cellWidth))
+          Int(rowTextWidth) / max(1, longest))
         if fit >= 1, fit * textHeight > bestHeight {
           menuFace = face; menuScale = fit; bestHeight = fit * textHeight
         }
@@ -1339,7 +1347,9 @@ struct ReticleFeedback {
         let value = MacInterfaceRenderer.menuText(line)
         let name = MacInterfaceRenderer.menuText(initials)
         let start = row.midX - macInterface.width(of: value, face: menuFace, scale: menuScale) / 2
-        let offset = CGFloat((value.count - name.count) * font.cellWidth * menuScale)
+        let prefix = String(value.dropLast(name.count))
+        let placed = font.layout(prefix)
+        let offset = CGFloat(((placed.last.map { $0.x + $0.advance } ?? 0) - font.horizontalBounds(of: value).left) * menuScale)
         macInterface.draw(name, face: menuFace,
           at: CGPoint(x: start + offset, y: floor(row.midY - CGFloat(font.height(of: value, scale: menuScale)) / 2 - CGFloat(font.verticalBounds(of: value).top * menuScale))),
           scale: menuScale, palette: .green)
@@ -1374,7 +1384,9 @@ struct ReticleFeedback {
       let count = CGFloat(labels.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
-      let natural = CGFloat(MacInterfaceRenderer.menuText(initials).count) * cell + 12 * scale
+      let name = MacInterfaceRenderer.menuText(initials)
+      let natural = (macInterface?.width(of: name, face: .small, scale: footerScale)
+        ?? CGFloat(GamePixelTypography.width(of: name) * footerScale)) + 12 * scale
       let minimumButtonWidth = max(110 * scale, 9 * cell + 16 * scale)
       let widest = max(64 * scale, footer.width - count * (minimumButtonWidth + gap))
       let initialsWidth = max(64 * scale, min(natural, widest))
@@ -1413,8 +1425,7 @@ struct ReticleFeedback {
       return
     }
     let height = font.height(of: MacInterfaceRenderer.menuText(text), scale: scale)
-    let columns = max(1, Int(rect.width) / (font.cellWidth * scale))
-    let lines = wrap ? MacInterfaceRenderer.menuLines(text, columns: columns) : [text]
+    let lines = wrap ? GameTextLayout.lines(text, width: rect.width, face: face, scale: scale, font: font) : [text]
     let rows = max(1, Int(rect.height) / height)
     let shown = min(rows, lines.count)
     let top = floor(rect.midY - CGFloat(shown * height) / 2)
@@ -1422,7 +1433,7 @@ struct ReticleFeedback {
     NSBezierPath(rect: rect).addClip()
     for (index, line) in lines.prefix(rows).enumerated() {
       let value = index == rows - 1 && lines.count > rows
-        ? String(line.prefix(max(0, columns - 3))) + "..." : line
+        ? GameTextLayout.truncated(line + "...", width: rect.width, face: face, scale: scale, font: font) : line
       macInterface.menuLine(value,
         in: CGRect(x: rect.minX, y: top + CGFloat(index * height),
           width: rect.width, height: CGFloat(height)), face: face, scale: scale, palette: palette, numberPalette: numberPalette)
@@ -1432,9 +1443,7 @@ struct ReticleFeedback {
 
   /// Draws a menu line in the release's own character set.
   ///
-  /// Both Macintosh character sets are monospaced, so every glyph advances one
-  /// cell no matter how wide its own pixels are. The scale stays a whole
-  /// number, because a fraction blurs pixels the original never blurred.
+  /// The scale stays a whole number so the pixels stay sharp.
   private func drawMacText(
     _ text: String, in rect: CGRect, minimumScale: Int = 1
   ) -> Bool {
@@ -1446,7 +1455,7 @@ struct ReticleFeedback {
 
     for face in [ClassicMacUserInterface.Face.large, .small] {
       guard let font = macInterface.font(face), font.covers(normalized) else { continue }
-      let wide = font.cellWidth * max(1, normalized.count)
+      let wide = font.width(of: normalized)
       let fit = min(Int(rect.height) / max(1, font.height(of: normalized)), Int(rect.width) / max(1, wide))
       guard fit >= minimumScale else { continue }
       macInterface.drawCentered(
@@ -1914,11 +1923,14 @@ struct ReticleFeedback {
   private func drawTurnBadge() {
     guard let initials = turnInitials else { return }
     let scale = max(1, min(2, bounds.width / 960))
-    let height = 22 * scale
+    let name = MacInterfaceRenderer.menuText(initials)
+    let compact = GamePixelTypography.verticalBounds(of: name)
+    let height = max(22, CGFloat(macInterface?.font(.small)?.height(of: name) ?? compact.bottom - compact.top)) * scale
     let image = turnPortraitImage()
     let spriteWidth = image.map { $0.size.width / $0.size.height * height } ?? 0
-    let textWidth = CGFloat(MacInterfaceRenderer.menuText(initials).count + 1)
-      * CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * Int(scale))
+    let textWidth = (macInterface?.width(of: name, face: .small, scale: Int(scale))
+      ?? CGFloat(GamePixelTypography.width(of: name)) * scale)
+      + CGFloat(macInterface?.font(.small)?.cellWidth ?? 8) * scale
     let badge = CGRect(x: bounds.maxX - (spriteWidth + textWidth + 14 * scale) - 10 * scale,
       y: bounds.maxY - height - 10 * scale,
       width: spriteWidth + textWidth + 14 * scale, height: height)

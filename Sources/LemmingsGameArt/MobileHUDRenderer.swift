@@ -110,12 +110,12 @@ public enum MobileHUDAction: Equatable, Sendable {
         return items
     }
 
-    private static let shortNames = [
+    private static var shortNames: [String: String] { [
         "walker": L10n.text("WALK"), "jumper": L10n.text("JUMP"), "shimmier": L10n.text("SHIM"), "slider": L10n.text("SLIDE"), "climber": L10n.text("CLIMB"),
         "swimmer": L10n.text("SWIM"), "floater": L10n.text("FLOAT"), "glider": L10n.text("GLIDE"), "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"),
         "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"), "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"),
         "laserer": L10n.text("LASER"), "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE"),
-    ]
+    ] }
 
     public func draw(in context: CGContext, bounds: CGRect, includeSkills: Bool = true, includeTicks: Bool = true) {
         context.setShouldAntialias(false)
@@ -286,7 +286,8 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawSkillLabels(_ panel: MobilePanelMetrics, context: CGContext) {
         let names = snapshot.skills.map { Self.shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() }
-        let longest = names.map(\.count).max() ?? 1
+        let compactWidth = names.map { GamePixelTypography.width(of: $0) }.max() ?? 1
+        let compactBounds = GamePixelTypography.verticalBounds(of: names.joined())
         for item in items {
             guard case let .skill(index) = item.action, let name = names[safe: index] else { continue }
             let box = CGRect(x: item.frame.minX, y: panel.frame.minY + 10 * panel.scale,
@@ -294,14 +295,15 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(box)
             let fits = typography.map { typography in
-                typography.font(.small).map {
-                    $0.cellWidth * longest <= Int(box.width) && $0.height(of: names.joined()) <= Int(box.height)
+                typography.font(.small).map { font in
+                    (names.map { font.width(of: GameMenuTypography.menuText($0)) }.max() ?? 0) <= Int(box.width)
+                        && font.height(of: names.joined()) <= Int(box.height)
                 } ?? false
             } ?? false
             if fits {
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: 1)
             } else {
-                let scale = max(1, min(3, floor(min(box.height / CGFloat(GamePixelTypography.verticalBounds(of: names.joined()).bottom - GamePixelTypography.verticalBounds(of: names.joined()).top), box.width / CGFloat(longest * 6)))))
+                let scale = max(1, min(3, floor(min(box.height / CGFloat(compactBounds.bottom - compactBounds.top), box.width / CGFloat(compactWidth)))))
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
             }
         }
@@ -409,7 +411,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
             let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
             let label = CGRect(x: frame.minX + 3, y: frame.maxY - 14, width: frame.width - 6, height: 10)
-            let scale = max(1, min(2, floor(min(label.height / 7, label.width / CGFloat(max(1, name.count * 6))))))
+            let bounds = GamePixelTypography.verticalBounds(of: name)
+            let scale = max(1, min(2, floor(min(label.height / CGFloat(bounds.bottom - bounds.top), label.width / CGFloat(GamePixelTypography.width(of: name))))))
             GamePixelTypography.draw(name, in: label, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
         }
     }
@@ -487,10 +490,11 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawGameLabel(_ text: String, in box: CGRect, context: CGContext) {
         let plain = text.replacingOccurrences(of: "∞", with: "*")
         if let font = typography?.font(.small),
-           font.height(of: GameMenuTypography.menuText(plain)) <= Int(box.height), font.cellWidth * plain.count <= Int(box.width) {
+           font.height(of: GameMenuTypography.menuText(plain)) <= Int(box.height), font.width(of: GameMenuTypography.menuText(plain)) <= Int(box.width) {
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: 1)
         } else {
-            let scale = max(1, min(3, floor(min(box.height / 7, box.width / CGFloat(max(1, plain.count * 6))))))
+            let bounds = GamePixelTypography.verticalBounds(of: plain)
+            let scale = max(1, min(3, floor(min(box.height / CGFloat(bounds.bottom - bounds.top), box.width / CGFloat(GamePixelTypography.width(of: plain))))))
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
         }
     }
@@ -507,7 +511,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         } else { iconSize = .zero }
         let gap: CGFloat = portrait == nil ? 0 : 6
         let plain = GameMenuTypography.menuText(name)
-        let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(max(1, plain.count * 6 - 1))
+        let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(GamePixelTypography.width(of: plain))
         let width = min(naturalWidth, max(0, row.width - iconSize.width - gap))
         let x = floor(row.midX - (iconSize.width + gap + width) / 2)
         let icon = portrait.map { _ in CGRect(x: x, y: floor(row.midY - iconSize.height / 2),
