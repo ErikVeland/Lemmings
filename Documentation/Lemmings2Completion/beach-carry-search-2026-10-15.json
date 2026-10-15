@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "purpose": "Probe whether a finer decision grid improves the low-survivor Beach 3 carry route.",
+  "provenance": {
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "resourceScope": "Installed 1.9.1 build 76 app resources. The seed level fingerprint matched this run, but this is not a full resource-set or exact build 83 package audit.",
+    "runtimeLibraryPath": ".build/l2-completion/libNxlvKit.dylib",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "solverPath": "/private/tmp/l2-solver-deadline-check-current",
+    "solverSHA256": "2dd53aba383cb61b7abc8280bd311122e9047b5c8bd079214c5ee581d59f47bf",
+    "compiler": "Xcode 26.6, Swift 6.3.3",
+    "resourceAppVersion": "1.9.1",
+    "resourceBuild": 76,
+    "solverSourceState": "Worktree edits to Tools/Lemmings2Solver/Search.swift and LevelRun.swift on top of main fc2c59e6. Runtime library was built from the current-main NxlvKit sources.",
+    "resourceEquivalenceRecord": "Documentation/ReleaseReadiness/2.0-build83/lemmings2-resource-equivalence.json",
+    "resourceEquivalence": "All 218 installed resource files match the build 82 manifest; build 83 source-equivalence evidence links the unchanged non-localisation resources to the release."
+  },
+  "seed": {
+    "path": "Tests/Lemmings2CompletionTests/Chains/beach-03.json",
+    "sha256": "b5f7947e39554490dfb32946624d7424d5ee1ad3dd1213b54555755bcddc2360",
+    "levelSHA256": "1fc0f2454dcf16e1560d63ed8448291c34f33eb5a2205d36996d40e1e7892664",
+    "population": 42,
+    "acceptedSaved": 1
+  },
+  "search": {
+    "budgetSeconds": 120,
+    "beamWidth": 4096,
+    "maxDepth": 120,
+    "cell": 2,
+    "refire": 24,
+    "decisionPoints": 443182,
+    "expanded": 443181,
+    "rounds": 1,
+    "solverReportedSeconds": 120,
+    "result": "No improvement. The solver returned the same replay-verified 1-of-42 route."
+  },
+  "output": {
+    "path": ".build/l2-solver/current-beach03-cell2-refire24/beach-03.json",
+    "sha256": "b5f7947e39554490dfb32946624d7424d5ee1ad3dd1213b54555755bcddc2360",
+    "matchesSeed": true
+  },
+  "remaining": "Beach remains one survivor at the Level 3 carry. The 30-survivor ark requirement remains open. This bounded search does not show that a higher-survivor route is impossible."
+}

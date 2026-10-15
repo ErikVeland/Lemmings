@@ -37,12 +37,7 @@ stops at Shadow 7. Shadow 13 now has a refreshed winning route; Egyptian 6 and
 remains open. See
 [release scope](ReleaseScope.md) for the current status.
 
-The bundled Classic fan library contains 6,020 levels in 535 packs. The current
-native audit verifies 2,399 winning routes. A further 3,600 levels have no
-matching candidate, and 21 candidate or historical replay witnesses fail. The
-October CSV lists two imported `fan:lldb-595` levels outside the bundle.
-Imported packs remain open-ended. See [release scope](ReleaseScope.md) for the
-closure work.
+A full native audit replayed all 6,020 fan levels from the exact build 83 resources. It recorded 2,399 winning routes, 3,600 levels without matching candidates and 21 failed replay levels. It found no load, decode or render failures. The strict route gate still has 3,621 levels without verified wins. Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical World” copies remain without winning routes. The October CSV lists two imported `fan:lldb-595` levels outside the bundle. Imported packs remain open-ended. See [release scope](ReleaseScope.md) for the closure work.
 NeoLemmix uses a separate engine and its own style dependencies.
 
 ## What "modern" means here

@@ -101,12 +101,18 @@ The host app used for this check identifies as 1.9.1 build 76. Its full
 3,830 are missing, 34 differ and one extra file is present. The game data in
 `Ports` and `LevelPacks` matches exactly. The host app is not a 2.0 candidate.
 
-The [native NeoLemmix inventory](neo-style-inventory.json) discovers 788 levels.
-Seventy-five reference missing style directories under the native decoder's
-rules. [The retained inventory source](neo-style-inventory.swift) checks names;
-it does not verify each graphic, rendering, mechanics, replays or distribution
-rights. A preliminary raw text count included a grouping marker and is not the
-accepted dependency result.
+The earlier [native NeoLemmix inventory](neo-style-inventory.json) records 788
+levels. The exact build 83 slim archive contains 794 files, all listed once in
+its pack manifests. A source-equivalent scan resolves 719 levels with the 26
+bundled DMA styles. The same 75 missing-style level identities remain. The six
+additional levels have ready style references. All 4,010 NeoLemmix files in
+the build 82 manifest match the build 83 slim archive by size and SHA-256.
+The archive manifest reports 718 ready levels because its generator counted a
+`*GROUP` marker as a style dependency. The bundle test still expects 788/713.
+The current source corrects both counts. The exact archive audit records these
+checks. It does not verify every graphic, route or engine rule. A local native
+scan could not run because the installed Swift compiler and SDK versions do
+not match.
 
 ## Open bundled-closure work
 

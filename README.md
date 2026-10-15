@@ -55,9 +55,9 @@ The recorded iPhone/iPad 1.3 source and Simulator gates pass for their exact
 commits. The 2.0 source connects Classic, Lemmings 2, Lemmings 3 and supported
 NeoLemmix packs to mobile libraries and sessions. L2 and L3 have native scene
 renderers, campaign records and checkpoint routes. NeoLemmix import validates
-styles, sprites, rendering and supported simulation features. The exact main
-commit `c7305724` passes the Xcode 27.2 source gate, the Mac workflow and the
-NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. Local
+styles, sprites, rendering and supported simulation features. The 2.0 source
+snapshot at `c7305724` passes the Xcode 27.2 source gate, the Mac workflow and
+the NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. Local
 Xcode 26.6 lacks the iOS 27 APIs used by the full app,
 and CoreSimulatorService cannot provide a local runtime. Real-data parity,
 physical-device and accessibility acceptance, audio, controller, Duo and
@@ -71,16 +71,27 @@ some L3 route witnesses. Shadow 13 now passes with a refreshed route. The
 strict route gate still stops at Shadow 7. Source parity, remaining route
 repair, L2's ark ending and L3 media remain open.
 
-The bundled Classic library contains 6,020 fan levels in 535 packs. The current
-native audit verifies 2,399 routes; 3,600 levels have no matching candidate and 21
-candidate or historical replays fail. The October CSV includes two additional
-imported levels outside that bundle. Imported content remains open-ended. The
-pinned NeoLemmix runnable gate passed 794 levels. The bundled three-pack set
-has 788 levels. The 26 bundled DMA styles resolve the listed style-directory
-references for 713 levels. The other 75 need one or more of 44 player-supplied
-community styles. Exact-version
-winning replay evidence covers 158 levels. See
-[release scope](Documentation/ReleaseScope.md) for the closure status.
+A full native audit replayed all 6,020 fan levels from the exact build 83
+resources. It recorded 2,399 winning routes, 3,600 levels without matching
+candidates, and 21 failed replay levels. It found no load, decode or render
+failures. The strict route gate still has 3,621 levels without verified wins.
+Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical
+World” copies remain without winning routes. The audit retains each level result
+and all 535 archive hashes. Two October CSV levels are imported and outside the
+bundle. Imported content remains open-ended. See the [build 83 fan replay
+audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-build83-replay.json),
+[package audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-package-audit.json)
+and [2.0 evidence bridge](Documentation/ReleaseReadiness/2.0-build83/engine-content-equivalence-current-main.json).
+
+The pinned NeoLemmix runnable gate passed 794 levels. The exact build 83 slim
+archive also contains 794 manifest-listed levels. A section scan resolves 719
+levels with the 26 bundled DMA styles. The other 75 need 44 community styles.
+Their rights remain unresolved, and all 794 levels stay in closure scope. The
+current source corrects the manifest and test counts. The released package still
+needs a rebuild and audit. Exact-version winning replay evidence covers 158
+levels. See the [NeoLemmix package audit](Documentation/ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
+[style rights inventory](Documentation/ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
+and [release scope](Documentation/ReleaseScope.md).
 
 ## Translation work
 

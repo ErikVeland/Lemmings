@@ -1,0 +1,52 @@
+{
+  "schema": "classic-fan-build83-package-audit-v1",
+  "auditDate": "2026-10-15",
+  "release": {
+    "version": "2.0",
+    "build": 83,
+    "asset": "UltimateLemmings-2.0-build83.zip",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83.zip",
+    "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "matchesPublicationRecord": true
+  },
+  "packageInputs": {
+    "baseline": "../MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "levelPackFiles": 537,
+    "filesMatchedBySizeAndSHA256": 537,
+    "missingChangedOrExtraFiles": 0
+  },
+  "fanPacks": {
+    "archiveCount": 535,
+    "archiveNamesAndHashesMatchPriorAudit": true,
+    "decodedLevels": 6020,
+    "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "currentSourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "winningRoutes": 2399,
+    "levelsWithoutVerifiedRoute": 3621,
+    "failedReplayWitnesses": 21,
+    "loadDecodeRenderFailures": 0
+  },
+  "interpretation": "The exact public archive identity is verified. All 537 LevelPacks inputs and all 535 fan archives match the frozen audited set by size and SHA-256. A full current-main native replay audit then used the extracted build 83 full-package resources. It confirms 2,399 winning routes, 3,600 levels without a matching candidate, 21 failed replay levels and zero load/decode/render failures. The strict fan-route gate remains open for 3,621 levels. The October imported levels remain outside the bundle and open-ended under their own support gate.",
+  "openWork": [
+    "Verify a winning route for the 3,621 bundled levels without a verified win.",
+    "Close Classic source-behaviour comparisons for all bundled ports and variants.",
+    "Keep the two imported October fan levels outside the bundle and open-ended under their own support gate."
+  ],
+  "exactPackageReplayAudit": {
+    "record": "classic-fan-build83-replay.json",
+    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourceSet": "Resources extracted from the exact public full build 83 archive",
+    "archiveFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+    "archives": 535,
+    "levels": 6020,
+    "winningRoutes": 2399,
+    "withoutMatchingWinningCandidate": 3600,
+    "failedReplayLevels": 21,
+    "withoutVerifiedRoute": 3621,
+    "loadDecodeRenderFailures": 0,
+    "defaultAuditPassed": true,
+    "strictRouteGatePassed": false,
+    "auditExecutableSHA256": "e8f7278c8b349a4b57b835df7e9aa40f65d80332c7837f494a2d4298866a7dd5",
+    "nxlvKitLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  }
+}

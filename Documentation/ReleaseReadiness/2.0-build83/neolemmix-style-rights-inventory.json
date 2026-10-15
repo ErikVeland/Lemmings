@@ -1,0 +1,429 @@
+{
+  "schema": "neolemmix-bundled-style-rights-v1",
+  "date": "2026-10-15",
+  "source": {
+    "repository": "https://github.com/Willicious/NeoLemmixCommunityEdition",
+    "commit": "38d0449f87501798e78ac668a9494848f4aa9649",
+    "licensePath": "License.txt",
+    "licenseSHA256": "dced3de612c59dad45d8716268f318796477ab20ea4a4b74b44101afa999e4ec",
+    "levelInventory": "MacOS2Preparation-2026-10-15/neo-style-inventory.json",
+    "levelInventoryScope": "The frozen native inventory contains 75 unresolved level identities. The exact archive audit confirms the same 75 identities in the 794-level build 83 package."
+  },
+  "licenseFinding": "The pinned CE License.txt says image, music and sound creators retain full rights and permits those assets to be copied only to run NeoLemmix. The licence lists owners for some styles, but it does not list 18 of the 44 referenced style identifiers. No redistribution permission is recorded here. This inventory is a rights follow-up list, not a legal interpretation.",
+  "bundledScope": {
+    "levels": 794,
+    "levelsReadyWithCurrentDMAStyles": 719,
+    "levelsWithUnresolvedStyleDependencies": 75,
+    "distinctUnresolvedStyleReferences": 44,
+    "userDirection": "Keep all 794 currently bundled levels in closure scope. Do not reclassify the 75 affected levels as open-ended imports."
+  },
+  "rightsHolders": [
+    {
+      "name": "Flopsy",
+      "styles": [
+        "flopsy_sandopolis",
+        "flopsy_scrapbrain",
+        "flopsy_starlight"
+      ]
+    },
+    {
+      "name": "GigaLem",
+      "styles": [
+        "gigalem_lagoon",
+        "gigalem_purplemd"
+      ]
+    },
+    {
+      "name": "Gronkling",
+      "styles": [
+        "gronkling_cyber",
+        "gronkling_minimal"
+      ]
+    },
+    {
+      "name": "IchoTolot",
+      "styles": [
+        "ichotolot_dune"
+      ]
+    },
+    {
+      "name": "Namida Verasche",
+      "styles": [
+        "namida_abstract",
+        "namida_circuit",
+        "namida_clockwork",
+        "namida_honeycomb",
+        "namida_lab",
+        "namida_metal",
+        "namida_mineshaft",
+        "namida_psychedelic",
+        "namida_sky",
+        "namida_space",
+        "namida_wasteland"
+      ]
+    },
+    {
+      "name": "Plom",
+      "styles": [
+        "plom_bastemp"
+      ]
+    },
+    {
+      "name": "Raymanni",
+      "styles": [
+        "ray_biolab",
+        "ray_eldorado",
+        "ray_food",
+        "ray_spooky"
+      ]
+    },
+    {
+      "name": "unidentified",
+      "styles": [
+        "dex_chalk",
+        "dex_davinci",
+        "dex_halloween",
+        "dex_lr2_build",
+        "dex_lr2_industry",
+        "dex_lr2_jungle",
+        "dex_lr2_mona",
+        "gigalem_skymd",
+        "l2_polar",
+        "namida_bridge",
+        "namida_garden",
+        "proxima_metroid",
+        "sms_crystal",
+        "sms_fire",
+        "special",
+        "sqron_turrican2wall",
+        "willlem_lemminas",
+        "zanzindorf_cloud"
+      ]
+    },
+    {
+      "name": "zanzindorf",
+      "styles": [
+        "zanzindorf_glacier",
+        "zanzindorf_kiwi"
+      ]
+    }
+  ],
+  "styles": [
+    {
+      "style": "dex_chalk",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_davinci",
+      "affectedBundledLevels": 4,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_halloween",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_lr2_build",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_lr2_industry",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_lr2_jungle",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "dex_lr2_mona",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "flopsy_sandopolis",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Flopsy",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "flopsy_scrapbrain",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Flopsy",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "flopsy_starlight",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Flopsy",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "gigalem_lagoon",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "GigaLem",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "gigalem_purplemd",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "GigaLem",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "gigalem_skymd",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "gronkling_cyber",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Gronkling",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "gronkling_minimal",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Gronkling",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "ichotolot_dune",
+      "affectedBundledLevels": 3,
+      "rightsHolder": "IchoTolot",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "l2_polar",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_abstract",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_bridge",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_circuit",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_clockwork",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_garden",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_honeycomb",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_lab",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_metal",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_mineshaft",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_psychedelic",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_sky",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_space",
+      "affectedBundledLevels": 3,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "namida_wasteland",
+      "affectedBundledLevels": 3,
+      "rightsHolder": "Namida Verasche",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "plom_bastemp",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Plom",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "proxima_metroid",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "ray_biolab",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Raymanni",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "ray_eldorado",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Raymanni",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "ray_food",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "Raymanni",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "ray_spooky",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "Raymanni",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "sms_crystal",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "sms_fire",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "special",
+      "affectedBundledLevels": 20,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "sqron_turrican2wall",
+      "affectedBundledLevels": 2,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "willlem_lemminas",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "zanzindorf_cloud",
+      "affectedBundledLevels": 1,
+      "rightsHolder": null,
+      "rightsStatus": "not-cleared",
+      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+    },
+    {
+      "style": "zanzindorf_glacier",
+      "affectedBundledLevels": 1,
+      "rightsHolder": "zanzindorf",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    },
+    {
+      "style": "zanzindorf_kiwi",
+      "affectedBundledLevels": 2,
+      "rightsHolder": "zanzindorf",
+      "rightsStatus": "not-cleared",
+      "nextStep": "Confirm the asset source and obtain written permission to bundle it."
+    }
+  ],
+  "status": "open",
+  "requiredNextSteps": [
+    "Confirm which style assets can be bundled in this native NeoLemmix implementation under the pinned licence.",
+    "Obtain and record written permission for each style whose existing terms do not allow this distribution.",
+    "Identify rights holders for every unlisted style reference, including special, before distribution.",
+    "Bundle the cleared dependencies, regenerate the manifest, and audit all 794 levels for style resolution, rendering, behaviour and winning routes."
+  ],
+  "communicationStatus": "No rights holders have been contacted."
+}

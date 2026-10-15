@@ -2692,7 +2692,521 @@
     "levelsWithoutMatchingWinningCandidate": 3600,
     "failedReplayWitnesses": 21,
     "loadDecodeRenderFailures": 0,
-    "strictGatePassed": false
+    "strictGatePassed": false,
+    "currentRecheck": {
+      "date": "2026-10-15",
+      "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; not an exact 2.0 release package",
+      "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+      "previousRouteCountRecalculated": true,
+      "previousWinningRoutes": 2399,
+      "previousLevelsWithoutVerifiedRoute": 3621,
+      "staleRouteWitnesses": [
+        {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "phaseShiftReplay": "failed",
+          "selectedOrdinaryReplay": "failed",
+          "observation": "source-rule replay saves 20/40; direct trace loses IDs 0, 2, ..., 38 at (667,164), while IDs 1, 3, ..., 39 exit at (560,112), except lemming 22 which falls at (656,164). Individual +/-40 tick changes to each of the six Builder events did not improve the saved count. The selected ordinary replay rejects Builder for lemming 22 at tick 953."
+        },
+        {
+          "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+          "phaseShiftReplay": "failed",
+          "selectedOrdinaryReplay": "failed",
+          "observation": "engine refused to queue builder for lemming 22 at tick 953"
+        },
+        {
+          "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+          "phaseShiftReplay": "failed",
+          "selectedOrdinaryReplay": "failed",
+          "completionOutcome": "verified 38/36 win in 1465 ticks by direct replay of the published source actions",
+          "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab"
+        },
+        {
+          "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+          "phaseShiftReplay": "failed",
+          "selectedOrdinaryReplay": "failed",
+          "completionOutcome": "verified 38/36 win in 1465 ticks by direct replay of the published source actions",
+          "observation": "terminal stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab"
+        }
+      ],
+      "status": "This full-corpus run recorded 2,399 winning replays. Its accompanying focused replay check was the initial check, before both Deep Deep Down runtime hashes were refreshed. See latestFocusedReplayRecheck for the later direct-route results; aggregate counts remain pending a full rerun.",
+      "targetedSearchesAdded": 10,
+      "focusedVerifier": {
+        "strictGolemsProfileRoutes": {
+          "passed": 64,
+          "checked": 68
+        },
+        "additionalGolemsProfileReplays": {
+          "passed": 5,
+          "checked": 5
+        },
+        "selectedGolemsRoutes": {
+          "passed": 3,
+          "checked": 7
+        },
+        "status": "Initial focused check: four identities failed. A later focused check refreshes both Deep Deep Down source-action replays to strict passes; both Magical World routes remain open. The selected-ordinary rows still fail."
+      },
+      "wideBeamSearches": {
+        "distinctLevelStates": 3,
+        "secondsPerSearch": 180,
+        "beamWidth": 4096,
+        "verifiedWins": 0
+      },
+      "fullRouteAudit": {
+        "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+        "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources",
+        "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+        "archives": 535,
+        "levels": 6020,
+        "winningRoutes": 2399,
+        "withoutMatchingWinningCandidate": 3600,
+        "failedReplayLevels": 21,
+        "loadDecodeRenderFailures": 0,
+        "fanRouteGateMissingWins": 3621,
+        "defaultContentAuditPassed": true,
+        "strictFanRouteGatePassed": false,
+        "inputManifestDrift": [],
+        "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+        "auditToolSHA256": "e8f7278c8b349a4b57b835df7e9aa40f65d80332c7837f494a2d4298866a7dd5",
+        "notes": "The audit decoded and rendered every bundled level. Levels without replay witnesses received a 180-tick smoke simulation. It verified each winning witness twice. Twenty-one levels had replay witnesses that failed. The archive fingerprint matches the frozen fan bundle. The exact 2.0 package was not available for this run.",
+        "failedReplayEvidence": [
+          {
+            "source": "0024-ISteve04.zip/ISteve04.dat#9",
+            "title": "I Challenge You to a Dual!",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e",
+                "result": "engine refused to queue builder for lemming 0 at tick 943"
+              },
+              {
+                "path": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/c93347c5b5da0edcc0c4251eb8016fcc75123b66b674f76eca6c35735fa3bbf4.json",
+                "result": "engine refused to queue builder for lemming 0 at tick 943"
+              }
+            ]
+          },
+          {
+            "source": "0035-1tseug.zip/1tseug.dat#2",
+            "title": "Ups and Downs",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+                "result": "replay saved mismatch: expected 19, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0066-Lemmy556-My-little-levels-2.zip/Lemmy556 My little levels 2.dat#4",
+            "title": "Heaven can wait (we hope!!!!)",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#4850b69e3a28c0f9085c0533fc4c027f5e2c8adc8b8e8a389e5d78f8e38b1700",
+                "result": "replay saved mismatch: expected 80, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0080-Master-System-Remakes.zip/Master System Remakes.dat#5",
+            "title": "Getting Closer...",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b",
+                "result": "engine refused to queue basher for lemming 1 at tick 2190"
+              }
+            ]
+          },
+          {
+            "source": "0199-TMChallenge.zip/TMChallenge.dat#1",
+            "title": "Smile if you love decoration",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#9ad9b913094b037fb8fd690d3259343cf07139a14f4d7da02456ce0e3873b6df",
+                "result": "replay saved mismatch: expected 20, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0199-TMChallenge.zip/TMChallenge.dat#4",
+            "title": "Get a little extra help",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#1f6875ddd25e71deadf7fd261f3f5605284558aa13fe647b42f9375f131b3b9f",
+                "result": "replay saved mismatch: expected 40, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0199-TMChallenge.zip/TMChallenge.dat#5",
+            "title": "Hocus Pocus",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#58bf0e1dbfb64e0547adab4b112a000c09e64c6c39431b3c3c8c3bd66bf38de8",
+                "result": "replay saved mismatch: expected 5, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0199-TMChallenge.zip/TMChallenge.dat#6",
+            "title": "Who you gonna call?",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#784f3537fc51291625fd2060409a658ad5fc973cf44993a3e1f0ffca1b1fb98b",
+                "result": "replay saved mismatch: expected 77, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0199-TMChallenge.zip/TMChallenge.dat#7",
+            "title": "The Frantic Lemming Antic",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8",
+                "result": "replay saved mismatch: expected 2, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0220-AkseliPack01.zip/AkseliPack01.dat#3",
+            "title": "Winter Solstice",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+                "result": "replay saved mismatch: expected 9, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0220-AkseliPack01.zip/AkseliPack01.dat#6",
+            "title": "In the Core",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de",
+                "result": "engine refused to queue builder for lemming 0 at tick 1482"
+              }
+            ]
+          },
+          {
+            "source": "0223-ANTHPCK3.zip/ANTHPCK3.DAT#9",
+            "title": "Spiders from Stars",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#ee9f5c0ffa2af42e0885f14a8abb8a79dd733232a915b467a3442adc1fea8a51",
+                "result": "engine refused to queue builder for lemming 38 at tick 3597"
+              },
+              {
+                "path": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/eec1a31a14b655bb223a0c6078f4381a43e894c71cd65e4e51ce8b2c98b4172a.json",
+                "result": "engine refused to queue builder for lemming 38 at tick 3597"
+              }
+            ]
+          },
+          {
+            "source": "0245-MazuLems-02.zip/Martin Zurlinden 02.dat#5",
+            "title": "It's a Magical World",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#8e3d5c2356eab0313daae09cc12df78d3aecffe687d602b59afb0566dd15d1e8",
+                "result": "engine refused to queue builder for lemming 22 at tick 953"
+              },
+              {
+                "path": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/326a41b6edb5686b5ecda9ac441513ade4bc30ecbd745862eeb899d00aebb434.json",
+                "result": "replay saved mismatch: expected 40, got 20"
+              }
+            ]
+          },
+          {
+            "source": "0278-CRISFN14.zip/CRISFN14.dat#8",
+            "title": "Forest of steel",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#faeab9970cd8c466fc5bf3994eb852c021167b346d1cd28802155e98609f93cb",
+                "result": "engine refused to queue builder for lemming 5 at tick 4457"
+              },
+              {
+                "path": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/d9c84fff772bc496f8d19b87cfda4617183bfaa106798a116a306d4c341b97f8.json",
+                "result": "engine refused to queue builder for lemming 5 at tick 4457"
+              }
+            ]
+          },
+          {
+            "source": "0490-Genesis-Taxing.zip/Genesis Taxing.dat#20",
+            "title": "Feel the heat!",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#0b7f4a7763790af01abc23a497e00da73b846e7e7a85583b1389f5362d2ab07a",
+                "result": "replay saved mismatch: expected 20, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0496-MARTPCK2.zip/MARTPCK2.DAT#4",
+            "title": "It's a Magical World",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#17f9b84298d41c916aacc750bcbeccd18fa98b8c2c564999445d46d6d9ebf1da",
+                "result": "engine refused to queue builder for lemming 22 at tick 953"
+              },
+              {
+                "path": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/28ec3ca7727b7577447fa44fea5100185a7c2de4d863560287092df6f8e69bba.json",
+                "result": "replay saved mismatch: expected 40, got 20"
+              }
+            ]
+          },
+          {
+            "source": "0547-Ji-Hoons-Lemmings-Remake-Heaven.zip/Ji Hoon Heaven 2.DAT#3",
+            "title": "Dude, where's my exit?",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+                "result": "replay saved mismatch: expected 19, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0548-Ji-Hoons-Lemmings-Remake-Sky.zip/Ji Hoon Sky 1.DAT#5",
+            "title": "Dude, where's my exit?",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+                "result": "replay saved mismatch: expected 19, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0550-Ji-Hoons-Lemmings-Remake-Hell.zip/Ji Hoon Hell 1.DAT#4",
+            "title": "Dude, where's my exit?",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+                "result": "replay saved mismatch: expected 19, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0568-Amiga-Fun.zip/Fun 16.lvl#0",
+            "title": "Don't do anything too hasty",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+                "result": "replay saved mismatch: expected 80, got 0"
+              }
+            ]
+          },
+          {
+            "source": "0573-Amiga-Fun-Budget.zip/Fun 16.lvl#0",
+            "title": "Don't do anything too hasty",
+            "witnesses": [
+              {
+                "path": "Artifacts/LearningJourney/candidate-solutions.json#a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+                "result": "replay saved mismatch: expected 80, got 0"
+              }
+            ]
+          }
+        ],
+        "failedReplayCategories": {
+          "assignmentRejected": 7,
+          "savedCountMismatch": 14
+        }
+      },
+      "failedRouteDiagnostics": {
+        "identity": "fan:lldb-35/1tseug.dat#2",
+        "title": "Ups and Downs",
+        "bundleMechanics": "golems",
+        "candidateExpected": "19 of 20 saved at tick 1022",
+        "golemsClock": {
+          "initialStateHashMatches": true,
+          "actual": "0 of 20 saved at tick 1022"
+        },
+        "dosClock": {
+          "initialStateHashMatches": false,
+          "actual": "0 of 20 saved at tick 1020"
+        },
+        "interpretation": "Changing only the clock does not reproduce the candidate win. This probe does not prove source-engine parity or identify a runtime defect.",
+        "boundedTimingSearches": [
+          {
+            "method": "Move only the recorded Blocker assignment across ticks 400 through 1000",
+            "completedReplays": 425,
+            "bestSaved": 1,
+            "verifiedWins": 0
+          },
+          {
+            "method": "Shift the full recorded input sequence by a uniform offset from -10 through +20 ticks",
+            "completedReplays": 1,
+            "bestSaved": 0,
+            "verifiedWins": 0
+          },
+          {
+            "method": "Shift each one of 29 recorded inputs independently by up to 20 ticks in either direction",
+            "completedReplays": 1004,
+            "bestSaved": 2,
+            "verifiedWins": 0
+          }
+        ],
+        "boundedSearchNote": "These timing searches did not recover a route. They do not prove that the level is impossible.",
+        "solverSearch": {
+          "identity": "fan:lldb-35/1tseug.dat#2",
+          "archiveSHA256": "c4b362a6a83f5a4dc03b24849adcfd28b00c6391570eed7a84b433c8a2aa2340",
+          "method": "Native ClassicSolver beam search",
+          "parameters": {
+            "beamWidth": 256,
+            "timeBudgetSeconds": 120,
+            "fallbackTicks": 75,
+            "refireTicks": 24,
+            "clock": "golems",
+            "ranking": "rescue quota distance"
+          },
+          "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+          "runtimeSHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+          "result": {
+            "verifiedWin": false,
+            "bestSaved": 0,
+            "required": 19,
+            "expanded": 60245,
+            "elapsedSeconds": 20,
+            "terminalProbe": "tick 269, released 5, lost 0, active 5, incomplete"
+          },
+          "interpretation": "This bounded search did not find a route. It does not prove that the level is impossible."
+        },
+        "prefixSolverSearch": {
+          "identity": "fan:lldb-35/1tseug.dat#2",
+          "method": "Current-source beam search with the first 28 candidate inputs forced through tick 431",
+          "prefixCommands": 28,
+          "beamWidth": 512,
+          "timeBudgetSeconds": 120,
+          "fallbackTicks": 75,
+          "refireTicks": 24,
+          "clock": "golems",
+          "ranking": "rescue quota distance",
+          "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+          "runtimeSHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+          "result": {
+            "verifiedWin": false,
+            "bestSaved": 0,
+            "required": 19,
+            "expanded": 91322,
+            "elapsedSeconds": 30,
+            "terminalProbe": "tick 490, released 20, lost 0, active 20, incomplete"
+          },
+          "interpretation": "This bounded search did not find a route. It does not prove that the level is impossible."
+        }
+      },
+      "supersededByLatestFocusedReplayRecheck": false,
+      "supersededByLatestFullCorpusRecheck": true
+    },
+    "latestFocusedReplayRecheck": {
+      "date": "2026-10-15",
+      "mainCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; exact 2.0 package not checked",
+      "verifier": "Scripts/verify-golems-phase-alternatives.sh",
+      "golemsProfileDirectReplays": {
+        "passed": 66,
+        "checked": 68
+      },
+      "additionalProfileReplays": {
+        "passed": 5,
+        "checked": 5
+      },
+      "selectedPackRows": {
+        "passed": 3,
+        "checked": 7
+      },
+      "routeUpdates": [
+        {
+          "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+          "status": "strict source-action replay passes",
+          "saved": 38,
+          "required": 36,
+          "ticks": 1465,
+          "terminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "replaySHA256": "5fbe5fcec70db17ad8654181e70d21477a0a6e2a1b2a8fe0377a45501a129584"
+        },
+        {
+          "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+          "status": "strict source-action replay passes",
+          "saved": 38,
+          "required": 36,
+          "ticks": 1465,
+          "terminalStateHash": "c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+          "replaySHA256": "9b399451ab90be47c882d55e96d3fb824c9645250b4945542a7b5db988dd4e52"
+        },
+        {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "status": "open",
+          "observation": "Published source-action replay saves 20/40; selected ordinary replay rejects Builder assignment."
+        },
+        {
+          "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+          "status": "open",
+          "observation": "Published source-action replay saves 20/40; selected ordinary replay rejects Builder assignment."
+        }
+      ],
+      "aggregateAuditStatus": "The full-corpus rerun after the replay refresh still reports 2,399 winning routes, 3,600 levels without a matching candidate and 21 failed replay levels. Both Deep Deep Down levels already have winning verified-fan replays, so the refreshed phase-shift files add alternate witnesses without changing route coverage. The two Magical World copies remain among the failed-route levels.",
+      "sourceParityLimit": "Per-state source-engine parity and the exact 2.0 release package remain unverified.",
+      "searchAttempts": [
+        {
+          "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+          "method": "ClassicSolver continuation search with the published Golems source-action opening forced through tick 360",
+          "prefixSourceReplaySHA256": "8ea1eae09d7cd7689b90e8cc6133df0fcdfcd814451bf0d613ca7cb684995afd",
+          "prefixThroughTick": 360,
+          "forcedInputCount": 52,
+          "solverSHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+          "seconds": 120,
+          "beamWidth": 1024,
+          "ranking": "balanced",
+          "fallback": 24,
+          "refire": 24,
+          "expanded": 318707,
+          "result": "no win; best saved 0/40",
+          "limit": "bounded search only; does not prove the level impossible"
+        }
+      ]
+    },
+    "latestFullCorpusRecheck": {
+      "date": "2026-10-15",
+      "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "resourceSet": "locally installed Ultimate Lemmings 1.9.1 build 76 resources; exact 2.0 package not checked",
+      "bundleFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+      "auditExecutableSHA256": "e8f7278c8b349a4b57b835df7e9aa40f65d80332c7837f494a2d4298866a7dd5",
+      "nxlvKitLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+      "inputManifestSHA256": "633ad6a128da0acf2c67db1998dda4e8858c1c5dfb713cfadfb22b08059b89cf",
+      "inputManifestDrift": [],
+      "archives": 535,
+      "levels": 6020,
+      "winningRoutes": 2399,
+      "levelsWithoutMatchingWinningCandidate": 3600,
+      "failedReplayLevels": 21,
+      "levelsWithoutVerifiedRoute": 3621,
+      "loadDecodeRenderFailures": 0,
+      "strictFanRouteGatePassed": false,
+      "refreshedReplayFindings": {
+        "fan:lldb-246/Martin Zurlinden 03.dat#5": "winning verified-fan replay and refreshed phase-shift replay both pass strict replay",
+        "fan:lldb-497/MARTPCK3.DAT#5": "winning verified-fan replay and refreshed phase-shift replay both pass strict replay",
+        "fan:lldb-245/Martin Zurlinden 02.dat#5": "no winning replay; selected ordinary Builder assignment is refused and phase-shift replay saves 20/40",
+        "fan:lldb-496/MARTPCK2.DAT#4": "no winning replay; selected ordinary Builder assignment is refused and phase-shift replay saves 20/40"
+      },
+      "verification": {
+        "auditRows": 6020,
+        "coverageReport": "failed only because 3,621 bundled levels lack verified winning replays",
+        "inputManifestCheck": "passed with no drift"
+      },
+      "scopeLimit": "This earlier audit used the locally installed build 76 resource set. The later exactBuild83PackageReplay reran the full audit against extracted build 83 resources and reproduced its counts."
+    },
+    "exactBuild83PackageReplay": {
+      "date": "2026-10-15",
+      "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+      "resourceSet": "Resources extracted from the exact public full build 83 archive",
+      "archiveFingerprintSHA256": "a20c06f03059cc3c008babd6ea4c9db8b1d475cc40e83b305e1fc20cad9079c9",
+      "auditExecutableSHA256": "e8f7278c8b349a4b57b835df7e9aa40f65d80332c7837f494a2d4298866a7dd5",
+      "nxlvKitLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+      "auditRecord": "../2.0-build83/classic-fan-build83-replay.json",
+      "archives": 535,
+      "levels": 6020,
+      "winningRoutes": 2399,
+      "withoutMatchingWinningCandidate": 3600,
+      "failedReplayLevels": 21,
+      "levelsWithoutVerifiedRoute": 3621,
+      "loadDecodeRenderFailures": 0,
+      "strictFanRouteGatePassed": false,
+      "verification": "All 6,020 per-level rows and 535 archive hashes are retained in the linked evidence files. The full native audit used the exact build 83 extracted Resources directory."
+    }
   },
   "followUpSearches": {
     "date": "2026-10-15",
@@ -2703,6 +3217,167 @@
         "searchSeconds": 72,
         "expanded": 178867,
         "result": "unsolved; best saved 0 of 40"
+      },
+      {
+        "identity": "fan:lldb-1/geooPk0.dat#5",
+        "title": "Increasing step heights",
+        "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 9,
+        "beamWidth": 1024,
+        "releaseRate": 99,
+        "clock": "golems",
+        "expanded": 27607,
+        "result": "unsolved; best saved 0 of 17"
+      },
+      {
+        "identity": "fan:lldb-4/Eymerich02.dat#4",
+        "title": "We still all fall down",
+        "archiveSHA256": "981566a7a5ae262b26b16a25d79e86f4d6f2363bafd24cb69b4e10465751961f",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 8,
+        "beamWidth": 512,
+        "releaseRate": 99,
+        "clock": "golems",
+        "expanded": 17999,
+        "result": "unsolved; best saved 0 of 54"
+      },
+      {
+        "identity": "fan:lldb-5/Mikepak00.dat#0",
+        "title": "Only practice",
+        "archiveSHA256": "b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 25,
+        "beamWidth": 1024,
+        "releaseRate": 99,
+        "clock": "golems",
+        "expanded": 59150,
+        "result": "unsolved; best saved 0 of 30"
+      },
+      {
+        "identity": "fan:lldb-409/BUILDING.DAT#0",
+        "title": "Building Practice",
+        "archiveSHA256": "67402d0948128821584f33f9ee061bdbd0b203e2a61dafcae359a32e24c5ebcf",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 9,
+        "expanded": 20614,
+        "result": "unsolved; best saved 0 of 80"
+      },
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "title": "It's a Magical World",
+        "archiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 60,
+        "beamWidth": 1024,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 152808,
+        "result": "unsolved; best saved 0 of 40"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+        "title": "It's a Magical World",
+        "archiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 60,
+        "beamWidth": 1024,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 149555,
+        "result": "unsolved; best saved 0 of 40"
+      },
+      {
+        "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+        "title": "Deep Deep Down",
+        "archiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 41,
+        "beamWidth": 1024,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 93837,
+        "result": "unsolved; best saved 0 of 36"
+      },
+      {
+        "identity": "fan:lldb-497/MARTPCK3.DAT#5",
+        "title": "Deep Deep Down",
+        "archiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 41,
+        "beamWidth": 1024,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 93837,
+        "result": "unsolved; best saved 0 of 36"
+      },
+      {
+        "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+        "title": "It's a Magical World",
+        "archiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 180,
+        "beamWidth": 4096,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 419470,
+        "result": "unsolved; best saved 0 of 40"
+      },
+      {
+        "identity": "fan:lldb-496/MARTPCK2.DAT#4",
+        "title": "It's a Magical World",
+        "archiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 180,
+        "beamWidth": 4096,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 424798,
+        "result": "unsolved; best saved 0 of 40"
+      },
+      {
+        "identity": "fan:lldb-246/Martin Zurlinden 03.dat#5",
+        "title": "Deep Deep Down",
+        "archiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+        "solverSHA256": "ffc1a530e92688d07206884b2c13410d0b0919f468b59124bf91b8b8feead0f4",
+        "runtimeSHA256": "18d71cb976c043fd65ae265b4974094e0b1420f168fb3b52990a0bebca372335",
+        "searchSeconds": 180,
+        "beamWidth": 4096,
+        "releaseRate": "level default",
+        "clock": "golems",
+        "ranking": "balanced",
+        "rescueQuotaDistance": true,
+        "directExitDistance": true,
+        "expanded": 379513,
+        "result": "unsolved; best saved 0 of 36"
       }
     ],
     "rankedBatch": [
@@ -2720,7 +3395,7 @@
       }
     ],
     "routeAuditChanged": false,
-    "interpretation": "No candidate from these searches was a verified win. Unresolved levels remain open; bounded search failure does not prove a level impossible."
+    "interpretation": "The bounded searches did not produce additional winning routes. The full current-source audit against the exact extracted build 83 resources confirms 2,399 winning routes and 3,621 bundled levels without verified wins. It confirms 3,600 levels without a matching candidate and 21 failed replay levels. Search failure does not prove a level impossible."
   },
   "outsideBundle": [
     {

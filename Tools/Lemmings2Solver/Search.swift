@@ -21,9 +21,10 @@ struct SearchReport: Sendable {
 }
 
 /// Runs a candidate through its events until the next decision point. Refused events are
-/// removed. Returns nil when the level ends.
-func advance(_ candidate: inout Candidate) -> Decision? {
+/// removed. Returns nil when the level ends or the optional deadline expires.
+func advance(_ candidate: inout Candidate, until deadline: Date? = nil) -> Decision? {
     while !candidate.game.isComplete {
+        if let deadline, Date() >= deadline { return nil }
         var cursor = candidate.cursor
         _ = cursor.applyDroppingRefused(eventsAt: &candidate.game, events: &candidate.events)
         candidate.cursor = cursor
@@ -33,18 +34,19 @@ func advance(_ candidate: inout Candidate) -> Decision? {
     return nil
 }
 
-/// Runs a candidate to the end of the level without taking further decisions.
-func finish(_ candidate: Candidate) -> Candidate {
+/// Runs a candidate without further decisions, stopping at the optional deadline.
+func finish(_ candidate: Candidate, until deadline: Date? = nil) -> Candidate {
     var tail = candidate
-    while advance(&tail) != nil {}
+    while advance(&tail, until: deadline) != nil {}
     return tail
 }
 
 /// Counts the decision points on a run that follows the seed without changes.
-func decisionCount(start: Lemmings2Runtime, seed: [Lemmings2TimedEvent], limits: SearchLimits) -> (points: Int, ticks: Int) {
+func decisionCount(start: Lemmings2Runtime, seed: [Lemmings2TimedEvent], limits: SearchLimits,
+                   until deadline: Date? = nil) -> (points: Int, ticks: Int) {
     var run = Candidate(game: start, events: seed, detector: DecisionDetector(cell: limits.cell, refire: limits.refire))
     var points = 0
-    while advance(&run) != nil { points += 1 }
+    while advance(&run, until: deadline) != nil { points += 1 }
     return (points, run.game.tick)
 }
 
@@ -52,9 +54,11 @@ func decisionCount(start: Lemmings2Runtime, seed: [Lemmings2TimedEvent], limits:
 func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], bounds: AimBounds,
             limits: SearchLimits) -> SearchReport {
     let started = Date()
+    let deadline = started.addingTimeInterval(limits.budgetSeconds)
     var report = SearchReport()
     var winners: [Int: Candidate] = [:]
     func elapsed() -> Double { Date().timeIntervalSince(started) }
+    func timeExpired() -> Bool { Date() >= deadline }
     func settle(_ candidate: inout Candidate, _ decision: Decision?) {
         candidate.fingerprint = candidate.game.stateFingerprint
         candidate.decision = decision
@@ -73,30 +77,23 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
     }
 
     var root = Candidate(game: start, events: seed, detector: DecisionDetector(cell: limits.cell, refire: limits.refire))
-    let firstDecision = advance(&root)
+    let firstDecision = advance(&root, until: deadline)
     settle(&root, firstDecision)
     consider(root)
     if !root.game.isComplete {
         // The unchanged seed is a result in its own right.
-        var tail = finish(root)
+        var tail = finish(root, until: deadline)
         settle(&tail, nil)
         consider(tail)
     }
     var beam = root.game.isComplete ? [] : [root]
 
-    while !beam.isEmpty {
-        if elapsed() >= limits.budgetSeconds {
-            if let top = beam.first {
-                var tail = finish(top)
-                settle(&tail, nil)
-                consider(tail)
-            }
-            break
-        }
+    search: while !beam.isEmpty && !timeExpired() {
         var next: [Candidate] = []
         for node in beam {
+            if timeExpired() { break search }
             if node.depth >= limits.maxDepth {
-                var tail = finish(node)
+                var tail = finish(node, until: deadline)
                 settle(&tail, nil)
                 consider(tail)
                 continue
@@ -104,18 +101,20 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
             let choices = actions(in: node.game, candidates: node.decision?.lemmings ?? [], bounds: bounds,
                                   pending: node.events, from: node.cursor.next)
             for action in choices {
+                if timeExpired() { break search }
                 var child = node
                 apply(action, to: &child)
                 if action != .wait { child.onSeedLine = false }
                 child.depth += 1
                 report.expanded += 1
-                let decision = advance(&child)
+                let decision = advance(&child, until: deadline)
                 settle(&child, decision)
                 consider(child)
+                if timeExpired() { break search }
                 if !child.game.isComplete { next.append(child) }
             }
-            if elapsed() >= limits.budgetSeconds { break }
         }
+        if timeExpired() { break }
         beam = Array(mergeByFingerprint(next).prefix(limits.beamWidth))
         // A seed line that scores no better than harmful variants would otherwise leave the beam
         // long before the decision point where one change improves it.
@@ -125,7 +124,7 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
         }
     }
     if let partial = report.bestPartial, !partial.game.isComplete {
-        var tail = finish(partial)
+        var tail = finish(partial, until: deadline)
         settle(&tail, nil)
         consider(tail)
     }

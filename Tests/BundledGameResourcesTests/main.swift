@@ -1,6 +1,11 @@
 import Foundation
 import NxlvKit
 
+private struct NeoLemmixBundleManifest: Decodable {
+    let levels: Int
+    let dmaStyleLevels: Int
+}
+
 func check(_ condition: Bool, _ message: String) {
     guard condition else {
         FileHandle.standardError.write(Data("FAIL: \(message)\n".utf8)); exit(1)
@@ -61,9 +66,25 @@ do {
             check(neoStyles.count == 26, "The bundle must carry exactly the 26 DMA NeoLemmix styles")
             check(FileManager.default.fileExists(atPath: neo.levelsRoot.deletingLastPathComponent()
                 .appendingPathComponent("License.txt").path), "The NeoLemmix CE licence is missing")
+            let neoManifestURL = neo.levelsRoot.deletingLastPathComponent()
+                .appendingPathComponent("manifest.json")
+            let neoManifest = try JSONDecoder().decode(
+                NeoLemmixBundleManifest.self,
+                from: Data(contentsOf: neoManifestURL)
+            )
             let neoPacks = NeoLemmixLibrary.discover([neo])
-            check(neoPacks.count == 3 && neoPacks.reduce(0, { $0 + $1.pack.levels.count }) == 788,
-                  "Embedded NeoLemmix CE packs are incomplete")
+            let neoLevelFiles = (FileManager.default.enumerator(
+                at: neo.levelsRoot,
+                includingPropertiesForKeys: [.isRegularFileKey]
+            )?.compactMap { $0 as? URL } ?? []).filter {
+                $0.pathExtension.lowercased() == "nxlv"
+            }
+            let discoveredLevelCount = neoPacks.reduce(0) { $0 + $1.pack.levels.count }
+            check(neoPacks.count == 3 && discoveredLevelCount == 794
+                  && discoveredLevelCount == neoLevelFiles.count
+                  && neoManifest.levels == discoveredLevelCount
+                  && neoManifest.dmaStyleLevels == 719,
+                  "Embedded NeoLemmix CE files and manifest must report 794 levels and 719 ready levels")
             var neoReady = 0
             for pack in neoPacks {
                 for level in pack.pack.levels {
@@ -75,7 +96,7 @@ do {
                     neoReady += 1
                 }
             }
-            check(neoReady == 713, "Expected 713 ready NeoLemmix levels, found \(neoReady)")
+            check(neoReady == 719, "Expected 719 ready NeoLemmix levels, found \(neoReady)")
             for name in ["Graphics", "Levels"] {
                 let fork = resources.appendingPathComponent("Ports/MacResourceForks/mac_extracted/Holiday_Lem93_94/Extras/X-Mas Demo '92/" + name + ".rsrc")
                 let bytes = try Data(contentsOf: fork)

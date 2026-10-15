@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "purpose": "Bound the L2 route solver by one deadline across seed profiling, candidate expansion and final partial-route handling.",
+  "changes": [
+    "Seed decision profiling now uses the same deadline as the search.",
+    "Candidate advances check the deadline each logic tick.",
+    "Beam node and action expansion stop when the deadline expires.",
+    "Partial-route finishing stops at the deadline."
+  ],
+  "runtimeSource": {
+    "libraryPath": ".build/l2-completion/libNxlvKit.dylib",
+    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1"
+  },
+  "solverBuild": {
+    "compiler": "Xcode 26.6, Swift 6.3.3",
+    "solverSHA256": "2dd53aba383cb61b7abc8280bd311122e9047b5c8bd079214c5ee581d59f47bf",
+    "buildNote": "Built the changed L2 solver sources against the fresh current-main NxlvKit module and library. The normal solver script rebuilds NxlvKit; this targeted compile reused its verified current-main build."
+  },
+  "seed": {
+    "path": "Tests/Lemmings2CompletionTests/Chains/highland-02.json",
+    "sha256": "9eff739b29b92e31c3632b48af0cd59bcde8e483468ed4cb7b8fab555bc4ff8a",
+    "levelSHA256": "0b2b4b9324e1239fcaf8f48cdd758257d7aba79f9867c2999c0992608ba719e5",
+    "population": 60,
+    "saved": 3,
+    "ticks": 4500
+  },
+  "resources": "Installed Lemmings 2 resource directory used by the current-main completion recheck; not a separate exact 2.0 package audit.",
+  "attempts": [
+    {
+      "budgetSeconds": 10,
+      "beam": 64,
+      "depth": 80,
+      "cell": 8,
+      "refire": 75,
+      "decisionPoints": 21336,
+      "expanded": 21335,
+      "rounds": 1,
+      "result": "The seeded route remains 3/60; replay checks agree on the 4,500-tick result.",
+      "solverReportedSeconds": 10,
+      "wallSeconds": 11.71,
+      "wallTimeIncludes": "Process startup and two route replay checks."
+    },
+    {
+      "budgetSeconds": 180,
+      "beam": 4,
+      "depth": 80,
+      "cell": 8,
+      "refire": 75,
+      "decisionPoints": 108931,
+      "expanded": 108925,
+      "rounds": 6,
+      "result": "No improvement; the seeded route remains 3/60 in 4,500 ticks.",
+      "solverReportedSeconds": 180,
+      "wallSeconds": 181.31,
+      "wallTimeIncludes": "Process startup and two route replay checks."
+    }
+  ],
+  "remaining": "Every tribe still ends with one survivor and a Bronze talisman. The 30-survivor-per-tribe and Gold talisman ark requirements remain open. These Highland 2 searches do not prove that a better route is impossible."
+}

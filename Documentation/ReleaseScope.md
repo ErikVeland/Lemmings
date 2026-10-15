@@ -30,10 +30,10 @@ open-ended and uses per-engine, per-version support claims. See the
 | Bundled set | Current evidence | Open closure work |
 | --- | --- | --- |
 | Official Classic and Oh Yes! | Current-source recheck passes all 352 routes and the full quest against game data whose 1,307 `Ports` files match the 1.9.7 build 82 manifest. | Finish any remaining variant-specific source checks. The 2.0 build 83 candidate has verified resources and retained plus focused regression evidence. |
-| Classic fan packs | The 15 October audit freezes 6,020 levels in 535 packs. All 535 archive hashes match the retained 1.9.7 build 82 resource manifest. Current native audit: 2,399 winning routes, 3,600 levels without a matching candidate and 21 candidate or historical replay failures. The two extra October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Resolve the 3,621 route gaps and close source-behaviour checks for bundled content. The released build has a frozen distribution manifest. |
-| Lemmings 2 | Current-main replay and runtime reruns pass 120/120 routes, 70 carry-over variants, all twelve full chains and the installed-data runtime suite. Cavelems saves 59, 36, 17, 4, 2, 2, 1, 1, 1 and 1. All tribes still end with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. |
-| Lemmings 3 | Current audit: 399/416 fixtures double-replay. Five Shadow 13 carried identities are refreshed. Four standalone outcomes and 13 carried schedules still fail. Source evidence has 673 repeatable samples for left-facing burrowing and a fall into an open gap. An isolated prototype matches 53 sampled positions, but four terrain-edge samples contradict its rectangular carve. | Recover four standalone routes and 13 carried schedules, then rerun the full 90-route and campaign gates. Verify the exact excavation mask, built-brick trigger and remaining source rules. Close environmental effects, movie audio, story transitions, recovery and release checks. |
-| NeoLemmix CE | The bundled three-pack set has 788 levels. The 26 bundled DMA styles resolve the listed style-directory references for 713 levels. The other 75 need one or more of 44 player-supplied community styles. Exact-version winning replay evidence covers 158 levels. | Clear distribution rights for the 44 community styles, then bundle and verify them. Prove a winning route for all 788 levels and source behaviour for every advertised feature. Keep player imports open-ended under per-engine and per-version support claims. |
+| Classic fan packs | A full native audit replayed all 6,020 fan levels from the exact build 83 resources. It found 2,399 winning routes, 3,600 levels without a matching candidate and 21 failed replay levels. It found no load, decode or render failures. Of 6,020 levels, 3,621 still lack a verified win. Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical World” copies still lack winning routes. The package audit confirms that all 537 `LevelPacks` inputs and all 535 fan archives match the frozen hashes. Two October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Verify the remaining bundled routes and source behaviour. Keep imported content open-ended under per-engine and per-version support claims. See the [build 83 replay audit](ReleaseReadiness/2.0-build83/classic-fan-build83-replay.json), [package audit](ReleaseReadiness/2.0-build83/classic-fan-package-audit.json) and [2.0 evidence bridge](ReleaseReadiness/2.0-build83/engine-content-equivalence-current-main.json). |
+| Lemmings 2 | The build 83 app payload replay passes 120 routes, 70 carry-over variants, all twelve chains and the event suite. Its 218 files match the retained build 82 manifest and installed build 76 tree. The full archive extraction had 14 DOS interpreter/support files that the app packager excludes. Every chain ends with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. See the [build 83 payload replay](ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json). |
+| Lemmings 3 | Current audit: 399/416 fixtures double-replay. Five Shadow 13 carried identities are refreshed. Four standalone outcomes and 13 carried schedules still fail. Current-main seeded searches for levels 206, 213 and 229 found no replacement routes. Source evidence has 673 repeatable samples for left-facing burrowing and a fall into an open gap. An isolated prototype matches 53 sampled positions, but four terrain-edge samples contradict its rectangular carve. | Recover four standalone routes and 13 carried schedules, then rerun the full 90-route and campaign gates. Verify the exact excavation mask, built-brick trigger and remaining source rules. Close environmental effects, movie audio, story transitions, recovery and release checks. See the [current route search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-route-searches-2026-10-15.json). |
+| NeoLemmix CE | The exact build 83 slim archive contains 794 `.nxlv` files, and all 794 appear once in the pack manifests. A section scan resolves 719 levels with the 26 bundled DMA styles. The other 75 need 44 community styles. Exact-version winning replay evidence covers 158 levels. The build 83 manifest reports 718. The old resource test expected 788/713. Current source corrects the manifest and test counts, but the released package does not contain those corrections. | Obtain rights to distribute the required styles and keep all 794 levels in closure scope. Rebuild the manifest and package. Verify every level route and advertised source behaviour. Keep imported packs open-ended under per-engine and per-version support claims. See the [archive audit](ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json) and [style rights inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json). |
 
 The table tracks engine and content closure. It does not certify a specific
 app archive. Release packaging, platform acceptance and distribution need their
@@ -45,8 +45,13 @@ and outside the 535-pack bundle. The nine saved-count mismatches are stale
 candidate replay records. Although the candidate archive labels matching
 inputs as wins, those labels are not proof: the strict native audit found 21
 candidate or historical replay witnesses that did not reproduce a win. The
-September 344-witness count is historical. The current audit raises verified
-bundled fan routes to 2,399 but does not close the remaining 3,621 levels.
+September 344-witness count is historical. The full current-source audit against the exact build 83 resources recorded
+2,399 verified bundled fan routes, 3,600 levels without matching candidates
+and 21 failed replay levels. It found no load, decode or render failures. Both
+Deep Deep Down copies have verified fan wins. The two Magical World copies
+remain without wins. The strict route gate remains open. The audit input manifest
+has no drift. Package-level runtime verification is closed. Source-state parity
+and the remaining routes stay open.
 
 The 1.9.4 build 79 macOS maintenance release is a historical record.
 Its full updater, slim download and signed build-78 delta pass publication
@@ -79,21 +84,24 @@ remain required. See the [acceptance record](ReleaseReadiness/2.0-build83/accept
 and [candidate evidence](ReleaseReadiness/2.0-build83/README.md).
 
 The owner requested macOS 2.0 journey checkpoint resume and campaign/bundle
-release readiness on 15 October 2026. Mac release acceptance is separate from
-the iOS launch gates. The new `macos-2.0` audit and packaging scope requires
-the relevant Mac P0 gates, including bundled engine and content closure.
-It requires all official Classic and conversion routes, bundled fan winning
-routes, strict L3 standalone and carried campaigns, and L2 ark prerequisites.
-NeoLemmix dependencies, exact-version routes, source-engine fidelity and ending
-playback remain part of the open bundle gate.
+readiness on 15 October 2026. Build 83 shipped under the recorded acceptance
+with existing classifications and documented limits. The `macos-2.0` scope
+tracks the stricter bundled-content closure target after release. It remains
+open until all bundled routes, source-engine checks, campaign transitions,
+endings and dependencies pass. Imported content remains open-ended under
+per-engine and per-version support claims. Mac distribution checks stay in
+their separate release records.
 
-The retained full 1.9.7 resource bundle provides a hashed content baseline, not
-an application candidate for 2.0. All 535 fan archive hashes match the 15 October
-bundle audit. This inventory match does not close the 3,621 fan route gaps.
-See [Mac preparation evidence](ReleaseReadiness/MacOS2Preparation-2026-10-15/README.md).
-Keep version/build changes, source freeze, final candidate checks, universal
-packaging, signing, notarisation, downloaded update and save migration tied to
-the eventual 2.0 candidate.
+The retained full 1.9.7 resource bundle provides a hashed content baseline.
+The full current-source audit ran at `fc2c59e6` against the exact extracted
+build 83 resources. It replayed all 6,020 fan levels and recorded 2,399 winning
+routes, 3,600 levels without a matching candidate, 21 failed replay levels and
+no load, decode or render failures. The strict route gate still has 3,621
+levels without verified wins. A separate package audit confirms that all 537
+`LevelPacks` inputs and all 535 fan archives match the frozen bundle hashes. See
+the [package replay audit](ReleaseReadiness/2.0-build83/classic-fan-build83-replay.json),
+[package audit](ReleaseReadiness/2.0-build83/classic-fan-package-audit.json) and
+[Mac preparation evidence](ReleaseReadiness/MacOS2Preparation-2026-10-15/README.md).
 
 ## iOS 2.0 launch scope
 
@@ -191,13 +199,13 @@ DOS campaign levels. All 60 now have strictly verified winning evidence.
 
 The 22 September record covers 6,020 retained bundled fan levels, with load and
 render evidence and 344 winning witnesses. This met the earlier community
-content rule. The current native audit verifies 2,399 bundled fan routes and
-does not meet the closure rule adopted on 15 October. The October audit
-artifact discovers two additional imported levels outside the bundle and has
-nine stale saved-count mismatches. The native audit reports 3,600 bundled
-levels without a winning route and 21 failed replay witnesses. Freeze and hash
-the exact bundle inventory, then close every bundled level route and
-source-behaviour gap. See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
+content rule. The latest full audit recorded 2,399 winning routes, 3,600 levels
+without a matching candidate and 21 failed replay levels after the Deep Deep Down
+replay refresh. Those two copies already pass through verified-fan routes. The
+two Magical World routes remain open. The strict route gate remains open. The audit
+found no load, decode or render failures and no input-manifest drift. The October inventory lists two additional imported
+levels outside the bundle and has nine stale saved-count mismatches. Close every
+bundled level route and source-behaviour gap. See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
 and the [October audit](../Artifacts/ClassicProgression/README.md). The
 [15 October bundle audit record](ReleaseReadiness/ClassicFanBundleAudit-2026-10-15.json)
 captures every audited archive hash and its route totals.

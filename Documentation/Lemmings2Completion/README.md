@@ -11,15 +11,43 @@ The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
 variants and all twelve continuous tribe chains. Every witness passed two fresh
 replays with matching saved counts, ticks and state hashes.
 
-The gate passed again on 15 October 2026 at current `main` revision `061e1b99`
-with Xcode 26.6. Strict ark mode replayed all 120 routes and 70 carry-over
-variants twice, then replayed all twelve ten-level chains. Every chain ends
-with one survivor and a Bronze talisman, so the gate correctly fails the ark
-prerequisites. The evidence does not prove a golden talisman or an ark ending.
+The latest strict gate replay passed on 15 October 2026 at `main` revision
+`061e1b99` with Xcode 26.6. Strict ark mode replayed all 120 routes and 70
+carry-over variants twice, then replayed all twelve ten-level chains. Every
+chain ends with one survivor and a Bronze talisman, so the gate correctly fails
+the ark prerequisites. The evidence does not prove a golden talisman or an ark
+ending.
+
+The worktree is now at `main` revision `fc2c59e6`. Review from the last
+source replay found no L2 runtime, level data, solver or completion-gate
+changes. A fresh build from this revision passed the 120-route gate, 70
+carry-over variants and all twelve ten-level chains against the installed L2
+resources. The event suite passed all 120 routes and rejected refused,
+off-viewport and out-of-order events. The strict ark gate still fails because
+each tribe ends with one survivor and a Bronze talisman. A Gold talisman and
+30 survivors per tribe remain open. The fresh verifier hash is
+`fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91`. The fresh
+`libNxlvKit.dylib` hash is
+`5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067`.
+
+The route gate also passed against the 218-file L2 app payload staged from the
+exact build 83 archive extraction. Every staged file matches the retained
+1.9.7 build 82 manifest; its tree hash matches the installed build 76 resource
+tree. The archive extraction also contained 14 original DOS interpreter and
+support files, which the app packager excludes. The 2.0 build 83 source
+equivalence record confirms the gameplay sources are unchanged. The direct
+payload replay passed 120 routes, 70 carry-over variants, all twelve chains and
+the event suite. It still fails the ark prerequisites. See the [payload replay
+audit](../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json)
+and [resource equivalence audit](../ReleaseReadiness/2.0-build83/lemmings2-resource-equivalence.json).
 
 A 15 October Cavelems route update now chains all ten levels from 60 lemmings.
 It records 59 saved on Level 1, then 36, 17, 4, 2, 2, 1, 1, 1 and 1. The
 strict route gate verifies the new routes twice. The ark gate remains open.
+A bounded search from this worktree did not improve Beach Level 3 from 1 of 42.
+It used the installed 1.9.1 build 76 resource tree and did not improve the route.
+All 218 L2 resources match the build 82 manifest, which build 83 source-equivalence
+evidence links to the release package. See the resource audit linked above.
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |

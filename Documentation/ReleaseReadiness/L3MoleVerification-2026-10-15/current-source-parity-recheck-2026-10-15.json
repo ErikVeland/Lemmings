@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+  "runtimeSource": {
+    "path": "Sources/NxlvKit/Lemmings3Runtime.swift",
+    "sha256": "ad41434ff2fff2efde433489b50f0defd17e0efaa8fd6c84cb7fa09982bd19bb"
+  },
+  "verifier": {
+    "path": "Scripts/verify-l3-mole-trace.py",
+    "sha256": "da5d52d75e961c5ead2f935a8ddfc6a2aba597f311fa9b02ea37a5bb2d442578",
+    "command": "python3 Scripts/verify-l3-mole-trace.py",
+    "result": "passed"
+  },
+  "sourceExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+  "evidence": {
+    "primaryTrace": {
+      "path": "original-steel-actor-trace.json",
+      "sha256": "a2aa3550fbcf3b33376bedd7a8056d5ddf0609a520927f62cc6cb3e14281a33b",
+      "nativePositionsCompared": 53,
+      "firstTick": 36,
+      "lastTick": 244,
+      "coordinateDifferences": 0
+    },
+    "repeatedSourceTraces": {
+      "path": "original-followup-traces.json",
+      "sha256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+      "cases": 2,
+      "samples": 673,
+      "repeatPositionDifferences": 0
+    },
+    "tunnelEdgeCheck": {
+      "path": "original-tunnel-edge-check.json",
+      "sha256": "4a8b1340e1ff78bcc7f54a2e96be55742eb87980f9417c2a33e2b81d735abebe",
+      "witnesses": 4,
+      "sourceOnlyClears": 2,
+      "prototypeOnlyClears": 2
+    }
+  },
+  "remaining": "The position traces verify partial Mole motion. The excavation mask, trigger conditions and complete Mole rules remain unverified. The rectangular prototype still conflicts with four source terrain samples."
+}

@@ -1,0 +1,1721 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-15",
+  "release": {
+    "version": "2.0",
+    "build": 83,
+    "asset": "UltimateLemmings-2.0-build83.zip",
+    "sha256": "f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+    "archiveDigestRecord": "engine-content-equivalence-current-main.json"
+  },
+  "source": {
+    "extractedL2Root": "/private/tmp/lemmings-bundled-closure/Resources/Ports/Lemm2",
+    "extractedFiles": 232,
+    "appPackagerExcludedFiles": [
+      "AUTORUN.RKO",
+      "BOBS256.RKO",
+      "BOOT.RKB",
+      "EDITOR.RKB",
+      "GAL.RKO",
+      "INSTALL.EXE",
+      "L2-FIX.COM",
+      "L2.EXE",
+      "L2.INI",
+      "L2.RKO",
+      "LOAD.RKO",
+      "PROCESS.RKO",
+      "TEXT.RKO",
+      "VGA.RKO"
+    ],
+    "appPackagerExclusionPolicy": "Scripts/bundle-game-data.sh excludes EXE, COM, RKO, RKB, INI, SAV and known overlays.",
+    "interpretation": "The extraction contains source/support files omitted by the app resource packager. The 218 release-manifest L2 payload files were copied from that extracted tree, matched by path, size and SHA-256, and replayed as the app payload."
+  },
+  "payload": {
+    "derivation": "The 218 Ports/Lemm2 entries from MacOS2Preparation-2026-10-15/bundle-inputs.json were copied from the extracted build 83 L2 tree. Every copied file matches by path, size and SHA-256.",
+    "manifest": "../MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "manifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "filesExpected": 218,
+    "filesActual": 218,
+    "filesMatched": 218,
+    "missing": 0,
+    "unexpected": 0,
+    "changed": 0,
+    "treeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f",
+    "stagedPayloadRoot": "/private/tmp/lemmings-bundled-closure/Lemm2-app-payload"
+  },
+  "runtime": {
+    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "sourceEquivalence": "engine-content-equivalence-current-main.json: engineGameplaySources is empty versus build 83",
+    "runtimeSourceSHA256": "650b5bf3f9fec062a274cf3bd7559cc58cb0fbf94367764c0229395acdd04d3d",
+    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "completionVerifierSHA256": "fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91",
+    "eventVerifierSHA256": "00c9e468d8768b7a5735283915403326172fcf83b0bfdb4732274114f13a4325",
+    "commands": [
+      ".build/l2-completion/events <payload-root>",
+      ".build/l2-completion/verify <payload-root> --require-all"
+    ],
+    "payloadReplayResultLogs": {
+      "events": "/private/tmp/l2-build83-payload-events.log",
+      "routes": "/private/tmp/l2-build83-payload-routes.log",
+      "ark": "/private/tmp/l2-build83-payload-ark.log"
+    }
+  },
+  "result": {
+    "routeGate": "passed",
+    "standaloneRoutes": 120,
+    "carryOverVariants": 70,
+    "doubleReplay": true,
+    "tenLevelChains": [
+      {
+        "tribe": "classic",
+        "levels": 10
+      },
+      {
+        "tribe": "beach",
+        "levels": 10
+      },
+      {
+        "tribe": "cavelem",
+        "levels": 10
+      },
+      {
+        "tribe": "circus",
+        "levels": 10
+      },
+      {
+        "tribe": "egyptian",
+        "levels": 10
+      },
+      {
+        "tribe": "highland",
+        "levels": 10
+      },
+      {
+        "tribe": "medieval",
+        "levels": 10
+      },
+      {
+        "tribe": "outdoor",
+        "levels": 10
+      },
+      {
+        "tribe": "polar",
+        "levels": 10
+      },
+      {
+        "tribe": "shadow",
+        "levels": 10
+      },
+      {
+        "tribe": "space",
+        "levels": 10
+      },
+      {
+        "tribe": "sports",
+        "levels": 10
+      }
+    ],
+    "completeChains": 12,
+    "routeOutcomes": [
+      {
+        "route": "classic-01",
+        "carryOver": false,
+        "saved": 60,
+        "population": 60,
+        "medal": "Gold",
+        "ticks": 3074
+      },
+      {
+        "route": "classic-02",
+        "carryOver": false,
+        "saved": 13,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "classic-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "classic-03",
+        "carryOver": true,
+        "saved": 13,
+        "population": 13,
+        "medal": "Gold",
+        "ticks": 2709
+      },
+      {
+        "route": "classic-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "classic-04",
+        "carryOver": true,
+        "saved": 12,
+        "population": 13,
+        "medal": "Gold",
+        "ticks": 3321
+      },
+      {
+        "route": "classic-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "classic-05",
+        "carryOver": true,
+        "saved": 5,
+        "population": 12,
+        "medal": "Silver",
+        "ticks": 3498
+      },
+      {
+        "route": "classic-06",
+        "carryOver": false,
+        "saved": 60,
+        "population": 60,
+        "medal": "Gold",
+        "ticks": 3651
+      },
+      {
+        "route": "classic-06",
+        "carryOver": true,
+        "saved": 5,
+        "population": 5,
+        "medal": "Gold",
+        "ticks": 3709
+      },
+      {
+        "route": "classic-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 7200
+      },
+      {
+        "route": "classic-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 5,
+        "medal": "Gold",
+        "ticks": 7200
+      },
+      {
+        "route": "classic-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1584
+      },
+      {
+        "route": "classic-08",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1093
+      },
+      {
+        "route": "classic-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2425
+      },
+      {
+        "route": "classic-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "classic-10",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 288
+      },
+      {
+        "route": "beach-01",
+        "carryOver": false,
+        "saved": 42,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "beach-02",
+        "carryOver": false,
+        "saved": 60,
+        "population": 60,
+        "medal": "Gold",
+        "ticks": 2066
+      },
+      {
+        "route": "beach-02",
+        "carryOver": true,
+        "saved": 42,
+        "population": 42,
+        "medal": "Gold",
+        "ticks": 1688
+      },
+      {
+        "route": "beach-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 726
+      },
+      {
+        "route": "beach-03",
+        "carryOver": true,
+        "saved": 1,
+        "population": 42,
+        "medal": "Bronze",
+        "ticks": 981
+      },
+      {
+        "route": "beach-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 864
+      },
+      {
+        "route": "beach-05",
+        "carryOver": false,
+        "saved": 54,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 1987
+      },
+      {
+        "route": "beach-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1007
+      },
+      {
+        "route": "beach-06",
+        "carryOver": false,
+        "saved": 54,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 1670
+      },
+      {
+        "route": "beach-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 581
+      },
+      {
+        "route": "beach-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1055
+      },
+      {
+        "route": "beach-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1505
+      },
+      {
+        "route": "beach-08",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 682
+      },
+      {
+        "route": "beach-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 4796
+      },
+      {
+        "route": "beach-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2140
+      },
+      {
+        "route": "beach-10",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1498
+      },
+      {
+        "route": "cavelem-01",
+        "carryOver": false,
+        "saved": 59,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 1794
+      },
+      {
+        "route": "cavelem-02",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1337
+      },
+      {
+        "route": "cavelem-02",
+        "carryOver": true,
+        "saved": 36,
+        "population": 59,
+        "medal": "Silver",
+        "ticks": 2199
+      },
+      {
+        "route": "cavelem-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 555
+      },
+      {
+        "route": "cavelem-03",
+        "carryOver": true,
+        "saved": 17,
+        "population": 36,
+        "medal": "Bronze",
+        "ticks": 1350
+      },
+      {
+        "route": "cavelem-04",
+        "carryOver": false,
+        "saved": 26,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1534
+      },
+      {
+        "route": "cavelem-04",
+        "carryOver": true,
+        "saved": 4,
+        "population": 17,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "cavelem-05",
+        "carryOver": false,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 580
+      },
+      {
+        "route": "cavelem-05",
+        "carryOver": true,
+        "saved": 2,
+        "population": 4,
+        "medal": "Silver",
+        "ticks": 510
+      },
+      {
+        "route": "cavelem-06",
+        "carryOver": false,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 2503
+      },
+      {
+        "route": "cavelem-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 2,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "cavelem-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2059
+      },
+      {
+        "route": "cavelem-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1681
+      },
+      {
+        "route": "cavelem-09",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1125
+      },
+      {
+        "route": "cavelem-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 917
+      },
+      {
+        "route": "circus-01",
+        "carryOver": false,
+        "saved": 2,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "circus-02",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 721
+      },
+      {
+        "route": "circus-02",
+        "carryOver": true,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 1218
+      },
+      {
+        "route": "circus-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1029
+      },
+      {
+        "route": "circus-03",
+        "carryOver": true,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 1126
+      },
+      {
+        "route": "circus-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 800
+      },
+      {
+        "route": "circus-04",
+        "carryOver": true,
+        "saved": 1,
+        "population": 2,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "circus-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1834
+      },
+      {
+        "route": "circus-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 590
+      },
+      {
+        "route": "circus-06",
+        "carryOver": false,
+        "saved": 3,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8985
+      },
+      {
+        "route": "circus-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 557
+      },
+      {
+        "route": "circus-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "circus-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 599
+      },
+      {
+        "route": "circus-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1338
+      },
+      {
+        "route": "circus-08",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1171
+      },
+      {
+        "route": "circus-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 268
+      },
+      {
+        "route": "circus-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "circus-10",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1160
+      },
+      {
+        "route": "egyptian-01",
+        "carryOver": false,
+        "saved": 40,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-02",
+        "carryOver": false,
+        "saved": 20,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-02",
+        "carryOver": true,
+        "saved": 14,
+        "population": 40,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1830
+      },
+      {
+        "route": "egyptian-03",
+        "carryOver": true,
+        "saved": 1,
+        "population": 14,
+        "medal": "Bronze",
+        "ticks": 1584
+      },
+      {
+        "route": "egyptian-04",
+        "carryOver": false,
+        "saved": 58,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 1690
+      },
+      {
+        "route": "egyptian-04",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 378
+      },
+      {
+        "route": "egyptian-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2700
+      },
+      {
+        "route": "egyptian-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1141
+      },
+      {
+        "route": "egyptian-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 566
+      },
+      {
+        "route": "egyptian-07",
+        "carryOver": false,
+        "saved": 3,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 441
+      },
+      {
+        "route": "egyptian-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "egyptian-08",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 724
+      },
+      {
+        "route": "egyptian-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2461
+      },
+      {
+        "route": "egyptian-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1036
+      },
+      {
+        "route": "highland-01",
+        "carryOver": false,
+        "saved": 60,
+        "population": 60,
+        "medal": "Gold",
+        "ticks": 1941
+      },
+      {
+        "route": "highland-02",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1030
+      },
+      {
+        "route": "highland-02",
+        "carryOver": true,
+        "saved": 3,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "highland-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1237
+      },
+      {
+        "route": "highland-03",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 2300
+      },
+      {
+        "route": "highland-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 844
+      },
+      {
+        "route": "highland-04",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 844
+      },
+      {
+        "route": "highland-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 693
+      },
+      {
+        "route": "highland-05",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 1870
+      },
+      {
+        "route": "highland-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2700
+      },
+      {
+        "route": "highland-06",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 569
+      },
+      {
+        "route": "highland-07",
+        "carryOver": false,
+        "saved": 3,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "highland-07",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 1028
+      },
+      {
+        "route": "highland-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1756
+      },
+      {
+        "route": "highland-08",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 2811
+      },
+      {
+        "route": "highland-09",
+        "carryOver": false,
+        "saved": 2,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1613
+      },
+      {
+        "route": "highland-09",
+        "carryOver": true,
+        "saved": 3,
+        "population": 3,
+        "medal": "Gold",
+        "ticks": 1369
+      },
+      {
+        "route": "highland-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 4,
+        "medal": "Silver",
+        "ticks": 1563
+      },
+      {
+        "route": "highland-10",
+        "carryOver": true,
+        "saved": 1,
+        "population": 3,
+        "medal": "Silver",
+        "ticks": 1307
+      },
+      {
+        "route": "medieval-01",
+        "carryOver": false,
+        "saved": 2,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 5400
+      },
+      {
+        "route": "medieval-02",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2249
+      },
+      {
+        "route": "medieval-02",
+        "carryOver": true,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 2417
+      },
+      {
+        "route": "medieval-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 1680
+      },
+      {
+        "route": "medieval-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1068
+      },
+      {
+        "route": "medieval-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1558
+      },
+      {
+        "route": "medieval-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 894
+      },
+      {
+        "route": "medieval-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 825
+      },
+      {
+        "route": "medieval-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "medieval-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1572
+      },
+      {
+        "route": "medieval-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1221
+      },
+      {
+        "route": "medieval-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1403
+      },
+      {
+        "route": "medieval-09",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 901
+      },
+      {
+        "route": "medieval-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 922
+      },
+      {
+        "route": "outdoor-01",
+        "carryOver": false,
+        "saved": 59,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 2033
+      },
+      {
+        "route": "outdoor-02",
+        "carryOver": false,
+        "saved": 17,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 5400
+      },
+      {
+        "route": "outdoor-02",
+        "carryOver": true,
+        "saved": 17,
+        "population": 59,
+        "medal": "Bronze",
+        "ticks": 5400
+      },
+      {
+        "route": "outdoor-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1892
+      },
+      {
+        "route": "outdoor-03",
+        "carryOver": true,
+        "saved": 1,
+        "population": 17,
+        "medal": "Bronze",
+        "ticks": 1227
+      },
+      {
+        "route": "outdoor-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2775
+      },
+      {
+        "route": "outdoor-04",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 255
+      },
+      {
+        "route": "outdoor-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2700
+      },
+      {
+        "route": "outdoor-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 574
+      },
+      {
+        "route": "outdoor-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1462
+      },
+      {
+        "route": "outdoor-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 435
+      },
+      {
+        "route": "outdoor-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4051
+      },
+      {
+        "route": "outdoor-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1465
+      },
+      {
+        "route": "outdoor-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2563
+      },
+      {
+        "route": "outdoor-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 2,
+        "medal": "Silver",
+        "ticks": 4500
+      },
+      {
+        "route": "outdoor-09",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1469
+      },
+      {
+        "route": "outdoor-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1528
+      },
+      {
+        "route": "outdoor-10",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 675
+      },
+      {
+        "route": "polar-01",
+        "carryOver": false,
+        "saved": 60,
+        "population": 60,
+        "medal": "Gold",
+        "ticks": 1829
+      },
+      {
+        "route": "polar-02",
+        "carryOver": false,
+        "saved": 7,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "polar-02",
+        "carryOver": true,
+        "saved": 7,
+        "population": 26,
+        "medal": "Bronze",
+        "ticks": 4500
+      },
+      {
+        "route": "polar-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1691
+      },
+      {
+        "route": "polar-03",
+        "carryOver": true,
+        "saved": 1,
+        "population": 7,
+        "medal": "Bronze",
+        "ticks": 1194
+      },
+      {
+        "route": "polar-04",
+        "carryOver": false,
+        "saved": 42,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 4500
+      },
+      {
+        "route": "polar-04",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1607
+      },
+      {
+        "route": "polar-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1576
+      },
+      {
+        "route": "polar-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1864
+      },
+      {
+        "route": "polar-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1325
+      },
+      {
+        "route": "polar-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1803
+      },
+      {
+        "route": "polar-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "polar-08",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 990
+      },
+      {
+        "route": "polar-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 292
+      },
+      {
+        "route": "polar-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 795
+      },
+      {
+        "route": "shadow-01",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2149
+      },
+      {
+        "route": "shadow-02",
+        "carryOver": false,
+        "saved": 7,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8115
+      },
+      {
+        "route": "shadow-02",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1283
+      },
+      {
+        "route": "shadow-03",
+        "carryOver": false,
+        "saved": 30,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 2700
+      },
+      {
+        "route": "shadow-03",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 369
+      },
+      {
+        "route": "shadow-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 407
+      },
+      {
+        "route": "shadow-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1157
+      },
+      {
+        "route": "shadow-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "shadow-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 504
+      },
+      {
+        "route": "shadow-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1111
+      },
+      {
+        "route": "shadow-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2429
+      },
+      {
+        "route": "shadow-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1676
+      },
+      {
+        "route": "shadow-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 239
+      },
+      {
+        "route": "space-01",
+        "carryOver": false,
+        "saved": 51,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 3440
+      },
+      {
+        "route": "space-02",
+        "carryOver": false,
+        "saved": 1,
+        "population": 3,
+        "medal": "Silver",
+        "ticks": 1105
+      },
+      {
+        "route": "space-02",
+        "carryOver": true,
+        "saved": 1,
+        "population": 51,
+        "medal": "Bronze",
+        "ticks": 2700
+      },
+      {
+        "route": "space-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1701
+      },
+      {
+        "route": "space-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 3065
+      },
+      {
+        "route": "space-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 1498
+      },
+      {
+        "route": "space-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 817
+      },
+      {
+        "route": "space-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 794
+      },
+      {
+        "route": "space-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 168
+      },
+      {
+        "route": "space-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 3600
+      },
+      {
+        "route": "space-07",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 972
+      },
+      {
+        "route": "space-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1661
+      },
+      {
+        "route": "space-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2283
+      },
+      {
+        "route": "space-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1008
+      },
+      {
+        "route": "sports-01",
+        "carryOver": false,
+        "saved": 2,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "sports-02",
+        "carryOver": false,
+        "saved": 56,
+        "population": 60,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "sports-02",
+        "carryOver": true,
+        "saved": 2,
+        "population": 2,
+        "medal": "Gold",
+        "ticks": 548
+      },
+      {
+        "route": "sports-03",
+        "carryOver": false,
+        "saved": 1,
+        "population": 2,
+        "medal": "Silver",
+        "ticks": 8100
+      },
+      {
+        "route": "sports-04",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 2376
+      },
+      {
+        "route": "sports-04",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1449
+      },
+      {
+        "route": "sports-05",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 8100
+      },
+      {
+        "route": "sports-05",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 745
+      },
+      {
+        "route": "sports-06",
+        "carryOver": false,
+        "saved": 1,
+        "population": 60,
+        "medal": "Bronze",
+        "ticks": 5400
+      },
+      {
+        "route": "sports-06",
+        "carryOver": true,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 354
+      },
+      {
+        "route": "sports-07",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 7178
+      },
+      {
+        "route": "sports-08",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 1235
+      },
+      {
+        "route": "sports-09",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 2000
+      },
+      {
+        "route": "sports-10",
+        "carryOver": false,
+        "saved": 1,
+        "population": 1,
+        "medal": "Gold",
+        "ticks": 965
+      }
+    ],
+    "eventSuite": [
+      "PASS 120 routes replay the same as version 1 and as converted events",
+      "PASS version 2 rejects refused, off-viewport and out-of-order events; a lenient replay drops without a trace"
+    ],
+    "arkPrerequisites": "open",
+    "goldenTalisman": false,
+    "arkTribes": [
+      {
+        "tribe": "Classic",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Beach",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Cavelems",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Circus",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Egyptian",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Highland",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Medieval",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Outdoor",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Polar",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Shadow",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Space",
+        "talisman": "Bronze",
+        "survivors": 1
+      },
+      {
+        "tribe": "Sports",
+        "talisman": "Bronze",
+        "survivors": 1
+      }
+    ],
+    "strictArkGate": {
+      "passed": false,
+      "exitCode": 1,
+      "expectedFailure": true,
+      "message": "Strict ark completion requires a golden talisman and at least 30 survivors from every tribe."
+    }
+  },
+  "verificationScope": "This replay covers the manifest-selected 218-file L2 app payload and its runtime outcomes. It does not verify the signed app archive layout, notarisation, or release distribution. The 14 original interpreter/support files found in the full resource extraction are excluded by the app packager and are outside this native-engine replay.",
+  "remaining": [
+    "Reach the golden talisman and at least 30 survivors from every tribe; all current chains end with one survivor and a Bronze talisman.",
+    "Verify L2 source-engine behaviour against original-engine evidence."
+  ]
+}

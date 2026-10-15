@@ -50,6 +50,21 @@ checks pass. The bundled L3 route gate remains open. The installed app is 1.9.1
 build 76, and its L3 files match the 1.9.7 build 82 `Ports` baseline. Replay
 evidence and route gaps cause the gate failure. See the [content recheck](../MacOS2Preparation-2026-10-15/classic-content-recheck.json).
 
+### Current-main route searches
+
+The latest current-main audit still reports 399 of 416 fixtures passing. I
+rebuilt the L3 solver against the audited runtime library and searched from
+retained route prefixes for levels 206, 213 and 229. The searches used 120
+seconds and a beam width of 1,024. None found a winning route. Level 206 was
+searched from ticks 424 and 630. Level 213 was searched from tick 750. Level
+229 was searched from tick 1,560, before the refused input at tick 1,561.
+The results and hashes are in
+[`current-route-searches-2026-10-15.json`](current-route-searches-2026-10-15.json).
+
+These searches did not change any fixture. They do not show that these levels
+are unsolvable. The four standalone route failures and thirteen carried route
+failures remain open.
+
 The audit ran when `main` was at `eb6d58d7`. The worktree is now at
 `0e3ac4a7` after a localisation-only commit. That commit did not change L3
 engine or verifier sources. The diagnostic audit uses a prebuilt verifier and
@@ -195,3 +210,15 @@ the ignored reference directory.
 No runtime or route fixture changes were made by this chat. The full campaign
 gate will be rerun against a fresh source build after the other agent's runtime
 and route repairs reach `main`.
+
+## Current-main trace recheck
+
+After this worktree advanced to `main` revision `fc2c59e6`, I reran
+`python3 Scripts/verify-l3-mole-trace.py`. It passed the 53 sampled positions,
+both repeated source traces with 673 samples, and all four tunnel-edge checks.
+This confirms the retained source comparison still matches the current runtime
+fingerprint. The intervening main commit changed pause and presentation code,
+not the L3 runtime or trace verifier. This does not close the excavation-mask
+or built-brick trigger gaps. See the
+[current parity recheck](current-source-parity-recheck-2026-10-15.json) for the
+source and verifier hashes.
