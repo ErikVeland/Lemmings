@@ -124,6 +124,65 @@ staged application-support location. The 2.0 source adds separate import paths
 for L2, L3 and supported NeoLemmix data. Each import validates the staged copy
 before replacing installed data and restores the prior copy on failure.
 
+### Localisation
+
+Localisation is shared presentation infrastructure in `NxlvKit`. Classic,
+Lemmings 2 and Lemmings 3 use it through the Mac and shared iOS/tvOS front ends.
+The normal TV app reuses the mobile application flow. Its separate development
+shell also needs translated captions. See the
+[TV parity contract](Apps/UltimateLemmingsTV/IOSParity.md) before changing either.
+
+```text
+Swift L10n.text / L10n.plural calls + original L2 text inventory
+                         |
+             Tools/Localisation/catalogue.py
+                         |
+         English tables + source-reference catalogue
+                         |
+       staged locale JSON + plural JSON + language review
+                         |
+     coverage / grammar / fonts / rendered flows / platform checks
+                         |
+       approved .lproj tables in Localization.bundle
+                         |
+       InterfaceLocalisation -> bitmap layout and accessibility
+```
+
+| Owner | Contract |
+| --- | --- |
+| `Sources/NxlvKit/InterfaceLocalisation.swift` | Language matching, English fallback, complete-message interpolation, native plurals and test text expansion. Resolve captions before layout. |
+| `SkillVocabulary`, `DifficultyTechniques`, `LearningJourney` | Translate display names while retaining canonical engine, shortcut and saved-journey identities. |
+| `BitmapLatinGlyphs`, `SequelBitmapFont`, shared bitmap renderers | Preserve source pixels and supported Western Latin letters. Measure translated text and accent overhang. Keep full Unicode accessibility text. |
+| `Tools/Localisation/catalogue.py` and `extract.swift` | Parse Swift syntax, collect message keys, generate English tables and source references, reject known technical-data mistakes. The scan does not prove coverage of computed captions. |
+| `Tools/Localisation/l2-original-text.json` | Explicit inventory of translatable text from original L2 banks. Binary-file references use line 1 as a locator, not a Swift source line. |
+| `Tools/Localisation/drafts/` | Staged translations, plural forms and per-locale review checkpoints. These files are not runtime resources. |
+| `Tools/Localisation/captions.tsv` | Shared action and skill vocabulary for seven locales. Neither the runtime nor validator applies it automatically. |
+| `Tools/Localisation/validate.py` | Structural completeness, placeholder, count-format and unchanged-English checks. Its `complete` field does not certify linguistic or device acceptance. |
+| `Sources/NxlvKit/Resources/Localization.bundle` | Approved runtime tables only. SwiftPM, Mac packaging and the iOS/tvOS asset packager copy this bundle. Adding a locale here can make it selectable at startup. |
+
+`InterfaceMessage` separates numbered `{0}` arguments from the English message
+key. Translations can reorder arguments without interpreting player data as a
+second template. Count-dependent messages use `.stringsdict`, with `%ld` and
+Apple's plural categories. Blank or damaged text falls back to English.
+That fallback is a runtime safeguard, not evidence that a pack is complete.
+
+Keep action IDs, keyboard bindings, artwork lookup tables, paths, HTTP headers,
+MIME types and JavaScript outside translation. Translate only their interface
+captions. Keyboard help uses structured key/action/category rows. Never recover
+command identity by parsing translated prose. The TV transfer page escapes
+translated HTML captions and quotes JavaScript messages separately from code.
+
+Original L2 bank text passes through `L10n.originalL2Text`. Its current inventory
+contains line fragments, so sentence grouping, credit-name protection and script
+layout still need review. Baked-in artwork is a separate content task. Do not
+infer that translating the string catalogue translates every original picture.
+
+Translation models, Python packages, downloaded weights and candidate output
+are optional developer tools under `.build/`. They are not app dependencies and
+do not establish language quality. The maintained workflow, current checkpoint,
+known defects and exact validation commands belong in
+[Interface localisation](Documentation/Localisation.md#translation-handover).
+
 ### `Sources/LemmingsDataTool`
 
 `LemmingsDataTool` is a command-line utility for inspecting and transforming
@@ -245,6 +304,7 @@ questions.
 | --- | --- |
 | What is the project and how do I build it? | [`README.md`](README.md) |
 | How is the code and release system shaped? | `ARCHITECTURE.md` |
+| How do I complete, review and enable a translation pack? | [`Documentation/Localisation.md`](Documentation/Localisation.md#translation-handover) and the per-locale review checkpoints |
 | What does a player see today? | [`Documentation/Overview.md`](Documentation/Overview.md) |
 | What does Complete, Playable or Preview mean? | [`Documentation/ReleaseScope.md`](Documentation/ReleaseScope.md) |
 | What is in the iPhone/iPad milestone? | [`Documentation/2.0Roadmap.md`](Documentation/2.0Roadmap.md) |
