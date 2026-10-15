@@ -51,7 +51,8 @@
     "completionVerifierSHA256": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
     "eventVerifierSHA256": "51b052f741f70ad9370bb25f5cca0ffcf5a9cc8a9eede128d507881580d6bb6d",
     "runtimeTestsSHA256": "58f12ea3c6d5d57394f38087116020be32b6376ead86363218d8492534c0e951",
-    "runtimeTestSourceSHA256": "ef9e4c8bc438771443222ad2ff727baec3b3c3e1df04d649c805b0e33b67b54f",
+    "runtimeTestSourceSHA256": "c2c872d02cca392c21949de2bc0bc9f23382cd13c585e658029b344e416a4cd4",
+    "runtimeTestCommit": "d537e822e3363d65fb7b9e7bfd879e59ce3a07e1",
     "buildMethod": "Optimised Xcode 26.6 Swift 6.3.3 build from current NxlvKit sources. A temporary copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings2Runtime.swift matches the current worktree byte for byte.",
     "commands": [
       ".build/l2-current-main-20261016/events <payload-root>",
@@ -61,7 +62,8 @@
     "payloadReplayResultLogs": {
       "events": "/private/tmp/l2-current-main-20261016-events.log",
       "routes": "/private/tmp/l2-current-main-20261016-routes.log",
-      "ark": "/private/tmp/l2-current-main-20261016-ark.log"
+      "ark": "/private/tmp/l2-current-main-20261016-ark.log",
+      "runtimeTests": "/private/tmp/l2-current-d537-runtime.log"
     }
   },
   "result": {

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUTC": "2026-10-15T14:58:01+00:00",
+  "sourceCommit": "fc52cac4bc27e9d196f3cdfa348ac36571426f94",
+  "purpose": "Recheck the four failing standalone L3 routes with the current runtime and staged build 83 data.",
+  "resourcePayload": {
+    "manifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "manifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "expectedFiles": 561,
+    "matchedFiles": 561,
+    "missing": 0,
+    "changed": 0,
+    "extractedFiles": 576,
+    "unmanifestedFiles": 15
+  },
+  "build": {
+    "compiler": "Xcode 26.6, Swift 6.3.3",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "replaySourceSHA256": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6",
+    "solverSearchSourceSHA256": "f359fa8171880fc0db1c0a91cd76f552573e42258b76cd0456305fade04ff6d3",
+    "solverMainSourceSHA256": "15d76aeadb9400cb1aefa938085ef1684d0f03f0f72fa24f11a7c8820eac5b1c",
+    "solverSHA256": "f8c9f343d8d937da5e2e4c2f6d4745406d583a1acc161804f06afa36c8680716",
+    "workaround": "A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping because the installed SDK rejects the selected compiler. Lemmings3Runtime.swift matches current main byte for byte."
+  },
+  "searchLimits": {
+    "budgetSeconds": 120,
+    "beamWidth": 1024,
+    "toolSiteCellPixels": 8,
+    "pairedActors": true,
+    "candidatePromotion": false
+  },
+  "results": [
+    {
+      "level": 107,
+      "name": "Shadow 7",
+      "population": 20,
+      "levelSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+      "input": "unseeded",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 1663,
+      "depth": 1703,
+      "expanded": 1511859
+    },
+    {
+      "level": 206,
+      "name": "Egyptian 6",
+      "population": 20,
+      "levelSHA256": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad",
+      "input": "unseeded",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 1595,
+      "depth": 1635,
+      "expanded": 2005691
+    },
+    {
+      "level": 213,
+      "name": "Egyptian 13",
+      "population": 20,
+      "levelSHA256": "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d",
+      "input": "unseeded",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 236,
+      "depth": 276,
+      "expanded": 1229232
+    },
+    {
+      "level": 229,
+      "name": "Egyptian 29",
+      "population": 20,
+      "levelSHA256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505",
+      "input": "Tests/Lemmings3CompletionTests/Fixtures/229.json through tick 1560, refreshed under current runtime",
+      "seedFixtureSHA256": "fc4eddbc9b818e2bf8aed34a275c2e8bb27f64fd705a6ccae395d5b9b318c650",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 1056,
+      "depth": 1096,
+      "expanded": 1299716
+    }
+  ],
+  "outcome": "No candidate route was found. The searches do not prove that any level is impossible and did not change fixtures.",
+  "currentFixtureAudit": {
+    "report": "current-fixture-audit.json",
+    "exactDoubleReplays": 399,
+    "totalFixtures": 416,
+    "failingRoutes": 17
+  }
+}

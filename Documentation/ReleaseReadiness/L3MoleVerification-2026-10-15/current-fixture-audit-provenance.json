@@ -19,7 +19,7 @@
   "reportSHA256": "96e83007d9a985826f1216b8afbe9f473b5d6f6c45af68ba78d5ce22d7ad8504",
   "resourceFileCount": 561,
   "resourceRoot": "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD",
-  "resourceTreeSHA256": "9ee43eb9251989be21d4513ee1c48a3463f6e2035cb3dc62f1b3987d566313a9",
+  "installedBuild76ResourceTreeSHA256": "9ee43eb9251989be21d4513ee1c48a3463f6e2035cb3dc62f1b3987d566313a9",
   "resourceManifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
   "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
   "resourceFilesMatched": 561,
