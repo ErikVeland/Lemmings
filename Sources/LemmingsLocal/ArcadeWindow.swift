@@ -130,6 +130,7 @@ import NxlvKit
     }
     var earnedRewardPage = 0
     private var announcedRewardRuns: Set<UUID> = []
+    var celebratesNewRewards = false
     var savedEarnedRewards: [ResultAwards.EarnedReward] {
         guard let report, let celebration, ArcadeStore.shared.storageError == nil,
               ArcadeStore.shared.records.runs.contains(where: { $0.id == report.run.id })
@@ -137,9 +138,9 @@ import NxlvKit
         return ResultAwards.earnedRewards(report: report, celebration: celebration)
     }
     func announceEarnedRewards() {
-        guard let report, !savedEarnedRewards.isEmpty,
-              announcedRewardRuns.insert(report.run.id).inserted else { return }
-        showEarnedRewards()
+        celebratesNewRewards = report.map { report in
+            !savedEarnedRewards.isEmpty && announcedRewardRuns.insert(report.run.id).inserted
+        } ?? false
     }
     var celebration: TrolleyCelebration?
     var celebrationTask: Task<Void, Never>?
@@ -296,7 +297,8 @@ import NxlvKit
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
-        func mapped(_ rect: CGRect) -> CGRect { CGRect(x: offset.x + rect.minX * scale, y: offset.y + rect.minY * scale, width: rect.width * scale, height: rect.height * scale) }
+        let pageScale = scale, pageOffset = offset
+        func mapped(_ rect: CGRect) -> CGRect { CGRect(x: pageOffset.x + rect.minX * pageScale, y: pageOffset.y + rect.minY * pageScale, width: rect.width * pageScale, height: rect.height * pageScale) }
         var result: [Any] = accessibleText.enumerated().map { index, item in
             accessibleElements.element(id: "text-\(index)", owner: self, label: item.0, frame: mapped(item.1))
         }

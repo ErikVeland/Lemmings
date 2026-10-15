@@ -376,21 +376,6 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "78:Taxing:19:4:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Bomboozal",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 106,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
         "levelID": "83:Taxing:24:5:0",
         "packID": "lemmings-LEVEL-120"
       },
@@ -401,6 +386,21 @@
       "requiredPreparation": [],
       "stage": "Expert",
       "step": 107,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "78:Taxing:19:4:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Bomboozal",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 108,
       "verdict": null
     },
     {
@@ -556,7 +556,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 120,
+      "step": 119,
       "verdict": null
     },
     {
@@ -751,6 +751,23 @@
     {
       "identity": {
         "engine": "classic",
+        "levelID": "52:Mega Drive Sunsoft:23:0:52",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Move on in two separate groups.",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 133,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
         "levelID": "85:Taxing:26:5:2",
         "packID": "lemmings-LEVEL-120"
       },
@@ -762,7 +779,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 133,
+      "step": 134,
       "verdict": null
     },
     {
@@ -777,7 +794,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 134,
+      "step": 135,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -792,25 +809,8 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 135,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Mega Drive Sunsoft:23:0:52",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Move on in two separate groups.",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
       "step": 136,
-      "verdict": null
+      "verdict": "tooHardForEarlyJourney"
     },
     {
       "identity": {
@@ -1236,7 +1236,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 164,
+      "step": 163,
       "verdict": null
     },
     {
@@ -1299,7 +1299,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 169,
+      "step": 168,
       "verdict": null
     },
     {
@@ -1451,6 +1451,24 @@
     {
       "identity": {
         "engine": "classic",
+        "levelID": "47:Wild:8:0:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "It`s a tight fit!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 179,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
         "levelID": "70:Wicked:11:4:1",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
@@ -1460,7 +1478,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 179,
+      "step": 180,
       "verdict": null
     },
     {
@@ -1477,7 +1495,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 180,
+      "step": 181,
       "verdict": null
     },
     {
@@ -1493,7 +1511,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 181,
+      "step": 182,
       "verdict": null
     },
     {
@@ -1510,7 +1528,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 182,
+      "step": 183,
       "verdict": null
     },
     {
@@ -1526,7 +1544,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 183,
+      "step": 184,
       "verdict": null
     },
     {
@@ -1545,7 +1563,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 184,
+      "step": 185,
       "verdict": null
     },
     {
@@ -1562,7 +1580,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 185,
+      "step": 186,
       "verdict": null
     },
     {
@@ -1579,7 +1597,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 186,
+      "step": 187,
       "verdict": null
     },
     {
@@ -1596,7 +1614,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 187,
+      "step": 188,
       "verdict": null
     },
     {
@@ -1610,24 +1628,6 @@
         "near-full rescue with several exhausted used skill stocks",
         "fast minimum release rate with no slower crowd-management option",
         "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 188,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "47:Wild:8:0:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "It`s a tight fit!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "dense assignment workload with limited recovery margin"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
@@ -1760,22 +1760,6 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "86:Havoc:7:5:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Creature Discomforts",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 198,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
         "levelID": "36:Crazy:17:3:4",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
@@ -1787,7 +1771,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 199,
+      "step": 197,
       "verdict": null
     },
     {
@@ -1803,7 +1787,23 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 200,
+      "step": 198,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "86:Havoc:7:5:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Creature Discomforts",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 199,
       "verdict": null
     },
     {
@@ -1818,7 +1818,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 201,
+      "step": 200,
       "verdict": null
     },
     {
@@ -2045,6 +2045,21 @@
     {
       "identity": {
         "engine": "classic",
+        "levelID": "35:Mega Drive Sunsoft:6:0:35",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Libra",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 222,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
         "levelID": "61:Wicked:2:4:6",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
@@ -2055,7 +2070,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 222,
+      "step": 223,
       "verdict": null
     },
     {
@@ -2071,22 +2086,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 223,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "35:Mega Drive Sunsoft:6:0:35",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Libra",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 224,
+      "step": 225,
       "verdict": null
     },
     {

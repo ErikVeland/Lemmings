@@ -523,6 +523,13 @@ each saved attempt automatically only once per app session. Repeated clears and
 unsaved previews do not open an earned-reward page. Reduced motion uses the same static
 page. Normal star chimes start when the player reaches the result.
 
+Muted offscreen checks also verify complete action rows, disabled Skip targets,
+short and multi-page awards, single-action details, long result titles and compact
+and large renders. Native Learning journey failures pass in all three engines,
+solo play and both Hot Seat rules. Representative results, rewards and details
+were visually inspected. Mac source compilation passes. Physical VoiceOver and
+controller delivery remain manual checks. This layout change is Mac-only.
+
 The muted, offscreen `TEST_SCOPE=earned-rewards` Mac suite passes for Classic,
 Lemmings 2 and Lemmings 3, solo play and both Hot Seat rules. It checks actual
 resource milestones and a named career award, every reward and reason across
