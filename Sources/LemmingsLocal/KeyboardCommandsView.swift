@@ -67,7 +67,7 @@ struct KeyboardCommand {
             (query.isEmpty || "\(row.keys) \(row.action) \(row.group)".localizedCaseInsensitiveContains(query))
         }
         table.reloadData()
-        count.stringValue = filtered.isEmpty ? L10n.text("No matching commands. Try another word or choose All commands.") : L10n.text("\(filtered.count) commands • Shortcuts apply in the context shown. Esc closes this guide.")
+        count.stringValue = filtered.isEmpty ? L10n.text("No matching commands. Try another word or choose All commands.") : L10n.plural("count.commands", count: filtered.count, one: "%ld command • Shortcuts apply in the context shown. Esc closes this guide.", other: "%ld commands • Shortcuts apply in the context shown. Esc closes this guide.")
     }
     func numberOfRows(in tableView: NSTableView) -> Int { filtered.count }
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

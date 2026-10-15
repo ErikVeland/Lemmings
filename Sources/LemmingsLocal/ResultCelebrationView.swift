@@ -78,10 +78,10 @@ import NxlvKit
                      earned: index < c.goals.stars && index < revealedStars, size: size)
             let goal: (String, String)
             switch index {
-            case 0: goal = (L10n.text("Target met"), L10n.text("Rescue \(run.level.required) lemmings and clear the level."))
-            case 1: goal = (L10n.text("Extra rescue"), L10n.text("Save \(c.goals.extraSaved) lemmings and clear the level to earn the second star."))
+            case 0: goal = (L10n.text("Target met"), L10n.plural("count.rescueGoal", count: run.level.required, one: "Rescue %ld lemming and clear the level.", other: "Rescue %ld lemmings and clear the level."))
+            case 1: goal = (L10n.text("Extra rescue"), L10n.plural("count.secondStarGoal", count: c.goals.extraSaved, one: "Save %ld lemming and clear the level to earn the second star.", other: "Save %ld lemmings and clear the level to earn the second star."))
             default: goal = (L10n.text("Three-star rescue"), c.goals.fullSaved.map {
-                L10n.text("Save \($0) lemmings and clear the level to earn the third star.")
+                L10n.plural("count.thirdStarGoal", count: $0, one: "Save %ld lemming and clear the level to earn the third star.", other: "Save %ld lemmings and clear the level to earn the third star.")
             } ?? L10n.text("The maximum rescue target for this level is not established yet."))
             }
             achievementTarget(goal.0, detail: goal.1,

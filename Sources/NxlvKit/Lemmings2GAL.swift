@@ -269,7 +269,7 @@ public struct Lemmings2GAL {
         } else if bob.type == 1 {
             guard bank.strings.indices.contains(bob.identifier) else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation text.")) }
             var lines: [String] = []
-            for paragraph in bank.strings[bob.identifier].split(separator:"\r",omittingEmptySubsequences:false) {
+            for paragraph in L10n.originalL2Text(bank.strings[bob.identifier]).split(separator:"\r",omittingEmptySubsequences:false) {
                 guard let layout = textLayout, layout.width > 0 else { lines.append(String(paragraph)); continue }
                 var line = ""
                 for word in paragraph.split(separator:" ") {

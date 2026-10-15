@@ -29,7 +29,7 @@ final class InterfaceLocalisationTests: XCTestCase {
         for locale in ["en", "de"] { try FileManager.default.createDirectory(at: root.appendingPathComponent("\(locale).lproj"), withIntermediateDirectories: true) }
         let metadata: [String: Any] = ["CFBundleIdentifier": "test.localisation.\(UUID().uuidString)", "CFBundleDevelopmentRegion": "en"]
         try PropertyListSerialization.data(fromPropertyList: metadata, format: .xml, options: 0).write(to: root.appendingPathComponent("Info.plist"))
-        let translations = ["{0} saved {1}": "{1} gerettet von {0}", "Invalid {0}": "Ungültig {2}"]
+        let translations = ["{0} saved {1}": "{1} gerettet von {0}", "Invalid {0}": "Ungültig {2}", "Start": "  "]
         for (locale, values) in [("en", [String: String]()), ("de", translations)] {
             try PropertyListSerialization.data(fromPropertyList: values, format: .xml, options: 0).write(to: root.appendingPathComponent("\(locale).lproj/Interface.strings"))
         }
@@ -38,6 +38,7 @@ final class InterfaceLocalisationTests: XCTestCase {
         XCTAssertEqual(language.text("\("ALICE") saved \(12)"), "12 gerettet von ALICE")
         XCTAssertEqual(language.text("Missing translation"), "Missing translation")
         XCTAssertEqual(language.text("Invalid \("value")"), "Invalid value")
+        XCTAssertEqual(language.text("Start"), "Start")
     }
     func testNativePluralRulesAndUnsupportedLanguageFallback() throws {
         let language = InterfaceLocalisation(bundle: try XCTUnwrap(Bundle(url: resources)), preferredLanguages: ["zz-ZZ"])

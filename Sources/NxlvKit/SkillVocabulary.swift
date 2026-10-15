@@ -62,6 +62,7 @@ public enum SkillVocabulary {
         case "spearer": L10n.text("Spearer")
         case "stacker": L10n.text("Stacker")
         case "stoner": L10n.text("Stoner")
+        case "stomper": L10n.text("Stomper")
         case "sucker": L10n.text("Sucker")
         case "superlem": L10n.text("Superlem")
         case "surfer": L10n.text("Surfer")

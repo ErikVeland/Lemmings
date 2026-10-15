@@ -33,6 +33,20 @@ public struct DifficultyTechniqueDefinition: Sendable {
 }
 
 public enum DifficultyTechniques {
+    public static func title(_ id: String) -> String {
+        switch id {
+        case "multiple-worker-coordination": L10n.text("Two workers")
+        case "release-rate-manipulation": L10n.text("Crowd spacing")
+        case "skill-cancellation": L10n.text("Skill cancellation")
+        case "blocker-turnaround": L10n.text("Blocker turnaround")
+        case "pickup-skill-interaction": L10n.text("Skill pickups")
+        case "button-interaction": L10n.text("Unlock buttons")
+        case "trap-disarming": L10n.text("Trap disarming")
+        case "teleporter-interaction": L10n.text("Teleporters")
+        default: SkillVocabulary.title(id)
+        }
+    }
+
     public static let definitions: [DifficultyTechniqueDefinition] =
         NeoLemmixSkill.allCases.map {
             DifficultyTechniqueDefinition(id: $0.rawValue, sophistication: 1, prerequisites: [],

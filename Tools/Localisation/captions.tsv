@@ -1,0 +1,128 @@
+English	es-419	de	fr	pt-BR	it	nl	nb
+Start	Iniciar	Starten	Démarrer	Iniciar	Inizia	Starten	Start
+Play	Jugar	Spielen	Jouer	Jogar	Gioca	Spelen	Spill
+Ready	Listo	Bereit	Prêt	Pronto	Pronto	Klaar	Klar
+Continue	Continuar	Weiter	Continuer	Continuar	Continua	Doorgaan	Fortsett
+Retry	Reintentar	Erneut versuchen	Réessayer	Tentar novamente	Riprova	Opnieuw proberen	Prøv igjen
+Try again	Intentar de nuevo	Erneut versuchen	Réessayer	Tentar novamente	Riprova	Opnieuw proberen	Prøv igjen
+Next	Siguiente	Weiter	Suivant	Próximo	Avanti	Volgende	Neste
+Previous	Anterior	Zurück	Précédent	Anterior	Precedente	Vorige	Forrige
+Back	Atrás	Zurück	Retour	Voltar	Indietro	Terug	Tilbake
+Cancel	Cancelar	Abbrechen	Annuler	Cancelar	Annulla	Annuleren	Avbryt
+Close	Cerrar	Schließen	Fermer	Fechar	Chiudi	Sluiten	Lukk
+Resume	Reanudar	Fortsetzen	Reprendre	Retomar	Riprendi	Hervatten	Fortsett
+Pause	Pausar	Pause	Pause	Pausar	Pausa	Pauzeren	Pause
+Paused	En pausa	Pausiert	En pause	Pausado	In pausa	Gepauzeerd	Pauset
+Playing	En juego	Spiel läuft	En jeu	Jogando	In gioco	Bezig met spelen	Spiller
+Settings	Configuración	Einstellungen	Réglages	Configurações	Impostazioni	Instellingen	Innstillinger
+Menu	Menú	Menü	Menu	Menu	Menu	Menu	Meny
+Library	Biblioteca	Bibliothek	Bibliothèque	Biblioteca	Libreria	Bibliotheek	Bibliotek
+Game menu	Menú del juego	Spielmenü	Menu du jeu	Menu do jogo	Menu di gioco	Spelmenu	Spillmeny
+Choose a game	Elegir un juego	Spiel auswählen	Choisir un jeu	Escolher um jogo	Scegli un gioco	Kies een spel	Velg et spill
+Choose player	Elegir jugador	Spieler auswählen	Choisir un joueur	Escolher jogador	Scegli giocatore	Kies speler	Velg spiller
+Players	Jugadores	Spieler	Joueurs	Jogadores	Giocatori	Spelers	Spillere
+Player	Jugador	Spieler	Joueur	Jogador	Giocatore	Speler	Spiller
+Hot Seat	Hot Seat	Hot Seat	Hot Seat	Hot Seat	Hot Seat	Hot Seat	Hot Seat
+Skills	Habilidades	Fähigkeiten	Aptitudes	Habilidades	Abilità	Vaardigheden	Ferdigheter
+Actions and tools	Acciones y herramientas	Aktionen und Werkzeuge	Actions et outils	Ações e ferramentas	Azioni e strumenti	Acties en gereedschap	Handlinger og verktøy
+Camera	Cámara	Kamera	Caméra	Câmera	Telecamera	Camera	Kamera
+Speed	Velocidad	Geschwindigkeit	Vitesse	Velocidade	Velocità	Snelheid	Hastighet
+Gameplay	Juego	Spielablauf	Partie	Jogabilidade	Gioco	Spelverloop	Spill
+Controller	Control	Controller	Manette	Controle	Controller	Controller	Kontroller
+Assign selected skill	Asignar habilidad seleccionada	Ausgewählte Fähigkeit zuweisen	Attribuer l’aptitude sélectionnée	Atribuir habilidade selecionada	Assegna l’abilità selezionata	Geselecteerde vaardigheid toewijzen	Tildel valgt ferdighet
+No skill	Sin habilidad	Keine Fähigkeit	Aucune aptitude	Sem habilidade	Nessuna abilità	Geen vaardigheid	Ingen ferdighet
+No target	Sin objetivo	Kein Ziel	Aucune cible	Sem alvo	Nessun bersaglio	Geen doelwit	Ingen mål
+Lemming {0}, eligible	Lemming {0}, disponible	Lemming {0}, geeignet	Lemming {0}, apte	Lemming {0}, apto	Lemming {0}, idoneo	Lemming {0}, geschikt	Lemming {0}, tilgjengelig
+Lemming {0}, unavailable	Lemming {0}, no disponible	Lemming {0}, nicht verfügbar	Lemming {0}, indisponible	Lemming {0}, indisponível	Lemming {0}, non disponibile	Lemming {0}, niet beschikbaar	Lemming {0}, utilgjengelig
+Ready, {0}	Listo, {0}	Bereit, {0}	Prêt, {0}	Pronto, {0}	Pronto, {0}	Klaar, {0}	Klar, {0}
+Level complete	Nivel completado	Level abgeschlossen	Niveau terminé	Fase concluída	Livello completato	Level voltooid	Brett fullført
+Level	Nivel	Level	Niveau	Fase	Livello	Level	Brett
+Levels	Niveles	Level	Niveaux	Fases	Livelli	Levels	Brett
+Records	Récords	Rekorde	Records	Recordes	Record	Records	Rekorder
+Hints	Pistas	Hinweise	Indices	Dicas	Suggerimenti	Hints	Hint
+Level hints	Pistas del nivel	Levelhinweise	Indices du niveau	Dicas da fase	Suggerimenti del livello	Levelhints	Bretthint
+End run	Terminar partida	Lauf beenden	Terminer la partie	Encerrar partida	Termina partita	Poging beëindigen	Avslutt forsøk
+Undo end run	Deshacer fin de partida	Laufende rückgängig machen	Annuler la fin de partie	Desfazer fim da partida	Annulla fine partita	Einde poging ongedaan maken	Angre avslutning
+Nuke	Explotar todos	Alle sprengen	Tout faire exploser	Explodir todos	Fai esplodere tutti	Alles opblazen	Spreng alle
+Undo nuke	Deshacer explosión	Sprengung rückgängig machen	Annuler l’explosion	Desfazer explosão	Annulla esplosione	Explosie ongedaan maken	Angre sprenging
+Rewind	Rebobinar	Zurückspulen	Rembobiner	Rebobinar	Riavvolgi	Terugspoelen	Spol tilbake
+Save	Guardar	Speichern	Enregistrer	Salvar	Salva	Opslaan	Lagre
+Load	Cargar	Laden	Charger	Carregar	Carica	Laden	Last inn
+Import	Importar	Importieren	Importer	Importar	Importa	Importeren	Importer
+Download	Descargar	Herunterladen	Télécharger	Baixar	Scarica	Downloaden	Last ned
+Export file	Exportar archivo	Datei exportieren	Exporter un fichier	Exportar arquivo	Esporta file	Bestand exporteren	Eksporter fil
+Choose files first.	Primero elige archivos.	Wähle zuerst Dateien aus.	Choisis d’abord des fichiers.	Escolha os arquivos primeiro.	Scegli prima i file.	Kies eerst bestanden.	Velg filer først.
+Transferred. Check Apple TV for validation.	Transferencia terminada. Revisa la validación en el Apple TV.	Übertragen. Prüfe die Validierung auf dem Apple TV.	Transfert terminé. Vérifie la validation sur l’Apple TV.	Transferido. Confira a validação no Apple TV.	Trasferimento completato. Controlla la verifica su Apple TV.	Overgedragen. Controleer de validatie op de Apple TV.	Overført. Sjekk valideringen på Apple TV.
+Walker	Caminante	Läufer	Marcheur	Caminhante	Camminatore	Loper	Vandrer
+Jumper	Saltador	Springer	Sauteur	Saltador	Saltatore	Springer	Hopper
+Climber	Escalador	Kletterer	Grimpeur	Escalador	Scalatore	Klimmer	Klatrer
+Floater	Paracaidista	Fallschirmspringer	Parachutiste	Paraquedista	Paracadutista	Parachutist	Fallskjermhopper
+Bomber	Dinamitero	Sprenger	Exploseur	Bombardeiro	Bombarolo	Bomlegger	Sprenger
+Blocker	Bloqueador	Blocker	Bloqueur	Bloqueador	Bloccatore	Blokkeerder	Blokkerer
+Builder	Constructor	Baumeister	Constructeur	Construtor	Costruttore	Bouwer	Bygger
+Basher	Excavador horizontal	Tunnelgräber	Creuseur horizontal	Escavador horizontal	Scavatore orizzontale	Tunnelgraver	Tunnelgraver
+Miner	Minero	Bergmann	Mineur	Minerador	Minatore	Mijnwerker	Gruvegraver
+Digger	Cavador	Gräber	Foreur	Cavador	Scavatore verticale	Graver	Graver
+Archer	Arquero	Bogenschütze	Archer	Arqueiro	Arciere	Boogschutter	Bueskytter
+Attractor	Animador	Animateur	Animateur	Animador	Animatore	Entertainer	Underholder
+Ballooner	Aeronauta	Ballonfahrer	Aérostier	Balonista	Aeronauta	Ballonvaarder	Ballongfører
+Bazooka	Lanzacohetes	Bazooka	Bazooka	Bazuca	Bazooka	Bazooka	Bazooka
+Bomb	Bomba	Bombe	Bombe	Bomba	Bomba	Bom	Bombe
+Bricks	Ladrillos	Ziegel	Briques	Tijolos	Mattoni	Stenen	Murstein
+Clock	Reloj	Uhr	Horloge	Relógio	Orologio	Klok	Klokke
+Cloner	Clonador	Kloner	Cloneur	Clonador	Clonatore	Kloner	Kloner
+Club Basher	Golpeador	Keulenschwinger	Massueur	Golpeador	Picchiatore	Knuppelaar	Køllesvinger
+Disarmer	Desactivador	Entschärfer	Désamorceur	Desarmador	Disinnescatore	Ontmantelaar	Felledesarmør
+Diver	Clavadista	Taucher	Plongeur	Mergulhador	Tuffatore	Duiker	Stuper
+Drop	Soltar	Ablegen	Déposer	Soltar	Lascia	Neerleggen	Slipp
+Exploder	Explosivo	Sprenger	Exploseur	Explosivo	Esplosivo	Opblazer	Eksploderer
+Fencer	Excavador ascendente	Fechter	Escrimeur	Escavador ascendente	Schermidore	Schermer	Fekter
+Filler	Rellenador	Füller	Remblayeur	Preenchedor	Riempitore	Vuller	Fyller
+Flame Thrower	Lanzallamas	Flammenwerfer	Lance-flammes	Lança-chamas	Lanciafiamme	Vlammenwerper	Flammekaster
+Glider	Planeador	Gleiter	Planeur	Planador	Planatore	Zwever	Glider
+Glue Pourer	Vertedor de pegamento	Klebergießer	Verseur de colle	Despejador de cola	Versatore di colla	Lijmgieter	Limheller
+Grenade	Granada	Granate	Grenade	Granada	Granata	Granaat	Granat
+Hadoken	Hadoken	Hadoken	Hadoken	Hadoken	Hadoken	Hadoken	Hadoken
+Hang Glider	Ala delta	Drachenflieger	Deltaplane	Asa-delta	Deltaplanista	Deltavlieger	Hangglider
+Hopper	Brincador	Hüpfer	Bondisseur	Saltitante	Saltellatore	Hopper	Spretter
+Icarus Wings	Alas de Ícaro	Ikarusflügel	Ailes d’Icare	Asas de Ícaro	Ali di Icaro	Icarusvleugels	Ikarosvinger
+Jet Pack	Mochila propulsora	Raketenrucksack	Réacteur dorsal	Mochila a jato	Zaino a reazione	Jetpack	Jetpakke
+Kayaker	Kayakista	Kajakfahrer	Kayakiste	Caiaqueiro	Canoista	Kajakker	Kajakkpadler
+Laser Blaster	Disparador láser	Laserschütze	Tireur laser	Disparador laser	Sparalaser	Laserschutter	Laserskytter
+Laserer	Disparador láser	Laserschütze	Tireur laser	Disparador laser	Sparalaser	Laserschutter	Laserskytter
+Magic Carpet	Alfombra mágica	Fliegender Teppich	Tapis volant	Tapete mágico	Tappeto volante	Vliegend tapijt	Flygende teppe
+Magno Booter	Botas magnéticas	Magnetstiefler	Bottes magnétiques	Botas magnéticas	Stivali magnetici	Magneetlaarzen	Magnetstøvler
+Mortar	Mortero	Mörser	Mortier	Morteiro	Mortaio	Mortier	Bombekaster
+Parachuter	Paracaidista	Fallschirmspringer	Parachutiste	Paraquedista	Paracadutista	Parachutist	Fallskjermhopper
+Planter	Sembrador	Pflanzer	Planteur	Plantador	Piantatore	Planter	Planter
+Platformer	Constructor de plataformas	Plattformbauer	Plateformeur	Construtor de plataformas	Costruttore di piattaforme	Platformbouwer	Plattformbygger
+Pole Vaulter	Saltador con pértiga	Stabhochspringer	Perchiste	Saltador com vara	Astista	Polsstokspringer	Stavhopper
+Rock Climber	Escalador de roca	Felskletterer	Varappeur	Escalador de rocha	Arrampicatore	Rotsklimmer	Fjellklatrer
+Roller	Rodador	Roller	Rouleur	Rolador	Rotolatore	Roller	Ruller
+Roper	Lanzacuerdas	Seilwerfer	Lanceur de corde	Lançador de corda	Lanciatore di corde	Touwschieter	Taumester
+Runner	Corredor	Sprinter	Coureur	Corredor	Corridore	Renner	Løper
+Sand Pourer	Vertedor de arena	Sandgießer	Verseur de sable	Despejador de areia	Versatore di sabbia	Zandgieter	Sandheller
+Scooper	Excavador inclinado	Schaufler	Pelleteur	Escavador inclinado	Scavatore inclinato	Schepper	Skuffegraver
+Shimmier	Colgante	Hangler	Suspendeur	Pendurador	Sospeso	Hangloper	Armhenger
+Shimmy	Colgarse	Hangeln	Se suspendre	Pendurar	Appenditi	Hangen	Heng
+Skater	Patinador	Schlittschuhläufer	Patineur	Patinador	Pattinatore	Schaatser	Skøyteløper
+Skier	Esquiador	Skifahrer	Skieur	Esquiador	Sciatore	Skiër	Skiløper
+Slider	Deslizador	Rutscher	Glisseur	Deslizador	Scivolatore	Glijder	Glider
+Stacker	Apilador	Stapler	Empileur	Empilhador	Impilatore	Stapelaar	Stabler
+Stomper	Pisoteador	Stampfer	Piétineur	Pisoteador	Pestatore	Stamper	Stamper
+Stoner	Petrificador	Versteinerer	Pétrificateur	Petrificador	Pietrificatore	Verstener	Forsteiner
+Sucker	Succionador	Sauger	Ventouse	Sugador	Ventosa	Zuiger	Suger
+Superlem	Superlem	Superlem	Superlem	Superlem	Superlem	Superlem	Superlem
+Surfer	Surfista	Surfer	Surfeur	Surfista	Surfista	Surfer	Surfer
+Swimmer	Nadador	Schwimmer	Nageur	Nadador	Nuotatore	Zwemmer	Svømmer
+Thrower	Lanzador	Werfer	Lanceur	Arremessador	Lanciatore	Werper	Kaster
+Twister	Tornado	Wirbler	Tornade	Tornado	Turbine	Wervelaar	Virvel
+Use tool	Usar herramienta	Werkzeug benutzen	Utiliser l’outil	Usar ferramenta	Usa attrezzo	Gereedschap gebruiken	Bruk verktøy
+Drop tool	Soltar herramienta	Werkzeug ablegen	Déposer l’outil	Soltar ferramenta	Lascia attrezzo	Gereedschap neerleggen	Slipp verktøy
+Use	Usar	Benutzen	Utiliser	Usar	Usa	Gebruiken	Bruk
+unlimited	ilimitados	unbegrenzt	illimité	ilimitado	illimitato	onbeperkt	ubegrenset
+Lemmings	Lemmings	Lemmings	Lemmings	Lemmings	Lemmings	Lemmings	Lemmings
+Lemmings 2	Lemmings 2	Lemmings 2	Lemmings 2	Lemmings 2	Lemmings 2	Lemmings 2	Lemmings 2
+Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3	Lemmings 3
+All New World of Lemmings	All New World of Lemmings	All New World of Lemmings	All New World of Lemmings	All New World of Lemmings	All New World of Lemmings	All New World of Lemmings	All New World of Lemmings
+The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles	The Lemmings Chronicles

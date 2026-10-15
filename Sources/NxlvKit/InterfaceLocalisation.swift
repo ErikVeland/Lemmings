@@ -47,6 +47,8 @@ public struct InterfaceLocalisation: Sendable {
         let translated = bundle?.localizedString(forKey: message.key, value: message.key, table: "Interface") ?? message.key
         // A damaged translation must not hide a value or display a placeholder.
         let valid = Self.placeholders(translated) == Self.placeholders(message.key)
+            && (!translated.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                || message.key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         let template = valid ? translated : message.key
         return Self.render(expandsText ? Self.expanded(template) : template, arguments: message.arguments)
     }
@@ -61,6 +63,11 @@ public struct InterfaceLocalisation: Sendable {
 
     public func number(_ value: Int) -> String {
         value.formatted(.number.locale(locale))
+    }
+
+    fileprivate func contains(_ key: String) -> Bool {
+        let missing = "\u{F8FF}missing\u{F8FF}"
+        return bundle?.localizedString(forKey: key, value: missing, table: "Interface") != missing && bundle != nil
     }
 
     private static let placeholder = try! NSRegularExpression(pattern: #"\{([0-9]+)\}"#)
@@ -105,6 +112,14 @@ public enum L10n {
     }()
 
     public static func text(_ message: InterfaceMessage) -> String { interface.text(message) }
+    public static func originalL2Text(_ source: String) -> String {
+        if interface.language == "en" && !interface.expandsText { return source }
+        return source.components(separatedBy: "\r").map { line in
+            let key = line.trimmingCharacters(in: .whitespaces)
+            guard interface.contains(key) else { return line }
+            return interface.text(InterfaceMessage(stringLiteral: key))
+        }.joined(separator: "\r")
+    }
     public static func plural(_ key: String, count: Int, one: String, other: String) -> String {
         interface.plural(key, count: count, one: one, other: other)
     }

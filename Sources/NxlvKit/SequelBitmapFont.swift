@@ -74,6 +74,22 @@ public struct SequelBitmapFont: Sendable {
             letters[character] = Glyph(x: frame.x, y: frame.y, width: frame.width, height: frame.height,
                                        advance: advance, pixels: pixels, opaque: opaque)
         }
+        for (character, base): (Character, Character) in [
+            ("’", "'"), ("‘", "'"), ("ʼ", "'"), ("“", "\""), ("”", "\""), ("„", "\""), ("«", "\""), ("»", "\""),
+            ("–", "-"), ("—", "-"), ("−", "-"), ("‑", "-"), ("\u{00A0}", " "), ("\u{202F}", " "), ("×", "X")
+        ] where letters[character] == nil { letters[character] = letters[base] }
+        if let dot = letters["."], letters["…"] == nil {
+            let step = max(dot.advance, dot.width)
+            let width = step * 2 + dot.width
+            var pixels = [UInt8](repeating: transparent, count: width * dot.height)
+            var opaque = [Bool](repeating: false, count: pixels.count)
+            for index in 0..<3 { for y in 0..<dot.height { for x in 0..<dot.width {
+                let source = y * dot.width + x, target = y * width + index * step + x
+                pixels[target] = dot.pixels[source]; opaque[target] = dot.opaque[source]
+            } } }
+            letters["…"] = Glyph(x: dot.x, y: dot.y, width: width, height: dot.height,
+                advance: step * 3, pixels: pixels, opaque: opaque)
+        }
         self.letters = letters
     }
 

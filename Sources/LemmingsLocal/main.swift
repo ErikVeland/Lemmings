@@ -3410,7 +3410,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     var first: NSButton?
     for (index, rating) in ratings.enumerated() {
       let button = page.addListAction(
-        L10n.text("\(rating.name)  \(rating.levels.count) levels"),
+        L10n.text("\(rating.name)  \(L10n.plural("count.levels", count: rating.levels.count, one: "%ld level", other: "%ld levels"))"),
         at: index
       ) { [weak self] in
         self?.presentResolvedLevelBrowser(
@@ -4467,7 +4467,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       let pool = try LevelPool(
         id: "playlist:\(playlist.id.uuidString):\(playlist.updatedAt.timeIntervalSinceReferenceDate)",
-        summary: L10n.text("\(playlist.name) - \(playlist.entries.count) levels"))
+        summary: L10n.text("\(playlist.name) - \(L10n.plural("count.levels", count: playlist.entries.count, one: "%ld level", other: "%ld levels"))"))
       let run = try LevelSequenceRun.playlist(
         playlist,
         pool: pool,
@@ -5173,7 +5173,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }.joined(separator: "\u{1f}")
     let poolID = "fan-all:" + ArcadeStore.fingerprint(Data(signature.utf8))
     let packCount = Set(candidates.map(\.identity.packID)).count
-    let summary = L10n.text("All eligible fan levels - \(candidates.count) levels from \(packCount) packs")
+    let summary = L10n.text("All eligible fan levels - \(L10n.plural("count.levels", count: candidates.count, one: "%ld level", other: "%ld levels")) from \(L10n.plural("count.packs", count: packCount, one: "%ld pack", other: "%ld packs"))")
     return (candidates, try LevelPool(id: poolID, summary: summary), summary)
   }
 
@@ -5420,7 +5420,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         presentPlaylistLibrary()
         GameScreen.shared.message(
           L10n.text("Run complete"),
-          detail: L10n.text("Finished \(run.entries.count) \(run.entries.count == 1 ? "level" : "levels") from \(run.pool.summary)."))
+          detail: L10n.text("Finished \(L10n.plural("count.levels", count: run.entries.count, one: "%ld level", other: "%ld levels")) from \(run.pool.summary)."))
       }
       return true
     } catch {
@@ -6976,7 +6976,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       ? Int((Double(session.required) / Double(session.total) * 100).rounded())
       : 0
     var lines = [
-      L10n.text("\(session.total) lemmings"),
+      L10n.plural("count.lemmings", count: session.total, one: "%ld lemming", other: "%ld lemmings"),
       L10n.text("Save \(session.required)  (\(percent)%)"),
       L10n.text("Release rate \(session.rate)"),
     ]

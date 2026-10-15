@@ -2,6 +2,7 @@ import CoreGraphics
 import Foundation
 import LemmingsMobileCore
 import LemmingsTVCore
+import NxlvKit
 
 /// The shipping TV playfield renderer also supplies offscreen acceptance captures.
 @MainActor public final class TVPlayfieldArt {

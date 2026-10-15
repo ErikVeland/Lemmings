@@ -32,7 +32,7 @@ import Darwin
         var folder = source.standardizedFileURL
         while folder.path != temporary.path && folder.path != "/" {
             if folder.deletingLastPathComponent().path == temporary.path,
-               folder.lastPathComponent.hasPrefix(L10n.text("TVTransfer-")) {
+               folder.lastPathComponent.hasPrefix("TVTransfer-") {
                 try? FileManager.default.removeItem(at: folder)
                 return
             }
@@ -162,7 +162,7 @@ import Darwin
                     if error != nil || complete { self.finish(connection, request); return }
                     self.receive(connection, request)
                 } catch {
-                    self.reply(L10n.text("400 Bad Request"), body: Data(error.localizedDescription.utf8), connection, request)
+                    self.reply("400 Bad Request", body: Data(error.localizedDescription.utf8), connection, request)
                 }
             }
         }
@@ -182,7 +182,7 @@ import Darwin
             guard start.count == 3, let decoded = String(start[1]).removingPercentEncoding,
                   decoded == "/\(token)" || decoded.hasPrefix("/\(token)/") else {
                 request.remaining = 0
-                reply(L10n.text("404 Not Found"), body: Data(), connection, request)
+                reply("404 Not Found", body: Data(), connection, request)
                 return
             }
             request.path = String(decoded.dropFirst(token.count + 1))
@@ -204,8 +204,8 @@ import Darwin
                 request.remaining = 0
                 if request.path == "/download", let exportURL { sendFile(exportURL, connection, request) }
                 else if request.path.isEmpty || request.path == "/" {
-                    reply("200 OK", body: Data(webPage.utf8), connection, request, type: L10n.text("text/html; charset=utf-8"))
-                } else { reply(L10n.text("404 Not Found"), body: Data(), connection, request) }
+                    reply("200 OK", body: Data(webPage.utf8), connection, request, type: "text/html; charset=utf-8")
+                } else { reply("404 Not Found", body: Data(), connection, request) }
                 return
             }
             guard start[0] == "POST", exportURL == nil, !committed else { throw URLError(.unsupportedURL) }
@@ -258,7 +258,7 @@ import Darwin
     private func reply(_ status: String, body: Data, _ connection: NWConnection, _ request: Request,
                        type: String = "text/plain", onComplete: (@MainActor @Sendable () -> Void)? = nil) {
         request.remaining = 0
-        let header = L10n.text("HTTP/1.1 \(status)\r\nContent-Type: \(type)\r\nContent-Length: \(body.count)\r\nConnection: close\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\n\r\n")
+        let header = "HTTP/1.1 \(status)\r\nContent-Type: \(type)\r\nContent-Length: \(body.count)\r\nConnection: close\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\n\r\n"
         connection.send(content: Data(header.utf8) + body, completion: .contentProcessed { [weak self] _ in
             Task { @MainActor in
                 self?.finish(connection, request)
@@ -280,7 +280,7 @@ import Darwin
                     self?.sendChunk(connection, request)
                 }
             })
-        } catch { reply(L10n.text("404 Not Found"), body: Data(), connection, request) }
+        } catch { reply("404 Not Found", body: Data(), connection, request) }
     }
 
     private func sendChunk(_ connection: NWConnection, _ request: Request) {

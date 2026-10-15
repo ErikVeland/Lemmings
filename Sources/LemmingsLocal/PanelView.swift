@@ -176,7 +176,8 @@ enum PanelButton: Equatable {
       case .rateUp: label = session is NeoLemmixSession ? L10n.text("Increase spawn interval") : L10n.text("Increase release rate")
       case .skill(let skill):
         guard let value = session?.skills[safe: skill] else { continue }
-        label = L10n.text("\(SkillVocabulary.title(value.name)), \(value.isInfinite ? "unlimited" : String(value.count)) remaining\((selectedSkillIndex == skill ? L10n.text(", selected") : ""))")
+        let remaining = value.isInfinite ? L10n.text("unlimited") : L10n.text("\(value.count) remaining")
+        label = L10n.text("\(SkillVocabulary.title(value.name)), \(remaining)\((selectedSkillIndex == skill ? L10n.text(", selected") : ""))")
       case .pause: label = isPaused ? L10n.text("Resume") : L10n.text("Pause")
       case .nuke: label = session?.canUndoNuke == true ? L10n.text("Undo end run") : L10n.text("End run")
       case .fastForward: label = isFastForward ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward at ") + speedChoiceLabel

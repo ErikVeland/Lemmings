@@ -30,6 +30,9 @@ final class SequelLatinFontTests: XCTestCase {
             XCTAssertEqual(font.height(of: "ASCII"), font.cellHeight)
             XCTAssertGreaterThan(font.height(of: "ÅÇȘ"), font.cellHeight)
             XCTAssertFalse(font.covers("ΩЖ漢"))
+            XCTAssertTrue(font.covers("L’outil «prêt»… 2× — Å\u{202F}Ø"))
+            XCTAssertEqual(font.glyph(for: "’"), font.glyph(for: "'"))
+            XCTAssertEqual(font.width(of: "…"), font.glyph(for: "…")?.advance)
         }
         for code in 32..<123 {
             let glyph = try XCTUnwrap(menu.bitmap.glyph(for: Character(String(Unicode.Scalar(code)!))))
@@ -41,6 +44,19 @@ final class SequelLatinFontTests: XCTestCase {
         }
         XCTAssertEqual(l3.digits.count, 30)
         XCTAssertTrue(l3.digits.allSatisfy { $0.count == 110 })
+    }
+
+    func testOrganicArtworkUsesTheOriginalLookupDataWithTextExpansion() throws {
+        let image = try SequelMacFrame(width: 3, height: 3,
+            rgba: (0..<9).flatMap { index -> [UInt8] in
+                let shade = UInt8(64 + (index % 3) * 32)
+                return [shade, 48, 24, 255]
+            })
+        let result = try SequelMacArtwork.reconstruct(image, category: .organic)
+        XCTAssertEqual(result.width, 6)
+        XCTAssertEqual(result.height, 6)
+        XCTAssertEqual(result.rgba.count, 6 * 6 * 4)
+        XCTAssertEqual(result, try SequelMacArtwork.reconstruct(image, category: .organic))
     }
 
     func testPanelRowsKeepASCIIAndFitCombiningLettersWithoutClipping() throws {

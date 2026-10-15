@@ -20,6 +20,14 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     public enum Stage: String, Codable, CaseIterable, Sendable {
         case fun = "Fun", intermediate = "Intermediate", difficult = "Difficult", expert = "Expert"
         public var order: Int { Self.allCases.firstIndex(of: self)! }
+        public var title: String {
+            switch self {
+            case .fun: L10n.text("Fun")
+            case .intermediate: L10n.text("Intermediate")
+            case .difficult: L10n.text("Difficult")
+            case .expert: L10n.text("Expert")
+            }
+        }
         public static func forLesson(demand: Double, objective: String?) -> Self {
             if demand < 180 { return .fun }
             if objective != nil, objective?.hasPrefix("introduce:") != true, demand < 360 { return .intermediate }
@@ -60,6 +68,17 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         public let focus: String
         public let needsSupport: Bool
         public var placement: Placement? = nil
+
+        public var interfaceFocus: String {
+            // Saved journeys retain canonical focus text. Translate generated captions at display time.
+            let topics = introduced.isEmpty ? concepts : introduced
+            let names = topics.prefix(2).map(DifficultyTechniques.title).joined(separator: " + ")
+            if focus == "Take a breather" { return L10n.text("Take a breather") }
+            if focus.hasPrefix("Discover: ") { return L10n.text("Discover: \(names)") }
+            if focus.hasPrefix("Combine: ") { return L10n.text("Combine: \(names)") }
+            if focus.hasPrefix("Practise: ") { return L10n.text("Practise: \(names)") }
+            return focus
+        }
     }
     public let version: String
     public let lessons: [Lesson]

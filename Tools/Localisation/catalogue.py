@@ -7,6 +7,7 @@ from pathlib import Path
 import plistlib
 import re
 import subprocess
+from validate import validate_source_messages, validate_texts, validate_plurals, read_json
 
 ROOT = Path(__file__).resolve().parents[2]
 BUNDLE = ROOT / 'Sources/NxlvKit/Resources/Localization.bundle'
@@ -24,7 +25,11 @@ def extract():
         sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-path'], text=True).strip()
         subprocess.run([str(compiler), '-sdk', sdk, '-module-cache-path', str(build / 'ModuleCache'), '-I', str(host), '-L', str(host), '-lSwiftParser', '-lSwiftSyntax', '-Xlinker', '-rpath', '-Xlinker', str(host), str(source), '-o', str(binary)], check=True)
     files = sorted(str(p.relative_to(ROOT)) for module in MODULES for p in (ROOT / 'Sources' / module).rglob('*.swift') if p.name != 'InterfaceLocalisation.swift')
-    return json.loads(subprocess.check_output([str(binary), *files], cwd=ROOT))
+    data = json.loads(subprocess.check_output([str(binary), *files], cwd=ROOT))
+    original = json.loads(Path(__file__).with_name('l2-original-text.json').read_text())
+    for key, references in original.items():
+        data['messages'] += [{'key': key, 'kind': 'text', 'file': file, 'line': 1} for file in references]
+    return data
 
 
 def quote(value):
@@ -52,19 +57,34 @@ def outputs(rows):
 
 
 def validate_translations(english_keys, plural_keys):
+    review_file = Path(__file__).with_name('unchanged.json')
+    reviews = read_json(review_file) if review_file.exists() else {}
     for locale in sorted(BUNDLE.glob('*.lproj')):
         strings = locale / 'Interface.strings'
         if not strings.exists():
             raise ValueError(f'Missing interface table: {locale.name}')
         # plutil reads Apple's text .strings format, including escapes and comments.
         data = json.loads(subprocess.check_output(['plutil', '-convert', 'json', '-o', '-', str(strings)]))
+        language = locale.stem
+        errors, missing = validate_texts(english_keys, data, english_keys if language == 'en' else reviews.get(language, {}))
+        if errors or missing:
+            raise ValueError(f'{locale.name}: {len(missing)} missing texts; ' + '; '.join(errors[:5]))
         for key, value in data.items():
             if key not in english_keys:
                 raise ValueError(f'{locale.name}: unknown key {key!r}')
             if not isinstance(value, str) or set(re.findall(r'\{\d+\}', key)) != set(re.findall(r'\{\d+\}', value)):
                 raise ValueError(f'{locale.name}: invalid placeholders for {key!r}')
         dictionary = locale / 'Interface.stringsdict'
+        if plural_keys and not dictionary.exists():
+            raise ValueError(f'Missing plural table: {locale.name}')
         if dictionary.exists():
+            entries = plistlib.loads(dictionary.read_bytes())
+            errors, missing = validate_plurals(plural_keys, {
+                key: {category: text for category, text in value.get('count', {}).items()
+                      if category in {'zero', 'one', 'two', 'few', 'many', 'other'}}
+                for key, value in entries.items()})
+            if errors or missing:
+                raise ValueError(f'{locale.name}: {len(missing)} missing plurals; ' + '; '.join(errors[:5]))
             for key, value in plistlib.loads(dictionary.read_bytes()).items():
                 if key not in plural_keys or value.get('NSStringLocalizedFormatKey') != '%#@count@':
                     raise ValueError(f'{locale.name}: unknown or malformed plural {key!r}')
@@ -82,6 +102,9 @@ def main():
     parser.add_argument('--audit', action='store_true', help='Report direct UI literals that still need migration.')
     args = parser.parse_args()
     data = extract()
+    source_errors = validate_source_messages(data['messages'])
+    if source_errors:
+        raise SystemExit('\n'.join(source_errors))
     exemptions = json.loads(Path(__file__).with_name('exemptions.json').read_text())
     exempt = {(r['file'], r['source']) for r in exemptions}
     data['uncovered'] = [r for r in data['uncovered'] if (r['file'], r['source']) not in exempt]

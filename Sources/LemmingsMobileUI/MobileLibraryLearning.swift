@@ -73,7 +73,7 @@ extension MobileLibraryViewController {
     }
     func techniquePage(subtitle: String) -> GameFrontEnd.Page {
         .init(title: L10n.text("Techniques"), subtitle: subtitle,
-              rows: LevelHintDeck.jobs.keys.sorted().map { .init("technique." + $0, $0.capitalized) },
+              rows: LevelHintDeck.jobs.keys.sorted().map { .init("technique." + $0, SkillVocabulary.title($0)) },
               footer: [.init("progression", L10n.text("Back"))])
     }
     func handleLearning(_ id: String) -> Bool {

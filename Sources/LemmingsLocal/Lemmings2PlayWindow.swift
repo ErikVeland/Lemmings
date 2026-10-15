@@ -1904,7 +1904,7 @@ import NxlvKit
                     outline.lineWidth = 0.5; outline.stroke()
                 }
             }
-            let label = hoverPracticeSkill.flatMap(Lemmings2Runtime.Skill.init(rawValue:))?.name ?? L10n.text("\(practiceSkills.count) of 8 selected")
+            let label = hoverPracticeSkill.flatMap(Lemmings2Runtime.Skill.init(rawValue:)).map { SkillVocabulary.title($0.name) } ?? L10n.text("\(practiceSkills.count) of 8 selected")
             text(label,160,112,"PRACTICE",centered:true)
             for (choice,tribe) in Lemmings2Practice.tribes.enumerated() {
                 let f = bank("INFO").sprites[8+tribe][0]
@@ -1939,7 +1939,7 @@ import NxlvKit
                 sprite("INFO", 0, 0, i * 25)
                 if (1...51).contains(skill) { sprite("INFO", 7, 0, i * 25, frame: skill - 1) }
                 text(String(format: "%02d", practiceLevel != nil ? 99 : level.skills[i].count), 32, i * 25 + 2)
-                if (1...51).contains(skill) { text(bank("INFO").strings[skill - 1], 32, i * 25 + 13) }
+                if (1...51).contains(skill) { text(SkillVocabulary.title(bank("INFO").strings[skill - 1]), 32, i * 25 + 13) }
             }
             // All tribe cards use the shared INFO palette, including their portraits.
             sprite("INFO", 8 + level.style, 150, 10)
@@ -1968,10 +1968,10 @@ import NxlvKit
                     let p = locations[medal.rawValue]
                     sprite("MEDALS", medal == .gold ? 3 : medal == .silver ? 4 : 5, p.0, p.1, frame: min(20, frontTicks / 4))
                 }
-                text(L10n.text("You saved \(game.saved) lemmings"), 160, 8, "MEDALS", centered: true)
+                text(L10n.plural("count.savedLemmings", count: game.saved, one: "You saved %ld lemming", other: "You saved %ld lemmings"), 160, 8, "MEDALS", centered: true)
                 text(medal == .none ? L10n.text("Oh dear!") : L10n.text("\(medal.name) medal"), 220, 42, "MEDALS", centered: true)
                 front.wrappedText(game.didWin ? L10n.text("Click to continue. Your survivors will go on to the next level.")
-                    : bank("MEDALS").strings[4], font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
+                    : L10n.originalL2Text(bank("MEDALS").strings[4]), font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
                 text(L10n.text("V Replay  S Save movie"), 160, 153, "MEDALS", centered: true)
                 text(L10n.text("Retry"), 35, 182, "MEDALS", centered: true)
                 text(L10n.text("Continue"), 160, 182, "MEDALS", centered: true)
