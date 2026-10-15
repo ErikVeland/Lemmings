@@ -2652,6 +2652,9 @@ extension AppDelegate {
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
     selectDataSet(); loadLevel(at: 0)
     phase = .playing; playfield.startCountdown.cancel(); isPaused = false
+    // Match renderScreen's playing branch after this fixture bypasses the briefing.
+    // Otherwise the retained Home title selects Home rendering during a game capture.
+    playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
     let live = session as! ClassicSession
     let liveHash = ClassicDOSReplayRecorder.stateHash(of: live.simulation)
     let run = arcadeRunID, owner = arcadeProfileID, seat = arcadeHotSeatID
