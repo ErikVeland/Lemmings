@@ -3,6 +3,42 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.0</title>
+            <pubDate>Thu, 15 Oct 2026 15:03:37 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>83</sparkle:version>
+            <sparkle:shortVersionString>2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>The flagship of this Macintosh release is the original 1-bit artwork, with a matching black-and-white gameplay panel. These notes cover changes since 1.9.6, including the 1.9.7 improvements.</p>
+<h3>Original Macintosh 1-bit graphics</h3>
+<p>A salute to the original artists behind Psygnosis's Macintosh releases: their immaculate dithering gives two colours texture, depth and character. The authored terrain, animated objects and lemming poses come from the original Macintosh black-and-white artwork banks.</p>
+<p>Choose <b>Settings → Graphics → Classic artwork → Artwork → Macintosh (1-bit)</b>. The gameplay panel uses monochrome stone, bitmap lettering and control symbols. The selected skill has a distinct inverted stone background. Optional permanent-skill backpacks use diagonal dithering for Climber, horizontal stripes for Floater and a checker pattern for both.</p>
+<p>Changing artwork preserves the live attempt, terrain edits and rewind history. Original black-and-white pixels remain exact. Reconstructed or missing fan pieces use monochrome dithering. Optional effects and the pointer retain their own settings. This artwork choice applies to Classic and its supported expansion families. The Tribes, Chronicles and NeoLemmix retain their separate artwork options.</p>
+<h3>Resume the attempt inside a journey</h3>
+<p>Saved journeys and supported sequence playlists can resume the attempt itself, including its simulation position, selected action and camera. Home and the journey hub show <b>Resume</b> when a matching checkpoint exists. Older saves without a checkpoint continue from their saved level.</p>
+<p>Checkpoints remain tied to the correct queue, content revision, player and Hot Seat session. Classic, The Tribes and Chronicles restore paused. Hot Seat retains the explicit <b>Ready</b> handover.</p>
+<h3>Controls and presentation</h3>
+<ul><li>Keyboard help uses structured commands for the active game and settings. Press <b>?</b> for control annotations and open <b>All commands</b> for the searchable reference.</li><li>Camera movement keeps the game cursor anchored to its level position across Classic, The Tribes and Chronicles. Precision Zoom uses the same targeting policy.</li><li>Controller speed reset takes priority over pause when a speed boost is active. Hot Seat retries and restored runs wait for Ready.</li><li>The Home screen draws scenery from installed levels. Chronicles uses its regional title artwork.</li><li>Closing sequel hints restores the previous pause state. Interruptions retain pause.</li><li>Shared result pages improve grouping, award help and bitmap lettering. Bomb countdowns use crisp digits above the lemming.</li></ul>
+<h3>Optional Classic ghost solutions</h3>
+<p>After revealing a full recorded solution, enable <b>Ghost solution</b> to overlay translucent blue lemmings. The overlay follows the current tick through play, pause, speed changes and rewind. It does not spend skills or change the live attempt.</p>
+<p>Ghosts follow their recorded terrain, so their bridges and tunnels can differ from yours. Same-player retries retain the choice. A different level or Hot Seat player clears the revealed solution. The feature requires a matching verified Classic solution. The sequels retain their existing coaching and checkpoint flows.</p>
+<h3>Performance, music and saves</h3>
+<ul><li>Classic, The Tribes and Chronicles share the vinyl backspin for rewind music and captured sound effects. Rewind respects pause, mute, volume and interruptions.</li><li>Terrain caches, crowd limits and adaptive optional effects reduce repeated rendering work.</li><li>If an incoming Classic journey track stops, the outgoing track recovers while gameplay remains paused.</li><li>Manual soundtrack shuffle follows the selected collection and can change music with the essential library installed.</li><li>Matching profiles can recover newer shared progress, including saved Hot Seat journeys. Recovery preserves ownership and visited levels.</li><li>Background level preparation retains caller cancellation.</li></ul>
+<h3>Seven added languages and original fonts</h3>
+<p>The app now includes Spanish (Latin America), German, French, Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål, alongside English. It follows your Mac’s preferred app language. Classic and sequel bitmap fonts support accented Western Latin text, including composed and combining forms. These language packs are AI-assisted drafts. Human language review and complete translated-screen validation remain open.</p>
+<h3>Release scope and known limits</h3>
+<p>The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>The owner approved this Macintosh release under the existing classifications on 15 October 2026: Classic and The Tribes <b>Complete</b>, with Chronicles and NeoLemmix <b>Beta</b>. The stricter bundled-content closure remains a future milestone. This release does not claim that gate is complete.</p>
+<p>The current L3 engine changes invalidate some retained standalone and carried-route witnesses. L2's golden-talisman ark ending remains unverified. The retained fan inventory has 2,399 verified routes and 3,621 route gaps. Seventy-five bundled NeoLemmix levels reference missing styles, and exact-version winning evidence covers 158 levels. Remaining source-engine fidelity and media checks remain open.</p>
+<p>Physical controller and VoiceOver journeys, audible listening, foreground shipping-app launch, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their validation gaps. Fresh candidate regression and distribution evidence accompanies the release. This release scope is Macintosh only. iPhone, iPad and Apple TV have separate release gates.</p>
+<p class="meta">Build: 83<br>Release commit: 1b4daa28adee3f3b05399e61775c1be201caf349<br>Release base: v1.9.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83.zip" length="2053746420" type="application/octet-stream" sparkle:edSignature="RvgF7reRZ4CXvRe2+71aI+SXr1+2VUVNH4XC0izd6NBP/KRu/qUSMizsfCtt7cKLNDnre3tL5U4s3iLWJpvvBQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-build83-from82.delta" sparkle:deltaFrom="82" length="3107290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="JOyoOJVih1t03JnaMpcbqmHH0pibQLOMMScik/geHsjU5UqMByU9rj6yUtG2mtwi0p9ErrJetqIk6wR7vYS7Aw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.9.7</title>
             <pubDate>Thu, 15 Oct 2026 01:00:42 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
