@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld opdracht • Sneltoetsen gelden in de getoonde context. Esc sluit deze handleiding.",
+    "other": "%ld opdrachten • Sneltoetsen gelden in de getoonde context. Esc sluit deze handleiding."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemmings"
+  },
+  "count.levels": {
+    "one": "%ld level",
+    "other": "%ld levels"
+  },
+  "count.packs": {
+    "one": "%ld pakket",
+    "other": "%ld pakketten"
+  },
+  "count.rescueGoal": {
+    "one": "Red %ld lemming en voltooi het level.",
+    "other": "Red %ld lemmings en voltooi het level."
+  },
+  "count.savedLemmings": {
+    "one": "Je hebt %ld lemming gered",
+    "other": "Je hebt %ld lemmings gered"
+  },
+  "count.secondStarGoal": {
+    "one": "Red %ld lemming en voltooi het level om de tweede ster te verdienen.",
+    "other": "Red %ld lemmings en voltooi het level om de tweede ster te verdienen."
+  },
+  "count.thirdStarGoal": {
+    "one": "Red %ld lemming en voltooi het level om de derde ster te verdienen.",
+    "other": "Red %ld lemmings en voltooi het level om de derde ster te verdienen."
+  }
+}

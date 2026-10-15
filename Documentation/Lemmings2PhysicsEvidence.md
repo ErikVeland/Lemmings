@@ -1,6 +1,6 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 15 October 2026 at `main` revision `67dd4356`. All twelve
+Status checked on 15 October 2026 at `main` revision `eb6d58d7`. All twelve
 tribes, 51 skills, 15 object types and four practice maps are enabled. The strict
 completion gate verified all 120 winning routes and 70 carry-over variants
 twice, with continuous ten-level chains for all twelve tribes. The runtime suite
@@ -17,6 +17,23 @@ On 15 October, the strict ark check replayed all 120 routes and 70 carry-over
 variants, then rejected the ending conditions. All twelve chains finish with
 one survivor and a Bronze talisman. None meets the golden-talisman and
 30-survivor requirements.
+
+## Current-main replay check
+
+On 15 October, I reran the strict route verifier and L2 runtime test binary
+against the installed game data while the checkout was at current `main`
+`eb6d58d7`. The verifier passes 120 standalone routes, 70 carry-over variants
+and all twelve ten-level chains. The runtime suite passes its engine, practice
+map, 120-level load/advance and 120-route replay checks. The runtime binary was
+built at 12:41, before the `67dd4356` and `41b7b0f5` documentation commits. No
+L2 engine or runtime-test source changed after its source baseline and none
+changed between `061e1b99` and current `main`. The repository wrapper could not
+rebuild on this host because its selected Swift compiler does not match the
+installed SDK, so these current-main checks used the retained binaries.
+
+The strict ark check still fails: each tribe finishes with one survivor and a
+Bronze talisman. The current-main rerun verifies the recorded rules and routes;
+it does not close original-engine comparison or the golden-ark requirement.
 
 ## Expansion corrections
 
@@ -152,9 +169,14 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
   "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2"
 ```
 
-The 15 October 2026 run passed with Xcode 26.6 at `main` revision `67dd4356`.
-The installed app bundle supplies the data for that run. The command does not
-prove that the source tree embeds or packages the same data.
+The 15 October 2026 run passed with Xcode 26.6 at source revision `061e1b99`.
+Current `main` is `eb6d58d7`. The L2 runtime and fixtures are unchanged from
+the tested revision. The installed app identifies as 1.9.1 build 76. All
+1,307 `Ports` files in that app match the 1.9.7 build 82 resource manifest.
+The full app resource tree does not match that manifest. See the [content
+recheck](ReleaseReadiness/MacOS2Preparation-2026-10-15/classic-content-recheck.json).
+The command does not prove that the source tree embeds or packages the same
+data.
 
 `Tests/Lemmings2CompletionTests/Fixtures/classic-01.json` contains twenty timed
 skill assignments for the local `LEVEL000.DAT`. The test starts the unmodified

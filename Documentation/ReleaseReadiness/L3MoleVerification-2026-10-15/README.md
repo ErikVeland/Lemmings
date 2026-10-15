@@ -9,32 +9,72 @@ The strict full gate was rerun against a current source-built NxlvKit library.
 It fails at Shadow 7 and at carried fixture `107-1.json`. Its negative replay
 checks pass. See `baseline-full-gate.log`.
 
-The exhaustive diagnostic audit double-replays every retained fixture without
-stopping at the first failure. Of 416 fixtures, 394 pass twice and 22 fail:
+The baseline diagnostic audit double-replayed every retained fixture without
+stopping at the first failure. Before the five Shadow 13 identity refreshes,
+394 of 416 fixtures passed twice and 22 failed:
 
 - Standalone: Shadow 7, Egyptian 6, Egyptian 13 and Egyptian 29.
 - Carried: three Shadow 7, five Shadow 13, four Egyptian 6, four Egyptian 13,
   and two Egyptian 29 fixtures.
 
 The earlier fail-fast result did not expose Egyptian 29. Five carried Shadow 13
-input schedules still win when rebased and double-replayed under the patrol
-runtime. The other 17 schedules—four standalone and thirteen carried—do not
-win under the current runtime. These failures do not prove that any level is
-impossible.
+input schedules won when rebased and double-replayed under the patrol runtime.
+The other 17 schedules—four standalone and thirteen carried—did not win. These
+failures do not prove that any level is impossible.
 
 See `baseline-fixture-audit.json`, `baseline-double-replay-audit.log`,
 `baseline-fixture-audit.log` and `baseline-provenance.json`. The diagnostic audit
 checks retained fixture identity and deterministic winning outcomes. The strict
 campaign gate additionally checks full coverage and linked survivor accounting.
 
-The audit was rerun from checkout `57d3490a` against the installed resource-only
-L3 bundle. The updated report separates strict fixture identity from whether
-the recorded inputs still win after rebasing. It confirms 394 exact
-double-replays, five rebased wins and 17 route failures. The five rebased wins
-are the stale-identity Shadow 13 fixtures; the 17 route failures are the four
-standalone gaps and thirteen carried schedules. See the [current fixture
-audit](current-fixture-audit.json) and [audit provenance](current-fixture-audit-provenance.json)
-for the report, source and tool hashes, and resource-tree fingerprint.
+The baseline report and its provenance remain as historical snapshots. The
+current audit is in [current-fixture-audit.json](current-fixture-audit.json),
+with source, tool and resource hashes in
+[current-fixture-audit-provenance.json](current-fixture-audit-provenance.json).
+
+## Current-main recheck
+
+On 15 October 2026, I rebuilt `NxlvKit` from `main` revision `41b7b0f5` and
+reran the gates against
+`/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD`. Five
+Shadow 13 carried fixtures still won but had stale initial-state and result
+hashes. I refreshed fixtures `113-1`, `113-21`, `113-22`, `113-25` and
+`113-26` from their retained inputs. The derivation tool double-replayed each
+candidate before I replaced its fixture. The exhaustive audit now reports 399
+exact double-replays, zero stale-identity wins and 17 route failures: four
+standalone and thirteen carried schedules.
+
+The strict `--require-all` gate still fails at carried fixture `107-1.json`.
+The campaign manifest check passes for 322 fixtures, and the negative gate
+checks pass. The bundled L3 route gate remains open. The installed app is 1.9.1
+build 76, and its L3 files match the 1.9.7 build 82 `Ports` baseline. Replay
+evidence and route gaps cause the gate failure. See the [content recheck](../MacOS2Preparation-2026-10-15/classic-content-recheck.json).
+
+The audit ran when `main` was at `eb6d58d7`. The worktree is now at
+`0e3ac4a7` after a localisation-only commit. That commit did not change L3
+engine or verifier sources. The diagnostic audit uses a prebuilt verifier and
+runtime library from `41b7b0f5`; the L3 engine and verifier Swift sources did
+not change between those revisions. The selected Swift 6.3.3 compiler does
+not match the installed SDK, so this checkout cannot rebuild the tools used
+for the rerun.
+
+I also tested two seeded repairs for Shadow 7 with the current runtime library.
+The first resumed from the retained route at tick 1,580 with a 1,024-wide beam
+and 8-pixel tool-site sampling. It expanded 1,492,739 candidates in 120
+seconds without a route. The second resumed at tick 1,666 with a 2,048-wide
+beam, 4-pixel sampling and paired-actor inputs. It expanded 1,380,463
+candidates in 120 seconds without a route. The retained solver executable
+loaded the current `NxlvKit` library, confirmed by the dynamic-loader trace.
+These bounded searches do not prove that Shadow 7 is unsolvable.
+
+To repeat the current-source campaign check, build `NxlvKit` into the selected
+library directory, then run:
+
+```sh
+L3_TEST_LIBRARY_DIR="$PWD/.build/l3-closure-current" \
+L3_PORTS_ROOT="/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD" \
+  zsh Scripts/verify-l3-completion.sh --require-all
+```
 
 Run the exhaustive audit with:
 

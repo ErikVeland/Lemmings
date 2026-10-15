@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld Befehl • Tastenkürzel gelten im angezeigten Kontext. Esc schliesst diese Hilfe.",
+    "other": "%ld Befehle • Tastenkürzel gelten im angezeigten Kontext. Esc schliesst diese Hilfe."
+  },
+  "count.lemmings": {
+    "one": "Du hast %ld Lemming gerettet",
+    "other": "Du hast %ld Lemminge gerettet"
+  },
+  "count.levels": {
+    "one": "%ld Level",
+    "other": "%ld Level"
+  },
+  "count.packs": {
+    "one": "%ld Paket",
+    "other": "%ld Pakete"
+  },
+  "count.rescueGoal": {
+    "one": "Rette %ld Lemming und schaffe das Level.",
+    "other": "Rette %ld Lemminge und schaffe das Level."
+  },
+  "count.savedLemmings": {
+    "one": "Du hast %ld Lemming gerettet",
+    "other": "Du hast %ld Lemminge gerettet"
+  },
+  "count.secondStarGoal": {
+    "one": "Rette %ld Lemming und schaffe das Level, um den zweiten Stern zu erhalten.",
+    "other": "Rette %ld Lemminge und schaffe das Level, um den zweiten Stern zu erhalten."
+  },
+  "count.thirdStarGoal": {
+    "one": "Rette %ld Lemming und schaffe das Level, um den dritten Stern zu erhalten.",
+    "other": "Rette %ld Lemminge und schaffe das Level, um den dritten Stern zu erhalten."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld kommando • Snarveier gjelder i vist sammenheng. Esc lukker denne veiledningen.",
+    "other": "%ld kommandoer • Snarveier gjelder i vist sammenheng. Esc lukker denne veiledningen."
+  },
+  "count.lemmings": {
+    "one": "Du reddet %ld lemming",
+    "other": "Du reddet %ld lemminger"
+  },
+  "count.levels": {
+    "one": "%ld brett",
+    "other": "%ld brett"
+  },
+  "count.packs": {
+    "one": "%ld pakke",
+    "other": "%ld pakker"
+  },
+  "count.rescueGoal": {
+    "one": "Redd %ld lemming og fullfør brettet.",
+    "other": "Redd %ld lemminger og fullfør brettet."
+  },
+  "count.savedLemmings": {
+    "one": "Du reddet %ld lemming",
+    "other": "Du reddet %ld lemminger"
+  },
+  "count.secondStarGoal": {
+    "one": "Redd %ld lemming og fullfør brettet for å få den andre stjernen.",
+    "other": "Redd %ld lemminger og fullfør brettet for å få den andre stjernen."
+  },
+  "count.thirdStarGoal": {
+    "one": "Redd %ld lemming og fullfør brettet for å få den tredje stjernen.",
+    "other": "Redd %ld lemminger og fullfør brettet for å få den tredje stjernen."
+  }
+}
