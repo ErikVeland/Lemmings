@@ -150,7 +150,7 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
         saved.sort { $0.savedAt > $1.savedAt }
     }
 
-    private static let name = L10n.text("hotseat")
+    private static let name = "hotseat"
 
     public static func load(from storage: MobileStorage) -> MobileHotSeatStore {
         storage.load(MobileHotSeatStore.self, name: name) ?? MobileHotSeatStore()

@@ -36,7 +36,7 @@ public struct ArchivalCatalog: Sendable {
     }
 
     /// Complete registry of all 16 historical Lemmings ports.
-    public static let platforms: [PlatformInfo] = [
+    public static var platforms: [PlatformInfo] { [
         PlatformInfo(
             id: "amiga",
             name: "Commodore Amiga 500 / 1000 / 2000",
@@ -197,7 +197,7 @@ public struct ArchivalCatalog: Sendable {
             exclusiveLevelCount: 1000,
             notes: L10n.text("Modern open level format (.nxlv) and custom style pack support.")
         ),
-    ]
+    ] }
 
     public init() {}
 

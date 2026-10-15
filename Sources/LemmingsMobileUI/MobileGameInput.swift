@@ -333,16 +333,27 @@ extension MobileGameViewController {
         speed = inputSpeed.multiplier; clock.speed = speed
         if changed { updatePerformanceBudget(); updateHUD() }
     }
-    func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false) {
+    func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false,
+                            language: Bool = false) {
         guard let library = parent as? MobileLibraryViewController else { return }
+        if !language { library.finishLanguageSelection(apply: false) }
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
-        overlayCanvas.page = soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
+        overlayCanvas.page = language ? library.languagePage() : soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0, inGame: true) } ?? library.settingsGroupsPage(inGame: true)
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
             if id == "home" { self.pausePlay(showControls: true) }
             else if id == "settings" { self.showInGameSettings() }
             else if id.hasPrefix("settingsGroup."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) { self.showInGameSettings(next) }
+            else if id == "setting.language" { self.showInGameSettings(.gameplay, language: true) }
+            else if id == "language.cancel" || id == "language.apply" {
+                library.finishLanguageSelection(apply: id == "language.apply")
+                self.updateHUD()
+                self.showInGameSettings(.gameplay)
+            }
+            else if id.hasPrefix("language."), library.handleSettings(id) {
+                self.showInGameSettings(.gameplay, language: true)
+            }
             else if id == "controllerMappings" { self.showInGameSettings(.controller, mappings: true) }
             else if id == "soundtrack" {
                 MobileMusicLibraries.shared.onChange = { [weak self] in
@@ -360,7 +371,7 @@ extension MobileGameViewController {
             } else if library.handleSettings(id) {
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
                 self.applyGameSettings(library.mobileSettings)
-                self.showInGameSettings(group, mappings: mappings)
+                self.showInGameSettings(group, mappings: mappings, language: language)
             }
         }
         view.setNeedsLayout()

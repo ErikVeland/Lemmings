@@ -16,7 +16,10 @@ import NxlvKit
     if let renderer = GameMenuArtwork.renderer(), renderer.font(.small)?.covers(text) == true {
       renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
     } else {
-      GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
+      let bounds = GamePixelTypography.verticalBounds(of: text)
+      let horizontal = GamePixelTypography.horizontalBounds(of: text)
+      GamePixelText.draw(text, in: CGRect(x: point.x + CGFloat(horizontal.left), y: point.y + CGFloat(bounds.top),
+        width: CGFloat(GamePixelTypography.width(of: text)), height: CGFloat(bounds.bottom - bounds.top)), maxScale: 1, palette: palette)
     }
   }
 }
@@ -128,15 +131,12 @@ import NxlvKit
         fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       return
     }
-    var pen = origin.x
-    let step = CGFloat(font.cellWidth * scale)
-    for character in text {
-      defer { pen += step }
-      guard let glyph = font.glyph(for: character),
-        let image = image(for: glyph, key: "\(face.rawValue)-\(character)", palette: palette)
+    for item in font.layout(text) {
+      guard let glyph = item.glyph,
+        let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette)
       else { continue }
       let rect = CGRect(
-        x: pen + CGFloat(glyph.x * scale), y: origin.y + CGFloat(glyph.y * scale),
+        x: origin.x + CGFloat((item.x + glyph.x) * scale), y: origin.y + CGFloat(glyph.y * scale),
         width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
       image.draw(
         in: rect, from: .zero, operation: .sourceOver, fraction: alpha,
@@ -151,10 +151,13 @@ import NxlvKit
     guard !text.isEmpty, text.count <= 512 else { return nil }
     let key = palette.rawValue + ":" + face.rawValue + ":" + text
     if let line = lines[key] { return line }
-    var bounds = CGRect(x: 0, y: 0, width: font.width(of: text), height: font.cellHeight)
-    for (index, character) in text.enumerated() {
-      guard let glyph = font.glyph(for: character) else { continue }
-      bounds = bounds.union(CGRect(x: index * font.cellWidth + glyph.x, y: glyph.y,
+    let horizontal = font.horizontalBounds(of: text), vertical = font.verticalBounds(of: text)
+    var bounds = CGRect(x: horizontal.left, y: vertical.top, width: horizontal.right - horizontal.left,
+      height: vertical.bottom - vertical.top)
+    let layout = font.layout(text)
+    for item in layout {
+      guard let glyph = item.glyph else { continue }
+      bounds = bounds.union(CGRect(x: item.x + glyph.x, y: glyph.y,
         width: glyph.width, height: glyph.height))
     }
     let width = Int(bounds.width), height = Int(bounds.height), cost = width * height * 4
@@ -166,10 +169,10 @@ import NxlvKit
     context.scaleBy(x: 1, y: -1)
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
-    for (index, character) in text.enumerated() {
-      guard let glyph = font.glyph(for: character),
-        let image = image(for: glyph, key: "\(face.rawValue)-\(character)", palette: palette) else { continue }
-      image.draw(in: CGRect(x: index * font.cellWidth + glyph.x, y: glyph.y,
+    for item in layout {
+      guard let glyph = item.glyph,
+        let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette) else { continue }
+      image.draw(in: CGRect(x: item.x + glyph.x, y: glyph.y,
         width: glyph.width, height: glyph.height), from: .zero, operation: .sourceOver,
         fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
@@ -189,7 +192,8 @@ import NxlvKit
     _ text: String, face: ClassicMacUserInterface.Face, centerX: CGFloat, top: CGFloat,
     scale: Int, alpha: CGFloat = 1, palette: Palette = .blue
   ) {
-    let origin = CGPoint(x: centerX - width(of: text, face: face, scale: scale) / 2, y: top)
+    let bearing = CGFloat((font(face)?.horizontalBounds(of: text).left ?? 0) * scale)
+    let origin = CGPoint(x: centerX - width(of: text, face: face, scale: scale) / 2 - bearing, y: top)
     draw(text, face: face, at: origin, scale: scale, alpha: alpha, palette: palette)
   }
 
@@ -223,19 +227,18 @@ import NxlvKit
                 scale: Int = 1, alignment: NSTextAlignment = .center, alpha: CGFloat = 1, palette: Palette = .blue,
                 numberPalette: Palette? = nil) {
     guard let font = font(face) else { return }
-    let columns = max(0, Int(rect.width) / (font.cellWidth * scale))
-    guard columns > 0 else { return }
-    let plain = Self.menuText(value)
-    let line = plain.count <= columns ? plain : String(plain.prefix(max(0, columns - 3))) + String(repeating: ".", count: min(3, columns))
+    let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font)
+    guard !line.isEmpty else { return }
     let width = width(of: line, face: face, scale: scale)
     let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - width : rect.midX - width / 2
     let top = CGFloat(font.verticalBounds(of: line).top * scale)
-    let origin = CGPoint(x: x.rounded(), y: (rect.minY - top).rounded())
+    let left = CGFloat(font.horizontalBounds(of: line).left * scale)
+    let origin = CGPoint(x: (x - left).rounded(), y: (rect.minY - top).rounded())
     draw(line, face: face, at: origin, scale: scale, alpha: alpha, palette: palette)
     if let numberPalette {
-      for (index, character) in line.enumerated() where character.isNumber || character == "," {
-        draw(String(character), face: face,
-          at: CGPoint(x: origin.x + CGFloat(index * font.cellWidth * scale), y: origin.y),
+      for item in font.layout(line) where item.sequence.allSatisfy({ $0.isNumber || $0 == "," }) {
+        draw(item.sequence, face: face,
+          at: CGPoint(x: origin.x + CGFloat(item.x * scale), y: origin.y),
           scale: scale, alpha: alpha, palette: numberPalette)
       }
     }
@@ -249,12 +252,12 @@ import NxlvKit
   func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,
     face: ClassicMacUserInterface.Face = .small, palette: Palette = .blue, alpha: CGFloat = 1) {
     guard let font = font(face) else { return }
-    let columns = max(1, Int(rect.width) / font.cellWidth)
     let spacing = max(font.cellHeight + 6, font.height(of: Self.menuText(value)) + 2)
     let rows = max(0, Int(rect.height) / spacing)
-    let lines = Self.menuLines(value, columns: columns)
+    let lines = GameTextLayout.lines(value, width: rect.width, face: face, font: font)
     for (index, value) in lines.prefix(rows).enumerated() {
-      let text = index == rows - 1 && lines.count > rows ? String(value.prefix(max(0, columns - 3))) + "..." : value
+      let text = index == rows - 1 && lines.count > rows
+        ? GameTextLayout.truncated(value + "...", width: rect.width, face: face, font: font) : value
       menuLine(text, in: CGRect(x: rect.minX, y: rect.minY + CGFloat(index * spacing), width: rect.width, height: CGFloat(spacing)), face: face, alignment: alignment, alpha: alpha, palette: palette)
     }
   }

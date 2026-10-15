@@ -867,7 +867,7 @@ import NxlvKit
             rowText(Self.time(run.seconds), x: 918, width: 132, row: row)
         }
         pageFooter()
-        setAccessibilityLabel(L10n.text("\(level.title). \(board.title). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. Escape returns. A opens achievements. D opens run details."))
+        setAccessibilityLabel(L10n.text("\(level.title). \(board.title). Rewinds: \(assisted ? L10n.text("used") : L10n.text("unused")). W switches the rewind filter. \(entries.count) local records. Escape returns. A opens achievements. D opens run details."))
     }
     private func drawAwards() {
         if level?.conditions != nil { drawTrolleyAwards(); return }
@@ -876,9 +876,10 @@ import NxlvKit
         text(L10n.text("\(careerAwards.filter(earned.contains).count) / \(careerAwards.count) earned"), 64, 216, 768)
         drawAwardEntries(careerAwards.map { ($0.title, $0.detail, earned.contains($0)) })
         pageFooter()
-        setAccessibilityLabel("Achievements across all levels. " + careerAwards.map {
+        let summary = careerAwards.map {
             "\(earned.contains($0) ? L10n.text("Earned") : L10n.text("Locked")): \($0.title). \($0.detail)"
-        }.joined(separator: " "))
+        }.joined(separator: " ")
+        setAccessibilityLabel(L10n.text("Achievements across all levels. \(summary)"))
     }
     private func drawDetails() {
         if let conditions = level?.conditions { drawTrolleyDetails(conditions); return }

@@ -19,11 +19,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/de.json",
-    "text_count": 3118,
+    "text_count": 3133,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "50bd835ab1e9f6a24ba2c9b8630e0be9bfb03839f34a7d02b9a05029eeacdca4"
+    "sha256": "84d73cb70df5528c22add6b0103f77ed9670b7a341d78983483245fb2202f6d1",
+    "entry_count": 3133
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/de.json",
@@ -34,9 +35,9 @@
     "note": "The staged machine candidate and local OPUS model were unavailable in this checkout; translations were completed directly from the catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3118,
+    "text_count": 3133,
     "plural_count": 8,
-    "sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357"
+    "sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -259,10 +260,10 @@
   ],
   "validation": {
     "structural_checks_run": true,
-    "coverage": "3118/3118 current text keys",
+    "coverage": "3130/3130 current text keys",
     "plural_coverage": "8/8 keys; one/other forms",
     "placeholder_check": "0 text placeholder mismatches; exactly one %ld in every staged plural form",
-    "validator_report": "German pack PASS: 3,118/3,118 text keys and 8/8 plural keys; 183 English-identical entries have individual shared allowlist reasons. Human linguistic approval and device acceptance remain pending.",
+    "validator_report": "German pack PASS: 3,130/3,130 text keys and 8/8 plural keys; 183 English-identical entries have individual shared allowlist reasons. Human linguistic approval and device acceptance remain pending.",
     "linguistic_review_complete": false,
     "render_checks_run": false,
     "device_checks_run": false
@@ -282,5 +283,48 @@
     "linguistic_approval": false,
     "locale_enabled": false
   },
-  "translated_current_text_count": 3118
+  "translated_current_text_count": 3118,
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "cd882077cddfe443298a907529434c5ad89c3f73762e39edd444bf48e8c4aabe",
+    "runtime_strings_sha256": "0ce125276657def319d0066f77bbe40102bfff37b0a37e03b434698f49421d36",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3133,
+    "catalogue_sha256": "1d71240347d7c8c6d25b9b179d9ac0017f34c82f3aa6e54c56f167e94ff32302",
+    "draft_sha256": "84d73cb70df5528c22add6b0103f77ed9670b7a341d78983483245fb2202f6d1",
+    "runtime_strings_sha256": "5ae025c36b59b6500709e6d3eaebf640f50e51fe77f8ab316149ca52f68397bd",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
+  }
 }

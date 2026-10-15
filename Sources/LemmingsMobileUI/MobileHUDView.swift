@@ -362,14 +362,14 @@ import UIKit
         let label: String
     }
 
-    private static let cells: [Cell] = MobileDirectionPickerLayout.gridDirections.map { direction in
+    private static var cells: [Cell] { MobileDirectionPickerLayout.gridDirections.map { direction in
         guard let direction else {
             return Cell(direction: nil, frameIndex: nil, label: L10n.text("Cancel tool direction"))
         }
         let label: String
         switch direction {
         case .upLeft: label = L10n.text("Up-left")
-        case .up: label = "Up"
+        case .up: label = L10n.text("Up")
         case .upRight: label = L10n.text("Up-right")
         case .left: label = L10n.text("Left")
         case .right: label = L10n.text("Right")
@@ -378,7 +378,7 @@ import UIKit
         case .downRight: label = L10n.text("Down-right")
         }
         return Cell(direction: direction, frameIndex: MobileDirectionPickerLayout.frameIndex(for: direction), label: label)
-    }
+    } }
 
     var onChoice: ((Lemmings3Runtime.Direction?) -> Void)?
     private var buttons: [UIButton] = []

@@ -96,7 +96,7 @@ public struct LevelHintDeck: Sendable {
     public init(title: String, checked: Bool, stages: [Stage]) {
         self.title = title; self.checked = checked; self.stages = stages
     }
-    public static let nudges = [
+    public static var nudges: [String: String] { [
         "blocker": L10n.text("Think about giving one worker room to prepare the route. The whole crowd does not need to move together."),
         "builder": L10n.text("Look for the first gap or change in height. Work out where a staircase could reach firm ground."),
         "basher": L10n.text("Look at the first wall in the route. Think about opening a passage at the height where the lemmings walk."),
@@ -105,8 +105,8 @@ public struct LevelHintDeck: Sendable {
         "climber": L10n.text("One lemming may need to take a route the crowd cannot follow yet. Check the vertical faces."),
         "floater": L10n.text("Check the first long drop. A safe landing is the first part of the route."),
         "bomber": L10n.text("A small opening can change the route. Check how much ground needs to be removed.")
-    ]
-    public static let jobs = [
+    ] }
+    public static var jobs: [String: String] { [
         "blocker": L10n.text("A Blocker turns other lemmings back. Leave room for the worker who will prepare the path."),
         "builder": L10n.text("A Builder makes a short rising staircase. Check its landing point and leave room for the next staircase."),
         "basher": L10n.text("A Basher cuts horizontally through ground. Choose the side and height of the passage carefully."),
@@ -115,7 +115,7 @@ public struct LevelHintDeck: Sendable {
         "climber": L10n.text("A Climber can scale vertical walls. Check where the worker will walk after reaching the top."),
         "floater": L10n.text("A Floater survives long falls. Give the skill before the lemming hits the ground."),
         "bomber": L10n.text("A Bomber removes nearby ground after a countdown. A moving lemming can travel during the countdown.")
-    ]
+    ] }
 
     public static func practice(title: String, skills: [String], chronicles: Bool = false) -> Self {
         let available = skills.filter { jobs[$0.lowercased()] != nil }

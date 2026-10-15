@@ -19,8 +19,13 @@ public struct ClassicMacUserInterface: Sendable {
         case large = "Charset2"
     }
 
-    /// A monospaced character set with Western Latin extensions.
+    /// Original monospaced Latin artwork with measured Tamil additions.
     public struct Font: Sendable {
+        public struct PositionedGlyph: Sendable {
+            public let sequence: String
+            public let glyph: ClassicMacArtwork.Frame?
+            public let x: Int, advance: Int
+        }
         /// The first character the set covers. Everything below it is control
         /// codes, which a menu never draws.
         public static let firstCharacter: Unicode.Scalar = " "
@@ -29,6 +34,7 @@ public struct ClassicMacUserInterface: Sendable {
         /// One cell, in Macintosh pixels. Twice the classic simulation's.
         public let cellWidth: Int
         public let cellHeight: Int
+        public let baseline: Int
         /// Glyphs in character order, starting at space. A blank entry draws
         /// nothing and still advances one cell.
         public let glyphs: [ClassicMacArtwork.Frame?]
@@ -50,6 +56,12 @@ public struct ClassicMacUserInterface: Sendable {
             let originals = Dictionary(uniqueKeysWithValues: printable.enumerated().compactMap { index, frame in
                 frame.map { (Character(String(Unicode.Scalar(first + index)!)), $0) }
             })
+            if let capital = originals["H"] {
+                let bytes = [UInt8](capital.rgba)
+                let lastRow = stride(from: 3, to: bytes.count, by: 4)
+                    .filter { bytes[$0] != 0 }.map { ($0 / 4) / capital.width }.max()
+                baseline = lastRow.map { capital.y + $0 + 1 } ?? max(1, cellHeight - 2)
+            } else { baseline = max(1, cellHeight - 2) }
             extendedGlyphs = BitmapLatinGlyphs.extending(originals, cellWidth: cellWidth, cellHeight: cellHeight)
         }
 
@@ -64,25 +76,72 @@ public struct ClassicMacUserInterface: Sendable {
                 return glyphs[Int(scalar.value) - Int(Font.firstCharacter.value)]
             }
             return extendedGlyphs[character]
+                ?? BitmapTamilGlyphs.frame(for: String(character), cellHeight: cellHeight, baseline: baseline)
+        }
+
+        public func glyph(forSequence sequence: String) -> ClassicMacArtwork.Frame? {
+            if sequence.count == 1, let character = sequence.first { return glyph(for: character) }
+            return BitmapTamilGlyphs.frame(for: sequence, cellHeight: cellHeight, baseline: baseline)
+        }
+
+        public func advance(forSequence sequence: String) -> Int {
+            BitmapTamilGlyphs.advance(for: sequence, cellHeight: cellHeight) ?? cellWidth
+        }
+
+        /**
+         * Preserve original Latin advances and position complete Tamil syllables as single units.
+         */
+        public func layout(_ text: String) -> [PositionedGlyph] {
+            var pen = 0
+            return BitmapTamilGlyphs.sequences(in: text).map { sequence in
+                let advance = advance(forSequence: sequence)
+                let glyph = glyph(forSequence: sequence) ?? (sequence == " " ? nil : glyph(for: "?"))
+                defer { pen += advance }
+                return PositionedGlyph(sequence: sequence, glyph: glyph, x: pen, advance: advance)
+            }
         }
 
         /// Whether the set covers every character in the text.
         public func covers(_ text: String) -> Bool {
-            text.allSatisfy { $0 == " " || glyph(for: $0) != nil }
+            BitmapTamilGlyphs.sequences(in: text).allSatisfy { $0 == " " || glyph(forSequence: $0) != nil }
         }
 
         /// The width of a line, in Macintosh pixels, at a whole-number scale.
         public func width(of text: String, scale: Int = 1) -> Int {
-            text.count * cellWidth * scale
+            let bounds = horizontalBounds(of: text)
+            return (bounds.right - bounds.left) * scale
+        }
+
+        /**
+         * Include negative Tamil bearings and ink after the final advance without changing ASCII cells.
+         */
+        public func horizontalBounds(of text: String) -> (left: Int, right: Int) {
+            var left = 0, right = 0, pen = 0
+            for sequence in BitmapTamilGlyphs.sequences(in: text) {
+                if let bounds = BitmapTamilGlyphs.metrics(for: sequence, cellHeight: cellHeight, baseline: baseline) {
+                    left = min(left, pen + bounds.x)
+                    right = max(right, pen + bounds.x + bounds.width)
+                }
+                pen += advance(forSequence: sequence)
+            }
+            return (left, max(pen, right))
         }
 
         public func height(scale: Int = 1) -> Int { cellHeight * scale }
 
         /// Accent overhang is included while ASCII retains its original line box.
         public func verticalBounds(of text: String) -> (top: Int, bottom: Int) {
-            let frames = text.compactMap { glyph(for: $0) }
-            return (min(0, frames.map(\.y).min() ?? 0),
-                    max(cellHeight, frames.map { $0.y + $0.height }.max() ?? cellHeight))
+            var top = 0, bottom = cellHeight
+            for sequence in BitmapTamilGlyphs.sequences(in: text) {
+                if let bounds = BitmapTamilGlyphs.metrics(for: sequence, cellHeight: cellHeight, baseline: baseline) {
+                    top = min(top, bounds.y)
+                    bottom = max(bottom, bounds.y + bounds.height)
+                } else if let frame = glyph(forSequence: sequence) ?? glyph(for: "?") {
+                    top = min(top, frame.y)
+                    bottom = max(bottom, frame.y + frame.height)
+                }
+            }
+            return (top, bottom)
         }
         public func height(of text: String, scale: Int = 1) -> Int {
             let bounds = verticalBounds(of: text)

@@ -181,6 +181,29 @@ import LemmingsGameArt
         container.layoutSubtreeIfNeeded()
         current.view.isHidden = false
     }
+    /**
+     * Rebuild one translated page while retaining the modal stack and the paused game beneath it.
+     */
+    @discardableResult func replace(_ current: NSView, with replacement: NSView,
+        focus: NSResponder? = nil, onDismiss: (() -> Void)? = nil) -> Bool {
+        guard let index = pages.firstIndex(where: { $0.view === current }), let window = gameWindow else { return false }
+        let previous = pages[index]
+        let selected = focus ?? (replacement as? GameMenuPage)?.controllerInitialControl
+            ?? keyboardNavigation.controls(in: replacement).first(where: { $0 is NSButton }) ?? replacement
+        let container = GamePageContainer(page: replacement)
+        let visible = index == pages.count - 1
+        replacement.isHidden = !visible
+        container.isHidden = !visible
+        pages[index] = Page(view: replacement, focus: selected, dismiss: onDismiss, container: container)
+        previous.view.removeFromSuperview()
+        previous.container.removeFromSuperview()
+        if visible {
+            reattach()
+            keyboardNavigation.focus(selected, in: window)
+        }
+        updateAccessibility()
+        return true
+    }
     func dismiss(_ view: NSView) {
         guard let index = pages.firstIndex(where: { $0.view === view }) else { return }
         onNavigate?()

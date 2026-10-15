@@ -28,7 +28,8 @@ public enum MobileSettingsArt {
 
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
                             sharing: Bool = false, sharingAvailable: Bool = false,
-                            displayAvailable: Bool = false, inGame: Bool = false) -> GameFrontEnd.Page {
+                            displayAvailable: Bool = false, inGame: Bool = false,
+                            language: InterfaceLanguage = .system) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
@@ -40,7 +41,8 @@ public enum MobileSettingsArt {
         var rows: [Action]
         switch group {
         case .gameplay:
-            rows = [choice("preset", L10n.text("Preset"), c.experiencePreset.title),
+            rows = [choice("language", L10n.text("Language"), language.title),
+                    choice("preset", L10n.text("Preset"), c.experiencePreset.title),
                     toggle("planning", L10n.text("Pause to assign"), settings.pauseToAssign),
                     choice("speed", L10n.text("Fast speed"), "\(settings.fastSpeed)X"),
                     toggle("variableSpeed", L10n.text("Variable speed"), c.variableSpeedEnabled),
@@ -94,7 +96,18 @@ public enum MobileSettingsArt {
                     .init("playInsights", L10n.text("Play Insights"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" } }
-        return .init(title: group.title, rows: rows, footer: [.init("settings", L10n.text("Back"))])
+        return .init(title: group.title, rows: rows,
+                     footer: [.init("settings", L10n.text("Back"))])
+    }
+
+    /**
+     * Each installed language remains selectable independently of system language support.
+     */
+    public static func languages(selection: InterfaceLanguage) -> GameFrontEnd.Page {
+        .init(title: L10n.text("Language"),
+              rows: L10n.languageOptions.map { .init("language." + $0.rawValue, $0.title, selected: $0 == selection) },
+              footer: [.init("language.cancel", L10n.text("Back"), backNavigation: true),
+                       .init("language.apply", L10n.text("Apply"), primary: true)])
     }
 
     public static func controllerMappings(_ settings: MobileSettings, television: Bool = false) -> GameFrontEnd.Page {

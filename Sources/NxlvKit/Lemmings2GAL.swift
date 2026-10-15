@@ -268,17 +268,9 @@ public struct Lemmings2GAL {
                   x:bob.x+frame.x,y:bob.y+frame.y,mode:bob.mode)
         } else if bob.type == 1 {
             guard bank.strings.indices.contains(bob.identifier) else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation text.")) }
-            var lines: [String] = []
-            for paragraph in L10n.originalL2Text(bank.strings[bob.identifier]).split(separator:"\r",omittingEmptySubsequences:false) {
-                guard let layout = textLayout, layout.width > 0 else { lines.append(String(paragraph)); continue }
-                var line = ""
-                for word in paragraph.split(separator:" ") {
-                    let proposed = line.isEmpty ? String(word) : line+" "+word
-                    if !line.isEmpty && font.width(proposed) > layout.width { lines.append(line); line = String(word) }
-                    else { line = proposed }
-                }
-                lines.append(line)
-            }
+            let translated = L10n.originalL2Text(bank.strings[bob.identifier])
+            let lines = textLayout.flatMap { $0.width > 0 ? font.bitmap.wrapped(translated, toWidth: $0.width) : nil }
+                ?? translated.components(separatedBy: "\r")
             let text = lines.joined()
             let pitch = max(12, font.bitmap.height(of: text) + 1)
             for (row,line) in lines.enumerated() {
@@ -288,11 +280,11 @@ public struct Lemmings2GAL {
                     else if layout.alignment == 6 { x += layout.width-font.width(line) }
                 }
                 let top = font.bitmap.verticalBounds(of: line).top
-                for character in line {
-                    defer { x += font.bitmap.advance(for: character) }
-                    guard let glyph = font.bitmap.glyph(for: character) ?? font.bitmap.glyph(for: "?") else { continue }
+                let left = font.bitmap.horizontalBounds(of: line).left
+                for placed in font.bitmap.layout(line) {
+                    guard let glyph = placed.glyph else { continue }
                     paint(glyph.pixels.map{$0 &+ fontColourOffset},opaque:glyph.opaque,width:glyph.width,height:glyph.height,
-                          x:x+glyph.x,y:bob.y+(textLayout?.y ?? 0)+row*pitch+glyph.y-top,mode:bob.mode)
+                          x:x+placed.x+glyph.x-left,y:bob.y+(textLayout?.y ?? 0)+row*pitch+glyph.y-top,mode:bob.mode)
                 }
             }
         }

@@ -79,8 +79,9 @@ import NxlvKit
             refreshHostedBoard()
         }
         pageFooter()
-        setAccessibilityLabel("Worldwide community leaderboard. \(hostedCategory.title). Rewinds \(assisted ? "used" : "unused"). \(service.status). " +
-            (service.board?.entries.map { L10n.text("Rank \($0.rank), \($0.name), \(hostedCategory.score($0.score)).") }.joined(separator: " ") ?? ""))
+        let rewinds = assisted ? L10n.text("used") : L10n.text("unused")
+        let entries = service.board?.entries.map { L10n.text("Rank \($0.rank), \($0.name), \(hostedCategory.score($0.score)).") }.joined(separator: " ") ?? ""
+        setAccessibilityLabel(L10n.text("Worldwide community leaderboard. \(hostedCategory.title). Rewinds \(rewinds). \(service.status). \(entries)"))
     }
 }
 #endif

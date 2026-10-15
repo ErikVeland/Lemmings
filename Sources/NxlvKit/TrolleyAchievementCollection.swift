@@ -29,7 +29,7 @@ extension TrolleyAchievement {
             self.title = title; self.detail = detail; self.group = group; self.tier = tier; self.goal = goal; self.philosopher = philosopher
         }
     }
-    static let collection: [Self: Definition] = [
+    static var collection: [Self: Definition] { [
         .bentham: .init("The Greater Sum", L10n.text("Clear a level as Jeremy Bentham, with an evidenced trade-off."), .philosophy, .gold, philosopher: "bentham"),
         .mill: .init("A Mill-ion Reasons", L10n.text("Clear a level with the John Stuart Mill play style."), .philosophy, philosopher: "mill"),
         .kant: .init("Kant Touch This", L10n.text("Clear a level with the Immanuel Kant play style."), .philosophy, .silver, philosopher: "kant"),
@@ -60,7 +60,7 @@ extension TrolleyAchievement {
         .philosopherKing: .init("The Philosopher King", L10n.text("Clear levels with 10 different philosophical affinities."), .mastery, .legendary, goal: 10),
         .schoolOfThought: .init("School of Thought", L10n.text("Earn the same play style on 5 distinct cleared levels."), .mastery, .gold, goal: 5),
         .unbrokenArgument: .init("An Unbroken Argument", L10n.text("Match targets on 5 distinct levels in consecutive attempts, without rewind."), .mastery, .legendary, goal: 5)
-    ]
+    ] }
     public var group: TrolleyAchievementGroup { self == .falsifier ? .philosophy : Self.collection[self]?.group ?? .rescue }
     public var tier: TrolleyAchievementTier {
         if self == .falsifier { return .legendary }

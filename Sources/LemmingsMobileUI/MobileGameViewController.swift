@@ -1592,14 +1592,14 @@ typealias MobileGameOverlay = UIScrollView
             .filter { $0.assignment == .eligible }
             .sorted { $0.id < $1.id }
         let skillName = snapshot.skills.indices.contains(selectedControl)
-            ? snapshot.skills[selectedControl].name : "selected skill"
+            ? SkillVocabulary.title(snapshot.skills[selectedControl].name) : L10n.text("selected skill")
         let selectedIndex = highlightedTarget.flatMap { selection in
             candidates.firstIndex { $0.id == selection.id }
         }
         if let selectedIndex {
-            playfieldView.accessibilityValue = "Eligible lemming \(selectedIndex + 1) of \(candidates.count). Skill: \(skillName)."
+            playfieldView.accessibilityValue = L10n.text("Eligible lemming \(selectedIndex + 1) of \(candidates.count). Skill: \(skillName).")
         } else {
-            playfieldView.accessibilityValue = "\(candidates.count) eligible lemmings. Skill: \(skillName)."
+            playfieldView.accessibilityValue = L10n.text("\(candidates.count) eligible lemmings. Skill: \(skillName).")
         }
 
         let canAssign = !session.isReadOnly && !snapshot.isComplete && playState.canEdit

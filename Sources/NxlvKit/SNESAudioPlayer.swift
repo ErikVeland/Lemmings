@@ -22,7 +22,7 @@ public struct SNESAudioPlayer: Sendable {
         }
     }
 
-    public static let tracks: [SNESTrack] = [
+    public static var tracks: [SNESTrack] { [
         SNESTrack(id: 0, title: L10n.text("SNES Main Theme")),
         SNESTrack(id: 1, title: L10n.text("Sunsoft Special 1"), isSNESExclusive: true),
         SNESTrack(id: 2, title: L10n.text("Sunsoft Special 2"), isSNESExclusive: true),
@@ -31,7 +31,7 @@ public struct SNESAudioPlayer: Sendable {
         SNESTrack(id: 5, title: L10n.text("Sunsoft Special 5"), isSNESExclusive: true),
         SNESTrack(id: 6, title: L10n.text("SNES Title Screen")),
         SNESTrack(id: 7, title: L10n.text("SNES Ending Theme")),
-    ]
+    ] }
 
     private var activeTrackIndex: Int?
     private var isPlaying = false

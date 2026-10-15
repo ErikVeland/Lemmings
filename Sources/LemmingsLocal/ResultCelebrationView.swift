@@ -301,7 +301,9 @@ import NxlvKit
         if rows.isEmpty { text(L10n.text("No completed attempts in this category yet."), 80, 340, 960) }
         text(L10n.text("Local players on this Mac."), 80, 578, 960)
         pageFooter()
-        setAccessibilityLabel("Local career leaderboard. Rewinds \(assisted ? "used" : "unused"). Best stars per distinct level. " + rows.enumerated().map { L10n.text("Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? L10n.text("LEM")), \($0.element.stars) stars.") }.joined(separator: " "))
+        let rewinds = assisted ? L10n.text("used") : L10n.text("unused")
+        let summary = rows.enumerated().map { L10n.text("Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? L10n.text("LEM")), \($0.element.stars) stars.") }.joined(separator: " ")
+        setAccessibilityLabel(L10n.text("Local career leaderboard. Rewinds \(rewinds). Best stars per distinct level. \(summary)"))
     }
 }
 #endif

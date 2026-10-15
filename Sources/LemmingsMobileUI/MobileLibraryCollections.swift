@@ -86,9 +86,9 @@ extension MobileLibraryViewController {
         case "favourites": openList(favourites.entries, name: "Favourites", back: .collections)
         case "recents": openList(recents.entries, name: "Recently played", back: .collections)
         case "playlists": navigate(.playlists)
-        case "listNew": if let created = playlists.create(name: "Playlist \(playlists.playlists.count + 1)") { savePlaylists(); openPlaylist(created) }
+        case "listNew": if let created = playlists.create(name: L10n.text("Playlist \(playlists.playlists.count + 1)")) { savePlaylists(); openPlaylist(created) }
         case "addPlaylist": navigate(.addToPlaylist)
-        case "addNew": addCurrentLevel(to: playlists.create(name: "Playlist \(playlists.playlists.count + 1)"))
+        case "addNew": addCurrentLevel(to: playlists.create(name: L10n.text("Playlist \(playlists.playlists.count + 1)")))
         case "random": makeRandomPlaylist()
         case "runResume": resumeRun()
         case "listPlay": playPlaylist(shuffle: false)
