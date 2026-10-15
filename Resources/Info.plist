@@ -20,6 +20,17 @@
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>academy.glasscode.lemmings</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>es-419</string>
+		<string>de</string>
+		<string>fr</string>
+		<string>pt-BR</string>
+		<string>it</string>
+		<string>nl</string>
+		<string>nb</string>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

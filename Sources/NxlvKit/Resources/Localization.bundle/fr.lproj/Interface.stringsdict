@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>count.commands</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld commande • Les raccourcis dépendent du contexte indiqué. Échap ferme ce guide.</string>
+			<key>other</key>
+			<string>%ld commandes • Les raccourcis dépendent du contexte indiqué. Échap ferme ce guide.</string>
+		</dict>
+	</dict>
+	<key>count.lemmings</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld lemming</string>
+			<key>other</key>
+			<string>%ld lemmings</string>
+		</dict>
+	</dict>
+	<key>count.levels</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld niveau</string>
+			<key>other</key>
+			<string>%ld niveaux</string>
+		</dict>
+	</dict>
+	<key>count.packs</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld pack</string>
+			<key>other</key>
+			<string>%ld packs</string>
+		</dict>
+	</dict>
+	<key>count.rescueGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Sauve %ld lemming et termine le niveau.</string>
+			<key>other</key>
+			<string>Sauve %ld lemmings et termine le niveau.</string>
+		</dict>
+	</dict>
+	<key>count.savedLemmings</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Tu as sauvé %ld lemming</string>
+			<key>other</key>
+			<string>Tu as sauvé %ld lemmings</string>
+		</dict>
+	</dict>
+	<key>count.secondStarGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Sauve %ld lemming et termine le niveau pour gagner la deuxième étoile.</string>
+			<key>other</key>
+			<string>Sauve %ld lemmings et termine le niveau pour gagner la deuxième étoile.</string>
+		</dict>
+	</dict>
+	<key>count.thirdStarGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Sauve %ld lemming et termine le niveau pour gagner la troisième étoile.</string>
+			<key>other</key>
+			<string>Sauve %ld lemmings et termine le niveau pour gagner la troisième étoile.</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

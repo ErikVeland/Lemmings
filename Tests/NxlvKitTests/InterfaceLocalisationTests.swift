@@ -47,6 +47,31 @@ final class InterfaceLocalisationTests: XCTestCase {
             XCTAssertEqual(language.plural("count.levels", count: count, one: "%ld level", other: "%ld levels"), expected)
         }
     }
+    func testEveryDraftLocaleLoadsItsStringsAndPluralTable() throws {
+        let bundle = try XCTUnwrap(Bundle(url: resources))
+        let expected = [
+            "es-419": ("Listo", "1 nivel", "2 niveles"),
+            "de": ("Bereit", "1 Level", "2 Level"),
+            "fr": ("Prêt", "1 niveau", "2 niveaux"),
+            "pt-BR": ("Pronto", "1 fase", "2 fases"),
+            "it": ("Pronto", "1 livello", "2 livelli"),
+            "nl": ("Klaar", "1 level", "2 levels"),
+            "nb": ("Klar", "1 brett", "2 brett"),
+        ]
+        for (locale, values) in expected {
+            let language = InterfaceLocalisation(bundle: bundle, preferredLanguages: [locale])
+            XCTAssertEqual(language.language, locale)
+            XCTAssertEqual(language.text("Ready"), values.0, locale)
+            XCTAssertEqual(language.plural("count.levels", count: 1, one: "%ld level", other: "%ld levels"), values.1, locale)
+            XCTAssertEqual(language.plural("count.levels", count: 2, one: "%ld level", other: "%ld levels"), values.2, locale)
+            let tableURL = resources.appendingPathComponent("\(locale).lproj/Interface.strings")
+            let table = try XCTUnwrap(NSDictionary(contentsOf: tableURL) as? [String: String])
+            XCTAssertEqual(table.count, 3118, locale)
+            for (key, value) in table {
+                XCTAssertEqual(language.text(InterfaceMessage(stringLiteral: key)), value, "\(locale): \(key)")
+            }
+        }
+    }
     func testTextExpansionLeavesInterpolatedDataAndPreferenceIDsIntact() throws {
         let language = InterfaceLocalisation(bundle: nil, expandsText: true)
         XCTAssertEqual(language.text("Ready, \("ALICE")"), "[Reeaady, ALICE]")
