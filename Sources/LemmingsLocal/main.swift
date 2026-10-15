@@ -6783,6 +6783,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
         game: currentNxlvURL != nil ? (currentNeoPackName ?? L10n.text("NeoLemmix"))
           : fanPlaying ? L10n.text("Fan levels") : activeTitle?.displayName ?? campaign?.name ?? L10n.text("Lemmings"),
         rules: rules, total: new.total, required: new.required, conditions: conditions)
+    if let classic = new as? ClassicSession {
+      playfield.hotSeatGhosts = ArcadeStore.shared.hotSeatGhosts(initial: .classic(classic.initialSimulation),
+        level: arcadeLevel, playerID: arcadeProfileID, sessionID: arcadeHotSeatID)
+    } else if let neo = new as? NeoLemmixSession {
+      playfield.hotSeatGhosts = ArcadeStore.shared.hotSeatGhosts(initial: .neolemmix(neo.recovery.initialState),
+        level: arcadeLevel, playerID: arcadeProfileID, sessionID: arcadeHotSeatID)
+    } else { playfield.hotSeatGhosts = nil }
     if !restoringCheckpoint {
       LevelCollections.record(currentCollectionEntry(), profileID: arcadeProfileID, attemptID: arcadeRunID)
       if sequencePlayingIdentity == nil {
@@ -7567,6 +7574,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
         level: arcadeLevel, saved: session.saved, didWin: session.didWin, skills: session.skillAssignments,
         seconds: Double(session.currentTick) / Double(session.ticksPerSecond), assisted: session.usedRewind,
         telemetry: TrolleyCapture.telemetry(session))
+      if let classic = session as? ClassicSession,
+         let commands = try? classic.recoveryEvents.map(LeaderboardActionReplay.Command.classic) {
+        ArcadeStore.shared.preserveHotSeatGhost(run: run, sessionID: arcadeHotSeatID,
+          initial: .classic(classic.initialSimulation), final: .classic(classic.simulation), commands: commands)
+      } else if let neo = session as? NeoLemmixSession {
+        ArcadeStore.shared.preserveHotSeatGhost(run: run, sessionID: arcadeHotSeatID,
+          initial: .neolemmix(neo.recovery.initialState), final: .neolemmix(neo.simulation),
+          commands: neo.recovery.inputs.map(LeaderboardActionReplay.Command.neo))
+      }
       PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: session.didWin)
       arcadeReport = ArcadeStore.shared.record(run)
       syncPrecisionZoom()

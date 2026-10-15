@@ -17,6 +17,10 @@ are visual recordings. They do not apply inputs to a simulation or change saved
 campaign progress. The DOS engine's separate deterministic replay format remains
 available to its tools.
 
+Mac Hot Seat recordings include earlier players' coloured ghosts as drawn during
+the attempt. Saved movies retain those overlays without loading a Hot Seat
+session. The ghosts contribute no audio. See [Hot Seat](HotSeat.md).
+
 Movies use H.264 video and AAC audio in an MP4 file. The recorder mixes game
 sound effects and the selected music against the replay clock. Music uses native
 modules or installed recordings. L3 records its bundled tribe modules, six named

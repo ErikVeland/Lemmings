@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import LemmingsGameArt
 import NxlvKit
 
@@ -110,7 +111,7 @@ struct ReticleFeedback {
   var nextChange: TimeInterval { max(successUntil, orangeUntil) }
 }
 
-@MainActor final class PlayfieldView: NSView {
+@MainActor final class PlayfieldView: NSView, HotSeatGhostRendering {
   private(set) var presentationRevision: UInt64 = 0
   override var needsDisplay: Bool {
     get { super.needsDisplay }
@@ -482,6 +483,8 @@ struct ReticleFeedback {
   private var overlayLineRects: [CGRect] = []
 
   private var spriteCache: [String: NSImage] = [:]
+  var hotSeatGhosts: HotSeatGhostPlayback?
+  private let hotSeatGhostSprites = ReplayGhostSprites()
   var solutionGhost: ClassicSolutionGhost?
   var ghostSolutionEnabled = false { didSet { needsDisplay = true } }
   private var ghostPixels: [String: CGImage] = [:]
@@ -863,7 +866,7 @@ struct ReticleFeedback {
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
 
-  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll(); ghostPixels.removeAll(); needsDisplay = true }
+  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll(); ghostPixels.removeAll(); hotSeatGhostSprites.clear(); needsDisplay = true }
 
   // MARK: - Drawing
 
@@ -921,6 +924,7 @@ struct ReticleFeedback {
         NSBezierPath(rect: bounds).addClip()
         precisionLens.applyToCurrentGraphicsContext()
         drawLevel(levelImage)
+        drawHotSeatGhosts()
         drawSolutionGhost()
         speedTrails.draw(enabled: usesTrails, in: bounds) { drawLemmings() }
         NSGraphicsContext.restoreGraphicsState()
@@ -1527,6 +1531,29 @@ struct ReticleFeedback {
     drawPixels(pixels, in: rect, alpha: alpha)
   }
 
+  private func drawHotSeatGhosts() {
+    guard let session else { return }
+    for frame in hotSeatGhosts?.frames(at: session.currentTick) ?? [] {
+      switch frame.state {
+      case .classic(let game):
+        for lemming in game.lemmings where lemming.isActive {
+          draw(SessionLemming(id: lemming.id, x: lemming.foot.x, y: lemming.foot.y,
+            pose: spritePose(for: lemming.action), facingLeft: lemming.direction == .left,
+            animationFrame: lemming.animationFrame, countdown: nil,
+            hasClimber: lemming.hasClimber, hasFloater: lemming.hasFloater), hotSeatColour: frame.colour)
+        }
+      case .neolemmix(let game):
+        for lemming in game.lemmings where lemming.isActive && lemming.action != .teleporting {
+          draw(SessionLemming(id: lemming.id, x: lemming.position.x, y: lemming.position.y,
+            pose: spritePose(for: lemming.action), facingLeft: lemming.direction == .left,
+            animationFrame: lemming.animationFrame, countdown: nil,
+            neoAction: lemming.action, neoTraits: lemming.traits), hotSeatColour: frame.colour)
+        }
+      default: continue
+      }
+    }
+  }
+
   private func drawSolutionGhost() {
     guard ghostSolutionEnabled, let session = session as? ClassicSession, solutionGhost != nil else { return }
     solutionGhost?.synchronise(to: session.currentTick)
@@ -1643,7 +1670,7 @@ struct ReticleFeedback {
     }
   }
 
-  private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false, solutionGhost: Bool = false) {
+  private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false, solutionGhost: Bool = false, hotSeatColour: ReplayGhostColour? = nil) {
     let motion = ghostsOnly ? speedTrails.motion(actor: lemming.id) : .zero
     if ghostsOnly && motion == .zero { return }
     if let action = lemming.neoAction, let neoSprites,
@@ -1670,6 +1697,10 @@ struct ReticleFeedback {
       if ghostsOnly {
         speedTrails.drawBehind(actor: lemming.id, sprite: frame.image, in: rect, motion: motion,
           pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+        return
+      }
+      if let hotSeatColour {
+        hotSeatGhostSprites.draw(frame.image, key: key, colour: hotSeatColour, in: rect, pixelScale: frame.pixelScale)
         return
       }
       drawSprite(frame.image, key: key, in: rect, alpha: fraction)
@@ -1721,6 +1752,10 @@ struct ReticleFeedback {
             pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
           return
         }
+        if let hotSeatColour {
+          hotSeatGhostSprites.draw(sprite, key: key, colour: hotSeatColour, in: rect, pixelScale: 2)
+          return
+        }
         if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
         captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
@@ -1755,6 +1790,10 @@ struct ReticleFeedback {
     if ghostsOnly {
       speedTrails.drawBehind(actor: lemming.id, sprite: sprite, in: rect, motion: motion,
         pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+      return
+    }
+    if let hotSeatColour {
+      hotSeatGhostSprites.draw(sprite, key: key, colour: hotSeatColour, in: rect)
       return
     }
     if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }

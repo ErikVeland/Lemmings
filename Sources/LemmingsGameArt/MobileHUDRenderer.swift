@@ -23,11 +23,13 @@ public enum MobileHUDAction: Equatable, Sendable {
         public let lost: Int
         public let deathCounter: String
         public let accessibility: String
+        public let engineIdentifier: String
 
         public init(lostCount: Int,
-                    deathCounter: (visible: String, accessibility: String)) {
+                    deathCounter: (visible: String, accessibility: String), engineIdentifier: String = "classic") {
             lost = max(0, lostCount)
             self.deathCounter = deathCounter.visible
+            self.engineIdentifier = engineIdentifier
             accessibility = deathCounter.accessibility
         }
     }
@@ -565,34 +567,37 @@ public enum MobileHUDAction: Equatable, Sendable {
         public let palette: GamePixelTypography.Palette
         public let bitmapOnly: Bool
         public let scale: CGFloat
+        public let face: GameMenuTypography.Face
     }
 
     /// Prioritise rescue progress and the clock. Extra statistics use available horizontal space.
     public static func statusFields(in frame: CGRect, snapshot: MobileGameSnapshot, details: StatusDetails?,
                                     engineIdentifier: String, paused: Bool, speed: Double,
                                     typography: GameMenuTypography?) -> [StatusField] {
+        guard frame.width >= 24, frame.height >= 8 else { return [] }
         let compact = frame.width < 440
         let gap: CGFloat = compact ? 8 : 20
         let row = frame.insetBy(dx: 6, dy: 2)
         let percent = snapshot.saved * 100 / max(1, snapshot.total)
         let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
         let bitmap = compact || typography == nil
-        func width(_ text: String, scale: CGFloat = 1) -> CGFloat {
+        func width(_ text: String, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGFloat {
             if bitmap { return CGFloat(GamePixelTypography.width(of: text)) * scale }
-            return typography?.width(of: GameMenuTypography.menuText(text), face: .small, scale: 1) ?? 0
+            return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: 1) ?? 0
         }
         let clock = compact ? time : L10n.text("TIME \(time)")
         let clockWidth = width(clock)
         let scoreScale: CGFloat = bitmap ? 2 : 1
+        let scoreFace: GameMenuTypography.Face = !bitmap && frame.width >= 1200 ? .large : .small
         var score = compact ? "\(snapshot.saved)/\(snapshot.required) \(percent)%"
             : L10n.text("HOME \(snapshot.saved)/\(snapshot.required)") + " (\(percent)%)"
-        if width(score, scale: scoreScale) + clockWidth + gap > row.width {
+        if width(score, scale: scoreScale, face: scoreFace) + clockWidth + gap > row.width {
             score = "\(snapshot.saved)/\(snapshot.required)"
         }
-        let scoreWidth = min(row.width, width(score, scale: scoreScale))
+        let scoreWidth = min(row.width, width(score, scale: scoreScale, face: scoreFace))
         let scoreFrame = CGRect(x: row.maxX - scoreWidth, y: row.minY, width: scoreWidth, height: row.height)
         var fields = [StatusField(id: "score", text: score, frame: scoreFrame, palette: .green,
-                                  bitmapOnly: bitmap, scale: scoreScale)]
+                                  bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
         let available = max(0, scoreFrame.minX - gap - row.minX)
         guard available >= clockWidth else { return fields }
         var candidates: [(String, String)] = [("time", clock)]
@@ -619,7 +624,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             let extent = width(text)
             fields.append(StatusField(id: id, text: text,
                 frame: CGRect(x: floor(x), y: row.minY, width: extent, height: row.height),
-                palette: .blue, bitmapOnly: bitmap, scale: 1))
+                palette: .blue, bitmapOnly: bitmap, scale: 1, face: .small))
             x += extent + spacing
         }
         return fields
@@ -627,13 +632,13 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawStatus(in frame: CGRect, context: CGContext) {
         let fields = Self.statusFields(in: frame, snapshot: snapshot, details: statusDetails,
-            engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic",
+            engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
             paused: paused, speed: speed, typography: typography)
         for field in fields {
             if field.bitmapOnly {
                 GamePixelTypography.draw(field.text, in: field.frame, context: context, typography: nil,
                     palette: field.palette, maximumScale: field.scale, bitmapOnly: true)
-            } else { drawStatusLabel(field.text, in: field.frame, palette: field.palette, context: context) }
+            } else { drawStatusLabel(field.text, in: field.frame, palette: field.palette, face: field.face, context: context) }
             if field.id == "score", snapshot.didWin {
                 context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
                 context.fill(CGRect(x: field.frame.minX, y: field.frame.maxY - 2, width: field.frame.width, height: 2))
@@ -641,10 +646,10 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
     }
 
-    private func drawStatusLabel(_ text: String, in row: CGRect, palette: GamePixelTypography.Palette, context: CGContext) {
+    private func drawStatusLabel(_ text: String, in row: CGRect, palette: GamePixelTypography.Palette, face: GameMenuTypography.Face, context: CGContext) {
         guard text.contains("💀"), let typography, let font = typography.font(.small) else {
             GamePixelTypography.draw(text, in: row, context: context, typography: typography,
-                palette: palette, maximumScale: 1, alignment: .left)
+                palette: palette, maximumScale: 1, alignment: .left, face: face)
             return
         }
         var x = row.minX
