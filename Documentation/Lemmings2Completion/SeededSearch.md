@@ -133,6 +133,19 @@ A 4,096-candidate, 360-second search for Cavelems Level 2 also found no route
 better than 36 of 59. The verified Level 1 and Level 2 witnesses remain the
 best routes found in these searches.
 
+### Beach 3 ark search
+
+A 600-second seeded search at the carried population of 42 used a 4,096-candidate
+beam. It expanded 2,684,497 candidates and returned a replay-verified route
+that saves one, matching the accepted chain witness. It did not improve the
+population passed to Beach 4. This bounded search does not show that Beach 3
+cannot save more lemmings.
+
+A second 600-second search kept the same seed and beam but changed the decision
+cell to 4 pixels and the refire interval to 75 ticks. It expanded 2,704,573
+candidates and returned the same 1-of-42 route. Neither search improved the
+Beach chain or proves a higher-survivor route is unavailable.
+
 ## Commands
 
 | Task | Command |

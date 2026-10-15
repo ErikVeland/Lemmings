@@ -40,6 +40,28 @@ matching candidate witness.
 The [15 October bundle audit record](../../Documentation/ReleaseReadiness/ClassicFanBundleAudit-2026-10-15.json)
 freezes all 535 archive hashes and records the native route totals.
 
+A focused follow-up targeted one failed witness: `0024-ISteve04.zip/ISteve04.dat#9`,
+“I Challenge You to a Dual!”. Its 8-of-8 candidate first fails when the engine
+refuses Builder for lemming 0 at tick 943. Replaying the exact bundled level,
+single-event offsets within 100 ticks, shifting the remaining route from that
+event within 100 ticks, and trying lemming IDs 0–7 with those timing offsets
+found no win. The level still needs a new route or a cause for the refusal.
+These bounded probes do not show that the level is unsolvable.
+
+A follow-up retimed the earlier Climber assignment for lemming 0 at tick 396
+across 200 offsets within 100 ticks. No variant won. The later Builder refusal
+is downstream of the actor already splatting by tick 943, so these timing
+changes did not repair the route. A new route or a better account of the
+Climber path is still needed.
+
+A separate search targeted bundled `0009-Mikepak04.zip/Mikepak04.dat#7`,
+“A strange manner to dig!”. The level has three lemmings and requires one
+rescue. A 120-second quota-distance beam search, a complete one-skill sweep,
+both ordered Miner/Blocker two-skill sweeps, and a 120-second balanced beam
+search found no winning route. The searches used the Golems clock and exact
+installed pack data. This level remains one of the bundled route gaps; the
+bounded searches do not show that it is unsolvable.
+
 Re-run the bundled closure audit with an app Resources directory that contains
 the exact `Ports` and `LevelPacks` directories:
 

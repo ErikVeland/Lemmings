@@ -67,6 +67,19 @@ each of these three cases from a current-runtime prefix. It found no winning
 route. The mode checks the exact level-data hash and population, drops refused
 inputs from the prefix and double-replays any route it returns.
 
+Two further Shadow 7 searches at the one-lemming carried population each ran
+for 600 seconds with tool-site sampling at 16 pixels. The refreshed-seed search
+used the accepted old-route prefix through tick 1650, expanded 6,184,978
+candidates and raised the beam to 4,096. The unseeded search expanded
+8,967,625 candidates at beam 2,048. Neither found a win; each best partial
+saved zero and lost zero. These bounded searches do not prove that Shadow 7 is
+unsolvable.
+
+A third 600-second unseeded Shadow 7 search used a 4,096-candidate beam,
+8-pixel tool-site sampling and fewer-inputs-first ranking. It expanded
+7,973,530 candidates without a win; its best partial saved zero and lost zero.
+This bounded search also leaves solvability open.
+
 `Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
 After deliberately adding or improving a fixture, run
 `python3 Tools/CampaignCompletion/report.py`, the replay gate, and
