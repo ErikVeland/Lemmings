@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "status": "Counterexamples to the isolated rectangular carve proposal; exact source brush still open",
+  "sourceTick": 62,
+  "prototypeTick": 62,
+  "worldToCapturePixel": "floor((x + 0.5) * 3), floor((y + 0.5) * 3.6)",
+  "colourTolerancePerChannel": 4,
+  "sourceFrameBeforeSHA256": "78bec0ea9cffcaa18a3376536f161c8a2d0ab61c64f4f2ad69e621ebb99f27b2",
+  "sourceFrameAfterSHA256": "36fa90b89d462b8e55f8114fc7689097546d7acf61768999f539f6baf789c1a1",
+  "nativeBackgroundSHA256": "ce68070a968ebed1920f8284f453c4623e0d4b5465b3c81faf5cb0cd40716ee4",
+  "prototypeEditsSHA256": "0afd0b93066cb632da98d1dc3f657167e2ab2e4d5d7a62ae1cd670807a3e49e3",
+  "prototypeRuntimeSHA256": "476d05ac6501f628b20f318f0e08f5a53bad9b7d1284119df0959da2d824ab2b",
+  "witnesses": [
+    {
+      "x": 198,
+      "y": 112,
+      "backgroundRGB": [
+        16,
+        0,
+        0
+      ],
+      "sourceBeforeRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceAfterRGB": [
+        16,
+        0,
+        0
+      ],
+      "sourceMatchesBackground": true,
+      "prototypeCleared": false,
+      "sourceBackgroundMaxChannelDifference": 0
+    },
+    {
+      "x": 199,
+      "y": 113,
+      "backgroundRGB": [
+        16,
+        0,
+        0
+      ],
+      "sourceBeforeRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceAfterRGB": [
+        16,
+        0,
+        0
+      ],
+      "sourceMatchesBackground": true,
+      "prototypeCleared": false,
+      "sourceBackgroundMaxChannelDifference": 0
+    },
+    {
+      "x": 184,
+      "y": 118,
+      "backgroundRGB": [
+        16,
+        16,
+        0
+      ],
+      "sourceBeforeRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceAfterRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceMatchesBackground": false,
+      "prototypeCleared": true,
+      "sourceBackgroundMaxChannelDifference": 65
+    },
+    {
+      "x": 192,
+      "y": 114,
+      "backgroundRGB": [
+        64,
+        64,
+        48
+      ],
+      "sourceBeforeRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceAfterRGB": [
+        65,
+        65,
+        65
+      ],
+      "sourceMatchesBackground": false,
+      "prototypeCleared": true,
+      "sourceBackgroundMaxChannelDifference": 17
+    }
+  ],
+  "limits": [
+    "One unobscured tunnel-edge region, away from actors at this tick",
+    "Original source frame and decoded permanent background are compared with palette tolerance",
+    "Pattern is consistent with the 8x2 source attribute grid; exact excavation algorithm is not yet established",
+    "This is not a complete terrain-mask parity test"
+  ]
+}
