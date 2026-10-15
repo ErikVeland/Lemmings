@@ -19,16 +19,21 @@ The normal TV frontend reserves a top strip for player identity, released/total,
 rescued/required and whole-percent rescued, time, actual deaths and the Mac's
 shared deaths-before-failure counter. The counter changes to SAFE when the
 rescue target is met. Release rate appears only on engines that expose it.
-Speed, planning pause, nuke and completion/failure states stay in that strip.
-L3 also shows its reserve and moves its status above the playfield. Its death
-count includes extra lemmings that started on the map. Rewind refreshes counts
-from the restored runtime. Existing HUD controls retain their bounds, and iOS
-retains its existing compact status presentation.
+Speed, planning pause, nuke and completion/failure states use the remaining
+horizontal space in that strip. L3 also shows its reserve above the playfield.
+Its death count includes extra lemmings that started on the map. Rewind refreshes counts
+from the restored runtime. Existing HUD controls retain their bounds. iOS and TV
+now share a single 44-point row: player at the left, rescue score at the right, clock beside the
+score, and supporting stats between them. Narrow screens prioritise the player,
+score and clock. Complete statistics remain available through accessibility.
 
-`Scripts/run-tv-console-checks.sh` includes 96 synthetic HUD captures at 720p,
-1080p and 4K across Classic, NeoLemmix, L2 and L3. They check complete text,
-0/1/50/100% values, visible skull pixels, SAFE/failure, pause/speed/nuke states,
-unchanged control geometry and activation centres. A native L3 fixture verifies
+`Scripts/run-tv-console-checks.sh` includes 256 HUD captures across phone, iPad,
+720p, 1080p and 4K sizes for Classic, NeoLemmix, L2 and L3. Classic, L2 and L3
+use native playfield fixtures with synthetic status states; NeoLemmix uses
+synthetic fixtures. They check complete text, 0/1/50/100% values, visible skull pixels, SAFE/failure, pause/speed/nuke states,
+unchanged control geometry, activation centres, one baseline and complete
+visible fields. Another 99 solo/Hot Seat captures cover portraits and reserved
+regions, and seven layout regressions pass. A native L3 fixture verifies
 extra-lemming deaths and their restoration on rewind. Representative renders
 were inspected. Both SDK modules and application entry points compile. All
 native checks run offscreen with muted audio. Physical television readability,
