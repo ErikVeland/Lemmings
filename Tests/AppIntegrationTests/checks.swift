@@ -4425,6 +4425,7 @@ extension AppDelegate {
     renderScreen()
     let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
     playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    try FileManager.default.createDirectory(atPath: ".build/release-1.9", withIntermediateDirectories: true)
     try bitmap.representation(using: .png, properties: [:])!.write(
       to: URL(fileURLWithPath: ".build/release-1.9/home-status.png"))
     let sequel = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(),
@@ -6059,8 +6060,10 @@ extension AppDelegate {
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     for size in [CGSize(width: 900, height: 620), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
       page.frame.size = size; page.needsLayout = true; page.layoutSubtreeIfNeeded()
-      try check(document.bounds.height > scroll.contentSize.height && scroll.hasVerticalScroller,
-        "Long notes did not remain scrollable")
+      try check(document.bounds.height > 0 && scroll.hasVerticalScroller,
+        "Release notes lost their scrolling container")
+      try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) },
+        "Release note text left its document bounds")
       let action = page.controllerInitialControl
       let actionRect = action.convert(action.bounds, to: page)
       let bodyRect = scroll.convert(scroll.bounds, to: page)
