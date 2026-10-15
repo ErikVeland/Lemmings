@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Search for a Cavelems campaign route path that can use a high-survivor Level 3 result without breaking the accepted ten-level chain.",
+  "provenance": {
+    "sourceCommit": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "resourcePayload": "2.0 build 83 manifest-selected L2 app payload",
+    "resourceTreeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f",
+    "runtimeLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "solverPath": "/private/tmp/l2-solver-deadline-check-current",
+    "solverSHA256": "2dd53aba383cb61b7abc8280bd311122e9047b5c8bd079214c5ee581d59f47bf",
+    "packageReplay": "../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json"
+  },
+  "candidateRoutes": [
+    {
+      "input": "unseeded",
+      "source": "Tests/Lemmings2CompletionTests/Chains/cavelem-03.json before candidate search",
+      "result": "saved 34/36, Silver, 399 ticks, 14 events",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 1204360,
+      "expanded": 1230042,
+      "solverVerifiedTwice": true,
+      "candidateFile": "candidates/2026-10-16/cavelem-03-pop36.json",
+      "sha256": "b913a3370732cad86a2cd239fc848e672fdf8b8f4f0e54f4ca5f6c6149b10e1d",
+      "levelSHA256": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0",
+      "population": 36,
+      "saved": 34,
+      "ticks": 399,
+      "events": 14
+    },
+    {
+      "input": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-04.json (26/60)",
+      "result": "saved 13/34, Bronze, 1210 ticks, 2330 events",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 782373,
+      "expanded": 782372,
+      "solverVerifiedTwice": true,
+      "candidateFile": "candidates/2026-10-16/cavelem-04-pop34.json",
+      "sha256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4",
+      "levelSHA256": "a5965c026a401a840956bbb1e6369106f278bca5a99984c9a9c88f5574094f93",
+      "population": 34,
+      "saved": 13,
+      "ticks": 1210,
+      "events": 2330
+    },
+    {
+      "input": "Tests/Lemmings2CompletionTests/Chains/cavelem-05.json (2/4)",
+      "result": "saved 10/13, Silver, 542 ticks, 10 events",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 898825,
+      "expanded": 898824,
+      "solverVerifiedTwice": true,
+      "candidateFile": "candidates/2026-10-16/cavelem-05-pop13.json",
+      "sha256": "c2e745d330d8ed2fb8e60d5ccdda94630154ae43543baf0db7a2c1b9fd483c64",
+      "levelSHA256": "7c5265672324bc36b35e507c594f23c8ef4b2bb50e5c90154e4645f9792a91c1",
+      "population": 13,
+      "saved": 10,
+      "ticks": 542,
+      "events": 10
+    }
+  ],
+  "unsolvedSearches": [
+    {
+      "level": "cavelem-04",
+      "population": 34,
+      "seed": "none",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 1293576,
+      "expanded": 1293575,
+      "result": "No winning route; best partial saved 1/34."
+    },
+    {
+      "level": "cavelem-06",
+      "population": 10,
+      "seed": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json (2/2)",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 626887,
+      "expanded": 626886,
+      "result": "No winning route; best partial saved 0/10."
+    },
+    {
+      "level": "cavelem-06",
+      "population": 10,
+      "seed": "none",
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "cell": 4,
+      "refire": 75,
+      "decisionPoints": 612874,
+      "expanded": 612873,
+      "result": "No winning route; best partial saved 0/10."
+    }
+  ],
+  "acceptedChain": {
+    "retainedRoute": "Tests/Lemmings2CompletionTests/Chains/cavelem-03.json",
+    "sha256": "cd60fc875f9696f689032ed06b3ef3472fd9909eeabc8cd186dc6947ffd218f9",
+    "population": 36,
+    "saved": 17,
+    "ticks": 1350,
+    "chainBeforeCandidate": "59, 36, 17, 4, 2, 2, 1, 1, 1, 1",
+    "chainStillComplete": true,
+    "reason": "The new Level 3-5 candidates lead to population 10 at Level 6, but neither a seeded nor unseeded Level 6 search found a route at that population. The candidates remain separate from accepted chain fixtures."
+  },
+  "outcome": "No replacement chain fixtures were retained. The accepted Cavelems chain remains continuous but ends at one survivor with a Bronze talisman. The 34/36, 13/34 and 10/13 witnesses are preserved as verified candidates for further route search.",
+  "limits": "The solver proves only replay outcomes in the current native runtime; it does not establish original-engine parity or prove that the unsolved Level 6 route is impossible."
+}
