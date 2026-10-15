@@ -18,13 +18,13 @@ public struct GenesisFMPlayer: Sendable {
         }
     }
 
-    public static let tracks: [GenesisTrack] = [
+    public static var tracks: [GenesisTrack] { [
         GenesisTrack(id: 0, title: L10n.text("Genesis Presenter Theme")),
         GenesisTrack(id: 1, title: L10n.text("Genesis Tricky Theme")),
         GenesisTrack(id: 2, title: L10n.text("Genesis Taxing Theme")),
         GenesisTrack(id: 3, title: L10n.text("Genesis Mayhem Theme")),
         GenesisTrack(id: 4, title: L10n.text("Genesis Title Screen")),
-    ]
+    ] }
 
     private var activeTrackIndex: Int?
     private var isPlaying = false

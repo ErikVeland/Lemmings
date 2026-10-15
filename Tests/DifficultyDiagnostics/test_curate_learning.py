@@ -179,7 +179,7 @@ class CommunityJourneyTests(unittest.TestCase):
         self.assertGreaterEqual(mac['demand'], 600)
         self.assertEqual(mac['placement']['basis'], 'userPlaytest')
         self.assertGreaterEqual(six['demand'], journey.teaching_floor(six['entry']))
-        self.assertEqual(six['placement']['basis'], 'solutionEstimate')
+        self.assertEqual(six['placement']['basis'], 'teachingCurriculum')
         pool = {journey.key(r): r for r in self.pool}
         witnesses = copy.deepcopy(self.witnesses)
         row = pool[journey.key(required[0])]
@@ -194,14 +194,100 @@ class CommunityJourneyTests(unittest.TestCase):
         rejected = {journey.key(r) for r in journey.read(journey.OUT / 'replay-rejections.json')}
         self.assertTrue(rejected.isdisjoint({journey.key(l) for l in self.manifest['lessons']}))
 
-    def test_estimated_beginner_routes_are_forgiving(self):
+    def test_beginner_practice_routes_are_forgiving(self):
         for lesson in self.plan['lessons']:
-            if lesson['placement']['basis'] == 'solutionEstimate' and lesson['placement']['position'] < 180:
+            if lesson['teachingPhase'] == 'simplePractice':
                 c = lesson['context']
                 self.assertEqual(c['narrowActions'], 0)
                 self.assertLessEqual(len(c['usedSkills']), 3)
                 self.assertLessEqual(c['jobChanges'], 1)
                 self.assertFalse(len(c['usedSkills']) > 1 and c['exhaustedUsedSkills'] and c['savedAboveRequirement'] == 0)
+            if lesson['teachingPhase'] == 'openPractice':
+                c = lesson['context']
+                self.assertEqual(c['minimumReleaseRate'], 1)
+                self.assertEqual(c['rescueFraction'], .5)
+                self.assertTrue(all(count > 0 for count in c['spareUsedSkills'].values()))
+
+    def test_entire_course_has_pinned_chapters_and_transition_reviews(self):
+        course = journey.read(journey.OUT / 'course-plan.json')
+        report = journey.read(journey.OUT / 'course-review.json')
+        self.assertEqual(len(course['chapters']), 13)
+        self.assertEqual(len(course['lessons']), 227)
+        self.assertEqual(report, journey.course_review_document(self.manifest, self.plan))
+        for authored, lesson, review in zip(course['lessons'], self.manifest['lessons'], report['lessons']):
+            self.assertEqual(journey.key(authored), journey.key(lesson))
+            self.assertEqual(authored['sourceRevision'], lesson['entry']['sourceRevision'])
+            self.assertEqual(authored['replayRevision'], lesson['placement']['replayRevision'])
+            self.assertTrue(review['placementReason'])
+            self.assertTrue(review['goal'])
+            self.assertTrue(all(example['step'] < review['step'] for example in review['preparationExamples']))
+            if review['step'] > 30:
+                self.assertLessEqual(sum(value > 30 for value in review['pressureRises'].values()), 2)
+                self.assertLessEqual(len(review['newPressurePeaks']), 2)
+
+    def test_transition_review_rejects_a_compound_pressure_wall(self):
+        plan = copy.deepcopy(self.plan)
+        for lesson in plan['lessons'][:31]:
+            lesson['humanPressureAxes'] = dict.fromkeys(lesson['humanPressureAxes'], 0)
+        axes = plan['lessons'][30]['humanPressureAxes']
+        for axis in list(axes)[:3]:
+            axes[axis] = 100
+        with self.assertRaisesRegex(AssertionError, 'Too many new pressure peaks'):
+            journey.course_transition_review(plan)
+        # Familiar pressures can still form an abrupt compound jump after a recovery.
+        for lesson in plan['lessons'][:2]:
+            lesson['humanPressureAxes'] = axes.copy()
+        with self.assertRaisesRegex(AssertionError, 'Compound pressure jump'):
+            journey.course_transition_review(plan)
+
+    def test_quota_timing_does_not_mistake_replay_shutdown_for_a_deadline(self):
+        titles = ['Get a little extra help', 'How on Earth?', 'The Steel Mines of Kessel',
+                  'Ice Ice Lemming', 'PoP TiL YoU DrOp!']
+        for title in titles:
+            context = next(g['context'] for g in self.plan['lessons'] if g['level'] == title)
+            self.assertTrue(context['quotaTimingVerified'], title)
+            self.assertGreater(context['remainingSeconds'], 120, title)
+            self.assertEqual(context['remainingSecondsAtReplayEnd'], 0, title)
+
+    def test_commands_after_rescue_quota_do_not_inflate_execution_demand(self):
+        row, replay, source = self.fixture()
+        proof = copy.deepcopy(next(p for p in journey.read(journey.OUT / 'native-replay-validation.json')
+                                   if journey.key(p) == journey.key(row)))
+        baseline = journey.solution_context(row, replay, source, proof)
+        extra = copy.deepcopy(next(e for e in replay['events'] if 'assign' in e['action']))
+        extra.update(tick=proof['firstQuotaTick'], afterTick=True)
+        replay['events'].append(extra)
+        self.assertEqual(baseline, journey.solution_context(row, replay, source, proof))
+        extra['afterTick'] = False
+        with self.assertRaisesRegex(AssertionError, 'native successful tool use'):
+            journey.solution_context(row, replay, source, proof)
+
+    def test_available_tool_scarcity_is_independent_of_witness_waste(self):
+        row, replay, source = self.fixture()
+        plentiful = journey.solution_context(row, replay, source)
+        extra = copy.deepcopy(next(e for e in replay['events'] if 'assign' in e['action']))
+        replay['events'].append(extra)
+        wasted = journey.solution_context(row, replay, source)
+        self.assertEqual(plentiful['sourceToolScarcity'], wasted['sourceToolScarcity'])
+        source['skills'] = {skill: min(count, 1) for skill, count in source['skills'].items()}
+        scarce = journey.solution_context(row, replay, source)
+        self.assertGreater(scarce['sourceToolScarcity'], plentiful['sourceToolScarcity'])
+
+    def test_slow_single_skill_rescue_practice_precedes_strict_combinations(self):
+        rows = self.plan['lessons']
+        index = next(i for i, g in enumerate(rows) if g['level'] == 'We all fall down')
+        context = rows[index]['context']
+        self.assertGreaterEqual(index, 30)
+        self.assertLess(index, 45)
+        self.assertEqual(context['minimumReleaseRate'], 1)
+        self.assertEqual(set(context['usedSkills']), {'digger'})
+        self.assertEqual(context['jobChanges'], 0)
+        self.assertEqual(context['rescueFraction'], 1)
+        for title, chapter in [("It's Lemmingentry Watson", 'small-budgets'),
+                               ('PoP YoR ToP!!!', 'hatches'), ('Just A Quicky', 'combined-plans')]:
+            lesson = next(g for g in rows if g['level'] == title)
+            self.assertEqual(lesson['courseChapter']['id'], chapter)
+        self.assertEqual([g['level'] for g in rows[-2:]], ['Time waits for no Lemming', 'This Corrosion'])
 
     def test_estimated_additions_have_visible_interactive_objects(self):
         sources = {journey.key(r): r for r in self.resources}

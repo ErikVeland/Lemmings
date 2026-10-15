@@ -6,13 +6,13 @@ import NxlvKit
 @MainActor struct Lemmings3Panel {
     static let edges = [0, 35, 70, 105, 140, 175, 214, 249, 284, 320]
     static let canonicalNames = ["Walker", "Blocker", "Jumper", "Use tool", "Drop tool", "Time remaining", "Fast forward", "Pause", "End run"]
-    static let names = [L10n.text("Walker"), L10n.text("Blocker"), L10n.text("Jumper"), L10n.text("Use tool"), L10n.text("Drop tool"), L10n.text("Time remaining"), L10n.text("Fast forward"), L10n.text("Pause"), L10n.text("End run")]
+    static var names: [String] { [L10n.text("Walker"), L10n.text("Blocker"), L10n.text("Jumper"), L10n.text("Use tool"), L10n.text("Drop tool"), L10n.text("Time remaining"), L10n.text("Fast forward"), L10n.text("Pause"), L10n.text("End run")] }
     static let directionAnimation = 91
     let normal: NSImage
     let pressed: NSImage
     let glyphs: [NSImage]
     let font: Lemmings3Font
-    private let extendedGlyphs: [Character: NSImage]
+    private let extendedGlyphs: [String: NSImage]
 
     init(root: URL, tribe: Int, renderer: SequelArtworkRenderer) throws {
         let folder = root.appendingPathComponent("GRAPHICS")
@@ -48,10 +48,10 @@ import NxlvKit
             try renderer.image(width: 8, height: 8, pixels: pixels, palette: palette,
                 opaque: pixels.map { $0 != 0 }, category: .architectural)
         }
-        var extended: [Character: NSImage] = [:]
-        for character in BitmapLatinGlyphs.characters + [Character("?")] {
-            guard let glyph = font.bitmap.glyph(for: character) else { continue }
-            extended[character] = try renderer.image(width: glyph.width, height: glyph.height, pixels: glyph.pixels,
+        var extended: [String: NSImage] = [:]
+        for sequence in font.bitmap.supportedSequences {
+            guard let glyph = font.bitmap.glyph(forSequence: sequence) else { continue }
+            extended[sequence] = try renderer.image(width: glyph.width, height: glyph.height, pixels: glyph.pixels,
                 palette: palette, opaque: glyph.opaque, category: .architectural)
         }
         extendedGlyphs = extended
@@ -59,10 +59,12 @@ import NxlvKit
     func text(_ value: String, x: CGFloat, y: CGFloat, scale: CGFloat = 1) {
         let text = BitmapLatinGlyphs.uppercase(value, locale: L10n.interface.locale)
         let top = font.bitmap.verticalBounds(of: text).top
-        var cursor = x
-        for character in text {
-            defer { cursor += CGFloat(font.bitmap.advance(for: character)) * scale }
-            if character == "%" {
+        let left = font.bitmap.horizontalBounds(of: text).left
+        for placed in font.bitmap.layout(text) {
+            let sequence = placed.sequence
+            let character = sequence.count == 1 ? sequence.first : nil
+            let cursor = x + CGFloat(placed.x - left) * scale
+            if sequence == "%" {
                 NSGraphicsContext.saveGraphicsState()
                 let transform = NSAffineTransform()
                 transform.translateX(by: cursor, yBy: y)
@@ -72,15 +74,15 @@ import NxlvKit
                 NSGraphicsContext.restoreGraphicsState()
                 continue
             }
-            if character == "💀" {
+            if sequence == "💀" {
                 GamePixelText.draw("💀", in: CGRect(x: cursor, y: y, width: 8 * scale, height: 8 * scale), maxScale: scale, palette: .green)
                 continue
             }
-            if let code = character.asciiValue, character != "?" {
+            if let character, let code = character.asciiValue, font.bitmap.originals[character] != nil {
                 let index = (48...57).contains(code) ? Int(code) - 48 : (65...90).contains(code) ? Int(code) - 65 + 10 : character == "!" ? 37 : 36
                 glyphs[index].draw(in: CGRect(x: cursor, y: y - CGFloat(top) * scale, width: 8 * scale, height: 8 * scale),
                     from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            } else if let glyph = font.bitmap.glyph(for: character), let image = extendedGlyphs[character] {
+            } else if let glyph = placed.glyph, let image = extendedGlyphs[sequence] {
                 image.draw(in: CGRect(x: cursor + CGFloat(glyph.x) * scale, y: y + CGFloat(glyph.y - top) * scale,
                     width: CGFloat(glyph.width) * scale, height: CGFloat(glyph.height) * scale),
                     from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])

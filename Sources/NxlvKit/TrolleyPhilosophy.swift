@@ -63,7 +63,7 @@ public struct TrolleyArchetype: Sendable {
 
 public enum TrolleyAnalyser {
     public static let version = 1
-    public static let archetypes: [TrolleyArchetype] = [
+    public static var archetypes: [TrolleyArchetype] { [
         .init(id: "bentham", name: "Jeremy Bentham", philosopher: "Jeremy Bentham", title: L10n.text("The Classical Utilitarian"),
               interpretation: L10n.text("Aggregate benefit, with an evidenced trade-off."),
               targets: [.preservation: 0.85, .utility: 0.9, .sacrifice: 0.2], weights: [.preservation: 2, .utility: 3, .sacrifice: 2],
@@ -117,7 +117,7 @@ public enum TrolleyAnalyser {
               minimums: ["surpassedTarget": 1], achievementHooks: [.falsifier]),
         .init(id: "fellow_traveller", name: "The Fellow Traveller", title: L10n.text("An unfinished argument"),
               interpretation: L10n.text("A recorded attempt, with room for a different solution."), targets: [:], weights: [:])
-    ]
+    ] }
     public static func archetype(_ id: String) -> TrolleyArchetype { archetypes.first { $0.id == id } ?? archetypes.last! }
     private static func unit(_ n: Double) -> Double { max(0, min(1, n)) }
 

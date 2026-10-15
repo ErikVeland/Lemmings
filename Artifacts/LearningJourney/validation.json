@@ -7,9 +7,12 @@
     "Tame practice requires 20 of every skill, release rate 1 and a 50% rescue target",
     "Native source export records hatch count and actual minimum/maximum release rates",
     "Every context records rescue fraction, tool availability and reserves, assignments per tick/second and simultaneous worker demand",
-    "Equal-position lessons avoid simultaneous jumps across rescue, scarcity, minimum rate, hatches, assignment density and skill chains",
+    "All lessons have pinned source/replay revisions, chapter goals, learning roles and individual placement reasons",
+    "Every winning replay measures first rescue quota and verifies successful tool use before it",
+    "No post-foundation transition raises more than two measured pressure axes by over 30 points",
+    "No post-foundation lesson introduces more than two new measured pressure peaks at once",
     "Player-reported early walls keep explicit too-hard verdicts and later placement floors",
-    "Unreviewed near-full-rescue routes with complex chains, narrow timing or exhausted combined stock stay in Expert",
+    "Scarce tools, high rescue targets, fast minimum rates and demanding execution require earlier practice",
     "At least 80% official levels; no fixed-size padding",
     "Unreviewed fan estimates never enter the golden path",
     "Seasonal levels need exact human difficulty review",
@@ -17,6 +20,6 @@
     "Original measured replay scores remain unchanged; teaching placements are explicit editorial decisions",
     "Adjacent teaching position gaps are checked; passing does not establish human difficulty"
   ],
-  "limits": "Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.",
-  "policy": "teaching-curriculum-2"
+  "limits": "Course positions are editorial ordinals, not measured difficulty scores. Every transition has a measured pressure review and earlier practice examples, but insight and special pacing still need novice playtesting. An elaborate witness need not be the easiest route. Native quota timing removes replay shutdown delay; it does not prove a fastest solution.",
+  "policy": "teaching-curriculum-3"
 }

@@ -27,9 +27,68 @@ public enum GamePixelTypography {
     ]
 
     private static let glyphs = BitmapLatinGlyphs.monochrome(columns: columns)
+    private static let masks = GameAssetCache<Data>(capacity: 768)
     public static func bitmapGlyph(for character: Character) -> ClassicMacArtwork.Frame? { glyphs[character] }
+
+    public static func bitmapGlyph(forSequence sequence: String) -> ClassicMacArtwork.Frame? {
+        if sequence.count == 1, let character = sequence.first, let glyph = glyphs[character] { return glyph }
+        return BitmapTamilGlyphs.frame(for: sequence, cellHeight: 7, baseline: 7)
+    }
+
+    /// Keep Tamil counters open when a compact destination tints the glyph with one colour.
+    public static func monochromeMask(forSequence sequence: String) -> Data? {
+        if let cached = masks.value(for: sequence) { return cached }
+        guard let glyph = bitmapGlyph(forSequence: sequence) else { return nil }
+        let tamil = BitmapTamilGlyphs.supports(sequence)
+        let pixels = [UInt8](glyph.rgba)
+        let mask = Data(stride(from: 0, to: pixels.count, by: 4).map { index -> UInt8 in
+            let outline = tamil && pixels[index] == 0 && pixels[index + 1] == 0 && pixels[index + 2] == 64
+            return outline ? 0 : pixels[index + 3]
+        })
+        masks.insert(mask, for: sequence)
+        return mask
+    }
+
+    public struct PositionedGlyph {
+        public let sequence: String
+        public let glyph: ClassicMacArtwork.Frame?
+        public let x: Int
+        public let advance: Int
+    }
+
+    public static func layout(_ text: String) -> [PositionedGlyph] {
+        var pen = 0
+        return BitmapTamilGlyphs.sequences(in: text).map { sequence in
+            let glyph = bitmapGlyph(forSequence: sequence)
+            let latin = sequence.count == 1 && sequence.first.map { glyphs[$0] != nil || $0 == " " } == true
+            let advance = latin ? 6 : BitmapTamilGlyphs.advance(for: sequence, cellHeight: 7) ?? 6
+            defer { pen += advance }
+            return PositionedGlyph(sequence: sequence, glyph: glyph, x: pen, advance: advance)
+        }
+    }
+
+    public static func width(of text: String) -> Int {
+        let bounds = horizontalBounds(of: text)
+        return max(1, bounds.right - bounds.left)
+    }
+
+    public static func horizontalBounds(of text: String) -> (left: Int, right: Int) {
+        let items = layout(BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale))
+        let left = min(0, items.compactMap { item in item.glyph.map { item.x + $0.x } }.min() ?? 0)
+        let ink = items.compactMap { item in item.glyph.map { item.x + $0.x + $0.width } }.max() ?? 0
+        let advance = items.last.map { $0.x + $0.advance - 1 } ?? 0
+        return (left, max(ink, advance))
+    }
+
+    public static func lines(_ text: String, width: CGFloat) -> [String] {
+        guard !text.isEmpty else { return [] }
+        let plain = GameMenuTypography.menuText(text)
+        return GameTextLayout.wrapped(BitmapTamilGlyphs.sequences(in: plain), width: width, space: " ",
+            text: { $0 }, measure: { CGFloat(self.width(of: $0)) }).map { $0.joined() }
+    }
+
     public static func verticalBounds(of text: String) -> (top: Int, bottom: Int) {
-        let frames = text.compactMap { glyphs[$0] }
+        let frames = layout(BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale)).compactMap(\.glyph)
         return (min(0, frames.map(\.y).min() ?? 0), max(7, frames.map { $0.y + $0.height }.max() ?? 7))
     }
 
@@ -82,11 +141,21 @@ public enum GamePixelTypography {
             return
         }
         let plain = BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale).replacingOccurrences(of: "×", with: "X")
-        let fittingColumns = max(0, Int((rect.width + 1) / 6))
-        guard fittingColumns > 0 else { return }
-        let normalized = plain.count <= fittingColumns ? plain
-            : String(plain.prefix(max(0, fittingColumns - 3))) + String(repeating: ".", count: min(3, fittingColumns))
-        let naturalWidth = max(1, normalized.count * 6 - 1)
+        var normalized = plain
+        if CGFloat(width(of: plain)) > rect.width {
+            var suffix = "..."
+            while !suffix.isEmpty, CGFloat(width(of: suffix)) > rect.width { suffix.removeLast() }
+            normalized = ""
+            for sequence in BitmapTamilGlyphs.sequences(in: plain) {
+                guard CGFloat(width(of: normalized + sequence + suffix)) <= rect.width else { break }
+                normalized += sequence
+            }
+            normalized += suffix
+        }
+        guard !normalized.isEmpty else { return }
+        let naturalWidth = width(of: normalized)
+        let items = layout(normalized)
+        let bearing = min(0, items.compactMap { item in item.glyph.map { item.x + $0.x } }.min() ?? 0)
         let bounds = verticalBounds(of: normalized)
         let height = CGFloat(bounds.bottom - bounds.top)
         let scale = max(1, min(maximumScale, floor(min(rect.height / height, rect.width / CGFloat(naturalWidth)))))
@@ -103,12 +172,12 @@ public enum GamePixelTypography {
         context.setShouldAntialias(false)
         context.setFillColor(color ?? palette.colour)
         context.setAlpha(alpha)
-        for (index, character) in normalized.enumerated() {
-            guard let glyph = glyphs[character] else { continue }
+        for item in items {
+            guard let glyph = item.glyph, let mask = monochromeMask(forSequence: item.sequence) else { continue }
             for x in 0..<glyph.width {
-                for y in 0..<glyph.height where glyph.rgba[(y * glyph.width + x) * 4 + 3] != 0 {
+                for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
                     context.fill(CGRect(
-                        x: start + CGFloat(index * 6 + glyph.x + x) * scale,
+                        x: start + CGFloat(item.x - bearing + glyph.x + x) * scale,
                         y: top + CGFloat(glyph.y + y) * scale,
                         width: scale,
                         height: scale

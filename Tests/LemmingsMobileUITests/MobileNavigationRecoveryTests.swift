@@ -7,7 +7,8 @@ import LemmingsMobileCore
 @testable import LemmingsMobileUI
 
 @MainActor struct MobileNavigationRecoveryTests {
-    private func withGame(_ body: (MobileGameViewController) async throws -> Void) async throws {
+    private func withGame(rendered: @escaping () -> Void = {},
+                          _ body: (MobileGameViewController) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let previous = UserDefaults.standard.object(forKey: MobileSettings.activeProfileKey)
         let runtime = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
@@ -15,7 +16,8 @@ import LemmingsMobileCore
             exits: [], total: 1, releaseInterval: 20, releaseDelay: 0))
         let session = Lemmings3MobileSession(runtime: runtime, engineFingerprint: "fixture", levelIdentifier: "fixture",
             levelIndex: 0, levelFingerprint: "fixture", renderer: { _, _ in
-                try MobilePixelFrame(width: 128, height: 64, rgba: Data(repeating: 0, count: 128 * 64 * 4))
+                rendered()
+                return try MobilePixelFrame(width: 128, height: 64, rgba: Data(repeating: 0, count: 128 * 64 * 4))
             })
         let controller = MobileGameViewController(summary: .init(index: 0, rank: "Classic", number: 1, title: "Fixture"),
             session: session, checkpointStore: .init(url: root.appendingPathComponent("current.json")),
@@ -29,6 +31,46 @@ import LemmingsMobileCore
         controller.view.frame = CGRect(x: 0, y: 0, width: 834, height: 1194)
         try await body(controller)
     }
+
+    #if os(tvOS)
+    @Test func controllerSkillBurstsDrawOnceWithoutWaitingForPhysics() async throws {
+        var renders = 0
+        try await withGame(rendered: { renders += 1 }) { game in
+            game.gameSettings.pauseToAssign = false
+            #expect(game.playState.resume(isForeground: true, isInterrupted: false))
+            #expect(game.playState.pauseForPlanning())
+            game.overlay.isHidden = true
+            let tick = game.session.snapshot.tick
+            let before = renders
+            for skill in [1, 2, 0, 1, 2] {
+                game.processTVControllerButtonEvent { game.performCommand(.skill(skill)) }
+                #expect(game.selectedControl == skill)
+                #expect(renders == before)
+                #expect(!game.pollingController)
+            }
+            game.flushControllerFrameUpdates()
+            #expect(renders == before + 1)
+            #expect(game.playfieldView.cursorSkillName == game.session.snapshot.skills[2].name)
+            #expect(game.session.snapshot.tick == tick)
+            game.flushControllerFrameUpdates()
+            #expect(renders == before + 1)
+        }
+    }
+
+    @Test func controllerBatchCannotSelectThroughReadyOrSuspension() async throws {
+        try await withGame { game in
+            let selected = game.selectedControl
+            game.processTVControllerButtonEvent { game.performCommand(.skill(1)) }
+            #expect(game.selectedControl == selected && game.playState.phase == .ready)
+            #expect(game.playState.resume(isForeground: true, isInterrupted: false))
+            game.overlay.isHidden = true
+            _ = game.lifecycle.handle(.becameInactive)
+            game.processTVControllerButtonEvent { game.performCommand(.skill(1)) }
+            #expect(game.selectedControl == selected)
+            #expect(!game.pollingController)
+        }
+    }
+    #endif
 
     @Test func helpReturnsToReadyWithoutStartingTheAttempt() async throws {
         try await withGame { game in

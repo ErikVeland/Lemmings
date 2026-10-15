@@ -100,7 +100,7 @@
       "phase": "bridgePractice"
     }
   ],
-  "journeyVersion": "learning-28",
+  "journeyVersion": "learning-29",
   "lessons": [
     {
       "identity": {
@@ -112,7 +112,7 @@
       "pressureWarnings": [],
       "requiredPreparation": [],
       "stage": "Difficult",
-      "step": 46,
+      "step": 52,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -125,7 +125,7 @@
       "pressureWarnings": [],
       "requiredPreparation": [],
       "stage": "Difficult",
-      "step": 48,
+      "step": 53,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -138,22 +138,22 @@
       "pressureWarnings": [],
       "requiredPreparation": [],
       "stage": "Difficult",
-      "step": 50,
+      "step": 54,
       "verdict": "tooHardForEarlyJourney"
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "78:Taxing:19:4:3",
+        "levelID": "90:Mayhem:1:5:5",
         "packID": "lemmings-LEVEL-120"
       },
-      "level": "Bomboozal",
+      "level": "Steel Works",
       "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
+        "near-full rescue with repeated worker skill changes"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 61,
+      "step": 73,
       "verdict": null
     },
     {
@@ -168,187 +168,22 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 64,
+      "step": 82,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "79:Wicked:20:7:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "31:Mega Drive Sunsoft:2:0:31",
+        "packID": "ohYesMoreLemmings-OHYES-60"
       },
-      "level": "The Lemming Funhouse",
-      "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 65,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "76:Wicked:17:9:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Down the tube",
-      "pressureWarnings": [
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 66,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "88:Havoc:9:1:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 68,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "31:Crazy:12:6:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Lemming Friendly",
+      "level": "Inside the bone",
       "pressureWarnings": [
         "near-full rescue with repeated worker skill changes"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 69,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "91:Havoc:12:0:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "It`s all a matter of timing",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 70,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "63:Wicked:4:9:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Oh No! It`s the 4TH DIMENSION!",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 71,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "60:Taxing:1:2:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "If at first you don`t succeed..",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 73,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "45:Tricky:16:9:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Luvly Jubly",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 74,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "38:Tricky:9:6:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "They just keep on coming",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 75,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "101:Mayhem:12:7:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The Far Side",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 76,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "61:Taxing:2:2:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Watch out, there`s traps about",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 77,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "54:Tricky:25:1:1",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Cascade",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 78,
+      "step": 84,
       "verdict": null
     },
     {
@@ -364,512 +199,22 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 79,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "29:Crazy:10:5:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "ROCKY VI",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 80,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "55:Wild:16:5:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Take care, Sweetie",
-      "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions",
-        "very few tools with high rescue or release pressure"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 81,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "27:Crazy:8:3:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "KEEP ON TRUCKING",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 82,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "83:Havoc:4:2:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "The race against cliches",
-      "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 83,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "110:Mayhem:21:8:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "With a twist of lemming please",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 84,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "66:Wicked:7:6:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Last Lemming To Lemmingcentral",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin",
-        "very few tools with high rescue or release pressure"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 85,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "54:Wild:15:4:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "THE SILENCE OF THE LEMMINGS",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
       "step": 86,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "72:Taxing:13:3:6",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "32:Mega Drive Sunsoft:3:0:32",
+        "packID": "ohYesMoreLemmings-OHYES-60"
       },
-      "level": "Upsidedown World",
+      "level": "Anxiety",
       "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
       "step": 87,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "96:Mayhem:7:6:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Poles Apart",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 88,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "68:Taxing:9:3:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Perseverance",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 89,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "80:Taxing:21:4:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Feel the heat!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 90,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "51:Tricky:22:0:6",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Turn around young lemmings!",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 91,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "105:Mayhem:16:7:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Just a Minute...",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 92,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "42:Mega Drive Sunsoft:13:0:42",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Doomsday",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 93,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "64:Wicked:5:0:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Chill out!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 94,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "95:Mayhem:6:6:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "One way or another",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 95,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "56:Tricky:27:1:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The Island of the Wicker people",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 96,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "97:Mayhem:8:6:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Last one out is a rotten egg!",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 97,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "58:Tricky:29:2:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Rainbow Island",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 98,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "44:Mega Drive Sunsoft:15:0:44",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Exodus!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "near-full rescue with multiple measured narrow actions"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 100,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "lm_set08.dat#5",
-        "packID": "fan:lldb-48"
-      },
-      "level": "Going their separate ways",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 101,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "48:Tricky:19:9:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Postcard from Lemmingland",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 102,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Wild:13:4:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "ONWARD AND UPWARD",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 103,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "35:Crazy:16:2:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Across The Gap",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 104,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "69:Taxing:10:3:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Izzie Wizzie lemmings get busy",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 105,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "107:Mayhem:18:7:6",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "And then there were four....",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 106,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "40:Wild:1:9:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "PoP YoR ToP!!!",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 107,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "85:Taxing:26:5:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Triple Trouble",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 108,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "21:Crazy:2:1:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Dolly Dimple",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "fast minimum release rate with no slower crowd-management option",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 109,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "57:Mega Drive Sunsoft:28:0:57",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "The gate trap Lemmings.",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 110,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "111:Mayhem:22:0:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "A BeastII of a level",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock",
-        "fast minimum release rate with no slower crowd-management option",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 111,
       "verdict": null
     },
     {
@@ -885,144 +230,8 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 114,
+      "step": 88,
       "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "92:Mayhem:3:5:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "It`s hero time!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock",
-        "fast minimum release rate with no slower crowd-management option",
-        "very few tools with high rescue or release pressure"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 115,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "69:Wicked:10:8:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Temple of Love",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 116,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "93:Havoc:14:8:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Synchronised Lemming",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 117,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "43:Mega Drive Sunsoft:14:0:43",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "No world without you",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 118,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "55:Tricky:26:1:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "I have a cunning plan",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 119,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "113:Mayhem:24:8:2",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "All or Nothing",
-      "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 120,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "85:Havoc:6:2:3",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Now get out of that!",
-      "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 122,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "93:Mayhem:4:6:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The Crossroads",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 123,
-      "verdict": null
     },
     {
       "identity": {
@@ -1037,56 +246,269 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 124,
+      "step": 91,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "59:Tricky:30:1:7",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "31:Crazy:12:6:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "level": "The Crankshaft",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 125,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "32:Mega Drive Sunsoft:3:0:32",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Anxiety",
+      "level": "Lemming Friendly",
       "pressureWarnings": [
         "near-full rescue with repeated worker skill changes"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 126,
+      "step": 93,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "109:Mayhem:20:9:2",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "34:Mega Drive Sunsoft:5:0:34",
+        "packID": "ohYesMoreLemmings-OHYES-60"
       },
-      "level": "No added colours or Lemmings",
+      "level": "Watch your step",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 95,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "95:Havoc:16:8:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Scaling the Heights",
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 96,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "87:Havoc:8:1:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Lemming about town",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 97,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "71:Wicked:12:5:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Suicidal Tendencies",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 98,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "39:Mega Drive Sunsoft:10:0:39",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Spiral staircase",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 99,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "88:Taxing:29:2:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "How do I dig up the way?",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 101,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "38:Tricky:9:6:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "They just keep on coming",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 102,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "83:Taxing:24:5:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Take a running jump.....",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 107,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "78:Taxing:19:4:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Bomboozal",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 108,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "92:Havoc:13:4:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "HIGHLAND FLING",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with multiple measured narrow actions"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 109,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "67:Wicked:8:0:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "A TOWERING PROBLEM",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 110,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "51:Mega Drive Sunsoft:22:0:51",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Watch right or left (Part two)",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 111,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "85:Havoc:6:2:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Now get out of that!",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 113,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "76:Wicked:17:9:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Down the tube",
+      "pressureWarnings": [
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 114,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "79:Wicked:20:7:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "The Lemming Funhouse",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 115,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "55:Wild:16:5:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Take care, Sweetie",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions",
         "very few tools with high rescue or release pressure"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 128,
+      "step": 116,
       "verdict": null
     },
     {
@@ -1103,27 +525,292 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
+      "step": 117,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "113:Mayhem:24:8:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "All or Nothing",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 118,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "63:Taxing:4:2:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Lend a helping hand....",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 119,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "63:Wicked:4:9:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Oh No! It`s the 4TH DIMENSION!",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 121,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "91:Havoc:12:0:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "It`s all a matter of timing",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 122,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "66:Wicked:7:6:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Last Lemming To Lemmingcentral",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "very few tools with high rescue or release pressure"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 123,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "60:Wicked:1:9:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "LeMming ToMato KetchUp fAcilitY",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 124,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "99:Havoc:20:9:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "LOoK BeFoRe YoU LeAp!",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 125,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "39:Tricky:10:7:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "There's a lot of them about",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 126,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "48:Wild:9:2:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Ice Station Lemming",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 127,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "104:Mayhem:15:7:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Fast Food Kitchen...",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 128,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "61:Taxing:2:2:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Watch out, there`s traps about",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 129,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "54:Tricky:25:1:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Cascade",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
       "step": 130,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "46:Wild:7:8:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "107:Mayhem:18:7:6",
+        "packID": "lemmings-LEVEL-120"
       },
-      "level": "You Take the High Road",
+      "level": "And then there were four....",
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "fast minimum release rate with no slower crowd-management option",
         "multiple hatches with combined work and little rescue or tool margin"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
       "step": 131,
       "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "57:Mega Drive Sunsoft:28:0:57",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "The gate trap Lemmings.",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 132,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "52:Mega Drive Sunsoft:23:0:52",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Move on in two separate groups.",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 133,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "85:Taxing:26:5:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Triple Trouble",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 134,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Tricky:29:2:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Rainbow Island",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 135,
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "40:Wild:1:9:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "PoP YoR ToP!!!",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 136,
+      "verdict": "tooHardForEarlyJourney"
     },
     {
       "identity": {
@@ -1137,23 +824,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 134,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "87:Havoc:8:1:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Lemming about town",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 135,
+      "step": 137,
       "verdict": null
     },
     {
@@ -1169,54 +840,18 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 136,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "38:Mega Drive Sunsoft:9:0:38",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Evacuating a coal mine",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 137,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "37:Crazy:18:3:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "NO PROBLEM",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
       "step": 138,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "81:Havoc:2:5:3",
+        "levelID": "88:Havoc:9:1:1",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "level": "Be more than just a number",
+      "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
       "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
+        "near-full rescue with several exhausted used skill stocks"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
@@ -1226,10 +861,10 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "51:Mega Drive Sunsoft:22:0:51",
-        "packID": "ohYesMoreLemmings-OHYES-60"
+        "levelID": "110:Mayhem:21:8:0",
+        "packID": "lemmings-LEVEL-120"
       },
-      "level": "Watch right or left (Part two)",
+      "level": "With a twist of lemming please",
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes"
@@ -1242,16 +877,145 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "34:Mega Drive Sunsoft:5:0:34",
-        "packID": "ohYesMoreLemmings-OHYES-60"
+        "levelID": "27:Crazy:8:3:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "level": "Watch your step",
+      "level": "KEEP ON TRUCKING",
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
       "step": 142,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "96:Mayhem:7:6:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Poles Apart",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 143,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "68:Taxing:9:3:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Perseverance",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 144,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "72:Taxing:13:3:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Upsidedown World",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 145,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "69:Wicked:10:8:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Temple of Love",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 146,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "95:Mayhem:6:6:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "One way or another",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 147,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "64:Wicked:5:0:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Chill out!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 148,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "56:Tricky:27:1:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Island of the Wicker people",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 149,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "97:Mayhem:8:6:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Last one out is a rotten egg!",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 150,
       "verdict": null
     },
     {
@@ -1267,8 +1031,91 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 143,
+      "step": 151,
       "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "82:Havoc:3:3:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "It`s the price you have to pay",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 152,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "lm_set08.dat#5",
+        "packID": "fan:lldb-48"
+      },
+      "level": "Going their separate ways",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 153,
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "44:Mega Drive Sunsoft:15:0:44",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Exodus!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "near-full rescue with multiple measured narrow actions"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 154,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "48:Tricky:19:9:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Postcard from Lemmingland",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 155,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "59:Tricky:30:1:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Crankshaft",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 156,
+      "verdict": "tooHardForEarlyJourney"
     },
     {
       "identity": {
@@ -1289,133 +1136,232 @@
         "plan a route with no spare used skills"
       ],
       "stage": "Expert",
-      "step": 144,
+      "step": 157,
       "verdict": "tooHardForEarlyJourney"
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "60:Wicked:1:9:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "LeMming ToMato KetchUp fAcilitY",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 145,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "61:Wicked:2:4:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Inroducing SUPERLEMMING",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 146,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Mega Drive Sunsoft:23:0:52",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Move on in two separate groups.",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 147,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "88:Taxing:29:2:1",
+        "levelID": "69:Taxing:10:3:3",
         "packID": "lemmings-LEVEL-120"
       },
-      "level": "How do I dig up the way?",
+      "level": "Izzie Wizzie lemmings get busy",
       "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 150,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "39:Mega Drive Sunsoft:10:0:39",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Spiral staircase",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 152,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "86:Havoc:7:5:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Creature Discomforts",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock",
-        "multiple hatches with combined work and little rescue or tool margin",
         "dense assignment workload with limited recovery margin"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 153,
+      "step": 158,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "83:Taxing:24:5:0",
+        "levelID": "70:Taxing:11:3:4",
         "packID": "lemmings-LEVEL-120"
       },
-      "level": "Take a running jump.....",
+      "level": "The ascending pillar scenario",
       "pressureWarnings": [
-        "near-full rescue with multiple measured narrow actions"
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 156,
+      "step": 159,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "67:Wicked:8:0:6",
+        "levelID": "35:Crazy:16:2:6",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "level": "A TOWERING PROBLEM",
+      "level": "Across The Gap",
       "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 160,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "109:Mayhem:20:9:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "No added colours or Lemmings",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option",
+        "very few tools with high rescue or release pressure"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 161,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "45:Tricky:16:9:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Luvly Jubly",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 162,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "81:Havoc:2:5:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Be more than just a number",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
         "near-full rescue with repeated worker skill changes"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 158,
+      "step": 163,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "93:Mayhem:4:6:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Crossroads",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 165,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "80:Taxing:21:4:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Feel the heat!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 166,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "51:Tricky:22:0:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Turn around young lemmings!",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 167,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "105:Mayhem:16:7:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Just a Minute...",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 168,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "60:Taxing:1:2:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "If at first you don`t succeed..",
+      "pressureWarnings": [
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 170,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "62:Taxing:3:2:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Heaven can wait (we hope!!!!)",
+      "pressureWarnings": [
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 171,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "25:Fun:26:7:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Nightmare on Lem street",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 172,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "52:Tricky:23:0:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "From The Boundary Line",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 173,
       "verdict": null
     },
     {
@@ -1433,7 +1379,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 159,
+      "step": 174,
       "verdict": null
     },
     {
@@ -1448,7 +1394,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 160,
+      "step": 175,
       "verdict": null
     },
     {
@@ -1464,197 +1410,20 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 161,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "95:Havoc:16:8:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Scaling the Heights",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 162,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "36:Crazy:17:3:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "DIGGING FOR VICTORY",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 163,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "31:Mega Drive Sunsoft:2:0:31",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Inside the bone",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 165,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "63:Taxing:4:2:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Lend a helping hand....",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 167,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "48:Wild:9:2:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Ice Station Lemming",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 169,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "98:Mayhem:9:6:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Curse of the Pharaohs",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 170,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "39:Tricky:10:7:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "There's a lot of them about",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "multiple hatches with combined work and little rescue or tool margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 172,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "70:Taxing:11:3:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The ascending pillar scenario",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 173,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Tricky:23:0:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "From The Boundary Line",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 174,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "104:Mayhem:15:7:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The Fast Food Kitchen...",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 175,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "102:Mayhem:13:7:1",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "The Great Lemming Caper",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
       "step": 176,
       "verdict": null
     },
     {
       "identity": {
         "engine": "classic",
-        "levelID": "99:Havoc:20:9:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "55:Tricky:26:1:2",
+        "packID": "lemmings-LEVEL-120"
       },
-      "level": "LOoK BeFoRe YoU LeAp!",
+      "level": "I have a cunning plan",
       "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin",
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option",
         "dense assignment workload with limited recovery margin"
       ],
       "requiredPreparation": [],
@@ -1665,303 +1434,18 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "94:Mayhem:5:6:1",
+        "levelID": "111:Mayhem:22:0:4",
         "packID": "lemmings-LEVEL-120"
       },
-      "level": "Down, along, up. In that order",
-      "pressureWarnings": [
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 179,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "26:Crazy:7:3:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "And now, the end is near...",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 181,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "66:Taxing:7:3:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Every Lemming for himself!!!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 182,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "97:Havoc:18:5:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Lemmings in a situation",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock",
-        "fast minimum release rate with no slower crowd-management option"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 183,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "118:Mayhem:29:8:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Save Me",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 184,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "58:Mega Drive Sunsoft:29:0:58",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "I am A.T.",
-      "pressureWarnings": [
-        "multiple hatches with combined work and little rescue or tool margin",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 185,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "59:Mega Drive Sunsoft:30:0:59",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Fall and no life (Part Two)",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 186,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "49:Tricky:20:0:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "One way digging to freedom",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 187,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "114:Mayhem:25:8:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Have a nice day!",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 193,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "99:Mayhem:10:6:6",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Pillars of Hercules",
-      "pressureWarnings": [
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 194,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "106:Mayhem:17:7:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Stepping Stones",
+      "level": "A BeastII of a level",
       "pressureWarnings": [
         "little deadline margin with combined skills and exhausted stock",
+        "fast minimum release rate with no slower crowd-management option",
         "dense assignment workload with limited recovery margin"
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 196,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "25:Fun:26:7:1",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Nightmare on Lem street",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 197,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "108:Mayhem:19:7:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Time to get up!",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 198,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "75:Taxing:16:4:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Mary Poppins` land",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes",
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 199,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "56:Mega Drive Sunsoft:27:0:56",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "level": "Two heads are better...",
-      "pressureWarnings": [
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 200,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "62:Taxing:3:2:4",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Heaven can wait (we hope!!!!)",
-      "pressureWarnings": [
-        "dense assignment workload with limited recovery margin"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 202,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "71:Wicked:12:5:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Suicidal Tendencies",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 207,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "92:Havoc:13:4:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "HIGHLAND FLING",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with multiple measured narrow actions"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 208,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "70:Wicked:11:4:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "ROCKY ROAD",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 209,
+      "step": 178,
       "verdict": null
     },
     {
@@ -1979,7 +1463,209 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 211,
+      "step": 179,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "70:Wicked:11:4:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "ROCKY ROAD",
+      "pressureWarnings": [
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 180,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "37:Crazy:18:3:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "NO PROBLEM",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 181,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Crazy:10:5:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "ROCKY VI",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 182,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "52:Wild:13:4:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "ONWARD AND UPWARD",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 183,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "54:Wild:15:4:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "THE SILENCE OF THE LEMMINGS",
+      "pressureWarnings": [
+        "little deadline margin with combined skills and exhausted stock",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 184,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "46:Wild:7:8:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "You Take the High Road",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock",
+        "fast minimum release rate with no slower crowd-management option",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 185,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "66:Taxing:7:3:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Every Lemming for himself!!!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "little deadline margin with combined skills and exhausted stock",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 186,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "59:Mega Drive Sunsoft:30:0:59",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Fall and no life (Part Two)",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 187,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "98:Mayhem:9:6:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Curse of the Pharaohs",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 188,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "21:Crazy:2:1:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Dolly Dimple",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "fast minimum release rate with no slower crowd-management option",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 189,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "92:Mayhem:3:5:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "It`s hero time!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "little deadline margin with combined skills and exhausted stock",
+        "fast minimum release rate with no slower crowd-management option",
+        "very few tools with high rescue or release pressure"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 190,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "83:Havoc:4:2:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "The race against cliches",
+      "pressureWarnings": [
+        "near-full rescue with multiple measured narrow actions",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 191,
       "verdict": null
     },
     {
@@ -1998,7 +1684,233 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 212,
+      "step": 192,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "97:Havoc:18:5:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Lemmings in a situation",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 193,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "93:Havoc:14:8:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Synchronised Lemming",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 194,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "43:Mega Drive Sunsoft:14:0:43",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "No world without you",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option",
+        "multiple hatches with combined work and little rescue or tool margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 195,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "42:Mega Drive Sunsoft:13:0:42",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Doomsday",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 196,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "36:Crazy:17:3:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "DIGGING FOR VICTORY",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 197,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "49:Tricky:20:0:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "One way digging to freedom",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 198,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "86:Havoc:7:5:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Creature Discomforts",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 199,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "101:Mayhem:12:7:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Far Side",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 200,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "114:Mayhem:25:8:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Have a nice day!",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 203,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "99:Mayhem:10:6:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Pillars of Hercules",
+      "pressureWarnings": [
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 204,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "106:Mayhem:17:7:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Stepping Stones",
+      "pressureWarnings": [
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 205,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "108:Mayhem:19:7:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Time to get up!",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 206,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "75:Taxing:16:4:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Mary Poppins` land",
+      "pressureWarnings": [
+        "near-full rescue with repeated worker skill changes",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 207,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "56:Mega Drive Sunsoft:27:0:56",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Two heads are better...",
+      "pressureWarnings": [
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 208,
       "verdict": null
     },
     {
@@ -2015,96 +1927,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 213,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "82:Havoc:3:3:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "It`s the price you have to pay",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks",
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 214,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "33:Crazy:14:1:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Time waits for no Lemming",
-      "pressureWarnings": [
-        "near-full rescue with several exhausted used skill stocks"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 215,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "62:Wicked:3:9:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "This Corrosion",
-      "pressureWarnings": [],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 216,
-      "verdict": "tooHardForEarlyJourney"
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "90:Mayhem:1:5:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "level": "Steel Works",
-      "pressureWarnings": [
-        "near-full rescue with repeated worker skill changes"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 217,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "44:Wild:5:7:3",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Lemming Head",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 218,
-      "verdict": null
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "74:Wicked:15:7:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
-      "pressureWarnings": [
-        "little deadline margin with combined skills and exhausted stock"
-      ],
-      "requiredPreparation": [],
-      "stage": "Expert",
-      "step": 219,
+      "step": 209,
       "verdict": null
     },
     {
@@ -2120,7 +1943,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 220,
+      "step": 212,
       "verdict": null
     },
     {
@@ -2135,7 +1958,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 221,
+      "step": 213,
       "verdict": null
     },
     {
@@ -2151,7 +1974,72 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 223,
+      "step": 215,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "102:Mayhem:13:7:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Great Lemming Caper",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 216,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "94:Mayhem:5:6:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Down, along, up. In that order",
+      "pressureWarnings": [
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 218,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "26:Crazy:7:3:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "And now, the end is near...",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "little deadline margin with combined skills and exhausted stock"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 219,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "38:Mega Drive Sunsoft:9:0:38",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "Evacuating a coal mine",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes",
+        "fast minimum release rate with no slower crowd-management option"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 220,
       "verdict": null
     },
     {
@@ -2166,8 +2054,68 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 226,
+      "step": 222,
       "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "61:Wicked:2:4:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Inroducing SUPERLEMMING",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks",
+        "near-full rescue with repeated worker skill changes"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 223,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Mega Drive Sunsoft:29:0:58",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "level": "I am A.T.",
+      "pressureWarnings": [
+        "multiple hatches with combined work and little rescue or tool margin",
+        "dense assignment workload with limited recovery margin"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 225,
+      "verdict": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "33:Crazy:14:1:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "Time waits for no Lemming",
+      "pressureWarnings": [
+        "near-full rescue with several exhausted used skill stocks"
+      ],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 226,
+      "verdict": "tooHardForEarlyJourney"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "62:Wicked:3:9:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "This Corrosion",
+      "pressureWarnings": [],
+      "requiredPreparation": [],
+      "stage": "Expert",
+      "step": 227,
+      "verdict": "tooHardForEarlyJourney"
     }
   ],
   "meaning": "Player reports are authoritative negative difficulty feedback. Pressure flags are cautious route evidence, not a human assessment or proof that the observed route is necessary.",

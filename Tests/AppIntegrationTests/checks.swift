@@ -1095,6 +1095,7 @@ extension AppDelegate {
       guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { throw IntegrationFailure(message: "No result render") }
       view.cacheDisplay(in: view.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(name + ".png"))
+      try checkCompactResultActions(view)
       let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
       if view.mode == .result, let primary = buttons.first(where: { $0.accessibilityLabel() == view.primaryResultTitle
         || (view.cleared && ($0.accessibilityLabel() ?? "").hasPrefix(view.continueTitle)) }) {
@@ -3936,6 +3937,7 @@ extension AppDelegate {
     let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/skip-ui")
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
+    try checkCompactResultActions(view)
     return view.accessibilityLabel() ?? ""
   }
   fileprivate func testHotSeatJourneyRetry() async throws {
@@ -4152,7 +4154,7 @@ extension AppDelegate {
       "Hot Seat Skip did not pass the turn like a loss")
     GameScreen.shared.dismissAll()
     store.endHotSeat()
-    print("PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over")
+    print("PASS level skips: failed-level offer and zero-balance state, owner pays, next level opens, Hot Seat hands over")
   }
   fileprivate func testBundledRescueTarget() throws {
     settings.music = .silent
@@ -7739,8 +7741,11 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
     #elseif EARNED_REWARD_TESTS
-    try testEarnedRewardPresentation()
+    try testPerkEarningStars()
+    try await testEarnedRewardPresentation()
     try await subject.testResultNavigation()
+    try await subject.testLevelSkipResult()
+    try await subject.testLearningLevelSkips()
     print("Earned reward presentation and result navigation integration tests passed.")
     #elseif LEVEL_SKIP_TESTS
     try testPrecisionRewardResults()
@@ -9440,7 +9445,77 @@ extension AppDelegate {
   print("PASS nine native Zoom/Level Skip badge renders, active outlines, accessible balances and geometry")
 }
 
-@MainActor private func testEarnedRewardPresentation() throws {
+@MainActor private func checkCompactResultActions(_ view: ArcadeView) throws {
+  guard [.result, .earnedRewards, .achievement].contains(view.mode) else { return }
+  let elements = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+  let scale = min(GamePageLayout.scale(in: view.bounds.size), view.bounds.height / view.pageContentHeight)
+  let offset = CGPoint(x: (view.bounds.width - 1120 * scale) / 2, y: (view.bounds.height - max(720, view.pageContentHeight) * scale) / 2 + max(0, 720 - view.pageContentHeight) * scale)
+  func logical(_ rect: CGRect) -> CGRect {
+    CGRect(x: (rect.minX - offset.x) / scale, y: (rect.minY - offset.y) / scale, width: rect.width / scale, height: rect.height / scale)
+  }
+  let controls = elements.filter { $0.accessibilityRole() == .button }.map { ($0.accessibilityLabel() ?? "", logical($0.localFrame)) }
+  let footerY: CGFloat
+  switch view.mode {
+  case .result: footerY = view.resultActionsY
+  case .earnedRewards: footerY = view.earnedRewardsFooterY
+  default: footerY = view.achievementFooterY
+  }
+  for y in [footerY, footerY - 52] {
+    let row = controls.filter { abs($0.1.minY - y) < 0.5 }.sorted { $0.1.minX < $1.1.minX }
+    guard !row.isEmpty else { continue }
+    try check(abs(row.first!.1.minX - 64) < 0.5 && abs(row.last!.1.maxX - 1056) < 0.5, "End-of-level row has an empty edge slot")
+    for index in 1..<row.count {
+      try check(abs(row[index].1.minX - row[index - 1].1.maxX - 16) < 1, "End-of-level row has a navigation hole")
+    }
+  }
+  try check(view.pageContentHeight - (footerY + 48) <= 51, "End-of-level panel reserves space below its actions")
+  if view.mode == .earnedRewards {
+    let lastReason = elements.filter { entry in view.savedEarnedRewards.contains { $0.reason == entry.accessibilityLabel() } }.map { logical($0.localFrame).maxY }.max()!
+    try check(footerY - lastReason <= 78, "Reward actions are detached from their content")
+  }
+}
+
+@MainActor private func testPerkEarningStars() throws {
+  let previous = ArcadeStore.shared
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent("perk-stars-\(UUID())")
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
+  defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
+  for (before, earningStar) in [(1, 2), (2, 1)] {
+    let store = ArcadeStore(file: directory.appendingPathComponent("\(before).json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    let owner = store.records.activeProfileID
+    func level(_ number: Int) -> ArcadeLevel {
+      let conditions = TrolleyConditions(gameID: "lemmings", packID: "perk-stars", levelID: "\(number)", levelFingerprint: "\(number)", rulesetVersion: "test", physicsMode: "test", population: 3, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+      return .init(id: "\(number)", title: "Star-linked Zoom", game: "lemmings", rules: "test", total: 3, required: 1, conditions: conditions)
+    }
+    for number in 0..<2 {
+      try store.acceptMaximum(.init(value: 3, status: .verified, source: "Perk test", date: Date(), buildVersion: "test"), conditions: level(number).conditions!, assisted: false)
+    }
+    _ = store.record(.init(profileID: owner, level: level(0), saved: before, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 3)))!
+    let report = store.record(.init(profileID: owner, level: level(1), saved: 3, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 3)))!
+    ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in })
+    let view = ArcadeWindow.shared.arcadeView
+    view.finishCelebration()
+    try check(view.celebration?.careerBefore.stars == before && view.earnedPerks.count == 1, "Perk threshold fixture is invalid")
+    let zoom = view.earnedPerks[0]
+    try check(zoom.kind == .zoom && zoom.star == earningStar, "Zoom did not attach to the exact earning star")
+    for star in 0...3 {
+      view.revealedStars = star
+      try check(view.perkIsRevealed(zoom) == (star >= earningStar), "Zoom appeared on the wrong star")
+    }
+    view.finishCelebration(); host.contentView?.layoutSubtreeIfNeeded()
+    let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
+    let folder = URL(fileURLWithPath: ".build/earned-reward-renders")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("single-perk-star-\(earningStar).png"))
+    try checkCompactResultActions(view)
+    let perk = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == "+1 ZOOM" }!
+    try check(view.bounds.contains(perk.localFrame) && perk.accessibilityPerformPress() && view.mode == .earnedRewards, "Single perk card lost its details target")
+  }
+  print("PASS Zoom reveals on the exact first or second earning star; single-perk result and details target")
+}
+
+@MainActor private func testEarnedRewardPresentation() async throws {
   let previous = ArcadeStore.shared
   let directory = FileManager.default.temporaryDirectory.appendingPathComponent("earned-rewards-\(UUID())")
   let folder = URL(fileURLWithPath: ".build/earned-reward-renders")
@@ -9454,6 +9529,7 @@ extension AppDelegate {
     if view.mode == .result { view.finishCelebration() }
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    try checkCompactResultActions(view)
     let children = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
     try check(children.allSatisfy { view.bounds.contains($0.localFrame) }, "Reward text or input target was clipped: " + name)
     let controls = children.filter { $0.accessibilityRole() == .button }
@@ -9502,7 +9578,27 @@ extension AppDelegate {
       var next = 0, retries = 0
       ArcadeWindow.shared.showResult(report, owner: host, retry: { retries += 1 }, next: { next += 1 }, replay: { _ in })
       let view = ArcadeWindow.shared.arcadeView
-      try check(view.mode == .earnedRewards && view.celebrationTask == nil, "Saved \(engine) rewards did not appear immediately without a timer")
+      try check(view.mode == .result && view.celebratesNewRewards, "Saved \(engine) result did not start its own reward celebration")
+      try check(view.earnedPerks.map { $0.title } == ["+1 ZOOM", "+1 SUPERZOOM", "+1 LEVEL SKIP"], "Result hid a new spendable perk")
+      let balanceBefore = store.records.levelSkips(profileID: owner).available
+      view.startCelebration(reduceMotion: false)
+      _ = try capture("\(engine)-\(mode)-stars-0", settled: false)
+      try check(view.earnedPerks.allSatisfy { !view.perkIsRevealed($0) }, "Perks appeared before their earning stars")
+      for _ in 0..<100 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 20_000_000) }
+      try check(view.mode == .result && view.celebrationTask == nil && view.earnedPerks.allSatisfy { view.perkIsRevealed($0) }, "Star celebration did not reveal every new perk on the result")
+      try check(next == 0 && retries == 0 && store.playingProfileID == owner && store.records.levelSkips(profileID: owner).available == balanceBefore, "Perk celebration changed ownership, progression or balances")
+      for width in [640, 900, 1600] {
+        host.setContentSize(CGSize(width: width, height: width == 640 ? 480 : width == 900 ? 620 : 1000))
+        for star in 0...3 {
+          view.revealedStars = star; view.stampedStar = star == 0 ? nil : star
+          _ = try capture("\(engine)-\(mode)-\(width)-stars-\(star)", settled: false)
+          try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) == (star >= $0.star) }, "Perk reveal does not match the earning star")
+        }
+        view.finishCelebration()
+      }
+      view.startCelebration(reduceMotion: true)
+      try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) } && view.stampedStar == nil, "Reduced motion hid a perk or stamped it")
+      view.showEarnedRewards()
       for width in [640, 900, 1600] {
         host.setContentSize(CGSize(width: width, height: width == 640 ? 480 : width == 900 ? 620 : 1000))
         view.earnedRewardPage = 0
@@ -9543,9 +9639,9 @@ extension AppDelegate {
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
         windowNumber: host.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!)
-      try check(view.mode == .result, "Escape did not return from rewards to the result")
+      try check(view.mode == .result && view.celebrationTask == nil && view.revealedStars == 3, "Returning from rewards replayed or hid the star celebration")
       ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in })
-      try check(view.mode == .result, "The same saved result announced its rewards twice")
+      try check(view.mode == .result && !view.celebratesNewRewards && view.earnedPerks.allSatisfy { view.perkIsRevealed($0) }, "The same saved result announced its perks twice")
       let repeatReport = store.record(.init(profileID: owner, level: level(engine, 2), saved: 1, didWin: true,
         skills: [:], seconds: 10, telemetry: .init(released: 1)))!
       let repeated = ResultAwards.earnedRewards(report: repeatReport, celebration: .init(report: repeatReport, history: store.records.trolley))
@@ -9555,6 +9651,14 @@ extension AppDelegate {
       ArcadeWindow.shared.showResult(preview, owner: host, retry: {}, next: {}, replay: { _ in })
       try check(view.mode == .result && view.savedEarnedRewards.isEmpty, "An unsaved preview claimed earned rewards")
       _ = try capture("\(engine)-\(mode)-preview")
+      let singleConditions = TrolleyConditions(gameID: engine, packID: "earned-rewards", levelID: "single", levelFingerprint: "single", rulesetVersion: "test", physicsMode: "test", population: 10, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+      let singleLevel = ArcadeLevel(id: "single", title: "One award", game: engine, rules: "test", total: 10, required: 1, conditions: singleConditions)
+      let single = store.record(.init(profileID: owner, level: singleLevel, saved: 1, didWin: true, skills: ["builder": 1, "digger": 1], seconds: 10))!
+      ArcadeWindow.shared.showResult(single, owner: host, retry: {}, next: {}, replay: { _ in })
+      try check(view.mode == .result && view.savedEarnedRewards.count == 1 && view.earnedPerks.isEmpty, "Single award fixture fabricated a perk")
+      view.showEarnedRewards()
+      _ = try capture("\(engine)-\(mode)-single-reward")
+      try check((view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }.count == 1, "One-page reward receipt reserved a second action slot")
       let rewound = store.record(.init(profileID: owner, level: level(engine, 4), saved: 1, didWin: true,
         skills: [:], seconds: 10, assisted: true, telemetry: .init(released: 1, rewindCount: 1)))!
       let assisted = ResultAwards.earnedRewards(report: rewound, celebration: .init(report: rewound, history: store.records.trolley))
@@ -9562,5 +9666,5 @@ extension AppDelegate {
       GameScreen.shared.dismissAll(); store.endHotSeat()
     }
   }
-  print("PASS earned reward receipts: automatic once, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
+  print("PASS star-linked perk celebrations: automatic once, reduced motion, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
 }

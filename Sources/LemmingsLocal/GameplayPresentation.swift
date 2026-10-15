@@ -313,19 +313,23 @@ import LemmingsGameArt
     let normalized = preservesCase ? source.precomposedStringWithCanonicalMapping : BitmapLatinGlyphs.uppercase(source, locale: L10n.interface.locale)
     let bounds = GamePixelTypography.verticalBounds(of: normalized)
     let height = CGFloat(bounds.bottom - bounds.top)
-    let scale = max(1, min(maxScale, floor(min(rect.height / height, rect.width / CGFloat(max(1, normalized.count * 6))))))
-    let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
+    let horizontal = GamePixelTypography.horizontalBounds(of: normalized)
+    let width = max(1, horizontal.right - horizontal.left)
+    let scale = max(1, min(maxScale, floor(min(rect.height / height, rect.width / CGFloat(width + 1)))))
+    let start = floor(rect.midX - CGFloat(width) * scale / 2) - CGFloat(horizontal.left) * scale
     let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
     let context = NSGraphicsContext.current?.cgContext
     context?.saveGState()
     context?.setShouldAntialias(false)
+    context?.clip(to: rect)
     defer { context?.restoreGState() }
     (color ?? (palette == .monochrome ? .white : palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
       : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).setFill()
-    let highlightedIndex = highlighted.flatMap { normalized.firstIndex(of: $0) }.map { normalized.distance(from: normalized.startIndex, to: $0) }
-    for (index, character) in normalized.enumerated() {
+    let layout = GamePixelTypography.layout(normalized)
+    let highlightedIndex = highlighted.flatMap { character in layout.firstIndex { $0.sequence.contains(character) } }
+    for (index, item) in layout.enumerated() {
       if let numberPalette {
-        let ink = character.isNumber || character == "," ? numberPalette : palette
+        let ink = item.sequence.allSatisfy { $0.isNumber || $0 == "," } ? numberPalette : palette
         (ink == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
           : ink == .monochrome ? .white : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
       }
@@ -334,18 +338,19 @@ import LemmingsGameArt
           ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
           : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
       }
-      guard let glyph = GamePixelTypography.bitmapGlyph(for: character) else { continue }
+      guard let glyph = item.glyph, let mask = GamePixelTypography.monochromeMask(forSequence: item.sequence) else { continue }
       for x in 0..<glyph.width {
-        for y in 0..<glyph.height where glyph.rgba[(y * glyph.width + x) * 4 + 3] != 0 {
-          CGRect(x: start + CGFloat(index * 6 + glyph.x + x) * scale,
+        for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
+          CGRect(x: start + CGFloat(item.x + glyph.x + x) * scale,
             y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).fill()
         }
       }
     }
     if palette == .monochrome, let highlightedIndex {
+      let item = layout[highlightedIndex]
       NSColor.white.setFill()
-      CGRect(x: start + CGFloat(highlightedIndex * 6) * scale,
-        y: min(rect.maxY - 1, top + height * scale + 1), width: 5 * scale, height: 1).fill()
+      CGRect(x: start + CGFloat(item.x) * scale,
+        y: min(rect.maxY - 1, top + height * scale + 1), width: CGFloat(max(1, item.advance - 1)) * scale, height: 1).fill()
     }
   }
 }
@@ -372,24 +377,39 @@ struct PrecisionZoomStatus: Equatable {
     return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(state)")
   }
 
+  private var rows: [(String, PrecisionZoomKind?)] {
+    [(L10n.text("z - \(zoom)"), .zoom),
+     (L10n.text("Z - \(superzoom)"), .superzoom),
+     (L10n.text("Skips \(skips)"), nil)]
+  }
+
+  private var metrics: (width: Int, rowHeight: Int) {
+    let widths = rows.map { GamePixelTypography.width(of: $0.0) }
+    let heights = rows.map { row in
+      let bounds = GamePixelTypography.verticalBounds(of: row.0)
+      return bounds.bottom - bounds.top
+    }
+    return ((widths.max() ?? 1) + 9, max(11, (heights.max() ?? 7) + 4))
+  }
+
   func size(scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count, L10n.text("Skips \(skips)").count)
-    return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
-                  height: 37 * scale)
+    let metrics = self.metrics
+    return CGSize(width: CGFloat(metrics.width) * scale,
+                  height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
   }
 
   @MainActor @discardableResult
   func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let rows: [(String, PrecisionZoomKind?)] = [(L10n.text("z - \(zoom)"), .zoom),
-                (L10n.text("Z - \(superzoom)"), .superzoom),
-                (L10n.text("Skips \(skips)"), nil)]
-    let badgeSize = size(scale: scale)
+    let rows = self.rows
+    let metrics = self.metrics
+    let badgeSize = CGSize(width: CGFloat(metrics.width) * scale,
+                           height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
     let width = badgeSize.width
-    let rowHeight = 11 * scale
+    let rowHeight = CGFloat(metrics.rowHeight) * scale
     for (index, row) in rows.enumerated() {
       let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
                         width: width, height: rowHeight)

@@ -13,6 +13,27 @@ collections, records, teaching, audio and service orchestration. Supplying
 explicit `TVLibrarySource` fixtures still opens the original TV development
 shell. That diagnostic path is not the normal application or the parity baseline.
 
+## Gameplay status parity with Mac
+
+The normal TV frontend reserves a top strip for player identity, released/total,
+rescued/required and whole-percent rescued, time, actual deaths and the Mac's
+shared deaths-before-failure counter. The counter changes to SAFE when the
+rescue target is met. Release rate appears only on engines that expose it.
+Speed, planning pause, nuke and completion/failure states stay in that strip.
+L3 also shows its reserve and moves its status above the playfield. Its death
+count includes extra lemmings that started on the map. Rewind refreshes counts
+from the restored runtime. Existing HUD controls retain their bounds, and iOS
+retains its existing compact status presentation.
+
+`Scripts/run-tv-console-checks.sh` includes 96 synthetic HUD captures at 720p,
+1080p and 4K across Classic, NeoLemmix, L2 and L3. They check complete text,
+0/1/50/100% values, visible skull pixels, SAFE/failure, pause/speed/nuke states,
+unchanged control geometry and activation centres. A native L3 fixture verifies
+extra-lemming deaths and their restoration on rewind. Representative renders
+were inspected. Both SDK modules and application entry points compile. All
+native checks run offscreen with muted audio. Physical television readability,
+UIKit focus delivery and VoiceOver remain device checks.
+
 ## Current source coverage
 
 | Area | Shared implementation and TV adaptation | Remaining acceptance |

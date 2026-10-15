@@ -2103,35 +2103,22 @@ import NxlvKit
                   rect: NSRect(x: x, y: y, width: width, height: height))
     }
     func text(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int) {
-        var cursor = x
         let top = font.bitmap.verticalBounds(of: text).top
-        for character in text {
-            defer { cursor += font.bitmap.advance(for: character) }
-            guard let glyph = font.bitmap.glyph(for: character) ?? font.bitmap.glyph(for: "?") else { continue }
+        let left = font.bitmap.horizontalBounds(of: text).left
+        for placed in font.bitmap.layout(text) {
+            guard let glyph = placed.glyph else { continue }
             draw(glyph.pixels, width: glyph.width, height: glyph.height, palette: palette,
-                 x: cursor + glyph.x, y: y + glyph.y - top, opaque: glyph.opaque)
+                 x: x + placed.x + glyph.x - left, y: y + glyph.y - top, opaque: glyph.opaque)
         }
     }
     func wrappedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int, width: Int) {
-        var line = "", row = y
         let pitch = max(13, font.bitmap.height(of: text) + 2)
-        for word in text.split(whereSeparator: { $0.isWhitespace }) {
-            let next = line.isEmpty ? String(word) : line + " " + word
-            if font.width(next) > width && !line.isEmpty {
-                self.text(line, font: font, palette: palette, x: x, y: row); row += pitch; line = String(word)
-            } else { line = next }
+        for (row, line) in font.bitmap.wrapped(text, toWidth: width).enumerated() {
+            self.text(line, font: font, palette: palette, x: x, y: y + row * pitch)
         }
-        self.text(line, font: font, palette: palette, x: x, y: row)
     }
     func fittedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], rect: NSRect) {
-        var lines: [String] = [], line = ""
-        for word in text.split(whereSeparator: { $0.isWhitespace }) {
-            let next = line.isEmpty ? String(word) : line + " " + word
-            if font.width(next) > Int(rect.width) && !line.isEmpty {
-                lines.append(line); line = String(word)
-            } else { line = next }
-        }
-        if !line.isEmpty { lines.append(line) }
+        let lines = font.bitmap.wrapped(text, toWidth: Int(rect.width))
         guard !lines.isEmpty else { return }
         let width = max(1, lines.map(font.width).max() ?? 1)
         let pitch = max(13, font.bitmap.height(of: text) + 2)

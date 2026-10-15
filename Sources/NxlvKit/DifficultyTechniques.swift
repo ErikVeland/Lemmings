@@ -47,7 +47,7 @@ public enum DifficultyTechniques {
         }
     }
 
-    public static let definitions: [DifficultyTechniqueDefinition] =
+    public static var definitions: [DifficultyTechniqueDefinition] {
         NeoLemmixSkill.allCases.map {
             DifficultyTechniqueDefinition(id: $0.rawValue, sophistication: 1, prerequisites: [],
                 evidenceRequirement: L10n.text("Successful assignment in a winning replay. This proves use, not necessity."))
@@ -69,6 +69,7 @@ public enum DifficultyTechniques {
             .init(id: "teleporter-interaction", sophistication: 2, prerequisites: [],
                   evidenceRequirement: L10n.text("An assigned or unassigned lemming enters teleporting state."))
         ]
+    }
     public static func detect(_ evidence: DifficultySolutionEvidence) -> [String] {
         let used = Set(evidence.assignments.map(\.skill)).union(evidence.observedConcepts)
         return definitions.filter { used.contains($0.id) }.map(\.id).sorted()

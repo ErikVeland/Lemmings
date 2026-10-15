@@ -180,6 +180,7 @@ public protocol MobileGameSession: AnyObject {
     var panelFrame: MobilePixelFrame? { get }
     var renderScale: Double { get }
     var activeLemmingCount: Int { get }
+    var lostLemmingCount: Int { get }
     var nukeRemainingTicks: Int? { get }
     var allNukeExplosionsPlayed: Bool { get }
     var explosions: [MobileExplosion] { get }
@@ -230,6 +231,7 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var lostLemmingCount: Int { max(0, snapshot.released - snapshot.saved - activeLemmingCount) }
     func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
         .init(encoded: try checkpointPayload())
     }

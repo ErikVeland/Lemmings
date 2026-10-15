@@ -8,7 +8,6 @@ from __future__ import annotations
 import argparse
 import collections
 import hashlib
-import itertools
 import json
 import math
 import pathlib
@@ -20,8 +19,8 @@ REFERENCE = ROOT / 'Content/NeoLemmix/levels/Lemmings_Redux'
 SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
-POLICY = 'teaching-curriculum-2'
-VERSION = 'learning-28'
+POLICY = 'teaching-curriculum-3'
+VERSION = 'learning-29'
 MAINLINE_PACKS = {'lemmings-LEVEL-120', 'ohNoMoreLemmings-DLVEL-100',
                   'ohYesMoreLemmings-OHYES-60'}
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -96,9 +95,13 @@ def valid_witness(row, replay):
                 and all((0 if e.get('afterTick') else 1) <= e['tick'] <= expected['ticks'] for e in replay['events']))
 
 
-def solution_context(row, replay, resource):
+def solution_context(row, replay, resource, quota=None):
     """Keep execution, spare resources and unknown discovery separate."""
-    events = sorted(replay['events'], key=lambda e: (e['tick'], e.get('afterTick', False)))
+    quota_tick = quota.get('firstQuotaTick') if quota else None
+    def before_quota(event):
+        return quota_tick is None or event['tick'] < quota_tick or event['tick'] == quota_tick and not event.get('afterTick')
+    events = sorted((e for e in replay['events'] if before_quota(e)), key=lambda e: (e['tick'], e.get('afterTick', False)))
+    relevant_sequences = {index for index, event in enumerate(replay['events']) if before_quota(event)}
     assignments = [e for e in events if 'assign' in e['action']]
     counts = collections.Counter(e['action']['assign']['skill'] for e in assignments)
     workers = collections.defaultdict(list)
@@ -111,6 +114,7 @@ def solution_context(row, replay, resource):
     finite = [skill for skill in counts if skills.get(skill, 0) < 99]
     exhausted = [skill for skill in finite if spare[skill] == 0]
     ticks = replay['expected']['ticks']
+    useful_ticks = quota_tick if quota_tick is not None else ticks
     deadline = resource['timeLimitTicks'] or None
     precision = row['profile'].get('precision') or {}
     burst = max((sum(e['tick'] <= other['tick'] < e['tick'] + 34 for other in assignments)
@@ -124,6 +128,11 @@ def solution_context(row, replay, resource):
     rate = resource['releaseRate']
     minimum_rate = resource.get('minimumReleaseRate', min(99, max(0, rate)))
     hatch_ticks = 4 + (99 - min(99, max(0, rate))) // 2
+    available = [count for count in skills.values() if count > 0]
+    source_scarcity = (1 - min(20, sum(available) / max(1, len(available))) / 20) * 65 + sum(count <= 2 for count in available) / max(1, len(available)) * 35
+    if quota:
+        assert counts == {skill: skills.get(skill, 0) - remaining for skill, remaining in quota['toolsRemainingAtQuota'].items()
+                          if skills.get(skill, 0) > remaining}, 'Recorded commands disagree with native successful tool use before quota'
     return {'assignments': len(assignments), 'workers': len(workers), 'jobChanges': changes,
             'usedSkills': dict(sorted(counts.items())), 'spareUsedSkills': spare,
             'exhaustedUsedSkills': exhausted, 'peakAssignmentsInTwoSeconds': burst,
@@ -134,7 +143,8 @@ def solution_context(row, replay, resource):
             'totalAvailableSkills': sum(min(99, max(0, count)) for count in skills.values()),
             'scarceAvailableSkills': sorted(skill for skill, count in skills.items() if 0 < count <= 2),
             'usedSkillUtilisation': {skill: counts[skill] / max(1, skills.get(skill, 0)) for skill in sorted(counts)},
-            'assignmentDemandEvidence': 'Recorded witness commands; a route may use redundant skills. Pause can separate commands at one simulation tick.',
+            'sourceToolScarcity': round(source_scarcity, 3),
+            'assignmentDemandEvidence': 'Native-verified successful assignments before the rescue quota' if quota else 'Recorded witness commands; quota timing is unmeasured',
             'population': resource['population'], 'required': resource['required'],
             'allowedLosses': resource['population'] - resource['required'],
             'savedAboveRequirement': replay['expected']['saved'] - resource['required'],
@@ -145,10 +155,12 @@ def solution_context(row, replay, resource):
             'canSlowReleaseBelowStartingRate': minimum_rate < rate,
             'hatchCount': resource.get('hatchCount'),
             'completionSeconds': ticks / 17,
-            'remainingSeconds': (deadline - ticks) / 17 if deadline else None,
+            'firstQuotaTick': quota_tick, 'quotaTimingVerified': quota_tick is not None,
+            'remainingSeconds': (deadline - useful_ticks) / 17 if deadline else None,
+            'remainingSecondsAtReplayEnd': (deadline - ticks) / 17 if deadline else None,
             'timingProbeComplete': precision.get('completed', False),
-            'probedAssignments': len(precision.get('actions', [])),
-            'narrowActions': len(row['profile'].get('criticalActions', [])),
+            'probedAssignments': sum(action['sequence'] in relevant_sequences for action in precision.get('actions', [])),
+            'narrowActions': sum(sequence in relevant_sequences for sequence in row['profile'].get('criticalActions', [])),
             'spatialToleranceMeasured': bool(precision.get('selectionOutcomes')),
             'discoveryDifficulty': 'unknown from replay',
             'replayRevision': row['profile']['key']['replayRevision']}
@@ -313,29 +325,14 @@ def early_pressure_warnings(context):
 def pressure_dimensions(context):
     """Comparable pressure axes for transition ordering, not a discovery score."""
     return [context['rescueFraction'] * 100,
-            max(context['usedSkillUtilisation'].values(), default=0) * 100,
+            context['sourceToolScarcity'],
             context['minimumReleaseRate'],
             max(0, (context.get('hatchCount') or 1) - 1) * 100 / 3,
             min(100, max(0, context['peakAssignmentsPerTick'] - 1) * 35
                 + max(0, context['peakAssignmentsPerSecond'] - 1) * 10),
-            min(100, context['jobChanges'] * 10)]
-
-
-def smooth_pressure_ties(selected):
-    """Avoid simultaneous pressure jumps among lessons at the same editorial position."""
-    result = []
-    for _, group in itertools.groupby(selected, key=lambda item: item['placement']['position']):
-        remaining = list(group)
-        while remaining:
-            previous = pressure_dimensions(result[-1]['context']) if result else [0] * 6
-            def cost(item):
-                rises = [max(0, a - b) for a, b in zip(pressure_dimensions(item['context']), previous)]
-                return (sum(rise > 20 for rise in rises), max(rises), sum(rises),
-                        item['tiePosition'], key(item['row']))
-            next_item = min(remaining, key=cost)
-            result.append(next_item)
-            remaining.remove(next_item)
-    return result
+            min(100, context['jobChanges'] * 10),
+            min(100, context['narrowActions'] * 25),
+            max(0, 120 - context['remainingSeconds']) * 100 / 120 if context['remainingSeconds'] is not None else 0]
 
 
 def apply_teaching_plan(selected, candidates, contexts, resources, references):
@@ -418,6 +415,83 @@ def fills_reviewed_gap(item, selected):
                for left, right in zip(official, official[1:]))
 
 
+def apply_course_plan(selected):
+    """Apply the reviewed whole-course order, including deliberate recovery lessons."""
+    course = read(OUT / 'course-plan.json')
+    by_id = {key(item['row']): item for item in selected}
+    chapters = {chapter['id']: chapter for chapter in course['chapters']}
+    entries = course['lessons']
+    assert len(entries) == len({key(entry) for entry in entries})
+    result = []
+    visited_chapters = set()
+    for lesson in entries:
+        assert key(lesson) in by_id, f'Missing reviewed course lesson: {lesson["title"]}'
+        item = by_id[key(lesson)]
+        assert item['row']['entry']['sourceRevision'] == lesson['sourceRevision']
+        assert item['context']['replayRevision'] == lesson['replayRevision']
+        assert item['context']['quotaTimingVerified'], f'Missing native quota timing: {lesson["title"]}'
+        chapter = chapters[lesson['chapter']]
+        assert set(chapter['requires']) <= visited_chapters
+        assert chapter['start'] <= lesson['position'] <= chapter['end']
+        assert lesson['role'] in {'introduction', 'practice', 'recovery', 'challenge'}
+        assert lesson['reason'].strip()
+        assert lesson['position'] >= teaching_floor(item['row']['entry'])
+        if item.get('reportedWall'):
+            assert lesson['position'] >= item['reportedWall']['minimumDemand'], f'Player wall moved too early: {lesson["title"]}'
+        placement = item['placement']
+        previous = placement.copy()
+        placement.update(position=lesson['position'], lower=lesson['position'], upper=lesson['position'],
+            basis='userPlaytest' if placement['basis'] == 'userPlaytest' else 'teachingCurriculum',
+            adjustment=lesson['reason'], comparisonPlacement=previous,
+            courseChapter=lesson['chapter'], learningRole=lesson['role'])
+        item['course'] = lesson
+        item['chapter'] = chapters[lesson['chapter']]
+        result.append(item)
+        visited_chapters.add(lesson['chapter'])
+    # New estimates remain review candidates until a course role and transition are authored.
+    return result
+
+
+def course_transition_review(plan):
+    """Expose every transition and its earlier rehearsals without claiming human playtests."""
+    rows = plan['lessons']
+    result = []
+    for index, lesson in enumerate(rows):
+        axes = lesson['humanPressureAxes']
+        earlier = rows[:index]
+        previous = earlier[-1]['humanPressureAxes'] if earlier else dict.fromkeys(axes, 0)
+        rises = {axis: round(max(0, value - previous[axis]), 3) for axis, value in axes.items()}
+        # A single high-pressure tutorial is not repeated practice of that pressure.
+        practised = {axis: sorted((row['humanPressureAxes'][axis] for row in earlier), reverse=True)[1]
+                     if len(earlier) >= 2 else 0 for axis in axes}
+        new = sorted(axis for axis, value in axes.items() if value > practised[axis] + 20)
+        skills = set(lesson['context']['usedSkills'])
+        def preparation_cost(pair):
+            i, row = pair
+            overlap = len(skills & set(row['context']['usedSkills'])) / max(1, len(skills))
+            distance = sum(abs(axes[axis] - row['humanPressureAxes'][axis]) for axis in sorted(axes))
+            return (-overlap, distance, index - i)
+        candidates = sorted(enumerate(earlier), key=preparation_cost)
+        examples = [{'step': i + 1, 'identity': row['identity'], 'level': row['level']}
+                    for i, row in candidates[:3]]
+        if index >= 30:
+            assert len(new) <= 2, f'Too many new pressure peaks at once: {lesson["level"]}: {new}'
+            assert sum(rise > 30 for rise in rises.values()) <= 2, f'Compound pressure jump before {lesson["level"]}: {rises}'
+        result.append({'step': index + 1, 'identity': lesson['identity'], 'level': lesson['level'],
+            'chapter': lesson['courseChapter']['id'], 'role': lesson['learningRole'],
+            'goal': lesson['courseChapter']['goal'], 'placementReason': lesson['placementReason'],
+            'preparationExamples': examples, 'pressureRises': rises, 'newPressurePeaks': new,
+            'pressureAxes': axes, 'quotaTimingVerified': lesson['context']['quotaTimingVerified'],
+            'discoveryAssessment': 'Editorial chapter and role; novice discovery remains unmeasured'})
+    return result
+
+
+def course_review_document(manifest, plan):
+    return {'version': 'course-review-1', 'journeyVersion': manifest['version'],
+        'meaning': 'A complete editorial review with measured pressure and earlier practice examples. Course positions are ordinal. Small numerical position gaps do not prove human difficulty. Novel discovery and special pacing remain explicit human validation gaps.',
+        'chapters': read(OUT / 'course-plan.json')['chapters'], 'lessons': course_transition_review(plan)}
+
+
 def build(pool, witnesses, resources, reference, reviews):
     additions = read(OUT / 'required-additions.json')
     required = {key(r) for r in additions}
@@ -426,6 +500,8 @@ def build(pool, witnesses, resources, reference, reviews):
     exclusions = read(ROOT / 'Resources/Progression/exclusions.json')
     excluded = {key(r) for r in exclusions}
     references = {r['reference']: r for r in reference}
+    quota_proofs = {key(proof): proof for proof in read(OUT / 'native-replay-validation.json')
+                    if proof['passed'] and proof.get('firstQuotaTick') is not None}
     rejected = {(key(r), r['sourceRevision'], r['replayRevision']) for r in read(OUT / 'replay-rejections.json')}
     by_title = collections.defaultdict(list)
     contexts, candidates, pending, selected, variant_holds = {}, {}, [], [], {}
@@ -442,7 +518,11 @@ def build(pool, witnesses, resources, reference, reviews):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'excluded or missing exact source/winning replay evidence'})
             continue
-        context = solution_context(row, witness, source)
+        proof = quota_proofs.get(ident)
+        if proof and (proof['sourceRevision'] != row['entry']['sourceRevision']
+                      or proof['replayRevision'] != row['profile']['key']['replayRevision']):
+            proof = None
+        context = solution_context(row, witness, source, proof)
         if any(value < 0 for value in context['spareUsedSkills'].values()):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'replay assignment count exceeds inventory; successful-input audit required'})
@@ -661,6 +741,7 @@ def build(pool, witnesses, resources, reference, reviews):
         if item['row']['official'] or fills_reviewed_gap(item, selected):
             selected = [r for r in selected if key(r['row']) != key(item['row'])] + [item]
     selected = apply_teaching_plan(selected, candidates, contexts, resource_by_id, references)
+    selected = apply_course_plan(selected)
     assert sum(item['row']['official'] for item in selected) >= .8 * len(selected), 'The golden path must remain official-heavy'
     assert not any(not item['row']['official'] and item['placement']['basis'] == 'solutionEstimate' for item in selected)
     admitted = {key(item['row']): item for item in selected}
@@ -673,8 +754,7 @@ def build(pool, witnesses, resources, reference, reviews):
                 'included with port counterpart evidence; human variant review still needed' if item['placement']['basis'] == 'reduxPortCounterpart' else
                 'included official variant with cautious estimated placement; human review still needed')
             row['placement'] = item['placement']
-    selected.sort(key=lambda r: (r['placement']['position'], r['tiePosition'], key(r['row'])))
-    selected = smooth_pressure_ties(selected)
+    assert all(a['placement']['position'] <= b['placement']['position'] for a, b in zip(selected, selected[1:]))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []
     practiced = set()
@@ -697,7 +777,9 @@ def build(pool, witnesses, resources, reference, reviews):
                            'teachingPhase': item.get('teaching', {}).get('phase'),
                            'difficultyVerdict': item.get('reportedWall', {}).get('verdict'),
                            'requiredPreparation': item.get('reportedWall', {}).get('requiredPreparation', []),
-                           'humanPressureAxes': dict(zip(['rescue', 'usedToolScarcity', 'minimumReleaseRate', 'hatches', 'assignmentDensity', 'skillChains'], pressure_dimensions(context))),
+                           'courseChapter': item['chapter'], 'learningRole': item['course']['role'],
+                           'placementReason': item['course']['reason'],
+                           'humanPressureAxes': dict(zip(['rescue', 'availableToolScarcity', 'minimumReleaseRate', 'hatches', 'assignmentDensity', 'skillChains', 'precision', 'quotaDeadline'], pressure_dimensions(context))),
                            'reference': item['reference'], 'placement': placement, 'context': context,
                            'variantDifferences': item['variantDifferences'], 'risks': risks(context),
                            'comparisons': item.get('comparisons', [])})
@@ -709,12 +791,12 @@ def build(pool, witnesses, resources, reference, reviews):
         transitions[-1]['pressureWarnings'] = placement.get('pressureWarnings', [])
         practiced.update(concepts)
     manifest = {'version': VERSION, 'placementPolicy': POLICY, 'lessons': lessons}
-    plan = {'version': 'curriculum-11', 'poolSize': len(pool), 'targetSize': len(selected),
+    plan = {'version': 'curriculum-12', 'poolSize': len(pool), 'targetSize': len(selected),
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,
-            'selectionPolicy': 'Pinned skill tutorials, simple native routes and all 20 generous Tame lessons precede open Fun combinations and explicit building bridges. Player-reported walls remain marked too hard for early teaching. Unreviewed high-pressure witnesses move to Expert. Restricted retail puzzle ranks cannot bypass teaching boundaries through a Redux match; exact pinned low-pressure teaching routes can bridge a real gap. Later uncertain routes remain cautious estimates. Seasonal levels and fan bridges require exact human review, apart from recorded owner exceptions. No level-count quota.',
-            'limits': 'Teaching positions and retail boundaries are editorial, not measured human difficulty. Tame resource settings permit recovery but do not prove novice discovery. Complex witnesses need not be necessary solutions. Redux variants differ from Classic. A native win proves a route; full novice playtesting remains outstanding.'}
+            'selectionPolicy': 'Every retained lesson has a pinned chapter, learning role and placement reason in the complete course plan. Skills, generous combinations, tool budgets, worker routes, precision and separate entrances prepare the later combined pressures, clocks and capstones. Required rescue timing and successful tool use come from exact native playback. Player-reported walls retain later floors. New estimates cannot silently enter the authored course. No fixed-size padding.',
+            'limits': 'Course positions are editorial ordinals, not measured difficulty scores. Every transition has a measured pressure review and earlier practice examples, but insight and special pacing still need novice playtesting. An elaborate witness need not be the easiest route. Native quota timing removes replay shutdown delay; it does not prove a fastest solution.'}
     pending.sort(key=lambda r: key(r))
     return manifest, plan, pending, transitions
 
@@ -728,6 +810,9 @@ def report(manifest, plan, pending, transitions):
                'stages': dict(collections.Counter(l['stage'] for l in lessons)),
                'reportedWalls': sum(bool(goal['difficultyVerdict']) for goal in plan['lessons']),
                'pressureFlaggedRoutes': sum(bool(goal['placement'].get('pressureWarnings')) for goal in plan['lessons']),
+               'chapters': len(read(OUT / 'course-plan.json')['chapters']),
+               'editorialCoursePlacements': sum(goal['placement']['basis'] == 'teachingCurriculum' for goal in plan['lessons']),
+               'nativeQuotaTimings': sum(goal['context']['quotaTimingVerified'] for goal in plan['lessons']),
                'pendingReview': len(pending), 'estimatedPlacements': sum(l['placement']['basis'] == 'solutionEstimate' for l in lessons),
                'largestReferenceGap': max(t['referenceStep'] for t in transitions),
                'limits': plan['limits']}
@@ -762,9 +847,12 @@ def report(manifest, plan, pending, transitions):
         'Tame practice requires 20 of every skill, release rate 1 and a 50% rescue target',
         'Native source export records hatch count and actual minimum/maximum release rates',
         'Every context records rescue fraction, tool availability and reserves, assignments per tick/second and simultaneous worker demand',
-        'Equal-position lessons avoid simultaneous jumps across rescue, scarcity, minimum rate, hatches, assignment density and skill chains',
+        'All lessons have pinned source/replay revisions, chapter goals, learning roles and individual placement reasons',
+        'Every winning replay measures first rescue quota and verifies successful tool use before it',
+        'No post-foundation transition raises more than two measured pressure axes by over 30 points',
+        'No post-foundation lesson introduces more than two new measured pressure peaks at once',
         'Player-reported early walls keep explicit too-hard verdicts and later placement floors',
-        'Unreviewed near-full-rescue routes with complex chains, narrow timing or exhausted combined stock stay in Expert',
+        'Scarce tools, high rescue targets, fast minimum rates and demanding execution require earlier practice',
         'At least 80% official levels; no fixed-size padding',
         'Unreviewed fan estimates never enter the golden path',
         'Seasonal levels need exact human difficulty review',
@@ -774,16 +862,22 @@ def report(manifest, plan, pending, transitions):
         'limits': plan['limits']})
     lines = ['# Oh My! All Lemmings! progression', '',
         f"{len(lessons)} Classic-mechanics lessons: {summary['official']} official levels and {summary['fan']} entries from fan archives.", '',
-        'The protected opening has 30 beginner lessons: the original skill tutorials, the owner-confirmed Cellbash lesson, simple repeated practice and all 20 Tame levels. Fourteen combination and building lessons follow before constrained puzzles. `teaching-plan.json` pins the exact sources, witnesses, order and reasons.', '',
+        'All 227 lessons have an authored place in 13 teaching chapters. `course-plan.json` pins each source, winning route, chapter, learning role and placement reason. `course-review.json` records every transition, measured pressures and earlier practice examples. The opening has 30 beginner lessons, followed by 15 lessons that combine familiar skills before tighter budgets.', '',
         'The simple practice routes use at most two skill types, no worker job changes or measured narrow actions, and retain spare used skills and a rescue margin. Every Tame level supplies 20 of all eight skills, starts at release rate 1 and requires 25 of 50 lemmings. Their elaborate stored replays no longer push these practice levels behind hard puzzles.', '',
-        f"[Redux's community order]({SOURCE}) remains comparison evidence for later puzzles. Its edited NeoLemmix counterparts do not certify beginner suitability in Classic. Tricky and Crazy normally start no earlier than Difficult, Wild follows at 420, Taxing at 480, and Mayhem, Wicked, Havoc and the Sunsoft campaign at Expert. The pinned native builder-only routes for Lemming sanctuary in sight and What an AWESOME level are explicit Intermediate bridges. A retail rank alone must not hide useful easier practice. Original measured replay scores remain unchanged.", '',
+        f"[Redux's community order]({SOURCE}) remains comparison evidence. Its edited NeoLemmix counterparts do not certify beginner suitability in Classic. A retail rank alone must not hide useful easier practice. The course brings generous construction routes forward, introduces small budgets before complex combinations, and reserves clocks and the hardest combinations for later chapters. Original measured replay scores remain unchanged. Course positions are editorial ordinals, not measurements of human difficulty.", '',
         'The path has no level-count quota. Unreviewed fan and NeoLemmix levels remain in the review queue, even when their artwork or winning replay looks easy. A short solution cannot establish how hard the trick is to discover. Reviewed fan bridges must fit between nearby official lessons, stay within their human-reviewed difficulty bounds and use previously practised skills. They fill real gaps rather than add variety.', '',
         'Xmas and Holiday levels are withheld unless an exact-version human difficulty review supports their placement. Seasonal rank names, visual simplicity and Redux title counterparts do not establish suitability in Classic physics.', '',
         'Cellbash remains lesson 2 from the owner’s single-basher playtest. Going their separate ways is the official Macintosh exclusive delivered through a Classic fan archive. Its Redux counterpart and conversion differences are recorded. Neither exception authorises unrelated fan estimates.', '',
         'Every owner-reported wall is explicitly marked too hard for early teaching in `route-safety.json` and `difficulty-walls.json`. Patience, Let’s be careful out there and Careless clicking costs lives follow the full teaching section in Difficult. Going their separate ways, Rainbow Island, The Crankshaft, PoP YoR ToP!!!, It’s Lemmingentry Watson and Just A Quicky are in Expert. Time waits for no Lemming and This Corrosion retain their late-Expert floors. All retained levels and winning routes remain available.', '',
-        'Unreviewed routes also move to Expert when their witness combines near-full rescue with repeated skill changes, several exhausted skill stocks or multiple measured narrow actions. Combined routes with exhausted stock and less than 30 seconds spare also move later. These are warning signs, not proof that an elaborate witness is the easiest solution. A genuine exact human review can supersede this precaution.', '',
+        'The course uses introductions, repeated practice, recovery lessons and chapter challenges. We all fall down introduces slow, single-skill full rescue at lesson 33. This should be a doddle! and A ladder would be handy supply generous route-planning practice at 46 and 47. Watson follows small-budget practice at 88, PoP YoR ToP!!! follows group coordination at 136, and Just A Quicky follows strict-budget combinations at 157.', '',
         'Human pressure is tracked across rescue percentage, available tool types and quantities, used-tool reserves, starting and minimum release rate, hatch count, assignments per tick and second, distinct workers needing commands, and skill chains. Classic cannot reduce release below the authored starting rate. The native exporter verified hatch counts and rate limits for all source levels. Hatches share the global spawn clock; their count is a coordination demand, not a multiplier on spawn frequency. Same-tick commands can be separated with Pause and are not labelled physically simultaneous clicks.', '',
-        'Fast minimum rates combined with scarce stock, high rescue targets or multiple hatches defer uncertain puzzles. Multiple hatches combined with several skills and little recovery margin do the same. Dense per-tick or per-second assignments also count when rescue, tools or measured timing leave little margin. Equal-position lessons are ordered to avoid simultaneous increases across several pressure axes. These safeguards change placement, not the measured replay score.', '',
+        'All 227 exact native replays record the first tick that reaches the rescue quota and the tools left at that tick. Commands after that point do not inflate the useful workload. Deadline pressure uses time left when the quota is reached, not when the replay shuts down. Tool scarcity uses the available inventory separately from witness reserves.', '',
+        'Eight measured pressure axes cover rescue, tool scarcity, minimum release rate, hatches, command density, worker skill chains, precision and deadline. After the foundations, no transition raises more than two axes by over 30 points. No lesson introduces more than two peaks over the pressure already seen twice. These checks catch compound jumps; they do not measure the difficulty of discovering a trick.', '',
+        '## Teaching chapters', '', '| Lessons | Chapter | Goal |', '| --- | --- | --- |']
+    for chapter in read(OUT / 'course-plan.json')['chapters']:
+        steps = [i + 1 for i, goal in enumerate(plan['lessons']) if goal['courseChapter']['id'] == chapter['id']]
+        lines.append(f"| {min(steps)}–{max(steps)} | {chapter['title']} | {chapter['goal']} |")
+    lines += ['',
         '## Evidence limits', '',
         'Every lesson requires exact source resources and a matching winning replay. A native win proves one route, not novice discovery or the easiest solution. Official estimates remain uncertain. The curriculum records leave-one-reference-out calibration error and variant differences. These diagnostics do not certify a smooth human difficulty curve.', '',
         'For fan or seasonal review, record the exact source and replay revisions, an ordinary human completion, discovery notes, hints, retries and recovery resources. Compare nearby reference levels played by the same person. Do not infer a human review from machine analysis.', '',
@@ -791,10 +885,10 @@ def report(manifest, plan, pending, transitions):
         'Older built-in queues restore the teaching order of every unvisited lesson, including an unreported current wall. Past visits, completed records, ownership and run identity remain intact. Unvisited retired fan and seasonal entries leave the queue. Custom playlists and newer saved versions remain unchanged.', '',
         'The bundled path uses Classic mechanics. Lemmings 2 and Lemmings 3 keep their existing campaigns and saved queues. Direct NeoLemmix playlist routing remains unsupported. No untested bridge is substituted for that gap.', '',
         'Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Check with `python3 Tools/DifficultyDiagnostics/human_journey.py --check`.', '',
-        '## Current order', '', '| Step | Comparison reference | Level | Stage | Evidence |', '| ---: | --- | --- | --- | --- |']
+        '## Current order', '', '| Step | Comparison reference | Level | Chapter | Role | Stage | Evidence |', '| ---: | --- | --- | --- | --- | --- | --- |']
     for i, (lesson, goal) in enumerate(zip(lessons, plan['lessons']), 1):
         ref = goal['reference']
-        lines.append(f"| {i} | {ref['rank']} {ref['number']} | {lesson['entry']['levelNameSnapshot'].replace('|', '/')} | {lesson['stage']} | {lesson['placement']['basis']} |")
+        lines.append(f"| {i} | {ref['rank']} {ref['number']} | {lesson['entry']['levelNameSnapshot'].replace('|', '/')} | {goal['courseChapter']['title']} | {goal['learningRole']} | {lesson['stage']} | {lesson['placement']['basis']} |")
     (OUT / 'README.md').write_text('\n'.join(lines) + '\n')
 
 
@@ -833,6 +927,7 @@ def main():
     outputs = {ROOT / 'Resources/Progression/learning.json': manifest,
                ROOT / 'Resources/Progression/solutions.json': bundled, OUT / 'curriculum.json': plan,
                OUT / 'human-review-queue.json': pending, OUT / 'transitions.json': transitions,
+               OUT / 'course-review.json': course_review_document(manifest, plan),
                OUT / 'redux-reference.json': {'sourceURL': SOURCE, 'levels': redux_reference()}}
     if args.check:
         for path, value in outputs.items():

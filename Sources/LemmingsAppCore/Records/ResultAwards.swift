@@ -13,15 +13,15 @@ public enum ResultAwards {
         var rewards: [EarnedReward] = []
         if !run.assisted && run.qualifies {
             if celebration.precisionRewards.zoomUses > 0 {
-                rewards.append(.init(title: "+\(celebration.precisionRewards.zoomUses) ZOOM",
+                rewards.append(.init(title: L10n.text("+\(celebration.precisionRewards.zoomUses) ZOOM"),
                     reason: L10n.text("Career stars: \(celebration.careerBefore.stars) to \(celebration.career.stars). One Zoom per 3 stars without rewind or undo.")))
             }
             if celebration.precisionRewards.superzoomUses > 0 {
-                rewards.append(.init(title: "+\(celebration.precisionRewards.superzoomUses) SUPERZOOM",
+                rewards.append(.init(title: L10n.text("+\(celebration.precisionRewards.superzoomUses) SUPERZOOM"),
                     reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Superzoom per 3 distinct levels without rewind or undo.")))
             }
             if report.earnedLevelSkip {
-                rewards.append(.init(title: "+1 LEVEL SKIP",
+                rewards.append(.init(title: L10n.text("+1 LEVEL SKIP"),
                     reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Level Skip per 3 distinct levels without rewind or undo.")))
             }
         }

@@ -83,7 +83,7 @@ import NxlvKit
             }
         }
         pageFooter()
-        setAccessibilityLabel(L10n.text("\(boardTitle). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns."))
+        setAccessibilityLabel(L10n.text("\(boardTitle). Rewinds: \(assisted ? L10n.text("used") : L10n.text("unused")). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns."))
     }
 
     private func achievementPriority(_ award: TrolleyAchievement) -> Int {
@@ -239,7 +239,8 @@ import NxlvKit
             affinityLink(attempt.philosophy.primaryID, in: CGRect(x: 64, y: 571, width: 992, height: 36))
         }
         pageFooter()
-        setAccessibilityLabel((rows + levelRows).map { $0.0 + ": " + $0.1 }.joined(separator: ". ") + ". Select the play style for an explanation. Escape returns.")
+        let summary = (rows + levelRows).map { $0.0 + ": " + $0.1 }.joined(separator: ". ")
+        setAccessibilityLabel(L10n.text("\(summary). Select the play style for an explanation. Escape returns."))
     }
 }
 

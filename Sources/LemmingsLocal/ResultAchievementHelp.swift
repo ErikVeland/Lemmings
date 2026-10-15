@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 @MainActor extension ArcadeView {
     func achievementLink(_ label: String, in rect: CGRect, title: String, detail: String,
@@ -23,34 +24,42 @@ import NxlvKit
     }
 
     func achievementTextHeight(_ value: String, width: CGFloat, face: ClassicMacUserInterface.Face = .small) -> CGFloat {
-        let cellWidth = font?.font(face)?.cellWidth ?? 12
         let bitmap = font?.font(face)
-        let lineHeight = max((bitmap?.cellHeight ?? 16) + 6,
-                             (bitmap?.height(of: MacInterfaceRenderer.menuText(value)) ?? 16) + 2)
-        return CGFloat(MacInterfaceRenderer.menuLines(value, columns: max(1, Int(width) / cellWidth)).count * lineHeight)
+        let lines = GameTextLayout.lines(value, width: width, face: face, font: bitmap)
+        return CGFloat(lines.count) * GameTextLayout.linePitch(value, face: face, font: bitmap)
     }
+
+    var achievementHeadingRect: CGRect {
+        guard !achievementDetails.isEmpty else { return .zero }
+        let award = achievementDetails[achievementDetailIndex % achievementDetails.count]
+        return CGRect(x: 96, y: 68, width: 928,
+                      height: achievementTextHeight(award.title, width: 928, face: .large))
+    }
+    var achievementBodyRect: CGRect {
+        guard !achievementDetails.isEmpty else { return .zero }
+        let award = achievementDetails[achievementDetailIndex % achievementDetails.count]
+        return CGRect(x: 96, y: achievementHeadingRect.maxY + 24, width: 928,
+                      height: achievementTextHeight(award.detail, width: 928))
+    }
+    var achievementFooterY: CGFloat { achievementBodyRect.maxY + 32 }
 
     func drawAchievementExplanation() {
         guard !achievementDetails.isEmpty else { page(.result); return }
         let award = achievementDetails[achievementDetailIndex % achievementDetails.count]
-        let width: CGFloat = 928
-        let headingHeight = achievementTextHeight(award.title, width: width, face: .large)
-        let heading = CGRect(x: 96, y: 68, width: width, height: headingHeight)
-        let body = CGRect(x: 96, y: heading.maxY + 36, width: width,
-                          height: achievementTextHeight(award.detail, width: width))
+        let heading = achievementHeadingRect, body = achievementBodyRect
         if let font {
             font.menuParagraph(award.title, in: heading, alignment: .left, face: .large, palette: .green)
         } else { GamePixelText.draw(award.title, in: heading) }
         paragraph(award.detail, body)
-        pageFooter()
+        var actions = [ResultAction(title: report == nil ? L10n.text("Back") : L10n.text("Back to result"), primary: achievementDetails.count == 1) { [weak self] in self?.back() }]
         if achievementDetails.count > 1 {
-            button(L10n.text("Next award") + " \(achievementDetailIndex + 1)/\(achievementDetails.count) >",
-                   CGRect(x: 712, y: 634, width: 344, height: 48)) { [weak self] in
+            actions.append(ResultAction(title: L10n.text("Next award") + " \(achievementDetailIndex + 1)/\(achievementDetails.count) >", primary: true) { [weak self] in
                 guard let self else { return }
                 self.achievementDetailIndex = (self.achievementDetailIndex + 1) % self.achievementDetails.count
                 self.needsDisplay = true
-            }
+            })
         }
+        resultActionRow(actions, y: achievementFooterY)
         setAccessibilityLabel(award.title + ". " + award.detail)
         registerAchievementText(award.title, rect: heading)
         registerAchievementText(award.detail, rect: body)

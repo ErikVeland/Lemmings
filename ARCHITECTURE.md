@@ -152,19 +152,40 @@ Swift L10n.text / L10n.plural calls + original L2 text inventory
 | --- | --- |
 | `Sources/NxlvKit/InterfaceLocalisation.swift` | Language matching, English fallback, complete-message interpolation, native plurals and test text expansion. Resolve captions before layout. |
 | `SkillVocabulary`, `DifficultyTechniques`, `LearningJourney` | Translate display names while retaining canonical engine, shortcut and saved-journey identities. |
-| `BitmapLatinGlyphs`, `SequelBitmapFont`, shared bitmap renderers | Preserve source pixels and supported Western Latin letters. Measure translated text and accent overhang. Keep full Unicode accessibility text. |
+| `BitmapLatinGlyphs`, `BitmapTamilGlyphs`, `SequelBitmapFont`, shared bitmap renderers | Preserve original Latin pixels and advances. Measure complete Tamil sequences, variable widths and mark overhang. Keep full Unicode accessibility text. |
 | `Tools/Localisation/catalogue.py` and `extract.swift` | Parse Swift syntax, collect message keys, generate English tables and source references, reject known technical-data mistakes. The scan does not prove coverage of computed captions. |
 | `Tools/Localisation/l2-original-text.json` | Explicit inventory of translatable text from original L2 banks. Binary-file references use line 1 as a locator, not a Swift source line. |
 | `Tools/Localisation/drafts/` | Staged translations, plural forms and per-locale review checkpoints. These files are not runtime resources. |
 | `Tools/Localisation/captions.tsv` | Shared action and skill vocabulary for seven locales. Neither the runtime nor validator applies it automatically. |
 | `Tools/Localisation/validate.py` | Structural completeness, placeholder, count-format and unchanged-English checks. Its `complete` field does not certify linguistic or device acceptance. |
-| `Sources/NxlvKit/Resources/Localization.bundle` | Approved runtime tables only. SwiftPM, Mac packaging and the iOS/tvOS asset packager copy this bundle. Adding a locale here can make it selectable at startup. |
+| `Sources/NxlvKit/Resources/Localization.bundle` | Runtime translation tables, candidate packs and bundled font pixels with their notices. SwiftPM, Mac packaging and the iOS/tvOS asset packager copy this bundle. Installed locales appear in the in-app language selector. |
 
 `InterfaceMessage` separates numbered `{0}` arguments from the English message
 key. Translations can reorder arguments without interpreting player data as a
 second template. Count-dependent messages use `.stringsdict`, with `%ld` and
 Apple's plural categories. Blank or damaged text falls back to English.
 That fallback is a runtime safeguard, not evidence that a pack is complete.
+
+Eight translation locales share the English message catalogue and eight
+plural keys. The seven existing AI packs remain drafts. The complete
+Tamil candidate pack is installed for in-app testing. Human linguistic, accessibility and
+device acceptance remain separate gates.
+
+Language selection lives under **Settings > Gameplay**. Settings previews the
+selected language through the shared resolver immediately. **Back** cancels
+the preview and restores the previous language. **Apply** persists the choice.
+**System default** follows the device language. Preview state and persisted
+preferences remain separate so cancelled changes do not replace the saved choice.
+
+`BitmapTamilGlyphs` loads 399 complete forms and the SA-based shrii alias from
+`Localization.bundle/Fonts/TamilPixelFont.json`. Three source body heights feed
+shared and native Classic/L2/L3 rendering. NFC and longest-sequence matching
+keep conjuncts intact through measurement, wrapping and truncation. Frames retain
+negative bearings and marks, align with source baselines and use bounded caches.
+Sequel conversion retains each bank's shade indices. Runtime drawing uses packed
+pixels and needs no Core Text or installed font. The Noto/OFL and Unicode notices
+travel beside the resource. Rebuild and export remain developer tooling in
+`Tools/TamilPixelFont`.
 
 Keep action IDs, keyboard bindings, artwork lookup tables, paths, HTTP headers,
 MIME types and JavaScript outside translation. Translate only their interface

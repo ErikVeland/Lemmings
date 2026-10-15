@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>count.commands</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld கட்டளை • காட்டப்பட்ட சூழலில் குறுக்குவிசைகள் பொருந்தும். இந்த வழிகாட்டியை மூட Esc அழுத்தவும்.</string>
+			<key>other</key>
+			<string>%ld கட்டளைகள் • காட்டப்பட்ட சூழலில் குறுக்குவிசைகள் பொருந்தும். இந்த வழிகாட்டியை மூட Esc அழுத்தவும்.</string>
+		</dict>
+	</dict>
+	<key>count.lemmings</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld லெம்மிங்</string>
+			<key>other</key>
+			<string>%ld லெம்மிங்கள்</string>
+		</dict>
+	</dict>
+	<key>count.levels</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld நிலை</string>
+			<key>other</key>
+			<string>%ld நிலைகள்</string>
+		</dict>
+	</dict>
+	<key>count.packs</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld தொகுப்பு</string>
+			<key>other</key>
+			<string>%ld தொகுப்புகள்</string>
+		</dict>
+	</dict>
+	<key>count.rescueGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld லெம்மிங்கை மீட்டு நிலையை முடிக்கவும்.</string>
+			<key>other</key>
+			<string>%ld லெம்மிங்களை மீட்டு நிலையை முடிக்கவும்.</string>
+		</dict>
+	</dict>
+	<key>count.savedLemmings</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>நீங்கள் %ld லெம்மிங்கை மீட்டீர்கள்</string>
+			<key>other</key>
+			<string>நீங்கள் %ld லெம்மிங்களை மீட்டீர்கள்</string>
+		</dict>
+	</dict>
+	<key>count.secondStarGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>இரண்டாவது நட்சத்திரத்தைப் பெற %ld லெம்மிங்கை மீட்டு நிலையை முடிக்கவும்.</string>
+			<key>other</key>
+			<string>இரண்டாவது நட்சத்திரத்தைப் பெற %ld லெம்மிங்களை மீட்டு நிலையை முடிக்கவும்.</string>
+		</dict>
+	</dict>
+	<key>count.thirdStarGoal</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>மூன்றாவது நட்சத்திரத்தைப் பெற %ld லெம்மிங்கை மீட்டு நிலையை முடிக்கவும்.</string>
+			<key>other</key>
+			<string>மூன்றாவது நட்சத்திரத்தைப் பெற %ld லெம்மிங்களை மீட்டு நிலையை முடிக்கவும்.</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

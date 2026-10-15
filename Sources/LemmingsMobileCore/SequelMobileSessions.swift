@@ -428,6 +428,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
     public var assignedSkillCount: Int { inputs.filter { $0.action != "abort" }.count }
+    /// Extras start on the map and are not included in the entrance's released count.
+    public var lostLemmingCount: Int { runtime.lost }
     public var supportsRewind: Bool { true }
 
     public var snapshot: MobileGameSnapshot {

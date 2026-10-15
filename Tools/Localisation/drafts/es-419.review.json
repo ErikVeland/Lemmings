@@ -8,7 +8,8 @@
   },
   "catalogue": {
     "plural_count": 8,
-    "text_count": 3118
+    "text_count": 3160,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2"
   },
   "checkpoint_date": "2026-10-15",
   "deliberately_unchanged": [
@@ -558,11 +559,12 @@
     }
   ],
   "draft": {
-    "current_catalogue_text_count": 3118,
-    "entry_count": 3118,
+    "current_catalogue_text_count": 3130,
+    "entry_count": 3160,
     "missing_catalogue_text_count": 0,
     "obsolete_key_count": 0,
-    "path": "Tools/Localisation/drafts/es-419.json"
+    "path": "Tools/Localisation/drafts/es-419.json",
+    "sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c"
   },
   "draft_modified_by_this_reviewer": true,
   "handover_snapshot": {
@@ -622,5 +624,71 @@
   },
   "status": "complete_ai_draft_pending_human_language_review",
   "unchanged_terms_pending_review": [],
-  "verified_translation_edits": []
+  "verified_translation_edits": [],
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "f1d32406d7e55dfe568f34a8ebab59af5131cf40b8053036932e2b880ac0ce16",
+    "runtime_strings_sha256": "e4eb6cda8c61a2b994d7aa53e7219cad960a450e6c056a39a3a1e118a93f09ec",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c",
+    "runtime_strings_sha256": "8e506807e1d7b3fd08fcab39b1523bf9e4727c69f0f631d82af67fce0f69b521",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
+  },
+  "validation": {
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c",
+    "complete": true
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
+  }
 }

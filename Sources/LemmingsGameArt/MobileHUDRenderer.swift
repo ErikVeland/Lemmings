@@ -18,6 +18,19 @@ public enum MobileHUDAction: Equatable, Sendable {
 
 /// UIKit and the audit tool draw the same pixels and route the same input rectangles.
 @MainActor public final class MobileHUDRenderer {
+    /// The controller supplies the Mac's shared failure decision using live engine counts.
+    public struct StatusDetails {
+        public let lost: Int
+        public let deathCounter: String
+        public let accessibility: String
+
+        public init(lostCount: Int,
+                    deathCounter: (visible: String, accessibility: String)) {
+            lost = max(0, lostCount)
+            self.deathCounter = deathCounter.visible
+            accessibility = deathCounter.accessibility
+        }
+    }
     public struct Item {
         public let action: MobileHUDAction
         public let frame: CGRect
@@ -44,9 +57,10 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
+    private let statusDetails: StatusDetails?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
@@ -54,6 +68,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         self.playerName = playerName
         self.playerPortrait = playerPortrait
         self.counterStyle = counterStyle
+        self.statusDetails = statusDetails
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                              paused: paused, speed: speed, endRunArmed: endRunArmed)
@@ -110,17 +125,21 @@ public enum MobileHUDAction: Equatable, Sendable {
         return items
     }
 
-    private static let shortNames = [
+    private static var shortNames: [String: String] { [
         "walker": L10n.text("WALK"), "jumper": L10n.text("JUMP"), "shimmier": L10n.text("SHIM"), "slider": L10n.text("SLIDE"), "climber": L10n.text("CLIMB"),
         "swimmer": L10n.text("SWIM"), "floater": L10n.text("FLOAT"), "glider": L10n.text("GLIDE"), "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"),
         "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"), "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"),
         "laserer": L10n.text("LASER"), "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE"),
-    ]
+    ] }
 
     public func draw(in context: CGContext, bounds: CGRect, includeSkills: Bool = true, includeTicks: Bool = true) {
         context.setShouldAntialias(false)
         context.interpolationQuality = .none
         let statusFrame = Self.cgRect(layout.interface.statusFrame)
+        if layout.television {
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: statusFrame.maxY))
+        }
         if let panel = layout.panel {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(CGRect(x: 0, y: panel.frame.minY, width: bounds.width, height: bounds.height - panel.frame.minY))
@@ -286,7 +305,8 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawSkillLabels(_ panel: MobilePanelMetrics, context: CGContext) {
         let names = snapshot.skills.map { Self.shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() }
-        let longest = names.map(\.count).max() ?? 1
+        let compactWidth = names.map { GamePixelTypography.width(of: $0) }.max() ?? 1
+        let compactBounds = GamePixelTypography.verticalBounds(of: names.joined())
         for item in items {
             guard case let .skill(index) = item.action, let name = names[safe: index] else { continue }
             let box = CGRect(x: item.frame.minX, y: panel.frame.minY + 10 * panel.scale,
@@ -294,14 +314,15 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(box)
             let fits = typography.map { typography in
-                typography.font(.small).map {
-                    $0.cellWidth * longest <= Int(box.width) && $0.height(of: names.joined()) <= Int(box.height)
+                typography.font(.small).map { font in
+                    (names.map { font.width(of: GameMenuTypography.menuText($0)) }.max() ?? 0) <= Int(box.width)
+                        && font.height(of: names.joined()) <= Int(box.height)
                 } ?? false
             } ?? false
             if fits {
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: 1)
             } else {
-                let scale = max(1, min(3, floor(min(box.height / CGFloat(GamePixelTypography.verticalBounds(of: names.joined()).bottom - GamePixelTypography.verticalBounds(of: names.joined()).top), box.width / CGFloat(longest * 6)))))
+                let scale = max(1, min(3, floor(min(box.height / CGFloat(compactBounds.bottom - compactBounds.top), box.width / CGFloat(compactWidth)))))
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
             }
         }
@@ -409,7 +430,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
             let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
             let label = CGRect(x: frame.minX + 3, y: frame.maxY - 14, width: frame.width - 6, height: 10)
-            let scale = max(1, min(2, floor(min(label.height / 7, label.width / CGFloat(max(1, name.count * 6))))))
+            let bounds = GamePixelTypography.verticalBounds(of: name)
+            let scale = max(1, min(2, floor(min(label.height / CGFloat(bounds.bottom - bounds.top), label.width / CGFloat(GamePixelTypography.width(of: name))))))
             GamePixelTypography.draw(name, in: label, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
         }
     }
@@ -487,10 +509,11 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawGameLabel(_ text: String, in box: CGRect, context: CGContext) {
         let plain = text.replacingOccurrences(of: "∞", with: "*")
         if let font = typography?.font(.small),
-           font.height(of: GameMenuTypography.menuText(plain)) <= Int(box.height), font.cellWidth * plain.count <= Int(box.width) {
+           font.height(of: GameMenuTypography.menuText(plain)) <= Int(box.height), font.width(of: GameMenuTypography.menuText(plain)) <= Int(box.width) {
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: 1)
         } else {
-            let scale = max(1, min(3, floor(min(box.height / 7, box.width / CGFloat(max(1, plain.count * 6))))))
+            let bounds = GamePixelTypography.verticalBounds(of: plain)
+            let scale = max(1, min(3, floor(min(box.height / CGFloat(bounds.bottom - bounds.top), box.width / CGFloat(GamePixelTypography.width(of: plain))))))
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
         }
     }
@@ -507,7 +530,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         } else { iconSize = .zero }
         let gap: CGFloat = portrait == nil ? 0 : 6
         let plain = GameMenuTypography.menuText(name)
-        let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(max(1, plain.count * 6 - 1))
+        let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(GamePixelTypography.width(of: plain))
         let width = min(naturalWidth, max(0, row.width - iconSize.width - gap))
         let x = floor(row.midX - (iconSize.width + gap + width) / 2)
         let icon = portrait.map { _ in CGRect(x: x, y: floor(row.midY - iconSize.height / 2),
@@ -518,7 +541,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     /// Player identity and counters share the opaque HUD strip, away from gameplay input.
     public static func statusFrames(layout: MobileHUDLayout, hasPlayer: Bool) -> (player: CGRect?, counters: CGRect) {
         var frame = cgRect(layout.interface.statusFrame)
-        if layout.panel != nil {
+        if layout.panel != nil && !layout.television {
             // The final navigation targets sit to the right of the status strip.
             // Use layout geometry because the actual skill count varies by engine.
             let navigationCount = (layout.supportsRewind ? 3 : 1) + (layout.showsMenuButton ? 1 : 0)
@@ -533,6 +556,17 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawStatus(in frame: CGRect, panelMode: Bool, context: CGContext) {
+        if layout.television {
+            let lines = Self.televisionStatusLines(snapshot: snapshot, details: statusDetails,
+                engineIdentifier: layout.panel?.style == .lemmings3 ? "lemmings3" : "classic",
+                paused: paused, speed: speed)
+            for (index, line) in lines.enumerated() {
+                let row = CGRect(x: frame.minX + 8, y: frame.minY + CGFloat(index) * frame.height / 2,
+                    width: frame.width - 16, height: frame.height / 2)
+                drawTelevisionStatus(line, in: row, context: context)
+            }
+            return
+        }
         let time: String
         if let remaining = snapshot.remainingSeconds {
             time = String(format: "%d:%02d", remaining / 60, remaining % 60)
@@ -549,6 +583,49 @@ public enum MobileHUDAction: Equatable, Sendable {
         GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,
                              palette: snapshot.didWin ? .green : .blue, maximumScale: 1,
                              alignment: panelMode ? .left : .center)
+    }
+
+    private func drawTelevisionStatus(_ text: String, in row: CGRect, context: CGContext) {
+        let palette: GamePixelTypography.Palette = snapshot.didWin ? .green : .blue
+        guard text.contains("💀"), let typography, let font = typography.font(.small) else {
+            GamePixelTypography.draw(text, in: row, context: context, typography: typography,
+                palette: palette, maximumScale: 1)
+            return
+        }
+        let width = typography.width(of: GameMenuTypography.menuText(text), face: .small, scale: 1)
+        let left = floor(row.midX - width / 2)
+        let parts = text.components(separatedBy: "💀")
+        var x = left
+        for (index, part) in parts.enumerated() {
+            let partWidth = typography.width(of: GameMenuTypography.menuText(part), face: .small, scale: 1)
+            GamePixelTypography.draw(part, in: CGRect(x: x, y: row.minY, width: partWidth, height: row.height),
+                context: context, typography: typography, palette: palette, maximumScale: 1, alignment: .left)
+            x += partWidth
+            if index < parts.count - 1 {
+                // The authored menu font has no skull. Reuse the shared pixel glyph in its cell.
+                GamePixelTypography.draw("💀", in: CGRect(x: x, y: row.minY, width: CGFloat(font.cellWidth), height: row.height),
+                    context: context, typography: nil, palette: palette, maximumScale: 2, bitmapOnly: true)
+                x += CGFloat(font.cellWidth)
+            }
+        }
+    }
+
+    public static func televisionStatusLines(snapshot: MobileGameSnapshot, details: StatusDetails?,
+                                            engineIdentifier: String, paused: Bool, speed: Double) -> [String] {
+        let percent = snapshot.saved * 100 / max(1, snapshot.total)
+        let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
+        var counts = [L10n.text("OUT \(snapshot.released)/\(snapshot.total)"),
+                      L10n.text("HOME \(snapshot.saved)/\(snapshot.required)") + " (\(percent)%)"]
+        if engineIdentifier == "lemmings3" { counts.append(L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))")) }
+        counts.append(L10n.text("TIME \(time)"))
+        var state: [String] = []
+        if let details { state += [L10n.text("LOST \(details.lost)"), details.deathCounter] }
+        if let rate = snapshot.releaseRate { state.append(L10n.text("RATE \(rate)")) }
+        state.append(L10n.text("SPEED \(speedLabel(speed))"))
+        if snapshot.isComplete { state.append(snapshot.didWin ? L10n.text("COMPLETE") : L10n.text("FAILED")) }
+        else if paused { state.append(L10n.text("PAUSED")) }
+        if snapshot.isEndingRun { state.append(L10n.text("NUKING")) }
+        return [counts.joined(separator: "   "), state.joined(separator: "   ")]
     }
 
     private static func speedLabel(_ speed: Double) -> String {

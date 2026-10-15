@@ -16,16 +16,16 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/it.json",
-    "sha256": "189ec016a9744ff6567db0b17b273406100c1a4b63a25391e044d3b59530aed2",
-    "entry_count": 3118,
+    "sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "entry_count": 3160,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
     "modified_by_this_worker": true
   },
   "catalogue": {
     "path": "Documentation/LocalisationCatalogue.json",
-    "sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357",
-    "text_count": 3118,
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "text_count": 3160,
     "plural_count": 8
   },
   "candidate": {
@@ -223,7 +223,16 @@
       "Foundation plural-rule verification.",
       "Rendered UI, accessibility or physical-device acceptance."
     ],
-    "enabled_for_runtime": false
+    "enabled_for_runtime": false,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "complete": true
   },
   "handover_snapshot": {
     "date": "2026-10-15",
@@ -286,5 +295,60 @@
     "plural_count": 8,
     "new_texts_translated": 10,
     "obsolete_texts_removed": 8
+  },
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "54e16e8959150a580220e8dde3c0a585b085300d6db3fe4ecdabf036ab8288e3",
+    "runtime_strings_sha256": "ce20a65581766e3602ccc4e37ad30a9f6c5ead82ccf855e358204ff28d6dc5ab",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "cef43b37429854db07eeb13cd87abde193c306583a1745386ee567444037327f",
+    "runtime_strings_sha256": "88a0c6e19ab72ea1dfe422b1335b4c00da4ff468b5fa018f8bc24b3dbfc7c1d8",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }

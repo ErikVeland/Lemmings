@@ -167,6 +167,30 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Tamil pixel font
+
+The bundled Tamil pixel font derives from Noto Sans Tamil Bold and Noto Sans
+Tamil Supplement. The prototype also uses Noto Sans Bold for ASCII comparison.
+The source fonts and derived bitmap artwork use the SIL Open Font License 1.1.
+
+- Copyright 2022 The Noto Project Authors: [Tamil sources](https://github.com/notofonts/tamil).
+- Copyright 2018 The Noto Project Authors: [Latin sources](https://github.com/notofonts/noto-fonts).
+
+The app carries the derived pixels in
+`Sources/NxlvKit/Resources/Localization.bundle/Fonts/TamilPixelFont.json`.
+`OFL.txt` and `OFL-Latin.txt` reproduce the font copyright and licence notices
+beside that resource. The derived pixel resource is named `TamilPixelFont.json`.
+The original Noto font files remain developer inputs under
+`Tools/TamilPixelFont/vendor/`.
+
+The repertoire uses Unicode 17 character data and named sequences. Unicode
+data is © 2025 Unicode, Inc. The reproduced Unicode Licence v3 notice is
+`Fonts/UNICODE-LICENSE.txt` in the runtime bundle and
+`Tools/TamilPixelFont/vendor/UNICODE-LICENSE.txt` in the source tree.
+Source URLs and file hashes are recorded in `Tools/TamilPixelFont/vendor/sources.json`
+and `repertoire.json`. See the [font tool](Tools/TamilPixelFont/README.md) for
+the derivation and rebuild procedure.
+
 ## Sparkle
 
 The macOS app bundles Sparkle 2.7.3 for signed automatic updates. Sparkle is

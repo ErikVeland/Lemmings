@@ -471,7 +471,7 @@ public struct GameFrontEnd {
 
     private static func wrapped(_ text: String, face: GameMenuTypography.Face, width: CGFloat,
                                 typography: GameMenuTypography) -> [String] {
-        GameTextLayout.lines(text, width: width, face: face)
+        GameTextLayout.lines(text, width: width, face: face, font: typography.font(face))
     }
 
     private static func line(_ text: String, box: CGRect, typography: GameMenuTypography,

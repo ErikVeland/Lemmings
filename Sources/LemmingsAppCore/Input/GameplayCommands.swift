@@ -49,7 +49,7 @@ public enum GameplayCommands {
         if command { return exact }
         return exact ?? bindings[KeyChord(key)]
     }
-    public static let help = [
+    public static var help: [String] { [
         L10n.text("Space / P: Pause"), "1-8: Skill", L10n.text("Tab: Next skill"), L10n.text("Shift+Tab: Previous skill"),
         L10n.text("F: Fast speed"), L10n.text("R: Rewind"), L10n.text(", / .: Step back / forward"), L10n.text("Shift+R: Retry"),
         L10n.text("Command+Z: Step back"),
@@ -57,5 +57,5 @@ public enum GameplayCommands {
         L10n.text("H / Home: Entrance"), L10n.text("G / End: Goal"), L10n.text("Arrow keys: Pan"), L10n.text("Z / Shift+Z: Zoom"),
         L10n.text("[ / ]: Unassigned lemming"), L10n.text("Return: Repeat assignment"), L10n.text("N: End run / undo"),
         "/ / I / F1: Hints", L10n.text("?: Controls"), L10n.text("Escape / Q: Library"),
-    ]
+    ] }
 }

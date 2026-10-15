@@ -494,19 +494,61 @@ one Zoom per three no-Rewind stars and one Superzoom per three distinct no-Rewin
 three-star levels. Repeated clears do not add credit. Preview results do not claim
 a saved reward.
 
-Earned rewards need an explicit award moment. Mac results automatically open a
-bitmap Rewards earned page for each newly saved award-bearing attempt. Show the
-attempt owner, each award's name and its earning reason. Zooms, Superzooms and
-Level Skips include the actual career counter change and the applicable threshold.
-Level awards state the achieved rescue or skill use. Career awards show their
-criteria. Paginate measured cards without clipping or automatic dismissal.
 
-View result and Escape return to the result without retrying, advancing a level
-or passing the Hot Seat turn. Keep gameplay shortcuts inactive on the reward
-page. The result retains a Rewards earned action to reopen all reasons. Announce
-each saved attempt automatically only once per app session. Repeated clears and
-unsaved previews do not claim new rewards. Reduced motion uses the same static
-page. Normal star chimes start when the player reaches the result.
+Mac level-end pages use complete action rows. Divide the row among the actions
+that exist, with consistent gaps and no vacant button slots. Group review actions
+above the final row. Keep Back left and the primary next action right. Include
+Back on successful results as well as failures. Learning journeys retain Hints,
+Try later, Level Skip and the named Hot Seat retry actions.
+
+Measure and wrap the result identity before placing the rescue summary. Omit the
+status row when it has no content. Size reward receipts and achievement details
+to their measured text and cards, with balances and navigation directly below.
+A single action fills its row. Keep drawing, keyboard, mouse and accessibility
+bounds in agreement when the panel height changes. Anchor the action row at the
+same bottom position across result, reward and achievement pages. Short panels
+shrink above the actions, so pagination does not move the navigation targets.
+
+Earned perks belong to the Mac result's star celebration. Open the result first.
+Place a complete row of pixel-art perk cards directly below the stars. Each card
+shows the new quantity, the perk name, the career counter change and the threshold.
+Use a magnifier for Zoom, a plus magnifier for Superzoom and a skip arrow with an
+end bar for Level Skip. Pending cards use a dim outline. The earning star fills
+the icon and gold reward edge. Retain the awarded cards after the animation.
+Do not animate balances or grant credit from presentation code.
+
+Reveal Zoom when a newly improved star crosses the next career-star threshold.
+Reveal Superzoom and Level Skip with the third star that crosses the distinct
+three-star-level threshold. Keep the attempt owner visible in Hot Seat. Animate
+new perks only on the first presentation of a saved attempt. Reopening an old
+result keeps its perk cards filled. Reduced motion and cancelled animations show
+the final state immediately. No resource card appears for a preview, an assisted
+run or a repeat that earned no new credit.
+
+The Rewards earned action and each perk card open the full award details.
+Show the attempt owner, every award name and its earning reason. Level awards
+state the achieved rescue or skill use. Career awards show their criteria.
+Paginate measured cards without clipping or automatic dismissal. Returning to
+the result does not replay the celebration, retry, advance or pass a Hot Seat turn.
+Keep gameplay shortcuts inactive on the detail page. The normal star chimes run
+with the initial result. Keep one primary next action and stable navigation.
+
+Muted offscreen checks also verify complete action rows, disabled Skip targets,
+short and multi-page awards, single-action details, long result titles and compact
+and large renders. Native Learning journey failures pass in all three engines,
+solo play and both Hot Seat rules. Representative results, rewards and details
+were visually inspected. Mac source compilation passes. Physical VoiceOver and
+controller delivery remain manual checks. This layout change is Mac-only.
+
+The muted, offscreen `TEST_SCOPE=earned-rewards` Mac suite passes for Classic,
+Lemmings 2 and Lemmings 3, solo play and both Hot Seat rules. It checks actual
+resource milestones and a named career award, every reward and reason across
+pages, compact/large layouts, long titles, mouse/keyboard/accessibility targets,
+reopening and one-time presentation. It preserves ownership and verifies repeat,
+preview and rewind guards. Existing result navigation, Records, Worldwide and
+Hot Seat setup/return checks also pass. Representative currency, named-award and
+long-title captures were inspected. Physical VoiceOver and controller delivery
+remain manual checks. iOS/tvOS result presentation is unchanged.
 
 ## Records level browsing and music notices
 
@@ -911,6 +953,16 @@ and the localisation catalogue pass. Physical VoiceOver and device input remain
 manual checks.
 
 ## Fixed TV menus
+
+TV gameplay keeps player identity and complete Mac status information above the
+playfield in all three engines. Show released/total, rescued/required, saved
+percentage rounded down, time, actual deaths, deaths remaining before failure
+or SAFE, supported release rate, speed and the current pause/end state. L3 also
+shows reserves. Draw the skull with the shared bitmap glyph because the shipped
+menu font has no skull. Keep the existing control targets and iOS HUD geometry.
+The muted offscreen TV gate checks 96 HUD renders, text fit, visible skull
+pixels, target bounds and L3 extra-death rewind. iOS/tvOS SDK compilation passes.
+Physical television readability, native focus and VoiceOver remain device checks.
 
 TV Home uses a fixed landscape board: saved play and Journey on the left,
 Classic/fan libraries on the right, sequel logos beneath them, and footer actions

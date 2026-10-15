@@ -10,6 +10,11 @@ Per-locale `.review.json` files retain their checkpoint and remaining work.
 The shared layer serves Mac, iOS and tvOS, including Classic, NeoLemmix,
 Lemmings 2 and Lemmings 3.
 
+Tamil (`ta`) is the eighth candidate translation pack. Its complete draft is
+installed for in-app testing. The integrated pixel font serves shared controls and the native
+Classic, Lemmings 2 and Lemmings 3 renderers. Human Tamil review, complete
+translated journeys, accessibility and device acceptance remain open.
+
 `Sources/NxlvKit/InterfaceLocalisation.swift` supplies language selection,
 English fallback, complete message interpolation, native plural selection and
 text expansion for layout checks. Menus, settings, game controls, dialogs,
@@ -18,12 +23,20 @@ Resolve messages before measuring text or building input targets.
 Standalone compiler scripts include the same localisation source when they
 compile a subset of shared files.
 
+## Choosing a language
+
+Open **Settings > Gameplay** and choose **Language**. Select a language to
+preview translated text immediately. Choose **Apply** to save the choice.
+Choose **Back** to undo the preview and restore the previous language.
+Choose **System default** to follow the device language.
+
 ## Translation handover
 
-The continuing validation task covers all seven language packs across Classic,
-Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The owner has authorised their inclusion in Macintosh 2.0. The packs contain AI translations and
-still need human language review and platform acceptance. Their checkpoint
-files describe language-review status and do not claim completed human review.
+The continuing validation task covers eight translation locales across Classic,
+Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The seven existing
+packs remain AI drafts included in Macintosh 2.0. Tamil is a candidate addition.
+All need human language review and platform acceptance. Their checkpoint files
+record the reviewed scope and remaining work.
 
 Read `AGENTS.md`, `Documentation/UIPrinciples.md` and the
 [localisation architecture](../ARCHITECTURE.md#localisation) first.
@@ -34,10 +47,10 @@ Inspect the current checkout before resetting, staging or committing files.
 
 ### Current checkpoint
 
-The current catalogue contains 3,118 text keys and eight plural keys. Each
-draft has full structural coverage. The runtime bundle includes the seven
-drafts for testing. Check the review files before you treat any translation as
-approved.
+Eight translation locales share the current text catalogue and eight plural
+keys. Each locale has a complete AI draft and runtime tables for testing.
+Read the catalogue and review checkpoints for current counts and hashes.
+Check the review files before treating a translation as approved.
 
 | Locale | Language | Reviewer checkpoint |
 | --- | --- | --- |
@@ -48,6 +61,7 @@ approved.
 | `it` | Italian | `Tools/Localisation/drafts/it.review.json` |
 | `nl` | Dutch | `Tools/Localisation/drafts/nl.review.json` |
 | `nb` | Norwegian Bokmål | `Tools/Localisation/drafts/nb.review.json` |
+| `ta` | Tamil candidate | `Tools/Localisation/drafts/ta.review.json` |
 
 A missing checkpoint means that review has not been recorded. A candidate or
 populated JSON file alone does not establish review. Check each checkpoint's
@@ -64,6 +78,7 @@ Source fixes already present include:
 - Journey captions translate at display time while saved identities remain stable.
 - More counts use native plural tables. Blank text falls back to English.
 - Sequel fonts support additional typographic punctuation without changing ASCII glyphs.
+- Shared and native game renderers measure complete Tamil sequences, including vowel forms and conjuncts.
 - The catalogue checker rejects known technical-data mistakes and incomplete bundled tables.
 
 The expanded source state needs a fresh full localisation regression run.
@@ -139,7 +154,7 @@ reasons. Shared English words may be valid translations, but still need review.
 9. Inspect actual translated renders and input targets across the engine and
    platform matrix. Record checks that cannot run headlessly.
 10. Update each review checkpoint with the exact draft hash and remaining gaps.
-    Promote the seven packs only after all pass the applicable checks.
+    Record each pack's remaining language and platform checks explicitly.
 
 Machine candidates contain known semantic errors. Examples include Norwegian
 Start translated as “Slutt”, German eligible as “beihilfefähig”, Spanish player
@@ -151,6 +166,8 @@ detect these errors. A nonempty translation is not evidence of correctness.
 `generate_drafts.py` uses local OPUS models through Transformers. It does not
 send app text to a translation service. Its Python packages and model weights
 are optional development dependencies, not application requirements.
+The listed Romance and Germanic models cover the seven Latin-script packs.
+They do not generate the Tamil candidate.
 Use a separate Python environment with `transformers<5`, `torch`,
 `sentencepiece` and `sacremoses`. The existing local environment is
 `.build/localisation-venv/` and model root is `.build/localisation-tools/models/`.
@@ -227,14 +244,14 @@ export LEMMINGS_TEST_AUDIO=muted
 export CLANG_MODULE_CACHE_PATH="$PWD/.build/localisation-module-cache"
 export SWIFTPM_MODULECACHE_OVERRIDE="$CLANG_MODULE_CACHE_PATH"
 python3 Tools/UITestRunner/run.py swift test --disable-sandbox --jobs 2 \
-  --filter 'InterfaceLocalisationTests|BitmapLatinGlyphTests|SequelLatinFontTests|LocalisationLayoutTests|BitmapLatinRenderTests|SequelLatinRenderTests|FooterNavigationTests'
+  --filter 'InterfaceLocalisationTests|BitmapLatinGlyphTests|BitmapTamilGlyphTests|SequelLatinFontTests|LocalisationLayoutTests|BitmapLatinRenderTests|TamilBitmapRenderTests|TamilSequelRenderTests|SequelLatinRenderTests|FooterNavigationTests'
 LEMMINGS_TEST_LANGUAGE=en-XA python3 Tools/UITestRunner/run.py \
   swift test --disable-sandbox --jobs 2 --filter SequelLatinFontTests
 ```
 
 The second command exercises the L2 artwork regression under text expansion.
 Existing render tests cover representative captions and shared layouts. They
-do not yet constitute seven complete translated application journeys. Staged
+do not establish complete translated application journeys for every locale. Staged
 JSON cannot be selected through `LEMMINGS_TEST_LANGUAGE` until a test harness
 loads it as a temporary localisation bundle. Build that fixture path before
 claiming end-to-end language coverage. Do not enable an incomplete pack merely
@@ -255,27 +272,61 @@ TV safe areas. Handovers must remain paused until Ready. Preserve engine limits:
 mobile L2/L3 have no release-rate control, and L3 has no nuke.
 
 Run `python3 Tools/Localisation/install_drafts_for_testing.py
---for-in-app-testing` to export the seven JSON drafts to Apple `.strings` and
-`.stringsdict` tables. The app and localisation bundle list all eight supported
-locales. The app follows the operating system's preferred language at launch.
-Use the per-app language setting on Mac or iPhone/iPad to check a locale.
+--for-in-app-testing` to export complete JSON drafts to Apple `.strings` and
+`.stringsdict` tables. The installer checks all eight translation locales and
+stops while any pack is incomplete. Bundle metadata lists English and the
+eight test locales. Use **Settings > Gameplay > Language** to preview a locale.
+**Apply** saves the choice. **Back** restores the previous language.
+**System default** follows the device language.
 These resources are for testing. Complete the human language and platform
 reviews before release.
 
-### Remaining integration work
+### Remaining language and platform review
 
-- Complete human linguistic review for all seven packs.
-- Test all eight plural keys with Foundation's locale selection.
+- Complete human linguistic review for all eight translation locales.
+- Review plural wording in each locale. Automated checks cover all eight Tamil
+  plural keys at zero, one, two and large counts through Foundation.
 - Review original L2 text grouping. The current inventory splits authored
   carriage-return lines, including incomplete sentence fragments. Preserve
   credits and complete sentences before final translation.
 - Check original L2 bank text and baked menu pictures, story screens and other
   imported lettering. String coverage does not replace an artwork pass.
 - Audit remaining computed captions, hint fragments and count-dependent text.
-- Run actual-locale resolver tests and translated render checks.
-- Rerun native regressions and both mobile SDK checks for the final source.
+- Complete translated journeys beyond the representative automated captures.
+- Complete the iOS SDK gate with an SDK that supplies the project's iOS 27 APIs.
 - Record physical touch, remote focus, VoiceOver and complete device journeys
   separately. Keep the packs marked as drafts until each release gate passes.
+
+### Local validation checkpoint — 15 October 2026
+
+- All eight draft/runtime packs contain 3,130 text keys and eight plural keys.
+  Pack validation and the source-catalogue check pass. Six validator tests pass.
+- The font rebuild reproduces the runtime resource byte for byte. The prototype
+  has 456 entries across three sizes, with no missing source glyphs. Six expected
+  silhouette warnings cover the two source letter/digit lookalike pairs.
+- Forty-eight focused Swift tests pass through the muted, offscreen runner.
+  These cover original Latin pixels, Tamil sequences, wrapping, bounds, editor
+  caret geometry, controls, Classic/L2/L3 renders and the original L2 intro.
+  The installed Tamil text and plural tables have complete runtime glyph coverage.
+- Apple TV's eight modules and app entry point compile. The final changed mobile
+  UI module also compiles against the TV SDK.
+- iOS compilation passes the shared font and layout modules, then stops in the
+  existing `MobileReservedRegions.swift`: the installed 26.5 SDK lacks
+  `UIView.ReservedRegion`, which the source expects for iOS 27.
+- Captures and logs are under `.build/tamil-font` and `.build/tamil-font-renders`.
+  These checks do not establish human language, tiny-label legibility, physical
+  input, VoiceOver or device acceptance.
+
+### Main integration — 16 October 2026
+
+The merged catalogue contains 3,160 text keys and eight plural keys per locale.
+All eight packs and the source audit pass structural checks. The Mac app and
+TV SDK build pass. Eighteen bitmap previews cover the picker and Gameplay page
+at phone, tablet and TV widths in English and Tamil. The live resolver changes
+language immediately, and restoring the entry choice undoes the preview.
+The earlier 48-test run preceded live language selection. No automated tests
+were added or rerun for this settings change. Physical input, VoiceOver and
+native language approval remain separate checks.
 
 ## Authoring
 
@@ -323,8 +374,9 @@ It does not prove coverage of all computed text or imported game content.
 
 Keep English keys stable and translate values. Mac bundle scripts and the
 shared iOS/TV asset packager copy this bundle. SwiftPM copies it as an NxlvKit
-resource. App metadata declares all testing locales so the system can offer
-per-app language selection. Complete language and platform reviews before
+resource. App metadata declares all testing locales. The in-app selector
+previews a language immediately and persists it only with **Apply**.
+Complete language and platform reviews before
 release. Unsupported languages use English. Missing messages fall back to English.
 
 ## Layout and artwork limits
@@ -350,16 +402,43 @@ retain its rim and proportional spacing. The panel extensions retain their
 compact shaded forms. L3's three large digit sets remain unchanged.
 The banks' original single-case lettering is retained for panel text.
 
-Text layout uses Unicode characters, so a combining accent does not create an
-extra column. Front-end and animation line spacing includes accent overhang.
+Text layout preserves Unicode characters and complete Tamil sequences, so
+combining signs do not create extra columns. Front-end and animation line
+spacing includes accent and Tamil mark overhang.
 L2's fixed eight-pixel header fits the complete row on one pixel grid when marks
 need extra height. Its icons, counters and targets retain their original bounds.
 L3 menu text fits the existing row targets, including the selected background.
 Glyph extensions load beside the banks. They do not rewrite imported game files.
 
-Other scripts, Latin letters outside this repertoire and right-to-left layout
-remain unsupported. Preserve the complete translated Unicode message in
-accessibility text.
+### Tamil candidate font
+
+`BitmapTamilGlyphs` loads `Localization.bundle/Fonts/TamilPixelFont.json`.
+The resource contains 399 complete Tamil forms at body heights of 14, 18 and
+26 pixels, plus the common SA-based shrii alias. The 456-entry prototype also
+contains ASCII support and isolated combining-sign diagnostics. Runtime export
+excludes those entries so original Latin artwork remains authoritative.
+
+Input uses NFC and the longest matching complete Tamil sequence. Kssa and
+shrii forms can span multiple Swift `Character` values. Width, line bounds,
+wrapping and truncation use complete sequences and variable advances. Negative
+bearings, pulli and vowel marks remain inside the measured bounds. Tamil aligns
+with the source font's baseline. Sequel glyphs use each bank's shade indices.
+The compact L2 header fits the complete row vertically and truncates to its
+measured width without splitting a sequence.
+
+Shared bitmap controls, the compact fallback and native Classic/L2/L3 text
+paths use this resource. Runtime drawing needs no Core Text or installed font.
+Bounded caches retain derived frames and palette glyphs. SwiftPM and existing
+Mac, iOS and tvOS packaging copy the font and its notices with the localisation
+bundle. See the [font tool](../Tools/TamilPixelFont/README.md) for rebuild and
+export commands, and [third-party notices](../THIRD_PARTY_NOTICES.md) for licences.
+
+The font and Tamil translations remain candidates. A fluent reader must check
+shapes, spacing, wording and the compact panel. Complete translated-screen,
+accessibility, input-target and device acceptance remain open. Source integration
+does not establish those checks. Other scripts, unsupported Latin letters and
+right-to-left layout remain outside this repertoire. Preserve complete Unicode
+messages in accessibility text.
 
 Original menu pictures and lettering baked into imported artwork are not
 translated by the string catalogue. Some original L2 bank and story text now
@@ -391,3 +470,10 @@ through the muted offscreen test runner, like all other native UI tests.
 coverage, combining forms, compact panel rows and original L2 introduction
 timing. `SequelLatinRenderTests` captures the three faces, L2 panel rows and
 native L2 text and accessibility targets in `.build/sequel-latin`.
+
+`BitmapTamilGlyphTests` covers resource forms, normalisation, aliases, sequence
+layout, original ASCII pixels, sequel palettes and unclipped masks. The
+`TamilBitmapRenderTests` and `TamilSequelRenderTests` suites cover representative
+shared controls and native game text. Run these with the same muted, offscreen
+runner. Their presence does not establish a completed test run or complete
+Tamil language and device acceptance.

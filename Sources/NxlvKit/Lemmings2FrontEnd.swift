@@ -211,7 +211,7 @@ public struct Lemmings2Panel: Sendable {
             let slot = control.rawValue - 8
             sprite(controls[4], 256 + slot % 2 * 32, slot / 2 * 20)
         }
-        text(String(label.prefix(13)), 0, 1)
+        text(font.truncated(label, toWidth: 104), 0, 1)
         sprite(skills[51], 120, 1)
         sprite(skills[52], 160, 1)
         sprite(skills[53], 208, 1)

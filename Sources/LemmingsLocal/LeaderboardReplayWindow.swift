@@ -35,7 +35,7 @@ import LemmingsAppCore
         self.cursor = replayCursor; self.field = field; self.render = render; self.title = title
         status.isEditable = false; status.isSelectable = false; status.isBordered = false; status.drawsBackground = false
         page.addSubview(field); page.addSubview(status); page.addSubview(skillPanel)
-        page.setAccessibilityLabel(title + ". Action replay. Space or P plays or pauses. Left and right seek one second.")
+        page.setAccessibilityLabel(L10n.text("\(title). Action replay. Space or P plays or pauses. Left and right seek one second."))
         func button(_ text: String, primary: Bool = false, action: @escaping () -> Void) -> GameActionButton {
             let b = GameActionButton(title: text, primary: primary, onPress: action)
             buttons.append(b); page.addSubview(b); return b

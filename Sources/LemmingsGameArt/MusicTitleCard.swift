@@ -38,10 +38,9 @@ public enum MusicTitleCard {
     public static func layout(title: String, soundtrack: String, maximumWidth: CGFloat,
                               maximumHeight: CGFloat) -> Layout {
         let titleFace: GameMenuTypography.Face = maximumWidth >= 440 ? .large : .small
-        let titleCell: CGFloat = titleFace == .large ? 16 : 12
         let titleText = GameMenuTypography.menuText(title)
         let sourceText = GameMenuTypography.menuText(soundtrack)
-        let naturalWidth = max(CGFloat(titleText.count) * titleCell, CGFloat(sourceText.count) * 12) + 40
+        let naturalWidth = max(GameTextLayout.width(of: titleText, face: titleFace), GameTextLayout.width(of: sourceText)) + 40
         let width = floor(min(600, maximumWidth, max(280, naturalWidth)))
         guard width >= 56, maximumHeight >= 54 else { return .init(size: .zero, pages: []) }
         let titleLines = GameTextLayout.lines(title, width: width - 40, face: titleFace)

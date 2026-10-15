@@ -2,6 +2,7 @@
 import AppKit
 import NxlvKit
 import LemmingsAppCore
+import LemmingsGameArt
 
 struct ReplaySkillStock {
     let name: String
@@ -21,20 +22,34 @@ struct ReplaySkillUse {
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     private func textWidth(_ text: String) -> CGFloat {
-        GameMenuArtwork.renderer()?.width(of: MacInterfaceRenderer.menuText(text), face: .small, scale: 1)
-            ?? CGFloat(text.count * 6)
+        let plain = MacInterfaceRenderer.menuText(text)
+        return GameMenuArtwork.renderer()?.width(of: plain, face: .small, scale: 1)
+            ?? CGFloat(GamePixelTypography.width(of: plain) + 1)
+    }
+    private var rowHeight: CGFloat {
+        let captions = [stockTitle, L10n.text("NONE"), L10n.text("USED @ TICK")]
+            + stocks.flatMap { [SkillVocabulary.title($0.name), $0.count] }
+            + uses.flatMap { [SkillVocabulary.title($0.name), String($0.tick)] }
+        let renderer = GameMenuArtwork.renderer()
+        return captions.reduce(CGFloat(18)) { current, text in
+            let plain = MacInterfaceRenderer.menuText(text)
+            let bounds = GamePixelTypography.verticalBounds(of: plain)
+            let height = renderer?.height(of: plain, face: .small, scale: 1) ?? CGFloat(bounds.bottom - bounds.top)
+            let tamil = BitmapTamilGlyphs.sequences(in: plain).contains(where: BitmapTamilGlyphs.supports)
+            return max(current, tamil || height > 18 ? height + 2 : 18)
+        }
     }
     private var countWidth: CGFloat { max(24, stocks.map { textWidth($0.count) + 6 }.max() ?? 24) }
     private var tickWidth: CGFloat { max(48, uses.map { textWidth(String($0.tick)) }.max() ?? 48) }
     private var columns: Int {
-        let columnWidth = (stocks.map { textWidth($0.name) }.max() ?? 0) + countWidth + 18
+        let columnWidth = (stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18
         return stocks.count > 8 && columnWidth * 3 + 16 <= 420 ? 3 : 2
     }
     var logicalSize: CGSize {
         let rows = max(1, (stocks.count + columns - 1) / columns)
-        let stockWidth = CGFloat(columns) * ((stocks.map { textWidth($0.name) }.max() ?? 0) + countWidth + 18) + 16
-        let historyWidth = (uses.map { textWidth($0.name) }.max() ?? 0) + tickWidth + 42
-        return CGSize(width: max(300, stockWidth, historyWidth), height: CGFloat(58 + rows * 18 + 3 * 18))
+        let stockWidth = CGFloat(columns) * ((stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18) + 16
+        let historyWidth = (uses.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + tickWidth + 42
+        return CGSize(width: max(300, stockWidth, historyWidth), height: 22 + CGFloat(rows + 5) * rowHeight)
     }
     func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text("LEFT")) {
         self.stocks = stocks; self.uses = Array(uses.suffix(3)); self.tick = tick; stockTitle = title
@@ -46,26 +61,27 @@ struct ReplaySkillUse {
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
         let inner = bounds.insetBy(dx: 8, dy: 6)
-        GameControlText.draw(stockTitle, in: CGRect(x: inner.minX, y: inner.minY, width: inner.width, height: 18), role: .heading)
+        let height = rowHeight
+        GameControlText.draw(stockTitle, in: CGRect(x: inner.minX, y: inner.minY, width: inner.width, height: height), role: .heading)
         let width = inner.width / CGFloat(columns)
         let rows = max(1, (stocks.count + columns - 1) / columns)
         if stocks.isEmpty {
-            GameControlText.draw(L10n.text("NONE"), in: CGRect(x: inner.minX, y: inner.minY + 18, width: inner.width, height: 18))
+            GameControlText.draw(L10n.text("NONE"), in: CGRect(x: inner.minX, y: inner.minY + height, width: inner.width, height: height))
         }
         for (index, stock) in stocks.enumerated() {
             let row = CGRect(x: inner.minX + CGFloat(index % columns) * width,
-                y: inner.minY + 18 + CGFloat(index / columns) * 18, width: width - 6, height: 18)
-            GameControlText.draw(SkillVocabulary.title(stock.name), in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: 18), enabled: stock.count != "0")
-            GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: 18), alignment: .right, enabled: stock.count != "0")
+                y: inner.minY + height + CGFloat(index / columns) * height, width: width - 6, height: height)
+            GameControlText.draw(SkillVocabulary.title(stock.name), in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: height), enabled: stock.count != "0")
+            GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: height), alignment: .right, enabled: stock.count != "0")
         }
-        let historyY = inner.minY + 24 + CGFloat(rows) * 18
-        GameControlText.draw(L10n.text("USED @ TICK"), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: 18), role: .heading)
+        let historyY = inner.minY + height + 6 + CGFloat(rows) * height
+        GameControlText.draw(L10n.text("USED @ TICK"), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: height), role: .heading)
         for (index, use) in uses.enumerated() {
-            let row = CGRect(x: inner.minX, y: historyY + 18 + CGFloat(index) * 18, width: inner.width, height: 18)
+            let row = CGRect(x: inner.minX, y: historyY + height + CGFloat(index) * height, width: inner.width, height: height)
             let current = use.tick == tick
-            GameControlText.draw(current ? ">" : "", in: CGRect(x: row.minX, y: row.minY, width: 12, height: 18), role: .heading)
-            GameControlText.draw(String(use.tick), in: CGRect(x: row.minX + 14, y: row.minY, width: tickWidth, height: 18), role: current ? .heading : .body)
-            GameControlText.draw(SkillVocabulary.title(use.name), in: CGRect(x: row.minX + tickWidth + 26, y: row.minY, width: row.width - tickWidth - 26, height: 18), role: current ? .heading : .body)
+            GameControlText.draw(current ? ">" : "", in: CGRect(x: row.minX, y: row.minY, width: 12, height: height), role: .heading)
+            GameControlText.draw(String(use.tick), in: CGRect(x: row.minX + 14, y: row.minY, width: tickWidth, height: height), role: current ? .heading : .body)
+            GameControlText.draw(SkillVocabulary.title(use.name), in: CGRect(x: row.minX + tickWidth + 26, y: row.minY, width: row.width - tickWidth - 26, height: height), role: current ? .heading : .body)
         }
     }
 }

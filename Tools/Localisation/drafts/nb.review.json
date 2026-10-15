@@ -1,17 +1,17 @@
 {
   "catalogue_snapshot": {
-    "text_count": 3118,
+    "text_count": 3160,
     "plural_count": 8,
-    "sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357"
+    "sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2"
   },
   "draft": {
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
     "path": "Tools/Localisation/drafts/nb.json",
-    "sha256": "7889ad4da5b8cec536bc008c30dce832c96131d4bbd1782d04591b19ca126150",
-    "text_count": 3118,
+    "sha256": "8735ff07fa20a6a46be094208003fd5329b22f617e55dc1b6435b315e669dd76",
+    "text_count": 3160,
     "unknown_current_text_count": 0,
-    "entry_count": 3118
+    "entry_count": 3160
   },
   "handover_date": "2026-10-15",
   "intentionally_unchanged": {
@@ -232,6 +232,70 @@
       "Checked placeholders for every translation and count format for every plural form.",
       "Checked exact and uppercase caption.tsv matches for Bokmål terminology."
     ],
-    "structural_checks_run": true
+    "structural_checks_run": true,
+    "text_keys": 3160,
+    "total_text_keys": 3160,
+    "missing_text": [],
+    "plural_keys": 8,
+    "total_plural_keys": 8,
+    "missing_plurals": [],
+    "errors": [],
+    "sha256": "8735ff07fa20a6a46be094208003fd5329b22f617e55dc1b6435b315e669dd76",
+    "complete": true
+  },
+  "source_key_sync": {
+    "date": "2026-10-15",
+    "catalogue_sha256": "c50dcc683c73068e27e5363e05e87660a43ebb1b9185bba4f2004fc91b4329be",
+    "text_count": 3130,
+    "draft_sha256": "32503c6291b269abf8fce60eb33d559018c3b7e15ca1b40407010f9e1e5a37f5",
+    "runtime_strings_sha256": "eaf2c18667887bf6cb5465a3bbf9d645d4d75b0e399e5a9cd4dc01404d666b3b",
+    "added_text_keys": 15,
+    "removed_obsolete_text_keys": 3,
+    "preserved_existing_translation_values": 3115,
+    "missing_text_count": 0,
+    "structural_errors": 0,
+    "scope": "Added Static home screen. Updated only Circle/B pause/play, R2 fast-forward and planning-pause behaviour, tap/hold speed changes and L2 reset/rewind instructions in the existing TV controller help. All other retained translations and plural files are unchanged. Added the four current mobile accessibility and playlist captions with numbered placeholders intact. Added nine final accessibility captions. The used/unused values describe rewind usage. All prior translations remain unchanged.",
+    "human_linguistic_review_complete": false,
+    "render_and_device_checks_run": false,
+    "note": "Source-key synchronisation and structural validation do not establish linguistic approval. Earlier handover snapshots remain historical records.",
+    "additional_mobile_keys": [
+      "Eligible lemming {0} of {1}. Skill: {2}.",
+      "{0} eligible lemmings. Skill: {1}.",
+      "selected skill",
+      "Playlist {0}"
+    ],
+    "additional_accessibility_keys": [
+      "On",
+      "{0}. Action replay. Space or P plays or pauses. Left and right seek one second.",
+      "{0}. Select the play style for an explanation. Escape returns.",
+      "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}",
+      "used",
+      "unused",
+      "Achievements across all levels. {0}",
+      "{0}. Show update and release notes",
+      "Local career leaderboard. Rewinds {0}. Best stars per distinct level. {1}"
+    ]
+  },
+  "live_language_settings": {
+    "date": "2026-10-16",
+    "text_count": 3160,
+    "catalogue_sha256": "50a868a3445633c50bedcc2322809c7006716a4f0668a98316ebbb128b6517d2",
+    "draft_sha256": "8735ff07fa20a6a46be094208003fd5329b22f617e55dc1b6435b315e669dd76",
+    "runtime_strings_sha256": "38954de680c824b2b50a855d43fecdb8728eabdc460ec7d94a134cc81314ca93",
+    "behaviour": "Gameplay language preview is immediate. Back restores the entry choice; Apply persists it.",
+    "human_language_approved": false,
+    "automated_tests_run": false
+  },
+  "main_integration": {
+    "date": "2026-10-16",
+    "main_base": "b91909e0",
+    "text_count": 3160,
+    "plural_count": 8,
+    "catalogue_audit": "Pass; zero uncovered direct UI literals.",
+    "mac_build": "Pass",
+    "tv_sdk_build": "Pass",
+    "live_picker_preview_count": 18,
+    "automated_tests_run_for_live_settings": false,
+    "native_language_approved": false
   }
 }
