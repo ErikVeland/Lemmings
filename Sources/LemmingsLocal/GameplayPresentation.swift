@@ -336,6 +336,11 @@ import LemmingsGameArt
         }
       }
     }
+    if palette == .monochrome, let highlightedIndex {
+      NSColor.white.setFill()
+      CGRect(x: start + CGFloat(highlightedIndex * 6) * scale,
+        y: min(rect.maxY - 1, top + height * scale + 1), width: 5 * scale, height: 1).fill()
+    }
   }
 }
 

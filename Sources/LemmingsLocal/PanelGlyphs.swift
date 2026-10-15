@@ -243,10 +243,18 @@ enum PanelGlyph: String {
   }
 
   /// `backdrop` replaces the flat well colour, for example with panel rock.
-  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil, monochrome: Bool = false) {
+  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil, monochrome: Bool = false,
+                   invertedBackdrop: Bool = false) {
     guard let context = NSGraphicsContext.current?.cgContext else { return }
     GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel, monochrome: monochrome)
     if let backdrop { drawTile(backdrop, in: frame, pixel: pixel) }
+    if invertedBackdrop {
+      context.saveGState()
+      context.setBlendMode(.difference)
+      context.setFillColor(CGColor(gray: 1, alpha: 1))
+      context.fill(well(frame, pixel: pixel))
+      context.restoreGState()
+    }
     GameStoneArt.drawAccent(in: context, frame: frame, selected: selected, pixel: pixel, monochrome: monochrome)
   }
 }

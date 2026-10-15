@@ -313,20 +313,23 @@ import Darwin
 
     private var webPage: String {
         if exportURL != nil {
-            return L10n.text("<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>Ultimate Lemmings</title><h1>Export file</h1><a href=\"/\(token)/download\">Download</a>")
+            return "<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>Ultimate Lemmings</title><h1>\(Self.html(L10n.text("Export file")))</h1><a href=\"/\(token)/download\">\(Self.html(L10n.text("Download")))</a>"
         }
-        return L10n.text("""
+        let heading = Self.html(L10n.text("Import \(directory ? L10n.text("game folder") : importName)"))
+        let chooseFiles = Self.javascript(L10n.text("Choose files first."))
+        let transferred = Self.javascript(L10n.text("Transferred. Check Apple TV for validation."))
+        return """
         <!doctype html><meta name="viewport" content="width=device-width">
-        <title>Ultimate Lemmings</title><h1>Import \(directory ? L10n.text("game folder") : importName)</h1>
-        <input id="files" type="file" \(directory ? L10n.text("webkitdirectory multiple") : "")>
-        <button id="send">Import</button><p id="status"></p>
+        <title>Ultimate Lemmings</title><h1>\(heading)</h1>
+        <input id="files" type="file" \(directory ? "webkitdirectory multiple" : "")>
+        <button id="send">\(Self.html(L10n.text("Import")))</button><p id="status"></p>
         <script>
         const button = document.getElementById('send'), status = document.getElementById('status');
         button.onclick = async () => {
           button.disabled = true;
           try {
             const files = Array.from(document.getElementById('files').files);
-            if (!files.length) throw Error('Choose files first.');
+            if (!files.length) throw Error(\(chooseFiles));
             for (let i = 0; i < files.length; i++) {
               const file = files[i], path = file.webkitRelativePath ? file.webkitRelativePath.split('/').slice(1).join('/') : file.name;
               status.textContent = (i + 1) + ' / ' + files.length;
@@ -335,12 +338,26 @@ import Darwin
             }
             const result = await fetch('/\(token)/commit', {method:'POST'});
             if (!result.ok) throw Error(await result.text());
-            status.textContent = 'Transferred. Check Apple TV for validation.';
+            status.textContent = \(transferred);
           } catch (error) { status.textContent = error.message; }
           button.disabled = false;
         };
         </script>
-        """)
+        """
+    }
+
+    private static func html(_ text: String) -> String {
+        text.replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&#39;")
+    }
+
+    private static func javascript(_ text: String) -> String {
+        // JSON quotes translated messages without allowing them to end the script element.
+        let data = try! JSONEncoder().encode(text)
+        return String(decoding: data, as: UTF8.self).replacingOccurrences(of: "<", with: "\\u003c")
     }
 
     private static func localAddress() -> String? {

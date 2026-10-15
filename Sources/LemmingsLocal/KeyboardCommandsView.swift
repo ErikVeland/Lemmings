@@ -8,6 +8,7 @@ struct KeyboardCommand {
     let keys: String
     let action: String
     let group: String
+    var skillTitle: String? = nil
 }
 
 /// A searchable native table keeps the command reference usable with keyboard and VoiceOver.

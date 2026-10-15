@@ -8649,10 +8649,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
        KeyboardCommand(keys: L10n.text("Return / Space"), action: L10n.text("Continue or start level"), group: L10n.text("Menus & results")),
        KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results"))]
     }
-    keyboard.help = { [weak self] in
-      let names = self?.session?.skills.map(\.name) ?? []
-      return L10n.text("\(SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true))\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels\nX: nuke")
-    }
+    keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: false, nuke: true) }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
       let wasPaused = self.isPaused

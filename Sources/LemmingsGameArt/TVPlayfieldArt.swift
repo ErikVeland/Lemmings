@@ -51,7 +51,7 @@ import LemmingsTVCore
         if game.session.snapshot.skills.indices.contains(game.selectedControl) {
             let skill = game.session.snapshot.skills[game.selectedControl]
             let remaining = game.session.skillCursorRemaining(control: game.selectedControl, target: game.target?.id)
-            SkillPointerBadge.draw(icon: skillImage, name: skill.name,
+            SkillPointerBadge.draw(icon: skillImage, name: SkillVocabulary.title(skill.name),
                 count: remaining.map(String.init) ?? (skill.isUnlimited && game.session.engineIdentifier != "lemmings3" ? "*" : nil), at: point,
                 within: CGRect(x: 0, y: 0, width: game.viewport.viewSize.width, height: game.viewport.viewSize.height),
                 scale: 2, context: context)
@@ -90,7 +90,7 @@ import LemmingsTVCore
         let start = max(0, min(game.selectedControl - 3, snapshot.skills.count - skillCount))
         let mapWidth: CGFloat = 230
         let cell = (bounds.width - mapWidth - 28) / CGFloat(max(1, skillCount))
-        let widestName = snapshot.skills.map { typography?.width(of: $0.name, face: .small, scale: 2) ?? 0 }.max() ?? 0
+        let widestName = snapshot.skills.map { typography?.width(of: SkillVocabulary.title($0.name), face: .small, scale: 2) ?? 0 }.max() ?? 0
         let labelScale: CGFloat = widestName <= cell - 12 ? 1.25 : 1
         for index in start..<(start + skillCount) {
             let skill = snapshot.skills[index]
@@ -104,7 +104,7 @@ import LemmingsTVCore
             }
             TVMenuArt.text(skill.isUnlimited ? "*" : String(skill.count), box: CGRect(x: box.minX + 8, y: box.minY + 56, width: box.width - 16, height: 32),
                 green: index == game.selectedControl, typography: typography, textScale: 1.25, context: context)
-            TVMenuArt.text(skill.name, box: CGRect(x: box.minX + 2, y: box.maxY - 42, width: box.width - 4, height: 38),
+            TVMenuArt.text(SkillVocabulary.title(skill.name), box: CGRect(x: box.minX + 2, y: box.maxY - 42, width: box.width - 4, height: 38),
                 green: index == game.selectedControl, enabled: skill.count > 0 || skill.isUnlimited, typography: typography, textScale: labelScale, context: context)
         }
         let visible = game.viewport.visibleLevelRect
@@ -117,7 +117,7 @@ import LemmingsTVCore
         portraits?.draw(ownerPortrait, in: CGRect(x: 0, y: 0, width: 38, height: 38), context: context)
         TVMenuArt.text(ownerName, box: CGRect(x: 44, y: 2, width: bounds.width / 2 - 320, height: 34), green: true, typography: typography, textScale: 1.25, context: context)
         if snapshot.skills.indices.contains(game.selectedControl) {
-            TVMenuArt.text(snapshot.skills[game.selectedControl].name, box: CGRect(x: bounds.width - 440, y: 2, width: 370, height: 34),
+            TVMenuArt.text(SkillVocabulary.title(snapshot.skills[game.selectedControl].name), box: CGRect(x: bounds.width - 440, y: 2, width: 370, height: 34),
                            green: true, typography: typography, textScale: 1.25, context: context)
         }
         if game.play.isPaused {

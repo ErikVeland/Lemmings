@@ -192,7 +192,7 @@ import UIKit
             menu.preferredActionID = "skill.\(game.selectedControl)"
             page.title = game.capabilities.carriedTools ? L10n.text("Actions and tools") : L10n.text("Skills")
             page.rows = game.session.snapshot.skills.enumerated().dropFirst(pageOffset).prefix(4).map { index, skill in
-                .init("skill.\(index)", "\(skill.name)  \(skill.isUnlimited ? "*" : String(skill.count))", enabled: skill.count > 0 || skill.isUnlimited, selected: index == game.selectedControl)
+                .init("skill.\(index)", "\(SkillVocabulary.title(skill.name))  \(skill.isUnlimited ? "*" : String(skill.count))", enabled: skill.count > 0 || skill.isUnlimited, selected: index == game.selectedControl)
             }
             page.footer = [back, .init("previousSkills", "<", enabled: pageOffset > 0), .init("moreSkills", ">", enabled: pageOffset + 4 < game.session.snapshot.skills.count)]
         case .camera:

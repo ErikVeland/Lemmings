@@ -1416,7 +1416,7 @@ enum Lemmings2MacRuleTables {
         3ff7007d:c5c
         """),
     ]
-    static let texture = decode(L10n.text("""
+    static let texture = decode("""
         300:4
         304:14
         305:1
@@ -1570,7 +1570,7 @@ enum Lemmings2MacRuleTables {
         2da5:4
         2da9:21
         2daa:8
-    """))
+    """)
     static let organicBrush: [UInt8] = [2,2,1,0,0,1,2,2,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,2,2,2,2,0,0,0,0,2,0,1,0,0,1,1,0,2,0,1,0]
     private static func decode(_ text: String) -> [UInt64: UInt16] {
         Dictionary(uniqueKeysWithValues: text.split(whereSeparator: \.isWhitespace).map { row in

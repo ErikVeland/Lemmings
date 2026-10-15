@@ -59,8 +59,10 @@ import UIKit
                 if renderError != message { renderError = message; onRenderFailure?(message) }
             }
         }
-        let skill = game.session.snapshot.skills.indices.contains(game.selectedControl) ? game.session.snapshot.skills[game.selectedControl].name : L10n.text("No skill")
-        let status = game.target.map { "Lemming \($0.id), \($0.state == .eligible ? "eligible" : "unavailable")" } ?? L10n.text("No target")
+        let skill = game.session.snapshot.skills.indices.contains(game.selectedControl) ? SkillVocabulary.title(game.session.snapshot.skills[game.selectedControl].name) : L10n.text("No skill")
+        let status = game.target.map { target in
+            target.state == .eligible ? L10n.text("Lemming \(target.id), eligible") : L10n.text("Lemming \(target.id), unavailable")
+        } ?? L10n.text("No target")
         accessibilityValue = L10n.text("\(ownerName). \(skill). \(status). \(game.session.snapshot.saved) rescued, \(game.session.snapshot.required) required. \(game.play.isPaused ? L10n.text("Paused") : L10n.text("Playing")).")
         setNeedsDisplay()
     }

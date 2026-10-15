@@ -548,7 +548,7 @@ enum PanelButton: Equatable {
     for (button, frame) in buttonFrames {
       let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
         || (button == .fastForward && isFastForward) || (button == .nuke && session?.canUndoNuke == true)
-      drawStoneButton(frame, selected: selected)
+      drawStoneButton(frame, selected: selected, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
       if case let .skill(index) = button, let image = macSkillImages[safe: index] ?? nil {
         let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 2 * panelScale,
           width: frame.width - 4 * panelScale, height: frame.height - 4 * panelScale)
@@ -587,9 +587,9 @@ enum PanelButton: Equatable {
 
   /// Pixel bevels keep the controls in the same visual period as the sprites.
   /// Every panel socket shows Amiga panel rock behind its glyph.
-  private func drawStoneButton(_ frame: CGRect, selected: Bool) {
+  private func drawStoneButton(_ frame: CGRect, selected: Bool, invertRock: Bool = false) {
     GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2),
-      backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome)
+      backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome, invertedBackdrop: invertRock)
   }
 
   private func drawSkillLabels() {
@@ -680,7 +680,7 @@ enum PanelButton: Equatable {
     let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
       || (button == .nuke && session?.canUndoNuke == true) || (button == .fastForward && isFastForward)
     let pixel = max(1, panelScale / 2)
-    drawStoneButton(frame, selected: selected)
+    drawStoneButton(frame, selected: selected, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
     let well = GameStoneButton.well(frame, pixel: pixel)
     switch button {
     case .skill(let index):
@@ -815,6 +815,10 @@ enum PanelButton: Equatable {
       macInterface.draw(String(highlighted), face: .small,
         at: CGPoint(x: x, y: top),
         scale: scale, palette: isMonochrome ? .monochrome : .green)
+      if isMonochrome {
+        NSColor.white.setFill()
+        CGRect(x: x, y: box.maxY - 1, width: CGFloat(font.cellWidth * scale - 1), height: 1).fill()
+      }
     }
     return true
   }

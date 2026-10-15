@@ -38,8 +38,10 @@ Mac Classic's 1-bit mode also uses the original dithered rock from `Charset0`
 frame 95. The 28×44 crop at (38,0) keeps the background dark behind the white
 lemmings. A one-pixel black sprite edge separates them from the rock dots.
 Bevels, control silhouettes, counters, captions, speed arrows and
-selection underlines use black and white. Disabled timeline symbols use a
-checker stipple. Colour modes retain their existing artwork. L2 and L3 do not
+selection underlines use black and white. The selected skill inverts its rock
+background while retaining the sprite's original black and white pixels.
+Disabled timeline symbols use a checker stipple. Colour modes retain their
+existing artwork. L2 and L3 do not
 offer Classic's 1-bit artwork option.
 
 The 16-colour display palette was matched to the user's reference. It is an

@@ -39,10 +39,10 @@ import NxlvKit
         card(L10n.text("KEYBOARD"), L10n.text("ESC / ?  CLOSE"), "title")
         let camera = commands.filter { $0.group == L10n.text("Camera") }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
         card(L10n.text("LOOK AROUND"), camera, "camera")
-        let variable = commands.contains { $0.keys.contains(L10n.text("Shift +")) }
+        let variable = commands.contains { $0.keys == "Shift + \\ (|)" }
         card(L10n.text("TIME & SPEED"), L10n.text("Space  Pause / resume\nF      Fast-forward / normal speed\((variable ? L10n.text("\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×") : ""))"), "speed")
         let skillRows = commands.filter { $0.group == L10n.text("Skills") }
-        let skills = skillRows.map { "\($0.keys)  \($0.action.replacingOccurrences(of: L10n.text("Select "), with: "").components(separatedBy: " (")[0])" }.joined(separator: "   •   ")
+        let skills = skillRows.compactMap { row in row.skillTitle.map { "\(row.keys)  \($0)" } }.joined(separator: "   •   ")
         card(L10n.text("SELECT A SKILL → CLICK A LEMMING"), skills.isEmpty ? L10n.text("Skill bindings appear when a level is loaded.") : skills, "skills")
         let focus = modern ? L10n.text("[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill") : L10n.text("Number keys select skills.\nModern letter and focus shortcuts are off.")
         card(L10n.text("ASSIGN & FOCUS"), focus, "focus")

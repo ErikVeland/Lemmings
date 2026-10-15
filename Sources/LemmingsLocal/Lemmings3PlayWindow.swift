@@ -438,10 +438,7 @@ import NxlvKit
         }
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { Array(Lemmings3Panel.canonicalNames.prefix(5)) }
-        keyboard.help = { [weak self] in
-            let names = Array(Lemmings3Panel.canonicalNames.prefix(5))
-            return L10n.text("\(SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false))\n\nSpace: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels")
-        }
+        keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space", retry: true, nuke: false) }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Pan the level"), group: L10n.text("Camera")),
              KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results")),
