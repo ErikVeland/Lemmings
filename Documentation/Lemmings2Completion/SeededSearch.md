@@ -300,5 +300,13 @@ An unseeded search used a 32,768-state beam, one-pixel decision sampling, a
 12-tick refire interval and a 600-second budget. It expanded 2,049,584
 candidates. It found no win, and its best partial candidate saved none. The
 accepted route remains 36/59. The Gold ark requirement remains open. This
-bounded search does not prove that a better route is impossible. See the
+bounded search does not prove that a better route is impossible. Three seeded
+searches kept either the first or first four accepted actions and varied the
+rest. The 8,192-state and 512-state beams each stopped after one layer. The
+64-state beam widened through four rounds to 512. None improved the route. See the
 [search record](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json).
+
+
+## 16 October current-origin/main runtime recheck
+
+After fast-forwarding to `9a95012e`, the solver and NxlvKit library were rebuilt from current source. The new L2 attraction-check implementation retained the accepted 36/59 route in a 120-second search from the first accepted action. It expanded 128,337 candidates across three beam rounds and found no improvement. The Gold ark requirement remains open. See the [current-main search evidence](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json).
