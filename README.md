@@ -3,6 +3,9 @@
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
 The current macOS release is 2.0.2 build 85, with Hot Seat ghosts, clearer
 results and refreshed Classic hints.
+The next maintenance candidate is **2.0.3 build 86**. It fixes language selection.
+See the [draft notes](Documentation/ReleaseNotes-2.0.3-build86.md) and
+[candidate checks](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
 Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
 work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
@@ -32,7 +35,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 - [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
-- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — seven added languages, review workflow and remaining validation.
+- [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — eight translated languages, review workflow and remaining validation.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
@@ -100,8 +103,8 @@ and [release scope](Documentation/ReleaseScope.md).
 ## Translation work
 
 English, Spanish (Latin America), German, French, Brazilian Portuguese,
-Italian, Dutch and Norwegian Bokmål are included in Macintosh 2.0. The seven
-added language packs are AI-assisted drafts. Human language review and complete
+Italian, Dutch, Norwegian Bokmål and Tamil are included in the current Mac app.
+The eight translated language packs are AI-assisted drafts. Human language review and complete
 translated-screen and device validation remain open.
 
 Start with the [translation handover](Documentation/Localisation.md#translation-handover)
@@ -210,6 +213,13 @@ NeoLemmix compatibility claim.
 
 ## Verification
 
+Run the repository and language checks before preparing a release:
+
+```sh
+python3 Tools/RepositoryMaintenance/check.py
+zsh Scripts/run-localisation-tests.sh
+```
+
 Run the routine minor-release audit for the current source and fixture set:
 
 ```sh
@@ -248,6 +258,7 @@ the development-signed Game Center build.
 ```sh
 SIGNING_IDENTITY="Developer ID Application: Example (TEAMID)" \
 NOTARY_PROFILE="lemmings-notary" \
+RELEASE_BASE=v2.0.2 RELEASE_TAG=v2.0.3 \
 zsh Scripts/build-and-notarise.sh
 ```
 
@@ -274,11 +285,11 @@ The Monterey worktree must be clean and use the exact release commit. Set
 `DOWNLOADS_DIR` to use another output directory. Use `--dry-run` to exercise
 the gates without building or contacting Apple services.
 
-The release source must be clean. The script uses `v1.2-build41` as the 1.5
-release base. It checks a reviewed notes draft, then adds the frozen commit to
+The release source must be clean. Set `RELEASE_BASE` to the previous release tag
+and `RELEASE_TAG` to the candidate version. The script checks a reviewed notes draft, then adds the frozen commit to
 the packaged copy. Update the notes draft when the build number changes.
 
-Run the data-independent 1.5 release checks before using the notarisation
+Run the data-independent release checks before using the notarisation
 script:
 
 ```sh
@@ -289,7 +300,7 @@ The release script runs the same check after it generates a signed appcast.
 
 ### Automatic updates
 
-The 1.5 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
+The Mac app uses Sparkle 2.7.3. It checks the signed appcast once per hour and
 downloads and installs signed updates in the background. The appcast is
 [`appcast.xml`](appcast.xml), and the app embeds its public Ed25519 key.
 
@@ -315,9 +326,14 @@ Apple does not accept that entitlement in a Developer ID notarisation.
 | --- | --- |
 | `Sources/NxlvKit` | Shared format, rendering and simulation library |
 | `Sources/LemmingsLocal` | Native macOS application shell |
+| `Sources/LemmingsAppCore` | Shared profiles, records, collections and persistence |
+| `Sources/LemmingsAudio` | Shared music, sound effects and playback |
+| `Sources/LemmingsGameArt` | Shared bitmap controls, fonts and menu artwork |
 | `Sources/LemmingsMobileCore` | Platform-neutral mobile sessions, input, recovery and performance policy |
 | `Sources/LemmingsMobileUI` | UIKit, Metal, audio, import and mobile flow adapters |
 | `Apps/UltimateLemmingsIOS` | iPhone/iPad application and UI-test target |
+| `Sources/LemmingsTVCore` and `Sources/LemmingsTVUI` | TV preferences, controllers and presentation |
+| `Apps/UltimateLemmingsTV` | Apple TV application target and assets |
 | `Sources/LemmingsDataTool` | Development data inspection utility |
 | `Tests` | Focused engine, data, app and evidence suites |
 | `Scripts` | Repeatable build and validation gates |
