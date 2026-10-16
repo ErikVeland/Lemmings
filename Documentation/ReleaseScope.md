@@ -44,6 +44,33 @@ match build 85, and it retains the shared engine libraries. The complete build
 86 app audit was not rerun, so build 85 route and engine evidence carries
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
+On 17 October, this worktree matched `origin/main` at `a57c52f9`. The engine,
+test, solver and validation-script trees match the source used for the latest
+route checks at `9a95012e`. The only later NxlvKit source change is the
+LearningJourney module. The engine, loader, solver and route-validation files
+remain unchanged. The accepted Classic replay witnesses also match the exact
+current-source rerun output. The 3,617-route Classic fan gap, L2 Gold
+ark, L3 route and source-parity gaps, and NeoLemmix style dependencies remain
+open. This check does not certify the build 86 app binary. Imported content
+remains open-ended. See the [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+
+A current-source bounded search used a 2,048-state beam for five unresolved
+fan levels. It found no winning route. The verified fan count remains
+2,403/6,020, with 3,617 routes open. These searches do not prove that the
+levels are impossible. See the [five-level search record](ReleaseReadiness/2.0-build83/classic-fan-gap-search-2026-10-16.json).
+
+A targeted search of both bundled `Lemcon Nine` entries also found no route.
+Each level has one Blocker and requires one saved lemming. Exhaustive single-skill
+timing sweeps tested 5,418 to 15,954 assignments per run under the recorded
+mechanics and clock variants. The fan count did not change. This does not prove
+the levels impossible. See the [diagnosis record](ReleaseReadiness/2.0-build83/classic-fan-lemcon-nine-diagnosis-2026-10-16.json).
+
+The geometry inspection found the exit trigger at y=96–100 above the floor at
+y=104. A temporary copy with the exit object moved down eight pixels produced
+a replayed three-save route. This isolates a trigger-alignment hypothesis, but
+the changed level is not accepted evidence. Both bundled entries remain open
+until source behaviour or an unchanged-content route confirms the result.
+
 | Bundled set | Current evidence | Open closure work |
 | --- | --- | --- |
 | Official Classic and Oh Yes! | Current-source recheck passes all 352 routes and the full quest. The build 85 manifest has the same 1,307 `Ports` paths and hashes as the route-check baseline. Current main changed only `MobileHomeArt.swift` since build 85, so no Classic gameplay source changed. | Finish any remaining variant-specific source checks. The 2.0 build 83 candidate has verified resources and retained plus focused regression evidence. See the [build 85 content comparison](ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json). |

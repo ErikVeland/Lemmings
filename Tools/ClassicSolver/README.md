@@ -15,6 +15,8 @@ multiple source files, it is not the zero-based `#section` in a level identity.
 Run `--describe` and check the title before a targeted search.
 Use `--member FILE#0` for a single-level `.lvl` or `.ini` file. A member search
 records the member's archive ordinal in the replay metadata.
+Use `--describe-geometry` with the exact member to print entrances, object and
+terrain placements, trigger bounds, steel areas and an 8-pixel terrain map.
 
 `solve_fan_batch.py` reads an evidence audit, searches low-confidence playable
 fan levels, and records every attempt in `attempts.jsonl`. It skips attempts

@@ -25,6 +25,7 @@ import NxlvKit
 //        [--source-terrain-coordinates]
 //        [--source-object-coordinates]
 //        [--source-canvas]
+//        [--describe-geometry]
 // Use --golems-objects for fan levels whose later object slots must be active.
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
@@ -283,7 +284,7 @@ if args.contains("--dos-clock") && args.contains("--golems-clock") {
     throw Failure(description: "choose one fan clock: --dos-clock or --golems-clock")
 }
 let (base, entry) = try loadLevel(args[1], Int(args[2])! - 1)
-if args.contains("--describe") {
+if args.contains("--describe") || args.contains("--describe-geometry") {
     let available = ClassicSkill.allCases.compactMap { skill -> String? in
         let count = base.remainingSkillCount(skill)
         return count > 0 ? "\(skill.rawValue)=\(count)" : nil
@@ -291,6 +292,54 @@ if args.contains("--describe") {
     print("\(entry.rank) \(entry.number) \(entry.level.title): "
         + "\(base.configuration.totalLemmings) lemmings, \(base.configuration.requiredToSave) required, "
         + "rate \(base.releaseRate), skills \(available.joined(separator: ","))")
+    if args.contains("--describe-geometry") {
+        let level = entry.level
+        print("canvas \(base.terrain.width)x\(base.terrain.height) startX \(level.startX)")
+        for (index, entrance) in base.configuration.entrances.enumerated() {
+            print("entrance \(index) \(entrance.x),\(entrance.y)")
+        }
+        for trigger in base.configuration.triggers {
+            let bounds = trigger.bounds
+            print("trigger \(trigger.id) \(trigger.effect) \(bounds.x1),\(bounds.y1),\(bounds.x2),\(bounds.y2)")
+            if trigger.effect == .exit {
+                let left = max(0, bounds.x1 - 8)
+                let right = min(base.terrain.width, bounds.x2 + 8)
+                let top = max(0, bounds.y1 - 8)
+                let bottom = min(base.terrain.height, bounds.y2 + 8)
+                print("exit terrain profile x=\(left)..<\(right) # solid . empty")
+                for y in top..<bottom {
+                    let pixels = (left..<right).map { base.terrain.isSolid(x: $0, y: y) ? "#" : "." }
+                    print(String(format: "%03d ", y) + String(pixels))
+                }
+            }
+        }
+        for object in level.objects {
+            print("object slot \(object.slot) id \(object.id) at \(object.x),\(object.y) sourceX \(object.sourceX.map(String.init) ?? "-")")
+        }
+        for terrain in level.terrain {
+            print("terrain id \(terrain.id) at \(terrain.x),\(terrain.y) erase \(terrain.draw.isErase)")
+        }
+        for steel in level.steel {
+            print("steel \(steel.x),\(steel.y) size \(steel.width)x\(steel.height)")
+        }
+        let cell = 8
+        print("terrain map: . empty, + partial, # solid, S steel; cell=\(cell)")
+        for top in stride(from: 0, to: base.terrain.height, by: cell) {
+            var row = String(format: "%03d ", top)
+            for left in stride(from: 0, to: base.terrain.width, by: cell) {
+                var solid = 0
+                var protected = false
+                for y in top..<min(base.terrain.height, top + cell) {
+                    for x in left..<min(base.terrain.width, left + cell) {
+                        if base.terrain.isSolid(x: x, y: y) { solid += 1 }
+                        if base.terrain.isSteelProtected(x: x, y: y) { protected = true }
+                    }
+                }
+                row.append(protected ? "S" : solid == 0 ? "." : solid == cell * cell ? "#" : "+")
+            }
+            print(row)
+        }
+    }
     exit(0)
 }
 let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit, base.configuration.timeLimitTicks ?? 0)

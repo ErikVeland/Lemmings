@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "91f8578ba94fd65559dfeba47178c8480d046892",
+  "resourceApp": "installed 1.9.1 build 76",
+  "scope": {
+    "bundledLevelsSearched": 5,
+    "importedLevelsIncluded": 0
+  },
+  "runtime": {
+    "command": "Scripts/build-classic-solver.sh followed by Tools/ClassicSolver/solve_fan_batch.py",
+    "solverSHA256": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+    "runtimeLibrarySHA256": "eda21a2bb373f3491f072d7359e9a93008b06a9021a6bb9a68cd6873222fb7c5",
+    "solverSourceSHA256": "af1c6d92b94c624ca3b181de4b19acfb57d04403df65d39e029fc34e3b1387e2",
+    "simulationSourceSHA256": "c9c21f77f48a2827c22eb61b78127627fc4f17e4060d277363f01e4679731c36",
+    "clock": "golems"
+  },
+  "search": {
+    "secondsPerLevel": 45,
+    "beamWidth": 2048,
+    "fallback": 100,
+    "refire": 60,
+    "ranking": "near-win",
+    "options": [
+      "prefer-progress",
+      "rescue-quota-distance",
+      "save-partials"
+    ]
+  },
+  "results": [
+    {
+      "adaptiveRate": false,
+      "balancedRanking": false,
+      "clock": "golems",
+      "elapsed": 1.25,
+      "fallback": 100,
+      "hash": "94c1a38f42b01470a00f65f973ed98cd22c32397ea0a5a22d592446ebe63e003",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#7",
+        "packID": "fan:lldb-303"
+      },
+      "preferProgress": true,
+      "rate": null,
+      "refire": 60,
+      "rescueQuotaDistance": true,
+      "result": "UNSOLVED fan:lldb-303 8 best saved 0/8 expanded 179 in 0s tick 1022 released 19 lost 0 active 19 complete true",
+      "rolloutSingle": false,
+      "savePartials": true,
+      "seconds": 45.0,
+      "solved": false,
+      "solverRevision": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+      "width": 2048,
+      "title": "Lemmings Of Mass Destruction"
+    },
+    {
+      "adaptiveRate": false,
+      "balancedRanking": false,
+      "clock": "golems",
+      "elapsed": 45.46,
+      "fallback": 100,
+      "hash": "4f3a8e9ba5fa0baf22493619495ae1d549d29e650c60603358f2c24481b985e9",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Mad00.dat#7",
+        "packID": "fan:lldb-55"
+      },
+      "preferProgress": true,
+      "rate": null,
+      "refire": 60,
+      "rescueQuotaDistance": true,
+      "result": "UNSOLVED fan:lldb-55 8 best saved 0/10 expanded 119214 in 45s tick 481 released 9 lost 0 active 9 complete false",
+      "rolloutSingle": false,
+      "savePartials": true,
+      "seconds": 45.0,
+      "solved": false,
+      "solverRevision": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+      "width": 2048,
+      "title": "VANDALISM !!"
+    },
+    {
+      "adaptiveRate": false,
+      "balancedRanking": false,
+      "clock": "golems",
+      "elapsed": 45.44,
+      "fallback": 100,
+      "hash": "8e246f6dc3017fac7321eb06ce7447eadff0804dc4b474d8b67701e7597fa91a",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Mad00Dos.dat#7",
+        "packID": "fan:lldb-56"
+      },
+      "preferProgress": true,
+      "rate": null,
+      "refire": 60,
+      "rescueQuotaDistance": true,
+      "result": "UNSOLVED fan:lldb-56 8 best saved 0/8 expanded 121666 in 45s tick 482 released 9 lost 0 active 9 complete false",
+      "rolloutSingle": false,
+      "savePartials": true,
+      "seconds": 45.0,
+      "solved": false,
+      "solverRevision": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+      "width": 2048,
+      "title": "VANDALISM !!"
+    },
+    {
+      "adaptiveRate": false,
+      "balancedRanking": false,
+      "clock": "golems",
+      "elapsed": 45.52,
+      "fallback": 100,
+      "hash": "d285b237a042b8e78172c3e3746e2937e62aa150ce60849dafc5c9700e33f124",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Hell 1.DAT#9",
+        "packID": "fan:lldb-550"
+      },
+      "preferProgress": true,
+      "rate": null,
+      "refire": 60,
+      "rescueQuotaDistance": true,
+      "result": "UNSOLVED fan:lldb-550 10 best saved 0/8 expanded 121993 in 45s tick 572 released 10 lost 0 active 10 complete false",
+      "rolloutSingle": false,
+      "savePartials": true,
+      "seconds": 45.0,
+      "solved": false,
+      "solverRevision": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+      "width": 2048,
+      "title": "Star Unit 17"
+    },
+    {
+      "adaptiveRate": false,
+      "balancedRanking": false,
+      "clock": "golems",
+      "elapsed": 0.46,
+      "fallback": 100,
+      "hash": "7c306713de07c3a5b50b0cb7fb72fe55965030934592789aaa063a80ffffe538",
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge05.dat#2",
+        "packID": "fan:lldb-434"
+      },
+      "preferProgress": true,
+      "rate": null,
+      "refire": 60,
+      "rescueQuotaDistance": true,
+      "result": "UNSOLVED fan:lldb-434 3 best saved 0/1 expanded 169 in 0s tick 381 released 9 lost 2 active 7 complete false",
+      "rolloutSingle": false,
+      "savePartials": true,
+      "seconds": 45.0,
+      "solved": false,
+      "solverRevision": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+      "width": 2048,
+      "title": "Lemcon Nine"
+    }
+  ],
+  "summary": {
+    "wins": 0,
+    "routeCountChanged": false,
+    "fanRoutesVerified": "2403/6020",
+    "fanRoutesWithoutVerifiedWins": 3617,
+    "interpretation": "These bounded searches found no route. They do not prove that the levels are impossible."
+  },
+  "importedContent": "Remains open-ended and outside this search."
+}

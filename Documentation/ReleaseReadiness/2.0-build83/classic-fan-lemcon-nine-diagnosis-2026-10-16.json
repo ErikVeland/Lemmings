@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "91f8578ba94fd65559dfeba47178c8480d046892",
+  "content": {
+    "archive": "0434-Level-Design-Game-05.zip",
+    "archiveSHA256": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+    "resourceApp": "installed 1.9.1 build 76",
+    "bundledIdentities": [
+      {
+        "member": "LDChallenge05.dat#2",
+        "title": "Lemcon Nine",
+        "levelNumber": 3,
+        "lemmings": 9,
+        "required": 1,
+        "initialHash": "7c306713de07c3a5b50b0cb7fb72fe55965030934592789aaa063a80ffffe538",
+        "staticFingerprint": "155be0c48a9795dd783f91104137737ee349014f64fb9e485939388f924f4b9d",
+        "skills": "1 Blocker"
+      },
+      {
+        "member": "LDChallenge05.dat#4",
+        "title": "Lemcon Nine",
+        "levelNumber": 5,
+        "lemmings": 13,
+        "required": 1,
+        "initialHash": "45ae7d312395b0c257c3e42142b9c2951f39643c747d12db2c6e93dda3b6e48d",
+        "staticFingerprint": "36ce96d39651bce8f07d3937bd8d3605139bccacacaa18e2b922e5ef40717378",
+        "skills": "1 Blocker"
+      }
+    ]
+  },
+  "runtime": {
+    "solverSHA256": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+    "runtimeLibrarySHA256": "eda21a2bb373f3491f072d7359e9a93008b06a9021a6bb9a68cd6873222fb7c5",
+    "solverSourceSHA256": "af1c6d92b94c624ca3b181de4b19acfb57d04403df65d39e029fc34e3b1387e2",
+    "simulationSourceSHA256": "c9c21f77f48a2827c22eb61b78127627fc4f17e4060d277363f01e4679731c36"
+  },
+  "experiments": [
+    {
+      "method": "Exhaustive single-skill timing sweep",
+      "mechanics": "default source selection",
+      "clock": "Golems",
+      "results": [
+        {
+          "member": "LDChallenge05.dat#2",
+          "assignments": 5427,
+          "result": "no winning route"
+        },
+        {
+          "member": "LDChallenge05.dat#4",
+          "assignments": 15954,
+          "result": "no winning route"
+        }
+      ]
+    },
+    {
+      "method": "Exhaustive single-skill timing sweep",
+      "mechanics": "default source selection",
+      "clock": "DOS",
+      "results": [
+        {
+          "member": "LDChallenge05.dat#2",
+          "assignments": 5427,
+          "result": "no winning route"
+        },
+        {
+          "member": "LDChallenge05.dat#4",
+          "assignments": 15946,
+          "result": "no winning route"
+        }
+      ]
+    },
+    {
+      "method": "Exhaustive single-skill timing sweep",
+      "mechanics": "Golems override",
+      "clock": "Golems",
+      "results": [
+        {
+          "member": "LDChallenge05.dat#2",
+          "assignments": 5418,
+          "result": "no winning route"
+        },
+        {
+          "member": "LDChallenge05.dat#4",
+          "assignments": 15945,
+          "result": "no winning route"
+        }
+      ]
+    },
+    {
+      "method": "Exhaustive single-skill timing sweep",
+      "mechanics": "Oh No! override",
+      "clock": "Golems",
+      "results": [
+        {
+          "member": "LDChallenge05.dat#2",
+          "assignments": 5418,
+          "result": "no winning route"
+        },
+        {
+          "member": "LDChallenge05.dat#4",
+          "assignments": 15945,
+          "result": "no winning route"
+        }
+      ]
+    },
+    {
+      "method": "Adaptive-rate beam search",
+      "mechanics": "default source selection",
+      "beamWidth": 4096,
+      "clock": "Golems and DOS",
+      "member": "LDChallenge05.dat#2",
+      "expanded": 169,
+      "result": "no winning route",
+      "note": "Both runs terminate at the level end. The level starts at rate 99, so the solver has no higher release rate to test."
+    }
+  ],
+  "result": {
+    "newWinningRoutes": 0,
+    "classicFanVerified": "2403/6020",
+    "classicFanUnverified": 3617,
+    "interpretation": "The tested single-Blocker assignments did not win. The result does not prove either level impossible and does not certify the original engine rules."
+  },
+  "nextEvidenceNeeded": "Verify the exact original-engine exit collision rule for the bundled coordinates. Keep both exact archive members open until an original-source comparison or an unchanged-content winning replay confirms them.",
+  "geometryInspection": {
+    "tool": "ClassicSolver --describe-geometry",
+    "toolSource": "Tools/ClassicSolver/main.swift",
+    "toolBehaviour": "Prints canvas size, entrances, triggers, object and terrain placements, steel areas, and 8-pixel terrain occupancy.",
+    "member2": {
+      "entrance": "792,86",
+      "exitTrigger": "792,96 to 796,100",
+      "floorBeginsAt": "y=104 in the inspected 8-pixel cells"
+    },
+    "member4": {
+      "entrance": "792,86",
+      "exitTrigger": "792,96 to 796,100",
+      "floorBeginsAt": "y=104; a pit is present under the exit in the inspected 8-pixel cells"
+    },
+    "interpretation": "The decoded exit trigger sits above the floor. The engine checks the lemming foot point against the trigger. This is a candidate explanation for the missing routes, not proof of incorrect source behaviour."
+  },
+  "counterfactual": {
+    "scope": "Temporary copy of member #2 only. The original bundled archive was not modified.",
+    "change": "Moved exit object slot 0 down 8 pixels, moving its trigger from y=96..100 to y=104..108.",
+    "result": "The current solver found and replay-verified one route: Blocker on lemming 1 at tick 68. It saved 3 of 9 against a requirement of 1.",
+    "temporaryInitialLevelFingerprint": "d953298a15b1bf8ed7798d448165fca01c61e2c6d5ed45815ca143d786650193",
+    "temporaryExpectedStateHash": "37c005163d2f2ad8433ddc878c50b9a2214289d8a03b45916eb5d96f96472000",
+    "status": "diagnostic only; not accepted for bundled closure because the source level was changed and no original-engine reference confirms the offset."
+  }
+}

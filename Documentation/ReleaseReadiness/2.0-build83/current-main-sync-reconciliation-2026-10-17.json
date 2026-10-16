@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "a57c52f939794712e452653cc9311952e16c201c",
+  "upstreamCommit": "a57c52f939794712e452653cc9311952e16c201c",
+  "branch": "main",
+  "worktreeMatchesOriginMain": true,
+  "sourceContinuity": {
+    "validatedSourceCommit": "9a95012e",
+    "pathsCompared": [
+      "Sources/NxlvKit classic, L2, L3 and NeoLemmix engine files",
+      "Sources/LemmingsLocal/FanLevelLibrary.swift",
+      "Sources/LemmingsLocal/GameAssetCache.swift",
+      "Tools/ClassicSolver",
+      "Tools/Lemmings2Completion",
+      "Tools/Lemmings3Completion",
+      "Tools/NeoLemmix",
+      "Scripts"
+    ],
+    "changesAfterValidatedSourceCommitInEnginePaths": 0,
+    "otherSourceChange": "Sources/NxlvKit/LearningJourney.swift changed after 9a95012e; it is not used by the game engine simulations or route solvers.",
+    "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
+    "result": "The only NxlvKit source change is LearningJourney.swift. The Classic, L2, L3 and NeoLemmix runtime, loader, solver and route-validation files used by the cited checks are unchanged."
+  },
+  "classic": {
+    "scope": "2,755 accepted bundled winning replay witnesses: 352 official/conversion and 2,403 fan",
+    "replayedSourceCommit": "9a95012e",
+    "strictDeterministicRuns": 2,
+    "acceptedWitnessSHA256": "ee539d3b791bc816b3c8ef253ccde0fee0d1077fb88c4e1620888167ccb50d7b",
+    "rerunOutputMatchesAcceptedWitnesses": true,
+    "fanClosure": {
+      "bundledLevels": 6020,
+      "verifiedWinningRoutes": 2403,
+      "failedCandidateReplays": 18,
+      "withoutMatchingCandidate": 3599,
+      "withoutVerifiedWin": 3617,
+      "loadDecodeRenderFailures": 0,
+      "status": "open"
+    }
+  },
+  "lemmings2": {
+    "searchSourceCommit": "9a95012e",
+    "searchStillAppliesAtCurrentMain": true,
+    "cavelemsLevel2BestAcceptedRoute": "36/59",
+    "goldArk": "open",
+    "note": "The current-main search found no improvement. Its bounded searches do not prove that no winning route exists."
+  },
+  "releaseLimits": [
+    "This record confirms the current-main source relationship and replay evidence. It does not certify the 2.0.3 build 86 app binary.",
+    "Bundled route and source-behaviour closure remains open across the engines.",
+    "Imported content remains open-ended and requires per-engine, per-version support claims."
+  ],
+  "evidence": [
+    "classic-fan-fingerprinted-audit-2026-10-16/audit.json",
+    "classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl",
+    "../../Lemmings2Completion/cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json"
+  ]
+}
