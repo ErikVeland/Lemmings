@@ -464,6 +464,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
         }
     }
 
+    public func targetWallDirection(for target: Int) -> Int? {
+        guard let lemming = runtime.lemmings.first(where: { $0.id == target }) else { return nil }
+        return LemmingApproachTargeting.wallDirection(x: lemming.x, footY: lemming.y, isSolid: runtime.isSolid)
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return [] }
         let action = Lemmings3Runtime.Action.allCases[control]
@@ -777,6 +782,13 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         if simulation.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
             onCompletion?(simulation)
+        }
+    }
+
+    public func targetWallDirection(for target: Int) -> Int? {
+        guard let lemming = simulation.lemmings.first(where: { $0.id == target }) else { return nil }
+        return LemmingApproachTargeting.wallDirection(x: lemming.position.x, footY: lemming.position.y) {
+            simulation.terrain.isSolid(x: $0, y: $1)
         }
     }
 

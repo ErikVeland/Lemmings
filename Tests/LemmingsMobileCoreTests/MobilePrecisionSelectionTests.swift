@@ -87,6 +87,64 @@ struct MobilePrecisionSelectionTests {
         #expect(router.ended(id: 3, at: end, time: 6) == [.cancelPreview])
     }
 
+    @Test(arguments: [-1, 1])
+    func wallFacingActorReplacesARetainedActorThatHasTurnedAway(side: Int) {
+        let viewport = MobileViewport(levelSize: .init(width: 160, height: 80),
+                                      viewSize: .init(width: 160, height: 80), zoom: 1)
+        // Aim just behind the crowd. The wall must override the pointer's side.
+        let point = MobilePoint(x: 40 - Double(side) * 2, y: 40)
+        let actors = [
+            MobileTargetCandidate(id: 1, point: .init(x: 40, y: 40), direction: -side, assignment: .eligible),
+            MobileTargetCandidate(id: 2, point: .init(x: 40 + Double(side), y: 40), direction: side, assignment: .eligible),
+        ]
+        let chosen = MobileTargetSelector.select(candidates: actors, touch: point, viewport: viewport,
+            input: .precision, retaining: 1, wallDirectionForTarget: { _ in side })
+        #expect(chosen?.id == 2 && chosen?.state == .eligible)
+        #expect(MobileTargetSelector.select(candidates: actors, touch: point, viewport: viewport,
+            favourApproaching: false, input: .precision, retaining: 1,
+            wallDirectionForTarget: { _ in side })?.id == 1)
+    }
+
+    @Test func ordinaryCrowdRetentionDoesNotSwitchWithEachCrossing() {
+        let viewport = MobileViewport(levelSize: .init(width: 160, height: 80),
+                                      viewSize: .init(width: 160, height: 80), zoom: 1)
+        let point = MobilePoint(x: 40, y: 40)
+        for x in [39.0, 40, 41] {
+            let actors = [
+                MobileTargetCandidate(id: 1, point: .init(x: x, y: 40), direction: 1, assignment: .eligible),
+                MobileTargetCandidate(id: 2, point: point, direction: -1, assignment: .eligible),
+            ]
+            #expect(MobileTargetSelector.select(candidates: actors, touch: point, viewport: viewport,
+                input: .precision, retaining: 1)?.id == 1)
+        }
+    }
+
+    @Test func wallPreferenceKeepsEligibilityToolsAndPickBounds() {
+        let viewport = MobileViewport(levelSize: .init(width: 160, height: 80),
+                                      viewSize: .init(width: 160, height: 80), zoom: 1)
+        let point = MobilePoint(x: 40, y: 40)
+        let carrier = MobileTargetCandidate(id: 1, point: point, direction: 1, assignment: .eligible, hasTool: true)
+        let unavailable = MobileTargetCandidate(id: 2, point: point, direction: -1, assignment: .unavailable)
+        let outside = MobileTargetCandidate(id: 3, point: .init(x: 60, y: 40), direction: -1, assignment: .eligible)
+        let emptyHanded = MobileTargetCandidate(id: 4, point: point, direction: -1, assignment: .eligible)
+        #expect(MobileTargetSelector.select(candidates: [carrier, unavailable, outside], touch: point,
+            viewport: viewport, input: .precision, retaining: 1, wallDirectionForTarget: { _ in -1 })?.id == 1)
+        #expect(MobileTargetSelector.select(candidates: [carrier, emptyHanded], touch: point,
+            viewport: viewport, preference: .toolHolder, input: .precision, retaining: 1,
+            wallDirectionForTarget: { _ in -1 })?.id == 1)
+    }
+
+    @Test func exactAimDoesNotInventAnApproachDirection() {
+        let viewport = MobileViewport(levelSize: .init(width: 160, height: 80),
+                                      viewSize: .init(width: 160, height: 80), zoom: 1)
+        let actors = [
+            MobileTargetCandidate(id: 1, point: .init(x: 41, y: 40), direction: 1, assignment: .eligible),
+            MobileTargetCandidate(id: 2, point: .init(x: 40, y: 40), direction: -1, assignment: .eligible),
+        ]
+        #expect(MobileTargetSelector.select(candidates: actors, touch: .init(x: 41, y: 40),
+            viewport: viewport, input: .precision)?.id == 2)
+    }
+
     private func pick(_ point: MobilePoint, viewport: MobileViewport) -> MobileTargetSelection? {
         MobileTargetSelector.select(candidates: candidates, touch: point, viewport: viewport,
                                     favourApproaching: false, input: .precision)
