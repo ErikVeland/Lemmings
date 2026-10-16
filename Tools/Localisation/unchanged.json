@@ -317,7 +317,6 @@
     "Zoom {0}×": "Zoom feature name and variable multiplier.",
     "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}": "Structured debug-log prefix and field names; do not translate.",
     "fan": "Spanish loanword retained as a content category.",
-    "hotseat": "Stable storage name for saved multiplayer sessions; do not translate.",
     "z - {0}": "Keyboard binding followed by a variable detail.",
     "{0} - Macintosh (original)": "Variable source name plus the original Macintosh artwork mode.",
     "{0} — {1} {2} — Beta": "Variable release information; “Beta” is the standard Spanish release-stage term."
@@ -852,7 +851,6 @@
     "Zoom {0}×": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     "fan": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
-    "hotseat": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     "z - {0}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     "{0}  {1}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     "{0} - Level {1}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
@@ -1020,7 +1018,6 @@
     "Zoom": "Established Brazilian Portuguese cognate, loanword, product term or interface label with the same spelling; the identical value is intentional in this context.",
     "Zoom 1×": "Established Brazilian Portuguese cognate, loanword, product term or interface label with the same spelling; the identical value is intentional in this context.",
     "Zoom {0}×": "Established Brazilian Portuguese cognate, loanword, product term or interface label with the same spelling; the identical value is intentional in this context.",
-    "hotseat": "Named shared-turn game mode or its identifier; preserve the established name.",
     "z - {0}": "Hardware, audio, file-format, keyboard/controller, build or runtime identifier; preserve the exact technical token.",
     "{0} - Macintosh (original)": "Source-defined proper name, fixed abbreviation or interface term whose identical form is intentional; preserve the source spelling.",
     "{0} Lemmings": "Lemmings franchise or in-game species term; preserve the established source spelling.",
@@ -1183,7 +1180,6 @@
     "Zoom {0}×": "Established Norwegian game term or skill/state caption whose spelling matches the source; the identical form is intentional in Bokmål.",
     "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}": "Source-defined file, version, storage or diagnostic identifier; preserve it exactly for compatibility and traceability.",
     "fan": "Bokmål word or borrowed interface term with the same spelling is correct in this context; identical spelling is intentional.",
-    "hotseat": "Bokmål word or borrowed interface term with the same spelling is correct in this context; identical spelling is intentional.",
     "{0}  {1}": "The value is a layout or interpolation template made only from dynamic placeholders; changing it would alter formatting rather than translate visible language.",
     "{0} — {1} {2} — Beta": "Dynamic title and metadata; “Beta” is the established Norwegian term with the same spelling.",
     "{0}, {1}{2}": "The value is a layout or interpolation template made only from dynamic placeholders; changing it would alter formatting rather than translate visible language."

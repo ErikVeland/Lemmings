@@ -1,8 +1,9 @@
 # Public testing
 
-The current 1.5 build 49 notes describe a local, registered-device test. They
-do not certify a public beta. Freeze one source commit and use a new build number
-for the next public candidate. Earlier package records do not certify it.
+The current public Mac release is 2.0.2 build 85. The next maintenance candidate
+is 2.0.3 build 86. See its [draft notes](ReleaseNotes-2.0.3-build86.md) and
+[release checks](ReleaseReadiness/2.0.3-build86/README.md). Freeze one source
+commit for a public candidate. Earlier package records do not certify it.
 
 ## Public beta boundary
 
@@ -39,7 +40,8 @@ Monterey worktree contains the current commit. It does not create missing
 notes. It then writes three timestamped ZIP files to
 `~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
 
-For 1.9, Lemmings 2 is Complete and Lemmings 3 is Beta. NeoLemmix remains Beta.
+Classic and Lemmings 2 retain their Complete classifications.
+Lemmings 3 and NeoLemmix remain Beta.
 Physical Intel, minimum-macOS, complete VoiceOver, physical-controller and
 sustained performance checks remain separate from automated checks.
 
@@ -54,7 +56,9 @@ zsh Scripts/build-local-app.sh
 open ".build/local/Ultimate Lemmings.app"
 ```
 
-This builds both Mac architectures with the installed local game assets.
+For a quick manual test build, set `LEMMINGS_ARCHITECTURES="$(uname -m)"` and
+copy the finished app to Downloads. Skip automated tests and notarisation for
+that build. Universal builds are for public release candidates.
 For a quick, current-architecture Game Center snapshot:
 
 ```sh
@@ -78,9 +82,9 @@ and is not the public download.
 
 ```sh
 NOTARY_PROFILE=lemmings-beta \
-RELEASE_TAG=v1.5-build50 \
+RELEASE_BASE=v2.0.2 RELEASE_TAG=v2.0.3 \
 MONTEREY_WORKTREE=/path/to/clean-release-worktree \
-UPDATES_DIR="$PWD/.build/release50-updates" \
+UPDATES_DIR="$PWD/.build/release-2.0.3/updates" \
 zsh Scripts/build-and-notarise.sh
 ```
 
@@ -93,8 +97,8 @@ The Game Center archive stays local to registered testers.
 
 The script also checks rescue proofs, hints, app integration, fresh-user launch,
 source consistency and the signed Sparkle feed. `--dry-run` checks the initial
-inputs without building or uploading. `RELEASE_BASE` defaults to `v1.2-build41`
-for version 1.5.
+inputs without building or uploading. Set `RELEASE_BASE` explicitly.
+Run `zsh Scripts/run-localisation-tests.sh` for the catalogue and picker gate.
 
 `NOTARY_KEYCHAIN` selects another keychain. Apple ID authentication uses
 `APPLE_ID` and `APPLE_TEAM_ID`, with a secure password prompt. App Store Connect
@@ -108,7 +112,7 @@ Use `build-and-notarise.sh` for this release.
 ## Validate and publish
 
 ```sh
-python3 Tools/ReleaseReadiness/audit.py --app --scope classic-1.0
+python3 Tools/ReleaseReadiness/audit.py --app --scope minor
 zsh Scripts/run-music-timing-tests.sh
 zsh Scripts/run-music-catalogue-tests.sh
 zsh Scripts/run-adaptive-dj-playback-tests.sh "$PWD/Sources/Music"
@@ -118,6 +122,11 @@ TEST_ARCH=x86_64 zsh Scripts/run-app-integration-tests.sh
 Review failures and open gates before publishing. A regression audit does not
 certify all hardware or complete the preview campaigns. Record each remaining
 limit in the release evidence and notes.
+
+Use `--scope all` when engine or content changes can affect campaign outcomes.
+The signed shipping-app launch check requires the real desktop and a separate
+explicit request. Offscreen tests do not close that gate. Keep all automated
+mechanical checks muted through the repository runner.
 
 Publish the notarised update ZIP, stamped Markdown notes, BBCode notes and
 checksums. A public tester release is a GitHub prerelease. Verify the public

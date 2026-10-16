@@ -1,3 +1,5 @@
+/* Draft localisation. For in-app testing only. */
+
 "\n\nKeep {0} available for later." = "\n\nHold {0} tilgjengelig til senere.";
 "\n\nRelease rate in this example:\n" = "\n\nUtslippsfart i dette eksempelet:\n";
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nDisse endringene påvirker avstanden i flokken. Tidspunktet betyr også noe. Sett på pause ved hvert merke og sjekk arbeider og retning.";
@@ -427,6 +429,7 @@
 "Choose a different level." = "Velg et annet brett.";
 "Choose a folder of ProTracker .mod files." = "Velg en mappe med ProTracker .mod-filer.";
 "Choose a game" = "Velg et spill";
+"Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel." = "Velg et språk under Innstillinger > Spill > Språk. Velg Bruk for å lagre forhåndsvisningen eller Tilbake for å avbryte.";
 "Choose a pack" = "Velg en pakke";
 "Choose a rating" = "Velg en kategori";
 "Choose a second player" = "Velg en spiller til";
@@ -728,7 +731,6 @@
 "Each teleporter needs a paired receiver." = "Hver teleportør trenger en tilhørende mottaker.";
 "Each zone must have a positive width and height." = "Hver sone må ha positiv bredde og høyde.";
 "Earlier" = "Tidligere";
-"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "De siste forsøkene til tidligere spillere vises som fargede spøkelser ved nye Hot Seat-forsøk. De følger tilbakespolingen og vises i opptaksfilmene.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Tjen Zoom for hver tredje stjerne uten tilbakespoling; Superzoom for hvert tredje brett med tre stjerner uten tilbakespoling";
 "Earn the same play style on 5 distinct cleared levels." = "Oppnå samme spillestil på 5 ulike fullførte brett.";
 "Earned" = "Opptjent";
@@ -984,8 +986,6 @@
 "Hopper" = "Spretter";
 "Host" = "Vert";
 "Hot Seat" = "Hot Seat";
-"Hot Seat and result improvements" = "Forbedringer i Hot Seat og resultater";
-"Hot Seat ghosts" = "Hot Seat-spøkelser";
 "Hot Seat player HUD" = "Hot Seat-spillerens HUD";
 "Hot Seat starts" = "Hot Seat-start";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1233,6 +1233,7 @@
 "LOST {0}" = "TAPT {0}";
 "LT / left trigger" = "LT / venstre avtrekker";
 "Language" = "Språk";
+"Language selection fixed" = "Språkvalg rettet";
 "Large (125%)" = "Stor (125%)";
 "Large menu text" = "Stor menytekst";
 "Large remaining transition to {0}: {1}." = "Stor gjenstående overgang til {0}: {1}.";
@@ -2018,7 +2019,6 @@
 "Restore TV saves?" = "Gjenopprette TV-lagringer?";
 "Restore recovery key" = "Gjenopprettingsnøkkel";
 "Restore the default gameplay actions for every controller button." = "Gjenopprett standardhandlingene for hver kontrollerknapp.";
-"Results and rewards" = "Resultater og belønninger";
 "Resume" = "Fortsett";
 "Resume  {0}/{1}" = "Fortsett  {0}/{1}";
 "Resume Hot Seat run" = "Fortsett Hot Seat-forsøk";
@@ -2037,7 +2037,6 @@
 "Retry" = "Prøv igjen";
 "Retry - " = "Prøv igjen – ";
 "Retry a clear: save more, or match it with fewer skills or less time." = "Prøv et fullført brett på nytt: redd flere, eller slå resultatet med færre ferdigheter eller kortere tid.";
-"Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles." = "Handlinger for nye forsøk og opptjente belønninger er tydeligere gruppert, med lik betjening i Classic, The Tribes og Chronicles.";
 "Retry as {0}" = "Prøv igjen som {0}";
 "Retry last level as {0}" = "Prøv forrige brett på nytt som {0}";
 "Retry level" = "Prøv brettet igjen";

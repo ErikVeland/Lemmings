@@ -23,10 +23,15 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.9.3 build 78 is the current release. The
-[1.9.3 distribution record](ReleaseReadiness/1.9.3Build78Distribution.md) covers
+Public 2.0.2 build 85 is the current release. The
+[2.0.2 distribution record](ReleaseReadiness/2.0.2-build85/README.md) covers
 the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
+
+Version 2.0.3 build 86 is the next maintenance candidate. Its
+[release record](ReleaseReadiness/2.0.3-build86/README.md) separates passed source
+checks from package and hardware checks. The public feed continues to describe
+2.0.2 until signed 2.0.3 archives and their deltas are ready.
 
 Public releases require a slim fresh-install download. It includes the
 54 essential music versions and offers missing optional libraries on first
@@ -98,8 +103,8 @@ soundtrack downloads at any time.
    Generation preserves earlier feed entries, download URLs, signatures and notes.
    Delta filenames use ASCII letters, digits and hyphens so GitHub retains them.
 
-8. Install public 1.2 build 41.
-9. Run the update and check its relaunch.
+8. Install the preceding public release and each supported skipped-version base.
+9. Verify each direct delta against the target app, then check update and relaunch.
 10. Record the source revision, archive checksum, appcast checksum and result.
 
 `publish-github-release.sh` creates a normal release by default. For a public
@@ -110,8 +115,8 @@ The update ZIP must contain only the notarised app. The Game Center archive is
 not an update candidate.
 
 Release packaging requires a clean worktree. Publication is a separate step
-and needs an authenticated GitHub CLI. The package script uses `v1.6.0` for
-the feed URL by default. The tag must match the approved release version.
+and needs an authenticated GitHub CLI. Set `RELEASE_TAG` to the exact version,
+such as `v2.0.3`. The tag must match the approved release version.
 The publication script requires the tag and stamped notes. Its read-only
 `--check` mode checks that the notes, archive name and signed appcast describe
 the same build. Only the publication run needs `RELEASE_APPROVED=1`.

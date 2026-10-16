@@ -25,7 +25,7 @@
 #   DOWNLOADS_DIR     destination for the three final ZIP files
 #   BUILD_ROOT        internal build output directory
 #   UPDATES_DIR       Sparkle update archives and appcast working directory
-#   RELEASE_TAG       public GitHub release tag, default vMAJOR.MINOR.0
+#   RELEASE_TAG       public GitHub release tag, default vVERSION
 #   DOWNLOAD_URL_PREFIX public HTTPS URL prefix for Sparkle update archives
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
 #
@@ -67,7 +67,7 @@ usage() {
   print "  DOWNLOADS_DIR               ZIP destination, default ~/Downloads"
   print "  BUILD_ROOT                  internal build output directory"
   print "  UPDATES_DIR                 Sparkle update archive directory"
-  print "  RELEASE_TAG                 public release tag, default vMAJOR.MINOR.0"
+  print "  RELEASE_TAG                 public release tag, default vVERSION"
   print "  DOWNLOAD_URL_PREFIX         public HTTPS URL prefix for update archives"
   print "  Publication is a separate step after package and hardware checks."
 }
@@ -358,6 +358,8 @@ print "==> Building and notarising Developer ID standard target (full soundtrack
 build_app "$project_dir" "$standard_dir" 0 full
 check_music_scope "$standard_app" full || fail "The update build does not carry the full soundtrack."
 print "==> Gate 6: running app integration tests"
+LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-localisation-tests.sh" ||
+  fail "The language catalogue or picker regressions failed. Do not release this build."
 LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
   fail "The app integration tests failed. Do not release this build."
 sign_developer_id "$standard_app"
@@ -375,7 +377,7 @@ check_asset_size "$update_zip"
 # The update alert shows these notes. Sparkle reads HTML beside the archive.
 python3 "$project_dir/Tools/ReleaseReadiness/update_notes.py" "$release_notes" \
   "$updates_dir/UltimateLemmings-$version-build$build_number.html"
-release_tag="${RELEASE_TAG:-v${version}.0}"
+release_tag="${RELEASE_TAG:-v${version}}"
 download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmings/releases/download/$release_tag/}"
 [[ "$download_url_prefix" == https://* ]] || fail "DOWNLOAD_URL_PREFIX must use HTTPS."
 DOWNLOAD_URL_PREFIX="$download_url_prefix" APPCAST_PATH="$project_dir/appcast.xml" \

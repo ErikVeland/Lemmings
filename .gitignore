@@ -46,4 +46,6 @@ Documentation/Threads*
 
 # Xcode user state and accidental compiler index output.
 .swiftpm/
+xcuserdata/
+*.xcuserstate
 Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/-Xcc/

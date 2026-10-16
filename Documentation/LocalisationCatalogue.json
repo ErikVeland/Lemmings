@@ -1797,7 +1797,7 @@
       "Sources/LemmingsLocal/ArcadeWindow.swift:530",
       "Sources/LemmingsLocal/ArcadeWindow.swift:814",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:22",
-      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:113",
+      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111",
       "Sources/LemmingsLocal/GameScreen.swift:322",
       "Sources/LemmingsLocal/GameScreen.swift:93",
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:43",
@@ -2382,7 +2382,7 @@
       "Sources/LemmingsGameArt/TVSharedMenuArt.swift:7",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:22",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:41",
-      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:113",
+      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111",
       "Sources/LemmingsLocal/GameScreen.swift:93",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1809",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2050",
@@ -2775,6 +2775,12 @@
       "Sources/LemmingsGameArt/MobileCareerArt.swift:65",
       "Sources/LemmingsLocal/ArcadeWindow.swift:735",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:158"
+    ]
+  },
+  "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
     ]
   },
   "Choose a pack": {
@@ -3410,7 +3416,7 @@
       "Sources/LemmingsLocal/ArcadeWindow.swift:407",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:22",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:41",
-      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:113",
+      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111",
       "Sources/LemmingsLocal/GameScreen.swift:93",
       "Sources/LemmingsLocal/GameSettingsHelp.swift:126",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:586"
@@ -3419,7 +3425,7 @@
   "Close (Esc)": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:113",
+      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111",
       "Sources/LemmingsLocal/KeyboardOverlayView.swift:51"
     ]
   },
@@ -3591,7 +3597,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
   "Complete": {
@@ -3724,7 +3730,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:253",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:82",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:81",
       "Sources/LemmingsLocal/main.swift:8399",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
@@ -4686,12 +4692,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:4249"
-    ]
-  },
-  "Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
     ]
   },
   "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels": {
@@ -6334,18 +6334,6 @@
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:234"
     ]
   },
-  "Hot Seat and result improvements": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
-    ]
-  },
-  "Hot Seat ghosts": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
-    ]
-  },
   "Hot Seat player HUD": {
     "kind": "text",
     "references": [
@@ -7886,9 +7874,16 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:107",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:44",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:15",
       "Sources/LemmingsLocal/SettingsWindow.swift:288",
       "Sources/LemmingsLocal/SettingsWindow.swift:342",
       "Sources/LemmingsLocal/SettingsWindow.swift:808"
+    ]
+  },
+  "Language selection fixed": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
     ]
   },
   "Large (125%)": {
@@ -12620,7 +12615,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:50"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:49"
     ]
   },
   "Release rate": {
@@ -12983,19 +12978,13 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:228"
     ]
   },
-  "Results and rewards": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
-    ]
-  },
   "Resume": {
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:91",
       "Sources/LemmingsLocal/ArcadeWindow.swift:86",
       "Sources/LemmingsLocal/ControllerMenuNavigator.swift:22",
-      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:113",
+      "Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111",
       "Sources/LemmingsLocal/GameScreen.swift:93",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:559",
       "Sources/LemmingsLocal/LearningJourneyMenu.swift:21",
@@ -13122,12 +13111,6 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/TrolleyAchievementCollection.swift:55"
-    ]
-  },
-  "Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
   "Retry as {0}": {
@@ -18099,7 +18082,7 @@
   "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
   "Unknown": {
@@ -18732,7 +18715,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:42"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:41"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {

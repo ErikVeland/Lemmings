@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-16",
+  "scope": "Repository maintenance for Macintosh 2.0.3 build 86",
+  "baselineCommit": "1111ece837840a005f932c0bdd14478df1728cc8",
+  "repositoryChecks": {
+    "status": "passed",
+    "checks": {
+      "files": 6617,
+      "markdown": 213,
+      "local_links": 2685,
+      "json": 3335,
+      "plist": 20,
+      "python": 178,
+      "shell": 181
+    },
+    "errors": []
+  },
+  "archivedReleaseNotes": [
+    "Documentation/ReleaseNotes-1.7.2-build55.md",
+    "Documentation/ReleaseNotes-1.7.3-build56.md",
+    "Documentation/ReleaseNotes-1.7.4-build57.md",
+    "Documentation/ReleaseNotes-1.7.4-build58.md",
+    "Documentation/ReleaseNotes-1.7.5-build59.md",
+    "Documentation/ReleaseNotes-1.7.6-build60.md",
+    "Documentation/ReleaseNotes-1.7.7-build61.md",
+    "Documentation/ReleaseNotes-1.8.1-build65.md",
+    "Documentation/ReleaseNotes-1.8.3-build72.md",
+    "Documentation/ReleaseNotes-1.9.1-build76.md",
+    "Documentation/ReleaseNotes-1.9.2-build77.md",
+    "Documentation/ReleaseNotes-1.9.3-build77.md",
+    "Documentation/ReleaseNotes-1.9.3-build78.md",
+    "Documentation/ReleaseNotes-1.9.6-build81.md",
+    "Documentation/ReleaseNotes-2.0.1-build84.md"
+  ],
+  "localArchive": ".archive/spring-clean-2026-10-16/Documentation",
+  "untrackedXcodeStateFiles": 4,
+  "removedCompilerCacheCount": 54,
+  "allocatedCompilerCacheBytesRemoved": 7555784704,
+  "preserved": "Historical release evidence, signed archives, five required delta bases, raw assets, three stashes and all linked worktrees. Three linked worktrees contain local changes.",
+  "sourceValidation": {
+    "sharedSwiftTests": 335,
+    "sharedSwiftSuites": 61,
+    "releaseToolingTests": 88,
+    "localisationSwiftTests": 10,
+    "localisationPythonTests": 6
+  },
+  "nativeRenderCount": 24,
+  "remainingManualChecks": [
+    "Physical mouse and VoiceOver",
+    "Signed shipping-app foreground launch",
+    "Update installation and relaunch",
+    "Intel and minimum-macOS hardware"
+  ],
+  "retainedSharedLibraries": {
+    "sourceMatchesBuild85": true,
+    "modules": {
+      "NxlvKit": 184,
+      "LemmingsAudio": 11,
+      "LemmingsAppCore": 31,
+      "LemmingsMobileCore": 45,
+      "LemmingsTVCore": 10
+    },
+    "scope": "Retain the published universal binaries and module interfaces only where every Swift source file matches the frozen build 85 source. Rebuild LemmingsGameArt and LemmingsLocal."
+  }
+}

@@ -9,13 +9,12 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.2"
-    static let subtitle = L10n.text("Hot Seat and result improvements")
-    static let sections = [
-        (L10n.text("Hot Seat ghosts"), L10n.text("Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.")),
-        (L10n.text("Results and rewards"), L10n.text("Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles.")),
+    static let notesVersion = "2.0.3"
+    static var subtitle: String { L10n.text("Language selection fixed") }
+    static var sections: [(String, String)] { [
+        (L10n.text("Language"), L10n.text("Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
-    ]
+    ] }
     private let defaults: UserDefaults
     private let build: Int
     private let version: String

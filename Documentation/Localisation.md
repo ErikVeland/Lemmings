@@ -1,8 +1,9 @@
 # Interface localisation
 
-English is the source language. Macintosh 2.0 includes seven additional language
+English is the source language. The current Mac app includes eight translated
 packs: Spanish (Latin America), German, French, Brazilian Portuguese, Italian,
-Dutch and Norwegian Bokmål. The owner requested their inclusion in a fresh
+Dutch, Norwegian Bokmål and Tamil. The owner requested inclusion of the seven
+Latin-script packs in a fresh
 release build on 15 October 2026 and instructed reuse of passed tests.
 These are AI-assisted drafts with full structural coverage. Human language
 review and complete translated-screen and device validation remain open.
@@ -34,7 +35,8 @@ Choose **System default** to follow the device language.
 
 The continuing validation task covers eight translation locales across Classic,
 Lemmings 2 and Lemmings 3 on Mac, iPhone/iPad and Apple TV. The seven existing
-packs remain AI drafts included in Macintosh 2.0. Tamil is a candidate addition.
+packs and Tamil are included as AI drafts. Tamil language and font acceptance
+remain candidate work.
 All need human language review and platform acceptance. Their checkpoint files
 record the reviewed scope and remaining work.
 
@@ -336,6 +338,13 @@ regions across each row, keyboard and accessibility activation, preview, Back,
 Apply and reopening the picker. Six English, French and Tamil captures retain
 the shipped artwork and selection/focus states. Representative captures were
 inspected. Native mouse event delivery and VoiceOver remain manual checks.
+
+For 2.0.3 build 86, the catalogue contains 3,159 text keys and eight plural keys.
+The release subtitle and language-selection instructions have draft values in
+all eight translated packs. Obsolete 2.0.2 welcome messages were removed only
+when no current source uses them. Locale checkpoint hashes match the updated
+drafts. Human approval remains open. `Scripts/run-localisation-tests.sh` is the
+shared catalogue and picker gate used by release audits and packaging.
 
 ## Authoring
 

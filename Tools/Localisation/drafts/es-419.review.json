@@ -560,11 +560,14 @@
   ],
   "draft": {
     "current_catalogue_text_count": 3130,
-    "entry_count": 3160,
+    "entry_count": 3159,
     "missing_catalogue_text_count": 0,
     "obsolete_key_count": 0,
     "path": "Tools/Localisation/drafts/es-419.json",
-    "sha256": "18fed6c044d00c7e296b44f28346ef98a3ffc05d50d2ea18760f1a41dd171c7c"
+    "sha256": "d30d48c4e1466e97fc9af1c63f822c0996894f686f9d5119f046ebfb348c6001",
+    "text_count": 3159,
+    "missing_current_text_count": 0,
+    "unknown_current_text_count": 0
   },
   "draft_modified_by_this_reviewer": true,
   "handover_snapshot": {
@@ -690,5 +693,19 @@
     "live_picker_preview_count": 18,
     "automated_tests_run_for_live_settings": false,
     "native_language_approved": false
+  },
+  "catalogue_snapshot": {
+    "text_count": 3159,
+    "plural_count": 8,
+    "sha256": "b4d03397887f05d76734ced87b8a555f66fb4f46cd50a4784f2d29d7c6a429eb"
+  },
+  "maintenance_2_0_3": {
+    "date": "2026-10-16",
+    "status": "ai_draft_human_review_required",
+    "added_keys": [
+      "Language selection fixed",
+      "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel."
+    ],
+    "scope": "Updated Macintosh release notes. Existing language and device validation gaps remain open."
   }
 }

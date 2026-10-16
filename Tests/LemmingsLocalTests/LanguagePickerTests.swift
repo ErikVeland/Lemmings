@@ -26,7 +26,10 @@ final class LanguagePickerTests: XCTestCase {
         InterfaceLanguagePreference.save(.system, to: .standard)
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
-        let artwork = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
+        let resources = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map {
+            URL(fileURLWithPath: $0).appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
+        } ?? root.appendingPathComponent(".build/mac-artwork/export/lemmings")
+        let artwork = try ClassicMacArtwork(directory: resources)
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
         try GameMenuArtwork.withRenderer(renderer) {
             let settings = SettingsWindow(settings: ClassicSettings(), options: .available(
@@ -105,6 +108,50 @@ final class LanguagePickerTests: XCTestCase {
                 XCTAssertEqual(L10n.currentLanguagePreference, .english)
                 _ = try language(.french, in: host).accessibilityPerformPress()
                 XCTAssertEqual(L10n.currentLanguagePreference, .french)
+            }
+        }
+    }
+
+    @MainActor func testReleaseNotesUseCurrentVersionAndRetainTranslatedTargets() throws {
+        try withSettings { host, window in
+            let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+                .deletingLastPathComponent().deletingLastPathComponent()
+            let info = try XCTUnwrap(NSDictionary(contentsOf: root.appendingPathComponent("Resources/Info.plist")))
+            XCTAssertEqual(ReleaseWelcome.notesVersion, info["CFBundleShortVersionString"] as? String)
+            let output = root.appendingPathComponent(".build/language-picker-renders")
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            for choice in L10n.languageOptions where choice != .system {
+                GameScreen.shared.dismissAll()
+                L10n.setLanguage(choice)
+                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Language selection fixed"))
+                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Language"))
+                if choice != .english {
+                    XCTAssertNotEqual(ReleaseWelcome.subtitle, "Language selection fixed")
+                }
+                let welcome = ReleaseWelcome(build: 86, version: ReleaseWelcome.notesVersion)
+                var continued = false
+                welcome.show(in: window) { continued = true }
+                let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+                for size in [CGSize(width: 900, height: 620), CGSize(width: 1280, height: 800)] {
+                    window.setContentSize(size)
+                    host.layoutSubtreeIfNeeded()
+                    let scroll = try XCTUnwrap(page.body.subviews.first as? NSScrollView)
+                    let document = try XCTUnwrap(scroll.documentView)
+                    XCTAssertTrue(document.subviews.allSatisfy { document.bounds.contains($0.frame) })
+                    let action = try XCTUnwrap(page.controllerInitialControl as? NSButton)
+                    action.scrollToVisible(action.bounds)
+                    let frame = action.convert(action.bounds, to: page)
+                    XCTAssertTrue(page.bounds.contains(frame))
+                    XCTAssertFalse(frame.intersects(scroll.convert(scroll.bounds, to: page)))
+                    XCTAssertTrue(host.hitTest(action.convert(CGPoint(x: action.bounds.midX, y: action.bounds.midY), to: host)) === action)
+                    let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+                    page.displayIgnoringOpacity(page.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+                    try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(
+                        to: output.appendingPathComponent("welcome-\(Int(size.width))-\(choice.rawValue).png"))
+                }
+                page.controllerInitialControl.performClick(nil)
+                XCTAssertTrue(continued)
+                XCTAssertFalse(GameScreen.shared.contains(page))
             }
         }
     }

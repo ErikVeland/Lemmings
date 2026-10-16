@@ -35,6 +35,12 @@ The Swift package uses the dependencies declared in `Package.swift`.
 
 ## Validation
 
+Run `python3 Tools/RepositoryMaintenance/check.py` for tracked-file hygiene,
+Python and shell syntax, JSON/plist validation, local Markdown links and matching
+release metadata. This check also runs in Mac CI. It does not need game assets.
+Run `zsh Scripts/run-localisation-tests.sh` for the catalogue and native Mac
+language-picker regressions. The picker checks need the shipped bitmap artwork.
+
 Use focused checks for the changed behaviour. Keep native UI tests offscreen
 and muted through `Tools/UITestRunner/run.py`. Report checks that require
 visible windows instead of changing window mode.

@@ -26,6 +26,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.4.app
+      - name: Repository hygiene and release metadata
+        run: python3 Tools/RepositoryMaintenance/check.py
       - name: Shared regression tests
         run: zsh Scripts/run-source-tests.sh
       - name: Universal Release executable

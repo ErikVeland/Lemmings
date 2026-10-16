@@ -226,6 +226,7 @@ def main():
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
         ("package-closure", [sys.executable, "Tests/ReleaseReadinessTests/test_package_scope.py"]),
         ("automatic-updates", [sys.executable, "Tests/ReleaseReadinessTests/test_automatic_updates.py"]),
+        ("localisation", ["zsh", "Scripts/run-localisation-tests.sh"]),
         ("classic-panel-art", [sys.executable, "Tools/ClassicPanelArt/check.py"]),
         ("fan-pruning", [sys.executable, "Tools/FanLevelCatalog/test_prune.py"]),
         ("retained-rescue-targets", [sys.executable, "Tools/TrolleyVerification/test_retained_targets.py"]),

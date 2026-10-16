@@ -1,0 +1,49 @@
+# Macintosh 2.0.3 build 86 candidate
+
+This is an unreleased maintenance candidate based on public 2.0.2 build 85.
+The language-picker fix is committed in `f5d1c4c5`. The candidate also refreshes
+release metadata, translated notes, release checks and repository maintenance.
+What's New now resolves its text when opened, so a language preview cannot
+leave its cached subtitle and sections in the first language used.
+See the [release notes](../../ReleaseNotes-2.0.3-build86.md).
+
+## Scope
+
+Mac language rows use rectangular native button tracking while retaining radio
+accessibility roles, selected states and the shipped bitmap artwork. The fix
+does not change simulation rules, content, saves or Hot Seat ownership.
+Classic and The Tribes retain Complete classifications. Chronicles and NeoLemmix
+remain Beta. Existing content and source-fidelity gates remain open.
+
+## Source validation
+
+The current focused check passes seven shared resolver tests and three Mac UI
+tests, plus six catalogue-validator tests. The picker checks cover all ten language choices at two window sizes,
+native cell hit regions, keyboard and accessibility activation, preview,
+Back, Apply and reopening. Six English, French and Tamil captures retain the
+original controls. Another eighteen captures cover What's New in all nine
+languages at the same two sizes, including Continue activation and containment.
+Representative German and Tamil renders were inspected after correcting the
+cached text. All eight packs have 3,159 text keys and eight plural keys.
+
+The data-independent shared source gate passes 335 Swift Testing cases across
+61 suites. The release-tooling suite passes 88 Python tests, including the new
+repository-maintenance checks. Rescue proofs retain 294 certificates and 315
+targets. These checks do not close the stricter engine and content gates.
+
+All eight translation packs remain AI-assisted drafts. Structural checks and
+bitmap renders do not establish human language approval or VoiceOver acceptance.
+
+## Distribution gates
+
+The public feed remains on 2.0.2 until signed and notarised candidate archives
+are ready. A 2.0.3 feed needs direct signed deltas from builds 85, 84, 83, 82
+and 81, plus the full fallback and separate slim fresh-install download.
+Archive signatures, Apple notarisation, Gatekeeper and delta application must
+be recorded against the frozen release source.
+
+Native mouse input, VoiceOver, physical controllers, Intel/minimum-OS hardware
+and the signed app's launch and update/relaunch remain manual checks. The
+shipping-app launch script requires the real desktop. Repository policy
+requires a separate explicit request for that foreground check.
+No public release has been published by this preparation.

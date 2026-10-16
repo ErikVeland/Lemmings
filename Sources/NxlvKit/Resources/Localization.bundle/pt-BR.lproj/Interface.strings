@@ -1,3 +1,5 @@
+/* Draft localisation. For in-app testing only. */
+
 "\n\nKeep {0} available for later." = "\n\nMantenha {0} disponível para usar depois.";
 "\n\nRelease rate in this example:\n" = "\n\nFrequência de saída neste exemplo:\n";
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nEstas mudanças afetam o espaçamento do grupo. O momento também importa. Pause em cada marca para verificar o trabalhador e a direção.";
@@ -427,6 +429,7 @@
 "Choose a different level." = "Escolha outra fase.";
 "Choose a folder of ProTracker .mod files." = "Escolha uma pasta com arquivos .mod do ProTracker.";
 "Choose a game" = "Escolher um jogo";
+"Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel." = "Escolha um idioma em Configurações > Jogabilidade > Idioma. Escolha Aplicar para salvar a prévia ou Voltar para cancelar.";
 "Choose a pack" = "Escolher um pacote";
 "Choose a rating" = "Escolher uma classificação";
 "Choose a second player" = "Escolher um segundo jogador";
@@ -728,7 +731,6 @@
 "Each teleporter needs a paired receiver." = "Cada teletransportador precisa de um receptor correspondente.";
 "Each zone must have a positive width and height." = "Cada zona deve ter largura e altura maiores que zero.";
 "Earlier" = "Anterior";
-"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "As últimas tentativas dos jogadores anteriores aparecem como fantasmas coloridos ao tentar novamente no Hot Seat. Eles acompanham o retrocesso e aparecem nos vídeos de replay.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Ganhe um Zoom a cada 3 estrelas sem retrocesso; Superzoom a cada 3 fases com três estrelas sem retrocesso";
 "Earn the same play style on 5 distinct cleared levels." = "Obtenha o mesmo estilo de jogo em 5 fases diferentes concluídas.";
 "Earned" = "Conquistado";
@@ -984,8 +986,6 @@
 "Hopper" = "Saltitante";
 "Host" = "Anfitrião";
 "Hot Seat" = "Hot Seat";
-"Hot Seat and result improvements" = "Melhorias no Hot Seat e nos resultados";
-"Hot Seat ghosts" = "Fantasmas do Hot Seat";
 "Hot Seat player HUD" = "HUD do jogador no Hot Seat";
 "Hot Seat starts" = "Partidas de Hot Seat";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1233,6 +1233,7 @@
 "LOST {0}" = "PERDIDOS {0}";
 "LT / left trigger" = "LT / gatilho esquerdo";
 "Language" = "Idioma";
+"Language selection fixed" = "Seleção de idioma corrigida";
 "Large (125%)" = "Grande (125%)";
 "Large menu text" = "Texto grande nos menus";
 "Large remaining transition to {0}: {1}." = "Grande transição restante para {0}: {1}.";
@@ -2018,7 +2019,6 @@
 "Restore TV saves?" = "Restaurar jogos salvos da TV?";
 "Restore recovery key" = "Restaurar chave de recuperação";
 "Restore the default gameplay actions for every controller button." = "Restaurar as ações de jogo padrão para todos os botões do controle.";
-"Results and rewards" = "Resultados e recompensas";
 "Resume" = "Retomar";
 "Resume  {0}/{1}" = "Retomar  {0}/{1}";
 "Resume Hot Seat run" = "Retomar partida de Hot Seat";
@@ -2037,7 +2037,6 @@
 "Retry" = "Tentar novamente";
 "Retry - " = "Tentar de novo - ";
 "Retry a clear: save more, or match it with fewer skills or less time." = "Tente novamente uma fase concluída: salve mais lemmings ou iguale o resultado usando menos habilidades ou menos tempo.";
-"Retry actions and earned rewards use clearer grouping and consistent controls across Classic, The Tribes and Chronicles." = "As ações para tentar novamente e as recompensas recebidas têm agrupamento mais claro e controles consistentes em Classic, The Tribes e Chronicles.";
 "Retry as {0}" = "Tentar novamente como {0}";
 "Retry last level as {0}" = "Tentar novamente a última fase como {0}";
 "Retry level" = "Repetir nível";
