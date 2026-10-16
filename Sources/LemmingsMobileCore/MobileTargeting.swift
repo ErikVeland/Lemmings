@@ -73,7 +73,9 @@ public enum MobileTargetSelector {
         radius: Double = 26,
         preference: MobileTargetPreference = .assignable,
         favourApproaching: Bool = true,
-        input: MobileTargetInput = .touch
+        input: MobileTargetInput = .touch,
+        retaining: Int? = nil,
+        wallDirectionForTarget: ((Int) -> Int?)? = nil
     ) -> MobileTargetSelection? {
         guard radius > 0, radius.isFinite else { return nil }
         guard viewport.contentFrame.contains(touch) else { return nil }
@@ -116,6 +118,7 @@ public enum MobileTargetSelector {
                 if lhs.0.assignment == .eligible { return true }
                 if rhs.0.assignment == .eligible { return false }
             }
+            if (lhs.0.id == retaining) != (rhs.0.id == retaining) { return lhs.0.id == retaining }
             if lhs.1 != rhs.1 { return lhs.1 < rhs.1 }
             return lhs.0.id < rhs.0.id
         }
@@ -123,9 +126,14 @@ public enum MobileTargetSelector {
         let sorted = projected.sorted(by: precedes)
         guard var chosen = sorted.first?.0 else { return nil }
         if favourApproaching, chosen.assignment == .eligible, preference != .builder, preference != .bombBlocker {
-            let touchLevel = viewport.levelPoint(fromView: touch)
+            let wallDirection = wallDirectionForTarget?(chosen.id)
+            // Retain an ordinary crowd pick, but reconsider it when it turns away from a wall.
+            if chosen.id == retaining, wallDirection == nil {
+                return MobileTargetSelection(id: chosen.id, point: chosen.point, state: chosen.assignment)
+            }
             func isApproaching(_ candidate: MobileTargetCandidate) -> Bool {
-                (touchLevel.x - candidate.point.x) * Double(candidate.direction) >= 0
+                if let wallDirection { return candidate.direction == wallDirection }
+                return (levelPoint.x - candidate.point.x) * Double(candidate.direction) > 0
             }
             func isBehind(_ candidate: MobileTargetCandidate, builder: MobileTargetCandidate) -> Bool {
                 guard candidate.direction == builder.direction else { return false }
@@ -136,12 +144,14 @@ public enum MobileTargetSelector {
             if chosen.isBuilding,
                let follower = sorted.map(\.0).first(where: {
                    $0.id != chosen.id && $0.assignment == .eligible
+                       && preferred($0) == preferred(chosen)
                        && isApproaching($0) && isBehind($0, builder: chosen)
                }) {
                 chosen = follower
             } else if !isApproaching(chosen),
                       let approaching = sorted.map(\.0).first(where: {
                           $0.assignment == .eligible && $0.direction != chosen.direction
+                              && preferred($0) == preferred(chosen)
                               && isApproaching($0)
                       }) {
                 chosen = approaching

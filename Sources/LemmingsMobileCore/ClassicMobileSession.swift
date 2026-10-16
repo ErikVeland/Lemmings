@@ -343,6 +343,13 @@ public final class ClassicMobileSession: MobileGameSession {
         }) { terrainFrame = nil }
     }
 
+    public func targetWallDirection(for target: Int) -> Int? {
+        guard let lemming = simulation.lemmings.first(where: { $0.id == target }) else { return nil }
+        return LemmingApproachTargeting.wallDirection(x: lemming.foot.x, footY: lemming.foot.y) {
+            simulation.terrain.isSolid(x: $0, y: $1)
+        }
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard ClassicSkill.allCases.indices.contains(control) else { return [] }
         let skill = ClassicSkill.allCases[control]

@@ -219,6 +219,8 @@ public protocol MobileGameSession: AnyObject {
 
     func tick()
     func targetCandidates(for control: Int) -> [MobileTargetCandidate]
+    /// A nearby wall's side, using the actor's native foot position and terrain.
+    func targetWallDirection(for target: Int) -> Int?
     @discardableResult func assign(control: Int, to target: Int) -> Bool
     @discardableResult func adjustReleaseRate(by delta: Int) -> Bool
     @discardableResult func beginEndRun() -> Bool
@@ -231,6 +233,7 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    func targetWallDirection(for target: Int) -> Int? { nil }
     var lostLemmingCount: Int { max(0, snapshot.released - snapshot.saved - activeLemmingCount) }
     func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
         .init(encoded: try checkpointPayload())

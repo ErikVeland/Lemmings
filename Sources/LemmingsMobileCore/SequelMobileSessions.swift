@@ -146,6 +146,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         if !runtime.isNuking { beforeEndRun = nil }
     }
 
+    public func targetWallDirection(for target: Int) -> Int? {
+        guard let lemming = runtime.lemmings.first(where: { $0.id == target }) else { return nil }
+        return LemmingApproachTargeting.wallDirection(x: lemming.x, footY: lemming.y, isSolid: runtime.isSolid)
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard runtime.configuration.skills.indices.contains(control) else { return [] }
         let results = runtime.assignmentResults(slot: control)

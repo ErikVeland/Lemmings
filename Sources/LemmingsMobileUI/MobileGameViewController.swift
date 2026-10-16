@@ -923,10 +923,10 @@ typealias MobileGameControllerBase = UIViewController
         else if session.engineIdentifier == "lemmings3", control >= 3 { preference = .toolHolder }
         else { preference = .assignable }
         #if os(tvOS)
-        if let retained = TVTargetLock.retain(highlightedTarget, at: point, candidates: candidates, viewport: playfieldView.gameViewport) { return retained }
-        let favourApproaching = false
+        let retained = TVTargetLock.retain(highlightedTarget, at: point, candidates: candidates,
+                                           viewport: playfieldView.gameViewport)?.id
         #else
-        let favourApproaching = settings.favorApproachingLemmings
+        let retained: Int? = nil
         #endif
         return MobileTargetSelector.select(
             candidates: candidates,
@@ -934,8 +934,10 @@ typealias MobileGameControllerBase = UIViewController
             viewport: playfieldView.gameViewport,
             radius: 30,
             preference: preference,
-            favourApproaching: favourApproaching,
-            input: previewInput
+            favourApproaching: settings.favorApproachingLemmings,
+            input: previewInput,
+            retaining: retained,
+            wallDirectionForTarget: session.targetWallDirection
         )
     }
 
