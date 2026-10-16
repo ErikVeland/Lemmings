@@ -816,7 +816,7 @@ import NxlvKit
     for (index, option) in L10n.languageOptions.enumerated() {
       let button = GameButton(title: option.title, target: self, action: #selector(previewLanguage))
       button.tag = index
-      button.setButtonType(.radio)
+      button.setButtonType(.momentaryPushIn) // Track the full stone face. Keep radio semantics below.
       let selected = option == L10n.currentLanguagePreference
       button.state = selected ? .on : .off
       button.setAccessibilityRole(.radioButton)

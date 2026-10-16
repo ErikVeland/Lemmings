@@ -328,6 +328,15 @@ The earlier 48-test run preceded live language selection. No automated tests
 were added or rerun for this settings change. Physical input, VoiceOver and
 native language approval remain separate checks.
 
+The Mac picker uses rectangular button tracking with radio accessibility roles.
+Native radio tracking excluded the centred bitmap captions. Nine muted,
+offscreen regression checks now pass, including the shared resolver and two
+picker tests. They cover all ten choices at two window sizes, native cell hit
+regions across each row, keyboard and accessibility activation, preview, Back,
+Apply and reopening the picker. Six English, French and Tamil captures retain
+the shipped artwork and selection/focus states. Representative captures were
+inspected. Native mouse event delivery and VoiceOver remain manual checks.
+
 ## Authoring
 
 Use complete messages:
