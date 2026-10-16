@@ -75,6 +75,44 @@ struct LearningJourneyTests {
         #expect(try journey.migrating(migrated) == migrated)
     }
 
+    /// Learning-17 opened with fan levels. A revised opening must not queue its beginner
+    /// lessons after a long run, and campaign wins must not return.
+    @Test func longOldRunResumesAtItsFrontierAndDefersSkippedOpeningLessons() throws {
+        let journey = try bundledJourney()
+        let lessons = journey.lessons.map(\.entry)
+        func fan(_ number: Int) throws -> LevelPlaylistEntry {
+            try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:retired", levelID: "old.dat#\(number)"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Retired fan pack",
+                levelNameSnapshot: "Fan \(number)", levelNumberSnapshot: number)
+        }
+        // Lessons 135 and 156 are far outliers. They must not move the resume point.
+        let visitedPositions = Array(0...8) + [13, 14, 20, 25, 30, 33, 39, 40, 51, 52, 53, 134, 155]
+        var past = try (1...28).map(fan)
+        for (offset, position) in visitedPositions.enumerated() { past.insert(lessons[position], at: offset * 2) }
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-17", summary: "Previous journey"),
+            entries: past + [try fan(99), lessons[80]], currentIndex: past.count)
+        let campaignWin = lessons[100].identity
+        let migration = try journey.migration(of: run) { $0 == campaignWin }
+        let migrated = try #require(migration.run)
+
+        #expect(migrated.id == run.id && migrated.currentIndex == past.count)
+        #expect(Array(migrated.entries.prefix(past.count)) == past)
+        #expect(migrated.currentEntry == lessons[54])
+        let future = migrated.entries.dropFirst(past.count).map(\.identity)
+        #expect(future == lessons.indices.filter { $0 > 53 && ![100, 134, 155].contains($0) }.map { lessons[$0].identity })
+        let skipped = lessons.indices.filter { $0 < 53 && !visitedPositions.contains($0) }.map { lessons[$0].identity }
+        #expect(migration.deferred == skipped)
+        #expect(!migration.deferred.contains(campaignWin))
+
+        // Deferred lessons appear in "Come back to these", not as wins.
+        var progress = LearningJourneyProgress()
+        for identity in migration.deferred { progress.record(identity, won: false) }
+        #expect(progress.revisit(in: journey).map(\.identity) == skipped)
+        #expect(progress.solvedCount(in: journey) == 0)
+        #expect(try journey.migrating(migrated) == migrated)
+    }
+
     @Test func reportedWallsKeepTheirFloorsAndDeferSavedAttempts() throws {
         let journey = try bundledJourney()
         for (levelID, demand, stage) in [

@@ -4950,6 +4950,20 @@ extension AppDelegate {
     try check(restored.activeRun == migrationStore.activeRun && restored.savedRuns.map(\.run) == migrationStore.savedRuns.map(\.run)
       && restored.savedRuns.map(\.hotSeatID) == migrationStore.savedRuns.map(\.hotSeatID),
       "Community migration was not persistent and idempotent")
+    // A long old run resumes at its frontier. Skipped openers wait in "Come back to these".
+    let longFile = directory.appendingPathComponent("long-migration.json")
+    let longStore = try LevelPlaylistStore(file: longFile)
+    try longStore.add(journey.playlist())
+    let longRun = try LevelSequenceRun(source: solo.source, pool: .init(id: "learning-17", summary: "Earlier journey"),
+      entries: [entries[0], entries[1], entries[15], withdrawn], currentIndex: 3)
+    try longStore.startRun(longRun, hotSeatID: nil)
+    let campaignWin = entries[16].identity
+    let longReopened = try LevelPlaylistStore(file: longFile) { $0 == campaignWin }
+    let longRevisit = longReopened.learningProgress.revisit(in: journey).map(\.identity)
+    try check(longReopened.activeRun?.currentEntry.identity == entries[17].identity
+      && longRevisit == entries[2..<15].map(\.identity)
+      && longReopened.learningProgress.completed.isEmpty,
+      "A revised journey requeued skipped openers or a campaign win after a long run")
     let futureRun = try LevelSequenceRun(source: solo.source, pool: .init(id: "learning-999", summary: "Future"), entries: [withdrawn])
     try check(try journey.migrating(futureRun) == futureRun, "Community migration downgraded a future journey")
     let custom = try LevelSequenceRun(source: .playlist(UUID()), pool: oldPool, entries: [withdrawn])

@@ -3731,11 +3731,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
       levelNameSnapshot: level.level.title.isEmpty ? L10n.text("Level \(levelIndex + 1)") : level.level.title, levelNumberSnapshot: levelIndex + 1)
   }
 
+  /// Journey and Classic campaign wins. A revised journey does not queue these lessons again.
+  private func learningWins(profileID: String) -> (LevelCatalogueIdentity) -> Bool {
+    let journey = GameProgressPreferences.learning(profileID: profileID).completed
+    var cleared: [String: Set<Int>] = [:]
+    for entry in dataSets {
+      guard let title = entry.set.title, !dataSetID(entry).contains(":source-"),
+        let data = savedClassicProgressData(for: entry),
+        let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) else { continue }
+      let passed = Set(saved.passed)
+      cleared[title.rawValue, default: []].formUnion(entry.set.campaign.levels.enumerated().compactMap { index, level in
+        passed.contains("\(level.rank)#\(level.number - 1)") ? index : nil
+      })
+    }
+    let campaign = LevelPlaylistStore.classicCampaignWins { cleared[$0] ?? [] }
+    return { journey.contains($0) || campaign($0) }
+  }
+
   private func playlistStore() throws -> LevelPlaylistStore {
     let profileID = ArcadeStore.shared.records.activeProfileID
     let store: LevelPlaylistStore
     if let cached = playlistStoreCache, cached.profileID == profileID { store = cached.store }
-    else { store = try LevelPlaylistStore(profileID: profileID); playlistStoreCache = (profileID, store) }
+    else {
+      store = try LevelPlaylistStore(profileID: profileID, won: learningWins(profileID: profileID))
+      playlistStoreCache = (profileID, store)
+    }
     try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID))
     try saveCloudLearning(store)
     return store

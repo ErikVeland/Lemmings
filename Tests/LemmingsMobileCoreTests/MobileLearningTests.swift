@@ -44,7 +44,10 @@ struct MobileLearningTests {
         #expect(restored.state.run?.id == original.run?.id)
         #expect(restored.state.run?.currentIndex == 20)
         #expect(Array(try #require(restored.state.run).entries.prefix(20)) == Array(entries.prefix(20)))
-        #expect(restored.state.run?.currentEntry.levelNameSnapshot == "Intsy-Wintsy...Lemming?")
+        // The revised opening's beginner lessons do not return after this run's frontier.
+        #expect(restored.state.run?.currentEntry == journey.lessons[54].entry)
+        #expect(!(try #require(restored.state.run).entries.dropFirst(20)
+            .contains { $0.levelNameSnapshot == "Intsy-Wintsy...Lemming?" }))
         #expect(try #require(restored.state.run).entries.dropFirst(20).lastIndex { $0.identity == opening[20].identity }! > 80)
     }
     @Test func oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() throws {

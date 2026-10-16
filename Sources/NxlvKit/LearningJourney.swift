@@ -164,24 +164,57 @@ public struct LearningJourney: Codable, Equatable, Sendable {
 
     /// Replace an older built-in queue without inventing wins or changing its owner.
     /// Restore the teaching order of unvisited lessons and retain all past visits.
+    /// A revised built-in run, and the earlier lessons it moved to "Come back to these".
+    public struct Migration: Equatable, Sendable {
+        /// Nil when every lesson of the revised journey is already reached.
+        public let run: LevelSequenceRun?
+        public let deferred: [LevelCatalogueIdentity]
+    }
+
+    /// A reached lesson further than this past the previous one is an outlier.
+    /// It does not move the resume point over the lessons in between.
+    public static let migrationFrontierGap = 20
+
     public func migrating(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
+        try migration(of: run).run
+    }
+
+    /// `won` reports wins outside this run, in the journey or a campaign. Won lessons never return.
+    public func migration(of run: LevelSequenceRun,
+                          won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws -> Migration {
         guard run.source == .playlist(Self.playlistID),
               run.pool.id.hasPrefix("learning-"),
               let oldVersion = Int(run.pool.id.dropFirst("learning-".count)),
               let newVersion = Int(version.dropFirst("learning-".count)),
-              oldVersion < newVersion else { return run }
+              oldVersion < newVersion else { return Migration(run: run, deferred: []) }
         _ = try validated()
-        guard placementPolicy == Self.communityPlacementPolicy else { return run }
-        let visited = Set(run.entries.prefix(run.currentIndex).map(\.identity))
-        // Keeping a newly demoted current puzzle would bypass the new practice section.
+        guard placementPolicy == Self.communityPlacementPolicy else { return Migration(run: run, deferred: []) }
         // Past visits remain history. Reorder only the unvisited tail of this built-in run.
-        let future = lessons.map(\.entry).filter { !visited.contains($0.identity) }
-        guard !future.isEmpty else { return nil }
-        // Past visits are history, not proof of completion. Progress records stay untouched.
         let past = Array(run.entries.prefix(run.currentIndex))
-        return try LevelSequenceRun(id: run.id, source: run.source,
+        let visited = Set(past.map(\.identity))
+        let entries = lessons.map(\.entry)
+        let reached = entries.map { visited.contains($0.identity) || won($0.identity) }
+        // Resume after the furthest reached lesson of the revised order. A revised opening
+        // must not queue a block of beginner lessons after a long run.
+        var frontier = -1
+        for index in entries.indices where reached[index] {
+            guard index - frontier <= Self.migrationFrontierGap else { break }
+            frontier = index
+        }
+        // The saved current lesson stays next when the revision moved it earlier.
+        // Keeping a newly demoted current puzzle would bypass the new practice section.
+        let current = run.currentIndex < run.entries.count ? run.currentEntry.identity : nil
+        var future: [LevelPlaylistEntry] = [], deferred: [LevelCatalogueIdentity] = []
+        for index in entries.indices where !reached[index] {
+            if index > frontier { future.append(entries[index]) }
+            else if entries[index].identity == current { future.insert(entries[index], at: 0) }
+            else { deferred.append(entries[index].identity) }
+        }
+        guard !future.isEmpty else { return Migration(run: nil, deferred: deferred) }
+        return Migration(run: try LevelSequenceRun(id: run.id, source: run.source,
             pool: LevelPool(id: version, summary: run.pool.summary), entries: past + future,
-            currentIndex: past.count, seed: run.seed, algorithm: run.algorithm, createdAt: run.createdAt)
+            currentIndex: past.count, seed: run.seed, algorithm: run.algorithm, createdAt: run.createdAt),
+            deferred: deferred)
     }
 
     public func playlist() throws -> LevelPlaylist {

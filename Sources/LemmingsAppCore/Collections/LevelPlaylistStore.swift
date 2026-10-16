@@ -268,15 +268,32 @@ import NxlvKit
         }
     }
 
-    public convenience init(profileID: String, storage: AppStorage = .current()) throws {
-        try self.init(file: Self.fileURL(profileID: profileID, storage: storage))
+    /// `won` reports wins outside this file, such as campaign wins. A journey revision skips them.
+    public convenience init(profileID: String, storage: AppStorage = .current(),
+                            won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
+        try self.init(file: Self.fileURL(profileID: profileID, storage: storage), won: won)
     }
 
-    public init(file: URL) throws {
+    public init(file: URL, won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
         self.file = file
         try load()
         try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
-        if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey) }
+        if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey, won: won) }
+    }
+
+    /// Classic campaign wins as journey identities. `cleared` returns the won campaign
+    /// indices of one release, such as "lemmings" for "lemmings-LEVEL-120".
+    nonisolated public static func classicCampaignWins(
+        _ cleared: @escaping (String) -> Set<Int>) -> (LevelCatalogueIdentity) -> Bool {
+        var cache: [String: Set<Int>] = [:]
+        return { identity in
+            guard identity.engine == .classic, !identity.packID.hasPrefix("fan:"),
+                  let release = identity.packID.split(separator: "-").first.map(String.init) else { return false }
+            let parts = identity.levelID.split(separator: ":", omittingEmptySubsequences: false)
+            guard parts.count == 5, let index = Int(parts[0]) else { return false }
+            if cache[release] == nil { cache[release] = cleared(release) }
+            return cache[release]?.contains(index) == true
+        }
     }
 
     /// Retain run identity, owner and completed visits when an editorial lesson is withdrawn.
@@ -305,17 +322,27 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    public func migrateLearningJourney(_ journey: LearningJourney) throws {
+    public func migrateLearningJourney(_ journey: LearningJourney,
+                                       won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
         let previous = document
-        let active = try document.activeRun.flatMap { try journey.migrating($0) }
+        var progress = learningProgress
+        let completed = progress.completed
+        func migrated(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
+            let migration = try journey.migration(of: run) { completed.contains($0) || won($0) }
+            // Skipped earlier lessons stay available in "Come back to these". A deferral is never a win.
+            for identity in migration.deferred { progress.record(identity, won: false) }
+            return migration.run
+        }
+        let active = try document.activeRun.flatMap(migrated)
         var changed = active != document.activeRun
         document.activeRun = active
         if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
         document.savedRuns = try savedRuns.compactMap { saved in
-            guard let run = try journey.migrating(saved.run) else { changed = true; return nil }
+            guard let run = try migrated(saved.run) else { changed = true; return nil }
             changed = changed || run != saved.run
             return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
         }
+        if progress != learningProgress { document.learningProgress = progress; changed = true }
         guard changed else { document = previous; return }
         do { try save() } catch { document = previous; throw error }
     }

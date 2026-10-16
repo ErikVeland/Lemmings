@@ -14,9 +14,14 @@ extension MobileLibraryViewController {
                 GameProgressPreferences.learning(profileID: profiles.activeID, sessionID: hotSeat?.id))
             if let run = saved.run, let journey = bundledJourney {
                 do {
-                    let migrated = try journey.migrating(run)
+                    let completed = saved.progress.completed
+                    let campaign = LevelPlaylistStore.classicCampaignWins { [self] in solvedLevels(for: "release/" + $0) }
+                    let migration = try journey.migration(of: run) { completed.contains($0) || campaign($0) }
+                    let migrated = migration.run
                     if migrated != run {
                         var updated = saved; updated.run = migrated
+                        // Skipped earlier lessons stay available in "Come back to these".
+                        for identity in migration.deferred { updated.progress.record(identity, won: false) }
                         try learningStorage.save(updated, name: "learning")
                         saved = updated
                     }
