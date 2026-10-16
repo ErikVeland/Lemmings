@@ -1,0 +1,6156 @@
+{
+  "passed": true,
+  "failures": [],
+  "counts": {
+    "lemmings": {
+      "winning-replay": 120
+    },
+    "ohNoMoreLemmings": {
+      "winning-replay": 100
+    },
+    "xmasLemmings1991": {
+      "winning-replay": 4
+    },
+    "xmasLemmings1992": {
+      "winning-replay": 4
+    },
+    "holidayLemmings1993": {
+      "winning-replay": 32
+    },
+    "holidayLemmings1994": {
+      "winning-replay": 32
+    },
+    "ohYesMoreLemmings": {
+      "winning-replay": 60
+    },
+    "fan": {
+      "winning-replay": 2403,
+      "rendered-and-smoke-tested-only": 3599,
+      "replay-failed": 18
+    }
+  },
+  "packs": 535,
+  "fanLevels": 6020,
+  "inventory": [
+    {
+      "pack": "0001-geooPk0.zip",
+      "file": "geooPk0.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0002-geooPk1.zip",
+      "file": "geooPk1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0003-Anatol00.zip",
+      "file": "Anatol00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0004-Eymerich02.zip",
+      "file": "Eymerich02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0005-Mikepak00.zip",
+      "file": "Mikepak00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0006-Mikepak01.zip",
+      "file": "Mikepak01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0007-Mikepak02.zip",
+      "file": "Mikepak02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0008-Mikepak03.zip",
+      "file": "Mikepak03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0009-Mikepak04.zip",
+      "file": "Mikepak04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0010-Mikepak05.zip",
+      "file": "Mikepak05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0011-Mikepak06.zip",
+      "file": "Mikepak06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0012-Mikepak07.zip",
+      "file": "Mikepak07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0013-Mikepak08.zip",
+      "file": "Mikepak08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0014-Mikepak09.zip",
+      "file": "Mikepak09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0015-Mikepak10.zip",
+      "file": "Mikepak10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0016-Mikepak11.zip",
+      "file": "Mikepak11.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0017-Mikepak12.zip",
+      "file": "Mikepak12.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0018-Mikepak13.zip",
+      "file": "Mikepak13.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0019-Mikepak14.zip",
+      "file": "Mikepak14.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0020-ISteve01.zip",
+      "file": "ISteve01.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0021-ISteve03.zip",
+      "file": "ISteve03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0022-ISteve08.zip",
+      "file": "ISteve08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0023-ISteve02.zip",
+      "file": "ISteve02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0024-ISteve04.zip",
+      "file": "ISteve04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0025-ISteve05.zip",
+      "file": "ISteve05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0026-ISteve06.zip",
+      "file": "ISteve06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0027-ISteve07.zip",
+      "file": "ISteve07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0028-ISteve09.zip",
+      "file": "ISteve09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0029-QBeez01.zip",
+      "file": "QBeez01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0030-QBeez02.zip",
+      "file": "QBeez02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0031-Siergiej01.zip",
+      "file": "Siergiej01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0032-ClamSpam01.zip",
+      "file": "ClamSpam01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0033-QBeez03.zip",
+      "file": "QBeez03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0034-levelpack1.zip",
+      "file": "levelpack1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0035-1tseug.zip",
+      "file": "1tseug.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0036-BulletRide1.zip",
+      "file": "BulletRide1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0037-BulletRide2.zip",
+      "file": "BulletRide2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0038-BulletRide3.zip",
+      "file": "BulletRide3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0039-BulletRide4.zip",
+      "file": "BulletRide4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0040-lemmings.zip",
+      "file": "lemmings .dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0041-lm-set01.zip",
+      "file": "lm_set01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0042-lm-set02.zip",
+      "file": "lm_set02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0043-lm-set03.zip",
+      "file": "lm_set03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0044-lm-set04.zip",
+      "file": "lm_set04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0045-lm-set05.zip",
+      "file": "lm_set05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0046-lm-set06.zip",
+      "file": "lm_set06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0047-lm-set07.zip",
+      "file": "lm_set07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0048-lm-set08.zip",
+      "file": "lm_set08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0049-QBeez04.zip",
+      "file": "QBeez04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0050-lm-set09.zip",
+      "file": "lm_set09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0051-lm-set10.zip",
+      "file": "lm_set10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0052-QBeez1.zip",
+      "file": "QBeez1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0053-extreme.zip",
+      "file": "extreme.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0054-BulletRide5.zip",
+      "file": "BulletRide5(ver3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0055-Mad00.zip",
+      "file": "Mad00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0056-Mad00Dos.zip",
+      "file": "Mad00Dos.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0057-lm-set11.zip",
+      "file": "lm_set11.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0058-lm-set12.zip",
+      "file": "lm_set12.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0059-lm-set13.zip",
+      "file": "lm_set13.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0060-lm-set14.zip",
+      "file": "lm_set14.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0061-lm-set15.zip",
+      "file": "lm_set15.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0062-ClamSpam02.zip",
+      "file": "ClamSpam02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0063-Lemmy556-Statues.zip",
+      "file": "Lemmy556 Statues.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0064-Lemmy556-Ismo.zip",
+      "file": "Lemmy556 Ismo.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0065-Lemmy556-My-little-levels.zip",
+      "file": "Lemmy556 My little levels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0066-Lemmy556-My-little-levels-2.zip",
+      "file": "Lemmy556 My little levels 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0067-Ninja-Lems.zip",
+      "file": "Ninja Lems.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0068-Lemmy556-More-levels.zip",
+      "file": "Lemmy556 More levels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0069-Many-more-levels.zip",
+      "file": "Many more levels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0071-fishthekiller99.zip",
+      "file": "fishthekiller99.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0072-Lemmy-556-My-last-dos-level-pack.zip",
+      "file": "Lemmy 556 My last dos level pack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0073-ClamSpam03.zip",
+      "file": "ClamSpam03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0074-elfpak01.zip",
+      "file": "elfpak01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0075-JHIsan1.zip",
+      "file": "JHIsan1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0076-ClamSpam04.zip",
+      "file": "ClamSpam04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0077-Consta1.zip",
+      "file": "Consta1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0078-doggycharly-random-lvls.zip",
+      "file": "doggycharly random lvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0079-ClamSpamXmas08.zip",
+      "file": "ClamSpamXmas08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0080-Master-System-Remakes.zip",
+      "file": "Master System Remakes.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0081-AdamPack01.zip",
+      "file": "AdamPack01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0082-Yawg01.zip",
+      "file": "Yawg01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0083-CSTame1.zip",
+      "file": "CSTame1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0084-CSTame2.zip",
+      "file": "CSTame2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0085-Yawg02.zip",
+      "file": "Yawg02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0086-epic01.zip",
+      "file": "epic01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0087-FleechPack-v1.zip",
+      "file": "FleechPack(v1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0088-Timpack1.zip",
+      "file": "Timpack1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0089-Timpack2.zip",
+      "file": "Timpack2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0090-Timpack3.zip",
+      "file": "Timpack3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0091-Timpack4.zip",
+      "file": "Timpack4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0092-Timpack5.zip",
+      "file": "Timpack5.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0093-Timpack6.zip",
+      "file": "Timpack6.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0094-Timpack7.zip",
+      "file": "Timpack7.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0095-Timpack8.zip",
+      "file": "Timpack8.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0096-Timpack9.zip",
+      "file": "Timpack9.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0097-Timpack10.zip",
+      "file": "Timpack10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0098-Timpack11.zip",
+      "file": "Timpack11.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0099-TimpackA.zip",
+      "file": "TimpackA.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0100-TimpackB.zip",
+      "file": "TimpackB.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0101-TimpackC.zip",
+      "file": "TimpackC.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0102-TimpackD.zip",
+      "file": "TimpackD.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0103-TimpackE.zip",
+      "file": "TimpackE.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0104-TimpackF.zip",
+      "file": "TimpackF.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0105-epic02.zip",
+      "file": "epic02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0106-ClamSpam05.zip",
+      "file": "ClamSpam05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0107-Yawg03.zip",
+      "file": "Yawg03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0108-geooPkG.zip",
+      "file": "geooPkG.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0109-Yawg04.zip",
+      "file": "Yawg04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0110-Yawg05.zip",
+      "file": "Yawg05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0111-Fernito-pack-1.zip",
+      "file": "Fernito pack 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0112-Epic-Fernito-1.zip",
+      "file": "Epic Fernito 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0113-Mayhem-01.zip",
+      "file": "Mayhem 01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0126-joe01.zip",
+      "file": "joe01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0127-joe02.zip",
+      "file": "joe02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0128-joe03.zip",
+      "file": "joe03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0129-epic03.zip",
+      "file": "epic03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0130-Crystal-Remakes.zip",
+      "file": "Crystal Remakes.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0131-joe04.zip",
+      "file": "joe04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0132-dstar01.zip",
+      "file": "dstar01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0133-weirdy01-version-2.zip",
+      "file": "weirdy01 (version 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0134-weirdy02-version-2.zip",
+      "file": "weirdy02 (version 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0135-weirdy03-version-2.zip",
+      "file": "weirdy03 (version 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0136-weirdy04-version-2.zip",
+      "file": "weirdy04 (version 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0137-weirdy05-version-2.zip",
+      "file": "weirdy05 (version 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0138-ISteve10.zip",
+      "file": "ISteve10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0139-Epic-giga01.zip",
+      "file": "Epic giga01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0140-Epic-giga02.zip",
+      "file": "Epic giga02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0141-Epic-Giga03.zip",
+      "file": "Epic Giga03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0142-Epic-Giga-rating-pack-01.zip",
+      "file": "Epic Giga rating pack 01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0143-Epic-giga-rating-pack-02.zip",
+      "file": "Epic giga rating pack 02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0144-Snow-remakes-01.zip",
+      "file": "Snow remakes 01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0160-Giga-pack-01.zip",
+      "file": "Giga pack 01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0161-Yawg06.zip",
+      "file": "Yawg06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0162-Giga-pack-02.zip",
+      "file": "Giga pack 02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0163-Giga-pack-03.zip",
+      "file": "Giga pack 03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0164-ClamSpamXmas09.zip",
+      "file": "ClamSpamXmas09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0165-Giga-pack-04.zip",
+      "file": "Giga pack 04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0166-QBeez05.zip",
+      "file": "QBeez05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0167-Giga-pack-05.zip",
+      "file": "Giga pack 05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0168-Giga-pack-06.zip",
+      "file": "Giga pack 06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0169-Giga-pack-07.zip",
+      "file": "Giga pack 07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0170-Giga-pack-08.zip",
+      "file": "Giga pack 08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0171-Giga-pack-09.zip",
+      "file": "Giga pack 09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0172-Giga-pack-10.zip",
+      "file": "Giga pack 10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0173-hubbart.zip",
+      "file": "hubbart.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0174-hubbart2.zip",
+      "file": "hubbart2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0175-hubbart3.zip",
+      "file": "hubbart3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0176-hubbart4.zip",
+      "file": "hubbart4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0177-hubbart5.zip",
+      "file": "hubbart5.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0178-hubbart6.zip",
+      "file": "hubbart6.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0179-The-lemming-google-pack.zip",
+      "file": "The lemming google pack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0180-Lemmings-platinum-Fragle-part-1.zip",
+      "file": "Lemmings platinum Fragle part 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0181-Lemmings-platinum-Fragle-part-2.zip",
+      "file": "Lemmings platinum Fragle part 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0182-hubbart7.zip",
+      "file": "hubbart7.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0183-SeverSet1.zip",
+      "file": "SeverSet1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0184-SeverSet2.zip",
+      "file": "SeverSet2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0185-SeverSet3.zip",
+      "file": "SeverSet3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0186-SeverSet4.zip",
+      "file": "SeverSet4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0187-Siergiej02.zip",
+      "file": "Siergiej02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0188-Lemmings-platinum-Careful-Part-1.zip",
+      "file": "Lemmings platinum Careful Part 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0189-Lemmings-platinum-Careful-Part-2.zip",
+      "file": "Lemmings platinum Careful Part 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0190-Lemmings-platinum-Dangerous-Part-1.zip",
+      "file": "Lemmings platinum Dangerous Part 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0191-Lemmings-platinum-Dangerous-Part-2.zip",
+      "file": "Lemmings platinum Dangerous Part 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0192-hubbart8.zip",
+      "file": "hubbart8.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0193-Gronklems-0.zip",
+      "file": "Gronklems #1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0194-ClamSpamXmas10.zip",
+      "file": "ClamSpamXmas10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0195-finpack-01.zip",
+      "file": "finpak01.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0196-nortpack1.zip",
+      "file": "nortpack1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0197-TimballistoPack2.zip",
+      "file": "Pack 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0198-TimballistoPack3.zip",
+      "file": "PACK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0199-TMChallenge.zip",
+      "file": "TMChallenge.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/1) Good Reception.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/10) Controlled Explosion.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/2) Jumble Sale.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/3) Lemmite.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/4) The Bashers Temple.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/5) Three Lemmings with One Brick.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/6) Welcome to Lemmingopolis.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/7) The Pendulemming.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/8) Which Way to Where.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/9) One Gap from Freedom.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/Extras/E1) The Pendulemming CH.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0200-Gronklems-4.zip",
+      "file": "Gronklems #4 (v3)/Extras/E2) Controlled Explosion CH.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "1) If Only That Pillar Wasn't There.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "10) Lemmington under construction.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "2) Wish you had them.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "3) Get on top of the problem.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "4) Not a Basher Tutorial.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "5) Not as Simple as it Looks.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "6) With a Twist!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "7) Get Your Oven Gloves Out!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "8) Lemming Island.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0201-Gronklems-3.zip",
+      "file": "9) Ruins of three.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "Askesis.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "fearfulSymmetry.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "hard to port!.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "Jacob's Ladder.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "LemmingsInArms.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "LemmingsInMotion.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "mobius1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "Ouch Me Head.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "PlanB.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "Roundabout.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0202-mobius1.zip",
+      "file": "theExitIsRightThere!.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/1) Unclimb that cliff!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/10) Bring it Together!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/2) Lemming Storage Facility.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/3) Mystery Machine.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/4) Balancing Act.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/5) Ancient Clockwork.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/6) Radioactive Lemming!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/7) LemDotAvi.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/8) Just Over the Hill.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Gronklems 6 v2/9) Emerald City.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/1) Unclimb that cliff!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/10) Bring it Together!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/2) Lemming Storage Facility.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/3) Mystery Machine.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/4) Balancing Act.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/5) Ancient Clockwork.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/6) Radioactive Lemming!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/7) Attack From Four Directions.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/8) Just Over the Hill.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0203-Gronklems-6.zip",
+      "file": "Original Levels/9) Emerald City.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/1) Inside the Pyramid.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/10) The Giants Leap.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/2) Crossing the Chasm.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/3) Drifting Away....ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/4) Brick City.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/5) Bubble Bath.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/6) Restoration in Progress.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/7) Where Clouds are Made.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/8) Antarctic Secret Base.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Gronklems #5/9) Optical Fibre Land.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/1) Inside the Pyramid.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/10) The Giants Leap.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/2) Crossing the Chasm.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/3) Drifting Away....ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/4) Brick City.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/5) Bubble Bath.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/6) Restoration in Progress.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/7) Where Clouds are Made.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/8) Antarctic Secret Base.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0204-Gronklems-5.zip",
+      "file": "Original levels/9) Optical Fibre Land.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0205-mobius2.zip",
+      "file": "mobius2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "1 Transit Timing Variations.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "10 Just Another Random Brick Level.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "2 Three'sCompany.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "3 Baptism by Fire.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "4 Babylon Fading.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "5 The Lemming With the Golden Gun.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "6 The French Connection.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "7 The Midas Touch.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "8 Tres Hombres.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0206-mobius-3.zip",
+      "file": "9 Rude Mood.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0207-LF-level-design-contest-1.zip",
+      "file": "contest1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/1) Lemmings Are Not Big Trucks.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/10) A DINOSAUR BLOCKS THE WAY.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/2) Getting Stuck in a Cave.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/3) Crossover.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/4) Now use Miners and Builders!.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/5) HELP.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/6) GLITCHSPACE.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/7) Blocked Bridge.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/8) Industrial Park.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0208-Gronklems-7.zip",
+      "file": "Gronklems 7/9) Four Quarters.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/1)Calder Glen.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/10)The Havoc of three.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/2)Dying Lemmings.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/3)08 BC lost temple.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/4)Random Dream.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/5)Lemmings at work.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/6)Linear Level.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/7)Burst Pipe.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/8)snow endurance.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0209-grams88-1.zip",
+      "file": "grams88 Levels/9)Stuck in the pipe.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0210-timelimits.zip",
+      "file": "timelimits.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/1)Go for life.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/10)Mr Havoc has returned.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/2)A tiny problem.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/3)House location change.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/4)Ice morning not.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/5)Sacrifice.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/6)Ten allowed to die.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/7)Lemming Factory.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/8)Plan Carefully.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0211-grams88-2.zip",
+      "file": "More Levels/9)High sand castle.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0212-TimballistoPack4.zip",
+      "file": "PACK4.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0213-Jammer-Pack-01-preview.zip",
+      "file": "JamPack01prev.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0214-LF-Level-Jam-1.zip",
+      "file": "LF Level Jam #1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "1 Fracture.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "10 suspended animation.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "2 Over My Head.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "3 It Takes Time to Build.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "4 Hook Line and Sinker.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "5 five for fighting.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "6 Last Lemming Standing.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "7 Fractured.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "8 Operation Barbarossa.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0215-Plinto.zip",
+      "file": "9 The Lemming Lies Down on Broadway.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0216-PSP-Special-1-10-of-36.zip",
+      "file": "LEVELPAK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0217-PSP-Special-11-26-of-36.zip",
+      "file": "PSP Special.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0218-PSP-Special-27-36.zip",
+      "file": "PSP Special2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0219-Nepster01.zip",
+      "file": "Nepster01_V6.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0220-AkseliPack01.zip",
+      "file": "AkseliPack01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0221-ANTHPCK1.zip",
+      "file": "ANTHPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0222-ANTHPCK2.zip",
+      "file": "ANTHPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0223-ANTHPCK3.zip",
+      "file": "ANTHPCK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0224-ANTHPCK4.zip",
+      "file": "ANTHPCK4.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0225-ANTHPCK5.zip",
+      "file": "ANTHPCK5.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0226-ANTHPCK6.zip",
+      "file": "ANTHPCK6.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0227-ANTHPCK7.zip",
+      "file": "ANTHPCK7.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0228-CALEPCK2.zip",
+      "file": "CALEPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0229-CALEPCK3.zip",
+      "file": "CALEPCK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0230-EMPACK.zip",
+      "file": "EMPACK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0231-JANNPCK1.zip",
+      "file": "JANNPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0232-JANNPCK2.zip",
+      "file": "JANNPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0233-JannPck3.zip",
+      "file": "jannpck3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0234-JANNPCK4.zip",
+      "file": "JANNPCK4.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0235-JEFFPCK1.zip",
+      "file": "JEFFPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0236-JEFFPCK2.zip",
+      "file": "JEFFPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0237-JEFFPCK3.zip",
+      "file": "JEFFPCK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0238-JEFFPCK4.zip",
+      "file": "JEFFPCK4.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0239-JEFFPCK5.zip",
+      "file": "JEFFPCK5.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0240-JEFFPCK6.zip",
+      "file": "JEFFPCK6.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0241-JEFFPCK7.zip",
+      "file": "JEFFPCK7.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0242-JOHNPACK.zip",
+      "file": "JOHNPACK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0243-LARSPACK.zip",
+      "file": "LARSPACK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0244-MazuLems-01.zip",
+      "file": "Martin Zurlinden 01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0245-MazuLems-02.zip",
+      "file": "Martin Zurlinden 02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0246-MazuLems-03.zip",
+      "file": "Martin Zurlinden 03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0248-MATTPCK1.zip",
+      "file": "MATTPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0249-MATTPCK2.zip",
+      "file": "MATTPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0250-Conway01.zip",
+      "file": "Conway01.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0251-Conway02.zip",
+      "file": "Conway02.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0252-Conway03.zip",
+      "file": "Conway03.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0253-Conway04.zip",
+      "file": "Conway04.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0254-Conway05.zip",
+      "file": "Conway05.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0256-Conway07.zip",
+      "file": "Conway07.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0257-Conway08.zip",
+      "file": "Conway08.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0258-Conway09.zip",
+      "file": "Conway09.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0259-Conway10.zip",
+      "file": "Conway10.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0260-Conway11.zip",
+      "file": "Conway11.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0261-Conway12.zip",
+      "file": "Conway12.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0262-Conway13.zip",
+      "file": "Conway13.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0263-Conway-Challenges-1.zip",
+      "file": "ConwayChallenges 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0264-Conway-Challenges-2.zip",
+      "file": "ConwayChallenges 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0265-CRISFN01.zip",
+      "file": "CRISFN01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0266-CRISFN02.zip",
+      "file": "CRISFN02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0267-CRISFN03.zip",
+      "file": "CRISFN03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0268-CRISFN04.zip",
+      "file": "CRISFN04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0269-CRISFN05.zip",
+      "file": "CRISFN05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0270-CRISFN06.zip",
+      "file": "CRISFN06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0271-CRISFN07.zip",
+      "file": "CRISFN07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0272-CRISFN08.zip",
+      "file": "CRISFN08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0273-CRISFN09.zip",
+      "file": "CRISFN09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0274-CRISFN10.zip",
+      "file": "CRISFN10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0275-CRISFN11.zip",
+      "file": "CRISFN11.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0276-CRISFN12.zip",
+      "file": "CRISFN12.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0277-CRISFN13.zip",
+      "file": "CRISFN13.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0278-CRISFN14.zip",
+      "file": "CRISFN14.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0279-CRISFN15.zip",
+      "file": "CRISFN15.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0280-GARJEN00.zip",
+      "file": "GARJEN00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0281-GARJEN01.zip",
+      "file": "GARJEN01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0282-GARJEN02.zip",
+      "file": "GARJEN02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0283-GARJEN03.zip",
+      "file": "GARJEN03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0284-GARJEN04.zip",
+      "file": "GARJEN04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0285-GARJEN05.zip",
+      "file": "GARJEN05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0286-GARJEN06.zip",
+      "file": "GARJEN06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0287-GARJEN07.zip",
+      "file": "GARJEN07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0288-GARJEN08.zip",
+      "file": "GARJEN08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0289-GARJEN09.zip",
+      "file": "GARJEN09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0290-JUANJO1N.zip",
+      "file": "JUANJO1N.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0291-JUANJO2N.zip",
+      "file": "JUANJO2N.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0292-JUANJO3N.zip",
+      "file": "JUANJO3N.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0293-JUANJO4N.zip",
+      "file": "JUANJO4N.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0294-JUANJO5N.zip",
+      "file": "JUANJO5N.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0295-JUANJO6.zip",
+      "file": "JUANJO6.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0296-JUANJO7.zip",
+      "file": "JUANJO7.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0297-JUANJO7B.zip",
+      "file": "JUANJO7B.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0298-LEMERINewlvls.zip",
+      "file": "LEMERINewlvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0299-LEMERITraplvls.zip",
+      "file": "LEMERITraplvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0300-Pacpack1.zip",
+      "file": "Pacpack1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0301-Pacpack2.zip",
+      "file": "Pacpack2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0302-TWPAK00.zip",
+      "file": "TWPAK00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0303-TWPAK01.zip",
+      "file": "TWPAK01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0304-TWPAK02.zip",
+      "file": "TWPAK02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0305-TWPAK03.zip",
+      "file": "TWPAK03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0306-TWPAK04.zip",
+      "file": "TWPAK04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0307-TWPAK05.zip",
+      "file": "TWPAK05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0308-TWPAK06.zip",
+      "file": "TWPAK06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0309-TWPAK07.zip",
+      "file": "TWPAK07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0310-TWPAK08.zip",
+      "file": "TWPAK08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0311-TWPAK09.zip",
+      "file": "TWPAK09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0312-TWPAK10.zip",
+      "file": "TWPAK10.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0313-TWPAK11.zip",
+      "file": "TWPAK11.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0314-TWPAK12.zip",
+      "file": "TWPAK12.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0315-TWPAK13.zip",
+      "file": "TWPAK13.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0316-twbestof.zip",
+      "file": "twbestof.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0317-joem1.zip",
+      "file": "joem1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0318-joem2.zip",
+      "file": "joem2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0319-joem3.zip",
+      "file": "joem3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0320-joem5.zip",
+      "file": "joem5.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0321-joem6.zip",
+      "file": "joem6.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0322-joem7.zip",
+      "file": "joem7.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0323-joem8.zip",
+      "file": "joem8.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0324-joem9.zip",
+      "file": "joem9.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0325-t3tesla.zip",
+      "file": "t3tesla.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0326-CALEPCK1.zip",
+      "file": "CALEPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0327-JM01.zip",
+      "file": "JM01.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0328-JM02.zip",
+      "file": "JM02.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0329-JM03.zip",
+      "file": "JM03.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0330-JM04.zip",
+      "file": "JM04.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0331-JM05.zip",
+      "file": "JM05.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0332-JM06.zip",
+      "file": "JM06.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0333-JM07.zip",
+      "file": "JM07.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0334-JM08.zip",
+      "file": "JM08.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0335-JM09.zip",
+      "file": "JM09.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0336-JM10.zip",
+      "file": "JM10.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0337-JM11.zip",
+      "file": "JM11.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0338-JM12.zip",
+      "file": "JM12.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0339-JM13.zip",
+      "file": "JM13.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0340-JM14.zip",
+      "file": "JM14.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0341-JM15.zip",
+      "file": "JM15.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0342-JM16.zip",
+      "file": "JM16.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0343-JM17.zip",
+      "file": "JM17.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0344-JM18.zip",
+      "file": "JM18.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0345-MARSHY01.zip",
+      "file": "MARSHY01.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0346-MARSHY02.zip",
+      "file": "MARSHY02.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0347-MARSHY03.zip",
+      "file": "MARSHY03.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0348-MARSHY04.zip",
+      "file": "MARSHY04.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0349-MARSHY05.zip",
+      "file": "MARSHY05.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0350-MARSHY06.zip",
+      "file": "MARSHY06.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0351-MARSHY07.zip",
+      "file": "MARSHY07.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0352-MARSHY08.zip",
+      "file": "MARSHY08.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0353-isupck02.zip",
+      "file": "Isupck02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0354-TimballistoPack1.zip",
+      "file": "Jeffpck1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0355-s370pak1.zip",
+      "file": "S370PAK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0356-Lemming-Crazy-Contest-1.zip",
+      "file": "Lemming Crazy Contest 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0357-Modlvls.zip",
+      "file": "Modlvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0358-oldbutgo.zip",
+      "file": "oldbutgo.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0359-wade.zip",
+      "file": "wade.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0360-MARSHY09.zip",
+      "file": "MARSHY09.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0361-togpak.zip",
+      "file": "togpak.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0362-m-91-1.zip",
+      "file": "m91-1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0363-m-91-2.zip",
+      "file": "m91-2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0364-Twigpak2.zip",
+      "file": "twigpak2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0365-LEVIPAK1.zip",
+      "file": "LEVPAK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0366-LEVIPAK2.zip",
+      "file": "LEVIPAK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0367-LEVIPAK3.zip",
+      "file": "LEVIPAK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0368-LEVIPAK4.zip",
+      "file": "levipak4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "01 - Tolosa.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "02 - Utopia.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "03 - Reciprocity.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "04 - Karjalanpiirakat.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "05 - Vertigo.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "06 - Totem.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "07 - Coalescing.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "08 - Parsimony.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "09 - Ecotone.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0369-Pieuw05.zip",
+      "file": "10 - Cozenage.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0370-Andi.zip",
+      "file": "andi.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0371-beta.zip",
+      "file": "beta.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0372-E3Levelpack-F.zip",
+      "file": "E3Levelpack_F.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0373-Insulfrog-LVL-PK-1.zip",
+      "file": "Insulfrog+LVL+PK+1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0374-justdigcomp.zip",
+      "file": "justdigcomp.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0375-twigpak1.zip",
+      "file": "twigpak1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0376-twigpak3.zip",
+      "file": "twigpak3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0377-shveg01.zip",
+      "file": "shveg01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0378-shveg02.zip",
+      "file": "shveg02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0379-shveg03.zip",
+      "file": "shveg03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0382-ClamSpam06.zip",
+      "file": "ClamSpam06_4lvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0384-Gronklems-1.zip",
+      "file": "Gronklems 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0385-Gronklems-2.zip",
+      "file": "Gronklems 3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0386-Gronklems-1.zip",
+      "file": "Gronklems -1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0387-Eymerich-01.zip",
+      "file": "Eymerich_01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0388-geoopck2.zip",
+      "file": "geooPk2_preview2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0389-Levelpak001.zip",
+      "file": "LEVELPAK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0390-elfpack02.zip",
+      "file": "elfpak02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0391-elfpack03.zip",
+      "file": "elfpak03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0393-Pieuw01.zip",
+      "file": "pieuw01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0394-Pieuw02.zip",
+      "file": "pieuw02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0395-The-Apple-Computer-Level.zip",
+      "file": "apple.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest10_patienceisavirtue.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest1_Rock house.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest1_RockHouse.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest2_So close.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest2_SoClose.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest3_theoilrig.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest4_handlewithcare.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest5_statueoflemetry.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest6_The Rambaldi Eye.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest6_TheRambaldiEye.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest7_Fall Guy.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest7_FallGuy.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest8_Out in Sixty Seconds.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest8_OutInSixtySeconds.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "file": "levelpack/contest9_DerangementofScience.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/01loftyD.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/02loftyD.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/03Ellischant.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/04Dodochacalo.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/05pieuw.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/06ftk99.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/07Dodochacalo.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/08pieuw.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/09ftk99.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/10karmew32.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/11Ellischant.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/12loftyD.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/13gronkling.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/14lacktardo.ini.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/15loftyD.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/16karmew32.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/17Ellischant.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/18pieuw.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/19lacktardo.ini.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "file": "2010 CONTEST/20lacktardo.lvl.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0398-MYSPEC.zip",
+      "file": "MYSPEC.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0399-Mon0lith.zip",
+      "file": "TheMon0lith.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0400-TUT.zip",
+      "file": "TUT.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0401-Christmas-2013.zip",
+      "file": "christmas/2013.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0401-Christmas-2013.zip",
+      "file": "christmas/christmas.ini",
+      "classification": "graphics-definition"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/1. Lemming Sold Seperately.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/10. Elegance.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/2. Who doesn't love triangles.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/3. Flaming Death.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/4. Lemming Designer.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/5. Almost Equilibrium.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/6. Backpedal Lemmings.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/7. It's Raining Lem.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/8. Break It Down.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0402-Grent01.zip",
+      "file": "Grent01/9. All At Once.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0403-Level-Jam-Contest-3.zip",
+      "file": "LevelJam3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0404-Genesis-2P-1.zip",
+      "file": "Genesis 2P 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0405-Genesis-2P-2.zip",
+      "file": "Genesis 2P 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl034.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl035.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl036.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl040.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl044.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl046.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl049.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl051.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl053.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0406-Just-Some-Levels.zip",
+      "file": "4_lem/lvl054.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0407-Orig-Extra-Levels.zip",
+      "file": "Orig Extra Levels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/delayrelay.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/frenzy.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/littletitle.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/mimic.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/multitask.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/planking.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/strifecircle.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/substitution.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/trust.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0408-Just-Some-More-Levels.zip",
+      "file": "mslevels2/twolemmings.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0409-Building-Practice.zip",
+      "file": "BUILDING.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0410-ClamSpam06-4lvls.zip",
+      "file": "ClamSpam06_4lvls.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0411-mobius05.zip",
+      "file": "mobius05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0412-mobius06.zip",
+      "file": "mobius06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0413-GeoffLems-Minipack.zip",
+      "file": "GeoffLems_Minipack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0414-QBeez06.zip",
+      "file": "QBeez06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/001.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/002.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/003.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/004.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/005.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/006.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/007.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/008.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/009.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/010.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/011.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/012.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/013.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/014.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/015.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/016.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/101.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/102.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/103.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/104.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/105.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/106.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/107.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/108.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/109.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/110.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/111.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/112.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/113.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/114.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/115.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/116.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/201.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/202.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/203.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/204.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/205.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/206.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/207.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/208.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/209.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/210.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/211.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/212.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/213.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/214.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/215.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/216.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/301.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/302.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/303.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/304.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/305.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/306.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/307.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/308.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/309.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/310.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/311.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/312.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/313.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/314.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/315.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/316.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "levels/Blizzlem/317.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0415-Blizzard-of-Lemm.zip",
+      "file": "mods/blizzlem/styles/snow/snow.ini",
+      "classification": "graphics-definition"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "25th Birthday of Lemmings.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Above The Pepsi Max.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Be Careful Where You Dig.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Bomboozal Not Quite.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Building Blocks.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Dash.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Four Entrances.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Graeme's Nightmare.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Hidden Sand.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "I Love Bubbles.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "It's Snowing.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Little house on top.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Pipe level.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Puzzle Time.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Revisit.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Steel Works Edit.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Ten Scattered lemmings.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Too Much Things Going on.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Up The Gap.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0416-grams88.zip",
+      "file": "Which Way Should we Go.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0417-bigqtwo.zip",
+      "file": "bigqtwo.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0418-bigqthree.zip",
+      "file": "bigqthree.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0419-Dehodson.zip",
+      "file": "Dehodson.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0420-2112.zip",
+      "file": "2112.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0421-Luis-Pack.zip",
+      "file": "Luis Pack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0422-fullglitch.zip",
+      "file": "fullglitch.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0423-unfinisd.zip",
+      "file": "unfinisd.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0424-Andi2.zip",
+      "file": "andi2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0425-Badpack.zip",
+      "file": "Badpack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0426-GM06.zip",
+      "file": "GM06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0427-Neato.zip",
+      "file": "Neato.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0428-Bipolar.zip",
+      "file": "Bipolar.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0429-CYSTN.zip",
+      "file": "CYSTN.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0430-Level-Design-Game-01.zip",
+      "file": "LDChallenge01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0431-Level-Design-Game-02.zip",
+      "file": "LDChallenge02.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0432-Level-Design-Game-03.zip",
+      "file": "LDChallenge03.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0433-Level-Design-Game-04.zip",
+      "file": "LDChallenge04.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0434-Level-Design-Game-05.zip",
+      "file": "LDChallenge05.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0435-Level-Design-Game-06.zip",
+      "file": "LDChallenge06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0436-Level-Design-Game-07.zip",
+      "file": "LDChallenge07.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0437-Level-Design-Game-08.zip",
+      "file": "LDChallenge08.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0438-Level-Design-Game-09.zip",
+      "file": "LDChallenge09.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0447-ccexplores-test-levels.zip",
+      "file": "ccxtestlevels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0448-GM00.zip",
+      "file": "GM00.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0449-comppak.zip",
+      "file": "comppak.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0450-Member-competition.zip",
+      "file": "Membercomp.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0451-insulfrog-extra.zip",
+      "file": "insulfrogextra.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0452-Isus-Other-Levels.zip",
+      "file": "isuotherlevels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0453-Jazzem.zip",
+      "file": "Jazzem.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0454-JMGM01.zip",
+      "file": "JMGM01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0455-JMGM02.zip",
+      "file": "JMGM02.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0456-JM-Acid-Bath.zip",
+      "file": "JMacidbath.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0457-Leviathans-Other-Levels.zip",
+      "file": "LeviOtherLevels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0458-Kindness.zip",
+      "file": "Kindness.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0459-NOTEASY.zip",
+      "file": "NOTEASY.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0460-SgBPak01.zip",
+      "file": "SgBPak01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0461-geoopak5.zip",
+      "file": "geoopak5.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0462-WBUG.zip",
+      "file": "WBUG.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0463-Group-Levels.zip",
+      "file": "Group Levels.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0464-Finland.zip",
+      "file": "Finland.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0465-LEMREMAKE.zip",
+      "file": "LEMREMAKE.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/01 Foreshadowing.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/02 Who let the lemmings out !.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/03 Complacency.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/04 Lem waz' here.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/05 Christmas Chill.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/06 Abandoned Palace.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/07 Separate the Crowd.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/08 Lemming Designer.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/09 Caught in the Symmetry.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/10 Tiptoe through the Factory.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/11 All that extra work.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/12 Cosmic Junk.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/13 Lemming Sold Separately.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/14 It's Raining Lem.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/15 All at once.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0466-GrentLems.zip",
+      "file": "GrentLems/16 A Double Rotation.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0467-Web-3-0.zip",
+      "file": "Web3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0468-joem4.zip",
+      "file": "joem4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "altitude_with_attitude.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "bedlam_in_lemmingshire.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "be_alert_theres_traps_to_avert.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "blessed_are_the_bricks.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "building_suspense.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "group_assignment.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "oh_chute.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "over_and_out.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "pole_lands_poles.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0469-Skeletonskeletons-Level-Pack.zip",
+      "file": "pyrefract.ini",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0470-Unreachable-Heights.zip",
+      "file": "Unreachable Heights/Unreachable Heights.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0471-Ron-Stards-Rodents.zip",
+      "file": "RSRdnt01.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "LEMPACK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/01.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/02.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/03.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/04.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/05.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/06.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/07.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0472-CPs-Level-Pack.zip",
+      "file": "levels/08.LVL",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0473-DOS-Fun.zip",
+      "file": "Fun.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0474-DOS-Tricky.zip",
+      "file": "Tricky.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0475-DOS-Taxing.zip",
+      "file": "Taxing.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0476-DOS-Mayhem.zip",
+      "file": "Mayhem.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0477-DOS-Amiga-Tame.zip",
+      "file": "Tame.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0478-DOS-Amiga-Crazy.zip",
+      "file": "Crazy.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0479-DOS-Amiga-Wild.zip",
+      "file": "Wild.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0480-DOS-Amiga-Wicked.zip",
+      "file": "Wicked.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0481-DOS-Amiga-Havoc.zip",
+      "file": "Havoc.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0482-DOS-Frost.zip",
+      "file": "Frost.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0483-DOS-Hail.zip",
+      "file": "Hail.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0484-DOS-Flurry.zip",
+      "file": "Flurry.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0485-DOS-Blitz.zip",
+      "file": "Blitz.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0486-DOS-Xmas-1991.zip",
+      "file": "Xmas 1991.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0487-DOS-Xmas-1992.zip",
+      "file": "Xmas 1992.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0488-Genesis-Fun.zip",
+      "file": "Genesis Fun.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0489-Genesis-Tricky.zip",
+      "file": "Genesis Tricky.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0490-Genesis-Taxing.zip",
+      "file": "Genesis Taxing.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0491-Genesis-Mayhem.zip",
+      "file": "Genesis Mayhem.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0492-Genesis-Present.zip",
+      "file": "Genesis Present.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0493-Genesis-Sunsoft.zip",
+      "file": "Genesis Sunsoft.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0494-JANNPCK3.zip",
+      "file": "JANNPCK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0495-MARTPCK1.zip",
+      "file": "MARTPCK1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0496-MARTPCK2.zip",
+      "file": "MARTPCK2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0497-MARTPCK3.zip",
+      "file": "MARTPCK3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0505-KillerMasters-Lemmings-1-Tame.zip",
+      "file": "KillerMaster 1 Tame 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0505-KillerMasters-Lemmings-1-Tame.zip",
+      "file": "KillerMaster 1 Tame 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0506-KillerMasters-Lemmings-1-Crazy.zip",
+      "file": "KillerMaster 1 Crazy 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0506-KillerMasters-Lemmings-1-Crazy.zip",
+      "file": "KillerMaster 1 Crazy 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0507-KillerMasters-Lemmings-1-Wild.zip",
+      "file": "KillerMaster 1 Wild 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0507-KillerMasters-Lemmings-1-Wild.zip",
+      "file": "KillerMaster 1 Wild 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0508-KillerMasters-Lemmings-1-Wicked.zip",
+      "file": "KillerMaster 1 Wicked 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0508-KillerMasters-Lemmings-1-Wicked.zip",
+      "file": "KillerMaster 1 Wicked 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "file": "KillerMaster 1 Havoc 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "file": "KillerMaster 1 Havoc 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0510-KillerMasters-Lemmings-2-Tame.zip",
+      "file": "KillerMaster 2 Tame 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0510-KillerMasters-Lemmings-2-Tame.zip",
+      "file": "KillerMaster 2 Tame 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0511-KillerMasters-Lemmings-2-Crazy.zip",
+      "file": "KillerMaster 2 Crazy 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0511-KillerMasters-Lemmings-2-Crazy.zip",
+      "file": "KillerMaster 2 Crazy 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0512-ssam1221s-Lemmings-Tame.zip",
+      "file": "ssam1221 Tame 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0512-ssam1221s-Lemmings-Tame.zip",
+      "file": "ssam1221 Tame 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0513-ssam1221s-Lemmings-Crazy.zip",
+      "file": "ssam1221 Crazy 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0513-ssam1221s-Lemmings-Crazy.zip",
+      "file": "ssam1221 Crazy 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0514-ssam1221s-Lemmings-Wild.zip",
+      "file": "ssam1221 Wild 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0514-ssam1221s-Lemmings-Wild.zip",
+      "file": "ssam1221 Wild 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0515-ssam1221s-Lemmings-Wicked.zip",
+      "file": "ssam1221 Wicked 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0515-ssam1221s-Lemmings-Wicked.zip",
+      "file": "ssam1221 Wicked 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0517-Van-Clan-Tame.zip",
+      "file": "Van Clan Tame 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0517-Van-Clan-Tame.zip",
+      "file": "Van Clan Tame 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0518-Van-Clan-Crazy.zip",
+      "file": "Van Clan Crazy 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0518-Van-Clan-Crazy.zip",
+      "file": "Van Clan Crazy 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0519-Van-Clan-Wild.zip",
+      "file": "Van Clan Wild 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0519-Van-Clan-Wild.zip",
+      "file": "Van Clan Wild 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0520-Van-Clan-Wicked.zip",
+      "file": "Van Clan Wicked 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0520-Van-Clan-Wicked.zip",
+      "file": "Van Clan Wicked 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0521-Van-Clan-Havoc.zip",
+      "file": "Van Clan Havoc 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0521-Van-Clan-Havoc.zip",
+      "file": "Van Clan Havoc 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0522-Deceits-Lemmings-Fun.zip",
+      "file": "Deceit Fun.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0523-Deceits-Lemmings-Tricky.zip",
+      "file": "Deceit Tricky 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0523-Deceits-Lemmings-Tricky.zip",
+      "file": "Deceit Tricky 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0524-Deceits-Lemmings-Taxing.zip",
+      "file": "Deceit Taxing 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0524-Deceits-Lemmings-Taxing.zip",
+      "file": "Deceit Taxing 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0525-Deceits-Lemmings-Mayhem.zip",
+      "file": "Deceit Mayhem 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0525-Deceits-Lemmings-Mayhem.zip",
+      "file": "Deceit Mayhem 2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0525-Deceits-Lemmings-Mayhem.zip",
+      "file": "Deceit Mayhem 3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0526-cLemmings-Fun.zip",
+      "file": "cLemmings Fun 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0526-cLemmings-Fun.zip",
+      "file": "cLemmings Fun 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0526-cLemmings-Fun.zip",
+      "file": "cLemmings Fun 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0527-cLemmings-Tricky.zip",
+      "file": "cLemmings Tricky 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0527-cLemmings-Tricky.zip",
+      "file": "cLemmings Tricky 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0527-cLemmings-Tricky.zip",
+      "file": "cLemmings Tricky 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0528-cLemmings-Taxing.zip",
+      "file": "cLemmings Taxing 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0528-cLemmings-Taxing.zip",
+      "file": "cLemmings Taxing 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0528-cLemmings-Taxing.zip",
+      "file": "cLemmings Taxing 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0529-cLemmings-Mayhem.zip",
+      "file": "cLemmings Mayhem 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0529-cLemmings-Mayhem.zip",
+      "file": "cLemmings Mayhem 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0529-cLemmings-Mayhem.zip",
+      "file": "cLemmings Mayhem 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0530-Oh-No-More-cLemmings-Tame.zip",
+      "file": "OhNoMorecLemmings Tame 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0530-Oh-No-More-cLemmings-Tame.zip",
+      "file": "OhNoMorecLemmings Tame 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0531-Oh-No-More-cLemmings-Crazy.zip",
+      "file": "OhNoMorecLemmings Crazy 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0531-Oh-No-More-cLemmings-Crazy.zip",
+      "file": "OhNoMorecLemmings Crazy 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0532-Oh-No-More-cLemmings-Wild.zip",
+      "file": "OhNoMorecLemmings Wild 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0532-Oh-No-More-cLemmings-Wild.zip",
+      "file": "OhNoMorecLemmings Wild 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0533-Oh-No-More-cLemmings-Wicked.zip",
+      "file": "OhNoMorecLemmings Wicked 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0533-Oh-No-More-cLemmings-Wicked.zip",
+      "file": "OhNoMorecLemmings Wicked 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0534-Oh-No-More-cLemmings-Havoc.zip",
+      "file": "OhNoMorecLemmings Havoc 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0534-Oh-No-More-cLemmings-Havoc.zip",
+      "file": "OhNoMorecLemmings Havoc 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0535-Holiday-cLemmings-Frost.zip",
+      "file": "Holiday cLemmings Frost 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0535-Holiday-cLemmings-Frost.zip",
+      "file": "Holiday cLemmings Frost 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0536-Holiday-cLemmings-Hail.zip",
+      "file": "Holiday cLemmings Hail 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0536-Holiday-cLemmings-Hail.zip",
+      "file": "Holiday cLemmings Hail 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0537-Holiday-cLemmings-Flurry.zip",
+      "file": "Holiday cLemmings Flurry 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0537-Holiday-cLemmings-Flurry.zip",
+      "file": "Holiday cLemmings Flurry 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0538-Holiday-cLemmings-Blitz.zip",
+      "file": "Holiday cLemmings Blitz 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0538-Holiday-cLemmings-Blitz.zip",
+      "file": "Holiday cLemmings Blitz 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0542-Pieuws-Lemmings-2007-Peace.zip",
+      "file": "Pieuw 2007 Peace 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0542-Pieuws-Lemmings-2007-Peace.zip",
+      "file": "Pieuw 2007 Peace 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0543-Pieuws-Lemmings-2007-Awkward.zip",
+      "file": "Pieuw 2007 Awkward 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0543-Pieuws-Lemmings-2007-Awkward.zip",
+      "file": "Pieuw 2007 Awkward 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0544-Pieuws-Lemmings-2007-Artful.zip",
+      "file": "Pieuw 2007 Artful 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0544-Pieuws-Lemmings-2007-Artful.zip",
+      "file": "Pieuw 2007 Artful 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0545-Pieuws-Lemmings-2007-Insane.zip",
+      "file": "Pieuw 2007 Insane 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0545-Pieuws-Lemmings-2007-Insane.zip",
+      "file": "Pieuw 2007 Insane 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0546-Deceits-Lemmings-Extras.zip",
+      "file": "Deceit Extras 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0546-Deceits-Lemmings-Extras.zip",
+      "file": "Deceit Extras 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0547-Ji-Hoons-Lemmings-Remake-Heaven.zip",
+      "file": "Ji Hoon Heaven 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0547-Ji-Hoons-Lemmings-Remake-Heaven.zip",
+      "file": "Ji Hoon Heaven 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0548-Ji-Hoons-Lemmings-Remake-Sky.zip",
+      "file": "Ji Hoon Sky 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0548-Ji-Hoons-Lemmings-Remake-Sky.zip",
+      "file": "Ji Hoon Sky 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0549-Ji-Hoons-Lemmings-Remake-Earth.zip",
+      "file": "Ji Hoon Earth 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0549-Ji-Hoons-Lemmings-Remake-Earth.zip",
+      "file": "Ji Hoon Earth 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0550-Ji-Hoons-Lemmings-Remake-Hell.zip",
+      "file": "Ji Hoon Hell 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0550-Ji-Hoons-Lemmings-Remake-Hell.zip",
+      "file": "Ji Hoon Hell 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0551-Lemmings-Plus-DOS-Project-Mild.zip",
+      "file": "Lemmings Plus DOS Project - 01 - Mild (Part 1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0551-Lemmings-Plus-DOS-Project-Mild.zip",
+      "file": "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0551-Lemmings-Plus-DOS-Project-Mild.zip",
+      "file": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0552-Lemmings-Plus-DOS-Project-Wimpy.zip",
+      "file": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0552-Lemmings-Plus-DOS-Project-Wimpy.zip",
+      "file": "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0552-Lemmings-Plus-DOS-Project-Wimpy.zip",
+      "file": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0553-Lemmings-Plus-DOS-Project-Medi.zip",
+      "file": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0553-Lemmings-Plus-DOS-Project-Medi.zip",
+      "file": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0553-Lemmings-Plus-DOS-Project-Medi.zip",
+      "file": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0554-Lemmings-Plus-DOS-Project-Danger.zip",
+      "file": "Lemmings Plus DOS Project - 10 - Danger (Part 1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0554-Lemmings-Plus-DOS-Project-Danger.zip",
+      "file": "Lemmings Plus DOS Project - 11 - Danger (Part 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0554-Lemmings-Plus-DOS-Project-Danger.zip",
+      "file": "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0555-Lemmings-Plus-DOS-Project-PSYCHO.zip",
+      "file": "Lemmings Plus DOS Project - 13 - PSYCHO (Part 1).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0555-Lemmings-Plus-DOS-Project-PSYCHO.zip",
+      "file": "Lemmings Plus DOS Project - 14 - PSYCHO (Part 2).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0555-Lemmings-Plus-DOS-Project-PSYCHO.zip",
+      "file": "Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0557-New-Year-Lemmings-1991-92.zip",
+      "file": "New Year Lemmings 1991_92.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0558-brickpk1.zip",
+      "file": "brickpk1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0559-brickpk2.zip",
+      "file": "brickpk2.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0560-brickpk3.zip",
+      "file": "brickpk3.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0561-brickpk4.zip",
+      "file": "brickpk4.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0562-Psygore-Holiday-Demo.zip",
+      "file": "Psygore Holiday Demo.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0563-ssam1221s-Lemmings-Havoc.zip",
+      "file": "ssam1221 Havoc 1.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0564-cLemmings-Ultimate-Edition-Simple.zip",
+      "file": "cLUE Simple 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0564-cLemmings-Ultimate-Edition-Simple.zip",
+      "file": "cLUE Simple 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0565-cLemmings-Ultimate-Edition-Complex.zip",
+      "file": "cLUE Complex 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0565-cLemmings-Ultimate-Edition-Complex.zip",
+      "file": "cLUE Complex 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0567-Conway06.zip",
+      "file": "Conway06.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0568-Amiga-Fun.zip",
+      "file": "Fun 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0569-Amiga-Tricky.zip",
+      "file": "Tricky 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0570-Amiga-Taxing.zip",
+      "file": "Taxing 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0571-Amiga-Mayhem.zip",
+      "file": "Mayhem 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0572-Amiga-Two-Player.zip",
+      "file": "Level 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0573-Amiga-Fun-Budget.zip",
+      "file": "Fun 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0574-Amiga-Tricky-Budget.zip",
+      "file": "Tricky 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0575-Amiga-Taxing-Budget.zip",
+      "file": "Taxing 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0576-Amiga-Mayhem-Budget.zip",
+      "file": "Mayhem 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0577-Amiga-Tricky-Book-Club.zip",
+      "file": "Tricky 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 11.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 12.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 13.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 14.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 15.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 16.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 17.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 18.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 19.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 20.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 21.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 22.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 23.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 24.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 25.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 26.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 27.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 28.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 29.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0578-Amiga-Taxing-Book-Club.zip",
+      "file": "Taxing 30.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0579-DOS-Tricky-Book-Club.zip",
+      "file": "Tricky 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0579-DOS-Tricky-Book-Club.zip",
+      "file": "Tricky 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0579-DOS-Tricky-Book-Club.zip",
+      "file": "Tricky 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0580-DOS-Taxing-Book-Club.zip",
+      "file": "Taxing 1.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0580-DOS-Taxing-Book-Club.zip",
+      "file": "Taxing 2.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0580-DOS-Taxing-Book-Club.zip",
+      "file": "Taxing 3.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0581-Amiga-Demo.zip",
+      "file": "Level 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0581-Amiga-Demo.zip",
+      "file": "Level 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0581-Amiga-Demo.zip",
+      "file": "Level 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0581-Amiga-Demo.zip",
+      "file": "Level 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0581-Amiga-Demo.zip",
+      "file": "Level 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0582-Amiga-Demo-Two-Player.zip",
+      "file": "Level 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0582-Amiga-Demo-Two-Player.zip",
+      "file": "Level 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0582-Amiga-Demo-Two-Player.zip",
+      "file": "Level 08 (extra).lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0582-Amiga-Demo-Two-Player.zip",
+      "file": "Level 09 (extra).lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 03.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 04.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 05.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 06.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 07.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 08.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 09.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip",
+      "file": "Level 10.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0584-Save-the-Lemmings.zip",
+      "file": "LEVEL000.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0585-Lemmings-The-Official-Companion.zip",
+      "file": "LEVEL000.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0585-Lemmings-The-Official-Companion.zip",
+      "file": "LEVEL001.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0586-Braden12-First-Levelpack-from-OpenSea-Facebook.zip",
+      "file": "LEVELPAK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0591-Mikes-Lemmix-Pack.zip",
+      "file": "Mikes Lemmix Pack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0592-Professional-Lemmings.zip",
+      "file": "LEVELPAK.DAT",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0593-Lemmy556-Superpack.zip",
+      "file": "Lemmy556 Superpack.dat",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0594-Amiga-Magazine-Demo.zip",
+      "file": "Level 01.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0594-Amiga-Magazine-Demo.zip",
+      "file": "Level 02.lvl",
+      "classification": "decoded-level-file"
+    },
+    {
+      "pack": "0594-Amiga-Magazine-Demo.zip",
+      "file": "Level 03.lvl",
+      "classification": "decoded-level-file"
+    }
+  ]
+}

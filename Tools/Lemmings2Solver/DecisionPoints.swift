@@ -142,7 +142,6 @@ struct DecisionDetector: Sendable {
         let ordered = fired.sorted { ($0.trigger.priority, $0.id) < ($1.trigger.priority, $1.id) }
         var offered: [Int] = []
         for entry in ordered where !offered.contains(entry.id) {
-            if offered.count == 3 { break }
             offered.append(entry.id)
         }
         return Decision(trigger: ordered[0].trigger, lemmings: offered)

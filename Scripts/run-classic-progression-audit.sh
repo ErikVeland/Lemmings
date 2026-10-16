@@ -15,6 +15,8 @@ swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_
   "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Records/GameProgressPreferences.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/LearningJourneyLibrary.swift" \
   "$project_dir/Sources/LemmingsAppCore/AppStorage.swift" \
@@ -22,6 +24,8 @@ swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_
 shasum -a 256 "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Records/GameProgressPreferences.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/LearningJourneyLibrary.swift" \
   "$project_dir/Sources/LemmingsAppCore/AppStorage.swift" > "$build_dir/adapter-manifest.sha256"

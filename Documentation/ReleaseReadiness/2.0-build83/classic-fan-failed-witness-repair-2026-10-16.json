@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "scope": "Current-main repair search for a failed historical route in two bundled Amiga archives, with a related DOS source that shares its initial hash.",
+  "auditFailurePool": {
+    "failedWitnessRows": 21,
+    "distinctInitialStateHashes": 18,
+    "failedHashGroupsWithWinningPeer": 10,
+    "failedHashGroupsWithDifferentTitleWinningPeer": 6,
+    "identityNote": "Ten of the 18 failed-hash groups also occur on a winning row. Six of those groups include a winning row with a different title. A shared initial hash does not identify a bundled level or transfer a route."
+  },
+  "target": {
+    "title": "Don’t do anything too hasty",
+    "initialStateSHA256": "a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+    "lemmings": 80,
+    "requiredToSave": 50,
+    "historicalCandidate": {
+      "expectedSaved": 80,
+      "expectedTicks": 3470,
+      "events": 57,
+      "currentAuditResult": "The exact build 83 audit rejected the candidate outcome in both archive copies. It recorded expected 80 saved, got 0."
+    },
+    "copies": [
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Fun 16.lvl#0",
+          "packID": "fan:lldb-568"
+        },
+        "sourceRevisionSHA256": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619",
+        "archiveSHA256": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Fun 16.lvl#0",
+          "packID": "fan:lldb-573"
+        },
+        "sourceRevisionSHA256": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574",
+        "archiveSHA256": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574"
+      }
+    ],
+    "relatedSameHashRoute": {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun.DAT#15",
+        "packID": "fan:lldb-473"
+      },
+      "sourceRevisionSHA256": "d8f1f0160cea6dd48ca5b9c84355238ebfea7ac109a92335c8d2bef28531e905",
+      "archiveSHA256": "d8f1f0160cea6dd48ca5b9c84355238ebfea7ac109a92335c8d2bef28531e905",
+      "auditStatus": "winning-replay",
+      "witness": "Artifacts/LearningJourney/candidate-solutions.json#a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f"
+    },
+    "fingerprintLimit": "ClassicDOSReplayRecorder.stateHash hashes the remaining time, counters, remaining skills, lemming state, selected configuration values, and solid/steel terrain bytes. It omits terrain dimensions, entrance and trigger definitions, destruction masks, hatch source offsets, and some continuation state such as release countdowns, trigger cooldowns, queued commands and the nuke cursor. Matching hashes therefore do not prove full simulation equivalence. The audit accepts the witness for the DOS source and rejects it for both Amiga sources; compare omitted inputs and replay semantics before transferring a route between identities."
+  },
+  "provenance": {
+    "solverSourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "solverBinarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "simulationSourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "nxlvKitLibrarySHA256": "5afb912bcfdfb8dd45c077adbb8ba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedApplication": "1.9.1 build 76",
+    "resourceNote": "The targeted archive hashes match current-main audit source revisions. This is not a complete build 86 package audit."
+  },
+  "searches": [
+    {
+      "strategy": "from-start bounded beam search",
+      "budgetSeconds": 600,
+      "elapsedSeconds": 600,
+      "beamWidth": 8192,
+      "fallbackTicks": 100,
+      "refireTicks": 60,
+      "ranking": [
+        "prefer-progress",
+        "rescue-quota-distance",
+        "direct-exit-distance"
+      ],
+      "expanded": 1422777,
+      "bestSaved": 0,
+      "requiredToSave": 50,
+      "partialSHA256": "b97e9bf627e120d8ad61af7fff63fb0c2c02393a3e9d776f54e939cb279f7e21",
+      "result": "No winning replay. The best partial reached tick 584 with 11 released, 1 lost and 10 active."
+    },
+    {
+      "strategy": "seeded repair with the first 12 historical actions forced through tick 1447",
+      "budgetSeconds": 300,
+      "elapsedSeconds": 300,
+      "beamWidth": 8192,
+      "fallbackTicks": 100,
+      "refireTicks": 60,
+      "ranking": [
+        "prefer-progress",
+        "rescue-quota-distance",
+        "direct-exit-distance"
+      ],
+      "expanded": 938891,
+      "bestSaved": 0,
+      "requiredToSave": 50,
+      "result": "No winning continuation."
+    }
+  ],
+  "acceptedRoutesChanged": false,
+  "interpretation": "Neither Amiga archive copy has a verified winning route. The same incomplete initial simulation hash occurs for a related DOS source where the candidate passes. Do not transfer that route across source identities until the omitted initial inputs are covered. The bounded Amiga searches do not prove either level impossible.",
+  "followUp": {
+    "finding": "The replay state fingerprint omits source setup and continuation state that can affect future simulation.",
+    "source": "Sources/NxlvKit/ClassicDOSReplay.swift:117-180; Sources/NxlvKit/ClassicDOSSimulation.swift:580-589",
+    "omittedInputs": [
+      "terrain.width and terrain.height",
+      "configuration.entrances",
+      "configuration.triggers and trigger cooldowns",
+      "destructionMasks",
+      "hatchSourceDeltaX",
+      "nextReleaseCountdown",
+      "releaseLimit after nuking",
+      "queuedCommands and commandSequence",
+      "nukeCursor"
+    ],
+    "representedInputs": [
+      "remainingTimeTicks includes the current time limit at initial state"
+    ],
+    "disposition": "A versioned static level fingerprint now protects new app, solver and completion replays. Existing replay files still use the legacy state hash. Refresh bundled witnesses and rerun the exact package audit before closing this gate.",
+    "implementation": {
+      "fingerprintVersion": "classic-level-source-v1",
+      "replayField": "initialLevelFingerprint",
+      "coveredInputs": [
+        "terrain dimensions and masks",
+        "level settings",
+        "entrances",
+        "triggers",
+        "destruction masks",
+        "hatch source offsets"
+      ],
+      "backwardCompatibility": "The field is optional. Older replay documents decode and retain legacy state-hash validation.",
+      "adoptedBy": [
+        "Classic mobile replay recording",
+        "Classic desktop route recording",
+        "ClassicSolver",
+        "ClassicCompletion",
+        "ClassicCorpus"
+      ]
+    }
+  },
+  "validation": {
+    "NxlvKitProductionCompile": "passed during SwiftPM build",
+    "standaloneClassicDOSReplayTests": "passed against the installed build 76 Classic DOS resources, including legacy hash collision cases, legacy JSON decoding, determinism and Fun 1 replay",
+    "NxlvKitTestsTarget": "not run; the installed command-line toolchain has no Testing module",
+    "changedToolSources": "frontend parse passed; not compiled",
+    "fullBundledClassicAudit": "not rerun",
+    "releasePackage": "not rebuilt"
+  }
+}

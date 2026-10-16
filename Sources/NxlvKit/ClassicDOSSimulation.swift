@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// A clean-room, fixed-tick simulation foundation for the original DOS game.
@@ -602,6 +603,97 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     public var didWin: Bool { isComplete && savedCount >= configuration.requiredToSave }
     public var remainingTimeSeconds: Int? {
         remainingTimeTicks.map { ($0 + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond }
+    }
+
+    /// Fingerprints the static level inputs that can affect a replay.
+    ///
+    /// This stays separate from the legacy state hash so old replay documents
+    /// keep their existing identity while new documents can reject a route
+    /// from a level with matching terrain and counters but different objects.
+    public var levelSourceFingerprint: String {
+        var bytes = Data()
+
+        func append(_ value: Int) {
+            withUnsafeBytes(of: Int64(value).littleEndian) { bytes.append(contentsOf: $0) }
+        }
+        func append(_ value: Int?) {
+            bytes.append(value == nil ? 0 : 1)
+            append(value ?? 0)
+        }
+        func append(_ value: String) {
+            let data = Data(value.utf8)
+            append(data.count)
+            bytes.append(data)
+        }
+        func append(_ data: Data) {
+            append(data.count)
+            bytes.append(data)
+        }
+        func append(_ point: ClassicDOSPoint) {
+            append(point.x)
+            append(point.y)
+        }
+        func append(_ rect: ClassicDOSRect) {
+            append(rect.x1)
+            append(rect.y1)
+            append(rect.x2)
+            append(rect.y2)
+        }
+        func append(_ mask: ClassicDOSMask) {
+            append(mask.width)
+            append(mask.height)
+            append(mask.offsetX)
+            append(mask.offsetY)
+            append(mask.pixels)
+        }
+
+        append("classic-level-source-v1")
+        append(terrain.width)
+        append(terrain.height)
+        append(terrain.solidMask)
+        append(terrain.steelMask)
+
+        append(configuration.totalLemmings)
+        append(configuration.requiredToSave)
+        append(configuration.timeLimitTicks)
+        append(configuration.initialReleaseRate)
+        append(configuration.maximumX)
+        append(configuration.maximumY)
+        append(configuration.mechanics.rawValue)
+
+        append(configuration.entrances.count)
+        for entrance in configuration.entrances { append(entrance) }
+
+        append(configuration.triggers.count)
+        for trigger in configuration.triggers {
+            append(trigger.id)
+            append(trigger.effect.rawValue)
+            append(trigger.bounds)
+            append(trigger.trapResetTicks)
+        }
+
+        for skill in ClassicSkill.allCases {
+            append(skill.rawValue)
+            append(configuration.initialSkills[skill] ?? 0)
+        }
+
+        if let destructionMasks {
+            bytes.append(1)
+            append(destructionMasks.explosion)
+            for masks in [destructionMasks.bashRight, destructionMasks.bashLeft,
+                          destructionMasks.mineRight, destructionMasks.mineLeft] {
+                append(masks.count)
+                for mask in masks { append(mask) }
+            }
+        } else {
+            bytes.append(0)
+        }
+
+        let sourceOffsets = hatchSourceDeltaX ?? []
+        append(sourceOffsets.count)
+        for offset in sourceOffsets { append(offset) }
+
+        return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
 
     public init(

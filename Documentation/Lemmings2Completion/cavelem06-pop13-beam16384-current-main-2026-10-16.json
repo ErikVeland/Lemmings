@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "scope": "Current-main bounded search for a higher-survivor Cavelems Level 6 route at the verified chained population.",
+  "provenance": {
+    "solverBinarySHA256": "40b9aaaef9fd4dfc04e430c858b70057bd7bcbca3fe59a60301c1bf24f9201cc",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "solverSourceSHA256": {
+      "main.swift": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+      "Search.swift": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+      "LevelRun.swift": "1ba8ea4ce6cbd7c3f7c625b9d41c7dcbabb06775cee32d6b1ef2955b53ae08d4"
+    },
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "installedApplication": "1.9.1 build 76",
+    "payloadManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "matchedPayloadFiles": 218,
+    "payloadTreeSHA256": "3f3ce2f90ee0dd36728ba6bd5a631324d76dd987cf0b625d1bc54e707816f75f",
+    "payloadLimit": "Installed build 76 resource files match the retained build 83 input manifest. This is route-search evidence for that matching resource tree, not a complete build 86 app audit."
+  },
+  "search": {
+    "level": "cavelem-06",
+    "tribe": "Cavelems",
+    "levelNumber": 6,
+    "population": 13,
+    "seed": "none",
+    "budgetSeconds": 600,
+    "elapsedSeconds": 602,
+    "beamWidth": 16384,
+    "cellPixels": 2,
+    "refireTicks": 24,
+    "decisionPoints": 1250232,
+    "expanded": 1250232,
+    "bestSaved": 0,
+    "required": 13,
+    "result": "No winning route."
+  },
+  "partial": {
+    "path": "/private/tmp/cavelem06-beam16384-current-20261016/cavelem-06.partial.json",
+    "sha256": "2a4f8da51a196729845ed0054395adea98573460a97da10627324dbaa6e4bcff",
+    "status": "Research only. Not an accepted route."
+  },
+  "acceptedChainChanged": false,
+  "interpretation": "This wider search found no route at the population passed by the current verified Cavelems chain. It does not prove that the level is impossible. The ark gate remains open."
+}

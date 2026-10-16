@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Rerun the carried Cavelems Level 2 search after removing the solver's three-actor decision cap.",
+  "provenance": {
+    "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "solverSource": "Tools/Lemmings2Solver/DecisionPoints.swift",
+    "solverSourceSHA256": "9e7697a802f44453b479531498a6fbe4ca963dcdd11a4c8f91cc649be3d59e9a",
+    "solverTestSourceSHA256": "cf11d18faeafe3c6445c405fa09592ca3bb770f90cde67dbfabaf31589d75400",
+    "solverExecutableSHA256": "7e641324f5580747cac32fefe9e7ac8db5f294608632c59c4cf0373283d1197d",
+    "runtimeLibrarySHA256": "69a55e77c1c2122d5043cb840dde0a987975b3ab79a3f5ced47854c0f6ca4d3e",
+    "compiler": "Xcode 26.6, Swift 6.3.3",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "resourceVersion": "1.9.1 build 76",
+    "resourceManifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "resourceFilesMatched": 218,
+    "resourceFilesMissing": 0,
+    "resourceFilesChanged": 0,
+    "seed": "Tests/Lemmings2CompletionTests/Chains/cavelem-02.json",
+    "seedSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361",
+    "levelSHA256": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb"
+  },
+  "change": "DecisionDetector now offers every triggered lemming, rather than truncating the choice list to the first three IDs. The solver regression test checks six simultaneous triggered actors.",
+  "test": {
+    "command": "Scripts/run-lemmings2-solver-tests.sh",
+    "compilerEnvironment": "Xcode 26.6 selected explicitly; module cache under /private/tmp",
+    "result": "passed",
+    "regression": "all six triggered lemmings are offered"
+  },
+  "currentTurnVerification": {
+    "date": "2026-10-16",
+    "sourceHashes": {
+      "decisionPointsSHA256": "9e7697a802f44453b479531498a6fbe4ca963dcdd11a4c8f91cc649be3d59e9a",
+      "solverTestSHA256": "cf11d18faeafe3c6445c405fa09592ca3bb770f90cde67dbfabaf31589d75400"
+    },
+    "fullSuiteRerun": "The suite binary rebuilt, but the runner produced no output and was interrupted before a completion result was available.",
+    "focusedRegression": {
+      "command": "swiftc with current Tools/Lemmings2Solver/DecisionPoints.swift and the rebuilt NxlvKit module, then run the six-actor check",
+      "result": "passed",
+      "output": "PASS all six triggered L2 actors are offered once in stable order"
+    }
+  },
+  "search": {
+    "command": ".build/l2-solver-tests/solver level '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2' cavelem-02 --population 59 --seed Tests/Lemmings2CompletionTests/Chains/cavelem-02.json --beam 16384 --depth 100 --budget 300 --cell 2 --refire 24 --out .build/l2-solver-tests/current-cavelem02-seeded-all-actors-20261016",
+    "seedSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361",
+    "population": 59,
+    "beamWidth": 16384,
+    "depth": 100,
+    "budgetSeconds": 300,
+    "cellPixels": 2,
+    "refireTicks": 24,
+    "decisionPoints": 1393819,
+    "expanded": 1393819,
+    "rounds": 1,
+    "resultSaved": 36,
+    "resultTicks": 2199,
+    "resultEvents": 12,
+    "candidateSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361",
+    "candidateMatchesSeed": true,
+    "replayRuns": 2,
+    "exitCode": 0,
+    "outcome": "The solver still returns the accepted 36-of-59 Silver route; it replayed it twice. The broader decision set did not improve this route."
+  },
+  "acceptedChainChanged": false,
+  "limits": "This bounded search does not prove that a higher-survivor route is impossible. It does not establish original DOS parity or close the 30-survivor Gold ark requirement."
+}

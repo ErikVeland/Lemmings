@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "scope": "Replay a higher-survivor Cavelems alternative chain through Level 5, then try the missing Level 6 continuation at its carried population of 10.",
+  "resource": {
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "application": "1.9.1 build 76",
+    "matchedBuild83PayloadFiles": 218,
+    "payloadManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "level06SHA256": "9bdc0d229b90b226b4c6517582e976a5de3269acf0a83057e6c00be28fb576f5"
+  },
+  "candidateChain": {
+    "base": {
+      "cavelem01": {
+        "population": 60,
+        "saved": 59
+      },
+      "cavelem02": {
+        "population": 59,
+        "saved": 36,
+        "routeSHA256": "8c9d7ebb5fd47926a4b15ec002958f8e791eb3cd94f8ca6e17de6d37a45b5361"
+      }
+    },
+    "replacements": [
+      {
+        "level": 3,
+        "population": 36,
+        "saved": 34,
+        "ticks": 399,
+        "candidate": "candidates/2026-10-16/cavelem-03-pop36.json",
+        "sha256": "b913a3370732cad86a2cd239fc848e672fdf8b8f4f0e54f4ca5f6c6149b10e1d"
+      },
+      {
+        "level": 4,
+        "population": 34,
+        "saved": 13,
+        "ticks": 1210,
+        "candidate": "candidates/2026-10-16/cavelem-04-pop34.json",
+        "sha256": "1bf18cd3caf093605917f5773036c755a13753309027764c4d7443c03e6d9ef4"
+      },
+      {
+        "level": 5,
+        "population": 13,
+        "saved": 10,
+        "ticks": 542,
+        "candidate": "candidates/2026-10-16/cavelem-05-pop13.json",
+        "sha256": "c2e745d330d8ed2fb8e60d5ccdda94630154ae43543baf0db7a2c1b9fd483c64"
+      }
+    ],
+    "verification": {
+      "verifier": ".build/l2-current-main-20261016/verify",
+      "verifierSHA256": "d247cbedb81804f2ab2d35743aba2bec7275b8b6c09850fcfe9d5a8aeac443b0",
+      "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+      "method": "Copy the completion fixture and Chains directories to a temporary directory; replace Chains/cavelem-03.json, cavelem-04.json and cavelem-05.json with the three candidate files; run the verifier against the resource root with L2_COMPLETION_FIXTURES and L2_COMPLETION_CHAINS set to those temporary directories.",
+      "candidateReplays": "Each replacement passed two fresh runs with matching state hash, saved count and ticks.",
+      "candidateCavelemsChain": "5/10; the verifier carries 10 survivors to Level 6, then stops because there is no population-10 witness.",
+      "otherTribes": "11 of 12 chains remain complete in this temporary comparison.",
+      "acceptedFixtureOrChainChanged": false
+    }
+  },
+  "level06Searches": [
+    {
+      "seed": "none",
+      "seedSHA256": null,
+      "population": 10,
+      "beamWidth": 16384,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "elapsedSeconds": 301,
+      "cellPixels": 2,
+      "refireTicks": 24,
+      "expanded": 747437,
+      "bestSaved": 0,
+      "result": "No winning route.",
+      "partialSHA256": "3c8db14e97015389429486ac914f761dd54423641b94e15c73d26230938c2ee3"
+    },
+    {
+      "seed": "accepted standalone cavelem-06 route",
+      "seedSHA256": "2fa2ec4fe1252502bce10c0e1f10504c525103b2b1bde4ee2f7c24a9f85834b3",
+      "population": 10,
+      "beamWidth": 16384,
+      "depth": 100,
+      "budgetSeconds": 300,
+      "elapsedSeconds": 304,
+      "cellPixels": 2,
+      "refireTicks": 24,
+      "expanded": 876791,
+      "bestSaved": 0,
+      "result": "No winning route.",
+      "partialSHA256": "7070a0fe1911bdbf53808953a7b62f067de79e409fbf89e0f6283257b2c2b6bf"
+    },
+    {
+      "population": 13,
+      "beamWidth": 16384,
+      "depth": 100,
+      "budgetSeconds": 600,
+      "elapsedSeconds": 602,
+      "cellPixels": 2,
+      "refireTicks": 24,
+      "expanded": 1291693,
+      "bestSaved": 0,
+      "result": "No winning route.",
+      "partialSHA256": "8b0bead66224603838518727751428090141b21f9eafe0c4045ec7243307077a",
+      "solverBinarySHA256": "7e641324f5580747cac32fefe9e7ac8db5f294608632c59c4cf0373283d1197d",
+      "solverRuntimeLibrarySHA256": "69a55e77c1c2122d5043cb840dde0a987975b3ab79a3f5ced47854c0f6ca4d3e",
+      "allTriggeredActors": true,
+      "seed": "none",
+      "seedSHA256": null
+    },
+    {
+      "population": 13,
+      "beamWidth": 16384,
+      "depth": 100,
+      "budgetSeconds": 600,
+      "elapsedSeconds": 600,
+      "cellPixels": 2,
+      "refireTicks": 24,
+      "expanded": 1463726,
+      "bestSaved": 0,
+      "result": "No winning route.",
+      "partialSHA256": "1e07e03f46dd00cb45369e48da447fe20c0c5cd412a102dad46a3fb4260fdde3",
+      "solverBinarySHA256": "7e641324f5580747cac32fefe9e7ac8db5f294608632c59c4cf0373283d1197d",
+      "solverRuntimeLibrarySHA256": "69a55e77c1c2122d5043cb840dde0a987975b3ab79a3f5ced47854c0f6ca4d3e",
+      "allTriggeredActors": true,
+      "seed": "accepted standalone cavelem-06 route",
+      "seedSHA256": "2fa2ec4fe1252502bce10c0e1f10504c525103b2b1bde4ee2f7c24a9f85834b3"
+    }
+  ],
+  "solver": {
+    "binarySHA256": "7e641324f5580747cac32fefe9e7ac8db5f294608632c59c4cf0373283d1197d",
+    "runtimeLibrarySHA256": "69a55e77c1c2122d5043cb840dde0a987975b3ab79a3f5ced47854c0f6ca4d3e",
+    "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
+    "decisionPointsSourceSHA256": "9e7697a802f44453b479531498a6fbe4ca963dcdd11a4c8f91cc649be3d59e9a",
+    "searchSourceSHA256": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+    "levelRunSourceSHA256": "1ba8ea4ce6cbd7c3f7c625b9d41c7dcbabb06775cee32d6b1ef2955b53ae08d4",
+    "branchesEveryTriggeredActor": true
+  },
+  "conclusion": "The three candidate routes form a replay-verified population chain through Cavelems Level 5 and carry ten survivors to Level 6. Current all-actor searches found no Level 6 win at populations 10 or 13. At population 13, both the 600-second unseeded search and the 600-second continuation from the accepted 2-of-2 route found no win. These bounded searches do not prove the level impossible. Keep the accepted 12-tribe chain unchanged; it remains fully chained but ends with one survivor and Bronze in each tribe. The Gold ark gate remains open.",
+  "acceptedBaseline": {
+    "verifier": "The accepted fixture and Chains directories, not the temporary candidate copies.",
+    "standaloneRoutes": 120,
+    "carryOverVariants": 70,
+    "completeTenLevelTribes": 12,
+    "ark": {
+      "goldenTalisman": false,
+      "survivorsPerTribe": 1,
+      "status": "open"
+    }
+  }
+}

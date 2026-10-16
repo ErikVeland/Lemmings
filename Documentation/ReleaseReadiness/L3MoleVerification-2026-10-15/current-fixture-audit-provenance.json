@@ -80,8 +80,22 @@
   },
   "sourceMatchesCurrentMain": true,
   "sourceChangedSincePreviousAudit": true,
-  "sourceRecheckedAtCommit": "4fe7328a00066644c4faa8240aed4efb79e4e390",
+  "sourceRecheckedAtCommit": "1111ece837840a005f932c0bdd14478df1728cc8",
   "sourceUnchangedSinceAudit": true,
   "normalisedFreshReportMatchesRetainedReport": true,
-  "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly."
+  "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly.",
+  "latestMainReverification": {
+    "worktreeHEAD": "1111ece837840a005f932c0bdd14478df1728cc8",
+    "originMain": "1111ece837840a005f932c0bdd14478df1728cc8",
+    "command": "L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures .build/l3-current-main-20261016/Audit /private/tmp/l3-audit-current-main-20261016.json",
+    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "counts": {
+      "strictExactDoubleReplays": 399,
+      "strictFailures": 17,
+      "totalFixtures": 416
+    },
+    "result": "The fresh report hash matches the previously retained fresh report hash; the audit reproduces 399 passes and the same 17 route failures against the current runtime source."
+  }
 }

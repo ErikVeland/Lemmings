@@ -1,0 +1,75 @@
+{
+  "schema": "classic-fan-current-main-targeted-search-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "sourceBranch": "main",
+  "sourceState": "modified worktree; current NxlvKit and ClassicSolver sources compiled for these searches",
+  "target": {
+    "identity": "fan:lldb-547/Ji Hoon Heaven 2.DAT#3",
+    "title": "Dude, where's my exit?",
+    "archive": "LevelPacks/0547-Ji-Hoons-Lemmings-Remake-Heaven.zip",
+    "archiveSHA256": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+    "initialStateHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+    "initialLevelFingerprint": "80cc787404b54b49970e28530ae1a4638ba171f0241d781e1f8c9dadfc84eca4",
+    "lemmings": 20,
+    "required": 12,
+    "skills": ["climber", "floater", "bomber", "blocker", "builder", "basher", "miner", "digger"]
+  },
+  "sameLegacyHashVariants": [
+    { "identity": "fan:lldb-548/Ji Hoon Sky 1.DAT#5", "levelSourceFingerprint": "492c9e67c25b4b5b32dec92e2f4ef8276e6e16ff3ffafe2b5157aace54d0eaa3" },
+    { "identity": "fan:lldb-549/Ji Hoon Earth 2.DAT#3", "levelSourceFingerprint": "1792f996ee54c4da4fd02059f0cb2860402dce6df89733e05b69e53055e94e86" },
+    { "identity": "fan:lldb-550/Ji Hoon Hell 1.DAT#4", "levelSourceFingerprint": "ade4db23d1199692d563562305170384cfac9ab91694476ef969ca658983d288" }
+  ],
+  "runtime": {
+    "engine": "Classic DOS simulation",
+    "clock": "Golems",
+    "runtimeSourceSHA256": "3a28f36ce9194b077934ac22951c1fbde79da1de013ad9f32f29e17fc63bd6f6",
+    "solverSourceSHA256": "a66bb66e906839496e39b074f6b7d70d42d9c4736deb32b712c30512ee13b659",
+    "solverBinarySHA256": "e8681f1bfb3683fcc0ca906d987b2638bdb942c0e09829e9d6167fdbbdd23128"
+  },
+  "searches": [
+    {
+      "strategy": "from-start beam",
+      "budgetSeconds": 180,
+      "beamWidth": 4096,
+      "ranking": ["prefer-progress", "rescue-quota-distance"],
+      "expanded": 290941,
+      "tick": 227,
+      "released": 4,
+      "lost": 0,
+      "active": 4,
+      "bestSaved": 0,
+      "result": "No winning route found within the budget."
+    },
+    {
+      "strategy": "Digger/Blocker timing sweep",
+      "budgetSeconds": 180,
+      "requestedFirstTickRange": "0 through 200",
+      "requestedSecondSkillGap": "1 through 120 ticks",
+      "completedFirstSkillAssignments": 2,
+      "completedSecondSkillAssignments": 207,
+      "completedContinuations": 206,
+      "lastWaitingTick": 69,
+      "deadlineExpired": true,
+      "result": "The sweep stopped at its deadline and did not complete the requested range."
+    },
+    {
+      "strategy": "seeded beam after Digger",
+      "prefix": [{ "tick": 68, "lemmingID": 0, "skill": "digger" }],
+      "budgetSeconds": 180,
+      "beamWidth": 4096,
+      "ranking": ["prefer-progress", "rescue-quota-distance"],
+      "expanded": 368905,
+      "tick": 341,
+      "released": 6,
+      "lost": 0,
+      "bestSaved": 0,
+      "result": "No winning continuation found within the budget."
+    }
+  ],
+  "outcome": {
+    "verifiedWinningRoutesAdded": 0,
+    "bundledRouteGate": "open",
+    "interpretation": "The three bounded searches did not find a replacement route. The related Earth entry has a different static level fingerprint, so its witness cannot transfer on the shared legacy initial-state hash. The incomplete pair sweep does not establish coverage or impossibility."
+  }
+}

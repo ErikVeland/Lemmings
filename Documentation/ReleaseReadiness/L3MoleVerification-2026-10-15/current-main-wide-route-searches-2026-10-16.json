@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Increase search coverage for all three missing standalone Egyptian routes without changing accepted fixtures.",
+  "sourceState": {
+    "baseCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified; all listed L3 runtime, replay and solver sources match the base commit",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "replaySourceSHA256": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6",
+    "solverSearchSourceSHA256": "f359fa8171880fc0db1c0a91cd76f552573e42258b76cd0456305fade04ff6d3",
+    "solverMainSourceSHA256": "15d76aeadb9400cb1aefa938085ef1684d0f03f0f72fa24f11a7c8820eac5b1c",
+    "runtimeLibrarySHA256": "69a55e77c1c2122d5043cb840dde0a987975b3ab79a3f5ced47854c0f6ca4d3e",
+    "solverSHA256": "9e43d0ae0f98830a254818fc1bf16efc82deed050e51a8a781c74935a294a5ab",
+    "compiler": "Xcode 26.6, Swift 6.3.3"
+  },
+  "resources": {
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "installedApp": "1.9.1 build 76",
+    "build85ResourceEquivalence": "All 561 L3 files match by path, size and SHA-256; see ../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json.",
+    "fullBuild86AppAudit": "not run",
+    "levels": {
+      "213": {
+        "sha256": "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d"
+      },
+      "229": {
+        "sha256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505"
+      },
+      "206": {
+        "sha256": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad"
+      }
+    }
+  },
+  "searches": [
+    {
+      "level": 213,
+      "name": "Egyptian 13",
+      "population": 20,
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "toolSiteCellPixels": 4,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "seed": "none",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 236,
+      "depth": 276,
+      "roundsToBeam": 1,
+      "expanded": 3889087
+    },
+    {
+      "level": 229,
+      "name": "Egyptian 29",
+      "population": 20,
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "toolSiteCellPixels": 4,
+      "pairedActors": true,
+      "seed": "Tests/Lemmings3CompletionTests/Fixtures/229.json through tick 1560; refreshed under the current runtime",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 1552,
+      "depth": 1592,
+      "roundsToBeam": 1,
+      "expanded": 3620601
+    },
+    {
+      "level": 206,
+      "name": "Egyptian 6",
+      "population": 20,
+      "budgetSeconds": 300,
+      "beamWidth": 4096,
+      "toolSiteCellPixels": 4,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "seed": "none",
+      "result": "no route",
+      "bestSaved": 0,
+      "bestLost": 0,
+      "decisionPoints": 2746,
+      "depth": 2786,
+      "roundsToBeam": 1,
+      "expanded": 5181833
+    }
+  ],
+  "outcome": "None of the three wider searches found a route. Accepted fixtures were not changed. These native searches do not prove any level impossible and do not close source-parity gaps."
+}

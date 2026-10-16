@@ -211,12 +211,7 @@ struct Detector {
             return sim.lemmings.filter { $0.isActive && $0.action == .walking }.prefix(1).map(\.id)
         }
         lastDecision = sim.tickCount
-        var offered: [Int] = []
-        for (_, id) in fired.sorted(by: { $0 < $1 }) where !offered.contains(id) {
-            if offered.count == 3 { break }
-            offered.append(id)
-        }
-        return offered
+        return uniqueDecisionActors(fired)
     }
 }
 
@@ -653,7 +648,8 @@ let route = best ?? bestPartial
 let proposal = route.map {
     ClassicDOSReplay(rank: entry.rank, number: entry.number,
         title: entry.level.title.trimmingCharacters(in: .whitespaces),
-        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: $0.events)
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+        initialLevelFingerprint: base.levelSourceFingerprint, events: $0.events)
 }
 let forcedInputsSatisfied = proposal.map { replay in
     forced.values.flatMap { $0 }.allSatisfy { command in
@@ -680,6 +676,7 @@ let coverage = broadcastSkill != nil
 if let proposal, let outcome = verifiedOutcome, outcome.didWin, forcedInputsSatisfied {
     let replay = ClassicDOSReplay(rank: proposal.rank, number: proposal.number,
         title: proposal.title, initialStateHash: proposal.initialStateHash,
+        initialLevelFingerprint: proposal.initialLevelFingerprint,
         events: proposal.events, expected: outcome)
     let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     let destination = args.contains("--hash-named")

@@ -128,16 +128,20 @@ for check in selected {
                 throw NSError(domain: "Rescore", code: 4)
             }
             let oldCandidate = ClassicDOSReplay(rank: oldReplay.rank, number: oldReplay.number,
-                title: oldReplay.title, initialStateHash: check.oldHash, events: oldReplay.events)
+                title: oldReplay.title, initialStateHash: check.oldHash,
+                initialLevelFingerprint: dosInitial.levelSourceFingerprint, events: oldReplay.events)
             guard try ClassicDOSReplayPlayer.run(oldCandidate, simulation: dosInitial,
                 tickLimit: 20_000).didWin else { throw NSError(domain: "Rescore", code: 4) }
         }
         let candidate = ClassicDOSReplay(rank: oldReplay.rank, number: oldReplay.number,
-            title: oldReplay.title, initialStateHash: hash, events: oldReplay.events)
+            title: oldReplay.title, initialStateHash: hash,
+            initialLevelFingerprint: initial.levelSourceFingerprint, events: oldReplay.events)
         let outcome = try ClassicDOSReplayPlayer.run(candidate, simulation: initial, tickLimit: 20_000)
         guard outcome.didWin else { throw NSError(domain: "Rescore", code: 5) }
         let witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number,
-            title: candidate.title, initialStateHash: hash, events: candidate.events, expected: outcome)
+            title: candidate.title, initialStateHash: hash,
+            initialLevelFingerprint: candidate.initialLevelFingerprint,
+            events: candidate.events, expected: outcome)
         let digest = SHA256.hash(data: try encoder.encode(witness)).description
         let key = DifficultyCacheKey(identity: old.entry.identity, levelRevision: old.entry.sourceRevision,
             replayRevision: digest, assetsRevision: hash + ":probes-10",

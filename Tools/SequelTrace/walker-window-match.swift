@@ -113,7 +113,7 @@ do {
 
     print("level=\(level.title) style=\(styles[level.style]) displayedSeconds=\(displayedSeconds)")
     print("nativeTicks=\(Set(frames.map(\.tick)).sorted()) walkerAsset=WALKER.DAT")
-    print("id,tick,direction,phase,x,y,matched,opaque,ratio")
+    print("id,tick,direction,phase,drawOriginX,drawOriginY,matched,opaque,ratio")
     for match in matches.sorted(by: {
         $0.ratio == $1.ratio ? $0.matchedPixels > $1.matchedPixels : $0.ratio > $1.ratio
     }).prefix(20) {

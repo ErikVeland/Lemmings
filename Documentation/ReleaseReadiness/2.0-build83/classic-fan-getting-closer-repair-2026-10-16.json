@@ -1,0 +1,92 @@
+{
+  "schema": "classic-fan-getting-closer-repair-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "target": {
+    "source": "0080-Master-System-Remakes.zip/Master System Remakes.dat#5",
+    "rank": "fan:lldb-80",
+    "number": 6,
+    "title": "Getting Closer...",
+    "legacyStateHash": "9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b",
+    "staticLevelFingerprint": "03829c5c3d844e2c0fbbb1b3f0441d0e5c51efeb3894c353319710a06a0a575c",
+    "archiveSHA256": "bae8cb65d910af0259378eab5ac9ed089135b7d3728d8a0d3897cad72232b515"
+  },
+  "bundle": {
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedApp": "1.9.1 build 76",
+    "build85ContentMatch": "The exact archive hash matches the retained build 85 bundle manifest.",
+    "build86ResourceNote": "The published build 86 record reports no non-localisation resource-index changes from build 85."
+  },
+  "identityFinding": {
+    "auditStatus": "replay-failed",
+    "sameStateHashLevel": {
+      "rank": "fan:lldb-80",
+      "number": 3,
+      "title": "Nowhere Near....",
+      "staticLevelFingerprint": "71a3fd2b27225e9d08adce73d765c04483979cec774d87d4fb7c108c40b61a1d"
+    },
+    "oldLegacyCandidate": {
+      "source": "Artifacts/LearningJourney/candidate-solutions.json#9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b",
+      "sha256": "2225f1189bee89a0b1f38f71aac1068fbd181e09aca53a28d15f813888656ac3",
+      "failure": "The engine refused to queue basher for lemming 1 at tick 2190."
+    },
+    "interpretation": "The legacy state hash is shared by two different levels. The fingerprinted witness is rejected for a level-identity mismatch, and the legacy route from level 3 fails when replayed on level 6. Neither is a verified win for this target."
+  },
+  "solver": {
+    "binarySHA256": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+    "runtimeLibrarySHA256": "d735fe0e769485a4e686c5a7671a392f91e923a4b61da8636935b8d3d09e02d3",
+    "solverSourceSHA256": "af1c6d92b94c624ca3b181de4b19acfb57d04403df65d39e029fc34e3b1387e2",
+    "decisionOffersSourceSHA256": "e40b486faa3b92424cd5b2013942b2e7a52e143dd86792d9501370ae450be7eb"
+  },
+  "searches": [
+    {
+      "strategy": "native release rate, beam search",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0080-Master-System-Remakes.zip' 1 .build/classic-solver-getting-closer-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'Master System Remakes.dat#5' --width 4096 --seconds 300 --fallback 170 --refire 120 --partial-out",
+      "expanded": 837512,
+      "elapsedSeconds": 300,
+      "terminalTick": 340,
+      "released": 6,
+      "lost": 1,
+      "active": 5,
+      "bestSaved": 0,
+      "partialSHA256": "542504d4bca55202ee50a61d18f4b9cae01e8ce695fe24fa3d3a59e2e14003ab",
+      "result": "No winning route."
+    },
+    {
+      "strategy": "adaptive release rate, progress-first ranking",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0080-Master-System-Remakes.zip' 1 .build/classic-solver-getting-closer-adaptive-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'Master System Remakes.dat#5' --width 4096 --seconds 300 --fallback 170 --refire 120 --adaptive-rate --prefer-progress --partial-out",
+      "expanded": 770486,
+      "elapsedSeconds": 300,
+      "terminalTick": 501,
+      "released": 20,
+      "lost": 5,
+      "active": 15,
+      "bestSaved": 0,
+      "partialSHA256": "08e3fa4f23adf66d2cab135f199d3ba085d28327a8afe5d43d9d46d698bc2a75",
+      "result": "No winning route."
+    },
+    {
+      "strategy": "adaptive release rate, progress-first ranking, seeded from the preceding partial schedule",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0080-Master-System-Remakes.zip' 1 .build/classic-solver-getting-closer-seeded-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'Master System Remakes.dat#5' --width 4096 --seconds 300 --fallback 170 --refire 120 --adaptive-rate --prefer-progress --prefix .build/classic-solver-getting-closer-adaptive-20261016/prefix.json --partial-out",
+      "prefixCommands": 20,
+      "prefixSHA256": "3347adde98291c2a352cbd7bbd89150a4cc658531a0d3ea59e692881b291db3c",
+      "expanded": 654163,
+      "elapsedSeconds": 254,
+      "terminalTick": 502,
+      "released": 20,
+      "lost": 5,
+      "active": 15,
+      "bestSaved": 0,
+      "partialSHA256": "934537e940ee2c78e8a9795a8cbcc96be2b493ceadfd39ab0993f451c833ca11",
+      "result": "No winning route."
+    }
+  ],
+  "closureEffect": {
+    "newWinningRoutes": 0,
+    "fanRouteCountChanged": false,
+    "targetRemainsUnverified": true,
+    "strictBundledGate": "open",
+    "importedContentScope": "unchanged and open-ended"
+  },
+  "limits": "The bounded searches do not prove that the level is impossible. No candidate was promoted to the accepted replay set."
+}

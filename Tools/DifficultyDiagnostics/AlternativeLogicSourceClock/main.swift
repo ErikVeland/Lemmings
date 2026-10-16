@@ -30,13 +30,15 @@ let decoder = JSONDecoder()
 let source = try decoder.decode(ClassicDOSReplay.self, from: Data(contentsOf:
     root.appendingPathComponent("Artifacts/DifficultyEvaluation/source-clock-candidates/alternative-logic.json")))
 let replay = ClassicDOSReplay(rank: source.rank, number: source.number, title: source.title,
-    initialStateHash: hash, events: source.events)
+    initialStateHash: hash, initialLevelFingerprint: initial.levelSourceFingerprint,
+    events: source.events)
 let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial, tickLimit: 20_000)
 guard outcome.didWin, outcome.saved == 50, outcome.required == 50, outcome.ticks == 1022 else {
     fatalError("The source-clock candidate did not win on the exact bundled level")
 }
 let witness = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
-    initialStateHash: hash, events: replay.events, expected: outcome)
+    initialStateHash: hash, initialLevelFingerprint: initial.levelSourceFingerprint,
+    events: replay.events, expected: outcome)
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 let digest = SHA256.hash(data: try encoder.encode(witness)).description

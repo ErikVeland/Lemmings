@@ -271,7 +271,7 @@ public final class ClassicMobileSession: MobileGameSession {
         self.levelIdentifier = levelIdentifier
         self.levelIndex = levelIndex
         initialStateHash = ClassicDOSReplayRecorder.stateHash(of: simulation)
-        levelFingerprint = initialStateHash
+        levelFingerprint = simulation.levelSourceFingerprint
         levelSize = MobileSize(
             width: Double(renderedLevel?.width ?? simulation.terrain.width),
             height: Double(renderedLevel?.height ?? simulation.terrain.height)
@@ -603,12 +603,17 @@ public final class ClassicMobileSession: MobileGameSession {
             stateHash: ClassicDOSReplayRecorder.stateHash(of: simulation))
         return try JSONEncoder().encode(ClassicDOSReplay(rank: "", number: levelIndex + 1,
             title: levelIdentifier, initialStateHash: hash,
+            initialLevelFingerprint: replayInitial.levelSourceFingerprint,
             events: history.appliedCommands.map { .init(tick: $0.tick, action: $0.action, afterTick: true) },
             expected: outcome))
     }
 
     public func makeReplaySession(document: Data) throws -> (any MobileGameSession)? {
         let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: document)
+        if let expectedFingerprint = replay.initialLevelFingerprint,
+           expectedFingerprint != levelInitial.levelSourceFingerprint {
+            throw MobileSessionError.changedLevel
+        }
         let start: ClassicDOSSimulation
         if replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: levelInitial) { start = levelInitial }
         else if replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: replayInitial) { start = replayInitial }

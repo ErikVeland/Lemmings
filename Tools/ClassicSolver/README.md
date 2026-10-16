@@ -4,6 +4,12 @@
 `--resources RESOURCES`. A win is written as a native replay. Use `--hash-named`
 when the output argument is a directory; the replay filename then matches the
 initial simulation hash.
+
+The decision detector offers every triggered lemming once. It does not cap the
+list at three actors. Build the solver from the current source with
+`zsh Scripts/build-classic-solver.sh`. Run
+`zsh Scripts/run-classic-solver-decision-tests.sh` to check the actor list.
+
 The number is the sequential entry in the whole archive. For packs with
 multiple source files, it is not the zero-based `#section` in a level identity.
 Run `--describe` and check the title before a targeted search.

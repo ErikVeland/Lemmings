@@ -6,6 +6,7 @@ import NxlvKit
 @MainActor final class ArcadeStore {
     static let shared = ArcadeStore()
     func progressKey(_ key: String) -> String { key }
+    static func progressKey(_ key: String, profileID: String) -> String { "ArcadeProfile.\(profileID).\(key)" }
     nonisolated static func fingerprint(_ data: Data) -> String {
         SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
@@ -47,12 +48,19 @@ struct ImportedFanReplay: Decodable {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let decoder = JSONDecoder()
-        var replays = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: URL(fileURLWithPath: args[2])))
+        let indexedReplays = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: URL(fileURLWithPath: args[2])))
+        var replays = Dictionary(grouping: indexedReplays.values, by: \.initialStateHash)
+        var replayFingerprints = Set(try indexedReplays.values.map { ArcadeStore.fingerprint(try encoder.encode($0)) })
+        func retainReplay(_ replay: ClassicDOSReplay) throws {
+            let fingerprint = ArcadeStore.fingerprint(try encoder.encode(replay))
+            guard replayFingerprints.insert(fingerprint).inserted else { return }
+            replays[replay.initialStateHash, default: []].append(replay)
+        }
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Ultimate Lemmings")
         for file in ((try? FileManager.default.contentsOfDirectory(at: support.appendingPathComponent("ClassicRoutes"), includingPropertiesForKeys: nil)) ?? []).sorted(by: { $0.path < $1.path }) {
             if let data = try? Data(contentsOf: file), let replay = try? decoder.decode(ClassicDOSReplay.self, from: data),
-               replay.expected?.didWin == true, replays[replay.initialStateHash] == nil { replays[replay.initialStateHash] = replay }
+               replay.expected?.didWin == true { try retainReplay(replay) }
         }
         let revision = ProcessInfo.processInfo.environment["DIFFICULTY_SIMULATION_REVISION"] ?? DifficultyModel.simulationVersion
         let fanClock: ClassicDOSClock = ProcessInfo.processInfo.environment["CLASSIC_FAN_CLOCK"] == "dos"
@@ -88,12 +96,23 @@ struct ImportedFanReplay: Decodable {
                 let simulation = try initial()
                 playable = true
                 let stateHash = ClassicDOSReplayRecorder.stateHash(of: simulation); hash = stateHash
-                if let replay = replays[stateHash], replay.expected?.didWin == true {
+                let candidates = (replays[stateHash] ?? []).filter { replay in
+                    replay.expected?.didWin == true &&
+                        (replay.initialLevelFingerprint == nil || replay.initialLevelFingerprint == simulation.levelSourceFingerprint)
+                }.sorted {
+                    ($0.initialLevelFingerprint != nil) && ($1.initialLevelFingerprint == nil)
+                }
+                for replay in candidates {
                     let replayHash = ArcadeStore.fingerprint(try encoder.encode(replay))
                     key = DifficultyCacheKey(identity: entry.identity, levelRevision: entry.sourceRevision,
                         replayRevision: replayHash, assetsRevision: stateHash + ":probes-10", simulationVersion: revision)
-                    if let saved = cache[entry.identity], saved.profile.key == key { profile = saved.profile }
-                    else { profile = try ClassicDifficultyAnalysis.analyse(initial: simulation, replay: replay, key: key, maximumProbeRuns: 10) }
+                    do {
+                        if let saved = cache[entry.identity], saved.profile.key == key { profile = saved.profile }
+                        else { profile = try ClassicDifficultyAnalysis.analyse(initial: simulation, replay: replay, key: key, maximumProbeRuns: 10) }
+                        break
+                    } catch {
+                        continue
+                    }
                 }
             } catch { issue = String(describing: error) }
             return .init(entry: entry, profile: profile, official: official, order: order,
@@ -209,11 +228,15 @@ struct ImportedFanReplay: Decodable {
                         mechanics: FanLevelLibrary.mechanics(for: pack, entry: item), clock: fanClock)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     let replay = ClassicDOSReplay(rank: candidate.packID, number: rows[index].entry.levelNumberSnapshot,
-                        title: level.title, initialStateHash: hash, events: candidate.events)
+                        title: level.title, initialStateHash: hash,
+                        initialLevelFingerprint: initial.levelSourceFingerprint,
+                        events: candidate.events)
                     let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial)
                     guard outcome.didWin else { throw DifficultyAnalysisError.replayDidNotWin }
                     let witness = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
-                        initialStateHash: hash, events: replay.events, expected: outcome)
+                        initialStateHash: hash,
+                        initialLevelFingerprint: replay.initialLevelFingerprint,
+                        events: replay.events, expected: outcome)
                     let old = rows[index]
                     let key = DifficultyCacheKey(identity: old.entry.identity, levelRevision: old.entry.sourceRevision,
                         replayRevision: ArcadeStore.fingerprint(try encoder.encode(witness)), assetsRevision: hash + ":probes-10", simulationVersion: revision)

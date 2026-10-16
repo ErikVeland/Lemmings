@@ -1,0 +1,203 @@
+{
+  "schema": "classic-fan-current-main-searches-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "bundle": {
+    "currentPublicRelease": "2.0.3 build 86",
+    "searchResources": "installed 1.9.1 build 76 app resources",
+    "resourceLimit": "The installed app is older than build 86. Both targeted archives match the exact sourceRevision hashes in the current-main audit. This is not a full build 86 app audit.",
+    "searchTimeFanRouteBaseline": "2399/6020 verified",
+    "searchTimeOpenRoutes": 3621
+  },
+  "reconciliation": {
+    "latestAudit": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/audit.json",
+    "latestFanRouteCount": "2403/6020 verified",
+    "latestOpenRoutes": 3617,
+    "note": "The bounded searches below used their recorded 2399-route baseline. The later reconciled full audit supersedes that count; it does not change the search outcomes."
+  },
+  "runtime": {
+    "solverSource": "Tools/ClassicSolver/main.swift",
+    "solverSourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "solverBinarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "simulationSourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "clock": "golems"
+  },
+  "batch": {
+    "input": "Artifacts/ClassicProgression/audit.json",
+    "eligiblePool": "3610 low-confidence playable fan levels after verified LearningJourney identities were excluded",
+    "attempted": 20,
+    "budgetSecondsPerLevel": 8,
+    "width": 1024,
+    "ranking": "near-win; no prior run in this new ledger, so the tool used score and initial-hash tie-breaks",
+    "options": [
+      "prefer-progress",
+      "rescue-quota-distance",
+      "fallback 100",
+      "refire 60",
+      "save partials"
+    ],
+    "wins": 0,
+    "unresolved": 20,
+    "levels": [
+      {
+        "identity": "fan:lldb-303/TWPAK01.dat#7",
+        "hash": "94c1a38f42b01470a00f65f973ed98cd22c32397ea0a5a22d592446ebe63e003",
+        "result": "UNSOLVED fan:lldb-303 8 best saved 0/8 expanded 179 in 0s tick 1022 released 19 lost 0 active 19 complete true"
+      },
+      {
+        "identity": "fan:lldb-55/Mad00.dat#7",
+        "hash": "4f3a8e9ba5fa0baf22493619495ae1d549d29e650c60603358f2c24481b985e9",
+        "result": "UNSOLVED fan:lldb-55 8 best saved 0/10 expanded 20747 in 8s tick 320 released 6 lost 0 active 6 complete false"
+      },
+      {
+        "identity": "fan:lldb-56/Mad00Dos.dat#7",
+        "hash": "8e246f6dc3017fac7321eb06ce7447eadff0804dc4b474d8b67701e7597fa91a",
+        "result": "UNSOLVED fan:lldb-56 8 best saved 0/8 expanded 21841 in 8s tick 320 released 6 lost 0 active 6 complete false"
+      },
+      {
+        "identity": "fan:lldb-550/Ji Hoon Hell 1.DAT#9",
+        "hash": "d285b237a042b8e78172c3e3746e2937e62aa150ce60849dafc5c9700e33f124",
+        "result": "UNSOLVED fan:lldb-550 10 best saved 0/8 expanded 21318 in 8s tick 429 released 8 lost 0 active 8 complete false"
+      },
+      {
+        "identity": "fan:lldb-434/LDChallenge05.dat#2",
+        "hash": "7c306713de07c3a5b50b0cb7fb72fe55965030934592789aaa063a80ffffe538",
+        "result": "UNSOLVED fan:lldb-434 3 best saved 0/1 expanded 169 in 0s tick 381 released 9 lost 2 active 7 complete false"
+      },
+      {
+        "identity": "fan:lldb-306/TWPAK04.dat#0",
+        "hash": "de4958a4aafe099ae900fd713711f2efe39394f8965403315b2571f4d17399f3",
+        "result": "UNSOLVED fan:lldb-306 1 best saved 0/20 expanded 18760 in 8s tick 547 released 62 lost 40 active 22 complete false"
+      },
+      {
+        "identity": "fan:lldb-306/TWPAK04.dat#6",
+        "hash": "f5a4ca759b955ebef06c7e0d197a7a4e05ca4d40476415170efa590365dfc28a",
+        "result": "UNSOLVED fan:lldb-306 7 best saved 0/20 expanded 23032 in 8s tick 250 released 8 lost 1 active 7 complete false"
+      },
+      {
+        "identity": "fan:lldb-197/Pack 2.DAT#3",
+        "hash": "0c9f96b7809975979a94e9b103dcca2bd69b24800e975c84f709bc84ea420c64",
+        "result": "UNSOLVED fan:lldb-197 4 best saved 0/5 expanded 19316 in 8s tick 860 released 20 lost 0 active 20 complete false"
+      },
+      {
+        "identity": "fan:lldb-547/Ji Hoon Heaven 1.DAT#2",
+        "hash": "fb598714aa8fadffd0c02d750a499e90b44de26e24172f90a4f9a9e270c70ff4",
+        "result": "UNSOLVED fan:lldb-547 3 best saved 0/1 expanded 21763 in 8s tick 386 released 7 lost 1 active 6 complete false"
+      },
+      {
+        "identity": "fan:lldb-511/KillerMaster 2 Crazy 2.dat#0",
+        "hash": "ad6836d3d828f89fde39c42ffd4b67a2413b5a0012b2fcd8eb52877f8e94878d",
+        "result": "UNSOLVED fan:lldb-511 11 best saved 0/8 expanded 22137 in 8s tick 387 released 7 lost 0 active 7 complete false"
+      },
+      {
+        "identity": "fan:lldb-269/CRISFN05.dat#3",
+        "hash": "a1309d1478543a1a158572be0c711381817e067edf8b13bb8be0eeb6b5bcbfa1",
+        "result": "UNSOLVED fan:lldb-269 4 best saved 0/1 expanded 22179 in 8s tick 374 released 7 lost 0 active 7 complete false"
+      },
+      {
+        "identity": "fan:lldb-16/Mikepak11.dat#3",
+        "hash": "7315844783b3873710e0f9a860d9760fe1a551f4185ae46e07a81c966116a159",
+        "result": "UNSOLVED fan:lldb-16 4 best saved 0/24 expanded 17002 in 8s tick 1146 released 40 lost 0 active 40 complete false"
+      },
+      {
+        "identity": "fan:lldb-104/TimpackF.dat#3",
+        "hash": "5be02310b7b6ddeca8b616997dae4078abc5a4a3ada17d53d7db8ba6eae61920",
+        "result": "UNSOLVED fan:lldb-104 4 best saved 0/25 expanded 22020 in 8s tick 474 released 8 lost 0 active 8 complete false"
+      },
+      {
+        "identity": "fan:lldb-521/Van Clan Havoc 2.dat#4",
+        "hash": "5be02310b7b6ddeca8b616997dae4078abc5a4a3ada17d53d7db8ba6eae61920",
+        "result": "UNSOLVED fan:lldb-521 15 best saved 0/25 expanded 21514 in 8s tick 474 released 8 lost 0 active 8 complete false"
+      },
+      {
+        "identity": "fan:lldb-65/Lemmy556 My little levels.dat#6",
+        "hash": "2b72af01864c717d854f92595536db1eea28e5f9d7f037c595024a52e51968cd",
+        "result": "UNSOLVED fan:lldb-65 7 best saved 0/5 expanded 20588 in 8s tick 256 released 16 lost 1 active 15 complete false"
+      },
+      {
+        "identity": "fan:lldb-237/JEFFPCK3.DAT#1",
+        "hash": "4f634451526f46256e9e86b799f86b80b8a2cdda7618b03eeb1a89546eda42c8",
+        "result": "UNSOLVED fan:lldb-237 2 best saved 0/1 expanded 22182 in 8s tick 496 released 9 lost 6 active 3 complete false"
+      },
+      {
+        "identity": "fan:lldb-434/LDChallenge05.dat#4",
+        "hash": "45ae7d312395b0c257c3e42142b9c2951f39643c747d12db2c6e93dda3b6e48d",
+        "result": "UNSOLVED fan:lldb-434 5 best saved 0/1 expanded 2225 in 0s tick 801 released 13 lost 0 active 13 complete false"
+      },
+      {
+        "identity": "fan:lldb-239/JEFFPCK5.DAT#1",
+        "hash": "626d1081bc76419263077d38d4a37a0164a96d86d1778c8169f53e0c7eb485df",
+        "result": "UNSOLVED fan:lldb-239 2 best saved 0/30 expanded 21695 in 8s tick 475 released 8 lost 4 active 4 complete false"
+      },
+      {
+        "identity": "fan:lldb-357/Modlvls.dat#3",
+        "hash": "bb1794971b64373f45404e6e114b97eba849c9948632acca6126489f4783cbce",
+        "result": "UNSOLVED fan:lldb-357 4 best saved 0/1 expanded 33 in 0s tick 277 released 5 lost 4 active 1 complete false"
+      },
+      {
+        "identity": "fan:lldb-378/shveg02.dat#8",
+        "hash": "e0da348dc125956d6aca0645359556437cffc9f601123f9f7f1fa3142b1c4ee2",
+        "result": "UNSOLVED fan:lldb-378 9 best saved 0/16 expanded 93 in 0s tick 299 released 62 lost 55 active 7 complete false"
+      }
+    ],
+    "interpretation": "These bounded searches found no route. They do not prove that any level is impossible."
+  },
+  "nearWinFollowups": [
+    {
+      "identity": "fan:lldb-345/MARSHY01.DAT#4",
+      "levelNumber": 5,
+      "title": "The Reflection",
+      "archiveSHA256": "6671b220493d84817904647aff660242ef1f9763453aab730073def1ba093866",
+      "initialStateSHA256": "a2da6d080357709491ce7a92fc81b20c2f390772f4eaa6bb12deed5ecb2a7280",
+      "searches": [
+        {
+          "strategy": "balanced beam, adaptive rate, rescue-quota distance, single-skill rollout, direct-exit distance",
+          "budgetSeconds": 180,
+          "width": 8192,
+          "expanded": 316000,
+          "elapsedSeconds": 183,
+          "bestSaved": "35/40",
+          "result": "No winning replay."
+        },
+        {
+          "strategy": "forced two-action partial prefix, balanced beam, rescue-quota distance, single-skill rollout, direct-exit distance",
+          "budgetSeconds": 300,
+          "width": 8192,
+          "expanded": 455686,
+          "elapsedSeconds": 302,
+          "bestSaved": "35/40",
+          "result": "No winning replay."
+        }
+      ]
+    },
+    {
+      "identity": "fan:lldb-325/t3tesla.dat#8",
+      "levelNumber": 9,
+      "title": "A TOWERING PROBLEM",
+      "archiveSHA256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+      "initialStateSHA256": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5",
+      "searches": [
+        {
+          "strategy": "forced four-action partial prefix, balanced beam, single-skill rollout, direct-exit distance",
+          "budgetSeconds": 180,
+          "width": 8192,
+          "expanded": 459,
+          "elapsedSeconds": 0,
+          "bestSaved": "8/9",
+          "result": "No winning replay. The solver exhausted this prefix without a continuation branch."
+        },
+        {
+          "strategy": "fresh balanced beam, adaptive rate, single-skill rollout, direct-exit distance",
+          "budgetSeconds": 90,
+          "width": 4096,
+          "expanded": 213609,
+          "elapsedSeconds": 90,
+          "bestSaved": "8/9",
+          "result": "No winning replay."
+        }
+      ]
+    }
+  ],
+  "interpretation": "At the search-time baseline, the current-main solver reproduced the earlier near-win counts but found no new winning routes. The later reconciled full audit verifies 2403/6020 bundled fan routes; 3617 remain open. Imported content remains outside this bounded bundled search and open-ended."
+}

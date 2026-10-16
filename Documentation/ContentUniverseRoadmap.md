@@ -46,6 +46,11 @@ The application must not present an unverified imported engine as a completed
 release. It must show the source engine, content status and known limits before
 play.
 
+For imported NeoLemmix packs, keep every indexed level visible in the library.
+Show the existing style-resolution error when a level cannot load because its
+required style is missing. Count a level as runnable only when its style
+dependencies resolve; do not treat visibility as compatibility.
+
 ## Release goals
 
 ### 1.1 — Mac three-engine reference release
@@ -104,6 +109,23 @@ Add the player-facing content browser in the same milestone:
 
 Current source status:
 
+- The fresh 16 October current-main strict audit verifies 2,403 of 6,020 bundled
+  Classic fan routes across 535 packs. It records 3,599 levels without a matching
+  candidate, 18 failed replays, zero load/decode/render failures and no input
+  drift. The fingerprinted “the last mohilem” replay passes twice; 3,617 bundled
+  routes remain unverified. Imported content stays open-ended. The source base
+  and input hashes are retained. A five-minute current-main search on “Mission at
+  max-fall 60” found no route after 600,630 expansions; the complete single-skill
+  sweep found no win in 7,727 assignments. See the [audit record](ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/audit.json)
+  and [targeted search](ReleaseReadiness/2.0-build83/classic-fan-mission-max-fall-60-search-2026-10-16.json).
+- The current-main audit adds static fingerprints to all 6,020 level rows and
+  identity-pinned replay witnesses for all 2,755 winning routes (352 official,
+  2,403 fan). Each witness passed two strict deterministic replays; coverage
+  checks its state hash and level fingerprint against the row. It records
+  5,461 distinct fan fingerprints, 18 failed fan replays, 3,599 fan levels
+  without a candidate, and no input drift. The 3,617 missing fan wins remain
+  open. Imported levels remain open-ended. See the [fingerprinted audit](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json)
+  and [winning replay witnesses](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl).
 - Classic level cards follow the active player's progress within each rating.
   Each rating starts with its first level available. A saved Settings option can
   unlock all Classic cards without changing campaign progress.
@@ -139,12 +161,15 @@ build 85 passes the bundled-resource check for all 794 indexed levels, with all
 719 levels supported by the 26 bundled DMA styles resolving. The 75 remaining
 levels need 44 community styles, and exact-version winning replay evidence
 covers 158 levels. Build 85 includes the staging fix that adds the existing
-Xmas group to the Original parent index; its check now passes the 794/719 count
-and resolves every counted ready level. No additional community styles are
-distributed, so the 75 style dependencies and their rights remain open. Keep
-all 794 levels in bundled closure scope. Obtain permission for those styles
-before adding them to the package, then audit all bundled routes and source
-rules. See the [build 85 release evidence](ReleaseReadiness/2.0.2-build85/README.md),
+Xmas group to the Original parent index; its check passes the 794/719 count and
+resolves every counted ready level. The published 2.0.3 build 86 records no
+non-localisation resource-index differences from build 85 and retains the same
+shared engine libraries. Its complete app audit was not rerun. No additional
+community styles are distributed, so the 75 style dependencies and their
+rights remain open. Keep all 794 levels in bundled closure scope. Obtain
+permission for those styles before adding them to the package, then audit all
+bundled routes and source rules. See the [2.0.3 release evidence](ReleaseReadiness/2.0.3-build86/README.md),
+[build 85 release evidence](ReleaseReadiness/2.0.2-build85/README.md),
 [build 84 content inventory](ReleaseReadiness/2.0.1-build84/neo-content.json),
 [archive audit](ReleaseReadiness/2.0-build83/neolemmix-bundle-audit.json),
 [style rights inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
@@ -179,6 +204,27 @@ open. Follow-up searches found no Cavelems Level 6 route from population 10 or
 13/60. The accepted chains did not change. These bounded searches do not prove
 that better routes are impossible. See the [current-main follow-up record](Lemmings2Completion/ark-reconnection-search-2026-10-16-current-main.json).
 
+On 16 October, a current-main unseeded Cavelems Level 2 search at population 59
+found no win after 1,033,283 expansions. A wider 16,384-beam continuation from
+the accepted 36-of-59 route replayed that same route twice after 1,393,376
+expansions. The chain remains unchanged, with one survivor at the ark, so the
+30-survivor Gold ending remains open. See the [Cavelems Level 2 search record](Lemmings2Completion/cavelem02-current-main-ark-route-searches-2026-10-16.json).
+
+The L2 solver now offers every triggered lemming at a decision point; a
+regression checks six simultaneous actors. A current-main 16,384-beam
+continuation still replayed the same 36-of-59 route twice. See the [all-actor
+follow-up](Lemmings2Completion/cavelem02-all-actor-followup-search-2026-10-16.json).
+
+A temporary exact-population Cavelems chain replayed improved Level 3–5 routes
+twice each and carried ten survivors to Level 6. Two current all-actor
+searches at population ten, one seeded from the accepted Level 6 route,
+found no win after 747,437 and 876,791 expansions. Two further 600-second
+all-actor searches at population 13, one seeded, found no win after
+1,291,693 and 1,463,726 expansions. The accepted twelve-chain baseline
+remains intact; this alternate path stops at 5/10. These bounded searches
+do not prove the level impossible. See the [candidate chain
+reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-10-16.json).
+
 The 15 October L3 Mole direction and patrol corrections match the captured
 starting directions and no-input patrols in Shadow 7 and Egyptian 13. The
 current strict audit double-replays 399/416 fixtures. Four standalone routes
@@ -187,6 +233,8 @@ and 13 carried schedules fail: the standalone gaps are Shadow 7 and Egyptian
 13 carried gaps are in Shadow 7 and Egyptian 6, 13 and 29. The prior 90-route
 and campaign proof applies to the earlier engine state. Keep the L3 bundled
 gate open until replacement witnesses pass the strict gates.
+
+At current main `9862374431ff67e67e084eb1f8416eb088b09ea3`, the retained Mole trace verifier passes its 53 position, 673 repeated-sample and four tunnel-edge checks. This is sampled motion evidence only; the full 416-fixture audit was not rerun because L3 runtime and audit sources did not change after `1111ece8`. The 399/416 result and 17 route failures remain the latest full audit. Three wider current-main searches used a 4,096 beam and 4-pixel tool-site grid: Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded 5,181,833, and Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. None found a route. The excavation mask, built-brick trigger and 17 route schedules remain open. See the [current-source recheck](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json) and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
 
 Continue the separate validation work:
 

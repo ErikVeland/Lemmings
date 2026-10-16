@@ -42,6 +42,19 @@
       "prototypeOnlyClears": 2
     }
   },
+  "referenceInputAvailability": {
+    "expectedIgnoredDirectory": ".build/l3-mole-verification",
+    "directoryPresent": false,
+    "originalExecutableInInstalledApp": false,
+    "rawCaptureFilesPresent": false,
+    "retainedEvidence": [
+      "original-steel-actor-trace.json",
+      "original-followup-traces.json",
+      "original-tunnel-edge-check.json",
+      "source and executable hashes"
+    ],
+    "impact": "Retained summaries support the recorded checks but do not allow a new source replay or pixel-level reanalysis. Restore the original executable and raw captures before closing the excavation-mask and built-brick trigger gates."
+  },
   "sourceChangeReview": "The runtime file changed after the prior recheck. The change adds L3 action-eligibility helpers and refactors assignment guards. The Mole update and movement region hash matches the trace baseline.",
   "currentMainReverification": {
     "worktreeHEAD": "c38831f3028da012c56cb6bf9522cb1117f144c5",
@@ -52,5 +65,16 @@
     "result": "Passed 53 positions, two repeated traces with 673 samples, and four tunnel-edge checks.",
     "remaining": "This verifies sampled motion only. The excavation mask, player-built brick trigger and complete Mole rules remain open."
   },
-  "remaining": "The position traces verify partial Mole motion. The excavation mask, trigger conditions and complete Mole rules remain unverified. Four tunnel-edge witnesses still reject the rectangular carve proposal."
+  "remaining": "The position traces verify partial Mole motion. The excavation mask, trigger conditions and complete Mole rules remain unverified. Four tunnel-edge witnesses still reject the rectangular carve proposal.",
+  "latestCurrentMainReverification": {
+    "worktreeHEAD": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "originMain": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "command": "python3 Scripts/verify-l3-mole-trace.py",
+    "verifierSHA256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "runtimeSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "moleMovementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
+    "result": "Passed 53 primary positions, two repeated source traces with 673 samples, and all four tunnel-edge checks.",
+    "scope": "Trace verification only. The L3 runtime, route, replay, verifier and audit sources have not changed since the 1111ece8 full fixture audit, so its 399/416 double-replay result and 17 route failures remain applicable; the full fixture audit was not rerun at this commit.",
+    "remaining": "The excavation mask, player-built brick trigger, complete Mole rules and 17 route schedules remain open. The original executable and raw captures are absent, so the source comparison cannot be extended from this checkout."
+  }
 }

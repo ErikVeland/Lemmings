@@ -1,0 +1,181 @@
+{
+  "schema": "classic-fan-low-population-searches-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "1111ece837840a005f932c0bdd14478df1728cc8",
+  "bundle": {
+    "release": "2.0 build 83 app resources",
+    "audit": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-build83-replay-levels.jsonl",
+    "verifiedRoutesBefore": "2399/6020",
+    "levelsWithoutVerifiedRoutesBefore": 3621
+  },
+  "runtime": {
+    "source": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+    "sourceSHA256": "e5d5a813109ef523d78bd9ccd8f91a41cbb8d55b633b38e97bd5c8cfe34e1494",
+    "librarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067",
+    "solverSourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "solverBinarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "clock": "golems",
+    "fanProfile": "native pack mechanics and exact build 83 resources"
+  },
+  "levels": [
+    {
+      "identity": "fan:lldb-65/Lemmy556 My little levels.dat#0",
+      "archive": "LevelPacks/0065-Lemmy556-My-little-levels.zip",
+      "archiveSHA256": "1a8387086f8d991ed73ebc916319db9960f6ca154bb257e75adad8306877dc88",
+      "initialStateSHA256": "2004161d65aad5da570e4af13055d58b2a86d35e32b7c4fa57b1abe2a7b80c70",
+      "title": "2 lemmings",
+      "population": 2,
+      "required": 2,
+      "skills": {
+        "builder": 5
+      },
+      "auditStatus": "rendered-and-smoke-tested-only",
+      "searches": [
+        {
+          "strategy": "single-skill sweep",
+          "budgetSeconds": 120,
+          "assignmentsCompleted": 48,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "adaptive beam, 20-tick fallback/refire",
+          "budgetSeconds": 120,
+          "expanded": 15001,
+          "elapsedSeconds": 5,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "adaptive beam, 1-tick fallback/refire, width 32768",
+          "budgetSeconds": 120,
+          "expanded": 356239,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "forced two-Builder opening, then adaptive beam",
+          "budgetSeconds": 120,
+          "expanded": 357697,
+          "bestSaved": 0,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "exhaustive two-Builder timing sweep",
+          "budgetSeconds": 120,
+          "firstAssignmentTicks": "0 through passive completion tick 115",
+          "secondAssignmentGapTicks": "1 through 240",
+          "firstAssignments": 48,
+          "secondAssignments": 557,
+          "completed": 557,
+          "deadlineExpired": false,
+          "result": "No winning route in the tested two-Builder policies."
+        },
+        {
+          "strategy": "Builder broadcast delay sweep",
+          "budgetSeconds": 120,
+          "delayTicks": "0 through 100",
+          "delaysCompleted": 101,
+          "terminalTick": 119,
+          "released": 2,
+          "lost": 2,
+          "deadlineExpired": false,
+          "result": "No winning route."
+        }
+      ],
+      "diagnosis": "The exact-runtime partial route shows both lemmings falling at the final gap. The level clamps a requested release rate of 0 to its initial rate of 99.",
+      "interpretation": "The additional complete Builder-pair and Builder-broadcast sweeps also found no win. They do not prove that the level is impossible."
+    },
+    {
+      "identity": "fan:lldb-509/KillerMaster 1 Havoc 2.dat#6",
+      "archive": "LevelPacks/0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "archiveSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+      "initialStateSHA256": "04badd640d2a678e4a13dc01716c90df1e24d93cc2378bff71770dae25ef6cfb",
+      "title": "New Message -From KillerMaster-",
+      "population": 1,
+      "required": 1,
+      "skills": {
+        "builder": 3,
+        "digger": 3
+      },
+      "auditStatus": "rendered-and-smoke-tested-only",
+      "searches": [
+        {
+          "strategy": "single-skill sweep",
+          "budgetSeconds": 120,
+          "assignmentsCompleted": 76,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "adaptive beam, 1-tick fallback/refire, width 32768",
+          "budgetSeconds": 120,
+          "expanded": 352264,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "exhaustive two-skill timing sweeps",
+          "budgetSeconds": 120,
+          "firstAssignmentTicks": "0 through passive completion tick 122",
+          "secondAssignmentGapTicks": "1 through 240",
+          "candidatePairs": [
+            {
+              "skills": "builder,builder",
+              "firstAssignments": 38,
+              "secondAssignments": 1399,
+              "completed": 1399
+            },
+            {
+              "skills": "builder,digger",
+              "firstAssignments": 38,
+              "secondAssignments": 5473,
+              "completed": 5473
+            },
+            {
+              "skills": "digger,builder",
+              "firstAssignments": 38,
+              "secondAssignments": 2006,
+              "completed": 2006
+            },
+            {
+              "skills": "digger,digger",
+              "firstAssignments": 38,
+              "secondAssignments": 726,
+              "completed": 726
+            }
+          ],
+          "deadlineExpired": false,
+          "result": "No winning route in the tested two-input policies."
+        }
+      ],
+      "interpretation": "All four Builder/Digger orderings were enumerated for first inputs on the passive route through tick 122 and second-input gaps of 1 to 240 ticks. These tests cover only two-input policies; they do not prove the level impossible."
+    },
+    {
+      "identity": "fan:lldb-6/Mikepak01.dat#2",
+      "archive": "LevelPacks/0006-Mikepak01.zip",
+      "archiveSHA256": "1d2a630fa8d51525b18029eac99f7c4478dc415784b9f4ec53562c122597e085",
+      "initialStateSHA256": "d808e7bade3194dea76b9aba44fac79feaee8ce6657cbc39c98c711e1bc11af2",
+      "title": "The strange spiral",
+      "population": 1,
+      "required": 1,
+      "skills": {
+        "builder": 8,
+        "basher": 3
+      },
+      "auditStatus": "rendered-and-smoke-tested-only",
+      "searches": [
+        {
+          "strategy": "single-skill sweep",
+          "budgetSeconds": 120,
+          "assignmentsCompleted": 5990,
+          "result": "No winning route."
+        },
+        {
+          "strategy": "adaptive-rate, prefer-progress beam, 20-tick fallback/refire",
+          "budgetSeconds": 120,
+          "expanded": 352002,
+          "result": "No winning route."
+        }
+      ],
+      "interpretation": "These bounded attempts do not prove the level impossible."
+    }
+  ],
+  "interpretation": "No route passed strict replay. The route audit remains 2399/6020, with 3621 bundled levels without verified wins. The current focused sweeps add bounded policy coverage but do not close the bundle route gate.",
+  "next": "Use a distinct level-specific route strategy or source-engine evidence. Do not count these levels as solved or classify them as imported."
+}

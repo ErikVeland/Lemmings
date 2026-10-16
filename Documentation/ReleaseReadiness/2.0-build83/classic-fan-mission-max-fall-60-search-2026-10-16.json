@@ -1,0 +1,67 @@
+{
+  "schema": "classic-fan-current-main-targeted-search-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "sourceBranch": "main",
+  "sourceState": "modified worktree; current NxlvKit and ClassicSolver sources compiled for this search",
+  "target": {
+    "identity": "fan:lldb-1/geooPk0.dat#8",
+    "title": "Mission at max-fall 60",
+    "archive": "LevelPacks/0001-geooPk0.zip",
+    "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+    "initialStateHash": "a2082643643cea09fd3ef13239045c53d0e1232c3dc7f57881ca69fd900a0e10",
+    "initialLevelFingerprint": "aba5a78d4a001463fa9e7a25a217e054d34f836e140ba3fcbd0b4120df411406",
+    "lemmings": 1,
+    "required": 1,
+    "skills": ["climber", "floater", "bomber", "blocker", "builder", "basher", "miner", "digger"]
+  },
+  "runtime": {
+    "engine": "Classic DOS simulation",
+    "clock": "Golems",
+    "runtimeSourceSHA256": "3a28f36ce9194b077934ac22951c1fbde79da1de013ad9f32f29e17fc63bd6f6",
+    "solverSourceSHA256": "a66bb66e906839496e39b074f6b7d70d42d9c4736deb32b712c30512ee13b659",
+    "solverBinarySHA256": "e8681f1bfb3683fcc0ca906d987b2638bdb942c0e09829e9d6167fdbbdd23128"
+  },
+  "searches": [
+    {
+      "strategy": "from-start beam",
+      "budgetSeconds": 180,
+      "beamWidth": 4096,
+      "ranking": ["prefer-progress", "rescue-quota-distance", "direct-exit-distance"],
+      "expanded": 290941,
+      "tick": 227,
+      "released": 4,
+      "lost": 0,
+      "active": 4,
+      "bestSaved": 0,
+      "result": "No winning route found within the budget."
+    },
+    {
+      "strategy": "exhaustive single-skill sweep",
+      "firstTickRange": "0 through completion at tick 1022",
+      "assignmentsCompleted": 7727,
+      "deadlineExpired": false,
+      "bestSaved": 0,
+      "result": "No single-skill assignment wins."
+    },
+    {
+      "strategy": "from-start beam",
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "ranking": ["prefer-progress", "rescue-quota-distance", "direct-exit-distance"],
+      "expanded": 600630,
+      "tick": 1022,
+      "released": 1,
+      "lost": 0,
+      "active": 1,
+      "complete": true,
+      "bestSaved": 0,
+      "result": "No winning route found within the budget."
+    }
+  ],
+  "outcome": {
+    "verifiedWinningRoutesAdded": 0,
+    "bundledRouteGate": "open",
+    "interpretation": "The exhaustive single-skill sweep rules out a one-assignment win for this decoded input. Bounded beam searches do not prove that the level is impossible."
+  }
+}

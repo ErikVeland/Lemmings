@@ -1,0 +1,56 @@
+{
+  "schema": "classic-fan-current-main-fingerprinted-audit-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "sourceBranch": "main",
+  "scope": {
+    "bundledPacks": 535,
+    "bundledLevels": 6020,
+    "importedLevelsIncluded": 0,
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedResourceApp": "1.9.1 build 76",
+    "contentBridge": [
+      "../../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+      "../../2.0.3-build86/README.md"
+    ]
+  },
+  "command": "env DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-classic-audit-module-cache PATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH Scripts/run-classic-validation.sh '/Applications/Ultimate Lemmings.app/Contents/Resources' 'Documentation/ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16' .",
+  "result": {
+    "officialRoutes": 352,
+    "fanWinningReplays": 2403,
+    "fanReplayFailed": 18,
+    "fanWithoutWinningCandidate": 3599,
+    "fanMissingVerifiedWins": 3617,
+    "fanLoadRenderFailures": 0,
+    "fanLevelsWithStaticFingerprint": 6020,
+    "distinctFanStaticFingerprints": 5461,
+    "strictBundledClosure": "open",
+    "fingerprintedWinningReplays": 2755,
+    "verifiedWinningReplayRuns": 5510,
+    "winningReplayIdentityMismatches": 0
+  },
+  "reconciliation": {
+    "supersedes": "../../classic-fan-current-main-audit-reconciled-2026-10-16/audit.json",
+    "routeStatusesChanged": false,
+    "note": "This rerun adds a static fingerprint to every audit row and an identity-pinned replay witness for each of the 2,755 winning rows. Each witness passed two deterministic strict replays; the independent coverage checker matched its state hash and level fingerprint to the audit row. Replay outcomes and the 2,403/6,020 fan-route count match the reconciled audit."
+  },
+  "evidenceFiles": {
+    "levelRows": "levels.jsonl",
+    "packHashes": "packs.json",
+    "counts": "summary.json",
+    "inputHashes": "inputs.json",
+    "inputDrift": "input-drift.json",
+    "coverage": "coverage.json (also checks every fingerprint-pinned replay identity)",
+    "blockers": "blockers.json",
+    "fingerprintedWinningReplays": "fingerprinted-winning-replays.jsonl"
+  },
+  "exitCode": 1,
+  "exitReason": "The audit and current-main coverage checks passed for all bundled levels. The strict bundled route gate exits non-zero because 3,617 fan levels still lack a verified winning replay.",
+  "sourceState": {
+    "baseCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified",
+    "inputManifestSHA256": "a1fb9c5b55630712dd67124f4b1e674edfe863edc722357fd380aab272579b99",
+    "inputDriftDuringAudit": false,
+    "note": "The full audit was rerun after strengthening the coverage checker. It used the modified worktree based on current main and installed 1.9.1 build 76 resources. The final input manifest records source and content hashes; the drift report is empty. The coverage report checks each generated winning replay against its source row identity. No 2.0.3 app-binary certification is implied."
+  }
+}

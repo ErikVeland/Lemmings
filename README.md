@@ -74,17 +74,18 @@ some L3 route witnesses. Shadow 13 now passes with a refreshed route. The
 strict route gate still stops at Shadow 7. Source parity, remaining route
 repair, L2's ark ending and L3 media remain open.
 
-A full native audit replayed all 6,020 fan levels from the exact build 83
-resources. It recorded 2,399 winning routes, 3,600 levels without matching
-candidates, and 21 failed replay levels. It found no load, decode or render
-failures. The strict route gate still has 3,621 levels without verified wins.
-Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical
-World” copies remain without winning routes. The audit retains each level result
-and all 535 archive hashes. Two October CSV levels are imported and outside the
-bundle. Imported content remains open-ended. See the [build 83 fan replay
-audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-build83-replay.json),
-[package audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-package-audit.json)
-and [2.0 evidence bridge](Documentation/ReleaseReadiness/2.0-build83/engine-content-equivalence-current-main.json).
+The 16 October strict audit from the modified worktree based on current main replayed all 6,020 bundled fan levels
+across 535 packs. It verified 2,402 winning routes; 3,600 levels had no matching
+candidate, and 18 candidate replays failed. There were no load, decode or render
+failures. The worktree was modified; its base commit and input hashes are recorded
+in the audit evidence. A corrected candidate index and three recovered routes reduced the
+missing-win count from 3,621 to 3,618. This audit used the installed 1.9.1 build
+76 resources. Its 535 `LevelPacks` archives match build 85, and build 86 records
+no non-localisation resource-index changes. It does not certify a 2.0.3 app
+binary. Imported October levels remain outside the bundle and open-ended. See
+the [current-main audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-2026-10-16/audit.json),
+[build 85 content comparison](Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json)
+and [2.0.3 release record](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
 
 The pinned NeoLemmix runnable gate passed 794 levels. Macintosh 2.0.2 build 85
 passes the bundled-resource check for all 794 indexed levels and resolves all

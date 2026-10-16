@@ -1,0 +1,57 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 119
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 124
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 150
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 322
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 2,
+    "required" : 1,
+    "saved" : 1,
+    "stateHash" : "f17d10a64f88b24afff2cfa848c197c28dec1ec1590d3a5c334cdf0b110d36ff",
+    "ticks" : 541
+  },
+  "initialLevelFingerprint" : "e30606ce1cbb054d0d68b40588bcb1790df850309cf597d36b2693bf9b0264de",
+  "initialStateHash" : "851f93199a0ee12e7b149fd1e948f8f5f41e8691544ae79ca4d42cbc4450493f",
+  "number" : 4,
+  "rank" : "fan:lldb-173",
+  "title" : "the last mohilem"
+}

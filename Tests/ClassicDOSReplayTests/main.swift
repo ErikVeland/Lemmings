@@ -77,10 +77,11 @@ private func findSingleAssignmentWin(
                 ]
                 let candidate = ClassicDOSReplay(
                     rank: entry.rank,
-                    number: entry.number,
-                    title: entry.level.title.trimmingCharacters(in: .whitespaces),
-                    initialStateHash: initialHash,
-                    events: events
+                number: entry.number,
+                title: entry.level.title.trimmingCharacters(in: .whitespaces),
+                initialStateHash: initialHash,
+                initialLevelFingerprint: base.levelSourceFingerprint,
+                events: events
                 )
                 guard
                     let outcome = try? ClassicDOSReplayPlayer.run(
@@ -92,6 +93,7 @@ private func findSingleAssignmentWin(
                         number: candidate.number,
                         title: candidate.title,
                         initialStateHash: initialHash,
+                        initialLevelFingerprint: base.levelSourceFingerprint,
                         events: events,
                         expected: outcome
                     )
@@ -109,6 +111,7 @@ private func testDeterminism(content: Content) throws {
         number: entry.number,
         title: entry.level.title.trimmingCharacters(in: .whitespaces),
         initialStateHash: ClassicDOSReplayRecorder.stateHash(of: simulation),
+        initialLevelFingerprint: simulation.levelSourceFingerprint,
         events: [ClassicDOSReplayEvent(tick: 60, action: .assign(lemmingID: 0, skill: .digger))]
     )
 
@@ -142,6 +145,79 @@ private func testInitialHashGuard(content: Content) throws {
         }
     }
     print("PASS initial state hash rejects mismatched data")
+}
+
+private func testLevelFingerprintGuard() throws {
+    let firstTerrain = try ClassicDOSTerrain(
+        width: 192, height: 96,
+        solidMask: Data(repeating: 0, count: 192 * 96),
+        steelMask: Data(repeating: 0, count: 192 * 96)
+    )
+    let secondTerrain = try ClassicDOSTerrain(
+        width: 96, height: 192,
+        solidMask: Data(repeating: 0, count: 96 * 192),
+        steelMask: Data(repeating: 0, count: 96 * 192)
+    )
+    func configuration(entranceX: Int = 40, triggers: [ClassicDOSTrigger] = []) -> ClassicDOSConfiguration {
+        ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+            initialReleaseRate: 50, entrances: [ClassicDOSPoint(x: entranceX, y: 0)],
+            triggers: triggers, maximumX: 191, maximumY: 95)
+    }
+    func emptyMask(width: Int, height: Int, filled: Bool = false) throws -> ClassicDOSMask {
+        try ClassicDOSMask(width: width, height: height,
+            pixels: Data(repeating: filled ? 1 : 0, count: width * height))
+    }
+    func maskSet(filled: Bool) throws -> ClassicDOSDestructionMaskSet {
+        try ClassicDOSDestructionMaskSet(
+            explosion: emptyMask(width: 16, height: 22, filled: filled),
+            bashRight: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+            bashLeft: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+            mineRight: (0..<2).map { _ in try emptyMask(width: 16, height: 13) },
+            mineLeft: (0..<2).map { _ in try emptyMask(width: 16, height: 13) })
+    }
+    let base = try ClassicDOSSimulation(terrain: firstTerrain, configuration: configuration())
+    let triggerVariant = try ClassicDOSSimulation(terrain: firstTerrain,
+        configuration: configuration(triggers: [.init(id: 0, effect: .triggeredTrap,
+            bounds: .init(x1: 60, y1: 20, x2: 80, y2: 40))]))
+    let entranceVariant = try ClassicDOSSimulation(terrain: firstTerrain,
+        configuration: configuration(entranceX: 41))
+    let dimensionVariant = try ClassicDOSSimulation(terrain: secondTerrain,
+        configuration: configuration())
+    let masksVariant = try ClassicDOSSimulation(terrain: firstTerrain,
+        configuration: configuration(), destructionMasks: maskSet(filled: true))
+    let masksBase = try ClassicDOSSimulation(terrain: firstTerrain,
+        configuration: configuration(), destructionMasks: maskSet(filled: false))
+
+    for variant in [triggerVariant, entranceVariant, dimensionVariant, masksVariant] {
+        try require(
+            ClassicDOSReplayRecorder.stateHash(of: base) == ClassicDOSReplayRecorder.stateHash(of: variant),
+            "fixture no longer reproduces the legacy initial-hash collision")
+        try require(base.levelSourceFingerprint != variant.levelSourceFingerprint,
+            "level source fingerprint missed a trigger, entrance, dimension or destruction-mask change")
+    }
+    try require(
+        ClassicDOSReplayRecorder.stateHash(of: masksBase) == ClassicDOSReplayRecorder.stateHash(of: masksVariant)
+            && masksBase.levelSourceFingerprint != masksVariant.levelSourceFingerprint,
+        "level source fingerprint did not include destruction-mask pixels")
+
+    let replay = ClassicDOSReplay(
+        rank: "Test", number: 1, title: "Fingerprint",
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+        initialLevelFingerprint: base.levelSourceFingerprint,
+        events: []
+    )
+    do {
+        _ = try ClassicDOSReplayPlayer.run(replay, simulation: triggerVariant)
+        throw ReplayFailure(description: "a replay accepted a different level fingerprint")
+    } catch ClassicDOSReplayError.outcomeMismatch(field: "level fingerprint", expected: _, actual: _) {}
+
+    let legacyJSON = Data("""
+    {"rank":"Test","number":1,"title":"Legacy","initialStateHash":"legacy","events":[]}
+    """.utf8)
+    let legacyReplay = try JSONDecoder().decode(ClassicDOSReplay.self, from: legacyJSON)
+    try require(legacyReplay.initialLevelFingerprint == nil, "legacy replay did not decode without a level fingerprint")
+    print("PASS level fingerprint covers legacy hash collisions and reads old replays")
 }
 
 private func testSpeculativeEarlyStop(content: Content) throws {
@@ -342,6 +418,7 @@ do {
     let content = try Content(directory: directory)
     try testDeterminism(content: content)
     try testInitialHashGuard(content: content)
+    try testLevelFingerprintGuard()
     try testSpeculativeEarlyStop(content: content)
 
     // Fun 1 is the canonical one-assignment level.

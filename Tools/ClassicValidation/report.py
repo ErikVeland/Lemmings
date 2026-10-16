@@ -64,6 +64,29 @@ def report(resources, output, require_fan_routes=False):
             failures.append("Incomplete or duplicate collection: " + collection)
     if any(row["status"] == "winning-replay" and (not row.get("witness") or not row.get("initialHash")) for row in rows):
         failures.append("Winning rows lack replay provenance")
+    replay_path = output / "fingerprinted-winning-replays.jsonl"
+    if not replay_path.is_file():
+        failures.append("Fingerprint-pinned winning replay file is missing")
+    else:
+        replays = [json.loads(line) for line in replay_path.read_text().splitlines() if line]
+        replay_by_witness = {f"fingerprinted-winning-replays.jsonl#{index}": replay
+                             for index, replay in enumerate(replays, 1)}
+        winning_rows = [row for row in rows if row["status"] == "winning-replay"]
+        if len(replays) != len(winning_rows):
+            failures.append("Fingerprint-pinned replay count differs from winning rows")
+        for row in winning_rows:
+            replay = replay_by_witness.get(row.get("witness"))
+            if replay is None:
+                failures.append("Winning row has no fingerprint-pinned replay: " + row["source"])
+                continue
+            if not row.get("sourceWitness"):
+                failures.append("Winning row lacks its source replay provenance: " + row["source"])
+            if replay.get("expected", {}).get("didWin") is not True:
+                failures.append("Fingerprint-pinned replay has no winning expectation: " + row["source"])
+            if replay.get("initialStateHash") != row.get("initialHash"):
+                failures.append("Fingerprint-pinned replay state hash mismatch: " + row["source"])
+            if replay.get("initialLevelFingerprint") != row.get("initialLevelFingerprint"):
+                failures.append("Fingerprint-pinned replay level identity mismatch: " + row["source"])
     # Official levels and conversions always need winning routes. Fan routes
     # became a bundled-closure requirement on 15 October 2026.
     required = [row for row in rows if row["collection"] != "fan"]

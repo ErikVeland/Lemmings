@@ -10,7 +10,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
     private struct Entry {
         let pack: NeoLemmixPack
         let level: NeoLemmixPackLevel
-        let stylesRoot: URL
+        let stylesRoot: URL?
         let summary: MobileLevelSummary
 
         var identifier: String { "neolemmix/\(pack.id)/\(level.levelID)" }
@@ -32,6 +32,11 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
     private var progress: Progress
     private var progressFailure: String?
 
+    /// Indices whose level dependencies resolve before full runtime validation.
+    var styleResolvedLevelIndices: [Int] {
+        entries.indices.filter { entries[$0].stylesRoot != nil }
+    }
+
     var currentLevelIndex: Int {
         progressLock.lock()
         defer { progressLock.unlock() }
@@ -49,7 +54,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         var entries: [Entry] = []
         for resolvedPack in resolvedPacks {
             for (index, level) in resolvedPack.pack.levels.enumerated() {
-                guard let stylesRoot = resolvedPack.stylesRoot(for: level) else { continue }
+                let stylesRoot = resolvedPack.stylesRoot(for: level)
                 let group = level.groups.last ?? resolvedPack.pack.title
                 let title = level.title.isEmpty ? L10n.text("Level \(index + 1)") : level.title
                 let summary = MobileLevelSummary(index: entries.count, rank: group,
@@ -96,7 +101,10 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
               Self.digest(data) == entry.level.sourceRevision else {
             throw MobileSessionError.changedLevel
         }
-        let resolution = NxlvStyleResolver(stylesRootURL: entry.stylesRoot).resolve(level: level)
+        guard let stylesRoot = entry.stylesRoot else {
+            throw NeoLemmixMobileLibraryError.incompleteStyles(level.title)
+        }
+        let resolution = NxlvStyleResolver(stylesRootURL: stylesRoot).resolve(level: level)
         try Task.checkCancellation()
         guard resolution.isComplete else { throw NeoLemmixMobileLibraryError.incompleteStyles(level.title) }
         let result = NxlvRenderer(retainsVisualLayers: true).render(level: level, resolution: resolution)
@@ -107,9 +115,9 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         }
         let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
         let controls = NxlvSkill.allCases.filter { level.skillQuantities[$0] != nil }.map(NeoLemmixSkill.init)
-        let sprites = try NeoLemmixMobileSpriteSet(stylesRootURL: entry.stylesRoot, themeStyle: level.themeStyle)
+        let sprites = try NeoLemmixMobileSpriteSet(stylesRootURL: stylesRoot, themeStyle: level.themeStyle)
         let renderer = NeoLemmixMobileSceneRenderer(renderedLevel: rendered, sprites: sprites,
-                                                   stylesRootURL: entry.stylesRoot)
+                                                   stylesRootURL: stylesRoot)
         let gadgetSounds = NeoLemmixSoundCue.gadgetSounds(for: rendered.gadgets, resolution: resolution)
         let fingerprint = try Self.fingerprint(levelData: data, resolution: resolution)
         let identifier = entry.identifier
@@ -127,7 +135,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
             engineFingerprint: Self.engineFingerprint, levelIdentifier: identifier,
             levelIndex: index, levelFingerprint: fingerprint, renderer: renderer.render,
             gadgetSounds: gadgetSounds,
-            soundDirectory: entry.stylesRoot.deletingLastPathComponent().appendingPathComponent("sound")) { [weak self] result in
+            soundDirectory: stylesRoot.deletingLastPathComponent().appendingPathComponent("sound")) { [weak self] result in
                 self?.record(result, key: identifier, at: index)
             }
         return MobileLevelContent(summary: entry.summary, session: session)

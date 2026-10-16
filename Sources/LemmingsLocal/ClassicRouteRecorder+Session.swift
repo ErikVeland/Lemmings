@@ -9,7 +9,9 @@ extension ClassicRouteRecorder {
         guard session.isComplete, session.didWin else { return }
         let final = session.simulation
         let replay = ClassicDOSReplay(rank: rank, number: number, title: title,
-            initialStateHash: session.initialStateHash, events: session.recoveryEvents,
+            initialStateHash: session.initialStateHash,
+            initialLevelFingerprint: session.initialSimulation.levelSourceFingerprint,
+            events: session.recoveryEvents,
             expected: .init(ticks: final.tickCount, released: final.releasedCount, saved: final.savedCount,
                 required: final.configuration.requiredToSave, didWin: final.didWin,
                 stateHash: ClassicDOSReplayRecorder.stateHash(of: final)))

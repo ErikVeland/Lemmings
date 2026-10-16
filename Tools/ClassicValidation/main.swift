@@ -11,9 +11,11 @@ struct Row: Codable {
     let source: String
     let title: String
     var initialHash: String? = nil
+    var initialLevelFingerprint: String? = nil
     var status = "unverified"
     var details: String? = nil
     var witness: String? = nil
+    var sourceWitness: String? = nil
 }
 let args = CommandLine.arguments
 guard args.count == 4 else {
@@ -39,8 +41,8 @@ for folder in ["Tests/ClassicDOSCompletionTests/Fixtures", "Tests/ClassicFamilyC
 let candidateSolutions = fixtureRoot.appendingPathComponent("Artifacts/LearningJourney/candidate-solutions.json")
 if FileManager.default.fileExists(atPath: candidateSolutions.path) {
     let candidates = try JSONDecoder().decode([String: ClassicDOSReplay].self, from: Data(contentsOf: candidateSolutions))
-    for (hash, replay) in candidates where replay.initialStateHash == hash && replay.expected?.didWin == true {
-        witnesses[hash, default: []].append(("Artifacts/LearningJourney/candidate-solutions.json#\(hash)", replay))
+    for (key, replay) in candidates where replay.expected?.didWin == true {
+        witnesses[replay.initialStateHash, default: []].append(("Artifacts/LearningJourney/candidate-solutions.json#\(key)", replay))
     }
 }
 let additionalWitnessFiles = [
@@ -48,6 +50,7 @@ let additionalWitnessFiles = [
     "Artifacts/ClassicProgression/verified-fan-replays",
     "Artifacts/DifficultyEvaluation/golems-phase-shift-replays",
     "Artifacts/DifficultyEvaluation/golems-retimed-replays",
+    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl",
 ]
 for relativePath in additionalWitnessFiles {
     let source = fixtureRoot.appendingPathComponent(relativePath)
@@ -61,6 +64,15 @@ for relativePath in additionalWitnessFiles {
         files = FileManager.default.fileExists(atPath: source.path) ? [source] : []
     }
     for file in files {
+        if file.pathExtension == "jsonl" {
+            let lines = try String(contentsOf: file, encoding: .utf8).split(whereSeparator: \.isNewline)
+            for (index, line) in lines.enumerated() {
+                guard let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: Data(line.utf8)),
+                      replay.expected?.didWin == true else { continue }
+                witnesses[replay.initialStateHash, default: []].append((relativePath + "#\(index + 1)", replay))
+            }
+            continue
+        }
         guard let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file)),
               replay.expected?.didWin == true else { continue }
         let witnessPath = isDirectory.boolValue ? relativePath + "/" + file.lastPathComponent : relativePath
@@ -71,6 +83,11 @@ try FileManager.default.createDirectory(at: output, withIntermediateDirectories:
 let destination = output.appendingPathComponent("levels.jsonl")
 FileManager.default.createFile(atPath: destination.path, contents: nil)
 let handle = try FileHandle(forWritingTo: destination)
+let replayDestination = output.appendingPathComponent("fingerprinted-winning-replays.jsonl")
+FileManager.default.createFile(atPath: replayDestination.path, contents: nil)
+let replayHandle = try FileHandle(forWritingTo: replayDestination)
+var fingerprintedReplayCount = 0
+let replayPath = "fingerprinted-winning-replays.jsonl"
 var counts: [String: [String: Int]] = [:]
 var groundCache: [String: ClassicGroundSet] = [:]
 var assetCache: [String: ClassicMainDATAssets] = [:]
@@ -115,18 +132,35 @@ var specialCache: [String: ClassicSpecialGraphic] = [:]
         let clock: ClassicDOSClock = collection == "fan" ? .golems : .dos
         let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
             mainDATAssets: assetCache[assetDirectory.path]!, mechanics: sourceMechanics, clock: clock)
-        let hash = ClassicDOSReplayRecorder.stateHash(of: base); row.initialHash = hash
+        let hash = ClassicDOSReplayRecorder.stateHash(of: base)
+        row.initialHash = hash
+        row.initialLevelFingerprint = base.levelSourceFingerprint
         if let candidates = witnesses[hash] {
             var failures: [String] = []
             for (path, replay) in candidates {
                 do {
+                    let identityPinnedReplay: ClassicDOSReplay
+                    if replay.initialLevelFingerprint == nil {
+                        identityPinnedReplay = ClassicDOSReplay(rank: replay.rank, number: replay.number,
+                            title: replay.title, initialStateHash: replay.initialStateHash,
+                            initialLevelFingerprint: base.levelSourceFingerprint, events: replay.events,
+                            sourceRules: replay.sourceRules, expected: replay.expected)
+                    } else {
+                        identityPinnedReplay = replay
+                    }
                     let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit,
                         base.configuration.timeLimitTicks ?? 0,
                         (replay.expected?.ticks ?? 0) + ClassicDOSRules.ticksPerSecond)
-                    let first = try ClassicDOSReplayPlayer.run(replay, simulation: base, tickLimit: tickLimit)
-                    let second = try ClassicDOSReplayPlayer.run(replay, simulation: base, tickLimit: tickLimit)
+                    let first = try ClassicDOSReplayPlayer.run(identityPinnedReplay, simulation: base, tickLimit: tickLimit)
+                    let second = try ClassicDOSReplayPlayer.run(identityPinnedReplay, simulation: base, tickLimit: tickLimit)
                     guard first.didWin && first == second else { throw NSError(domain: "ReplayDidNotWin", code: 1) }
-                    row.status = "winning-replay"; row.witness = path; break
+                    row.status = "winning-replay"
+                    row.sourceWitness = path
+                    row.witness = "\(replayPath)#\(fingerprintedReplayCount + 1)"
+                    try replayHandle.write(contentsOf: encoder.encode(identityPinnedReplay))
+                    try replayHandle.write(contentsOf: Data([10]))
+                    fingerprintedReplayCount += 1
+                    break
                 } catch { failures.append("\(path): \(error)") }
             }
             if row.witness == nil { row.status = "replay-failed"; row.details = failures.joined(separator: "\n") }
@@ -172,6 +206,7 @@ for (index, pack) in FanLevelLibrary.packs(in: [resources.appendingPathComponent
 try encoder.encode(packs).write(to: output.appendingPathComponent("packs.json"), options: .atomic)
 try encoder.encode(counts).write(to: output.appendingPathComponent("summary.json"), options: .atomic)
 try handle.close()
+try replayHandle.close()
 print(String(data: try encoder.encode(counts), encoding: .utf8)!)
 // Missing completion evidence is a failed corpus-completion gate, not a passing smoke test.
 exit(counts.values.allSatisfy { $0.keys.allSatisfy { $0 == "winning-replay" } } ? 0 : 1)

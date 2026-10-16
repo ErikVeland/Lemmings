@@ -24,13 +24,16 @@ against the staged 218-file build 83 app payload. The current test source
 still matches that build. It includes a regression check for the crowd
 assignment query.
 
-At current `main` `c38831f3`, I reran the route, event and runtime test binaries
-against the exact 218-file build 83 payload. All three commands exited 0. The
-route verifier passed all 120 routes, 70 carry-over variants and twelve chains.
-The event verifier passed its valid and invalid event checks. The runtime suite
-passed. See the [payload replay record](../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json)
-for command and binary hashes. These checks do not close source-engine parity
-or the Gold ark requirements.
+At current-main commit `c38831f3`, I reran the route, event and runtime test
+binaries against the exact 218-file build 83 payload. All three commands
+exited 0. The route verifier passed all 120 routes, 70 carry-over variants and
+twelve chains. The event verifier passed its valid and invalid event checks.
+The runtime suite passed. `main` has since advanced to `98623744`. No L2 runtime,
+completion, event-verifier or runtime-test source changed between those commits;
+the runtime source still has the recorded SHA-256. These results therefore
+remain current for L2 source and build 83 payload. They do not close
+source-engine parity or the Gold ark requirements. See the [payload replay
+record](../ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json).
 
 A direct current-main rerun against the locally installed L2 tree also passed
 all three checks. The app identifies as 1.9.1 build 76. Its 218 L2 files match
@@ -79,6 +82,11 @@ It used the installed 1.9.1 build 76 resource tree and did not improve the route
 All 218 L2 resources match the build 82 manifest, which build 83 source-equivalence
 evidence links to the release package. See the resource audit linked above.
 
+A 16 October seeded Beach Level 1 search used a beam of 8,192, a 2-pixel
+decision grid and a 24-tick refire interval for 300 seconds. It replayed the
+42-of-60 route and found no higher-survivor witness. The accepted fixture did
+not change. See the [Beach 1 search record](beach01-seeded-beam8192-search-2026-10-16.json).
+
 On 16 October, a current solver search against the build 83 app payload found
 a Cavelems Level 3 route that saves 34 of 36, compared with the accepted 17.
 Seeded searches also found 13 of 34 on Level 4 and 10 of 13 on Level 5. Neither
@@ -92,6 +100,40 @@ search reproduced the existing 10-of-13 route. A wider Classic Level 2 search
 also reproduced its accepted 13-of-60 route. All inputs matched the 218-file
 build 83 app payload. No route or chain fixture changed. See the [current-main
 search record](ark-reconnection-search-2026-10-16-current-main.json).
+
+A later current-main search tried Cavelems Level 2 at population 59. The
+unseeded 8,192-beam search found no win after 1,033,283 expansions. The seeded
+16,384-beam search replayed the accepted 36-of-59 route twice after 1,393,376
+expansions. It did not improve the route or chain. See the [Cavelems Level 2
+search record](cavelem02-current-main-ark-route-searches-2026-10-16.json).
+
+The solver previously offered only the first three triggered lemming IDs at a
+decision. It now offers every triggered actor, with a six-actor regression
+test. A new 16,384-beam Cavelems Level 2 search expanded 1,393,819 candidates
+and replayed the same 36-of-59 route twice. The route and chain did not change.
+See the [all-actor follow-up](cavelem02-all-actor-followup-search-2026-10-16.json).
+
+A further unseeded search used a 32,768-state beam, one-pixel decision
+sampling and a 600-second budget. It expanded 2,049,584 candidates and found
+no winning route. The best partial candidate saved none. The accepted 36-of-59
+route and chain remain unchanged. The Gold ark requirement stays open. See the
+[wider search record](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json).
+
+A temporary current-main chain check replaces Cavelems Levels 3–5 with the
+higher-survivor candidates. Each route passes two fresh replays, producing
+36→34→13→10 survivors through Level 5. The alternative chain reaches Level 6
+with ten survivors but stops there. Two current all-actor searches at that
+population, seeded and unseeded, expanded 747,437 and 876,791 candidates
+without a win. The accepted 12-tribe chain remains unchanged; the ark gate
+stays open. See the [candidate-chain reconciliation]
+(cavelem-candidate-chain-reconciliation-2026-10-16.json).
+
+The current all-actor solver also searched Cavelems Level 6 at population 13,
+both from the start and seeded with the accepted 2-of-2 route. The two
+600-second searches expanded 1,291,693 and 1,463,726 candidates without a
+win. These bounds do not prove the level impossible; the Gold ark remains
+unproved. The same [candidate-chain record]
+(cavelem-candidate-chain-reconciliation-2026-10-16.json) retains both runs.
 
 Two further unseeded Cavelems Level 4 searches used the carried population of
 34, a beam of 8,192 and a 300-second budget. The standard 4-pixel grid expanded
@@ -112,6 +154,12 @@ A further 300-second Cavelems Level 6 search at population 10 used beam 8,192
 and depth 80. It expanded 692,245 candidates and found no win. This raises the
 search bound but does not prove the level unsolvable. The ark remains open,
 and each accepted chain still ends with one survivor.
+
+A 16 October current-main search then tested Cavelems Level 6 at the chained
+population of 13. It used a 16,384 beam, a 2-pixel decision grid and a 24-tick
+refire interval for 600 seconds. It expanded 1,250,232 candidates and found no
+route. The accepted chain did not change. This bounded result does not prove
+the level impossible. See the [wide Level 6 search record](cavelem06-pop13-beam16384-current-main-2026-10-16.json).
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |

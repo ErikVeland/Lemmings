@@ -272,3 +272,33 @@ record](cavelem04-seeded-beam8192-search-2026-10-16.json).
 | Promote candidate files | `.build/l2-solver/solver promote Sources/Ports/Lemm2 <file>...` |
 | Regenerate the manifest | `python3 Tools/Lemmings2Completion/report.py` |
 | Run the gate | `zsh Scripts/verify-lemmings2-completion.sh` |
+
+## 16 October current-main Cavelems Level 2 continuation
+
+A fresh current-main search used the exact installed L2 resource tree, whose 218
+files match the retained bundle manifest. An unseeded 300-second search at
+population 59 did not find a winning route. A second 300-second search used a
+16,384-candidate beam and the accepted 36-of-59 route as its seed. It replayed
+the same 36-survivor result twice. Neither result changes the accepted chain.
+The Cavelems Level 2 route remains 36/59; the ten-level tribe chain and Gold ark
+requirements remain open. These bounded searches do not prove that a better
+route is impossible. See the [current-main search record](cavelem02-current-main-ark-route-searches-2026-10-16.json).
+
+## 16 October current-main all-actor follow-up
+
+The decision detector previously truncated simultaneous event candidates to the
+first three lemming IDs. It now offers every triggered actor. The L2 solver test
+suite passes with a regression that presents six actors at once. A 300-second
+16,384-beam Cavelems Level 2 continuation at population 59 expanded 1,393,819
+candidates, then replayed the existing 36-of-59 route twice. The wider candidate
+set did not improve the route. The chain still ends with one survivor and the
+Gold ark gate remains open. See the [follow-up search record](cavelem02-all-actor-followup-search-2026-10-16.json).
+
+## 16 October wider Cavelems Level 2 search
+
+An unseeded search used a 32,768-state beam, one-pixel decision sampling, a
+12-tick refire interval and a 600-second budget. It expanded 2,049,584
+candidates. It found no win, and its best partial candidate saved none. The
+accepted route remains 36/59. The Gold ark requirement remains open. This
+bounded search does not prove that a better route is impossible. See the
+[search record](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json).

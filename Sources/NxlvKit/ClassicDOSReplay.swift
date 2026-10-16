@@ -5,9 +5,8 @@ import Foundation
 ///
 /// A replay stores player input against tick numbers, never against wall-clock
 /// time. Replaying it on the same level data must reproduce the same result on
-/// every machine. The initial state hash guards against silent drift: if the
-/// level data or the engine changes, the hash stops matching and the replay
-/// fails loudly instead of reporting a false pass.
+/// every machine. The state hash guards mutable simulation state. New replay
+/// documents can also store a fingerprint for static level inputs.
 
 public enum ClassicDOSReplayAction: Codable, Equatable, Sendable {
     case assign(lemmingID: Int, skill: ClassicSkill)
@@ -60,6 +59,8 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
     public let title: String
     /// State hash of the simulation before the first tick.
     public let initialStateHash: String
+    /// Optional fingerprint of the static level inputs used by new replay documents.
+    public let initialLevelFingerprint: String?
     public let events: [ClassicDOSReplayEvent]
     /// Present only when imported source input uses a different assignment path.
     public let sourceRules: ClassicDOSReplaySourceRules?
@@ -71,6 +72,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         number: Int,
         title: String,
         initialStateHash: String,
+        initialLevelFingerprint: String? = nil,
         events: [ClassicDOSReplayEvent],
         sourceRules: ClassicDOSReplaySourceRules? = nil,
         expected: ClassicDOSReplayOutcome? = nil
@@ -79,6 +81,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         self.number = number
         self.title = title
         self.initialStateHash = initialStateHash
+        self.initialLevelFingerprint = initialLevelFingerprint
         self.events = events
         self.sourceRules = sourceRules
         self.expected = expected
@@ -216,6 +219,14 @@ public enum ClassicDOSReplayPlayer {
         }
 
         if verify {
+            if let expectedFingerprint = replay.initialLevelFingerprint {
+                let actualFingerprint = simulation.levelSourceFingerprint
+                guard actualFingerprint == expectedFingerprint else {
+                    throw ClassicDOSReplayError.outcomeMismatch(
+                        field: "level fingerprint", expected: expectedFingerprint,
+                        actual: actualFingerprint)
+                }
+            }
             let actual = ClassicDOSReplayRecorder.stateHash(of: simulation)
             guard actual == replay.initialStateHash else {
                 throw ClassicDOSReplayError.initialStateMismatch(

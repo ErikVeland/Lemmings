@@ -228,6 +228,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
             number: number,
             title: title,
             initialStateHash: initialStateHash,
+            initialLevelFingerprint: simulation.levelSourceFingerprint,
             events: appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
         )
     }

@@ -1,0 +1,98 @@
+{
+  "schema": "classic-fan-current-main-audit-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "sourceBranch": "main",
+  "scope": {
+    "bundledPacks": 535,
+    "bundledLevels": 6020,
+    "importedLevelsIncluded": 0,
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedResourceApp": "1.9.1 build 76",
+    "contentBridge": [
+      "../../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+      "../../2.0.3-build86/README.md"
+    ]
+  },
+  "command": "zsh Scripts/run-classic-validation.sh '/Applications/Ultimate Lemmings.app/Contents/Resources' OUTPUT .",
+  "result": {
+    "officialRoutes": 352,
+    "fanWinningReplays": 2403,
+    "fanReplayFailed": 18,
+    "fanWithoutWinningCandidate": 3599,
+    "fanMissingVerifiedWins": 3617,
+    "fanLoadRenderFailures": 0,
+    "strictBundledClosure": "open"
+  },
+  "priorResult": {
+    "fanWinningReplays": 2402,
+    "fanReplayFailed": 18,
+    "fanWithoutWinningCandidate": 3600,
+    "fanMissingVerifiedWins": 3618
+  },
+  "restoredRoutes": [
+    {
+      "source": "0568-Amiga-Fun.zip/Fun 16.lvl#0",
+      "title": "Don't do anything too hasty",
+      "archiveSHA256": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619",
+      "events": 26,
+      "saved": 80,
+      "required": 50,
+      "ticks": 2028,
+      "initialStateHash": "a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+      "initialLevelFingerprint": "94d929cf11e0e08043f9e4d9d6e75504c682c553b890e3f43927f4d19d7e6b28",
+      "witness": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-568-dont-do-anything-too-hasty.json"
+    },
+    {
+      "source": "0573-Amiga-Fun-Budget.zip/Fun 16.lvl#0",
+      "title": "Don't do anything too hasty",
+      "archiveSHA256": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574",
+      "events": 26,
+      "saved": 80,
+      "required": 50,
+      "ticks": 2028,
+      "initialStateHash": "a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+      "initialLevelFingerprint": "94d929cf11e0e08043f9e4d9d6e75504c682c553b890e3f43927f4d19d7e6b28",
+      "witness": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-573-dont-do-anything-too-hasty.json"
+    },
+    {
+      "source": "0490-Genesis-Taxing.zip/Genesis Taxing.dat#20",
+      "title": "Feel the heat!",
+      "archiveSHA256": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+      "witness": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 7d5efb5637b01ccc0c794efb1a2edf2a306beac21cf139cb783cb3f7cc6e3655"
+    }
+  ],
+  "evidenceFiles": {
+    "levelRows": "levels.jsonl",
+    "packHashes": "packs.json",
+    "counts": "summary.json",
+    "inputHashes": "inputs.json",
+    "inputDrift": "input-drift.json",
+    "coverage": "coverage.json",
+    "blockers": "blockers.json"
+  },
+  "exitCode": 1,
+  "exitReason": "The audit completed with all 352 official routes passing and no load, decode or render failures. The strict bundled gate exits non-zero because 3,617 fan levels still lack a verified winning replay.",
+  "sourceState": {
+    "baseCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified",
+    "inputManifestSHA256": "0423a4ea5527b502cc472d9b9ea9ef5917d612b5fc440e7657e1e4e81d00f15f",
+    "inputDriftDuringAudit": false,
+    "note": "The audit used the modified worktree based on current main and the installed 1.9.1 build 76 resource tree. inputs.json records source and content hashes. input-drift.json is empty."
+  },
+  "newlyVerifiedRoutes": [
+    {
+      "source": "0173-hubbart.zip/hubbart.dat#3",
+      "title": "the last mohilem",
+      "archiveSHA256": "ec7ef0118b1ab4baebdae02cc808fe0766d593a76a213f2dcc004a508c780203",
+      "events": 4,
+      "saved": 1,
+      "required": 1,
+      "ticks": 541,
+      "initialStateHash": "851f93199a0ee12e7b149fd1e948f8f5f41e8691544ae79ca4d42cbc4450493f",
+      "initialLevelFingerprint": "e30606ce1cbb054d0d68b40588bcb1790df850309cf597d36b2693bf9b0264de",
+      "witness": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-173-the-last-mohilem.json",
+      "strictReplayRuns": 2
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 level=Quad Quirks on the Quay! style=BEACH displayedSeconds=516
 nativeTicks=[360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374] walkerAsset=WALKER.DAT
-id,tick,direction,phase,x,y,matched,opaque,ratio
+id,tick,direction,phase,drawOriginX,drawOriginY,matched,opaque,ratio
 0,370,-1,14,240,17,29,29,1.000
 4,374,-1,14,240,17,29,29,1.000
 11,373,1,5,288,66,26,26,1.000

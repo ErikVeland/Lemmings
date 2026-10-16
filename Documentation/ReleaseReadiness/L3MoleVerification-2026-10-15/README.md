@@ -65,6 +65,23 @@ These searches did not change any fixture. They do not show that these levels
 are unsolvable. The four standalone route failures and thirteen carried route
 failures remain open.
 
+### 16 October 2.0.3 current-main check
+
+After `main` advanced to `9862374431ff67e67e084eb1f8416eb088b09ea3`, I reran
+`python3 Scripts/verify-l3-mole-trace.py`. It again passes 53 primary positions,
+two repeated traces with 673 samples, and all four tunnel-edge checks. The L3
+runtime, route, replay, trace-verifier and fixture-audit sources did not change
+after the `1111ece8` full fixture audit. That audit remains the latest full
+result: 399/416 fixtures double-replay and 17 route schedules fail. The trace
+check is not a replacement for that full audit. Build 86 also retains the
+shared engine libraries, but its complete app audit was not rerun. See the
+[current-source recheck](current-source-parity-recheck-2026-10-16.json) and
+[2.0.3 release record](../2.0.3-build86/README.md).
+
+The original executable and raw captures are still absent. The excavation
+mask, player-built-brick trigger, complete Mole rules and all 17 route repairs
+remain open.
+
 These solver probes predate the 16 October current-main audit below. They have
 not been repeated against the current runtime source.
 
@@ -234,12 +251,17 @@ The [original manual](https://db.hfsplay.fr/files/2018/10/06/c9f24f28-42dd-4046-
 printed pages 25, 31 and 35, documents Use and Drop, directional brick/spade
 selection and using placed bricks to redirect a harmless Mole. These are
 source instructions. A verified gameplay capture of the built-brick trigger
-is still required. The manual PDF, original binary and raw captures stay in
-the ignored reference directory.
+is still required. The original binary, manual PDF and raw captures are absent
+from this worktree and the installed app. The trace summaries, comparison
+values and file hashes remain, but they do not allow a new source replay or
+pixel-level reanalysis. Restore the reference files before closing the Mole
+excavation-mask and built-brick trigger gates.
 
-No runtime or route fixture changes were made by this chat. The full campaign
-gate will be rerun against a fresh source build after the other agent's runtime
-and route repairs reach `main`.
+At the time of the original coordination split, this chat made no runtime or
+route fixture changes. A separate session owned those repairs. That ownership
+split is historical. The current closure work must implement source-backed
+Mole behaviour, refresh affected routes and pass the full campaign gate against
+a fresh source build.
 
 ## Current-main trace recheck
 
@@ -265,8 +287,18 @@ excavation-mask, trigger or complete Mole behaviour gaps. See the
 [16 October parity recheck](current-source-parity-recheck-2026-10-16.json) for
 the source and verifier hashes from that check.
 
-After a fresh fetch, the worktree matched remote `main` at `c38831f3`. I reran
-the verifier at that revision. It passed all 53 primary positions, both source
-traces with 673 samples and all four tunnel-edge checks. The runtime hash and
-Mole movement region still match the recorded values. The mask, brick trigger
-and complete Mole rules remain open.
+At current main `9862374431ff67e67e084eb1f8416eb088b09ea3`, the Mole trace
+verifier passes all 53 primary positions, both source traces with 673 samples
+and all four tunnel-edge checks. The runtime hash and Mole movement region
+match the recorded values. The latest full fixture audit at `1111ece8` still
+records 399/416 strict double-replay passes and 17 route failures; L3 runtime,
+route, replay and audit sources have not changed since that audit.
+
+Three wider current-main searches used a 4,096 beam and 4-pixel tool-site grid.
+Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded 5,181,833,
+and Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. Each
+search ran for 300 seconds and found no route. They did not change fixtures.
+See the [search record](current-main-wide-route-searches-2026-10-16.json).
+The excavation mask, built-brick trigger, 17 route schedules and complete Mole
+rules remain open. The original executable and raw captures are absent, so the
+source comparison cannot be extended from this checkout.

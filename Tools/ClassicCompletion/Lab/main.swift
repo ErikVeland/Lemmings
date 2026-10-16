@@ -413,7 +413,9 @@ case "run", "replay":
     if let out = option("--out"), result.sim.didWin {
         let events = result.events
         let outcome = ClassicDOSReplayOutcome(ticks: result.sim.tickCount, released: result.sim.releasedCount, saved: result.sim.savedCount, required: c.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: result.sim))
-        let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces), initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: events, expected: outcome)
+        let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces),
+            initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+            initialLevelFingerprint: base.levelSourceFingerprint, events: events, expected: outcome)
         let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
         try enc.encode(replay).write(to: URL(fileURLWithPath: out))
         print("WROTE", out)
@@ -572,7 +574,10 @@ case "transplant":
     }
     if let out = option("--out"), final.sim.didWin {
         let outcome = ClassicDOSReplayOutcome(ticks: final.sim.tickCount, released: final.sim.releasedCount, saved: final.sim.savedCount, required: c.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: final.sim))
-        let moved = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces), initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: final.events, expected: outcome)
+        let moved = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces),
+            initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+            initialLevelFingerprint: base.levelSourceFingerprint,
+            events: final.events, expected: outcome)
         let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
         try enc.encode(moved).write(to: URL(fileURLWithPath: out))
         print("WROTE", out)
@@ -669,7 +674,10 @@ case "climb":
     }
     if let out = option("--out"), best.sim.didWin {
         let outcome = ClassicDOSReplayOutcome(ticks: best.sim.tickCount, released: best.sim.releasedCount, saved: best.sim.savedCount, required: c.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: best.sim))
-        let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces), initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: best.events, expected: outcome)
+        let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces),
+            initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+            initialLevelFingerprint: base.levelSourceFingerprint,
+            events: best.events, expected: outcome)
         let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
         try enc.encode(replay).write(to: URL(fileURLWithPath: out))
         print("WROTE", out)

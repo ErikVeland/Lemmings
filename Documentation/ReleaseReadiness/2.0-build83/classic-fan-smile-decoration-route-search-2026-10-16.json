@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "status": "bounded_search_unsolved",
+  "level": {
+    "rank": "fan:lldb-199",
+    "archive": "0199-TMChallenge.zip",
+    "archiveMember": "TMChallenge.dat#1",
+    "sequentialLevel": 2,
+    "title": "Smile if you love decoration",
+    "initialStateHash": "9ad9b913094b037fb8fd690d3259343cf07139a14f4d7da02456ce0e3873b6df",
+    "totalLemmings": 20,
+    "requiredToSave": 10
+  },
+  "resources": {
+    "path": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedApp": "1.9.1 build 76",
+    "note": "The archive bytes match the retained build 85 LevelPacks manifest; build 86 records no non-localisation resource-index differences from build 85. This search did not verify the build 86 app binary.",
+    "archiveBytes": 7750,
+    "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b"
+  },
+  "solver": {
+    "source": "Tools/ClassicSolver/main.swift",
+    "sourceSHA256": "7c4085e6d2ba0280032c4cdd0379d51d063bdc1caf8be9409e03599a2850d22b",
+    "binary": ".build/classic-fan-current/ClassicSolver",
+    "binarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "linkedLibrary": ".build/classic-fan-current/libNxlvKit.dylib",
+    "linkedLibrarySHA256": "5afb912bcfdfb8dd45c077adbbba8c769cfdd6c5e8d7d2d11944be942e59a067"
+  },
+  "search": {
+    "timeLimitSeconds": 600,
+    "beamWidth": 8192,
+    "fallbackTicks": 100,
+    "refireTicks": 60,
+    "ranking": [
+      "prefer-progress",
+      "rescue-quota-distance",
+      "direct-exit-distance"
+    ],
+    "clock": "Golems default for this exact bundled fan level",
+    "forcedPrefix": null,
+    "command": ".build/classic-fan-current/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0199-TMChallenge.zip' 2 /private/tmp/fan-smile-decoration-600s-20261016.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --seconds 600 --width 8192 --fallback 100 --refire 60 --prefer-progress --rescue-quota-distance --direct-exit-distance --partial-out --diagnose-active"
+  },
+  "result": {
+    "terminalStatus": "UNSOLVED",
+    "elapsedSearchSeconds": 600,
+    "expandedCandidates": 1564061,
+    "terminalTick": 315,
+    "released": 10,
+    "lost": 3,
+    "active": 7,
+    "bestSaved": 0,
+    "requiredToSave": 10,
+    "complete": false,
+    "terminalActors": [
+      {
+        "id": 0,
+        "x": 792,
+        "y": 45,
+        "direction": "right",
+        "action": "blocking"
+      },
+      {
+        "id": 2,
+        "x": 874,
+        "y": 142,
+        "direction": "right",
+        "action": "ohNo"
+      },
+      {
+        "id": 3,
+        "x": 885,
+        "y": 149,
+        "direction": "right",
+        "action": "drowning"
+      },
+      {
+        "id": 4,
+        "x": 883,
+        "y": 149,
+        "direction": "right",
+        "action": "drowning"
+      },
+      {
+        "id": 7,
+        "x": 813,
+        "y": 145,
+        "direction": "right",
+        "action": "splatting"
+      },
+      {
+        "id": 8,
+        "x": 810,
+        "y": 48,
+        "direction": "right",
+        "action": "mining"
+      },
+      {
+        "id": 9,
+        "x": 792,
+        "y": 45,
+        "direction": "right",
+        "action": "walking"
+      }
+    ]
+  },
+  "partialReplay": "classic-fan-smile-decoration-partial-2026-10-16.json",
+  "interpretation": "This timed search found no win and does not show that the level is impossible. The partial replay is a research lead, not a verified winning route. The 2,399/6,020 route count and 3,621 levels without verified wins do not change."
+}

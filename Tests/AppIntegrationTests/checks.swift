@@ -3178,12 +3178,15 @@ extension AppDelegate {
     }
     let shifted = ClassicDOSReplay(rank: proof.replay.rank, number: proof.replay.number,
       title: proof.replay.title, initialStateHash: proof.replay.initialStateHash,
+      initialLevelFingerprint: proof.replay.initialLevelFingerprint,
       events: [.init(tick: 0, action: .releaseRate(50), afterTick: true)] + proof.replay.events.map {
         .init(tick: $0.tick, action: $0.action, afterTick: true)
       })
     let liveOutcome = try ClassicDOSReplayPlayer.run(shifted, simulation: fresh, verify: false)
     let liveReplay = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
-      initialStateHash: shifted.initialStateHash, events: shifted.events, expected: liveOutcome)
+      initialStateHash: shifted.initialStateHash,
+      initialLevelFingerprint: shifted.initialLevelFingerprint,
+      events: shifted.events, expected: liveOutcome)
     guard let liveProof = VerifiedSolution.validate(liveReplay, initial: fresh) else {
       throw IntegrationFailure(message: "Valid after-tick solution was rejected")
     }
@@ -3218,7 +3221,8 @@ extension AppDelegate {
       conditions: arcadeLevel?.conditions, folder: routeDirectory) == recordedURL,
       "Repeated player route created a duplicate")
     let invalidRoute = ClassicDOSReplay(rank: liveReplay.rank, number: liveReplay.number,
-      title: liveReplay.title, initialStateHash: liveReplay.initialStateHash, events: [], expected: liveReplay.expected)
+      title: liveReplay.title, initialStateHash: liveReplay.initialStateHash,
+      initialLevelFingerprint: liveReplay.initialLevelFingerprint, events: [], expected: liveReplay.expected)
     do {
       _ = try ClassicRouteRecorder.save(invalidRoute, initial: fresh, conditions: nil, folder: routeDirectory)
       throw IntegrationFailure(message: "Invalid played route was preserved as a win")
@@ -3228,11 +3232,13 @@ extension AppDelegate {
     try check(VerifiedSolution.validate(proof.replay, initial: changed) == nil,
       "Changed initial state accepted a solution")
     let incomplete = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
-      initialStateHash: shifted.initialStateHash, events: shifted.events)
+      initialStateHash: shifted.initialStateHash,
+      initialLevelFingerprint: shifted.initialLevelFingerprint, events: shifted.events)
     try check(VerifiedSolution.validate(incomplete, initial: fresh) == nil,
       "Solution without a verified outcome was accepted")
     let broken = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
-      initialStateHash: shifted.initialStateHash, events: [], expected: liveOutcome)
+      initialStateHash: shifted.initialStateHash,
+      initialLevelFingerprint: shifted.initialLevelFingerprint, events: [], expected: liveOutcome)
     try check(VerifiedSolution.validate(broken, initial: fresh) == nil,
       "Broken solution was accepted")
     let hintCampaigns: [(ClassicTitle, Int)] = [(.ohNoMoreLemmings, 0), (.xmasLemmings1991, 0),

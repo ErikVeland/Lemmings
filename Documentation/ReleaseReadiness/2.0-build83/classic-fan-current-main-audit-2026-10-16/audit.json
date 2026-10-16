@@ -1,0 +1,80 @@
+{
+  "schema": "classic-fan-current-main-audit-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "sourceBranch": "main",
+  "scope": {
+    "bundledPacks": 535,
+    "bundledLevels": 6020,
+    "importedLevelsIncluded": 0,
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedResourceApp": "1.9.1 build 76",
+    "contentBridge": [
+      "../../2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+      "../../2.0.3-build86/README.md"
+    ]
+  },
+  "command": "zsh Scripts/run-classic-validation.sh '/Applications/Ultimate Lemmings.app/Contents/Resources' OUTPUT .",
+  "result": {
+    "officialRoutes": 352,
+    "fanWinningReplays": 2402,
+    "fanReplayFailed": 18,
+    "fanWithoutWinningCandidate": 3600,
+    "fanMissingVerifiedWins": 3618,
+    "fanLoadRenderFailures": 0,
+    "strictBundledClosure": "open"
+  },
+  "priorResult": {
+    "fanWinningReplays": 2399,
+    "fanReplayFailed": 21,
+    "fanWithoutWinningCandidate": 3600,
+    "fanMissingVerifiedWins": 3621
+  },
+  "restoredRoutes": [
+    {
+      "source": "0568-Amiga-Fun.zip/Fun 16.lvl#0",
+      "title": "Don't do anything too hasty",
+      "archiveSHA256": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619",
+      "events": 26,
+      "saved": 80,
+      "required": 50,
+      "ticks": 2028,
+      "initialStateHash": "a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+      "initialLevelFingerprint": "94d929cf11e0e08043f9e4d9d6e75504c682c553b890e3f43927f4d19d7e6b28",
+      "witness": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-568-dont-do-anything-too-hasty.json"
+    },
+    {
+      "source": "0573-Amiga-Fun-Budget.zip/Fun 16.lvl#0",
+      "title": "Don't do anything too hasty",
+      "archiveSHA256": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574",
+      "events": 26,
+      "saved": 80,
+      "required": 50,
+      "ticks": 2028,
+      "initialStateHash": "a82000ab74a24e5da4e917c515269a21a0f6005a30ae1cc5e6de43dff036252f",
+      "initialLevelFingerprint": "94d929cf11e0e08043f9e4d9d6e75504c682c553b890e3f43927f4d19d7e6b28",
+      "witness": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-573-dont-do-anything-too-hasty.json"
+    },
+    {
+      "source": "0490-Genesis-Taxing.zip/Genesis Taxing.dat#20",
+      "title": "Feel the heat!",
+      "archiveSHA256": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+      "witness": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 7d5efb5637b01ccc0c794efb1a2edf2a306beac21cf139cb783cb3f7cc6e3655"
+    }
+  ],
+  "evidenceFiles": {
+    "levelRows": "levels.jsonl",
+    "packHashes": "packs.json",
+    "counts": "summary.json",
+    "inputHashes": "inputs.json"
+  },
+  "exitCode": 1,
+  "exitReason": "The strict gate exits non-zero because 3618 bundled fan levels still lack a verified winning replay. All 352 official routes passed.",
+  "sourceState": {
+    "baseCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified",
+    "inputManifestSHA256": "b938cf6719938672e3747f4015d881ff826936678eabc1f21c85fa45dc5953f6",
+    "inputDriftDuringAudit": false,
+    "note": "The audit used the modified worktree based on this main commit. inputs.json records hashes for source and content inputs."
+  }
+}

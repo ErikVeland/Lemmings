@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "purpose": "Try a wider, finer-grained search for a higher-survivor carried Cavelems Level 2 route.",
+  "provenance": {
+    "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktree": "modified",
+    "runtimeLibrarySHA256": "d735fe0e769485a4e686c5a7671a392f91e923a4b61da8635b8d3d09e02d3",
+    "solverExecutableSHA256": "207bc67a4402ea8df8708e9bc28f321627e2df777272a5e1367e27c6c5ef03bb",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "resourceVersion": "1.9.1 build 76",
+    "resourceManifest": "Documentation/ReleaseReadiness/MacOS2Preparation-2026-10-15/bundle-inputs.json",
+    "resourceManifestSHA256": "4b6b3b8b6f06338ad8354535624f333534bba9e11d454b1083973d4e68167645",
+    "resourceFilesMatched": 218,
+    "resourceFilesMissing": 0,
+    "resourceFilesChanged": 0,
+    "solverSourceSHA256": {
+      "Actions.swift": "4f197d189c799bfbba6fcfb99777d757cc3170394d03fc86edb73383a7f09357",
+      "Chain.swift": "8980864476ed41fed65bbd5395fb386eba64cd78295b6519ec0c437e9c463b1c",
+      "DecisionPoints.swift": "9e7697a802f44453b479531498a6fbe4ca963dcdd11a4c8f91cc649be3d59e9a",
+      "DistanceField.swift": "3371d478dcf751d5b8c0a9255c3a697e3aa79164e23b88917bf9bf9027b49ae2",
+      "LevelRun.swift": "1ba8ea4ce6cbd7c3f7c625b9d41c7dcbabb06775cee32d6b1ef2955b53ae08d4",
+      "Promotion.swift": "a87811b1b72fc08617c874009b3593b99362bc5ef0410a936beb6c3b792140ff",
+      "Scoring.swift": "ee8488fbee22f53fc9ae1a8010f2cb041d4702f6a2f706ecb69b461d09824620",
+      "Search.swift": "f856a4f45f1db60996e947cf868bc01300835678e1d7f4c92213980f20899819",
+      "main.swift": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a"
+    },
+    "population": 59,
+    "levelSHA256": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb"
+  },
+  "search": {
+    "command": ".build/l2-solver/solver level '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2' cavelem-02 --population 59 --beam 32768 --depth 100 --budget 600 --cell 1 --refire 12 --out .build/l2-solver/current-cavelem02-unseeded-beam32768-cell1-refire12-20261016",
+    "beamWidth": 32768,
+    "depth": 100,
+    "budgetSeconds": 600,
+    "decisionCellPixels": 1,
+    "refireTicks": 12,
+    "elapsedSeconds": 600,
+    "decisionPoints": 2049585,
+    "expanded": 2049584,
+    "rounds": 1,
+    "bestPartialSaved": 0,
+    "partialCandidateSHA256": "492dc3625069db0623c6cdcc11b15bd4b56cc999d490dc76231fadfda2eb9e05",
+    "exitCode": 2,
+    "outcome": "No winning route found. The search did not improve or invalidate the accepted 36-of-59 witness."
+  },
+  "acceptedChainChanged": false,
+  "limits": "This bounded search does not prove that a higher-survivor route is impossible. The Gold ark requirement remains open."
+}

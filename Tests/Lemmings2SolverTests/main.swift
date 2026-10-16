@@ -88,8 +88,9 @@ func testLocationKeys() {
 
     var crowd = DecisionDetector()
     let many = crowd.update(TickObservation(tick: 5, lemmings: (0..<6).map { lemming($0, x: 400 + 16 * $0, wall: true) }, nearestToExit: 0))
-    check(many == Decision(trigger: .wallAhead, lemmings: [0, 1, 2]), "Candidates were not capped at three in id order")
-    print("PASS location keys, re-fire window, fallback lemming, turns and the three lemming cap")
+    check(many == Decision(trigger: .wallAhead, lemmings: [0, 1, 2, 3, 4, 5]),
+          "The decision omitted triggered lemmings after the first three")
+    print("PASS location keys, re-fire window, fallback lemming, turns and all triggered lemmings")
 }
 testLocationKeys()
 

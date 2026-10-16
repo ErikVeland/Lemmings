@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "scope": "Search for a higher-survivor Beach 1 route on the bundled L2 resource set.",
+  "provenance": {
+    "sourceCommit": "1111ece837840a005f932c0bdd14478df1728cc8",
+    "solverPath": ".build/l2-current-main-20261016/solver",
+    "solverSHA256": "40b9aaaef9fd4dfc04e430c858b70057bd7bcbca3fe59a60301c1bf24f9201cc",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2",
+    "installedApp": "1.9.1 build 76",
+    "build85ResourceEquivalence": "Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+    "resourceFiles": 218,
+    "levelSHA256": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3",
+    "seed": "Tests/Lemmings2CompletionTests/Fixtures/beach-01.json",
+    "seedSHA256": "b543303a2f43f932f97ed5e99e2a91393167fb20057a44a810f6f69655ff1026"
+  },
+  "search": {
+    "population": 60,
+    "budgetSeconds": 300,
+    "elapsedSeconds": 302,
+    "beamWidth": 8192,
+    "depth": 100,
+    "cell": 2,
+    "refire": 24,
+    "decisionPoints": 172431,
+    "expanded": 172431,
+    "candidateSHA256": "0264c86076748ccc7c9e65f12a13861836664b4314eb7a95e2822cd56dfd1fc3",
+    "result": "Reproduced 42/60 at 8100 ticks. No higher-survivor route found."
+  },
+  "acceptedFixtureChanged": false,
+  "limits": "This bounded native search does not prove that a higher-survivor route is impossible or establish original-engine parity."
+}

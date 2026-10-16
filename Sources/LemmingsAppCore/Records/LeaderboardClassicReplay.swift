@@ -24,7 +24,8 @@ extension LeaderboardActionReplay {
             return .init(tick: command.tick, action: action, afterTick: true)
         }
         return try JSONEncoder().encode(ClassicDOSReplay(rank: "", number: 1, title: title,
-            initialStateHash: initialStateHash, events: events,
+            initialStateHash: initialStateHash,
+            initialLevelFingerprint: initial.levelSourceFingerprint, events: events,
             expected: .init(ticks: ticks, released: final.releasedCount, saved: saved,
                             required: conditions.rescueRequirement, didWin: won, stateHash: finalStateHash)))
     }

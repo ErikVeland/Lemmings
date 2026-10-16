@@ -310,7 +310,7 @@
     },
     "walkerWindowComparison": {
       "tool": "Tools/SequelTrace/walker-window-match.swift",
-      "toolSHA256": "15f5239c450f043ef1f31f58e369c1612f24f6fc7f5df6fd35d459dbd38c9630",
+      "toolSHA256": "03cbee00c7f90b8a53e6d3ab27b8b331ba838038987f947dc5292212919a7a1b",
       "runtimeSourceSHA256": "515eac80771a95243a650e7db520a1f5f5facfd85aa6e09e12768f88493524d7",
       "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
       "walkerDecoderSourceSHA256": "b71f3e272fad942629e9b8a2ac05a1e484a95da1b293f2bc9f45b5b646a38a8a",
@@ -339,7 +339,7 @@
           "exactPixels": 26,
           "opaquePixels": 26,
           "output": "walker-match-2450.txt",
-          "outputSHA256": "921ff08eb5aec12aaf922a3ec947a0b6c7a42a546eb3dfaa76e1644c67574a7e"
+          "outputSHA256": "02a4aee0d426de9da6897462b171509c1534180529c908d51ca8ccb01eaefc8b"
         },
         {
           "sourceFrame": "source-renderer-run13-frame-2520.png",
@@ -360,7 +360,7 @@
           "exactPixels": 26,
           "opaquePixels": 26,
           "output": "walker-match-2520.txt",
-          "outputSHA256": "76e2d86acc6d4a9dbc18d3417070a7c08ccf101d7d38fc252b178ab28e8211db"
+          "outputSHA256": "cec8c0f56b514f3e6b81a638871a522804a2f49a42d4756f521f5581ee3bc40f"
         }
       ],
       "thirdSample": {
@@ -368,7 +368,7 @@
         "displayedCountdown": "8:33",
         "result": "The matcher reports additional exact WALKER matches in the native countdown window. It does not provide a tracked match to native actor 11 for this frame.",
         "output": "walker-match-2590.txt",
-        "outputSHA256": "ddaa28b48d0bfcb2e417b06c55bdf0de2558595278970513d281576da9271463"
+        "outputSHA256": "cd25f4ff8704204addf5bd0008f7946ad5490a11db440c6552db7998ecc8d6c2"
       },
       "identityLimit": "The DOS frames do not contain native actor IDs or emulated ticks. Actor 11 is a native candidate based on the shared countdown interval and exact sprite position; the source-side identity remains inferred.",
       "method": "Replay Beach 10 without inputs through every native tick sharing the source frame's displayed countdown. Use the production renderer's WALKER phase and draw offsets, then compare every opaque WALKER.DAT palette pixel at the predicted source coordinates. RGB input was extracted from each retained source PNG with ImageMagick.",

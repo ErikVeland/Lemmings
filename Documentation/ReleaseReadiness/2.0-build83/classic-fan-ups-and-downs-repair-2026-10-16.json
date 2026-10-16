@@ -1,0 +1,123 @@
+{
+  "schema": "classic-fan-ups-and-downs-repair-v1",
+  "date": "2026-10-16",
+  "sourceCommit": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+  "target": {
+    "source": "0035-1tseug.zip/1tseug.dat#2",
+    "rank": "fan:lldb-35",
+    "number": 3,
+    "title": "Ups and Downs",
+    "population": 20,
+    "required": 19,
+    "nativeReleaseRate": 1,
+    "legacyStateHash": "512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+    "staticLevelFingerprint": "119f110f8c4548d9f728e9957b330add3b19cb16244dd8aed1a42a3fc2562dc7",
+    "archiveSHA256": "c4b362a6a83f5a4dc03b24849adcfd28b00c6391570eed7a84b433c8a2aa2340"
+  },
+  "bundle": {
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "installedApp": "1.9.1 build 76",
+    "build85ContentMatch": "The exact archive hash matches the retained build 85 bundle manifest.",
+    "build86ResourceNote": "The published build 86 record reports no non-localisation resource-index changes from build 85."
+  },
+  "existingWitness": {
+    "source": "Artifacts/LearningJourney/candidate-solutions.json#512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+    "artifactSHA256": "95e53224b4839f827aa563305d7502000619aebd7cb21373563878ea4e00d607",
+    "candidateSHA256": "bd22f92fba7a4620f5f2093610454bd6274f24efb6f21045bdf494863a189c9b",
+    "expected": "19 of 20 saved",
+    "currentReplay": "0 saved"
+  },
+  "solver": {
+    "binarySHA256": "db9d9b2cbd93a3e92cef6bb1d1047486a870d1d26b443b08a8740ef44f3d2b50",
+    "runtimeLibrarySHA256": "d735fe0e769485a4e686c5a7671a392f91e923a4b61da8636935b8d3d09e02d3",
+    "solverSourceSHA256": "af1c6d92b94c624ca3b181de4b19acfb57d04403df65d39e029fc34e3b1387e2",
+    "decisionOffersSourceSHA256": "e40b486faa3b92424cd5b2013942b2e7a52e143dd86792d9501370ae450be7eb"
+  },
+  "searches": [
+    {
+      "strategy": "adaptive release rate, progress-first beam",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0035-1tseug.zip' 1 .build/classic-solver-ups-and-downs-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member '1tseug.dat#2' --width 4096 --seconds 300 --fallback 170 --refire 120 --adaptive-rate --prefer-progress --partial-out",
+      "expanded": 249943,
+      "elapsedSeconds": 97,
+      "terminalTick": 410,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "bestSaved": 0,
+      "partialSHA256": "6b70815f0b8317150aa47f6f99e816ba6db9cb03d34fddf82163124e15c1584f",
+      "result": "No winning route; the decision beam exhausted before the time budget."
+    },
+    {
+      "strategy": "rate 99, rollout each one-skill action, rescue-quota ranking",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0035-1tseug.zip' 1 .build/classic-solver-ups-and-downs-rollout-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member '1tseug.dat#2' --width 4096 --seconds 300 --fallback 170 --refire 120 --rate 99 --rollout-single --rescue-quota-distance --partial-out",
+      "expanded": 348438,
+      "elapsedSeconds": 133,
+      "waitingTick": 358,
+      "bestPartialTick": 316,
+      "singleSkillRollouts": 22,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "bestSaved": 0,
+      "partialSHA256": "ca04ffab9013c0874c74b0d81a80f0293ccc3eabf6d49bd2a7c471e899cd9c65",
+      "result": "No winning route; the decision beam exhausted before the time budget."
+    },
+    {
+      "strategy": "adaptive release rate, progress-first search seeded with the existing witness opening",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0035-1tseug.zip' 1 .build/classic-solver-ups-and-downs-seeded-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member '1tseug.dat#2' --width 4096 --seconds 180 --fallback 170 --refire 120 --adaptive-rate --prefer-progress --prefix .build/classic-solver-ups-and-downs-20261016/prefix-opening.json --partial-out",
+      "prefixCommands": 7,
+      "prefixSHA256": "bac5f6cda1d45e460f0fa7806d4ffa11dc0ecef44f063be8fad000a6860f1176",
+      "expanded": 398698,
+      "elapsedSeconds": 145,
+      "terminalTick": 417,
+      "released": 20,
+      "lost": 1,
+      "active": 19,
+      "bestSaved": 0,
+      "partialSHA256": "22a153fb76a8c449d273fd9c41125dff0cfbfdb69bcedff9efa8167315de4996",
+      "result": "No winning route."
+    },
+    {
+      "strategy": "adaptive release rate, progress-first search seeded through the 20 recorded Climber assignments",
+      "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0035-1tseug.zip' 1 .build/classic-solver-ups-and-downs-seeded-climbers-20261016/candidate.json --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member '1tseug.dat#2' --width 4096 --seconds 180 --fallback 170 --refire 120 --prefer-progress --prefix .build/classic-solver-ups-and-downs-20261016/prefix-through-climbers.json --partial-out",
+      "prefixCommands": 21,
+      "prefixSHA256": "42b304eb0fcb5d60a565911797f532a191df8b5fe245d171e2debea02d0d0a8e",
+      "expanded": 309612,
+      "elapsedSeconds": 115,
+      "terminalTick": 419,
+      "released": 20,
+      "lost": 1,
+      "active": 19,
+      "bestSaved": 0,
+      "partialSHA256": "03da0464cd30e42eeb6214f2cd0e8b4bf1f9673c5c85e6c8fa5f6f49fcd442f0",
+      "result": "No winning route."
+    }
+  ],
+  "currentMainReplayRecheck": {
+    "runtimeLibrarySHA256": "d735fe0e769485a4e686c5a7671a392f91e923a4b61da8635b8d3d09e02d3",
+    "replaySource": "Artifacts/LearningJourney/candidate-solutions.json#512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+    "addedSourceRulesForDiagnostic": "golemsFallingBuilder",
+    "initialLevelFingerprint": "119f110f8c4548d9f728e9957b330add3b19cb16244dd8aed1a42a3fc2562dc7",
+    "initialStateHash": "512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+    "replayMode": "verify=false to measure the input outcome without enforcing the stale expected result",
+    "runs": 2,
+    "outcome": {
+      "didWin": false,
+      "released": 20,
+      "required": 19,
+      "saved": 0,
+      "ticks": 1022,
+      "stateHash": "e7fabae0b743526ab0daa7f91ba7d70f2f381a16144c32aed1777d34675fe972"
+    },
+    "sourceRecoveryRecordConflict": "The 4 October source-recovery record reports 19 saved at tick 1022 for the same replay digest. Current-main replay does not reproduce that outcome, even when the Golems source-assignment rule is added. Treat the old native outcome and score as historical, not current verified evidence.",
+    "result": "No route promoted. Exact bundled route remains unverified."
+  },
+  "closureEffect": {
+    "newWinningRoutes": 0,
+    "fanRouteCountChanged": false,
+    "targetRemainsUnverified": true,
+    "strictBundledGate": "open",
+    "importedContentScope": "unchanged and open-ended"
+  },
+  "limits": "These bounded searches do not prove that the level is impossible. No candidate was promoted to the accepted replay set."
+}

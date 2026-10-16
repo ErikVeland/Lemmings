@@ -207,11 +207,14 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                 guard events.allSatisfy({ $0.tick >= ($0.afterTick == true ? 0 : 1) && $0.tick <= trial.tickCount }), trial.isComplete, trial.didWin,
                       trial.savedCount > (row.bestSaved ?? -1) || trial.savedCount == row.population else { return }
                 let candidate = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: level.title,
-                    initialStateHash: initialHash, events: events)
+                    initialStateHash: initialHash,
+                    initialLevelFingerprint: base.levelSourceFingerprint, events: events)
                 let outcome = try ClassicDOSReplayPlayer.run(candidate, simulation: base)
                 guard outcome.saved == trial.savedCount, outcome.stateHash == ClassicDOSReplayRecorder.stateHash(of: trial) else { throw SequelDataError.invalid("Replay is not deterministic") }
                 let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: level.title,
-                    initialStateHash: initialHash, events: events, expected: outcome)
+                    initialStateHash: initialHash,
+                    initialLevelFingerprint: base.levelSourceFingerprint,
+                    events: events, expected: outcome)
                 _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
                 row.accept(try save(replay, name: "\(titleID)-\(index)", saved: outcome.saved,
                     released: outcome.released, lost: trial.lostCount, ticks: outcome.ticks, completed: true, won: outcome.didWin))

@@ -96,6 +96,9 @@ private struct Content {
 private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws -> ClassicDOSReplayOutcome {
     var simulation = base
     try require(replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: base), "initial state mismatch")
+    if let expectedFingerprint = replay.initialLevelFingerprint {
+        try require(expectedFingerprint == base.levelSourceFingerprint, "initial level fingerprint mismatch")
+    }
     let grouped = Dictionary(grouping: replay.events.filter { $0.afterTick != true }, by: \.tick)
     let live = Dictionary(grouping: replay.events.filter { $0.afterTick == true }, by: \.tick)
     for event in replay.events {
@@ -386,7 +389,9 @@ do {
         let title = entry.level.title.trimmingCharacters(in: .whitespaces)
         func candidate(_ events: [ClassicDOSReplayEvent], expected: ClassicDOSReplayOutcome? = nil) -> ClassicDOSReplay {
             ClassicDOSReplay(rank: entry.rank, number: entry.number, title: title,
-                initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: events, expected: expected)
+                initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base),
+                initialLevelFingerprint: base.levelSourceFingerprint,
+                events: events, expected: expected)
         }
         var replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file))
         if mode == "refresh", let existing = replay {
