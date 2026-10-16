@@ -74,6 +74,12 @@ public enum FailureMoodDecision {
     if progress >= 1 { timer?.invalidate(); timer = nil }
   }
 
+  public func finish() {
+    timer?.invalidate(); timer = nil
+    amount = targetAmount
+    onChange?(amount)
+  }
+
   deinit { timer?.invalidate() }
 }
 
@@ -110,6 +116,7 @@ public enum FailureMoodDecision {
   }
 
   public func advance(at now: TimeInterval) { transition.advance(at: now) }
+  public func finish() { transition.finish() }
 }
 
 

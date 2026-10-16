@@ -18,7 +18,10 @@ import UIKit
     var artworkLoader: ((Int) async -> CGImage?)?
     var artworkLoadingEnabled = false {
         didSet {
-            if artworkLoadingEnabled { layoutCards() }
+            if artworkLoadingEnabled {
+                layoutCards()
+                if abs(target - position) >= 0.002 { startLink() }
+            }
             else { cancelArtwork(); link?.invalidate(); link = nil }
         }
     }
@@ -110,7 +113,7 @@ import UIKit
     func select(_ index: Int, animated: Bool) {
         guard !titles.isEmpty else { return }
         target = CGFloat(min(max(0, index), titles.count - 1))
-        if animated { startLink() } else { position = target; positionChanged() }
+        if animated && artworkLoadingEnabled { startLink() } else { position = target; positionChanged() }
     }
 
     override func accessibilityIncrement() { select(selectedIndex + 1, animated: true) }
@@ -122,7 +125,7 @@ import UIKit
     }
 
     private func startLink() {
-        guard link == nil else { return }
+        guard artworkLoadingEnabled, link == nil else { return }
         let proxy = LinkTarget()
         proxy.owner = self
         let link = CADisplayLink(target: proxy, selector: #selector(LinkTarget.tick))

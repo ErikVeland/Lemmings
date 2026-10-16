@@ -37,6 +37,7 @@ extension MobileLibraryViewController {
         return adapter
     }
     @objc func pollLibraryInput(_ link: CADisplayLink) {
+        guard game == nil, view.window?.windowScene?.activationState == .foregroundActive else { return }
         libraryInput.poll(context: ObjectIdentifier(canvas), at: link.timestamp)
         advanceHomeBackdrop(at: link.timestamp)
     }

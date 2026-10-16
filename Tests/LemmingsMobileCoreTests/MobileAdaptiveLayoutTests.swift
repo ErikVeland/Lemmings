@@ -3,6 +3,43 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileAdaptiveLayoutTests {
+    @Test func bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() throws {
+        let safe = MobileRect(x: 0, y: 24, width: 1194, height: 786)
+        let hinge = MobileReservedRegion(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))
+        let camera = MobileReservedRegion(kind: .occlusion, frame: .init(x: 1138, y: 24, width: 56, height: 60))
+        let panes = MobileDisplayRegions.resultPanes(in: safe, avoiding: [hinge, camera])
+        #expect(panes.count == 2)
+        #expect(panes[0].maxX <= hinge.frame.minX)
+        #expect(panes[1].minX >= hinge.frame.maxX)
+        #expect(panes.allSatisfy { !$0.intersects(hinge.frame) && !$0.intersects(camera.frame) })
+        #expect(panes.allSatisfy { $0.width >= 280 && $0.height == safe.height })
+        #expect(MobileDisplayRegions.resultPanes(in: safe, avoiding: []).isEmpty)
+        let tableSafe = MobileRect(x: 0, y: 24, width: 834, height: 1146)
+        let tableHinge = MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 589, width: 834, height: 16))
+        #expect(MobileDisplayRegions.resultPanes(in: tableSafe, avoiding: [tableHinge])
+            == MobileDisplayRegions.tablePanes(in: tableSafe, avoiding: [tableHinge]))
+        #expect(MobileDisplayRegions.resultPanes(in: safe, avoiding: [hinge])
+            == MobileDisplayRegions.bookPanes(in: safe, avoiding: [hinge]))
+        #expect(MobileDisplayRegions.resultPanes(in: safe, avoiding: [hinge,
+            .init(kind: .occlusion, frame: .init(x: 605, y: 0, width: 589, height: 834))]).isEmpty)
+    }
+
+    @Test func tabletopResultsRequireTwoUsableClearScreens() {
+        let safe = MobileRect(x: 0, y: 24, width: 834, height: 1146)
+        let division = MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 589, width: 834, height: 16))
+        let cutout = MobileReservedRegion(kind: .occlusion, frame: .init(x: 0, y: 605, width: 42, height: 70))
+        let panes = MobileDisplayRegions.tablePanes(in: safe, avoiding: [division, cutout])
+        #expect(panes.count == 2)
+        #expect(panes[0].maxY <= division.frame.minY)
+        #expect(panes[1].minY >= division.frame.maxY)
+        #expect(panes.allSatisfy { !$0.intersects(division.frame) && !$0.intersects(cutout.frame) })
+        #expect(MobileDisplayRegions.tablePanes(in: safe, avoiding: []).isEmpty)
+        #expect(MobileDisplayRegions.tablePanes(in: safe, avoiding: [
+            .init(kind: .division, frame: .init(x: 405, y: 0, width: 24, height: 1194))]).isEmpty)
+        #expect(MobileDisplayRegions.tablePanes(in: safe, avoiding: [division,
+            .init(kind: .occlusion, frame: .init(x: 0, y: 605, width: 834, height: 565))]).isEmpty)
+    }
+
     @Test func controlDeckAvoidsSystemRegionsAcrossEngineControlSets() {
         let poses: [(MobileSize, [MobileReservedRegion])] = [
             (.init(width: 390, height: 844), []),
@@ -34,12 +71,13 @@ struct MobileAdaptiveLayoutTests {
                 }
                 #expect(layout.interface.controlFrames.count == (rate ? 2 : 0) + skills + 5)
                 let safe = layout.interface.safeFrame
-                for (index, frame) in (layout.interface.controlFrames + [layout.interface.statusFrame]).enumerated() {
+                for (index, frame) in (layout.interface.controlFrames + layout.statusBanks).enumerated() {
                     let firstSkill = rate ? 2 : 0
                     if let portrait = layout.portrait, (firstSkill..<(firstSkill + skills)).contains(index) {
                         #expect(frame.minX >= portrait.skills.minX)
                         #expect(frame.maxX <= portrait.skills.minX + portrait.skillContentWidth + 0.001)
-                        #expect(abs(frame.minY - Double(portrait.skills.minY)) < 0.001)
+                        #expect(frame.minY >= portrait.skills.minY)
+                        #expect(frame.maxY <= portrait.skills.maxY)
                         continue
                     }
                     #expect(safe.contains(.init(x: frame.minX, y: frame.minY)))
@@ -50,9 +88,76 @@ struct MobileAdaptiveLayoutTests {
                     #expect(frame.width >= 44 && frame.height >= 44)
                 }
                 for arrow in layout.speedArrows { #expect(arrow.width >= 44 && arrow.height >= 44) }
-                if layout.isDiorama {
+                if layout.isDiorama, regions.contains(where: { $0.kind == .division && $0.frame.width > $0.frame.height }) {
                     #expect(layout.interface.playfieldFrame.maxY <= 405)
                     #expect(layout.interface.controlsFrame.minY >= 429)
+                }
+            }
+        }
+    }
+
+    @Test func dividedScreensKeepGameplayAcrossTheTopAndControlsFillingTheBottom() throws {
+        for (size, divider) in [
+            (MobileSize(width: 1194, height: 834), MobileRect(x: 589, y: 0, width: 16, height: 834)),
+            (.init(width: 834, height: 1194), .init(x: 0, y: 589, width: 834, height: 16)),
+            (.init(width: 650, height: 465), .init(x: 318, y: 0, width: 14, height: 465)),
+            (.init(width: 465, height: 650), .init(x: 0, y: 318, width: 465, height: 14))
+        ] {
+            for (engine, rate, count) in [("classic", true, 8), ("lemmings2", false, 8), ("lemmings3", false, 5)] {
+                let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
+                    hasRate: rate, skillCount: count, reservedRegions: [.init(kind: .division, frame: divider)],
+                    supportsRewind: true, hasPlayer: true, engineIdentifier: engine)
+                let deck = try #require(layout.portrait)
+                let field = layout.interface.playfieldFrame
+                #expect(layout.canPlay)
+                #expect(field.minX == layout.interface.safeFrame.minX)
+                #expect(field.maxX == layout.interface.safeFrame.maxX)
+                #expect(layout.interface.controlsFrame.minX == layout.interface.safeFrame.minX)
+                #expect(layout.interface.controlsFrame.maxX == layout.interface.safeFrame.maxX)
+                #expect(layout.interface.controlsFrame.maxY == layout.interface.safeFrame.maxY)
+                if divider.height > divider.width {
+                    #expect(field.intersects(divider))
+                    #expect(field.maxY == layout.interface.controlsFrame.minY)
+                    #expect(layout.interface.controlFrames.contains { $0.maxX <= divider.minX && $0.minY >= field.maxY })
+                    #expect(layout.interface.controlFrames.contains { $0.minX >= divider.maxX && $0.minY >= field.maxY })
+                } else {
+                    #expect(field.maxY == divider.minY)
+                    #expect(layout.interface.controlsFrame.minY == divider.maxY)
+                }
+                #expect(layout.interface.statusFrame.maxY == field.minY)
+                #expect(deck.skillContentWidth == deck.skills.width)
+                let first = rate ? 2 : 0
+                for frame in layout.interface.controlFrames[first..<(first + count)] {
+                    #expect(frame.minX >= deck.skills.minX && frame.maxX <= deck.skills.maxX + 0.001)
+                    #expect(frame.minY >= deck.skills.minY && frame.maxY <= deck.skills.maxY)
+                }
+                let bottomControls = layout.interface.controlFrames.dropLast()
+                #expect(bottomControls.map(\.maxY).max() == layout.interface.safeFrame.maxY)
+                #expect(bottomControls.map(\.minY).min() == layout.interface.controlsFrame.minY)
+                #expect(bottomControls.map(\.minX).min() == layout.interface.safeFrame.minX)
+                #expect(bottomControls.map(\.maxX).max() == layout.interface.safeFrame.maxX)
+                let occupied = layout.interface.controlFrames + layout.statusBanks + [
+                    .init(x: deck.minimap.minX, y: deck.minimap.minY, width: deck.minimap.width, height: deck.minimap.height)]
+                for (index, frame) in occupied.enumerated() {
+                    #expect(!frame.intersects(divider))
+                    #expect(!frame.intersects(field))
+                    for other in occupied.dropFirst(index + 1) {
+                        #expect(!frame.intersects(other))
+                    }
+                }
+            }
+        }
+    }
+
+    @Test func compactLandscapeShowsEveryNativeSkillWithoutScrolling() throws {
+        for width in [568.0, 650, 720, 834] {
+            for (engine, rate, count) in [("classic", true, 8), ("lemmings2", false, 8), ("lemmings3", false, 5)] {
+                let layout = MobileHUDLayout.make(container: .init(width: width, height: 465),
+                    safeArea: .init(top: 20, left: 20, bottom: 20, right: 20),
+                    hasRate: rate, skillCount: count, supportsRewind: true, engineIdentifier: engine)
+                #expect(layout.canPlay)
+                if let deck = layout.portrait {
+                    #expect(deck.skillContentWidth <= deck.skills.width + 0.001)
                 }
             }
         }
@@ -123,6 +228,64 @@ struct MobileAdaptiveLayoutTests {
                     #expect(status.height == 44)
                     #expect(status.maxY == layout.interface.playfieldFrame.minY)
                     #expect(layout.interface.controlFrames.allSatisfy { !$0.intersects(status) })
+                }
+            }
+        }
+    }
+
+    @Test func bookHomeKeepsBothScrollingListsClearOfTheHingeAndCamera() {
+        let safe = MobileRect(x: 20, y: 24, width: 1154, height: 790)
+        let regions: [MobileReservedRegion] = [
+            .init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834)),
+            .init(kind: .occlusion, frame: .init(x: 1120, y: 24, width: 74, height: 60))
+        ]
+        let panes = MobileDisplayRegions.bookPanes(in: safe, avoiding: regions)
+        #expect(panes.count == 2)
+        #expect(panes[0].maxX <= 589)
+        #expect(panes[1].minX >= 605)
+        #expect(panes.allSatisfy { $0.minY == safe.minY && $0.maxY == safe.maxY })
+        #expect(panes.allSatisfy { pane in regions.allSatisfy { !pane.intersects($0.frame) } })
+        #expect(MobileDisplayRegions.bookPanes(in: safe, avoiding: []).isEmpty)
+        #expect(MobileDisplayRegions.bookPanes(in: safe, avoiding: [
+            .init(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))]).isEmpty)
+    }
+
+    @Test func roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() throws {
+        for (size, regions) in [
+            (MobileSize(width: 650, height: 465), [MobileReservedRegion]()),
+            (.init(width: 465, height: 650), []),
+            (.init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))]),
+            (.init(width: 834, height: 1194), [.init(kind: .division, frame: .init(x: 0, y: 589, width: 834, height: 16))])
+        ] {
+            for (engine, rate, count) in [("classic", true, 8), ("lemmings2", false, 8), ("lemmings3", false, 5)] {
+                for menu in [false, true] {
+                    let baseline = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
+                        hasRate: rate, skillCount: count, reservedRegions: regions, supportsRewind: true,
+                        hasPlayer: true, engineIdentifier: engine, showsMenuButton: menu)
+                    let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
+                        hasRate: rate, skillCount: count, reservedRegions: regions, supportsRewind: true,
+                        hasPlayer: true, engineIdentifier: engine, showsMenuButton: menu,
+                        topBarInsets: .init(left: 60, right: 72))
+                    #expect(layout.canPlay)
+                    #expect(layout.interface.statusFrame.minX >= 60)
+                    #expect(layout.interface.statusFrame.maxX <= size.width - 72)
+                    #expect(layout.interface.playfieldFrame == baseline.interface.playfieldFrame)
+                    #expect(layout.interface.controlsFrame == baseline.interface.controlsFrame)
+                    #expect(layout.portrait == baseline.portrait)
+                    #expect(layout.interface.statusFrame.height == 44)
+                    let controls = layout.interface.controlFrames
+                    if menu {
+                        let headerMenu = try #require(controls.last)
+                        if baseline.interface.controlFrames.last?.minY == baseline.interface.safeFrame.minY {
+                            #expect(headerMenu.maxX == size.width - 72)
+                            #expect(headerMenu.width == 44 && headerMenu.height == 44)
+                            #expect(headerMenu.minX > layout.interface.statusFrame.maxX)
+                        } else {
+                            // L3's native panel keeps Menu in its lower navigation row.
+                            #expect(headerMenu == baseline.interface.controlFrames.last)
+                        }
+                        #expect(Array(controls.dropLast()) == Array(baseline.interface.controlFrames.dropLast()))
+                    } else { #expect(controls == baseline.interface.controlFrames) }
                 }
             }
         }

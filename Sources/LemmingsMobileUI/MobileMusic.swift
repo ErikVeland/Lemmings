@@ -21,6 +21,7 @@ import UIKit
     private var pitch = GameplayMusicPitch()
     private var failureMusic = FailureMusicTransition()
     private let nukeMood = NukeMusicSweep()
+    private var resultTransitionTask: Task<Void, Never>?
     private var lastTrack: URL?
     private var lastPitchCents: Double?
     private var cachedSettings = MobileSettings.current(from: .standard)
@@ -81,12 +82,12 @@ import UIKit
         module.setMuted(!isEnabled || isTestAudioMuted)
         recordings.setMuted(!isEnabled || isTestAudioMuted)
         dj.setMuted(!isEnabled || isTestAudioMuted)
-        if !isEnabled || isTestAudioMuted { stop() }
+        if !isEnabled || volume <= 0 || isTestAudioMuted { stop() }
     }
 
     func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {
         applySettings()
-        guard isEnabled, !isTestAudioMuted else { return }
+        guard isEnabled, settings.classic.musicVolume > 0, !isTestAudioMuted else { return }
         let key = attemptID.uuidString + "|" + soundtrack
         guard playing != key else { return }
         lastPitchCents = nil
@@ -206,12 +207,23 @@ import UIKit
             FailureMoodDecision.isUnrecoverable(saved: snapshot.saved, active: $0,
                 unreleased: snapshot.total - snapshot.released, required: snapshot.required)
         } ?? false
-        let allPopped = allNukePopped ?? (snapshot.isComplete || active == 0)
+        let allPopped = snapshot.isComplete || (allNukePopped ?? (active == 0))
         let now = ProcessInfo.processInfo.systemUptime
         failureMusic.update(failed: failed, isNuking: snapshot.isEndingRun, allPopped: allPopped,
             remainingTicks: nukeRemainingTicks, oneCountTicks: Int(ticksPerSecond), tick: snapshot.tick, now: now)
         nukeMood.update(active: snapshot.isEndingRun && settings.classic.hdEffectsEnabled,
             tick: snapshot.tick, durationTicks: 79, remainingTicks: nukeRemainingTicks, allPopped: allPopped, now: now)
+        if snapshot.isComplete, nukeMood.amount > 0, resultTransitionTask == nil, !inactive {
+            // Results have no frame loop. Finish this finite audio transition separately.
+            resultTransitionTask = Task { @MainActor [weak self] in
+                while !Task.isCancelled {
+                    do { try await Task.sleep(for: .milliseconds(33)) } catch { return }
+                    guard let self, !self.inactive else { return }
+                    self.nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime)
+                    if self.nukeMood.amount == 0 { self.resultTransitionTask = nil; return }
+                }
+            }
+        }
         guard usingDJ else { return }
         dj.updateTelemetry(.init(releasedCount: snapshot.released, totalCount: snapshot.total,
             savedCount: snapshot.saved, requiredCount: snapshot.required, releaseRate: snapshot.releaseRate ?? 50,
@@ -231,10 +243,19 @@ import UIKit
         module.setSpeedPitch(pitch.cents); recordings.setSpeedPitch(pitch.cents); dj.setSpeedPitch(pitch.cents)
     }
     private func applyOutputState() {
+        // Retry clears the track key before its vinyl brake finishes.
+        // Lifecycle suspension must still park every existing transport.
+        if inactive {
+            module.suspendOutput(immediately: true)
+            recordings.suspendOutput(immediately: true)
+            dj.suspendOutput(immediately: true)
+            return
+        }
         guard playing != nil else { return }
-        if (paused && !resultComplete) || inactive {
-            let rhythm = !inactive && settings.classic.pauseMusicBeatOnly
-            module.suspendOutput(rhythmOnly: rhythm); recordings.suspendOutput(rhythmOnly: rhythm)
+        if paused && !resultComplete {
+            let rhythm = settings.classic.pauseMusicBeatOnly
+            module.suspendOutput(rhythmOnly: rhythm)
+            recordings.suspendOutput(rhythmOnly: rhythm)
             dj.suspendOutput(rhythmOnly: rhythm)
         } else {
             try? module.resumeOutput(); recordings.resumeOutput(); dj.resumeOutput()
@@ -245,9 +266,16 @@ import UIKit
         module.playRewind(); recordings.playRewind(); dj.playRewind()
     }
     func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
-    func suspend() { inactive = true; applyOutputState() }
+    func suspend() {
+        inactive = true
+        resultTransitionTask?.cancel(); resultTransitionTask = nil
+        failureMusic.finish()
+        nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + NukeMusicSweep.returnDuration)
+        applyOutputState()
+    }
     func resume() { inactive = false; applyOutputState() }
     func stop() {
+        resultTransitionTask?.cancel(); resultTransitionTask = nil
         module.stop(); recordings.stop(); dj.stop()
         playing = nil; lastTrack = nil; currentTrackTitle = nil; currentSoundtrackName = nil; resultComplete = false
         lastPitchCents = nil

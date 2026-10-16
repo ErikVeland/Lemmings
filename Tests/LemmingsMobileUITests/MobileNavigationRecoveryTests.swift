@@ -2,6 +2,7 @@
 import Foundation
 import Testing
 import UIKit
+import GameController
 import NxlvKit
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
@@ -82,6 +83,50 @@ import LemmingsMobileCore
             #expect(game.playState.phase == .ready)
             #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text("START") })
             #expect(game.session.snapshot.tick == 0)
+        }
+    }
+
+    @Test func suspensionStopsFramesUntilThePlayerResumes() async throws {
+        var renders = 0
+        try await withGame(rendered: { renders += 1 }) { game in
+            game.viewWillAppear(false)
+            #expect(game.isDisplayLinkPaused == GCController.controllers().isEmpty)
+            game.resumePlay()
+            #expect(!game.isDisplayLinkPaused)
+            _ = game.clock.advance(at: 1)
+            game.applyLifecycle(.becameInactive)
+            #expect(game.isDisplayLinkPaused && game.paused)
+            let snapshot = game.session.snapshot
+            let before = renders
+            let target = MobileDisplayLinkTarget { _ in }
+            let frame = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+            defer { frame.invalidate() }
+            for _ in 0..<10 { game.displayFrame(frame) }
+            #expect(renders == before && game.session.snapshot == snapshot)
+            game.applyLifecycle(.enteredBackground)
+            game.applyLifecycle(.becameActive)
+            #expect(game.paused && !game.overlay.isHidden)
+            #expect(game.isDisplayLinkPaused == GCController.controllers().isEmpty)
+            #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text("RESUME") })
+            game.resumePlay()
+            #expect(!game.paused && !game.isDisplayLinkPaused)
+            #expect(game.clock.advance(at: 1000) == 0)
+        }
+    }
+
+    @Test func hiddenGameCannotRenderOrRestartItsFrameLoop() async throws {
+        var renders = 0
+        try await withGame(rendered: { renders += 1 }) { game in
+            game.viewWillAppear(false)
+            game.resumePlay()
+            game.viewWillDisappear(false)
+            #expect(game.isDisplayLinkPaused && game.paused)
+            let before = renders
+            let snapshot = game.session.snapshot
+            game.applyLifecycle(.becameInactive)
+            game.applyLifecycle(.becameActive)
+            #expect(game.isDisplayLinkPaused && game.paused)
+            #expect(renders == before && game.session.snapshot == snapshot)
         }
     }
 

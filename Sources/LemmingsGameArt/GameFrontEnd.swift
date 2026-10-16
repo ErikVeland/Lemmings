@@ -71,6 +71,7 @@ public struct GameFrontEnd {
         public var televisionGrid = false
         public var televisionPageIndex = 0
         public var result = false
+        public var achievementItems: [MobileResultAchievementsArt.Item]?
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
@@ -94,16 +95,23 @@ public struct GameFrontEnd {
         public let details: [CGRect]
         public let targets: [Target]
         public var initials: CGRect = .zero
+        public var secondaryBoard: CGRect? = nil
+        public var libraryHeading: CGRect? = nil
         public func action(at point: CGPoint) -> String? {
             targets.first { $0.action.enabled && $0.frame.contains(point) }?.action.id
         }
     }
 
-    public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false) -> Layout {
+    public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false,
+                              bookHomePanes: [CGRect] = [], fillsResultPane: Bool = false) -> Layout {
         if page.televisionGrid { return TVMenuPresentation.settingsLayout(page, width: width, height: minimumHeight) }
         if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
-        if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight) }
+        if page.achievementItems != nil { return MobileResultAchievementsArt.layout(page, width: width, minimumHeight: minimumHeight) }
+        if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight, fillsPane: fillsResultPane) }
         if page.home {
+            if bookHomePanes.count == 2 {
+                return MobileBookHomeArt.layout(page, width: width, height: minimumHeight, panes: bookHomePanes)
+            }
             if boxedHome { return boxedHomeLayout(page, width: width, minimumHeight: minimumHeight) }
             return homeLayout(page, width: width, minimumHeight: minimumHeight)
         }
@@ -145,7 +153,18 @@ public struct GameFrontEnd {
         } else {
             if page.preview {
                 let previewWidth = boardWidth - 40
-                preview = CGRect(x: x + 20, y: y, width: previewWidth, height: min(360, previewWidth / 2))
+                let detailHeight = page.details.enumerated().reduce(CGFloat.zero) { total, entry in
+                    total + GameTextLayout.height(entry.element, width: previewWidth,
+                        face: page.detailTitles.contains(entry.offset) ? .large : .small) + 6
+                        + (page.detailHeadings.contains(entry.offset) || page.detailTitles.contains(entry.offset) ? 12 : 0)
+                }
+                let footerCell = (boardWidth - 40 - CGFloat(footerGrid.columns - 1) * 12) / CGFloat(footerGrid.columns)
+                let actionHeight = max(48, page.footer.map {
+                    GameTextLayout.height($0.title, width: footerCell - ($0.primary ? 48 : 24)) + 8
+                }.max() ?? 48)
+                let room = minimumHeight - y - 16 - detailHeight - CGFloat(footerGrid.rows) * (actionHeight + 12) - 36
+                preview = CGRect(x: x + 20, y: y, width: previewWidth,
+                                 height: min(360, previewWidth / 2, max(80, room)))
                 y = preview.maxY + 16
             }
             for (index, value) in page.details.enumerated() {
@@ -272,7 +291,7 @@ public struct GameFrontEnd {
     }
 
     /// Results reserve room for actions first; the snapshot fills the remaining space.
-    private static func resultLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+    private static func resultLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, fillsPane: Bool) -> Layout {
         let width = max(280, width), inset: CGFloat = 20
         let boardWidth = min(1032, width - 24), x = (width - boardWidth) / 2
         let inner = boardWidth - inset * 2, gap: CGFloat = 8
@@ -306,12 +325,13 @@ public struct GameFrontEnd {
         }
         let available = minimumHeight - contentTop - actionsHeight - 36
         let previewWidth = sideBySide ? inner - detailWidth - gap : inner
-        let previewHeight = sideBySide ? max(64, min(220, available)) : max(48, min(140, minimumHeight - y - actionsHeight - 36))
+        let previewHeight = sideBySide ? max(64, fillsPane ? available : min(220, available))
+            : max(48, fillsPane ? minimumHeight - y - actionsHeight - 36 : min(140, minimumHeight - y - actionsHeight - 36))
         let preview = CGRect(x: x + inset, y: sideBySide ? contentTop : y, width: previewWidth, height: previewHeight)
         y = max(y, preview.maxY) + 8
         let contentHeight = y + actionsHeight + 24
         let height = max(minimumHeight, contentHeight)
-        let offset = max(0, (height - contentHeight) / 2)
+        let offset = fillsPane ? 0 : max(0, (height - contentHeight) / 2)
         let footerY = y
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: CGRect(x: x + inset + CGFloat(slot.column) * (cell + gap),
@@ -331,8 +351,16 @@ public struct GameFrontEnd {
         context.saveGState()
         defer { context.restoreGState() }
         context.setFillColor(CGColor(gray: 0, alpha: 1))
-        context.fill(fillsCanvas ? CGRect(origin: .zero, size: layout.size) : layout.board)
-        GameMenuFrameArt.draw(in: context, board: layout.board)
+        let boards = [layout.board] + (layout.secondaryBoard.map { [$0] } ?? [])
+        if fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
+        for board in boards {
+            if !fillsCanvas { context.fill(board) }
+            GameMenuFrameArt.draw(in: context, board: board)
+        }
+        if let heading = layout.libraryHeading {
+            GameTextLayout.draw(L10n.text("Levels"), in: heading, typography: typography, face: .large,
+                               palette: .green, context: context)
+        }
         if page.home, let image = typography.menuLogo {
             let size = GameMenuLogo.logicalSize(of: image)
             let frame = GameMenuLogo.frame(canvasSize: size,
@@ -361,7 +389,9 @@ public struct GameFrontEnd {
                 drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
             }
         }
-        if page.pause == nil {
+        if page.achievementItems != nil {
+            MobileResultAchievementsArt.draw(page, layout: layout, typography: typography, in: context)
+        } else if page.pause == nil {
             for (index, pair) in zip(page.details, layout.details).enumerated() {
                 GameTextLayout.draw(pair.0, in: pair.1, typography: typography,
                     face: page.detailTitles.contains(index) ? .large : .small,

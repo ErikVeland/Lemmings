@@ -798,6 +798,52 @@ private func testActiveBombedBlockerCodableContinuation() throws {
     }
 }
 
+private func testBlockerLookupOwnerPrecedence() throws {
+    var seed = try ClassicDOSSimulation(
+        terrain: floorTerrain(floorY: 40),
+        configuration: configuration(
+            totalLemmings: 3, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 32, y: 39)],
+            maximumX: 191, maximumY: 95
+        )
+    )
+    while seed.lemmings.count < 3 { seed.tick() }
+
+    // At x=44 the earlier owner's right lobe overlaps the later owner's left
+    // lobe. Only an active owner with an anchor can take precedence.
+    for (outcome, ownsField, hasAnchor, expected) in [
+        (ClassicDOSLemmingOutcome.active, true, true, ClassicDOSObjectEffect.forceLeft),
+        (.lost, true, true, .forceRight),
+        (.saved, true, true, .forceRight),
+        (.active, false, true, .forceRight),
+        (.active, true, false, .forceRight),
+    ] {
+        var simulation = try modifiedSimulation(seed) { root in
+            try modifyLemmings(in: &root) { lemmings in
+                lemmings[0]["foot"] = ["x": 43, "y": 40]
+                lemmings[0]["direction"] = ClassicDOSDirection.right.rawValue
+                lemmings[0]["action"] = ClassicDOSAction.walking.rawValue
+                lemmings[0]["animationFrame"] = 0
+                for index in 1...2 {
+                    let x = index == 1 ? 40 : 48
+                    lemmings[index]["foot"] = ["x": x, "y": 40]
+                    lemmings[index]["action"] = ClassicDOSAction.blocking.rawValue
+                    lemmings[index]["ownsBlockerField"] = true
+                    lemmings[index]["blockerAnchor"] = ["x": x, "y": 40]
+                }
+                lemmings[2]["outcome"] = outcome.rawValue
+                lemmings[2]["ownsBlockerField"] = ownsField
+                if !hasAnchor { lemmings[2].removeValue(forKey: "blockerAnchor") }
+            }
+        }
+        simulation.tick()
+        try require(simulation.lemmings[0].objectBelow == expected,
+            "blocker lookup precedence changed for \(outcome), field=\(ownsField), anchor=\(hasAnchor)")
+        try require(simulation.lemmings[0].direction == (expected == .forceLeft ? .left : .right),
+            "overlapping blocker fields applied the wrong direction")
+    }
+}
+
 private func testReleaseRateZeroCanBeRestored() throws {
     var simulation = try ClassicDOSSimulation(
         terrain: emptyTerrain(),
@@ -1275,6 +1321,7 @@ private func run() throws {
     try testFallingOhNoKeepsFixedBlockerAnchor()
     try testBlockerClearingUsesLemmingOrder()
     try testActiveBombedBlockerCodableContinuation()
+    try testBlockerLookupOwnerPrecedence()
     try testReleaseRateZeroCanBeRestored()
     try testCoolingTrapEmitsOneActivation()
     try testExitTakesTheLemmingAtTheMiddle()

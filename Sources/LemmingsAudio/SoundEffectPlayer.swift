@@ -176,6 +176,16 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     engine.pause()
   }
 
+  /// Park a silent graph after the last voice finishes. Playback adapters own retries.
+  @discardableResult public func suspendOutputIfIdle() -> Bool {
+    lock.lock()
+    let idle = !voices.contains { $0.isActive }
+    lock.unlock()
+    guard idle else { return false }
+    suspendOutput()
+    return true
+  }
+
   public func resumeOutput() throws {
     guard isRunning else { return }
     if !engine.isRunning { try engine.start() }

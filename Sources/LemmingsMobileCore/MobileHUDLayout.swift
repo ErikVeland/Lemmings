@@ -41,6 +41,11 @@ public struct MobileHUDLayout: Equatable, Sendable {
         guard panel?.style != .lemmings3 else { return nil }
         return panel?.minimap
     }
+    /// Visible status banks can straddle a division without placing text under it.
+    public var statusBanks: [MobileRect] {
+        MobileDisplayRegions.freeFrames(in: interface.statusFrame, avoiding: reservedRegions)
+            .sorted { $0.minX < $1.minX }
+    }
     public let interface: MobileInterfaceLayout
     public let panel: MobilePanelMetrics?
     /// Whole-number scale of the panel art inside the touch grid used on narrow screens. Zero beside a panel.
@@ -63,12 +68,13 @@ public struct MobileHUDLayout: Equatable, Sendable {
     public static func make(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
                             reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
                             hasPlayer: Bool = false, engineIdentifier: String = "classic",
-                            showsMenuButton: Bool = true, television: Bool = false) -> MobileHUDLayout {
+                            showsMenuButton: Bool = true, television: Bool = false,
+                            topBarInsets: MobileInsets = .init()) -> MobileHUDLayout {
         var layout = makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
             skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
             hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
         layout = topStatusLayout(layout, television: television)
-        guard !showsMenuButton else { return layout }
+        guard !showsMenuButton else { return insettingHeader(layout, by: topBarInsets) }
         let original = layout.interface
         // Console navigation comes from Back or Options/Menu, with no HUD target.
         let status = original.statusFrame.minY == original.safeFrame.minY
@@ -78,16 +84,43 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
             playfieldFrame: original.playfieldFrame, statusFrame: status,
             controlsFrame: original.controlsFrame, controlFrames: Array(original.controlFrames.dropLast()))
-        return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
+        let console = MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
             compactScale: layout.compactScale, speedArrows: layout.speedArrows,
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
             isDiorama: layout.isDiorama, showsMenuButton: false, television: layout.television)
+        return insettingHeader(console, by: topBarInsets)
+    }
+
+    /// Move the visible header and its input/accessibility targets together, without changing gameplay.
+    private static func insettingHeader(_ layout: MobileHUDLayout, by insets: MobileInsets) -> MobileHUDLayout {
+        let original = layout.interface
+        let safe = original.safeFrame
+        guard original.statusFrame.minY == safe.minY,
+              insets.left > 0 || insets.right > 0 else { return layout }
+        let left = safe.minX + max(0, insets.left.mobileFiniteOrZero)
+        let right = safe.maxX - max(0, insets.right.mobileFiniteOrZero)
+        var frames = original.controlFrames
+        var statusRight = min(right, original.statusFrame.maxX)
+        if layout.showsMenuButton, let menu = frames.last, menu.minY == safe.minY {
+            frames[frames.count - 1].x = right - menu.width
+            statusRight = right - menu.width - 4
+        }
+        let status = MobileRect(x: max(left, original.statusFrame.minX), y: original.statusFrame.minY,
+            width: max(0, statusRight - max(left, original.statusFrame.minX)), height: original.statusFrame.height)
+        let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: safe,
+            playfieldFrame: original.playfieldFrame, statusFrame: status,
+            controlsFrame: original.controlsFrame, controlFrames: frames, controlsPlacement: original.controlsPlacement)
+        return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
+            compactScale: layout.compactScale, speedArrows: layout.speedArrows,
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
+            isDiorama: layout.isDiorama, showsMenuButton: layout.showsMenuButton, television: layout.television)
     }
 
     /// One broadcast-style row above gameplay, shared by all mobile engines.
     private static func topStatusLayout(_ layout: MobileHUDLayout, television: Bool) -> MobileHUDLayout {
         let original = layout.interface
         guard !original.controlFrames.isEmpty else { return layout }
+        if layout.isDiorama, layout.portrait != nil { return layout }
         let safe = original.safeFrame
         let oldStatus = original.statusFrame
         let top = MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: rowHeight)
@@ -116,6 +149,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
+        if let divided = dividedLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
+            supportsRewind: supportsRewind, regions: reservedRegions) { return divided }
         if engineIdentifier == "lemmings3", base.orientation == .landscape,
            let panel = lemmings3PanelLayout(base: base, reservedRegions: reservedRegions,
                                             supportsRewind: supportsRewind, skillCount: skillCount) {
@@ -124,7 +159,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
         if base.orientation == .landscape, safe.width >= 400, safe.height >= 258 {
             let landscape = landscapeLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
                                             supportsRewind: supportsRewind, reservedRegions: reservedRegions)
-            if portraitControlsFit(landscape, avoiding: reservedRegions) { return landscape }
+            if let skills = landscape.portrait,
+               (safe.height < 308 || skillCount > 8 || skills.skillContentWidth <= skills.skills.width + 0.001),
+               portraitControlsFit(landscape, avoiding: reservedRegions) { return landscape }
         }
         if safe.width >= 308, safe.height >= 308 {
             let portrait = portraitLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
@@ -192,6 +229,123 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                    minimap: CGRect(x: panelFrame.minX + 256 * scale, y: panelFrame.minY + 18 * scale,
                                                    width: 60 * scale, height: 20 * scale)),
                                compactScale: 0, speedArrows: arrows, reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
+    }
+
+    /// Gameplay spans the top. Controls fill the lower area, with targets clear of the division.
+    private static func dividedLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
+                                      supportsRewind: Bool, regions: [MobileReservedRegion]) -> MobileHUDLayout? {
+        let safe = base.safeFrame
+        guard let division = regions.first(where: {
+            $0.kind == .division && $0.frame.intersects(safe)
+                && (($0.frame.height >= safe.height * 0.7 && $0.frame.minX > safe.minX && $0.frame.maxX < safe.maxX)
+                    || ($0.frame.width >= safe.width * 0.7 && $0.frame.minY > safe.minY && $0.frame.maxY < safe.maxY))
+        }) else { return nil }
+        let vertical = division.frame.height > division.frame.width
+        let lower = vertical
+            ? MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height)
+            : MobileRect(x: safe.minX, y: division.frame.maxY, width: safe.width, height: safe.maxY - division.frame.maxY)
+        let paneFrames = vertical ? [
+            MobileRect(x: safe.minX, y: lower.minY, width: division.frame.minX - safe.minX, height: lower.height),
+            MobileRect(x: division.frame.maxX, y: lower.minY, width: safe.maxX - division.frame.maxX, height: lower.height)
+        ] : [lower]
+        let counts = vertical ? [(skillCount + 1) / 2, skillCount / 2] : [skillCount]
+        let preferredColumns = !vertical && lower.width < lower.height * 2
+            ? max(1, (skillCount + 1) / 2) : max(1, skillCount)
+        func columns(in width: Double, count: Int) -> Int {
+            max(1, min(count, preferredColumns, Int((width + 2) / 46)))
+        }
+        let rows = zip(paneFrames, counts).map { pane, count in
+            max(1, Int(ceil(Double(count) / Double(columns(in: pane.width, count: count)))))
+        }.max() ?? 1
+        let minimumHeight = Double(rows) * 82 + 94
+        let height = vertical ? max(minimumHeight, floor(safe.height * 0.38)) : lower.height
+        guard height >= minimumHeight, safe.height - height - 44 >= 88 else { return nil }
+        let deck = MobileRect(x: safe.minX, y: safe.maxY - height, width: safe.width, height: height)
+        var banks: [MobileRect] = []
+        for pane in paneFrames {
+            let area = MobileRect(x: pane.minX, y: deck.minY, width: pane.width, height: deck.height)
+            // Prefer a full-height bank so the controls still reach the lower edge beside a cutout.
+            let candidates = MobileDisplayRegions.freeFrames(in: area, avoiding: regions)
+                .filter { $0.width >= (vertical ? 160 : 308) && $0.height >= minimumHeight }
+            let fullHeight = candidates.filter { $0.minY == area.minY && $0.maxY == area.maxY }
+            guard let bank = (fullHeight.isEmpty ? candidates : fullHeight)
+                .max(by: { $0.width * $0.height < $1.width * $1.height }) else { return nil }
+            banks.append(bank)
+        }
+        // All rows use the same vertical bounds, including when a cutout narrows one bank.
+        let top = banks.map(\.minY).max() ?? deck.minY
+        let bottom = banks.map(\.maxY).min() ?? deck.maxY
+        let minimumSkills = Double(rows) * 80 + Double(rows - 1) * 2
+        let navigationHeight = min(max(44, floor((bottom - top) * 0.20)), bottom - top - minimumSkills - 52)
+        let transportHeight = min(max(48, floor((bottom - top) * 0.28)), bottom - top - navigationHeight - minimumSkills - 4)
+        let skillY = top + navigationHeight + 2
+        let transportY = bottom - transportHeight
+        let skillHeight = transportY - skillY - 2
+        guard skillHeight >= Double(rows) * 80 + Double(rows - 1) * 2 else { return nil }
+        let skillArea = CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight)
+        var skills: [MobileRect] = []
+        for (bank, count) in zip(banks, counts) {
+            let columns = columns(in: bank.width, count: count)
+            let bankRows = max(1, Int(ceil(Double(count) / Double(columns))))
+            let rowHeight = (skillHeight - Double(bankRows - 1) * 2) / Double(bankRows)
+            for index in 0..<count {
+                let row = index / columns
+                let rowCount = min(columns, count - row * columns)
+                let width = (bank.width - Double(rowCount - 1) * 2) / Double(rowCount)
+                skills.append(MobileRect(x: bank.minX + Double(index % columns) * (width + 2),
+                    y: skillY + Double(row) * (rowHeight + 2), width: width, height: rowHeight))
+            }
+        }
+        let leading = banks[0], trailing = banks[banks.count - 1]
+        let navigationCount = supportsRewind ? 3 : 1
+        let navigationWidth = vertical ? leading.width : floor(leading.width * 0.42)
+        let navigationCell = (navigationWidth - Double(navigationCount - 1) * 4) / Double(navigationCount)
+        guard navigationCell >= 44 else { return nil }
+        let navigation = (0..<navigationCount).map {
+            MobileRect(x: leading.minX + Double($0) * (navigationCell + 4), y: top,
+                       width: navigationCell, height: navigationHeight)
+        }
+        let mapX = vertical ? trailing.minX : leading.minX + navigationWidth + 4
+        let map = CGRect(x: mapX, y: top, width: trailing.maxX - mapX, height: navigationHeight)
+        let rateWidth = hasRate ? max(116, vertical ? floor(leading.width / 2) - 2 : floor(leading.width / 4) - 3) : 0
+        let speedX = leading.minX + (hasRate ? rateWidth + 4 : 0)
+        let speedWidth = vertical ? leading.maxX - speedX
+            : (leading.width - rateWidth - (hasRate ? 12 : 8)) / 3
+        let speed = MobileRect(x: speedX, y: transportY, width: speedWidth, height: transportHeight)
+        let nukeX = vertical ? trailing.minX : speed.maxX + 4
+        let transportWidth = (trailing.maxX - nukeX - 4) / 2
+        let nuke = MobileRect(x: nukeX, y: transportY, width: transportWidth, height: transportHeight)
+        let pause = MobileRect(x: nuke.maxX + 4, y: transportY,
+                              width: trailing.maxX - nuke.maxX - 4, height: transportHeight)
+        var frames: [MobileRect] = []
+        let value = hasRate ? CGRect(x: leading.minX + (rateWidth - 28) / 2, y: transportY,
+                                    width: 28, height: transportHeight) : nil
+        if let value {
+            frames += [MobileRect(x: leading.minX, y: transportY, width: value.minX - leading.minX, height: transportHeight),
+                       MobileRect(x: value.maxX, y: transportY, width: leading.minX + rateWidth - value.maxX, height: transportHeight)]
+        }
+        frames += skills + [pause, nuke, speed]
+        frames += navigation
+        let header = MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: 44)
+        guard let menuBank = MobileDisplayRegions.freeFrames(in: header, avoiding: regions)
+            .filter({ $0.width >= 44 && $0.height == 44 }).max(by: { $0.maxX < $1.maxX }) else { return nil }
+        let menu = MobileRect(x: menuBank.maxX - 44, y: safe.minY, width: 44, height: 44)
+        frames.append(menu)
+        let status = MobileRect(x: safe.minX, y: safe.minY, width: menu.minX - safe.minX - 4, height: 44)
+        guard frames.allSatisfy({ frame in
+            frame.width >= 44 - 0.001 && frame.height >= 44
+                && regions.allSatisfy { !frame.intersects($0.frame) }
+        }) else { return nil }
+        let interface = MobileInterfaceLayout(orientation: base.orientation, safeFrame: safe,
+            playfieldFrame: MobileRect(x: safe.minX, y: header.maxY, width: safe.width,
+                                      height: (vertical ? deck.minY : division.frame.minY) - header.maxY),
+            statusFrame: status, controlsFrame: deck, controlFrames: frames)
+        let artWidth = skills.map(\.width).min() ?? 44
+        let artHeight = skills.map(\.height).min() ?? 80
+        let scale = max(1, min(6, floor(min((artWidth - 4) / 16, (artHeight - 34) / 24))))
+        return MobileHUDLayout(portrait: Portrait(skills: skillArea, skillContentWidth: safe.width,
+            rateValue: value, minimap: map), interface: interface, panel: nil, compactScale: scale,
+            speedArrows: [], reservedRegions: regions, supportsRewind: supportsRewind, isDiorama: true)
     }
 
     private static func lemmings3PanelLayout(base: MobileInterfaceLayout,

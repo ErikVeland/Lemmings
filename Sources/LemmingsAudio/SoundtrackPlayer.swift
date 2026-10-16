@@ -239,13 +239,19 @@ import NxlvKit
     player = nil
   }
 
-  public func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+    if immediately {
+      vinylRamp.cancel()
+      vinylStopping = false; vinylHeld = false
+      vinylPendingIndex = nil; vinylReleaseRequested = false
+      player?.setVinyl(rate: 1, gain: 1)
+    }
     player?.cancelRewind()
-    guard !outputSuspended || pauseUsesRhythm != rhythmOnly else { return }
+    guard immediately || !outputSuspended || pauseUsesRhythm != rhythmOnly else { return }
     if !outputSuspended { resumeAfterSleep = isPlaying }
     outputSuspended = true
     pauseUsesRhythm = rhythmOnly
-    player?.suspendOutput(rhythmOnly: rhythmOnly)
+    player?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
   }
 
   public func resumeOutput() {

@@ -179,7 +179,9 @@ public final class MusicFileDeck {
   private var playbackGeneration = 0
   private var finishedLoops = 0
   public var completedLoops: Int {
-    guard started, let time = player.lastRenderTime.flatMap({ player.playerTime(forNodeTime: $0) }) else { return finishedLoops }
+    guard started, let renderTime = player.lastRenderTime,
+      renderTime.isSampleTimeValid || renderTime.isHostTimeValid,
+      let time = player.playerTime(forNodeTime: renderTime) else { return finishedLoops }
     let first: (start: Int64, count: Int64) = profile?.segment(first: true, repeats: repeats, fileFrames: file.length,
       fileRate: file.processingFormat.sampleRate) ?? (0, file.length)
     let loop: (start: Int64, count: Int64) = profile?.segment(first: false, repeats: repeats, fileFrames: file.length,
@@ -227,6 +229,7 @@ public final class MusicFileDeck {
   /// The player's timeline excludes pauses and advances in source samples.
   public var sourceSeconds: Double {
     guard let renderTime = player.lastRenderTime,
+      renderTime.isSampleTimeValid || renderTime.isHostTimeValid,
       let time = player.playerTime(forNodeTime: renderTime), time.sampleRate > 0 else { return 0 }
     let elapsed = Double(time.sampleTime) / time.sampleRate
     let sourceLoopApplies = profile?.sampleRate == file.processingFormat.sampleRate
@@ -406,8 +409,23 @@ public final class MusicFileDeck {
   }
 
   /// A vinyl stop slows the source, lets the reverb ring out, then parks the engine.
-  public func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
     cancelRewind()
+    if immediately {
+      guard started else { return }
+      rewindAudio.setRecording(false)
+      if !outputSuspended { resumeAfterSuspend = player.isPlaying }
+      outputSuspended = true
+      fadeTask?.cancel(); fadeTask = nil
+      rhythmTask?.cancel(); rhythmTask = nil
+      rhythmMode = false
+      rhythmPlayer.stop()
+      musicLayer.outputVolume = 1; rhythmLayer.outputVolume = 0
+      player.pause()
+      engine.pause()
+      reverb.wetDryMix = restingWet
+      return
+    }
     if rhythmOnly, rhythmBuffer != nil, started {
       if outputSuspended { resumeOutput() }
       setRhythmMode(true)

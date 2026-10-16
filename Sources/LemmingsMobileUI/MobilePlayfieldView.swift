@@ -235,7 +235,7 @@ import UIKit
         insertSubview(view, belowSubview: bombCountdownView)
         hdr = view
     }
-    func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false }
+    func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
     func resetTransientEffects() { hdr?.clear(); explosionBirths.removeAll() }
     func releaseEffectResources() {
         releaseHDR()

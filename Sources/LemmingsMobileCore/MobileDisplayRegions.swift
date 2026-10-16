@@ -35,6 +35,48 @@ public enum MobileDisplayRegions {
         return frames
     }
 
+    /// Full-height banks keep vertically scrolling Home lists clear of cutouts and the hinge.
+    public static func bookPanes(in safe: MobileRect, avoiding regions: [MobileReservedRegion]) -> [MobileRect] {
+        guard let division = regions.first(where: {
+            $0.kind == .division && $0.frame.height >= safe.height * 0.7
+                && $0.frame.height > $0.frame.width && $0.frame.minX > safe.minX && $0.frame.maxX < safe.maxX
+        }) else { return [] }
+        let panes = [
+            MobileRect(x: safe.minX, y: safe.minY, width: division.frame.minX - safe.minX, height: safe.height),
+            MobileRect(x: division.frame.maxX, y: safe.minY, width: safe.maxX - division.frame.maxX, height: safe.height)
+        ]
+        let banks = panes.compactMap { pane in
+            freeFrames(in: pane, avoiding: regions)
+                .filter { $0.width >= 280 && $0.minY == safe.minY && $0.maxY == safe.maxY }
+                .max { $0.width < $1.width }
+        }
+        return banks.count == 2 ? banks : []
+    }
+
+    /// Each tabletop screen has its own scroll surface, clear of the horizontal hinge.
+    public static func tablePanes(in safe: MobileRect, avoiding regions: [MobileReservedRegion]) -> [MobileRect] {
+        guard let division = regions.first(where: {
+            $0.kind == .division && $0.frame.width >= safe.width * 0.7
+                && $0.frame.width > $0.frame.height && $0.frame.minY > safe.minY && $0.frame.maxY < safe.maxY
+        }) else { return [] }
+        let panes = [
+            MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: division.frame.minY - safe.minY),
+            MobileRect(x: safe.minX, y: division.frame.maxY, width: safe.width, height: safe.maxY - division.frame.maxY)
+        ]
+        let banks = panes.compactMap { pane in
+            freeFrames(in: pane, avoiding: regions).filter { $0.width >= 280 && $0.height >= 200 }
+                .max { $0.width * $0.height < $1.width * $1.height }
+        }
+        return banks.count == 2 ? banks : []
+    }
+
+    /// Results lead on the left in book mode and above the hinge in tabletop mode.
+    public static func resultPanes(in safe: MobileRect, avoiding regions: [MobileReservedRegion]) -> [MobileRect] {
+        let book = bookPanes(in: safe, avoiding: regions)
+        if book.count == 2, book.allSatisfy({ $0.height >= 200 }) { return book }
+        return tablePanes(in: safe, avoiding: regions)
+    }
+
     public static func menuFrame(in safe: MobileRect, avoiding regions: [MobileReservedRegion]) -> MobileRect {
         let frames = freeFrames(in: safe, avoiding: regions)
         let readable = frames.filter { $0.width >= 280 && $0.height >= 88 }

@@ -17,6 +17,7 @@ import UIKit
     var playerRole = MobileTurnArt.Role.current { didSet { if oldValue != playerRole { rebuild() } } }
     var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
     private var televisionPageIndex = 0
+    private var measuredViewport = CGSize.zero
     private var televisionViewport = CGSize.zero
     private var televisionScaleCache: (page: GameFrontEnd.Page, width: CGFloat, height: CGFloat, preferred: CGFloat, scale: CGFloat)?
     private var displayedPage: GameFrontEnd.Page {
@@ -32,17 +33,28 @@ import UIKit
         #endif
         return result
     }
+    var splitResult = false
     var boxesHome = false {
         didSet { if boxesHome != oldValue { setNeedsLayout(); setNeedsDisplay() } }
     }
-    private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat) -> GameFrontEnd.Layout {
+    var bookHomePanes: [CGRect] = [] {
+        didSet {
+            guard bookHomePanes != oldValue else { return }
+            pageLayout = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
+    }
+    private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat, scale: CGFloat) -> GameFrontEnd.Layout {
         #if os(tvOS)
         if page.home { return TVMenuPresentation.homeLayout(page, width: width, height: minimumHeight) }
         if page.pause != nil {
             return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight, television: true)
         }
         #endif
-        return GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight, boxedHome: boxesHome)
+        let panes = bookHomePanes.map { $0.applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale)) }
+        return GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight,
+                                   boxedHome: boxesHome, bookHomePanes: panes, fillsResultPane: splitResult)
     }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
@@ -127,6 +139,10 @@ import UIKit
         return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height, television: true)
             : MobileSettingsArt.interfaceScale(setting, width: width, television: true)
         #else
+        if splitResult, page.result {
+            return MobileResultAchievementsArt.resultScale(MobileSettingsArt.interfaceScale(setting, width: width),
+                page: displayedPage, width: width, height: height)
+        }
         return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height)
             : MobileSettingsArt.interfaceScale(setting, width: width)
         #endif
@@ -142,6 +158,13 @@ import UIKit
     }
     #endif
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
+        let measured = CGSize(width: width, height: minimumHeight)
+        if measuredViewport != measured {
+            measuredViewport = measured
+            pageLayout = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
         #if os(tvOS)
         let viewport = CGSize(width: width, height: minimumHeight)
         if televisionViewport != viewport {
@@ -150,7 +173,7 @@ import UIKit
         }
         #endif
         let scale = interfaceScale(width: width, viewportHeight: minimumHeight)
-        let size = layoutPage(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
+        let size = layoutPage(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale, scale: scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
     override func layoutSubviews() {
@@ -158,12 +181,9 @@ import UIKit
         let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
-        #if os(tvOS)
-        let minimumHeight = televisionViewport.height > 0 ? televisionViewport.height : bounds.height
-        #else
-        let minimumHeight = page.pause != nil ? (superview as? UIScrollView)?.bounds.height ?? bounds.height : bounds.height
-        #endif
-        var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale)
+        let minimumHeight = (superview as? UIScrollView)?.bounds.height
+            ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)
+        var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale, scale: scale)
         if page.pause != nil, let scroll = superview as? UIScrollView {
             layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
                 width: scroll.bounds.width / scale, height: scroll.bounds.height / scale))
@@ -181,6 +201,11 @@ import UIKit
         for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
             element.accessibilityLabel = text
+            if let items = page.achievementItems,
+               let index = page.details.indices.first(where: { page.details[$0] == text }), index % 2 == 0,
+               let star = items[index / 2].star {
+                element.accessibilityValue = star == 2 ? L10n.text("Unknown") : star == 1 ? L10n.text("Earned") : L10n.text("Not earned")
+            }
             element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = frame.applying(transform)
             elements.append(element)
@@ -192,7 +217,25 @@ import UIKit
             element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
             elements.append(element)
         }
-        accessibilityElements = elements + targets
+        if let heading = layout.libraryHeading {
+            let element = UIAccessibilityElement(accessibilityContainer: self)
+            element.accessibilityLabel = L10n.text("Levels")
+            element.accessibilityTraits = .header
+            element.accessibilityFrameInContainerSpace = heading.applying(transform)
+            elements.append(element)
+        }
+        if page.home, bookHomePanes.count == 2 {
+            let rightEdge = bookHomePanes[1].minX
+            let positioned = elements.compactMap { element -> (element: Any, frame: CGRect)? in
+                guard let item = element as? UIAccessibilityElement else { return nil }
+                return (item, item.accessibilityFrameInContainerSpace)
+            } + targets.map { (element: $0 as Any, frame: $0.frame) }
+            accessibilityElements = positioned.sorted {
+                let a = $0.frame.midX >= rightEdge ? 1 : 0
+                let b = $1.frame.midX >= rightEdge ? 1 : 0
+                return a == b ? $0.frame.minY < $1.frame.minY : a < b
+            }.map(\.element)
+        } else { accessibilityElements = elements + targets }
         setNeedsDisplay()
     }
     private func rebuild() {
@@ -321,10 +364,12 @@ import UIKit
         context.saveGState()
         defer { context.restoreGState() }
         context.scaleBy(x: scale, y: scale)
-        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
+        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: ((superview as? UIScrollView)?.bounds.height
+                ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)) / scale, scale: scale)
         guard let typography = MobileGameArt.typography else {
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
+            if let heading = layout.libraryHeading { MobilePixelText.draw(L10n.text("Levels"), in: heading, palette: .green) }
             for target in layout.targets {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))

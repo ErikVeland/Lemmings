@@ -401,6 +401,27 @@ private func testWalkerJumperAndShimmier() throws {
                 "A grounded Shimmier assignment did not enter the Reacher action.")
 }
 
+private func testOverlappingBlockerForcePrecedence() throws {
+    for (positions, expected): ([Int], NeoLemmixDirection) in [
+        ([22, 30], .left), ([30, 22], .right),
+    ] {
+        let preplaced = (positions + [26]).map {
+            NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: $0, y: 48))
+        }
+        var simulation = try NeoLemmixSimulation(
+            terrain: terrain(),
+            configuration: configuration(total: 3, preplaced: preplaced)
+        )
+        for id in 0..<2 {
+            try require(simulation.assign(skill: .blocker, to: id).wasAssigned,
+                        "Overlapping force-lobe Blocker assignment failed.")
+        }
+        simulation.tick()
+        try require(try lemming(simulation, id: 2).direction == expected,
+                    "The last matching Blocker force did not take precedence.")
+    }
+}
+
 private func testBlockerAndConstructiveSkills() throws {
     let two = [
         NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .right),
@@ -1795,6 +1816,52 @@ private func testCodableContinuation() throws {
     try require(decoded.snapshot() == original.snapshot(), "Decoded snapshot diverged.")
 }
 
+private func testCompletionPopulationBoundaries() throws {
+    var empty = try NeoLemmixSimulation(
+        terrain: terrain(), configuration: configuration(total: 0, preplaced: [])
+    )
+    try require(empty.isComplete && empty.didWin, "An empty level did not complete.")
+    try require(empty.tick() == [.completed(didWin: true)],
+                "An empty level did not report completion once.")
+    try require(empty.tick().isEmpty && empty.tickCount == 0,
+                "A completed level advanced or reported completion twice.")
+
+    let entrance = NeoLemmixEntrance(id: 0, position: .init(x: 20, y: 10))
+    var pending = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 1, required: 1, entrances: [entrance],
+                                     preplaced: [], timeLimitTicks: 1)
+    )
+    try require(pending.activeLemmings.isEmpty && !pending.isComplete && !pending.didWin,
+                "Unreleased lemmings were treated as a completed level.")
+    try require(pending.tick().contains(.completed(didWin: false)),
+                "Expiration did not complete the pending population.")
+    try require(pending.isComplete && !pending.didWin && pending.tick().isEmpty,
+                "Expired completion changed its result or reported twice.")
+
+    for positions in [[127, 20], [20, 127]] {
+        let preplaced = positions.map {
+            NeoLemmixPreplacedLemming(position: .init(x: $0, y: 48))
+        }
+        var mixed = try NeoLemmixSimulation(
+            terrain: terrain(), configuration: configuration(total: 2, preplaced: preplaced)
+        )
+        mixed.run(ticks: 4)
+        try require(mixed.lemmings.contains { !$0.isActive } && mixed.activeLemmings.count == 1,
+                    "The mixed-population fixture did not retain one active lemming.")
+        try require(!mixed.isComplete, "A mixed population completed while an actor was active.")
+        let survivor = try requireValue(mixed.activeLemmings.first, "Missing active lemming.")
+        try require(mixed.assign(skill: .cloner, to: survivor.id).wasAssigned,
+                    "The completion fixture could not create a clone.")
+        try require(mixed.clonedCount == 1 && mixed.activeLemmings.count == 2 && !mixed.isComplete,
+                    "The active clone changed completion of the released population.")
+        mixed.enqueue(.nuke)
+        mixed.run(ticks: 120)
+        try require(mixed.isComplete && mixed.activeLemmings.isEmpty,
+                    "A removed population did not complete.")
+    }
+}
+
 private func testNukeAndCompletion() throws {
     var simulation = try walkingSimulation()
     simulation.enqueue(.nuke)
@@ -1812,6 +1879,7 @@ private let tests: [(String, () throws -> Void)] = [
     ("preplaced traits and core movement", testPreplacedTraitsAndCoreMovement),
     ("permanent skills", testPermanentSkillAssignments),
     ("walker, jumper, and shimmier", testWalkerJumperAndShimmier),
+    ("overlapping blocker force precedence", testOverlappingBlockerForcePrecedence),
     ("blocker and constructive skills", testBlockerAndConstructiveSkills),
     ("destructive skills and materials", testDestructiveSkillsAndMaterials),
     ("bomber and stoner", testBomberAndStoner),
@@ -1834,6 +1902,7 @@ private let tests: [(String, () throws -> Void)] = [
     ("state changers", testStateChangers),
     ("portals", testPortals),
     ("Codable continuation", testCodableContinuation),
+    ("completion population boundaries", testCompletionPopulationBoundaries),
     ("nuke and completion", testNukeAndCompletion),
 ]
 

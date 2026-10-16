@@ -18,6 +18,23 @@ import UIKit
         return []
     }
 
+    /// Extra horizontal clearance for the header, relative to the ordinary safe area.
+    static func topBarInsets(in view: UIView) -> MobileInsets {
+        #if os(iOS)
+        let safe = view.safeAreaInsets
+        guard #available(iOS 26.0, *) else { return .init() }
+        let corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .horizontal))
+        var left = corners.left, right = corners.right
+        if #available(iOS 27.1, *) {
+            let bar = view.edgeInsets(for: .bar(onEdge: UIRectEdge.top, extent: MobileHUDLayout.rowHeight))
+            left = max(left, bar.left); right = max(right, bar.right)
+        }
+        return MobileInsets(left: max(0, left - safe.left), right: max(0, right - safe.right))
+        #else
+        return .init()
+        #endif
+    }
+
     static func menuFrame(in view: UIView) -> CGRect {
         let safe = view.safeAreaLayoutGuide.layoutFrame
         let rect = MobileDisplayRegions.menuFrame(

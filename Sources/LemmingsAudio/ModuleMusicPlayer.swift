@@ -182,7 +182,10 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var bufferedSeconds: Double {
     guard let node = sourceNode, isRunning else { return 0 }
     bufferClockLock.lock(); let scheduled = scheduledFrames; bufferClockLock.unlock()
-    let played = node.lastRenderTime.flatMap { node.playerTime(forNodeTime: $0) }?.sampleTime ?? 0
+    let played = node.lastRenderTime.flatMap { time -> AVAudioTime? in
+      guard time.isSampleTimeValid || time.isHostTimeValid else { return nil }
+      return node.playerTime(forNodeTime: time)
+    }?.sampleTime ?? 0
     return Double(min(Int64(bufferedFrameCount * bufferCount), max(0, scheduled - played))) / sampleRate
   }
 
@@ -220,9 +223,24 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   /// Keep native percussion, or slow the source into a short vinyl stop.
-  public func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
     cancelRewind()
     guard isRunning else { return }
+    if immediately {
+      resetVinyl()
+      pauseWorkItem?.cancel(); pauseWorkItem = nil
+      rewindAudio.setRecording(false)
+      lock.lock()
+      outputSuspended = true
+      pauseFadeFrames = 0
+      spinUpFrames = 0
+      rhythmTarget = 0
+      rhythmAmount = 0
+      lock.unlock()
+      engine.pause()
+      reverb.wetDryMix = 0
+      return
+    }
     let queuedFrames = min(bufferedFrameCount * bufferCount, Int(bufferedSeconds * sampleRate))
     lock.lock()
     if rhythmOnly, player?.hasRhythm == true {
@@ -257,6 +275,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   public func resumeOutput() throws {
     cancelRewind()
     guard isRunning else { return }
+    rewindAudio.setRecording(true)
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
     lock.lock()
