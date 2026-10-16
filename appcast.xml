@@ -3,6 +3,32 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.0.3</title>
+            <pubDate>Fri, 16 Oct 2026 11:11:38 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>86</sparkle:version>
+            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release fixes language selection in Settings.</p>
+<h3>Language selection</h3>
+<p>Language buttons now accept clicks across their visible width. Previously, native radio-button input did not match the centred pixel captions, so clicking a language could leave System default selected.</p>
+<p>Open <b>Settings &gt; Gameplay &gt; Language</b>. Select a language to preview it. Choose <b>Apply</b> to save the choice or <b>Back</b> to restore the previous language. System default continues to follow the device language. Keyboard navigation, accessibility roles and the original pixel artwork are retained. Reopening What's New also uses the selected language immediately.</p>
+<h3>Compatibility and known limits</h3>
+<p>The public app targets Apple silicon and Intel Macs running macOS 12.3 or later. The slim fresh-install download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. This update does not change engine rules, level content or the existing campaign and source-fidelity limits.</p>
+<p>The eight translated language packs remain AI-assisted drafts. Human language review, physical controllers, VoiceOver, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their recorded validation gaps. Mobile and TV releases have separate gates.</p>
+<p class="meta">Build: 86<br>Release commit: b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76<br>Release base: v2.0.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-2.0.3-build86.zip" length="2054422043" type="application/octet-stream" sparkle:edSignature="bYg/LzSigyg4+jqJ3NbCEjr/zrLk5B4oz2rXock/CyNRPhexS20qIQrn9dN37fV4nIEkt8TYgbC03xvoACQDAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from85.delta" sparkle:deltaFrom="85" length="473790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="QcR93IrKrnU0NEWehhqZyHXdDvKvETcgtdnbj/oD7iRCBKK+mLyou08+FluoBfO/ktlW58KlHfo33AcFcQ7PCQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from84.delta" sparkle:deltaFrom="84" length="3174762" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="juvCqU/TvyGqp5K/Q+aFu6++90jUxLACvsohBpqT3JpEiiN3A2DbE0vIZyfG6WqEHzI2Y3DjuNqDxHNoda8uBw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from83.delta" sparkle:deltaFrom="83" length="3640086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="vC0Lg6WOiaPOAoQ7FfQtJo2AQodHyEpY0cDEKG75vetRmiDwtlKvsJ+bMhQgGWms6XS7M3mKqlf6D3YdMoZXBA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from82.delta" sparkle:deltaFrom="82" length="4496358" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="3hTit1JNXC08EcDdYNdnVetONrKD0fYGUUYRIJtcTJBJcAv5KMJSFTdZg/QdUpLF6g9zNZqYYa5LeUrbkhu4Cw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from81.delta" sparkle:deltaFrom="81" length="7869386" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="/VSa+F6R8AHjd5cEadg/s+AiXyE916VkBNvrN95FT0HKhPbFXnnpf6E0iqF5j6mNPX+sh5BN5CDb5rTwYfltBg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.2</title>
             <pubDate>Fri, 16 Oct 2026 02:19:56 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
