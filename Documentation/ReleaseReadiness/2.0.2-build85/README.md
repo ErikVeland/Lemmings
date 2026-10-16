@@ -1,6 +1,6 @@
 # Macintosh 2.0.2 build 85
 
-Status: [2.0.2 is public](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.2). The full and slim universal packages have Developer ID signatures, accepted Apple notarisation tickets and stapled tickets. Quarantined extractions pass Gatekeeper. Remote package digests, the build-84 delta and the live signed update feed are verified.
+Status: [2.0.2 is public](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.2). The full and slim universal packages have Developer ID signatures, accepted Apple notarisation tickets and stapled tickets. Quarantined extractions pass Gatekeeper. Remote package digests, the deltas from the five recent published builds and the live signed update feed are verified.
 
 Release source: `f956df19bc4ebf4b484c6553eda3157a81a258ab`. The owner requested the 2.0.2 fixes and publication. Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta. Strict bundled-content closure and hardware acceptance remain open.
 
@@ -53,3 +53,25 @@ The rescue refresh preserves 294 exact-condition certificates and 315 best-known
 [Publication receipts](publication.json) record accepted Apple tickets, archive hashes, remote digests, release-tag identity and live feed verification. [Delta verification](delta-verification.json) checks the Ed25519 signature and all 18,558 reconstructed payload files. All fifteen previous feed entries remain unchanged. [Downloads verification](downloads-final.json) records the delivered notarised app and both public archives.
 
 The optional detailed Apple submission-log fetch could not find its saved keychain credential after publication. Accepted submission receipts, stapled tickets and successful Gatekeeper checks are retained. This does not change the notarisation or live-release verification.
+
+## Skipped-version delta correction — 16 October 2026
+
+The initial 2.0.2 feed offered a delta only from 2.0.1. Users on 2.0 therefore
+received the full archive. The repaired feed offers direct signed patches from
+2.0.1 (84), 2.0 (83), 1.9.7 (82), 1.9.6 (81) and 1.9.4 (79). The 2.0 patch is
+3,619,614 bytes. The full and slim archives, original build-84 patch, release
+notes, source tag and earlier feed entries retain their published identities.
+
+[Verification receipts](skipped-version-deltas.json) record signed source
+archives, patch signatures, public download hashes, Sparkle eligibility metadata
+and exact reconstruction of all 18,558 shipping files for every patch. File
+permissions, symlinks and native code signatures also pass. The live main and
+raw Sparkle feeds contain all five update paths.
+
+Generation now stages the five most recent published full archives. Generation,
+publication and the data-independent release check reject missing direct deltas.
+The policy counts published releases, including gaps in build numbers, and uses
+all earlier releases when fewer than five exist. Historical feed entries keep
+their original coverage. The old feed was rejected for missing builds 83, 82, 81
+and 79. [All 86 release-tooling tests](skipped-version-checks.log), the publication
+gate and the data-independent release check pass with the repaired feed.
