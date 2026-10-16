@@ -1,11 +1,10 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The current macOS release is 2.0.2 build 85, with Hot Seat ghosts, clearer
-results and refreshed Classic hints.
-The next maintenance candidate is **2.0.3 build 86**. It fixes language selection.
-See the [draft notes](Documentation/ReleaseNotes-2.0.3-build86.md) and
-[candidate checks](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
+The current macOS release is **2.0.3 build 86**. It fixes language selection
+and refreshes translated release notes and repository checks.
+See the [release notes](Documentation/ReleaseNotes-2.0.3-build86.md) and
+[release evidence](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
 Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
 work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
@@ -20,11 +19,11 @@ before distributing a build.
 
 ## Download
 
-Download [2.0.2 build 85](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.2),
+Download [2.0.3 build 86](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.3),
 the current signed and notarised macOS release for Apple silicon and Intel.
 Installed copies update automatically. Read the
-[2.0.2 notes](Documentation/ReleaseNotes-2.0.2-build85.md),
-[release evidence](Documentation/ReleaseReadiness/2.0.2-build85/README.md) and
+[2.0.3 notes](Documentation/ReleaseNotes-2.0.3-build86.md),
+[release evidence](Documentation/ReleaseReadiness/2.0.3-build86/README.md) and
 the [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite

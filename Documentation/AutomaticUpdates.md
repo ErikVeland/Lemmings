@@ -23,15 +23,11 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 2.0.2 build 85 is the current release. The
-[2.0.2 distribution record](ReleaseReadiness/2.0.2-build85/README.md) covers
-the notarised archives, signed live feed and validation limits. Publish an
-appcast only with its matching signed and notarised archive.
-
-Version 2.0.3 build 86 is the next maintenance candidate. Its
-[release record](ReleaseReadiness/2.0.3-build86/README.md) separates passed source
-checks from package and hardware checks. The public feed continues to describe
-2.0.2 until signed 2.0.3 archives and their deltas are ready.
+Public 2.0.3 build 86 is the current release. Its
+[release record](ReleaseReadiness/2.0.3-build86/README.md) covers both notarised
+archives, the signed live feed and all five deltas from builds 85, 84, 83, 82
+and 81. The record separates source and package checks from open hardware
+checks. Publish an appcast only with its matching signed and notarised archive.
 
 Public releases require a slim fresh-install download. It includes the
 54 essential music versions and offers missing optional libraries on first

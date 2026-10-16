@@ -1,10 +1,10 @@
 # Modern Lemmings release plan
 
-Updated 16 October 2026. This plan separates the published Mac release, the next maintenance candidate and the remaining platform and fidelity work.
+Updated 16 October 2026. This plan records the published Mac release and the remaining platform and fidelity work.
 
 The next platform milestone is a full 2.0 iOS release for iPad, iPhone and
 iPhone Duo, with Classic, Lemmings 2 and Lemmings 3 at launch. Macintosh
-2.0.2 build 85 is public, and 2.0.3 build 86 is the next maintenance candidate.
+2.0.3 build 86 is public, with the language-picker fix and repository maintenance.
 The earlier 1.3 mobile work remains historical development evidence. See [release scope](ReleaseScope.md) for current
 release claims and the [2.0 roadmap](2.0Roadmap.md) for the delivery sequence.
 

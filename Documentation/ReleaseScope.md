@@ -1,12 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public Macintosh release is 2.0.2 build 85. Its universal packages
+The current public Macintosh release is 2.0.3 build 86. Its universal packages
 are signed, notarised and accepted by Gatekeeper. The signed update feed and
-build-84 delta are live and verified. See the [2.0.2 distribution evidence](ReleaseReadiness/2.0.2-build85/README.md).
+five deltas from builds 85, 84, 83, 82 and 81 are live and verified. See the [2.0.3 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md).
 This release retains the existing classifications and documented limits. The stricter bundled-content closure remains open.
 
-The next maintenance candidate is 2.0.3 build 86. It fixes the Mac language
+Version 2.0.3 build 86 fixes the Mac language
 picker without changing engine rules or bundled levels. Source checks and
 package status are recorded in the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 

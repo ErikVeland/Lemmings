@@ -1,7 +1,7 @@
-# Macintosh 2.0.3 build 86 candidate
+# Macintosh 2.0.3 build 86 release
 
-This is an unreleased maintenance candidate based on public 2.0.2 build 85.
-The language-picker fix is committed in `f5d1c4c5`. The candidate also refreshes
+This maintenance release is based on public 2.0.2 build 85.
+The language-picker fix is committed in `f5d1c4c5`. The release also refreshes
 release metadata, translated notes, release checks and repository maintenance.
 What's New now resolves its text when opened, so a language preview cannot
 leave its cached subtitle and sections in the first language used.
@@ -39,13 +39,13 @@ validated file types, archived notes, removed caches and preserved local work.
 
 ## Distribution gates
 
-The candidate is built from `b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76`.
+The release is built from `b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76`.
 Both universal archives are signed, notarised and stapled. Quarantined copies
 extracted from each ZIP pass code-signature, ticket and Gatekeeper checks.
 The full archive is 2,054,422,043 bytes. The slim archive is 270,365,950 bytes.
 See [distribution checks and checksums](distribution.json).
 
-The [staged signed feed](appcast-candidate.xml) preserves all sixteen published
+The [verified signed feed](appcast-candidate.xml) preserves all sixteen earlier
 entries and adds build 86 with direct patches from builds 85, 84, 83, 82 and 81.
 Every patch passes Ed25519 verification and reproduces all 18,558 target files,
 including 649 music files, symlinks and file modes. Patched apps pass code-signature
@@ -56,15 +56,20 @@ Five shared libraries retain code from the signed public build 85 ZIP. Their
 281 Swift source files match the frozen build 85 source, and the retained
 library inputs match the public ZIP byte for byte. The changed artwork library
 and Mac app were rebuilt. No campaign or source-fidelity closure is claimed.
-The complete current-candidate app audit was not rerun. Existing music-resource
+The complete build-86 app audit was not rerun. The owner authorised publication
+with existing engine evidence because engine sources and code are unchanged.
+Existing music-resource
 permission warnings and AppKit warnings are recorded in the distribution checks.
 
-Publication input checks pass. The public feed remains on 2.0.2, and no archive
-or candidate feed has been uploaded. Public publication remains separate from
-this preparation.
+The owner authorised publication on 16 October 2026. The
+[public release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.3)
+contains both archives and all five signed deltas. GitHub's asset digests match
+the local SHA-256 values, and every public download URL resolves. All five
+downloaded delta payloads match the verified local patches. The live update feed
+matches the verified candidate byte for byte. See the
+[publication receipt](publication.json) for asset IDs, URLs, hashes and checks.
 
 Native mouse input, VoiceOver, physical controllers, Intel/minimum-OS hardware
 and the signed app's launch and update/relaunch remain manual checks. The
 shipping-app launch script requires the real desktop. Repository policy
 requires a separate explicit request for that foreground check.
-No public release has been published by this preparation.

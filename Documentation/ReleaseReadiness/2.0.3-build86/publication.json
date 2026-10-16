@@ -1,0 +1,97 @@
+{
+  "version": "2.0.3",
+  "build": 86,
+  "verifiedAt": "2026-10-16T01:52:35.489146+00:00",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.3",
+  "releaseID": 414444827,
+  "publishedAt": "2026-10-16T01:50:53Z",
+  "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.0.3-build86.zip",
+      "id": 645785604,
+      "bytes": 2054422043,
+      "sha256": "074059d2547c3fd98dc217256a1d743104f313de2e5a798bc8d61ce62d086b32",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": null,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-2.0.3-build86.zip"
+    },
+    {
+      "name": "UltimateLemmings-2.0.3-build86-slim.zip",
+      "id": 645785592,
+      "bytes": 270365950,
+      "sha256": "8fa7650af64af6e741532af32c687738e7cb6022c3acf848ef9e905383eab1ab",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": null,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-2.0.3-build86-slim.zip"
+    },
+    {
+      "name": "UltimateLemmings-build86-from85.delta",
+      "id": 645785596,
+      "bytes": 473790,
+      "sha256": "6e9efe6d245fb0d886f74ddd7b9aa8b04df09bc1e9916ba4b73589d78601016b",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": true,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from85.delta"
+    },
+    {
+      "name": "UltimateLemmings-build86-from84.delta",
+      "id": 645785591,
+      "bytes": 3174762,
+      "sha256": "567ff6d1ca75cc7ad6d94eccce1125752b55e51ab086b6c0f3ca52df6b9c7e94",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": true,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from84.delta"
+    },
+    {
+      "name": "UltimateLemmings-build86-from83.delta",
+      "id": 645785606,
+      "bytes": 3640086,
+      "sha256": "72ff10d983c39fddb8971cbc8df1ffe84053fd29911319c71567c5309cfc19c7",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": true,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from83.delta"
+    },
+    {
+      "name": "UltimateLemmings-build86-from82.delta",
+      "id": 645785638,
+      "bytes": 4496358,
+      "sha256": "e18781de5278a583393fbb3385d84431b483b079162e4a4a5e995e50a3491e33",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": true,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from82.delta"
+    },
+    {
+      "name": "UltimateLemmings-build86-from81.delta",
+      "id": 645785775,
+      "bytes": 7869386,
+      "sha256": "1b388e6c6083381b18525bb18f567562b4037c00ddcab36af749146dff32b6c2",
+      "githubDigestMatches": true,
+      "publicDownloadReachable": true,
+      "downloadedPayloadMatches": true,
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from81.delta"
+    }
+  ],
+  "appcast": {
+    "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+    "gitBlobSHA": "1a7d9b6b8cd5be4507295d5e4e9dd7e95288de15",
+    "sha256": "285f6f20e0517c98b2ac26ab3e6ce0e553c7c51d63c283d86c60bcd56e5b4536",
+    "matchesVerifiedCandidate": true,
+    "deltaBaseBuilds": [
+      85,
+      84,
+      83,
+      82,
+      81
+    ]
+  },
+  "engineValidation": "Existing engine evidence retained: engine sources and retained library code are unchanged. Full engine tests were not rerun, as authorised by the release owner."
+}

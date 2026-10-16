@@ -13,10 +13,9 @@ Entertainment, which holds the Lemmings rights today. See
 [README.md](../README.md) and `THIRD_PARTY_NOTICES.md` for the full notice.
 This document is a status summary, not a product announcement.
 
-Public Macintosh remains 2.0.2 build 85. The next maintenance candidate,
-2.0.3 build 86, fixes language selection. See its
-[draft notes](ReleaseNotes-2.0.3-build86.md) and
-[candidate checks](ReleaseReadiness/2.0.3-build86/README.md).
+Public Macintosh is 2.0.3 build 86. It fixes language selection. See its
+[release notes](ReleaseNotes-2.0.3-build86.md) and
+[release evidence](ReleaseReadiness/2.0.3-build86/README.md).
 
 ## The proposition
 

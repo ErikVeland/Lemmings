@@ -1,7 +1,7 @@
 # Public testing
 
-The current public Mac release is 2.0.2 build 85. The next maintenance candidate
-is 2.0.3 build 86. See its [draft notes](ReleaseNotes-2.0.3-build86.md) and
+The current public Mac release is 2.0.3 build 86.
+See its [release notes](ReleaseNotes-2.0.3-build86.md) and
 [release checks](ReleaseReadiness/2.0.3-build86/README.md). Freeze one source
 commit for a public candidate. Earlier package records do not certify it.
 

@@ -3,7 +3,7 @@
   "build": 86,
   "releaseBase": "v2.0.2",
   "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
-  "status": "prepared_not_published",
+  "status": "published_and_publicly_verified",
   "architectures": [
     "arm64",
     "x86_64"
@@ -47,7 +47,8 @@
     "sha256": "285f6f20e0517c98b2ac26ab3e6ce0e553c7c51d63c283d86c60bcd56e5b4536",
     "items": 17,
     "publicationInputsPassed": true,
-    "publicFeedUnchanged": true
+    "publicFeedMatchesVerifiedCandidate": true,
+    "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml"
   },
   "retainedSharedLibraries": {
     "NxlvKit": {
@@ -107,5 +108,7 @@
     "Intel and minimum-OS hardware",
     "Physical controllers, audible listening, HDR and live cross-device acceptance"
   ],
-  "published": false
+  "published": true,
+  "publishedAt": "2026-10-16T01:50:53Z",
+  "publicationReceipt": "publication.json"
 }
