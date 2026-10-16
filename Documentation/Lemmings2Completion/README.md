@@ -116,8 +116,9 @@ See the [all-actor follow-up](cavelem02-all-actor-followup-search-2026-10-16.jso
 A further unseeded search used a 32,768-state beam, one-pixel decision
 sampling and a 600-second budget. It expanded 2,049,584 candidates and found
 no winning route. The best partial candidate saved none. The accepted 36-of-59
-route and chain remain unchanged. The Gold ark requirement stays open. See the
-[wider search record](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json).
+route and chain remain unchanged. The Gold ark requirement stays open. Three
+searches from partial prefixes also failed to improve the route. See the
+[wider and seeded search record](cavelem02-unseeded-beam32768-cell1-search-2026-10-16.json). A current-origin/main rebuild with the L2 runtime optimisation also retained 36/59 and found no improvement.
 
 A temporary current-main chain check replaces Cavelems Levels 3–5 with the
 higher-survivor candidates. Each route passes two fresh replays, producing
