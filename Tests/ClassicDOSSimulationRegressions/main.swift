@@ -72,6 +72,51 @@ private func testGolemsClimberPassesRearPixel() throws {
         "Golems climber should pass the rear pixel")
 }
 
+/**
+ * A DOS climber must fall away from a one-pixel wall gap and land on the nearby bridge.
+ */
+private func testClimberFallsAcrossOnePixelGap() throws {
+    let width = 192, height = 96
+    var solid = Data(repeating: 0, count: width * height)
+    for x in 0..<width { solid[80 * width + x] = 1 }
+    for y in 0..<80 { solid[y * width + 100] = 1 }
+    solid[41 * width + 99] = 1
+    for x in 96..<99 { solid[55 * width + x] = 1 }
+    let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+        steelMask: Data(repeating: 0, count: width * height))
+    let config = configuration(
+        totalLemmings: 1, releaseRate: 99,
+        entrances: [ClassicDOSPoint(x: 40, y: 80)],
+        skills: [.climber: 1], maximumX: width - 1, maximumY: height - 1)
+    var simulation = try ClassicDOSSimulation(terrain: terrain, configuration: config)
+    while simulation.tickCount < 54 { _ = simulation.tick() }
+    simulation = try modifiedSimulation(simulation) { root in
+        try modifyLemmings(in: &root) { lemmings in
+            lemmings[0]["foot"] = ["x": 100, "y": 50]
+            lemmings[0]["direction"] = ClassicDOSDirection.right.rawValue
+            lemmings[0]["action"] = ClassicDOSAction.climbing.rawValue
+            lemmings[0]["animationFrame"] = 4
+            lemmings[0]["hasClimber"] = true
+        }
+    }
+
+    let departureEvents = simulation.tick()
+    try require(simulation.lemmings[0].action == .falling,
+        "a climber did not fall when the rear pixel had a one-pixel gap")
+    try require(simulation.lemmings[0].foot == ClassicDOSPoint(x: 98, y: 49),
+        "a climber fell at \(simulation.lemmings[0].foot), not onto the bridge side")
+    try require(departureEvents.contains(.directionChanged(lemmingID: 0, direction: .left)),
+        "a climber did not turn away from the wall gap")
+
+    while simulation.lemmings[0].action == .falling && simulation.tickCount < 100 {
+        _ = simulation.tick()
+    }
+    try require(simulation.lemmings[0].action == .walking,
+        "a climber did not land on the bridge across the one-pixel gap")
+    try require(simulation.lemmings[0].foot == ClassicDOSPoint(x: 98, y: 55),
+        "a climber landed at the wrong bridge pixel")
+}
+
 private func configuration(
     totalLemmings: Int,
     releaseRate: Int,
@@ -977,8 +1022,26 @@ private func testDirectDropRequiresSplat() throws {
     }
     try require(falling.savedCount == 0, "ordinary faller entered an exit in midair")
 
-    let groundExit = ClassicDOSTrigger(
+    let disconnectedExit = ClassicDOSTrigger(
         id: 2, effect: .exit,
+        bounds: ClassicDOSRect(x1: 20, y1: 68, x2: 24, y2: 72)
+    )
+    var splattingBelowExit = try ClassicDOSSimulation(
+        terrain: floorTerrain(width: 64, height: 96, floorY: 77),
+        configuration: configuration(
+            totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 20, y: 0)],
+            triggers: [disconnectedExit], maximumX: 63, maximumY: 95
+        )
+    )
+    while !splattingBelowExit.isComplete && splattingBelowExit.tickCount < 150 {
+        splattingBelowExit.tick()
+    }
+    try require(splattingBelowExit.savedCount == 0 && splattingBelowExit.lostCount == 1,
+        "a splatter below a disconnected exit trigger was saved")
+
+    let groundExit = ClassicDOSTrigger(
+        id: 3, effect: .exit,
         bounds: ClassicDOSRect(x1: 20, y1: 68, x2: 24, y2: 80)
     )
     var splatting = try ClassicDOSSimulation(
@@ -1314,6 +1377,7 @@ private func run() throws {
     try testMaximumSafeFallDistance()
     try testGolemsOneWayMining()
     try testGolemsClimberPassesRearPixel()
+    try testClimberFallsAcrossOnePixelGap()
     try testImmutableSteelAndDestructionMasks()
     try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()

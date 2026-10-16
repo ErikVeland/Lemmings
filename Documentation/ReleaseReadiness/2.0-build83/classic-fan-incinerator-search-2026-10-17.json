@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "remoteMainCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Exact bundled Classic fan member GARJEN03.dat#5. Imported content is excluded.",
+  "level": {
+    "packID": "fan:lldb-283",
+    "archive": "0283-GARJEN03.zip",
+    "member": "GARJEN03.dat#5",
+    "title": "The Incinerator",
+    "lemmings": 20,
+    "required": 20,
+    "releaseRate": 50,
+    "skills": {
+      "basher": 2,
+      "miner": 2,
+      "digger": 2
+    },
+    "initialHash": "b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832",
+    "initialLevelFingerprint": "660538cfe3fff82812b72e60a7b1ac067f952302019d6ed74417b22ad4146062"
+  },
+  "search": {
+    "command": "ClassicSolver fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0283-GARJEN03.zip 1 <output> --resources /Applications/Ultimate Lemmings.app/Contents/Resources --member GARJEN03.dat#5 --seconds 300 --width 16384 --fallback 170 --refire 120 --hash-named --golems-clock --rescue-quota-distance --prefer-progress --adaptive-rate --prefix .build/classic-fan-current-main-20261017/incinerator-prefix-strong.json --partial-out",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+    "seconds": 300,
+    "beamWidth": 16384,
+    "fallback": 170,
+    "refire": 120,
+    "clock": "Golems",
+    "ranking": [
+      "rescue-quota-distance",
+      "prefer-progress"
+    ],
+    "adaptiveRate": true,
+    "forcedPrefixSHA256": "ce30c3509bf94e8818cda12a0c3a2610b6b2a7869c13e0a6265e73830cb74fc2",
+    "expandedCandidates": 366347,
+    "lastTick": 451,
+    "released": 20,
+    "lost": 0,
+    "active": 5,
+    "bestSaved": 15,
+    "result": "UNSOLVED; seeded bounded search found no winning route and retained a 15/20 partial."
+  },
+  "priorAttempts": [
+    {
+      "seconds": 180,
+      "beamWidth": 8192,
+      "expandedCandidates": 498977,
+      "bestSaved": 3,
+      "result": "No winning route; retained the six-assignment partial."
+    },
+    {
+      "seconds": 180,
+      "beamWidth": 8192,
+      "adaptiveRate": true,
+      "prefixEvents": 6,
+      "expandedCandidates": 225717,
+      "bestSaved": 15,
+      "result": "No winning route; adaptive rate changed to 99 and retained a 15/20 partial.",
+      "partialSHA256": "2665458e80612b797eed4acec6d148669082b5dd0058b3e09aa35e88903dad75"
+    }
+  ],
+  "alternativePrefixAttempts": [
+    {
+      "prefixSHA256": "945f17d2c33d82a92e33622b85300f9e4b7cbb3eda4553dba876345ca8a4be59",
+      "forcedSkillActions": 3,
+      "adaptiveRate": true,
+      "seconds": 300,
+      "beamWidth": 16384,
+      "expandedCandidates": 887911,
+      "bestSaved": 2,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-prefix-first3-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "9a567084c6aafda6865a1e26074b143e79c9c86d02673e32a241395bb29de41f",
+      "result": "UNSOLVED; no win. This branch did not improve the retained 15/20 partial."
+    }
+  ],
+  "followUpSearches": [
+    {
+      "prefixSHA256": "ccb396553145bcc524e86790a9e3cddd136d55931001939757ebad6e46bb6ad4",
+      "forcedAction": "lemming 0 basher at tick 146",
+      "ranking": "progress-first with rescue-quota distance",
+      "seconds": 300,
+      "beamWidth": 16384,
+      "expandedCandidates": 819505,
+      "lastTick": 218,
+      "bestSaved": 0,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-first-basher-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "cc073f419400fdba6bc128af554c263520e2b00028f6c3f505b32155116860ff"
+    },
+    {
+      "prefixSHA256": "9a6eab8a02d2e98bb43f95fa0370a3cedbb8aa7ddeeb6e96e894b234d93b20f3",
+      "forcedActionSummary": "Worker 1 digger at tick 174, basher at 175, rate 99 at 192. The solver later selected worker 0 digger at tick 146 and worker 2 basher at tick 213; worker 0 digger was not forced.",
+      "ranking": "progress-first with rescue-quota distance",
+      "seconds": 300,
+      "beamWidth": 16384,
+      "expandedCandidates": 790232,
+      "lastTick": 451,
+      "bestSaved": 16,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker1-prefix-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "f4d661749d1ef06224185f1887d2a71f31d1b5d4de36d8fcac6ab96ed0391af9",
+      "result": "UNSOLVED; the best partial improved from 15/20 to 16/20, but exact replay loses four."
+    },
+    {
+      "prefixSHA256": "9a6eab8a02d2e98bb43f95fa0370a3cedbb8aa7ddeeb6e96e894b234d93b20f3",
+      "ranking": "balanced survivor/progress with rescue-quota distance",
+      "seconds": 300,
+      "beamWidth": 16384,
+      "expandedCandidates": 692577,
+      "lastTick": 404,
+      "bestSaved": 5,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker1-balanced-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "dae3e63f478969ee375c423c85b9c956e614c82c7c354edb1d7be22901b19928"
+    },
+    {
+      "prefixSHA256": "c26ff4d4c0289d9c11f162a4c7ed8152d0896d57b9977c1c28a68db25ce8b017",
+      "forcedActionSummary": "lemming 1 digger/basher and release rate 99; lemming 4 basher at tick 268",
+      "ranking": "progress-first with rescue-quota distance",
+      "seconds": 300,
+      "expandedCandidates": 556817,
+      "lastTick": 451,
+      "bestSaved": 15,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker4-basher-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "80fee579976ce77bde80a7a46c9946ad4f7f0acdad9e2985ca9870d166700f32",
+      "elapsedReportedSeconds": 200
+    },
+    {
+      "prefixSHA256": "4554a4c8d028bc38382902826e0ef792f5c492da80d54f28f996d39f9394fc49",
+      "forcedActionSummary": "Worker 1 digger/basher and release rate 99; worker 3 basher and worker 0 miner at tick 263.",
+      "ranking": "progress-first with rescue-quota distance",
+      "seconds": 300,
+      "expandedCandidates": 537862,
+      "elapsedReportedSeconds": 191,
+      "lastTick": 452,
+      "released": 20,
+      "lostAtPartial": 1,
+      "activeAtPartial": 3,
+      "bestSaved": 16,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker3-basher-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "d92246f634bbe3877eab731c388ceb54cbf70e41e052ff40aefb8b1120a97f52",
+      "result": "UNSOLVED; tied the best 16/20 partial. Exact replay loses lemmings 0, 2, 4 and 5 at lower fire triggers."
+    },
+    {
+      "prefixSHA256": "6a672e9cc0f74e709a32f92155d9dbcf52881eda23e87d5f21119d4dd7f86289",
+      "forcedActionSummary": "Worker 2 digger at tick 146, worker 1 digger/basher at 174/175 and release rate 99 at 192.",
+      "ranking": "progress-first with rescue-quota distance",
+      "seconds": 300,
+      "beamWidth": 16384,
+      "expandedCandidates": 824108,
+      "lastTick": 409,
+      "released": 20,
+      "lostAtPartial": 1,
+      "activeAtPartial": 12,
+      "bestSaved": 7,
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker2-digger-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "ef3fd707442dbcabd6154e7a90967a289d42d95d139247aa0d9c2e1a64e93fed",
+      "result": "UNSOLVED; moving the first digger to worker 2 did not improve the 16/20 best partial."
+    }
+  ],
+  "unseededSearch": {
+    "seconds": 300,
+    "beamWidth": 16384,
+    "adaptiveRate": true,
+    "expandedCandidates": 761311,
+    "lastTick": 226,
+    "released": 20,
+    "lost": 0,
+    "active": 20,
+    "bestSaved": 0,
+    "partialPath": ".build/classic-fan-current-main-20261017/incinerator-unseeded-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+    "partialSHA256": "91cce155246ab810127f031392aea38bbbc62ea3ed80ae1621a10122aacb7832",
+    "result": "UNSOLVED; the unseeded search did not improve on the later 16/20 partial."
+  },
+  "replayRetiming": {
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "toolSHA256": "00c85d9efdfb1f1bea0628087a04be308e62d82ab69f2045e877d3937395bda2",
+    "seedPartialSHA256": "2665458e80612b797eed4acec6d148669082b5dd0058b3e09aa35e88903dad75",
+    "temporaryAuditRow": ".build/classic-fan-current-main-20261017/incinerator-retime-search/audit.json",
+    "temporaryAuditNote": "One exact-identity low-confidence row was created under .build solely to run ExpandFanEvidence; no learning-journey evidence or accepted route was changed.",
+    "runs": [
+      {
+        "policy": "single event",
+        "offsetTicks": "-8..-1,+1..+8",
+        "attempts": 114,
+        "wins": 0
+      },
+      {
+        "policy": "two events",
+        "offsetTicks": "-2,-1,+1,+2",
+        "attempts": 338,
+        "wins": 0
+      },
+      {
+        "policy": "three events",
+        "offsetTicks": "-2,-1,+1,+2",
+        "attempts": 2242,
+        "wins": 0
+      },
+      {
+        "policy": "four events",
+        "offsetTicks": "-2,-1,+1,+2",
+        "attempts": 8962,
+        "wins": 0
+      },
+      {
+        "policy": "single skill input, wider window",
+        "offsetTicks": "-60..-1,+1..+60",
+        "candidateRoutes": 720,
+        "attempts": 721,
+        "wins": 0
+      },
+      {
+        "policy": "two skill inputs",
+        "offsetTicks": "-10..-1,+1..+10",
+        "candidateRoutes": 6000,
+        "attempts": 6001,
+        "wins": 0
+      },
+      {
+        "policy": "three skill inputs",
+        "offsetTicks": "-4..-1,+1..+4",
+        "candidateRoutes": 10240,
+        "attempts": 10241,
+        "wins": 0
+      },
+      {
+        "policy": "four skill inputs",
+        "offsetTicks": "-4..-1,+1..+4",
+        "candidateRoutes": 61440,
+        "attempts": 61441,
+        "wins": 0
+      },
+      {
+        "policy": "all six skill inputs",
+        "offsetTicks": "-2,-1,+1,+2",
+        "candidateRoutes": 4096,
+        "attempts": 4097,
+        "wins": 0
+      }
+    ],
+    "totalAttempts": 94157,
+    "attemptCounterFix": "ExpandFanEvidence now includes stored solver candidates in its trial count. The tool was rebuilt from current sources and every listed retiming policy was rerun with the corrected counter.",
+    "verifiedWinningRoutes": 0,
+    "result": "No retimed candidate won the exact bundled simulation. A later assignment search improved the best partial to 16/20."
+  },
+  "replayEvidence": {
+    "winningCandidate": false,
+    "strictReplayRun": false,
+    "strictReplayReason": "No winning replay candidate was produced.",
+    "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker1-prefix-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+    "partialSHA256": "f4d661749d1ef06224185f1887d2a71f31d1b5d4de36d8fcac6ab96ed0391af9"
+  },
+  "partialReplayDiagnosis": {
+    "method": "Exact ClassicDOSReplayPlayer replay with verify=true on the retained 16/20 partial.",
+    "finalTick": 870,
+    "saved": 16,
+    "required": 20,
+    "lost": 4,
+    "failure": "Four remaining lemmings entered lower fire triggers before the replay ended.",
+    "fireTriggers": [
+      {
+        "lemming": 0,
+        "x": 606,
+        "y": 154,
+        "tick": 480
+      },
+      {
+        "lemming": 4,
+        "x": 605,
+        "y": 154,
+        "tick": 520
+      },
+      {
+        "lemming": 3,
+        "x": 605,
+        "y": 154,
+        "tick": 600
+      },
+      {
+        "lemming": 5,
+        "x": 659,
+        "y": 152,
+        "tick": 870
+      }
+    ],
+    "result": "The strongest partial saves one more lemming than the prior route, but still fails at the fire band. No winning route is verified.",
+    "equalBestVariant": {
+      "partialPath": ".build/classic-fan-current-main-20261017/incinerator-worker3-basher-300/b6c6cfc6e0a5c8c24eeb27a22681e0c47f58e3a1babc750299feac8f16eee832.partial.json",
+      "partialSHA256": "d92246f634bbe3877eab731c388ceb54cbf70e41e052ff40aefb8b1120a97f52",
+      "finalTick": 870,
+      "saved": 16,
+      "lost": 4,
+      "fireTriggers": [
+        {
+          "lemming": 0,
+          "x": 606,
+          "y": 154,
+          "tick": 480
+        },
+        {
+          "lemming": 4,
+          "x": 605,
+          "y": 154,
+          "tick": 520
+        },
+        {
+          "lemming": 2,
+          "x": 605,
+          "y": 154,
+          "tick": 600
+        },
+        {
+          "lemming": 5,
+          "x": 659,
+          "y": 152,
+          "tick": 870
+        }
+      ],
+      "result": "Tied the 16/20 partial while changing which worker reaches the exit; closure remains open."
+    }
+  },
+  "closureEffect": {
+    "verifiedFanWinsBefore": 2403,
+    "verifiedFanWinsAfter": 2403,
+    "openFanRoutesBefore": 3617,
+    "openFanRoutesAfter": 3617,
+    "status": "No bundled route gap closed."
+  },
+  "limits": [
+    "UNSOLVED means this bounded search did not find a route. It does not prove that no winning route exists.",
+    "Search used installed build 76 resources. The retained pack manifest matches build 85, and this is not certification of the build 86 app binary.",
+    "This search makes no claim about imported content."
+  ]
+}

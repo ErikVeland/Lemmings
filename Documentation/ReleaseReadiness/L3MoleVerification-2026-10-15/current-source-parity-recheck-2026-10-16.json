@@ -9,9 +9,9 @@
   },
   "verifier": {
     "path": "Scripts/verify-l3-mole-trace.py",
-    "sha256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "sha256": "e07468cf6e74646eb7aba3924325678677d69894ae0a57ee6c42c34e42d6e426",
     "command": "python3 Scripts/verify-l3-mole-trace.py",
-    "result": "passed"
+    "result": "passed recorded prototype comparison checks; current production trajectory is not compared with DOS"
   },
   "comparison": {
     "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/prototype-steel-comparison.json",
@@ -25,7 +25,9 @@
       "nativePositionsCompared": 53,
       "firstTick": 36,
       "lastTick": 244,
-      "coordinateDifferences": 0
+      "coordinateDifferences": 0,
+      "comparisonTarget": "isolated prototype",
+      "productionNativePositionsCompared": 0
     },
     "repeatedSourceTraces": {
       "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json",
@@ -44,37 +46,124 @@
   },
   "referenceInputAvailability": {
     "expectedIgnoredDirectory": ".build/l3-mole-verification",
-    "directoryPresent": false,
+    "directoryPresent": true,
     "originalExecutableInInstalledApp": false,
-    "rawCaptureFilesPresent": false,
+    "rawCaptureFilesPresent": true,
     "retainedEvidence": [
       "original-steel-actor-trace.json",
       "original-followup-traces.json",
       "original-tunnel-edge-check.json",
       "source and executable hashes"
     ],
-    "impact": "Retained summaries support the recorded checks but do not allow a new source replay or pixel-level reanalysis. Restore the original executable and raw captures before closing the excavation-mask and built-brick trigger gates."
+    "impact": "The build 83 extraction contains the exact executable used by the retained traces. Both trace-specific fixture sets were reconstructed and match every retained file hash. A new headless launch did not reach the controlled Shadow 7 state. Raw captures remain absent. The excavation-mask and built-brick trigger gates remain open.",
+    "bundlePayloadExecutablePresent": true,
+    "bundlePayloadExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+    "bundlePayloadExecutablePaths": [
+      "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD/L3CD.EXE",
+      "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD-2/L3CD.EXE"
+    ],
+    "bundlePayloadFixtureFilesSHA256": {
+      "LEM3CD": {
+        "LEVEL101.DAT": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1",
+        "PERM101.OBS": "a3e151b29fa7f8ec9cf37d68d87eae9f70c554b587f893b5b8e4f9045a1ae47e",
+        "TEMP101.OBS": "c434ad64d50f7b2be6581c4c5d295ef8bc2dbdd2909a83678aa48c88ae2c44fd"
+      },
+      "LEM3CD-2": {
+        "LEVEL101.DAT": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1",
+        "PERM101.OBS": "a3e151b29fa7f8ec9cf37d68d87eae9f70c554b587f893b5b8e4f9045a1ae47e",
+        "TEMP101.OBS": "c434ad64d50f7b2be6581c4c5d295ef8bc2dbdd2909a83678aa48c88ae2c44fd"
+      }
+    },
+    "traceInputFixtureHashesMatchBundlePayload": false,
+    "retainedCaptureDirectoryPresent": true,
+    "traceFixturesReconstructedFromBuild83Payload": {
+      "steel-air-gap": {
+        "fixtureHashes": {
+          "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+          "PERM101.OBS": "789ff30f151bb922d0f34d3f95804a6e9e2ebd70bd5abedb80e514e309e73dcb",
+          "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+        },
+        "reconstructedExactly": true
+      },
+      "steel-left-facing": {
+        "fixtureHashes": {
+          "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+          "PERM101.OBS": "ccae27cab491b0308394ec9a5bb5d8070ae06f5cfa075fae8ca8f2d9b627e09e",
+          "TEMP101.OBS": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8"
+        },
+        "reconstructedExactly": true
+      }
+    },
+    "latestHeadlessReplayAttempt": {
+      "date": "2026-10-17",
+      "emulator": "DOSBox Staging 0.83.0",
+      "video": "SDL dummy",
+      "audio": "muted",
+      "sourceExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+      "fixtureSet": "steel-left-facing",
+      "fixtureHashesMatchRetainedTrace": true,
+      "startupInput": "Eight delayed Enter keypresses through AUTOTYPE",
+      "result": "Did not establish the Shadow 7 test-level state. Framebuffer dumps exist, but no actor trace or gameplay capture was accepted.",
+      "limitation": "The source menu navigation sequence remains unknown. This run does not change the retained 0.82.2 trace or prove source behaviour."
+    }
   },
   "sourceChangeReview": "The runtime file changed after the prior recheck. The change adds L3 action-eligibility helpers and refactors assignment guards. The Mole update and movement region hash matches the trace baseline.",
   "currentMainReverification": {
     "worktreeHEAD": "c38831f3028da012c56cb6bf9522cb1117f144c5",
     "command": "python3 Scripts/verify-l3-mole-trace.py",
-    "verifierSHA256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "verifierSHA256": "e07468cf6e74646eb7aba3924325678677d69894ae0a57ee6c42c34e42d6e426",
     "runtimeSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
     "moleMovementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
-    "result": "Passed 53 positions, two repeated traces with 673 samples, and four tunnel-edge checks.",
-    "remaining": "This verifies sampled motion only. The excavation mask, player-built brick trigger and complete Mole rules remain open."
+    "result": "Passed the recorded isolated-prototype comparison, repeated-source-trace and tunnel-edge checks. This does not verify current production trajectory parity.",
+    "remaining": "Current production still has the pre-prototype Mole movement; excavation-mask and built-brick trigger parity remain open."
   },
   "remaining": "The position traces verify partial Mole motion. The excavation mask, trigger conditions and complete Mole rules remain unverified. Four tunnel-edge witnesses still reject the rectangular carve proposal.",
   "latestCurrentMainReverification": {
-    "worktreeHEAD": "9862374431ff67e67e084eb1f8416eb088b09ea3",
-    "originMain": "9862374431ff67e67e084eb1f8416eb088b09ea3",
+    "worktreeHEAD": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "originMain": "368e7e724c40027d364d7f01c1d05d113afd852b",
     "command": "python3 Scripts/verify-l3-mole-trace.py",
-    "verifierSHA256": "f3642d43dd7417f30f7060cfcbae8c52a7a332863ede24b619cae4abc3673dde",
+    "verifierSHA256": "e07468cf6e74646eb7aba3924325678677d69894ae0a57ee6c42c34e42d6e426",
     "runtimeSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
-    "moleMovementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
-    "result": "Passed 53 primary positions, two repeated source traces with 673 samples, and all four tunnel-edge checks.",
-    "scope": "Trace verification only. The L3 runtime, route, replay, verifier and audit sources have not changed since the 1111ece8 full fixture audit, so its 399/416 double-replay result and 17 route failures remain applicable; the full fixture audit was not rerun at this commit.",
-    "remaining": "The excavation mask, player-built brick trigger, complete Mole rules and 17 route schedules remain open. The original executable and raw captures are absent, so the source comparison cannot be extended from this checkout."
+    "result": "Passed 53 recorded prototype positions, two repeated original-engine traces with 673 samples, and all four tunnel-edge checks. The 53-position comparison is against the isolated prototype, not current production.",
+    "scope": "Trace data verification only. Current production-to-DOS trajectory parity was not tested. The production Mole movement source remains at the pre-prototype baseline. The full fixture audit was not rerun at this commit. Excavation mask, built-brick trigger, complete Mole rules and 17 route schedules remain open.",
+    "bundlePayloadExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+    "bundlePayloadExecutablePaths": [
+      "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD/L3CD.EXE",
+      "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD-2/L3CD.EXE"
+    ],
+    "latestArtifactInspection": {
+      "date": "2026-10-17",
+      "directory": ".build/l3-mole-verification",
+      "executableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+      "traceFixtureHashesMatch": true,
+      "framebufferFiles": [
+        {
+          "path": ".build/l3-mole-verification/framebuffer-gray.png",
+          "sha256": "648a322ac7e1776d5e7c31af5e8c143a5eede71328a68ec174d911cfc41c4d41"
+        },
+        {
+          "path": ".build/l3-mole-verification/framebuffer-next.png",
+          "sha256": "0b930f4e618d9c7011d9c778e19e8c2357d25481dade4cce16bd925f4243e4b6"
+        },
+        {
+          "path": ".build/l3-mole-verification/live-vga.png",
+          "sha256": "86f79a01a37c62b2b2eff8e58f834a2609707432b5d9bc7f0e60908a4b094c07"
+        },
+        {
+          "path": ".build/l3-mole-verification/current-frame.png",
+          "sha256": "17061eb5d104285f8fd0921be0379b39f01a2f62e986e7fbb9cd70588d5aa98d"
+        }
+      ],
+      "acceptedActorTrace": false,
+      "conclusion": "Artifacts exist, but they do not close the excavation-mask or trigger gates."
+    },
+    "verifierResult": "The verifier validates recorded prototype samples and reconstructs the prototype patch. It does not run or compare the current production trajectory."
+  },
+  "productionRuntimeComparison": {
+    "status": "not compared against original DOS trajectory",
+    "runtimeSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "movementRegionSHA256": "34352b8ef7c7180dbe8c8ee7f13ca0e729467b4718ff0e68e56e2544e19c1e5e",
+    "prototypeRuntimeSHA256": "476d05ac6501f628b20f318f0e08f5a53bad9b7d1284119df0959da2d824ab2b",
+    "interpretation": "The 53 stored native samples belong to the isolated prototype. Production retains the pre-prototype movement region."
   }
 }

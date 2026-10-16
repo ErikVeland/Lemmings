@@ -3,11 +3,57 @@
 import argparse
 import hashlib
 import json
+import os
 import pathlib
 import re
 import shutil
 import subprocess
 import time
+
+
+def load_rows(path):
+    if path.suffix != ".jsonl":
+        return json.loads(path.read_text())
+    rows = []
+    for line_number, line in enumerate(path.read_text().splitlines(), 1):
+        source_row = json.loads(line)
+        if source_row.get("collection") != "fan" or source_row.get("status") == "winning-replay":
+            continue
+        match = re.fullmatch(r"(\d{4})-[^/]+\.zip/(.+)#(\d+)", source_row["source"])
+        if not match:
+            raise ValueError(f"invalid fan identity on line {line_number}: {source_row['source']}")
+        pack_number, filename, section = match.groups()
+        rows.append({
+            "entry": {
+                "identity": {
+                    "engine": "classic",
+                    "levelID": f"{filename}#{section}",
+                    "packID": f"fan:lldb-{int(pack_number)}",
+                },
+                "levelNumberSnapshot": 1,
+            },
+            "initialHash": source_row["initialHash"],
+            "official": False,
+            "playable": True,
+            "profile": {"confidence": "low", "overallScore": 0},
+            "memberSelector": f"{filename}#{section}",
+            "sourceTitle": source_row.get("title"),
+        })
+    return rows
+
+
+def filter_pack(rows, pack_id):
+    if not pack_id:
+        return rows
+    if not re.fullmatch(r"fan:lldb-\d+", pack_id):
+        raise ValueError(f"invalid fan pack ID: {pack_id}")
+
+    def row_pack(row):
+        entry = row.get("entry")
+        identity = entry.get("identity", {}) if entry else row.get("identity", {})
+        return identity.get("packID")
+
+    return [row for row in rows if row_pack(row) == pack_id]
 
 
 def main():
@@ -56,7 +102,13 @@ def main():
                 previous[key] = entry
             if completed_search(entry):
                 completed_attempts.setdefault(key, []).append(entry)
-    rows = json.loads(args.audit.read_text())
+    only_pack = os.environ.get("FAN_ONLY_PACK")
+    try:
+        rows = filter_pack(load_rows(args.audit), only_pack)
+    except ValueError as error:
+        parser.error(str(error))
+    if only_pack and not rows:
+        parser.error(f"no unresolved audit rows found for {only_pack}")
     evidence_path = pathlib.Path(__file__).resolve().parents[2] / "Artifacts/LearningJourney/fan-evidence.json"
     verified_identities = set()
     if evidence_path.exists():
@@ -118,6 +170,8 @@ def main():
                    "--resources", str(args.resources), "--seconds", str(args.seconds),
                    "--width", str(args.width), "--fallback", str(args.fallback),
                    "--refire", str(args.refire), "--hash-named"]
+        if row.get("memberSelector"):
+            command.extend(["--member", row["memberSelector"]])
         if args.rate is not None:
             command.extend(["--rate", str(args.rate)])
         if args.clock == "golems":
@@ -134,6 +188,7 @@ def main():
             command.append("--rollout-single")
         if args.save_partials:
             command.append("--partial-out")
+        candidate.unlink(missing_ok=True)
         started = time.monotonic()
         result = subprocess.run(command, capture_output=True, text=True, check=False)
         did_solve = result.returncode == 0 and candidate.exists()

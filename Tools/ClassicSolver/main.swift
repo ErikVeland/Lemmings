@@ -308,8 +308,8 @@ if args.contains("--describe") || args.contains("--describe-geometry") {
                 let bottom = min(base.terrain.height, bounds.y2 + 8)
                 print("exit terrain profile x=\(left)..<\(right) # solid . empty")
                 for y in top..<bottom {
-                    let pixels = (left..<right).map { base.terrain.isSolid(x: $0, y: y) ? "#" : "." }
-                    print(String(format: "%03d ", y) + String(pixels))
+                    let pixels = (left..<right).map { base.terrain.isSolid(x: $0, y: y) ? "#" : "." }.joined()
+                    print(String(format: "%03d ", y) + pixels)
                 }
             }
         }

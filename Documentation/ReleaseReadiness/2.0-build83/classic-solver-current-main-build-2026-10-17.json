@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "sourceState": "Current main worktree. The only compiled solver-source diff from HEAD is terrain-map output formatting in Tools/ClassicSolver/main.swift. NxlvKit and solver behaviour sources are unchanged.",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=\"$PWD/.build/classic-solver-module-cache\" SWIFT_MODULE_CACHE_PATH=\"$PWD/.build/classic-solver-module-cache\" zsh Scripts/build-classic-solver.sh",
+  "exitCode": 0,
+  "output": ".build/classic-solver/ClassicSolver",
+  "toolchain": {
+    "swift": "6.3.3",
+    "macOSSDK": "26.5"
+  },
+  "outputs": {
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3"
+  },
+  "reproducibility": "Both output hashes match the hashes in the current-main Frantic and Incinerator search records."
+}

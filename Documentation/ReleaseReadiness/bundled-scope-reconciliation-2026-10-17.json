@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
+  "sourceState": {
+    "branch": "main",
+    "head": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "originMain": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "worktreeHasUncommittedChanges": true
+  },
+  "releasePackageStates": {
+    "macOS": {
+      "publishedVersion": "2.0.3",
+      "build": 86,
+      "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
+      "packageEvidence": "Build 86 records no non-localisation resource-index differences from build 85 and reuses selected build 85 engine evidence. The complete build 86 app audit and campaign closure were not rerun.",
+      "status": "Published, with bundled engine/content closure still open.",
+      "evidence": [
+        "2.0.3-build86/distribution.json",
+        "2.0.3-build86/README.md",
+        "2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json"
+      ]
+    },
+    "iOS": {
+      "lastInstalledCandidate": "2.0 build 8",
+      "candidateSourceCommit": "0398d081d0aa4b1f25717eb59d2095f35d81f542",
+      "manifest": "Build 8 packages 120 Classic campaign levels and 26 files. Its content validation lists no L2 or L3 mobile library.",
+      "currentSourceStatus": "Later 2.0 source connects L2, L3 and supported NeoLemmix import and gameplay paths. No accepted iOS release package for that source is recorded here.",
+      "status": "Current source scope is broader than the last accepted iOS package. Do not count source support as bundled release coverage.",
+      "evidence": [
+        "2.0DeviceBeta-2026-10-11/Build8/evidence.json",
+        "2.0DeviceBeta-2026-10-11/Build8/content-manifest.json",
+        "2.0DeviceBeta-2026-10-11/Build8/content-validation.json",
+        "../2.0Roadmap.md"
+      ]
+    }
+  },
+  "bundledEngineStatus": {
+    "classic": {
+      "scope": "352 official/conversion levels and 6,020 fan levels across 535 fan packs in the Mac bundle evidence.",
+      "verified": "All 352 official/conversion routes have identity-pinned winning replay evidence. Fan audit has 2,403 verified winning routes, 18 failed candidates, 3,599 rows without matching candidates, and 3,617 levels without verified wins.",
+      "open": "The Mac fan-level closure gate requires winning routes. The 3,617 missing wins remain open. The older fan load/conversion gate covers load/start and the 60 conversions only.",
+      "evidence": [
+        "2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json",
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+        "gates.json"
+      ]
+    },
+    "lemmings2": {
+      "scope": "120 campaign levels, 70 carry-over variants and 12 continuous tribe chains in the Mac content evidence.",
+      "verified": "All 120 standalone routes, 70 carry-over variants and 12 chains replay successfully.",
+      "open": "The chains end with one survivor and a Bronze talisman. Gold Ark completion and source-engine parity remain open.",
+      "evidence": [
+        "../Lemmings2Completion/README.md",
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
+      ]
+    },
+    "lemmings3": {
+      "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
+      "verified": "399 of 416 fixtures pass exact double replay.",
+      "open": "17 route fixtures fail. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
+      "evidence": [
+        "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
+        "L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
+      ]
+    },
+    "neoLemmix": {
+      "scope": "794 level files and 26 bundled DMA styles in the published Mac package evidence.",
+      "verified": "719 levels resolve with the bundled styles. Exact-version winning replay evidence covers 158 levels.",
+      "open": "75 bundled levels need 44 community styles. Rights are not cleared. Every level remains in bundled closure scope. Winning-route and source-behaviour coverage remain incomplete.",
+      "evidence": [
+        "2.0-build83/neolemmix-bundle-audit.json",
+        "2.0-build83/neolemmix-style-rights-inventory.json",
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
+      ]
+    }
+  },
+  "scopeDecisions": [
+    "The Classic fan load/start gate and the 60-conversion gate do not close the separate all-bundled-content gate.",
+    "The pinned NeoLemmix 1.7 compatibility gate does not close the 2.0 bundled scope. The 75 indexed levels with missing styles remain in scope.",
+    "Community styles required by indexed bundled NeoLemmix levels are unresolved bundled dependencies. Do not relabel these levels as imported content.",
+    "Player-imported content is outside bundled closure counts. Keep support claims limited by engine, version and tested features."
+  ],
+  "overallStatus": "open",
+  "reason": "The published Mac bundle has unresolved route, fidelity, style-rights and source-parity gaps. The last installed iOS candidate does not contain the full 2.0 engine scope, and no accepted full-scope iOS package is recorded."
+}

@@ -368,7 +368,18 @@
         "displayedCountdown": "8:33",
         "result": "The matcher reports additional exact WALKER matches in the native countdown window. It does not provide a tracked match to native actor 11 for this frame.",
         "output": "walker-match-2590.txt",
-        "outputSHA256": "cd25f4ff8704204addf5bd0008f7946ad5490a11db440c6552db7998ecc8d6c2"
+        "outputSHA256": "cd25f4ff8704204addf5bd0008f7946ad5490a11db440c6552db7998ecc8d6c2",
+        "currentMainRecheck": {
+          "date": "2026-10-17",
+          "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+          "runtimeSourceSHA256": "cefbb1755307379e95b4b089fd676fe31b5c1edb563b7ead3339ddf26062aee6",
+          "runtimeLibrarySHA256": "d475a60e05bd429cac4f1ab73c40407850016613453c27796e0b134bbf95b081",
+          "matcherSourceSHA256": "03cbee00c7f90b8a53e6d3ab27b8b331ba838038987f947dc5292212919a7a1b",
+          "matcherBinarySHA256": "ba7661f7414c74a2f52b8acfc2dfbcfb5885ba183eb340b04c6efee57d5b3cc3",
+          "output": "walker-match-2590-current-main-2026-10-17.txt",
+          "outputSHA256": "cd25f4ff8704204addf5bd0008f7946ad5490a11db440c6552db7998ecc8d6c2",
+          "result": "The current-main rebuild reproduces the prior exact WALKER pixel matches and still has no tracked match for native actor 11. Multiple actor IDs and ticks match at the same predicted sprite positions; this does not establish source actor identity or continuous actor parity."
+        }
       },
       "identityLimit": "The DOS frames do not contain native actor IDs or emulated ticks. Actor 11 is a native candidate based on the shared countdown interval and exact sprite position; the source-side identity remains inferred.",
       "method": "Replay Beach 10 without inputs through every native tick sharing the source frame's displayed countdown. Use the production renderer's WALKER phase and draw offsets, then compare every opaque WALKER.DAT palette pixel at the predicted source coordinates. RGB input was extracted from each retained source PNG with ImageMagick.",

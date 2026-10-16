@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "remoteMainCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Exact bundled Classic fan level. Imported content is excluded.",
+  "level": {
+    "identity": "fan:lldb-199/TMChallenge.dat#7",
+    "title": "The Frantic Lemming Antic",
+    "archive": "0199-TMChallenge.zip",
+    "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+    "initialStateHash": "ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8",
+    "initialLevelFingerprint": "650b28fe07b16ebe5ffb904f983ec58e9036ac1926abfad9e6273cfbb1834657",
+    "lemmings": 2,
+    "requiredToSave": 2,
+    "skills": {
+      "climber": 1,
+      "floater": 1,
+      "bomber": 2,
+      "blocker": 2,
+      "builder": 2,
+      "basher": 10,
+      "miner": 10,
+      "digger": 10
+    }
+  },
+  "search": {
+    "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0199-TMChallenge.zip' 1 OUTPUT --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'TMChallenge.dat#7' --seconds 600 --width 16384 --fallback 45 --refire 30 --hash-named --golems-clock --rescue-quota-distance --prefer-progress --adaptive-rate --partial-out",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "seconds": 600,
+    "beamWidth": 16384,
+    "fallback": 45,
+    "refire": 30,
+    "clock": "Golems",
+    "ranking": [
+      "rescue-quota-distance",
+      "prefer-progress"
+    ],
+    "adaptiveRate": true,
+    "expandedCandidates": 1663361,
+    "lastTick": 646,
+    "released": 2,
+    "lost": 0,
+    "active": 2,
+    "bestSaved": 0,
+    "result": "UNSOLVED; no winning route found within this bound.",
+    "partialPath": ".build/classic-fan-current-main-20261017/frantic-20261017-02/ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8.partial.json",
+    "partialSHA256": "630f91f9e5480327d2324b9aae05d8e5f0574ec73e7273c44fa97b88fa133471",
+    "alternativeRankingAttempts": [
+      {
+        "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0199-TMChallenge.zip' 1 OUTPUT --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'TMChallenge.dat#7' --seconds 600 --width 16384 --fallback 45 --refire 30 --hash-named --golems-clock --direct-exit-distance --prefer-progress --adaptive-rate --partial-out",
+        "ranking": [
+          "direct-exit-distance",
+          "prefer-progress"
+        ],
+        "seconds": 600,
+        "beamWidth": 16384,
+        "fallback": 45,
+        "refire": 30,
+        "adaptiveRate": true,
+        "expandedCandidates": 1675731,
+        "lastTick": 646,
+        "released": 2,
+        "lost": 0,
+        "active": 2,
+        "bestSaved": 0,
+        "partialPath": ".build/classic-fan-current-main-20261017/frantic-direct-20261017-03/ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8.partial.json",
+        "partialSHA256": "630f91f9e5480327d2324b9aae05d8e5f0574ec73e7273c44fa97b88fa133471",
+        "result": "UNSOLVED; found no route. The retained partial matches the earlier search exactly."
+      }
+    ],
+    "summary": "Two 600-second searches used different ranking modes and identical fine timing. Both found no route and retained the same 0/2 partial.",
+    "interpretation": "Two different beam rankings returned the same 0/2 partial. The stored donor replay and 89,771 bounded timing trials also produced no target win. A new route, rather than further small timing changes to this donor, is required."
+  },
+  "replayEvidence": {
+    "winningCandidate": false,
+    "strictReplayRun": false,
+    "verifiedWinningRoutesAdded": 0
+  },
+  "closureEffect": {
+    "verifiedFanWinsBefore": 2403,
+    "verifiedFanWinsAfter": 2403,
+    "openFanRoutesBefore": 3617,
+    "openFanRoutesAfter": 3617,
+    "status": "No bundled route gap closed."
+  },
+  "limits": [
+    "This bounded search does not prove that no winning route exists.",
+    "The solver used the exact bundled archive and the Golems clock.",
+    "This record makes no claim about imported content."
+  ],
+  "storedCandidateReplayRepair": {
+    "candidateSource": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 6cad3a286bcc8aace698124aebdf2bd76fdcb2f6612005e5f9a4f90b07f15281",
+    "candidateDonorIdentity": "fan:lldb-476/Mayhem.DAT#12",
+    "candidateDonorTitle": "The Great Lemming Caper",
+    "candidateEvents": 7,
+    "targetInitialHashMatchesDonorInitialHash": true,
+    "tool": "ExpandFanEvidence",
+    "toolSHA256": "00c85d9efdfb1f1bea0628087a04be308e62d82ab69f2045e877d3937395bda2",
+    "targetedTrials": [
+      {
+        "strategy": "single event shifts, radius 1..8 ticks",
+        "trials": 116,
+        "newWinningWitnesses": 0
+      },
+      {
+        "strategy": "all two-event shifts, each event ±1 or ±2 ticks",
+        "trials": 677,
+        "newWinningWitnesses": 0
+      },
+      {
+        "strategy": "all three-event shifts, each event ±1 or ±2 ticks",
+        "trials": 4485,
+        "newWinningWitnesses": 0
+      },
+      {
+        "strategy": "all four-event shifts, each event ±1 or ±2 ticks",
+        "trials": 17925,
+        "newWinningWitnesses": 0
+      },
+      {
+        "strategy": "all five-event subsets, each selected event ±1 or ±2 ticks",
+        "trials": 21508,
+        "generatedVariants": 21504,
+        "newWinningWitnesses": 0
+      },
+      {
+        "strategy": "all six- and seven-event subsets, each selected event ±1 or ±2 ticks",
+        "trials": 45060,
+        "generatedVariants": 45056,
+        "newWinningWitnesses": 0
+      }
+    ],
+    "totalReplayTrials": 89771,
+    "interpretation": "The donor replay does not transfer to this level through the tested timing changes. This does not prove that the target has no winning route.",
+    "newVerifiedWins": 0
+  }
+}

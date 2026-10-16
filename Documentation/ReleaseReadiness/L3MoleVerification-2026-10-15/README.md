@@ -68,8 +68,9 @@ failures remain open.
 ### 16 October 2.0.3 current-main check
 
 After `main` advanced to `9862374431ff67e67e084eb1f8416eb088b09ea3`, I reran
-`python3 Scripts/verify-l3-mole-trace.py`. It again passes 53 primary positions,
-two repeated traces with 673 samples, and all four tunnel-edge checks. The L3
+`python3 Scripts/verify-l3-mole-trace.py`. It again checks 53 recorded
+isolated-prototype positions, two repeated traces with 673 samples, and all four
+tunnel-edge checks. The L3
 runtime, route, replay, trace-verifier and fixture-audit sources did not change
 after the `1111ece8` full fixture audit. That audit remains the latest full
 result: 399/416 fixtures double-replay and 17 route schedules fail. The trace
@@ -78,9 +79,14 @@ shared engine libraries, but its complete app audit was not rerun. See the
 [current-source recheck](current-source-parity-recheck-2026-10-16.json) and
 [2.0.3 release record](../2.0.3-build86/README.md).
 
-The original executable and raw captures are still absent. The excavation
-mask, player-built-brick trigger, complete Mole rules and all 17 route repairs
-remain open.
+The build 83 extraction now contains the exact original L3 executable used by
+the retained traces. The unmodified level and placement files do not match the
+trace-specific fixture hashes. Both edited fixture sets have now been rebuilt
+from the bundled Shadow 107 files and match every retained hash. A new headless
+run did not reach the controlled Shadow 7 state. No gameplay capture or valid
+actor trace was accepted. The source menu sequence and capture process remain open. The
+excavation mask, player-built-brick trigger, complete Mole rules and all 17
+route repairs remain open.
 
 These solver probes predate the 16 October current-main audit below. They have
 not been repeated against the current runtime source.
@@ -178,10 +184,12 @@ through 244, including the ricochets and tunnel crossing. See
 `prototype-steel-comparison.json`. This proves the sampled trajectory in this
 case. It does not establish the full excavation mask, a player-built brick
 trigger, long travel outside terrain, water interactions or destruction.
-Run `python3 Scripts/verify-l3-mole-trace.py` to check the 53 source/native
-coordinate pairs, the runtime fingerprint, both repeated traces and all four
-tunnel-edge counterexamples. The verifier also confirms that both source traces
-use the same executable.
+Run `python3 Scripts/verify-l3-mole-trace.py` to check the 53 recorded source
+and isolated-prototype coordinate pairs, the baseline movement fingerprint,
+both repeated traces and all four tunnel-edge counterexamples. The verifier
+also confirms that both source traces use the same executable. It does not
+compare the current production runtime to the DOS trace; production still uses
+the pre-prototype Mole movement.
 
 `mole-prototype.patch` contains the isolated proposal against the baseline
 runtime hash recorded in `baseline-provenance.json`. It has not been applied
@@ -251,11 +259,13 @@ The [original manual](https://db.hfsplay.fr/files/2018/10/06/c9f24f28-42dd-4046-
 printed pages 25, 31 and 35, documents Use and Drop, directional brick/spade
 selection and using placed bricks to redirect a harmless Mole. These are
 source instructions. A verified gameplay capture of the built-brick trigger
-is still required. The original binary, manual PDF and raw captures are absent
-from this worktree and the installed app. The trace summaries, comparison
-values and file hashes remain, but they do not allow a new source replay or
-pixel-level reanalysis. Restore the reference files before closing the Mole
-excavation-mask and built-brick trigger gates.
+is still required. The exact original binary is present in the extracted build
+83 payload, and both trace fixture sets have exact hash matches. The headless
+replay did not reach the controlled level. The manual PDF and accepted gameplay
+captures are absent from this worktree and the installed app. The retained trace summaries
+do not allow pixel-level reanalysis. The menu sequence and raw capture path must
+be restored before closing the Mole excavation-mask and built-brick trigger
+gates.
 
 At the time of the original coordination split, this chat made no runtime or
 route fixture changes. A separate session owned those repairs. That ownership
@@ -266,12 +276,12 @@ a fresh source build.
 ## Current-main trace recheck
 
 After this worktree advanced to `main` revision `fc2c59e6`, I reran
-`python3 Scripts/verify-l3-mole-trace.py`. It passed the 53 sampled positions,
-both repeated source traces with 673 samples, and all four tunnel-edge checks.
-This confirms the retained source comparison still matches the current runtime
-fingerprint. The intervening main commit changed pause and presentation code,
-not the L3 runtime or trace verifier. This does not close the excavation-mask
-or built-brick trigger gaps. See the
+`python3 Scripts/verify-l3-mole-trace.py`. It checked the 53 recorded
+isolated-prototype positions, both repeated source traces with 673 samples, and
+all four tunnel-edge witnesses. The intervening main commit changed pause and
+presentation code, not the L3 runtime or trace verifier. This does not compare
+production trajectory to the source or close the excavation-mask and built-brick
+trigger gaps. See the
 [current parity recheck](current-source-parity-recheck-2026-10-15.json) for the
 source and verifier hashes.
 
@@ -280,17 +290,19 @@ source and verifier hashes.
 At `4fe7328a`, the whole runtime file hash changed after the previous recheck.
 The change adds action-eligibility helpers and refactors assignment guards.
 The Mole update and movement source region still matches the trace baseline.
-The verifier now checks that region, then passes all 53 primary positions, 673
-samples across two repeated source traces, and four tunnel-edge witnesses.
-This result confirms the recorded movement only. It does not close the
+The verifier checks the baseline movement region, 53 recorded isolated-prototype
+positions, 673 samples across two repeated source traces, and four tunnel-edge
+witnesses. The 53 positions do not come from the current production runtime.
+This result does not close the
 excavation-mask, trigger or complete Mole behaviour gaps. See the
 [16 October parity recheck](current-source-parity-recheck-2026-10-16.json) for
 the source and verifier hashes from that check.
 
 At current main `9862374431ff67e67e084eb1f8416eb088b09ea3`, the Mole trace
-verifier passes all 53 primary positions, both source traces with 673 samples
-and all four tunnel-edge checks. The runtime hash and Mole movement region
-match the recorded values. The latest full fixture audit at `1111ece8` still
+verifier checks 53 recorded isolated-prototype positions, both source traces
+with 673 samples and all four tunnel-edge witnesses. The production runtime
+hash and Mole movement region match the pre-prototype baseline. The verifier
+does not establish production trajectory parity. The latest full fixture audit at `1111ece8` still
 records 399/416 strict double-replay passes and 17 route failures; L3 runtime,
 route, replay and audit sources have not changed since that audit.
 
@@ -300,5 +312,83 @@ and Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. Each
 search ran for 300 seconds and found no route. They did not change fixtures.
 See the [search record](current-main-wide-route-searches-2026-10-16.json).
 The excavation mask, built-brick trigger, 17 route schedules and complete Mole
-rules remain open. The original executable and raw captures are absent, so the
-source comparison cannot be extended from this checkout.
+rules remain open. The exact original executable is present in the extracted
+build 83 payload, and the trace-edited fixtures have been rebuilt with exact hash matches.
+The ignored `.build/l3-mole-verification` directory now contains four
+framebuffer image dumps from a later failed launch. The original executable and
+trace-edited fixture hashes match. The images do not show an accepted controlled
+gameplay capture or actor trace, so they do not extend the source comparison.
+See `current-source-parity-recheck-2026-10-16.json` for their hashes.
+
+## 17 October current-main check
+
+`HEAD` and `origin/main` match at `368e7e72`. The L3 runtime, replay, route,
+audit and fixture paths have no changes after the full fixture audit source at
+`1111ece8`. The audit still records 399 of 416 exact double replays and 17
+route failures. The full audit was not rerun at current `HEAD`. The trace
+verifier checks 53 recorded isolated-prototype positions, 673 repeated source
+samples and four tunnel-edge checks at this `HEAD`. It does not compare
+production trajectory with DOS. A new 300-second Shadow 7 search expanded
+3,732,001 candidates without a route. It did not change fixtures. These checks do not
+prove that any level is impossible or verify the excavation mask and built-brick
+trigger. Source parity, all 17 route repairs and the build 86 app audit remain
+open. See the [current parity recheck]
+(current-source-parity-recheck-2026-10-16.json) and [Shadow 7 search]
+(current-head-shadow07-search-2026-10-17.json).
+
+
+### 17 October build 83 reference payload correction
+
+The extracted build 83 payload contains `LEM3CD/L3CD.EXE` and
+`LEM3CD-2/L3CD.EXE`. Both files match the retained trace executable SHA-256
+`5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018`. The
+unmodified `LEVEL101.DAT`, `PERM101.OBS` and `TEMP101.OBS` files in both
+directories do not match the trace-specific fixture hashes. The raw source captures remain absent.
+The prior availability record was too broad when it said the original
+executable was absent. This correction does not close the excavation-mask or
+built-brick trigger gates. See the [updated source parity recheck]
+(current-source-parity-recheck-2026-10-16.json).
+
+
+### 17 October headless source replay attempt
+
+I launched the rebuilt `steel-left-facing` fixture with the hash-matched
+executable in DOSBox Staging 0.83.0. SDL dummy video and muted audio kept the run
+headless. Eight delayed Enter keypresses did not establish the controlled
+Shadow 7 level state. The memory samples did not form a valid actor trace, so I
+rejected them. The original retained traces still use DOSBox Staging 0.82.2.
+The fixture files are reproducible, but the startup menu sequence and raw
+capture process remain open. No Mole behaviour or route gate changed.
+
+
+### 17 October full L3 fixture audit
+
+I rebuilt the audit executable from current `main` and reran all 416 standalone
+and carried fixtures against the build 83 L3 resources. The fresh report hash
+`8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351` matches
+the retained report. It confirms 399 exact double replays and 17 route failures.
+The failures remain four standalone routes and thirteen carried schedules. The
+non-zero audit result is expected because the strict gate requires every route
+to pass. The audit does not verify source parity or the full app package. See
+[current fixture audit provenance](current-fixture-audit-provenance.json).
+
+
+### 17 October Egyptian 13 wider search
+
+A current-main search used the exact extracted build 83 L3 resources, an
+8,192-state beam, two-pixel tool-site sampling and a 600-second budget. It
+expanded 7,175,180 candidates and found no route. It wrote no candidate, and
+fixture `213.json` stayed unchanged. The earlier 4,096-state, four-pixel,
+300-second search expanded 3,889,087 candidates and also found no route.
+Neither bounded search proves that the level is impossible. The route gate stays
+open. See the [search record](current-head-egyptian13-wide-search-2026-10-17.json).
+
+
+### 17 October strict L3 completion gate
+
+The fresh `verify-l3-completion.sh --require-all` run used the extracted build
+83 resources and the current-main runtime library. The 322-entry campaign
+manifest, fixture refresh checks and negative checks passed. The standalone
+route gate failed at Shadow 7 (`107.json`). The full campaign gate failed at
+carried fixture `107-1.json`. The strict route and campaign gates remain open.
+See the [current-head gate record](current-head-strict-gate-2026-10-17.json).

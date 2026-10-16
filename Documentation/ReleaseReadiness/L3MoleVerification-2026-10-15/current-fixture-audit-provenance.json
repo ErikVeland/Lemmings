@@ -85,17 +85,70 @@
   "normalisedFreshReportMatchesRetainedReport": true,
   "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly.",
   "latestMainReverification": {
-    "worktreeHEAD": "1111ece837840a005f932c0bdd14478df1728cc8",
-    "originMain": "1111ece837840a005f932c0bdd14478df1728cc8",
-    "command": "L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures .build/l3-current-main-20261016/Audit /private/tmp/l3-audit-current-main-20261016.json",
-    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "worktreeHEAD": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "originMain": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-report.json",
     "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
-    "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "sourceFiles": {
+      "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+      "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
+      "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+    },
+    "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
     "counts": {
       "strictExactDoubleReplays": 399,
       "strictFailures": 17,
-      "totalFixtures": 416
+      "totalFixtures": 416,
+      "standaloneFailures": 4,
+      "carriedFailures": 13
     },
-    "result": "The fresh report hash matches the previously retained fresh report hash; the audit reproduces 399 passes and the same 17 route failures against the current runtime source."
+    "exitCode": 1,
+    "result": "Fresh current-HEAD replay completed and reproduced the retained report hash and the same 17 failed route schedules. The non-zero result is expected because --require-all is not met.",
+    "scope": "Full 416-fixture audit, not a source-parity or release-package audit."
+  },
+  "latestCurrentHeadFullAudit": {
+    "worktreeHEAD": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "originMain": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-report.json",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "sourceFiles": {
+      "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+      "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
+      "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+    },
+    "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "counts": {
+      "strictExactDoubleReplays": 399,
+      "strictFailures": 17,
+      "totalFixtures": 416,
+      "standaloneFailures": 4,
+      "carriedFailures": 13
+    },
+    "exitCode": 1,
+    "result": "Fresh current-HEAD replay completed and reproduced the retained report hash and the same 17 failed route schedules. The non-zero result is expected because --require-all is not met."
+  },
+  "currentMainAuditRerun": true,
+  "latestCurrentHeadStrictCompletionGate": {
+    "schemaVersion": 1,
+    "date": "2026-10-17",
+    "headCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/verify-l3-completion.sh --require-all",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "sourceFiles": {
+      "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+      "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6",
+      "Tools/Lemmings3Completion/main.swift": "a00d6eb09e101d4ed8172e02c0c63e3dba6b9c78c49fb3685e0fc868397da7a5",
+      "Tools/Lemmings3Completion/Campaign.swift": "f8df18a17baa9eca0915bb94b140c1ea2673f0b2f5876d63ef99f9411bf08ad0"
+    },
+    "result": {
+      "exitCode": 1,
+      "campaignManifest": "322 fixture hashes and coverage entries passed",
+      "refreshAndNegativeChecks": "passed",
+      "standaloneStrictRouteGate": "failed at 107.json after 36 earlier levels printed as passing",
+      "campaignStrictGate": "failed at carried fixture 107-1.json",
+      "interpretation": "The strict bundled L3 route and campaign gates remain open. The independent full fixture audit records 399 of 416 exact double replays and the same 17 route failures."
+    }
   }
 }

@@ -23,9 +23,15 @@ fan levels, and records every attempt in `attempts.jsonl`. It skips attempts
 already made with at least the requested time and width. The output directory
 can be passed as `FAN_SOLVER_REPLAYS` to `ExpandFanEvidence`. That tool replays
 each candidate in the native simulation before it assigns a score.
+Pass the current Classic audit `levels.jsonl` to search each unresolved bundled
+fan row by its exact archive member. Pass `fan-evidence.json` to retain the
+low-confidence profile search. The audit input skips rows with verified wins;
+each generated replay still needs strict evidence expansion and identity checks.
 The batch uses the Golems clock for bundled fan levels. Use `--clock dos` only
 for a comparison run; the attempt ledger keeps the clock setting.
-Set `FAN_ONLY_PACK=fan:lldb-N` for a targeted verification pass.
+Set `FAN_ONLY_PACK=fan:lldb-N` for a targeted verification pass. The batch
+driver searches only unresolved rows from that pack and stops if the audit has
+none for it.
 
 The solver uses the fan library's exact archive and level mechanics by default.
 For a geometry probe of an `.ini` source pack, pass `--canvas-width N` and
@@ -149,7 +155,7 @@ gives the last waiting-route tick, assignments started, continuations completed
 and whether the deadline expired. A completed sweep covers only this one-skill,
 fixed-rate search; it does not establish that a level is impossible.
 
-`generate_solver_partial_retimes.py` makes bounded one-command timing
+`Tools/DifficultyDiagnostics/generate_solver_partial_retimes.py` makes bounded one-command timing
 candidates from these partial routes. Use `--minimum N --radius M` to search
 an untested range without repeating earlier shifts. Feed the candidate folder
 to `ExpandFanEvidence`, then run strict exact-level replay verification before

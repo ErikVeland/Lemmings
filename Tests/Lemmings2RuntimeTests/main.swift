@@ -57,6 +57,43 @@ func testPlainFallLanding() throws {
 }
 
 /**
+ * Verifies the four-pixel walking step limit from the PROCESS overlay.
+ */
+func testWalkingStepHeight() throws {
+    func walker(at obstacleHeight: Int) throws -> Lemmings2Runtime {
+        let width = 64, height = 80, floor = 60, wallX = 21
+        var solid = [Bool](repeating: false, count: width * height)
+        for y in floor..<height { for x in 0..<width { solid[y * width + x] = true } }
+        for y in (floor - obstacleHeight)..<floor { solid[y * width + wallX] = true }
+        return try .init(configuration: .init(width: width, height: height,
+            pixels: solid.map { $0 ? 6 : 0 }, solid: solid,
+            palette: [UInt8](repeating: 255, count: 1024),
+            entrance: .init(x: 20, y: 45, width: 1, height: 1),
+            exits: [.init(x: 50, y: 50, width: 8, height: 16)],
+            skills: [], supplies: [], total: 1, timeLimit: 120,
+            releaseInterval: 20, terrainMasks: try syntheticMasks(), firstReleaseTick: 1))
+    }
+
+    for (height, canStep) in [(4, true), (5, false)] {
+        var game = try walker(at: height)
+        for _ in 0..<100 where game.lemmings.first?.state != .walking { game.step() }
+        check(game.lemmings.first?.state == .walking, "Step-height fixture did not land")
+        game.step()
+        let actor = game.lemmings[0]
+        if canStep {
+            check(actor.x == 21 && actor.y == 56 && actor.direction == 1
+                && actor.state == .walking,
+                "Walker failed the four-pixel rise: \(actor.x),\(actor.y),\(actor.state)")
+        } else {
+            check(actor.x == 20 && actor.y == 60 && actor.direction == -1
+                && actor.state == .walking,
+                "Walker crossed a five-pixel rise: \(actor.x),\(actor.y),\(actor.state)")
+        }
+    }
+    print("PASS L2 walking step limit at four and five pixels")
+}
+
+/**
  * Verifies the Classic blocker field against the original grid and skill ordering.
  */
 func testClassicBlockerField() throws {
@@ -1676,6 +1713,7 @@ func testControlsAndSoundEvents() throws {
 
 do {
     try testPlainFallLanding()
+    try testWalkingStepHeight()
     try testTerrainRecovery()
     try testClassicBlockerField()
     try testControlsAndSoundEvents()

@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Bounded searches for one unresolved, bundled Classic fan level.",
+  "level": {
+    "identity": "fan:lldb-171/Giga pack 09.dat#2",
+    "title": "Frozen in the airport",
+    "archive": "LevelPacks/0171-Giga-pack-09.zip",
+    "archiveSHA256": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
+    "initialStateHash": "00afb6607b5845f8a866e9112b8b63d9479a7ff94e40ab19bf92d7ac65205931",
+    "lemmings": 8,
+    "requiredToSave": 1
+  },
+  "build": {
+    "solver": "Tools/ClassicSolver",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "resourceApp": "Ultimate Lemmings 1.9.1 build 76",
+    "releaseBinaryAudit": false
+  },
+  "searches": [
+    {
+      "mode": "adaptive beam",
+      "seconds": 180,
+      "width": 8192,
+      "ranking": ["prefer progress", "rescue quota distance"],
+      "adaptiveReleaseRate": true,
+      "expandedCandidates": 519143,
+      "bestSaved": 0,
+      "result": "no winning route"
+    },
+    {
+      "mode": "single-skill timing sweep",
+      "seconds": 180,
+      "fallback": 1,
+      "assignmentsStarted": 8432,
+      "continuationsCompleted": 8432,
+      "deadlineExpired": false,
+      "bestSaved": 0,
+      "result": "no winning route"
+    },
+    {
+      "mode": "Builder then Basher timing sweep",
+      "seconds": 180,
+      "firstInputTicks": "1..600",
+      "secondInputGap": "1..120",
+      "firstSkillAssignments": 1088,
+      "secondSkillAssignments": 384647,
+      "continuationsCompleted": 384647,
+      "deadlineExpired": false,
+      "bestSaved": 0,
+      "result": "no winning route"
+    }
+  ],
+  "followUpSearches": [
+    {
+      "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d475a60e05bd429cac4f1ab73c40407850016613453c27796e0b134bbf95b081",
+      "archiveSHA256": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
+      "resources": "installed 1.9.1 build 76",
+      "options": [
+        "--seconds 180",
+        "--width 8192",
+        "--fallback 20",
+        "--refire 10",
+        "--adaptive-rate",
+        "--prefer-progress",
+        "--rescue-quota-distance",
+        "--focus-workers 1"
+      ],
+      "result": "UNSOLVED",
+      "expandedCandidates": 557979,
+      "terminalTick": 180,
+      "released": 4,
+      "lost": 0,
+      "active": 4,
+      "saved": 0,
+      "required": 1,
+      "partialReplay": {
+        "path": ".build/classic-fan-frozen-airport-focused/00afb6607b5845f8a866e9112b8b63d9479a7ff94e40ab19bf92d7ac65205931.partial.json",
+        "sha256": "fd1ed6a4d0a481bb9457488849f2297d8f6b6818fba341f0e67b38fde9668afe"
+      },
+      "elapsedSeconds": 180
+    },
+    {
+      "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d475a60e05bd429cac4f1ab73c40407850016613453c27796e0b134bbf95b081",
+      "archiveSHA256": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
+      "prefixPlanSHA256": "fe07078ccea4eebf9e380fb6a6dce9164bdf01d64c452b5d9d828ddecb7e1404",
+      "resources": "installed 1.9.1 build 76",
+      "options": [
+        "--seconds 180",
+        "--width 8192",
+        "--fallback 20",
+        "--refire 10",
+        "--adaptive-rate",
+        "--prefer-progress",
+        "--rescue-quota-distance",
+        "--focus-workers 1",
+        "--prefix from the preceding partial replay's recorded commands"
+      ],
+      "result": "UNSOLVED",
+      "expandedCandidates": 660621,
+      "terminalTick": 233,
+      "released": 8,
+      "lost": 0,
+      "active": 8,
+      "saved": 0,
+      "required": 1,
+      "elapsedSeconds": 180
+    }
+  ],
+  "outcome": {
+    "verifiedRoutesAdded": 0,
+    "openFanRoutes": 3617,
+    "interpretation": "These searches cover one level and the listed input policies only. They do not prove that the level is impossible.",
+    "importedContent": "Excluded. Imported content remains open-ended under per-engine and per-version support claims."
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "One exact bundled Classic fan level; imported content excluded.",
+  "level": {
+    "pack": "0220-AkseliPack01.zip",
+    "member": "AkseliPack01.dat#6",
+    "displayName": "In the Core",
+    "solverRank": "fan:lldb-220 7",
+    "initialStateHash": "9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de",
+    "staticLevelFingerprint": "af9b26aa78e5137d6454eeefe2180d9c985538cd2b6e3689e82d05844a3ebab1",
+    "lemmings": 12,
+    "requiredToSave": 7,
+    "skills": {
+      "climber": 1,
+      "blocker": 10,
+      "builder": 10,
+      "digger": 1
+    }
+  },
+  "priorCandidate": {
+    "witness": "Artifacts/LearningJourney/candidate-solutions.json#9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de",
+    "failure": "engine refused to queue builder for lemming 0 at tick 1482"
+  },
+  "search": {
+    "binary": ".build/classic-fan-current/ClassicSolver",
+    "binarySHA256": "911b45b3d0b1e4e5f5de1e85e2747991f1e87b7a20370b39061c2a9ca6d07222",
+    "archiveSHA256": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+    "resources": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "options": [
+      "--member AkseliPack01.dat#6",
+      "--seconds 60",
+      "--width 4096",
+      "--balanced-ranking"
+    ],
+    "result": "UNSOLVED",
+    "expandedCandidates": 150349,
+    "elapsedSeconds": 60,
+    "terminalTick": 140,
+    "released": 12,
+    "lost": 0,
+    "active": 12,
+    "complete": false
+  },
+  "conclusion": "No replacement route was found within this bounded search. This is not proof that the level is impossible. The exact bundled level remains unverified and the bundled Classic fan gate remains open. A 180-second current-source search with an 8,192-wide beam, more frequent decisions and progress ranking also found no route. This bounded search does not prove the level impossible.",
+  "importedContent": "Not included; support remains open-ended and is assessed per engine and version.",
+  "followUpSearches": [
+    {
+      "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "solver": "current-source rebuild from Scripts/build-classic-solver.sh",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "librarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "archiveSHA256": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+      "resources": "installed 1.9.1 build 76; retained pack manifest matches build 85",
+      "options": [
+        "--seconds 180",
+        "--width 8192",
+        "--fallback 20",
+        "--refire 10",
+        "--adaptive-rate",
+        "--prefer-progress",
+        "--rescue-quota-distance",
+        "--save-partials"
+      ],
+      "result": "UNSOLVED",
+      "expandedCandidates": 492416,
+      "terminalTick": 209,
+      "released": 12,
+      "lost": 1,
+      "active": 11,
+      "saved": 0,
+      "required": 7,
+      "elapsedSeconds": 180
+    }
+  ]
+}

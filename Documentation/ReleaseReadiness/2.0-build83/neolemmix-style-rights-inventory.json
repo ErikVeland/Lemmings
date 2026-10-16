@@ -9,7 +9,7 @@
     "levelInventory": "MacOS2Preparation-2026-10-15/neo-style-inventory.json",
     "levelInventoryScope": "The frozen native inventory contains 75 unresolved level identities. The exact archive audit confirms the same 75 identities in the 794-level build 83 package."
   },
-  "licenseFinding": "The pinned CE License.txt says image, music and sound creators retain full rights and permits those assets to be copied only to run NeoLemmix. The licence lists owners for some styles, but it does not list 18 of the 44 referenced style identifiers. No redistribution permission is recorded here. This inventory is a rights follow-up list, not a legal interpretation.",
+  "licenseFinding": "The pinned CE License.txt says image, music and sound creators retain full rights and permits those assets to be copied only to run NeoLemmix. Normalising the listed name 'l2 polar' to the style identifier l2_polar leaves 17 of the 44 referenced identifiers without a matching listed owner. No redistribution permission is recorded here. This inventory is a rights follow-up list, not a legal interpretation.",
   "bundledScope": {
     "levels": 794,
     "levelsReadyWithCurrentDMAStyles": 719,
@@ -18,6 +18,12 @@
     "userDirection": "Keep all 794 currently bundled levels in closure scope. Do not reclassify the 75 affected levels as open-ended imports."
   },
   "rightsHolders": [
+    {
+      "name": "DMA",
+      "styles": [
+        "l2_polar"
+      ]
+    },
     {
       "name": "Flopsy",
       "styles": [
@@ -88,7 +94,6 @@
         "dex_lr2_jungle",
         "dex_lr2_mona",
         "gigalem_skymd",
-        "l2_polar",
         "namida_bridge",
         "namida_garden",
         "proxima_metroid",
@@ -108,6 +113,76 @@
       ]
     }
   ],
+  "attributionResearch": {
+    "date": "2026-10-17",
+    "styleNameConvention": "The NeoLemmix style guide says custom style names should usually start with the creator's username. A prefix is a lead, not proof of authorship or permission.",
+    "sources": [
+      "https://www.lemmingsforums.net/index.php?topic=4337.0",
+      "https://www.lemmingsforums.net/index.php?topic=5673.15",
+      "https://www.neolemmix.com/?page=download_list&program=52"
+    ],
+    "candidateCreators": [
+      {
+        "candidate": "Dex (account identity unconfirmed)",
+        "styles": ["dex_chalk", "dex_davinci", "dex_halloween", "dex_lr2_build", "dex_lr2_industry", "dex_lr2_jungle", "dex_lr2_mona"],
+        "basis": "Name-prefix convention only. No style-specific creator record was found.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "GigaLem",
+        "styles": ["gigalem_skymd"],
+        "basis": "Name-prefix convention. The pinned licence names GigaLem for other styles, but omits this style.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "Namida Verasche",
+        "styles": ["namida_bridge", "namida_garden"],
+        "basis": "Name-prefix convention and Namida's published style tutorials. The pinned licence omits both identifiers.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "Proxima",
+        "styles": ["proxima_metroid"],
+        "basis": "Name-prefix convention only. No style-specific creator record was found.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "SQRon",
+        "styles": ["sqron_turrican2wall"],
+        "basis": "Name-prefix convention. The pinned licence names SQRon for another style, but omits this style.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "WillLem",
+        "styles": ["willlem_lemminas"],
+        "basis": "Name-prefix convention only. No style-specific creator record was found.",
+        "rightsStatus": "not-cleared"
+      },
+      {
+        "candidate": "zanzindorf",
+        "styles": ["zanzindorf_cloud"],
+        "basis": "Name-prefix convention. The pinned licence names zanzindorf for other styles, but omits this style.",
+        "rightsStatus": "not-cleared"
+      }
+    ],
+    "maintainerEvidence": [
+      {
+        "style": "special",
+        "maintainer": "Namida",
+        "basis": "Namida posted an update to the special style. The post does not identify the copyright holder or grant redistribution rights.",
+        "rightsStatus": "not-cleared"
+      }
+    ],
+    "stillUnassigned": ["sms_crystal", "sms_fire", "special"],
+    "nameMatch": {
+      "style": "l2_polar",
+      "licenseName": "l2 polar",
+      "licenseSection": "DMA",
+      "normalisation": "underscore to space",
+      "redistributionClearance": false
+    },
+    "clearanceRule": "Candidate creators do not prove ownership or permission and do not change rightsStatus. Get style-specific permission or a written licence determination before distribution."
+  },
   "styles": [
     {
       "style": "dex_chalk",
@@ -224,9 +299,9 @@
     {
       "style": "l2_polar",
       "affectedBundledLevels": 1,
-      "rightsHolder": null,
+      "rightsHolder": "DMA",
       "rightsStatus": "not-cleared",
-      "nextStep": "Identify the asset source and rights holder, then obtain written permission to bundle it."
+      "nextStep": "Confirm the style-to-licence identity and obtain written permission to bundle it."
     },
     {
       "style": "namida_abstract",

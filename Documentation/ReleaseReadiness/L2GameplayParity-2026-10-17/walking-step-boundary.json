@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Verify the source-derived L2 walking step boundary and rerun the full repository runtime suite against the installed L2 bundle.",
+  "referenceRule": {
+    "overlay": "PROCESS",
+    "offsets": "4e7f-4f10",
+    "rule": "Walking steps up at most four pixels; a five-pixel obstruction causes a turn.",
+    "record": "Documentation/Lemmings2PhysicsEvidence.md",
+    "limit": "The installed app bundle contains L2 data but not the original DOS executable or PROCESS overlay. This run validates the native implementation against the recorded source-derived rule; it is not a new DOS comparison."
+  },
+  "regression": {
+    "name": "testWalkingStepHeight",
+    "cases": [
+      {
+        "obstaclePixels": 4,
+        "expected": "advance one pixel and rise four pixels"
+      },
+      {
+        "obstaclePixels": 5,
+        "expected": "stay in place, turn, remain walking"
+      }
+    ],
+    "testSourceSHA256": "bf4348079f54216907843589c7eadb9f3d6ef3ffcc55208f454fdbcae9de95da",
+    "runtimeSourceSHA256": "cefbb1755307379e95b4b089fd676fe31b5c1edb563b7ead3339ddf26062aee6"
+  },
+  "validation": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/run-lemmings2-runtime-tests.sh '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2'",
+    "exitCode": 0,
+    "result": "Full L2 runtime suite passed. The new four/five-pixel boundary regression passed. All 120 bundled campaign levels loaded and advanced, and all 120 recorded campaign completion replays passed.",
+    "runtimeLibrarySHA256": "6e09e76783c06b4624a01cd6d6b973bdc8c1d58b499f66da8f7b46fab60bc044",
+    "testBinarySHA256": "e8207a7c6b306b472e60f0e8a25af1065baa5d2eee5819f7488b26c2bad12acd",
+    "contentRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2"
+  },
+  "closureEffect": "Closes a source-derived walking-step boundary regression gap. It does not close broad DOS gameplay parity, ark completion, campaign ending or full-app release validation."
+}

@@ -67,22 +67,21 @@ physical-device and accessibility acceptance, audio, controller, Duo and
 distribution gates remain open. See the
 [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 The 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
-Chronicles Beta. The native campaign gates record 120/120 L2 routes. The prior
-L3 engine state passed 90/90 routes and finished all three campaigns with 50
-survivors. The 15 October Mole direction and patrol corrections invalidated
-some L3 route witnesses. Shadow 13 now passes with a refreshed route. The
-strict route gate still stops at Shadow 7. Source parity, remaining route
-repair, L2's ark ending and L3 media remain open.
+Chronicles Beta. L2 records 120/120 standalone routes, 70 carry-over variants
+and 12 chains. Its Gold Ark and original-engine parity remain open. The latest
+L3 fixture audit passes 399/416 exact double replays. Four standalone routes
+and 13 carried schedules fail. Source parity, route repair and L3 media remain
+open.
 
-The 16 October strict audit from the modified worktree based on current main replayed all 6,020 bundled fan levels
-across 535 packs. It verified 2,402 winning routes; 3,600 levels had no matching
-candidate, and 18 candidate replays failed. There were no load, decode or render
-failures. The worktree was modified; its base commit and input hashes are recorded
-in the audit evidence. A corrected candidate index and three recovered routes reduced the
-missing-win count from 3,621 to 3,618. This audit used the installed 1.9.1 build
-76 resources. Its 535 `LevelPacks` archives match build 85, and build 86 records
-no non-localisation resource-index changes. It does not certify a 2.0.3 app
-binary. Imported October levels remain outside the bundle and open-ended. See
+The latest strict audit covers all 6,020 bundled fan levels across 535 packs.
+It verifies 2,403 winning routes. Another 3,599 levels have no matching
+candidate, and 18 candidate replays fail. The audit reports no load, decode or
+render failures. The evidence records the level identity and verified replay
+for all 2,755 accepted Classic routes. This audit used the installed 1.9.1
+build 76 resources. Its 535
+`LevelPacks` archives match build 85, and build 86 records no non-localisation
+resource-index changes. It does not certify a 2.0.3 app binary. Imported levels
+remain outside the bundle and open-ended. See
 the [current-main audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-2026-10-16/audit.json),
 [build 85 content comparison](Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json)
 and [2.0.3 release record](Documentation/ReleaseReadiness/2.0.3-build86/README.md).

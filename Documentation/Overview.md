@@ -42,7 +42,12 @@ Shadow 7 and Egyptian 6, 13 and 29 lack standalone wins. Thirteen carried
 schedules also fail. L3 route closure remains open. See
 [release scope](ReleaseScope.md) for the current status.
 
-A full native audit replayed all 6,020 fan levels from the exact build 83 resources. It recorded 2,399 winning routes, 3,600 levels without matching candidates and 21 failed replay levels. It found no load, decode or render failures. The strict route gate still has 3,621 levels without verified wins. Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical World” copies remain without winning routes. The October CSV lists two imported `fan:lldb-595` levels outside the bundle. Imported packs remain open-ended. See [release scope](ReleaseScope.md) for the closure work.
+The latest audit covers all 6,020 bundled fan levels. It verifies 2,403 winning
+routes, records 3,599 levels without matching candidates and 18 failed replay
+candidates, with no load, decode or render failures. The strict route gate has
+3,617 levels without verified wins. The two “It’s a Magical World” copies
+remain without winning routes. Imported packs remain open-ended. See
+[release scope](ReleaseScope.md) for the closure work.
 NeoLemmix uses a separate engine and its own style dependencies.
 
 ## What "modern" means here
@@ -97,14 +102,14 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-Macintosh 2.0.2 build 85 was published on 15 October. See the
-[release notes](ReleaseNotes-2.0.2-build85.md) and
-[distribution evidence](ReleaseReadiness/2.0.2-build85/README.md). It retains
-the published classifications and limits. Full bundled-content closure remains
-open. The 2.0 source connects all
-three native games and supported NeoLemmix to mobile sessions. Its signed build
-12 contains Classic only. Real-data fidelity, full package, physical-device,
-accessibility and distribution gates remain open. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
+Macintosh 2.0.3 build 86 is public. It fixes language selection and retains the
+published classifications and limits. See the
+[release notes](ReleaseNotes-2.0.3-build86.md) and
+[distribution evidence](ReleaseReadiness/2.0.3-build86/README.md). Full
+bundled-content closure remains open. The 2.0 source connects all three native
+games and supported NeoLemmix to mobile sessions. Its signed build 12 contains
+Classic only. Real-data fidelity, full package, physical-device, accessibility
+and distribution gates remain open. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 
 ## Roadmap
 

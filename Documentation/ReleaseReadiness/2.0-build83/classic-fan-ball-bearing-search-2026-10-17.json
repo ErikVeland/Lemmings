@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "remoteMainCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Exact bundled Classic fan member GARJEN03.dat#2. Imported content is excluded.",
+  "level": {
+    "packID": "fan:lldb-283",
+    "archive": "0283-GARJEN03.zip",
+    "member": "GARJEN03.dat#2",
+    "title": "Ball Bearing",
+    "initialHash": "006bcccc04d87600f2358c03af5f787623f95bdc81e6c00ca9c06efca25b19d0",
+    "initialLevelFingerprint": "c3e67d5d8f20d5448477990f13b2494501fb37edb92e55b99889979b5cc5ae42"
+  },
+  "search": {
+    "command": "ClassicSolver fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0283-GARJEN03.zip 1 <output> --resources /Applications/Ultimate Lemmings.app/Contents/Resources --member GARJEN03.dat#2 --seconds 180 --width 8192 --fallback 170 --refire 120 --hash-named --golems-clock --rescue-quota-distance --prefer-progress --partial-out",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+    "seconds": 180,
+    "beamWidth": 8192,
+    "fallback": 170,
+    "refire": 120,
+    "clock": "Golems",
+    "ranking": ["rescue-quota-distance", "prefer-progress"],
+    "expandedCandidates": 466314,
+    "lastTick": 347,
+    "released": 74,
+    "lost": 1,
+    "bestSaved": 8,
+    "required": 80,
+    "result": "UNSOLVED; bounded search found no winning route."
+  },
+  "replayEvidence": {
+    "winningCandidate": false,
+    "strictReplayRun": false,
+    "strictReplayReason": "No winning replay candidate was produced.",
+    "partialPath": ".build/classic-fan-current-main-20261017/ballbearing-exact/006bcccc04d87600f2358c03af5f787623f95bdc81e6c00ca9c06efca25b19d0.partial.json",
+    "partialSHA256": "11ede46e21600e8206935006e42ca6ceb37c43ddd9dd73d32afafa0eaca61370"
+  },
+  "closureEffect": {
+    "verifiedFanWinsBefore": 2403,
+    "verifiedFanWinsAfter": 2403,
+    "openFanRoutesBefore": 3617,
+    "openFanRoutesAfter": 3617,
+    "status": "No bundled route gap closed."
+  },
+  "limits": [
+    "UNSOLVED means this bounded search did not find a route. It does not prove that no winning route exists.",
+    "Search used installed build 76 resources. The retained pack manifest matches build 85, and this is not certification of the build 86 app binary.",
+    "This search makes no claim about imported content."
+  ]
+}

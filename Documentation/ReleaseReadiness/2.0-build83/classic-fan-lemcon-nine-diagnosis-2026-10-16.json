@@ -121,22 +121,71 @@
     "classicFanUnverified": 3617,
     "interpretation": "The tested single-Blocker assignments did not win. The result does not prove either level impossible and does not certify the original engine rules."
   },
-  "nextEvidenceNeeded": "Verify the exact original-engine exit collision rule for the bundled coordinates. Keep both exact archive members open until an original-source comparison or an unchanged-content winning replay confirms them.",
+  "nextEvidenceNeeded": "Compare these exact source coordinates and trigger semantics with an authoritative original-engine reference. Keep both archive members open until that comparison or an unchanged-content winning replay confirms them.",
   "geometryInspection": {
     "tool": "ClassicSolver --describe-geometry",
     "toolSource": "Tools/ClassicSolver/main.swift",
-    "toolBehaviour": "Prints canvas size, entrances, triggers, object and terrain placements, steel areas, and 8-pixel terrain occupancy.",
+    "toolBehaviour": "Prints canvas, entrances, trigger bounds, object and terrain placements, steel areas, an 8-pixel terrain map, and exact terrain pixels around each exit.",
     "member2": {
       "entrance": "792,86",
       "exitTrigger": "792,96 to 796,100",
-      "floorBeginsAt": "y=104 in the inspected 8-pixel cells"
+      "floorBeginsAt": "y=105 in the exact pixel profile; rows y=96..100 are empty within the exit trigger."
     },
     "member4": {
       "entrance": "792,86",
       "exitTrigger": "792,96 to 796,100",
-      "floorBeginsAt": "y=104; a pit is present under the exit in the inspected 8-pixel cells"
+      "floorBeginsAt": "No continuous floor within the exit trigger. Nearby terrain at x=796 and x=798 sits at or beyond the trigger right edge."
     },
-    "interpretation": "The decoded exit trigger sits above the floor. The engine checks the lemming foot point against the trigger. This is a candidate explanation for the missing routes, not proof of incorrect source behaviour."
+    "interpretation": "Exact pixel output confirms that both exit triggers occupy y=96..<100 and have no terrain under the trigger. Member 2 first reaches a floor at y=105. Member 4 has only nearby pixels at or beyond the exit right edge. The native foot-point trigger check makes the mismatch a plausible cause of the missing routes. It remains an unresolved source-behaviour and content question.",
+    "toolSourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "exactPixelProfiles": {
+      "member2": {
+        "profileX": "784..<804",
+        "exitBounds": "x=792..<796, y=96..<100",
+        "terrainAtY96To100WithinExit": "none",
+        "firstFloorRow": {
+          "y": 105,
+          "solidX": "784..796"
+        }
+      },
+      "member4": {
+        "profileX": "784..<804",
+        "exitBounds": "x=792..<796, y=96..<100",
+        "terrainAtY96To100WithinExit": "none",
+        "nearestTerrain": "x=798 from y=93 and x=796 from y=99; x=796 is outside the half-open exit bounds"
+      }
+    },
+    "engineRuleReview": {
+      "source": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+      "rule": "Classic trigger bounds are half-open. The simulation queries the lemming foot point. Golems accepts an exit trigger contact, while DOS mechanics also checks walking entry into the exit.",
+      "interpretation": "The terrain profiles do not place a walkable floor inside either exit trigger. The eight-pixel counterfactual aligns member 2 floor and trigger and wins, but it changes the level. This supports a geometry mismatch hypothesis and does not establish original-engine behaviour.",
+      "secondaryDOSReference": {
+        "url": "https://giovanniviglietta.com/files/lemmings/Glitches",
+        "claim": "The DOS glitch reference says a lemming falling onto an exit trigger exits when terrain is under that trigger, even if the fall would otherwise cause a splat. It distinguishes this DOS behaviour from Amiga.",
+        "evidenceType": "Secondary gameplay reference, not original source code or a capture of these exact levels.",
+        "corroboration": "A DOS-engine discussion explains that direct-drop occurs because fallers are blocked from exits but splatters are not: https://www.lemmingsforums.net/index.php?topic=2989.0",
+        "relevance": "The current simulation checks objects after a fall update and accepts a splatter at an exit when its landing foot is inside the trigger. Regressions cover this case, a midair faller over an exit, and a splatter landing below a disconnected exit trigger. The source reference does not support saving a splatter when the exit trigger does not overlap its landing point.",
+        "exactLevelStatus": "Neither decoded member places terrain inside the exit bounds. Member 2 first reaches terrain at y=105, below its y=96..<100 trigger. Member 4 has nearby terrain at or beyond the trigger's right edge. This geometry does not match the documented direct-drop condition. The exact DOS collision point and route outcome remain unverified.",
+        "currentEngineCode": "Sources/NxlvKit/ClassicDOSSimulation.swift:1695-1699"
+      },
+      "localDirectDropRegression": {
+        "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/run-classic-dos-simulation-regressions.sh '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30'",
+        "result": "PASS. The suite reports original exit centre-arrival and Golems first-contact behavior. Direct-drop regressions reject a midair faller and a splatter landing below a disconnected trigger, and save a splatter whose landing point overlaps the exit trigger.",
+        "testSourceSHA256": "87dddad31ed2a33a98925a16022a8a8e2931c87e3098d4390b246d03fb6d716e",
+        "scope": "This validates the native state transition with synthetic trigger geometry. It does not run either exact Lemcon Nine level in the original DOS executable.",
+        "validatedAt": "2026-10-17"
+      }
+    },
+    "validatedAt": "2026-10-17",
+    "currentMainValidation": {
+      "solverSourceSHA256": "42fb70c727ed1354f96a98cef42d367d5d4c05d567478252a643c93505400f6c",
+      "solverBinarySHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "method": "Compiled Tools/ClassicSolver with the installed Xcode toolchain against the local NxlvKit module and library, then ran --describe-geometry on archive entries 3 and 5.",
+      "result": "Both exact members report exit bounds x=792..<796, y=96..<100. The exact terrain profiles are summarised above.",
+      "baseCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "workingTreeChange": "Joined the pixel strings before printing. This fixes the diagnostic option compile error and does not change geometry or simulation behaviour."
+    }
   },
   "counterfactual": {
     "scope": "Temporary copy of member #2 only. The original bundled archive was not modified.",

@@ -267,3 +267,11 @@ standalone evidence. Both sets are hash-checked in the manifest.
 The chain tests cover matching populations, missing levels and ambiguous routes.
 Real replay tests also reject altered hashes, outcomes, versions, invalid
 populations and orphan variants.
+
+## 17 October current-main check
+
+`HEAD` and `origin/main` match at `368e7e72`. The L2 runtime, route and event
+verifiers, and completion fixtures have no changes after the 16 October source
+check at `9a95012e`. Its 120 standalone routes, 70 carry-over variants and 12
+chains remain source-current for the recorded build 83 payload. This does not
+close original-engine parity or the Gold Ark requirement.

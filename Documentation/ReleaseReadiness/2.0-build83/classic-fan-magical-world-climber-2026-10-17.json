@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "scope": "Exact bundled Classic fan level and one reported DOS climbing behaviour.",
+  "level": {
+    "identity": "fan:lldb-245/Martin Zurlinden 02.dat#5",
+    "title": "It's a Magical World",
+    "archive": "LevelPacks/0245-MazuLems-02.zip",
+    "archiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+    "levelNumber": 6,
+    "requiredToSave": 40,
+    "existingRouteRecord": "classic-fan-magical-world-route-repair-2026-10-16.json"
+  },
+  "reportedBehaviour": {
+    "description": "A climber catches a one-pixel rear wall contact, turns away, falls across a one-pixel gap, and lands on a bridge.",
+    "source": "https://www.lemmingsforums.net/index.php?topic=4195.0",
+    "evidenceLimit": "The community report is not a captured original-engine replay."
+  },
+  "nativeRegression": {
+    "test": "testClimberFallsAcrossOnePixelGap",
+    "testSourceSHA256": "d64ff5bc9e689d01d43669118020d24e9dd7022d8ee2e396dac7efab719a90c0",
+    "simulationSource": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+    "simulationSourceSHA256": "c9c21f77f48a2827c22eb61b78127627fc4f17e4060d277363f01e4679731c36",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/run-classic-dos-simulation-regressions.sh '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30'",
+    "result": "passed",
+    "campaignSoak": {
+      "levels": 120,
+      "tickCalls": 60000
+    },
+    "verificationLimit": "The regression checks the native transition and synthetic bridge landing. It does not prove route or full source parity for the bundled level."
+  },
+  "exactLevelSearch": {
+    "solverSource": "Tools/ClassicSolver",
+    "solverBinarySHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "firstSkillAssignments": 335,
+    "secondSkillAssignments": 168063,
+    "elapsedSeconds": 30,
+    "result": "no winning route",
+    "limit": "This bounded Builder-to-Climber timing sweep does not prove the level impossible."
+  },
+  "outcome": "The reported climbing behaviour now has a native regression. The bundled level still has no verified winning replay and remains open.",
+  "importedContent": "Excluded. Imported content remains open-ended with per-engine and per-version support claims."
+}

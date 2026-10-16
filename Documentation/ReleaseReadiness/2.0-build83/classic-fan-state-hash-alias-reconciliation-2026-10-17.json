@@ -1,0 +1,415 @@
+{
+  "schema": "classic-fan-state-hash-alias-reconciliation-v1",
+  "date": "2026-10-17",
+  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "inputs": {
+    "audit": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/levels.jsonl",
+    "hashAliasChecks": "Artifacts/DifficultyEvaluation/classic-state-hash-alias-checks.json"
+  },
+  "method": "Join each checked target by exact bundled archive and level member identity. Compare target and donor scene geometry and puzzle-scenario fingerprints. Keep original replay audit statuses unchanged. For the other replay-failed rows, compare candidate rank, one-based level number, and title with the bundled pack and level entry.",
+  "scope": {
+    "bundledFanLevels": 6020,
+    "verifiedWinningRoutes": 2403,
+    "replayFailedRows": 18,
+    "rowsWithoutWinningReplay": 3617
+  },
+  "reconciliation": {
+    "checkedStateHashAliases": 11,
+    "failedRowsIdentifiedAsCrossLevelAliases": 10,
+    "checkedAliasAlreadyHadIndependentWinningRoute": 1,
+    "remainingReplayFailedRowsNotCoveredByThisCheck": 0,
+    "differentSceneGeometryCount": 11,
+    "differentPuzzleScenarioCount": 11,
+    "routeClosures": 0,
+    "routeStatusChanges": 0,
+    "failedRowsWithMatchingTargetMetadata": 8,
+    "unclassifiedReplayFailedRows": 0
+  },
+  "records": [
+    {
+      "target": {
+        "source": "0066-Lemmy556-My-little-levels-2.zip/Lemmy556 My little levels 2.dat#4",
+        "title": "Heaven can wait (we hope!!!!)",
+        "auditStatus": "replay-failed",
+        "initialHash": "4850b69e3a28c0f9085c0533fc4c027f5e2c8adc8b8e8a389e5d78f8e38b1700"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#2",
+        "packID": "fan:lldb-475"
+      },
+      "targetSceneGeometrySHA256": "4a9c1be5b900b7c0f9e2fe88cc18045fc9483a7e59ba74882a95e90cf02d647c",
+      "donorSceneGeometrySHA256": "7ac741e707e78def2b74c91acc415fc33861f6d7d961c3269fa0e072fc6afec2",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: ebd6072284e032a4f734a47504cf60e8d1f1e64dd1542c61767bb84a9f64bcae",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 2f31459e159a5c1f8ce8999163b50c459b845d3f6a826618b50a788720ea7737",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0080-Master-System-Remakes.zip/Master System Remakes.dat#5",
+        "title": "Getting Closer...",
+        "auditStatus": "replay-failed",
+        "initialHash": "9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Master System Remakes.dat#2",
+        "packID": "fan:lldb-80"
+      },
+      "targetSceneGeometrySHA256": "3ec54853e0007df9697bd21f8182f925d17034759df9834324f8f9c098a1c420",
+      "donorSceneGeometrySHA256": "d85dff04e22576d2abc76b556d003bf65e4478a9bd67010b769f594243be2058",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 82f16ec745cdbdde400613008ee1ba60a502fa19f717fde3f940fdb22486a314",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 95a7f9ab54684a68e0d99d2b6101dd3f44334598c04b2ab3e17175bd5250bf10",
+      "targetOutcome": "error"
+    },
+    {
+      "target": {
+        "source": "0199-TMChallenge.zip/TMChallenge.dat#1",
+        "title": "Smile if you love decoration",
+        "auditStatus": "replay-failed",
+        "initialHash": "9ad9b913094b037fb8fd690d3259343cf07139a14f4d7da02456ce0e3873b6df"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Fun.DAT#9",
+        "packID": "fan:lldb-473"
+      },
+      "targetSceneGeometrySHA256": "813e333b70e9d456469f341946608e953c02689b6734a7e2b8018cdbda5302bd",
+      "donorSceneGeometrySHA256": "b716e983f9daa5d820555202bf5985c313a0162aef2b2cdb8874e8c9a93e2cc6",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: cb2dd41583c42f3775d77f16dc8375eb7f37af52493c6f00e2bdc8c13a59fe20",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: b6ca73db7064f0a6004140e60d1b181d0caa3377c8a0225a07f7ff4676db47f2",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0199-TMChallenge.zip/TMChallenge.dat#4",
+        "title": "Get a little extra help",
+        "auditStatus": "replay-failed",
+        "initialHash": "1f6875ddd25e71deadf7fd261f3f5605284558aa13fe647b42f9375f131b3b9f"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#3",
+        "packID": "fan:lldb-475"
+      },
+      "targetSceneGeometrySHA256": "9bd088c8e2409f93e442d97a52465569d4154580857d3d49d984edf2fda9a3b7",
+      "donorSceneGeometrySHA256": "68245ed0f603a63ad26021b713ae17e83f25a7d6fb730877d9068ddeb00a3165",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 4d5fe4680e6ad6532add93fa1df90bca663b3437b1f073f9b4715439c739adf4",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 3724b4df855b3ec8ae77073892292689a22dc9bdd4d10d3804080024e37a559d",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0199-TMChallenge.zip/TMChallenge.dat#5",
+        "title": "Hocus Pocus",
+        "auditStatus": "replay-failed",
+        "initialHash": "58bf0e1dbfb64e0547adab4b112a000c09e64c6c39431b3c3c8c3bd66bf38de8"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#9",
+        "packID": "fan:lldb-475"
+      },
+      "targetSceneGeometrySHA256": "88cd640a8906a46c2f93177fdf3dfb0240d635064d471bafe7d60cdbadb59780",
+      "donorSceneGeometrySHA256": "dd7148f3a0841121b86b535474c1d629df5498ee509ab9f8c263d88268b2dceb",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 017ed73b9e915dc487e9c9a2a5c7a09ad1652fd6285681fe9a7e58839cb097fa",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 08e2a276a30a4710634ff67c3d6ec298b2b26a6b956d75a47fa26ab8ed50a543",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0199-TMChallenge.zip/TMChallenge.dat#6",
+        "title": "Who you gonna call?",
+        "auditStatus": "replay-failed",
+        "initialHash": "784f3537fc51291625fd2060409a658ad5fc973cf44993a3e1f0ffca1b1fb98b"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#26",
+        "packID": "fan:lldb-475"
+      },
+      "targetSceneGeometrySHA256": "132c13897651cc2ddeaef3a3b1510888b5b0350706761e047768de45b828bb93",
+      "donorSceneGeometrySHA256": "54bce6b3c9299a2b701cee23b4048063f09103aa31a7ca08775835bec9c74c0e",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: aa44080326399dfecf24e3e57b1c0dd2eecc80339bf8fc28b0e0f00821f4e6ed",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: c87f8c0d289c676485710186d85092a5f887b31ca7093d0b44e387be8078b146",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0199-TMChallenge.zip/TMChallenge.dat#7",
+        "title": "The Frantic Lemming Antic",
+        "auditStatus": "replay-failed",
+        "initialHash": "ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Mayhem.DAT#12",
+        "packID": "fan:lldb-476"
+      },
+      "targetSceneGeometrySHA256": "7c7b24acf7866b2d567f6c1b299df6fe13a040dd3f1b592a8d80f1e7c166d426",
+      "donorSceneGeometrySHA256": "f9f65ffe1c68a672a16d7efd154c78b77eeff50684eb7fb26801ae55c9eed900",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 0fdfbf38de9a2196d7798d754618d106439c8424e508f419e7270c91b858501a",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 74ff61b48421185bb08c591a0833ddf49bccd75f1e817aa4583bcac665d5eea6",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0547-Ji-Hoons-Lemmings-Remake-Heaven.zip/Ji Hoon Heaven 2.DAT#3",
+        "title": "Dude, where's my exit?",
+        "auditStatus": "replay-failed",
+        "initialHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "targetSceneGeometrySHA256": "537345ae7ca9ea79fc94b008be9ea5961ad65adc687092f7014371a8c063a3eb",
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 9a3950a1a8991e8148de132b312f602be69739c6c3882b792fc26414e9f3b98d",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0548-Ji-Hoons-Lemmings-Remake-Sky.zip/Ji Hoon Sky 1.DAT#5",
+        "title": "Dude, where's my exit?",
+        "auditStatus": "replay-failed",
+        "initialHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "targetSceneGeometrySHA256": "bc09adb39b14d86ebd45d927a6ee027ef59e7c797c87d2c8f9f7ec3ed9129aba",
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: ec0d86fcdafaf3585b08bb8e75ad9467bba0cd4a21145ca0563f7570dbdaffea",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "targetOutcome": "loss"
+    },
+    {
+      "target": {
+        "source": "0550-Ji-Hoons-Lemmings-Remake-Hell.zip/Ji Hoon Hell 1.DAT#4",
+        "title": "Dude, where's my exit?",
+        "auditStatus": "replay-failed",
+        "initialHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a"
+      },
+      "candidateDonor": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "targetSceneGeometrySHA256": "77ae16cd179c51cdb4b640d5fe7ba7b73142f66e4f44478cf254498efe5f616f",
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "targetPuzzleScenarioSHA256": "SHA256 digest: 50e5c02f0e7d2e5d0422f5baeba5bc38768c531d2a69ebf2e62504f3a5911ee1",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "targetOutcome": "loss"
+    }
+  ],
+  "sameLevelMetadataReplayFailures": [
+    {
+      "target": {
+        "source": "0024-ISteve04.zip/ISteve04.dat#9",
+        "title": "I Challenge You to a Dual!",
+        "auditStatus": "replay-failed",
+        "initialHash": "8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#8988065953fa40ef9efa6cb6da7813c79d8abece55d10aafa3f0c9c262577e1e",
+          "rank": "fan:lldb-24",
+          "number": 10,
+          "title": "I Challenge You to a Dual!"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: c93347c5b5da0edcc0c4251eb8016fcc75123b66b674f76eca6c35735fa3bbf4",
+          "rank": "fan:lldb-24",
+          "number": 10,
+          "title": "I Challenge You to a Dual!"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0035-1tseug.zip/1tseug.dat#2",
+        "title": "Ups and Downs",
+        "auditStatus": "replay-failed",
+        "initialHash": "512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+          "rank": "fan:lldb-35",
+          "number": 3,
+          "title": "Ups and Downs"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: bd22f92fba7a4620f5f2093610454bd6274f24efb6f21045bdf494863a189c9b",
+          "rank": "fan:lldb-35",
+          "number": 3,
+          "title": "Ups and Downs"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0220-AkseliPack01.zip/AkseliPack01.dat#3",
+        "title": "Winter Solstice",
+        "auditStatus": "replay-failed",
+        "initialHash": "03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+          "rank": "fan:lldb-220",
+          "number": 4,
+          "title": "Winter Solstice"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 25785d13756a2f7258dc8575431c4f73a5f1905d320e4d4461c6e1436cbdb0e8",
+          "rank": "fan:lldb-220",
+          "number": 4,
+          "title": "Winter Solstice"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0220-AkseliPack01.zip/AkseliPack01.dat#6",
+        "title": "In the Core",
+        "auditStatus": "replay-failed",
+        "initialHash": "9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de",
+          "rank": "fan:lldb-220",
+          "number": 7,
+          "title": "In the Core"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: e0ff97bcdf0b89e9e98bd74d160f2edf560332776de585752858176c57520e51",
+          "rank": "fan:lldb-220",
+          "number": 7,
+          "title": "In the Core"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0223-ANTHPCK3.zip/ANTHPCK3.DAT#9",
+        "title": "Spiders from Stars",
+        "auditStatus": "replay-failed",
+        "initialHash": "ee9f5c0ffa2af42e0885f14a8abb8a79dd733232a915b467a3442adc1fea8a51"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: eec1a31a14b655bb223a0c6078f4381a43e894c71cd65e4e51ce8b2c98b4172a",
+          "rank": "fan:lldb-223",
+          "number": 10,
+          "title": "Spiders from Stars"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#ee9f5c0ffa2af42e0885f14a8abb8a79dd733232a915b467a3442adc1fea8a51",
+          "rank": "fan:lldb-223",
+          "number": 10,
+          "title": "Spiders from Stars"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0245-MazuLems-02.zip/Martin Zurlinden 02.dat#5",
+        "title": "It's a Magical World",
+        "auditStatus": "replay-failed",
+        "initialHash": "8e3d5c2356eab0313daae09cc12df78d3aecffe687d602b59afb0566dd15d1e8"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#8e3d5c2356eab0313daae09cc12df78d3aecffe687d602b59afb0566dd15d1e8",
+          "rank": "fan:lldb-245",
+          "number": 6,
+          "title": "It's a Magical World"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 21486623acb1fe7f2c673f162df151f21f6eb9108ef07d82c2e72c89f1023c8f",
+          "rank": "fan:lldb-245",
+          "number": 6,
+          "title": "It's a Magical World"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0278-CRISFN14.zip/CRISFN14.dat#8",
+        "title": "Forest of steel",
+        "auditStatus": "replay-failed",
+        "initialHash": "faeab9970cd8c466fc5bf3994eb852c021167b346d1cd28802155e98609f93cb"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: d9c84fff772bc496f8d19b87cfda4617183bfaa106798a116a306d4c341b97f8",
+          "rank": "fan:lldb-278",
+          "number": 9,
+          "title": "Forest of steel"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#faeab9970cd8c466fc5bf3994eb852c021167b346d1cd28802155e98609f93cb",
+          "rank": "fan:lldb-278",
+          "number": 9,
+          "title": "Forest of steel"
+        }
+      ]
+    },
+    {
+      "target": {
+        "source": "0496-MARTPCK2.zip/MARTPCK2.DAT#4",
+        "title": "It's a Magical World",
+        "auditStatus": "replay-failed",
+        "initialHash": "17f9b84298d41c916aacc750bcbeccd18fa98b8c2c564999445d46d6d9ebf1da"
+      },
+      "candidateMetadataMatchesTarget": true,
+      "candidateWitnesses": [
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#17f9b84298d41c916aacc750bcbeccd18fa98b8c2c564999445d46d6d9ebf1da",
+          "rank": "fan:lldb-496",
+          "number": 5,
+          "title": "It's a Magical World"
+        },
+        {
+          "source": "Artifacts/LearningJourney/candidate-solutions.json#SHA256 digest: 5de912673ede3a12fdfbd1b19aac9eb821a4029ca47821d6e09e9634d33daee7",
+          "rank": "fan:lldb-496",
+          "number": 5,
+          "title": "It's a Magical World"
+        }
+      ]
+    }
+  ],
+  "alreadyVerifiedAlias": {
+    "target": {
+      "source": "0514-ssam1221s-Lemmings-Wild.zip/ssam1221 Wild 2.dat#2",
+      "title": "No Problemming!",
+      "auditStatus": "winning-replay",
+      "currentAuditInitialHash": "5a62d63a37b1fa100a4d3f2194ce19f6a3f642389586fe71ca067b0e6b196058"
+    },
+    "aliasCheckInitialStateHash": "d122cfd09c34885e333010bf5ab98ed7102071d20072023e628ec6733e2a0bc5",
+    "candidateDonor": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#10",
+      "packID": "fan:lldb-478"
+    },
+    "targetSceneGeometrySHA256": "76047acff6bc25446eb852d1b82d1d731e024bb90cdca9d08710db2acec4ee38",
+    "donorSceneGeometrySHA256": "f43f3b5f69685d87aa9a88e88d5f187e36fe431c1ecf9894e46304c4d9f1fb8b",
+    "targetPuzzleScenarioSHA256": "SHA256 digest: a81a97252a8a8f8caf726d36ba3b910761f95a1a3d804fd98da39dace7b39308",
+    "donorPuzzleScenarioSHA256": "SHA256 digest: 7c21f525e2d944053612cdec45a20c33226c030a1a567696e2702bc134810ddf",
+    "note": "The checked target identity has an independent winning replay in the current audit. Its state hash differs from the historical alias-check run."
+  }
+}

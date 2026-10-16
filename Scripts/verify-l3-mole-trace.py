@@ -4,6 +4,8 @@
 import hashlib
 import json
 from pathlib import Path
+import subprocess
+import tempfile
 
 
 project = Path(__file__).resolve().parents[1]
@@ -14,6 +16,32 @@ source = json.loads((evidence / "original-steel-actor-trace.json").read_text())
 comparison = json.loads((evidence / "prototype-steel-comparison.json").read_text())
 followup = json.loads((evidence / "original-followup-traces.json").read_text())
 tunnel_edges = json.loads((evidence / "original-tunnel-edge-check.json").read_text())
+if not comparison["status"].startswith("isolated prototype"):
+    raise SystemExit("FAIL Mole coordinate samples are not labelled as prototype evidence.")
+baseline = json.loads((evidence / "baseline-provenance.json").read_text())
+source_path = "Sources/NxlvKit/Lemmings3Runtime.swift"
+baseline_commit = baseline["gitCommit"]
+baseline_source = subprocess.run(
+    ["git", "show", f"{baseline_commit}:{source_path}"],
+    check=True,
+    capture_output=True,
+).stdout
+if hashlib.sha256(baseline_source).hexdigest() != comparison["baselineRuntimeSHA256"]:
+    raise SystemExit("FAIL prototype base source differs from the recorded baseline.")
+with tempfile.TemporaryDirectory() as temporary_directory:
+    prototype_root = Path(temporary_directory)
+    prototype_source = prototype_root / source_path
+    prototype_source.parent.mkdir(parents=True, exist_ok=True)
+    prototype_source.write_bytes(baseline_source)
+    subprocess.run(
+        ["patch", "-p1", "-i", str(evidence / "mole-prototype.patch")],
+        cwd=prototype_root,
+        check=True,
+        capture_output=True,
+    )
+    prototype_hash = hashlib.sha256(prototype_source.read_bytes()).hexdigest()
+if prototype_hash != comparison["prototypeRuntimeSHA256"]:
+    raise SystemExit("FAIL isolated prototype source differs from the recorded patch.")
 source_by_tick = {sample["tick"]: sample for sample in source["samples"]}
 first = comparison["firstTick"]
 last = comparison["lastTick"]
@@ -34,16 +62,21 @@ for sample in samples:
         raise SystemExit(f"FAIL Mole position differs at tick {sample['tick']}.")
 
 runtime_text = runtime.read_text()
+runtime_hash = hashlib.sha256(runtime_text.encode()).hexdigest()
 movement_start = runtime_text.index("    private mutating func updateCreatures()")
 movement_end = runtime_text.index("    public mutating func step()", movement_start)
 movement_hash = hashlib.sha256(runtime_text[movement_start:movement_end].encode()).hexdigest()
 if movement_hash != comparison["moleMovementSourceSHA256"]:
     raise SystemExit("FAIL Mole movement source differs from the trace comparison baseline.")
+if runtime_hash == comparison["prototypeRuntimeSHA256"]:
+    raise SystemExit("FAIL prototype comparison is being reported as an isolated production check.")
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
 
-print(f"PASS original DOS to native Mole trace: {len(samples)} positions, ticks {first}–{last}")
-print("PASS Mole movement source matches the trace comparison baseline")
+print(f"PASS recorded DOS/prototype samples: {len(samples)} positions, ticks {first}–{last}")
+print("PASS isolated prototype patch reconstructs from its recorded baseline")
+print("PASS production Mole movement source matches the pre-prototype baseline")
+print("OPEN production-to-DOS trajectory parity: the prototype comparison is not production evidence")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")

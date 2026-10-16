@@ -1,6 +1,6 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 16 October 2026 at `main` revision `c38831f3`. All twelve
+Status checked on 17 October 2026 at `main` revision `368e7e72`. All twelve
 tribes, 51 skills, 15 object types and four practice maps are enabled. The strict
 completion gate verified all 120 winning routes and 70 carry-over variants
 twice, with continuous ten-level chains for all twelve tribes. The runtime suite
@@ -29,6 +29,22 @@ Actor identity and cause remain unknown, so this observation does not support a
 runtime change. See the [frame comparison](ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json),
 [source frame](ReleaseReadiness/L2GameplayParity-2026-10-16/source-frame-035.png)
 and [native actor trace](ReleaseReadiness/L2GameplayParity-2026-10-16/native-tick-360-walking-actors.txt).
+
+On 17 October, the 8:33 sample was rechecked with a library rebuilt from current
+`main` (`368e7e72`). It reproduced the recorded pixel-match output byte for
+byte. The matcher still reports exact WALKER pixels for several native actor
+IDs and ticks, but no tracked match for actor 11. The rerun confirms the pixel
+result only; it does not establish source actor identity or continuous actor
+parity. See the current-main recheck in the [frame comparison](ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json).
+
+The runtime test suite now checks the DOS-derived four-pixel walking step
+boundary: a four-pixel rise succeeds, and a five-pixel obstruction turns the
+walker. The full test suite passed on 17 October against the installed L2
+bundle. All 120 levels loaded and advanced, and all 120 recorded completion
+replays passed. This verifies the native implementation against the recorded
+PROCESS rule at `4e7f–4f10`; it is not a new DOS comparison because the installed
+bundle excludes the original executable and overlay. See the [step-boundary
+record](ReleaseReadiness/L2GameplayParity-2026-10-17/walking-step-boundary.json).
 
 On 15 October, the strict ark check replayed all 120 routes and 70 carry-over
 variants, then rejected the ending conditions. All twelve chains finish with

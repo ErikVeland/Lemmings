@@ -261,6 +261,7 @@ struct GolemsObjectComparison: Codable {
                     for saved in (solverReplays[hash] ?? []) + (solutions[hash].map { [$0] } ?? []) where witness == nil {
                         let candidate = ClassicDOSReplay(rank: id.packID, number: rows[index].entry.levelNumberSnapshot,
                             title: level.title, initialStateHash: hash, events: saved.events)
+                        attempts += 1
                         if let outcome = try? ClassicDOSReplayPlayer.run(
                             candidate, simulation: initial, verify: false, stopWhenUnwinnable: true
                         ), outcome.didWin {
