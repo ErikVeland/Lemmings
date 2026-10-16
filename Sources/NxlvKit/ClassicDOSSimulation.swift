@@ -1673,9 +1673,13 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         excludingOwnerID: Int? = nil
     ) -> ClassicDOSObjectEffect? {
         let pointCell = blockerCell(x: point.x, y: point.y)
-        for lemming in lemmings.reversed()
-        where lemming.id != excludingOwnerID && lemming.isActive && lemming.ownsBlockerField {
-            guard let anchor = lemming.blockerAnchor else { continue }
+        // Most lemmings own no field. Read that flag before copying actor state
+        // or comparing its outcome, while retaining reverse-owner precedence.
+        for index in lemmings.indices.reversed() {
+            guard lemmings[index].ownsBlockerField,
+                  lemmings[index].id != excludingOwnerID,
+                  lemmings[index].isActive,
+                  let anchor = lemmings[index].blockerAnchor else { continue }
             for yOffset in [-6, -2, 2] {
                 if pointCell == blockerCell(x: anchor.x - 4, y: anchor.y + yOffset) {
                     return .forceLeft
