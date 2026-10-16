@@ -401,6 +401,27 @@ private func testWalkerJumperAndShimmier() throws {
                 "A grounded Shimmier assignment did not enter the Reacher action.")
 }
 
+private func testOverlappingBlockerForcePrecedence() throws {
+    for (positions, expected): ([Int], NeoLemmixDirection) in [
+        ([22, 30], .left), ([30, 22], .right),
+    ] {
+        let preplaced = (positions + [26]).map {
+            NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: $0, y: 48))
+        }
+        var simulation = try NeoLemmixSimulation(
+            terrain: terrain(),
+            configuration: configuration(total: 3, preplaced: preplaced)
+        )
+        for id in 0..<2 {
+            try require(simulation.assign(skill: .blocker, to: id).wasAssigned,
+                        "Overlapping force-lobe Blocker assignment failed.")
+        }
+        simulation.tick()
+        try require(try lemming(simulation, id: 2).direction == expected,
+                    "The last matching Blocker force did not take precedence.")
+    }
+}
+
 private func testBlockerAndConstructiveSkills() throws {
     let two = [
         NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .right),
@@ -1812,6 +1833,7 @@ private let tests: [(String, () throws -> Void)] = [
     ("preplaced traits and core movement", testPreplacedTraitsAndCoreMovement),
     ("permanent skills", testPermanentSkillAssignments),
     ("walker, jumper, and shimmier", testWalkerJumperAndShimmier),
+    ("overlapping blocker force precedence", testOverlappingBlockerForcePrecedence),
     ("blocker and constructive skills", testBlockerAndConstructiveSkills),
     ("destructive skills and materials", testDestructiveSkillsAndMaterials),
     ("bomber and stoner", testBomberAndStoner),

@@ -2462,25 +2462,34 @@ private extension NeoLemmixSimulation {
         }
     }
 
-    func blockerForcedDirection(_ lemming: NeoLemmixLemming) -> NeoLemmixDirection? {
-        lemmings.compactMap { blocker -> NeoLemmixDirection? in
-            guard blocker.id != lemming.id, blocker.isActive, blocker.traits.contains(.blocker),
-                  (blocker.position.y - 6...blocker.position.y + 4).contains(lemming.position.y) else {
-                return nil
-            }
-            if lemming.action == .building {
-                let distance = blocker.direction == lemming.direction ? 2 : 3
-                let checkX = lemming.position.x + distance * lemming.direction.rawValue
-                if blocker.position.x == checkX,
-                   (blocker.position.y - 1...blocker.position.y + 3).contains(lemming.position.y) {
-                    return nil
+    func blockerForcedDirection(
+        id: Int, position: NeoLemmixPoint, action: NeoLemmixAction,
+        direction: NeoLemmixDirection
+    ) -> NeoLemmixDirection? {
+        var result: NeoLemmixDirection?
+        for index in lemmings.indices {
+            guard lemmings[index].traits.contains(.blocker), lemmings[index].id != id,
+                  lemmings[index].isActive,
+                  (lemmings[index].position.y - 6...lemmings[index].position.y + 4)
+                    .contains(position.y) else { continue }
+            if action == .building {
+                let distance = lemmings[index].direction == direction ? 2 : 3
+                let checkX = position.x + distance * direction.rawValue
+                if lemmings[index].position.x == checkX,
+                   (lemmings[index].position.y - 1...lemmings[index].position.y + 3)
+                    .contains(position.y) {
+                    continue
                 }
             }
-            let fieldStart = blocker.position.x - 6 + (blocker.direction == .right ? 1 : 0)
-            if (fieldStart...fieldStart + 3).contains(lemming.position.x) { return .left }
-            if (fieldStart + 8...fieldStart + 11).contains(lemming.position.x) { return .right }
-            return nil
-        }.last
+            let fieldStart = lemmings[index].position.x - 6
+                + (lemmings[index].direction == .right ? 1 : 0)
+            if (fieldStart...fieldStart + 3).contains(position.x) {
+                result = .left
+            } else if (fieldStart + 8...fieldStart + 11).contains(position.x) {
+                result = .right
+            }
+        }
+        return result
     }
 
     func isInWater(_ point: NeoLemmixPoint) -> Bool {
@@ -2822,14 +2831,18 @@ private extension NeoLemmixSimulation {
             }
         }
 
-        let finalZones = configuration.zones.filter { $0.bounds.contains(lemming.position) }
+        let finalPosition = lemming.position
+        let finalZones = configuration.zones.filter { $0.bounds.contains(finalPosition) }
         if !finalZones.contains(where: { $0.effect == .splitter }) {
             lemming.lastSplitterZoneID = nil
         }
         if !finalZones.contains(where: { $0.effect == .portal }) {
             lemming.lastPortalZoneID = nil
         }
-        let blockerForce = blockerForcedDirection(lemming)
+        let blockerForce = blockerForcedDirection(
+            id: lemming.id, position: finalPosition, action: lemming.action,
+            direction: lemming.direction
+        )
         let forcedDirection: NeoLemmixDirection?
         if blockerForce == .left || finalZones.contains(where: { $0.effect == .forceLeft }) {
             forcedDirection = .left
