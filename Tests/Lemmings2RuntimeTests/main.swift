@@ -1064,6 +1064,11 @@ func testAttractor() throws {
     for _ in 0..<80 { game.step() }
     check(game.lemmings[0].state == .attracting && game.lemmings.dropFirst().contains { $0.state == .dancing },
           "Attractor did not hold nearby walkers")
+    check(game.tick == 120 && game.lemmings.map(\.x) == [20, 24, 25]
+          && game.lemmings.map(\.y) == [60, 60, 60]
+          && game.lemmings.map(\.state) == [.attracting, .dancing, .dancing]
+          && game.lemmings.map(\.age) == [80, 56, 35],
+          "Attractor changed the fixed capture sequence or per-actor update order")
     let builder = game.configuration.skills.firstIndex(of:.builder)!
     check(game.assign(slot:builder,to:0), "Attractor could not be interrupted")
     game.step()

@@ -924,15 +924,17 @@ public struct Lemmings2Runtime: Sendable {
         fillStreams.removeAll { $0.finished && !$0.particles.contains { $0.direction != 0 } }
     }
 
-    private func withinAttraction(_ actor: Lemming) -> Bool {
+    private func withinAttraction(id: Int, x: Int, y: Int) -> Bool {
         let rows = [0x0180,0x03c0,0x07e0,0x0ff0,0x1ff8,0x1ff8,0x1ff8,0x0ff0,0x07e0,0x03c0]
-        return lemmings.contains { source in
-            guard source.state == .attracting, source.id != actor.id else { return false }
-            let column = (actor.x >> 4) - ((source.x - 128) >> 4)
-            let row = (actor.y >> 3) - (max(0, source.y - 40) >> 3)
-            return rows.indices.contains(row) && (0..<16).contains(column)
-                && rows[row] & (0x8000 >> column) != 0
+        // Read only the attraction fields, without copying each full actor.
+        for index in lemmings.indices {
+            guard lemmings[index].state == .attracting, lemmings[index].id != id else { continue }
+            let column = (x >> 4) - ((lemmings[index].x - 128) >> 4)
+            let row = (y >> 3) - (max(0, lemmings[index].y - 40) >> 3)
+            if rows.indices.contains(row) && (0..<16).contains(column)
+                && rows[row] & (0x8000 >> column) != 0 { return true }
         }
+        return false
     }
 
     private mutating func applyBlast(x: Int, y: Int) {
@@ -1484,7 +1486,7 @@ public struct Lemmings2Runtime: Sendable {
             case .attracting:
                 if !isSolid(lem.x, lem.y) { change(&lem, .falling); lem.fallDistance = 0 }
             case .dancing:
-                if !withinAttraction(lem) { change(&lem, .walking) }
+                if !withinAttraction(id: lem.id, x: lem.x, y: lem.y) { change(&lem, .walking) }
                 else if !isSolid(lem.x, lem.y) { change(&lem, .falling); lem.fallDistance = 0 }
             case .parachuting:
                 let motion = Lemmings2FanPhysics.step(x:lem.x,y:lem.y,velocityX:lem.driftX,
@@ -1840,7 +1842,7 @@ public struct Lemmings2Runtime: Sendable {
                 if lem.skater { lem.y &= ~7; change(&lem, .skating) }
                 else if lem.state != .slipping { lem.y &= ~7; change(&lem, .slipping); lem.work = 2; lem.iceDirection = lem.direction }
             }
-            if lem.state == .walking && withinAttraction(lem) {
+            if lem.state == .walking && withinAttraction(id: lem.id, x: lem.x, y: lem.y) {
                 randomSeed = randomSeed &* 0x05e5 &+ 0x29
                 if randomSeed & 0x0c == 0 { change(&lem, .dancing) }
             }
