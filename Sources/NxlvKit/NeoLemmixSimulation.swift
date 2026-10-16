@@ -1292,7 +1292,7 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
     public var totalPopulation: Int { configuration.totalLemmings + clonedCount }
 
     public var isComplete: Bool {
-        originalLemmingsRemainingToRelease == 0 && activeLemmings.isEmpty
+        originalLemmingsRemainingToRelease == 0 && !lemmings.contains(where: \.isActive)
     }
 
     public var didWin: Bool { isComplete && savedCount >= configuration.requiredToSave }
