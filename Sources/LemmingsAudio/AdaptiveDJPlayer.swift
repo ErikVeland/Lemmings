@@ -72,7 +72,10 @@ import NxlvKit
   }
   func cancelRewind() { recording?.cancelRewind(); module?.cancelRewind() }
   func playRewind() { recording?.playRewind(); module?.playRewind() }
-  func pause(rhythmOnly: Bool = false) { recording?.suspendOutput(rhythmOnly: rhythmOnly); module?.suspendOutput(rhythmOnly: rhythmOnly) }
+  func pause(rhythmOnly: Bool = false, immediately: Bool = false) {
+    recording?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
+    module?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
+  }
   func stop() { recording?.stop(); module?.stop() }
 }
 
@@ -819,9 +822,13 @@ import NxlvKit
     fadeBass = true
   }
 
-  public func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+    if immediately {
+      resetVinyl()
+      allDecks.forEach { $0.setVinyl(rate: 1, gain: 1) }
+    }
     allDecks.forEach { $0.cancelRewind() }
-    guard !outputSuspended || rhythmOnly != pauseUsesRhythm else { return }
+    guard immediately || !outputSuspended || rhythmOnly != pauseUsesRhythm else { return }
     if !outputSuspended {
       suspendedAtUptime = ProcessInfo.processInfo.systemUptime
       resumeDeckA = deckA?.isPlaying == true
@@ -829,10 +836,18 @@ import NxlvKit
       resumeCarry = carryDecks.filter(\.isPlaying)
     }
     outputSuspended = true
+    // Resume rebuilds the fade from its saved position or current beat grid.
+    // A suspended fade must not poll the main actor thirty times per second.
+    fadeTask?.cancel(); fadeTask = nil
+    fadeGeneration += 1
     pauseUsesRhythm = rhythmOnly
-    if resumeDeckA { deckA?.pause(rhythmOnly: rhythmOnly) }
-    if resumeDeckB { deckB?.pause(rhythmOnly: rhythmOnly) }
-    resumeCarry.forEach { $0.pause(rhythmOnly: rhythmOnly) }
+    if immediately {
+      allDecks.forEach { $0.pause(immediately: true) }
+    } else {
+      if resumeDeckA { deckA?.pause(rhythmOnly: rhythmOnly) }
+      if resumeDeckB { deckB?.pause(rhythmOnly: rhythmOnly) }
+      resumeCarry.forEach { $0.pause(rhythmOnly: rhythmOnly) }
+    }
   }
 
   public func resumeOutput() {
@@ -873,7 +888,9 @@ import NxlvKit
     resumeDeckA = false
     resumeDeckB = false
     resumeCarry = []
-    if let destination = interruptedDestination, !interruptedLevelEntry {
+    if interruptedDestination != nil, interruptedLevelEntry {
+      runLevelEntryFade(from: fadePosition, generation: fadeGeneration)
+    } else if let destination = interruptedDestination {
       // Rhythm playback and vinyl stops advance the decks differently. Plan
       // again from the audible deck's current grid when play resumes.
       fadeTask?.cancel()

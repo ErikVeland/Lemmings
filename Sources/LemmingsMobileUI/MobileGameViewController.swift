@@ -27,14 +27,13 @@ struct MobileGameTurn {
 
 #if os(tvOS)
 typealias MobileGameControllerBase = GCEventViewController
+#else
+typealias MobileGameControllerBase = UIViewController
+#endif
 @MainActor final class MobileGameOverlay: UIScrollView {
     var onVisibilityChanged: (() -> Void)?
     override var isHidden: Bool { didSet { if oldValue != isHidden { onVisibilityChanged?() } } }
 }
-#else
-typealias MobileGameControllerBase = UIViewController
-typealias MobileGameOverlay = UIScrollView
-#endif
 
 @MainActor final class MobileGameViewController: MobileGameControllerBase, UIScrollViewDelegate {
     lazy var inputAdapter = makeInputAdapter()
@@ -45,6 +44,10 @@ typealias MobileGameOverlay = UIScrollView
     var soloOwnerID: String?
     var canDefer = false
     var onSkipLevel: (() -> Bool)?
+    var onResultAchievements: (() -> [MobileResultAchievementsArt.Item])?
+    private let achievementScroll = UIScrollView()
+    private let achievementCanvas = MobileMenuCanvas()
+    private var showsSplitResult = false
     var onResultAwards: (() -> (stars: Int, ornament: Bool))?
     private var celebrationTask: Task<Void, Never>?
     var onRecordCompletion: ((MobileGameSnapshot) -> (details: [String], error: String?))?
@@ -86,6 +89,7 @@ typealias MobileGameOverlay = UIScrollView
 
     private func rotateResultAchievements() {
         achievementTask?.cancel()
+        guard !showsSplitResult else { return }
         let awards = resultAchievements
         guard !awards.isEmpty else { return }
         achievementIndex %= awards.count
@@ -140,7 +144,10 @@ typealias MobileGameOverlay = UIScrollView
     var lifecycle = MobileLifecycleState()
     private weak var owningScene: UIWindowScene?
     var clock: MobileTickClock
-    private var displayLink: CADisplayLink?
+    nonisolated(unsafe) private var displayLink: CADisplayLink?
+    private var viewIsVisible = false
+    private var displayUpdatesSuspended = false
+    var isDisplayLinkPaused: Bool { displayLink?.isPaused ?? true }
     private var framePacing = MobileFramePacing()
     private var appliedFrameRate = 0
     private var checkpointSaveTask: Task<Void, Never>?
@@ -261,6 +268,8 @@ typealias MobileGameOverlay = UIScrollView
 
     required init?(coder: NSCoder) { nil }
 
+    deinit { displayLink?.invalidate() }
+
     #if os(iOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -269,8 +278,14 @@ typealias MobileGameOverlay = UIScrollView
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        overlay.onVisibilityChanged = { [weak self] in
+            self?.updateDisplayLinkState()
+            if let self, self.overlay.isHidden { self.clearSplitResult() }
+            #if os(tvOS)
+            self?.updateTVInputRouting()
+            #endif
+        }
         #if os(tvOS)
-        overlay.onVisibilityChanged = { [weak self] in self?.updateTVInputRouting() }
         updateTVInputRouting()
         #endif
         view.backgroundColor = .black
@@ -439,14 +454,27 @@ typealias MobileGameOverlay = UIScrollView
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewIsVisible = true
+        synchronizeSceneActivity()
         installTrackNoticeCallback()
         startDisplayLink()
+        updateDisplayLinkState()
         updatePerformanceBudget()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewIsVisible = false
+        pausePlay(showControls: false)
+        updateDisplayLinkState()
+        suspendAudio()
+        achievementTask?.cancel(); achievementTask = nil
+        celebrationTask?.cancel(); celebrationTask = nil
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if let scene = view.window?.windowScene { owningScene = scene }
+        synchronizeSceneActivity()
         let insets = view.safeAreaInsets
         let layout = hudLayout(insets: insets)
 #if DEBUG
@@ -508,6 +536,7 @@ typealias MobileGameOverlay = UIScrollView
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        viewIsVisible = false
         #if os(tvOS)
         inputAdapter.reset()
         controllerUserInteractionEnabled = true
@@ -519,12 +548,37 @@ typealias MobileGameOverlay = UIScrollView
 
     private func startDisplayLink() {
         guard displayLink == nil else { return }
-        let link = CADisplayLink(target: self, selector: #selector(displayFrame(_:)))
+        let target = MobileDisplayLinkTarget { [weak self] in self?.displayFrame($0) }
+        let link = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+        link.isPaused = true
         link.add(to: .main, forMode: .common)
         displayLink = link
     }
 
-    @objc private func displayFrame(_ link: CADisplayLink) {
+    private func updateDisplayLinkState() {
+        let active = viewIsVisible && lifecycle.isForeground && !lifecycle.isInterrupted && !displayUpdatesSuspended
+        displayLink?.isPaused = !active || (!overlay.isHidden && GCController.controllers().isEmpty)
+        if isDisplayLinkPaused {
+            clock.suspend()
+            lastVisibleTimestamp = nil
+        }
+    }
+
+    private func synchronizeSceneActivity() {
+        guard let scene = viewIfLoaded?.window?.windowScene else { return }
+        owningScene = scene
+        // Level preparation can finish after the scene's deactivation notification.
+        if scene.activationState != .foregroundActive, lifecycle.isForeground {
+            applyLifecycle(.becameInactive)
+        }
+    }
+
+    @objc func displayFrame(_ link: CADisplayLink) {
+        synchronizeSceneActivity()
+        guard viewIsVisible, lifecycle.isForeground, !lifecycle.isInterrupted, !displayUpdatesSuspended else {
+            updateDisplayLinkState()
+            return
+        }
         #if os(tvOS)
         updateTVInputRouting()
         #endif
@@ -544,6 +598,7 @@ typealias MobileGameOverlay = UIScrollView
         pollingController = true
         playfieldView.deferFrameUpdates = true
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
+        guard !isDisplayLinkPaused else { return }
         #if !os(tvOS)
         pollingController = false
         playfieldView.deferFrameUpdates = false
@@ -561,7 +616,7 @@ typealias MobileGameOverlay = UIScrollView
             playfieldView.selectionOpacity = 1
             playfieldView.redrawSelection()
         }
-        playfieldView.advanceVisualEffects()
+        if overlay.isHidden { playfieldView.advanceVisualEffects() }
         let elapsed = lastVisibleTimestamp.map { min(0.1, max(0, link.timestamp - $0)) } ?? 0
         lastVisibleTimestamp = link.timestamp
         #if os(tvOS)
@@ -599,7 +654,7 @@ typealias MobileGameOverlay = UIScrollView
             endRunArmedUntil = 0
             updateHUD()
         }
-        guard !paused, !snapshot.isComplete else { return }
+        guard !paused, overlay.isHidden, !snapshot.isComplete else { return }
         let ticks = clock.advance(at: link.timestamp)
         guard ticks > 0 else { return }
         let deadline = frameStarted + min(0.012, 0.6 / Double(max(1, appliedFrameRate)))
@@ -638,7 +693,8 @@ typealias MobileGameOverlay = UIScrollView
             supportsRewind: session.supportsRewind,
             hasPlayer: true,
             engineIdentifier: session.engineIdentifier,
-            showsMenuButton: showsMenuButton, television: television
+            showsMenuButton: showsMenuButton, television: television,
+            topBarInsets: MobileSystemRegions.topBarInsets(in: view)
         )
     }
 
@@ -1009,7 +1065,8 @@ typealias MobileGameOverlay = UIScrollView
     /// Reactivates the session, then starts this level's tune or lifts its pause.
     private func resumeAudio() {
         audio.resume { [weak self] succeeded in
-            guard let self, succeeded, self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { return }
+            guard let self, succeeded, self.viewIsVisible, self.lifecycle.isForeground,
+                  !self.lifecycle.isInterrupted, !self.displayUpdatesSuspended, !self.paused else { return }
             self.effects.prepare()
             self.effects.resume()
             if self.readyCuePending && !self.paused {
@@ -1284,7 +1341,11 @@ typealias MobileGameOverlay = UIScrollView
     }
 
     private var transitionInFlight = false
-    func resetTransition() { transitionInFlight = false }
+    func resetTransition() {
+        transitionInFlight = false
+        displayUpdatesSuspended = false
+        updateDisplayLinkState()
+    }
 
     private func finish(_ action: MobileGameExitAction, handingTo player: String? = nil) {
         guard !transitionInFlight else { return }
@@ -1295,7 +1356,8 @@ typealias MobileGameOverlay = UIScrollView
         if action == .retry { MobileMusic.shared.vinylStop() }
         transitionInFlight = true
         celebrationTask?.cancel(); celebrationTask = nil
-        displayLink?.isPaused = true
+        displayUpdatesSuspended = true
+        updateDisplayLinkState()
         suspendAudio()
         effects.stop()
         if action == .library || action == .menu { MobileMusic.shared.stop() }
@@ -1321,7 +1383,8 @@ typealias MobileGameOverlay = UIScrollView
         if session.isReadOnly { dismiss(animated: false); return }
         playState.suspend()
         clock.suspend()
-        displayLink?.isPaused = true
+        displayUpdatesSuspended = true
+        updateDisplayLinkState()
         suspendAudio()
         guard !session.snapshot.isComplete else {
             finish(.library)
@@ -1332,7 +1395,8 @@ typealias MobileGameOverlay = UIScrollView
         showOverlay(title: L10n.text("SAVING..."), actions: [(L10n.text("CANCEL"), { [weak self] in
             guard let self else { return }
             self.leaveRequestID = UUID()
-            self.displayLink?.isPaused = false
+            self.displayUpdatesSuspended = false
+            self.updateDisplayLinkState()
             self.pausePlay(showControls: true)
         })])
         do {
@@ -1443,6 +1507,11 @@ typealias MobileGameOverlay = UIScrollView
         observe(UIScene.didActivateNotification, .becameActive, sceneOnly: true)
         observe(UIScene.didDisconnectNotification, .sceneDisconnected, sceneOnly: true)
         observe(UIApplication.didReceiveMemoryWarningNotification, .memoryWarning)
+        for name in [Notification.Name.GCControllerDidConnect, .GCControllerDidDisconnect] {
+            observers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.updateDisplayLinkState() }
+            })
+        }
         observers.append(centre.addObserver(
             forName: UIAccessibility.reduceMotionStatusDidChangeNotification,
             object: nil,
@@ -1465,7 +1534,7 @@ typealias MobileGameOverlay = UIScrollView
         ) { [weak self] _ in MainActor.assumeIsolated { self?.updatePerformanceBudget() } })
     }
 
-    private func applyLifecycle(_ event: MobileLifecycleEvent) {
+    func applyLifecycle(_ event: MobileLifecycleEvent) {
         if event == .memoryWarning {
             MobileDevicePerformance.memoryWarning()
             updatePerformanceBudget()
@@ -1473,6 +1542,13 @@ typealias MobileGameOverlay = UIScrollView
         }
         inputAdapter.reset()
         applyEffects(lifecycle.handle(event))
+        updateDisplayLinkState()
+        if !lifecycle.isForeground || lifecycle.isInterrupted {
+            achievementTask?.cancel(); achievementTask = nil
+            celebrationTask?.cancel(); celebrationTask = nil
+        } else if viewIsVisible, !overlay.isHidden, overlayCanvas.page.result {
+            rotateResultAchievements()
+        }
     }
 
     private func applyEffects(_ effects: [MobileLifecycleEffect]) {
@@ -1495,8 +1571,10 @@ typealias MobileGameOverlay = UIScrollView
             case .suspendAudio:
                 suspendAudio()
             case .prepareAudio:
-                audio.prepare()
-                renderCurrentFrame(force: true)
+                if viewIsVisible {
+                    audio.prepare()
+                    renderCurrentFrame(force: true)
+                }
             case .resumeAudio:
                 resumeAudio()
             case .showResumeControl:
@@ -1675,6 +1753,10 @@ typealias MobileGameOverlay = UIScrollView
             self.overlayActions[index]()
         }
         view.addSubview(overlay)
+        achievementScroll.backgroundColor = .black
+        achievementScroll.isHidden = true
+        achievementScroll.addSubview(achievementCanvas)
+        view.addSubview(achievementScroll)
     }
 
     func returnToResult() {
@@ -1691,7 +1773,8 @@ typealias MobileGameOverlay = UIScrollView
     }
 
     func showRecoveryOverlay(title: String, retry: @escaping () -> Void) {
-        displayLink?.isPaused = false
+        displayUpdatesSuspended = false
+        updateDisplayLinkState()
         showCustomOverlay(title: title, details: [], actions: [])
         overlayCanvas.page = GameRecoveryArt.page(title: title)
         overlayCanvas.onAction = { [weak self] id in
@@ -1708,7 +1791,8 @@ typealias MobileGameOverlay = UIScrollView
 
     private func leaveKeepingCheckpoint(_ destination: MobileGameExitAction) {
         leaveRequestID = UUID()
-        displayLink?.isPaused = true
+        displayUpdatesSuspended = true
+        updateDisplayLinkState()
         suspendAudio()
         MobileMusic.shared.stop()
         onExit?(destination)
@@ -2022,12 +2106,62 @@ typealias MobileGameOverlay = UIScrollView
         if scrollView === overlay, overlayCanvas.page.pause != nil { overlayCanvas.setNeedsLayout() }
     }
 
+    private func clearSplitResult() {
+        if showsSplitResult, overlayCanvas.page.result { overlayCanvas.resultStars = onResultAwards?().stars }
+        achievementScroll.isHidden = true
+        showsSplitResult = false
+        overlayCanvas.splitResult = false
+        hud.isHidden = false
+        view.accessibilityElements = nil
+    }
+
+    private func layoutSplitResult() -> CGRect? {
+        guard overlayCanvas.page.result, !session.isReadOnly else { clearSplitResult(); return nil }
+        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let panes = MobileDisplayRegions.resultPanes(in: .init(x: safe.minX, y: safe.minY,
+            width: safe.width, height: safe.height), avoiding: MobileSystemRegions.read(in: view))
+        guard panes.count == 2 else {
+            let wasSplit = showsSplitResult
+            clearSplitResult()
+            if wasSplit { rotateResultAchievements() }
+            return nil
+        }
+        let firstPresentation = !showsSplitResult
+        showsSplitResult = true
+        overlayCanvas.splitResult = true
+        overlayCanvas.resultStars = nil
+        achievementTask?.cancel(); achievementTask = nil
+        if !overlayCanvas.page.rows.isEmpty { overlayCanvas.page.rows = [] }
+        overlayCanvas.actionHelp = [:]
+        var items = onResultAchievements?() ?? []
+        let titles = Set(items.map(\.title))
+        let covered = titles.union([
+            titles.contains(L10n.text("+1 LEVEL SKIP")) ? L10n.text("Level skip earned") : "",
+            titles.contains(ArcadeLevelAchievement.betterRescue.title) ? L10n.text("New rescue record") : "",
+            titles.contains(ArcadeLevelAchievement.fewerSkills.title) ? L10n.text("New skill record") : ""
+        ])
+        items += resultAchievements.filter { !covered.contains($0.title) }.map { .init($0.title, detail: $0.detail) }
+        let page = MobileResultAchievementsArt.page(items)
+        if achievementCanvas.page != page { achievementCanvas.page = page }
+        achievementScroll.frame = Self.cgRect(panes[1])
+        let size = achievementCanvas.size(width: achievementScroll.bounds.width, minimumHeight: achievementScroll.bounds.height)
+        achievementCanvas.frame = CGRect(origin: .zero, size: size)
+        achievementScroll.contentSize = size
+        if firstPresentation { achievementScroll.contentOffset = .zero }
+        achievementScroll.isHidden = false
+        hud.isHidden = true
+        overlay.accessibilityViewIsModal = false
+        view.accessibilityElements = [overlay, achievementScroll]
+        return Self.cgRect(panes[0])
+    }
+
     private func layoutOverlay() {
         guard !overlay.isHidden else { return }
         var region = MobileSystemRegions.menuFrame(in: view)
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = solutionSelector.isHidden
         if let content = solutionPanelContentFrame { region = content }
+        if let resultPane = layoutSplitResult() { region = resultPane }
         overlay.frame = region
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
         overlayCanvas.frame = CGRect(origin: .zero, size: size)

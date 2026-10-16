@@ -7,6 +7,7 @@ import UIKit
 
 @MainActor private enum MobileResultAwardsCache {
     static var values: [UUID: (stars: Int, ornament: Bool)] = [:]
+    static var achievements: [UUID: [MobileResultAchievementsArt.Item]] = [:]
 }
 
 extension MobileLibraryViewController {
@@ -17,6 +18,15 @@ extension MobileLibraryViewController {
             arcadeStore.records.trolley.maximum(conditions: $0, assisted: run.assisted)
         } ?? TrolleyMaximum()
         return (TrolleyRescueGoals(run: run, maximum: maximum).stars, false)
+    }
+
+    func mobileResultAchievements(runID: UUID) -> [MobileResultAchievementsArt.Item] {
+        if let saved = MobileResultAwardsCache.achievements[runID] { return saved }
+        guard let run = arcadeStore.records.runs.first(where: { $0.id == runID }) else { return [] }
+        let maximum = run.level.conditions.map {
+            arcadeStore.records.trolley.maximum(conditions: $0, assisted: run.assisted)
+        } ?? TrolleyMaximum()
+        return MobileResultAchievementsArt.goals(TrolleyRescueGoals(run: run, maximum: maximum))
     }
 
     func recordsPage(subtitle: String) -> GameFrontEnd.Page {
@@ -85,10 +95,22 @@ extension MobileLibraryViewController {
             return ([], arcadeStore.storageError ?? L10n.text("Records were not saved. Retry the save before continuing."))
         }
         let celebration = TrolleyCelebration(report: report, history: arcadeStore.records.trolley)
-        if MobileResultAwardsCache.values.count > 128 { MobileResultAwardsCache.values.removeAll() }
+        if MobileResultAwardsCache.values.count > 128 {
+            MobileResultAwardsCache.values.removeAll(); MobileResultAwardsCache.achievements.removeAll()
+        }
         MobileResultAwardsCache.values[run.id] = (celebration.goals.stars,
             ResultAwards.ornament(report: report, celebration: celebration, history: arcadeStore.records.trolley))
         let campaignAfter = mobileCampaignProgress(profileID: run.profileID).unlocked
+        var achievementInfo = MobileResultAchievementsArt.goals(celebration.goals)
+        achievementInfo += ResultAwards.earnedRewards(report: report, celebration: celebration).map { reward in
+            let detail = TrolleyAchievement.allCases.first { $0.title == reward.title }
+                .map { ResultAwards.explanation(for: $0) } ?? reward.reason
+            return .init(reward.title, detail: detail)
+        }
+        achievementInfo += ClassicAchievement.catalog.filter {
+            campaignAfter.contains($0.id) && !campaignBefore.contains($0.id)
+        }.map { .init($0.title, detail: $0.detail) }
+        MobileResultAwardsCache.achievements[run.id] = achievementInfo
         var details = report.earned.map(\.title) + celebration.newAwards.map { $0.award.title }
         details += ClassicAchievement.catalog.filter { campaignAfter.contains($0.id) && !campaignBefore.contains($0.id) }.map(\.title)
         if report.newRescueBest { details.insert(L10n.text("New rescue record"), at: 0) }

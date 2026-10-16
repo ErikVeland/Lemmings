@@ -6,6 +6,7 @@ import LemmingsTVCore
 import NxlvKit
 import UIKit
 import UniformTypeIdentifiers
+import GameController
 
 #if os(iOS)
 extension MobileLibraryViewController: UIDocumentPickerDelegate {}
@@ -56,7 +57,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var learningPreparing = false
     lazy var mobileRankings = MobileRankingsController(presenter: self, store: arcadeStore)
     lazy var libraryInput = makeLibraryInput()
-    private var inputLink: CADisplayLink?
+    nonisolated(unsafe) private var inputLink: CADisplayLink?
+    private var viewIsVisible = false
+    private var sceneIsActive = false
+    private let activityObservers = MobileNotificationObserverBag()
     override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
@@ -216,9 +220,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         _ = saveProfiles()
         reloadPlayerData()
         catalogue = Self.makeCatalogue()
-        inputLink = CADisplayLink(target: self, selector: #selector(pollLibraryInput(_:)))
+        let target = MobileDisplayLinkTarget { [weak self] in self?.pollLibraryInput($0) }
+        inputLink = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+        inputLink?.isPaused = true
         inputLink?.preferredFramesPerSecond = 30
         inputLink?.add(to: .main, forMode: .common)
+        observeFrameActivity()
         searchField.autocorrectionType = .no
         searchField.spellCheckingType = .no
         searchField.textContentType = nil
@@ -286,12 +293,58 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        viewIsVisible = true
+        sceneIsActive = view.window?.windowScene?.activationState == .foregroundActive
+        syncPages()
         if game == nil { becomeFirstResponder() }
         #if os(iOS)
         cloudProgress.requestSync()
         #endif
         libraryCloud.requestSync()
         presentCloudAuthentication()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewIsVisible = false
+        syncPages()
+    }
+
+    deinit { inputLink?.invalidate() }
+
+    private func observeFrameActivity() {
+        let centre = NotificationCenter.default
+        for name in [UIScene.willDeactivateNotification, UIScene.didEnterBackgroundNotification,
+                     UIScene.didDisconnectNotification, UIScene.didActivateNotification] {
+            activityObservers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] notification in
+                let scene = notification.object as? UIWindowScene
+                MainActor.assumeIsolated {
+                    guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
+                    self.sceneIsActive = name == UIScene.didActivateNotification
+                    self.libraryInput.reset()
+                    self.syncPages()
+                }
+            })
+        }
+        for name in [Notification.Name.GCControllerDidConnect, .GCControllerDidDisconnect,
+                     UIAccessibility.reduceMotionStatusDidChangeNotification] {
+            activityObservers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.updateLibraryDisplayLink() }
+            })
+        }
+    }
+
+    private func updateLibraryDisplayLink() {
+        let active = viewIsVisible && sceneIsActive && game == nil
+        if !active { unfold.stop() }
+        let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
+            && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
+            && !UIAccessibility.isReduceMotionEnabled
+        inputLink?.isPaused = !active || (!animatedBackdrop && GCController.controllers().isEmpty)
+        if inputLink?.isPaused == true {
+            libraryInput.reset()
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
+        }
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         #if os(tvOS)
@@ -324,7 +377,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         homeBackdropView.frame = view.bounds
         canvas.boxesHome = usesHomeBox
         syncPages()
-        scrollView.frame = MobileSystemRegions.menuFrame(in: view)
+        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
+            in: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
+            avoiding: MobileSystemRegions.read(in: view)) : []
+        scrollView.frame = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
+        canvas.bookHomePanes = book.map {
+            CGRect(x: $0.minX - safe.minX, y: $0.minY - safe.minY, width: $0.width, height: $0.height)
+        }
         let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
         canvas.frame = CGRect(origin: .zero, size: size)
         scrollView.contentSize = size
@@ -351,7 +411,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         scrollView.isOpaque = !shown
         canvas.backgroundColor = shown ? .clear : .black
         canvas.isOpaque = !shown
-        guard shown else {
+        guard shown, viewIsVisible, sceneIsActive else {
             homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
             if homeBackdropTask != nil { homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil }
             return
@@ -383,6 +443,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             guard !Task.isCancelled, let self, self.homeBackdropKey == key else { return }
             self.homeBackdropTask = nil
             self.homeBackdropView.show(scenery)
+            self.updateLibraryDisplayLink()
         }
     }
 
@@ -568,8 +629,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     /// iPad keeps the Mac carousel in both orientations. Narrow panes use the stacked page.
     private func syncPages() {
-        inputLink?.isPaused = game != nil
         refreshHomeBackdrop()
+        updateLibraryDisplayLink()
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
         browser.statusText = loading ? L10n.text("Loading...") : notice
         browser.isLoading = loading
@@ -578,7 +639,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let show = game == nil && route == .levels && coverBrowser && library != nil
         scrollView.isHidden = game != nil || show
         browser.isHidden = !show
-        browser.artworkLoadingEnabled = show && !preparingLevel && libraryTask == nil
+        browser.artworkLoadingEnabled = show && viewIsVisible && sceneIsActive && !preparingLevel && libraryTask == nil
         if show, !browserShown, let library {
             browser.frame = view.bounds
             browser.configure(levels: library.levels.filter { canSelectJourneyLevel($0.index) }, selected: selectedIndex)
@@ -1172,6 +1233,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     level: recordLevel, session: session)
                 return self.recordMobileCompletion(run, session: session)
             }
+            next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
             next.onHandover = { [weak self] player in self?.handOver(to: player) ?? false }
             next.onCompleted = { [weak self] snapshot in

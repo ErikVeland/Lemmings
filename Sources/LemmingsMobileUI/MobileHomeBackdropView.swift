@@ -11,6 +11,13 @@ import UIKit
     private var start = CGPoint.zero
     private var goal = CGPoint.zero
     private var clock = GameHomeBackdropClock()
+    var canAnimate: Bool {
+        guard let image, start != goal, bounds.width > 0, bounds.height > 0 else { return false }
+        let size = CGSize(width: image.width, height: image.height)
+        let from = GameHomeBackdropArt.source(imageSize: size, viewSize: bounds.size, start: start, goal: start, elapsed: 0)
+        let to = GameHomeBackdropArt.source(imageSize: size, viewSize: bounds.size, start: goal, goal: goal, elapsed: 0)
+        return from != to
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = false; isAccessibilityElement = false

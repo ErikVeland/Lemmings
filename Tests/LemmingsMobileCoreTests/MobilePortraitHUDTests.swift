@@ -70,7 +70,7 @@ struct MobilePortraitHUDTests {
             let layout = MobileHUDLayout.make(container: .init(width: 390, height: 844),
                 safeArea: .init(top: 47, bottom: 34), hasRate: true, skillCount: 8,
                 reservedRegions: [region], supportsRewind: true)
-            #expect(layout.portrait == nil)
+            if region.kind != .division { #expect(layout.portrait == nil) }
             #expect(layout.canPlay)
             #expect(layout.interface.controlFrames.allSatisfy { !$0.intersects(region.frame) })
         }

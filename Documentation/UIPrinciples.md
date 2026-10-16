@@ -951,6 +951,74 @@ US source file. Mac source typechecking, iOS/tvOS SDK modules, app entry points
 and the localisation catalogue pass. Physical VoiceOver and device input remain
 manual checks.
 
+## Book Home menu
+
+Home uses both panes when a vertical division leaves room for two lists.
+Keep the saved games and libraries in their existing order, down the left list
+and then the right. Balance the lists using measured captions and the footer
+space. Keep Profiles, Records and Playlists together below the left list, with
+the update and Settings icons in the header. Retain one primary action, the
+player identity, native sequel logos and complete progress counts.
+
+Both lists retain the selected interface size and share vertical scrolling when
+needed. Full-height unobstructed banks keep scrolled actions clear of the hinge
+and camera. Drawing, keyboard navigation and accessibility follow the same list
+order. Other pages retain their existing safe menu region.
+
+The muted, windowless `LemmingsMobileMenuAudit --book-home` check passes 120
+captures across four book poses, all three interface sizes, solo, saved games,
+Hot Seat, expanded captions and unavailable/selected/busy states. It checks both
+lists, every action, target sizes, hit testing and scroll reachability. Focused
+menu/layout tests and iOS/tvOS SDK compilation pass. Physical touch, rotation,
+VoiceOver and display compositing remain device checks.
+
+## Rounded gameplay headers
+
+iOS gameplay applies the system's horizontal corner-adapted safe area to the
+status text and top Menu target. On iOS 27.1 and later, also honour the top bar
+layout region for the 44-point row. Apply only the extra horizontal clearance
+inside the ordinary safe area. Keep the playfield and lower controls in place.
+All three engines use the same header geometry for pixels, input and accessibility.
+L3's native panel retains Menu in its lower navigation row.
+
+The muted, windowless `LemmingsMobileMenuAudit --rounded-hud` check passes 72
+rounded-rectangle fixture captures across Classic, Lemmings 2 and Lemmings 3,
+portrait, landscape, book, stacked, zero-top-inset and existing-safe-area views.
+It checks complete status banks and bitmap fields inside each screen outline,
+the 44-point Menu target, hit testing, reserved regions and unchanged gameplay
+geometry. Focused layout regressions and both mobile SDK module builds pass.
+UIKit's device-supplied corner values, physical touch, VoiceOver and composited
+CRT output remain device checks.
+
+## Divided mobile screens
+
+Duo gameplay spans the upper part of the view. In book view, lemmings remain
+visible across both screens, with controls filling the lower part of both screens.
+Split buttons, status text and the minimap around the vertical division. In stacked
+view, gameplay fills the upper screen and the controls fill the lower screen.
+Scale the original pixel artwork with the available control area. Keep input
+targets and status text clear of reserved regions. Gameplay may span a vertical
+division, with input blocked inside it.
+Classic, Lemmings 2 and Lemmings 3 reuse the shared skill, rate, transport and
+minimap controls. Native skill sets stay visible together. Compact landscape
+uses the two-row deck when the single-row strip would need skill scrolling and
+there is enough height. Short phone landscapes retain their scrollable skill bank.
+
+Menu measurement, input targets and drawing use the same viewport height.
+Reserve space for details and footer actions before sizing a level preview.
+Keep the selected interface size and scroll when the remaining content cannot fit.
+Changing the layout retains the existing session and paused Ready boundary.
+
+The muted, windowless `LemmingsMobileMenuAudit --duo` check passes 156 bitmap
+captures across eight poses, all three native engines and all menu interface
+sizes. It checks gameplay across both upper panes, lower-area fill, complete
+native skill sets, reserved-region containment for controls and status text,
+status/minimap separation, target sizes, activation centres and preview actions.
+The wider menu audit passes 441 pages, 60 HUD states, 18 native artwork states,
+six cover states and three unfold frames. Focused layout and menu regressions
+pass, and iOS/tvOS SDK modules compile. Physical Duo folding, rotation, touch,
+VoiceOver and composited CRT output remain device checks.
+
 ## Fixed TV menus
 
 TV gameplay keeps player identity and shared Mac status information above the
@@ -997,3 +1065,23 @@ text, disabled controls and target geometry. Representative renders were inspect
 iOS and tvOS SDK modules and app entry points compile. Physical DualSense
 resistance, native UIKit focus delivery, VoiceOver and TV compositing remain
 device checks. The diagnostic TV shell retains its separate input implementation.
+
+
+Level results use both clear screens in book and tabletop layouts. The left
+screen in book mode, or upper screen in tabletop mode, keeps the level snapshot,
+outcome and existing navigation actions. Its preview fills the available pane
+above the actions. The right or lower screen replaces the inactive gameplay
+controls with a separately scrollable achievement sheet: rescue goals first, followed by earned awards and reward
+receipts with their full criteria and reasons. Filled stars, outlines and question
+marks distinguish earned, unearned and unknown goals. Bitmap type and shared
+result rules apply to Classic, Lemmings 2 and Lemmings 3. The achievement sheet
+keeps the selected text size; the result scales within the available pane to
+keep its action shelf visible. Both panes remain available to accessibility in
+result-then-achievements order. Each pane avoids the hinge and camera cutouts.
+Returning to play or rotating out of a divided layout restores the normal view.
+Muted offscreen checks pass 360 captures covering the three engines, all text
+sizes, two tabletop sizes, three book poses, wins, partial rescues, failures and
+Hot Seat labels.
+Goal text, state shapes and action geometry have focused tests. iOS and tvOS SDK
+compiles pass. Physical folding, touch scrolling and VoiceOver delivery remain
+device checks.

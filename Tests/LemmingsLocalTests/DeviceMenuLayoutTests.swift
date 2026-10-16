@@ -6,6 +6,131 @@ import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    func testBookResultKeepsActionsLeftAndFullAchievementTextRight() {
+        var page = GameFrontEnd.Page(title: "Level complete", subtitle: "Played: ALICE Fan-made / Ji Hoots Lemmings Remake Heaven Level 2",
+            details: ["Cellbash", "Saved 10/10 Goal 1", "New time record 2:41.12"],
+            footer: [.init("next", "Next: PLAYER TWO", primary: true), .init("retry", "Retry"), .init("back", "Back"),
+                     .init("review", "Review"), .init("share", "Share movie"), .init("menu", "Menu")], preview: true)
+        page.result = true
+        let awards = MobileResultAchievementsArt.page([
+            .init("First clear", detail: "First clear of this level. Rescued 10; target 1."),
+            .init("+1 ZOOM", detail: String(repeating: "Complete reward details. ", count: 10))])
+        for setting in ClassicInterfaceSize.allCases {
+            let pane = CGSize(width: 589, height: 786)
+            let scale = MobileResultAchievementsArt.resultScale(MobileSettingsArt.interfaceScale(setting, width: pane.width),
+                page: page, width: pane.width, height: pane.height)
+            let result = GameFrontEnd.layout(page, width: pane.width / scale, minimumHeight: pane.height / scale, fillsResultPane: true)
+            XCTAssertLessThanOrEqual(result.size.height * scale, pane.height + 0.5)
+            XCTAssertEqual(Set(result.targets.map { $0.action.id }), Set(page.footer.map(\.id)))
+            for target in result.targets {
+                XCTAssertEqual(result.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+                XCTAssertGreaterThanOrEqual(target.frame.height * scale, 44)
+            }
+            let back = result.targets.first { $0.action.id == "back" }!.frame
+            let next = result.targets.first { $0.action.id == "next" }!.frame
+            XCTAssertEqual(back.minY, next.minY)
+            XCTAssertLessThan(back.maxX, next.minX)
+            let awardScale = MobileSettingsArt.interfaceScale(setting, width: pane.width)
+            let right = GameFrontEnd.layout(awards, width: pane.width / awardScale, minimumHeight: pane.height / awardScale)
+            XCTAssertEqual(right.details.count, awards.details.count)
+            XCTAssertTrue(right.targets.isEmpty)
+            for (index, frame) in right.details.enumerated() {
+                XCTAssertTrue(right.board.contains(frame))
+                XCTAssertGreaterThanOrEqual(frame.height, GameTextLayout.height(awards.details[index], width: frame.width))
+            }
+        }
+    }
+
+    func testTableResultKeepsPrimaryAndBackInsideUpperPaneAtEveryTextSize() {
+        var page = GameFrontEnd.Page(title: "Level complete", subtitle: "Played: PLA Fan-made / Ji Hoots Lemmings Remake Heaven Level 2",
+            details: ["Cellbash", "Saved 10/10 Goal 1", "New time record 2:41.12"],
+            footer: [.init("next", "Next level", primary: true), .init("retry", "Retry"), .init("back", "Back"),
+                     .init("review", "Review"), .init("share", "Share movie"), .init("menu", "Menu")], preview: true)
+        page.result = true
+        for setting in ClassicInterfaceSize.allCases {
+            let width: CGFloat = 834, height: CGFloat = 565
+            let scale = MobileResultAchievementsArt.resultScale(MobileSettingsArt.interfaceScale(setting, width: width),
+                page: page, width: width, height: height)
+            let layout = GameFrontEnd.layout(page, width: width / scale, minimumHeight: height / scale, fillsResultPane: true)
+            XCTAssertLessThanOrEqual(layout.size.height * scale, height + 0.5)
+            let back = layout.targets.first { $0.action.id == "back" }!.frame
+            let next = layout.targets.first { $0.action.id == "next" }!.frame
+            XCTAssertEqual(back.minY, next.minY)
+            XCTAssertLessThan(back.maxX, next.minX)
+            XCTAssertTrue(layout.targets.allSatisfy { $0.frame.maxY * scale <= height })
+            XCTAssertEqual(layout.action(at: CGPoint(x: next.midX, y: next.midY)), "next")
+        }
+    }
+
+    func testTableAchievementsPreserveFullTextAndStarStatesAtAllSizes() {
+        let level = ArcadeLevel(id: "goal", title: "Test", game: "Classic", rules: "test", total: 10, required: 5)
+        for (saved, won, expected) in [(0, false, [0, 0, 2]), (5, true, [1, 0, 2]),
+                                      (6, true, [1, 1, 2]), (10, true, [1, 1, 1])] {
+            let run = ArcadeRun(profileID: "PLA", level: level, saved: saved, didWin: won, skills: [:], seconds: 42)
+            let items = MobileResultAchievementsArt.goals(.init(run: run, maximum: .init()))
+                + [.init("A long earned achievement title", detail: String(repeating: "Full achievement description. ", count: 6))]
+            XCTAssertEqual(items.prefix(3).compactMap(\.star), expected)
+            let page = MobileResultAchievementsArt.page(items)
+            for width: CGFloat in [280, 465, 596, 834, 1194] {
+                let layout = GameFrontEnd.layout(page, width: width, minimumHeight: 549)
+                XCTAssertTrue(layout.targets.isEmpty)
+                XCTAssertEqual(layout.details.count, items.count * 2)
+                for (index, frame) in layout.details.enumerated() {
+                    XCTAssertTrue(layout.board.contains(frame))
+                    XCTAssertGreaterThanOrEqual(frame.height, GameTextLayout.height(page.details[index], width: frame.width))
+                    XCTAssertFalse(layout.details.dropFirst(index + 1).contains { frame.intersects($0) })
+                }
+            }
+        }
+    }
+
+    func testLevelPreviewKeepsLibraryAndStartVisibleOnDuoPanes() {
+        let page = GameFrontEnd.Page(title: "Just Dig!", subtitle: "Fun 1/30",
+            details: ["10 Lemmings save 1", "Time 5:01"],
+            footer: [.init("back", "Library"), .init("start", "Start", primary: true)], preview: true)
+        for size in [CGSize(width: 589, height: 794), .init(width: 834, height: 549),
+                     .init(width: 650, height: 425), .init(width: 465, height: 610)] {
+            let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+            XCTAssertEqual(layout.size.height, size.height)
+            XCTAssertTrue(layout.targets.allSatisfy { CGRect(origin: .zero, size: size).contains($0.frame) })
+            XCTAssertGreaterThanOrEqual(layout.preview.height, 80)
+            let back = layout.targets.first { $0.action.id == "back" }!.frame
+            let start = layout.targets.first { $0.action.id == "start" }!.frame
+            XCTAssertLessThan(back.maxX, start.minX)
+            XCTAssertEqual(back.minY, start.minY)
+            XCTAssertEqual(layout.action(at: CGPoint(x: start.midX, y: start.midY)), "start")
+        }
+    }
+
+    func testBookHomeUsesBothListsAndRetainsEveryAction() {
+        let families = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Classic Lemmings 0/120") }
+            + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
+        for width: CGFloat in [650, 1194] {
+            let hinge = CGRect(x: width / 2 - 8, y: 0, width: 16, height: 834)
+            let panes = [CGRect(x: 0, y: 0, width: hinge.minX, height: 834),
+                         CGRect(x: hinge.maxX, y: 0, width: width - hinge.maxX, height: 834)]
+            let page = MobileHomeArt.page(resume: [.init("resume", "Resume Journey")],
+                journey: .init("journey", "Journey map 1/227 solved"), families: families, initials: "ALICE v BOB")
+            let layout = GameFrontEnd.layout(page, width: width, minimumHeight: 834, bookHomePanes: panes)
+            XCTAssertNotNil(layout.secondaryBoard)
+            XCTAssertNotNil(layout.libraryHeading)
+            XCTAssertEqual(Set(layout.targets.map { $0.action.id }), Set((page.rows + page.footer).map(\.id)))
+            XCTAssertEqual(layout.targets.filter { $0.action.primary }.count, 1)
+            for pane in panes {
+                XCTAssertTrue(layout.targets.contains { page.rows.contains($0.action) && pane.contains($0.frame) })
+            }
+            for (index, target) in layout.targets.enumerated() {
+                XCTAssertFalse(target.frame.intersects(hinge))
+                XCTAssertGreaterThanOrEqual(target.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(target.frame.height, 44)
+                XCTAssertTrue(CGRect(origin: .zero, size: layout.size).contains(target.frame))
+                XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+                XCTAssertFalse(layout.targets.dropFirst(index + 1).contains { target.frame.intersects($0.frame) })
+            }
+            XCTAssertNil(layout.action(at: CGPoint(x: hinge.midX, y: 400)))
+        }
+    }
+
     func testHomeLibrarySpacingSequelRowAndThreeColumnFooter() {
         let libraries = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Library \($0) 0/120") }
             + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]

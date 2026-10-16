@@ -151,13 +151,15 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.fill(statusFrame)
             if layout.portrait != nil {
                 context.setFillColor(CGColor(gray: 0.06, alpha: 1))
-                context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: statusFrame.maxY))
+                context.fill(statusFrame)
                 context.setFillColor(CGColor(gray: 0.25, alpha: 1))
-                context.fill(CGRect(x: 0, y: statusFrame.maxY - 1, width: bounds.width, height: 1))
+                context.fill(CGRect(x: statusFrame.minX, y: statusFrame.maxY - 1, width: statusFrame.width, height: 1))
                 context.setFillColor(CGColor(gray: 0, alpha: 1))
                 context.fill(Self.cgRect(layout.interface.controlsFrame))
                 if let value = layout.portrait?.rateValue {
-                    drawStoneSocket(value.insetBy(dx: -44, dy: 0), selected: false, pixel: 1, context: context)
+                    let rate = items.filter { if case .releaseRate = $0.action { return true }; return false }
+                        .reduce(value) { $0.union($1.frame) }
+                    drawStoneSocket(rate, selected: false, pixel: 1, context: context)
                 }
                 for item in items {
                     if case .skill = item.action { continue }
@@ -390,7 +392,9 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.fill(well)
             if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
                 let art = CGRect(x: well.minX, y: frame.minY + 18, width: well.width, height: max(0, frame.height - 34))
-                let fit = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
+                let available = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
+                let fit = layout.isDiorama && available > 0
+                    ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
                 GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
@@ -552,6 +556,12 @@ public enum MobileHUDAction: Equatable, Sendable {
                navigation.minY < frame.maxY, navigation.maxY > frame.minY {
                 frame.size.width = max(0, navigation.minX - frame.minX - 4)
             }
+        }
+        let banks = layout.statusBanks.map(cgRect)
+        if banks.count > 1, let leading = banks.first, let trailing = banks.last {
+            let player = hasPlayer ? CGRect(x: leading.minX, y: leading.minY,
+                width: min(200, leading.width), height: leading.height) : nil
+            return (player, trailing)
         }
         guard hasPlayer else { return (nil, frame) }
         let playerWidth = min(200, max(90, floor(frame.width * 0.28)))
