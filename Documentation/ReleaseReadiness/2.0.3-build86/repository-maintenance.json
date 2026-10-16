@@ -5,10 +5,10 @@
   "repositoryChecks": {
     "status": "passed",
     "checks": {
-      "files": 6617,
+      "files": 6620,
       "markdown": 213,
-      "local_links": 2685,
-      "json": 3335,
+      "local_links": 2681,
+      "json": 3337,
       "plist": 20,
       "python": 178,
       "shell": 181
@@ -61,5 +61,32 @@
       "LemmingsTVCore": 10
     },
     "scope": "Retain the published universal binaries and module interfaces only where every Swift source file matches the frozen build 85 source. Rebuild LemmingsGameArt and LemmingsLocal."
-  }
+  },
+  "removedOlderBuildProductTrees": [
+    {
+      "path": ".build/release-preparation-2026-10-14/source/.build/out",
+      "allocatedBytes": 22245376
+    },
+    {
+      "path": ".build/release-preparation-2026-10-14/source/.build/shared-release-tests/out",
+      "allocatedBytes": 1058918400
+    }
+  ],
+  "additionalAllocatedBuildProductBytesRemoved": 1081163776,
+  "archivedUnusedDistribution": "Sparkle-2.10.0",
+  "prunedStaleWorktreeRegistrations": 1,
+  "removedFullyMergedLocalBranches": [
+    "feature/mac-1.9.4"
+  ],
+  "recoveryArchive": ".archive/spring-clean-2026-10-16",
+  "structuredChecks": {
+    "xcodeProjectPlists": 2,
+    "workflowYamlFiles": 3
+  },
+  "temporaryReleaseExtractionCacheCleanup": {
+    "removedExtractionCaches": 6,
+    "allocatedBytesRemoved": 14249779200,
+    "preserved": "All six signed full archives, the slim download, signed appcast, canonical deltas, source snapshots and original assets."
+  },
+  "allocatedOldBuildCacheBytesRemoved": 8636948480
 }

@@ -1,0 +1,68 @@
+{
+  "version": "2.0.3",
+  "build": 86,
+  "fullArchiveSignatureVerified": true,
+  "publishedItemsPreserved": 16,
+  "deltas": [
+    {
+      "fromBuild": 85,
+      "toBuild": 86,
+      "asset": "UltimateLemmings-build86-from85.delta",
+      "bytes": 473790,
+      "sha256": "6e9efe6d245fb0d886f74ddd7b9aa8b04df09bc1e9916ba4b73589d78601016b",
+      "signatureVerified": true,
+      "patchedPayloadMatchesTarget": true,
+      "payloadFiles": 18558,
+      "musicFiles": 649,
+      "codeSignatureVerified": true
+    },
+    {
+      "fromBuild": 84,
+      "toBuild": 86,
+      "asset": "UltimateLemmings-build86-from84.delta",
+      "bytes": 3174762,
+      "sha256": "567ff6d1ca75cc7ad6d94eccce1125752b55e51ab086b6c0f3ca52df6b9c7e94",
+      "signatureVerified": true,
+      "patchedPayloadMatchesTarget": true,
+      "payloadFiles": 18558,
+      "musicFiles": 649,
+      "codeSignatureVerified": true
+    },
+    {
+      "fromBuild": 83,
+      "toBuild": 86,
+      "asset": "UltimateLemmings-build86-from83.delta",
+      "bytes": 3640086,
+      "sha256": "72ff10d983c39fddb8971cbc8df1ffe84053fd29911319c71567c5309cfc19c7",
+      "signatureVerified": true,
+      "patchedPayloadMatchesTarget": true,
+      "payloadFiles": 18558,
+      "musicFiles": 649,
+      "codeSignatureVerified": true
+    },
+    {
+      "fromBuild": 82,
+      "toBuild": 86,
+      "asset": "UltimateLemmings-build86-from82.delta",
+      "bytes": 4496358,
+      "sha256": "e18781de5278a583393fbb3385d84431b483b079162e4a4a5e995e50a3491e33",
+      "signatureVerified": true,
+      "patchedPayloadMatchesTarget": true,
+      "payloadFiles": 18558,
+      "musicFiles": 649,
+      "codeSignatureVerified": true
+    },
+    {
+      "fromBuild": 81,
+      "toBuild": 86,
+      "asset": "UltimateLemmings-build86-from81.delta",
+      "bytes": 7869386,
+      "sha256": "1b388e6c6083381b18525bb18f567562b4037c00ddcab36af749146dff32b6c2",
+      "signatureVerified": true,
+      "patchedPayloadMatchesTarget": true,
+      "payloadFiles": 18558,
+      "musicFiles": 649,
+      "codeSignatureVerified": true
+    }
+  ]
+}

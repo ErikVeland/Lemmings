@@ -34,13 +34,34 @@ targets. These checks do not close the stricter engine and content gates.
 All eight translation packs remain AI-assisted drafts. Structural checks and
 bitmap renders do not establish human language approval or VoiceOver acceptance.
 
+The [repository maintenance record](repository-maintenance.json) lists the
+validated file types, archived notes, removed caches and preserved local work.
+
 ## Distribution gates
 
-The public feed remains on 2.0.2 until signed and notarised candidate archives
-are ready. A 2.0.3 feed needs direct signed deltas from builds 85, 84, 83, 82
-and 81, plus the full fallback and separate slim fresh-install download.
-Archive signatures, Apple notarisation, Gatekeeper and delta application must
-be recorded against the frozen release source.
+The candidate is built from `b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76`.
+Both universal archives are signed, notarised and stapled. Quarantined copies
+extracted from each ZIP pass code-signature, ticket and Gatekeeper checks.
+The full archive is 2,054,422,043 bytes. The slim archive is 270,365,950 bytes.
+See [distribution checks and checksums](distribution.json).
+
+The [staged signed feed](appcast-candidate.xml) preserves all sixteen published
+entries and adds build 86 with direct patches from builds 85, 84, 83, 82 and 81.
+Every patch passes Ed25519 verification and reproduces all 18,558 target files,
+including 649 music files, symlinks and file modes. Patched apps pass code-signature
+checks. The build-85 patch is 473,790 bytes. See the
+[five-base delta record](delta-verification.json).
+
+Five shared libraries retain code from the signed public build 85 ZIP. Their
+281 Swift source files match the frozen build 85 source, and the retained
+library inputs match the public ZIP byte for byte. The changed artwork library
+and Mac app were rebuilt. No campaign or source-fidelity closure is claimed.
+The complete current-candidate app audit was not rerun. Existing music-resource
+permission warnings and AppKit warnings are recorded in the distribution checks.
+
+Publication input checks pass. The public feed remains on 2.0.2, and no archive
+or candidate feed has been uploaded. Public publication remains separate from
+this preparation.
 
 Native mouse input, VoiceOver, physical controllers, Intel/minimum-OS hardware
 and the signed app's launch and update/relaunch remain manual checks. The

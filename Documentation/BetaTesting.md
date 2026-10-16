@@ -52,8 +52,8 @@ and steps to reproduce. Include a screenshot or replay when it helps.
 ## Build locally
 
 ```sh
-zsh Scripts/build-local-app.sh
-open ".build/local/Ultimate Lemmings.app"
+LEMMINGS_ARCHITECTURES="$(uname -m)" zsh Scripts/build-local-app.sh
+ditto ".build/local/Ultimate Lemmings.app" "$HOME/Downloads/Ultimate Lemmings.app"
 ```
 
 For a quick manual test build, set `LEMMINGS_ARCHITECTURES="$(uname -m)"` and

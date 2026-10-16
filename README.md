@@ -340,7 +340,7 @@ Apple does not accept that entitlement in a Developer ID notarisation.
 | `Tools` | Probes, catalogues, solvers and evidence generators |
 | `Resources` | Repository-owned application resources |
 | `Documentation` | Product status, scope, operations and evidence |
-| `docs/superpowers` | Active design specifications and implementation plans |
+| `docs/superpowers` | Retained targeting design and implementation history |
 
 Generated `.build` output, application bundles, local commercial assets,
 credentials and worktrees are ignored. `.archive/` is an intentionally ignored

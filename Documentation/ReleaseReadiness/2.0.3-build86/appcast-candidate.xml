@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Ultimate Lemmings</title>
+        <item>
+            <title>2.0.3</title>
+            <pubDate>Fri, 16 Oct 2026 11:11:38 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>86</sparkle:version>
+            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release fixes language selection in Settings.</p>
+<h3>Language selection</h3>
+<p>Language buttons now accept clicks across their visible width. Previously, native radio-button input did not match the centred pixel captions, so clicking a language could leave System default selected.</p>
+<p>Open <b>Settings &gt; Gameplay &gt; Language</b>. Select a language to preview it. Choose <b>Apply</b> to save the choice or <b>Back</b> to restore the previous language. System default continues to follow the device language. Keyboard navigation, accessibility roles and the original pixel artwork are retained. Reopening What's New also uses the selected language immediately.</p>
+<h3>Compatibility and known limits</h3>
+<p>The public app targets Apple silicon and Intel Macs running macOS 12.3 or later. The slim fresh-install download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. This update does not change engine rules, level content or the existing campaign and source-fidelity limits.</p>
+<p>The eight translated language packs remain AI-assisted drafts. Human language review, physical controllers, VoiceOver, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their recorded validation gaps. Mobile and TV releases have separate gates.</p>
+<p class="meta">Build: 86<br>Release commit: b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76<br>Release base: v2.0.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-2.0.3-build86.zip" length="2054422043" type="application/octet-stream" sparkle:edSignature="bYg/LzSigyg4+jqJ3NbCEjr/zrLk5B4oz2rXock/CyNRPhexS20qIQrn9dN37fV4nIEkt8TYgbC03xvoACQDAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from85.delta" sparkle:deltaFrom="85" length="473790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="QcR93IrKrnU0NEWehhqZyHXdDvKvETcgtdnbj/oD7iRCBKK+mLyou08+FluoBfO/ktlW58KlHfo33AcFcQ7PCQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from84.delta" sparkle:deltaFrom="84" length="3174762" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="juvCqU/TvyGqp5K/Q+aFu6++90jUxLACvsohBpqT3JpEiiN3A2DbE0vIZyfG6WqEHzI2Y3DjuNqDxHNoda8uBw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from83.delta" sparkle:deltaFrom="83" length="3640086" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="vC0Lg6WOiaPOAoQ7FfQtJo2AQodHyEpY0cDEKG75vetRmiDwtlKvsJ+bMhQgGWms6XS7M3mKqlf6D3YdMoZXBA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from82.delta" sparkle:deltaFrom="82" length="4496358" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="3hTit1JNXC08EcDdYNdnVetONrKD0fYGUUYRIJtcTJBJcAv5KMJSFTdZg/QdUpLF6g9zNZqYYa5LeUrbkhu4Cw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from81.delta" sparkle:deltaFrom="81" length="7869386" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="/VSa+F6R8AHjd5cEadg/s+AiXyE916VkBNvrN95FT0HKhPbFXnnpf6E0iqF5j6mNPX+sh5BN5CDb5rTwYfltBg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>2.0.2</title>
+            <pubDate>Fri, 16 Oct 2026 02:19:56 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>85</sparkle:version>
+            <sparkle:shortVersionString>2.0.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release improves Hot Seat retries and result presentation.</p>
+<h3>Hot Seat</h3>
+<p>Earlier players' latest completed attempts appear as coloured ghosts during retries. Ghosts follow simulation time, pause and rewind. They stay silent and cannot receive skills. Each ghost belongs to the same session, level and starting state. Solo play and the current player's own attempts stay separate. Replay movies include the ghost presentation.</p>
+<p>Classic, The Tribes, Chronicles and supported NeoLemmix sessions use the shared replay flow. The Tribes ghosts omit separate equipment, projectiles and blast particles. Chronicles uses its existing provisional animation mapping. Native NeoLemmix ghost artwork and composited CRT/HDR output retain their validation gaps.</p>
+<h3>Results and artwork</h3>
+<p>Retry actions, result rewards and earned Level Skips use clearer grouping and consistent pixel artwork. Shared HUD presentation improves the player, score, clock and statistics layout in the mobile and TV source. This download updates Macintosh only.</p>
+<h3>Journey and language support</h3>
+<p>The Learning journey uses the updated teaching order while preserving completed lessons and saved ownership. Tamil bitmap lettering joins the shared interface. New result, resource and Hot Seat labels have entries in all eight translated language tables. Human language and full-screen reviews remain open.</p>
+<p>Rescue proofs and Classic hints are refreshed against the current source fingerprint. The refresh retains all 294 exact-condition certificates and 315 best-known rescue targets.</p>
+<h3>Compatibility and known limits</h3>
+<p>The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. The stricter bundled-content closure remains open. The retained fan audit records 2,399 winning routes and 3,621 levels without verified wins. Seventy-five bundled NeoLemmix levels still need community styles. L3 standalone and carried-route gaps, the L2 golden-talisman ending, source-engine fidelity and media checks remain open.</p>
+<p>Human language review, physical controllers, VoiceOver journeys, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their validation gaps. Automated native checks run offscreen with muted audio. Mobile and TV distribution remains separate.</p>
+<p class="meta">Build: 85<br>Release commit: f956df19bc4ebf4b484c6553eda3157a81a258ab<br>Release base: v2.0.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-2.0.2-build85.zip" length="2054415049" type="application/octet-stream" sparkle:edSignature="8PviJYhMG+S5ZZ+fIJBqQrqRAADlXcrUUrHnbM4zNBbu4pj3idEBS1Axg1pMwMIQl8EygjoLVKwrW+Oygx1xCw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from84.delta" sparkle:deltaFrom="84" length="3154398" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ZBEh9mlZpJQhTtjaAZagbK0lcLrXT1OXouU+jwpfQT/ppA7Q3vjYNtatC3FLuFFITsFYGMtvk25FZVN387XtCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from83.delta" sparkle:deltaFrom="83" length="3619614" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="Base,ar,ca,cs,da,de,el,en,es,fa,fi,fr,he,hr,hu,is,it,ja,ko,nb,nl,nn,pl,pt-BR,pt-PT,ro,ru,sk,sl,sv,th,tr,uk,zh_CN,zh_HK,zh_TW" sparkle:edSignature="/w6f2v/cuOkWSBHCjU/W8e5JqI6ShFdcHXOZgEHT4vJGK8wTZxDNiApDuhkGN4g6nxvoJLZmWKaQh1a41TiEDg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from82.delta" sparkle:deltaFrom="82" length="4480222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="Base,ar,ca,cs,da,de,el,en,es,fa,fi,fr,he,hr,hu,is,it,ja,ko,nb,nl,nn,pl,pt-BR,pt-PT,ro,ru,sk,sl,sv,th,tr,uk,zh_CN,zh_HK,zh_TW" sparkle:edSignature="Ond6cj59J5/1OFC4SKiKa2ZaX5SmDB1rSEDNRONI+3R+kbo+JR0NOIrqTsKfP7NC7dO/MGZnVoPNfcr9LMZiCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from81.delta" sparkle:deltaFrom="81" length="7860518" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="Base,ar,ca,cs,da,de,el,en,es,fa,fi,fr,he,hr,hu,is,it,ja,ko,nb,nl,nn,pl,pt-BR,pt-PT,ro,ru,sk,sl,sv,th,tr,uk,zh_CN,zh_HK,zh_TW" sparkle:edSignature="9ojcSykcQ5Z9fbLQDnuHgQAeQqJaApNhpeETVa7k2EJ4woNPnzgy3oOpRvRHKspr8nA1pAiADAYLC/0Zt9fpAw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from79.delta" sparkle:deltaFrom="79" length="9493054" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="Base,ar,ca,cs,da,de,el,en,es,fa,fi,fr,he,hr,hu,is,it,ja,ko,nb,nl,nn,pl,pt-BR,pt-PT,ro,ru,sk,sl,sv,th,tr,uk,zh_CN,zh_HK,zh_TW" sparkle:edSignature="BvjYQnMNQTV9sOwzhhDVmhAEUYccVOSWRx0CtkP1KFPPpdJZQjcf3YQ046md7s2tz5G0P6bmRik8F+6R2H/KCw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>2.0.1</title>
+            <pubDate>Fri, 16 Oct 2026 00:40:12 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>84</sparkle:version>
+            <sparkle:shortVersionString>2.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release includes the latest Macintosh controls, learning journey, reward presentation and compatibility fixes since 2.0.</p>
+<h3>Learning journey</h3>
+<p>The revised teaching order prepares skills before harder puzzles and moves reported difficulty walls later. Placement now accounts for rescue requirements, skill reserves, release rate, hatch count and coordination. Existing journeys update unvisited lessons while preserving visited levels, completed records, run identity and player or Hot Seat ownership. Difficulty remains an editorial estimate that needs human playtesting.</p>
+<h3>Controls and results</h3>
+<ul><li>Pause, speed reset and frame stepping follow the selected control settings across Classic, The Tribes and Chronicles.</li><li>Gameplay quick controls and the solution selector handle pointer changes consistently, including flat and CRT views.</li><li>The Classic ghost solution selector uses the system pointer across its buttons, checkbox and gaps. Leaving the selector restores the gameplay cursor.</li><li>Results group newly earned Zooms, Superzooms and Level Skips. Rewards earned explains each award and can reopen without advancing the level or changing the attempt owner.</li><li>Failed Learning journey levels support earned skips under the shared campaign rules. Hot Seat retains explicit paused handovers.</li><li>Sequel targeting checks eligibility without copying the whole runtime. The Tribes includes an updated Cavelem carry-over route fixture.</li><li>Localisation resources and bundled NeoLemmix inventory checks include the latest corrections.</li></ul>
+<h3>Compatibility and known limits</h3>
+<p>The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack. This release is Macintosh only.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. The stricter bundled-content closure remains open. The retained fan audit records 2,399 winning routes and 3,621 levels without verified wins. Seventy-five bundled NeoLemmix levels still need community styles, and exact-version winning evidence covers 158 levels. L3 standalone and carried-route gaps, the L2 golden-talisman ending, source-engine fidelity and media checks remain open.</p>
+<p>Human language review, complete translated-screen validation, physical controllers, VoiceOver journeys, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their validation gaps. Automated native checks run offscreen with muted audio.</p>
+<p class="meta">Build: 84<br>Release commit: cb1772afe76b97fac18e7c2460c2254006473f31<br>Release base: v2.0</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-2.0.1-build84.zip" length="2053899553" type="application/octet-stream" sparkle:edSignature="0f0iQm2w09fJdbVHcIw/3KJmZKLhFTnfvMirGDUgwI4BekbUu9lzli8sJVMkLw+q0Oc9w9hShU3bRPmOeo19Cg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-build84-from83.delta" sparkle:deltaFrom="83" length="2514406" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="7KmBktKDnfnmfFKI8WBp9VdMusDA1ZqUQm5nqV7TKKn0dXEFpw/psWoUjsr4YsjQXYT1b2mC2AluMEBoDxWcBw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>2.0</title>
+            <pubDate>Thu, 15 Oct 2026 15:03:37 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>83</sparkle:version>
+            <sparkle:shortVersionString>2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>The flagship of this Macintosh release is the original 1-bit artwork, with a matching black-and-white gameplay panel. These notes cover changes since 1.9.6, including the 1.9.7 improvements.</p>
+<h3>Original Macintosh 1-bit graphics</h3>
+<p>A salute to the original artists behind Psygnosis's Macintosh releases: their immaculate dithering gives two colours texture, depth and character. The authored terrain, animated objects and lemming poses come from the original Macintosh black-and-white artwork banks.</p>
+<p>Choose <b>Settings → Graphics → Classic artwork → Artwork → Macintosh (1-bit)</b>. The gameplay panel uses monochrome stone, bitmap lettering and control symbols. The selected skill has a distinct inverted stone background. Optional permanent-skill backpacks use diagonal dithering for Climber, horizontal stripes for Floater and a checker pattern for both.</p>
+<p>Changing artwork preserves the live attempt, terrain edits and rewind history. Original black-and-white pixels remain exact. Reconstructed or missing fan pieces use monochrome dithering. Optional effects and the pointer retain their own settings. This artwork choice applies to Classic and its supported expansion families. The Tribes, Chronicles and NeoLemmix retain their separate artwork options.</p>
+<h3>Resume the attempt inside a journey</h3>
+<p>Saved journeys and supported sequence playlists can resume the attempt itself, including its simulation position, selected action and camera. Home and the journey hub show <b>Resume</b> when a matching checkpoint exists. Older saves without a checkpoint continue from their saved level.</p>
+<p>Checkpoints remain tied to the correct queue, content revision, player and Hot Seat session. Classic, The Tribes and Chronicles restore paused. Hot Seat retains the explicit <b>Ready</b> handover.</p>
+<h3>Controls and presentation</h3>
+<ul><li>Keyboard help uses structured commands for the active game and settings. Press <b>?</b> for control annotations and open <b>All commands</b> for the searchable reference.</li><li>Camera movement keeps the game cursor anchored to its level position across Classic, The Tribes and Chronicles. Precision Zoom uses the same targeting policy.</li><li>Controller speed reset takes priority over pause when a speed boost is active. Hot Seat retries and restored runs wait for Ready.</li><li>The Home screen draws scenery from installed levels. Chronicles uses its regional title artwork.</li><li>Closing sequel hints restores the previous pause state. Interruptions retain pause.</li><li>Shared result pages improve grouping, award help and bitmap lettering. Bomb countdowns use crisp digits above the lemming.</li></ul>
+<h3>Optional Classic ghost solutions</h3>
+<p>After revealing a full recorded solution, enable <b>Ghost solution</b> to overlay translucent blue lemmings. The overlay follows the current tick through play, pause, speed changes and rewind. It does not spend skills or change the live attempt.</p>
+<p>Ghosts follow their recorded terrain, so their bridges and tunnels can differ from yours. Same-player retries retain the choice. A different level or Hot Seat player clears the revealed solution. The feature requires a matching verified Classic solution. The sequels retain their existing coaching and checkpoint flows.</p>
+<h3>Performance, music and saves</h3>
+<ul><li>Classic, The Tribes and Chronicles share the vinyl backspin for rewind music and captured sound effects. Rewind respects pause, mute, volume and interruptions.</li><li>Terrain caches, crowd limits and adaptive optional effects reduce repeated rendering work.</li><li>If an incoming Classic journey track stops, the outgoing track recovers while gameplay remains paused.</li><li>Manual soundtrack shuffle follows the selected collection and can change music with the essential library installed.</li><li>Matching profiles can recover newer shared progress, including saved Hot Seat journeys. Recovery preserves ownership and visited levels.</li><li>Background level preparation retains caller cancellation.</li></ul>
+<h3>Seven added languages and original fonts</h3>
+<p>The app now includes Spanish (Latin America), German, French, Brazilian Portuguese, Italian, Dutch and Norwegian Bokmål, alongside English. It follows your Mac’s preferred app language. Classic and sequel bitmap fonts support accented Western Latin text, including composed and combining forms. These language packs are AI-assisted drafts. Human language review and complete translated-screen validation remain open.</p>
+<h3>Release scope and known limits</h3>
+<p>The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>The owner approved this Macintosh release under the existing classifications on 15 October 2026: Classic and The Tribes <b>Complete</b>, with Chronicles and NeoLemmix <b>Beta</b>. The stricter bundled-content closure remains a future milestone. This release does not claim that gate is complete.</p>
+<p>The current L3 engine changes invalidate some retained standalone and carried-route witnesses. L2's golden-talisman ark ending remains unverified. The retained fan inventory has 2,399 verified routes and 3,621 route gaps. Seventy-five bundled NeoLemmix levels reference missing styles, and exact-version winning evidence covers 158 levels. Remaining source-engine fidelity and media checks remain open.</p>
+<p>Physical controller and VoiceOver journeys, audible listening, foreground shipping-app launch, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their validation gaps. Fresh candidate regression and distribution evidence accompanies the release. This release scope is Macintosh only. iPhone, iPad and Apple TV have separate release gates.</p>
+<p class="meta">Build: 83<br>Release commit: 1b4daa28adee3f3b05399e61775c1be201caf349<br>Release base: v1.9.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-2.0-build83.zip" length="2053746420" type="application/octet-stream" sparkle:edSignature="RvgF7reRZ4CXvRe2+71aI+SXr1+2VUVNH4XC0izd6NBP/KRu/qUSMizsfCtt7cKLNDnre3tL5U4s3iLWJpvvBQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-build83-from82.delta" sparkle:deltaFrom="82" length="3107290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="JOyoOJVih1t03JnaMpcbqmHH0pibQLOMMScik/geHsjU5UqMByU9rj6yUtG2mtwi0p9ErrJetqIk6wR7vYS7Aw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.7</title>
+            <pubDate>Thu, 15 Oct 2026 01:00:42 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>82</sparkle:version>
+            <sparkle:shortVersionString>1.9.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This macOS update adds optional Classic ghost solutions, clearer controls and help, shared performance and save-recovery fixes, and broader bitmap lettering.</p>
+<h3>Ghost solutions</h3>
+<p>Classic can overlay a recorded winning route as translucent blue lemming silhouettes. Enable <b>Ghost solution</b> after revealing the full solution. The overlay follows the current simulation tick through pause, speed changes and rewind. It leaves your terrain, skills and live attempt unchanged.</p>
+<p>Same-owner retries retain the choice. A different level or Hot Seat player clears the revealed solution. Ghosts follow their recorded terrain, so they can pass through ground or cross bridges that your attempt has not changed. Lemmings 2 and Lemmings 3 retain their existing coaching and checkpoint flows. They do not offer ghost overlays.</p>
+<h3>Controls, help and presentation</h3>
+<ul><li>Controller defaults use B for speed reset, pause and resume, X for speed reset, Y for end run or undo, and Menu for the game menu. Holding a speed boost does not skip the first reset to 1×.</li><li>Keyboard help follows the active engine and control settings. The searchable command reference and in-game annotations make available actions easier to find.</li><li>Closing sequel hints restores the previous pause state. An interruption keeps the game paused.</li><li>Classic, The Tribes and Chronicles keep Hot Seat retries, restored runs and handovers paused until the player is ready. Sequel playfields identify the current player.</li><li>Result help explains achievements and rescue goals. Shared result pages use clearer grouping and consistent bitmap lettering.</li><li>Macintosh monochrome skill backpacks use distinct pixel patterns for Climber, Floater and both skills.</li><li>Manual soundtrack shuffle follows the chosen music collection. Bomb countdowns use crisp digits above the lemming.</li><li>If an incoming Classic journey music deck stops, the outgoing track recovers while gameplay remains paused.</li></ul>
+<h3>Shared performance and rewind</h3>
+<ul><li>Classic, The Tribes and Chronicles use the shared vinyl backspin for rewind music and captured sound effects. Rewind keeps gameplay paused and respects mute, volume and interruptions.</li><li>Rendering adapts optional effects to available memory and sustained performance. Terrain caches and crowd limits reduce repeated work.</li><li>Saved journeys exclude unsupported multiplayer levels while retaining compatible progress and ownership. Learning journeys preserve their existing route evidence.</li><li>Background level preparation retains caller cancellation, including synchronous actor decoding.</li><li>Manual shuffle can change music when the essential soundtrack contains only one version of the current theme.</li></ul>
+<h3>Saves and profiles</h3>
+<p>Matching profiles can recover newer shared progress, including saved Hot Seat journeys. Recovery preserves saved ownership and visited levels. Private library linking and recovery-key flows retain local saves. Live cross-device synchronisation remains a device-validation gap.</p>
+<h3>Bitmap lettering and localisation groundwork</h3>
+<p>Classic menu fonts, the compact bitmap fallback, Lemmings 2 front-end and panel fonts, and Lemmings 3 lettering support accented Western Latin characters. Composed and combining forms render alike. The original glyph pixels and spacing remain intact.</p>
+<p>Menus, controls, help and accessibility text use a shared localisation catalogue with English fallback and plural handling. <b>The shipped interface remains English. No translated language pack is enabled.</b> Other scripts, right-to-left layouts and text baked into original artwork require further work.</p>
+<h3>Compatibility and release scope</h3>
+<p>The universal app supports Apple silicon and Intel on macOS 12.3 or later. The fresh-install download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta. This release publishes macOS only. iPhone, iPad and Apple TV work follows separate 2.0 release gates.</p>
+<h3>Validation scope</h3>
+<p>The release uses a frozen source checkout, a universal optimised build, focused shared regressions, preserved winning-route manifests, and muted offscreen native UI checks. Distribution evidence records signing, notarisation, Gatekeeper, archive integrity and the signed Sparkle update feed.</p>
+<p>Physical controller and VoiceOver journeys, audible listening, foreground shipping-app launch, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation remain manual validation gaps. A minor audit preserves campaign evidence rather than claiming a fresh replay of every campaign.</p>
+<p class="meta">Build: 82<br>Release commit: 94c11e613b128a1b19aa4fc84efc0cf52237fe0b<br>Release base: v1.9.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.7/UltimateLemmings-1.9.7-build82.zip" length="2052997956" type="application/octet-stream" sparkle:edSignature="e+NgR3iKqq/vDLgFADqiYXmA7Rd2O3uk34l0YHy6Szq8QV8Jy0tbutnsJ5XqtX/13Gqr/ufNaR4Kzt/oxJ82CA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.7/UltimateLemmings-build82-from81.delta" sparkle:deltaFrom="81" length="6681394" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="iVxWho2z/iH0QGKcMSBvbKntz9b2tAYzBBLdP6H7PojcU8OyBajp9EnRJF1vhffXXKqCL1buXXrnNQAyLqICCw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.6</title>
+            <pubDate>Wed, 14 Oct 2026 01:18:57 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>81</sparkle:version>
+            <sparkle:shortVersionString>1.9.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This release brings the current shared engine, artwork, saves and audio fixes to macOS. The companion iPhone and iPad beta is version 2.0, build 13, and uses the same release source.</p>
+<h3>All platforms</h3>
+<ul><li>Bombs scatter crisp pixel debris and show bitmap countdown digits. Explosion artwork ends after its brief animation.</li><li>Selection uses a steady white outline and green halo. Dying, exiting and exploding lemmings no longer retain selection or rescue outlines.</li><li>Rewind scratches backwards through recent music and effects. Repeated requests reuse bounded audio buffers.</li><li>Recorded music decodes in bounded queues. Short loops blend their seams, and peak protection follows the effects mix.</li><li>Shared rendering budgets reduce added-effects work while simulation keeps its authored tick rate. Terrain and panel caches avoid unchanged bitmap conversions.</li><li>Profiles, records, recovery, playlists and Hot Seat use shared modules. Saved runs and handovers stay paused until the player is ready.</li><li>Golden Path moves “Let’s be careful out there” later in the journey. Saved journeys preserve visited levels and player ownership.</li></ul>
+<h3>macOS</h3>
+<p>The Mac build includes Classic, The Tribes, Chronicles and NeoLemmix. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta.</p>
+<p>Fresh starts and retries have a short 3–2–1 countdown. Rewinds add brief sprite echoes when modern effects are enabled. Profiles and result pages keep the primary action last in their navigation order.</p>
+<p>The Cloud saves page supports linked private libraries and recovery keys. Local saves remain available. Chronicles retains 90 standalone winning routes out of 90. This does not establish a complete chained campaign or remove its Beta status.</p>
+<p>The universal Mac app supports Apple silicon and Intel on macOS 12.3 or later. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<h3>iPhone and iPad — 2.0 beta</h3>
+<p>The beta plays the Classic family, Holiday packs, Oh Yes! More Lemmings! and installed fan packs. It includes profiles, favourites, recent levels, playlists, journeys, records and Hot Seat.</p>
+<p>Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat identifies the player through Ready, play, pause, results and handover. The player's portrait and green name sit above the HUD counters during play. Skip and restored runs preserve the saved turn. Collections places Resume beside Back as the primary action.</p>
+<p>The pause screen shows the level preview, rescue target, remaining lemmings, skills, time and current music. Resume stays in a fixed position while the details scroll.</p>
+<p>Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. The companion private beta includes all 495 soundtrack versions. Local builds now include them by default. Slim builds offer optional soundtrack libraries in Settings; downloads require the app to remain in the foreground.</p>
+<p>The display adapts to sustained load and avoids repeated bitmap conversion. Gameplay keeps its authored tick rate. Sustained performance on older iPads remains a device acceptance check.</p>
+<p>Lemmings 2, Lemmings 3 and NeoLemmix remain unavailable to play on iOS. Game Center runtime availability remains disabled until Apple-side configuration is verified. TestFlight delivery and Beta App Review are separate from public App Store publication.</p>
+<h3>Validation scope</h3>
+<p>CI checks shared regressions, the universal Mac executable, iOS Debug and Release simulator builds, the unsigned Release device build, and iPhone/iPad layout and lifecycle contracts. Distribution tooling checks signatures, provisioning, content manifests and update metadata.</p>
+<p>Local automated checks use offscreen windows and muted audio. Release evidence records each result against the frozen source. Physical input, audible listening, foreground shipping-app launch, HDR appearance, minimum-OS hardware and sustained device performance remain manual validation gaps.</p>
+<p class="meta">Build: 81<br>Release commit: 3ba689eaf21979833fcfa97d2beac1babfaabc36<br>Release base: v1.9.4</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-1.9.6-build81.zip" length="2046920368" type="application/octet-stream" sparkle:edSignature="4YsPpm768us1nI7GcpxtmalWwEemuaVOeXXRgmZg7kcy+uDWpNimOvPr6Q91SKR7OChTzuYfG1fXoLmOrC+UDg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-build81-from79.delta" sparkle:deltaFrom="79" length="4944134" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="l1F6RZjxDgRnaH81V0inDYUag2aALxbwiEgs5pdMlP91+QUiiL2jitVLcFsS4nFwArgmJh1yMALXD7NvEfT2Bg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.4</title>
+            <pubDate>Tue, 13 Oct 2026 03:52:48 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>79</sparkle:version>
+            <sparkle:shortVersionString>1.9.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This Mac update softens solved-level effects and fixes saved journey navigation, replay information and rendering overhead.</p>
+<h3>Calmer celebrations and smoother rendering</h3>
+<p>The golden lemming aura is at least 70% softer. Terrain and scenery receive a very faint golden haze when the rescue goal is secured. The effect fades gently and keeps original artwork sharp. Levels requiring every lemming retain their brief glow and current music.</p>
+<p>Background haze builds off the main thread and reuses cached images during fast-forward. Both sequels reuse decoded bitmap pixels. The Tribes skips unchanged skill-panel image conversions.</p>
+<h3>Saved journeys and controls</h3>
+<p>Golden Path Continue finds a saved journey after another solo or Hot Seat session. Resuming restores the saved session, players and turn while keeping the departing run saved.</p>
+<p>Command-Z rewinds one step through the shared Mac gameplay controls.</p>
+<h3>Clearer replays and level order</h3>
+<p>Solution and leaderboard action replays show remaining skills and the last three successful skill uses in the upper-right corner. Each use shows its exact tick. Chronicles shows tools held by active lemmings and names each recorded tool use.</p>
+<p>Time waits for no Lemming and This Corrosion now appear near the end of Golden Path. Their known official and fan variants retain a late Expert placement. Identified routes based on engine quirks cannot enter Intermediate. Golden Path includes 295 lessons.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Full and slim downloads retain original Macintosh music. Automatic updates retain the full music library.</p>
+<p>The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. iOS 2.0 remains separate from this Mac release.</p>
+<p>Public-release checks run headlessly with native UI windows offscreen and test audio muted. Package, update-feed and focused regression results are recorded in the distribution evidence. Physical HDR appearance, audible listening, physical Intel, minimum macOS and sustained high-speed hardware acceptance remain manual checks.</p>
+<p class="meta">Build: 79<br>Release base: v1.9.3<br>Release commit: 4cf2c500bf9f8759bfc0c01b00051e195775e533</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-1.9.4-build79.zip" length="2044303097" type="application/octet-stream" sparkle:edSignature="9kTfRuYgdZVLPwLfDiM/rFxLCvy/rs+WhOxEmV8IBcg0MRkWUVKm+YW2vGGcB5hX2+zMf+VGh3BAFOcCnI8ZBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-build79-from78.delta" sparkle:deltaFrom="78" length="1569334" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="D5r0ZcXEEaRyUX4LgjdD1+RL73kCM4n7lM6Z6Y+8c6PAWlvNgAtEQeNOLLca5V0gSKYdHJ5sP83h5mypDVT4AQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.3</title>
+            <pubDate>Mon, 12 Oct 2026 19:14:33 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>78</sparkle:version>
+            <sparkle:shortVersionString>1.9.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This Mac update makes rescue celebrations clearer and gives players more control over visual distractions.</p>
+<h3>Rescue celebrations</h3>
+<p>Reaching the rescue goal adds a stronger golden haze and warm light around the lemmings. HDR screens add extra light. Reduced flashes disables the sprite aura; reduced motion keeps the glow steady.</p>
+<p>Levels that require every lemming show a brief glow and retain their current music, avoiding a short celebratory track change before the next level. Classic, Lemmings 2 and Lemmings 3 share this rule.</p>
+<h3>Accessibility</h3>
+<p>Accessibility settings now include Show song info and Fade Menu button. Both can be disabled. Song information fades in gently over 350 milliseconds and leaves gameplay clicks available.</p>
+<h3>Update alerts</h3>
+<p>Compatible updates appear in the home menu as soon as Sparkle discovers them, including during automatic downloads. Launch checks can bring the update alert forward, and scheduled checks run hourly by default. Saved update preferences are retained.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Full and slim downloads retain original Macintosh music. Automatic updates retain the full music library, with a signed delta from build 77.</p>
+<p>The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. iOS 2.0 remains separate from this Mac release.</p>
+<p>Checks cover rescue timing, music selection, saved accessibility settings, rendered controls, all three Mac playfields and the Metal aura. Native UI checks run offscreen with test audio muted. Physical HDR appearance, audible listening, physical Intel and minimum-macOS checks remain open. Package and publication evidence is recorded separately.</p>
+<p class="meta">Build: 78<br>Release commit: 361241f9607929c03977d6971df1d907a185b78f<br>Release base: v1.9.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.3/UltimateLemmings-1.9.3-build78.zip" length="2044222765" type="application/octet-stream" sparkle:edSignature="UvvMwJYYvYSLG5hIFnHYPwAc1pXTpzH/c2BHzcGDkOJ82C15xJykYa/B5r8dWYwEecMAVZtn8IegZKEzJm0dDA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.3/UltimateLemmings-build78-from77.delta" sparkle:deltaFrom="77" length="1683234" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="69N4hGgT6iSVt92OfxiUfFkx/5vidxzeJ7DsMul+s1TZ7V4ruuBAoeZ0ilrZu4Hphi5sn37u2ZPBVy580molBQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.2</title>
+            <pubDate>Sun, 11 Oct 2026 23:46:45 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>77</sparkle:version>
+            <sparkle:shortVersionString>1.9.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance update restores completion celebrations and precision rewards, and improves navigation during play and in Records.</p>
+<h3>Celebrations and rewards</h3>
+<p>Securing the rescue goal restores the celebratory music transition. A subtle golden glow adds to the moment and honours reduced-motion and reduced-flash settings. Classic, Lemmings 2 and Lemmings 3 share the completion treatment.</p>
+<p>Learning and Hot Seat journey results now credit earned Zooms and Superzooms. Results show the newly awarded amounts. The existing rules remain: one Zoom per three unassisted stars and one Superzoom per three distinct unassisted three-star levels. Assisted runs and repeat clears do not create extra rewards.</p>
+<h3>Learning journey</h3>
+<p>Cellbash is now lesson 2. Come back! moves to lesson 71 in Intermediate. Existing journeys retain their current level, history and players, including unvisited lessons moved earlier in the sequence.</p>
+<h3>Navigation and music</h3>
+<p>The gameplay Menu button fades after a few seconds and returns on hover or keyboard focus. Moving to the top edge releases cursor capture so the Mac menu bar remains accessible. Capture stays released while a menu is open.</p>
+<p>Records supports Previous, Next and arrow keys through the current campaign, including levels without a saved run. A song change briefly shows its title and soundtrack in pixel lettering, then fades without blocking gameplay clicks.</p>
+<p>The shared artwork module keeps Mac controls consistent with the iOS beta work. Settings include contextual help, and compatible shared leaderboard records can open action replays. iOS 2.0 remains a separate device beta and is not part of these macOS downloads.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Both full and slim downloads retain original Macintosh music. Automatic updates carry the full music library, with a signed delta from build 76.</p>
+<p>Lemmings 2: The Tribes remains Complete. Lemmings 3: Chronicles and NeoLemmix remain Beta. The existing original-engine, campaign and ending limits remain.</p>
+<p>Checks cover shared engines, preserved route manifests, journey migration, reward accounting, muted music transitions, Records input, notices and rendered pixel controls. Native UI tests run offscreen with all test audio muted. Audible listening, foreground launch, physical Intel and minimum-macOS checks remain open. Final package and publication evidence is recorded separately.</p>
+<p class="meta">Build: 77<br>Release commit: 71559011ce09631479bc27644abe60b348bd88ae<br>Release base: v1.9.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.2/UltimateLemmings-1.9.2-build77.zip" length="2044191073" type="application/octet-stream" sparkle:edSignature="XeXb3ZvNebGroe7ikvkkcnUwsHNAinemN6mtFRBdhF5qKz3Z3DoM6jWU0oz4rKEHFVFrKv1p46PL32kJQycsAA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.2/UltimateLemmings-build77-from76.delta" sparkle:deltaFrom="76" length="2039554" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="PVLTlHAphtxlLYlFDtOT3pzOYQ8M4G58CKGsVu/hf3XQpXQHL11egg0QgKidA2xRPPejvTe+hC8DjCSU5rRRAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9.1</title>
+            <pubDate>Sat, 10 Oct 2026 17:04:53 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>76</sparkle:version>
+            <sparkle:shortVersionString>1.9.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This update fixes crowded-wall targeting, clarifies Gameplay settings and restores the nuke funeral music transition.</p>
+<h3>Targeting</h3>
+<p><b>Favor lemmings still approaching</b> uses nearby walls to favour eligible lemmings facing into the work. This fixes Basher selection in crowds at the top of a staircase. Classic also refreshes its hovered target when that lemming turns. The shared correction covers Classic, NeoLemmix, Lemmings 2 and Lemmings 3. Existing bomb, builder and manual direction preferences retain their priority.</p>
+<p>All three targeting preferences now share one outlined group in Gameplay settings.</p>
+<h3>Flat Panel</h3>
+<p>Selecting <b>Flat Panel</b> disables and greys out <b>Tube Strength</b> and <b>Pixel Width</b>. Selecting Monitor or Television enables them again and retains their saved values.</p>
+<h3>Nuke music</h3>
+<p>The funeral music slowdown starts at the <b>2→1 countdown</b>. Screen saturation changes only when rescue becomes impossible, so colour continues to show the actual game state. Music returns to normal over 2.4 seconds after the final explosion. Classic, NeoLemmix and Lemmings 2 share this timing. Lemmings 3 has no mass-nuke action.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Both full and slim downloads retain the original Macintosh music from 1.9. Lemmings 2: The Tribes remains Complete. Lemmings 3: Chronicles and NeoLemmix remain Beta. The existing campaign, original-hardware and ending limits remain recorded in the 1.9 release evidence.</p>
+<p>Checks cover wall-facing selection, a real Classic Basher assignment, settings renders and input targets, countdown timing, separate saturation, rewind and music recovery. Native UI and audio checks run offscreen and muted. Audible listening, foreground launch, physical Intel and minimum-macOS checks remain open.</p>
+<p class="meta">Build: 76<br>Release commit: 9ba3fc25c42a57cd89394680d46e5aee79ba3d44<br>Release base: v1.9</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-1.9.1-build76.zip" length="2043810178" type="application/octet-stream" sparkle:edSignature="jpDZhxpMNFmgzNUg/HpDTdqGKWmnH1GhKlZyhTiPfmkWHTgl/QB66pUFDkGqksxDc5qCMPLIMfgvva5YU/tRAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-build76-from75.delta" sparkle:deltaFrom="75" length="1250526" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="GoBMIwM8HfR9sYgOsj81jlivniGR3tA569YK9va39kM+chjOV+cX7d3SyxS3Lvhkzb8yyED1WnO+HuatDI8uBA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.9</title>
+            <pubDate>Sat, 10 Oct 2026 14:50:17 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>75</sparkle:version>
+            <sparkle:shortVersionString>1.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>Lemmings 2: The Tribes is complete and leaves beta. Lemmings 3: Chronicles moves from Preview to Beta. This update also restores more of the original Macintosh presentation and improves saved runs, Hot Seat, music and updates.</p>
+<h3>The Tribes is complete</h3>
+<p>All 120 levels have preserved winning routes. All twelve tribes have continuous ten-level runs, with verified survivor carry-over. This release includes the latest climbing, stone-collision and native runtime corrections.</p>
+<h3>Chronicles moves to Beta</h3>
+<p>Lemmings 3: Chronicles now carries the Beta label throughout the library and native game window. The retained evidence covers 74 of 90 standalone wins. Work continues on the remaining routes, original-engine fidelity and endings.</p>
+<h3>Original Macintosh presentation</h3>
+<p>Choose <b>Macintosh (original)</b> in Audio for 31 arrangements rendered with the game's original sampled instruments: 21 Classic, six Oh No! and four Xmas tunes. Release-rate changes use the original MousePress sound and changing pitch. Choose <b>Original Macintosh</b> under Graphics → Counters for the original skill-counter digits. These choices are independent of terrain artwork.</p>
+<h3>Saved runs and Hot Seat</h3>
+<p>Resume shows every participating player's initials in turn order. Long rosters wrap inside the button. Journey wins save at completion, before Next level. A visible Menu action, Q and Escape return to the library with the saved run. Classic, Lemmings 2 and Lemmings 3 share these controls.</p>
+<h3>Music and update reliability</h3>
+<p>Music-source changes retain manual and interruption pauses. Journey and shuffled music playback retain their continuity. The download icon and Check for Updates share a recoverable flow after repeated clicks, cancellation or a busy update.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. The slim download includes original Mac music and essential soundtracks. Automatic updates retain the full soundtrack bundle.</p>
+<p>The L2 recorded tribe chains finish with one survivor. The golden-talisman ark ending and complete original-hardware fidelity remain separate validation. L3 retains sixteen missing standalone routes and open campaign/ending checks. Original-Mac listening comparison, physical Intel, minimum-macOS, controller and VoiceOver listening journeys remain unverified.</p>
+<p class="meta">Build: 75<br>Release commit: 6eb9e174b9663f3dc3f85aff62cfa5f923b718c5<br>Release base: v1.8.5</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9/UltimateLemmings-1.9-build75.zip" length="2043795519" type="application/octet-stream" sparkle:edSignature="EQVuKDiz46Bi4yDjfpPs1bGBA6ezJ6rJs+o0PlbTIOFxxEJIoXbbAlpQFTmPgVvWdbZxU7IYJRBFPo5KhRoxCA=="/>
+        </item>
+        <item>
+            <title>1.8.5</title>
+            <pubDate>Sat, 10 Oct 2026 01:53:44 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>74</sparkle:version>
+            <sparkle:shortVersionString>1.8.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Keep favourite levels close and return to the ones you have played recently.&lt;/p&gt;
+&lt;h3&gt;Favourites&lt;/h3&gt;
+&lt;p&gt;Bookmark a level from Level Select or its result screen. The outlined star fills when saved. Open Collections from the home screen or pack browser to find it again. Remove a favourite with the same control.&lt;/p&gt;
+&lt;h3&gt;Recently Played&lt;/h3&gt;
+&lt;p&gt;Collections keeps the last 50 distinct levels, with the most recent first. Playing a level again moves it to the front. Start opens a fresh attempt; the existing Resume action restores a saved attempt.&lt;/p&gt;
+&lt;h3&gt;Personal collections across the library&lt;/h3&gt;
+&lt;p&gt;Each player has separate favourites and history. Hot Seat records a visit for the player who owns the attempt, and result bookmarks belong to that player. Collections cover Classic campaigns, fan packs, NeoLemmix packs, Lemmings 2 and Lemmings 3. Locked, missing and changed entries stay visible but cannot start. Favourites and history survive relaunch, with validated backup recovery and protection against overwriting another app's save.&lt;/p&gt;
+&lt;h3&gt;Compatibility&lt;/h3&gt;
+&lt;p&gt;Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 74&lt;br&gt;Release commit: ecafd64c09ca0f87e3ad45d842683ab9b2a4b11d&lt;br&gt;Release base: v1.8.4&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" sparkle:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg=="/>
+        </item>
+        <item>
+            <title>1.8.4</title>
+            <pubDate>Fri, 09 Oct 2026 12:26:24 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>73</sparkle:version>
+            <sparkle:shortVersionString>1.8.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;More rescue cheers, playful feedback and music that carries the celebration.&lt;/p&gt;
+&lt;h3&gt;Keep the winning tune&lt;/h3&gt;
+&lt;p&gt;Meeting the rescue target can lift the current theme to an available, documented composer recording or remix of the same tune. The Adaptive DJ keeps that theme looping through the result screen. It keeps an existing remix, and leaves the current version playing when no suitable upgrade is installed or alternate soundtracks are disabled. Wins reached while paused resume the selected music.&lt;/p&gt;
+&lt;p&gt;Recorded soundtracks have measured volume trims that preserve their dynamics. Versions with verified source loops play the intro once, then repeat the loop without the recording's extra repeated pass or ending fade.&lt;/p&gt;
+&lt;h3&gt;Let the whole crowd cheer&lt;/h3&gt;
+&lt;p&gt;Every rescue keeps its own voice, including simultaneous arrivals and crowded exits. The chorus stays at full strength while useful assignment and warning sounds remain clear. Player volume, mute and distance still apply.&lt;/p&gt;
+&lt;p&gt;Lemmings 2 adds rescue cheers, trampoline bounces and trap feedback. Lemmings 3 adds short sounds for tool and clock pickups, projectile launches, explosions, brickwork, steel, water, drowning and traps. Sounds follow the actual event, and a trap or explosion does not add a second generic death voice afterward.&lt;/p&gt;
+&lt;h3&gt;Little rewards and useful cues&lt;/h3&gt;
+&lt;p&gt;An established rescue, skill or fastest-time personal best, or a newly earned rare award, adds a small flourish to the final result note. Fastest clear and Fastest 100% both qualify. The flourish adds no extra note or longer fanfare.&lt;/p&gt;
+&lt;p&gt;Result sounds follow live effects volume and mute, stop when the result loses focus, and remain available with Reduced Motion. Reduced Motion reveals the stars immediately.&lt;/p&gt;
+&lt;p&gt;Fresh starts and retries play Ready when the countdown finishes. Hot Seat handovers wait for the next player's Ready action. Timer warnings now sound different from builder warnings. Rejected actions on a lemming get a short, positioned cue, and locked Classic levels use the game's sound preference.&lt;/p&gt;
+&lt;h3&gt;A cartoon speed pedal&lt;/h3&gt;
+&lt;p&gt;Holding fast-forward winds the soundtrack's pitch up smoothly between speed tiers. It settles on musical intervals, with a perfect fourth at the top. The soundtrack's tempo and the existing simulation speed tiers stay as before. Releasing the hold restores the previous cruising speed.&lt;/p&gt;
+&lt;h3&gt;Compatibility&lt;/h3&gt;
+&lt;p&gt;Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 73&lt;br&gt;Release commit: aff210c0d1aa1a67c281e1e9240d3c2516db1003&lt;br&gt;Release base: v1.8.3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ=="/>
+        </item>
+        <item>
+            <title>1.8.3</title>
+            <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>72</sparkle:version>
+            <sparkle:shortVersionString>1.8.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Changes since the public 1.8.1 release, including the local 1.8.2 test builds.&lt;/p&gt;
+&lt;h3&gt;Worldwide and local records&lt;/h3&gt;
+&lt;p&gt;Worldwide speed, rescue and career leaderboards now work without Game Center. Sharing is optional for each local player, under their initials. Game Center remains a separate option in supported builds. Watch available recorded runs from the hosted boards, or remove your shared records and movies.&lt;/p&gt;
+&lt;p&gt;Fastest clear and Fastest 100% have separate leaderboards. Rewind-assisted runs are kept separate. The result screen shows your best clear time, and local record movies are retained for playback. Hosted scores are community submissions, not independently verified solutions. Movie uploads have storage and size limits.&lt;/p&gt;
+&lt;h3&gt;A better learning journey&lt;/h3&gt;
+&lt;p&gt;The 294-level journey includes the Macintosh level Going their separate ways and All the 6s in their intended positions. Cellbash moves earlier. Covox and Something wrong are replaced with more suitable lessons. Fan levels in the default journey are bundled for offline play. Existing journey history and player ownership carry over.&lt;/p&gt;
+&lt;p&gt;Continuation into unopened fan packs, saved-run resume, pack-to-pack navigation, tall NeoLemmix level scrolling and Escape behaviour have been corrected.&lt;/p&gt;
+&lt;h3&gt;Rescue goals and anonymous totals&lt;/h3&gt;
+&lt;p&gt;Checked completion solutions provide best-known rescue targets for three-star awards and philosophy assessments. Levels with a checked winning solution no longer leave the final star unknown. Best-known records remain distinct from proven maximum rescues.&lt;/p&gt;
+&lt;p&gt;Optional anonymous rescue totals use the hosted aggregate counter. These totals remain separate from player identities, public scores and rescue proofs.&lt;/p&gt;
+&lt;h3&gt;Sound and presentation&lt;/h3&gt;
+&lt;p&gt;Solution replays include sound effects. Rewind effects play backwards with a limited mix to prevent repeated rewinds becoming excessively loud. Beast of a level has a better-balanced Modern mix. Hot Seat handovers and level changes avoid brief unwanted tracks and use smoother music transitions.&lt;/p&gt;
+&lt;p&gt;The Macintosh snowman artwork now matches its collision shape. What's New stays within a scrollable window. Additional L3 level-specific creature corrections are included.&lt;/p&gt;
+&lt;h3&gt;Compatibility&lt;/h3&gt;
+&lt;p&gt;Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 72&lt;br&gt;Release commit: 0e49151f13fee037aa4cbc8050086a758cdbbb40&lt;br&gt;Release base: v1.8.1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip" length="1944623460" type="application/octet-stream" sparkle:edSignature="G89mKt64zpK9v+RZ0R2dsbIYDHf49pO4d07u7dahTg5tLWd6b4tHXCH7iGwe0ZCsWQtrtVbOJ8qgLkNvGernBw==" />
+        </item>
+        <item>
+            <title>1.8.1</title>
+            <pubDate>Tue, 06 Oct 2026 14:52:32 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>65</sparkle:version>
+            <sparkle:shortVersionString>1.8.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;This update covers the whole 1.8 line: 1.8 and 1.8.1.&lt;/p&gt;
+&lt;h3&gt;The full journey&lt;/h3&gt;
+&lt;p&gt;Oh My! All Lemmings! returns to 292 curated levels, official and fan, in a Redux-anchored order. The first seven teaching levels stay in order. Old built-in journeys migrate with their history, ownership and progress. Custom playlists remain unchanged.&lt;/p&gt;
+&lt;h3&gt;Explosions stay on the terrain&lt;/h3&gt;
+&lt;p&gt;Classic, NeoLemmix, Lemmings 2 and Lemmings 3 keep each explosion at its world position. Camera pan, zoom, window resize, CRT curvature and the precision lens move the effect with the terrain.&lt;/p&gt;
+&lt;h3&gt;Sharper pixels and sound (1.8)&lt;/h3&gt;
+&lt;p&gt;Pixel artwork keeps crisp edges across game views, controls, level previews, hints and original movies. NeoLemmix plays hatch, assignment, rescue, death and nuke sound effects through the selected Classic sound bank. After the final nuke explosion, slowed music returns to normal speed in Classic, NeoLemmix and Lemmings 2.&lt;/p&gt;
+&lt;h3&gt;NeoLemmix controls and camera&lt;/h3&gt;
+&lt;p&gt;The - and + keys now do the same as the on-screen buttons. A double tap on - or + goes to the fastest or slowest rate. Each level opens with the camera centred on the first hatch, in both directions.&lt;/p&gt;
+&lt;h3&gt;Lemmings 3&lt;/h3&gt;
+&lt;p&gt;Brick pickups give eight uses. Hatch order, Bricks, Shimmy ceiling wear and Mole wall patrols follow the original game more closely. Lemmings 2 and 3 remain Preview. Their full completion milestone is 1.9. NeoLemmix remains Beta. Mobile remains the separate 2.0 milestone.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 65&lt;br&gt;Release commit: 66b309479f04d9be231d3e84fb8c926ad9ea0dd9&lt;br&gt;Release base: v1.8&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/UltimateLemmings-1.8.1-build65.zip" length="1943712042" type="application/octet-stream" sparkle:edSignature="oIDFHlf2VWCXug4CoqQJ7P3h+A1RHw6MTOwshZdwUWN7kILOXYcepoTzzN9fCXPb4yL41hTDWFAELbyJawPtBw==" />
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-54.delta" sparkle:deltaFrom="54" length="3474198" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="1kB/ncgFpYA8sVLj9OtA0vsXoK3lDQ8ZqMkETctD9YZ+VR1zT+4/2vXAskM59BnfuQjcnIKtkKEzTR0SUj2KAA==" />
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-53.delta" sparkle:deltaFrom="53" length="3486974" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="chuSATCtUWBKvP9QiHTYMTFl6ACt7IUahw0KOl4VY53jTQsaQIJ+p30Rbn239T0pz4TIPBYlM2UMqFK2MyFnBg==" />
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-39.delta" sparkle:deltaFrom="39" length="1519960290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fPMdTZ4ISfhY+8GosNTa5GoDPFUtciqB8FWdeQHxDVy+9rOaNPGJyxW53aSdduAiMSH/a8iE0ai0He0AreszCw==" />
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>1.8</title>
+            <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>64</sparkle:version>
+            <sparkle:shortVersionString>1.8</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h3&gt;Sharper pixels&lt;/h3&gt;
+&lt;p&gt;Pixel artwork keeps crisp edges when scaled across game views, controls, level previews, hints and original movies.&lt;/p&gt;
+&lt;h3&gt;Sound fixes&lt;/h3&gt;
+&lt;p&gt;NeoLemmix now plays hatch, assignment, rescue, death and nuke sound effects through the selected Classic sound bank. Custom gadget samples, builder warnings and steel-contact effects remain incomplete.&lt;/p&gt;
+&lt;p&gt;After the final nuke explosion, slowed music smoothly returns to normal speed in Classic, NeoLemmix and Lemmings 2, including failed results. The visual failure mood remains. Rewinding into the countdown restores the effect. Lemmings 3 has no mass-nuke control.&lt;/p&gt;
+&lt;h3&gt;Lemmings 3 correction&lt;/h3&gt;
+&lt;p&gt;Brick pickups provide eight uses, matching the original game. Lemmings 2 and Lemmings 3 remain Preview. Their full completion milestone moves to 1.9. NeoLemmix remains Beta. Mobile remains the separate 2.0 milestone.&lt;/p&gt;
+&lt;h3&gt;Download and update&lt;/h3&gt;
+&lt;p&gt;Choose the slim download for a fresh installation. Optional soundtrack libraries remain available in the app. Check for Updates uses the full archive to preserve bundled music. Both downloads support Intel and Apple silicon Macs running macOS 12.3 or later.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 64&lt;br&gt;Release commit: 0a4075fc0d293ef81b2cf1026c6f2b709ff6c4e7&lt;br&gt;Release base: v1.7.9&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8/UltimateLemmings-1.8-build64.zip" length="1943417851" type="application/octet-stream" sparkle:edSignature="XkdmcLjgvsVge6iwVVlPbHpszlike+ANhP3+63WjMmJPgTxszl06Id+IgmsdJ0SDRLIp2StSklVJSxM77OB4Cg==" />
+        </item>
+        <item>
+            <title>1.7.9</title>
+            <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>63</sparkle:version>
+            <sparkle:shortVersionString>1.7.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h3&gt;Macintosh artwork for NeoLemmix&lt;/h3&gt;
+&lt;p&gt;Settings → Graphics → Artwork → Macintosh now applies to NeoLemmix levels. Matching original and Oh No! terrain uses native 2× Macintosh artwork, together with supported lemming animations and skill icons. Changed pieces, custom styles, NeoLemmix-only actions and trait colours retain their authored graphics. Switching artwork preserves collision, physics and rewind history.&lt;/p&gt;
+&lt;p&gt;NeoLemmix uses Classic stone controls and bitmap counters. The panel adapts to the number of skills and keeps each skill's name and themed icon. Locked spawn intervals disable both rate buttons. The minimap follows its visible input area. Classic fan levels can also use matching Macintosh pieces while preserving custom artwork. Seasonal packs select their correct snow graphics.&lt;/p&gt;
+&lt;h3&gt;More fan solutions&lt;/h3&gt;
+&lt;p&gt;The evidence ledger now records 2,401 Classic fan wins, up from 2,305 in 1.7.8, and 322 NeoLemmix wins. More exact bundled packs and levels select their matching Golems or later official hatch rules. Golems source replay assignments receive further compatibility corrections. These replay rules do not relax ordinary player skill assignment.&lt;/p&gt;
+&lt;p&gt;The 292-lesson learning journey is refreshed from the expanded evidence. Recorded native wins do not prove complete source-engine physics parity. Some source replay outcomes still differ, and unverified levels remain unscored.&lt;/p&gt;
+&lt;h3&gt;Lemmings 3&lt;/h3&gt;
+&lt;p&gt;Extra lemmings now start facing the direction observed in the original game. A focused stair-contact correction improves selected rises. Preserved routes and replacement routes are checked separately from unfinished investigations. Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta.&lt;/p&gt;
+&lt;h3&gt;Download and update&lt;/h3&gt;
+&lt;p&gt;For a fresh installation, choose &lt;code&gt;UltimateLemmings-1.7.9-build63-slim.zip&lt;/code&gt;. It includes the original soundtracks and offers missing optional libraries. Previously downloaded libraries are detected and retained.&lt;/p&gt;
+&lt;p&gt;Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 63&lt;br&gt;Release commit: 4d8cda805cd938df919776498193cdd10ff48714&lt;br&gt;Release base: v1.7.8&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.9/UltimateLemmings-1.7.9-build63.zip" length="1943413088" type="application/octet-stream" sparkle:edSignature="Fj4+Gsx5k+0u5/2SIRGkdrs2Rmh30YLGXmUklg7GvGxPW0tVDLVO8kBE6W777klQ0ww+eDQhmoFzJf7y9r5MDg==" />
+        </item>
+    </channel>
+</rss>

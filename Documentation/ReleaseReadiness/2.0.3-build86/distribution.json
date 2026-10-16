@@ -1,0 +1,111 @@
+{
+  "version": "2.0.3",
+  "build": 86,
+  "releaseBase": "v2.0.2",
+  "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
+  "status": "prepared_not_published",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "minimumMacOS": "12.3",
+  "sourceInputsUnchangedAfterBuild": true,
+  "archives": {
+    "standard": {
+      "variant": "standard",
+      "asset": "UltimateLemmings-2.0.3-build86.zip",
+      "bytes": 2054422043,
+      "sha256": "074059d2547c3fd98dc217256a1d743104f313de2e5a798bc8d61ce62d086b32",
+      "extractedCodeSignatureVerified": true,
+      "extractedNotaryTicketVerified": true,
+      "quarantinedExtractedAppAcceptedByGatekeeper": true,
+      "foregroundLaunch": "not_run_requires_explicit_request"
+    },
+    "slim": {
+      "variant": "slim",
+      "asset": "UltimateLemmings-2.0.3-build86-slim.zip",
+      "bytes": 270365950,
+      "sha256": "8fa7650af64af6e741532af32c687738e7cb6022c3acf848ef9e905383eab1ab",
+      "extractedCodeSignatureVerified": true,
+      "extractedNotaryTicketVerified": true,
+      "quarantinedExtractedAppAcceptedByGatekeeper": true,
+      "foregroundLaunch": "not_run_requires_explicit_request"
+    }
+  },
+  "notarisation": {
+    "standard": {
+      "id": "7cc5c879-4169-4dac-ab82-3c4b5612a09f",
+      "status": "Accepted"
+    },
+    "slim": {
+      "id": "01bba8ed-dfc3-42cd-8b5d-3c30fa3d0eb3",
+      "status": "Accepted"
+    }
+  },
+  "signedFeed": {
+    "path": "appcast-candidate.xml",
+    "sha256": "285f6f20e0517c98b2ac26ab3e6ce0e553c7c51d63c283d86c60bcd56e5b4536",
+    "items": 17,
+    "publicationInputsPassed": true,
+    "publicFeedUnchanged": true
+  },
+  "retainedSharedLibraries": {
+    "NxlvKit": {
+      "sourceFiles": 184,
+      "sourceMatchesBuild85": true,
+      "publishedArchiveByteMatch": true,
+      "publishedBinarySHA256": "ff0d7907b4939f1661bd76b33b1a242592aade7942f3e77372fd1cf4ba1cb96e"
+    },
+    "LemmingsAudio": {
+      "sourceFiles": 11,
+      "sourceMatchesBuild85": true,
+      "publishedArchiveByteMatch": true,
+      "publishedBinarySHA256": "a231b9734d588f4ba6e94ec0b7a89af1a6c15d1e03064e9225e51163437ab26a"
+    },
+    "LemmingsAppCore": {
+      "sourceFiles": 31,
+      "sourceMatchesBuild85": true,
+      "publishedArchiveByteMatch": true,
+      "publishedBinarySHA256": "a690c5c2271a7fe7879df2278459e0e91bedc0dee7fc59b11aeff7be1901272c"
+    },
+    "LemmingsMobileCore": {
+      "sourceFiles": 45,
+      "sourceMatchesBuild85": true,
+      "publishedArchiveByteMatch": true,
+      "publishedBinarySHA256": "3d228d76fd327a7819e28a773c2a8e67cbea5f8a40f65b9262ea89256665a0a8"
+    },
+    "LemmingsTVCore": {
+      "sourceFiles": 10,
+      "sourceMatchesBuild85": true,
+      "publishedArchiveByteMatch": true,
+      "publishedBinarySHA256": "d4912e875145efa415fc7384208ab8b62161c909f7044933eef116381794150a"
+    }
+  },
+  "resourceIndexEquivalence": {
+    "baselineBuild": 85,
+    "candidateBuild": 86,
+    "scope": "Non-localisation resource sizes and JSON/text content indexes",
+    "differences": []
+  },
+  "freshSourceValidation": {
+    "swiftSharedTests": 335,
+    "releaseToolingPythonTests": 88,
+    "localisationSwiftTests": 10,
+    "localisationPythonTests": 6,
+    "xcodeProjectsLinted": 2,
+    "workflowYamlFilesParsed": 3
+  },
+  "engineAudit": "Build 85 evidence is retained for unchanged shared engine sources and published library code. The complete current-candidate app audit and campaign closure were not rerun or claimed.",
+  "warnings": [
+    "Sparkle reports inherited 0777 permissions on existing music resources. Every patched payload, file mode and code signature still matches the notarised target.",
+    "Existing deprecated AppKit API and offscreen settings-constraint warnings remain."
+  ],
+  "manualGates": [
+    "Native mouse and VoiceOver acceptance",
+    "Signed app foreground launch",
+    "Public update installation and relaunch",
+    "Intel and minimum-OS hardware",
+    "Physical controllers, audible listening, HDR and live cross-device acceptance"
+  ],
+  "published": false
+}
