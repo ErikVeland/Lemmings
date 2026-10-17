@@ -126,6 +126,13 @@ Current source status:
   without a candidate, and no input drift. The 3,617 missing fan wins remain
   open. Imported levels remain open-ended. See the [fingerprinted audit](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json)
   and [winning replay witnesses](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl).
+- Current main `b0db98cf` replays all 615 Trolley rescue configurations across
+  562 bundled campaign identities. The fresh audit confirms every recorded
+  level condition, status, best-save result and witness. It retains 294 exact
+  population proofs and 315 rescue records; six configurations remain unknown.
+  These records cover campaign rescue evidence. They do not close Classic fan
+  routes or prove source-engine fidelity. See the [Trolley audit](TrolleyVerification/audit.json)
+  and [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 - Current main `b92386eb` fixes Classic rewind replay export to retain the
   starting level fingerprint after terrain edits. The focused rewind suite
   passes, including a digger replay. It used installed 1.9.1 build 76 data; it

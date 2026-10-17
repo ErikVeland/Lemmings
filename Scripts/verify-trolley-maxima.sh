@@ -4,15 +4,19 @@ project_dir="${0:A:h:h}"
 cd "$project_dir"
 build_dir="$project_dir/.build/trolley-verification"
 jobs="${TROLLEY_AUDIT_JOBS:-8}"
+resources_dir="${TROLLEY_RESOURCES:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources}"
+results_dir="${TROLLEY_OUTPUT:-$build_dir/results}"
 if [[ "$jobs" != <1-32> ]]; then
   echo "TROLLEY_AUDIT_JOBS must be between 1 and 32." >&2
   exit 1
 fi
-if [[ ! -d "$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Ports" ]]; then
-  echo "Build the local app with bundled game data before auditing." >&2
+if [[ ! -d "$resources_dir/Ports" ]]; then
+  echo "TROLLEY_RESOURCES must point to a resource bundle with Ports." >&2
   exit 1
 fi
-mkdir -p "$build_dir/modules"
+export TROLLEY_RESOURCES="$resources_dir"
+export TROLLEY_OUTPUT="$results_dir"
+mkdir -p "$build_dir/modules" "$results_dir"
 engine_before=$(python3 Tools/TrolleyVerification/catalogue.py fingerprint)
 swiftc -swift-version 6 -O -target "$(uname -m)-apple-macos12.3" -parse-as-library -emit-module -emit-library \
   -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
@@ -51,4 +55,4 @@ if [[ "$engine_before" != "$(python3 Tools/TrolleyVerification/catalogue.py fing
   echo "Engine sources changed during verification. No proofs were packaged." >&2
   exit 1
 fi
-python3 Tools/TrolleyVerification/catalogue.py merge --shards "$jobs"
+python3 Tools/TrolleyVerification/catalogue.py merge --results "$results_dir" --shards "$jobs"

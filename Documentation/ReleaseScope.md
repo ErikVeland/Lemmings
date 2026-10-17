@@ -45,25 +45,23 @@ match build 85, and it retains the shared engine libraries. The complete build
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
 On 17 October, a fetch confirmed that `HEAD`, `origin/main` and `FETCH_HEAD`
-match at `b92386eb59323d265a0777b3b3b047d2f245259b`. The worktree has
-uncommitted evidence and diagnostic changes. Main fixes Classic rewind replay
-fingerprints and refreshes Trolley evidence. It does not change Classic, L2, L3
-or NeoLemmix simulation rules or bundled level data. The refreshed Trolley audit
-has 615 identities and unchanged status and best-save results; it records 1,535
-candidate runs, up from 1,423. The accepted Classic replay witnesses were rerun
-at `9a95012e` and matched. The L3 production trace was last run at `b2dd57a`
-and matched 0/329 original-engine positions; it remains applicable because L3
-runtime sources are unchanged. The prepared 2.0.4 build 87 release notes are on
-main, but the latest accepted Mac package is build 86. At `b92386eb`, the
-focused Classic rewind checks passed, including replay export after terrain edits;
-they used the installed 1.9.1 build 76 game data. The Trolley catalogue check
-passed 294 proofs, 315 rescue records and replay hashes against the current
-engine fingerprint. It did not rerun all campaign simulations. See the
-[current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json)
-for the validation commands and limits. The
-3,617 Classic fan route gaps, L2 Gold ark, L3 route and source-parity gaps, and
-NeoLemmix style dependencies remain open. Imported content remains open-ended.
-See the [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+match at `dd0f1578ec2efb8b1e587949d708610931cc0ae4`. The latest commit changes
+an audio presentation state report only; engine sources and bundled data are
+unchanged from `b92386eb`. Main fixes Classic rewind replay fingerprints and refreshes Trolley
+evidence. The focused Classic rewind suite passes with a digger replay. A full
+replay-only Trolley audit at current engine fingerprint
+`dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c` checked 615
+configurations across 562 campaign identities. Every condition, status,
+best-save result and witness matches the prior catalogue. The merge retained
+1,535 search attempts for the same engine and exact conditions. It reports 294
+population proofs, 315 rescue records and six unknown configurations. This
+evidence does not establish source fidelity or close the fan, Gold ark, L3 route
+or NeoLemmix style gaps. A direct L3 production-to-DOS trace at `dd0f1578` matches 0/329 positions.
+The runtime lacks source-observed Mole excavation; its exact carve mask and
+built-brick trigger remain unverified. Build 87 release notes are prepared on
+main, while the latest accepted Mac package remains build 86. The full command,
+input limits and audit record are in the [current-main reconciliation]
+(ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 
 The published Mac build 86 and the current 2.0 iOS source are separate package
 states. Build 86 records no non-localisation resource-index changes from build

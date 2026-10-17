@@ -456,3 +456,14 @@ Scripts/audit-l3-mole-production-trace.sh`. The expected current result is a
 non-zero exit because production does not match the source. See the
 [production trace record](current-head-production-mole-trace-2026-10-17.json).
 No route or bundled closure count changed.
+
+### 17 October current-source production Mole rerun
+
+At `dd0f1578`, `Scripts/audit-l3-mole-production-trace.sh` rebuilt NxlvKit
+and compared the production Mole with all 329 retained positions. It matched
+0 positions; the first mismatch is tick 2 (source `(154,110)`, production
+`(156,110)`). The exact source, library and trace hashes are in the
+[current production trace record](current-head-production-mole-trace-2026-10-17.json).
+This confirms a current-source fidelity gap. The partial prototype remains
+unpromoted because its excavation mask and fall transitions do not match the
+source evidence.

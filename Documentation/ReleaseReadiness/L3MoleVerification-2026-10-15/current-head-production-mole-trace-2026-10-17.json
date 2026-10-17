@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "headCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+  "headCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
   "fixture": {
     "name": "steel-left-facing",
     "level": 101,
@@ -20,7 +20,16 @@
     "placementFile": "LEVELS/TEMP101.OBS",
     "placementSHA256": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8",
     "objectIdentifier": 354,
-    "placements": [[112, 96], [112, 104]],
+    "placements": [
+      [
+        112,
+        96
+      ],
+      [
+        112,
+        104
+      ]
+    ],
     "styleObjectFile": "STYLES/TEMP002.OBJ",
     "styleObjectSHA256": "bb75eedf2ac8241d3e4a843636c31c776ccc91c983a3c3529647afecf16a96cd",
     "attributeFiles": {
@@ -30,7 +39,12 @@
     "decodedStyleObject": {
       "flags": "0x60",
       "attributeGrid": "1x4 cells, each 8x2 pixels",
-      "attributeValues": ["0x60", "0x60", "0x60", "0x60"]
+      "attributeValues": [
+        "0x60",
+        "0x60",
+        "0x60",
+        "0x60"
+      ]
     },
     "interpretation": "The controlled source fixture triggers Mole excavation with a steel-tagged object. The decoded tag combines the runtime's solid bit 0x20 and steel bit 0x40. This establishes the material in this witness, but not whether other materials also trigger Mole excavation."
   },
@@ -43,15 +57,21 @@
   "productionRun": {
     "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
     "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
-    "runtimeLibrarySHA256": "3a10b17dd4c954785732afee8ba96e4d82d1ea96fd3d2d4f249cc613e2713610",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
     "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
     "exactPositionMatches": 0,
     "firstMismatch": {
       "tick": 2,
-      "source": [154, 110],
-      "production": [156, 110]
+      "source": [
+        154,
+        110
+      ],
+      "production": [
+        156,
+        110
+      ]
     },
-    "result": "At b2dd57a, production matched 0 of 329 original-engine positions. First mismatch is tick 2: source (154,110), production (156,110). The command exits non-zero because source parity remains open."
+    "result": "At dd0f1578, production matched 0 of 329 original-engine positions. First mismatch is tick 2: source (154,110), production (156,110). The command exits non-zero because source parity remains open."
   },
   "isolatedTimingProbe": {
     "baseRuntimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
@@ -69,8 +89,14 @@
     },
     "firstProbeMismatch": {
       "tick": 2,
-      "source": [154, 110],
-      "probe": [158, 110]
+      "source": [
+        154,
+        110
+      ],
+      "probe": [
+        158,
+        110
+      ]
     },
     "result": "The timing-only probe lowers mean position error slightly but still matches no samples. It does not model the source descent or excavation. Do not promote it."
   },
@@ -79,10 +105,13 @@
     "librarySHA256": "386836bf03f2cdd19fa66493b9e6598178225df13470ca7282c4b3f1fc055186",
     "exactPositionMatches": 141,
     "totalSamples": 329,
-    "matchingSampleRanges": ["36-153", "173-187"],
+    "matchingSampleRanges": [
+      "36-153",
+      "173-187"
+    ],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "The current production Mole remains horizontal and has no excavation behaviour. Its movement implementation source hash is unchanged at b2dd57a. The isolated proposal matches the sampled left-facing burrow path over ticks 36-153 and 173-187, then continues tunnelling where the source falls through an opening. The four retained tunnel-edge witnesses also show the proposal's rectangular carve mask is incomplete.",
-  "closureEffect": "This current-head rerun confirms the mismatch at b2dd57a. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
+  "interpretation": "The production Mole remains horizontal and has no excavation behaviour at dd0f1578. The isolated proposal matches some burrow positions but fails later fall behaviour and conflicts with two tunnel-edge witnesses. Neither is a complete Mole implementation.",
+  "closureEffect": "A direct current-source rerun at dd0f1578 confirms 0 of 329 source positions. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
   "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh"
 }

@@ -1,8 +1,37 @@
 import unittest
-from catalogue import require_retained_targets
+from catalogue import require_retained_targets, retain_candidate_history
 
 
 class RetainedTargetsTests(unittest.TestCase):
+    def test_replay_only_merge_keeps_same_engine_candidate_history(self):
+        previous = {
+            "engineSourceFingerprint": "current",
+            "levels": [
+                {"conditions": {"levelID": "same"}, "testedCandidates": 4},
+                {"conditions": {"levelID": "changed"}, "testedCandidates": 7},
+            ],
+        }
+        current = [
+            {"conditions": {"levelID": "same"}, "testedCandidates": 0},
+            {"conditions": {"levelID": "changed-again"}, "testedCandidates": 2},
+            {"conditions": {"levelID": "new"}, "testedCandidates": 1},
+        ]
+
+        retain_candidate_history(current, previous, "current")
+
+        self.assertEqual([row["testedCandidates"] for row in current], [4, 2, 1])
+
+    def test_candidate_history_is_not_carried_across_engine_fingerprints(self):
+        previous = {
+            "engineSourceFingerprint": "old",
+            "levels": [{"conditions": {"levelID": "same"}, "testedCandidates": 4}],
+        }
+        current = [{"conditions": {"levelID": "same"}, "testedCandidates": 1}]
+
+        retain_candidate_history(current, previous, "current")
+
+        self.assertEqual(current[0]["testedCandidates"], 1)
+
     def test_explicit_ruleset_transition_retires_only_old_rules(self):
         change = [{"gameIDs": ["lemmings3"],
                    "rulesetTransition": {"from": "old", "to": "new"}}]

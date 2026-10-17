@@ -124,6 +124,22 @@ def require_retained_targets(rows, published, changes=()):
                              + previous.get("title", previous["conditions"]["levelID"]))
 
 
+def retain_candidate_history(rows, previous_audit, current_engine_fingerprint):
+    """Keep same-engine search counts when a replay-only audit runs."""
+    if previous_audit.get("engineSourceFingerprint") != current_engine_fingerprint:
+        return
+    previous_counts = {
+        json.dumps(row["conditions"], sort_keys=True): row.get("testedCandidates", 0)
+        for row in previous_audit.get("levels", ()) if row.get("conditions")
+    }
+    for row in rows:
+        conditions = row.get("conditions")
+        if conditions is None:
+            continue
+        key = json.dumps(conditions, sort_keys=True)
+        row["testedCandidates"] = max(row.get("testedCandidates", 0), previous_counts.get(key, 0))
+
+
 def merge(results, shards):
     paths = [results / f"classic-{i}.json" for i in range(shards)]
     paths += [results / f"{name}.json" for name in ("ports", "l2", "l3")]
@@ -148,6 +164,9 @@ def merge(results, shards):
     rows.sort(key=lambda r: (order[r["gameID"]], r["rank"], r["number"], -r["population"]))
     report_dir = PROJECT / "Documentation/TrolleyVerification"
     proof_dir = PROJECT / "Resources/Trolley"
+    previous_audit_path = report_dir / "audit.json"
+    if previous_audit_path.exists():
+        retain_candidate_history(rows, json.loads(previous_audit_path.read_text()), engine)
     if (proof_dir / "verified-maxima.json").exists():
         require_retained_targets(rows, validate_catalogue(proof_dir)["levels"], RULE_CHANGES)
     report_dir.mkdir(parents=True, exist_ok=True)
