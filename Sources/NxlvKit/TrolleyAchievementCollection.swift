@@ -61,14 +61,27 @@ extension TrolleyAchievement {
         .schoolOfThought: .init("School of Thought", L10n.text("Earn the same play style on 5 distinct cleared levels."), .mastery, .gold, goal: 5),
         .unbrokenArgument: .init("An Unbroken Argument", L10n.text("Match targets on 5 distinct levels in consecutive attempts, without rewind."), .mastery, .legendary, goal: 5)
     ] }
-    public var group: TrolleyAchievementGroup { self == .falsifier ? .philosophy : Self.collection[self]?.group ?? .rescue }
+    /// The fields that do not change with the interface language. The analyser reads
+    /// these for every attempt, so they are built once. Titles stay live in `collection`.
+    struct Traits: Sendable {
+        let group: TrolleyAchievementGroup
+        let tier: TrolleyAchievementTier
+        let goal: Int
+        let philosopher: String?
+    }
+    static let traits: [Self: Traits] = collection.mapValues {
+        Traits(group: $0.group, tier: $0.tier, goal: $0.goal, philosopher: $0.philosopher)
+    }
+    private static let byPhilosopher: [String: Self] = Dictionary(
+        allCases.compactMap { award in award.philosopherID.map { ($0, award) } }, uniquingKeysWith: { first, _ in first })
+    public var group: TrolleyAchievementGroup { self == .falsifier ? .philosophy : Self.traits[self]?.group ?? .rescue }
     public var tier: TrolleyAchievementTier {
         if self == .falsifier { return .legendary }
         if self == .absoluteMaximum { return .gold }
-        return Self.collection[self]?.tier ?? .bronze
+        return Self.traits[self]?.tier ?? .bronze
     }
-    public var philosopherID: String? { self == .falsifier ? "popper" : Self.collection[self]?.philosopher }
-    public static func forPhilosopher(_ id: String) -> Self? { allCases.first { $0.philosopherID == id } }
+    public var philosopherID: String? { self == .falsifier ? "popper" : Self.traits[self]?.philosopher }
+    public static func forPhilosopher(_ id: String) -> Self? { byPhilosopher[id] }
     public static func forBoard(_ board: TrolleyBoard) -> Self? {
         switch board {
         case .fastestClear, .fastestAllSaved: nil
@@ -114,7 +127,7 @@ extension TrolleyAchievement {
     public func progress(attempts: [TrolleyAttempt], profileID: String) -> TrolleyAchievementProgress {
         let personal = attempts.filter { $0.run.profileID == profileID }
         let earned = personal.contains { $0.achievements.contains(self) }
-        let goal = self == .moralSurplus ? 100 : self == .absoluteMaximum ? 10 : Self.collection[self]?.goal ?? 1
+        let goal = self == .moralSurplus ? 100 : self == .absoluteMaximum ? 10 : Self.traits[self]?.goal ?? 1
         return .init(value: earned ? goal : min(goal, count(in: personal)), goal: goal, earned: earned)
     }
     static func collectionEarned(attempt: TrolleyAttempt, history: [TrolleyAttempt]) -> [Self] {
