@@ -1,7 +1,6 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "headCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
   "fixture": {
     "name": "steel-left-facing",
     "level": 101,
@@ -111,31 +110,9 @@
     ],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "At current main 3e1c7498, production remains horizontal and does not match the recorded source trajectory. The isolated candidate matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It continues through air after tick 187 and fails two of four source tunnel-edge checks. No candidate is a complete Mole implementation.",
-  "closureEffect": "The current-head production rerun at 3e1c7498 matches 0 of 329 source positions. The rebuilt runtime and trace hashes match the retained dd0f1578 run. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
+  "interpretation": "At dc9c596, the cell-carve Mole implementation is in production. A fresh no-optimisation build matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It diverges after tick 187 and fails two of four source tunnel-edge checks. Release-optimised build validation and full L3 fixture validation remain outstanding.",
+  "closureEffect": "Main includes partial Mole excavation behaviour. The fresh no-optimisation current-head trace is 141/329; route fixtures were not rerun after the runtime change. Mole movement and excavation rules, built-brick trigger and full L3 completion gates remain open.",
   "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh",
-  "currentHeadRerun": {
-    "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-    "command": "CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
-    "comparisonCommand": "python3 Tools/Lemmings3Completion/compare_mole_trace.py .build/l3-mole-production-trace/production-trace.json Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json steel-left-facing",
-    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
-    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
-    "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
-    "exactPositionMatches": 0,
-    "samples": 329,
-    "firstMismatch": {
-      "tick": 2,
-      "source": [
-        154,
-        110
-      ],
-      "production": [
-        156,
-        110
-      ]
-    },
-    "result": "The current-head rebuild produced the same runtime, library and trace hashes as the retained dd0f1578 run. It still matches 0 of 329 source positions."
-  },
   "isolatedCandidateProbe": {
     "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
     "fixture": "steel-left-facing",
@@ -177,5 +154,90 @@
     },
     "finding": "The candidate matches every position from tick 36 through 187, then diverges. It clears all local solid terrain by tick 180 and continues through air. This does not model the source transition after tick 187. The separate baseline terrain-edge check still rejects two of four pixels.",
     "status": "isolated probe only; production source restored"
-  }
+  },
+  "cellCarveVariant": {
+    "candidateRuntimeSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "candidateLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
+    "candidateTraceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
+    "carve": "One trailing 8x2 attribute cell per move. The candidate kept the full body collision checks.",
+    "result": "It produced the same 141/329 trajectory and tick ranges as the full-body carve. The changed carve mask did not alter movement on this fixture.",
+    "status": "This exact source hash was later promoted to production in dc9c596. Its 141/329 trace is still isolated-build evidence; the current-head rebuild and full fixture audit remain outstanding."
+  },
+  "noMaterialHeadProbe": {
+    "candidateRuntimeSHA256": "7e90f8c68b2a0838c85fe2a5c2b5591a56a30d2c83f57bdf6e3fb993dec18a35",
+    "candidateLibrarySHA256": "49e11dd6cf38be3da3bbb7088882d6bbe931d7d3abadd9a059e32dd4e99773dc",
+    "candidateTraceSHA256": "fd2ee2609b0af85fcadd75fbbdcd5b6935cf928749f66090a5bd86347384cd5f",
+    "samples": 329,
+    "exactPositionMatches": 88,
+    "matchingTickRanges": [
+      [
+        17,
+        17
+      ],
+      [
+        19,
+        19
+      ],
+      [
+        25,
+        30
+      ],
+      [
+        36,
+        115
+      ]
+    ],
+    "ruleProbe": "Exit diagonal digging when the 8x9 leading half of the predicted body contains no solid pixels, reverse direction, then wait five ticks.",
+    "result": "The probe exits too early. Source movement continues after tick 115. The source transition point needs a different rule or a more accurate collision mask.",
+    "status": "isolated probe only; production source restored"
+  },
+  "currentHeadRerun": {
+    "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache swiftc -swift-version 6 -parse-as-library -emit-module -emit-library (no optimisation), then compile Tools/Lemmings3Completion/MoleTrace.swift and compare_mole_trace.py",
+    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
+    "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
+    "compiler": "Apple Swift 6.3.3, Xcode toolchain",
+    "optimisation": "none",
+    "freshTraceProduced": true,
+    "exactPositionMatches": 141,
+    "samples": 329,
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        154,
+        110
+      ],
+      "production": [
+        156,
+        112
+      ]
+    },
+    "result": "A fresh no-optimisation build of current production source at dc9c596 matched 141/329 source positions. This reproduces the isolated cell-carve trace. It is not an optimised release build or a full fixture audit."
+  },
+  "previousHeadRerun": {
+    "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "command": "CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
+    "comparisonCommand": "python3 Tools/Lemmings3Completion/compare_mole_trace.py .build/l3-mole-production-trace/production-trace.json Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json steel-left-facing",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+    "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
+    "exactPositionMatches": 0,
+    "samples": 329,
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        154,
+        110
+      ],
+      "production": [
+        156,
+        110
+      ]
+    },
+    "result": "The current-head rebuild produced the same runtime, library and trace hashes as the retained dd0f1578 run. It still matches 0 of 329 source positions."
+  },
+  "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. Fresh no-optimisation trace parity is partial at 141/329; release-optimised and full fixture audits remain open.",
+  "initialReportHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+  "headCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870"
 }

@@ -4,21 +4,19 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-    "originMain": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-    "fetchHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "head": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "originMain": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "fetchHead": "dc9c59614a710705f6bd4701deb7d34cf3796870",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal 3e1c749854f433fe6cce279a5d165ef48fef1b2f. The worktree was clean at fetch and is zero commits ahead or behind. This update now has four local record edits. Commit 3e1c7498 updates the L2 solver memory bound and its regression. It adds evidence records. It changes no engine runtime, loader or bundled level resources. The Cavelems 6 search saved 0/60. Both Trolley rows remain UNKNOWN.",
-    "postFastForwardValidation": "The replay-only Trolley audit checked 615 configurations across 562 campaign identities. Its conditions and results match the prior catalogue. The L3 trace verifier checks 53 DOS and prototype positions, repeated source traces and four tunnel-edge checks. It does not prove production parity. The direct production-to-DOS comparison at dd0f1578 matches 0/329 positions. Commit 3e1c7498 changes L2 solver tools and records only. Open bundled gaps include 3,617 Classic fan routes, the L2 Gold Ark and two UNKNOWN Trolley rows, 17 L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
+    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal dc9c59614a710705f6bd4701deb7d34cf3796870, zero commits ahead or behind. Two release-record edits were present at fetch. Commit dc9c5961 adds the 8x2 Mole carve implementation to the production L3 runtime. Identical-source candidate evidence matches 141/329 positions and diverges after tick 187; two of four terrain-edge checks fail. A fresh trace build and full L3 fixture audit were not completed. Bundled gaps remain; imported content stays open-ended.",
+    "postFastForwardValidation": "The recorded Trolley replay audit checked 615 configurations across 562 campaign identities. Prior L3 evidence includes 399/416 exact double replays at fe11bd5d, 17 route failures, and a strict-gate failure at 107 and 107-1. That audit predates the Mole runtime change at dc9c596 and is not current-head validation. A fresh no-optimisation current-head Mole trace matches 141/329 positions; release-optimised trace and full L3 fixture audits remain open. Open bundled gaps include 3,617 Classic fan routes, L2 Gold Ark and two UNKNOWN Trolley rows, 17 last-audited L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
     "uncommittedPaths": [
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseScope.md"
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
     ]
   },
   "releasePackageStates": {
@@ -78,8 +76,8 @@
     },
     "lemmings3": {
       "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
-      "verified": "399 of 416 fixtures pass exact double replay in the fresh fe11bd5d audit; the 322-entry manifest and negative checks pass.",
-      "open": "17 route fixtures fail (four standalone, 13 carried). Two additional 600-second seeded searches for Egyptian 29 expanded 7,975,174 and 6,634,249 candidates without finding a route; no fixture changed. Bounded searches do not prove impossibility. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
+      "verified": "The latest retained full audit at fe11bd5d passed 399/416 fixtures. This audit predates the dc9c596 Mole runtime change. A fresh no-optimisation current-head trace matches 141/329 positions; this does not validate the release-optimised build or all L3 fixtures.",
+      "open": "The last full fixture audit had 17 route failures (four standalone, 13 carried). Two 600-second seeded searches for Egyptian 29 found no route; no fixture changed. A fresh no-optimisation Mole trace at dc9c596 matches 141/329 positions and diverges after tick 187; two of four terrain-edge witnesses fail. Release-optimised trace and current-head fixture audits remain open. Bounded searches do not prove impossibility. The built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
       "evidence": [
         "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
         "L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json",
@@ -105,7 +103,7 @@
     "Player-imported content is outside bundled closure counts. Keep support claims limited by engine, version and tested features."
   ],
   "overallStatus": "open",
-  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. The appcast advertises build 87, but retained package acceptance evidence is for build 86. The latest installed iOS candidate does not contain the full 2.0 engine scope. Imported content remains open-ended and is tracked separately.",
+  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. The latest L3 runtime change lacks a fresh current-head trace and full fixture audit. The appcast advertises build 87, but retained package acceptance evidence is for build 86. The latest installed iOS candidate does not contain the full 2.0 engine scope. Imported content remains open-ended and is tracked separately.",
   "importedContentStatus": {
     "scope": "Open-ended; excluded from bundled closure counts.",
     "supportRule": "State support by engine, content version and verified features. Do not infer full support for every imported pack or level.",
