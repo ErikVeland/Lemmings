@@ -91,6 +91,7 @@
 "A recorded sacrifice enabled other rescues." = "ஒரு பதிவு செய்யப்பட்ட தியாகம் மற்ற மீட்புகளை அனுமதித்தது.";
 "A replay frame could not be encoded." = "மறு இயக்கப் படத்தைக் குறியாக்க முடியவில்லை.";
 "A rescue that disproved the previous estimate." = "முந்தைய மதிப்பீட்டை நிராகரிக்கும் ஒரு மீட்பு.";
+"A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these." = "திருத்தப்பட்ட பயணம் இனி தொடக்க நிலைகளை மீண்டும் செய்யாது. நீங்கள் அடைந்த மிகத் தொலைவான நிலைக்குப் பிறகு அது தொடர்கிறது. தவிர்த்த நிலைகள் இவற்றுக்கு மீண்டும் திரும்பு பகுதியில் தோன்றும்.";
 "A saved player is unavailable" = "சேமிக்கப்பட்ட வீரர் கிடைக்கவில்லை";
 "A section marker has no keyword." = "ஒரு பிரிவு மார்க்கரில் முக்கிய வார்த்தை இல்லை.";
 "A secured clear amid substantial loss." = "பெரிய இழப்புகளுக்கு மத்தியில் ஒரு பாதுகாக்கப்பட்ட கடன்.";
@@ -1233,7 +1234,6 @@
 "LOST {0}" = "இழந்தவை {0}";
 "LT / left trigger" = "LT / இடது துப்பாக்கி";
 "Language" = "மொழி";
-"Language selection fixed" = "மொழித் தேர்வு சரிசெய்யப்பட்டது";
 "Large (125%)" = "பெரியது (125%)";
 "Large menu text" = "பெரிய பட்டி எழுத்து";
 "Large remaining transition to {0}: {1}." = "{0}: {1} க்கு பெரிய மீதமுள்ள மாற்றம்.";
@@ -1247,6 +1247,7 @@
 "Last {0} days" = "கடந்த {0} நாட்கள்";
 "Later" = "பின்னர்";
 "Latest build" = "சமீபத்திய கட்டமைப்பு";
+"Leaderboard and journey fixes" = "தரவரிசை மற்றும் பயணத் திருத்தங்கள்";
 "Leaderboards" = "தரவரிசைப் பட்டியல்கள்";
 "Least skills" = "குறைந்த திறன்கள்";
 "Leave Hot Seat?" = "மாறிமுறையிலிருந்து வெளியேறவா?";
@@ -1600,6 +1601,7 @@
 "None" = "எதுவுமில்லை";
 "None hides selection effects. Obvious adds a coloured marker. Modern adds a white outline and green glow in all three games." = "தேர்வு விளைவுகளை மறைக்கும் ஒன்றுமில்லை. வெளிப்படையான ஒரு வண்ண மார்க்கரை சேர்க்கிறது. நவீனமானது மூன்று விளையாட்டுகளிலும் ஒரு வெள்ளை ஓட்டம் மற்றும் பச்சை பிரகாசத்தை சேர்க்கிறது.";
 "Not bad, but not good either." = "மோசமாக இல்லை, ஆனால் நல்ல இல்லை.";
+"Not earned" = "பெறப்படவில்லை";
 "Not met. " = "நிறைவேறவில்லை. ";
 "Not now" = "இப்போது வேண்டாம்";
 "Not rescued" = "மீட்கப்படவில்லை";
@@ -2940,6 +2942,7 @@
 "Worldwide Game Center leaderboard. {0} {1}{2}" = "உலகளாவிய Game Center தரவரிசை. {0} {1}{2}";
 "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}" = "உலகளாவிய சமூகத் தரவரிசை. {0}. பின்னோக்கு {1}. {2}. {3}";
 "Worldwide leaderboard" = "உலகளாவிய தரவரிசை";
+"Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects." = "Classic நிலைகளுக்கான உலகளாவிய தரவரிசைப் பதிவுகள் இப்போது பொறிகள் மற்றும் பொருட்கள் உட்பட சரியான நிலையை அடையாளம் காண்கின்றன.";
 "Worldwide rankings are not enabled in this build. Local records are saved." = "உலக தரவரிசைகள் இந்த கட்டமைப்பில் இயங்கவில்லை. உள்ளூர் பதிவுகள் சேமிக்கப்படுகின்றன.";
 "Xmas Lemmings 1991" = "Xmas Lemmings 1991";
 "Xmas Lemmings 1992" = "Xmas Lemmings 1992";

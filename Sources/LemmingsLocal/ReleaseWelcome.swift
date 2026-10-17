@@ -9,9 +9,11 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.3"
-    static var subtitle: String { L10n.text("Language selection fixed") }
+    static let notesVersion = "2.0.4"
+    static var subtitle: String { L10n.text("Leaderboard and journey fixes") }
     static var sections: [(String, String)] { [
+        (L10n.text("Leaderboards"), L10n.text("Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.")),
+        (L10n.text("Journey"), L10n.text("A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.")),
         (L10n.text("Language"), L10n.text("Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
     ] }

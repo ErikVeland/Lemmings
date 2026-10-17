@@ -16,12 +16,12 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/it.json",
-    "sha256": "7656b022b64159ca04a94a33c3d0acf0967e24cbf48165a8bfad14c91461738d",
-    "entry_count": 3159,
+    "sha256": "ad99bca91df74cde1924e07bb8b90765eb95558a2ffd55872ccdf44b30949c99",
+    "entry_count": 3162,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
     "modified_by_this_worker": true,
-    "text_count": 3159,
+    "text_count": 3162,
     "unknown_current_text_count": 0
   },
   "catalogue": {
@@ -354,9 +354,9 @@
     "native_language_approved": false
   },
   "catalogue_snapshot": {
-    "text_count": 3159,
+    "text_count": 3162,
     "plural_count": 8,
-    "sha256": "b4d03397887f05d76734ced87b8a555f66fb4f46cd50a4784f2d29d7c6a429eb"
+    "sha256": "bd5910c059e1e9e4966cd11c014ef0c1d4a4299574883fe091c1c07a1e8c03eb"
   },
   "maintenance_2_0_3": {
     "date": "2026-10-16",
@@ -366,5 +366,19 @@
       "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel."
     ],
     "scope": "Updated Macintosh release notes. Existing language and device validation gaps remain open."
+  },
+  "maintenance_2_0_4": {
+    "date": "2026-10-17",
+    "status": "ai_draft_human_review_required",
+    "added_keys": [
+      "Leaderboard and journey fixes",
+      "Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.",
+      "A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.",
+      "Not earned"
+    ],
+    "removed_keys": [
+      "Language selection fixed"
+    ],
+    "scope": "Updated Macintosh release notes and one mobile achievement status. Existing language and device validation gaps remain open."
   }
 }

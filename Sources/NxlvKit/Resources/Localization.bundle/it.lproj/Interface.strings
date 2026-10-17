@@ -91,6 +91,7 @@
 "A recorded sacrifice enabled other rescues." = "Un sacrificio registrato ha permesso altri salvataggi.";
 "A replay frame could not be encoded." = "Impossibile codificare un fotogramma del replay.";
 "A rescue that disproved the previous estimate." = "Un salvataggio che ha smentito la stima precedente.";
+"A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these." = "Un percorso rivisto non ripete più i primi livelli. Riprende dopo il livello più avanzato che hai raggiunto. I livelli saltati compaiono in Torna a questi.";
 "A saved player is unavailable" = "Il profilo del giocatore salvato non è disponibile";
 "A section marker has no keyword." = "Un indicatore di sezione non contiene una parola chiave.";
 "A secured clear amid substantial loss." = "Un completamento ottenuto nonostante gravi perdite.";
@@ -1233,7 +1234,6 @@
 "LOST {0}" = "PERSI {0}";
 "LT / left trigger" = "LT / grilletto sinistro";
 "Language" = "Lingua";
-"Language selection fixed" = "Selezione della lingua corretta";
 "Large (125%)" = "Grande (125%)";
 "Large menu text" = "Testo grande nei menu";
 "Large remaining transition to {0}: {1}." = "Ampio margine residuo per la transizione a {0}: {1}.";
@@ -1247,6 +1247,7 @@
 "Last {0} days" = "Ultimi {0} giorni";
 "Later" = "Più tardi";
 "Latest build" = "Ultima build";
+"Leaderboard and journey fixes" = "Correzioni a classifiche e percorso";
 "Leaderboards" = "Classifiche";
 "Least skills" = "Meno abilità";
 "Leave Hot Seat?" = "Uscire da Hot Seat?";
@@ -1600,6 +1601,7 @@
 "None" = "Nessuno";
 "None hides selection effects. Obvious adds a coloured marker. Modern adds a white outline and green glow in all three games." = "Nessuno nasconde gli effetti di selezione. Evidente aggiunge un indicatore colorato. Moderno aggiunge un contorno bianco e un alone verde in tutti e tre i giochi.";
 "Not bad, but not good either." = "Non male, ma neanche bene.";
+"Not earned" = "Non ottenuto";
 "Not met. " = "Non raggiunto. ";
 "Not now" = "Non ora";
 "Not rescued" = "Non salvato";
@@ -2940,6 +2942,7 @@
 "Worldwide Game Center leaderboard. {0} {1}{2}" = "Classifica mondiale Game Center. {0} {1}{2}";
 "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}" = "Classifica mondiale della comunità. {0}. Riavvolgimenti {1}. {2}. {3}";
 "Worldwide leaderboard" = "Classifica mondiale";
+"Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects." = "Le voci delle classifiche mondiali dei livelli Classic ora identificano il livello esatto, incluse trappole e oggetti.";
 "Worldwide rankings are not enabled in this build. Local records are saved." = "Le classifiche mondiali non sono abilitate in questa versione. I record locali vengono salvati.";
 "Xmas Lemmings 1991" = "Xmas Lemmings 1991";
 "Xmas Lemmings 1992" = "Xmas Lemmings 1992";

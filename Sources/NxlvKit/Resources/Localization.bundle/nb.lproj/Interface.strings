@@ -91,6 +91,7 @@
 "A recorded sacrifice enabled other rescues." = "Et dokumentert offer gjorde det mulig å redde andre.";
 "A replay frame could not be encoded." = "En reprisebilde kunne ikke kodes.";
 "A rescue that disproved the previous estimate." = "En redning som motbeviste det forrige anslaget.";
+"A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these." = "En revidert reise gjentar ikke lenger de første brettene. Den fortsetter etter det lengste brettet du nådde. Brett du hoppet over, vises under Kom tilbake til disse.";
 "A saved player is unavailable" = "En lagret spiller er utilgjengelig";
 "A section marker has no keyword." = "En seksjonsmarkør mangler nøkkelord.";
 "A secured clear amid substantial loss." = "En fullført bane til tross for store tap.";
@@ -1233,7 +1234,6 @@
 "LOST {0}" = "TAPT {0}";
 "LT / left trigger" = "LT / venstre avtrekker";
 "Language" = "Språk";
-"Language selection fixed" = "Språkvalg rettet";
 "Large (125%)" = "Stor (125%)";
 "Large menu text" = "Stor menytekst";
 "Large remaining transition to {0}: {1}." = "Stor gjenstående overgang til {0}: {1}.";
@@ -1247,6 +1247,7 @@
 "Last {0} days" = "Siste {0} dager";
 "Later" = "Senere";
 "Latest build" = "Nyeste versjon";
+"Leaderboard and journey fixes" = "Rettelser for poengtavler og reise";
 "Leaderboards" = "Poengtavler";
 "Least skills" = "Færrest ferdigheter";
 "Leave Hot Seat?" = "Avslutte Hot Seat?";
@@ -1600,6 +1601,7 @@
 "None" = "Ingen";
 "None hides selection effects. Obvious adds a coloured marker. Modern adds a white outline and green glow in all three games." = "Ingen skjuler valgeffekter. Tydelig legger til en farget markør. Moderne legger til hvit omrisslinje og grønn glød i alle tre spillene.";
 "Not bad, but not good either." = "Ikke dårlig, men heller ikke bra.";
+"Not earned" = "Ikke opptjent";
 "Not met. " = "Ikke nådd. ";
 "Not now" = "Ikke nå";
 "Not rescued" = "Ikke reddet";
@@ -2940,6 +2942,7 @@
 "Worldwide Game Center leaderboard. {0} {1}{2}" = "Verdensomspennende Game Center-poengtavle. {0} {1}{2}";
 "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}" = "Verdensomspennende toppliste for fellesskapet. {0}. Tilbakespolinger {1}. {2}. {3}";
 "Worldwide leaderboard" = "Verdensrangliste";
+"Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects." = "Oppføringer på verdensomspennende poengtavler for Classic-brett identifiserer nå nøyaktig brett, inkludert feller og objekter.";
 "Worldwide rankings are not enabled in this build. Local records are saved." = "Verdensrangering er ikke slått på i denne versjonen. Lokale rekorder lagres.";
 "Xmas Lemmings 1991" = "Xmas Lemmings 1991";
 "Xmas Lemmings 1992" = "Xmas Lemmings 1992";

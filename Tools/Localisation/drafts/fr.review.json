@@ -18,12 +18,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/fr.json",
-    "text_count": 3159,
+    "text_count": 3162,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "4fc0fb33f1e8ad5d9a237896a0419d8fc86d47922a722077c10f7c988089458e",
-    "entry_count": 3159
+    "sha256": "087f0ef04d94ed2b211c616df154093c06d9f5acebbc2c7bd58afeae59a89a84",
+    "entry_count": 3162
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/fr.json",
@@ -33,9 +33,9 @@
     "note": "The ignored machine-generated candidate was not merged; translations were drafted from the current English catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3159,
+    "text_count": 3162,
     "plural_count": 8,
-    "sha256": "b4d03397887f05d76734ced87b8a555f66fb4f46cd50a4784f2d29d7c6a429eb"
+    "sha256": "bd5910c059e1e9e4966cd11c014ef0c1d4a4299574883fe091c1c07a1e8c03eb"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -319,5 +319,19 @@
       "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel."
     ],
     "scope": "Updated Macintosh release notes. Existing language and device validation gaps remain open."
+  },
+  "maintenance_2_0_4": {
+    "date": "2026-10-17",
+    "status": "ai_draft_human_review_required",
+    "added_keys": [
+      "Leaderboard and journey fixes",
+      "Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.",
+      "A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.",
+      "Not earned"
+    ],
+    "removed_keys": [
+      "Language selection fixed"
+    ],
+    "scope": "Updated Macintosh release notes and one mobile achievement status. Existing language and device validation gaps remain open."
   }
 }
