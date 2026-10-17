@@ -241,19 +241,32 @@ remains intact; this alternate path stops at 5/10. These bounded searches
 do not prove the level impossible. See the [candidate chain
 reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-10-16.json).
 
-The 15 October L3 Mole direction and patrol corrections match the captured
-starting directions and no-input patrols in Shadow 7 and Egyptian 13. The
-current strict audit double-replays 399/416 fixtures. Four standalone routes
-and 13 carried schedules fail: the standalone gaps are Shadow 7 and Egyptian
-6, 13 and 29. Five Shadow 13 carried inputs were refreshed and now pass. The
-13 carried gaps are in Shadow 7 and Egyptian 6, 13 and 29. The prior 90-route
-and campaign proof applies to the earlier engine state. Keep the L3 bundled
-gate open until replacement witnesses pass the strict gates.
+The 15 October L3 Mole direction and patrol corrections match captured starting
+directions and no-input patrols. Main then added an 8x2-cell Mole excavation
+implementation. A fresh optimised trace at `aa21fa0e` matches 141/329 source
+positions, with the first mismatch at tick 2 and a further divergence after
+tick 187. Two of four source tunnel-edge checks fail. The independent
+no-optimisation trace matches the same result.
 
-The L3 Mole verifier last passed at `b2dd57a6991f5f9685435d3df6533f6245b794f4` and remains source-continuous at current main `b92386eb59323d265a0777b3b3b047d2f245259b`; neither L3 runtime nor verifier changed in the intervening commits. It checks 53 prototype positions, two repeated source traces with 673 samples, and four tunnel-edge witnesses. It reconstructs the isolated prototype patch. A separate production trace compares the engine with 329 original-engine positions and matches none. The first mismatch is tick 2: source `(154,110)`, production `(156,110)`. The full 416-fixture audit was not rerun because L3 runtime and audit sources did not change after `1111ece8`. Its latest result remains 399/416, with 17 route failures.
+A fresh full audit at `aa21fa0e` checks 416 fixtures: 393 exact double replays,
+six stale-identity routes that still win when rebased, and 17 schedules that do
+not win (four standalone, 13 carried). The strict gate passes 322 manifest and
+negative checks, then fails at standalone Shadow 7 and carried fixture 107-1.
+The earlier 399/416 audit predates the Mole runtime change. The Mole mask,
+built-brick trigger and full rules remain open. See the [current fixture
+audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json),
+[strict gate](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json)
+and [Mole trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json).
 
-Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site grid. Egyptian 13 expanded 3,889,087 candidates. Egyptian 6 expanded 5,181,833 candidates. Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. None found a route. The excavation mask, built-brick trigger and 17 route schedules remain open. The latest fast-forward to `b92386eb` also fixes Classic rewind replay fingerprints and refreshes Trolley evidence. It does not change simulation rules or level data. The 2.0.4 build 87 release notes are prepared on main, but published package evidence remains at 2.0.3 build 86. See the [bundled-scope reconciliation](ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json), [current-source recheck](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json) and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
-
+Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site
+grid. Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded
+5,181,833, and seeded Egyptian 29 expanded 3,620,601. None found a route.
+The latest `aa21fa0e` commit changes trace evidence and its verifier, not the
+runtime. The advertised macOS 2.0.4 build 87 still lacks accepted-package
+evidence; the latest retained acceptance record is build 86. Imported content
+remains open-ended and is excluded from bundled closure counts. See the
+[bundled-scope reconciliation](ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json)
+and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
 Continue the separate validation work:
 
 - compare native rules, movement, tools, traps and input cadence with the

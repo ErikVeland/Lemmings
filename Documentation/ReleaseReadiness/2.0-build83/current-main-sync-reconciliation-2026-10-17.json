@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-  "upstreamCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+  "sourceCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+  "upstreamCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "commit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -28,7 +28,7 @@
       "classicSolver": "The current-main commit changes ClassicSolver geometry output formatting and the batch driver input path. The driver now selects exact unresolved bundled audit rows and exact level members. Search selection changed; engine simulation and replay behaviour did not.",
       "classicReplayEvidence": "The 2,755 accepted winning-route witnesses were rerun at 9a95012e. Main later changes Classic rewind replay export to retain the starting level fingerprint and refreshes Trolley proof metadata. The focused rewind suite passes with a digger replay. A full Trolley replay audit at b0db98cf confirms all 615 exact rescue configurations against the current catalogue; it does not establish source-engine parity.",
       "routeValidation": "Scripts/verify-l3-mole-trace.py passed at b2dd57a: 53 recorded DOS/prototype positions, isolated prototype reconstruction, production Mole source hash, two repeated traces with 673 samples, and four tunnel-edge checks. It explicitly leaves production-to-DOS trajectory parity open.",
-      "latestMainAdvance": "Commit dc9c5961 changes the production L3 Mole runtime. Its source hash matches an isolated cell-carve build with 141/329 trace matches; this remains partial candidate evidence, and no current-head trace or full fixture rerun is recorded. Earlier main changes remain recorded below.",
+      "latestMainAdvance": "The 2.0.5 hotfix changes Trolley achievement lookup and personal history filtering; it changes no L3 runtime, L3 fixture or bundled L3 resource. The L3 audit at aa21fa0 remains applicable at 4a8e2fa by exact L3 runtime source hash.",
       "trolleyAudit": "At b0db98cf, the standard verifier replays 615 configurations covering 562 campaign level identities. Conditions, status, maximum, best-save outcome, witness and tested-candidate counts match the prior audit for every identity. The merge reports 294 population-bound certificates, 315 best-known rescue records and six unknown configurations. Candidate search was disabled; the 1,535 recorded attempts were retained only for identical conditions and engine fingerprint. This audit does not cover Classic fan packs or prove source fidelity."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
@@ -289,33 +289,31 @@
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
-    "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-    "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseScope.md"
+    "Documentation/ContentUniverseRoadmap.md",
+    "Documentation/Overview.md",
+    "Documentation/ReleaseReadiness/gates.json"
   ],
   "remoteVerification": {
     "method": "git fetch origin main; git rev-parse HEAD origin/main; git rev-list --left-right --count HEAD...origin/main",
-    "head": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-    "originMain": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-    "fetchHead": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "head": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "originMain": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "fetchHead": "4a8e2fa191ef69779366f7109d7f8b750053182c",
     "upToDate": true,
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
     "workingTreeCleanAtFetch": false,
-    "workingTreeStateAtFetch": "Four release-record edits were present; engine and content source files were clean.",
+    "workingTreeStateAtFetch": "Four release-record edits were present; engine and content files were clean. Three documentation edits remain in this checkout.",
     "uncommittedPathsAfterReconciliation": [
-      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseScope.md"
+      "Documentation/ContentUniverseRoadmap.md",
+      "Documentation/Overview.md",
+      "Documentation/ReleaseReadiness/gates.json"
     ]
   },
   "lemmings3": {
-    "currentMainHead": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-    "currentMainRuntimeContinuity": "Main at aa21fa0 contains the 8x2-cell Mole excavation implementation from dc9c596. The aa21fa0 commit changes the verifier and evidence only; the runtime source hash is unchanged. A fresh optimised trace at that runtime source matches 141/329 positions, with first divergence at tick 2 and further divergence after tick 187; two of four terrain-edge witnesses still fail. The full fixture audit remains outstanding.",
+    "currentMainHead": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "currentMainRuntimeContinuity": "Current HEAD 4a8e2fa retains the exact L3 runtime source audited at dc9c596. The intervening Trolley hotfix and evidence updates do not change L3 runtime or fixture inputs. Fresh optimised Mole trace is 141/329; fresh fixture audit is 393/416 exact, six stale-identity rebased wins, and 17 route failures. Full L3 completion remains open.",
     "latestFullFixtureAuditSource": "aa21fa0e",
     "fixtureResults": {
       "exactDoubleReplays": 393,
@@ -357,7 +355,9 @@
       "rebasedWinsWithStaleIdentity": 6,
       "result": "Fresh optimised full audit against the current runtime library. 393/416 exact double replays; six stale-identity routes still win when rebased; 17 schedules do not win (four standalone, 13 carried).",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
-      "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json"
+      "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json",
+      "verifiedAtCurrentHead": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+      "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8"
     },
     "latestCurrentMainSearch": {
       "level": 213,
@@ -377,7 +377,8 @@
       "manifestAndNegativeChecks": "passed",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json",
       "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-      "rerun": true
+      "rerun": true,
+      "verifiedAtCurrentHead": "4a8e2fa191ef69779366f7109d7f8b750053182c"
     },
     "shadow07FollowUpBeam8192Cell2": {
       "budgetSeconds": 300,
@@ -397,7 +398,7 @@
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json"
     },
     "latestProductionMoleTraceComparison": {
-      "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+      "commit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
       "sourceTraceSamples": 329,
       "productionExactMatches": 141,
       "isolatedPrototypeExactMatches": 141,
@@ -456,12 +457,12 @@
         ],
         "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
         "result": "Optimised build and trace completed against runtime source introduced at dc9c596; current HEAD aa21fa0 retains the identical runtime source hash. Comparator returned 1 because parity is partial. The independent no-optimisation build produced the same trace hash.",
-        "currentHeadCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+        "currentHeadCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
         "runtimeUnchangedInCurrentHeadCommit": true
       },
       "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
     },
-    "latestCurrentMainHeadVerifiedByFetch": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "latestCurrentMainHeadVerifiedByFetch": "4a8e2fa191ef69779366f7109d7f8b750053182c",
     "latestCurrentMainSeededSearches": {
       "level": 229,
       "name": "Egyptian 29",
@@ -672,18 +673,21 @@
     }
   },
   "mainAdvanceSincePreviousSync": {
-    "fromCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "toCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-    "commitTitle": "L3 Mole trace",
+    "fromCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "toCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "commitTitle": "2.0.5 Trolley hotfix and evidence merge",
     "changedPaths": [
+      "Sources/NxlvKit/TrolleyAchievementCollection.swift",
+      "Sources/NxlvKit/TrolleyHistory.swift",
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
       "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json",
       "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseScope.md",
-      "Scripts/verify-l3-mole-trace.py"
+      "Documentation/ReleaseScope.md"
     ],
-    "sourceImpact": "The commit updates Mole trace evidence, release-scope records and the verifier. The L3 runtime is unchanged from dc9c596. A fresh optimised trace matches 141/329 source positions. A fresh full fixture audit at aa21fa0 records 393/416 exact double replays, six stale-identity rebased wins and 17 current-runtime route failures. Bundled completion remains open."
+    "sourceImpact": "The new Trolley history hotfix filters to the requested profile/comparison before reassessing attempts and caches language-independent achievement traits. The focused Trolley script could not start because its Sparkle bootstrap could not resolve github.com. The change does not alter game simulation, level data or L3 runtime. Current L3 trace and full fixture audit remain applicable by runtime hash."
   },
   "currentMainReleaseFeedCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-  "currentMainReleaseFeedNote": "The appcast update at 833f396b advertises 2.0.4 build 87. HEAD is aa21fa0e after L3 Mole trace and verifier evidence updates; its runtime source is unchanged from the audited dc9c596 source. Neither current accepted-package evidence for build 87 nor bundled-engine closure is established."
+  "currentMainReleaseFeedNote": "Current main includes the 2.0.5 Trolley source hotfix, but appcast.xml still advertises macOS 2.0.4 build 87. The latest retained package acceptance evidence is build 86. Neither accepted-package evidence for the hotfix nor bundled-engine closure is established."
 }

@@ -1,4 +1,5 @@
 import AppKit
+import CryptoKit
 import LemmingsAppCore
 import NxlvKit
 
@@ -67,7 +68,9 @@ func verifiedRecords(_ c: TrolleyConditions = conditions(), maximum: Int = 58) t
 @MainActor func testBundledMaximumProofs() throws {
     let c = conditions(), engine = String(repeating: "a", count: 64)
     let conditionJSON = try JSONSerialization.jsonObject(with: JSONEncoder().encode(c))
-    let witness: [String: Any] = ["path": "witnesses/test.json", "sha256": String(repeating: "b", count: 64),
+    let witnessBytes = Data("trolley test replay".utf8)
+    let witnessSHA256 = SHA256.hash(data: witnessBytes).map { String(format: "%02x", $0) }.joined()
+    let witness: [String: Any] = ["path": "witnesses/test.json", "sha256": witnessSHA256,
         "saved": 60, "released": 60, "lost": 0, "retainedReserves": 0, "completed": true, "didWin": true]
     let row: [String: Any] = ["conditions": conditionJSON, "status": "VERIFIED", "population": 60,
                             "maximumSaveable": 60, "minimumSacrifices": 0, "witness": witness]
@@ -133,8 +136,16 @@ func verifiedRecords(_ c: TrolleyConditions = conditions(), maximum: Int = 58) t
     let temp = FileManager.default.temporaryDirectory.appendingPathComponent("trolley-proofs-\(UUID().uuidString)")
     try FileManager.default.createDirectory(at: temp, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: temp) }
+    let witnessURL = temp.appendingPathComponent("witnesses/test.json")
+    try FileManager.default.createDirectory(at: witnessURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try witnessBytes.write(to: witnessURL)
+    let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601
+    try encoder.encode(catalogue).write(to: temp.appendingPathComponent("verified-maxima.json"))
+    try Data(engine.utf8).write(to: temp.appendingPathComponent("engine-fingerprint.txt"))
     let file = temp.appendingPathComponent("records.json")
-    let bundled = TrolleyBundledProofs(catalogue: catalogue, engineFingerprint: engine)
+    guard let bundled = TrolleyBundledProofs.load(from: temp) else {
+        throw SequelDataError.invalid("Valid bundled proof fixture failed to load")
+    }
     let store = ArcadeStore(file: file, bundledProofs: bundled)
     store.beginAttempt(id: UUID(), profileID: store.records.activeProfileID, level: level(c), previousID: nil)
     for assisted in [false, true] {

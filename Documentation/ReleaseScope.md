@@ -49,21 +49,24 @@ match build 85, and it retains the shared engine libraries. The complete build
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
 On 17 October, a fresh fetch confirmed that `HEAD`, `origin/main` and
-`FETCH_HEAD` match at `aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a`, with zero
+`FETCH_HEAD` match at `4a8e2fa191ef69779366f7109d7f8b750053182c`, with zero
 commits ahead or behind. Four local release-record edits were present at fetch.
-Commit `833f396b` updates the 2.0.4 appcast. Commit `dc9c5961` adds an 8x2
+Current main includes a 2.0.5 Trolley history hotfix; its focused test script
+could not start because the Sparkle bootstrap could not resolve `github.com`.
+Commit `833f396b` still updates the 2.0.4 appcast. Commit `dc9c5961` adds an 8x2
 Mole carve to the production L3 runtime. Commit `aa21fa0e` updates its trace
 evidence and verifier without changing that runtime. A fresh optimised build of the current source matches 141/329 Mole positions,
 with first divergence at tick 2 and further divergence after tick 187; two of
 four terrain-edge checks fail. An independent no-optimisation build produced
-the same trace. A fresh full audit at `aa21fa0e` records 393/416 exact double replays, six
+the same trace. A fresh full audit at `aa21fa0e` (still applicable at `4a8e2fa1`; L3 runtime hash unchanged) records 393/416 exact double replays, six
 stale-identity routes that still win when rebased, and 17 schedules that do not
 win on the current runtime (four standalone, 13 carried). The earlier
 `fe11bd5d` audit had 399/416 exact replays and predates this runtime change. Earlier Trolley evidence checks 615 configurations across 562 campaign
 identities, with 294 population proofs, 315 rescue records and six unknown
 configurations. These results do not establish source fidelity or close the
-fan, Gold Ark, L3 route or NeoLemmix style gaps. The appcast advertises build
-87, while the latest package acceptance record remains build 86. See the
+fan, Gold Ark, L3 route or NeoLemmix style gaps. The appcast still advertises build
+87, while the latest package acceptance record remains build 86. The 2.0.5
+hotfix is source state, not accepted package evidence. See the
 [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 
 The published Mac build 86 and the current 2.0 iOS source are separate package

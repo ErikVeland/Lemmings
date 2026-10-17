@@ -35,11 +35,12 @@ Both paths run the same simulation and produce the same win.
 The official Classic and conversion routes pass at 352/352. L2 has routes for
 all 120 levels. Its current-main replay passes against the staged build 83 app
 payload, but the ark ending and original-engine comparisons remain open. The
-prior L3 engine state passed all 90 routes and all three linked campaigns. The
-15 October Mole direction and patrol corrections invalidated affected route
-witnesses. The current audit passes 399/416 fixtures and stops at Shadow 7.
-Shadow 7 and Egyptian 6, 13 and 29 lack standalone wins. Thirteen carried
-schedules also fail. L3 route closure remains open. See
+prior L3 engine state passed all 90 routes and all three linked campaigns.
+The latest optimised audit passes 393/416 exact fixtures. Six more routes win
+when rebased but have stale replay identity; 17 schedules fail (four standalone,
+13 carried). The strict gate stops at Shadow 7 and carried fixture 107-1. A
+fresh Mole trace matches 141/329 source positions and has two failed terrain
+edge checks. L3 route and source fidelity remain open. See
 [release scope](ReleaseScope.md) for the current status.
 
 The latest audit covers all 6,020 bundled fan levels. It verifies 2,403 winning

@@ -157,9 +157,10 @@ public enum TrolleyAnalyser {
             guard eligible else { continue }
             if archetype.id == "fellow_traveller" { scores[archetype.id] = 0.01; continue }
             let weights = archetype.weights.filter { measured.contains($0.key) }
-            let sum = weights.values.reduce(0, +)
-            scores[archetype.id] = sum > 0 ? weights.reduce(0) { result, pair in
-                result + pair.value * (1 - abs(dimensions[pair.key, default: 0] - archetype.targets[pair.key, default: 0]))
+            let orderedWeights = weights.keys.sorted { $0.rawValue < $1.rawValue }.map { ($0, weights[$0]!) }
+            let sum = orderedWeights.reduce(0.0) { $0 + $1.1 }
+            scores[archetype.id] = sum > 0 ? orderedWeights.reduce(0.0) { result, pair in
+                result + pair.1 * (1 - abs(dimensions[pair.0, default: 0] - archetype.targets[pair.0, default: 0]))
             } / sum : 0
         }
         let ranked = scores.keys.sorted { scores[$0] == scores[$1] ? $0 < $1 : scores[$0]! > scores[$1]! }
