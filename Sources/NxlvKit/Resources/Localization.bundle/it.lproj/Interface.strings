@@ -484,6 +484,7 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Grafiche Classic";
+"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "Classic può sovrapporre la soluzione registrata come sagome blu dei lemming. La sovrapposizione facoltativa segue la partita, la pausa e il riavvolgimento senza modificare il tentativo.";
 "Classic effects" = "Effetti Classic";
 "Classic skill counters" = "Contatori abilità Classic";
 "Classic tribe movie" = "Filmato della tribù classica";
@@ -732,6 +733,7 @@
 "Each teleporter needs a paired receiver." = "Ogni teletrasporto deve avere un ricevitore abbinato.";
 "Each zone must have a positive width and height." = "Ogni zona deve avere larghezza e altezza positive.";
 "Earlier" = "Precedenti";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "Gli ultimi tentativi dei giocatori precedenti appaiono come fantasmi colorati nei nuovi tentativi Hot Seat. Seguono il riavvolgimento e appaiono nei filmati delle ripetizioni.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Ottieni Zoom per ogni 3 stelle senza riavvolgimenti; Superzoom per ogni 3 livelli a tre stelle senza riavvolgimenti";
 "Earn the same play style on 5 distinct cleared levels." = "Ottieni lo stesso stile di gioco in 5 livelli completati diversi.";
 "Earned" = "Ottenuti";
@@ -932,6 +934,7 @@
 "Genesis Title Screen" = "Genesis Title Screen";
 "Genesis Tricky Theme" = "Genesis Tricky Theme";
 "Ghost solution" = "Soluzione fantasma";
+"Ghost solutions" = "Soluzioni fantasma";
 "Glider" = "Planatore";
 "Glider, then goal" = "Planatore, poi obiettivo";
 "Glue Pourer" = "Versatore di colla";
@@ -987,6 +990,7 @@
 "Hopper" = "Saltellatore";
 "Host" = "Ospitante";
 "Hot Seat" = "Hot Seat";
+"Hot Seat ghosts" = "Fantasmi di Hot Seat";
 "Hot Seat player HUD" = "HUD giocatori Hot Seat";
 "Hot Seat starts" = "Partite Hot Seat";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1247,7 +1251,6 @@
 "Last {0} days" = "Ultimi {0} giorni";
 "Later" = "Più tardi";
 "Latest build" = "Ultima build";
-"Leaderboard and journey fixes" = "Correzioni a classifiche e percorso";
 "Leaderboards" = "Classifiche";
 "Least skills" = "Meno abilità";
 "Leave Hot Seat?" = "Uscire da Hot Seat?";
@@ -1683,6 +1686,7 @@
 "Original" = "Originale";
 "Original Lemmings 3 movie" = "Filmato originale di Lemmings 3";
 "Original Macintosh" = "Macintosh originale";
+"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "La grafica originale in bianco e nero per Macintosh porta sui Mac moderni il suo intricato dithering. Scegli Macintosh (1 bit) nelle impostazioni grafiche per usare la grafica Classic e i relativi controlli di gioco monocromatici.";
 "Original PC" = "PC originale";
 "Original inputs" = "Comandi originali";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Piattaforma principale originale. Include gli iconici campioni vocali digitalizzati e lo schermo diviso per 2 giocatori.";
@@ -2021,6 +2025,7 @@
 "Restore TV saves?" = "Ripristinare i salvataggi TV?";
 "Restore recovery key" = "Ripristina chiave di recupero";
 "Restore the default gameplay actions for every controller button." = "Ripristina le azioni di gioco predefinite per ogni pulsante del controller.";
+"Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel." = "Risultati, record e classifica carriera non mettono più in pausa il gioco, anche dopo centinaia di tentativi. In Chronicles le talpe seguono più fedelmente il gioco originale quando incontrano l'acciaio.";
 "Resume" = "Riprendi";
 "Resume  {0}/{1}" = "Riprendi  {0}/{1}";
 "Resume Hot Seat run" = "Riprendi partita Hot Seat";
@@ -2032,6 +2037,7 @@
 "Resume session" = "Riprendi sessione";
 "Resume session?" = "Riprendere la sessione?";
 "Resume solo run" = "Riprendi partita in solitaria";
+"Resume your journey" = "Riprendi il tuo viaggio";
 "Resume {0}  {1}/{2}" = "Riprendi {0}  {1}/{2}";
 "Reticule" = "Mirino";
 "Reticule count" = "Numero di mirini";
@@ -2309,6 +2315,8 @@
 "Small Budget, Big Heart" = "Budget ridotto, grande cuore";
 "Smooth Progression" = "Progressione fluida";
 "Smooth music loops" = "Transizioni musicali fluide";
+"Smoother play" = "Gioco più fluido";
+"Smoother results and saves" = "Risultati e salvataggi più fluidi";
 "Solo / Hot Seat" = "Solitaria / Hot Seat";
 "Solo starts" = "Partite in solitaria";
 "Solution" = "Soluzione";
@@ -2404,6 +2412,7 @@
 "Superlem" = "Superlem";
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom attivo";
+"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "I viaggi supportati e le playlist ripristinano il tentativo salvato, l’azione selezionata e la telecamera. Classic, The Tribes e Chronicles riprendono in pausa. Hot Seat resta in pausa finché il giocatore non seleziona Pronto.";
 "Surfer" = "Surfista";
 "Swap sticks" = "Inverti le levette";
 "Swimmer" = "Nuotatore";
@@ -2542,6 +2551,7 @@
 "The archive has more than one member named {0}." = "L'archivio contiene più elementi chiamati {0}.";
 "The archive has no member named {0}." = "L'archivio non contiene alcun elemento chiamato {0}.";
 "The archive member {0} is too large." = "L'elemento {0} dell'archivio è troppo grande.";
+"The art of one bit" = "L’arte di un bit";
 "The attempt was not saved." = "Il tentativo non è stato salvato.";
 "The cloud player is invalid." = "Il giocatore cloud non è valido.";
 "The cloud progress format does not match." = "Il formato dei progressi cloud non corrisponde.";

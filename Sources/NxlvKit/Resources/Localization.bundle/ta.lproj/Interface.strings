@@ -484,6 +484,7 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Classic ஓவியம்";
+"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "Classic பதிவுசெய்த தீர்வை நீல நிற லெம்மிங் நிழலுருவங்களாக மேலே காட்டலாம். இந்த விருப்ப மேலடுக்கு உங்கள் முயற்சியை மாற்றாமல் விளையாடு, இடைநிறுத்து மற்றும் பின்னோக்கைப் பின்பற்றுகிறது.";
 "Classic effects" = "Classic விளைவுகள்";
 "Classic skill counters" = "Classic திறன் எண்ணிகள்";
 "Classic tribe movie" = "Classic குலக் காணொளி";
@@ -732,6 +733,7 @@
 "Each teleporter needs a paired receiver." = "ஒவ்வொரு தொலைதொடர்பவருக்கும் ஒரு ஜோடி பெற்ற ரிசீவர் தேவை.";
 "Each zone must have a positive width and height." = "ஒவ்வொரு மண்டலமும் ஒரு நேர்மறையான அகலமும் உயரமும் இருக்க வேண்டும்.";
 "Earlier" = "முன்னர்";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "Hot Seat மீண்டும் முயற்சிகளில் முந்தைய வீரர்களின் கடைசி முயற்சிகள் வண்ண நிழல்களாகத் தோன்றும். அவை பின்னோக்கிச் செல்லுதலைப் பின்பற்றி மீள்பதிவு காணொளிகளிலும் தோன்றும்.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "பின்னோக்காமல் பெறும் ஒவ்வொரு 3 நட்சத்திரங்களுக்கும் பெரிதாக்கம் கிடைக்கும். பின்னோக்காமல் மூன்று நட்சத்திரங்கள் பெறும் ஒவ்வொரு 3 நிலைகளுக்கும் மிகைப் பெரிதாக்கம் கிடைக்கும்.";
 "Earn the same play style on 5 distinct cleared levels." = "5 வெவ்வேறு க்ளைர் நிலைகளில் அதே விளையாட்டு பாணியை சம்பாதிக்கவும்.";
 "Earned" = "பெறப்பட்டது";
@@ -932,6 +934,7 @@
 "Genesis Title Screen" = "Genesis Title Screen";
 "Genesis Tricky Theme" = "Genesis Tricky Theme";
 "Ghost solution" = "நிழல் தீர்வு";
+"Ghost solutions" = "பேய்த் தீர்வுகள்";
 "Glider" = "சறுக்கிப் பறப்பவர்";
 "Glider, then goal" = "சறுக்கிப் பறப்பவர், பின்னர் இலக்கு";
 "Glue Pourer" = "பசை ஊற்றுபவர்";
@@ -987,6 +990,7 @@
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
 "Hot Seat" = "மாறிமுறை";
+"Hot Seat ghosts" = "Hot Seat நிழல்கள்";
 "Hot Seat player HUD" = "மாறிமுறை வீரர் நிலைக்காட்சி";
 "Hot Seat starts" = "மாறிமுறைத் தொடக்கங்கள்";
 "Hot Seat: {0}" = "மாறிமுறை: {0}";
@@ -1247,7 +1251,6 @@
 "Last {0} days" = "கடந்த {0} நாட்கள்";
 "Later" = "பின்னர்";
 "Latest build" = "சமீபத்திய கட்டமைப்பு";
-"Leaderboard and journey fixes" = "தரவரிசை மற்றும் பயணத் திருத்தங்கள்";
 "Leaderboards" = "தரவரிசைப் பட்டியல்கள்";
 "Least skills" = "குறைந்த திறன்கள்";
 "Leave Hot Seat?" = "மாறிமுறையிலிருந்து வெளியேறவா?";
@@ -1683,6 +1686,7 @@
 "Original" = "அசல்";
 "Original Lemmings 3 movie" = "அசல் Lemmings 3 காணொளி";
 "Original Macintosh" = "அசல் Macintosh";
+"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "அசல் Macintosh கருப்பு-வெள்ளை ஓவியங்கள் அவற்றின் நுணுக்கமான புள்ளியிடலுடன் நவீன Mac கணினிகளுக்கு வருகின்றன. Classic ஓவியங்களுக்கும் பொருந்தும் ஒற்றைநிற விளையாட்டுக் கட்டுப்பாடுகளுக்கும் வரைகலை அமைப்புகளில் Macintosh (1-bit) ஐத் தேர்ந்தெடுக்கவும்.";
 "Original PC" = "அசல் PC";
 "Original inputs" = "அசல் உள்ளீடுகள்";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "அசல் முன்னணி மேடையில். சின்னமான டிஜிட்டல் குரல் மாதிரிகள் மற்றும் 2 வீரர் பிளவு திரையை உள்ளடக்கியது.";
@@ -2021,6 +2025,7 @@
 "Restore TV saves?" = "TV சேமிப்புகளை மீட்டமைக்கவா?";
 "Restore recovery key" = "மீட்பு விசை மீட்டெடுக்கவும்";
 "Restore the default gameplay actions for every controller button." = "ஒவ்வொரு கட்டுப்பாட்டு பொத்தானிற்கும் இயல்புநிலை விளையாட்டு நடவடிக்கைகளை மீட்டெடுக்கவும்.";
+"Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel." = "முடிவுகள், பதிவுகள் மற்றும் விளையாட்டு வாழ்நாள் தரவரிசை இனி விளையாட்டை இடைநிறுத்தாது. நூற்றுக்கணக்கான முயற்சிகளுக்குப் பிறகும் இது பொருந்தும். Chronicles அகழெலிகள் எஃகை அடையும்போது மூல விளையாட்டை இன்னும் நெருக்கமாகப் பின்பற்றுகின்றன.";
 "Resume" = "தொடர்";
 "Resume  {0}/{1}" = "தொடக்கம் {0}/{1}";
 "Resume Hot Seat run" = "மாறிமுறை ஆட்டத்தைத் தொடர்";
@@ -2032,6 +2037,7 @@
 "Resume session" = "அமர்வைத் தொடர்";
 "Resume session?" = "அமர்வைத் தொடரவா?";
 "Resume solo run" = "தனி ஆட்டத்தைத் தொடர்";
+"Resume your journey" = "உங்கள் பயணத்தைத் தொடருங்கள்";
 "Resume {0}  {1}/{2}" = "தொடக்கம் {0} {1}/{2}";
 "Reticule" = "குறிவட்டம்";
 "Reticule count" = "குறிவட்ட எண்ணிக்கை";
@@ -2309,6 +2315,8 @@
 "Small Budget, Big Heart" = "சிறிய பட்ஜெட், பெரிய இதயம்";
 "Smooth Progression" = "மென்மையான முன்னேற்றம்";
 "Smooth music loops" = "சீரான இசைச் சுழற்சிகள்";
+"Smoother play" = "மென்மையான விளையாட்டு";
+"Smoother results and saves" = "மென்மையான முடிவுகளும் சேமிப்புகளும்";
 "Solo / Hot Seat" = "தனி / மாறிமுறை";
 "Solo starts" = "தனி ஆட்டத் தொடக்கங்கள்";
 "Solution" = "தீர்வு";
@@ -2404,6 +2412,7 @@
 "Superlem" = "சூப்பர்லெம்";
 "Superzoom" = "மிகைப் பெரிதாக்கம்";
 "Superzoom active" = "மிகைப் பெரிதாக்கம் செயலில் உள்ளது";
+"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "ஆதரிக்கப்படும் பயணங்களும் வரிசை நிலைப்பட்டியல்களும் சேமித்த முயற்சி, தேர்ந்தெடுத்த செயல் மற்றும் காட்சியை மீட்டெடுக்கின்றன. Classic, The Tribes மற்றும் Chronicles இடைநிறுத்தப்பட்ட நிலையில் தொடர்கின்றன. மாறிமுறை தயார் என்பதற்காகக் காத்திருக்கும்.";
 "Surfer" = "அலைச்சறுக்கு வீரர்";
 "Swap sticks" = "குச்சிகளை மாற்று";
 "Swimmer" = "நீந்துபவர்";
@@ -2542,6 +2551,7 @@
 "The archive has more than one member named {0}." = "காப்பகத்தில் {0} என்ற பெயரில் ஒன்றுக்கு மேற்பட்ட உறுப்பினர்கள் உள்ளனர்.";
 "The archive has no member named {0}." = "காப்பகத்தில் {0} என்று பெயரிடப்பட்ட உறுப்பினர் இல்லை.";
 "The archive member {0} is too large." = "காப்பக உறுப்பினர் {0} மிகப்பெரியது.";
+"The art of one bit" = "ஒற்றை பிட் கலை";
 "The attempt was not saved." = "முயற்சி சேமிக்கப்படவில்லை.";
 "The cloud player is invalid." = "மேகச் சேமிப்பு வீரர் செல்லாது.";
 "The cloud progress format does not match." = "மேகத்தின் முன்னேற்ற வடிவம் பொருந்தாது.";

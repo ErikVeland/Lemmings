@@ -8,7 +8,8 @@
     "All 3,118 current catalogue text keys received an AI German translation/review pass.",
     "The 10 current release-welcome additions were translated; 8 obsolete entries were removed.",
     "Existing draft terms were inspected; captions.tsv German terminology was applied in context, including uppercase game-action variants.",
-    "All eight catalogue plural keys have German one/other forms."
+    "All eight catalogue plural keys have German one/other forms.",
+    "The 2.0.5 release-welcome page has 11 AI-drafted additions, restored from earlier 2.0 drafts where available. One obsolete entry was removed."
   ],
   "review_notes": [
     "Used informal German and the German captions.tsv vocabulary for matching action and skill labels. Product names, contributor names, authored titles, control labels and data identifiers retain their source form where justified.",
@@ -19,12 +20,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/de.json",
-    "text_count": 3162,
+    "text_count": 3172,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "3caac5a04c8aca191609fcd4958ad5b37db3307a1f8f25b085dbcff4bc9c6404",
-    "entry_count": 3162
+    "sha256": "fb951e99d18ca0f6016e50b312a94c6b3541014cb7d5a03be78ac57e6aa03937",
+    "entry_count": 3172
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/de.json",
@@ -35,9 +36,9 @@
     "note": "The staged machine candidate and local OPUS model were unavailable in this checkout; translations were completed directly from the catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3162,
+    "text_count": 3172,
     "plural_count": 8,
-    "sha256": "bd5910c059e1e9e4966cd11c014ef0c1d4a4299574883fe091c1c07a1e8c03eb"
+    "sha256": "d61934371796bf4d3f8e17eddda706cca74de3b48bab47d7450b2f68ac75f16a"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",

@@ -484,6 +484,7 @@
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
 "Classic artwork" = "Classic-grafikk";
+"Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt." = "Classic kan vise en innspilt løsning som blå lemmingsilhuetter over brettet. Dette valgfrie overlegget følger spilling, pause og tilbakespoling uten å endre forsøket ditt.";
 "Classic effects" = "Classic-effekter";
 "Classic skill counters" = "Classic-ferdighetstellere";
 "Classic tribe movie" = "Film av klassisk stamme";
@@ -732,6 +733,7 @@
 "Each teleporter needs a paired receiver." = "Hver teleportør trenger en tilhørende mottaker.";
 "Each zone must have a positive width and height." = "Hver sone må ha positiv bredde og høyde.";
 "Earlier" = "Tidligere";
+"Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies." = "De siste forsøkene til tidligere spillere vises som fargede spøkelser ved nye Hot Seat-forsøk. De følger tilbakespolingen og vises i opptaksfilmene.";
 "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels" = "Tjen Zoom for hver tredje stjerne uten tilbakespoling; Superzoom for hvert tredje brett med tre stjerner uten tilbakespoling";
 "Earn the same play style on 5 distinct cleared levels." = "Oppnå samme spillestil på 5 ulike fullførte brett.";
 "Earned" = "Opptjent";
@@ -932,6 +934,7 @@
 "Genesis Title Screen" = "Genesis-tittelskjerm";
 "Genesis Tricky Theme" = "Genesis-vanskelig-tema";
 "Ghost solution" = "Spøkelsesløsning";
+"Ghost solutions" = "Spøkelsesløsninger";
 "Glider" = "Glider";
 "Glider, then goal" = "Glider, deretter mål";
 "Glue Pourer" = "Limheller";
@@ -987,6 +990,7 @@
 "Hopper" = "Spretter";
 "Host" = "Vert";
 "Hot Seat" = "Hot Seat";
+"Hot Seat ghosts" = "Hot Seat-spøkelser";
 "Hot Seat player HUD" = "Hot Seat-spillerens HUD";
 "Hot Seat starts" = "Hot Seat-start";
 "Hot Seat: {0}" = "Hot Seat: {0}";
@@ -1247,7 +1251,6 @@
 "Last {0} days" = "Siste {0} dager";
 "Later" = "Senere";
 "Latest build" = "Nyeste versjon";
-"Leaderboard and journey fixes" = "Rettelser for poengtavler og reise";
 "Leaderboards" = "Poengtavler";
 "Least skills" = "Færrest ferdigheter";
 "Leave Hot Seat?" = "Avslutte Hot Seat?";
@@ -1683,6 +1686,7 @@
 "Original" = "Original";
 "Original Lemmings 3 movie" = "Opprinnelig Lemmings 3-film";
 "Original Macintosh" = "Opprinnelig Macintosh";
+"Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls." = "Den opprinnelige svart-hvitt-grafikken for Macintosh gir moderne Macer de intrikate rastreringsmønstrene fra originalen. Velg Macintosh (1-bit) under Grafikkinnstillinger for Classic-grafikk og matchende monokrome spillkontroller.";
 "Original PC" = "Opprinnelig PC-grafikk";
 "Original inputs" = "Opprinnelige inndata";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
@@ -2021,6 +2025,7 @@
 "Restore TV saves?" = "Gjenopprette TV-lagringer?";
 "Restore recovery key" = "Gjenopprettingsnøkkel";
 "Restore the default gameplay actions for every controller button." = "Gjenopprett standardhandlingene for hver kontrollerknapp.";
+"Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel." = "Resultater, rekorder og karrieretabellen stanser ikke lenger spillet, selv etter hundrevis av forsøk. Muldvarpene i Chronicles følger originalspillet tettere ved stål.";
 "Resume" = "Fortsett";
 "Resume  {0}/{1}" = "Fortsett  {0}/{1}";
 "Resume Hot Seat run" = "Fortsett Hot Seat-forsøk";
@@ -2032,6 +2037,7 @@
 "Resume session" = "Fortsett økt";
 "Resume session?" = "Fortsette økten?";
 "Resume solo run" = "Fortsett soloforsøk";
+"Resume your journey" = "Fortsett reisen din";
 "Resume {0}  {1}/{2}" = "Fortsett {0}  {1}/{2}";
 "Reticule" = "Siktemerke";
 "Reticule count" = "Antall siktemerker";
@@ -2309,6 +2315,8 @@
 "Small Budget, Big Heart" = "Lite budsjett, stort hjerte";
 "Smooth Progression" = "Jevn framdrift";
 "Smooth music loops" = "Myke musikksløyfer";
+"Smoother play" = "Jevnere spill";
+"Smoother results and saves" = "Jevnere resultater og lagring";
 "Solo / Hot Seat" = "Solo / Hot Seat";
 "Solo starts" = "Solostart";
 "Solution" = "Løsning";
@@ -2404,6 +2412,7 @@
 "Superlem" = "Superlem";
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom aktiv";
+"Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready." = "Støttede reiser og sekvensspillelister gjenoppretter det lagrede forsøket, den valgte handlingen og kameravisningen. Classic, The Tribes og Chronicles gjenopptas på pause. Hot Seat venter på Klar.";
 "Surfer" = "Surfer";
 "Swap sticks" = "Bytt styrespaker";
 "Swimmer" = "Svømmer";
@@ -2542,6 +2551,7 @@
 "The archive has more than one member named {0}." = "Arkivet har flere enn ett element med navnet {0}.";
 "The archive has no member named {0}." = "Arkivet har ikke noe element med navnet {0}.";
 "The archive member {0} is too large." = "Arkivelementet {0} er for stort.";
+"The art of one bit" = "Kunsten med én bit";
 "The attempt was not saved." = "Forsøket ble ikke lagret.";
 "The cloud player is invalid." = "Skyspilleren er ugyldig.";
 "The cloud progress format does not match." = "Formatet på skyframdriften samsvarer ikke.";

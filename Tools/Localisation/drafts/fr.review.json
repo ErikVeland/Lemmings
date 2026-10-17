@@ -8,7 +8,8 @@
     "All 3,118 current catalogue text keys have French draft values; 10 new welcome and release-note strings were translated in this catalogue reconciliation.",
     "Eight current plural keys have French one/other forms, with one %ld token in each category.",
     "The French captions.tsv terminology was consulted for skill and gameplay vocabulary, with informal player-facing phrasing and tutoiement.",
-    "Eight keys newly obsolete in the current catalogue were removed; no unknown keys remain."
+    "Eight keys newly obsolete in the current catalogue were removed; no unknown keys remain.",
+    "The 2.0.5 release-welcome page has 11 AI-drafted additions, restored from earlier 2.0 drafts where available. One obsolete entry was removed."
   ],
   "review_notes": [
     "This is an AI draft. The earlier 458-entry French draft was retained and included in the completed catalogue, but it did not receive separate human linguistic approval.",
@@ -18,12 +19,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/fr.json",
-    "text_count": 3162,
+    "text_count": 3172,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "087f0ef04d94ed2b211c616df154093c06d9f5acebbc2c7bd58afeae59a89a84",
-    "entry_count": 3162
+    "sha256": "416f7ed6c5febcc437fc9529b44070b8cdef9f58f40b596e91e456e94b1e6ce5",
+    "entry_count": 3172
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/fr.json",
@@ -33,9 +34,9 @@
     "note": "The ignored machine-generated candidate was not merged; translations were drafted from the current English catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3162,
+    "text_count": 3172,
     "plural_count": 8,
-    "sha256": "bd5910c059e1e9e4966cd11c014ef0c1d4a4299574883fe091c1c07a1e8c03eb"
+    "sha256": "d61934371796bf4d3f8e17eddda706cca74de3b48bab47d7450b2f68ac75f16a"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",

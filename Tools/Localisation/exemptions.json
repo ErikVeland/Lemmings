@@ -5,6 +5,11 @@
     "reason": "Stable identifier"
   },
   {
+    "file": "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift",
+    "source": "academy.glasscode.lemmings.records-writer",
+    "reason": "Stable identifier"
+  },
+  {
     "file": "Sources/LemmingsAppCore/Records/ReplayMovie.swift",
     "source": "academy.glasscode.lemmings.replay",
     "reason": "Stable identifier"

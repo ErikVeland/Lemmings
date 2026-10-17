@@ -75,7 +75,7 @@
   " Your rank: {0}. Your score: {1}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:152"
+      "Sources/LemmingsLocal/GameCenterScores.swift:154"
     ]
   },
   " {0}. K skips this level.": {
@@ -94,7 +94,7 @@
   " — Import needed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1797"
+      "Sources/LemmingsLocal/main.swift:1799"
     ]
   },
   "#{0} > #{1} of {2}": {
@@ -386,8 +386,8 @@
   "A fan level pack changed or could not be read.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4506",
-      "Sources/LemmingsLocal/main.swift:5283"
+      "Sources/LemmingsLocal/main.swift:4508",
+      "Sources/LemmingsLocal/main.swift:5285"
     ]
   },
   "A fictional play style centred on care for each lemming. Humanism places human welfare and agency at the centre of ethics.": {
@@ -466,7 +466,7 @@
   "A library can contain up to eight players.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:448"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:477"
     ]
   },
   "A little practice might be what you need.": {
@@ -514,7 +514,7 @@
   "A player keeps going until they lose a level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:61"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:65"
     ]
   },
   "A playlist with this identity already exists.": {
@@ -556,7 +556,7 @@
   "A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
     ]
   },
   "A saved player is unavailable": {
@@ -604,7 +604,7 @@
   "A styles directory is needed to draw NeoLemmix levels.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6628"
+      "Sources/LemmingsLocal/main.swift:6630"
     ]
   },
   "A successful rescue through a documented unusual route.": {
@@ -775,7 +775,7 @@
   "About Ultimate Lemmings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:915"
+      "Sources/LemmingsLocal/main.swift:917"
     ]
   },
   "Above and beyond": {
@@ -812,7 +812,7 @@
   "Achievement unlocked: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7700"
+      "Sources/LemmingsLocal/main.swift:7702"
     ]
   },
   "Achievements": {
@@ -841,7 +841,7 @@
   "Achievements…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:928"
+      "Sources/LemmingsLocal/main.swift:930"
     ]
   },
   "Across all recorded levels": {
@@ -922,25 +922,25 @@
   "Add": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3495"
+      "Sources/LemmingsLocal/main.swift:3497"
     ]
   },
   "Add Fan Level Folder…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1003"
+      "Sources/LemmingsLocal/main.swift:1005"
     ]
   },
   "Add Game…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:997"
+      "Sources/LemmingsLocal/main.swift:999"
     ]
   },
   "Add NeoLemmix Packs…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1004"
+      "Sources/LemmingsLocal/main.swift:1006"
     ]
   },
   "Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects.": {
@@ -952,7 +952,7 @@
   "Add a game folder, or open a .nxlv level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2230"
+      "Sources/LemmingsLocal/main.swift:2232"
     ]
   },
   "Add favourite": {
@@ -964,7 +964,7 @@
   "Add level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4341"
+      "Sources/LemmingsLocal/main.swift:4343"
     ]
   },
   "Add player": {
@@ -977,7 +977,7 @@
   "Add to playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3900",
+      "Sources/LemmingsLocal/main.swift:3902",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:68"
     ]
   },
@@ -991,7 +991,7 @@
   "Added to {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3926"
+      "Sources/LemmingsLocal/main.swift:3928"
     ]
   },
   "Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value.": {
@@ -1149,7 +1149,7 @@
   "All eligible fan levels - {0} from {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5264"
+      "Sources/LemmingsLocal/main.swift:5266"
     ]
   },
   "All extra soundtracks": {
@@ -1199,14 +1199,14 @@
   "Already at the start of the history.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:9063"
+      "Sources/LemmingsLocal/main.swift:9065"
     ]
   },
   "Already in playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3928",
-      "Sources/LemmingsLocal/main.swift:4997"
+      "Sources/LemmingsLocal/main.swift:3930",
+      "Sources/LemmingsLocal/main.swift:4999"
     ]
   },
   "Also featuring from the Kingdom of Psygnosis": {
@@ -1256,7 +1256,7 @@
   "Amiga sound effects: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7915"
+      "Sources/LemmingsLocal/main.swift:7917"
     ]
   },
   "An ERASE terrain piece also uses NO_OVERWRITE and cannot erase existing terrain.": {
@@ -1328,7 +1328,7 @@
   "Analysing available levels": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4149"
+      "Sources/LemmingsLocal/main.swift:4151"
     ]
   },
   "Ancient but still": {
@@ -1376,7 +1376,7 @@
   "Another app is saving records. Try again after it finishes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:15"
+      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:16"
     ]
   },
   "Another app is saving this run. Try again.": {
@@ -1534,8 +1534,8 @@
   "Assigned music unavailable: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8046",
-      "Sources/LemmingsLocal/main.swift:8115"
+      "Sources/LemmingsLocal/main.swift:8048",
+      "Sources/LemmingsLocal/main.swift:8117"
     ]
   },
   "Assignment changes a worker from an active skill to another action.": {
@@ -1581,7 +1581,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:118",
-      "Sources/LemmingsLocal/main.swift:1027",
+      "Sources/LemmingsLocal/main.swift:1029",
       "Sources/LemmingsMobileCore/MobileSettings.swift:126",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:218",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:221"
@@ -1596,13 +1596,13 @@
   "Audio unavailable: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2014",
-      "Sources/LemmingsLocal/main.swift:2019",
+      "Sources/LemmingsLocal/main.swift:2016",
       "Sources/LemmingsLocal/main.swift:2021",
       "Sources/LemmingsLocal/main.swift:2023",
-      "Sources/LemmingsLocal/main.swift:7824",
-      "Sources/LemmingsLocal/main.swift:7828",
-      "Sources/LemmingsLocal/main.swift:8104"
+      "Sources/LemmingsLocal/main.swift:2025",
+      "Sources/LemmingsLocal/main.swift:7826",
+      "Sources/LemmingsLocal/main.swift:7830",
+      "Sources/LemmingsLocal/main.swift:8106"
     ]
   },
   "Availability": {
@@ -1705,13 +1705,13 @@
   "BEST": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7330"
+      "Sources/LemmingsLocal/main.swift:7332"
     ]
   },
   "BETA": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1747"
+      "Sources/LemmingsLocal/main.swift:1749"
     ]
   },
   "BEYOND THE DARKNESS TO A NEW LAND": {
@@ -1942,7 +1942,7 @@
   "Be the first to set a score.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:131"
+      "Sources/LemmingsLocal/GameCenterScores.swift:133"
     ]
   },
   "Beach": {
@@ -2032,7 +2032,7 @@
   "Best-known target: {0} saved; {1} below target. The minimum losses are not proved.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyPhilosophy.swift:178"
+      "Sources/NxlvKit/TrolleyPhilosophy.swift:179"
     ]
   },
   "Best: {0}/3 stars, {1} rescued": {
@@ -2126,8 +2126,8 @@
   "Browse levels": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3295",
-      "Sources/LemmingsLocal/main.swift:4837"
+      "Sources/LemmingsLocal/main.swift:3297",
+      "Sources/LemmingsLocal/main.swift:4839"
     ]
   },
   "Builder": {
@@ -2274,15 +2274,15 @@
   "CLICK OR PRESS ENTER FOR THE GAME LIBRARY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7030"
+      "Sources/LemmingsLocal/main.swift:7032"
     ]
   },
   "CLICK OR PRESS ENTER TO CONTINUE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7006",
-      "Sources/LemmingsLocal/main.swift:7016",
-      "Sources/LemmingsLocal/main.swift:7027"
+      "Sources/LemmingsLocal/main.swift:7008",
+      "Sources/LemmingsLocal/main.swift:7018",
+      "Sources/LemmingsLocal/main.swift:7029"
     ]
   },
   "CLIMB": {
@@ -2329,19 +2329,19 @@
     "references": [
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:614",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:692",
-      "Sources/LemmingsLocal/main.swift:1746"
+      "Sources/LemmingsLocal/main.swift:1748"
     ]
   },
   "COMPLETE — press N": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7724"
+      "Sources/LemmingsLocal/main.swift:7726"
     ]
   },
   "CONTINUE {0} - {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6079"
+      "Sources/LemmingsLocal/main.swift:6081"
     ]
   },
   "CONTROLS HELP": {
@@ -2365,7 +2365,7 @@
       "Sources/LemmingsLocal/KeyboardOverlayView.swift:40",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444",
-      "Sources/LemmingsLocal/main.swift:8770",
+      "Sources/LemmingsLocal/main.swift:8772",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:104",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:188",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:199"
@@ -2417,13 +2417,13 @@
   "Cannot add NeoLemmix packs": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6540"
+      "Sources/LemmingsLocal/main.swift:6542"
     ]
   },
   "Cannot assign: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7840"
+      "Sources/LemmingsLocal/main.swift:7842"
     ]
   },
   "Cannot create sequel artwork.": {
@@ -2448,19 +2448,19 @@
   "Cannot open Lemmings 2": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1553"
+      "Sources/LemmingsLocal/main.swift:1555"
     ]
   },
   "Cannot open Lemmings 3": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1621"
+      "Sources/LemmingsLocal/main.swift:1623"
     ]
   },
   "Cannot open {0}: {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1763"
+      "Sources/LemmingsLocal/main.swift:1765"
     ]
   },
   "Cannot read directory '{0}'.": {
@@ -2485,7 +2485,7 @@
   "Cannot restore run": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5418",
+      "Sources/LemmingsLocal/main.swift:5420",
       "Sources/LemmingsLocal/main.swift:632",
       "Sources/LemmingsLocal/main.swift:636",
       "Sources/LemmingsLocal/main.swift:639"
@@ -2544,7 +2544,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/HostedRankings.swift:36",
-      "Sources/LemmingsLocal/GameCenterScores.swift:115",
+      "Sources/LemmingsLocal/GameCenterScores.swift:117",
       "Sources/LemmingsMobileUI/MobileRankings.swift:117"
     ]
   },
@@ -2612,7 +2612,7 @@
   "Change Hot Seat players?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8583"
+      "Sources/LemmingsLocal/main.swift:8585"
     ]
   },
   "Change artwork every level": {
@@ -2648,7 +2648,7 @@
   "Changed - replace or remove  {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4237"
+      "Sources/LemmingsLocal/main.swift:4239"
     ]
   },
   "Charmed": {
@@ -2666,7 +2666,7 @@
   "Check for Updates…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:921"
+      "Sources/LemmingsLocal/main.swift:923"
     ]
   },
   "Check for new packs": {
@@ -2720,13 +2720,13 @@
   "Choose Music Folder…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1028"
+      "Sources/LemmingsLocal/main.swift:1030"
     ]
   },
   "Choose Sound Effects…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1029"
+      "Sources/LemmingsLocal/main.swift:1031"
     ]
   },
   "Choose a Classic level from 1 to 10.": {
@@ -2738,19 +2738,19 @@
   "Choose a Macintosh Lemmings disk image.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7878"
+      "Sources/LemmingsLocal/main.swift:7880"
     ]
   },
   "Choose a NeoLemmix level file.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6500"
+      "Sources/LemmingsLocal/main.swift:6502"
     ]
   },
   "Choose a NeoLemmix pack, or the 'levels' directory that contains packs.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6512"
+      "Sources/LemmingsLocal/main.swift:6514"
     ]
   },
   "Choose a button, then choose what it does during play.": {
@@ -2768,13 +2768,13 @@
   "Choose a different level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4997"
+      "Sources/LemmingsLocal/main.swift:4999"
     ]
   },
   "Choose a folder of ProTracker .mod files.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7859"
+      "Sources/LemmingsLocal/main.swift:7861"
     ]
   },
   "Choose a game": {
@@ -2788,19 +2788,19 @@
   "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
     ]
   },
   "Choose a pack": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4833"
+      "Sources/LemmingsLocal/main.swift:4835"
     ]
   },
   "Choose a rating": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6969"
+      "Sources/LemmingsLocal/main.swift:6971"
     ]
   },
   "Choose a second player": {
@@ -2818,7 +2818,7 @@
   "Choose a technique": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4103"
+      "Sources/LemmingsLocal/main.swift:4105"
     ]
   },
   "Choose an action, then click a lemming. Walker turns or releases a blocker.": {
@@ -2836,19 +2836,19 @@
   "Choose and order levels": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4005"
+      "Sources/LemmingsLocal/main.swift:4007"
     ]
   },
   "Choose another level or open Playlists to change the order.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3928"
+      "Sources/LemmingsLocal/main.swift:3930"
     ]
   },
   "Choose at least two players for Hot Seat.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4739"
+      "Sources/LemmingsLocal/main.swift:4741"
     ]
   },
   "Choose at least two players, then try again.": {
@@ -2886,8 +2886,8 @@
   "Choose one level pack": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4010",
-      "Sources/LemmingsLocal/main.swift:5004"
+      "Sources/LemmingsLocal/main.swift:4012",
+      "Sources/LemmingsLocal/main.swift:5006"
     ]
   },
   "Choose player": {
@@ -2899,7 +2899,7 @@
   "Choose pool": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3973"
+      "Sources/LemmingsLocal/main.swift:3975"
     ]
   },
   "Choose practice level": {
@@ -2917,7 +2917,7 @@
   "Choose rank": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8773"
+      "Sources/LemmingsLocal/main.swift:8775"
     ]
   },
   "Choose the Classic artwork source. Available sources depend on installed game data.": {
@@ -2929,7 +2929,7 @@
   "Choose the NeoLemmix 'styles' directory.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6627"
+      "Sources/LemmingsLocal/main.swift:6629"
     ]
   },
   "Choose the colour palette for Classic artwork.": {
@@ -2941,13 +2941,13 @@
   "Choose the directory holding LEVEL000.DAT and MAIN.DAT.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2052"
+      "Sources/LemmingsLocal/main.swift:2054"
     ]
   },
   "Choose the folder holding the level packs.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6184"
+      "Sources/LemmingsLocal/main.swift:6186"
     ]
   },
   "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings.": {
@@ -2959,7 +2959,7 @@
   "Choose the matching NeoLemmix 'styles' directory.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6528"
+      "Sources/LemmingsLocal/main.swift:6530"
     ]
   },
   "Choose the physical controller button to change.": {
@@ -3117,6 +3117,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:520"
+    ]
+  },
+  "Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Classic effects": {
@@ -3326,7 +3332,7 @@
   "Cleared": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:115"
+      "Sources/LemmingsLocal/GameCenterScores.swift:117"
     ]
   },
   "Cleared the level using one skill type.": {
@@ -3363,7 +3369,7 @@
   "Click or press Enter to try again": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7007"
+      "Sources/LemmingsLocal/main.swift:7009"
     ]
   },
   "Click speed to toggle. Hold to boost; release to return. Arrows apply 1×, 2×, 3×, 5× or 10× immediately.": {
@@ -3440,7 +3446,7 @@
   "Cloud Saves…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:934"
+      "Sources/LemmingsLocal/main.swift:936"
     ]
   },
   "Cloud player edits conflict.": {
@@ -3506,9 +3512,9 @@
   "Collections": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3309",
-      "Sources/LemmingsLocal/main.swift:3630",
-      "Sources/LemmingsLocal/main.swift:3956",
+      "Sources/LemmingsLocal/main.swift:3311",
+      "Sources/LemmingsLocal/main.swift:3632",
+      "Sources/LemmingsLocal/main.swift:3958",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:22"
     ]
   },
@@ -3521,7 +3527,7 @@
   "Collections unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3640"
+      "Sources/LemmingsLocal/main.swift:3642"
     ]
   },
   "Collector": {
@@ -3551,7 +3557,7 @@
   "Come back to these": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4607"
+      "Sources/LemmingsLocal/main.swift:4609"
     ]
   },
   "Command": {
@@ -3605,7 +3611,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
     ]
   },
   "Complete": {
@@ -3629,14 +3635,14 @@
   "Complete the preceding level or choose an available level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5662"
+      "Sources/LemmingsLocal/main.swift:5664"
     ]
   },
   "Complete the preceding level, or enable Unlock all Classic levels in Settings.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1839",
-      "Sources/LemmingsLocal/main.swift:5675"
+      "Sources/LemmingsLocal/main.swift:1841",
+      "Sources/LemmingsLocal/main.swift:5677"
     ]
   },
   "Confirm delete": {
@@ -3685,7 +3691,7 @@
   "Connect Game Center": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:145"
+      "Sources/LemmingsLocal/GameCenterScores.swift:147"
     ]
   },
   "Connect Game Center to compare worldwide.": {
@@ -3698,7 +3704,7 @@
   "Connect to the internet to link a device.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:305"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:307"
     ]
   },
   "Connected as {0}. Records synced.": {
@@ -3716,7 +3722,7 @@
   "Connecting...": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:145"
+      "Sources/LemmingsLocal/GameCenterScores.swift:147"
     ]
   },
   "Consequentialist optimisation with a strong rescue outcome.": {
@@ -3738,8 +3744,8 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:253",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:83",
-      "Sources/LemmingsLocal/main.swift:8419",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:89",
+      "Sources/LemmingsLocal/main.swift:8421",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
   },
@@ -3752,7 +3758,7 @@
   "Continue or start level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8774"
+      "Sources/LemmingsLocal/main.swift:8776"
     ]
   },
   "Control Method": {
@@ -3848,7 +3854,7 @@
   "Could not clear completed checkpoint: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7581"
+      "Sources/LemmingsLocal/main.swift:7583"
     ]
   },
   "Could not load shared counts. Check the token and service.": {
@@ -3879,7 +3885,7 @@
   "Could not parse {0}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6652"
+      "Sources/LemmingsLocal/main.swift:6654"
     ]
   },
   "Could not play the ending: {0}": {
@@ -3897,7 +3903,7 @@
   "Could not read every installed fan pack. Check {0} and try again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5222"
+      "Sources/LemmingsLocal/main.swift:5224"
     ]
   },
   "Could not read saved Zoom uses.": {
@@ -3909,13 +3915,13 @@
   "Could not read {0}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6648"
+      "Sources/LemmingsLocal/main.swift:6650"
     ]
   },
   "Could not render {0}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6668"
+      "Sources/LemmingsLocal/main.swift:6670"
     ]
   },
   "Could not rewind this run: {0}": {
@@ -3934,13 +3940,13 @@
   "Could not save completed lesson: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5481"
+      "Sources/LemmingsLocal/main.swift:5483"
     ]
   },
   "Could not save the input route: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7590"
+      "Sources/LemmingsLocal/main.swift:7592"
     ]
   },
   "Could not show the talisman: {0}": {
@@ -3952,7 +3958,7 @@
   "Could not sync journey: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4657"
+      "Sources/LemmingsLocal/main.swift:4659"
     ]
   },
   "Counters": {
@@ -3983,8 +3989,8 @@
   "Create": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3972",
-      "Sources/LemmingsLocal/main.swift:5008"
+      "Sources/LemmingsLocal/main.swift:3974",
+      "Sources/LemmingsLocal/main.swift:5010"
     ]
   },
   "Create / View": {
@@ -4014,7 +4020,7 @@
   "Current level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8514"
+      "Sources/LemmingsLocal/main.swift:8516"
     ]
   },
   "Current turn: {0}": {
@@ -4328,7 +4334,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:29",
       "Sources/LemmingsLocal/ArcadeWindow.swift:819",
-      "Sources/LemmingsLocal/main.swift:4468",
+      "Sources/LemmingsLocal/main.swift:4470",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:60"
     ]
   },
@@ -4341,8 +4347,8 @@
   "Delete playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4448",
-      "Sources/LemmingsLocal/main.swift:4466"
+      "Sources/LemmingsLocal/main.swift:4450",
+      "Sources/LemmingsLocal/main.swift:4468"
     ]
   },
   "Delete {0}": {
@@ -4354,14 +4360,14 @@
   "Delete {0} and discard its saved runs?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4463"
+      "Sources/LemmingsLocal/main.swift:4465"
     ]
   },
   "Delete {0}?": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:642",
-      "Sources/LemmingsLocal/main.swift:4464"
+      "Sources/LemmingsLocal/main.swift:4466"
     ]
   },
   "Deletes this player's records and saved progress on linked devices.": {
@@ -4386,7 +4392,7 @@
   "Difficulty": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4214"
+      "Sources/LemmingsLocal/main.swift:4216"
     ]
   },
   "Digger": {
@@ -4430,7 +4436,7 @@
   "Discard run": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5465"
+      "Sources/LemmingsLocal/main.swift:5467"
     ]
   },
   "Discard saved run": {
@@ -4528,7 +4534,7 @@
     "references": [
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:120",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:126",
-      "Sources/LemmingsLocal/main.swift:772"
+      "Sources/LemmingsLocal/main.swift:774"
     ]
   },
   "Downloading...": {
@@ -4608,31 +4614,31 @@
   "ENTER  *  ESC BACK": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6415"
+      "Sources/LemmingsLocal/main.swift:6417"
     ]
   },
   "ENTER FOR THE NEXT LEVEL": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6406"
+      "Sources/LemmingsLocal/main.swift:6408"
     ]
   },
   "ENTER TO GO BACK": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6406"
+      "Sources/LemmingsLocal/main.swift:6408"
     ]
   },
   "ENTER TO RETRY LEVEL": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6404"
+      "Sources/LemmingsLocal/main.swift:6406"
     ]
   },
   "ENTER TO START  *  ESC BACK": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6383"
+      "Sources/LemmingsLocal/main.swift:6385"
     ]
   },
   "ENTRANCE": {
@@ -4699,7 +4705,13 @@
   "Earlier": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4269"
+      "Sources/LemmingsLocal/main.swift:4271"
+    ]
+  },
+  "Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels": {
@@ -4734,7 +4746,7 @@
   "Edit": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1020"
+      "Sources/LemmingsLocal/main.swift:1022"
     ]
   },
   "Edit player": {
@@ -4785,7 +4797,7 @@
   "Eligible fan levels": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4016"
+      "Sources/LemmingsLocal/main.swift:4018"
     ]
   },
   "Eligible lemming {0} of {1}. Skill: {2}.": {
@@ -4865,7 +4877,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1055",
-      "Sources/LemmingsLocal/main.swift:8647"
+      "Sources/LemmingsLocal/main.swift:8649"
     ]
   },
   "Ending": {
@@ -4945,7 +4957,7 @@
   "Estimate": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4214"
+      "Sources/LemmingsLocal/main.swift:4216"
     ]
   },
   "Estimate from resources and object structure; no validated solution.": {
@@ -4957,7 +4969,7 @@
   "Estimated difficulty": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4001"
+      "Sources/LemmingsLocal/main.swift:4003"
     ]
   },
   "Estimated solution burden": {
@@ -5005,8 +5017,8 @@
   "Every rating is finished.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7026",
-      "Sources/LemmingsLocal/main.swift:7029"
+      "Sources/LemmingsLocal/main.swift:7028",
+      "Sources/LemmingsLocal/main.swift:7031"
     ]
   },
   "Everyone home": {
@@ -5177,7 +5189,7 @@
   "FAILED — press R": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7724"
+      "Sources/LemmingsLocal/main.swift:7726"
     ]
   },
   "FALLER": {
@@ -5198,25 +5210,25 @@
   "FAN LEMMINGS  {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6030"
+      "Sources/LemmingsLocal/main.swift:6032"
     ]
   },
   "FAN LEMMINGS  {0}/{1}  — COUNTING": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6032"
+      "Sources/LemmingsLocal/main.swift:6034"
     ]
   },
   "FAN LEMMINGS  — NO PACKS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6025"
+      "Sources/LemmingsLocal/main.swift:6027"
     ]
   },
   "FAN LEVELS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6204"
+      "Sources/LemmingsLocal/main.swift:6206"
     ]
   },
   "FASTER": {
@@ -5346,7 +5358,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2200",
-      "Sources/LemmingsLocal/main.swift:7589",
+      "Sources/LemmingsLocal/main.swift:7591",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:998"
     ]
   },
@@ -5360,14 +5372,14 @@
   "Fan Levels…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1001"
+      "Sources/LemmingsLocal/main.swift:1003"
     ]
   },
   "Fan levels": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TelemetryDashboard.swift:221",
-      "Sources/LemmingsLocal/main.swift:6804"
+      "Sources/LemmingsLocal/main.swift:6806"
     ]
   },
   "Fan levels are not available.": {
@@ -5421,7 +5433,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/HostedRankings.swift:33",
-      "Sources/LemmingsLocal/GameCenterScores.swift:115",
+      "Sources/LemmingsLocal/GameCenterScores.swift:117",
       "Sources/LemmingsMobileUI/MobileRankings.swift:119",
       "Sources/NxlvKit/TrolleyLeaderboards.swift:8"
     ]
@@ -5430,7 +5442,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/HostedRankings.swift:32",
-      "Sources/LemmingsLocal/GameCenterScores.swift:115",
+      "Sources/LemmingsLocal/GameCenterScores.swift:117",
       "Sources/LemmingsMobileUI/MobileRankings.swift:119",
       "Sources/NxlvKit/TrolleyLeaderboards.swift:7"
     ]
@@ -5471,9 +5483,9 @@
   "Favourites": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3631",
-      "Sources/LemmingsLocal/main.swift:3652",
-      "Sources/LemmingsLocal/main.swift:3660"
+      "Sources/LemmingsLocal/main.swift:3633",
+      "Sources/LemmingsLocal/main.swift:3654",
+      "Sources/LemmingsLocal/main.swift:3662"
     ]
   },
   "Favourites  {0}": {
@@ -5523,7 +5535,7 @@
   "File": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:988"
+      "Sources/LemmingsLocal/main.swift:990"
     ]
   },
   "Filler": {
@@ -5567,15 +5579,15 @@
   "Finish run": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1533",
-      "Sources/LemmingsLocal/main.swift:1601",
-      "Sources/LemmingsLocal/main.swift:8393"
+      "Sources/LemmingsLocal/main.swift:1535",
+      "Sources/LemmingsLocal/main.swift:1603",
+      "Sources/LemmingsLocal/main.swift:8395"
     ]
   },
   "Finished {0} from {1}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5511"
+      "Sources/LemmingsLocal/main.swift:5513"
     ]
   },
   "First clear of this level. Rescued {0}; target {1}.": {
@@ -5790,8 +5802,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:68",
-      "Sources/LemmingsLocal/main.swift:1009",
-      "Sources/LemmingsLocal/main.swift:7022"
+      "Sources/LemmingsLocal/main.swift:1011",
+      "Sources/LemmingsLocal/main.swift:7024"
     ]
   },
   "Game Boy PAPU 4-Channel Audio": {
@@ -5846,7 +5858,7 @@
   "Game Library": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:995"
+      "Sources/LemmingsLocal/main.swift:997"
     ]
   },
   "Game controls": {
@@ -5916,8 +5928,8 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:447",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:448",
       "Sources/LemmingsLocal/SettingsWindow.swift:114",
-      "Sources/LemmingsLocal/main.swift:8771",
-      "Sources/LemmingsLocal/main.swift:8772",
+      "Sources/LemmingsLocal/main.swift:8773",
+      "Sources/LemmingsLocal/main.swift:8774",
       "Sources/LemmingsMobileCore/MobileSettings.swift:122"
     ]
   },
@@ -5936,7 +5948,7 @@
   "Games": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1008"
+      "Sources/LemmingsLocal/main.swift:1010"
     ]
   },
   "General coaching for this level.": {
@@ -5948,7 +5960,7 @@
   "Generate a learning sequence": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4000"
+      "Sources/LemmingsLocal/main.swift:4002"
     ]
   },
   "Genesis Mayhem Theme": {
@@ -5989,6 +6001,12 @@
       "Sources/LemmingsLocal/SolutionSwitchView.swift:12",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:23",
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:56"
+    ]
+  },
+  "Ghost solutions": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Glider": {
@@ -6185,7 +6203,7 @@
   "Help": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1034"
+      "Sources/LemmingsLocal/main.swift:1036"
     ]
   },
   "Help / extra actions": {
@@ -6315,7 +6333,7 @@
   "Home {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7708"
+      "Sources/LemmingsLocal/main.swift:7710"
     ]
   },
   "Hopper": {
@@ -6344,6 +6362,12 @@
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:234"
     ]
   },
+  "Hot Seat ghosts": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+    ]
+  },
   "Hot Seat player HUD": {
     "kind": "text",
     "references": [
@@ -6365,7 +6389,7 @@
   "Hot Seat…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:936"
+      "Sources/LemmingsLocal/main.swift:938"
     ]
   },
   "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning.": {
@@ -6377,7 +6401,7 @@
   "HotSeat.{0}.{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:719"
+      "Sources/LemmingsLocal/main.swift:721"
     ]
   },
   "How it works": {
@@ -6628,7 +6652,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/GameSession.swift:555",
-      "Sources/LemmingsLocal/main.swift:8748"
+      "Sources/LemmingsLocal/main.swift:8750"
     ]
   },
   "Intro sequence": {
@@ -7002,7 +7026,7 @@
   "Invalid Trolley attempt history. The saved file must be preserved.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyHistory.swift:199"
+      "Sources/NxlvKit/TrolleyHistory.swift:201"
     ]
   },
   "Invalid archived level slot mapping.": {
@@ -7160,19 +7184,19 @@
   "JOURNEY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6074"
+      "Sources/LemmingsLocal/main.swift:6076"
     ]
   },
   "JOURNEY MAP  {0}/{1} SOLVED": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6089"
+      "Sources/LemmingsLocal/main.swift:6091"
     ]
   },
   "JOURNEY {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7313"
+      "Sources/LemmingsLocal/main.swift:7315"
     ]
   },
   "JUMP": {
@@ -7217,7 +7241,7 @@
   "Journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:59"
     ]
   },
@@ -7242,14 +7266,14 @@
   "Journey not advanced": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4681"
+      "Sources/LemmingsLocal/main.swift:4683"
     ]
   },
   "Journey unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4588",
-      "Sources/LemmingsLocal/main.swift:4601"
+      "Sources/LemmingsLocal/main.swift:4590",
+      "Sources/LemmingsLocal/main.swift:4603"
     ]
   },
   "Joystick": {
@@ -7282,7 +7306,7 @@
   "KNOWN": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7330"
+      "Sources/LemmingsLocal/main.swift:7332"
     ]
   },
   "Karl Popper - The Falsifier": {
@@ -7364,7 +7388,7 @@
   "Keyboard commands…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1036"
+      "Sources/LemmingsLocal/main.swift:1038"
     ]
   },
   "Keyboard overlay. The level is paused. Escape closes the overlay.": {
@@ -7733,8 +7757,8 @@
       "Sources/LemmingsLocal/ResultCelebrationView.swift:284",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:291",
       "Sources/LemmingsLocal/TrolleyResultView.swift:54",
-      "Sources/LemmingsLocal/main.swift:6065",
-      "Sources/LemmingsLocal/main.swift:6085"
+      "Sources/LemmingsLocal/main.swift:6067",
+      "Sources/LemmingsLocal/main.swift:6087"
     ]
   },
   "LEMMING": {
@@ -7756,7 +7780,7 @@
       "Sources/LemmingsLocal/PlayfieldView.swift:1148",
       "Sources/LemmingsLocal/PlayfieldView.swift:1241",
       "Sources/LemmingsLocal/PlayfieldView.swift:270",
-      "Sources/LemmingsLocal/main.swift:6941"
+      "Sources/LemmingsLocal/main.swift:6943"
     ]
   },
   "LEMMINGS 3": {
@@ -7781,7 +7805,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ResultCelebrationView.swift:74",
-      "Sources/LemmingsLocal/main.swift:6408"
+      "Sources/LemmingsLocal/main.swift:6410"
     ]
   },
   "LEVEL COMPLETE\n{0} SAVED": {
@@ -7830,14 +7854,14 @@
   "LEVEL {0} OF {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6378"
+      "Sources/LemmingsLocal/main.swift:6380"
     ]
   },
   "LEVEL {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7315",
-      "Sources/LemmingsLocal/main.swift:7318"
+      "Sources/LemmingsLocal/main.swift:7317",
+      "Sources/LemmingsLocal/main.swift:7320"
     ]
   },
   "LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS": {
@@ -7885,7 +7909,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:107",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:44",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23",
       "Sources/LemmingsLocal/SettingsWindow.swift:288",
       "Sources/LemmingsLocal/SettingsWindow.swift:342",
       "Sources/LemmingsLocal/SettingsWindow.swift:808"
@@ -7963,7 +7987,7 @@
   "Later": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4285"
+      "Sources/LemmingsLocal/main.swift:4287"
     ]
   },
   "Latest build": {
@@ -7972,17 +7996,11 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:24"
     ]
   },
-  "Leaderboard and journey fixes": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
-    ]
-  },
   "Leaderboards": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:538",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Least skills": {
@@ -7996,7 +8014,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:754",
-      "Sources/LemmingsLocal/main.swift:8558"
+      "Sources/LemmingsLocal/main.swift:8560"
     ]
   },
   "Left": {
@@ -8067,10 +8085,10 @@
       "Sources/LemmingsLocal/PlayfieldView.swift:1054",
       "Sources/LemmingsLocal/ReplayWindow.swift:123",
       "Sources/LemmingsLocal/ReplayWindow.swift:16",
-      "Sources/LemmingsLocal/main.swift:6802",
       "Sources/LemmingsLocal/main.swift:6804",
-      "Sources/LemmingsLocal/main.swift:6822",
-      "Sources/LemmingsLocal/main.swift:6918",
+      "Sources/LemmingsLocal/main.swift:6806",
+      "Sources/LemmingsLocal/main.swift:6824",
+      "Sources/LemmingsLocal/main.swift:6920",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:10",
       "Sources/LemmingsMobileUI/MobileTVBootstrap.swift:40",
       "Sources/LemmingsTVCore/TVLibrarySource.swift:14",
@@ -8121,7 +8139,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:277",
-      "Sources/LemmingsLocal/main.swift:1546"
+      "Sources/LemmingsLocal/main.swift:1548"
     ]
   },
   "Lemmings 2. {0} selected. {1}. {2} {3} {4} released, {5} saved. {6}. {7}. {8}": {
@@ -8207,8 +8225,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TelemetryDashboard.swift:219",
-      "Sources/LemmingsLocal/main.swift:1014",
-      "Sources/LemmingsLocal/main.swift:7093",
+      "Sources/LemmingsLocal/main.swift:1016",
+      "Sources/LemmingsLocal/main.swift:7095",
       "Sources/LemmingsMobileCore/MobileLibrary.swift:25"
     ]
   },
@@ -8221,21 +8239,21 @@
   "Level Records…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:938"
+      "Sources/LemmingsLocal/main.swift:940"
     ]
   },
   "Level Select": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:345",
-      "Sources/LemmingsLocal/main.swift:2801",
-      "Sources/LemmingsLocal/main.swift:2996"
+      "Sources/LemmingsLocal/main.swift:2803",
+      "Sources/LemmingsLocal/main.swift:2998"
     ]
   },
   "Level Select…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:998"
+      "Sources/LemmingsLocal/main.swift:1000"
     ]
   },
   "Level Skips": {
@@ -8271,7 +8289,7 @@
   "Level complete": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6996",
+      "Sources/LemmingsLocal/main.swift:6998",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2038",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:243"
     ]
@@ -8285,19 +8303,19 @@
   "Level error: could not create the level image": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2668"
+      "Sources/LemmingsLocal/main.swift:2670"
     ]
   },
   "Level error: missing graphics style {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2641"
+      "Sources/LemmingsLocal/main.swift:2643"
     ]
   },
   "Level error: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2695"
+      "Sources/LemmingsLocal/main.swift:2697"
     ]
   },
   "Level goals": {
@@ -8325,8 +8343,8 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:588",
       "Sources/LemmingsLocal/KeyboardOverlayView.swift:51",
       "Sources/LemmingsLocal/LevelHintWindow.swift:111",
-      "Sources/LemmingsLocal/main.swift:8508",
-      "Sources/LemmingsLocal/main.swift:8806"
+      "Sources/LemmingsLocal/main.swift:8510",
+      "Sources/LemmingsLocal/main.swift:8808"
     ]
   },
   "Level hints (H)": {
@@ -8338,19 +8356,19 @@
   "Level hints…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1037"
+      "Sources/LemmingsLocal/main.swift:1039"
     ]
   },
   "Level locked": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1838"
+      "Sources/LemmingsLocal/main.swift:1840"
     ]
   },
   "Level locked. Complete the preceding level or change the Classic unlock setting.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2520"
+      "Sources/LemmingsLocal/main.swift:2522"
     ]
   },
   "Level map": {
@@ -8362,13 +8380,13 @@
   "Level not added": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3906"
+      "Sources/LemmingsLocal/main.swift:3908"
     ]
   },
   "Level not removed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4319"
+      "Sources/LemmingsLocal/main.swift:4321"
     ]
   },
   "Level playfield": {
@@ -8392,7 +8410,7 @@
   "Level select": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8419"
+      "Sources/LemmingsLocal/main.swift:8421"
     ]
   },
   "Level selection": {
@@ -8424,43 +8442,43 @@
   "Level unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5651"
+      "Sources/LemmingsLocal/main.swift:5653"
     ]
   },
   "Level {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3047",
-      "Sources/LemmingsLocal/main.swift:3087",
-      "Sources/LemmingsLocal/main.swift:3124",
-      "Sources/LemmingsLocal/main.swift:3691",
-      "Sources/LemmingsLocal/main.swift:3731",
+      "Sources/LemmingsLocal/main.swift:3049",
+      "Sources/LemmingsLocal/main.swift:3089",
+      "Sources/LemmingsLocal/main.swift:3126",
+      "Sources/LemmingsLocal/main.swift:3693",
+      "Sources/LemmingsLocal/main.swift:3733",
       "Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:59"
     ]
   },
   "Level {0}  {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4214"
+      "Sources/LemmingsLocal/main.swift:4216"
     ]
   },
   "Level {0}  {1}  {2}/{3}{4}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3543"
+      "Sources/LemmingsLocal/main.swift:3545"
     ]
   },
   "Level {0}  {1}/{2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4933"
+      "Sources/LemmingsLocal/main.swift:4935"
     ]
   },
   "Level {0} of {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3987",
-      "Sources/LemmingsLocal/main.swift:3994"
+      "Sources/LemmingsLocal/main.swift:3989",
+      "Sources/LemmingsLocal/main.swift:3996"
     ]
   },
   "Level {0} • {1}×{2}": {
@@ -8474,9 +8492,9 @@
     "references": [
       "Sources/LemmingsGameArt/GameFrontEnd.swift:361",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:57",
-      "Sources/LemmingsLocal/main.swift:1013",
-      "Sources/LemmingsLocal/main.swift:3256",
-      "Sources/LemmingsLocal/main.swift:5043",
+      "Sources/LemmingsLocal/main.swift:1015",
+      "Sources/LemmingsLocal/main.swift:3258",
+      "Sources/LemmingsLocal/main.swift:5045",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:222",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:372",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:166"
@@ -8485,7 +8503,7 @@
   "Levels  {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4876"
+      "Sources/LemmingsLocal/main.swift:4878"
     ]
   },
   "Levels cleared": {
@@ -8499,7 +8517,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameFrontEnd.swift:29",
-      "Sources/LemmingsLocal/main.swift:8419",
+      "Sources/LemmingsLocal/main.swift:8421",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:27",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:189",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:260"
@@ -8561,20 +8579,20 @@
   "Loaded {0} Amiga sound effects.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7913"
+      "Sources/LemmingsLocal/main.swift:7915"
     ]
   },
   "Loaded {0} sound effects.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7891"
+      "Sources/LemmingsLocal/main.swift:7893"
     ]
   },
   "Loading": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/GameScreen.swift:13",
-      "Sources/LemmingsLocal/main.swift:773",
+      "Sources/LemmingsLocal/main.swift:775",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:268"
     ]
   },
@@ -8624,15 +8642,15 @@
   "Local records are not writable.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:426",
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:438",
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:455",
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:467",
       "Sources/LemmingsAppCore/Records/GameCenterProgressSync.swift:105"
     ]
   },
   "Local saves are not writable.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:143"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:147"
     ]
   },
   "Locked": {
@@ -8640,14 +8658,14 @@
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:885",
       "Sources/LemmingsLocal/main.swift:359",
-      "Sources/LemmingsLocal/main.swift:3693",
+      "Sources/LemmingsLocal/main.swift:3695",
       "Sources/NxlvKit/LevelCatalogue.swift:50"
     ]
   },
   "Locked  {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4221"
+      "Sources/LemmingsLocal/main.swift:4223"
     ]
   },
   "Locked item": {
@@ -8847,7 +8865,7 @@
   "Macintosh artwork could not be applied to this level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6581"
+      "Sources/LemmingsLocal/main.swift:6583"
     ]
   },
   "Macintosh sound resources": {
@@ -8921,13 +8939,13 @@
   "Manual": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4006"
+      "Sources/LemmingsLocal/main.swift:4008"
     ]
   },
   "Manual order": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4024"
+      "Sources/LemmingsLocal/main.swift:4026"
     ]
   },
   "Master": {
@@ -9149,9 +9167,9 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:429",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446",
-      "Sources/LemmingsLocal/main.swift:8773",
-      "Sources/LemmingsLocal/main.swift:8774",
-      "Sources/LemmingsLocal/main.swift:8775"
+      "Sources/LemmingsLocal/main.swift:8775",
+      "Sources/LemmingsLocal/main.swift:8776",
+      "Sources/LemmingsLocal/main.swift:8777"
     ]
   },
   "Menus always use standard controls: D-pad selects, {0} confirms, {1} returns.": {
@@ -9219,7 +9237,7 @@
   "Missing - replace or remove  {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4244"
+      "Sources/LemmingsLocal/main.swift:4246"
     ]
   },
   "Missing Chronicles entrance trigger.": {
@@ -9261,7 +9279,7 @@
   "Missing style data: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6658"
+      "Sources/LemmingsLocal/main.swift:6660"
     ]
   },
   "Missing {0} dependency '{1}'.": {
@@ -9290,7 +9308,7 @@
   "Modern Sound": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1032"
+      "Sources/LemmingsLocal/main.swift:1034"
     ]
   },
   "Modern defaults add HD effects, variable speed and hold-to-boost controls.\n\nPrefer original controls and effects? Choose Old school. Change this later in Settings > Gameplay.": {
@@ -9351,7 +9369,7 @@
   "More": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4613"
+      "Sources/LemmingsLocal/main.swift:4615"
     ]
   },
   "More  {0}/{1}  ›": {
@@ -9487,7 +9505,7 @@
   "Music output interrupted. Previous track continues.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8238"
+      "Sources/LemmingsLocal/main.swift:8240"
     ]
   },
   "Music paused": {
@@ -9518,7 +9536,7 @@
   "Mute": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1031"
+      "Sources/LemmingsLocal/main.swift:1033"
     ]
   },
   "N: End run / undo": {
@@ -9530,13 +9548,13 @@
   "NEOLEMMIX  {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6046"
+      "Sources/LemmingsLocal/main.swift:6048"
     ]
   },
   "NEOLEMMIX  — NO PACKS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6038"
+      "Sources/LemmingsLocal/main.swift:6040"
     ]
   },
   "NES / Famicom NSF": {
@@ -9615,7 +9633,7 @@
   "NO DATA": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1747"
+      "Sources/LemmingsLocal/main.swift:1749"
     ]
   },
   "NONE": {
@@ -9628,13 +9646,13 @@
   "NOT THIS TIME": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6408"
+      "Sources/LemmingsLocal/main.swift:6410"
     ]
   },
   "NOTHING HERE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6222"
+      "Sources/LemmingsLocal/main.swift:6224"
     ]
   },
   "NUKE": {
@@ -9648,7 +9666,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:615",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:694",
-      "Sources/LemmingsLocal/main.swift:7722"
+      "Sources/LemmingsLocal/main.swift:7724"
     ]
   },
   "Name": {
@@ -9684,15 +9702,15 @@
   "Needed {0}  ({1}%)": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6999"
+      "Sources/LemmingsLocal/main.swift:7001"
     ]
   },
   "NeoLemmix": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:131",
-      "Sources/LemmingsLocal/main.swift:6518",
-      "Sources/LemmingsLocal/main.swift:6803",
+      "Sources/LemmingsLocal/main.swift:6520",
+      "Sources/LemmingsLocal/main.swift:6805",
       "Sources/LemmingsMobileCore/MobileContentStore.swift:29",
       "Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:27",
       "Sources/NxlvKit/LevelCatalogue.swift:13"
@@ -9707,13 +9725,13 @@
   "NeoLemmix difficulty analysis is not yet available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4139"
+      "Sources/LemmingsLocal/main.swift:4141"
     ]
   },
   "NeoLemmix error: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6729"
+      "Sources/LemmingsLocal/main.swift:6731"
     ]
   },
   "NeoLemmix level could not be decoded: {0}": {
@@ -9767,7 +9785,7 @@
   "NeoLemmix styles needed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5777"
+      "Sources/LemmingsLocal/main.swift:5779"
     ]
   },
   "New Hot Seat": {
@@ -9775,7 +9793,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:60",
       "Sources/LemmingsLocal/ArcadeWindow.swift:728",
-      "Sources/LemmingsLocal/main.swift:4762"
+      "Sources/LemmingsLocal/main.swift:4764"
     ]
   },
   "New awards from this run are highlighted. {0}": {
@@ -9801,7 +9819,7 @@
   "New playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4004",
+      "Sources/LemmingsLocal/main.swift:4006",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:29",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:67"
     ]
@@ -9825,7 +9843,7 @@
   "New solo": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4760"
+      "Sources/LemmingsLocal/main.swift:4762"
     ]
   },
   "New time record": {
@@ -9909,11 +9927,11 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:30",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:31",
-      "Sources/LemmingsLocal/main.swift:1533",
-      "Sources/LemmingsLocal/main.swift:1601",
-      "Sources/LemmingsLocal/main.swift:8393",
-      "Sources/LemmingsLocal/main.swift:8419",
-      "Sources/LemmingsLocal/main.swift:8771"
+      "Sources/LemmingsLocal/main.swift:1535",
+      "Sources/LemmingsLocal/main.swift:1603",
+      "Sources/LemmingsLocal/main.swift:8395",
+      "Sources/LemmingsLocal/main.swift:8421",
+      "Sources/LemmingsLocal/main.swift:8773"
     ]
   },
   "Next level >": {
@@ -9994,7 +10012,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileTurnArt.swift:9",
-      "Sources/LemmingsLocal/main.swift:7026",
+      "Sources/LemmingsLocal/main.swift:7028",
       "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:40"
     ]
   },
@@ -10007,7 +10025,7 @@
   "No .mod files were found in that folder.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7863"
+      "Sources/LemmingsLocal/main.swift:7865"
     ]
   },
   "No Exit? Watch Me": {
@@ -10031,13 +10049,13 @@
   "No Lemmings data found. {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2289"
+      "Sources/LemmingsLocal/main.swift:2291"
     ]
   },
   "No NeoLemmix packs were found in that folder.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6518"
+      "Sources/LemmingsLocal/main.swift:6520"
     ]
   },
   "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.": {
@@ -10045,7 +10063,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1047",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1370",
-      "Sources/LemmingsLocal/main.swift:8293"
+      "Sources/LemmingsLocal/main.swift:8295"
     ]
   },
   "No Zoom uses. Earn one for every 3 no-Rewind career stars.": {
@@ -10055,8 +10073,8 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1063",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1369",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1387",
-      "Sources/LemmingsLocal/main.swift:8292",
-      "Sources/LemmingsLocal/main.swift:8305"
+      "Sources/LemmingsLocal/main.swift:8294",
+      "Sources/LemmingsLocal/main.swift:8307"
     ]
   },
   "No build changes supplied.": {
@@ -10086,14 +10104,14 @@
   "No fan level packs are available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5207",
-      "Sources/LemmingsLocal/main.swift:5271"
+      "Sources/LemmingsLocal/main.swift:5209",
+      "Sources/LemmingsLocal/main.swift:5273"
     ]
   },
   "No favourites yet": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3700"
+      "Sources/LemmingsLocal/main.swift:3702"
     ]
   },
   "No hands-off clear this run. This goal may not be possible here.": {
@@ -10111,7 +10129,7 @@
   "No level packs are available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3000"
+      "Sources/LemmingsLocal/main.swift:3002"
     ]
   },
   "No level starts yet": {
@@ -10123,13 +10141,13 @@
   "No levels played yet": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3700"
+      "Sources/LemmingsLocal/main.swift:3702"
     ]
   },
   "No levels yet": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4392"
+      "Sources/LemmingsLocal/main.swift:4394"
     ]
   },
   "No matching commands. Try another word or choose All commands.": {
@@ -10179,7 +10197,7 @@
   "No repeats": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4017"
+      "Sources/LemmingsLocal/main.swift:4019"
     ]
   },
   "No replays": {
@@ -10249,25 +10267,25 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:356",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:357",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:384",
-      "Sources/LemmingsLocal/main.swift:8694"
+      "Sources/LemmingsLocal/main.swift:8696"
     ]
   },
   "No validated local solution demonstrates this technique.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4175"
+      "Sources/LemmingsLocal/main.swift:4177"
     ]
   },
   "No worldwide score yet.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:132"
+      "Sources/LemmingsLocal/GameCenterScores.swift:134"
     ]
   },
   "No {0} level packs are available in this build.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2824"
+      "Sources/LemmingsLocal/main.swift:2826"
     ]
   },
   "None": {
@@ -10328,7 +10346,7 @@
   "Not this time": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6996"
+      "Sources/LemmingsLocal/main.swift:6998"
     ]
   },
   "Not yet earned": {
@@ -10461,7 +10479,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:618",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:684",
-      "Sources/LemmingsLocal/main.swift:7333"
+      "Sources/LemmingsLocal/main.swift:7335"
     ]
   },
   "OVERVIEW": {
@@ -10671,7 +10689,7 @@
   "One below the maximum rescue.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyPhilosophy.swift:175"
+      "Sources/NxlvKit/TrolleyPhilosophy.swift:176"
     ]
   },
   "One lemming may need to take a route the crowd cannot follow yet. Check the vertical faces.": {
@@ -10713,14 +10731,14 @@
   "Open": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3961",
-      "Sources/LemmingsLocal/main.swift:3975"
+      "Sources/LemmingsLocal/main.swift:3963",
+      "Sources/LemmingsLocal/main.swift:3977"
     ]
   },
   "Open Game Center": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:141"
+      "Sources/LemmingsLocal/GameCenterScores.swift:143"
     ]
   },
   "Open Game Center from the game window to sign in.": {
@@ -10732,13 +10750,13 @@
   "Open Level File…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1005"
+      "Sources/LemmingsLocal/main.swift:1007"
     ]
   },
   "Open Replay Movie…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:945"
+      "Sources/LemmingsLocal/main.swift:947"
     ]
   },
   "Open this address on another device:": {
@@ -10807,6 +10825,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ClassicSettings.swift:197"
+    ]
+  },
+  "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "Original PC": {
@@ -10885,7 +10909,7 @@
   "Out {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7707"
+      "Sources/LemmingsLocal/main.swift:7709"
     ]
   },
   "Outdoor": {
@@ -11010,7 +11034,7 @@
   "PLAY ALL": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6211"
+      "Sources/LemmingsLocal/main.swift:6213"
     ]
   },
   "PLAY LEVEL {0}": {
@@ -11133,7 +11157,7 @@
   "Packs": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3289"
+      "Sources/LemmingsLocal/main.swift:3291"
     ]
   },
   "Pan": {
@@ -11147,7 +11171,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444",
-      "Sources/LemmingsLocal/main.swift:8770"
+      "Sources/LemmingsLocal/main.swift:8772"
     ]
   },
   "Parachuter": {
@@ -11342,7 +11366,7 @@
       "Sources/LemmingsGameArt/MobilePauseArt.swift:18",
       "Sources/LemmingsGameArt/MobileTurnArt.swift:17",
       "Sources/LemmingsLocal/OriginalMoviePlayer.swift:105",
-      "Sources/LemmingsLocal/main.swift:8804",
+      "Sources/LemmingsLocal/main.swift:8806",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:500",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:504",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:187",
@@ -11425,7 +11449,7 @@
       "Sources/LemmingsLocal/ReplayWindow.swift:326",
       "Sources/LemmingsLocal/SettingsWindow.swift:342",
       "Sources/LemmingsLocal/SolutionReplay.swift:387",
-      "Sources/LemmingsLocal/main.swift:4336",
+      "Sources/LemmingsLocal/main.swift:4338",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:54",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:545",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:152",
@@ -11444,13 +11468,13 @@
   "Play Insights…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:940"
+      "Sources/LemmingsLocal/main.swift:942"
     ]
   },
   "Play Lemmings 2…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:948"
+      "Sources/LemmingsLocal/main.swift:950"
     ]
   },
   "Play a death sound when a lemming falls out of the bottom of the level in any of the three games.": {
@@ -11532,7 +11556,7 @@
   "Play {0} Beta…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:955"
+      "Sources/LemmingsLocal/main.swift:957"
     ]
   },
   "Playable": {
@@ -11562,7 +11586,7 @@
   "Player Profiles…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:932"
+      "Sources/LemmingsLocal/main.swift:934"
     ]
   },
   "Player Unlocked": {
@@ -11574,19 +11598,19 @@
   "Player deleted. Some collections could not be removed: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:378"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:384"
     ]
   },
   "Player deleted. Some playlists could not be removed: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:376"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:382"
     ]
   },
   "Player deleted. Some saved files could not be removed: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:365"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:371"
     ]
   },
   "Player initials": {
@@ -11610,7 +11634,7 @@
   "Player records could not be saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4714"
+      "Sources/LemmingsLocal/main.swift:4716"
     ]
   },
   "Player was not deleted.": {
@@ -11657,69 +11681,69 @@
   "Playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3920",
-      "Sources/LemmingsLocal/main.swift:4054",
+      "Sources/LemmingsLocal/main.swift:3922",
+      "Sources/LemmingsLocal/main.swift:4056",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:542"
     ]
   },
   "Playlist name": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4424",
-      "Sources/LemmingsLocal/main.swift:4429"
+      "Sources/LemmingsLocal/main.swift:4426",
+      "Sources/LemmingsLocal/main.swift:4431"
     ]
   },
   "Playlist not changed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4282",
-      "Sources/LemmingsLocal/main.swift:4299",
-      "Sources/LemmingsLocal/main.swift:4961",
-      "Sources/LemmingsLocal/main.swift:4999"
+      "Sources/LemmingsLocal/main.swift:4284",
+      "Sources/LemmingsLocal/main.swift:4301",
+      "Sources/LemmingsLocal/main.swift:4963",
+      "Sources/LemmingsLocal/main.swift:5001"
     ]
   },
   "Playlist not created": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4059"
+      "Sources/LemmingsLocal/main.swift:4061"
     ]
   },
   "Playlist not deleted": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4483"
+      "Sources/LemmingsLocal/main.swift:4485"
     ]
   },
   "Playlist not opened": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4088"
+      "Sources/LemmingsLocal/main.swift:4090"
     ]
   },
   "Playlist not renamed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4442"
+      "Sources/LemmingsLocal/main.swift:4444"
     ]
   },
   "Playlist not saved": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3930"
+      "Sources/LemmingsLocal/main.swift:3932"
     ]
   },
   "Playlist not started": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4505",
-      "Sources/LemmingsLocal/main.swift:4512",
-      "Sources/LemmingsLocal/main.swift:4538"
+      "Sources/LemmingsLocal/main.swift:4507",
+      "Sources/LemmingsLocal/main.swift:4514",
+      "Sources/LemmingsLocal/main.swift:4540"
     ]
   },
   "Playlist unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4251"
+      "Sources/LemmingsLocal/main.swift:4253"
     ]
   },
   "Playlist {0}": {
@@ -11734,9 +11758,9 @@
     "references": [
       "Sources/LemmingsGameArt/MobileHomeArt.swift:20",
       "Sources/LemmingsLocal/PlayfieldView.swift:261",
-      "Sources/LemmingsLocal/main.swift:2801",
-      "Sources/LemmingsLocal/main.swift:3306",
-      "Sources/LemmingsLocal/main.swift:3955",
+      "Sources/LemmingsLocal/main.swift:2803",
+      "Sources/LemmingsLocal/main.swift:3308",
+      "Sources/LemmingsLocal/main.swift:3957",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:30"
     ]
   },
@@ -11761,7 +11785,7 @@
   "Playlists unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3952"
+      "Sources/LemmingsLocal/main.swift:3954"
     ]
   },
   "Please centre joystick then press fire": {
@@ -12042,21 +12066,21 @@
   "Progress is saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7037"
+      "Sources/LemmingsLocal/main.swift:7039"
     ]
   },
   "Progression": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ProgressionMenu.swift:7",
-      "Sources/LemmingsLocal/main.swift:3999",
+      "Sources/LemmingsLocal/main.swift:4001",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:75"
     ]
   },
   "Progression not created": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4197"
+      "Sources/LemmingsLocal/main.swift:4199"
     ]
   },
   "Progression playlists": {
@@ -12086,13 +12110,13 @@
   "Q / Escape": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8772"
+      "Sources/LemmingsLocal/main.swift:8774"
     ]
   },
   "Q AGAIN TO QUIT  *  ESCAPE TO STAY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7038"
+      "Sources/LemmingsLocal/main.swift:7040"
     ]
   },
   "Queued": {
@@ -12104,19 +12128,19 @@
   "Quit Ultimate Lemmings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:966"
+      "Sources/LemmingsLocal/main.swift:968"
     ]
   },
   "Quit to main menu": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8807"
+      "Sources/LemmingsLocal/main.swift:8809"
     ]
   },
   "Quit?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7036"
+      "Sources/LemmingsLocal/main.swift:7038"
     ]
   },
   "R / B": {
@@ -12128,8 +12152,8 @@
   "R RETRY - SAVE MORE, USE LESS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6414",
-      "Sources/LemmingsLocal/main.swift:7001"
+      "Sources/LemmingsLocal/main.swift:6416",
+      "Sources/LemmingsLocal/main.swift:7003"
     ]
   },
   "R1 / RB": {
@@ -12210,7 +12234,7 @@
   "RELEASE RATE {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6375"
+      "Sources/LemmingsLocal/main.swift:6377"
     ]
   },
   "REMOTE: MOVE, CLICK TO ASSIGN": {
@@ -12281,19 +12305,19 @@
   "RESUME - ": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6086"
+      "Sources/LemmingsLocal/main.swift:6088"
     ]
   },
   "RESUME LEVEL - ": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6086"
+      "Sources/LemmingsLocal/main.swift:6088"
     ]
   },
   "RESUME {0} - {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6079"
+      "Sources/LemmingsLocal/main.swift:6081"
     ]
   },
   "RETRY": {
@@ -12398,9 +12422,9 @@
   "Random 10": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4009",
-      "Sources/LemmingsLocal/main.swift:5004",
-      "Sources/LemmingsLocal/main.swift:5067",
+      "Sources/LemmingsLocal/main.swift:4011",
+      "Sources/LemmingsLocal/main.swift:5006",
+      "Sources/LemmingsLocal/main.swift:5069",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:543"
     ]
   },
@@ -12413,7 +12437,7 @@
   "Random playlist not created": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5075"
+      "Sources/LemmingsLocal/main.swift:5077"
     ]
   },
   "Rank >": {
@@ -12437,13 +12461,13 @@
   "Rank {0}. {1}. {2}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:151"
+      "Sources/LemmingsLocal/GameCenterScores.swift:153"
     ]
   },
   "Ranked catalogue: {0} configurations. Rewinds excluded.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:138"
+      "Sources/LemmingsLocal/GameCenterScores.swift:140"
     ]
   },
   "Rate": {
@@ -12467,7 +12491,7 @@
   "Ratings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3449"
+      "Sources/LemmingsLocal/main.swift:3451"
     ]
   },
   "Reach 100%": {
@@ -12497,9 +12521,9 @@
   "Recently Played": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3632",
-      "Sources/LemmingsLocal/main.swift:3652",
-      "Sources/LemmingsLocal/main.swift:3660"
+      "Sources/LemmingsLocal/main.swift:3634",
+      "Sources/LemmingsLocal/main.swift:3654",
+      "Sources/LemmingsLocal/main.swift:3662"
     ]
   },
   "Recently played  {0}": {
@@ -12540,39 +12564,39 @@
   "Records changed in another app. Close and reopen this app.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:14"
+      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:15"
     ]
   },
   "Records could not be moved aside. Check folder access.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:314"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:320"
     ]
   },
   "Records could not be read. Existing files have been preserved.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:280",
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:304"
+    ]
+  },
+  "Records need a different app version. Existing files were preserved.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:14"
+    ]
+  },
+  "Records recovered from backup. Recent results may be missing.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:276",
       "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:299"
     ]
   },
-  "Records need a different app version. Existing files were preserved.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift:13"
-    ]
-  },
-  "Records recovered from backup. Recent results may be missing.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:272",
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:294"
-    ]
-  },
   "Records were not saved. Check free space and folder access.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:421"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:449"
     ]
   },
   "Records were not saved. Retry the save before continuing.": {
@@ -12639,7 +12663,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:51"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:57"
     ]
   },
   "Release rate": {
@@ -12651,7 +12675,7 @@
   "Release rate {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7084"
+      "Sources/LemmingsLocal/main.swift:7086"
     ]
   },
   "Remap buttons": {
@@ -12676,8 +12700,8 @@
   "Remove": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4302",
-      "Sources/LemmingsLocal/main.swift:4308",
+      "Sources/LemmingsLocal/main.swift:4304",
+      "Sources/LemmingsLocal/main.swift:4310",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:58"
     ]
   },
@@ -12690,7 +12714,7 @@
   "Remove level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4306"
+      "Sources/LemmingsLocal/main.swift:4308"
     ]
   },
   "Remove shared records": {
@@ -12708,13 +12732,13 @@
   "Remove {0} from this playlist?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4307"
+      "Sources/LemmingsLocal/main.swift:4309"
     ]
   },
   "Rename": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4331",
+      "Sources/LemmingsLocal/main.swift:4333",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:36",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:59"
     ]
@@ -12722,7 +12746,7 @@
   "Rename playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4423"
+      "Sources/LemmingsLocal/main.swift:4425"
     ]
   },
   "Repeat last assignment": {
@@ -12741,14 +12765,14 @@
   "Replace": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4323",
+      "Sources/LemmingsLocal/main.swift:4325",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:617"
     ]
   },
   "Replace or remove each locked, missing or changed level before starting.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4526"
+      "Sources/LemmingsLocal/main.swift:4528"
     ]
   },
   "Replay": {
@@ -12763,7 +12787,7 @@
   "Replay Last Game": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:942"
+      "Sources/LemmingsLocal/main.swift:944"
     ]
   },
   "Replay Level": {
@@ -12915,7 +12939,7 @@
   "Rescued {0} of {1}  ({2}%)": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6998"
+      "Sources/LemmingsLocal/main.swift:7000"
     ]
   },
   "Rescued {0}, up from your previous best of {1}.": {
@@ -13002,6 +13026,12 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:228"
     ]
   },
+  "Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+    ]
+  },
   "Resume": {
     "kind": "text",
     "references": [
@@ -13015,8 +13045,8 @@
       "Sources/LemmingsLocal/LearningJourneyMenu.swift:36",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1788",
       "Sources/LemmingsLocal/PanelView.swift:181",
-      "Sources/LemmingsLocal/main.swift:3975",
-      "Sources/LemmingsLocal/main.swift:8805",
+      "Sources/LemmingsLocal/main.swift:3977",
+      "Sources/LemmingsLocal/main.swift:8807",
       "Sources/LemmingsMobileCore/MobileLearning.swift:47",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:184",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:189"
@@ -13037,7 +13067,7 @@
   "Resume Saved Run…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:991"
+      "Sources/LemmingsLocal/main.swift:993"
     ]
   },
   "Resume journey": {
@@ -13056,7 +13086,7 @@
   "Resume run": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4067",
+      "Sources/LemmingsLocal/main.swift:4069",
       "Sources/LemmingsLocal/main.swift:506"
     ]
   },
@@ -13069,19 +13099,25 @@
   "Resume session": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5332"
+      "Sources/LemmingsLocal/main.swift:5334"
     ]
   },
   "Resume session?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5430"
+      "Sources/LemmingsLocal/main.swift:5432"
     ]
   },
   "Resume solo run": {
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:191"
+    ]
+  },
+  "Resume your journey": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Resume {0}  {1}/{2}": {
@@ -13148,7 +13184,7 @@
   "Retry last level as {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7102"
+      "Sources/LemmingsLocal/main.swift:7104"
     ]
   },
   "Retry level": {
@@ -13156,8 +13192,8 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1769",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1494",
-      "Sources/LemmingsLocal/main.swift:8394",
-      "Sources/LemmingsLocal/main.swift:8805"
+      "Sources/LemmingsLocal/main.swift:8396",
+      "Sources/LemmingsLocal/main.swift:8807"
     ]
   },
   "Retry level?": {
@@ -13175,7 +13211,7 @@
   "Retry sync": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:145"
+      "Sources/LemmingsLocal/GameCenterScores.swift:147"
     ]
   },
   "Retry: {0}": {
@@ -13189,7 +13225,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:421",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446",
-      "Sources/LemmingsLocal/main.swift:8774"
+      "Sources/LemmingsLocal/main.swift:8776"
     ]
   },
   "Return to library": {
@@ -13219,13 +13255,13 @@
       "Sources/LemmingsLocal/ArcadeWindow.swift:726",
       "Sources/LemmingsLocal/ArcadeWindow.swift:755",
       "Sources/LemmingsLocal/ArcadeWindow.swift:823",
-      "Sources/LemmingsLocal/main.swift:8559"
+      "Sources/LemmingsLocal/main.swift:8561"
     ]
   },
   "Return to the game library before choosing another game, level, saved run or Hot Seat session.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1665"
+      "Sources/LemmingsLocal/main.swift:1667"
     ]
   },
   "Return to the library before choosing another level or saved game.": {
@@ -13243,25 +13279,25 @@
   "Return to the library before linking devices.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:309"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:311"
     ]
   },
   "Return to the library to change players. The current attempt keeps its owner and is saved for later.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8586"
+      "Sources/LemmingsLocal/main.swift:8588"
     ]
   },
   "Return to the library to change players. Your saved run keeps its progress and next turn.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8585"
+      "Sources/LemmingsLocal/main.swift:8587"
     ]
   },
   "Return to the library to restore a recovery key.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:324"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:326"
     ]
   },
   "Return: Repeat assignment": {
@@ -13294,7 +13330,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445",
-      "Sources/LemmingsLocal/main.swift:8775"
+      "Sources/LemmingsLocal/main.swift:8777"
     ]
   },
   "Revisit": {
@@ -13446,13 +13482,13 @@
   "Run complete": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5510"
+      "Sources/LemmingsLocal/main.swift:5512"
     ]
   },
   "Run could not continue": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5515"
+      "Sources/LemmingsLocal/main.swift:5517"
     ]
   },
   "Run details": {
@@ -13465,26 +13501,26 @@
   "Run in progress": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1664"
+      "Sources/LemmingsLocal/main.swift:1666"
     ]
   },
   "Run not discarded": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5472"
+      "Sources/LemmingsLocal/main.swift:5474"
     ]
   },
   "Run not started": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4800",
-      "Sources/LemmingsLocal/main.swift:4819"
+      "Sources/LemmingsLocal/main.swift:4802",
+      "Sources/LemmingsLocal/main.swift:4821"
     ]
   },
   "Run paused": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5463"
+      "Sources/LemmingsLocal/main.swift:5465"
     ]
   },
   "Run recovery save failed: {0}": {
@@ -13497,9 +13533,9 @@
   "Run unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5342",
-      "Sources/LemmingsLocal/main.swift:5374",
-      "Sources/LemmingsLocal/main.swift:5643"
+      "Sources/LemmingsLocal/main.swift:5344",
+      "Sources/LemmingsLocal/main.swift:5376",
+      "Sources/LemmingsLocal/main.swift:5645"
     ]
   },
   "Runner": {
@@ -13544,19 +13580,19 @@
   "SAVE {0}  ({1}%)": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6374"
+      "Sources/LemmingsLocal/main.swift:6376"
     ]
   },
   "SAVED {0} OF {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6401"
+      "Sources/LemmingsLocal/main.swift:6403"
     ]
   },
   "SAVED {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7322"
+      "Sources/LemmingsLocal/main.swift:7324"
     ]
   },
   "SAVING MOVIE  {0}%   ESC TO CANCEL": {
@@ -13586,7 +13622,7 @@
   "SESSION": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6074"
+      "Sources/LemmingsLocal/main.swift:6076"
     ]
   },
   "SETTINGS": {
@@ -13655,7 +13691,7 @@
   "SHUFFLE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6211"
+      "Sources/LemmingsLocal/main.swift:6213"
     ]
   },
   "SIMON LITTLE": {
@@ -13809,7 +13845,7 @@
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:622",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:691",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1298",
-      "Sources/LemmingsLocal/main.swift:7721"
+      "Sources/LemmingsLocal/main.swift:7723"
     ]
   },
   "ST Game Programmer of Myth": {
@@ -13958,7 +13994,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2049",
-      "Sources/LemmingsLocal/main.swift:4432",
+      "Sources/LemmingsLocal/main.swift:4434",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:570",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/LOAD.IFF:1"
     ]
@@ -13990,7 +14026,7 @@
   "Save and return to library": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8587"
+      "Sources/LemmingsLocal/main.swift:8589"
     ]
   },
   "Save at least 20 more than required in one successful clear.": {
@@ -14033,7 +14069,7 @@
   "Save playlist": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4955"
+      "Sources/LemmingsLocal/main.swift:4957"
     ]
   },
   "Save recovery key": {
@@ -14047,7 +14083,7 @@
     "references": [
       "Sources/LemmingsLocal/GameplayKeyboard.swift:112",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:515",
-      "Sources/LemmingsLocal/main.swift:8772"
+      "Sources/LemmingsLocal/main.swift:8774"
     ]
   },
   "Save this replay at {0}× speed, with music and sound effects.": {
@@ -14065,7 +14101,7 @@
   "Save {0}  ({1}%)": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7083"
+      "Sources/LemmingsLocal/main.swift:7085"
     ]
   },
   "Save {0} more above requirements.": {
@@ -14099,14 +14135,14 @@
   "Saved and editable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4011"
+      "Sources/LemmingsLocal/main.swift:4013"
     ]
   },
   "Saved attempt identities conflict.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyHistory.swift:221",
-      "Sources/NxlvKit/TrolleyHistory.swift:227"
+      "Sources/NxlvKit/TrolleyHistory.swift:223",
+      "Sources/NxlvKit/TrolleyHistory.swift:229"
     ]
   },
   "Saved data could not be opened": {
@@ -14124,7 +14160,7 @@
   "Saved level sequences": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3955"
+      "Sources/LemmingsLocal/main.swift:3957"
     ]
   },
   "Saved on this device": {
@@ -14380,27 +14416,27 @@
   "Session not changed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8568",
-      "Sources/LemmingsLocal/main.swift:8589"
+      "Sources/LemmingsLocal/main.swift:8570",
+      "Sources/LemmingsLocal/main.swift:8591"
     ]
   },
   "Session not resumed": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:89",
-      "Sources/LemmingsLocal/main.swift:5424",
-      "Sources/LemmingsLocal/main.swift:5441",
-      "Sources/LemmingsLocal/main.swift:5456"
+      "Sources/LemmingsLocal/main.swift:5426",
+      "Sources/LemmingsLocal/main.swift:5443",
+      "Sources/LemmingsLocal/main.swift:5458"
     ]
   },
   "Session not started": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4703",
-      "Sources/LemmingsLocal/main.swift:4709",
-      "Sources/LemmingsLocal/main.swift:4714",
-      "Sources/LemmingsLocal/main.swift:4739",
-      "Sources/LemmingsLocal/main.swift:4753"
+      "Sources/LemmingsLocal/main.swift:4705",
+      "Sources/LemmingsLocal/main.swift:4711",
+      "Sources/LemmingsLocal/main.swift:4716",
+      "Sources/LemmingsLocal/main.swift:4741",
+      "Sources/LemmingsLocal/main.swift:4755"
     ]
   },
   "Set a first record, then improve its skill count.": {
@@ -14443,7 +14479,7 @@
   "Settings…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:961"
+      "Sources/LemmingsLocal/main.swift:963"
     ]
   },
   "Shadow": {
@@ -14588,7 +14624,7 @@
   "Show Recorded Routes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:952"
+      "Sources/LemmingsLocal/main.swift:954"
     ]
   },
   "Show full solution": {
@@ -14652,19 +14688,19 @@
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:520",
       "Sources/LemmingsLocal/SettingsWindow.swift:659",
-      "Sources/LemmingsLocal/main.swift:3974",
-      "Sources/LemmingsLocal/main.swift:4348",
+      "Sources/LemmingsLocal/main.swift:3976",
+      "Sources/LemmingsLocal/main.swift:4350",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:55"
     ]
   },
   "Shuffle all": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4015",
-      "Sources/LemmingsLocal/main.swift:5207",
-      "Sources/LemmingsLocal/main.swift:5212",
-      "Sources/LemmingsLocal/main.swift:5233",
-      "Sources/LemmingsLocal/main.swift:5276",
+      "Sources/LemmingsLocal/main.swift:4017",
+      "Sources/LemmingsLocal/main.swift:5209",
+      "Sources/LemmingsLocal/main.swift:5214",
+      "Sources/LemmingsLocal/main.swift:5235",
+      "Sources/LemmingsLocal/main.swift:5278",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:281",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:511"
     ]
@@ -14678,11 +14714,11 @@
   "Shuffle not started": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5221",
-      "Sources/LemmingsLocal/main.swift:5240",
-      "Sources/LemmingsLocal/main.swift:5271",
-      "Sources/LemmingsLocal/main.swift:5282",
-      "Sources/LemmingsLocal/main.swift:5298"
+      "Sources/LemmingsLocal/main.swift:5223",
+      "Sources/LemmingsLocal/main.swift:5242",
+      "Sources/LemmingsLocal/main.swift:5273",
+      "Sources/LemmingsLocal/main.swift:5284",
+      "Sources/LemmingsLocal/main.swift:5300"
     ]
   },
   "Sign in to Game Center to view worldwide scores.": {
@@ -14898,6 +14934,18 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:17"
     ]
   },
+  "Smoother play": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
+    ]
+  },
+  "Smoother results and saves": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
+    ]
+  },
   "Solo / Hot Seat": {
     "kind": "text",
     "references": [
@@ -14960,7 +15008,7 @@
   "Sound effects: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7893"
+      "Sources/LemmingsLocal/main.swift:7895"
     ]
   },
   "Sound fx": {
@@ -14972,7 +15020,7 @@
   "Sound unavailable: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:833"
+      "Sources/LemmingsLocal/main.swift:835"
     ]
   },
   "Soundtrack": {
@@ -15155,8 +15203,8 @@
   "Start": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3487",
-      "Sources/LemmingsLocal/main.swift:3665",
+      "Sources/LemmingsLocal/main.swift:3489",
+      "Sources/LemmingsLocal/main.swift:3667",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:283",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:184"
     ]
@@ -15164,7 +15212,7 @@
   "Start a level, then choose Help > Level hints or press i.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8508"
+      "Sources/LemmingsLocal/main.swift:8510"
     ]
   },
   "Start a new Hot Seat?": {
@@ -15176,7 +15224,7 @@
   "Start a new session?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4758"
+      "Sources/LemmingsLocal/main.swift:4760"
     ]
   },
   "Start fast-forward": {
@@ -15209,7 +15257,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:461",
-      "Sources/LemmingsLocal/main.swift:8648"
+      "Sources/LemmingsLocal/main.swift:8650"
     ]
   },
   "Start practice": {
@@ -15221,20 +15269,20 @@
   "Start session": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4696"
+      "Sources/LemmingsLocal/main.swift:4698"
     ]
   },
   "Start shuffle": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5235"
+      "Sources/LemmingsLocal/main.swift:5237"
     ]
   },
   "Start the nuke countdown for the remaining lemmings.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460",
-      "Sources/LemmingsLocal/main.swift:8647"
+      "Sources/LemmingsLocal/main.swift:8649"
     ]
   },
   "Start with these players. Your current Hot Seat will stay saved.": {
@@ -15246,7 +15294,7 @@
   "Start {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4499"
+      "Sources/LemmingsLocal/main.swift:4501"
     ]
   },
   "Started: {0}": {
@@ -15502,6 +15550,12 @@
       "Sources/LemmingsLocal/GameplayPresentation.swift:376"
     ]
   },
+  "Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+    ]
+  },
   "Surfer": {
     "kind": "text",
     "references": [
@@ -15547,7 +15601,7 @@
   "Sync this library before saving its recovery key.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:319"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:321"
     ]
   },
   "Synced": {
@@ -15815,14 +15869,14 @@
   "Technique Curriculum": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4103",
+      "Sources/LemmingsLocal/main.swift:4105",
       "Sources/NxlvKit/ProgressionPlaylist.swift:11"
     ]
   },
   "Technique unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4175"
+      "Sources/LemmingsLocal/main.swift:4177"
     ]
   },
   "Techniques": {
@@ -16002,7 +16056,7 @@
   "The Classic graphics library is not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5736"
+      "Sources/LemmingsLocal/main.swift:5738"
     ]
   },
   "The Classical Utilitarian": {
@@ -16166,7 +16220,7 @@
   "The NeoLemmix pack changed. Open Level Select and choose the level again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5791"
+      "Sources/LemmingsLocal/main.swift:5793"
     ]
   },
   "The NeoLemmix theme '{0}' could not be loaded.": {
@@ -16251,7 +16305,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1004",
-      "Sources/LemmingsLocal/main.swift:3123"
+      "Sources/LemmingsLocal/main.swift:3125"
     ]
   },
   "The Tribes prospered and grew": {
@@ -16330,7 +16384,7 @@
   "The archive changed or could not be read. Repair or replace it, then open Level Select and try again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3371"
+      "Sources/LemmingsLocal/main.swift:3373"
     ]
   },
   "The archive has more than one member named {0}.": {
@@ -16349,6 +16403,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ZipArchive.swift:19"
+    ]
+  },
+  "The art of one bit": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "The attempt was not saved.": {
@@ -16438,8 +16498,8 @@
   "The fan level pack changed or could not be read.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3907",
-      "Sources/LemmingsLocal/main.swift:4962"
+      "Sources/LemmingsLocal/main.swift:3909",
+      "Sources/LemmingsLocal/main.swift:4964"
     ]
   },
   "The file is not a ZIP archive.": {
@@ -16512,14 +16572,14 @@
   "The imported game data changed. Open Level Select and choose the level again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5537",
-      "Sources/LemmingsLocal/main.swift:5569"
+      "Sources/LemmingsLocal/main.swift:5539",
+      "Sources/LemmingsLocal/main.swift:5571"
     ]
   },
   "The learning path is missing from this build.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4557"
+      "Sources/LemmingsLocal/main.swift:4559"
     ]
   },
   "The legacy NeoLemmix replay format is not supported.": {
@@ -16573,8 +16633,8 @@
   "The level load was cancelled.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5573",
-      "Sources/LemmingsLocal/main.swift:5617"
+      "Sources/LemmingsLocal/main.swift:5575",
+      "Sources/LemmingsLocal/main.swift:5619"
     ]
   },
   "The level needs an entrance for the lemmings that are not preplaced.": {
@@ -16739,19 +16799,19 @@
   "The player or saved session changed. Choose the playlist again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4703"
+      "Sources/LemmingsLocal/main.swift:4705"
     ]
   },
   "The player, Hot Seat session or saved run changed before the level loaded.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4801"
+      "Sources/LemmingsLocal/main.swift:4803"
     ]
   },
   "The player, Hot Seat session or saved run changed while the level was loading.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4820"
+      "Sources/LemmingsLocal/main.swift:4822"
     ]
   },
   "The playlist already contains this level.": {
@@ -16805,13 +16865,13 @@
   "The recovery key is empty.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:327"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:329"
     ]
   },
   "The recovery keys conflict.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:332"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:334"
     ]
   },
   "The replay could not be assembled.": {
@@ -16890,7 +16950,7 @@
   "The saved Hot Seat or one of its players is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5441"
+      "Sources/LemmingsLocal/main.swift:5443"
     ]
   },
   "The saved NeoLemmix level is no longer available.": {
@@ -16902,7 +16962,7 @@
   "The saved collections could not be read.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3640"
+      "Sources/LemmingsLocal/main.swift:3642"
     ]
   },
   "The saved game's library is unavailable.": {
@@ -16968,13 +17028,13 @@
   "The saved sequence changed before this level started.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5644"
+      "Sources/LemmingsLocal/main.swift:5646"
     ]
   },
   "The saved session changed. Choose it again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5424"
+      "Sources/LemmingsLocal/main.swift:5426"
     ]
   },
   "The selected Lemmings 2 level changed. Open Level Select and choose it again.": {
@@ -17016,7 +17076,7 @@
   "The selected NeoLemmix level changed. Open Level Select and choose it again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6643"
+      "Sources/LemmingsLocal/main.swift:6645"
     ]
   },
   "The selected NeoLemmix styles root is not a directory.": {
@@ -17028,36 +17088,36 @@
   "The selected archive changed. Open Level Select and choose the level again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5589",
-      "Sources/LemmingsLocal/main.swift:5612"
+      "Sources/LemmingsLocal/main.swift:5591",
+      "Sources/LemmingsLocal/main.swift:5614"
     ]
   },
   "The selected catalogue entry changed. Open Level Select and choose it again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5651",
-      "Sources/LemmingsLocal/main.swift:5964"
+      "Sources/LemmingsLocal/main.swift:5653",
+      "Sources/LemmingsLocal/main.swift:5966"
     ]
   },
   "The selected fan level could not load: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5619"
+      "Sources/LemmingsLocal/main.swift:5621"
     ]
   },
   "The selected game data could not load: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5575",
-      "Sources/LemmingsLocal/main.swift:5924"
+      "Sources/LemmingsLocal/main.swift:5577",
+      "Sources/LemmingsLocal/main.swift:5926"
     ]
   },
   "The selected game data is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2371",
-      "Sources/LemmingsLocal/main.swift:5683",
-      "Sources/LemmingsLocal/main.swift:5898"
+      "Sources/LemmingsLocal/main.swift:2373",
+      "Sources/LemmingsLocal/main.swift:5685",
+      "Sources/LemmingsLocal/main.swift:5900"
     ]
   },
   "The selected level data changed. Open Level Select and choose it again.": {
@@ -17069,7 +17129,7 @@
   "The selected level is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5540"
+      "Sources/LemmingsLocal/main.swift:5542"
     ]
   },
   "The selected level is not available.": {
@@ -17081,20 +17141,20 @@
   "The selected level's graphics style is missing.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5555"
+      "Sources/LemmingsLocal/main.swift:5557"
     ]
   },
   "The selected playlist is no longer available.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift:32",
-      "Sources/LemmingsLocal/main.swift:4251"
+      "Sources/LemmingsLocal/main.swift:4253"
     ]
   },
   "The selected release is not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2303"
+      "Sources/LemmingsLocal/main.swift:2305"
     ]
   },
   "The service sees your network address during delivery.": {
@@ -17106,7 +17166,7 @@
   "The shared campaign players are missing.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:288"
+      "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:290"
     ]
   },
   "The shared saved total stays until the service resets it.": {
@@ -17196,7 +17256,7 @@
   "The turn passes when a level ends, won or lost.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:60"
+      "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:64"
     ]
   },
   "The vessel will carry us far away": {
@@ -17401,7 +17461,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:907",
-      "Sources/LemmingsLocal/GameCenterScores.swift:115",
+      "Sources/LemmingsLocal/GameCenterScores.swift:117",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:263",
       "Sources/LemmingsLocal/TrolleyResultView.swift:225",
       "Sources/LemmingsMobileUI/MobileRankings.swift:118"
@@ -17422,7 +17482,7 @@
   "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5778"
+      "Sources/LemmingsLocal/main.swift:5780"
     ]
   },
   "This library needs a newer app or exceeds its limits.": {
@@ -17434,8 +17494,8 @@
   "This pack has no playable levels.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3475",
-      "Sources/LemmingsLocal/main.swift:4897"
+      "Sources/LemmingsLocal/main.swift:3477",
+      "Sources/LemmingsLocal/main.swift:4899"
     ]
   },
   "This player's progress is linked to another Game Center account.": {
@@ -17459,8 +17519,8 @@
   "This ruleset cannot rewind yet.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:8977",
-      "Sources/LemmingsLocal/main.swift:9056"
+      "Sources/LemmingsLocal/main.swift:8979",
+      "Sources/LemmingsLocal/main.swift:9058"
     ]
   },
   "This run": {
@@ -17542,7 +17602,7 @@
   "Three-star": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:115"
+      "Sources/LemmingsLocal/GameCenterScores.swift:117"
     ]
   },
   "Three-star levels": {
@@ -17627,8 +17687,8 @@
   "Time {0}:{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7087",
-      "Sources/LemmingsLocal/main.swift:7719",
+      "Sources/LemmingsLocal/main.swift:7089",
+      "Sources/LemmingsLocal/main.swift:7721",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2029",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:533"
     ]
@@ -17958,13 +18018,13 @@
   "UP AND DOWN TO CHOOSE  *  ENTER TO START": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6975"
+      "Sources/LemmingsLocal/main.swift:6977"
     ]
   },
   "UP DOWN ENTER  *  ESC BACK": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6234"
+      "Sources/LemmingsLocal/main.swift:6236"
     ]
   },
   "USED @ TICK": {
@@ -17985,10 +18045,10 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:518",
-      "Sources/LemmingsLocal/main.swift:1448",
-      "Sources/LemmingsLocal/main.swift:1702",
-      "Sources/LemmingsLocal/main.swift:1943",
-      "Sources/LemmingsLocal/main.swift:6917",
+      "Sources/LemmingsLocal/main.swift:1450",
+      "Sources/LemmingsLocal/main.swift:1704",
+      "Sources/LemmingsLocal/main.swift:1945",
+      "Sources/LemmingsLocal/main.swift:6919",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:143",
       "Sources/LemmingsTVUI/TVMenuView.swift:14"
     ]
@@ -17996,7 +18056,7 @@
   "Ultimate Lemmings — {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6724"
+      "Sources/LemmingsLocal/main.swift:6726"
     ]
   },
   "UltimateLemmings/0.1 (fan-pack updates; sequential requests)": {
@@ -18028,7 +18088,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TrolleyResultView.swift:61",
-      "Sources/LemmingsLocal/main.swift:3254",
+      "Sources/LemmingsLocal/main.swift:3256",
       "Sources/LemmingsLocal/main.swift:360",
       "Sources/NxlvKit/LevelCatalogue.swift:51"
     ]
@@ -18036,7 +18096,7 @@
   "Unavailable  {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4229"
+      "Sources/LemmingsLocal/main.swift:4231"
     ]
   },
   "Unavailable item": {
@@ -18109,7 +18169,7 @@
   "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
     ]
   },
   "Unknown": {
@@ -18117,8 +18177,8 @@
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:909",
       "Sources/LemmingsLocal/TrolleyResultView.swift:229",
-      "Sources/LemmingsLocal/main.swift:1446",
-      "Sources/LemmingsLocal/main.swift:1447",
+      "Sources/LemmingsLocal/main.swift:1448",
+      "Sources/LemmingsLocal/main.swift:1449",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:207"
     ]
   },
@@ -18412,7 +18472,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445",
-      "Sources/LemmingsLocal/main.swift:8775"
+      "Sources/LemmingsLocal/main.swift:8777"
     ]
   },
   "V Replay  S Save movie": {
@@ -18424,8 +18484,8 @@
   "V WATCH REPLAY  *  S SAVE MOVIE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:6412",
-      "Sources/LemmingsLocal/main.swift:7000"
+      "Sources/LemmingsLocal/main.swift:6414",
+      "Sources/LemmingsLocal/main.swift:7002"
     ]
   },
   "VALVE": {
@@ -18522,13 +18582,13 @@
   "Version {0} {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:775"
+      "Sources/LemmingsLocal/main.swift:777"
     ]
   },
   "Version {0} · Build {1}\nA rescue worth another try.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1448"
+      "Sources/LemmingsLocal/main.swift:1450"
     ]
   },
   "Very Hard": {
@@ -18546,7 +18606,7 @@
   "View": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1023"
+      "Sources/LemmingsLocal/main.swift:1025"
     ]
   },
   "View / Options": {
@@ -18736,14 +18796,14 @@
   "What's New…": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1035"
+      "Sources/LemmingsLocal/main.swift:1037"
     ]
   },
   "What's new in {0}": {
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:43"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:49"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {
@@ -18824,7 +18884,7 @@
   "Worldwide Game Center leaderboard. {0} {1}{2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:153"
+      "Sources/LemmingsLocal/GameCenterScores.swift:155"
     ]
   },
   "Worldwide community leaderboard. {0}. Rewinds {1}. {2}. {3}": {
@@ -18836,14 +18896,14 @@
   "Worldwide leaderboard": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:110",
+      "Sources/LemmingsLocal/GameCenterScores.swift:112",
       "Sources/LemmingsLocal/HostedRankingsView.swift:22"
     ]
   },
   "Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Worldwide rankings are not enabled in this build. Local records are saved.": {
@@ -18868,7 +18928,7 @@
   "YOUR TURN, {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7099"
+      "Sources/LemmingsLocal/main.swift:7101"
     ]
   },
   "Yamaha YM2149 3-Voice SSG": {
@@ -18946,8 +19006,8 @@
   "Your current session will stay saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4759",
-      "Sources/LemmingsLocal/main.swift:5430"
+      "Sources/LemmingsLocal/main.swift:4761",
+      "Sources/LemmingsLocal/main.swift:5432"
     ]
   },
   "Your fewest skills used to complete this level.": {
@@ -18974,7 +19034,7 @@
   "Your rank: #{0} of {1} - {2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:132"
+      "Sources/LemmingsLocal/GameCenterScores.swift:134"
     ]
   },
   "Your rescue story": {
@@ -18988,7 +19048,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:754",
-      "Sources/LemmingsLocal/main.swift:8558"
+      "Sources/LemmingsLocal/main.swift:8560"
     ]
   },
   "Z - {0}": {
@@ -19038,13 +19098,13 @@
   "Zoom In": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1024"
+      "Sources/LemmingsLocal/main.swift:1026"
     ]
   },
   "Zoom Out": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:1025"
+      "Sources/LemmingsLocal/main.swift:1027"
     ]
   },
   "Zoom active": {
@@ -19147,7 +19207,7 @@
   "available to download": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:774"
+      "Sources/LemmingsLocal/main.swift:776"
     ]
   },
   "carry us to safety.": {
@@ -19159,7 +19219,7 @@
   "changed after this run was created": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5367"
+      "Sources/LemmingsLocal/main.swift:5369"
     ]
   },
   "classic sprite": {
@@ -19183,19 +19243,19 @@
   "count.lemmings": {
     "kind": "plural",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7082"
+      "Sources/LemmingsLocal/main.swift:7084"
     ]
   },
   "count.levels": {
     "kind": "plural",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3256",
-      "Sources/LemmingsLocal/main.swift:3454",
-      "Sources/LemmingsLocal/main.swift:4023",
-      "Sources/LemmingsLocal/main.swift:4256",
-      "Sources/LemmingsLocal/main.swift:4531",
-      "Sources/LemmingsLocal/main.swift:5264",
-      "Sources/LemmingsLocal/main.swift:5511",
+      "Sources/LemmingsLocal/main.swift:3258",
+      "Sources/LemmingsLocal/main.swift:3456",
+      "Sources/LemmingsLocal/main.swift:4025",
+      "Sources/LemmingsLocal/main.swift:4258",
+      "Sources/LemmingsLocal/main.swift:4533",
+      "Sources/LemmingsLocal/main.swift:5266",
+      "Sources/LemmingsLocal/main.swift:5513",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:279",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:52",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:621"
@@ -19204,7 +19264,7 @@
   "count.packs": {
     "kind": "plural",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5264",
+      "Sources/LemmingsLocal/main.swift:5266",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:279",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:519"
     ]
@@ -19335,13 +19395,13 @@
   "is missing": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5370"
+      "Sources/LemmingsLocal/main.swift:5372"
     ]
   },
   "is not available": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5364"
+      "Sources/LemmingsLocal/main.swift:5366"
     ]
   },
   "left": {
@@ -19505,7 +19565,7 @@
   "ready to install": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:774"
+      "Sources/LemmingsLocal/main.swift:776"
     ]
   },
   "recovery key": {
@@ -19703,7 +19763,7 @@
   "the unavailable packs": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5222"
+      "Sources/LemmingsLocal/main.swift:5224"
     ]
   },
   "unexpected oracle replay {0}": {
@@ -19788,13 +19848,13 @@
   "{0}  {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:3454"
+      "Sources/LemmingsLocal/main.swift:3456"
     ]
   },
   "{0} ({1}) was locked, removed or changed. Check the playlist and try again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4710"
+      "Sources/LemmingsLocal/main.swift:4712"
     ]
   },
   "{0} - Level {1}": {
@@ -19819,7 +19879,7 @@
   "{0} - {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4531"
+      "Sources/LemmingsLocal/main.swift:4533"
     ]
   },
   "{0} / {1} earned": {
@@ -19851,7 +19911,7 @@
   "{0} Ranked catalogue only, without rewinds.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/GameCenterScores.swift:154"
+      "Sources/LemmingsLocal/GameCenterScores.swift:156"
     ]
   },
   "{0} Start new records to save again. The unreadable files stay in the records folder.": {
@@ -19870,7 +19930,7 @@
   "{0} artwork unavailable for this level: {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:2754"
+      "Sources/LemmingsLocal/main.swift:2756"
     ]
   },
   "{0} assigned to lemming {1}.": {
@@ -19889,14 +19949,14 @@
   "{0} complete": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7014",
-      "Sources/LemmingsLocal/main.swift:7023"
+      "Sources/LemmingsLocal/main.swift:7016",
+      "Sources/LemmingsLocal/main.swift:7025"
     ]
   },
   "{0} eligible": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5043"
+      "Sources/LemmingsLocal/main.swift:5045"
     ]
   },
   "{0} eligible lemmings. Skill: {1}.": {
@@ -19950,7 +20010,7 @@
   "{0} levels  {1}/{2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:4877"
+      "Sources/LemmingsLocal/main.swift:4879"
     ]
   },
   "{0} libraries selected    {1}": {
@@ -19962,7 +20022,7 @@
   "{0} lost; {1} below the verified maximum.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyPhilosophy.swift:182"
+      "Sources/NxlvKit/TrolleyPhilosophy.swift:183"
     ]
   },
   "{0} mask": {
@@ -20057,7 +20117,7 @@
   "{0} run finished": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7014"
+      "Sources/LemmingsLocal/main.swift:7016"
     ]
   },
   "{0} saved": {
@@ -20093,25 +20153,25 @@
   "{0} were never released. Lost counts only those released.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyPhilosophy.swift:181"
+      "Sources/NxlvKit/TrolleyPhilosophy.swift:182"
     ]
   },
   "{0} {1}   •   Click or space to begin   •   i: goals and hints": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7107"
+      "Sources/LemmingsLocal/main.swift:7109"
     ]
   },
   "{0} {1} unavoidable. None were avoidable.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/TrolleyPhilosophy.swift:177"
+      "Sources/NxlvKit/TrolleyPhilosophy.swift:178"
     ]
   },
   "{0} {1}. No replacement was chosen.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5464"
+      "Sources/LemmingsLocal/main.swift:5466"
     ]
   },
   "{0} {1}s": {
@@ -20242,7 +20302,7 @@
   "{0}/{1} levels passed in this rating.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:7015"
+      "Sources/LemmingsLocal/main.swift:7017"
     ]
   },
   "{0}/{1} packs": {

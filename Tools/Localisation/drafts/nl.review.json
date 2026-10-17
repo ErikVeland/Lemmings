@@ -22,16 +22,17 @@
       "Corrected identified cross-language carryovers and several glossary/semantic issues in the original draft.",
       "Translated the 10 current catalogue additions and removed eight obsolete source strings; refreshed counts and hashes against the current catalogue."
     ],
-    "note": "The draft has full structural text/plural coverage. This AI translation pass included targeted context and glossary checks, but it is not an exhaustive native-speaker linguistic review; no human approval, rendered-layout verification, or device/platform acceptance is claimed."
+    "note": "The draft has full structural text/plural coverage. This AI translation pass included targeted context and glossary checks, but it is not an exhaustive native-speaker linguistic review; no human approval, rendered-layout verification, or device/platform acceptance is claimed.",
+    "release_welcome_2_0_5": "The 2.0.5 release-welcome page has 11 AI-drafted additions, restored from earlier 2.0 drafts where available. One obsolete entry was removed."
   },
   "draft": {
     "path": "Tools/Localisation/drafts/nl.json",
-    "sha256": "0a13786d1b8f31d7b8c343548c821b826740feecf4ae260fa0052ee75ee3b56a",
-    "entry_count": 3162,
+    "sha256": "5be66ff718f227d25792b8c8d3179a2d8d17acf585b8ffb5b47dc90d215b657c",
+    "entry_count": 3172,
     "modified_by_this_worker": true,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
-    "text_count": 3162,
+    "text_count": 3172,
     "unknown_current_text_count": 0
   },
   "catalogue": {
@@ -381,9 +382,9 @@
     "native_language_approved": false
   },
   "catalogue_snapshot": {
-    "text_count": 3162,
+    "text_count": 3172,
     "plural_count": 8,
-    "sha256": "bd5910c059e1e9e4966cd11c014ef0c1d4a4299574883fe091c1c07a1e8c03eb"
+    "sha256": "d61934371796bf4d3f8e17eddda706cca74de3b48bab47d7450b2f68ac75f16a"
   },
   "maintenance_2_0_3": {
     "date": "2026-10-16",

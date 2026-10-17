@@ -123,12 +123,12 @@ final class LanguagePickerTests: XCTestCase {
             for choice in L10n.languageOptions where choice != .system {
                 GameScreen.shared.dismissAll()
                 L10n.setLanguage(choice)
-                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Leaderboard and journey fixes"))
-                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Leaderboards"))
+                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Smoother results and saves"))
+                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Smoother play"))
                 if choice != .english {
-                    XCTAssertNotEqual(ReleaseWelcome.subtitle, "Leaderboard and journey fixes")
+                    XCTAssertNotEqual(ReleaseWelcome.subtitle, "Smoother results and saves")
                 }
-                let welcome = ReleaseWelcome(build: 87, version: ReleaseWelcome.notesVersion)
+                let welcome = ReleaseWelcome(build: 88, version: ReleaseWelcome.notesVersion)
                 var continued = false
                 welcome.show(in: window) { continued = true }
                 let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
