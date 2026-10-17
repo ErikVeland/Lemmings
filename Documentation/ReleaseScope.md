@@ -325,12 +325,30 @@ support claims.
 The current evidence does not meet this rule. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md)
 and the [gate register](ReleaseReadiness/gates.json).
 
+## Sequel completion rule — 18 October 2026
+
+The owner set the completion rule for Lemmings 2 and Lemmings 3. A sequel is
+Complete when every bundled level has a winning route that the current native
+engine replays exactly twice, and the campaign progresses with carry-over,
+saves, recovery, replay identity and result records. Higher survivor counts,
+talismans, endings and better scores are better completions. They do not block
+the Complete classification. Source-fidelity work improves accuracy, but it
+does not decide Complete or Beta. Fan levels keep their separate route work.
+
+Lemmings 2 meets this rule and is Complete. Lemmings 3 had winning routes for
+all 90 levels on the 13 October engine state. On current main, 86 of 90 routes
+still win. The routes for levels 107 (Shadow 7), 206, 213 and 229 stopped
+winning after the 15 October Mole corrections. Lemmings 3 stays Beta until
+these four levels have verified routes on the current engine. See the
+[gate register](ReleaseReadiness/gates.json).
+
 ## Wording
 
 Three words carry the claims, and they mean different things.
 
 **Complete.** Every level has a preserved winning replay that the native engine
 reproduces. The gate fails if a replay is missing, altered, or stops winning.
+A better score or ending is an improvement, not a requirement.
 
 **Playable.** Every level loads, renders and runs. Some levels have a preserved
 winning replay and some do not. A level without one is not a broken level. It is
@@ -436,7 +454,7 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 | Release | Levels | Current route evidence | 1.9 claim |
 | --- | ---: | ---: | --- |
 | Lemmings 2: The Tribes | 120 | 120/120 pass, 70 carry-over variants and 12 full chains pass | **Complete** |
-| Lemmings 3: The Chronicles | 90 | 90 retained fixtures from the prior engine state, current strict replay fails at Shadow 7 | **Beta (route gate open)** |
+| Lemmings 3: The Chronicles | 90 | 86/90 routes win on current main; levels 107, 206, 213 and 229 need repaired routes | **Beta (route gate open)** |
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with

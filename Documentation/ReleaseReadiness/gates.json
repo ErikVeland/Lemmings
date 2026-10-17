@@ -23,10 +23,42 @@
     ]
   },
   {
-    "area": "Sequel fidelity",
+    "area": "L2 campaign completion (MVP)",
     "priority": "P0",
+    "status": "closed",
+    "exitCriteria": "Owner rule, 18 October 2026: a sequel is Complete when every bundled level has a winning route that the current native engine replays exactly twice, and the campaign progresses with carry-over, saves, recovery, replay identity and result records. Higher survivor counts, talismans, endings and better scores are better completions. They do not block this gate or the Complete classification.",
+    "progress": "18 October 2026: L2 meets the rule. Current-main replay passes all 120 standalone routes, 70 carry-over variants and all twelve continuous tribe chains. Each witness wins twice with matching saved counts, ticks and state hashes. L2 is Complete. See Documentation/Lemmings2Completion/README.md.",
+    "scopes": [
+      "all",
+      "macos-2.0"
+    ]
+  },
+  {
+    "area": "L3 campaign completion (MVP)",
+    "priority": "P0",
+    "status": "partial",
+    "exitCriteria": "Owner rule, 18 October 2026: a sequel is Complete when every bundled level has a winning route that the current native engine replays exactly twice, and the campaign progresses with carry-over, saves, recovery, replay identity and result records. Higher survivor counts, talismans, endings and better scores are better completions. They do not block this gate or the Complete classification.",
+    "progress": "13 October 2026: all 90 standalone L3 routes won on that engine state, and each tribe finished with 50 survivors. 18 October 2026 at 183bc8a8: 86 of 90 levels have a route that the current engine replays exactly twice (399 of 416 fixtures). The stored routes for levels 107 (Shadow 7), 206, 213 and 229 no longer win after the 15 October Mole corrections. L3 stays Beta until these four levels have verified routes on the current engine. See ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json.",
+    "scopes": [
+      "all",
+      "macos-2.0"
+    ]
+  },
+  {
+    "area": "Sequel better completions",
+    "priority": "P2",
     "status": "open",
-    "exitCriteria": "1.9 completion gate: resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over, at least 50 survivors at the end of each L3 tribe, endings, saved-run recovery, replay identity and result records.",
+    "exitCriteria": "Non-blocking improvement targets. Raise each L2 tribe to at least 30 survivors with the golden talisman and reach the ark ending. Finish each L3 tribe with at least 50 survivors on the current engine. Improve route scores. These targets do not affect the Complete or Beta classifications.",
+    "progress": "18 October 2026: the twelve L2 chains finish with one lemming, so the ark ending remains unproved. Bounded searches have not raised the Cavelems, Beach or Highland survivor counts. The 13 October L3 engine state finished each tribe with 50 survivors. See Documentation/Lemmings2Completion/README.md.",
+    "scopes": [
+      "all"
+    ]
+  },
+  {
+    "area": "Sequel fidelity",
+    "priority": "P1",
+    "status": "open",
+    "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Owner rule, 18 October 2026: fidelity work improves accuracy. It does not decide the Complete or Beta classification. The L2 and L3 completion gates decide that.",
     "scopes": [
       "all",
       "macos-2.0"
