@@ -421,6 +421,43 @@ guard quotaGame.reserve == 19, quotaGame.pendingReleases == 9,
       nextQuotaScore.distance == quotaActiveDistance + 4 * firstHatchDistance + 5 * secondHatchDistance else {
     fatalError("Solver scored unreleased reserve actors beyond the current release quota")
 }
+var mvpTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+for y in 48..<64 { for x in 0..<128 { mvpTags[y * 128 + x] = 0x20 } }
+let mvpBase = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+    attributes: mvpTags, entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)],
+    total: 2, releaseInterval: 1, releaseDelay: 0))
+var mvpOneSaved = mvpBase
+while mvpOneSaved.saved == 0 && mvpOneSaved.tick < 1000 { mvpOneSaved.step() }
+let mvpAbort = L3Replay.Input(tick: mvpOneSaved.tick, action: "abort", lemming: nil, direction: nil)
+guard L3Replay.apply(mvpAbort, to: &mvpOneSaved), mvpOneSaved.isComplete, mvpOneSaved.saved == 1 else {
+    fatalError("Could not construct a one-survivor MVP route")
+}
+var mvpTwoSaved = mvpBase
+while !mvpTwoSaved.isComplete && mvpTwoSaved.tick < 1000 { mvpTwoSaved.step() }
+guard mvpTwoSaved.isComplete, mvpTwoSaved.saved == 2 else {
+    fatalError("Could not construct a higher-survivor comparison route")
+}
+let mvpLevelData = Data([42])
+let mvpFirstReplay = L3Replay(level: 999, levelSHA256: L3Replay.digest(mvpLevelData), population: 2,
+    initialStateHash: L3Replay.stateHash(mvpBase), inputs: [mvpAbort], expected: .init(mvpOneSaved))
+let mvpLaterReplay = L3Replay(level: 999, levelSHA256: L3Replay.digest(mvpLevelData), population: 2,
+    initialStateHash: L3Replay.stateHash(mvpBase), inputs: [], expected: .init(mvpTwoSaved))
+guard try mvpFirstReplay.replay(from: mvpBase, levelData: mvpLevelData).saved == 1,
+      try mvpLaterReplay.replay(from: mvpBase, levelData: mvpLevelData).saved == 2 else {
+    fatalError("MVP comparison routes did not replay as wins")
+}
+var mvpReport = L3Report()
+let firstMvpCandidate = L3Candidate(game: mvpOneSaved, inputs: [mvpAbort], detector: L3Detector())
+let higherSavingCandidate = L3Candidate(game: mvpTwoSaved, detector: L3Detector())
+guard mvpReport.recordFirstWinningCandidate(firstMvpCandidate),
+      !mvpReport.recordFirstWinningCandidate(higherSavingCandidate),
+      mvpReport.best?.inputs.count == 1,
+      mvpReport.best?.inputs.first?.tick == mvpAbort.tick,
+      mvpReport.best?.inputs.first?.action == "abort",
+      mvpReport.best?.game.saved == 1 else {
+    fatalError("L3 solver replaced the first verified MVP route with a higher-scoring route")
+}
+print("PASS L3 solver keeps the first verified MVP route")
 print("PASS L3 solver offers accepted Brick and Spade directions from retained routes")
 print("PASS L3 solver offers a useful tool site on Classic 03")
 print("PASS L3 solver revisits an active Classic 04 builder when Brick stock changes")

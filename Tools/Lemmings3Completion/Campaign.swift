@@ -86,8 +86,10 @@ private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
 @main private enum Lemmings3CampaignProof {
     static func main() throws {
         let arguments = Set(CommandLine.arguments.dropFirst())
-        guard arguments.isSubset(of: ["--write", "--require-all"]), !arguments.contains("--write") || arguments.count == 1 else {
-            throw SequelDataError.invalid("Usage: Lemmings3CampaignProof [--write | --require-all]")
+        guard arguments.isSubset(of: ["--write", "--require-all", "--require-routes"]),
+              !arguments.contains("--write") || arguments.count == 1,
+              !arguments.contains("--require-all") || !arguments.contains("--require-routes") else {
+            throw SequelDataError.invalid("Usage: Lemmings3CampaignProof [--write | --require-all | --require-routes]")
         }
         let project = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         let root = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_PORTS_ROOT"]
@@ -191,5 +193,6 @@ private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
             print("GAP \(gap.tribe) \(gap.level): \(gap.population) \(noun)\(target)")
         }
         if arguments.contains("--require-all"), !gaps.isEmpty { exit(1) }
+        if arguments.contains("--require-routes"), gaps.contains(where: { $0.requiredSurvivors == nil }) { exit(1) }
     }
 }

@@ -621,3 +621,113 @@ post-drop patrol mismatch at tick 184: source `(115, 192)`, runtime
 release-preparation commits did not change the L3 runtime source, but no build
 88 app-package audit is recorded. See the [current-main reconciliation](../2.0-build83/current-main-sync-reconciliation-2026-10-17.json)
 and [pointwise trace record](current-main-open-drop-e613a5e9-2026-10-17.json).
+
+### 18 October current-main MVP replay refresh
+
+The full current-main audit checked 416 retained routes. It found 203 routes
+that still won with their existing inputs but had stale initial-state records.
+The refresh updated their current identity and expected outcome. It changed no
+input stream. Each refreshed route passed two replays.
+
+The current-main audit now records 399 exact double replays and 17 routes that
+still fail. Four failures are standalone routes. Thirteen are carried routes.
+The fixture manifest and same-level refresh checks pass. The strict gate stops
+at `107.json` and `107-1.json`. This closes stale replay identity only. It does
+not prove optimal routes or original-engine parity. See the [current-main MVP
+audit](current-main-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+### 18 October upstream ancestry check
+
+A fresh fetch resolves remote `main` to
+`09155829a9a404c052410e175818f6da75a43b4d`. Worktree `8c66ef3e` contains that
+commit and is 1,153 commits ahead, with none behind. The local `origin/main`
+tracking ref still points to `8c66ef3e` and is stale for this fetch. The 416
+retained replay scenarios produce 399 exact double
+replays. The 203 refreshed identities keep their original input streams. The
+17 failures are population-specific scenarios for four levels: Shadow 7,
+Egyptian 6, Egyptian 13 and Egyptian 29. The L3 runtime source hash remains
+`97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750`.
+
+For MVP, the route target is one verified win per bundled level. No route must
+be optimal, save every lemming or minimise inputs. Reuse and replay existing
+winning witnesses; only work on levels with no winning witness. Keep the 17
+failed scenarios visible until they are resolved or explicitly moved out of the
+MVP gate. Imported content remains open-ended and is gated per engine and
+version. See the [current-main MVP audit](current-main-mvp-fixture-audit-8c66ef3e-2026-10-18.json)
+and the [bundled-scope reconciliation](../bundled-scope-reconciliation-2026-10-17.json).
+
+
+### 18 October replay state hash correction
+
+`L3Replay.stateHash` now records `Creature.moleDropDelay`. This timer changes
+future Mole movement, so the replay identity must include it. The regression in
+`Tests/Lemmings3CompletionTests/test_state_hash.swift` confirms that two otherwise
+equal Mole states with different delays produce different hashes.
+
+The refresh rebuilt 203 winning routes with current state hashes. It updated the
+initial identity for 17 losing route scenarios. It changed no route inputs. The
+source-built audit then passed 399 of 416 scenarios twice. The same 17 route
+scenarios fail across Shadow 7 and Egyptian 6, 13 and 29. Their current
+identities now match, so the audit reports route failures directly.
+
+`Scripts/verify-l3-completion.sh 001` passed the state-hash regression, fixture
+manifest, refresh checks, verifier integration and strict-gate checks. The
+Mole movement and excavation-mask gaps remain open. See the [current-main audit](current-main-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+### 18 October MVP discovery follow-up
+
+The L3 discovery tool now ignores a retained route when it does not replay as
+a win. It keeps a valid existing route and writes the first new route that
+passes two replays. This removes the prior survivor-count comparison from the
+discovery gate. The current fixed policies found no winning route for levels
+107, 206, 213 or 229. They produced no candidate fixture. These bounded tries
+do not show that the levels are impossible and do not search for optimal
+routes. The runtime suite passed after the static-brick test label was corrected
+to state what its fixture contains. The four route gaps and Mole source-rule
+gaps remain open.
+
+
+## 18 October current-worktree MVP audit
+
+The current-worktree source-built runtime suite passes. The strict fixture
+manifest and negative gates pass. The 416-route audit verifies 399 exact
+double replays. Seventeen route scenarios still fail across Shadow 7 and
+Egyptian 6, 13 and 29. The strict gate stops at standalone `107.json` and
+carried `107-1.json`. This work uses one winning route as the MVP target. It
+does not optimise rescue or input counts.
+
+The runtime now starts a Mole tunnel at player-built bricks. The original manual
+says bricks can direct a Mole, but this audit does not prove the trigger timing
+or excavation mask against the original engine. See the [current-worktree audit](current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+An 18 October DOSBox Staging 0.83 session started the bundled `L3CD.EXE`.
+Its local API exposed CPU and memory access, but no screen capture or timed
+input endpoint. One BIOS Enter key advanced the display, but it did not produce
+a readable level image or an actor trace. This attempt adds no original-engine
+evidence and closes no Mole or route gap. The emulator was stopped.
+
+The current-worktree solver now stops at the first verified win. It keeps a
+retained route when that route still wins. Three targeted 120-second searches
+found no route for Egyptian 6, Egyptian 13 or the carried Egyptian 29 case.
+Three Shadow 7 searches also found no route, including a 300-second run with a
+2,048-wide beam. See the [MVP search details](current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+A direct walkthrough-based Shadow 7 attempt built a vertical stack at tick 615
+and jumped at tick 700. The Mole reached the embedded Spades, but two boxes
+fell only 2 to 6 pixels and no Lem collected them. The route saved no Lems by
+tick 2,200. The [MVP audit](current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json)
+records this failed attempt. This points to tunnel clearance or pickup access.
+
+### 18 October Egyptian 6 route segment
+
+The runtime allows a supported eight-pixel step near the left boundary in
+Egyptian 6's 320 by 400 layout. The actor needs a full support runway and clear
+body space. A bundled-level regression follows Egyptian 6 through the vertical
+brick stack and Shimmy traversal. The L3 runtime suite passes with this
+regression. The rule stays local because the wider rule changed Egyptian 16 and
+22 route outcomes.
+
+The route still fails after the Mole trigger. The actor enters a trap near
+x=135,y=52 and dies. Jump timing probes did not avoid it. This verifies one
+route segment, not an MVP win. No original-engine trace confirms the new step
+rule. The audit records the runtime and test hashes.

@@ -66,7 +66,8 @@ struct L3Replay: Codable {
         for creature in game.creatures {
             text(creature.digDirection.rawValue)
             for value in [creature.id, creature.kind.rawValue, creature.x, creature.y, creature.direction,
-                          creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age] { number(value) }
+                          creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age,
+                          creature.moleDropDelay] { number(value) }
         }
         for trap in c.traps.sorted(by: { $0.id < $1.id }) { number(trap.id); number(game.trapFrame(id: trap.id)) }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
@@ -102,8 +103,15 @@ struct L3Replay: Codable {
             }
             game.step()
         }
-        guard cursor == inputs.count, game.isComplete, game.saved > 0, Outcome(game) == expected else {
-            throw SequelDataError.invalid("L3 replay did not consume every input and reproduce its winning outcome.")
+        guard cursor == inputs.count else {
+            throw SequelDataError.invalid("L3 replay consumed \(cursor) of \(inputs.count) inputs.")
+        }
+        guard game.isComplete, game.saved > 0 else {
+            throw SequelDataError.invalid("L3 replay ended without a win at tick \(game.tick), with \(game.saved) saved and \(game.lost) lost.")
+        }
+        let actual = Outcome(game)
+        guard actual == expected else {
+            throw SequelDataError.invalid("L3 replay outcome differs: expected \(expected.saved) saved, \(expected.lost) lost, \(expected.reserves) reserve at tick \(expected.ticks); got \(actual.saved) saved, \(actual.lost) lost, \(actual.reserves) reserve at tick \(actual.ticks).")
         }
         return game
     }

@@ -2,7 +2,7 @@
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
 The latest macOS package with retained acceptance evidence is **2.0.3 build
-86**. The appcast advertises 2.0.4 build 87. Main prepares 2.0.5 build 88,
+86**. The appcast advertises 2.0.4 build 87. The 2.0 preparation branch prepares build 88,
 but this repository has no build 88 package or acceptance record. See the
 [release notes](Documentation/ReleaseNotes-2.0.3-build86.md),
 [release evidence](Documentation/ReleaseReadiness/2.0.3-build86/README.md) and
@@ -71,10 +71,11 @@ distribution gates remain open. See the
 [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 The 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. L2 records 120/120 standalone routes, 70 carry-over variants
-and 12 chains. Its Gold Ark and original-engine parity remain open. The latest
-L3 fixture audit passes 399/416 exact double replays. Four standalone routes
-and 13 carried schedules fail. Source parity, route repair and L3 media remain
-open.
+and 12 chains. Its Gold Ark and original-engine parity remain open. The
+current-worktree L3 audit on `8c66ef3e` passes 399/416 exact double replays. It
+refreshed 220 fixture identities without changing their input streams. Replay hashes now include the Mole drop delay. Four bundled L3 level identities lack a verified route; 13 carried-schedule
+failures are continuity cases for those same levels. Source parity, route repair and L3 media
+remain open. See the [current-worktree MVP audit](Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
 
 The latest strict audit covers all 6,020 bundled fan levels across 535 packs.
 It verifies 2,403 winning routes. Another 3,599 levels have no matching

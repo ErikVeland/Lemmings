@@ -447,12 +447,34 @@ do {
     for _ in 0..<12 { mole.step() }
     try require(mole.creatures[0].x < 50 && mole.terrainEdits.isEmpty && mole.lost == 0,
         "L3 Mole patrol turns at destructible terrain without excavating it")
-    var brickBarrier = moleTags
-    for y in 28..<48 { for x in 50..<90 { brickBarrier[y * 128 + x] = 0x2020 } }
-    var steeredMole = try moleGame(brickBarrier)
+    var taggedBrickTerrain = moleTags
+    for y in 28..<48 { for x in 50..<90 { taggedBrickTerrain[y * 128 + x] = 0x2020 } }
+    var steeredMole = try moleGame(taggedBrickTerrain)
     for _ in 0..<8 { steeredMole.step() }
     try require(steeredMole.creatures[0].direction == -1 && steeredMole.terrainEdits.isEmpty,
-        "L3 Mole turns at constructed bricks without destroying them")
+        "L3 Mole turns at static terrain with the brick tag without digging")
+    var guidedTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+    for y in 48..<64 { for x in 0..<128 { guidedTags[y * 128 + x] = 0x20 } }
+    var guidedMole = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+        attributes: guidedTags, entrance: .init(x: 16, y: 40), exits: [.init(x: 112, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000,
+        pickups: [.init(id: 0, tool: .bricks, x: 80, y: 40)],
+        extras: [.init(x: 80, y: 48, direction: 1)],
+        creatures: [.init(id: 10, kind: .mole, x: 8, y: 48, direction: 1)]))
+    for _ in 0..<4 { guidedMole.step() }
+    try require(guidedMole.lemmings[0].tool == .bricks &&
+                guidedMole.useTool(to: 0, direction: .up),
+                "L3 Mole guide case collects and activates player-built bricks")
+    var brickTriggeredTunnel = false
+    for _ in 0..<160 {
+        guidedMole.step()
+        if guidedMole.creatures[0].digDirection.dy > 0 {
+            brickTriggeredTunnel = true
+            break
+        }
+    }
+    try require(brickTriggeredTunnel && guidedMole.terrainEdits.values.contains(true),
+        "L3 Mole starts a tunnel at player-built brick terrain and leaves the bricks intact")
     var stoneMole = try moleGame(moleTags, permanent: moleTags)
     for _ in 0..<32 { stoneMole.step() }
     try require(stoneMole.terrainEdits.isEmpty, "L3 mole preserves permanent terrain")
@@ -673,6 +695,32 @@ do {
             }
         }
         try require(crossedCorner, "L3 floor regression did not cross the overlapping corner")
+        let egyptianSix = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent("LEVELS/LEVEL206.DAT")))
+        let egyptianSixStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: egyptianSix.style)
+        let egyptianSixPermanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", egyptianSix.permanentObjectsReference))))
+        let egyptianSixTemporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", egyptianSix.temporaryObjectsReference))))
+        var egyptianSixRun = try Lemmings3Runtime(level: egyptianSix, style: egyptianSixStyle,
+            permanent: egyptianSixPermanent, temporary: egyptianSixTemporary, total: 20)
+        while egyptianSixRun.tick < 511 { egyptianSixRun.step() }
+        try require(egyptianSixRun.lemmings.first { $0.id == 1 }?.x == 32
+            && egyptianSixRun.lemmings.first { $0.id == 1 }?.y == 112,
+            "L3 Egyptian 6 reaches the eight-pixel ledge")
+        egyptianSixRun.step()
+        try require(egyptianSixRun.lemmings.first { $0.id == 1 }?.x == 31
+            && egyptianSixRun.lemmings.first { $0.id == 1 }?.y == 104,
+            "L3 Egyptian 6 steps up the supported eight-pixel ledge")
+        while egyptianSixRun.tick < 527 { egyptianSixRun.step() }
+        try require(egyptianSixRun.useTool(to: 1, direction: .up), "L3 Egyptian 6 starts the source-guided brick stack")
+        while egyptianSixRun.tick < 775 { egyptianSixRun.step() }
+        try require(egyptianSixRun.lemmings.first { $0.id == 1 }?.y == 40
+            && egyptianSixRun.lemmings.first { $0.id == 1 }?.quantity == 0,
+            "L3 Egyptian 6 stack reaches the upper Shimmy pickup")
+        while egyptianSixRun.tick < 850 { egyptianSixRun.step() }
+        try require(egyptianSixRun.useTool(to: 1, direction: .right), "L3 Egyptian 6 uses the Shimmy pickup")
+        while egyptianSixRun.tick < 925 { egyptianSixRun.step() }
+        try require(egyptianSixRun.lemmings.first { $0.id == 1 }.map { $0.x >= 160 } == true,
+            "L3 Egyptian 6 crosses the gap with Shimmy")
+        print("PASS L3 Egyptian 6 eight-pixel step, brick stack and Shimmy route segment")
         for _ in 0..<5000 where !native.isComplete {
             for lem in native.lemmings where lem.state == .walking && lem.y >= 144 && lem.x > 104 {
                 if lem.direction == 1 { _ = native.assign(.walker, to: lem.id) }

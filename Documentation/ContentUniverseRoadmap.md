@@ -22,6 +22,12 @@ The owner set this boundary on 15 October 2026:
 - Distribution rights and complete source data are release gates. A required
   style, asset or dependency that is not available in the bundle leaves that
   content outside the ready set.
+- **Bundled route MVP:** keep one verified winning replay for each bundled
+  level. Use any route that meets that level's win condition. Do not search for
+  maximum rescues, perfect runs or minimum inputs. Keep valid existing routes;
+  replace them only when they stop winning or when a relevant engine or content
+  change requires a new replay. Replaying the full catalogue is not a routine
+  release task.
 
 The compatibility vocabulary below still applies to imported content. Bundled
 content must pass every gate through **Complete** before the release can claim
@@ -126,6 +132,15 @@ Current source status:
   without a candidate, and no input drift. The 3,617 missing fan wins remain
   open. Imported levels remain open-ended. See the [fingerprinted audit](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json)
   and [winning replay witnesses](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl).
+- The bundled `geooPk0` pack is a CustLem2 pack. Forum evidence says CustLem2
+  uses the original Lemmings safe-fall rule. The current `.original` mechanics
+  uses a 60-pixel counter with a 3-pixel initial count. No separate fall rule
+  is needed for this pack. The public NeoLemmix “Crossing Stairs” replay uses
+  60 lemmings, while the bundled Classic level has 40. Two event remappings
+  did not win on the bundled level. Its route remains open. See the [source-rule
+  reconciliation](../Artifacts/DifficultyEvaluation/classic-geoo-crossing-stairs-source-candidate.json),
+  the [CustLem2 pack identification](https://www.lemmingsforums.net/index.php?topic=555.0),
+  and the [CustLem2 fall-rule correction](https://www.lemmingsforums.net/index.php?topic=179.135).
 - Current main `b0db98cf` replays all 615 Trolley rescue configurations across
   562 bundled campaign identities. The fresh audit confirms every recorded
   level condition, status, best-save result and witness. It retains 294 exact
@@ -243,35 +258,81 @@ reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-
 
 The 15 October L3 Mole direction and patrol corrections match captured starting
 directions and no-input patrols. Main `e613a5e9` includes the source-based
-open-drop transition after a down-tunnel. Current main `0659e3a6` keeps the same
-L3 runtime source and passes the runtime suite. Production traces match 139/329
+open-drop transition after a down-tunnel. Worktree commit `8c66ef3e` keeps the same L3 runtime source. The source-built
+runtime suite passed on this worktree commit with this source hash. Production traces match 139/329
 left-facing positions and 179/344 air-gap positions. The air-gap fall matches
 the captured position through tick 183; the first post-drop patrol mismatch is
 at tick 184. Later movement and two of four tunnel-edge checks remain unmatched.
 
-The fresh current-main audit at `e613a5e9` checks 416 fixtures: 399 exact double
-replays, zero stale-identity wins and 17 schedules that do not win (four standalone,
-13 carried). The strict gate passes 322 manifest and negative checks, then fails
-at standalone Shadow 7 and carried fixture 107-1. A historical worktree-only
+The current-worktree audit at `8c66ef3e` checks 416 fixtures. It verifies 399 exact
+double replays after 220 fixture identities were refreshed without changing
+input streams. Replay state hashes now include Mole drop delay. Seventeen schedules still fail across four level identities (four standalone,
+13 carried). The carried failures are continuity cases for those same levels.
+The fixture manifest and refresh checks pass. The strict gate then stops at
+standalone Shadow 7 and carried fixture 107-1. See the [current-worktree audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+A historical worktree-only
 Mole cadence experiment raised air-gap trace matches from 179/344 to 191/344,
 but pointwise checks reject its 4/3-pixel rule: it differs from source at ticks
 185 and 190 shortly after landing. The runtime change and test were removed.
 The experiment and its searches are not current-main or release evidence. See
 the [rejected experiment record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json).
-The Mole excavation mask,
-built-brick trigger and remaining source rules remain open. This Mole change
-does not close the route gaps. Three bounded Shadow 7 searches before the
+Two 120-second MVP searches for Shadow 7 found no route. One started from
+the level start and one continued the retained route through tick 1,666. They
+expanded 735,128 and 316,204 candidates. Neither search changed a fixture.
+These bounded results do not prove the level impossible. The [search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json) records the current solver hashes and commands.
+
+The same first-win solver found no MVP route for Egyptian 6 or Egyptian 13 in
+120-second searches. A 120-second carried-population search from tick 1,560
+found no route for Egyptian 29. These results do not prove the levels
+impossible. The 17 failed route scenarios remain across all four level
+identities.
+
+The nine retained deterministic discovery policies also found no route for
+Shadow 7 or Egyptian 6, 13 and 29 against the current runtime library. This
+bounded pass changed no fixtures. Its prebuilt executable predates the current
+first-win source change; the policy bodies were unchanged, so treat this as
+diagnostic evidence only. See the [discovery record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+A targeted current-runtime check confirms the carried Egyptian 29 population-15
+and population-43 fixtures have their current initial-state hashes and share
+the same inputs. Both first refuse Walker for lemming 2 at tick 1,561,
+immediately after a down-tool action. Moving the three nearby Walker/Jump
+inputs to tick 1,560 lets both replays proceed to a refused blocker at tick
+1,972. For population 15, moving that blocker to tick 1,960 accepts all inputs
+but does not rescue a lemming. No candidate was promoted. This keeps the MVP
+route gap open without spending effort on survivor or input optimisation; see
+the [targeted repair probes](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+The runtime now starts a tunnel when a Mole meets player-built bricks. The
+manual says bricks can direct a Mole, but no original-engine capture confirms
+this trigger's timing or excavation mask. This change does not close the route
+gaps. Three bounded Shadow 7 searches before the
 steel-contact change found no route; they do not validate current main. See the
 [historical search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-currentmole-search-2026-10-17.json),
-[current-main fixture audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json),
+[current-worktree fixture audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json),
 [current-main Mole record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json),
 [left-facing trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-left-facing-e613a5e9-2026-10-17.json)
 and [air-gap trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-air-gap-e613a5e9-2026-10-17.json).
 
+Three source-guided MVP probes on the current Mole runtime built toward the
+walkthrough's four-or-five-brick direction stack. Two builds sent the Mole
+down-right; one sent it down-left. In all three, the Mole passed below the
+embedded Spades without releasing them, and no lemming was saved. The retained
+fixture was restored unchanged. This directs the next check to tunnel placement
+and excavation around the pickups, but it does not establish which original
+Mole rule differs. Details and hashes are in the [MVP probe record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+
+An 18 October Egyptian 6 follow-up added a supported eight-pixel step near the
+left boundary in that level's 320 by 400 layout. A bundled-level regression
+follows the route to Shimmy. The test passes, but the route still fails at a
+trap near x=135 after the Mole trigger. The broader rule changed Egyptian 16
+and 22 route outcomes, so the correction stays local. This segment does not
+close the level's MVP gap. The audit records the evidence and hashes.
+
 Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site
 grid. Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded
 5,181,833, and seeded Egyptian 29 expanded 3,620,601. None found a route.
-Main `0659e3a6` prepares macOS 2.0.5 build 88, iOS build 14 and tvOS build 4.
+Main `8c66ef3e` prepares macOS 2.0.5 build 88, iOS build 14 and tvOS build 4.
 The appcast still advertises macOS 2.0.4 build 87, and no build 88 package or
 acceptance record is present. The latest retained Mac acceptance record is
 build 86. Imported content remains open-ended and is excluded from bundled
@@ -282,8 +343,8 @@ Continue the separate validation work:
 
 - compare native rules, movement, tools, traps and input cadence with the
   original DOS engines;
-- prove L2's golden-talisman ark ending with at least 30 survivors per tribe,
-  and L3's three complete campaigns with at least 50 final survivors;
+- verify a complete carried path through each bundled campaign; treat the
+  30-survivor L2 Gold Ark and 50-survivor L3 campaign routes as stretch goals;
 - close environmental effects, original movie audio and story transitions;
 - keep recovery, replay identity and result records validated against the
   actual release candidate.

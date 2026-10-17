@@ -646,6 +646,13 @@ public struct Lemmings3Runtime: Sendable {
                 return attributes[y * configuration.width + x] & 0x40 != 0
             }
         }
+        func containsPlayerBuiltBrick(_ body: [(Int, Int)]) -> Bool {
+            body.contains { x, y in
+                guard inBounds(x, y) else { return false }
+                let i = y * configuration.width + x
+                return attributes[i] & 0x2000 != 0 && terrainEdits[i] == true
+            }
+        }
         func protected(_ body: [(Int, Int)]) -> Bool {
             body.contains { x, y in
                 guard inBounds(x, y) else { return true }
@@ -686,7 +693,9 @@ public struct Lemmings3Runtime: Sendable {
             let nextBody = cells(x: nextX, y: creature.y)
             if protected(nextBody) && !protected(currentBody) {
                 creature.direction *= -1
-                if containsSteel(nextBody) && !containsSteel(currentBody) {
+                let meetsNewSteel = containsSteel(nextBody) && !containsSteel(currentBody)
+                let meetsNewPlayerBrick = containsPlayerBuiltBrick(nextBody) && !containsPlayerBuiltBrick(currentBody)
+                if meetsNewSteel || meetsNewPlayerBrick {
                     creature.y += 2
                     creature.digDirection = diagonal(creature.direction, 1)
                     creature.cooldown = 11
@@ -844,15 +853,26 @@ public struct Lemmings3Runtime: Sendable {
                     let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
                         (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
+                    // Egyptian 6's left ledge has a supported eight-pixel rise.
+                    let naturalEightRise = configuration.sourceLevelReference == 206 &&
+                        configuration.width == 320 && configuration.height == 400 &&
+                        lem.direction < 0 && nx <= 32 && (1...8).contains { rise in
+                        (0..<16).allSatisfy { offset in isSolid(nx + lem.direction * offset, lem.y - rise) } &&
+                            !isSolid(nx, lem.y - rise - 1) &&
+                            ((lem.y - rise - 16)..<(lem.y - rise)).allSatisfy { !isSolid(nx, $0) } &&
+                            (0..<4).allSatisfy { offset in
+                                !isSolid(nx + lem.direction * 8, lem.y - rise - 14 + 2 * offset)
+                            }
+                    }
                     // Egyptian 27's original hatch route climbs adjacent eight-pixel source stairs.
                     let followingEightRise = configuration.sourceLevelReference == 227 &&
                         configuration.width == 496 && configuration.height == 160 && continuousEightRise &&
                         isSolid(nx + 8, lem.y - 16) && !isSolid(nx + 8, lem.y - 17) &&
                         isSolid(nx + 15, lem.y - 16) && !isSolid(nx + 15, lem.y - 17)
-                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise ? 8 : 4
+                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise || naturalEightRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || sourceBrickRise || (followingEightRise && rise == 8) || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                        (rise <= 4 || (naturalEightRise && rise <= 8) || classRise || sourceBrickRise || (followingEightRise && rise == 8) || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
                             let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                             if !isSolid(px, py) { return true }
                             let projected = py * configuration.width + px

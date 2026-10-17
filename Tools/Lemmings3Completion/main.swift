@@ -26,14 +26,22 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         let file = fixtures.appendingPathComponent(String(format: "%03d.json", number))
         var best: L3Replay?
         if FileManager.default.fileExists(atPath: file.path) {
-            best = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: file))
-        }
-        if let best {
-            guard best.level == number else { throw SequelDataError.invalid("Replay level number does not match its fixture") }
-            _ = try best.replay(from: base, levelData: level.rawData)
+            let retained = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: file))
+            guard retained.level == number else { throw SequelDataError.invalid("Replay level number does not match its fixture") }
+            if discover {
+                do {
+                    _ = try retained.replay(from: base, levelData: level.rawData)
+                    best = retained
+                } catch {
+                    best = nil
+                }
+            } else {
+                _ = try retained.replay(from: base, levelData: level.rawData)
+                best = retained
+            }
         }
         if discover {
-            for policy in -1...7 where best == nil || best!.expected.lost > 0 {
+            for policy in -1...7 where best == nil {
                 var game = base, inputs: [L3Replay.Input] = []
                 func action(_ name: String, _ id: Int, _ direction: String? = nil) {
                     let input = L3Replay.Input(tick: game.tick, action: name, lemming: id, direction: direction)
@@ -82,10 +90,6 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
                     }
                 }
                 guard game.isComplete && game.saved > 0 else { continue }
-                if let best {
-                    let retained = best.expected.saved + best.expected.reserves
-                    if game.survivors < retained || (game.survivors == retained && game.saved <= best.expected.saved) { continue }
-                }
                 let replay = L3Replay(level: number, levelSHA256: L3Replay.digest(level.rawData), population: 20,
                     initialStateHash: L3Replay.stateHash(base), inputs: inputs, expected: .init(game))
                 _ = try replay.replay(from: base, levelData: level.rawData)
