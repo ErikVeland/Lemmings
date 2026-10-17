@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-  "upstreamCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
+  "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+  "upstreamCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "commit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -28,12 +28,12 @@
       "classicSolver": "The current-main commit changes ClassicSolver geometry output formatting and the batch driver input path. The driver now selects exact unresolved bundled audit rows and exact level members. Search selection changed; engine simulation and replay behaviour did not.",
       "classicReplayEvidence": "The 2,755 accepted winning-route witnesses were rerun at 9a95012e. Main later changes Classic rewind replay export to retain the starting level fingerprint and refreshes Trolley proof metadata. The focused rewind suite passes with a digger replay. A full Trolley replay audit at b0db98cf confirms all 615 exact rescue configurations against the current catalogue; it does not establish source-engine parity.",
       "routeValidation": "Scripts/verify-l3-mole-trace.py passed at b2dd57a: 53 recorded DOS/prototype positions, isolated prototype reconstruction, production Mole source hash, two repeated traces with 673 samples, and four tunnel-edge checks. It explicitly leaves production-to-DOS trajectory parity open.",
-      "latestMainAdvance": "Commits 82b6509e, 8e8066b6 and b92386eb prepare 2.0.4 build 87. Commit b0db98cf adds documentation only. No Classic, L2, L3 or NeoLemmix simulation rules or level data changed after b92386eb. Main fixes Classic rewind replay export by preserving the starting level fingerprint. The current-source Trolley full replay audit at b0db98cf checks 615 configurations across 562 campaign identities; all conditions, statuses, best-save outcomes, replay witnesses and candidate-history counts match the prior catalogue. It reports 294 exact population proofs, 315 rescue records and six unknown configurations. The L3 runtime and trace verifier remain unchanged from b2dd57a, so the recorded 0/329 production trajectory remains valid at that source. Prepared build 87 release notes are on main, but there is no accepted build-87 package evidence. Commit 31868d5f adds the previously prepared bundled-scope, Egyptian 29 and five-search L2 records to main. It changes documentation only; no engine, loader, solver or level data changed. Commit 833f396b publishes the 2.0.4 appcast update only. It changes no game source, solver or bundled resources.",
+      "latestMainAdvance": "Commits 82b6509e, 8e8066b6 and b92386eb prepare 2.0.4 build 87. Commit b0db98cf adds documentation only. No Classic, L2, L3 or NeoLemmix simulation rules or level data changed after b92386eb. Main fixes Classic rewind replay export by preserving the starting level fingerprint. The current-source Trolley full replay audit at b0db98cf checks 615 configurations across 562 campaign identities; all conditions, statuses, best-save outcomes, replay witnesses and candidate-history counts match the prior catalogue. It reports 294 exact population proofs, 315 rescue records and six unknown configurations. The L3 runtime and trace verifier remain unchanged from b2dd57a, so the recorded 0/329 production trajectory remains valid at that source. Prepared build 87 release notes are on main, but there is no accepted build-87 package evidence. Commit 31868d5f adds the previously prepared bundled-scope, Egyptian 29 and five-search L2 records to main. It changes documentation only; no engine, loader, solver or level data changed. Commit 833f396b publishes the 2.0.4 appcast update only. It changes no game source, solver or bundled resources. Commit 3e1c7498 (Fade zoom indicators) adds documentation and an L2 solver memory bound. It adds a regression for that bound. It changes no engine runtime, loader or bundled level resources. The L2 searches in this commit use the updated solver.",
       "trolleyAudit": "At b0db98cf, the standard verifier replays 615 configurations covering 562 campaign level identities. Conditions, status, maximum, best-save outcome, witness and tested-candidate counts match the prior audit for every identity. The merge reports 294 population-bound certificates, 315 best-known rescue records and six unknown configurations. Candidate search was disabled; the 1,535 recorded attempts were retained only for identical conditions and engine fingerprint. This audit does not cover Classic fan packs or prove source fidelity."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
-    "result": "Current main is 833f396b9edee8f0059deb010286439ac97c4e0a. Commit 833f396b publishes the 2.0.4 appcast update only. It changes no engine, loader, solver or level resources. The Classic and L2 solver/runtime hashes used by current searches remain source-current.",
-    "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members. Commit 833f396b changes only appcast.xml."
+    "result": "Current main is 3e1c749854f433fe6cce279a5d165ef48fef1b2f. The L2 solver now bounds pending candidates and has a memory-bound regression. No engine runtime, loader or bundled level resources changed. Bundled route and source-behaviour gaps remain open. This worktree now has four uncommitted release-record updates. The current-head L3 Mole rerun also matches the retained runtime and trace hashes, with 0/329 source positions.",
+    "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members. Commit 833f396b changes only appcast.xml. Commit 3e1c7498 changes L2 solver tools only. It does not change Classic simulation or replay behaviour."
   },
   "classic": {
     "scope": "2,755 accepted bundled winning replay witnesses: 352 official/conversion and 2,403 fan",
@@ -216,7 +216,7 @@
     "carryOverVariants": 70,
     "continuousChains": 12,
     "sourceParity": "open",
-    "currentMainContinuity": "Commit 31868d5f adds evidence documentation. Commit 833f396b publishes the 2.0.4 appcast update. Neither changes L2 runtime, solver or resource inputs. The bounded-frontier solver fix and Classic route searches remain local to this worktree.",
+    "currentMainContinuity": "The L2 runtime and resource inputs did not change. Commit 3e1c7498 bounds pending candidates in the L2 search solver and adds a memory-bound regression. The Cavelems 6 search used this solver. Earlier Highland 10 searches used the prior solver and remain bounded evidence for that version. Classic search evidence is now part of main.",
     "sourceFrameRecheck": {
       "date": "2026-10-17",
       "sourceFrame": "Beach 10, countdown 8:33",
@@ -289,26 +289,32 @@
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
-    "Documentation/Lemmings2Completion/README.md",
-    "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json",
     "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
     "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseScope.md",
-    "Tests/Lemmings2SolverTests/main.swift",
-    "Tools/Lemmings2Solver/LevelRun.swift",
-    "Tools/Lemmings2Solver/Search.swift"
+    "Documentation/ReleaseScope.md"
   ],
   "remoteVerification": {
     "method": "git fetch origin main; git rev-parse HEAD origin/main FETCH_HEAD; git rev-list --left-right --count HEAD...origin/main",
-    "head": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "originMain": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "fetchHead": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "upToDate": true
+    "head": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "originMain": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "fetchHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "upToDate": true,
+    "aheadBehindOriginMain": {
+      "ahead": 0,
+      "behind": 0
+    },
+    "workingTreeCleanAtFetch": true,
+    "uncommittedPathsAfterReconciliation": [
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md"
+    ]
   },
   "lemmings3": {
-    "currentMainHead": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "currentMainRuntimeContinuity": "The diff from the recorded route and trace evidence contains no Lemmings3Runtime.swift change. The production Mole trace and trace verifier were both rerun at b2dd57a; production-to-DOS trajectory parity remains open. Commit 833f396b changes appcast.xml only.",
+    "currentMainHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "currentMainRuntimeContinuity": "The recorded route and trace evidence has no committed Lemmings3Runtime.swift change. The current-head production Mole rerun matches 0 of 329 source positions. An isolated candidate matches 141 of 329 but diverges after tick 187 and fails two tunnel-edge witnesses. The candidate was not retained in production.",
     "latestFullFixtureAuditSource": "1111ece8",
     "fixtureResults": {
       "exactDoubleReplays": 399,
@@ -397,9 +403,26 @@
       "isolatedPrototypeExactMatches": 141,
       "interpretation": "At b2dd57a, current production remains horizontal and diverges from 329 source positions. The prototype matches the recorded burrow segment but then tunnels through a source opening; its carve mask also conflicts with two of four source tunnel-edge witnesses. No runtime or route fixture changed.",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-      "audit": "Scripts/audit-l3-mole-production-trace.sh"
+      "audit": "Scripts/audit-l3-mole-production-trace.sh",
+      "currentHeadRerun": {
+        "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+        "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+        "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+        "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
+        "exactMatches": 0,
+        "samples": 329,
+        "firstMismatchTick": 2,
+        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+      },
+      "isolatedCandidateProbe": {
+        "exactMatches": 141,
+        "samples": 329,
+        "matchingTicks": "36\u2013187 inclusive, plus ticks 17, 19 and 25\u201330",
+        "result": "The candidate diverges after tick 187 and clears all nearby terrain by tick 180. It remains rejected by two of four source tunnel-edge checks. Production source was restored.",
+        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+      }
     },
-    "latestCurrentMainHeadVerifiedByFetch": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "latestCurrentMainHeadVerifiedByFetch": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
     "latestCurrentMainSeededSearches": {
       "level": 229,
       "name": "Egyptian 29",
@@ -537,12 +560,12 @@
       "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
       "partialSHA256": "2aba985ca16072743cab435083721dd06faaa88793828aaa3fd470fc34803df7",
       "resourceVersion": "Installed app 1.9.1 build 76; level SHA matches the audited Trolley condition.",
-      "sourceContinuity": "The search ran at 31868d5f. Commits 31868d5f and 833f396b change documentation and appcast only; solver binary, L2 solver source and runtime hashes match current source."
+      "sourceContinuity": "This search ran at 31868d5f with the prior L2 solver. Commit 3e1c7498 changes candidate management but not L2 runtime or resource inputs. The result remains bounded evidence for the recorded solver version."
     }
   },
   "mainUpdateToCurrent": {
     "fromCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
-    "toCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "toCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
     "commits": [
       "82b6509e Prepare 2.0.4 build 87 release notes",
       "8e8066b6 Refresh rescue proofs and hints for build 87",
@@ -551,7 +574,8 @@
       "dd0f1578 Report a suspended level-entry fade as crossfading",
       "a78098f2 Trolley",
       "31868d5f More evidence (documentation-only; no engine or resource changes)",
-      "833f396b Publish 2.0.4 update feed"
+      "833f396b Publish 2.0.4 update feed",
+      "3e1c7498 Fade zoom indicators"
     ],
     "findings": [
       "Classic rewind replay export now uses the starting level fingerprint, so terrain edits during a run do not produce a mismatched replay identity. Older checkpoints remain decodable.",
@@ -563,8 +587,9 @@
       "No Classic, L2, L3 or NeoLemmix simulation rules or level data changed in the three release-preparation commits or the two later evidence/audio commits.",
       "Commit a78098f2 adds Trolley audit and replay tooling, catalogue evidence and tests. It changes no game simulation, loader or level data. The current L2 population-60 search record leaves both audited rescue rows open.",
       "The dd0f1578 L3 production trace remains applicable at a78098f2 because the incoming commit changes no NxlvKit source. It matches 0 of 329 source positions.",
-      "Commit 31868d5f records the L2 population-60 and L3 Egyptian 29 searches, plus bundled-scope reconciliation. It changes documentation only. The latest Highland 10 population-60 search remains uncommitted in this worktree and found no route.",
-      "Commit 833f396b updates appcast.xml for the 2.0.4 release feed. It changes no game code or bundled resources. Package acceptance remains separate."
+      "Commit 31868d5f records earlier L2 population-60 and L3 Egyptian 29 searches. The Highland 10 result used the prior solver and found no route in a bounded search. Commit 3e1c7498 adds the bounded-frontier solver and the Cavelems 6 search record.",
+      "Commit 833f396b updates appcast.xml for the 2.0.4 release feed. It changes no game code or bundled resources. Package acceptance remains separate.",
+      "Commit 3e1c7498 bounds pending candidates in the L2 search solver and adds a memory-bound regression. It changes no engine runtime, loader or bundled level resources. The Cavelems 6 search used this solver and found no route."
     ]
   },
   "postFastForwardValidation": {
@@ -600,14 +625,22 @@
     }
   },
   "mainAdvanceSincePreviousSync": {
-    "fromCommit": "31868d5fd753ca325be77abc6d23e90fbac14ce5",
-    "toCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "commitTitle": "Publish 2.0.4 update feed",
+    "fromCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "toCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "commitTitle": "Fade zoom indicators",
     "changedPaths": [
-      "appcast.xml"
+      "Documentation/Lemmings2Completion/README.md",
+      "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md",
+      "Tests/Lemmings2SolverTests/main.swift",
+      "Tools/Lemmings2Solver/LevelRun.swift",
+      "Tools/Lemmings2Solver/Search.swift"
     ],
-    "sourceImpact": "The commit changes the update feed only. It changes no engine, solver, loader or level resource."
+    "sourceImpact": "The commit bounds pending candidates in the L2 search solver and adds a memory-bound regression. It also updates evidence records. It changes no engine runtime, loader or bundled level resources. Route and source-behaviour gaps remain open."
   },
   "currentMainReleaseFeedCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-  "currentMainReleaseFeedNote": "The current main commit publishes the 2.0.4 appcast update. This feed change does not establish full bundled-engine closure or package acceptance."
+  "currentMainReleaseFeedNote": "The appcast update at 833f396b advertises 2.0.4 build 87. HEAD is now 3e1c7498 after L2 solver-tooling and evidence changes. Neither commit establishes bundled-engine closure or accepted-package evidence for build 87."
 }

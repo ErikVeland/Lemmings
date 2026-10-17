@@ -48,9 +48,13 @@ match build 85, and it retains the shared engine libraries. The complete build
 86 app audit was not rerun, so build 85 route and engine evidence carries
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
-On 17 October, a fetch confirmed that `HEAD`, `origin/main` and `FETCH_HEAD`
-match at `833f396b9edee8f0059deb010286439ac97c4e0a`. This commit updates the
-2.0.4 appcast only. The current-main reconciliation records earlier changes to
+On 17 October, a fresh fetch confirmed that `HEAD`, `origin/main` and
+`FETCH_HEAD` match at `3e1c749854f433fe6cce279a5d165ef48fef1b2f`, with a clean worktree at fetch and zero
+commits ahead or behind. This reconciliation adds local release-record edits. Commit `833f396b` updates the 2.0.4
+appcast. Commit `3e1c7498` adds a bounded pending-candidate frontier to the L2
+search solver and a memory-bound regression. It also updates evidence records.
+It changes no engine runtime, loader or bundled level resources. The current-main
+reconciliation records earlier changes to
 Classic rewind fingerprints and Trolley evidence. A full replay-only Trolley
 audit at engine fingerprint
 `dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c` checked 615

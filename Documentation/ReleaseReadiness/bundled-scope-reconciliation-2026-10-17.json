@@ -4,27 +4,22 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "originMain": "833f396b9edee8f0059deb010286439ac97c4e0a",
-    "fetchHead": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "head": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "originMain": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "fetchHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "A fresh fetch confirms HEAD, origin/main and FETCH_HEAD all equal 833f396b9edee8f0059deb010286439ac97c4e0a. The latest commit, 833f396b, updates appcast.xml for 2.0.4 build 87 only; it changes no engine, loader, solver or bundled level data. The current-main reconciliation records that the latest route and replay evidence remains source-current for the affected engine files. Seven completed bounded population-60 searches found no Trolley route; the bounded-frontier Cavelems 6 run completed at beam 32,768 and saved 0/60. Both Trolley rows remain UNKNOWN.",
-    "postFastForwardValidation": "At b0db98cf, the full replay-only Trolley verifier checked all 615 exact rescue configurations across 562 campaign identities against engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c; conditions and outcomes match the prior catalogue. The later current-main audit confirms those engine inputs are unchanged. The L3 trace verifier checks 53 recorded DOS/prototype positions, repeated source traces and four tunnel-edge checks, but does not establish production parity. The direct production-to-DOS comparison at dd0f1578 matches 0/329 positions. Commit 833f396b changes appcast.xml only. Open bundled gaps remain: 3,617 Classic fan routes, the L2 Gold Ark and two UNKNOWN Trolley rows, 17 L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded here.",
-    "uncommittedPaths": [
-      "Documentation/Lemmings2Completion/README.md",
-      "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json",
-      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json",
-      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseScope.md",
-      "Tests/Lemmings2SolverTests/main.swift",
-      "Tools/Lemmings2Solver/LevelRun.swift",
-      "Tools/Lemmings2Solver/Search.swift"
-    ],
+    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal 3e1c749854f433fe6cce279a5d165ef48fef1b2f. The worktree was clean at fetch and is zero commits ahead or behind. This update now has four local record edits. Commit 3e1c7498 updates the L2 solver memory bound and its regression. It adds evidence records. It changes no engine runtime, loader or bundled level resources. The Cavelems 6 search saved 0/60. Both Trolley rows remain UNKNOWN.",
+    "postFastForwardValidation": "The replay-only Trolley audit checked 615 configurations across 562 campaign identities. Its conditions and results match the prior catalogue. The L3 trace verifier checks 53 DOS and prototype positions, repeated source traces and four tunnel-edge checks. It does not prove production parity. The direct production-to-DOS comparison at dd0f1578 matches 0/329 positions. Commit 3e1c7498 changes L2 solver tools and records only. Open bundled gaps include 3,617 Classic fan routes, the L2 Gold Ark and two UNKNOWN Trolley rows, 17 L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
-    }
+    },
+    "uncommittedPaths": [
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md"
+    ]
   },
   "releasePackageStates": {
     "macOS": {

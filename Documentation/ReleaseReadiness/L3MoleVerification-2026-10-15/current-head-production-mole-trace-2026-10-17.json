@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "headCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+  "headCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
   "fixture": {
     "name": "steel-left-facing",
     "level": 101,
@@ -111,7 +111,71 @@
     ],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "The production Mole remains horizontal and has no excavation behaviour at dd0f1578. The isolated proposal matches some burrow positions but fails later fall behaviour and conflicts with two tunnel-edge witnesses. Neither is a complete Mole implementation.",
-  "closureEffect": "A direct current-source rerun at dd0f1578 confirms 0 of 329 source positions. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
-  "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh"
+  "interpretation": "At current main 3e1c7498, production remains horizontal and does not match the recorded source trajectory. The isolated candidate matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It continues through air after tick 187 and fails two of four source tunnel-edge checks. No candidate is a complete Mole implementation.",
+  "closureEffect": "The current-head production rerun at 3e1c7498 matches 0 of 329 source positions. The rebuilt runtime and trace hashes match the retained dd0f1578 run. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
+  "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh",
+  "currentHeadRerun": {
+    "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "command": "CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
+    "comparisonCommand": "python3 Tools/Lemmings3Completion/compare_mole_trace.py .build/l3-mole-production-trace/production-trace.json Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json steel-left-facing",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+    "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
+    "exactPositionMatches": 0,
+    "samples": 329,
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        154,
+        110
+      ],
+      "production": [
+        156,
+        110
+      ]
+    },
+    "result": "The current-head rebuild produced the same runtime, library and trace hashes as the retained dd0f1578 run. It still matches 0 of 329 source positions."
+  },
+  "isolatedCandidateProbe": {
+    "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
+    "fixture": "steel-left-facing",
+    "patch": "mole-prototype.patch",
+    "patchSHA256": "58365aef473dfcbac35a6c8c9b3854c58b31a17c574fca0b7e94f14f9309e792",
+    "candidateRuntimeSHA256": "14e5ce9625861ecdac622e50e909133aec1525bc43138140d405f5d816d87318",
+    "candidateLibrarySHA256": "2b4912c6fa6750366b3193d44cdd418070c7e332a36bd49a8bad581e196b974f",
+    "candidateTraceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
+    "samples": 329,
+    "exactPositionMatches": 141,
+    "matchingTickRanges": [
+      [
+        17,
+        17
+      ],
+      [
+        19,
+        19
+      ],
+      [
+        25,
+        30
+      ],
+      [
+        36,
+        187
+      ]
+    ],
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        154,
+        110
+      ],
+      "candidate": [
+        156,
+        112
+      ]
+    },
+    "finding": "The candidate matches every position from tick 36 through 187, then diverges. It clears all local solid terrain by tick 180 and continues through air. This does not model the source transition after tick 187. The separate baseline terrain-edge check still rejects two of four pixels.",
+    "status": "isolated probe only; production source restored"
+  }
 }
