@@ -3,6 +3,38 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.0.4</title>
+            <pubDate>Sat, 17 Oct 2026 14:46:49 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>87</sparkle:version>
+            <sparkle:shortVersionString>2.0.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release fixes worldwide leaderboard verification and saved journeys. It also makes the game simulations faster.</p>
+<h3>Worldwide leaderboards</h3>
+<p>A Classic leaderboard entry now records a fingerprint of the exact level. The fingerprint includes terrain, steel, entrances, traps, exits, skills and counters. Previously, a route from a different level with the same terrain and counters could pass verification. Entries recorded before this update still verify.</p>
+<h3>Journey</h3>
+<p>A revised journey no longer repeats its opening levels for a saved run. Previously, a change in the journey order queued every level that the run had not visited, starting again from the first level.</p>
+<p>The journey now resumes after the furthest level that you reached in the new order. Earlier levels that you skipped appear in <b>Come back to these</b>. They do not count as wins. Levels that you won in the journey or in a Classic campaign do not come back.</p>
+<h3>Performance</h3>
+<p>Classic, The Tribes and NeoLemmix levels use less processing time. Classic replays with blockers run up to a third faster. Level results, replays and saved runs are unchanged.</p>
+<h3>Language selection</h3>
+<p>The 2.0.3 language fix is retained. Open <b>Settings &gt; Gameplay &gt; Language</b>. Select a language to preview it. Choose <b>Apply</b> to save the choice or <b>Back</b> to restore the previous language.</p>
+<h3>Compatibility and known limits</h3>
+<p>The public app targets Apple silicon and Intel Macs running macOS 12.3 or later. The slim fresh-install download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. This update does not change level content or the existing campaign and source-fidelity limits.</p>
+<p>The eight translated language packs remain AI-assisted drafts. Human language review, physical controllers, VoiceOver, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their recorded validation gaps. Mobile and TV releases have separate gates.</p>
+<p class="meta">Build: 87<br>Release commit: dd0f1578ec2efb8b1e587949d708610931cc0ae4<br>Release base: v2.0.3</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-2.0.4-build87.zip" length="2054538831" type="application/octet-stream" sparkle:edSignature="0m+2FiEJWTwetAvGt8q7CdRbz31crYW1XH28CqofwhFjhuErzr0uX+FMxeNwEsX8dy+j8WBpSANbUaqPQ1D+DQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from86.delta" sparkle:deltaFrom="86" length="2432782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="xIykkIjDq3+yrppI40C+Bhrbt37X0iXT5UqeoNjBMzD5iTWHoe0IuJZ3l8TFuOblxwPym3ipskiZA3tCW/9vAw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from85.delta" sparkle:deltaFrom="85" length="2430242" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="y0rT6tN3MC99aRVUXwGUpzjjdrX42LoHQ72dulc/17wdWcPSeUkgymF/aqQ7W8FtoLHubfgTSzbX0AMz6RZ+Cw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from84.delta" sparkle:deltaFrom="84" length="3647246" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="6bMu1899PO+RSH4kgcxs1259t7N/pQPuAgWcK69cR/hSkqT45cxu/ejnuHqanVGQABzelBRS/CMb6BoEHU/mAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from83.delta" sparkle:deltaFrom="83" length="4034446" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="eX1KAPHY9yNmUbqEznXAJPb0FZTosWqoWebaOQZ3qkBj2coOdfxrR6PY1n3kQVO9zi4RrC7vv+yhcF8G94JMAw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from82.delta" sparkle:deltaFrom="82" length="4872806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ANLoe+5xJVip2fppcVGs2cmTu+fF1POSt2r3msLQIFGTBBcPBEXPFL3kgyHEMUvHlWW3Xx2f/kKBlo7lFcdNBg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.3</title>
             <pubDate>Fri, 16 Oct 2026 11:11:38 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
