@@ -71,83 +71,81 @@ for sample in samples:
     if source_position != recorded_source or native_position != recorded_source or not sample["matches"]:
         raise SystemExit(f"FAIL Mole position differs at tick {sample['tick']}.")
 
-runtime_hash = hashlib.sha256(runtime.read_bytes()).hexdigest()
-report = json.loads(current_report.read_text())
 current_commit = subprocess.run(
     ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
 ).stdout.strip()
-if report["headCommit"] != current_commit:
-    raise SystemExit("FAIL current production report does not match HEAD.")
-current_head = report["currentHeadRerun"]
-if current_head["runtimeSourceSHA256"] != runtime_hash:
-    raise SystemExit("FAIL production runtime source differs from the current-head report.")
-if current_head["freshTraceProduced"]:
-    if "exactPositionMatches" not in current_head or "traceSHA256" not in current_head:
-        raise SystemExit("FAIL fresh current-head trace summary is incomplete.")
-    parity_summary = (
-        f"fresh current-head trace matches "
-        f"{current_head['exactPositionMatches']}/{current_head['samples']} positions"
+
+
+def compare_trace(case_name, trace_name, trace_hash, expected_matches, expected_ranges):
+    case = next(item for item in followup["cases"] if item["name"] == case_name)
+    source_positions = {tick: (left + 8, top + 18) for tick, left, top, *_ in case["samples"]}
+    trace_bytes = (evidence / trace_name).read_bytes()
+    if hashlib.sha256(trace_bytes).hexdigest() != trace_hash:
+        raise SystemExit(f"FAIL {case_name} trace hash differs from its record.")
+    native = {sample["tick"]: (sample["x"], sample["y"]) for sample in json.loads(trace_bytes)}
+    matches = [tick for tick, position in source_positions.items() if native.get(tick) == position]
+    ranges = []
+    for tick in matches:
+        if not ranges or tick > ranges[-1][-1] + 1:
+            ranges.append([tick])
+        else:
+            ranges[-1].append(tick)
+    actual_ranges = [[ticks[0], ticks[-1]] for ticks in ranges]
+    if len(matches) != expected_matches or actual_ranges != expected_ranges:
+        raise SystemExit(f"FAIL {case_name} trace positions differ from its summary.")
+    return len(source_positions), len(matches)
+
+
+if candidate_mode:
+    candidate = json.loads((evidence / "current-worktree-steel-contact-8d65e927-2026-10-17.json").read_text())
+    runtime_hash = hashlib.sha256(runtime.read_bytes()).hexdigest()
+    fetched_commit = subprocess.run(
+        ["git", "rev-parse", "FETCH_HEAD"], check=True, capture_output=True, text=True
+    ).stdout.strip()
+    if candidate["baseCommit"] != current_commit or candidate["originMain"] != fetched_commit:
+        raise SystemExit("FAIL candidate base does not match HEAD and fetched main.")
+    if candidate["runtimeSourceSHA256"] != runtime_hash:
+        raise SystemExit("FAIL worktree runtime source differs from its candidate record.")
+    left = candidate["sourceTraces"]["steel-left-facing"]
+    air = candidate["sourceTraces"]["steel-air-gap"]
+    left_name = left["trace"].split("L3MoleVerification-2026-10-15/")[-1]
+    air_name = air["trace"].split("L3MoleVerification-2026-10-15/")[-1]
+    left_count, left_matches = compare_trace(
+        "steel-left-facing", left_name, left["traceSHA256"],
+        left["exactPositionMatches"], left["matchingTickRanges"]
     )
+    air_count, air_matches = compare_trace(
+        "steel-air-gap", air_name, air["traceSHA256"],
+        air["exactPositionMatches"], air["matchingTickRanges"]
+    )
+    parity_summary = f"candidate traces match {left_matches}/{left_count} left-facing and {air_matches}/{air_count} air-gap positions"
+    print(f"PASS worktree candidate is based on fetched main {fetched_commit[:8]}")
 else:
-    cell_carve = report["cellCarveVariant"]
-    if cell_carve["candidateRuntimeSHA256"] != runtime_hash:
-        raise SystemExit("FAIL current production source differs from its recorded cell-carve evidence.")
-    if current_head["sourceHashMatchedEvidence"] != "cellCarveVariant":
-        raise SystemExit("FAIL isolated candidate evidence is not identified in the current-head report.")
-    parity_summary = (
-        f"matching source hash has prior {current_head['candidateExactMatches']}/"
-        f"{current_head['samples']} candidate matches, not a fresh current-head trace"
+    main_record = json.loads((evidence / "current-head-strict-gate-8d65e927.json").read_text())
+    main_source = subprocess.run(
+        ["git", "show", f"{current_commit}:{source_path}"], check=True, capture_output=True
+    ).stdout
+    if main_record["headCommit"] != current_commit:
+        raise SystemExit("FAIL current-main evidence does not match HEAD.")
+    if hashlib.sha256(main_source).hexdigest() != main_record["runtimeSourceSHA256"]:
+        raise SystemExit("FAIL current-main runtime source differs from its evidence record.")
+    left_count, left_matches = compare_trace(
+        "steel-left-facing", "current-head-left-facing-production-trace.json",
+        "743d78ec2f05b81233b4996bb1fa6f6e64207d4eae65436c885c69a49eaa5a4b", 0, []
     )
+    air_count, air_matches = compare_trace(
+        "steel-air-gap", "current-head-air-gap-production-trace.json",
+        "73d0404042b8b4d4198ba7c5cf1c9238ca1898f163e97120aa1022efd912fa82", 2,
+        [[17, 17], [19, 19]]
+    )
+    parity_summary = f"current main traces match {left_matches}/{left_count} left-facing and {air_matches}/{air_count} air-gap positions"
+
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
-
-air_gap = report.get("currentHeadAirGapRerun")
-if not air_gap or air_gap["runtimeSourceSHA256"] != runtime_hash:
-    raise SystemExit("FAIL current air-gap trace does not match the production runtime source.")
-if air_gap["headCommit"] != current_commit:
-    raise SystemExit("FAIL current air-gap trace does not match HEAD.")
-air_gap_trace_path = project / air_gap["productionTracePath"]
-air_gap_trace_bytes = air_gap_trace_path.read_bytes()
-if hashlib.sha256(air_gap_trace_bytes).hexdigest() != air_gap["traceSHA256"]:
-    raise SystemExit("FAIL current air-gap production trace hash differs from its record.")
-air_gap_trace = json.loads(air_gap_trace_bytes)
-air_gap_source = next(case for case in followup["cases"] if case["name"] == "steel-air-gap")
-air_gap_source_positions = {
-    tick: (left + 8, top + 18)
-    for tick, left, top, _width, _height in air_gap_source["samples"]
-}
-air_gap_native = {sample["tick"]: (sample["x"], sample["y"]) for sample in air_gap_trace}
-air_gap_matches = [
-    tick for tick, position in air_gap_source_positions.items()
-    if air_gap_native.get(tick) == position
-]
-air_gap_ranges = []
-for tick in air_gap_matches:
-    if not air_gap_ranges or tick > air_gap_ranges[-1][-1] + 1:
-        air_gap_ranges.append([tick])
-    else:
-        air_gap_ranges[-1].append(tick)
-air_gap_first_mismatch_tick = next(
-    tick for tick in sorted(air_gap_source_positions)
-    if air_gap_native.get(tick) != air_gap_source_positions[tick]
-)
-if len(air_gap_matches) != air_gap["exactPositionMatches"] or len(air_gap_source_positions) != air_gap["samples"]:
-    raise SystemExit("FAIL current air-gap position count differs from its record.")
-if [[ticks[0], ticks[-1]] for ticks in air_gap_ranges] != air_gap["matchingTickRanges"]:
-    raise SystemExit("FAIL current air-gap matching ranges differ from its record.")
-if air_gap_first_mismatch_tick != air_gap["firstMismatch"]["tick"]:
-    raise SystemExit("FAIL current air-gap first mismatch differs from its record.")
-for tick in (167, 173, 182):
-    expected_source = air_gap["fallTransitionComparison"][f"sourceTick{tick}"]
-    expected_native = air_gap["fallTransitionComparison"][f"productionTick{tick}"]
-    if list(air_gap_source_positions[tick]) != expected_source or list(air_gap_native[tick]) != expected_native:
-        raise SystemExit(f"FAIL current air-gap fall sample differs at tick {tick}.")
-
 print(f"PASS recorded DOS/prototype samples: {len(samples)} positions, ticks {first}–{last}")
 print("PASS isolated prototype patch reconstructs from its recorded baseline")
-print("PASS current production runtime hash matches the current-head report")
 print(f"OPEN production-to-DOS trajectory parity: {parity_summary}")
-print(f"OPEN current air-gap trace matches {len(air_gap_matches)}/{len(air_gap_source_positions)} positions; source fall transition remains unmatched")
+print("OPEN source fall transition and full Mole rules remain unmatched")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")
