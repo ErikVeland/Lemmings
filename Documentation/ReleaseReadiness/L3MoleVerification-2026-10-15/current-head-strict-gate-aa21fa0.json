@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+  "runtimeSourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+  "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+  "runtimeLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace zsh Scripts/verify-l3-completion.sh --require-all",
+  "exitCode": 1,
+  "manifestAndNegativeChecks": "passed: 322 campaign fixture hashes and coverage manifest; missing fixture/population/hash/level/outcome/rejected input/order/strict-scope tests passed",
+  "replayGate": "failed",
+  "firstStandaloneFailure": "107.json",
+  "firstCarriedFailure": "107-1.json",
+  "fixtureAudit": "current-head-fixture-audit-aa21fa0.json",
+  "result": "Strict completion remains open. The current full audit has 17 current-runtime route failures, including four standalone and 13 carried. Six additional fixtures have stale identities but still win when rebased."
+}

@@ -4,19 +4,21 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "originMain": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "fetchHead": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "head": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "originMain": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "fetchHead": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal dc9c59614a710705f6bd4701deb7d34cf3796870, zero commits ahead or behind. Two release-record edits were present at fetch. Commit dc9c5961 adds the 8x2 Mole carve implementation to the production L3 runtime. Identical-source candidate evidence matches 141/329 positions and diverges after tick 187; two of four terrain-edge checks fail. A fresh trace build and full L3 fixture audit were not completed. Bundled gaps remain; imported content stays open-ended.",
-    "postFastForwardValidation": "The recorded Trolley replay audit checked 615 configurations across 562 campaign identities. Prior L3 evidence includes 399/416 exact double replays at fe11bd5d, 17 route failures, and a strict-gate failure at 107 and 107-1. That audit predates the Mole runtime change at dc9c596 and is not current-head validation. A fresh no-optimisation current-head Mole trace matches 141/329 positions; release-optimised trace and full L3 fixture audits remain open. Open bundled gaps include 3,617 Classic fan routes, L2 Gold Ark and two UNKNOWN Trolley rows, 17 last-audited L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
+    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a, zero commits ahead or behind. Four release-record edits were present at fetch. Commit aa21fa0 updates the L3 Mole trace evidence and verifier; the runtime source remains the 8x2 cell-carve implementation from dc9c596. A fresh optimised trace matches 141/329 positions and diverges after tick 187; two of four terrain-edge checks fail. The full L3 fixture audit remains open. Bundled gaps remain; imported content stays open-ended.",
+    "postFastForwardValidation": "The recorded Trolley replay audit checked 615 configurations across 562 campaign identities. A fresh optimised L3 audit at aa21fa0 checked 416 fixtures: 393 exact double replays, six stale-identity routes that still win when rebased, and 17 schedules that do not win (four standalone, 13 carried). The Mole trace matches 141/329 source positions and diverges after tick 187; two of four terrain-edge witnesses fail. The independent no-optimisation trace matches the same positions. Bundled gaps remain: 3,617 Classic fan routes, L2 Gold Ark and two UNKNOWN Trolley rows, L3 failures and identity reconciliation, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
     "uncommittedPaths": [
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md"
     ]
   },
   "releasePackageStates": {
@@ -76,13 +78,15 @@
     },
     "lemmings3": {
       "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
-      "verified": "The latest retained full audit at fe11bd5d passed 399/416 fixtures. This audit predates the dc9c596 Mole runtime change. A fresh no-optimisation current-head trace matches 141/329 positions; this does not validate the release-optimised build or all L3 fixtures.",
-      "open": "The last full fixture audit had 17 route failures (four standalone, 13 carried). Two 600-second seeded searches for Egyptian 29 found no route; no fixture changed. A fresh no-optimisation Mole trace at dc9c596 matches 141/329 positions and diverges after tick 187; two of four terrain-edge witnesses fail. Release-optimised trace and current-head fixture audits remain open. Bounded searches do not prove impossibility. The built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
+      "verified": "A fresh optimised audit at aa21fa0 confirms 393/416 exact double replays. Six fixtures with stale identity still produce winning routes when rebased. The Mole source trace comparison is 141/329 positions; this is partial behaviour evidence, not engine fidelity closure.",
+      "open": "Seventeen schedules do not win on the current runtime (four standalone, 13 carried). Six additional routes win only when rebased and need replay identity/initial-state reconciliation. The Mole trace diverges after tick 187 and two of four terrain-edge witnesses fail. The built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery remain open.",
       "evidence": [
         "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
         "L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json",
         "L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
-        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+        "L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
+        "L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json"
       ]
     },
     "neoLemmix": {

@@ -49,15 +49,17 @@ match build 85, and it retains the shared engine libraries. The complete build
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
 On 17 October, a fresh fetch confirmed that `HEAD`, `origin/main` and
-`FETCH_HEAD` match at `dc9c59614a710705f6bd4701deb7d34cf3796870`, with zero
-commits ahead or behind. Two local release-record edits were present at fetch.
+`FETCH_HEAD` match at `aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a`, with zero
+commits ahead or behind. Four local release-record edits were present at fetch.
 Commit `833f396b` updates the 2.0.4 appcast. Commit `dc9c5961` adds an 8x2
-Mole carve to the production L3 runtime and updates its evidence. A fresh no-optimisation build of the current source matches 141/329 Mole
-positions, with first divergence at tick 2 and further divergence after tick
-187; two of four terrain-edge checks fail. This is not a release-optimised
-build. No current-head full L3 fixture audit is recorded. The previous full
-fixture audit at `fe11bd5d` had 399/416 passing fixtures and 17 route failures;
-it predates this runtime change. Earlier Trolley evidence checks 615 configurations across 562 campaign
+Mole carve to the production L3 runtime. Commit `aa21fa0e` updates its trace
+evidence and verifier without changing that runtime. A fresh optimised build of the current source matches 141/329 Mole positions,
+with first divergence at tick 2 and further divergence after tick 187; two of
+four terrain-edge checks fail. An independent no-optimisation build produced
+the same trace. A fresh full audit at `aa21fa0e` records 393/416 exact double replays, six
+stale-identity routes that still win when rebased, and 17 schedules that do not
+win on the current runtime (four standalone, 13 carried). The earlier
+`fe11bd5d` audit had 399/416 exact replays and predates this runtime change. Earlier Trolley evidence checks 615 configurations across 562 campaign
 identities, with 294 population proofs, 315 rescue records and six unknown
 configurations. These results do not establish source fidelity or close the
 fan, Gold Ark, L3 route or NeoLemmix style gaps. The appcast advertises build

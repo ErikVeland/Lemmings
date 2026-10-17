@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-  "upstreamCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+  "sourceCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+  "upstreamCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -290,45 +290,51 @@
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
     "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+    "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+    "Documentation/ReleaseScope.md"
   ],
   "remoteVerification": {
     "method": "git fetch origin main; git rev-parse HEAD origin/main; git rev-list --left-right --count HEAD...origin/main",
-    "head": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "originMain": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "fetchHead": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "head": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "originMain": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "fetchHead": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
     "upToDate": true,
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
     "workingTreeCleanAtFetch": false,
-    "workingTreeStateAtFetch": "Two existing audit-document edits were present. Runtime and content files were clean.",
+    "workingTreeStateAtFetch": "Four release-record edits were present; engine and content source files were clean.",
     "uncommittedPathsAfterReconciliation": [
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md"
     ]
   },
   "lemmings3": {
-    "currentMainHead": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "currentMainRuntimeContinuity": "Main contains the 8x2-cell Mole excavation implementation. A fresh no-optimisation current-head build matches 141/329 source positions, with first divergence at tick 2 and further divergence after tick 187; two of four terrain-edge witnesses still fail. Release-optimised trace and full fixture audits remain outstanding.",
-    "latestFullFixtureAuditSource": "1111ece8",
+    "currentMainHead": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "currentMainRuntimeContinuity": "Main at aa21fa0 contains the 8x2-cell Mole excavation implementation from dc9c596. The aa21fa0 commit changes the verifier and evidence only; the runtime source hash is unchanged. A fresh optimised trace at that runtime source matches 141/329 positions, with first divergence at tick 2 and further divergence after tick 187; two of four terrain-edge witnesses still fail. The full fixture audit remains outstanding.",
+    "latestFullFixtureAuditSource": "aa21fa0e",
     "fixtureResults": {
-      "exactDoubleReplays": 399,
+      "exactDoubleReplays": 393,
       "total": 416,
       "routeFailures": 17,
       "standaloneFailures": 4,
-      "carriedFailures": 13
+      "carriedFailures": 13,
+      "rebasedWinsWithStaleIdentity": 6
     },
     "runtimeAndVerifierPathsUnchangedSinceAudit": false,
-    "currentMainFullAuditRerun": false,
-    "latestFullFixtureAuditCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "currentMainFullAuditRerun": true,
+    "latestFullFixtureAuditCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
     "partialSourceTrace": "53 primary positions, 673 repeated samples across two traces, four tunnel-edge witnesses",
     "openGaps": [
-      "17 route repairs",
-      "excavation mask",
-      "built-brick trigger",
-      "complete Mole rules",
+      "17 route schedules fail on current runtime (4 standalone, 13 carried)",
+      "6 routes win only after rebase and need identity/initial-state reconciliation",
+      "Mole path matches 141/329 source positions; divergence after tick 187",
+      "two of four Mole tunnel-edge witnesses fail",
+      "built-brick Mole trigger and full Mole rule set",
       "environmental effects",
       "movie audio",
       "story transitions",
@@ -343,12 +349,15 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-shadow07-search-2026-10-17.json"
     },
     "latestCurrentMainAudit": {
-      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-      "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
-      "strictExactDoubleReplays": 399,
+      "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+      "reportSHA256": "73a5773b249c6c8b0ecd2c9d68a0345681025694c4ac5d3ecb368190c2473357",
+      "strictExactDoubleReplays": 393,
       "totalFixtures": 416,
       "routeFailures": 17,
-      "result": "Historical full audit at fe11bd5d reproduces 399/416 exact double replays. It predates the dc9c596 Mole runtime change and is not current-head validation."
+      "rebasedWinsWithStaleIdentity": 6,
+      "result": "Fresh optimised full audit against the current runtime library. 393/416 exact double replays; six stale-identity routes still win when rebased; 17 schedules do not win (four standalone, 13 carried).",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
+      "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json"
     },
     "latestCurrentMainSearch": {
       "level": 213,
@@ -362,12 +371,13 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-egyptian13-wide-search-2026-10-17.json"
     },
     "latestCurrentMainStrictGate": {
-      "result": "Historical strict gate at fe11bd5d: manifest and negative checks pass; standalone 107 and carried 107-1 fail. This predates the dc9c596 Mole runtime change.",
+      "result": "Fresh strict gate at aa21fa0 failed at standalone route 107 and carried route 107-1. The 322-entry manifest and negative checks passed. The full fixture audit records 393 exact replays, six stale-identity rebased wins and 17 current-runtime route failures.",
       "standaloneFailure": "107.json",
       "carriedFailure": "107-1.json",
       "manifestAndNegativeChecks": "passed",
-      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
-      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4"
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json",
+      "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+      "rerun": true
     },
     "shadow07FollowUpBeam8192Cell2": {
       "budgetSeconds": 300,
@@ -387,11 +397,11 @@
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json"
     },
     "latestProductionMoleTraceComparison": {
-      "commit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+      "commit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
       "sourceTraceSamples": 329,
       "productionExactMatches": 141,
       "isolatedPrototypeExactMatches": 141,
-      "interpretation": "At dc9c596, production includes the cell-carve implementation with source SHA 493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8. A fresh no-optimisation build matched 141/329 positions, first mismatch tick 2 (source 154,110; production 156,112), and divergence after tick 187. Two of four terrain-edge checks still fail. This is not a release-optimised build or a full fixture audit.",
+      "interpretation": "At dc9c596, production includes the cell-carve implementation with source SHA 493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8. A fresh optimised build matched 141/329 positions, first mismatch tick 2 (source 154,110; production 156,112), and diverged after tick 187. Two of four terrain-edge checks still fail. An independent no-optimisation build produced the same trace. The full fixture audit remains open.",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
       "audit": "Scripts/audit-l3-mole-production-trace.sh",
       "isolatedCandidateProbe": {
@@ -427,11 +437,12 @@
       "currentHeadRerun": {
         "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
         "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-        "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
+        "runtimeLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
         "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
         "compiler": "Apple Swift 6.3.3, Xcode toolchain",
-        "optimisation": "none",
+        "optimisation": "-O",
         "freshTraceProduced": true,
+        "auditExitCode": 1,
         "exactMatches": 141,
         "samples": 329,
         "firstMismatchTick": 2,
@@ -444,10 +455,13 @@
           112
         ],
         "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-        "limitations": "Not a release-optimised build or full L3 fixture audit."
-      }
+        "result": "Optimised build and trace completed against runtime source introduced at dc9c596; current HEAD aa21fa0 retains the identical runtime source hash. Comparator returned 1 because parity is partial. The independent no-optimisation build produced the same trace hash.",
+        "currentHeadCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+        "runtimeUnchangedInCurrentHeadCommit": true
+      },
+      "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
     },
-    "latestCurrentMainHeadVerifiedByFetch": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "latestCurrentMainHeadVerifiedByFetch": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
     "latestCurrentMainSeededSearches": {
       "level": 229,
       "name": "Egyptian 29",
@@ -658,19 +672,18 @@
     }
   },
   "mainAdvanceSincePreviousSync": {
-    "fromCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-    "toCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "commitTitle": "L3 Evidence",
+    "fromCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+    "toCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "commitTitle": "L3 Mole trace",
     "changedPaths": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift",
-      "Sources/NxlvKit/Lemmings3Runtime.swift.orig",
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
       "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
       "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseScope.md"
+      "Documentation/ReleaseScope.md",
+      "Scripts/verify-l3-mole-trace.py"
     ],
-    "sourceImpact": "The commit promotes the 8x2 Mole carve implementation to the production L3 runtime and adds the prior horizontal runtime as a .orig source file. This is a behavioural engine change. Matching source-hash evidence is 141/329, with divergence after tick 187 and two of four terrain-edge checks failing. No current-head rebuild or full L3 fixture audit is recorded; bundled engine closure remains open."
+    "sourceImpact": "The commit updates Mole trace evidence, release-scope records and the verifier. The L3 runtime is unchanged from dc9c596. A fresh optimised trace matches 141/329 source positions. A fresh full fixture audit at aa21fa0 records 393/416 exact double replays, six stale-identity rebased wins and 17 current-runtime route failures. Bundled completion remains open."
   },
   "currentMainReleaseFeedCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-  "currentMainReleaseFeedNote": "The appcast update at 833f396b advertises 2.0.4 build 87. HEAD is dc9c5961 after an L3 Mole runtime change and evidence updates. Neither current accepted-package evidence for build 87 nor bundled-engine closure is established."
+  "currentMainReleaseFeedNote": "The appcast update at 833f396b advertises 2.0.4 build 87. HEAD is aa21fa0e after L3 Mole trace and verifier evidence updates; its runtime source is unchanged from the audited dc9c596 source. Neither current accepted-package evidence for build 87 nor bundled-engine closure is established."
 }

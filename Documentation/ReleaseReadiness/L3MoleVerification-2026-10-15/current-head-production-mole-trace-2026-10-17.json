@@ -110,8 +110,8 @@
     ],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "At dc9c596, the cell-carve Mole implementation is in production. A fresh no-optimisation build matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It diverges after tick 187 and fails two of four source tunnel-edge checks. Release-optimised build validation and full L3 fixture validation remain outstanding.",
-  "closureEffect": "Main includes partial Mole excavation behaviour. The fresh no-optimisation current-head trace is 141/329; route fixtures were not rerun after the runtime change. Mole movement and excavation rules, built-brick trigger and full L3 completion gates remain open.",
+  "interpretation": "At dc9c596, the cell-carve Mole implementation is in production. A fresh optimised build matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It diverges after tick 187 and fails two of four source tunnel-edge checks. The independent no-optimisation build produces the same trace. Full L3 fixture validation remains outstanding.",
+  "closureEffect": "Main includes partial Mole excavation behaviour. Fresh optimised production trace parity is 141/329. Fresh full fixture audit has 393 exact double replays, six stale-identity routes that win when rebased, and 17 route failures. Mole movement and excavation rules, built-brick trigger and full L3 completion gates remain open.",
   "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh",
   "isolatedCandidateProbe": {
     "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
@@ -193,13 +193,14 @@
   },
   "currentHeadRerun": {
     "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache swiftc -swift-version 6 -parse-as-library -emit-module -emit-library (no optimisation), then compile Tools/Lemmings3Completion/MoleTrace.swift and compare_mole_trace.py",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
     "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-    "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
+    "runtimeLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
     "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
     "compiler": "Apple Swift 6.3.3, Xcode toolchain",
-    "optimisation": "none",
+    "optimisation": "-O",
     "freshTraceProduced": true,
+    "auditExitCode": 1,
     "exactPositionMatches": 141,
     "samples": 329,
     "firstMismatch": {
@@ -213,7 +214,10 @@
         112
       ]
     },
-    "result": "A fresh no-optimisation build of current production source at dc9c596 matched 141/329 source positions. This reproduces the isolated cell-carve trace. It is not an optimised release build or a full fixture audit."
+    "result": "The optimised runtime build and trace completed. The comparison returned nonzero because current production matched 141/329 positions. The independent no-optimisation build produced the same trace hash. Commit aa21fa0 changes the verifier and evidence records only; the audited L3 runtime path and source hash are unchanged.",
+    "currentHeadCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+    "runtimeUnchangedInCurrentHeadCommit": true,
+    "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
   },
   "previousHeadRerun": {
     "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
@@ -237,7 +241,24 @@
     },
     "result": "The current-head rebuild produced the same runtime, library and trace hashes as the retained dd0f1578 run. It still matches 0 of 329 source positions."
   },
-  "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. Fresh no-optimisation trace parity is partial at 141/329; release-optimised and full fixture audits remain open.",
+  "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. A fresh optimised trace gives 141/329 exact positions; parity and full fixture gates remain open.",
   "initialReportHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-  "headCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870"
+  "headCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
+  "noOptimisationDiagnostic": {
+    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
+    "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
+    "optimisation": "none",
+    "result": "Independent no-optimisation build matched the optimised trace result of 141/329."
+  },
+  "fixtureAuditAtCurrentHead": {
+    "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
+    "sourceReportSHA256": "73a5773b249c6c8b0ecd2c9d68a0345681025694c4ac5d3ecb368190c2473357",
+    "exactDoubleReplays": 393,
+    "totalFixtures": 416,
+    "rebasedWinsWithStaleIdentity": 6,
+    "currentRuntimeRouteFailures": 17,
+    "standaloneFailures": 4,
+    "carriedFailures": 13
+  }
 }
