@@ -26,7 +26,7 @@ import NxlvKit
     private var timer: Task<Void, Never>?
     private var requested = false
     private var stateReadFailed = false
-    private struct LocalState: Codable {
+    private struct LocalState: Codable, Equatable {
         var mapping: [String: String] = [:]
         var archive = CloudLibraryArchive()
         var seatRevisions: [String: String] = [:]
@@ -92,6 +92,8 @@ import NxlvKit
         }
     }
     private func persist(_ value: LocalState) throws {
+        // The periodic pass usually changes nothing. Skip the rewrite of the whole archive.
+        guard value != saved || !FileManager.default.fileExists(atPath: stateFile.path) else { return }
         try FileManager.default.createDirectory(at: stateFile.deletingLastPathComponent(), withIntermediateDirectories: true)
         try JSONEncoder().encode(value).write(to: stateFile, options: .atomic)
         saved = value

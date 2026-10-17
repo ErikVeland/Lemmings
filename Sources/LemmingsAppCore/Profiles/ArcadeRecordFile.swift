@@ -3,7 +3,8 @@ import Darwin
 import NxlvKit
 
 /// Keeps the previous validated save and refuses to overwrite a changed file.
-public final class ArcadeRecordFile {
+/// ArcadeStore uses one instance at a time, from its serial writer queue.
+public final class ArcadeRecordFile: @unchecked Sendable {
     public enum Failure: Error, LocalizedError {
         case unsupportedVersion
         case changedOnDisk

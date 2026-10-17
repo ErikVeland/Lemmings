@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 
 /// Versioned conditions for rescue comparisons. Presentation and audio settings are deliberately absent.
-public struct TrolleyConditions: Codable, Equatable, Sendable {
+public struct TrolleyConditions: Codable, Hashable, Sendable {
     public let gameID: String
     public let packID: String
     public let levelID: String
@@ -26,10 +26,14 @@ public struct TrolleyConditions: Codable, Equatable, Sendable {
         self.population = population; self.rescueRequirement = rescueRequirement; self.startingSkills = startingSkills
         self.timeLimitSeconds = timeLimitSeconds; self.modifiers = modifiers; self.rewindPolicy = rewindPolicy
     }
+    /// Boards read this for every stored attempt, so each distinct set of conditions is hashed once.
     public var fingerprint: String {
+        if let cached = TrolleyFingerprintCache.shared.value(for: self) { return cached }
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         // All fields are validated before a completed attempt can enter a board.
-        return SHA256.hash(data: (try? encoder.encode(self)) ?? Data()).map { String(format: "%02x", $0) }.joined()
+        let value = SHA256.hash(data: (try? encoder.encode(self)) ?? Data()).map { String(format: "%02x", $0) }.joined()
+        TrolleyFingerprintCache.shared.insert(value, for: self)
+        return value
     }
     public func comparisonID(assisted: Bool) -> String { "trolley-v1:\(fingerprint):\(assisted ? "assisted" : "direct")" }
     public var maximumPopulation: Int? {
@@ -142,13 +146,18 @@ public struct TrolleyAttempt: Codable, Equatable, Sendable, Identifiable {
     public var rescueShortfall: Int? { maximum.isRescueTarget ? maximum.value.map { max(0, $0 - run.saved) } : nil }
     public var targetSacrifices: Int? { maximum.isRescueTarget ? maximum.value.map { max(0, run.level.total - $0) } : nil }
     /// Reassess a display or leaderboard entry without rewriting the saved attempt.
+    /// Boards and results reassess the whole history on each draw, so the result is cached.
     public func assessed(using current: TrolleyMaximum) -> Self {
         guard current.isRescueTarget, let value = current.value, value >= run.saved else { return self }
+        let language = L10n.interface.language + (L10n.interface.expandsText ? "+expanded" : "")
+        if let cached = TrolleyAssessmentCache.shared.value(for: self, maximum: current, language: language) { return cached }
         let metrics = TrolleyMetrics(run: run, telemetry: run.telemetry!, maximum: current)
-        return Self(run: run, start: start, maximum: current, metrics: metrics,
+        let result = Self(run: run, start: start, maximum: current, metrics: metrics,
                     philosophy: TrolleyAnalyser.analyse(run: run, metrics: metrics, maximum: current)
                         .recognizingBreakthrough(saved: run.saved, previous: surpassedTarget),
                     achievements: achievements, surpassedTarget: surpassedTarget)
+        TrolleyAssessmentCache.shared.insert(result, for: self, maximum: current, language: language)
+        return result
     }
     public var id: UUID { run.id }
     public var comparisonID: String { run.level.conditions?.comparisonID(assisted: run.assisted) ?? "invalid:" + id.uuidString }
@@ -159,5 +168,51 @@ public struct TrolleyAttempt: Codable, Equatable, Sendable, Identifiable {
         self.metrics = metrics; self.philosophy = philosophy; self.achievements = achievements
         self.surpassedTarget = surpassedTarget
         rescueGoals = TrolleyRescueGoals(run: run, maximum: maximum)
+    }
+}
+
+/// Process-local reassessments. An entry is used only for the same stored attempt,
+/// the same maximum and the same interface language, because the analyser writes
+/// localized explanations.
+final class TrolleyAssessmentCache: @unchecked Sendable {
+    static let shared = TrolleyAssessmentCache()
+    private struct Entry {
+        let source: TrolleyAttempt
+        let maximum: TrolleyMaximum
+        let language: String
+        let result: TrolleyAttempt
+    }
+    private let lock = NSLock()
+    private var entries: [UUID: Entry] = [:]
+    private var order: [UUID] = []
+    private let capacity = 4096
+    func value(for source: TrolleyAttempt, maximum: TrolleyMaximum, language: String) -> TrolleyAttempt? {
+        lock.lock(); defer { lock.unlock() }
+        guard let entry = entries[source.id], entry.maximum == maximum, entry.language == language,
+              entry.source == source else { return nil }
+        return entry.result
+    }
+    func insert(_ result: TrolleyAttempt, for source: TrolleyAttempt, maximum: TrolleyMaximum, language: String) {
+        lock.lock(); defer { lock.unlock() }
+        if entries[source.id] == nil { order.append(source.id) }
+        entries[source.id] = Entry(source: source, maximum: maximum, language: language, result: result)
+        while order.count > capacity { entries.removeValue(forKey: order.removeFirst()) }
+    }
+}
+
+/// Conditions are immutable values, so a fingerprint never goes stale. The bound only limits memory.
+final class TrolleyFingerprintCache: @unchecked Sendable {
+    static let shared = TrolleyFingerprintCache()
+    private let lock = NSLock()
+    private var values: [TrolleyConditions: String] = [:]
+    private let capacity = 4096
+    func value(for conditions: TrolleyConditions) -> String? {
+        lock.lock(); defer { lock.unlock() }
+        return values[conditions]
+    }
+    func insert(_ value: String, for conditions: TrolleyConditions) {
+        lock.lock(); defer { lock.unlock() }
+        if values.count >= capacity { values.removeAll(keepingCapacity: true) }
+        values[conditions] = value
     }
 }
