@@ -37,6 +37,8 @@ public struct ClassicDOSRewind: Codable, Sendable {
     private var appliedCommandCount = 0
     private let interval: Int
     private let maximumKeyframes: Int
+    /// Captured before play changes the terrain. Older checkpoints decode without it.
+    private var initialLevelFingerprint: String?
 
     /// - Parameters:
     ///   - keyframeInterval: ticks between keyframes. Larger values use less
@@ -51,6 +53,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
         self.interval = max(1, keyframeInterval)
         self.maximumKeyframes = max(2, maximumKeyframes)
         keyframes = [Keyframe(tick: simulation.tickCount, state: simulation, commandCount: 0)]
+        initialLevelFingerprint = simulation.levelSourceFingerprint
     }
 
     /// Checkpoints retain the oldest state and log. Intermediate keyframes are rebuilt on demand.
@@ -62,6 +65,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
         try values.encode(appliedCommandCount, forKey: .appliedCommandCount)
         try values.encode(interval, forKey: .interval)
         try values.encode(maximumKeyframes, forKey: .maximumKeyframes)
+        try values.encodeIfPresent(initialLevelFingerprint, forKey: .initialLevelFingerprint)
     }
 
     // MARK: - Running forward
@@ -228,7 +232,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
             number: number,
             title: title,
             initialStateHash: initialStateHash,
-            initialLevelFingerprint: simulation.levelSourceFingerprint,
+            initialLevelFingerprint: initialLevelFingerprint,
             events: appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
         )
     }
