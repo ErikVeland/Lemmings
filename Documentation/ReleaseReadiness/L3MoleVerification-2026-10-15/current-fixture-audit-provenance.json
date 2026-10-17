@@ -85,17 +85,19 @@
   "normalisedFreshReportMatchesRetainedReport": true,
   "buildMethod": "Built with Xcode 26.6 and Swift 6.3.3 using a workspace-local module cache. A temporary NxlvKit source copy disables optimisation only for ClassicDOSSimulation.handleJumping to work around the documented compiler failure. Lemmings3Runtime.swift matches current main byte for byte. The normalised fresh audit report matches the retained 416-result report exactly.",
   "latestMainReverification": {
-    "worktreeHEAD": "368e7e724c40027d364d7f01c1d05d113afd852b",
-    "originMain": "368e7e724c40027d364d7f01c1d05d113afd852b",
-    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-report.json",
+    "worktreeHEAD": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-fe11bd5d-report.json",
     "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
-    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "auditExecutableSHA256": "a7103ebda31bc0c969f05ca95f6584d17fcbcf55a663aae956422d2d2d73dff2",
     "sourceFiles": {
       "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
       "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
       "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
     },
-    "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "reportPath": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit.json",
+    "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "rawRunReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
     "counts": {
       "strictExactDoubleReplays": 399,
       "strictFailures": 17,
@@ -104,21 +106,25 @@
       "carriedFailures": 13
     },
     "exitCode": 1,
-    "result": "Fresh current-HEAD replay completed and reproduced the retained report hash and the same 17 failed route schedules. The non-zero result is expected because --require-all is not met.",
-    "scope": "Full 416-fixture audit, not a source-parity or release-package audit."
+    "result": "Fresh full fixture audit at fe11bd5d reproduced the retained normalised report SHA-256 and the same 399/416 exact double replays. The non-zero exit is expected because 17 schedules still fail.",
+    "freshRunReportPath": ".build/l3-fixture-audit/current-main-fe11bd5d-report.json",
+    "normalisedReportMatchesRetained": true,
+    "sourceScope": "Full 416-fixture replay audit. No source-parity or release-package claim."
   },
   "latestCurrentHeadFullAudit": {
-    "worktreeHEAD": "368e7e724c40027d364d7f01c1d05d113afd852b",
-    "originMain": "368e7e724c40027d364d7f01c1d05d113afd852b",
-    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-report.json",
+    "worktreeHEAD": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-fe11bd5d-report.json",
     "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
-    "auditExecutableSHA256": "c2ff4d7e1f3ec6ba75959b852711a56757cbec685ede753ca355204457df9f75",
+    "auditExecutableSHA256": "a7103ebda31bc0c969f05ca95f6584d17fcbcf55a663aae956422d2d2d73dff2",
     "sourceFiles": {
       "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
       "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
       "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
     },
-    "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "reportPath": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit.json",
+    "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "rawRunReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
     "counts": {
       "strictExactDoubleReplays": 399,
       "strictFailures": 17,
@@ -127,7 +133,10 @@
       "carriedFailures": 13
     },
     "exitCode": 1,
-    "result": "Fresh current-HEAD replay completed and reproduced the retained report hash and the same 17 failed route schedules. The non-zero result is expected because --require-all is not met."
+    "result": "Fresh full fixture audit at fe11bd5d reproduced the retained normalised report SHA-256 and the same 399/416 exact double replays. The non-zero exit is expected because 17 schedules still fail.",
+    "freshRunReportPath": ".build/l3-fixture-audit/current-main-fe11bd5d-report.json",
+    "normalisedReportMatchesRetained": true,
+    "sourceScope": "Full 416-fixture replay audit. No source-parity or release-package claim."
   },
   "currentMainAuditRerun": true,
   "latestCurrentHeadStrictCompletionGate": {
@@ -150,5 +159,32 @@
       "campaignStrictGate": "failed at carried fixture 107-1.json",
       "interpretation": "The strict bundled L3 route and campaign gates remain open. The independent full fixture audit records 399 of 416 exact double replays and the same 17 route failures."
     }
+  },
+  "latestCurrentMainAudit": {
+    "worktreeHEAD": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-fe11bd5d-report.json",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "auditExecutableSHA256": "a7103ebda31bc0c969f05ca95f6584d17fcbcf55a663aae956422d2d2d73dff2",
+    "sourceFiles": {
+      "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+      "Tools/Lemmings3Completion/Audit.swift": "43d5de84363a242a975bfeba27489870e82cb6cac031b489216883657c96de07",
+      "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+    },
+    "reportPath": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit.json",
+    "freshReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "rawRunReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+    "counts": {
+      "strictExactDoubleReplays": 399,
+      "strictFailures": 17,
+      "totalFixtures": 416,
+      "standaloneFailures": 4,
+      "carriedFailures": 13
+    },
+    "exitCode": 1,
+    "result": "Fresh full fixture audit at fe11bd5d reproduced the retained normalised report SHA-256 and the same 399/416 exact double replays. The non-zero exit is expected because 17 schedules still fail.",
+    "freshRunReportPath": ".build/l3-fixture-audit/current-main-fe11bd5d-report.json",
+    "normalisedReportMatchesRetained": true,
+    "sourceScope": "Full 416-fixture replay audit. No source-parity or release-package claim."
   }
 }

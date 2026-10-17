@@ -4,9 +4,10 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-    "originMain": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-    "worktreeHasUncommittedChanges": true
+    "head": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "worktreeHasUncommittedChanges": true,
+    "currentMainUpdate": "fe11bd5d adds documentation, tests and diagnostic tooling, but no production engine runtime, loader or bundled game-content changes. The L3 trace verifier and Classic fan batch-driver tests pass at this commit. The latest full L3 route audit remains 399/416 at 368e7e72."
   },
   "releasePackageStates": {
     "macOS": {
@@ -57,8 +58,8 @@
     },
     "lemmings3": {
       "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
-      "verified": "399 of 416 fixtures pass exact double replay.",
-      "open": "17 route fixtures fail. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
+      "verified": "399 of 416 fixtures pass exact double replay in the fresh fe11bd5d audit; the 322-entry manifest and negative checks pass.",
+      "open": "17 route fixtures fail (four standalone, 13 carried). A current-runtime retiming probe for Egyptian 29 repaired two stale action ticks but then reached an action with a depleted tool; delay-only repair is insufficient, so no route count changed. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
       "evidence": [
         "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
         "L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",

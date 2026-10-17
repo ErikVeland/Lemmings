@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "engine": "Lemmings 3",
+  "level": 107,
+  "name": "Shadow 7",
+  "scope": "Bundled level; population 20",
+  "identity": {
+    "levelSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "sourceFile": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD/LEVELS/LEVEL107.DAT",
+    "sourceFileSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3"
+  },
+  "sourceContinuity": {
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "solverSearchSourceSHA256": "f359fa8171880fc0db1c0a91cd76f552573e42258b76cd0456305fade04ff6d3",
+    "solverMainSourceSHA256": "15d76aeadb9400cb1aefa938085ef1684d0f03f0f72fa24f11a7c8820eac5b1c",
+    "solverBinarySHA256": "f8c9f343d8d937da5e2e4c2f6d4745406d583a1acc161804f06afa36c8680716",
+    "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
+    "sourceDiffFromPreviousSearchCommit": "No changes in Lemmings3Runtime.swift, Lemmings3Solver, or L3 route fixtures from 368e7e72 through fe11bd5d."
+  },
+  "search": {
+    "command": "L3_PORTS_ROOT=\"/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD\" .build/l3-current-main-20261016/Solver 107 --budget 300 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-main-fe11bd5d/shadow07-beam8192-cell2",
+    "budgetSeconds": 300,
+    "elapsedSeconds": 303,
+    "beamWidth": 8192,
+    "toolSiteCellPixels": 2,
+    "pairedActors": true,
+    "fewerInputsFirst": true,
+    "decisionPoints": 4827,
+    "depth": 4867,
+    "roundsToBeam": 1,
+    "expandedCandidates": 3235462,
+    "bestSaved": 0,
+    "bestLost": 0,
+    "result": "No route found.",
+    "candidateFilesProduced": 0,
+    "fixtureChanged": false
+  },
+  "comparison": {
+    "previousBudgetSeconds": 300,
+    "previousBeamWidth": 4096,
+    "previousToolSiteCellPixels": 4,
+    "previousExpandedCandidates": 3732001,
+    "verifiedRoutesAdded": 0,
+    "routeGapChanged": false
+  },
+  "interpretation": "This bounded search does not prove the level impossible. Shadow 7 remains one of the 17 failing L3 route schedules."
+}

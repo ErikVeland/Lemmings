@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "fixture": {
+    "name": "steel-left-facing",
+    "level": 101,
+    "levelSHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+    "permanentObjectsSHA256": "ccae27cab491b0308394ec9a5bb5d807e9e2ebd70bd5abedb80e514e309e73dcb",
+    "temporaryObjectsSHA256": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8"
+  },
+  "sourceTrace": {
+    "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json",
+    "sha256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "case": "steel-left-facing",
+    "samples": 329,
+    "repeatPositionDifferences": 0
+  },
+  "productionRun": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
+    "exactPositionMatches": 0,
+    "firstMismatch": {
+      "tick": 2,
+      "source": [154, 110],
+      "production": [156, 110]
+    },
+    "result": "failed as expected: current production Mole does not reproduce the original-engine trace"
+  },
+  "isolatedPrototype": {
+    "patchSHA256": "58365aef473dfcbac35a6c8c9b3854c58b31a17c574fca0b7e94f14f9309e792",
+    "librarySHA256": "386836bf03f2cdd19fa66493b9e6598178225df13470ca7282c4b3f1fc055186",
+    "exactPositionMatches": 141,
+    "totalSamples": 329,
+    "matchingSampleRanges": ["36-153", "173-187"],
+    "result": "partial trajectory match; not production evidence or a complete implementation"
+  },
+  "interpretation": "The current production Mole remains horizontal and has no excavation behaviour. The isolated proposal matches the sampled left-facing burrow path over ticks 36-153 and 173-187, then continues tunnelling where the source falls through an opening. The four retained tunnel-edge witnesses also show the proposal's rectangular carve mask is incomplete.",
+  "closureEffect": "No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
+  "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh"
+}

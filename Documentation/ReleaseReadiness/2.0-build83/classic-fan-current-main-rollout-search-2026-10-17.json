@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "scope": "Three exact unresolved levels from the 6,020-level bundled Classic fan audit. Imported content is excluded.",
+  "audit": {
+    "path": "classic-fan-fingerprinted-audit-2026-10-16/levels.jsonl",
+    "sha256": "d3026583582dfedb2a321eb9cfec4fe71958c2923290e151ae0f149abbf823a1",
+    "bundledFanLevels": 6020,
+    "verifiedFanWinsBefore": 2403,
+    "openFanRoutesBefore": 3617
+  },
+  "resources": {
+    "appVersion": "1.9.1",
+    "build": 76,
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "packs": [
+      {
+        "archive": "0412-mobius06.zip",
+        "sha256": "0da5ed80a69c56db00ca7644bf4974d11baee01761ef5e9f376e849b0ea155f4"
+      },
+      {
+        "archive": "0095-Timpack8.zip",
+        "sha256": "56337c940d0e924b0dca3be4278276a3dd471f87b783ecc40570000de25637a7"
+      },
+      {
+        "archive": "0463-Group-Levels.zip",
+        "sha256": "a92378d34c54b351685776fdc36911a033ad062d730ddfe7ce2f09eee8223cf7"
+      }
+    ]
+  },
+  "solver": {
+    "path": ".build/classic-solver/ClassicSolver",
+    "sha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "buildCommand": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/build-classic-solver.sh",
+    "searchCommand": "python3 Tools/ClassicSolver/solve_fan_batch.py Documentation/ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/levels.jsonl '/Applications/Ultimate Lemmings.app/Contents/Resources' .build/classic-solver/ClassicSolver .build/classic-fan-current-main-20261017/fan-exploration-01 --seconds 60 --width 4096 --max-levels 3 --order near-win --clock golems --adaptive-rate --rescue-quota-distance --prefer-progress --rollout-single --save-partials",
+    "secondsPerLevel": 60,
+    "beamWidth": 4096,
+    "clock": "golems",
+    "adaptiveReleaseRate": true,
+    "ranking": [
+      "rescue-quota-distance",
+      "prefer-progress",
+      "single-skill rollout"
+    ],
+    "attemptLedgerSHA256": "42850eeab2c6b830e3b4babc13a10722c278a5690b3487b8a3a1623aa30c8ce1"
+  },
+  "attempts": [
+    {
+      "packID": "fan:lldb-412",
+      "member": "mobius06.dat#8",
+      "title": "General Tsao's Lemming",
+      "initialHash": "00030eb751ad85e1bc68c3eed79af05c023ad7dee6bde2e35016ef1b948d9ec4",
+      "levelFingerprint": "dacc6c305438ede0b415fbfd03c09a2c0dba50267360144b5ea4a00a4e7829b3",
+      "required": 10,
+      "expandedCandidates": 173392,
+      "bestSaved": 0,
+      "result": "UNSOLVED"
+    },
+    {
+      "packID": "fan:lldb-95",
+      "member": "Timpack8.dat#4",
+      "title": "Thunder Bolts Of Lightning",
+      "initialHash": "00155877232818e3c4a09daaf7a8d09bf90ef93acb40a7b06aad261f009c25a3",
+      "levelFingerprint": "27286e6c08be86077d5f1d17184398b2553e0268fcb32bb89277a6fc285eb066",
+      "required": 79,
+      "expandedCandidates": 162426,
+      "bestSaved": 0,
+      "result": "UNSOLVED"
+    },
+    {
+      "packID": "fan:lldb-463",
+      "member": "Group Levels.dat#2",
+      "title": "Collaboration",
+      "initialHash": "0027c02191b990966cd375514dc6ab9f81dd6c859968e36f39a5d92034ab864e",
+      "levelFingerprint": "65c713d8b04ab03f90f99656c2710f1fcf60ef4b2a2983bcf54a6e65781f9f65",
+      "required": 22,
+      "expandedCandidates": 155559,
+      "bestSaved": 0,
+      "result": "UNSOLVED"
+    }
+  ],
+  "outcome": {
+    "attempted": 3,
+    "expandedCandidatesTotal": 491377,
+    "verifiedRoutesAdded": 0,
+    "verifiedFanWinsAfter": 2403,
+    "openFanRoutesAfter": 3617,
+    "interpretation": "The current-source single-skill rollout search found no winning candidate. This does not prove that any level is impossible. Exact source/runtime content parity and all bundled closure gates remain open."
+  },
+  "limits": [
+    "The search used the installed 1.9.1 build 76 resources. The retained pack manifest matches build 85, but this run does not certify the build 86 app binary.",
+    "No candidate win was produced, so no strict replay was run and no route was promoted.",
+    "Imported content was excluded and remains open-ended."
+  ]
+}

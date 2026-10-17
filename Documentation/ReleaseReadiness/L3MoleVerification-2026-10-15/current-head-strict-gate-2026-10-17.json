@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "headCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
-  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/verify-l3-completion.sh --require-all",
+  "headCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
   "runtimeLibrarySHA256": "2904de481368af1ed13512e9f8271d9afd593447a59840e13ea32e4059f20607",
   "sourceFiles": {
     "Sources/NxlvKit/Lemmings3Runtime.swift": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
@@ -14,8 +14,17 @@
     "exitCode": 1,
     "campaignManifest": "322 fixture hashes and coverage entries passed",
     "refreshAndNegativeChecks": "passed",
-    "standaloneStrictRouteGate": "failed at 107.json after 36 earlier levels printed as passing",
+    "standaloneStrictRouteGate": "failed at 107.json after 36 earlier levels passed",
     "campaignStrictGate": "failed at carried fixture 107-1.json",
-    "interpretation": "The strict bundled L3 route and campaign gates remain open. The independent full fixture audit records 399 of 416 exact double replays and the same 17 route failures."
+    "interpretation": "The strict bundled L3 route and campaign gates remain open. A fresh full audit at fe11bd5d reproduced 399 of 416 exact double replays and the same 17 route failures.",
+    "headCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4"
+  },
+  "auditReportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+  "egyptian29RetimingProbe": {
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+    "method": "Temporary diagnostic retimed each existing action to the first accepted tick, allowing up to 180 ticks of delay. It did not modify production code or fixtures.",
+    "result": "No route candidate. Input 6 moved from tick 1561 to 1579 and input 15 from tick 1972 to 1994. At the first unrecoverable input, input 36 (use right), lemming 2 was blocking at (118, 360) with no assigned tool; retrying through tick 2868 did not accept it.",
+    "interpretation": "The existing route cannot be repaired by delaying actions alone. A new route must account for skill depletion or reacquire a tool. This is current-runtime diagnosis, not proof of original-engine behaviour.",
+    "routeCountChanged": false
   }
 }

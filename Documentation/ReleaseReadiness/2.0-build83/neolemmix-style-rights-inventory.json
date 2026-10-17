@@ -116,10 +116,12 @@
   "attributionResearch": {
     "date": "2026-10-17",
     "styleNameConvention": "The NeoLemmix style guide says custom style names should usually start with the creator's username. A prefix is a lead, not proof of authorship or permission.",
+    "distributionFinding": "The official NeoLemmix site says custom styles should not be added to other creators' styles without the creator's agreement. Its style download page provides downloadable archives but does not state a redistribution licence for this native app. Download availability therefore does not clear any of the 44 dependencies for bundling.",
     "sources": [
       "https://www.lemmingsforums.net/index.php?topic=4337.0",
       "https://www.lemmingsforums.net/index.php?topic=5673.15",
-      "https://www.neolemmix.com/?page=download_list&program=52"
+      "https://www.neolemmix.com/?page=download_list&program=52",
+      "https://www.neolemmix.com/?page=neolemmix"
     ],
     "candidateCreators": [
       {

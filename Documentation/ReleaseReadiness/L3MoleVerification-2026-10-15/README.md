@@ -392,3 +392,21 @@ manifest, fixture refresh checks and negative checks passed. The standalone
 route gate failed at Shadow 7 (`107.json`). The full campaign gate failed at
 carried fixture `107-1.json`. The strict route and campaign gates remain open.
 See the [current-head gate record](current-head-strict-gate-2026-10-17.json).
+
+
+### 17 October production Mole trace comparison
+
+The new current-source trace audit rebuilt NxlvKit and compared the production
+Mole with all 329 retained positions from the reconstructed left-facing steel
+case. Production matched none; its first mismatch is at tick 2. The isolated
+proposal matches 141 positions, including the burrow samples at ticks 36–153
+and 173–187, then continues through an opening where the source falls. Its
+rectangular carve also conflicts with two of the four retained tunnel-edge
+witnesses. Neither result is a complete Mole implementation.
+
+Repeat the production comparison with
+`L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh
+Scripts/audit-l3-mole-production-trace.sh`. The expected current result is a
+non-zero exit because production does not match the source. See the
+[production trace record](current-head-production-mole-trace-2026-10-17.json).
+No route or bundled closure count changed.

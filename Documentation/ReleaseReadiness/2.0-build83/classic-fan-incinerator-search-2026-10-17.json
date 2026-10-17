@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
-  "remoteMainCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+  "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+  "remoteMainCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
   "scope": "Exact bundled Classic fan member GARJEN03.dat#5. Imported content is excluded.",
   "level": {
     "packID": "fan:lldb-283",
@@ -321,16 +321,188 @@
       "result": "Tied the 16/20 partial while changing which worker reaches the exit; closure remains open."
     }
   },
-  "closureEffect": {
-    "verifiedFanWinsBefore": 2403,
-    "verifiedFanWinsAfter": 2403,
-    "openFanRoutesBefore": 3617,
-    "openFanRoutesAfter": 3617,
-    "status": "No bundled route gap closed."
-  },
+  "closureEffect": "Initial-rate, skill-timing, release-rate timeline and alternative first-skill searches found no winning witness. The verified fan count remains 2,403/6,020, with 3,617 routes open.",
   "limits": [
     "UNSOLVED means this bounded search did not find a route. It does not prove that no winning route exists.",
     "Search used installed build 76 resources. The retained pack manifest matches build 85, and this is not certification of the build 86 app binary.",
     "This search makes no claim about imported content."
+  ],
+  "fixedInitialRateSearches": [
+    {
+      "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+      "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "sourceContinuity": "No ClassicSolver or NxlvKit source changed between the solver build and current main.",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "initialReleaseRate": 99,
+      "seconds": 180,
+      "beamWidth": 16384,
+      "fallback": 20,
+      "refire": 10,
+      "ranking": [
+        "rescue-quota-distance",
+        "prefer-progress"
+      ],
+      "expandedCandidates": 436752,
+      "lastTick": 186,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "bestSaved": 0,
+      "partialReplaySHA256": "1646bad25f458085ea619a9bf7db7d61ec110f691d07a46c530c68b173757e2a",
+      "result": "UNSOLVED; maximum initial rate released all actors but produced no saved lemming or route."
+    },
+    {
+      "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+      "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "sourceContinuity": "No ClassicSolver or NxlvKit source changed between the solver build and current main.",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "initialReleaseRate": 1,
+      "seconds": 180,
+      "beamWidth": 16384,
+      "fallback": 20,
+      "refire": 10,
+      "ranking": [
+        "rescue-quota-distance",
+        "prefer-progress"
+      ],
+      "expandedCandidates": 476644,
+      "lastTick": 278,
+      "released": 9,
+      "lost": 0,
+      "active": 9,
+      "bestSaved": 0,
+      "partialReplaySHA256": "c27198e50301e6008147b68369da0554977e8b4545848a06c364ff32a5be441e",
+      "result": "UNSOLVED; minimum initial rate did not improve the route and released only nine actors within the run."
+    }
+  ],
+  "strongest16of20PartialRetiming": {
+    "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "sourceContinuity": "No ClassicSolver or NxlvKit source changed between the solver build and current main.",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "retimingToolSHA256": "00c85d9efdfb1f1bea0628087a04be308e62d82ab69f2045e877d3937395bda2",
+    "seedPartialSHA256": "f4d661749d1ef06224185f1887d2a71f31d1b5d4de36d8fcac6ab96ed0391af9",
+    "seedPartialEvents": 6,
+    "generatedCandidateVariants": 336,
+    "candidateTrialCount": 337,
+    "packEntriesScanned": 536,
+    "newWinningWitnesses": 0,
+    "replayFailures": 0,
+    "retimeManifestSHA256": "53c2f6b0bfe539da28c89c9994168bbfd801923c902aec7f5a922de5a644cb52",
+    "auditInputSHA256": "059f1965a9f7208f4677df795d7f75bab828d25bc95a41981294c855e5beb2c5",
+    "policies": {
+      "singleSkillEventOffsets": "-8..-1,+1..+8",
+      "twoSkillEventOffsets": "each event shifted independently by -2,-1,+1,+2",
+      "maximumSkillEvents": 6,
+      "releaseRateEventChanged": false
+    },
+    "result": "No timing variant won. This pass starts from the strongest retained 16/20 partial. It does not prove the level impossible."
+  },
+  "strongest16of20ReleaseRateSweep": {
+    "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+    "sourceContinuity": "No ClassicSolver or NxlvKit source changed between the solver build and current main.",
+    "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "seedPartialSHA256": "f4d661749d1ef06224185f1887d2a71f31d1b5d4de36d8fcac6ab96ed0391af9",
+    "generatedCandidateVariants": 179,
+    "candidateTrialCount": 180,
+    "packEntriesScanned": 1,
+    "newWinningWitnesses": 0,
+    "replayFailures": 0,
+    "rates": "Rate 99 at every tick from 112 through 272, plus rates 25, 50 and 75 at ticks 150, 175, 192, 206, 230 and 263.",
+    "auditSHA256": "93238cb6f7f1a500db90189cd2482d72157c64788f00afbeabf76e103cadd4ea",
+    "solutionsSHA256": "f8a5a26e3056eb6fb06deeb3dbccfd88ae74900200c98c70b5966bbb7ec9d4de",
+    "failuresSHA256": "ace810d7e2cbb4f8c40ce09dc8e191ae466adb4e1a7d49c59f2215b411d38b05",
+    "result": "No release-rate timing or value variant won. This does not prove the level impossible."
+  },
+  "alternateSkillChoiceSearches": [
+    {
+      "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+      "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "levelArchiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "prefix": [
+        {
+          "tick": 146,
+          "lemmingID": 0,
+          "skill": "miner"
+        },
+        {
+          "tick": 174,
+          "lemmingID": 1,
+          "skill": "digger"
+        },
+        {
+          "tick": 192,
+          "releaseRate": 99
+        }
+      ],
+      "prefixSHA256": "c583446fa5d437ffb4218630e8316b47383d4436cd044a2b535d79d77be7b51a",
+      "seconds": 180,
+      "beamWidth": 16384,
+      "fallback": 20,
+      "refire": 10,
+      "ranking": [
+        "rescue-quota-distance",
+        "prefer-progress"
+      ],
+      "adaptiveReleaseRate": true,
+      "expandedCandidates": 501667,
+      "lastTick": 193,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "bestSaved": 0,
+      "partialReplaySHA256": "d0cd12d1035b737ed00c4e3b17271cf084313b4c01c387e490f5c99262f270d7",
+      "result": "UNSOLVED; this miner-first skill-choice branch found no saved lemmings or winning route."
+    },
+    {
+      "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+      "solverBuiltFromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+      "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+      "levelArchiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "prefix": [
+        {
+          "tick": 146,
+          "lemmingID": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 174,
+          "lemmingID": 1,
+          "skill": "digger"
+        },
+        {
+          "tick": 192,
+          "releaseRate": 99
+        }
+      ],
+      "prefixSHA256": "b3ba8a4761bbcfda42e711848edd63bb9e736f88355865220e5d57ca9a0eb863",
+      "seconds": 180,
+      "beamWidth": 16384,
+      "fallback": 20,
+      "refire": 10,
+      "ranking": [
+        "rescue-quota-distance",
+        "prefer-progress"
+      ],
+      "adaptiveReleaseRate": true,
+      "expandedCandidates": 505163,
+      "lastTick": 192,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "bestSaved": 0,
+      "partialReplaySHA256": "54c3eba7e9d6ac27418cbe3e097db5d8de6a14dc0974c52f1b662d7fba97b1a3",
+      "result": "UNSOLVED; this basher-first skill-choice branch found no saved lemmings or winning route."
+    }
   ]
 }

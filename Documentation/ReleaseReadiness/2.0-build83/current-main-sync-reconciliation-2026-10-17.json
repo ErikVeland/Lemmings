@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-  "upstreamCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+  "sourceCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "upstreamCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -25,11 +25,13 @@
     "changesSinceLatestRouteCheck": {
       "engineRuntime": 0,
       "learningJourney": "Sources/NxlvKit/LearningJourney.swift changed and is not used by engine simulations or route solvers.",
-      "classicSolver": "Commit 368e7e72 adds descriptive geometry output. It does not change simulation, decision detection, search, or replay behaviour.",
-      "classicReplayEvidence": "The 2,755 accepted witness replay rerun is recorded at 9a95012e. Its engine and replay inputs remain unchanged through current HEAD."
+      "classicSolver": "The current-main commit changes ClassicSolver geometry output formatting and the batch driver input path. The driver now selects exact unresolved bundled audit rows and exact level members. Search selection changed; engine simulation and replay behaviour did not.",
+      "classicReplayEvidence": "The 2,755 accepted witness replay rerun is recorded at 9a95012e. Its engine and replay inputs remain unchanged through current HEAD.",
+      "routeValidation": "Scripts/verify-l3-mole-trace.py passed at fe11bd5d: 53 recorded DOS/prototype positions, isolated prototype reconstruction, production Mole source hash, two repeated traces with 673 samples, and four tunnel-edge checks. It explicitly leaves production-to-DOS trajectory parity open."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
-    "result": "No engine runtime, loader, route-validation, or search-behaviour changes were found after the latest route-check source. The Classic geometry option only reports decoded level data."
+    "result": "The fetched current main has no production engine runtime, loader, or game-content changes after the latest route-check source. It changes test coverage, the L3 trace verifier, and Classic batch-search row selection. Existing replay results remain engine-source-continuous. The trace verifier, batch-driver tests, and full L3 fixture audit pass their recorded checks at fe11bd5d; the 17-route completion gap remains open.",
+    "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members, which changes search inputs but not simulation or replay behaviour."
   },
   "classic": {
     "scope": "2,755 accepted bundled winning replay witnesses: 352 official/conversion and 2,403 fan",
@@ -70,6 +72,20 @@
         "distinctLevels": 19,
         "prefixContinuations": 3
       },
+      "latestSupplementalBatchSearch": {
+        "record": "classic-fan-current-main-rollout-search-2026-10-17.json",
+        "sourceCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+        "attempted": 3,
+        "expandedCandidates": 491377,
+        "verifiedRoutesAdded": 0,
+        "levels": [
+          "General Tsao's Lemming",
+          "Thunder Bolts Of Lightning",
+          "Collaboration"
+        ],
+        "search": "60 seconds, beam 4,096, adaptive release rate, rescue-quota distance, progress-first ranking and single-skill rollouts",
+        "result": "No candidate saved a Lemming. The verified fan-route count remains 2,403 of 6,020."
+      },
       "failedCandidateReplayBreakdown": {
         "auditReplayFailedRows": 18,
         "checkedCrossLevelStateHashAliases": 10,
@@ -109,7 +125,59 @@
           "donorReplayRepairResult": "0 new winning witnesses",
           "donorReplayRepairRecord": "classic-fan-frantic-search-2026-10-17.json"
         }
-      ]
+      ],
+      "latestInitialRateProbe": {
+        "level": "The Incinerator",
+        "source": "0283-GARJEN03.zip/GARJEN03.dat#5",
+        "record": "classic-fan-incinerator-search-2026-10-17.json",
+        "solverSHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+        "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+        "runs": [
+          {
+            "initialReleaseRate": 99,
+            "seconds": 180,
+            "beamWidth": 16384,
+            "expandedCandidates": 436752,
+            "result": "0/20 saved; no route."
+          },
+          {
+            "initialReleaseRate": 1,
+            "seconds": 180,
+            "beamWidth": 16384,
+            "expandedCandidates": 476644,
+            "result": "0/20 saved; nine released before the run ended."
+          }
+        ],
+        "verifiedRoutesAdded": 0,
+        "fanWinsRemain": 2403,
+        "openFanRoutesRemain": 3617
+      },
+      "strongestPartialFollowUp": {
+        "level": "The Incinerator",
+        "source": "0283-GARJEN03.zip/GARJEN03.dat#5",
+        "seedSaved": "16/20",
+        "seedPartialSHA256": "f4d661749d1ef06224185f1887d2a71f31d1b5d4de36d8fcac6ab96ed0391af9",
+        "skillTimingVariants": 336,
+        "skillTimingTrials": 337,
+        "releaseRateVariants": 179,
+        "releaseRateTrials": 180,
+        "winningWitnesses": 0,
+        "record": "classic-fan-incinerator-search-2026-10-17.json",
+        "verifiedFanWinsRemain": 2403,
+        "openFanRoutesRemain": 3617
+      },
+      "latestSkillChoiceSearch": {
+        "level": "The Incinerator",
+        "source": "0283-GARJEN03.zip/GARJEN03.dat#5",
+        "prefix": "Basher on lemming 0 at tick 146, Digger on lemming 1 at tick 174, release rate 99 at tick 192.",
+        "seconds": 180,
+        "beamWidth": 16384,
+        "expandedCandidates": 505163,
+        "result": "0/20 saved; no route.",
+        "record": "classic-fan-incinerator-search-2026-10-17.json",
+        "verifiedFanWinsRemain": 2403,
+        "openFanRoutesRemain": 3617
+      }
     },
     "currentMainContinuity": "The 2,755-witness replay rerun is recorded at 9a95012e. Later source changes do not alter engine or replay behaviour.",
     "sourceBehaviourRegression": {
@@ -160,7 +228,7 @@
     }
   },
   "releaseLimits": [
-    "This record confirms the current-main source relationship and replay evidence. It does not certify the 2.0.3 build 86 app binary.",
+    "This record confirms the fetched current-main source relationship and the replay evidence continuity. It does not certify the 2.0.3 build 86 app binary.",
     "Bundled route and source-behaviour closure remains open across the engines.",
     "Imported content remains open-ended and requires per-engine, per-version support claims.",
     "The current-main check does not close any open route, source-parity, style-rights or app-binary gate."
@@ -178,51 +246,42 @@
     "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-16/walker-match-2590-current-main-2026-10-17.txt",
     "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-17/walking-step-boundary.json",
     "classic-fan-frantic-search-2026-10-17.json",
-    "classic-solver-current-main-build-2026-10-17.json"
+    "classic-fan-current-main-rollout-search-2026-10-17.json",
+    "classic-solver-current-main-build-2026-10-17.json",
+    "git comparison: 81a7d030..fe11bd5d",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-beam8192-search-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+    "Scripts/audit-l3-mole-production-trace.sh",
+    "Tools/Lemmings3Completion/MoleTrace.swift",
+    "Tools/Lemmings3Completion/compare_mole_trace.py"
   ],
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
-    "Documentation/ContentUniverseRoadmap.md",
-    "Documentation/Lemmings2Completion/README.md",
-    "Documentation/Lemmings2PhysicsEvidence.md",
-    "Documentation/Overview.md",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-batch-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-frozen-airport-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-ball-bearing-search-2026-10-17.json",
     "Documentation/ReleaseReadiness/2.0-build83/classic-fan-incinerator-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-in-the-core-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-lemcon-nine-diagnosis-2026-10-16.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-magical-world-climber-2026-10-17.json",
     "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-rollout-search-2026-10-17.json",
     "Documentation/ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json",
-    "Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md",
-    "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json",
-    "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-16/walker-match-2590-current-main-2026-10-17.txt",
-    "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-17/",
     "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
     "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-egyptian13-wide-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-search-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-beam8192-search-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json",
     "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json",
+    "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
     "Documentation/ReleaseReadiness/gates.json",
-    "Documentation/ReleaseScope.md",
-    "README.md",
-    "Scripts/verify-l3-mole-trace.py",
-    "Tests/ClassicDOSSimulationRegressions/main.swift",
-    "Tests/Lemmings2RuntimeTests/main.swift",
-    "Tools/ClassicSolver/README.md",
-    "Tools/ClassicSolver/main.swift",
-    "Tools/ClassicSolver/solve_fan_batch.py",
-    "Tools/DifficultyDiagnostics/ExpandFanEvidence.swift",
-    "Tools/ClassicSolver/test_solve_fan_batch.py"
+    "Scripts/audit-l3-mole-production-trace.sh",
+    "Tools/Lemmings3Completion/MoleTrace.swift",
+    "Tools/Lemmings3Completion/compare_mole_trace.py"
   ],
   "remoteVerification": {
     "method": "git fetch origin main followed by HEAD, origin/main and FETCH_HEAD comparison",
-    "head": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-    "originMain": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-    "fetchHead": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "head": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "fetchHead": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
     "upToDate": true
   },
   "lemmings3": {
@@ -249,9 +308,11 @@
     ],
     "sourceLimit": "The exact original executable is present in the extracted build 83 payload and matches the retained trace hash. Both trace-specific fixture sets were reconstructed and match all retained hashes. A new headless DOSBox 0.83.0 launch did not reach the controlled level. Raw captures remain absent.",
     "traceVerifierAtCurrentMain": {
-      "commit": "368e7e72",
-      "result": "53 positions, two repeated traces with 673 samples, four tunnel-edge checks passed",
-      "fullFixtureAuditRerun": false
+      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+      "result": "Trace verifier passes at fe11bd5d: 53 recorded DOS/prototype positions, isolated prototype patch, production source hash, 673 repeated samples and four tunnel-edge checks. The fresh full fixture audit also reproduces 399/416; production-to-DOS trajectory parity remains open.",
+      "productionToDOSParity": "open",
+      "fullFixtureAuditRerun": true,
+      "latestFullFixtureAuditCommit": "368e7e724c40027d364d7f01c1d05d113afd852b"
     },
     "shadow07FollowUp": {
       "budgetSeconds": 300,
@@ -261,12 +322,12 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-shadow07-search-2026-10-17.json"
     },
     "latestCurrentMainAudit": {
-      "commit": "368e7e724c40027d364d7f01c1d05d113afd852b",
+      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
       "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
       "strictExactDoubleReplays": 399,
       "totalFixtures": 416,
       "routeFailures": 17,
-      "result": "Fresh audit reproduces the retained 399/416 report exactly."
+      "result": "Fresh full audit reproduces the retained 399/416 report exactly at fe11bd5d."
     },
     "latestCurrentMainSearch": {
       "level": 213,
@@ -280,11 +341,38 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-egyptian13-wide-search-2026-10-17.json"
     },
     "latestCurrentMainStrictGate": {
-      "result": "failed as expected",
+      "result": "failed as expected: manifest and negative checks pass; standalone route 107 and carried fixture 107-1 fail",
       "standaloneFailure": "107.json",
       "carriedFailure": "107-1.json",
       "manifestAndNegativeChecks": "passed",
-      "record": "../L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json"
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
+      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4"
+    },
+    "shadow07FollowUpBeam8192Cell2": {
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "expandedCandidates": 3235462,
+      "result": "No route; bounded search. No candidate or fixture change.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-beam8192-search-2026-10-17.json"
+    },
+    "shadow07SeededFollowUpBeam8192Cell2": {
+      "seedThroughTick": 1666,
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "expandedCandidates": 3412143,
+      "result": "No route; the accepted prefix did not improve the search. No fixture change.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json"
+    },
+    "latestProductionMoleTraceComparison": {
+      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+      "sourceTraceSamples": 329,
+      "productionExactMatches": 0,
+      "isolatedPrototypeExactMatches": 141,
+      "interpretation": "Current production remains horizontal and diverges from the source trace. The prototype matches the recorded burrow segment but then tunnels through a source opening; its carve mask also conflicts with two of four source tunnel-edge witnesses. No runtime or route fixture changed.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "audit": "Scripts/audit-l3-mole-production-trace.sh"
     }
   },
   "neoLemmix": {
@@ -299,13 +387,69 @@
     "scope": "All 794 bundled levels remain in closure scope."
   },
   "mainUpdateSincePreviousCheck": {
-    "fromCommit": "368e7e724c40027d364d7f01c1d05d113afd852b",
-    "toCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
-    "commitTitle": "Updated to recommended settings",
+    "fromCommit": "81a7d030885c20f9e5721cbdcc4e9c192c0b5057",
+    "toCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "commitTitle": "More evidence",
     "changedPaths": [
-      "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/project.pbxproj",
-      "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/xcshareddata/xcschemes/UltimateLemmingsTV.xcscheme"
+      "Documentation/ContentUniverseRoadmap.md",
+      "Documentation/Lemmings2Completion/README.md",
+      "Documentation/Lemmings2PhysicsEvidence.md",
+      "Documentation/Overview.md",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-ball-bearing-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-batch-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-frantic-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-frozen-airport-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-in-the-core-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-incinerator-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-lemcon-nine-diagnosis-2026-10-16.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-magical-world-climber-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-state-hash-alias-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-solver-current-main-build-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json",
+      "Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md",
+      "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json",
+      "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-16/walker-match-2590-current-main-2026-10-17.txt",
+      "Documentation/ReleaseReadiness/L2GameplayParity-2026-10-17/walking-step-boundary.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-egyptian13-wide-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/gates.json",
+      "Documentation/ReleaseScope.md",
+      "README.md",
+      "Scripts/verify-l3-mole-trace.py",
+      "Tests/ClassicDOSSimulationRegressions/main.swift",
+      "Tests/Lemmings2RuntimeTests/main.swift",
+      "Tools/ClassicSolver/README.md",
+      "Tools/ClassicSolver/main.swift",
+      "Tools/ClassicSolver/solve_fan_batch.py",
+      "Tools/ClassicSolver/test_solve_fan_batch.py",
+      "Tools/DifficultyDiagnostics/ExpandFanEvidence.swift"
     ],
-    "continuity": "The fast-forward changes only Apple TV project settings and scheme metadata. It changes no engine, loader, content, solver, replay, route-validation, or completion-verifier source. Existing engine evidence remains source-continuous. This does not verify Apple TV build behaviour or certify the 2.0 app binary."
+    "continuity": "The current-main commit adds evidence, tests and diagnostic tooling. No production runtime, loader or game-content files changed. It adds Classic and L2 regression cases, strengthens the L3 prototype-provenance verifier, and updates the Classic batch driver to consume exact unresolved audit rows. The L3 trace verifier and Classic batch-driver tests pass at fe11bd5d. A fresh 416-fixture audit reproduces 399 exact double replays and 17 route failures; the strict gate still fails at 107/107-1. This does not certify the 2.0 app binary."
+  },
+  "currentMainToolValidation": {
+    "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "l3TraceVerifier": {
+      "command": "python3 Scripts/verify-l3-mole-trace.py",
+      "result": "passed",
+      "evidence": "53 positions; isolated prototype reconstruction; production movement source hash; two repeated traces with 673 samples; four tunnel-edge checks. Production-to-DOS trajectory parity remains open."
+    },
+    "classicFanBatchDriver": {
+      "command": "python3 Tools/ClassicSolver/test_solve_fan_batch.py",
+      "result": "4 tests passed",
+      "evidence": "Exact unresolved bundled fan rows and member selectors are accepted by the driver tests."
+    },
+    "fullL3FixtureAudit": {
+      "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l2-current-main-20261016 L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/current-main-fe11bd5d-report.json",
+      "reportSHA256": "8efd819255e4b522993a32d0b3541048011429bb6dcd5b02e261a550f08f2351",
+      "result": "399/416 exact double replays; 17 route failures (4 standalone, 13 carried). The fresh report matches the retained normalised report exactly.",
+      "strictGate": "322 manifest entries and negative checks passed; completion still fails at standalone 107 and carried 107-1.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json"
+    }
   }
 }
