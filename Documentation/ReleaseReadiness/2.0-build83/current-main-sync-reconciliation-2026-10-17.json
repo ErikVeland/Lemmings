@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
-  "upstreamCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+  "sourceCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+  "upstreamCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+    "commit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -288,7 +288,19 @@
   ],
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
-  "uncommittedPaths": [],
+  "uncommittedPaths": [
+    "Documentation/ContentUniverseRoadmap.md",
+    "Documentation/Overview.md",
+    "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
+    "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+    "Documentation/ReleaseScope.md",
+    "Scripts/verify-l3-mole-trace.py",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-left-facing-trace-2026-10-17.json"
+  ],
   "remoteVerification": {
     "method": "git fetch origin main; git rev-parse HEAD origin/main; git rev-list --left-right --count HEAD...origin/main",
     "head": "4a8e2fa191ef69779366f7109d7f8b750053182c",
@@ -308,9 +320,9 @@
     ]
   },
   "lemmings3": {
-    "currentMainHead": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
-    "currentMainRuntimeContinuity": "The current main L3 runtime hash matches the fresh production trace and fixture audit at 03ae9286. The Mole trace matches 141/329 source positions. The fixture audit passes 399/416 exact double replays, with zero stale-identity wins and 17 route failures. The strict completion gate remains open.",
-    "latestFullFixtureAuditSource": "03ae9286",
+    "currentMainHead": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "currentMainRuntimeContinuity": "Current main contains the explicit-steel Mole contact rule. Its runtime source hash matches the tested candidate source. The runtime suite passes. Mole traces match 139/329 left-facing and 140/344 air-gap positions. The 416-fixture audit verifies 399 exact replays, zero stale-identity wins and 17 route failures. The strict completion gate remains open.",
+    "latestFullFixtureAuditSource": "183bc8a8",
     "fixtureResults": {
       "exactDoubleReplays": 399,
       "total": 416,
@@ -321,7 +333,7 @@
     },
     "runtimeAndVerifierPathsUnchangedSinceAudit": true,
     "currentMainFullAuditRerun": true,
-    "latestFullFixtureAuditCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "latestFullFixtureAuditCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
     "partialSourceTrace": "53 primary positions, 673 repeated samples across two traces, four tunnel-edge witnesses",
     "openGaps": [
       "17 route schedules fail on current runtime (4 standalone, 13 carried)",
@@ -343,17 +355,15 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-shadow07-search-2026-10-17.json"
     },
     "latestCurrentMainAudit": {
-      "commit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+      "commit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
       "reportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
       "strictExactDoubleReplays": 399,
       "totalFixtures": 416,
       "routeFailures": 17,
       "rebasedWinsWithStaleIdentity": 0,
-      "result": "Fresh optimised full audit at 03ae9286. 399/416 exact double replays, zero stale-identity wins and 17 route failures (four standalone, 13 carried).",
-      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-03ae9286.json",
-      "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-03ae9286.json",
-      "verifiedAtCurrentHead": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
-      "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8"
+      "result": "The exact current-main runtime source was audited against all 416 fixtures. It verifies 399 exact double replays, zero stale-identity wins and 17 route failures (four standalone, 13 carried).",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
+      "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754"
     },
     "latestCurrentMainSearch": {
       "level": 213,
@@ -367,12 +377,12 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-egyptian13-wide-search-2026-10-17.json"
     },
     "latestCurrentMainStrictGate": {
-      "result": "Fresh strict gate at 03ae9286 passes the 322-entry manifest and negative checks, then fails at standalone route 107.json and carried fixture 107-1.json.",
+      "result": "The current-main runtime passes manifest and negative checks, then fails standalone route 107.json and carried fixture 107-1.json.",
       "standaloneFailure": "107.json",
       "carriedFailure": "107-1.json",
       "manifestAndNegativeChecks": "passed",
-      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-03ae9286.json",
-      "commit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
+      "commit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
       "rerun": true
     },
     "shadow07FollowUpBeam8192Cell2": {
@@ -393,71 +403,16 @@
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json"
     },
     "latestProductionMoleTraceComparison": {
-      "commit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+      "commit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
       "sourceTraceSamples": 329,
-      "productionExactMatches": 141,
-      "isolatedPrototypeExactMatches": 141,
-      "interpretation": "At dc9c596, production includes the cell-carve implementation with source SHA 493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8. A fresh optimised build matched 141/329 positions, first mismatch tick 2 (source 154,110; production 156,112), and diverged after tick 187. Two of four terrain-edge checks still fail. An independent no-optimisation build produced the same trace. The full fixture audit remains open.",
-      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-      "audit": "Scripts/audit-l3-mole-production-trace.sh",
-      "isolatedCandidateProbe": {
-        "exactMatches": 141,
-        "samples": 329,
-        "matchingTicks": "36\u2013187 inclusive, plus ticks 17, 19 and 25\u201330",
-        "result": "The candidate diverges after tick 187 and clears all nearby terrain by tick 180. It remains rejected by two of four source tunnel-edge checks. Production source was restored.",
-        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
-      },
-      "cellCarveVariant": {
-        "matches": 141,
-        "samples": 329,
-        "result": "The 8x2 one-cell carve and full-body carve produce the same positions on the left-facing trace. Carve geometry alone does not change this trajectory.",
-        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
-      },
-      "noMaterialHeadProbe": {
-        "matches": 88,
-        "samples": 329,
-        "matchingThroughTick": 115,
-        "result": "A leading-half no-material rule exits too early. This does not match the source transition.",
-        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
-      },
-      "previousHeadRun": {
-        "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-        "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
-        "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
-        "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
-        "exactMatches": 0,
-        "samples": 329,
-        "firstMismatchTick": 2,
-        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
-      },
-      "currentHeadRerun": {
-        "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
-        "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-        "runtimeLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
-        "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
-        "compiler": "Apple Swift 6.3.3, Xcode toolchain",
-        "optimisation": "-O",
-        "freshTraceProduced": true,
-        "auditExitCode": 1,
-        "exactMatches": 141,
-        "samples": 329,
-        "firstMismatchTick": 2,
-        "firstMismatchSource": [
-          154,
-          110
-        ],
-        "firstMismatchProduction": [
-          156,
-          112
-        ],
-        "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-        "result": "Optimised build and trace completed against runtime source introduced at dc9c596; current HEAD aa21fa0 retains the identical runtime source hash. Comparator returned 1 because parity is partial. The independent no-optimisation build produced the same trace hash.",
-        "currentHeadCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
-        "runtimeUnchangedInCurrentHeadCommit": true
-      },
-      "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
+      "productionExactMatches": 139,
+      "airGapSourceTraceSamples": 344,
+      "airGapProductionExactMatches": 140,
+      "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+      "interpretation": "The explicit-steel contact change improves both traces and preserves the Shadow 7 patrol assertion. The source fall after tick 167 and two of four tunnel-edge witnesses still disagree.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json"
     },
-    "latestCurrentMainHeadVerifiedByFetch": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "latestCurrentMainHeadVerifiedByFetch": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
     "latestCurrentMainSeededSearches": {
       "level": 229,
       "name": "Egyptian 29",
@@ -481,11 +436,11 @@
       "record": "../L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json"
     },
     "traceVerifierAtPreviousMain": {
-      "commit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-      "result": "Passed at the recorded prior source: 53 DOS/prototype positions, isolated prototype reconstruction, production movement source hash, two repeated traces with 673 samples and four tunnel-edge checks. The verifier does not establish production parity and predates the dc9c596 Mole runtime change.",
+      "commit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+      "result": "The verifier now checks the current source hash, fetched HEAD, retained source traces and tunnel-edge evidence. It passes on current main.",
       "productionToDOSParity": "open",
-      "fullFixtureAuditRerun": false,
-      "latestFullFixtureAuditCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4"
+      "fullFixtureAuditRerun": true,
+      "latestFullFixtureAuditCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42"
     }
   },
   "neoLemmix": {
@@ -570,7 +525,7 @@
     "l3TraceVerifier": {
       "command": "python3 Scripts/verify-l3-mole-trace.py",
       "exitCode": 0,
-      "result": "Passed 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, two repeated source traces with 673 samples, and four tunnel-edge checks. Production-to-DOS trajectory parity remains open."
+      "result": "Passed current-main source, fetched commit, production trace hashes, 673 repeated source samples and four tunnel-edge checks. Full production-to-DOS parity remains open."
     },
     "productionMoleTrace": {
       "measuredAt": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
@@ -633,7 +588,8 @@
       "Commit 833f396b updates appcast.xml for the 2.0.4 release feed. It changes no game code or bundled resources. Package acceptance remains separate.",
       "Commit 3e1c7498 bounds pending candidates in the L2 search solver and adds a memory-bound regression. It changes no engine runtime, loader or bundled level resources. The Cavelems 6 search used this solver and found no route."
     ],
-    "continuity": " The subsequent dc9c5961 commit changes the production L3 Mole runtime; see mainAdvanceSincePreviousSync. The retained L3 full audit predates that change."
+    "continuity": " The subsequent dc9c5961 commit changes the production L3 Mole runtime; see mainAdvanceSincePreviousSync. The retained L3 full audit predates that change.",
+    "result": "Fresh fetch confirms current main 183bc8a8. The steel-contact Mole rule passes the runtime suite. The 416-fixture audit gives 399 exact replays, zero stale-identity wins and 17 route failures. Strict gate fails at 107.json and 107-1.json. Current production Mole traces match 139/329 left-facing and 140/344 air-gap positions. Bundled closure remains open."
   },
   "postFastForwardValidation": {
     "commit": "a78098f254d816325647a44de570029df2083df6",
@@ -688,36 +644,35 @@
   "currentMainReleaseFeedNote": "Current main includes the 2.0.5 Trolley source hotfix, but appcast.xml still advertises macOS 2.0.4 build 87. The latest retained package acceptance evidence is build 86. Neither accepted-package evidence for the hotfix nor bundled-engine closure is established.",
   "latestFetchRefresh": {
     "date": "2026-10-17",
-    "head": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
-    "originMain": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
-    "fetchHead": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "originMain": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "fetchHead": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
     "ahead": 0,
     "behind": 0,
-    "result": "A fresh fetch confirms the worktree is current with origin/main."
+    "result": "Fresh fetch confirms HEAD, origin/main and FETCH_HEAD match 183bc8a8."
   },
   "latestCurrentMainL3Recheck": {
-    "head": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
-    "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
-    "runtimeLibrarySHA256": "e8b9ae403ea20881ac0e07483dd5166a56aad48965017babb3247f470de01f3a",
-    "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-8d65e927.json",
-    "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-8d65e927.json",
+    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+    "runtimeLibrarySHA256": "0bc3fe0c1a257b977642c0099cc8bbcc689238f033fca7dfe7da3b7d7e1229be",
+    "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
+    "rawFixtureAudit": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
+    "strictGateRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
     "exactDoubleReplays": 399,
     "totalFixtures": 416,
     "staleIdentityWins": 0,
     "routeFailures": 17,
     "standaloneFailures": 4,
     "carriedFailures": 13,
-    "strictGate": "Manifest and negative checks pass; standalone 107.json and carried 107-1.json fail.",
-    "runtimeSuite": "Passed with bundled L3 resources.",
+    "strictGate": "Manifest and negative checks passed. Standalone 107.json and carried 107-1.json fail.",
+    "runtimeSuite": "Rerun on current main 183bc8a8 with bundled resources. The L3 suite passes.",
     "sourceTraces": {
-      "leftFacingExactPositions": 0,
+      "leftFacingExactPositions": 139,
       "leftFacingSamples": 329,
-      "airGapExactPositions": 2,
-      "airGapSamples": 344,
-      "parentMainAirGapExactPositions": 140,
-      "parentMainCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6"
+      "airGapExactPositions": 140,
+      "airGapSamples": 344
     },
-    "interpretation": "Runtime test and six hashes are closed; engine fidelity and route completion remain open."
+    "interpretation": "The steel-contact change is integrated and improves both traces. Seventeen route schedules and full Mole fidelity remain open."
   },
   "latestCurrentMainShadow07Search": {
     "head": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
@@ -725,22 +680,21 @@
     "runs": 3,
     "budgetSecondsEach": 300,
     "beamWidth": 8192,
-    "result": "No route found. No candidate written. Existing fixture unchanged. Bounded searches do not prove the level impossible."
+    "result": "No route found. No candidate written. Existing fixture unchanged. Bounded searches do not prove the level impossible.",
+    "scope": "Historical search before the steel-contact change. It is not a search against current main."
   },
-  "latestWorktreeCandidate": {
-    "baseCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
-    "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
-    "record": "../L3MoleVerification-2026-10-15/current-worktree-candidate-03ae9286-2026-10-17.json",
-    "runtimeSuite": "Passed the complete L3 runtime suite, including Shadow 7 right-patrol assertion.",
-    "fixtureManifest": "Passed 322 fixture hashes after six verified level-113 expected-state refreshes.",
-    "fixtureAudit": "399/416 exact double replays; zero stale-identity wins; 17 route failures (four standalone, 13 carried).",
-    "strictGate": "Fails at Shadow 107 standalone fixture 107.json and carried fixture 107-1.json after the manifest and negative checks pass.",
-    "status": "Integrated into current main at 8d65e927. Runtime suite passes, but air-gap trace agreement fell from 140/344 to 2/344. L3 fidelity and routes remain open.",
-    "integratedCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
-    "sourceTraceComparison": {
-      "leftFacing": "0/329",
-      "airGap": "2/344",
-      "parentMainAirGap": "140/344"
-    }
+  "latestL3Implementation": {
+    "commit": "5b2306ed",
+    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+    "record": "../L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
+    "runtimeSuite": "Passed against this exact source hash with bundled resources and the steel-contact regression.",
+    "fixtureAudit": "399/416 exact double replays; zero stale-identity wins; 17 route failures.",
+    "strictGate": "Fails at 107.json and 107-1.json.",
+    "sourceTraces": {
+      "leftFacing": "139/329",
+      "airGap": "140/344"
+    },
+    "status": "Integrated in main at 5b2306ed. Source fall after tick 167, two tunnel-edge witnesses, 17 route schedules and full engine fidelity remain open."
   }
 }

@@ -456,6 +456,33 @@ do {
     var stoneMole = try moleGame(moleTags, permanent: moleTags)
     for _ in 0..<32 { stoneMole.step() }
     try require(stoneMole.terrainEdits.isEmpty, "L3 mole preserves permanent terrain")
+    var dropTerrain = Array(repeating: UInt16(0x1000), count: 320 * 200)
+    for y in 192..<200 { for x in 0..<320 { dropTerrain[y * 320 + x] = 0x20 } }
+    for y in 134..<152 { for x in 104..<112 { dropTerrain[y * 320 + x] = 0x20 } }
+    var dropMole = Lemmings3Runtime.Creature(id: 0, kind: .mole, x: 120, y: 152)
+    dropMole.digDirection = .downRight
+    var dropGame = try Lemmings3Runtime(configuration: .init(width: 320, height: 200,
+        attributes: dropTerrain, entrance: .init(x: 16, y: 40), exits: [.init(x: 300, y: 100)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000, creatures: [dropMole]))
+    for _ in 0..<6 { dropGame.step() }
+    try require(dropGame.creatures[0].x == 112 && dropGame.creatures[0].y == 156 &&
+        dropGame.creatures[0].digDirection == .down,
+        "L3 Mole exits a diagonal tunnel into a vertical drop")
+    for _ in 0..<9 { dropGame.step() }
+    try require(dropGame.creatures[0].x == 112 && dropGame.creatures[0].y == 192 &&
+        dropGame.creatures[0].digDirection == .right,
+        "L3 Mole falls to the floor and resumes patrol")
+    var towardWallTerrain = Array(repeating: UInt16(0x1000), count: 320 * 200)
+    for y in 192..<200 { for x in 0..<320 { towardWallTerrain[y * 320 + x] = 0x20 } }
+    for y in 134..<152 { for x in 104..<110 { towardWallTerrain[y * 320 + x] = 0x20 } }
+    var towardWall = Lemmings3Runtime.Creature(id: 0, kind: .mole, x: 120, y: 152, direction: -1)
+    towardWall.digDirection = .downLeft
+    var wallGame = try Lemmings3Runtime(configuration: .init(width: 320, height: 200,
+        attributes: towardWallTerrain, entrance: .init(x: 16, y: 40), exits: [.init(x: 300, y: 100)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000, creatures: [towardWall]))
+    wallGame.step()
+    try require(wallGame.creatures[0].moleDropDelay == 0 && wallGame.creatures[0].digDirection == .downLeft,
+        "L3 Mole keeps digging when it moves toward the remaining wall")
     var multipleHatches = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
         entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 20, releaseInterval: 1, releaseDelay: 0,
         additionalEntrances: [.init(x: 70, y: 40)]))

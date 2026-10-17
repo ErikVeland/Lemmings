@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "originMain": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+  "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+  "runtimeLibrarySHA256": "0bc3fe0c1a257b977642c0099cc8bbcc689238f033fca7dfe7da3b7d7e1229be",
+  "runtimeChange": "On a horizontal Mole patrol, an explicit steel (0x40) contact initiates the source-observed down-left/down-right tunnel transition and a two-pixel vertical adjustment. Other protected contacts keep the Mole on its horizontal patrol. The 8x16 patrol footprint and no-ground-snap rule remain.",
+  "sourceBasis": {
+    "steelObject": 354,
+    "steelObjectTag": "0x60",
+    "steelContact": {
+      "nativeFixture": "steel-air-gap",
+      "sourcePositions": "Mole holds at mapped (192,112) through ticks 25-30 and starts down-left at tick 36.",
+      "candidateBehaviour": "Contact at tick 25 sets (192,112), then resumes down-left movement after the recorded cooldown."
+    },
+    "nonSteelPatrol": "The Shadow 7 no-input runtime assertion retains its captured horizontal patrol positions. This source comparison does not define all Mole materials or excavation rules."
+  },
+  "runtimeSuite": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/run-lemmings3-runtime-tests.sh",
+    "exitCode": 0,
+    "result": "Passed when rerun on current main 183bc8a8 with bundled resources. The explicit-steel regression and Shadow 7 patrol assertions pass."
+  },
+  "sourceTraces": {
+    "steel-left-facing": {
+      "exactPositionMatches": 139,
+      "samples": 329,
+      "matchingTickRanges": [
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          153
+        ],
+        [
+          173,
+          187
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-main-steel-contact-left-facing-trace-2026-10-17.json",
+      "traceSHA256": "d852c3dd2742331bb220c6c27358b88d36a6bb80dee6cbd18663ddbd49189f07",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    },
+    "steel-air-gap": {
+      "exactPositionMatches": 140,
+      "samples": 344,
+      "matchingTickRanges": [
+        [
+          4,
+          4
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          167
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json",
+      "traceSHA256": "ee928af17d783c4404a78f8af3986fcb66bc6491223c993c06d33604e6107104",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    }
+  },
+  "fixtureAudit": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-main-steel-contact-fixture-audit.json",
+    "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "staleIdentityWins": 0,
+    "routeFailures": 17,
+    "standaloneFailures": 4,
+    "carriedFailures": 13,
+    "result": "No change to the 17 known route failures.",
+    "rawReport": "L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
+    "rawReportFileSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8"
+  },
+  "strictGate": {
+    "exitCode": 1,
+    "campaignManifest": "322 fixture hashes and coverage passed.",
+    "refreshAndNegativeChecks": "passed.",
+    "standalone": "Passes levels 1-30 and 101-106, then fails at 107.json.",
+    "campaign": "Fails at 107-1.json.",
+    "result": "Strict bundled L3 closure remains open."
+  },
+  "limits": [
+    "The two traces do not prove the complete Mole state machine.",
+    "The air-gap source falls vertically after tick 167; the candidate does not match that transition.",
+    "Two of four tunnel-edge witnesses still disagree with the excavation mask.",
+    "Seventeen L3 route schedules fail."
+  ],
+  "status": "Integrated into current main. The runtime suite and current-source 416-fixture audit pass their recorded checks. Seventeen route schedules and full source fidelity remain open.",
+  "headCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+  "runtimeChangeStatus": "Integrated in main at 5b2306ed. HEAD 183bc8a8 changes verifier evidence only. Runtime source remains byte-identical.",
+  "sourceContinuity": {
+    "testedRuntimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+    "currentHeadRuntimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
+    "matches": true,
+    "latestValidationHead": "5b2306ed"
+  }
+}

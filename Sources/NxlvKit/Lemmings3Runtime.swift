@@ -84,6 +84,7 @@ public struct Lemmings3Runtime: Sendable {
         public var target: Int?
         public var cooldown = 0
         public var age = 0
+        public var moleDropDelay = 0
         public var digDirection: Direction
         public var width: Int { kind == .buzzard ? 48 : (kind == .potato ? 32 : 16) }
         public var height: Int { kind == .buzzard ? 48 : (kind == .mole ? 18 : 24) }
@@ -656,6 +657,27 @@ public struct Lemmings3Runtime: Sendable {
         func diagonal(_ dx: Int, _ dy: Int) -> Direction {
             dy > 0 ? (dx > 0 ? .downRight : .downLeft) : (dx > 0 ? .upRight : .upLeft)
         }
+        if creature.moleDropDelay > 0 {
+            creature.moleDropDelay -= 1
+            if creature.moleDropDelay == 4 || creature.moleDropDelay == 1 { creature.x -= 1 }
+            if creature.moleDropDelay == 0 {
+                creature.x = creature.x / 16 * 16
+                creature.y += 4
+                creature.digDirection = .down
+            }
+            return
+        }
+        if creature.digDirection == .down {
+            let nextY = creature.y + 4
+            let lands = isSolid(creature.x, nextY)
+            creature.y = nextY
+            if lands {
+                creature.direction = 1
+                creature.digDirection = .right
+                creature.age += 1
+            }
+            return
+        }
         if creature.digDirection.dy == 0 {
             let nextX = creature.x + creature.direction * 2
             let current = patrolCells(x: creature.x, y: creature.y)
@@ -686,6 +708,26 @@ public struct Lemmings3Runtime: Sendable {
         if protected(cells(x: creature.x, y: creature.y + dy)) { dy *= -1 }
         let nextX = creature.x + dx * 2, nextY = creature.y + dy
         let next = cells(x: nextX, y: nextY)
+        if dy > 0 && creature.x % 16 == 8 {
+            let body = cells(x: creature.x, y: creature.y)
+            let bodyIsClear = body.allSatisfy { !isSolid($0.0, $0.1) }
+            let nextIsClear = next.allSatisfy { !isSolid($0.0, $0.1) }
+            let trailingRange = dx > 0 ? (creature.x - 16)..<(creature.x - 8) : (creature.x + 8)..<(creature.x + 16)
+            let leadingRange = dx > 0 ? (creature.x + 8)..<(creature.x + 16) : (creature.x - 16)..<(creature.x - 8)
+            let verticalDropIsClear = ((creature.x - 4)..<(creature.x + 4)).allSatisfy { x in
+                (creature.y..<min(configuration.height, creature.y + 16)).allSatisfy { y in !isSolid(x, y) }
+            }
+            let trailingWallRemains = trailingRange.contains { x in
+                (creature.y - 18..<creature.y).contains { y in isSolid(x, y) }
+            }
+            let leadingSideIsClear = leadingRange.allSatisfy { x in
+                (creature.y - 18..<creature.y).allSatisfy { y in !isSolid(x, y) }
+            }
+            if bodyIsClear && nextIsClear && verticalDropIsClear && trailingWallRemains && leadingSideIsClear {
+                creature.moleDropDelay = 5
+                return
+            }
+        }
         creature.direction = dx; creature.digDirection = diagonal(dx, dy)
         guard !protected(next) else { return }
         let clearCellX = (dx < 0 ? creature.x + 1 : creature.x - 8) / 8 * 8
