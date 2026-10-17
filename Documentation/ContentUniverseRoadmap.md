@@ -126,6 +126,15 @@ Current source status:
   without a candidate, and no input drift. The 3,617 missing fan wins remain
   open. Imported levels remain open-ended. See the [fingerprinted audit](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json)
   and [winning replay witnesses](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl).
+- Current main `b92386eb` fixes Classic rewind replay export to retain the
+  starting level fingerprint after terrain edits. The focused rewind suite
+  passes, including a digger replay. It used installed 1.9.1 build 76 data; it
+  does not certify the prepared build 87 package. See the [current-main
+  reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+- A 17 October 8,192-beam search tried three previously unattempted exact fan
+  identities. Two full 60-second searches found no candidate win. The third
+  stopped after six candidates and does not support a route conclusion. No
+  route status changed. See the [untried-level search record](ReleaseReadiness/2.0-build83/classic-fan-current-main-untried-search-2026-10-17.json).
 - Classic level cards follow the active player's progress within each rating.
   Each rating starts with its first level available. A saved Settings option can
   unlock all Classic cards without changing campaign progress.
@@ -234,7 +243,9 @@ and 13 carried schedules fail: the standalone gaps are Shadow 7 and Egyptian
 and campaign proof applies to the earlier engine state. Keep the L3 bundled
 gate open until replacement witnesses pass the strict gates.
 
-At current main `81a7d030885c20f9e5721cbdcc4e9c192c0b5057`, the retained Mole verifier checks 53 recorded isolated-prototype positions, two repeated source traces with 673 samples, and four tunnel-edge witnesses. It reconstructs the prototype patch from its baseline. This does not compare current production movement with the DOS trace. The full 416-fixture audit was not rerun because L3 runtime and audit sources did not change after `1111ece8`. The 399/416 result and 17 route failures remain the latest full audit. Three wider current-main searches used a 4,096 beam and 4-pixel tool-site grid: Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded 5,181,833, and Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. None found a route. The excavation mask, built-brick trigger and 17 route schedules remain open. The fast-forward from `368e7e72` changed only Apple TV project settings. See the [bundled-scope reconciliation](ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json), [current-source recheck](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json) and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
+The L3 Mole verifier last passed at `b2dd57a6991f5f9685435d3df6533f6245b794f4` and remains source-continuous at current main `b92386eb59323d265a0777b3b3b047d2f245259b`; neither L3 runtime nor verifier changed in the intervening commits. It checks 53 prototype positions, two repeated source traces with 673 samples, and four tunnel-edge witnesses. It reconstructs the isolated prototype patch. A separate production trace compares the engine with 329 original-engine positions and matches none. The first mismatch is tick 2: source `(154,110)`, production `(156,110)`. The full 416-fixture audit was not rerun because L3 runtime and audit sources did not change after `1111ece8`. Its latest result remains 399/416, with 17 route failures.
+
+Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site grid. Egyptian 13 expanded 3,889,087 candidates. Egyptian 6 expanded 5,181,833 candidates. Egyptian 29 expanded 3,620,601 candidates from its tick-1,560 seed. None found a route. The excavation mask, built-brick trigger and 17 route schedules remain open. The latest fast-forward to `b92386eb` also fixes Classic rewind replay fingerprints and refreshes Trolley evidence. It does not change simulation rules or level data. The 2.0.4 build 87 release notes are prepared on main, but published package evidence remains at 2.0.3 build 86. See the [bundled-scope reconciliation](ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json), [current-source recheck](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json) and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
 
 Continue the separate validation work:
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "headCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "headCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
   "fixture": {
     "name": "steel-left-facing",
     "level": 101,
@@ -16,10 +16,34 @@
     "samples": 329,
     "repeatPositionDifferences": 0
   },
+  "steelTriggerFixture": {
+    "placementFile": "LEVELS/TEMP101.OBS",
+    "placementSHA256": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8",
+    "objectIdentifier": 354,
+    "placements": [[112, 96], [112, 104]],
+    "styleObjectFile": "STYLES/TEMP002.OBJ",
+    "styleObjectSHA256": "bb75eedf2ac8241d3e4a843636c31c776ccc91c983a3c3529647afecf16a96cd",
+    "attributeFiles": {
+      "FRL": "20e152e8eb896d8ab6cf38be04edccfea0245bc031bbfbb954f4bf932f70b1c0",
+      "BLK": "85ab585858de1fd9118607ff4a4bc61bb086d6d7270dfa5764080025ef600b8a"
+    },
+    "decodedStyleObject": {
+      "flags": "0x60",
+      "attributeGrid": "1x4 cells, each 8x2 pixels",
+      "attributeValues": ["0x60", "0x60", "0x60", "0x60"]
+    },
+    "interpretation": "The controlled source fixture triggers Mole excavation with a steel-tagged object. The decoded tag combines the runtime's solid bit 0x20 and steel bit 0x40. This establishes the material in this witness, but not whether other materials also trigger Mole excavation."
+  },
+  "runtimeGap": {
+    "source": "Sources/NxlvKit/Lemmings3Runtime.swift moveMole(_:)",
+    "observedRuntimeBehavior": "The Mole patrol checks only the 0x20 solid bit through isSolid(_:_:). It changes horizontal position and direction. It does not inspect the 0x40 steel bit, update vertical position, or add terrain edits.",
+    "fixtureBehavior": "The retained source fixture places left-facing Mole object 10013 at (152,92) and steel cells with tag 0x60 at x=112...119, y=96...111. The source trace reports steel contact and first down-right motion at tick 36.",
+    "interpretation": "The production code lacks the observed steel-triggered excavation path and source vertical movement. This identifies missing behaviour, but the source tunnel-edge witnesses still do not establish the exact excavation mask."
+  },
   "productionRun": {
     "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
     "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
-    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "runtimeLibrarySHA256": "3a10b17dd4c954785732afee8ba96e4d82d1ea96fd3d2d4f249cc613e2713610",
     "traceSHA256": "48ca9ce94ffaa8b2c3528ffc152ce685c8bb8f1c34ad19e826a7842e7568f20a",
     "exactPositionMatches": 0,
     "firstMismatch": {
@@ -27,7 +51,28 @@
       "source": [154, 110],
       "production": [156, 110]
     },
-    "result": "failed as expected: current production Mole does not reproduce the original-engine trace"
+    "result": "At b2dd57a, production matched 0 of 329 original-engine positions. First mismatch is tick 2: source (154,110), production (156,110). The command exits non-zero because source parity remains open."
+  },
+  "isolatedTimingProbe": {
+    "baseRuntimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "probeRuntimeSourceSHA256": "d65ce3a60645b2384da08f52b4c2102e4878bab2737f7d4a35eb8ac8739e695f",
+    "changes": "A temporary copy moves the Mole one pixel on every game tick instead of two pixels on two of every three ticks.",
+    "samples": 329,
+    "exactPositionMatches": 0,
+    "meanManhattanError": {
+      "production": 90.65,
+      "probe": 86.76
+    },
+    "meanVerticalError": {
+      "production": 38.11,
+      "probe": 38.11
+    },
+    "firstProbeMismatch": {
+      "tick": 2,
+      "source": [154, 110],
+      "probe": [158, 110]
+    },
+    "result": "The timing-only probe lowers mean position error slightly but still matches no samples. It does not model the source descent or excavation. Do not promote it."
   },
   "isolatedPrototype": {
     "patchSHA256": "58365aef473dfcbac35a6c8c9b3854c58b31a17c574fca0b7e94f14f9309e792",
@@ -37,7 +82,7 @@
     "matchingSampleRanges": ["36-153", "173-187"],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "The current production Mole remains horizontal and has no excavation behaviour. The isolated proposal matches the sampled left-facing burrow path over ticks 36-153 and 173-187, then continues tunnelling where the source falls through an opening. The four retained tunnel-edge witnesses also show the proposal's rectangular carve mask is incomplete.",
-  "closureEffect": "No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
+  "interpretation": "The current production Mole remains horizontal and has no excavation behaviour. Its movement implementation source hash is unchanged at b2dd57a. The isolated proposal matches the sampled left-facing burrow path over ticks 36-153 and 173-187, then continues tunnelling where the source falls through an opening. The four retained tunnel-edge witnesses also show the proposal's rectangular carve mask is incomplete.",
+  "closureEffect": "This current-head rerun confirms the mismatch at b2dd57a. No production code, route fixture or route count changed. Mole movement, excavation-mask, built-brick trigger and full L3 completion gates remain open.",
   "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh"
 }

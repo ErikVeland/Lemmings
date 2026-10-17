@@ -4,10 +4,12 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "head": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "originMain": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "fetchHead": "b92386eb59323d265a0777b3b3b047d2f245259b",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "fe11bd5d adds documentation, tests and diagnostic tooling, but no production engine runtime, loader or bundled game-content changes. The L3 trace verifier and Classic fan batch-driver tests pass at this commit. The latest full L3 route audit remains 399/416 at 368e7e72."
+    "currentMainUpdate": "Fetched origin/main and fast-forwarded the worktree on 17 October to b92386eb59323d265a0777b3b3b047d2f245259b. Main includes prepared 2.0.4 build 87 release notes and fixes Classic rewind replay export to retain the starting level fingerprint. The 615-identity Trolley audit was refreshed under engine fingerprint 82dbd2af416fc82592eb023d0cd1b26fbd3547e61f899e5d465fc7063f4d5011: status counts and best-save values are unchanged, with 1,535 candidate runs (previously 1,423). No Classic, L2, L3 or NeoLemmix simulation rules or level data changed. L3 production trace evidence at b2dd57a remains source-continuous because L3 runtime and verifier files are unchanged. The full L3 audit remains 399/416; 17 route gaps remain. The 17 October exact-member Classic search adds no routes. Build 87 is prepared on main; the latest published package evidence remains macOS 2.0.3 build 86. Current local documentation changes are listed in the current-main sync record.",
+    "postFastForwardValidation": "At b92386eb, Scripts/run-classic-dos-rewind-tests.sh passes all focused checks, including replay export after terrain edits; it uses installed 1.9.1 build 76 data and does not certify build 87. python3 Tools/TrolleyVerification/catalogue.py check passes 294 population proofs, 315 rescue records and replay hashes against the current engine fingerprint. python3 Scripts/verify-l3-mole-trace.py passes its 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, 673 repeated source samples and four tunnel-edge checks. It leaves production-to-DOS parity open. The checks do not replace full campaign simulations. See the current-main sync record for commands and limits."
   },
   "releasePackageStates": {
     "macOS": {

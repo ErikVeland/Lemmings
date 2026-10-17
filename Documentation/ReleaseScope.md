@@ -44,15 +44,26 @@ match build 85, and it retains the shared engine libraries. The complete build
 86 app audit was not rerun, so build 85 route and engine evidence carries
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
-On 17 October, `HEAD` matches `origin/main` at `81a7d030`. The worktree has
-uncommitted evidence and diagnostic changes. The fast-forward from `368e7e72`
-changes only the Apple TV Xcode project and scheme settings. The Classic, L2,
-L3 and NeoLemmix engine, loader and route-validation sources remain unchanged.
-The accepted Classic replay witnesses were rerun at `9a95012e` and matched.
-This source check does not certify the build 86 app binary. The 3,617 Classic
-fan route gaps, L2 Gold ark, L3 route and source-parity gaps, and NeoLemmix
-style dependencies remain open. Imported content remains open-ended. See the
-[current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+On 17 October, a fetch confirmed that `HEAD`, `origin/main` and `FETCH_HEAD`
+match at `b92386eb59323d265a0777b3b3b047d2f245259b`. The worktree has
+uncommitted evidence and diagnostic changes. Main fixes Classic rewind replay
+fingerprints and refreshes Trolley evidence. It does not change Classic, L2, L3
+or NeoLemmix simulation rules or bundled level data. The refreshed Trolley audit
+has 615 identities and unchanged status and best-save results; it records 1,535
+candidate runs, up from 1,423. The accepted Classic replay witnesses were rerun
+at `9a95012e` and matched. The L3 production trace was last run at `b2dd57a`
+and matched 0/329 original-engine positions; it remains applicable because L3
+runtime sources are unchanged. The prepared 2.0.4 build 87 release notes are on
+main, but the latest accepted Mac package is build 86. At `b92386eb`, the
+focused Classic rewind checks passed, including replay export after terrain edits;
+they used the installed 1.9.1 build 76 game data. The Trolley catalogue check
+passed 294 proofs, 315 rescue records and replay hashes against the current
+engine fingerprint. It did not rerun all campaign simulations. See the
+[current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json)
+for the validation commands and limits. The
+3,617 Classic fan route gaps, L2 Gold ark, L3 route and source-parity gaps, and
+NeoLemmix style dependencies remain open. Imported content remains open-ended.
+See the [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 
 The published Mac build 86 and the current 2.0 iOS source are separate package
 states. Build 86 records no non-localisation resource-index changes from build

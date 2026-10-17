@@ -166,6 +166,14 @@ at `(200,96)` and `(200,104)` to the copied temporary placements. The original
 Mole then excavates a diagonal tunnel. A static brick-object case did not show
 excavation. A lemming-built brick trigger is still unverified.
 
+The reconstructed left-facing fixture uses object ID 354 at `(112,96)` and
+`(112,104)`. Its decoded `TEMP002` style assigns four `0x60` attribute cells
+to the object. Each cell is 8 by 2 pixels; `0x60` carries the runtime's solid
+and steel bits. This confirms the material in the controlled witness, but it
+does not prove that steel is the only material that can start a Mole dig. The
+resource hashes and decoded fields are in the
+[current production trace record](current-head-production-mole-trace-2026-10-17.json).
+
 Read-only actor samples now identify the original logic counter, actor position
 and animation state. `original-steel-actor-trace.json` records ticks 7 through
 244; setup and samples without a valid actor record are excluded. The original actor is 16
@@ -298,8 +306,8 @@ excavation-mask, trigger or complete Mole behaviour gaps. See the
 [16 October parity recheck](current-source-parity-recheck-2026-10-16.json) for
 the source and verifier hashes from that check.
 
-At current main `9862374431ff67e67e084eb1f8416eb088b09ea3`, the Mole trace
-verifier checks 53 recorded isolated-prototype positions, both source traces
+At the 16 October source check at `9862374431ff67e67e084eb1f8416eb088b09ea3`, the Mole trace
+verifier checked 53 recorded isolated-prototype positions, both source traces
 with 673 samples and all four tunnel-edge witnesses. The production runtime
 hash and Mole movement region match the pre-prototype baseline. The verifier
 does not establish production trajectory parity. The latest full fixture audit at `1111ece8` still
@@ -322,19 +330,50 @@ See `current-source-parity-recheck-2026-10-16.json` for their hashes.
 
 ## 17 October current-main check
 
-`HEAD` and `origin/main` match at `368e7e72`. The L3 runtime, replay, route,
-audit and fixture paths have no changes after the full fixture audit source at
-`1111ece8`. The audit still records 399 of 416 exact double replays and 17
-route failures. The full audit was not rerun at current `HEAD`. The trace
-verifier checks 53 recorded isolated-prototype positions, 673 repeated source
-samples and four tunnel-edge checks at this `HEAD`. It does not compare
-production trajectory with DOS. A new 300-second Shadow 7 search expanded
-3,732,001 candidates without a route. It did not change fixtures. These checks do not
-prove that any level is impossible or verify the excavation mask and built-brick
-trigger. Source parity, all 17 route repairs and the build 86 app audit remain
-open. See the [current parity recheck]
-(current-source-parity-recheck-2026-10-16.json) and [Shadow 7 search]
-(current-head-shadow07-search-2026-10-17.json).
+At the 17 October check, `HEAD`, `origin/main` and the fetched `main` tip matched at
+`b2dd57a6991f5f9685435d3df6533f6245b794f4`. The full fixture audit was rerun at
+`fe11bd5d` and records 399 of 416 exact double replays, with 17 route failures.
+L3 runtime, replay, route, audit and fixture paths have no changes after
+`1111ece8`. The audit report therefore remains source-continuous, but the full
+audit was not rerun at `b2dd57a`. The trace verifier checks 53 prototype
+positions, 673 repeated source samples and four tunnel-edge witnesses. A
+separate production comparison matches 0/329 original-engine positions. Its
+first mismatch is tick 2: source `(154,110)`, production `(156,110)`. A
+temporary one-pixel-per-tick timing probe also matched 0/329 positions. It
+reduced mean Manhattan error from 90.65 to 86.76 pixels, but it did not model
+the source descent or excavation. Do not promote it. A 300-second Shadow 7
+search expanded 3,732,001 candidates without a route. It did not change
+fixtures. These checks do not
+prove that any level is impossible or verify the excavation mask and
+built-brick trigger. Source parity, all 17 route repairs and the build 86 app
+audit remain open. See the [current parity recheck](current-source-parity-recheck-2026-10-16.json),
+[Shadow 7 search](current-head-shadow07-search-2026-10-17.json) and
+[production trace record](current-head-production-mole-trace-2026-10-17.json).
+
+
+
+
+### 17 October main fast-forward to build 87 preparation
+
+The worktree is now fast-forwarded from `b2dd57a` to `b92386eb`, which matches
+`origin/main`. Neither L3 runtime nor the Mole trace verifier changed in the
+three incoming commits. The 0/329 production comparison at `b2dd57a` remains
+source-continuous; the 399/416 fixture audit remains at its recorded `fe11bd5d`
+source. Main now contains prepared 2.0.4 build 87 release notes, but there is no
+accepted build 87 package evidence. The latest accepted macOS package remains
+build 86. See the [current-main reconciliation](../2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+
+### 17 October current-main trace check after build 87 preparation
+
+After the fast-forward to `b92386eb`, `python3 Scripts/verify-l3-mole-trace.py`
+passed 53 recorded DOS/prototype positions, isolated prototype reconstruction,
+the production movement source fingerprint, two repeated source traces with 673
+samples, and four tunnel-edge checks. The check confirms the current production
+movement is still the pre-prototype implementation. It does not establish
+production-to-DOS parity. The recorded 0/329 production comparison remains at
+`b2dd57a`; neither the L3 runtime nor its trace inputs changed in the incoming
+commits. The 399/416 full fixture audit remains at its recorded `fe11bd5d`
+source. See the [current-main reconciliation](../2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 
 
 ### 17 October build 83 reference payload correction
@@ -396,13 +435,20 @@ See the [current-head gate record](current-head-strict-gate-2026-10-17.json).
 
 ### 17 October production Mole trace comparison
 
-The new current-source trace audit rebuilt NxlvKit and compared the production
-Mole with all 329 retained positions from the reconstructed left-facing steel
-case. Production matched none; its first mismatch is at tick 2. The isolated
+The current-source trace audit was rerun at `b2dd57a`. It rebuilt NxlvKit and
+compared the production Mole with all 329 retained positions from the
+reconstructed left-facing steel case. Production matched none; its first
+mismatch is at tick 2: source `(154,110)`, production `(156,110)`. The isolated
 proposal matches 141 positions, including the burrow samples at ticks 36–153
 and 173–187, then continues through an opening where the source falls. Its
 rectangular carve also conflicts with two of the four retained tunnel-edge
 witnesses. Neither result is a complete Mole implementation.
+
+The decoded left-facing fixture places steel tags `0x60` at x=112–119 and
+y=96–111. The production Mole checks the solid bit but ignores the steel bit.
+Its patrol also leaves y fixed and makes no terrain edits. The source first
+shows down-right movement at tick 36. This confirms missing behaviour, but the
+four edge witnesses still do not define a safe excavation mask.
 
 Repeat the production comparison with
 `L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh

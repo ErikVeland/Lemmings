@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-  "upstreamCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+  "sourceCommit": "b92386eb59323d265a0777b3b3b047d2f245259b",
+  "upstreamCommit": "b92386eb59323d265a0777b3b3b047d2f245259b",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "commit": "b92386eb59323d265a0777b3b3b047d2f245259b",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -26,11 +26,12 @@
       "engineRuntime": 0,
       "learningJourney": "Sources/NxlvKit/LearningJourney.swift changed and is not used by engine simulations or route solvers.",
       "classicSolver": "The current-main commit changes ClassicSolver geometry output formatting and the batch driver input path. The driver now selects exact unresolved bundled audit rows and exact level members. Search selection changed; engine simulation and replay behaviour did not.",
-      "classicReplayEvidence": "The 2,755 accepted witness replay rerun is recorded at 9a95012e. Its engine and replay inputs remain unchanged through current HEAD.",
-      "routeValidation": "Scripts/verify-l3-mole-trace.py passed at fe11bd5d: 53 recorded DOS/prototype positions, isolated prototype reconstruction, production Mole source hash, two repeated traces with 673 samples, and four tunnel-edge checks. It explicitly leaves production-to-DOS trajectory parity open."
+      "classicReplayEvidence": "The 2,755 accepted winning-route witnesses were rerun at 9a95012e. Main later changes Classic rewind replay export to retain the starting level fingerprint and refreshes Trolley proof metadata. These changes do not alter simulation rules. The refreshed Trolley audit is at b92386eb; broader witness reruns remain bounded by their recorded sources.",
+      "routeValidation": "Scripts/verify-l3-mole-trace.py passed at b2dd57a: 53 recorded DOS/prototype positions, isolated prototype reconstruction, production Mole source hash, two repeated traces with 673 samples, and four tunnel-edge checks. It explicitly leaves production-to-DOS trajectory parity open.",
+      "latestMainAdvance": "Commits 82b6509e, 8e8066b6 and b92386eb prepare 2.0.4 build 87. The 2.0.4 release notes are present on main, but no published or accepted build-87 package evidence is recorded. Main fixes Classic rewind replay export by preserving the starting level fingerprint; the 615-identity Trolley audit is refreshed under the new engine fingerprint. Its 294 VERIFIED, 315 OBSERVED and 6 UNKNOWN statuses and best-save values are unchanged; candidate runs increase from 1,423 to 1,535. No Classic, L2, L3 or NeoLemmix simulation rules or level data changed in this advance. The L3 runtime and trace verifier are unchanged from b2dd57a, so the recorded 0/329 production trajectory remains valid as evidence at that source. The Trolley audit and witnesses are current at b92386eb."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
-    "result": "The fetched current main has no production engine runtime, loader, or game-content changes after the latest route-check source. It changes test coverage, the L3 trace verifier, and Classic batch-search row selection. Existing replay results remain engine-source-continuous. The trace verifier, batch-driver tests, and full L3 fixture audit pass their recorded checks at fe11bd5d; the 17-route completion gap remains open.",
+    "result": "Current main is b92386eb. Since the 9a95012e route-check baseline, simulation rules, loaders and bundled game data remain unchanged. Main changes Classic rewind replay fingerprint handling and refreshes Trolley proof metadata, hints and release notes. The Trolley audit retains the same 615 identities and status/results, with 1,535 candidate runs. The L3 runtime and trace verifier remain unchanged since b2dd57a; production-to-DOS trajectory parity remains open. The full L3 fixture audit remains 399/416 at its recorded source, with 17 route gaps open.",
     "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members, which changes search inputs but not simulation or replay behaviour."
   },
   "classic": {
@@ -231,7 +232,8 @@
     "This record confirms the fetched current-main source relationship and the replay evidence continuity. It does not certify the 2.0.3 build 86 app binary.",
     "Bundled route and source-behaviour closure remains open across the engines.",
     "Imported content remains open-ended and requires per-engine, per-version support claims.",
-    "The current-main check does not close any open route, source-parity, style-rights or app-binary gate."
+    "The current-main check does not close any open route, source-parity, style-rights or app-binary gate.",
+    "Main contains prepared 2.0.4 build 87 release notes; no published or accepted build 87 package evidence is recorded. Continue to distinguish source state from release state."
   ],
   "evidence": [
     "classic-fan-fingerprinted-audit-2026-10-16/audit.json",
@@ -261,30 +263,24 @@
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-incinerator-search-2026-10-17.json",
+    "Documentation/ContentUniverseRoadmap.md",
+    "Documentation/ReleaseScope.md",
     "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-rollout-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-beam8192-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
     "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseReadiness/gates.json",
-    "Scripts/audit-l3-mole-production-trace.sh",
-    "Tools/Lemmings3Completion/MoleTrace.swift",
-    "Tools/Lemmings3Completion/compare_mole_trace.py"
+    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-untried-search-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
   ],
   "remoteVerification": {
-    "method": "git fetch origin main followed by HEAD, origin/main and FETCH_HEAD comparison",
-    "head": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-    "originMain": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-    "fetchHead": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+    "method": "git fetch origin main followed by HEAD, origin/main and FETCH_HEAD comparison, then fast-forward merge",
+    "head": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "originMain": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "fetchHead": "b92386eb59323d265a0777b3b3b047d2f245259b",
     "upToDate": true
   },
   "lemmings3": {
+    "currentMainHead": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+    "currentMainRuntimeContinuity": "The diff from the recorded route and trace evidence contains no Lemmings3Runtime.swift change. The production Mole trace and trace verifier were both rerun at b2dd57a; production-to-DOS trajectory parity remains open.",
     "latestFullFixtureAuditSource": "1111ece8",
     "fixtureResults": {
       "exactDoubleReplays": 399,
@@ -294,7 +290,8 @@
       "carriedFailures": 13
     },
     "runtimeAndVerifierPathsUnchangedSinceAudit": true,
-    "currentMainFullAuditRerun": true,
+    "currentMainFullAuditRerun": false,
+    "latestFullFixtureAuditCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
     "partialSourceTrace": "53 primary positions, 673 repeated samples across two traces, four tunnel-edge witnesses",
     "openGaps": [
       "17 route repairs",
@@ -308,11 +305,11 @@
     ],
     "sourceLimit": "The exact original executable is present in the extracted build 83 payload and matches the retained trace hash. Both trace-specific fixture sets were reconstructed and match all retained hashes. A new headless DOSBox 0.83.0 launch did not reach the controlled level. Raw captures remain absent.",
     "traceVerifierAtCurrentMain": {
-      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
-      "result": "Trace verifier passes at fe11bd5d: 53 recorded DOS/prototype positions, isolated prototype patch, production source hash, 673 repeated samples and four tunnel-edge checks. The fresh full fixture audit also reproduces 399/416; production-to-DOS trajectory parity remains open.",
+      "commit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+      "result": "Trace verifier passes at b2dd57a: 53 recorded DOS/prototype positions, isolated prototype patch, production source hash, 673 repeated samples and four tunnel-edge checks. The production trace audit matches 0/329 source positions. Production-to-DOS trajectory parity remains open.",
       "productionToDOSParity": "open",
-      "fullFixtureAuditRerun": true,
-      "latestFullFixtureAuditCommit": "368e7e724c40027d364d7f01c1d05d113afd852b"
+      "fullFixtureAuditRerun": false,
+      "latestFullFixtureAuditCommit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4"
     },
     "shadow07FollowUp": {
       "budgetSeconds": 300,
@@ -366,11 +363,11 @@
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-seeded1666-beam8192-search-2026-10-17.json"
     },
     "latestProductionMoleTraceComparison": {
-      "commit": "fe11bd5d8640c83c291ed12c15d1bb5a90c9efc4",
+      "commit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
       "sourceTraceSamples": 329,
       "productionExactMatches": 0,
       "isolatedPrototypeExactMatches": 141,
-      "interpretation": "Current production remains horizontal and diverges from the source trace. The prototype matches the recorded burrow segment but then tunnels through a source opening; its carve mask also conflicts with two of four source tunnel-edge witnesses. No runtime or route fixture changed.",
+      "interpretation": "At b2dd57a, current production remains horizontal and diverges from 329 source positions. The prototype matches the recorded burrow segment but then tunnels through a source opening; its carve mask also conflicts with two of four source tunnel-edge witnesses. No runtime or route fixture changed.",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
       "audit": "Scripts/audit-l3-mole-production-trace.sh"
     }
@@ -450,6 +447,54 @@
       "result": "399/416 exact double replays; 17 route failures (4 standalone, 13 carried). The fresh report matches the retained normalised report exactly.",
       "strictGate": "322 manifest entries and negative checks passed; completion still fails at standalone 107 and carried 107-1.",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json"
+    }
+  },
+  "currentHeadFollowUpValidation": {
+    "commit": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "l3TraceVerifier": {
+      "command": "python3 Scripts/verify-l3-mole-trace.py",
+      "exitCode": 0,
+      "result": "Passed 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, two repeated source traces with 673 samples, and four tunnel-edge checks. Production-to-DOS trajectory parity remains open."
+    },
+    "productionMoleTrace": {
+      "measuredAt": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+      "result": "0 of 329 production positions match. The L3 runtime and trace inputs are unchanged through b92386eb, so the recorded mismatch remains source-continuous; the 329-position production comparison was not rerun at b92386eb.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+    }
+  },
+  "mainUpdateToCurrent": {
+    "fromCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+    "toCommit": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "commits": [
+      "82b6509e Prepare 2.0.4 build 87 release notes",
+      "8e8066b6 Refresh rescue proofs and hints for build 87",
+      "b92386eb Fingerprint the starting level in rewind replays"
+    ],
+    "findings": [
+      "Classic rewind replay export now uses the starting level fingerprint, so terrain edits during a run do not produce a mismatched replay identity. Older checkpoints remain decodable.",
+      "Trolley audit refreshed at engine fingerprint 82dbd2af416fc82592eb023d0cd1b26fbd3547e61f899e5d465fc7063f4d5011: 615 level identities; 294 VERIFIED, 315 OBSERVED, 6 UNKNOWN; no status or best-save changes; 1,535 candidate runs, up from 1,423.",
+      "No Classic, L2, L3 or NeoLemmix simulation rules or level data changed in these three commits. L3 production trace evidence at b2dd57a remains applicable because the L3 runtime and verifier are unchanged.",
+      "Build 87 release notes are prepared on main. Published/accepted package evidence remains at macOS 2.0.3 build 86."
+    ]
+  },
+  "postFastForwardValidation": {
+    "commit": "b92386eb59323d265a0777b3b3b047d2f245259b",
+    "classicRewind": {
+      "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache Scripts/run-classic-dos-rewind-tests.sh '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30'",
+      "exitCode": 0,
+      "result": "All focused rewind checks passed, including exporting and verifying a replay after digger terrain edits.",
+      "resourceLimit": "Used the installed 1.9.1 build 76 DOS Classic data. This validates current source against those inputs; it does not certify the prepared build 87 package."
+    },
+    "trolleyCatalogue": {
+      "command": "python3 Tools/TrolleyVerification/catalogue.py check",
+      "exitCode": 0,
+      "result": "PASS: 294 proofs, 315 rescue records, and replay hashes.",
+      "scope": "Checks the current engine fingerprint, retained certificate and rescue inputs, and witness hashes. It does not rerun every level simulation."
+    },
+    "l3TraceVerifier": {
+      "command": "python3 Scripts/verify-l3-mole-trace.py",
+      "exitCode": 0,
+      "result": "Passed 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, two repeated source traces with 673 samples, and four tunnel-edge checks. Production-to-DOS trajectory parity remains open."
     }
   }
 }

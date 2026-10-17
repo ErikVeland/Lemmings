@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
+  "scope": "Three previously unattempted exact identities from the 6,020-level bundled Classic fan audit. Imported content is excluded.",
+  "audit": {
+    "path": "classic-fan-fingerprinted-audit-2026-10-16/levels.jsonl",
+    "sha256": "d3026583582dfedb2a321eb9cfec4fe71958c2923290e151ae0f149abbf823a1",
+    "bundledFanLevels": 6020,
+    "verifiedFanWinsBefore": 2403,
+    "openFanRoutesBefore": 3617
+  },
+  "selection": {
+    "method": "Filter unresolved audit rows against exact identities in the retained 17 October local attempt ledgers, then select in initial-hash order.",
+    "previouslyAttemptedIdentities": 19,
+    "unattemptedUnresolvedRows": 3598,
+    "temporaryInput": "/private/tmp/classic-fan-unattempted-20261017.jsonl",
+    "temporaryInputSHA256": "b25fcf98d1cd1b62de4f376327cc5f6ba9596a93255256751bce8945bb00dba0"
+  },
+  "resources": {
+    "appVersion": "1.9.1",
+    "build": 76,
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "packs": [
+      {
+        "packID": "fan:lldb-52",
+        "archive": "0052-QBeez1.zip",
+        "sha256": "c3b1961305f3afe1219387a1489803195d0847a6af4a76c44dc3283c8e4de1f3"
+      },
+      {
+        "packID": "fan:lldb-512",
+        "archive": "0512-ssam1221s-Lemmings-Tame.zip",
+        "sha256": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11"
+      },
+      {
+        "packID": "fan:lldb-415",
+        "archive": "0415-Blizzard-of-Lemm.zip",
+        "sha256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec"
+      }
+    ]
+  },
+  "solver": {
+    "path": ".build/classic-solver/ClassicSolver",
+    "sha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrarySHA256": "d94417ff0a5bf8ae5148ccab2888339b0b2cf99fa6b44810befb204211aca6b3",
+    "command": "python3 Tools/ClassicSolver/solve_fan_batch.py /private/tmp/classic-fan-unattempted-20261017.jsonl '/Applications/Ultimate Lemmings.app/Contents/Resources' .build/classic-solver/ClassicSolver .build/classic-fan-current-main-20261017/fan-exploration-04 --seconds 60 --width 8192 --max-levels 3 --order hash --clock golems --adaptive-rate --rescue-quota-distance --prefer-progress --save-partials",
+    "secondsPerLevel": 60,
+    "beamWidth": 8192,
+    "clock": "golems",
+    "adaptiveReleaseRate": true,
+    "rescueQuotaDistance": true,
+    "preferProgress": true,
+    "rolloutSingle": false,
+    "attemptLedgerSHA256": "c4143531d9eebdc2242a2b8e5b9edf8d133c80aad1d87df6a2a6967ea323b57a"
+  },
+  "attempts": [
+    {
+      "packID": "fan:lldb-52",
+      "member": "QBeez1.dat#1",
+      "title": "Preactor of the Plains",
+      "initialHash": "0189cf3580ed52be62e7ee64d68cae3e67fbf8c3f46c8f60ffa6bb58b860890e",
+      "required": 99,
+      "expandedCandidates": 151117,
+      "elapsedSeconds": 60.45,
+      "tick": 217,
+      "released": 41,
+      "lost": 0,
+      "active": 41,
+      "bestSaved": 0,
+      "result": "UNSOLVED"
+    },
+    {
+      "packID": "fan:lldb-512",
+      "member": "ssam1221 Tame 2.dat#9",
+      "title": "You have various tools!",
+      "initialHash": "018d4c5090bea3d72fe5b64353da11b4604412a679871e06e6350ace2e6a686b",
+      "required": 6,
+      "expandedCandidates": 128340,
+      "elapsedSeconds": 60.58,
+      "tick": 422,
+      "released": 66,
+      "lost": 53,
+      "active": 13,
+      "bestSaved": 0,
+      "result": "UNSOLVED"
+    },
+    {
+      "packID": "fan:lldb-415",
+      "member": "levels/Blizzlem/304.ini#0",
+      "title": "Another Ice Spy",
+      "initialHash": "01a97fb182b7efa0ebb5f617b4bc5802e49628d787520615068e61d7fda3fad6",
+      "required": 80,
+      "expandedCandidates": 6,
+      "elapsedSeconds": 5.24,
+      "tick": 54,
+      "released": 1,
+      "lost": 0,
+      "active": 1,
+      "bestSaved": 0,
+      "result": "UNSOLVED",
+      "interpretation": "The search stopped after six candidates and is too short to support a route conclusion."
+    }
+  ],
+  "outcome": {
+    "attempted": 3,
+    "expandedCandidatesTotal": 279463,
+    "verifiedRoutesAdded": 0,
+    "verifiedFanWinsAfter": 2403,
+    "openFanRoutesAfter": 3617,
+    "strictReplayCandidates": 0,
+    "interpretation": "The bounded search found no winning candidate for the first two identities. The third run ended too early to support a route conclusion. No level route status changed."
+  },
+  "limits": [
+    "The search used installed 1.9.1 build 76 resources. The retained fan-pack input hashes match the audited pack set, but the search does not certify the build 86 or a later app binary.",
+    "No candidate win was produced, so no strict replay was run and no route was promoted.",
+    "The search does not prove that any level is impossible.",
+    "Imported content remains excluded and open-ended."
+  ],
+  "sourceCommitStatus": "Historical search source; worktree is now fast-forwarded to b92386eb59323d265a0777b3b3b047d2f245259b. The intervening commits changed rewind replay fingerprint handling and Trolley evidence, not Classic simulation or solver inputs. The recorded solver/library hashes identify the exact binaries used."
+}
