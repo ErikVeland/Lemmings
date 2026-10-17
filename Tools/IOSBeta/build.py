@@ -17,6 +17,14 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECT = ROOT / "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj"
 
 
+def marketing_version():
+    """The project's single MARKETING_VERSION, so a version bump reaches the archive."""
+    values = set(re.findall(r"MARKETING_VERSION = ([^;]+);", (PROJECT / "project.pbxproj").read_text()))
+    if len(values) != 1:
+        raise ValueError(f"Expected one MARKETING_VERSION in the iOS project, found {sorted(values)}.")
+    return values.pop()
+
+
 def run(arguments, log=None, env=None):
     print("Running:", arguments[0], flush=True)
     result = subprocess.run(arguments, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT if log else None)
@@ -139,7 +147,7 @@ def validate_archive(archive, build, bundle_id, signed):
     app = archive / "Products/Applications/UltimateLemmingsIOS.app"
     info = plistlib.loads((app / "Info.plist").read_bytes())
     for key, expected in {
-        "CFBundleIdentifier": bundle_id, "CFBundleShortVersionString": "2.0",
+        "CFBundleIdentifier": bundle_id, "CFBundleShortVersionString": marketing_version(),
         "CFBundleVersion": str(build), "CFBundleSupportedPlatforms": ["iPhoneOS"],
         "UIDeviceFamily": [1, 2], "ITSAppUsesNonExemptEncryption": False,
     }.items():
@@ -171,7 +179,7 @@ def validate_archive(archive, build, bundle_id, signed):
             raise ValueError("The signed device archive has no provisioning profile.")
         signing_capabilities(app, bundle_id)
     return {
-        "app": str(app), "bundleID": bundle_id, "version": "2.0", "build": build,
+        "app": str(app), "bundleID": bundle_id, "version": marketing_version(), "build": build,
         "executableSHA256": digest(binary), "symbolUUIDs": binary_uuids,
         "contentManifestSHA256": digest(app / "BetaGameData/manifest.json"),
         "contentFiles": len(content["files"]), "archiveSigned": signed,
@@ -208,7 +216,7 @@ def main():
             parser.error("Game Center activation requires a signed candidate.")
         from game_center import validate_activation
         validate_activation(args.game_center_activation, bundle_id=args.bundle_id)
-    output = (args.output or ROOT / f".build/ios-beta/2.0-{args.build}").resolve()
+    output = (args.output or ROOT / f".build/ios-beta/{marketing_version()}-{args.build}").resolve()
     output.mkdir(parents=True, exist_ok=False)
     env = dict(os.environ, LEMMINGS_TEST_AUDIO="muted")
     music_scope = args.music_scope or ("main" if args.export == "app-store-connect" else "full")
@@ -245,7 +253,7 @@ def main():
                    "-configuration", "Release", "-destination", f"id={args.device_id}" if args.device_id else "generic/platform=iOS",
                    "-archivePath", str(archive), "-derivedDataPath", str(output / "DerivedData"),
                    "-clonedSourcePackagesDirPath", str(ROOT / ".build/ios-packages"),
-                   f"CURRENT_PROJECT_VERSION={args.build}", "MARKETING_VERSION=2.0",
+                   f"CURRENT_PROJECT_VERSION={args.build}", f"MARKETING_VERSION={marketing_version()}",
                    f"PRODUCT_BUNDLE_IDENTIFIER={args.bundle_id}", f"DEVELOPMENT_TEAM={args.team}",
                    f"IOS_BETA_CONTENT_DIR={output / 'BetaGameData'}", f"IOS_MUSIC_SCOPE={music_scope}", "COMPILER_INDEX_STORE_ENABLE=NO"]
         if args.unsigned:
