@@ -2,80 +2,20 @@
   "schemaVersion": 1,
   "date": "2026-10-17",
   "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
-  "runtimeSourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
   "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-  "auditToolSourceSHA256": "fff56cdbb5ab0b5cdbbea1a14635510624a79795035eadb7d21d324b2089fe6c",
-  "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
-  "auditExecutableSHA256": "c6d17f42c3948508addc21f4ce59698e7e354f9da330ebe74949434d1ad5bcf2",
+  "runtimeLibrarySHA256": "0f3b0cdbc5fba5850920d613f400b2884b83d432af153c5397d0fcf70ef42135",
+  "auditExecutableSHA256": "ec1097ea20e1fcd269d4606f4e162a7d1117817aa4becab9504c254ca7f24d15",
   "optimisation": "-O",
-  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/post-refresh-03ae9286.json",
-  "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+  "command": "L3_TEST_LIBRARY_DIR=.build/l3-runtime-baseline L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/current-main-fixture-recheck.json",
+  "rawReportSHA256": "c7258c9582ba69912e8f1b8dd09a08e6f4cd192b7383de617a865d05f97968d1",
   "summary": {
     "fixtures": 416,
-    "exactDoubleReplays": 399,
-    "rebasedWinsWithStaleIdentity": 0,
+    "exactDoubleReplays": 393,
+    "rebasedWinsWithStaleIdentity": 6,
     "currentRuntimeRouteFailures": 17,
     "standaloneRouteFailures": 4,
     "carriedRouteFailures": 13
   },
-  "refreshedFixtures": [
-    {
-      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
-      "population": 20,
-      "oldExpectedStateHash": "6bd59347eb44501d87b881b0ab241a0fcbd5eabd4d40bd4454ed818efb8428fa",
-      "newExpectedStateHash": "fc9ab37594878c06c7abcf66ec6499c0d791e6bf6f018e31ed447e38e6b44a15",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    },
-    {
-      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
-      "population": 1,
-      "oldExpectedStateHash": "fa1dd3ff2e1dbf4a036f6d32d9a3f42479753fad5a09f5c8b45224729e64b96a",
-      "newExpectedStateHash": "35994c77cd70f02ce8151d9b67586d4580370af10767a49192e41361a61f51af",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    },
-    {
-      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
-      "population": 21,
-      "oldExpectedStateHash": "2512108d885d14d007c0972da8c7e39a19bc37a31fa1695df9e21ff28b35f337",
-      "newExpectedStateHash": "6a46ccafde96422a9a195fe7be84ac225e0e924bc6b1580330cab5591a11693a",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    },
-    {
-      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
-      "population": 22,
-      "oldExpectedStateHash": "166594c59ead7bc80f2999f1caf63ded9f7cbd54998706e409373704107fa365",
-      "newExpectedStateHash": "6a53095581cf385243fba2035f233c828b13a94312c56374bddc5ba59f9ac640",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    },
-    {
-      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
-      "population": 25,
-      "oldExpectedStateHash": "ba217bedf8616640b94f55358a67e7abadfc7f7fadb5bc1155e6c6ce0b9010da",
-      "newExpectedStateHash": "07bf48eb8d0d0b63706c3c1fdb657991b56a0d3a1023ea5d53a45a06358777b2",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    },
-    {
-      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
-      "population": 26,
-      "oldExpectedStateHash": "88dad53fcccc8906e2ee8b3ffa8426b5e5c3b2adeef3192cb92e27e5d19a5182",
-      "newExpectedStateHash": "56d54941e6f97d4091ba976adb725b6a622816ff0b85f262dd1f9805fd0841e4",
-      "initialStateHashUnchanged": true,
-      "inputsUnchanged": true,
-      "twiceReplayed": true
-    }
-  ],
-  "interpretation": "A fresh audit at 03ae9286 confirms 399 exact double replays, zero stale-identity wins and 17 route failures. The six level-113 expected state hashes remain refreshed. Their initial-state hashes, level hashes and input schedules match current source. This closes fixture-hash drift only. Mole source parity and the 17 route failures remain open.",
-  "strictCompletionGate": "current-head-strict-gate-03ae9286.json",
   "results": [
     {
       "currentInitialStateHash": "c24797fb606d8c407b42b6623f3376eb35ba37487a194f03a47cc3a12238f6a9",
@@ -417,11 +357,19 @@
     },
     {
       "currentInitialStateHash": "0f7f8fb7d6c4c129067fe3bc7ede3832c014e2c6af2eca24694bed2426b6a694",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 20,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 10,
+        "saved": 10,
+        "stateHash": "fc9ab37594878c06c7abcf66ec6499c0d791e6bf6f018e31ed447e38e6b44a15",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "ce366b8273907168b0b2e3ba70236ce7ed34f3b38f8497a8bd3b1a64b642f7e2",
@@ -1677,43 +1625,83 @@
     },
     {
       "currentInitialStateHash": "7022058819638a360aaa33be7e040141ffad371b3f0aa4a4e40f4b5b270240bf",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 1,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 0,
+        "saved": 1,
+        "stateHash": "35994c77cd70f02ce8151d9b67586d4580370af10767a49192e41361a61f51af",
+        "ticks": 119
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "16b469054002f79d507d1f1fe7d015e672ed82ee103d1d4fc5c7628a609f0a0a",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 21,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 11,
+        "saved": 10,
+        "stateHash": "6a46ccafde96422a9a195fe7be84ac225e0e924bc6b1580330cab5591a11693a",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "ba6c7d48525c3a216b0503d966f7ac47642b18ede64378cd44e94eed1177e0e5",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 22,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 12,
+        "saved": 10,
+        "stateHash": "6a53095581cf385243fba2035f233c828b13a94312c56374bddc5ba59f9ac640",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "04cadd98d9e96bfa89e634ed0a2f2cda7a8f96140f03aebdb7485a1cb8af93e0",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 25,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 15,
+        "saved": 10,
+        "stateHash": "07bf48eb8d0d0b63706c3c1fdb657991b56a0d3a1023ea5d53a45a06358777b2",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "15257d10438cf462e1b09af1be8ad1e3beab8e34a7da41991511250999536817",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
       "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
       "level": 113,
-      "passed": true,
+      "passed": false,
       "population": 26,
-      "routeStatus": "exact"
+      "rebasedOutcome": {
+        "lost": 0,
+        "reserves": 16,
+        "saved": 10,
+        "stateHash": "56d54941e6f97d4091ba976adb725b6a622816ff0b85f262dd1f9805fd0841e4",
+        "ticks": 443
+      },
+      "routeStatus": "rebased-win"
     },
     {
       "currentInitialStateHash": "fac2669f96ea61bcea83f5ea336a2c48c8db20d4562aaa56a8417afa3b7e1545",
@@ -3439,5 +3427,6 @@
       "population": 44,
       "routeStatus": "exact"
     }
-  ]
+  ],
+  "interpretation": "Fresh audit at 03ae9286: 393/416 exact double replays, 6 stale-identity routes that still win when rebased, and 17 schedules that do not win. Bundled L3 completion remains open."
 }

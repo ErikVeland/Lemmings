@@ -5,7 +5,7 @@
   "runtime": {
     "fixture": "steel-air-gap",
     "samples": 344,
-    "exactPositionMatches": 140,
+    "exactPositionMatches": 2,
     "matchingTickRanges": [
       [
         17,
@@ -35,11 +35,11 @@
         112
       ]
     },
-    "traceSHA256": "1b56d32df21cc64ca3ee4fd4728307af8083e33b37ea72f203bc57ba771f58df",
-    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+    "traceSHA256": "73d0404042b8b4d4198ba7c5cf1c9238ca1898f163e97120aa1022efd912fa82",
+    "runtimeLibrarySHA256": "e8b9ae403ea20881ac0e07483dd5166a56aad48965017babb3247f470de01f3a",
     "traceToolSHA256": "2167461236c70ad036c201a3cf56bd3baf50cda79ba46b8459478d41ed94d770",
-    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-    "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
+    "headCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
     "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
     "sourceFixtureHashes": {
       "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
@@ -77,10 +77,10 @@
         167
       ]
     },
-    "result": "Production matches 140/344 source positions. It matches the source trajectory from ticks 36 through 167, then continues diagonally through the open gap. The source pauses, drops vertically from ticks 173 through 182, and resumes patrol at the floor.",
+    "result": "Current production at 8d65e927 matches 2/344 source positions. Parent 03ae9286 matched 140/344. The patrol change fixes the Shadow 7 runtime assertion but prevents the source air-gap Mole from following the captured down-left tunnel.",
     "productionTracePath": "current-head-air-gap-production-trace.json"
   },
-  "interpretation": "This second fixture confirms a source-backed missing transition from diagonal burrowing to a vertical fall when the Mole leaves the tunnel into an open gap. It does not establish the exact state trigger or animation timing. Keep those rules open until a candidate matches both retained traces and the tunnel-edge witnesses.",
+  "interpretation": "The current main runtime passes the Shadow 7 patrol assertion, but production air-gap agreement falls from 140/344 at 03ae9286 to 2/344. Mole source behaviour is not closed.",
   "rejectedTriggerExperiment": {
     "candidate": "Start a vertical fall when both the current and next down-tunnel footprints contain no solid terrain.",
     "sourceCounterexampleTick": 70,

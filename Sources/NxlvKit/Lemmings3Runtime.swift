@@ -639,6 +639,12 @@ public struct Lemmings3Runtime: Sendable {
         func patrolCells(x: Int, y: Int) -> [(Int, Int)] {
             ((y - 16)..<y).flatMap { py in ((x - 4)..<(x + 4)).map { ($0, py) } }
         }
+        func containsSteel(_ body: [(Int, Int)]) -> Bool {
+            body.contains { x, y in
+                guard inBounds(x, y) else { return false }
+                return attributes[y * configuration.width + x] & 0x40 != 0
+            }
+        }
         func protected(_ body: [(Int, Int)]) -> Bool {
             body.contains { x, y in
                 guard inBounds(x, y) else { return true }
@@ -654,10 +660,17 @@ public struct Lemmings3Runtime: Sendable {
             let nextX = creature.x + creature.direction * 2
             let current = patrolCells(x: creature.x, y: creature.y)
             let next = patrolCells(x: nextX, y: creature.y)
-            if protected(cells(x: nextX, y: creature.y)) &&
-                !protected(cells(x: creature.x, y: creature.y)) {
+            let currentBody = cells(x: creature.x, y: creature.y)
+            let nextBody = cells(x: nextX, y: creature.y)
+            if protected(nextBody) && !protected(currentBody) {
                 creature.direction *= -1
-                creature.digDirection = creature.direction > 0 ? .right : .left
+                if containsSteel(nextBody) && !containsSteel(currentBody) {
+                    creature.y += 2
+                    creature.digDirection = diagonal(creature.direction, 1)
+                    creature.cooldown = 11
+                } else {
+                    creature.digDirection = creature.direction > 0 ? .right : .left
+                }
                 return
             } else {
                 if next.filter({ isSolid($0.0, $0.1) }).count > current.filter({ isSolid($0.0, $0.1) }).count {

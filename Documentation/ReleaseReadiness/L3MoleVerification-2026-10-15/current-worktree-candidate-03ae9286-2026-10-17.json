@@ -32,5 +32,22 @@
     "campaign": "Failed at carried fixture 107-1.json: replay identity, initial state or input order differs.",
     "result": "Strict bundled L3 closure remains open."
   },
-  "closure": "This candidate fixes the captured Shadow 7 patrol-position regression in the runtime suite. It does not close Shadow 107 standalone/carried routes, the 17-route audit gap, original-engine Mole parity, or bundled L3 closure. It is uncommitted and does not change origin/main."
+  "closure": "This candidate fixes the captured Shadow 7 patrol-position regression in the runtime suite. It does not close Shadow 107 standalone/carried routes, the 17-route audit gap, original-engine Mole parity, or bundled L3 closure. It is uncommitted and does not change origin/main.",
+  "integratedCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+  "status": "Integrated into current main at 8d65e927. The runtime suite passes; the 416-fixture audit has 399 exact replays and 17 route failures. Strict gate fails at 107.json and 107-1.json. Source traces match 0/329 left-facing and 2/344 air-gap positions; parent 03ae9286 matched 140/344 air-gap positions. Full Mole fidelity remains open.",
+  "sourceTraceComparison": {
+    "leftFacing": {
+      "exact": 0,
+      "samples": 329
+    },
+    "airGap": {
+      "exact": 2,
+      "samples": 344
+    },
+    "parentMainAirGap": {
+      "exact": 140,
+      "samples": 344,
+      "commit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6"
+    }
+  }
 }

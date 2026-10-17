@@ -531,3 +531,22 @@ at standalone Shadow 107 (`107.json`) and carried fixture `107-1.json`. These
 results apply to this uncommitted candidate. Main's original runtime baseline
 remains separately recorded. See the [candidate record]
 (current-worktree-candidate-03ae9286-2026-10-17.json).
+
+
+### 17 October current-main recheck at 8d65e927
+
+A fresh fetch confirms the worktree matches `origin/main` at `8d65e927`. The
+L3 runtime suite passes. The full 416-fixture audit verifies 399 exact double
+replays, zero stale-identity wins and 17 route failures. The strict gate passes
+the 322-entry manifest and negative checks, then fails at standalone Shadow 7
+(`107.json`) and carried fixture `107-1.json`.
+
+The patrol change and six level-113 outcome hashes are now part of main. Direct
+source comparisons show 0/329 left-facing Mole positions and 2/344 air-gap
+positions. Parent `03ae9286` matched 140/344 positions on the air-gap trace. The
+new runtime test passes, but this does not establish full Mole fidelity. The
+level-107 patrol rule and level-101 steel-contact transition still need a rule
+that matches both source scenes. See the [current fixture audit]
+(current-head-fixture-audit-8d65e927.json), [strict gate]
+(current-head-strict-gate-8d65e927.json) and [air-gap trace]
+(current-head-production-air-gap-trace-2026-10-17.json).

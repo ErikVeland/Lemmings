@@ -342,5 +342,26 @@
     },
     "result": "Production matches 140/344 source positions. It matches the source trajectory from ticks 36 through 167, then continues diagonally through the open gap. The source pauses, drops vertically from ticks 173 through 182, and resumes patrol at the floor.",
     "productionTracePath": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-air-gap-production-trace.json"
-  }
+  },
+  "currentMainRerun": {
+    "headCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+    "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
+    "runtimeLibrarySHA256": "e8b9ae403ea20881ac0e07483dd5166a56aad48965017babb3247f470de01f3a",
+    "traceSHA256": "743d78ec2f05b81233b4996bb1fa6f6e64207d4eae65436c885c69a49eaa5a4b",
+    "exactPositionMatches": 0,
+    "samples": 329,
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        154,
+        110
+      ],
+      "production": [
+        156,
+        110
+      ]
+    },
+    "result": "Production matches 0/329 positions on the left-facing steel trace at 8d65e927. The 141/329 count is the isolated prototype result, not production."
+  },
+  "currentSourceStatus": "Current main 8d65e927 passes the runtime suite. Strict completion fails at 107.json and 107-1.json. Production traces match 0/329 left-facing and 2/344 air-gap positions; air-gap match was 140/344 at parent 03ae9286."
 }

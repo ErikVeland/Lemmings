@@ -5,13 +5,16 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 
 
 project = Path(__file__).resolve().parents[1]
 evidence = project / "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15"
 runtime = project / "Sources/NxlvKit/Lemmings3Runtime.swift"
-current_report = evidence / "current-head-production-mole-trace-2026-10-17.json"
+candidate_mode = sys.argv[1:] == ["--worktree-candidate"]
+if sys.argv[1:] not in ([], ["--worktree-candidate"]):
+    raise SystemExit("Usage: verify-l3-mole-trace.py [--worktree-candidate]")
 
 source = json.loads((evidence / "original-steel-actor-trace.json").read_text())
 comparison = json.loads((evidence / "prototype-steel-comparison.json").read_text())

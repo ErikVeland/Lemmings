@@ -931,6 +931,21 @@ do {
                     try require(corridor.creatures.contains { $0.kind == .mole && (116...208).contains($0.x) && $0.y == 110 } &&
                         corridor.attributes[104 * 320 + 110] == 0x20 && corridor.lost == 0,
                         "L3 Shadow 7 Mole patrols the DOS corridor without losing the hatch")
+                    var steelTerrain = Array(repeating: UInt16(0x1000), count: 320 * 200)
+                    for y in 112..<200 {
+                        for x in 0..<320 { steelTerrain[y * 320 + x] = 0x20 }
+                    }
+                    for y in 96..<112 {
+                        for x in 200..<208 { steelTerrain[y * 320 + x] = 0x60 }
+                    }
+                    var steelContact = try Lemmings3Runtime(configuration: .init(width: 320, height: 200,
+                        attributes: steelTerrain, entrance: .init(x: 16, y: 40), exits: [.init(x: 300, y: 100)],
+                        total: 1, releaseInterval: 1000, releaseDelay: 1000,
+                        creatures: [.init(id: 0, kind: .mole, x: 160, y: 110, direction: 1)]))
+                    for _ in 0..<25 { steelContact.step() }
+                    try require(steelContact.creatures.first.map {
+                        $0.x == 192 && $0.y == 112 && $0.direction == -1 && $0.digDirection == .downLeft
+                    } == true, "L3 Mole starts a down-left tunnel at the source steel contact")
                 }
                 if tribe == .egyptian && index == 12 {
                     try require(run.creatures.contains { $0.kind == .mole && $0.direction == -1 && $0.digDirection == .left },

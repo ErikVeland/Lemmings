@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "8d65e927934fb3e454e516a06ec8ee5a364450cd",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+  "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
+  "runtimeSuite": "Passed the complete L3 runtime suite for Classic, Shadow and Egyptian resources.",
+  "campaignManifest": "Passed 322 fixture hashes and coverage entries.",
+  "refreshAndNegativeChecks": "Passed.",
+  "strictGate": {
+    "exitCode": 1,
+    "standalone": "Levels 1-30 and 101-106 pass; 107.json fails to reproduce its winning outcome.",
+    "campaign": "107-1.json fails replay identity, initial state or input order.",
+    "result": "Bundled L3 strict completion remains open."
+  },
+  "fixtureAudit": "current-head-fixture-audit-8d65e927.json",
+  "fixtureAuditSHA256": "84e01bbf9c3d6ed301cf3f67684be8bb8e8600d2de0229a98857025bdeff7fda",
+  "exactDoubleReplays": 399,
+  "totalFixtures": 416,
+  "staleIdentityWins": 0,
+  "routeFailures": 17,
+  "standaloneFailures": 4,
+  "carriedFailures": 13
+}
