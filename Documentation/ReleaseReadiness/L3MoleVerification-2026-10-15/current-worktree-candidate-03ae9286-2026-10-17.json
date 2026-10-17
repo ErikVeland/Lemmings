@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "baseCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+  "originMain": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+  "runtimeSourceSHA256": "4a97370993a52b4166e41977f1b82592ab91f96020f03159f3e76cbbb9325099",
+  "runtimeChange": "Use an 8x16 horizontal patrol footprint and remove the two-pixel ground snap. Keep the full 16x18 footprint for protected-terrain checks.",
+  "runtimeSuite": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/run-lemmings3-runtime-tests.sh",
+    "result": "Passed the complete L3 runtime suite, including Shadow and Egyptian release checks and the Shadow 7 right-patrol assertion.",
+    "source": "Local candidate; based on 03ae9286."
+  },
+  "fixtureManifest": {
+    "command": "python3 Tools/CampaignCompletion/report.py --check",
+    "result": "Passed 322 fixture hashes and coverage entries after regenerating Documentation/CampaignCompletion/evidence.json for six level-113 expected-state hash refreshes."
+  },
+  "fixtureAudit": {
+    "report": ".build/l3-patrol-fix-fixture-audit-refreshed.json",
+    "exactDoubleReplays": 399,
+    "totalFixtures": 416,
+    "staleIdentityWins": 0,
+    "routeFailures": 17,
+    "standaloneFailures": 4,
+    "carriedFailures": 13
+  },
+  "strictGate": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=Sources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+    "exitCode": 1,
+    "manifest": "322 hashes and coverage passed",
+    "negativeChecks": "passed",
+    "standalone": "Passed levels 1-30 and 101-106; failed at Shadow 107 (107.json): replay did not consume every input and reproduce its winning outcome.",
+    "campaign": "Failed at carried fixture 107-1.json: replay identity, initial state or input order differs.",
+    "result": "Strict bundled L3 closure remains open."
+  },
+  "closure": "This candidate fixes the captured Shadow 7 patrol-position regression in the runtime suite. It does not close Shadow 107 standalone/carried routes, the 17-route audit gap, original-engine Mole parity, or bundled L3 closure. It is uncommitted and does not change origin/main."
+}

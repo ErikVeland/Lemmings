@@ -186,5 +186,39 @@
     "freshRunReportPath": ".build/l3-fixture-audit/current-main-fe11bd5d-report.json",
     "normalisedReportMatchesRetained": true,
     "sourceScope": "Full 416-fixture replay audit. No source-parity or release-package claim."
+  },
+  "latestCurrentHeadAuditAt03ae9286": {
+    "worktreeHEAD": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "originMain": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "fetchHead": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "ahead": 0,
+    "behind": 0,
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/post-refresh-03ae9286.json",
+    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+    "auditToolSourceSHA256": "fff56cdbb5ab0b5cdbbea1a14635510624a79795035eadb7d21d324b2089fe6c",
+    "auditExecutableSHA256": "c6d17f42c3948508addc21f4ce59698e7e354f9da330ebe74949434d1ad5bcf2",
+    "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "reportPath": "current-head-fixture-audit-03ae9286.json",
+    "counts": {
+      "fixtures": 416,
+      "exactDoubleReplays": 399,
+      "rebasedWinsWithStaleIdentity": 0,
+      "currentRuntimeRouteFailures": 17,
+      "standaloneRouteFailures": 4,
+      "carriedRouteFailures": 13
+    },
+    "exitCode": 1,
+    "result": "Fresh full audit at 03ae9286 confirms 399/416 exact double replays, zero stale-identity wins and 17 route failures. The non-zero exit is expected because 17 schedules do not win.",
+    "sourceScope": "Full 416-fixture replay audit. This does not establish original-engine parity or release-package closure."
+  },
+  "latestCurrentHeadStrictGateAt03ae9286": {
+    "record": "current-head-strict-gate-03ae9286.json",
+    "head": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "exitCode": 1,
+    "manifestAndNegativeChecks": "passed",
+    "standaloneFailure": "107.json",
+    "carriedFailure": "107-1.json",
+    "result": "Strict bundled L3 route and campaign gates remain open."
   }
 }

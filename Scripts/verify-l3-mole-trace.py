@@ -98,10 +98,53 @@ else:
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
 
+air_gap = report.get("currentHeadAirGapRerun")
+if not air_gap or air_gap["runtimeSourceSHA256"] != runtime_hash:
+    raise SystemExit("FAIL current air-gap trace does not match the production runtime source.")
+if air_gap["headCommit"] != current_commit:
+    raise SystemExit("FAIL current air-gap trace does not match HEAD.")
+air_gap_trace_path = project / air_gap["productionTracePath"]
+air_gap_trace_bytes = air_gap_trace_path.read_bytes()
+if hashlib.sha256(air_gap_trace_bytes).hexdigest() != air_gap["traceSHA256"]:
+    raise SystemExit("FAIL current air-gap production trace hash differs from its record.")
+air_gap_trace = json.loads(air_gap_trace_bytes)
+air_gap_source = next(case for case in followup["cases"] if case["name"] == "steel-air-gap")
+air_gap_source_positions = {
+    tick: (left + 8, top + 18)
+    for tick, left, top, _width, _height in air_gap_source["samples"]
+}
+air_gap_native = {sample["tick"]: (sample["x"], sample["y"]) for sample in air_gap_trace}
+air_gap_matches = [
+    tick for tick, position in air_gap_source_positions.items()
+    if air_gap_native.get(tick) == position
+]
+air_gap_ranges = []
+for tick in air_gap_matches:
+    if not air_gap_ranges or tick > air_gap_ranges[-1][-1] + 1:
+        air_gap_ranges.append([tick])
+    else:
+        air_gap_ranges[-1].append(tick)
+air_gap_first_mismatch_tick = next(
+    tick for tick in sorted(air_gap_source_positions)
+    if air_gap_native.get(tick) != air_gap_source_positions[tick]
+)
+if len(air_gap_matches) != air_gap["exactPositionMatches"] or len(air_gap_source_positions) != air_gap["samples"]:
+    raise SystemExit("FAIL current air-gap position count differs from its record.")
+if [[ticks[0], ticks[-1]] for ticks in air_gap_ranges] != air_gap["matchingTickRanges"]:
+    raise SystemExit("FAIL current air-gap matching ranges differ from its record.")
+if air_gap_first_mismatch_tick != air_gap["firstMismatch"]["tick"]:
+    raise SystemExit("FAIL current air-gap first mismatch differs from its record.")
+for tick in (167, 173, 182):
+    expected_source = air_gap["fallTransitionComparison"][f"sourceTick{tick}"]
+    expected_native = air_gap["fallTransitionComparison"][f"productionTick{tick}"]
+    if list(air_gap_source_positions[tick]) != expected_source or list(air_gap_native[tick]) != expected_native:
+        raise SystemExit(f"FAIL current air-gap fall sample differs at tick {tick}.")
+
 print(f"PASS recorded DOS/prototype samples: {len(samples)} positions, ticks {first}–{last}")
 print("PASS isolated prototype patch reconstructs from its recorded baseline")
 print("PASS current production runtime hash matches the current-head report")
 print(f"OPEN production-to-DOS trajectory parity: {parity_summary}")
+print(f"OPEN current air-gap trace matches {len(air_gap_matches)}/{len(air_gap_source_positions)} positions; source fall transition remains unmatched")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")

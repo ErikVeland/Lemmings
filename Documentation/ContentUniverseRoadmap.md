@@ -243,20 +243,20 @@ reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-
 
 The 15 October L3 Mole direction and patrol corrections match captured starting
 directions and no-input patrols. Main then added an 8x2-cell Mole excavation
-implementation. A fresh optimised trace at `aa21fa0e` matches 141/329 source
-positions, with the first mismatch at tick 2 and a further divergence after
-tick 187. Two of four source tunnel-edge checks fail. The independent
-no-optimisation trace matches the same result.
+implementation. Fresh production traces at `03ae9286` match 141/329 positions
+in the left-facing case and 140/344 in the air-gap case. The air-gap trace
+matches through tick 167, then production continues diagonally while the source
+falls to the floor. Two of four left-facing tunnel-edge checks fail. The
+independent no-optimisation trace matches the left-facing result.
 
-A fresh full audit at `aa21fa0e` checks 416 fixtures: 393 exact double replays,
-six stale-identity routes that still win when rebased, and 17 schedules that do
-not win (four standalone, 13 carried). The strict gate passes 322 manifest and
-negative checks, then fails at standalone Shadow 7 and carried fixture 107-1.
-The earlier 399/416 audit predates the Mole runtime change. The Mole mask,
-built-brick trigger and full rules remain open. See the [current fixture
-audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json),
-[strict gate](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json)
-and [Mole trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json).
+A fresh full audit at `03ae9286` checks 416 fixtures: 399 exact double replays,
+zero stale-identity wins and 17 schedules that do not win (four standalone, 13
+carried). Six level-113 expected state hashes now match current source. The
+strict gate passes 322 manifest and negative checks, then fails at standalone
+Shadow 7 and carried fixture 107-1. The Mole mask, built-brick trigger and full
+rules remain open. Three fresh current-runtime Shadow 7 searches found no route within their 300-second budgets. See the [search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-currentmole-search-2026-10-17.json), the [current fixture audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-03ae9286.json),
+[strict gate](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-03ae9286.json)
+the [Mole trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json) and [air-gap comparison](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-air-gap-trace-2026-10-17.json).
 
 Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site
 grid. Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded

@@ -27,10 +27,11 @@ See `baseline-fixture-audit.json`, `baseline-double-replay-audit.log`,
 checks retained fixture identity and deterministic winning outcomes. The strict
 campaign gate additionally checks full coverage and linked survivor accounting.
 
-The baseline report and its provenance remain as historical snapshots. The
-current audit is in [current-fixture-audit.json](current-fixture-audit.json),
-with source, tool and resource hashes in
-[current-fixture-audit-provenance.json](current-fixture-audit-provenance.json).
+The baseline and retained audit reports are historical snapshots. The latest
+current-main audit is in
+[current-head-fixture-audit-03ae9286.json](current-head-fixture-audit-03ae9286.json).
+The provenance file records the earlier audit runs and the latest current-head
+run.
 
 ## Current-main recheck
 
@@ -187,42 +188,26 @@ logic tick. Ricochets reflect the obstructed axis. The Mole continues through
 its previously excavated tunnel. Stopping as soon as its body reaches empty
 cells does not match this trace.
 
-An isolated native prototype matches every fourth-tick position from tick 36
-through 244, including the ricochets and tunnel crossing. See
-`prototype-steel-comparison.json`. This proves the sampled trajectory in this
-case. It does not establish the full excavation mask, a player-built brick
-trigger, long travel outside terrain, water interactions or destruction.
-Run `python3 Scripts/verify-l3-mole-trace.py` to check the 53 recorded source
-and isolated-prototype coordinate pairs, the baseline movement fingerprint,
-both repeated traces and all four tunnel-edge counterexamples. The verifier
-also confirms that both source traces use the same executable. It does not
-compare the current production runtime to the DOS trace; production still uses
-the pre-prototype Mole movement.
+An isolated native prototype matched every fourth-tick position from tick 36
+through 244, including ricochets and tunnel crossing. See
+`prototype-steel-comparison.json`. This result supported the production 8x2
+cell-carve change. It does not establish the full excavation mask, a
+player-built brick trigger, travel outside terrain, water interactions or
+destruction.
 
-`mole-prototype.patch` contains the isolated proposal against the baseline
-runtime hash recorded in `baseline-provenance.json`. It has not been applied
-to production. Its full fixture audit has 393 passes and 23 failures; rebasing
-old inputs yields six winning refresh candidates, including standalone Shadow
-13. That refresh saves four and loses six, so it is not a lossless campaign
-repair. No candidate has been promoted.
-
-No Mole runtime change, route replacement or campaign closure is claimed yet.
+The production Mole now uses the 8x2 cell carve. A fresh current-main trace
+matches 141 of 329 source positions. Two of four tunnel-edge witnesses reject
+the production carve. The strict fixture audit confirms 399 of 416 exact
+double replays. Seventeen route schedules still fail. See the current-head
+trace and audit records below. The Mole mask, trigger and complete behaviour
+remain open.
 
 ## Coordination across machines
 
-The owner confirmed on 15 October that another Codex agent is working on
-`main` on a separate machine. This chat cannot directly message that session.
-The owner assigned this split on 15 October:
-
-- The other agent owns production Mole runtime changes and L3 route fixtures.
-- This chat owns original-engine verification, exhaustive fixture diagnostics
-  and the final gate rerun after the runtime and route repairs are available.
-
-This chat will not edit `Sources/NxlvKit/Lemmings3Runtime.swift` or either L3
-fixture directory while that work is in progress. The owner confirmed the split in this chat. The other session is not directly
-accessible from this machine. The other agent
-should pull this record before further route searches: the pending source
-behaviour correction can change replay timing again.
+On 15 October, work was split between production Mole changes and source
+verification. That split is historical. Current runtime and fixture changes
+are in `main`. Any new runtime rule must match captured source behaviour and
+pass the full fixture and campaign gates before it can close a bundled gap.
 
 Baseline failures include Egyptian 29, not just Shadow 7 and Egyptian 6/13.
 Use `baseline-provenance.json` for all 22 exact fixture names. Refresh identity
@@ -445,10 +430,11 @@ rectangular carve also conflicts with two of the four retained tunnel-edge
 witnesses. Neither result is a complete Mole implementation.
 
 The decoded left-facing fixture places steel tags `0x60` at x=112–119 and
-y=96–111. The production Mole checks the solid bit but ignores the steel bit.
-Its patrol also leaves y fixed and makes no terrain edits. The source first
-shows down-right movement at tick 36. This confirms missing behaviour, but the
-four edge witnesses still do not define a safe excavation mask.
+y=96–111. The production Mole checks steel as a protected boundary and will not
+clear it. This does not yet reproduce the source contact transition. Its patrol
+also uses a different vertical path and a provisional terrain mask. The source
+first shows down-right movement at tick 36. The four edge witnesses do not
+define the full excavation mask.
 
 Repeat the production comparison with
 `L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh
@@ -479,3 +465,69 @@ candidates, respectively, and neither found a route. No candidate was written
 and fixture `229.json` is unchanged. These bounded searches do not show that the
 level is impossible. See the [search record]
 (current-head-egyptian29-seeded-searches-2026-10-17.json).
+
+
+### 17 October current-main recheck at 03ae9286
+
+The worktree is at `03ae9286c5bb0f3dbd4c478bfe017047f6e728d6`, which matches
+`origin/main`. Fresh production traces match 141 of 329 left-facing positions
+and 140 of 344 air-gap positions. The air-gap trace diverges after tick 167.
+The full fixture audit passes 399 of 416
+double replays, with zero stale-identity wins and 17 route failures. The strict
+gate passes the 322-entry manifest and negative checks, then fails at standalone
+route `107.json` and carried fixture `107-1.json`.
+
+This closes the six stale expected-state hashes for level 113. The initial
+state hashes, level hashes and input schedules already matched current source.
+The refresh tool double-replayed all six candidates before it updated the
+fixtures. The 17 route failures, Mole parity, built-brick trigger and full L3
+completion remain open. See the [current fixture audit](current-head-fixture-audit-03ae9286.json),
+[strict gate](current-head-strict-gate-03ae9286.json) and
+[production Mole trace](current-head-production-mole-trace-2026-10-17.json).
+
+
+### 17 October current-runtime Shadow 7 searches
+
+The solver was rebuilt from the current source at `03ae9286`. Three 300-second searches used an 8,192-state beam, two-pixel tool-site sampling, paired actors and fewer-inputs-first ranking. The searches were unseeded, seeded through tick 1,666, and seeded through tick 1,590. They expanded 2,583,028, 1,338,517 and 2,195,448 candidates. None found a route. No candidate was written, and fixture `107.json` did not change. These bounded results do not prove that Shadow 7 is impossible. See the [current-runtime search record](current-head-shadow07-currentmole-search-2026-10-17.json).
+
+
+### 17 October current-runtime air-gap trace
+
+I rebuilt the retained air-gap fixture from the left-facing fixture. Its level,
+permanent-object and temporary-object hashes match the retained source hashes.
+The current production runtime matches 140 of 344 positions and follows the
+source through tick 167. The source then pauses, drops vertically from ticks
+173 to 182, and resumes patrol at floor position `(112,192)`. Production keeps
+moving diagonally and reaches `(150,167)` at tick 182. This confirms a missing
+fall transition. The trigger and animation timing remain open. See the
+[air-gap trace record](current-head-production-air-gap-trace-2026-10-17.json).
+
+A prototype trigger based on empty current and next footprints was rejected. It
+started a fall at tick 70, but the DOS Mole continued its down-left burrow
+through tick 167. The prototype matched 44 of 344 source positions, down from
+140. Empty footprints alone do not identify the source transition. The
+production runtime remains unchanged while the trigger stays open.
+
+### 17 October current-main runtime check
+
+The L3 runtime test runner fails at the Shadow 7 assertion for the right patrol
+position. A separate build of the committed runtime and test at `03ae9286`
+fails at the same assertion against `Sources/Ports/LEM3CD`. This is a baseline
+failure. The expected position and direction need a fresh source comparison.
+
+
+### 17 October local patrol candidate
+
+The worktree is based on `03ae9286`, which matches the fetched `origin/main`. A
+local runtime candidate uses an 8x16 horizontal patrol footprint and removes
+the two-pixel ground snap. The full L3 runtime suite passes, including the
+Shadow 7 patrol assertion. Six level-113 fixture outcome hashes were refreshed
+after double replay; the 322-entry campaign manifest now passes.
+
+The candidate does not close bundled L3 routes. The full fixture audit reports
+399/416 exact double replays, zero stale-identity wins and 17 failed route
+schedules. The strict gate passes its manifest and negative checks, then fails
+at standalone Shadow 107 (`107.json`) and carried fixture `107-1.json`. These
+results apply to this uncommitted candidate. Main's original runtime baseline
+remains separately recorded. See the [candidate record]
+(current-worktree-candidate-03ae9286-2026-10-17.json).

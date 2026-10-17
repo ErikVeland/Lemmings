@@ -1,0 +1,3443 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+  "runtimeSourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
+  "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+  "auditToolSourceSHA256": "fff56cdbb5ab0b5cdbbea1a14635510624a79795035eadb7d21d324b2089fe6c",
+  "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+  "auditExecutableSHA256": "c6d17f42c3948508addc21f4ce59698e7e354f9da330ebe74949434d1ad5bcf2",
+  "optimisation": "-O",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-fixture-audit/post-refresh-03ae9286.json",
+  "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+  "summary": {
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "rebasedWinsWithStaleIdentity": 0,
+    "currentRuntimeRouteFailures": 17,
+    "standaloneRouteFailures": 4,
+    "carriedRouteFailures": 13
+  },
+  "refreshedFixtures": [
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
+      "population": 20,
+      "oldExpectedStateHash": "6bd59347eb44501d87b881b0ab241a0fcbd5eabd4d40bd4454ed818efb8428fa",
+      "newExpectedStateHash": "fc9ab37594878c06c7abcf66ec6499c0d791e6bf6f018e31ed447e38e6b44a15",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
+      "population": 1,
+      "oldExpectedStateHash": "fa1dd3ff2e1dbf4a036f6d32d9a3f42479753fad5a09f5c8b45224729e64b96a",
+      "newExpectedStateHash": "35994c77cd70f02ce8151d9b67586d4580370af10767a49192e41361a61f51af",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
+      "population": 21,
+      "oldExpectedStateHash": "2512108d885d14d007c0972da8c7e39a19bc37a31fa1695df9e21ff28b35f337",
+      "newExpectedStateHash": "6a46ccafde96422a9a195fe7be84ac225e0e924bc6b1580330cab5591a11693a",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
+      "population": 22,
+      "oldExpectedStateHash": "166594c59ead7bc80f2999f1caf63ded9f7cbd54998706e409373704107fa365",
+      "newExpectedStateHash": "6a53095581cf385243fba2035f233c828b13a94312c56374bddc5ba59f9ac640",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
+      "population": 25,
+      "oldExpectedStateHash": "ba217bedf8616640b94f55358a67e7abadfc7f7fadb5bc1155e6c6ce0b9010da",
+      "newExpectedStateHash": "07bf48eb8d0d0b63706c3c1fdb657991b56a0d3a1023ea5d53a45a06358777b2",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
+      "population": 26,
+      "oldExpectedStateHash": "88dad53fcccc8906e2ee8b3ffa8426b5e5c3b2adeef3192cb92e27e5d19a5182",
+      "newExpectedStateHash": "56d54941e6f97d4091ba976adb725b6a622816ff0b85f262dd1f9805fd0841e4",
+      "initialStateHashUnchanged": true,
+      "inputsUnchanged": true,
+      "twiceReplayed": true
+    }
+  ],
+  "interpretation": "A fresh audit at 03ae9286 confirms 399 exact double replays, zero stale-identity wins and 17 route failures. The six level-113 expected state hashes remain refreshed. Their initial-state hashes, level hashes and input schedules match current source. This closes fixture-hash drift only. Mole source parity and the 17 route failures remain open.",
+  "strictCompletionGate": "current-head-strict-gate-03ae9286.json",
+  "results": [
+    {
+      "currentInitialStateHash": "c24797fb606d8c407b42b6623f3376eb35ba37487a194f03a47cc3a12238f6a9",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/001.json",
+      "level": 1,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1dcb8a7b24a621f8248c824f3a777c82c7c104697617d5505ab9775615ca7261",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/002.json",
+      "level": 2,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "325cec4dc35e7599fe4029122a64cc7513c4e933b3934c510bfca611eaff1fde",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/003.json",
+      "level": 3,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1500cdc5bb9a10b260677014f0c29babe0dd4522f6b8a09363cdad72fc7ab9f7",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/004.json",
+      "level": 4,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9fb11bb00bc16128f580b26107c9ce6b04b23a7eb4b68dd4d7634007dc55c32d",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/005.json",
+      "level": 5,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3234c69def725a9cb1a0bc9b0583d33106f2ceb437d4b61a93d722421e79be86",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/006.json",
+      "level": 6,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "35866f5d42706dc5ab7e2882f10c7efe4154b69cfbfb92b236453214f26e23a8",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/007.json",
+      "level": 7,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "66292118703e9c9f1d8b26004d224350119cc8c1d32d3225507303649ac7d7fc",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/008.json",
+      "level": 8,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2b837e4fff2ef624eb400be4c62b22753c7167eb9ab23b48ff2635682a71ceff",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/009.json",
+      "level": 9,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ad0cba258cb3c9f432c8aa663e4e3b372e6d10a570b457a0fc7e8c58b20d934d",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/010.json",
+      "level": 10,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cc9963c2f2fae8dd2aef5076f406748a9fd180ecf0174ae7fce6e76473e94755",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/011.json",
+      "level": 11,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4628e8ea64b2b16b915815682259fb5122aa403efa4c98f836a5500adef8dde7",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/012.json",
+      "level": 12,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "22314432398b2e81b2891808acd36171cce070629d9ae8c894887ae5d8a3982c",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/013.json",
+      "level": 13,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b114c114c176d64a0c5d691591780aba30d1cfdb3fa26b8064514f9a340501a8",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/014.json",
+      "level": 14,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9d8aec65e50b148ff15f046eef9ede5b4bd8185669ef78bab020cc207f41efb1",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/015.json",
+      "level": 15,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "15a4d02d456ae2211c4d9c2ac8840e60bff6daa88ba4bb7a5f110157f1197c7d",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/016.json",
+      "level": 16,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "388c868a89361deff9be6099bfd7478d6ace21f91cedf1c5d39c669ee8d27212",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/017.json",
+      "level": 17,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7436ee1ae3406129d612fa6356cd512f49ff7139b389f1060c764cec55adebea",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/018.json",
+      "level": 18,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f8c7da88e7c6a9e278019555af3ccf6c353eef32a8b35ad0bd87aa59a926a910",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/019.json",
+      "level": 19,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "481444cc9e81c49f36039757f733057f1ef8f84c21ddd066b0c9b33475d1b802",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/020.json",
+      "level": 20,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "67924c7f368a40add351fc966aed767166ce1698e977e265d8c4fb3d377469cc",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/021.json",
+      "level": 21,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a931eecf19db362015239f3f9d8e07bc7f7fbe58557f44e792a8d5344df10c93",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/022.json",
+      "level": 22,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3b5f221b879ce1c6a75463936223a0c220e3ade1fbbfafc47f3ef30e296d807a",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/023.json",
+      "level": 23,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2f1bec6fe10f0b12118cf5b322cb7c210c1c4ee3ed7fee7d2d944ad24d9d5a15",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/024.json",
+      "level": 24,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "05b14e68bcb8ac086693b77aded5da610a97df9598629937bb5bb8867f6cd3f1",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/025.json",
+      "level": 25,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "98e33c9fb02abfff6580d8f5edd11aa99f44a9b3e6811b424e8a28b5ecf31ef1",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/026.json",
+      "level": 26,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bf1e6365ffc758c203e441d67b509b1566869daac37ecde39e61b2177f461f23",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/027.json",
+      "level": 27,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "42b5a30fd54e5f05d7334457fab78592c90f1445ce645d1052e5a0f89c1b39b9",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/028.json",
+      "level": 28,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f419e2fb2ea31820a11d4c88761d3800bc23b7ecc67b6bce2e2dad3acdb39158",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/029.json",
+      "level": 29,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f9477a1a61ec4d1f0876cf6f7293786a661b342d215db966bdc9a744251b4fbd",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/030.json",
+      "level": 30,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5e5c7d6dd8f1f9021d4837466e14ec252bccd5fd8c1dbcf1f274f1db0c7fa3e1",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/101.json",
+      "level": 101,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "be569649de3e3cf531c8dd271dff23f03bb4217e00f3bfb3fe12d2b9fc52b6ee",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/102.json",
+      "level": 102,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a312fb8036d37bdedd6580f33305b68a9d1b15ffe549e4e666fd43e160ced7a8",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/103.json",
+      "level": 103,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "053e3a84549edb8163e63fafb5e784eca6a37a00251ffa927d9b03edec43937b",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/104.json",
+      "level": 104,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f8c20e633fe2a6f0021cfe9a8f0009be5104f41079293206fe849794dbb6d934",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/105.json",
+      "level": 105,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a536001793d929400c9dc83129481757a57443ea71ee3a4e156bd3b9123e9938",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/106.json",
+      "level": 106,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "821f9559b75e18c7a4eaa2f4401ac70a4da11ac79c22ae36e339ed4586ec4693",
+      "failure": "L3 replay did not consume every input and reproduce its winning outcome.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+      "level": 107,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "990bdd4b786eb008d7fe637bd3c9584b9454ae3b6e99263732feeaa398cfc203",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/108.json",
+      "level": 108,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4a725f1aecfc4070cc09fc955dcee49ef316b1f2d341b2943fc9ae494026a033",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/109.json",
+      "level": 109,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bd8cc0c5eca6595556f97280d5cf29130a914b2c68ecdaeccf902510f8494154",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/110.json",
+      "level": 110,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a4788f756ef40fe5ca448061b72b9696b26ef1ad37b89a1418133c059dec6b36",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/111.json",
+      "level": 111,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "af0ea34e4e14a1aac237501689282d703367812636ce6e2e11d1def6ae8cacc3",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/112.json",
+      "level": 112,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0f7f8fb7d6c4c129067fe3bc7ede3832c014e2c6af2eca24694bed2426b6a694",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
+      "level": 113,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ce366b8273907168b0b2e3ba70236ce7ed34f3b38f8497a8bd3b1a64b642f7e2",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/114.json",
+      "level": 114,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c179f132142fed2229974c1547690c394389063701bf47b8e824f598ad4d5137",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/115.json",
+      "level": 115,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ddffc86a8e0f5972aebd8dbf66dfc2f5570edeeb637865e52f92c1df30ce076a",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/116.json",
+      "level": 116,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "eb97ff850af42b0e7f43411378e3ba293076146b877024bb337a1e4839c57f3c",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/117.json",
+      "level": 117,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c826c344e51807ced4b103394491570b63a26b4f4a79b5df3985c563d05f03f4",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/118.json",
+      "level": 118,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "06a69a9324df38a4aebed8fef673da76a945e924c1672a46b92b9acaf4761d04",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/119.json",
+      "level": 119,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f49528cb281cde752f3ae7eae2469ff2c48bc93807aa9c3235edd1b6d864b72a",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/120.json",
+      "level": 120,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b9ddccc572b9465aa8f4cb1c00295a6aec504c01bc60f3e618348ccc280eb584",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/121.json",
+      "level": 121,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "34bc4642a7cb30922631543b8ab6a79aca494c8b8ed23406e2ecdd14baf47fbd",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/122.json",
+      "level": 122,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bded6f91ddd40df5a1010a09bd6a5c92bffa9981ea9c9218ba5fc2b1255984a1",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/123.json",
+      "level": 123,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ea7cb687f4164d2187f2b0aa21634d32e067a309c5b4e9a2230c53a0fab25ada",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/124.json",
+      "level": 124,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e79bb21c6d2db2a516894a29769f86cccdc16fe077537fe51fae9f322d459915",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/125.json",
+      "level": 125,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "624c96940a110ddec433085b4fab6886f44c09d8600dd7250f9e47b383eda84c",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/126.json",
+      "level": 126,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "380d54ad577f1fe36a35db62673e58a0c9a5b1fec2a100852633e3448ff1f309",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/127.json",
+      "level": 127,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "445098a3dd8506e5cd9e36a076e1b9124f528326b1e01fdb3166e084f6e1f870",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/128.json",
+      "level": 128,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c27123410c214c6e66b24662eda507868d4e4a508413ca0f0e22dc92dc41ce5b",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/129.json",
+      "level": 129,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "45e62bcf8b59f7955fab83639ea54b4a2ce46229f762764b2483ca5c10b4f0c5",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/130.json",
+      "level": 130,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e3169faf29775b24b74413200bee38882a0d45fee43f2931e775c0aefefbecb3",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/201.json",
+      "level": 201,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6e730596f9759c4ab259d69c540041deba09e5607636557077ec6ff5ea8bd4a2",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/202.json",
+      "level": 202,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "afbbf268774055e5eff812cb50f9d05d9b30ff6d6ec811d0f7466db27bfb265c",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/203.json",
+      "level": 203,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1d681d350c74b52a4712faf301b09b36949ef400415e3df07e8f93149455ac74",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/204.json",
+      "level": 204,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a3352339712d855b044659bda0983f5f35568751b20fb1fa62e5b605066eafed",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/205.json",
+      "level": 205,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "762a6fee150c09649b21ba9863db375a4f66335b6c69a8a45101ae495e54dd95",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+      "level": 206,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "393e2c08cd54c28afee19e4c2220fb6fc332d63d282289a2c7550f1720b00402",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/207.json",
+      "level": 207,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "972d4a408c274139f81914aafc173c19b07e58b1c13fea532b3c7ab2e9b08c28",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/208.json",
+      "level": 208,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "08d7aaa6a40d0da0c2e96cf75b1a11ca3b2f5a7131fe8a5dc7fa9825fd5f84f5",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/209.json",
+      "level": 209,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "515ee7fc333dcd65d21d7c7d48d4ef3dd55d034f49894276b3e1339a1e0df197",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/210.json",
+      "level": 210,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b202a8479cda9741989c4a1b3b46fc8e2bc138e12d584262ceeeb3aa5d1e2532",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/211.json",
+      "level": 211,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "93da748156425577896e5a2c42afc45412b6d827070624da3584b59a193030ec",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/212.json",
+      "level": 212,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3437ce975a42abaccc26799e9f018b583fe57db536d6afb0bc70027197e5a817",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/213.json",
+      "level": 213,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "ff59c007808bd820d3ab96147b1778ef9b2b14619119cce489677a4dd733e208",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/214.json",
+      "level": 214,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5f76244e70b9b4eb653f92c66f7d4d65e2b3f8025502f05380b3c9ef3868a25e",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/215.json",
+      "level": 215,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "586cfa7d140ddd4a815495ad8a0dae1de852906b709baffbea390d9020ec8dcd",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/216.json",
+      "level": 216,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d0edf191752950288db030dac53bddd01f3d57cf1a25c1db8b9e254737ddf38c",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/217.json",
+      "level": 217,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "05cc5ff127b893dee3eff2171693b0ea1097d904e11a9a0de712e6683e1d5122",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/218.json",
+      "level": 218,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bc2a226bd7588a71401e527a4ceb6d065d6266c530c179011d7073bea1b75396",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/219.json",
+      "level": 219,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "22c2ea2458d88eab6a5a479c6603f4040575e8369cce9001696594aa7f72ff1f",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/220.json",
+      "level": 220,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f6094a704d82b01a5c691d6b1ad8121204f2d15f2498016475517051496efb66",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/221.json",
+      "level": 221,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4fe6b919ff864c838ad64265b2219c1aa761c951352c2c555767b16f6cbc0b01",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/222.json",
+      "level": 222,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d089d8d21d453f162e1e77561e4c4730377d08e31be9b22dee6b8777cbc4850e",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/223.json",
+      "level": 223,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7c07ffefd72cc4275b8f3574d1451b33212e1541cebc015f03235a8ff0be909a",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/224.json",
+      "level": 224,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "83b4e9779dfcc9fa08ec42fd5e6688ad162e95134f628ce035491dda91f949db",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/225.json",
+      "level": 225,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d61c1bdf97883ff0b5726a05d049e98e56765e0a75a3877f25806af56cd278fc",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/226.json",
+      "level": 226,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3370facce003c8c38b888d0fc159aa77efa44f87a3c3e5496a536f810961ec43",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/227.json",
+      "level": 227,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bcf30c2c24f487dbf9f1ccc878310f7304f512c5ade65e196d15b04919e04034",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/228.json",
+      "level": 228,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fdce0825559431ce948e80db07f06cd5628c8dabc12cb7436ca975b2dfc94c84",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+      "level": 229,
+      "passed": false,
+      "population": 20,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "f827a3a011993d2f9171bcb5b813337ddea4b655e5816aac9ce26cd6c426f93f",
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/230.json",
+      "level": 230,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "871b5aaf6dd2fa10b2c29bb6391c24c3f118873ec364616abf922520ad0badf3",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/003-22.json",
+      "level": 3,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c981963cd9e3cdde7f3e609fda4e21c978186330ebf74231a72da463bd7d112c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/004-22.json",
+      "level": 4,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f4a8d9e31b5ca177fe076bcd8f71392c02f8443a27cee49b122b963f917ee90f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/005-22.json",
+      "level": 5,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1597be46c6894c9a8f0e2d95a2b7d2bd2067b9a8fc112f5ee9d294c93e617e58",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/005-24.json",
+      "level": 5,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6c55a1601d26f6c62ed3b038b54be24a24b108d3281f62cc6ef4f356f718e60a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-13.json",
+      "level": 6,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3234c69def725a9cb1a0bc9b0583d33106f2ceb437d4b61a93d722421e79be86",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-20.json",
+      "level": 6,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "63cd09e9c3e89a332aea39c06ba54c0e6f2a8d300d61bd45d1bf647bdc9ba2b1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-22.json",
+      "level": 6,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "75f0780abd37ebd72bc2d37e0fee43f3fd44fedf60d6fdb9e8c23f7116c17c0f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/006-24.json",
+      "level": 6,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ac49a88908653e8d6e844ec75a5fba19cfe12b297f5c8dc819589f4891b77143",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-13.json",
+      "level": 7,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "35866f5d42706dc5ab7e2882f10c7efe4154b69cfbfb92b236453214f26e23a8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-20.json",
+      "level": 7,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a9fa42368f8b3d2db11d89dc5b5cc698964e54efa5af37330dcc8e64d56b6edb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-22.json",
+      "level": 7,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "98fa6abbd45a4e07ec8f7bd5225aa6466eac96c77d8af0c2f39688ac64f4a163",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-24.json",
+      "level": 7,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f178e7b18bccc79d5a2290b386e58bb40767afd2404f4a7d1fcc34e903d43398",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/007-5.json",
+      "level": 7,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b7244bf169a63522a7c1bbfca66041093eb3a1f163c9f13f58e092ef89959945",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-1.json",
+      "level": 8,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "35addc9f58d57494cd8b2f02f8c382dfd60a7eb37f6764a65ff396ee82b89152",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-13.json",
+      "level": 8,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "66292118703e9c9f1d8b26004d224350119cc8c1d32d3225507303649ac7d7fc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-20.json",
+      "level": 8,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1f5332404d92728f8a1d6a57d02b99b3119cb09dfbb049f2a35dec81496156c6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-22.json",
+      "level": 8,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "41e17e1e880bb6fa630191e13e1831ca6fc8d584c9b91f6b52a1444c66607b48",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/008-24.json",
+      "level": 8,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8fd72323f624b047f45b74c6fc555cc3c7cc622f438a29a3cc337190bdfb8ca8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/009-13.json",
+      "level": 9,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "15d5ddf65230f139a9ed3983dd07b95990f49a8b07b8ab20091a9bbaab3fcf4e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/009-25.json",
+      "level": 9,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "14d13fe4d365ab5aa2cb248468a5dcd9fa18ced9d68dc64922fdb58365cc511c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-13.json",
+      "level": 10,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ad0cba258cb3c9f432c8aa663e4e3b372e6d10a570b457a0fc7e8c58b20d934d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-20.json",
+      "level": 10,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ddd0ac8ee51a79021ab992503ee9bc93e229f113f106abe4b77483206e7c734c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-22.json",
+      "level": 10,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "27e4782d26a98e10361bda3d30b9b23c7f04fad72e4c80ce45a7f52f60fc732e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/010-25.json",
+      "level": 10,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "43b3ef29ec27975e86ca522d9ad0ad45c0277744835f87cd5ec72f734614b902",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/011-22.json",
+      "level": 11,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "291a454873668ed5319612337346bfc07220a8cd290cfbe23591e03548cddf48",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/011-25.json",
+      "level": 11,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1e919ddc143dc5b63bdffa4e2a9fe5df808bc95027201463d9afb89bb1587686",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/012-23.json",
+      "level": 12,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2471e893bbcc146da6e88e4271717e756979f988dfc2ad4f40e415811f8d634f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/012-26.json",
+      "level": 12,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "254b4205a56d9db0d435b70020da98f744a071415721e92a7810b38605412267",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/013-23.json",
+      "level": 13,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c36dac19ba5f304bb873176f5d2640bb77cb703b4050f49ef16d09e921915b79",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/013-26.json",
+      "level": 13,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ee4592b2ae597896155c150fa81e5c4400c45a3e79d114951590431e92d927c0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/014-25.json",
+      "level": 14,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "389846c84c8a7dc679a85a8755bc4ed02101544a80a9f87c77cfdb3c5b8575c4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/014-28.json",
+      "level": 14,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f807844600f0a35fef3d85e0e06059cb75c2336b5bb9f87fdf6bbeac138f9a8d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/015-26.json",
+      "level": 15,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "311d3d711c573339344e4f4132f98af65efcf8c74a74ee2d275eaece9cabea86",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/015-29.json",
+      "level": 15,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "262abb952222c217ce394083a7c1c149331bc297be65df934dd128988694dbbf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/016-26.json",
+      "level": 16,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5ce0f85eb3b643cc9d6692ffbc8e7b7f4351db67fb6bb9d667f9ed009c7d8aeb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/016-32.json",
+      "level": 16,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b5b02f18871a271a5d87d5539a8cfa3d29aa396dad8b8240e923ecf17837b0ca",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/017-26.json",
+      "level": 17,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "98d70d115088f271798d0df5f881b6645a590cff2ddf4573f389b81b1896c1ae",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/017-32.json",
+      "level": 17,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "56957532c0d6bcbb5dc5bbbcbf3f46fd6fc7ee38b21b5870d949c62a406dc191",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/018-26.json",
+      "level": 18,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "34faccc7ae13ed9443ed8bb163dc5772783b3cc2cc72dec3eadafb2bee088ec0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/018-32.json",
+      "level": 18,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7812ac93039a0c63216955eccfc2b96adf07a4d9c0f7e4b624399d2ec0d533a5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/019-26.json",
+      "level": 19,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "11d1394a5c73dacb68fbb9b68af3ce8250cbff8ad42f6e6ecdd577e9b372d57c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/019-32.json",
+      "level": 19,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "380d53f14edd47fd449a72e8d7b25494cbc4423ea4df39a02340ff3506c92f14",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/020-28.json",
+      "level": 20,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7c0bc9b9b8b278bc7d7ea66bc9f181809871edb16795589757a5898a761cfd23",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/020-34.json",
+      "level": 20,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "24bbb456f20a347141c7d175017ed01838d425aca7f981081d9ec59c2bf2acaf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/021-28.json",
+      "level": 21,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "50611e4d54ebb734ca977a16108a0460f0d35dff6dd43cbcee653d558682f41f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/021-36.json",
+      "level": 21,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0148b7259815f5949d5e9f87b6abf9545f3959e72fcebf2bc69fc334ee58fd54",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/022-36.json",
+      "level": 22,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8aaa4075f2b1278301c5469a2bc25dfa1417efc10a465694730501a8b85a761e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/023-36.json",
+      "level": 23,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "889604f7e010b8d5bd8f3012197075c94d30ef16d0cebd19e4f57ff345de8186",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/024-36.json",
+      "level": 24,
+      "passed": true,
+      "population": 36,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ca3b27d5d15f366929258fe03150ff59060bc0479335575ed299e8fa485aaed2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/024-38.json",
+      "level": 24,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "43c692149c3c29c0bffd03d75166462b008fd98b06a43154820db0f910eaf01a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/025-38.json",
+      "level": 25,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "24a8bf62b8f5a4ab1e6293d5a7d65037d8f8a89c83c637fefe4a62de30c3acd5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/026-40.json",
+      "level": 26,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "24f23bbdc83ad10afe843e24497beeb368b0de7b8c240ca10b936602777ed8f6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/027-31.json",
+      "level": 27,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "843ed1e577aeec719fe95cf9ed839bf330a3309bff515478e3415e6f323b41e9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/027-42.json",
+      "level": 27,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "918e907cf5f439affe6bf80c5fc617410ee886db6d19b7b16c223f823da03fac",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-22.json",
+      "level": 28,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7aaf56a27d7bc6904ca9ceeb4fc2a5bfb2cccee18bee057c301bed3ca0a490df",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-33.json",
+      "level": 28,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "dc5f7131c0744482a1acf531802f8c0f6209765372d899ac7e9a5e910daa5cf7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/028-44.json",
+      "level": 28,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d6160bf268513b2d7dde177092607fa1773254e2be1de8c69be34ab7f340ba3c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-13.json",
+      "level": 29,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c5aca872382bcd368005db8359b7b6b61454fbd9c8db40b60d54f682abdee5c2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-24.json",
+      "level": 29,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "23523241d1b3bba034cf198815da4ec5c48dcaf9b162bd624f6a83a2084b1e9e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-35.json",
+      "level": 29,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bc1adf469160592467f726202267f2b976ade5d307da6c1f0a24244e550ac26b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/029-46.json",
+      "level": 29,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "827b5699c464454191a99e557cfc9ee4871c0f45c7b140f4290d9362bfab890a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-15.json",
+      "level": 30,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f851c25dfb40e412e06983729f557081e95d067bfc3c43aa2157b978484c62f3",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-26.json",
+      "level": 30,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bfa0539bbdd2f0c9d55a4eaf2f9aab59269c0bd71c723343a53d9d5d3ab6ffc1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-37.json",
+      "level": 30,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "de9a28887a37eb32b513740e6847bc7d7219fa38a3294a2af2a9de3c4f0ffc95",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-4.json",
+      "level": 30,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3e7f89e8688e5f64f24f4b4976144736094a86db2a45369ed82774ad3dc0477d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/030-48.json",
+      "level": 30,
+      "passed": true,
+      "population": 48,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "478578bb9df89961a7b8fc533147782abd2e3325fefb90d4f7c758b5da68c618",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/102-19.json",
+      "level": 102,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9e6be8fc5701b49d5e9e16038070b65b20f885a1d2e63e2f0643f92de4fba93e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/103-15.json",
+      "level": 103,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "315d5f0caa89d69b380f9d1a01386374e9573a21b182e3807f08308f23d7fd69",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/103-19.json",
+      "level": 103,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cef370517a9a0b64163fb6b2fe497e7be82c8852bdc93b44d2bc21080f4e907e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-15.json",
+      "level": 104,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d3a7d923e2c50f7cb0576337e4eab79f9816c26f2825c52d0224ba026e096c78",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-19.json",
+      "level": 104,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ccd2c9c10d1226cf6abb7db5c9288275dbec5a54cd64319467cd2b29157e2b44",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/104-5.json",
+      "level": 104,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "66262c28074bde9bdde56bb0995f02e0b47d8bcb026e05ae2289fa08b163179b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-1.json",
+      "level": 105,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fa3e8c1935f822afb638c1bc33c16dfb01ea7c798c154cd4a161136474e6268a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-15.json",
+      "level": 105,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1c800e13e8b9cf82e2a1b19d52bd1844ae3978e394b5ecfa6a597636b52ab18b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-16.json",
+      "level": 105,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "52100bf1092c72e340c4cd866415963862de6f04c75c082b5713e1614810dbd2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-2.json",
+      "level": 105,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4ab59a1a7740b7c9619b0f884c664ea4a0e84ae5ae0a6e668f3759a77e5eeb77",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-21.json",
+      "level": 105,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d6159959e7b3016e47cd3b46dd5d1293a9a26b75867f8a007f3cf229facab81d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/105-22.json",
+      "level": 105,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ce4a2ef9fa744f417ba1654b3ee61cdf0ecbc42583dc3b1f8a872fcf9fd71145",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-1.json",
+      "level": 106,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6b686c79771ee6287723fef97b69becdf5946c65ad3a699d5960b4f6309ffc9f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-10.json",
+      "level": 106,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2270ea19f942475e19223922c4e0a9cb8aaf54b318df980ca7f85fed07461cae",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-11.json",
+      "level": 106,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "697b5edd61cc30f3b4c115084a087aad402e68f2c9406db00666f828ddf0ffb4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-17.json",
+      "level": 106,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "36293c932bc518d2fef970e178dc05c6e8f859b37985fe8c45ed3d2848b80908",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-21.json",
+      "level": 106,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a060403c39ea5fdff667b7611241be778c5f8e29fb5f61295a7fba6c86eaa1d4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-22.json",
+      "level": 106,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0b631a768d455ce2c436775fc50d58df7955ec2d428363a7a7dd5ce303cfd5b9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/106-23.json",
+      "level": 106,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8129cd09e78ef96459a134a69d8821943876eb0e17f387e42d8890f1038243a8",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-1.json",
+      "level": 107,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "c06314ab9932daf1f4b99b4ed9166c2ff60a6e65add5b22fe505230b7bc33024",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-22.json",
+      "level": 107,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "04ca5874d5b608103d33eb0637695856de3755e6307e6ec5c29ab82f5f9273ab",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-23.json",
+      "level": 107,
+      "passed": false,
+      "population": 23,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "3648fcb842a95a2233361a910ee6cda5483791455f59e821cf99f89ef97985d4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-1.json",
+      "level": 108,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "eea66206c2b237f07217e41d1296e4144f45c768c5b7d7896426d47453c79742",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-22.json",
+      "level": 108,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "df71832529e81938b0dac1a3f109c4e1c887e1c095aae7a6270e170089a1a39b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/108-23.json",
+      "level": 108,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "00a8f10dcd6371fe008c53096b6e23690b39b6e354ef858902454eaedef0ed71",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-1.json",
+      "level": 109,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "11c75e592841f7696eb5e6d6ed87f459a3dac7c14a701a8210b6fa69ca7ca5f8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-22.json",
+      "level": 109,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "48c9177521b693f53bb8771d67a5e734dbfc8753dd7e8da3a53902cf2f13f489",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/109-23.json",
+      "level": 109,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7a8a07b30907287d27ba06cf81ab5b500343014cde2b32db95f083816e5fd53f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-1.json",
+      "level": 110,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e7a3b36d510a836d9d5e7066d8c84b871ea4993dcbbaaa2f8f8fb62cb1c01edb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-23.json",
+      "level": 110,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d6203f44a28c95caeba3f4feeb09e69aa5383478fb98329f69ca28cfd43efacb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-24.json",
+      "level": 110,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f0bc2a254dc4e696b6172759e87d87b61dd599d41687fcee2fa7bd800b4828fa",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/110-25.json",
+      "level": 110,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9b1297987ef291d5c839e487493f4762679dabc78e6167eeaf21f3fb717be959",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-2.json",
+      "level": 111,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4de30b29e7a978a1b1c44a23a35911f89420d8dc7c4f9f8b97fbaef47cc1910c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-21.json",
+      "level": 111,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "053d1e1c31193e67ddb6ef8abde10e5a2309e628d23c30f85628ce13ebe82163",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-22.json",
+      "level": 111,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0a01fdb9ed7dcc7572b10a4f0917306edf5c477834c7323b3d4532e65e972782",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-25.json",
+      "level": 111,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5826738f298689aebcd9b06fe1abe6961b7db48b3b11eca97f83af40236ebb1b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/111-26.json",
+      "level": 111,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d56fda1c50670606861ef5ce76cd7c307908e312d599b95197ef15e94dfcc265",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-2.json",
+      "level": 112,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b5c7ea4bd9c35f878d859bcac54060b0aa3a3cbf2a1baf0f07f73b5780949043",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-21.json",
+      "level": 112,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bac773a955e8cdec64cabd76aa1fb7fcc8f3948154311201b0c7de38cf870c8b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-22.json",
+      "level": 112,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fb455b410476e8f2c30dd708bea51b2b361f556aabe49dce13281c2d481d0851",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-25.json",
+      "level": 112,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4222693bc2d0653e9ed43ea092d577520a4b8aa8328a60b12acdc9023772abe2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/112-26.json",
+      "level": 112,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7022058819638a360aaa33be7e040141ffad371b3f0aa4a4e40f4b5b270240bf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
+      "level": 113,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "16b469054002f79d507d1f1fe7d015e672ed82ee103d1d4fc5c7628a609f0a0a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
+      "level": 113,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ba6c7d48525c3a216b0503d966f7ac47642b18ede64378cd44e94eed1177e0e5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
+      "level": 113,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "04cadd98d9e96bfa89e634ed0a2f2cda7a8f96140f03aebdb7485a1cb8af93e0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
+      "level": 113,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "15257d10438cf462e1b09af1be8ad1e3beab8e34a7da41991511250999536817",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
+      "level": 113,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fac2669f96ea61bcea83f5ea336a2c48c8db20d4562aaa56a8417afa3b7e1545",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-1.json",
+      "level": 114,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9ca3385474aa32ce6561c337fcbca77b29c1273dd4afe3bad0cd0d1cda1248eb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-21.json",
+      "level": 114,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fc4376914d069b9a05ff1c3936f15e042e36ebe2be7af73984de70dd851a2e00",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-22.json",
+      "level": 114,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ed95c3174604d0c7658d1e469a4ddd2a263a23274b3e29a992157174409580f8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-25.json",
+      "level": 114,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "92f95a69787f5792b97b047a2f574a469f8e60523b8a0cbe2204f8d9cab99182",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/114-26.json",
+      "level": 114,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "80d83f74867d1d4074391708ad859dac6c19dcbe59261bfa7c25ec1eba771261",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-1.json",
+      "level": 115,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2185072e98c694ab8cbb3ca042484e6c0742c5441a8890833d5bebea0cf0d5b9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-22.json",
+      "level": 115,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "41133db55e016e62812a9718c242176a555e23b27ee8457468c9e563ef3595f4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-25.json",
+      "level": 115,
+      "passed": true,
+      "population": 25,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9ec42f9d4bd51dfa878382334c1eb8a3513e184f61bda0da2c3b0860bfa61544",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-26.json",
+      "level": 115,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4c93b4956982d998b72738beac178d1793e76aea49fdd03adb4efde11c4ff75e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/115-27.json",
+      "level": 115,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "da6024e6e93885ce51e03cb7afa6697b9ab6f38783e0324e6790f3b6d0528676",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-1.json",
+      "level": 116,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4861ca6406b4bb17d759f7969ddb88c78cf1aa923eb3331cf737cd121c291be9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-13.json",
+      "level": 116,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "abd4b4aeb11109b5ab6a286c67f0d77965ebbc6df38fb08063f7550b96d50d6f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-16.json",
+      "level": 116,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0497d0428d4b1652eb3b004d6b7c3906205f731fbff7e07c637651a735ff8217",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-17.json",
+      "level": 116,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d73e7e900c0ca3bf307d4926bba67c4eb4c7b7ff9b63a542815f400c8b0e13c9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-27.json",
+      "level": 116,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "95302aa6a1299dd591becd39d77e6244ad46df6965548663ec9763c22adb1e9f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-28.json",
+      "level": 116,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "322d68519cbb167610916b62270bcfcafc479fd44cc21d3fba5af4ff8dd14aae",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/116-29.json",
+      "level": 116,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "aa6a16da1b0de4b35a0c6f8ac13efeb503a461ffcc92c742439551aeb733e7ee",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-1.json",
+      "level": 117,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cc1a05deb46767b3dbe303812bcb6e2f1b773e0caf1344924a06f809086a4605",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-27.json",
+      "level": 117,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "00ccd944b9df66868698b02babd25df2254f4bde61fd11af43d3192e936096cb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-29.json",
+      "level": 117,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c2b1d00977a3ceae25cf9fc15fe8db5511e8b9c10a8deb944b631e27b04c2197",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-30.json",
+      "level": 117,
+      "passed": true,
+      "population": 30,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3ce102bd6810ff9876cb76b5be54baf3cafb8bc2767efffaf5a3e06612b56c57",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-31.json",
+      "level": 117,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5935c67aeb066637f5058b283e45108ed063db8877e57e4d1e90e4938c704d9a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/117-8.json",
+      "level": 117,
+      "passed": true,
+      "population": 8,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "534df04333701afd0e0606592b22856eeb04e11415cefc02377cf3021e107bb5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-1.json",
+      "level": 118,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "849f58f06f80de32137c6612ac9579d5ddbe30798f5e23ed4989e001383a0534",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-29.json",
+      "level": 118,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9a830b46e1bd989b3f04133f27d1f96aef5752462406cf31663b18f2d76d52c5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-30.json",
+      "level": 118,
+      "passed": true,
+      "population": 30,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9a7aefbac1f05691e51ed82ac19956b632721d2e02021b7cc0cafbe4874cfaa2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/118-31.json",
+      "level": 118,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f636599481aee156e1cea0d88414a3f87494f58b7900e6a05006c79c44d733f6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-1.json",
+      "level": 119,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5f27a0f0abc30d1d2b91e39dc6319cd55c08a46ac22d0cd155119980544258b9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-2.json",
+      "level": 119,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4dbf6ed8d6cd128037e971d796e04f52c7aa9818dde1582cee172f18b024edd7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-21.json",
+      "level": 119,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c76e27e86bfcf7d76ab3747e21cd115ad055a1db3a9d7f391e8275d370a6177e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-37.json",
+      "level": 119,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c3df0d92f04d28c411b0498f266992af45c426bfe2ae6ebbbb2ab6217e23c6d8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-38.json",
+      "level": 119,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "42d16df5790f0be4d61262cb0ffe1057ce8e6c004bdaea661df00d305aab4eeb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/119-39.json",
+      "level": 119,
+      "passed": true,
+      "population": 39,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9ae6914f7f8637a2a2b653009eaa56fe0c39ee9dbb5e8dd671ad150dfca88d25",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-1.json",
+      "level": 120,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e670da404e75dc51e32ee9d0c30597651008254169d7320d08c20f57c3aea695",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-2.json",
+      "level": 120,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ffc1b0954352e32cf13532a5442f6d0a2b113dd1c38130a52b4eeb9c00d71f3f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-21.json",
+      "level": 120,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "324c2dc77334d1e18b16697aea768ea995778f3303d9b2edeb38be670365130b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-37.json",
+      "level": 120,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3c56a7f93996590e46ae52732243d1621df9d303cb7efe6fa1082e2f9446e274",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-41.json",
+      "level": 120,
+      "passed": true,
+      "population": 41,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0a9e38ee0da63e926e35991f3bdfc71fb2ad6f895c5b586ca8cbe2ca1f5928c8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-42.json",
+      "level": 120,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "410160e4d17ebf565f54dbb0c8029b80de41d0eb07df7c93e421eea9d4e61b07",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/120-43.json",
+      "level": 120,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "eccf945e949eb79e7dd8e89f1388a7ac85a49236f51fe43546ae14578542cb7b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-12.json",
+      "level": 121,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "340c3ef81a04082152e2e6c9975b5b98dea4f5e89dc395c5f3ba3fb8af5bbd87",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-28.json",
+      "level": 121,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e80a8fd59a5f5ec2448216ab9d8fc5af7e32eaa042bc105d3e5c20c84c372faf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-42.json",
+      "level": 121,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "367323afd0e8b75d2f760b3caa0f94b23da04c55199c39cb550673e6d3c2119a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-43.json",
+      "level": 121,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d1305616e51132a2e2d4ca99b94b5a6a706d88aea176f7be1c610404ef8f9dfe",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/121-44.json",
+      "level": 121,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "34bc4642a7cb30922631543b8ab6a79aca494c8b8ed23406e2ecdd14baf47fbd",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-20.json",
+      "level": 122,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cb63a23e0f83c756e965d592a445cf8d36f1bd1e3bb5bf0be151fd2a16132825",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-34.json",
+      "level": 122,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "40cdfd753a721c03485e893be823338c9895ca46ceb39fc7f671da9f5437195b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-43.json",
+      "level": 122,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8b28a06c1509ddea3f177798a9170de4e6a7daa5c4e2c1f49c61d595366801ae",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-44.json",
+      "level": 122,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9ba26deb95a51fbeb4ffbbf0c4c7d2f76cd4ce8a42c44a85119354dd57d44e4c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/122-45.json",
+      "level": 122,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "aa74b64f69f88781533378c6861a6322da32ba081ec0de02cedf9d39f13e20b9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-18.json",
+      "level": 123,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "051693f6dd32752d43fdfa8fb54513a8dfe6e2a36065e84e5a4e0901e14fc427",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-32.json",
+      "level": 123,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9c1d87c312c6caa37f1b32c9b42e58996a8df95240b436d52e94632e3cdcecef",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-41.json",
+      "level": 123,
+      "passed": true,
+      "population": 41,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2c54e9956892db5b0a1fb152f353fde7139b6426217f6b8fffaf37f2138a8202",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-42.json",
+      "level": 123,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c9db0eb22421a5b7a9d163db07fc9e6d957317e4ff73afcd89f41f25718db527",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/123-44.json",
+      "level": 123,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a06271dbf38bb909d8809de605b058fa65192391ef9fffaa21348df76d083ebf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-19.json",
+      "level": 124,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d4ca161704a51705c0c81c39f9618a9f92faedb3602d5a76e5ffc1f7f5ed728b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-28.json",
+      "level": 124,
+      "passed": true,
+      "population": 28,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "271919bcd0a700fc0cbcc6ceb02e4a0761cb5b0e1c349a074a67bc605d63c51b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-42.json",
+      "level": 124,
+      "passed": true,
+      "population": 42,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "06308e77771197fa10e7cd05ef2d7967cd4b7c54864caa2c596aee15d1f0c926",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-43.json",
+      "level": 124,
+      "passed": true,
+      "population": 43,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9fc5d91e7555dc27cde46f94f6004c721f142b77b3662b6a6b87251b34e37ade",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-45.json",
+      "level": 124,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b330a8e3a89f516b8e3b19d631ed8001d4b545a9c0315f83446abbd489557043",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/124-5.json",
+      "level": 124,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0e1451e22f4d57d59bf6f3278ce88a5948ef5bc95592230fddc569d751854b3a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-10.json",
+      "level": 125,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "dc04329b45868935e0eacc57a45bf8f8605de89fdb7a6968ab55928dae1db4c7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-19.json",
+      "level": 125,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4d51d5a1d7c51df5421ab4e92d812eccd1f27735a5e6acdf61154b2cde0bdd79",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-33.json",
+      "level": 125,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0684d8ba6cd4256df10f10d59918bb518eaec8f671a1c22b736194673dc85edd",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-34.json",
+      "level": 125,
+      "passed": true,
+      "population": 34,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "42e14b48ff055d2d6eb04685b42f2f04cc2473ad0b6f164e69615f7e87a021b1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-44.json",
+      "level": 125,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c5b49586ba6135067da6a117c9668d7dc9027ef9b7f088221fd5a4d3614ac099",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/125-46.json",
+      "level": 125,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1ced83a13e78f3aec7ef53ddf60f3746d83aeae52b9a33c1ea9543a72aae6b85",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-12.json",
+      "level": 126,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7f3e4a5b739d2f61dc60095dd4ca83167246d44575b108baa6a6e1475363837c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-26.json",
+      "level": 126,
+      "passed": true,
+      "population": 26,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b1c044187fba52640782240cc61cb2048cd23c409b8f875520cfecc41fff8338",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-27.json",
+      "level": 126,
+      "passed": true,
+      "population": 27,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0b2ffa5250435126dd3224715e5ecdcc9230be86d23b4d17a1808fbef7203711",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-3.json",
+      "level": 126,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b0e7914714df5a8790d3169196f5d6af02942ab4dc80ab9e33e9137ccf915dd5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-37.json",
+      "level": 126,
+      "passed": true,
+      "population": 37,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "26dcdba0c32a85c17a99b90c6f29bad4d773dfd8811fa3feb3409c24c9bb13f7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-44.json",
+      "level": 126,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d660b2bda5d61fa4f9f1faac7fc177f3b173773a34661f59c928dac13365f9a1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/126-46.json",
+      "level": 126,
+      "passed": true,
+      "population": 46,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8d79b40db8af13b0d17f771a44b213adc09a2f575238cfa382132d6b370655ac",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-18.json",
+      "level": 127,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2e1256ca71e84744eae17602a4b6d5c5a0ec8ceb742426e0dfc3671a88735519",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-19.json",
+      "level": 127,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cb71f0c016698cb083085e88c93e2f51bf7b70bb62daa9aa4ce157a1d02df342",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-2.json",
+      "level": 127,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b680283fb95a53bcb143b0db75e78333022eed43381d820fdc71824c0806cffc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-29.json",
+      "level": 127,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a4dc22944f5074fafbf32e8524223694c64287b37c359c4ecf576c6ae34a5bfb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-38.json",
+      "level": 127,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e67f29ab275b3fbad6747299eefa6bec3433d421f462eba109eb71966c2c5dbc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-4.json",
+      "level": 127,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4b1b2d51f39591e0530fac8c81907aac4444952a2e83b6cf71bd651011bfe5be",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-45.json",
+      "level": 127,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6193d582ac961db58eeea2b29124ef1aebc954158de96d6ba4023997d7ba2600",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/127-47.json",
+      "level": 127,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "753d383779151b0d26d57240fc447776c543c426375f5a929ca579e1d7bd6182",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-1.json",
+      "level": 128,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "062e901f56f786aff2c66ff3cf81eb3489c63f768cc1773702db0cff954bdc6f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-10.json",
+      "level": 128,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "445098a3dd8506e5cd9e36a076e1b9124f528326b1e01fdb3166e084f6e1f870",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-20.json",
+      "level": 128,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3152d1a91f5a869c728903d4f0369f66404fa75956ab80c17b4afe435524b6b9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-29.json",
+      "level": 128,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "11568dda37df761cc657b37c329c2c471af3f7f84b06af96f18de37ca4a1dd87",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-38.json",
+      "level": 128,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e360d50c54427baf8bacd366a1e3ff3b61053b30e7d4ad239c3409d78abb30c5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-45.json",
+      "level": 128,
+      "passed": true,
+      "population": 45,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d069104537fa2c09b2fa19c521b09a8da8f7ba5cc71a7a7acd4ef58e0a5dc5b2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-47.json",
+      "level": 128,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8cca17f4a878a6f9e04c751dfee67c44725cab287891c6173662d79867a5c30c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/128-9.json",
+      "level": 128,
+      "passed": true,
+      "population": 9,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "88894d6d05004bfaf813d4ac54d89c327df9706a5466be179d4a267bfb3f038f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-10.json",
+      "level": 129,
+      "passed": true,
+      "population": 10,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c27123410c214c6e66b24662eda507868d4e4a508413ca0f0e22dc92dc41ce5b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-20.json",
+      "level": 129,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "154c42087b6fec161fe4bd5e305037143b5bb5c328beabbd3f7f10c32453088f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-29.json",
+      "level": 129,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "13aa93a6047887d8a0f2f4c44f6507df1caadf986adf0257e8c9f04fd4e2d6b2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-38.json",
+      "level": 129,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4b86ee47460fe27f4c77f1b8ad8c7f0518fc4682c7ae8ccfb562ed46124d3ab0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-40.json",
+      "level": 129,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "79f8571da30feeb716d30db41cb665d21e761894c56581fc5ba9bcbcab545013",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-47.json",
+      "level": 129,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "013d3ec0d9df62990bac03732faada2fd8dd2acfa56451c0d7930e2e1423cb36",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-49.json",
+      "level": 129,
+      "passed": true,
+      "population": 49,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "65bf63cdc0363a6d8000953e06d1803acbd034da67b1d1b94d0055684208bfe9",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/129-9.json",
+      "level": 129,
+      "passed": true,
+      "population": 9,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2d58e1adb1c9c38df57a2dd3febf86cd4c7be6fa979d50cd3a5387880f24a417",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-40.json",
+      "level": 130,
+      "passed": true,
+      "population": 40,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b1584a22f792e1d501bd362d3ebfad97286ed5eb21a15aadb23c4478d47046e1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-47.json",
+      "level": 130,
+      "passed": true,
+      "population": 47,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "48ee1d7a3e3361acdf0a70ba257e4ebe6fd5edff3f3a69f300d51930122b55ee",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/130-49.json",
+      "level": 130,
+      "passed": true,
+      "population": 49,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c2a6ed77c91d0a1e0ca230ac741a575de8ecfd94fb061c5a6c944a351682fe49",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-1.json",
+      "level": 203,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "798bfbb0ae82f763f7d6188bf0b0590527487428887d9b4619c1e774c937638c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-11.json",
+      "level": 203,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4552d2a13c037ca352678e3d7e34de95c6bc30edce84b1d9ce96c1803ef2a521",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/203-22.json",
+      "level": 203,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c770eba78d7897fd32cc5ec3ac0fe2a6371aabcd03cfe020fa43d7015d9c9319",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-1.json",
+      "level": 204,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f7def0fa6a66b21f5bc8255eb259e54da85dde1255dc817d0185362a08f88ade",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-11.json",
+      "level": 204,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "67740071d3f53e9117d309ec97393f932d814d5c9864163d91186ab8a14ff6ce",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-2.json",
+      "level": 204,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ffb1be191aec966474ca8cca250dce33cc8a272a1fafcaa44202831674583426",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/204-22.json",
+      "level": 204,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ae0accfabb76f6896437a6ba6aa5e48a39b11c52db8912e108ccd0c7442436dc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-1.json",
+      "level": 205,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "830706bb36eb3f071cb1873170714c617b88ae08bff2e45f55f6917eac9cd9c0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-11.json",
+      "level": 205,
+      "passed": true,
+      "population": 11,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "20089d9049c22bc40069e374cf33755aab9cf8279975946ea12476e608189983",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/205-22.json",
+      "level": 205,
+      "passed": true,
+      "population": 22,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "3c9fcb1e4089b6d57744bab495612ee320b58ee3e196c55ae9a9438eca58cac3",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-1.json",
+      "level": 206,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "1b6f9d4a73be9d1f88cee060e6d59c190dd644431c125b1a8cdf8d644a979a45",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-11.json",
+      "level": 206,
+      "passed": false,
+      "population": 11,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "bbc5a9cc0346b65e482821e18efc0645b0b3ee896468f8df6607081bbe8427a9",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-22.json",
+      "level": 206,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "9662646b177a31a32b58fd842d46e54a38bdb01ede41795387df935adb9b9f1e",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-23.json",
+      "level": 206,
+      "passed": false,
+      "population": 23,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "d79c50ddb6868c850cbb56f19741c9c073fab73c83cc9ec111239050102317ec",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-12.json",
+      "level": 207,
+      "passed": true,
+      "population": 12,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "494d56da651d3784a0fd31803cb2f1681d9c45852a4889a701d3cdcd5d55a354",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-2.json",
+      "level": 207,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ed2ed87779e302b33595b74192a002cbfd7970faa2b63eb1efae8eba425f8084",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-21.json",
+      "level": 207,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f99a8d81e7da7d9a3bf483162700c24b880d14e3d2400d8b478a88a216806265",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-23.json",
+      "level": 207,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b6e85c21906bfe15acca85d49876d3a26e3d3b91fa37a1a54040ee314a81992f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/207-24.json",
+      "level": 207,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d8539039a2f25ec8f0c590acd981a756f9e108f1682206ef20038089f742687b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-1.json",
+      "level": 208,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4445dcd1260ade374887a090dba3b04bb10ee2305d2f6072d86623f5432242df",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-21.json",
+      "level": 208,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "769ecce8b788150e5a8cda3ea4c0e08756aa73196bd8611495ae224780ea5aef",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-23.json",
+      "level": 208,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2b6d915370b95aa1a0e529c928ac552c77678c9e4a47237d9394371869b2c463",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-24.json",
+      "level": 208,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "881abaabfa8b061e93066f1048be9e9792420b15c5bb5f839e37bf3d7492f2be",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-4.json",
+      "level": 208,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f9eec5db7e8f7bbca72d0a0deed66d67a2dc5acf2a002f5c5781bb4d2b58daf3",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/208-5.json",
+      "level": 208,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "587a30c832d8caf806e2b988210427bd6f3cfd8d4d292af3c6003ea9fed125f4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-1.json",
+      "level": 209,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8fa21e1d1e4329b5df1a19574aad605d572692775a2b8dc15a8b994745f21ae6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-15.json",
+      "level": 209,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "28a9e8bb1decbfa6887b3d33c66fc1d92a2d973c54610e016ce005d2f08b0a89",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-17.json",
+      "level": 209,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "cbeb8907892e707122b7f68f51d0781ac210cf1b947431cfecf63ac88391c207",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-18.json",
+      "level": 209,
+      "passed": true,
+      "population": 18,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ba7134c6542a9aff853098c24864ab55cb965c3b3eecd0036b944bfa3057f613",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-19.json",
+      "level": 209,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c181a01e5e00e42ac48827738ad849597ff3a4370180765642d13f27c502b416",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/209-5.json",
+      "level": 209,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8ca593983bbbc1650eed5686550ccb2b8708e232f94f492b72157278635dd918",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-1.json",
+      "level": 210,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "a14d8b70a74dc43611c16dac2f3f4f33cc4ef5af1c3a3083c2a97b641dc30f16",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-19.json",
+      "level": 210,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "515ee7fc333dcd65d21d7c7d48d4ef3dd55d034f49894276b3e1339a1e0df197",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-20.json",
+      "level": 210,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0de81795a699011749027051021195165161301895482952335603a9c0179c3f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-21.json",
+      "level": 210,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bb1b328c1d7fce9b5ad56ed32b40550d2f5c53660b4cd480184732c043cd3eb4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/210-7.json",
+      "level": 210,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "572b716369425d0638ee176475272248786a2f7c61d0b2caf900292062f3f51d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-1.json",
+      "level": 211,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fae964e8fa9fc8d0fad26a2bc1f3f9d52b724c7d5b35df4f1af4eaf0c5d4d5fc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-19.json",
+      "level": 211,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b202a8479cda9741989c4a1b3b46fc8e2bc138e12d584262ceeeb3aa5d1e2532",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-20.json",
+      "level": 211,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9ed1c6d4b4ea5c708417d0369c44f23c13daf500123c1f47070b4c4e2108ec74",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-21.json",
+      "level": 211,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "632057e475fe6ad57163fd91045eccb5946e2233317f08fc7b7cc700828bc357",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/211-7.json",
+      "level": 211,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f212077bcd2f18d214adec86cd568fd7a2ed89cd9f9d66d058dc59f8995aad0f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-1.json",
+      "level": 212,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "76f48fd99d6ae93726a4549179aa0aa3d4ddc87dbd6fb24d2901042f3f696cc3",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-19.json",
+      "level": 212,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "93da748156425577896e5a2c42afc45412b6d827070624da3584b59a193030ec",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-20.json",
+      "level": 212,
+      "passed": true,
+      "population": 20,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "47d0710d2d1d24b9b77b3b83e2f308be89bf158f919fb7f1db13c4ecbc125b53",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-21.json",
+      "level": 212,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "16f6438bc64576f877772481953fdf52d4bac1470bccc0d81b96fafefb904a19",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/212-7.json",
+      "level": 212,
+      "passed": true,
+      "population": 7,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "612858289652ac612df657e1d0fc14970dddb65c0191b5f3fea1bc68db436bdc",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-1.json",
+      "level": 213,
+      "passed": false,
+      "population": 1,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "9f394ebeee40a542028bbcc8b18f1973ef58aa5864522eb20302e11587055665",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-21.json",
+      "level": 213,
+      "passed": false,
+      "population": 21,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "c8d065784d87a02d46da6d13cac246ab24b7d782543460356a8bbda3276f94af",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-22.json",
+      "level": 213,
+      "passed": false,
+      "population": 22,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "6464fa095a540c5948d7b0da12192cf15620306cedbf22d45d12de69ca528af3",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-8.json",
+      "level": 213,
+      "passed": false,
+      "population": 8,
+      "rebasedFailure": "Inputs did not complete the level with a rescue.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "59522c4eec19c374be29ee63489932f917d7a336123e335885667fdc0ccaa310",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/214-1.json",
+      "level": 214,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "eb527d65b8ca916df506d8c39625825aa11741fe08bd806215273516f7dc0729",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/214-13.json",
+      "level": 214,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e5820d0449098db26dbe5506824f4dbd30f82b608b53c6bac907ffa314ea89bf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-1.json",
+      "level": 215,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e44637c9417b0e5b391ecdbef053062ebf2c91b160113c6976e62996981f5675",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-13.json",
+      "level": 215,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b3a5e7d878ffa2a3d85c7a0bad4df5b95cad716131e119ec2551c9ae5765481d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-16.json",
+      "level": 215,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b3a0f13dc0de4a0e92f322d54c9d710399244ea821befbedbf9c6319a0d17dcf",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/215-19.json",
+      "level": 215,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1ed2faf8f335b5c2c6a83f32a1d253b53e5e3e4e47da027913bbf3484a3388e7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-1.json",
+      "level": 216,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "080eec1679c3271e54ecc65007f14390a9340efac5b61f39c13b2b0725663642",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-13.json",
+      "level": 216,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e928a6138745dc2ad2fb0b65ee99eb1dce059ea9f85113ae129719b7f7c74cb6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-16.json",
+      "level": 216,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8ec98fce9d29026f29c894b66364a8e2a0ab17e10fdcdef9d92b217ff42b9236",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-17.json",
+      "level": 216,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "323bc4b6fb7598a2154e7539103e56ef0f016487694e52c9b3cd711db3fbe0b2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/216-19.json",
+      "level": 216,
+      "passed": true,
+      "population": 19,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "114032102862c3aea8ab5bbadb9d2b86b15eb4b274e877c70dc23fc08621005d",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-1.json",
+      "level": 217,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "26cc65136e99852ff245eb588513479c3fb49b2a0061a49bedb679cebc869eeb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-13.json",
+      "level": 217,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d83c7176f086fc422bd8bf8eb1f704cf94ce8bc45f3712a926493c2b42bce692",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-16.json",
+      "level": 217,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "290e421e127a6ea62e231fd5382a0b1dadf2446dbabdf2738d5148a13504f873",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/217-17.json",
+      "level": 217,
+      "passed": true,
+      "population": 17,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1387fec3b271c8860b18a3e49ab6e36eb938a1b348ae685f698aa4cd6c0b4212",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-2.json",
+      "level": 218,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "e45ea6193aa1b5a25d5ad1d5a6faf81efdc744c9d4c9eb86195c7a7035cd12b8",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-21.json",
+      "level": 218,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "282038c7ef261d745f5cf466ce4d3ae6b07c9700268a0cee522a2aa6a475e93f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-3.json",
+      "level": 218,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2107aec3ad49f1ee91bc63b62e9b087fa47a9c30d1ad425c729b06e4e2bbf7ed",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-4.json",
+      "level": 218,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d0327e1c38cf94ba31bd1bc273072072ed0fe729bf61f3376c63708b79cb035a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/218-6.json",
+      "level": 218,
+      "passed": true,
+      "population": 6,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "777f5728bd888d4adebc4a266a1549aaedc3aa546d13f5d7f02e84c3f19aad32",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-2.json",
+      "level": 219,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6a4a313a1b63eefc6f562f7f37f6fa491e142d1a7d2c15fab04888ba749b3237",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-21.json",
+      "level": 219,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "1bb5b97b981f295afb3e6568658426a3c34f75ba604614d99d0173fae71fc53b",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-29.json",
+      "level": 219,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "5071eff644c50b4890b7a43f6494122d2c38e2d66186cc7c1737866c998fa807",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-3.json",
+      "level": 219,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ae16842ffab4396f4bae9ab83fd39f7ed2306fda74d693e61e4226586a0499dd",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-4.json",
+      "level": 219,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "d6b9007dfbe04afbef06759cc79238027a97425c6cd062f8b3e66f38f4a94ffd",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/219-6.json",
+      "level": 219,
+      "passed": true,
+      "population": 6,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "66b978ec95cec354b1371954e0e80769cf7290414e778a8640d6b14deae03412",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-1.json",
+      "level": 220,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "89c6a32711cfe275cc329010efb8c5dfb5d79d2721a8bb655b07e0b463ebbcfb",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-13.json",
+      "level": 220,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "7544c366536f1c6af377f61785da0f0eb17464eb72963832ce7987c588ca8295",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-2.json",
+      "level": 220,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "9e243b74fc5b5608deb2d1a2d1d581fe09d7318edc0829558c30bf1f6de1a28f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-21.json",
+      "level": 220,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c4916f41571c31efc5f92808dac88899c4189cdba3a2a4a585efef9b72c006b2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-29.json",
+      "level": 220,
+      "passed": true,
+      "population": 29,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "155ec5f9cb9da1a8b29c86c2e3e29bbdab257cdca6a400b09a8af7682f3c63dc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/220-3.json",
+      "level": 220,
+      "passed": true,
+      "population": 3,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b2bfaafb87fff8ecdcc040884531305793928c50e8f00bcc8a0ceffbd43b8aba",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-13.json",
+      "level": 221,
+      "passed": true,
+      "population": 13,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "44f3e33b71896c77e12f843b2af94ec6968fb446a296e6b21b3df695ee254c94",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-2.json",
+      "level": 221,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bb41180ddc94b538863c6f9dc0157e116f08e2e7e14ddf15287a6801a1d0fd3a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-21.json",
+      "level": 221,
+      "passed": true,
+      "population": 21,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "db61fc68e56435fac89ebb25839ce3041d1d04d6c4582c1e9b5e532112dea8f2",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-31.json",
+      "level": 221,
+      "passed": true,
+      "population": 31,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "234f275c8ae5ea890aa0b24f501fb85ad73894ccf27ae2d03cd5c758b1504984",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/221-5.json",
+      "level": 221,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "27d242aa526546a791d809c4afb3e4aad996da19eb49ebf287087f350be0b4f1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/222-2.json",
+      "level": 222,
+      "passed": true,
+      "population": 2,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "f5a875069931b2824ba6de70b1ed18dc8b4af5f1482378d9c078bbb95eba3712",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/222-32.json",
+      "level": 222,
+      "passed": true,
+      "population": 32,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "6b0d0f181ef7a3e95c634a74adaf75b16c9f5984e91812083a38143184d50450",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-1.json",
+      "level": 223,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "84795ea797fafed356a6033004cc6c1dbb0b32a6f01bcd967a20603f20935e4e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-23.json",
+      "level": 223,
+      "passed": true,
+      "population": 23,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "b6ff12050446f7f68b2b318d3c877b328d0e7b4ed5f53d339dea4e955aa6a3c0",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/223-33.json",
+      "level": 223,
+      "passed": true,
+      "population": 33,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "4ccaff78e8336f54c03483e6228bcbf4a4b1f170ca5c441e01d8bade1d4b4080",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-14.json",
+      "level": 224,
+      "passed": true,
+      "population": 14,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bb28fb77a27c9f52d3a753393cbecfc06df08c981d7edbaf9801de054f8a0e4a",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-24.json",
+      "level": 224,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "ba56623a3a13e65f23c379380109b39f2e573c1b5b91daac65603e5dc10898a7",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/224-35.json",
+      "level": 224,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "66d70ab44c5afe1842891e87a57321cd157c0d1e77abbcbd51cb180134eea2a4",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-14.json",
+      "level": 225,
+      "passed": true,
+      "population": 14,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2ca4b31fee0c288c302368112914bfd8208f27f201c26a5d395f9ba402b8fad6",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-24.json",
+      "level": 225,
+      "passed": true,
+      "population": 24,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fd2b3000517bd5f869af1825680e4e187400e151d82867caefc128a7a04c730c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-35.json",
+      "level": 225,
+      "passed": true,
+      "population": 35,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c2a7a631d9160142dca73bfd910f3fe6820035d816348e994777e5cd15af812f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/225-4.json",
+      "level": 225,
+      "passed": true,
+      "population": 4,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "8edb0445be6a1fa58574553da55879b7f91d95804f94ab54e2a4908b724574c1",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-1.json",
+      "level": 226,
+      "passed": true,
+      "population": 1,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "df3889ef2c3f8b8a248f5f663f3f488c305cc47dc1fed461a7f8fb95a1730bfc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-15.json",
+      "level": 226,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fc359b7d165ecf1bb80de47cff1f7ddff8fa4c7dcc965ea3f4ca0c02e6a4f5db",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-38.json",
+      "level": 226,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "363c7ed107f2216c129a01de4d56d5fb201924a1ce6ca22de74fc5a8626ee788",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/226-5.json",
+      "level": 226,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "bf408a352565b2e57c7c1399001f9e8ff0b8d7de1319946add4dc1c95af3283f",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-15.json",
+      "level": 227,
+      "passed": true,
+      "population": 15,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "fa5679a2a318d49028fddc2668eb47d69fb9b884ce200bc29c4eb2e242daa8ed",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-38.json",
+      "level": 227,
+      "passed": true,
+      "population": 38,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c9832f58eaf9f10031a2958b0e627df546310f9703717b2ebd3d2c8cf20ffdd5",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/227-5.json",
+      "level": 227,
+      "passed": true,
+      "population": 5,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "c711a88d75ca00d3fbe6c0552b2bb274c87a4c35fdb2a6422bf55e2bff0ce1dc",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/228-16.json",
+      "level": 228,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "99ab652fbe63207ad8a00f1465e555581f96f227f37afd8c3dacfd2f3c02060c",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/228-39.json",
+      "level": 228,
+      "passed": true,
+      "population": 39,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "0f38062f913ca13d09ce4a6b789c9c7900bf7b30b5eb063066d0e574ff538971",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-15.json",
+      "level": 229,
+      "passed": false,
+      "population": 15,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "e480a5cb95cfb7155d1211c898ee8fc5d0ac7ce659e3f7757f957efc8b7b34dd",
+      "failure": "L3 replay identity, initial state or input order differs.",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-43.json",
+      "level": 229,
+      "passed": false,
+      "population": 43,
+      "rebasedFailure": "Input 6 was refused at tick 1561.",
+      "routeStatus": "route-fails"
+    },
+    {
+      "currentInitialStateHash": "e1f11ab8cf1209a59dcc41ae7b4cb25b28331d73325e8dd306638faf8ab3b9f3",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/230-16.json",
+      "level": 230,
+      "passed": true,
+      "population": 16,
+      "routeStatus": "exact"
+    },
+    {
+      "currentInitialStateHash": "2a54d4aa456d767125d90726085c432dfad2e58aeb3026c208e17014f8c6ea2e",
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/230-44.json",
+      "level": 230,
+      "passed": true,
+      "population": 44,
+      "routeStatus": "exact"
+    }
+  ]
+}

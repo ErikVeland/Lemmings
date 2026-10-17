@@ -636,6 +636,9 @@ public struct Lemmings3Runtime: Sendable {
         func cells(x: Int, y: Int) -> [(Int, Int)] {
             ((y - 18)..<y).flatMap { py in ((x - 8)..<(x + 8)).map { ($0, py) } }
         }
+        func patrolCells(x: Int, y: Int) -> [(Int, Int)] {
+            ((y - 16)..<y).flatMap { py in ((x - 4)..<(x + 4)).map { ($0, py) } }
+        }
         func protected(_ body: [(Int, Int)]) -> Bool {
             body.contains { x, y in
                 guard inBounds(x, y) else { return true }
@@ -648,15 +651,13 @@ public struct Lemmings3Runtime: Sendable {
             dy > 0 ? (dx > 0 ? .downRight : .downLeft) : (dx > 0 ? .upRight : .upLeft)
         }
         if creature.digDirection.dy == 0 {
-            let groundY = creature.y + 2
-            if !isSolid(creature.x, creature.y) && isSolid(creature.x, groundY) { creature.y = groundY }
             let nextX = creature.x + creature.direction * 2
-            let current = cells(x: creature.x, y: creature.y)
-            let next = cells(x: nextX, y: creature.y)
-            if protected(next) && !protected(current) {
+            let current = patrolCells(x: creature.x, y: creature.y)
+            let next = patrolCells(x: nextX, y: creature.y)
+            if protected(cells(x: nextX, y: creature.y)) &&
+                !protected(cells(x: creature.x, y: creature.y)) {
                 creature.direction *= -1
-                creature.digDirection = diagonal(creature.direction, 1)
-                creature.cooldown = 11
+                creature.digDirection = creature.direction > 0 ? .right : .left
                 return
             } else {
                 if next.filter({ isSolid($0.0, $0.1) }).count > current.filter({ isSolid($0.0, $0.1) }).count {

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+  "engine": "Lemmings 3",
+  "level": 107,
+  "name": "Shadow 7",
+  "scope": "Bundled level; population 20",
+  "identity": {
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+    "fixtureSHA256": "ecca51c2962a0d8e69411aa8994af2e8098ebbba589f11c3f9ce4a950792da8d",
+    "levelSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "sourceResource": "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD/LEVELS/LEVEL107.DAT"
+  },
+  "solver": {
+    "binarySHA256": "9e43d0ae0f98830a254818fc1bf16efc82deed050e51a8a781c74935a294a5ab",
+    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+    "sourceFiles": {
+      "Sources/NxlvKit/Lemmings3Runtime.swift": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+      "Tools/Lemmings3Solver/Search.swift": "f359fa8171880fc0db1c0a91cd76f552573e42258b76cd0456305fade04ff6d3",
+      "Tools/Lemmings3Solver/main.swift": "15d76aeadb9400cb1aefa938085ef1684d0f03f0f72fa24f11a7c8820eac5b1c",
+      "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6"
+    },
+    "runs": [
+      {
+        "budgetSeconds": 300,
+        "beamWidth": 8192,
+        "toolSiteCellPixels": 2,
+        "pairedActors": true,
+        "fewerInputsFirst": true,
+        "decisionPoints": 4827,
+        "depth": 4867,
+        "roundsToBeam": 1,
+        "expandedCandidates": 2583028,
+        "bestSaved": 0,
+        "bestLost": 0,
+        "elapsedSeconds": 301,
+        "result": "No route found.",
+        "candidateFilesProduced": 0,
+        "fixtureChanged": false,
+        "kind": "unseeded",
+        "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/solve-lemmings3-levels.sh 107 --budget 300 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-main-03ae9286/shadow07-beam8192-currentmole"
+      },
+      {
+        "kind": "seeded-through-1666",
+        "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/solve-lemmings3-levels.sh 107 --budget 300 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --seed Tests/Lemmings3CompletionTests/Fixtures/107.json --seed-through 1666 --refresh-engine-seed --out .build/l3-current-main-03ae9286/shadow07-seeded1666-currentmole",
+        "budgetSeconds": 300,
+        "beamWidth": 8192,
+        "toolSiteCellPixels": 2,
+        "pairedActors": true,
+        "fewerInputsFirst": true,
+        "seedFixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+        "seedFixtureSHA256": "ecca51c2962a0d8e69411aa8994af2e8098ebbba589f11c3f9ce4a950792da8d",
+        "seedThroughTick": 1666,
+        "refreshEngineSeed": true,
+        "decisionPoints": 1124,
+        "depth": 1164,
+        "roundsToBeam": 1,
+        "expandedCandidates": 1338517,
+        "bestSaved": 0,
+        "bestLost": 0,
+        "elapsedSeconds": 303,
+        "result": "No route found.",
+        "candidateFilesProduced": 0,
+        "fixtureChanged": false
+      },
+      {
+        "kind": "seeded-through-1590",
+        "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/solve-lemmings3-levels.sh 107 --budget 300 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --seed Tests/Lemmings3CompletionTests/Fixtures/107.json --seed-through 1590 --refresh-engine-seed --out .build/l3-current-main-03ae9286/shadow07-seeded1590-currentmole",
+        "budgetSeconds": 300,
+        "beamWidth": 8192,
+        "toolSiteCellPixels": 2,
+        "pairedActors": true,
+        "fewerInputsFirst": true,
+        "seedFixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+        "seedFixtureSHA256": "ecca51c2962a0d8e69411aa8994af2e8098ebbba589f11c3f9ce4a950792da8d",
+        "seedThroughTick": 1590,
+        "refreshEngineSeed": true,
+        "decisionPoints": 630,
+        "depth": 670,
+        "roundsToBeam": 1,
+        "expandedCandidates": 2195448,
+        "bestSaved": 0,
+        "bestLost": 0,
+        "elapsedSeconds": 305,
+        "result": "No route found.",
+        "candidateFilesProduced": 0,
+        "fixtureChanged": false
+      }
+    ]
+  },
+  "interpretation": "All three searches ran against the current 03ae9286 runtime. None found a winning route. The current fixture remains unchanged. These bounded searches do not prove that the level is impossible. Earlier Shadow 7 search records used the pre-carve runtime and do not replace these current-source results. The strict bundled route gate remains open."
+}

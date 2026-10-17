@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "purpose": "Current production trace comparison against the retained original DOS air-gap case.",
+  "runtime": {
+    "fixture": "steel-air-gap",
+    "samples": 344,
+    "exactPositionMatches": 140,
+    "matchingTickRanges": [
+      [
+        17,
+        17
+      ],
+      [
+        19,
+        19
+      ],
+      [
+        25,
+        30
+      ],
+      [
+        36,
+        167
+      ]
+    ],
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        163,
+        110
+      ],
+      "production": [
+        164,
+        112
+      ]
+    },
+    "traceSHA256": "1b56d32df21cc64ca3ee4fd4728307af8083e33b37ea72f203bc57ba771f58df",
+    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+    "traceToolSHA256": "2167461236c70ad036c201a3cf56bd3baf50cda79ba46b8459478d41ed94d770",
+    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "sourceFixtureHashes": {
+      "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+      "PERM101.OBS": "789ff30f151bb922d0f34d3f95804a6e9e2ebd70bd5abedb80e514e309e73dcb",
+      "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+    },
+    "nativeFixtureHashes": {
+      "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+      "PERM101.OBS": "789ff30f151bb922d0d0b5ab5d8070ae9e2ebd70bd5abedb80e514e309e73dcb",
+      "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+    },
+    "fallTransitionComparison": {
+      "sourceTick167": [
+        120,
+        152
+      ],
+      "sourceTick173": [
+        112,
+        156
+      ],
+      "sourceTick182": [
+        112,
+        192
+      ],
+      "productionTick167": [
+        120,
+        152
+      ],
+      "productionTick173": [
+        132,
+        158
+      ],
+      "productionTick182": [
+        150,
+        167
+      ]
+    },
+    "result": "Production matches 140/344 source positions. It matches the source trajectory from ticks 36 through 167, then continues diagonally through the open gap. The source pauses, drops vertically from ticks 173 through 182, and resumes patrol at the floor.",
+    "productionTracePath": "current-head-air-gap-production-trace.json"
+  },
+  "interpretation": "This second fixture confirms a source-backed missing transition from diagonal burrowing to a vertical fall when the Mole leaves the tunnel into an open gap. It does not establish the exact state trigger or animation timing. Keep those rules open until a candidate matches both retained traces and the tunnel-edge witnesses.",
+  "rejectedTriggerExperiment": {
+    "candidate": "Start a vertical fall when both the current and next down-tunnel footprints contain no solid terrain.",
+    "sourceCounterexampleTick": 70,
+    "sourceCounterexample": "The DOS Mole remains on its down-left burrow through tick 167.",
+    "prototypeExactPositions": 44,
+    "baselineExactPositions": 140,
+    "totalSourcePositions": 344,
+    "decision": "Rejected. Empty footprints alone do not identify the fall transition. The production runtime remains unchanged."
+  }
+}

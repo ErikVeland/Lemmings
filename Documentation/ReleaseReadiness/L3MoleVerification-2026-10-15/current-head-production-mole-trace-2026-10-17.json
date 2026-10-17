@@ -49,9 +49,9 @@
   },
   "runtimeGap": {
     "source": "Sources/NxlvKit/Lemmings3Runtime.swift moveMole(_:)",
-    "observedRuntimeBehavior": "The Mole patrol checks only the 0x20 solid bit through isSolid(_:_:). It changes horizontal position and direction. It does not inspect the 0x40 steel bit, update vertical position, or add terrain edits.",
+    "observedRuntimeBehavior": "The Mole treats the 0x40 steel bit as a protected boundary. It can start a diagonal state at that boundary, but it does not clear steel. Its vertical movement and terrain edits use the current provisional rule.",
     "fixtureBehavior": "The retained source fixture places left-facing Mole object 10013 at (152,92) and steel cells with tag 0x60 at x=112...119, y=96...111. The source trace reports steel contact and first down-right motion at tick 36.",
-    "interpretation": "The production code lacks the observed steel-triggered excavation path and source vertical movement. This identifies missing behaviour, but the source tunnel-edge witnesses still do not establish the exact excavation mask."
+    "interpretation": "The runtime recognises steel as a protected boundary, but this alone does not prove source-equivalent contact or excavation. Its trace matches 141/329 source positions. The source tunnel-edge witnesses still do not establish the full excavation mask."
   },
   "productionRun": {
     "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
@@ -110,8 +110,8 @@
     ],
     "result": "partial trajectory match; not production evidence or a complete implementation"
   },
-  "interpretation": "At dc9c596, the cell-carve Mole implementation is in production. A fresh optimised build matches 141 of 329 left-facing positions, including every sample from ticks 36 to 187. It diverges after tick 187 and fails two of four source tunnel-edge checks. The independent no-optimisation build produces the same trace. Full L3 fixture validation remains outstanding.",
-  "closureEffect": "Main includes partial Mole excavation behaviour. Fresh optimised production trace parity is 141/329. Fresh full fixture audit has 393 exact double replays, six stale-identity routes that win when rebased, and 17 route failures. Mole movement and excavation rules, built-brick trigger and full L3 completion gates remain open.",
+  "interpretation": "The left-facing production trace matches 141/329 source positions. The air-gap production trace matches 140/344 and follows the source through tick 167, then diverges because production continues diagonally while the source Mole falls. Two of four left-facing tunnel-edge witnesses also fail.",
+  "closureEffect": "The refreshed level-113 fixture hashes close six stale expected-state mismatches. The fresh L3 audit records 399/416 exact double replays, zero stale-identity wins and 17 route failures. The current production traces match 141/329 left-facing positions and 140/344 air-gap positions. The air-gap trace follows the source through tick 167, then continues diagonally while the source falls vertically. Mole movement and excavation rules, the built-brick trigger and full L3 completion gates remain open.",
   "repeatCommand": "L3_MOLE_TRACE_ROOT=/absolute/path/to/reconstructed/steel-left-facing zsh Scripts/audit-l3-mole-production-trace.sh",
   "isolatedCandidateProbe": {
     "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
@@ -195,7 +195,7 @@
     "sourceCommit": "dc9c59614a710705f6bd4701deb7d34cf3796870",
     "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
     "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
-    "runtimeLibrarySHA256": "dedf06c5777b5226399b6bc1d3090cf5e0d57143f3db62e0840eddd7bbd3be19",
+    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
     "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73",
     "compiler": "Apple Swift 6.3.3, Xcode toolchain",
     "optimisation": "-O",
@@ -214,10 +214,10 @@
         112
       ]
     },
-    "result": "The optimised build and trace ran at 4a8e2fa against the production runtime source introduced at dc9c596. HEAD 0803e8bd changes Trolley classification and documentation only. The independent no-optimisation build produced the same trace hash. The result remains applicable at 0803e8bd by the unchanged L3 runtime hash.",
-    "currentHeadCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "result": "The optimised production trace was rerun at 03ae9286. It matched 141 of 329 positions. The first mismatch is at tick 2. An independent no-optimisation build produced the same trace hash. The Mole source parity gate remains open.",
+    "currentHeadCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
     "runtimeUnchangedInCurrentHeadCommit": true,
-    "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
+    "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-03ae9286.json"
   },
   "previousHeadRerun": {
     "sourceCommit": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
@@ -243,7 +243,7 @@
   },
   "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. The 4a8e2fa optimised trace gives 141/329 exact positions. HEAD 0803e8bd retains the audited L3 runtime source and fixture inputs. Parity and full fixture gates remain open.",
   "initialReportHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-  "headCommit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+  "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
   "noOptimisationDiagnostic": {
     "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
     "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
@@ -252,17 +252,95 @@
     "result": "Independent no-optimisation build matched the optimised trace result of 141/329."
   },
   "fixtureAuditAtCurrentHead": {
-    "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
-    "sourceReportSHA256": "73a5773b249c6c8b0ecd2c9d68a0345681025694c4ac5d3ecb368190c2473357",
-    "exactDoubleReplays": 393,
+    "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-03ae9286.json",
+    "sourceReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "exactDoubleReplays": 399,
     "totalFixtures": 416,
-    "rebasedWinsWithStaleIdentity": 6,
+    "rebasedWinsWithStaleIdentity": 0,
     "currentRuntimeRouteFailures": 17,
     "standaloneFailures": 4,
     "carriedFailures": 13
   },
   "currentApplicability": {
-    "head": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
-    "basis": "The 4a8e2fa trace remains applicable because 4a8e2fa through 0803e8bd changes no L3 runtime source or fixture inputs."
+    "head": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "basis": "Fresh production Mole and full fixture audits ran at 03ae9286. Runtime and fixture hashes match the recorded evidence."
+  },
+  "currentHeadAirGapRerun": {
+    "fixture": "steel-air-gap",
+    "samples": 344,
+    "exactPositionMatches": 140,
+    "matchingTickRanges": [
+      [
+        17,
+        17
+      ],
+      [
+        19,
+        19
+      ],
+      [
+        25,
+        30
+      ],
+      [
+        36,
+        167
+      ]
+    ],
+    "firstMismatch": {
+      "tick": 2,
+      "source": [
+        163,
+        110
+      ],
+      "production": [
+        164,
+        112
+      ]
+    },
+    "traceSHA256": "1b56d32df21cc64ca3ee4fd4728307af8083e33b37ea72f203bc57ba771f58df",
+    "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+    "traceToolSHA256": "2167461236c70ad036c201a3cf56bd3baf50cda79ba46b8459478d41ed94d770",
+    "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+    "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "sourceFixtureHashes": {
+      "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+      "PERM101.OBS": "789ff30f151bb922d0f34d3f95804a6e9e2ebd70bd5abedb80e514e309e73dcb",
+      "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+    },
+    "nativeFixtureHashes": {
+      "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+      "PERM101.OBS": "789ff30f151bb922d0d0b5ab5d8070ae9e2ebd70bd5abedb80e514e309e73dcb",
+      "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+    },
+    "fallTransitionComparison": {
+      "sourceTick167": [
+        120,
+        152
+      ],
+      "sourceTick173": [
+        112,
+        156
+      ],
+      "sourceTick182": [
+        112,
+        192
+      ],
+      "productionTick167": [
+        120,
+        152
+      ],
+      "productionTick173": [
+        132,
+        158
+      ],
+      "productionTick182": [
+        150,
+        167
+      ]
+    },
+    "result": "Production matches 140/344 source positions. It matches the source trajectory from ticks 36 through 167, then continues diagonally through the open gap. The source pauses, drops vertically from ticks 173 through 182, and resumes patrol at the floor.",
+    "productionTracePath": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-air-gap-production-trace.json"
   }
 }

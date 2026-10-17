@@ -48,14 +48,20 @@ match build 85, and it retains the shared engine libraries. The complete build
 86 app audit was not rerun, so build 85 route and engine evidence carries
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
-On 17 October, a fresh fetch confirmed that `HEAD`, `origin/main` and
-`FETCH_HEAD` match at `0803e8bd99e3c2d63429bf3a2866c37f528e3842`, with zero
-commits ahead or behind. Two source and test files are now modified in this
-worktree. The Trolley runner passes the history, deterministic-classification,
-Game Center reconnect, rank, account-switch and profile-ownership checks. Its
-full UI flow stops at the `Play replay` control assertion. The local app bundle
-lacks game data, and a rebuild is blocked because `Content/LevelPacks/packs.json`
-is absent.
+On 17 October, `HEAD` and `origin/main` match at
+`03ae9286c5bb0f3dbd4c478bfe017047f6e728d6`, with zero commits ahead or
+behind. The worktree contains local documentation, evidence and trace-verifier
+changes. It contains no game-runtime changes. A fresh L3 audit at this commit confirms 399/416
+exact double replays, zero stale-identity wins and 17 route failures. The
+strict gate passes the manifest and negative checks, then fails at `107.json`
+and `107-1.json`. See the [current audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-03ae9286.json)
+and [strict gate](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-03ae9286.json). Three current-runtime searches for Shadow 7 found no route within 300 seconds. See the [search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-currentmole-search-2026-10-17.json).
+
+The Trolley runner passes the history, deterministic-classification, Game
+Center reconnect, rank, account-switch and profile-ownership checks. Its full
+UI flow stops at the `Play replay` control assertion. The local app bundle
+lacks game data, and a rebuild is blocked because
+`Content/LevelPacks/packs.json` is absent.
 
 Current main includes the 2.0.5 Trolley history hotfix and a deterministic
 classification fix. The source changes do not alter the Classic, L2, L3 or
@@ -67,11 +73,13 @@ positions. It first diverges at tick 2 and later diverges after tick 187. Two
 of four terrain-edge checks fail. An independent no-optimisation build produced
 the same trace.
 
-The full L3 audit at `aa21fa0e` remains applicable at the current head because
-the L3 runtime and fixture inputs have not changed. It records 393/416 exact
-double replays, six stale-identity routes that win when rebased, and 17
-schedules that do not win (four standalone, 13 carried). The strict gate fails
-at Shadow 7 and carried fixture 107-1. Earlier Trolley evidence checks 615
+The latest L3 audit at `03ae9286` records 399/416 exact double replays, zero
+stale-identity wins and 17 schedules that do not win (four standalone, 13
+carried). Six level-113 expected state hashes now match current source. The
+strict gate fails at Shadow 7 and carried fixture 107-1. Fresh Mole traces
+match 141/329 left-facing positions and 140/344 air-gap positions. Production
+continues diagonally through the open gap, while the source Mole falls to the
+floor. Earlier Trolley evidence checks 615
 configurations across 562 campaign identities, with 294 population proofs,
 315 rescue records and six unknown configurations. These results do not close
 the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.

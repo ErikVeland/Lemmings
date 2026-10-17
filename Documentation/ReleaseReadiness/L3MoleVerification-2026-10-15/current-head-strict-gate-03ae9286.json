@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "03ae9286c5bb0f3dbd4c478bfe017047f6e728d6",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+  "runtimeLibrarySHA256": "d9492b0ddf0dea8b42c3ab77e225cdce55a8e38fe05d5c3e971adbea63902cf6",
+  "sourceFiles": {
+    "Sources/NxlvKit/Lemmings3Runtime.swift": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
+    "Tools/Lemmings3Completion/Replay.swift": "8d1b2cfeffd2c1f0e9a25931948f505b4918edf15be51a9e8ec22299710311b6",
+    "Tools/Lemmings3Completion/Audit.swift": "fff56cdbb5ab0b5cdbbea1a14635510624a79795035eadb7d21d324b2089fe6c",
+    "Tools/Lemmings3Completion/Campaign.swift": "f8df18a17baa9eca0915bb94b140c1ea2673f0b2f5876d63ef99f9411bf08ad0"
+  },
+  "result": {
+    "exitCode": 1,
+    "campaignManifest": "322 fixture hashes and coverage entries passed",
+    "refreshAndNegativeChecks": "passed",
+    "standaloneStrictRouteGate": "failed at 107.json after 36 earlier levels passed",
+    "campaignStrictGate": "failed at carried fixture 107-1.json",
+    "interpretation": "The strict bundled L3 route and campaign gates remain open. A fresh full audit confirms 399 of 416 exact double replays, zero stale-identity wins and 17 route failures (four standalone, 13 carried)."
+  },
+  "auditReport": "current-head-fixture-audit-03ae9286.json",
+  "auditReportSHA256": "b18a2c480cffde914d97bb0125eab231e6f22511d52026de6213bd20a318e122",
+  "moleTrace": {
+    "exactPositionMatches": 141,
+    "samples": 329,
+    "firstMismatchTick": 2,
+    "traceSHA256": "d3d1aae3857b96b8c9af4c22930f6d155c4e3fcf26e983667324e02e06f98f73"
+  }
+}
