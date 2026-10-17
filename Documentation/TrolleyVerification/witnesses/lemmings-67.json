@@ -133,6 +133,7 @@
     "stateHash" : "5e4c9c1095733b279033852132e75468d01d955072fdd79189d09da2567fa5f1",
     "ticks" : 2018
   },
+  "initialLevelFingerprint" : "dd540ff77d600e19d41d8b811efeab0a046b2adc370b97053cb942c9e5eae49c",
   "initialStateHash" : "d8b19d16b3f1d00cda9e38341ff5579b7b87bc263237cf9d4c07091cd50d51cf",
   "number" : 8,
   "rank" : "Taxing",

@@ -45,6 +45,7 @@
     "stateHash" : "37f93e3b6be7912cb390a05debdebe03e1f5e1f8748e728685f1aae834cec2f0",
     "ticks" : 1695
   },
+  "initialLevelFingerprint" : "d8c9d6e7d3985b38406bd4d395cfba037c9dcc6dfe7f3ca5be6f45b1ee803101",
   "initialStateHash" : "207d55ea84ce5c3d4a27bd162f0ee430cf782123b07a2d779b510e0ed3a0f922",
   "number" : 6,
   "rank" : "Fun",

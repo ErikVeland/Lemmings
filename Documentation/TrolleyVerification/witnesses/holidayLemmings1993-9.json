@@ -115,6 +115,7 @@
     "stateHash" : "b190568fe4b019f3f9275ee52e3c496fb8b2145ae5b81797a5aa10a1dce372a6",
     "ticks" : 3833
   },
+  "initialLevelFingerprint" : "3cb8c7cd25141c7183ca514af4148c2077029ccdf8cc168789b363c0a5b1daf2",
   "initialStateHash" : "aaf0b817d3d9b0a018aaeaf2436d3d1f8180be21e8568e7b9ad4c5c8e2fd60bb",
   "number" : 10,
   "rank" : "Flurry",

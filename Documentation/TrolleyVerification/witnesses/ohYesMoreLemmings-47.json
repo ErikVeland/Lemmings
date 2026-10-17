@@ -128,6 +128,7 @@
     "stateHash" : "001d27cab7a1710d8f09090c9949cd4b3a2d14ff9397767ce6a929e7b83de48a",
     "ticks" : 3060
   },
+  "initialLevelFingerprint" : "d91f744a98cf30c4db65f419324903c15f9e5af681c3d34f266e15ded8202858",
   "initialStateHash" : "a7bdbcdca47cf84fde8391a03df3da58f543ced330965c19acbe3be8281149ff",
   "number" : 18,
   "rank" : "Mega Drive Sunsoft",

@@ -165,6 +165,7 @@
     "stateHash" : "8e184d2cab09049d2eda7ef95e075a781d68f8436c691bd57edc29f79641a3d9",
     "ticks" : 2176
   },
+  "initialLevelFingerprint" : "c37e1929e8caf83aff9842063c93b22119a666101d7f1c6b61bc0070f008ad2f",
   "initialStateHash" : "e83abe35429e6d14137d47ee58cfedf1ea660473417d9b7ed9bad38e4d33bb53",
   "number" : 2,
   "rank" : "Blizzard",

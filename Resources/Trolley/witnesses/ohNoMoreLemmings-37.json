@@ -107,6 +107,7 @@
     "stateHash" : "703a6ccc415b2e194403692743c10ec4eee1b7568c191f12c4f985fe8ac5bd8b",
     "ticks" : 3033
   },
+  "initialLevelFingerprint" : "00637466b0d4d8b5d97d93aa3c847470e953e481cf98a9afbd9e15a401b108df",
   "initialStateHash" : "1565aca8c053465820146126e4ad512a6f267fe52e298d937d4dd84aa9ffc06f",
   "number" : 18,
   "rank" : "Crazy",

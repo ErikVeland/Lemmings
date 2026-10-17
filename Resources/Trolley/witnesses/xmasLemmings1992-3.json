@@ -158,6 +158,7 @@
     "stateHash" : "83825513a71629e9fd3e9b8b188d43d568cebe38706829a64ba47e3532fb2977",
     "ticks" : 2380
   },
+  "initialLevelFingerprint" : "07326dc05aa5d527205a75f00e3a8d9bbf694cfd068a71215b8d9fea690af814",
   "initialStateHash" : "f581e65915506564f468599f3d249e56d848f5a45ac810e4afeb12f08f3fd4c4",
   "number" : 4,
   "rank" : "Xmas",

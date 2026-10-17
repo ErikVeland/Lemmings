@@ -169,6 +169,7 @@
     "stateHash" : "2a1c2f6abe358a569e19bb2fc254a0f385770b07d2bfb827c07402ac4711936b",
     "ticks" : 1995
   },
+  "initialLevelFingerprint" : "f141a9d0f8c865a555b0c3960330b13dc4617c156115e629957e256ca1a71bfb",
   "initialStateHash" : "766478678a03d39e1a8e9a6b386d68b14b21365eb7e14ec3ae368ba826578693",
   "number" : 11,
   "rank" : "Lemmings Versus",

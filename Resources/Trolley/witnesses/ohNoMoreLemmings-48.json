@@ -189,6 +189,7 @@
     "stateHash" : "e3023e879f0f595d03654a579e9a68ac1cfcdf6b6ddee7dbce8dc07dab03e1d6",
     "ticks" : 2904
   },
+  "initialLevelFingerprint" : "ee6aa1c9a0bf33c3638255a7c9eaff61c07e7a7a6cd6b9619ac2762242f7949c",
   "initialStateHash" : "e3ae7d97807bad818e6693a4788620dbc278befb1f28f9662a78653f75397351",
   "number" : 9,
   "rank" : "Wild",

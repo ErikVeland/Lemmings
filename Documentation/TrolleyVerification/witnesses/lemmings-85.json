@@ -125,6 +125,7 @@
     "stateHash" : "7c945035d66e9826cea2915934a6885ae2722e9ea7b67ecbdb9e307c3fefeb9a",
     "ticks" : 2108
   },
+  "initialLevelFingerprint" : "f25e2f6321415a670af03391d562e29bf22e1f487d9112abbaf39a5fc8a962d9",
   "initialStateHash" : "9ecab5fec05d3f7579da0dcb0d1d89f02c0a2e9d7c3e289e2fa005e431f0da21",
   "number" : 26,
   "rank" : "Taxing",

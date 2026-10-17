@@ -155,6 +155,7 @@
     "stateHash" : "2f6b74b26b14faa4349cca85e58bcdbf5e99004edaea61ece5c2679362f6c6fa",
     "ticks" : 3534
   },
+  "initialLevelFingerprint" : "4cb0613988cd6becb3225ccee81fa5f7b1e4904651711779ec0aa789f212fa08",
   "initialStateHash" : "8d36d74e84fd582f0a6da3d3d28c5b938663c96d644c662dd366cfac13fb2a67",
   "number" : 14,
   "rank" : "Wild",

@@ -108,6 +108,7 @@
     "stateHash" : "25c0fb949f41e2fd849230ac4808cd9b61ca68d42b5f1e125f5879f7e2c6ca40",
     "ticks" : 3700
   },
+  "initialLevelFingerprint" : "0791c756a9e4ea891670d6a051c15f13869c3313aea5a918e3a69b7f7042f7c0",
   "initialStateHash" : "b93123321a524317af70e6f38a8c4edef33d21e20f0a87c1b101cc102f7fa725",
   "number" : 10,
   "rank" : "Hail",

@@ -134,6 +134,7 @@
     "stateHash" : "da70eac720543556b3d3fa4762bf222c5f203c2f926f6dd41de91312cd29a6e6",
     "ticks" : 696
   },
+  "initialLevelFingerprint" : "158c1a3851ba5dc4e03d6b2259da1836c4b0931d7800367f2f2e7b7e05235ca9",
   "initialStateHash" : "1f9d56e523af5ab8d3300ba0d79493b8a5f4d9ce244d03687cac76f7af475ad6",
   "number" : 26,
   "rank" : "Tricky",

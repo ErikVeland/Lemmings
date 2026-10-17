@@ -231,6 +231,7 @@
     "stateHash" : "4815d4acf35acd3b35f0122c73b7c705f3587660983d45f3a1d82693b316ee1a",
     "ticks" : 2601
   },
+  "initialLevelFingerprint" : "f3b875ad72b50fde2dfa07906ea8c8e81eecc5ad9dcbd6a24b1bc5f95b581dd1",
   "initialStateHash" : "8173c380706d0ed5864d039c62eb84a72bc959c617f23a3ebb80e86373d0e977",
   "number" : 25,
   "rank" : "Mayhem",

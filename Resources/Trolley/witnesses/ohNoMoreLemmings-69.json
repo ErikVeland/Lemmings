@@ -186,6 +186,7 @@
     "stateHash" : "ba9748a225b158c77ab029165da67460ab96293a03d57a2db9a702ea2a93117a",
     "ticks" : 4080
   },
+  "initialLevelFingerprint" : "356b3cce5ff68b1bd456a6d984e2635c0872f1bd3e58fe6d2975327d5fcfa3ab",
   "initialStateHash" : "ff1a1887da8c96654e93259ec47bde517b69de86f5acc6788d04e6a2b2391825",
   "number" : 10,
   "rank" : "Wicked",

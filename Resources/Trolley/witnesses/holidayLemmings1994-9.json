@@ -77,6 +77,7 @@
     "stateHash" : "61f53770de91ce51a46a29537d34b3566884569a45d4808da1069b6550084182",
     "ticks" : 2016
   },
+  "initialLevelFingerprint" : "4bf6ae680100c07d0c654bdc28e2231b582059500c9017d745c17cda380caef1",
   "initialStateHash" : "8a76dadd26f0248a3485940595de3aa65113cbfaae2258ef8860417866e39675",
   "number" : 10,
   "rank" : "Frost",

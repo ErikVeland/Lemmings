@@ -69,6 +69,7 @@
     "stateHash" : "28c5990b4069d89c246d73a8fa850bc976fee3cd3b3ef661c438064ed53fec6d",
     "ticks" : 3033
   },
+  "initialLevelFingerprint" : "2177de77a21acfda59abf5653428483b1f159aaf1c770edba39276d95b23d6e0",
   "initialStateHash" : "5336b1af6ab326b088cd965a72ebb1b230c57c3626f0785968513a34d924d543",
   "number" : 8,
   "rank" : "Tame",

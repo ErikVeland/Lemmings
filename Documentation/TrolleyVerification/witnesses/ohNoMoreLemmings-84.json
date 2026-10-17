@@ -79,6 +79,7 @@
     "stateHash" : "6b54b8354093ce234954ef83782463bf91ed88fb4097c5c4bf99160ccbd3e875",
     "ticks" : 2160
   },
+  "initialLevelFingerprint" : "71aa7f3ce4fe0819e9d2ff92bee8334da96dbe6388b666eca2cc467242cdb5bb",
   "initialStateHash" : "4744f62debb160c4985bf2ffa672fe737d2e208401227f43567a04d3d65ff07a",
   "number" : 5,
   "rank" : "Havoc",
