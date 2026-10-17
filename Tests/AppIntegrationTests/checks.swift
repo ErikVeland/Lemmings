@@ -3593,7 +3593,11 @@ extension AppDelegate {
       return view.subviews.compactMap(findGuide).first
     }
     guard let guide = sheet.contentView.flatMap(findGuide) else { throw IntegrationFailure(message: "Missing command reference") }
-    try check(guide.commands.contains { $0.keys == "Escape" } && guide.commands.contains { $0.keys == "N" }, "Guide omitted navigation bindings")
+    // Rows can list alternatives, such as "Escape / Q". Check each listed key.
+    func lists(_ key: String) -> Bool {
+      guide.commands.contains { $0.keys.components(separatedBy: " / ").contains(key) }
+    }
+    try check(lists("Escape") && lists("N"), "Guide omitted navigation bindings")
     guide.search.stringValue = "rewind"; guide.refresh()
     try check(!guide.filtered.isEmpty && guide.filtered.allSatisfy { $0.action.localizedCaseInsensitiveContains("rewind") }, "Command search did not filter")
     guide.search.stringValue = "no-command-matches-this"; guide.refresh()

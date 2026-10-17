@@ -358,9 +358,10 @@ print "==> Building and notarising Developer ID standard target (full soundtrack
 build_app "$project_dir" "$standard_dir" 0 full
 check_music_scope "$standard_app" full || fail "The update build does not carry the full soundtrack."
 print "==> Gate 6: running app integration tests"
-LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-localisation-tests.sh" ||
+LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-localisation-tests.sh" ||
   fail "The language catalogue or picker regressions failed. Do not release this build."
-LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
+# Mechanical integration tests stay headless. Only the launch checks need the real desktop.
+LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
   fail "The app integration tests failed. Do not release this build."
 sign_developer_id "$standard_app"
 notarise_app "$standard_app" "$run_dir/standard-submission.zip" "$standard_zip"
