@@ -29,6 +29,10 @@ import NxlvKit
     public private(set) var storageError: String?
     private let file: URL
     private var recordFile: ArcadeRecordFile
+    /// Every records write runs on this queue, in order. A synchronous save waits for
+    /// earlier background saves, so it never races or overtakes them.
+    private let writer = DispatchQueue(label: "academy.glasscode.lemmings.records-writer", qos: .userInitiated)
+    private var saveGeneration = 0
     private let recoveryStore: RunRecoveryStore
     public private(set) var storageNotice: String?
     private var canWrite = true
@@ -287,6 +291,7 @@ import NxlvKit
     }
     /// Reads the records file again, for example after another copy of the app changed it.
     @discardableResult public func reloadRecords() -> Bool {
+        flushPendingSaves()
         let reopened = ArcadeRecordFile(url: file)
         do {
             records = try reopened.load() ?? ArcadeRecords()
@@ -305,6 +310,7 @@ import NxlvKit
         let manager = FileManager.default
         let stamp = UUID().uuidString
         let previousProfiles = records.profiles.map(\.id)
+        flushPendingSaves()
         do {
             for url in [file, recordFile.backupURL] where manager.fileExists(atPath: url.path) {
                 try manager.moveItem(at: url, to: url.deletingLastPathComponent()
@@ -412,16 +418,39 @@ import NxlvKit
     }
     public func save() {
         guard canWrite else { return }
+        saveGeneration += 1
+        let file = recordFile, snapshot = records
         do {
-            try recordFile.save(records)
+            try writer.sync { try file.save(snapshot) }
             storageError = nil
             notifyProgressChanged()
         } catch {
-            storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
-                ?? L10n.text("Records were not saved. Check free space and folder access.")
-            if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
+            saveFailed(error)
         }
     }
+    /// Writes without blocking the main thread. Use it only where a later failure
+    /// can be reported through `storageError` instead of rolling the change back.
+    private func saveInBackground() {
+        guard canWrite else { return }
+        saveGeneration += 1
+        let generation = saveGeneration, file = recordFile, snapshot = records
+        writer.async { [weak self] in
+            let failure: Error?
+            do { try file.save(snapshot); failure = nil } catch { failure = error }
+            Task { @MainActor in
+                // A later save owns the reported state.
+                guard let self, self.saveGeneration == generation else { return }
+                if let failure { self.saveFailed(failure) } else { self.storageError = nil; self.notifyProgressChanged() }
+            }
+        }
+    }
+    private func saveFailed(_ error: Error) {
+        storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
+            ?? L10n.text("Records were not saved. Check free space and folder access.")
+        if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
+    }
+    /// Waits for background saves. Call it before the app quits.
+    public func flushPendingSaves() { writer.sync {} }
     @discardableResult public func mergeCloudRecords(_ incoming: ArcadeRecords, profileID: String) throws -> Bool {
         guard canWrite, storageError == nil else { throw SequelDataError.invalid(L10n.text("Local records are not writable.")) }
         let previous = records
@@ -542,8 +571,14 @@ import NxlvKit
             ?? (prior == nil ? .fresh : .restartDuringPlay)
         records.beginTrolleyAttempt(.init(id: id, profileID: profileID, conditions: conditions,
             parentAttemptID: completed?.id ?? prior?.id, kind: kind))
-        save()
-        guard storageError == nil else { records = previous; return false }
+        // A start only links retries. It must not delay the level entry with a full records write.
+        guard storageError == nil else {
+            // After a failed write, retry synchronously so the caller still learns the result.
+            save()
+            guard storageError == nil else { records = previous; return false }
+            return true
+        }
+        saveInBackground()
         return true
     }
     public func acceptMaximum(_ evidence: TrolleyMaximum, conditions: TrolleyConditions, assisted: Bool) throws {

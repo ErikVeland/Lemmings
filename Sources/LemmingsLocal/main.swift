@@ -646,7 +646,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
+  func applicationWillTerminate(_ notification: Notification) {
+    saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush(); ArcadeStore.shared.flushPendingSaves()
+  }
 
   private let cloudTransport = AppleGameProgressTransport()
   private var cloudProgress: GameCenterProgressSync?

@@ -426,6 +426,8 @@ func testEngineFamilies() throws {
     store.beginAttempt(id: retry, profileID: ArcadeProfile.legacyID, level: level(c), previousID: first)
     try require(store.records.trolley.starts.last?.kind == .retryAfterSuccess, "Store retry path")
     try require(store.progressKey("ClassicGameProgress.lemmings") == "ClassicGameProgress.lemmings", "Legacy campaign namespace moved")
+    // Starts save in the background. A flush makes them durable before another reader opens the file.
+    store.flushPendingSaves()
     try require(ArcadeStore(file: file).records == store.records, "Store did not persist history")
     let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
     let view = ArcadeView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720)); view.useArtwork(artwork)

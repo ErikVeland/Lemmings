@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 
 /// Versioned conditions for rescue comparisons. Presentation and audio settings are deliberately absent.
-public struct TrolleyConditions: Codable, Equatable, Sendable {
+public struct TrolleyConditions: Codable, Hashable, Sendable {
     public let gameID: String
     public let packID: String
     public let levelID: String
@@ -26,10 +26,14 @@ public struct TrolleyConditions: Codable, Equatable, Sendable {
         self.population = population; self.rescueRequirement = rescueRequirement; self.startingSkills = startingSkills
         self.timeLimitSeconds = timeLimitSeconds; self.modifiers = modifiers; self.rewindPolicy = rewindPolicy
     }
+    /// Boards read this for every stored attempt, so each distinct set of conditions is hashed once.
     public var fingerprint: String {
+        if let cached = TrolleyFingerprintCache.shared.value(for: self) { return cached }
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         // All fields are validated before a completed attempt can enter a board.
-        return SHA256.hash(data: (try? encoder.encode(self)) ?? Data()).map { String(format: "%02x", $0) }.joined()
+        let value = SHA256.hash(data: (try? encoder.encode(self)) ?? Data()).map { String(format: "%02x", $0) }.joined()
+        TrolleyFingerprintCache.shared.insert(value, for: self)
+        return value
     }
     public func comparisonID(assisted: Bool) -> String { "trolley-v1:\(fingerprint):\(assisted ? "assisted" : "direct")" }
     public var maximumPopulation: Int? {
@@ -193,5 +197,22 @@ final class TrolleyAssessmentCache: @unchecked Sendable {
         if entries[source.id] == nil { order.append(source.id) }
         entries[source.id] = Entry(source: source, maximum: maximum, language: language, result: result)
         while order.count > capacity { entries.removeValue(forKey: order.removeFirst()) }
+    }
+}
+
+/// Conditions are immutable values, so a fingerprint never goes stale. The bound only limits memory.
+final class TrolleyFingerprintCache: @unchecked Sendable {
+    static let shared = TrolleyFingerprintCache()
+    private let lock = NSLock()
+    private var values: [TrolleyConditions: String] = [:]
+    private let capacity = 4096
+    func value(for conditions: TrolleyConditions) -> String? {
+        lock.lock(); defer { lock.unlock() }
+        return values[conditions]
+    }
+    func insert(_ value: String, for conditions: TrolleyConditions) {
+        lock.lock(); defer { lock.unlock() }
+        if values.count >= capacity { values.removeAll(keepingCapacity: true) }
+        values[conditions] = value
     }
 }
