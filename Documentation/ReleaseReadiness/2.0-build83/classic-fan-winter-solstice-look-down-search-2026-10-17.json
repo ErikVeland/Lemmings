@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "31868d5fd753ca325be77abc6d23e90fbac14ce5",
+  "scope": "Current-source route probes for two exact bundled Classic fan members. Imported content is excluded.",
+  "resources": {
+    "resourceApp": "Ultimate Lemmings 1.9.1 build 76",
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "inputsMatch": "The retained build 85 fan-pack manifest records these bundled pack inputs. This search does not certify a packaged build 86 app.",
+    "packs": [
+      {
+        "packID": "fan:lldb-220",
+        "archive": "0220-AkseliPack01.zip",
+        "sha256": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198"
+      },
+      {
+        "packID": "fan:lldb-183",
+        "archive": "0183-SeverSet1.zip",
+        "sha256": "2e003941486e59419574c4fe954a5063db4cb9c1b61f0d51b7b1e556af53b669"
+      }
+    ]
+  },
+  "solver": {
+    "buildCommand": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/build-classic-solver.sh",
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "runtimeLibrary": ".build/classic-solver/libNxlvKit.dylib",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+    "runtimeSource": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+    "runtimeSourceSHA256": "c9c21f77f48a2827c22eb61b78127627fc4f17e4060d277363f01e4679731c36",
+    "toolchain": "Apple Swift 6.3.3, Xcode developer directory"
+  },
+  "targets": [
+    {
+      "identity": "fan:lldb-220/AkseliPack01.dat#3",
+      "title": "Winter Solstice",
+      "initialStateHash": "03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+      "levelFingerprint": "715a28aa0e7097b15bca2d2eab0a14ec8c18b4a362fb6eaceb9925422354d39b",
+      "auditStatus": "replay-failed",
+      "candidateReplay": {
+        "source": "Artifacts/LearningJourney/candidate-solutions.json#03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+        "recordedExpected": "9/9 saved at tick 2596",
+        "currentAudit": "Replay mismatch: expected 9, got 0. Candidate metadata matches this target.",
+        "reconciliation": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-state-hash-alias-reconciliation-2026-10-17.json"
+      },
+      "searches": [
+        {
+          "mode": "adaptive beam",
+          "seconds": 300,
+          "beamWidth": 16384,
+          "fallback": 20,
+          "refire": 10,
+          "expandedCandidates": 859190,
+          "tick": 149,
+          "released": 9,
+          "lost": 0,
+          "active": 9,
+          "bestSaved": "0/9",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "single-skill sweep",
+          "initialRate": 80,
+          "assignments": 14098,
+          "completed": 14098,
+          "deadlineExpired": false,
+          "bestSaved": "0/9",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "seeded continuation from search partial",
+          "seconds": 300,
+          "beamWidth": 16384,
+          "expandedCandidates": 490877,
+          "elapsedSeconds": 116,
+          "tick": 184,
+          "released": 10,
+          "lost": 0,
+          "active": 10,
+          "bestSaved": "0/9",
+          "prefixEvents": 13,
+          "prefixSHA256": "ef37a74cfe9502bd1a9fe21606592b4c1a8af2bd2dcc7eb0f80ca97c2fdda6e2",
+          "seedPartialSHA256": "fe65b24eca6f78c9b01e9cb6f8d4f6c814c0526cd50c00ba94988afd4be99cda",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "direct-exit-distance beam",
+          "seconds": 300,
+          "beamWidth": 16384,
+          "expandedCandidates": 849301,
+          "tick": 111,
+          "released": 5,
+          "lost": 0,
+          "active": 5,
+          "bestSaved": "0/9",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "continuation from the retained failed candidate",
+          "seconds": 300,
+          "beamWidth": 16384,
+          "expandedCandidates": 895825,
+          "prefixEvents": 12,
+          "prefixSHA256": "9cf72b727cb68731173a9205c17c7db832334ff9dd620723c2dcb8591017fae3",
+          "bestSaved": "0/9",
+          "result": "UNSOLVED"
+        }
+      ],
+      "closureEffect": "No current winning replay was produced. The candidate remains rejected and the route remains open.",
+      "auditSource": "0220-AkseliPack01.zip/AkseliPack01.dat#3",
+      "auditStateHash": "03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+      "auditLevelFingerprint": "715a28aa0e7097b15bca2d2eab0a14ec8c18b4a362fb6eaceb9925422354d39b"
+    },
+    {
+      "identity": "fan:lldb-183/SeverSet1.dat#6",
+      "title": "Look Down!",
+      "initialStateHash": "02862bd32487cf2f60f1d6c8f862d8769fd1d6fb3b273614bfae95a9541063a8",
+      "levelFingerprint": "1885c00d686f60a40fe0bfda120f3bd1329b31b880ada16b88a22c07db4f1177",
+      "auditStatus": "rendered-and-smoke-tested-only",
+      "configuration": {
+        "lemmings": 20,
+        "required": 19,
+        "releaseRate": 1,
+        "skills": [
+          "bomber",
+          "blocker",
+          "builder",
+          "miner"
+        ],
+        "geometry": "Two hatches near a central exit. Two triggered traps flank a steel floor."
+      },
+      "searches": [
+        {
+          "mode": "adaptive beam",
+          "seconds": 300,
+          "beamWidth": 16384,
+          "expandedCandidates": 488167,
+          "elapsedSeconds": 178,
+          "tick": 228,
+          "released": 20,
+          "lost": 1,
+          "active": 19,
+          "bestSaved": "0/19",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "single-skill sweep",
+          "initialRate": 1,
+          "assignments": 554,
+          "completed": 554,
+          "deadlineExpired": false,
+          "bestSaved": "0/19",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "single-skill sweep",
+          "initialRate": 99,
+          "assignments": 2420,
+          "completed": 2420,
+          "deadlineExpired": false,
+          "bestSaved": "0/19",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "Builder then Miner sweep",
+          "initialRate": 1,
+          "firstWindowTicks": "1..176",
+          "secondInputGapTicks": "1..100",
+          "firstSkillAssignments": 132,
+          "secondSkillAssignments": 19895,
+          "completed": 19895,
+          "tick": 355,
+          "released": 6,
+          "lost": 2,
+          "active": 2,
+          "bestSaved": "2/19",
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "two-skill ordered-pair sweep",
+          "initialRate": 99,
+          "firstWindowTicks": "1..176",
+          "secondInputGapTicks": "1..100",
+          "skillPairsTested": [
+            [
+              "builder",
+              "miner",
+              567,
+              165090
+            ],
+            [
+              "builder",
+              "bomber",
+              567,
+              192214
+            ],
+            [
+              "builder",
+              "blocker",
+              567,
+              165090
+            ],
+            [
+              "miner",
+              "builder",
+              567,
+              165219
+            ],
+            [
+              "miner",
+              "bomber",
+              567,
+              192635
+            ],
+            [
+              "miner",
+              "blocker",
+              567,
+              165219
+            ],
+            [
+              "bomber",
+              "builder",
+              719,
+              205680
+            ],
+            [
+              "bomber",
+              "miner",
+              719,
+              205680
+            ],
+            [
+              "bomber",
+              "blocker",
+              719,
+              205680
+            ],
+            [
+              "blocker",
+              "builder",
+              567,
+              160279
+            ],
+            [
+              "blocker",
+              "miner",
+              567,
+              160279
+            ],
+            [
+              "blocker",
+              "bomber",
+              567,
+              203162
+            ]
+          ],
+          "orderedPairCount": 12,
+          "completedContinuations": 2186227,
+          "deadlineExpired": false,
+          "winningRoutes": 0,
+          "result": "UNSOLVED"
+        },
+        {
+          "mode": "direct-exit-distance beam",
+          "initialRate": 99,
+          "seconds": 300,
+          "beamWidth": 16384,
+          "expandedCandidates": 185419,
+          "elapsedSeconds": 75,
+          "tick": 134,
+          "released": 20,
+          "lost": 1,
+          "active": 19,
+          "bestSaved": "0/19",
+          "result": "UNSOLVED"
+        }
+      ],
+      "strictReplayCandidates": 0,
+      "closureEffect": "No route changed status. The target remains unverified.",
+      "auditSource": "0183-SeverSet1.zip/SeverSet1.dat#6",
+      "auditStateHash": "02862bd32487cf2f60f1d6c8f862d8769fd1d6fb3b273614bfae95a9541063a8",
+      "auditLevelFingerprint": "1885c00d686f60a40fe0bfda120f3bd1329b31b880ada16b88a22c07db4f1177"
+    }
+  ],
+  "outcome": {
+    "attemptedExactLevels": 2,
+    "verifiedRoutesAdded": 0,
+    "strictReplayCandidates": 0,
+    "fanWinningRoutesAfter": 2403,
+    "bundledFanLevels": 6020,
+    "openFanRoutesAfter": 3617,
+    "interpretation": "The current-source searches produced no verified route. Winter Solstice remains a replay-failed candidate. Look Down! remains rendered and smoke tested without a winning candidate. Bounded search results do not prove either level impossible. Imported content remains excluded."
+  },
+  "limits": [
+    "The route search used exact bundled pack members from the installed 1.9.1 build 76 resource tree.",
+    "No candidate was promoted without a strict exact-member replay.",
+    "The search does not close original-engine equivalence or certify a release package.",
+    "Imported content remains open-ended and outside this bundled audit."
+  ]
+}

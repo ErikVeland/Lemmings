@@ -174,6 +174,8 @@ func testPlantedRouteIsFound() throws {
         check(false, "The search found no winning route on the planted level"); return
     }
     check(best.game.saved == 3, "The search saved \(best.game.saved) of 3 on the planted level, expected the crowd route")
+    check(report.peakPendingCandidates > 0 && report.peakPendingCandidates <= 32,
+          "The 16-wide search retained \(report.peakPendingCandidates) pending candidates, expected at most 32")
     // Replay the found events strictly from a fresh runtime through the shared cursor.
     var replay = try fixture(wall: true)
     var cursor = Lemmings2EventCursor()

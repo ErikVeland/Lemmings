@@ -17,6 +17,7 @@ struct SearchReport: Sendable {
     var decisionPoints = 0
     var fallbackPoints = 0
     var expanded = 0
+    var peakPendingCandidates = 0
     var seconds = 0.0
 }
 
@@ -87,9 +88,11 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
         consider(tail)
     }
     var beam = root.game.isComplete ? [] : [root]
+    let pendingCandidateLimit = max(1, limits.beamWidth) * 2
 
     search: while !beam.isEmpty && !timeExpired() {
         var next: [Candidate] = []
+        var seedLineFallback: Candidate?
         for node in beam {
             if timeExpired() { break search }
             if node.depth >= limits.maxDepth {
@@ -111,14 +114,21 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
                 settle(&child, decision)
                 consider(child)
                 if timeExpired() { break search }
-                if !child.game.isComplete { next.append(child) }
+                if !child.game.isComplete {
+                    if child.onSeedLine && seedLineFallback == nil { seedLineFallback = child }
+                    next.append(child)
+                    report.peakPendingCandidates = max(report.peakPendingCandidates, next.count)
+                    if next.count >= pendingCandidateLimit {
+                        next = Array(mergeByFingerprint(next).prefix(limits.beamWidth))
+                    }
+                }
             }
         }
         if timeExpired() { break }
         beam = Array(mergeByFingerprint(next).prefix(limits.beamWidth))
         // A seed line that scores no better than harmful variants would otherwise leave the beam
         // long before the decision point where one change improves it.
-        if !beam.contains(where: \.onSeedLine), let line = next.first(where: \.onSeedLine) {
+        if !beam.contains(where: \.onSeedLine), let line = seedLineFallback {
             if beam.count == limits.beamWidth { beam.removeLast() }
             beam.append(line)
         }

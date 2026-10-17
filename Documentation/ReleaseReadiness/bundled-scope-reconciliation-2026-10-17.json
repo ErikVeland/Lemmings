@@ -4,12 +4,27 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "a78098f254d816325647a44de570029df2083df6",
-    "originMain": "a78098f254d816325647a44de570029df2083df6",
-    "fetchHead": "a78098f254d816325647a44de570029df2083df6",
+    "head": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "originMain": "833f396b9edee8f0059deb010286439ac97c4e0a",
+    "fetchHead": "833f396b9edee8f0059deb010286439ac97c4e0a",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "Fetched origin/main at a78098f254d816325647a44de570029df2083df6. The latest commit adds Trolley audit tooling, replay evidence and tests. It changes no game simulation or level data, and the Trolley engine fingerprint remains unchanged. The standard Trolley verifier now accepts explicit resource/output paths. A replay-only audit at current engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c checked all 615 exact configurations across 562 campaign identities. Conditions, statuses, best outcomes, witnesses and candidate-history counts match the prior catalogue. It packages 294 population certificates and 315 rescue records; six configurations remain unknown. Classic fan routes, the L2 Gold ark, 17 L3 fixtures, NeoLemmix style dependencies and source-fidelity gates remain open. Published package evidence remains macOS 2.0.3 build 86; build 87 is prepared on main. New population-60 searches for the two L2 Trolley rows found no route: five bounded runs ended at 0/60, and one wider run was terminated before a result. Both rows remain UNKNOWN. A fresh fetch before continuing verified that HEAD, origin/main and FETCH_HEAD all match a78098f254d816325647a44de570029df2083df6 (zero ahead/behind). Current-source Egyptian 29 searches add no route and leave fixture 229 unchanged.",
-    "postFastForwardValidation": "At b0db98cf (the full Trolley replay audit ran at this source; the later dd0f1578 audio-only change leaves its engine fingerprint unchanged), Scripts/run-classic-dos-rewind-tests.sh passes all focused checks, including replay export after terrain edits; it uses installed 1.9.1 build 76 data and does not certify build 87. python3 Tools/TrolleyVerification/catalogue.py check passes 294 population proofs, 315 rescue records and replay hashes. The full replay-only verifier checked all 615 exact rescue configurations across 562 campaign identities at engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c; all identity conditions and outcomes match the prior catalogue. python3 Scripts/verify-l3-mole-trace.py passes its 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, 673 repeated source samples and four tunnel-edge checks. A direct production-to-DOS comparison at dd0f1578 matches 0/329 positions; the first mismatch is tick 2. The later a78098f2 commit changes no L3 runtime source. None of these checks closes the six unknown rescue configurations, all 3,617 Classic fan route gaps, L2 Gold ark, 17 L3 route fixtures, NeoLemmix dependencies, full engine fidelity or release-package acceptance."
+    "currentMainUpdate": "A fresh fetch confirms HEAD, origin/main and FETCH_HEAD all equal 833f396b9edee8f0059deb010286439ac97c4e0a. The latest commit, 833f396b, updates appcast.xml for 2.0.4 build 87 only; it changes no engine, loader, solver or bundled level data. The current-main reconciliation records that the latest route and replay evidence remains source-current for the affected engine files. Seven completed bounded population-60 searches found no Trolley route; the bounded-frontier Cavelems 6 run completed at beam 32,768 and saved 0/60. Both Trolley rows remain UNKNOWN.",
+    "postFastForwardValidation": "At b0db98cf, the full replay-only Trolley verifier checked all 615 exact rescue configurations across 562 campaign identities against engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c; conditions and outcomes match the prior catalogue. The later current-main audit confirms those engine inputs are unchanged. The L3 trace verifier checks 53 recorded DOS/prototype positions, repeated source traces and four tunnel-edge checks, but does not establish production parity. The direct production-to-DOS comparison at dd0f1578 matches 0/329 positions. Commit 833f396b changes appcast.xml only. Open bundled gaps remain: 3,617 Classic fan routes, the L2 Gold Ark and two UNKNOWN Trolley rows, 17 L3 route fixtures, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded here.",
+    "uncommittedPaths": [
+      "Documentation/Lemmings2Completion/README.md",
+      "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json",
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md",
+      "Tests/Lemmings2SolverTests/main.swift",
+      "Tools/Lemmings2Solver/LevelRun.swift",
+      "Tools/Lemmings2Solver/Search.swift"
+    ],
+    "aheadBehindOriginMain": {
+      "ahead": 0,
+      "behind": 0
+    }
   },
   "releasePackageStates": {
     "macOS": {
@@ -17,12 +32,18 @@
       "build": 86,
       "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
       "packageEvidence": "Build 86 records no non-localisation resource-index differences from build 85 and reuses selected build 85 engine evidence. The complete build 86 app audit and campaign closure were not rerun.",
-      "status": "Published, with bundled engine/content closure still open.",
+      "status": "The appcast advertises 2.0.4 build 87. The latest package acceptance evidence retained here is 2.0.3 build 86. Bundled engine/content closure remains open.",
       "evidence": [
         "2.0.3-build86/distribution.json",
         "2.0.3-build86/README.md",
         "2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json"
-      ]
+      ],
+      "updateFeed": {
+        "advertisedVersion": "2.0.4",
+        "build": 87,
+        "sourceCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+        "evidence": "The appcast contains the build 87 package and delta enclosures. This reconciliation has no build 87 distribution record or accepted-package audit."
+      }
     },
     "iOS": {
       "lastInstalledCandidate": "2.0 build 8",
@@ -42,17 +63,18 @@
     "classic": {
       "scope": "352 official/conversion levels and 6,020 fan levels across 535 fan packs in the Mac bundle evidence.",
       "verified": "All 352 official/conversion routes have identity-pinned winning replay evidence. Fan audit has 2,403 verified winning routes, 18 failed candidates, 3,599 rows without matching candidates, and 3,617 levels without verified wins.",
-      "open": "The Mac fan-level closure gate requires winning routes. The 3,617 missing wins remain open. The older fan load/conversion gate covers load/start and the 60 conversions only.",
+      "open": "The Mac fan-level closure gate requires winning routes. The 3,617 missing wins remain open. Current-source exact-member searches for Winter Solstice and Look Down! found no current winning route; all added candidates still need strict replay. The older fan load/conversion gate covers load/start and the 60 conversions only.",
       "evidence": [
         "2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json",
         "2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
         "gates.json"
-      ]
+      ],
+      "targetedSearchRecord": "2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json"
     },
     "lemmings2": {
       "scope": "120 campaign levels, 70 carry-over variants and 12 continuous tribe chains in the Mac content evidence.",
       "verified": "All 120 standalone routes, 70 carry-over variants and 12 chains replay successfully.",
-      "open": "The chains end with one survivor and a Bronze talisman. Gold Ark completion and source-engine parity remain open. Five completed bounded population-60 searches for Cavelems 6 and Highland 10 found no route; one wider Cavelems 6 attempt ended before a result. Both Trolley rows remain UNKNOWN. See the population-60 search record.",
+      "open": "The chains end with one survivor and a Bronze talisman. Gold Ark completion and source-engine parity remain open. Seven completed bounded population-60 searches for Cavelems 6 and Highland 10 found no route. The latest Cavelems 6 run used bounded-frontier compaction, completed at a 32,768 beam, and saved 0/60. Both Trolley rows remain UNKNOWN. See the population-60 search record.",
       "evidence": [
         "../Lemmings2Completion/README.md",
         "2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
@@ -88,5 +110,10 @@
     "Player-imported content is outside bundled closure counts. Keep support claims limited by engine, version and tested features."
   ],
   "overallStatus": "open",
-  "reason": "The published Mac bundle has unresolved route, fidelity, style-rights and source-parity gaps. The last installed iOS candidate does not contain the full 2.0 engine scope, and no accepted full-scope iOS package is recorded."
+  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. The appcast advertises build 87, but retained package acceptance evidence is for build 86. The latest installed iOS candidate does not contain the full 2.0 engine scope. Imported content remains open-ended and is tracked separately.",
+  "importedContentStatus": {
+    "scope": "Open-ended; excluded from bundled closure counts.",
+    "supportRule": "State support by engine, content version and verified features. Do not infer full support for every imported pack or level.",
+    "bundledDependencyRule": "A dependency required by an indexed bundled level remains in bundled scope even if its source is community content."
+  }
 }

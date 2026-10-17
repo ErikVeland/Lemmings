@@ -270,7 +270,7 @@ populations and orphan variants.
 
 ## 17 October current-main check
 
-`HEAD` and `origin/main` match at `368e7e72`. The L2 runtime, route and event
+`HEAD` and `origin/main` match at `833f396b`. The L2 runtime, route and event
 verifiers, and completion fixtures have no changes after the 16 October source
 check at `9a95012e`. Its 120 standalone routes, 70 carry-over variants and 12
 chains remain source-current for the recorded build 83 payload. This does not
@@ -280,14 +280,21 @@ close original-engine parity or the Gold Ark requirement.
 
 The Trolley audit has no population-60 witness for Cavelems 6 or Highland 10.
 Their standalone fixtures use populations two and four. I searched each level at
-population 60 with an 8,192-state beam for 180 seconds. The seeded searches used
-the accepted standalone route as input. None of the four searches found a win.
+population 60 with an 8,192-state beam for 180 seconds. Each seeded search used
+the accepted standalone route. None of the four initial searches found a win.
 
 The best saved count was 0 of 60 in the four 180-second runs. A seeded
 600-second Cavelems 6 search also saved 0 of 60 after 1,275,815 expansions.
-A 32,768-state attempt stopped with exit 137 before it returned a result. The
-cause was not confirmed. These bounded searches do not prove that either level
-is unsolvable. They leave both Trolley targets open and do not prove original
-DOS parity. See the [search record]
-(unknown-trolley-population60-search-2026-10-17.json) for exact conditions,
+A later 300-second Highland 10 search used a 16,384-state beam, one-pixel
+action sampling and a 24-tick refire interval. It expanded 905,384 candidates
+and also saved 0 of 60.
+
+The first 32,768-state Cavelems 6 attempt stopped with exit 137. The cause was
+not confirmed. A bounded-frontier solver then completed a 600-second search
+with the same seed and beam width. It also used one-pixel action sampling and
+a 24-tick refire interval. It expanded 1,719,537 candidates and held at most
+65,536 pending candidates, but it still saved 0 of 60. These bounded searches
+do not prove that either level is unsolvable. Both Trolley targets remain open.
+The results do not prove parity with the original DOS game. See the [search
+record](unknown-trolley-population60-search-2026-10-17.json) for conditions,
 commands, hashes and candidate counts.

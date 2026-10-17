@@ -43,7 +43,7 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
     var current = seed
     var best: Candidate?, bestPartial: Candidate?
     var winners: [Int: Candidate] = [:]
-    var points = 0, fallback = 0, expanded = 0, rounds = 0
+    var points = 0, fallback = 0, expanded = 0, peakPendingCandidates = 0, rounds = 0
     while Date() < deadline {
         rounds += 1
         let line = decisionCount(start: start, seed: current, limits: limits, until: deadline)
@@ -52,6 +52,7 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
         guard limits.budgetSeconds > 0 else { break }
         let report = search(from: start, seed: current, bounds: AimBounds(level: level), limits: limits)
         points += report.decisionPoints; fallback += report.fallbackPoints; expanded += report.expanded
+        peakPendingCandidates = max(peakPendingCandidates, report.peakPendingCandidates)
         for winner in report.winners where winners[winner.game.saved].map({ Score($0) < Score(winner) }) ?? true {
             winners[winner.game.saved] = winner
         }
@@ -71,7 +72,7 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
             break
         }
     }
-    let summary = "density \(density) per 100 ticks, decision points \(points) (fallback \(fallback)), expanded \(expanded), \(rounds) rounds to beam \(limits.beamWidth), \(Int(Date().timeIntervalSince(started))) s"
+    let summary = "density \(density) per 100 ticks, decision points \(points) (fallback \(fallback)), expanded \(expanded), peak pending \(peakPendingCandidates), \(rounds) rounds to beam \(limits.beamWidth), \(Int(Date().timeIntervalSince(started))) s"
     guard let best else {
         return LevelResult(status: .unsolved, witness: nil,
             partial: bestPartial.map { witness(finish($0, until: deadline), level: level, population: population) },

@@ -78,6 +78,31 @@
             "bestSaved": 0,
             "result": "UNSOLVED",
             "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 32768 --budget 600 --depth 120 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded-beam32768"
+          },
+          {
+            "seed": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json",
+            "budgetSeconds": 600,
+            "beamWidth": 32768,
+            "depth": 120,
+            "decisionPoints": 1719538,
+            "expanded": 1719537,
+            "fallback": 0,
+            "peakPendingCandidates": 65536,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "partialSHA256": "48ec3b816f9591bf1ad112e74c9032e9413744dd5c3455e58cf0eab5ddd3f169",
+            "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/solve-lemmings2-level.sh cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 32768 --budget 600 --depth 120 --cell 1 --refire 24 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded-beam32768-streamcompact",
+            "solverMemoryFix": "The bounded-frontier solver completed without the prior exit 137. It kept no more than twice the beam width in pending candidates. The search still found no route.",
+            "sourceHashesAtRun": {
+              "searchSHA256": "b90db64f1972a429817ecc309d0e25fee79bb0c3040b2ba451cac29671b7b3a1",
+              "levelRunSHA256": "246e08f46e954c85b907527c082487a19f14948b742e61d7060cf98892519efc",
+              "mainSHA256": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+              "solverSHA256": "6336d11224c7ea53e8063edcf3984115b3852cb3696f682223f2a625dbe99992",
+              "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+              "runtimeSHA256": "cefbb1755307379e95b4b089fd676fe31b5c1edb563b7ead3339ddf26062aee6",
+              "fixtureSHA256": "2fa2ec4fe1252502bce10c0e1f10504c525103b2b1bde4ee2f7c24a9f85834b3",
+              "levelSHA256": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5"
+            }
           }
         ]
       },
@@ -143,6 +168,22 @@
             "bestSaved": 0,
             "result": "UNSOLVED",
             "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 highland-10 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/highland-10.json --beam 8192 --budget 180 --depth 100 --out .build/lemmings-bundled-gap-20261017/highland10-pop60-seeded"
+          },
+          {
+            "seed": null,
+            "budgetSeconds": 300,
+            "beamWidth": 16384,
+            "depth": 120,
+            "cellPixels": 1,
+            "refireTicks": 24,
+            "decisionPoints": 905384,
+            "expanded": 905384,
+            "fallback": 14426,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "partialSHA256": "2aba985ca16072743cab435083721dd06faaa88793828aaa3fd470fc34803df7",
+            "command": "L3_PORTS_ROOT=unused .build/l2-solver/solver level Sources/Ports/Lemm2 highland-10 --population 60 --beam 16384 --budget 300 --depth 120 --cell 1 --refire 24 --out .build/lemmings-bundled-gap-20261017/highland10-pop60-beam16384-cell1",
+            "resourceNote": "Sources/Ports/Lemm2 resolves to the installed app resource tree, version 1.9.1 build 76. The search partial reports levelSHA256 fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8, matching the fixture and audited Trolley level condition. The L3_PORTS_ROOT environment prefix was unused by this L2 solver."
           }
         ]
       }
@@ -151,22 +192,34 @@
   "solver": {
     "buildCommand": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/solve-lemmings2-level.sh",
     "binary": ".build/l2-solver/solver",
-    "binarySHA256": "a51eaaad4a901bfc17e3d3dd1784e2b666ceffa43287c21172a62a206afa861a",
+    "binarySHA256": "6336d11224c7ea53e8063edcf3984115b3852cb3696f682223f2a625dbe99992",
     "runtimeLibrary": ".build/l2-solver/libNxlvKit.dylib",
     "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
     "toolchain": "Apple Swift 6.3.3, Xcode developer directory",
     "options": "--population 60 --beam 8192 --budget 180 --depth 100",
-    "seededRuns": "The same built solver was called directly because the repository script always rebuilds NxlvKit. No L2 or solver source changed between the build and these searches.",
-    "currentMainContinuity": "The solver binary was built at dd0f1578. The later a78098f2 commit changes only Trolley audit tooling, evidence and tests. It changes no L2 runtime, level, or solver source."
+    "seededRuns": "The initial six searches used the earlier solver hashes recorded with the 8,192 and 16,384-beam results. The latest search rebuilt the solver through the repository script after bounded-frontier compaction. Its binary and source hashes are recorded with that attempt.",
+    "currentMainContinuity": "The current main runtime, level data and fixture remain unchanged from the earlier source checks. The bounded-frontier solver change is local to this worktree and applies only to the latest search.",
+    "sourceHashesAtRun": {
+      "searchSHA256": "b90db64f1972a429817ecc309d0e25fee79bb0c3040b2ba451cac29671b7b3a1",
+      "levelRunSHA256": "246e08f46e954c85b907527c082487a19f14948b742e61d7060cf98892519efc",
+      "mainSHA256": "74acdeb67d867aa654f11277d64aece30052f4af00e623f4870d6f88543ddc2a",
+      "solverSHA256": "6336d11224c7ea53e8063edcf3984115b3852cb3696f682223f2a625dbe99992",
+      "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+      "runtimeSHA256": "cefbb1755307379e95b4b089fd676fe31b5c1edb563b7ead3339ddf26062aee6",
+      "fixtureSHA256": "2fa2ec4fe1252502bce10c0e1f10504c525103b2b1bde4ee2f7c24a9f85834b3",
+      "levelSHA256": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5"
+    }
   },
   "outcome": {
     "wins": 0,
     "newRoutes": 0,
     "trolleyStatusesChanged": 0,
-    "interpretation": "Five completed bounded searches ended without a route. Best saved count was 0 of 60 in every run. The existing routes at populations two and four do not establish a solution at population 60. One wider attempt ended before a result.",
-    "limits": "These search results do not prove either level unsolvable. They do not close the Trolley rescue targets or establish original DOS parity."
+    "interpretation": "Seven completed bounded searches ended without a population-60 route. Best saved count was 0 of 60 in every run. The 32,768-beam Cavelems 6 search now completes with bounded pending memory but still finds no route. The existing routes at populations two and four do not establish a solution at population 60.",
+    "limits": "These search results do not prove either level unsolvable. They do not close the Trolley rescue targets or establish original DOS parity.",
+    "completedBoundedSearches": 7,
+    "latestSearch": "Cavelems 6, seeded from the standalone fixture, 600 seconds, 32,768 beam, 1,719,538 decision points, 1,719,537 expanded, peak pending 65,536, best saved 0/60."
   },
-  "currentMainCommit": "a78098f254d816325647a44de570029df2083df6",
+  "currentMainCommit": "31868d5fd753ca325be77abc6d23e90fbac14ce5",
   "abortedAttempts": [
     {
       "levelID": "2:5",
@@ -176,7 +229,7 @@
       "depth": 120,
       "exitCode": 137,
       "result": "Process terminated before a final solver result. No candidate file was written.",
-      "interpretation": "Exit 137 is consistent with memory pressure, but the cause was not confirmed. This attempt does not support a route conclusion.",
+      "interpretation": "The earlier 32,768-beam attempt exited 137 before a final result. The cause was not confirmed. A later run with bounded frontier compaction completed at the same beam width.",
       "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 32768 --budget 600 --depth 120 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded-beam32768"
     }
   ]
