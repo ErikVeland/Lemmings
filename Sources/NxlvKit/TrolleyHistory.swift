@@ -113,7 +113,9 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
         return orphaned
     }
     public func personal(profileID: String, comparisonID: String? = nil) -> TrolleyPersonalRecords {
-        .init(attempts: attempts.map { $0.assessed(using: maxima[$0.comparisonID]?.current ?? TrolleyMaximum()) }, starts: starts, profileID: profileID, comparisonID: comparisonID)
+        // Assess only the attempts the records keep. Each assessment runs the analyser.
+        let mine = attempts.filter { $0.run.profileID == profileID && (comparisonID == nil || $0.comparisonID == comparisonID) }
+        return .init(attempts: mine.map { $0.assessed(using: maxima[$0.comparisonID]?.current ?? TrolleyMaximum()) }, starts: starts, profileID: profileID, comparisonID: comparisonID)
     }
     public func leaderboard(conditions: TrolleyConditions, assisted: Bool, board: TrolleyBoard) -> [TrolleyAttempt] {
         TrolleyLeaderboards.rank(attempts, comparisonID: conditions.comparisonID(assisted: assisted), board: board,
