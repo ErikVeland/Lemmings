@@ -136,7 +136,7 @@ Current source status:
 - Current main `b92386eb` fixes Classic rewind replay export to retain the
   starting level fingerprint after terrain edits. The focused rewind suite
   passes, including a digger replay. It used installed 1.9.1 build 76 data; it
-  does not certify the prepared build 87 package. See the [current-main
+  does not certify the 2.0.5 build 88 preparation. See the [current-main
   reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 - A 17 October 8,192-beam search tried three previously unattempted exact fan
   identities. Two full 60-second searches found no candidate win. The third
@@ -242,27 +242,40 @@ do not prove the level impossible. See the [candidate chain
 reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-10-16.json).
 
 The 15 October L3 Mole direction and patrol corrections match captured starting
-directions and no-input patrols. Main `183bc8a8` includes the explicit-steel
-contact change in the Mole excavation implementation. Its runtime suite passes.
-Production traces match 139/329 left-facing and 140/344 air-gap positions. The source fall after tick
-167 and two of four tunnel-edge checks remain unmatched.
+directions and no-input patrols. Main `e613a5e9` includes the source-based
+open-drop transition after a down-tunnel. Current main `0659e3a6` keeps the same
+L3 runtime source and passes the runtime suite. Production traces match 139/329
+left-facing positions and 179/344 air-gap positions. The air-gap fall matches
+the captured position through tick 183; the first post-drop patrol mismatch is
+at tick 184. Later movement and two of four tunnel-edge checks remain unmatched.
 
-The current-main audit at `183bc8a8` checks 416 fixtures: 399 exact double
-replays, zero stale-identity wins and 17 schedules that do not win (four standalone, 13
-carried). Six level-113 expected state hashes match current source. The strict
-gate passes 322 manifest and negative checks, then fails at standalone Shadow 7
-and carried fixture 107-1. The Mole mask, built-brick trigger and full rules
-remain open. The Mole change does not close these route gaps. Three bounded
-Shadow 7 searches before the steel-contact change found no route. They do not
-validate current main. See the [historical search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-currentmole-search-2026-10-17.json), [current-main fixture audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json), [current-main Mole record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json), [left-facing trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-left-facing-trace-2026-10-17.json) and [air-gap trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json).
+The fresh current-main audit at `e613a5e9` checks 416 fixtures: 399 exact double
+replays, zero stale-identity wins and 17 schedules that do not win (four standalone,
+13 carried). The strict gate passes 322 manifest and negative checks, then fails
+at standalone Shadow 7 and carried fixture 107-1. A historical worktree-only
+Mole cadence experiment raised air-gap trace matches from 179/344 to 191/344,
+but pointwise checks reject its 4/3-pixel rule: it differs from source at ticks
+185 and 190 shortly after landing. The runtime change and test were removed.
+The experiment and its searches are not current-main or release evidence. See
+the [rejected experiment record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json).
+The Mole excavation mask,
+built-brick trigger and remaining source rules remain open. This Mole change
+does not close the route gaps. Three bounded Shadow 7 searches before the
+steel-contact change found no route; they do not validate current main. See the
+[historical search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-shadow07-currentmole-search-2026-10-17.json),
+[current-main fixture audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json),
+[current-main Mole record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json),
+[left-facing trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-left-facing-e613a5e9-2026-10-17.json)
+and [air-gap trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-air-gap-e613a5e9-2026-10-17.json).
 
 Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site
 grid. Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded
 5,181,833, and seeded Egyptian 29 expanded 3,620,601. None found a route.
-The latest `aa21fa0e` commit changes trace evidence and its verifier, not the
-runtime. The advertised macOS 2.0.4 build 87 still lacks accepted-package
-evidence; the latest retained acceptance record is build 86. Imported content
-remains open-ended and is excluded from bundled closure counts. See the
+Main `0659e3a6` prepares macOS 2.0.5 build 88, iOS build 14 and tvOS build 4.
+The appcast still advertises macOS 2.0.4 build 87, and no build 88 package or
+acceptance record is present. The latest retained Mac acceptance record is
+build 86. Imported content remains open-ended and is excluded from bundled
+closure counts. See the
 [bundled-scope reconciliation](ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json)
 and [wider route searches](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-wide-route-searches-2026-10-16.json).
 Continue the separate validation work:

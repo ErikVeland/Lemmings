@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+  "runtimeSourceSHA256": "97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750",
+  "runtimeLibrarySHA256": "cf4043b517e395244b3c709b6b6c9e94cd862feb72fc90a95f3968aa7bcaf467",
+  "auditReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+  "result": {
+    "exitCode": 1,
+    "campaignManifest": "322 fixture hashes and coverage entries passed",
+    "refreshAndNegativeChecks": "passed",
+    "standaloneStrictRouteGate": "failed at 107.json after levels 1-30 and 101-106 passed",
+    "campaignStrictGate": "failed at carried fixture 107-1.json",
+    "interpretation": "The strict bundled L3 route and campaign gates remain open. The fresh 416-fixture audit gives 399 exact double replays, zero stale-identity wins and the same 17 route failures."
+  }
+}

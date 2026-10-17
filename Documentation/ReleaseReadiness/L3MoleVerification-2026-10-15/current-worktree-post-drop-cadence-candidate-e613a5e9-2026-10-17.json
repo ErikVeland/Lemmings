@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "status": "rejected experiment; runtime change removed after pointwise source comparison",
+  "baseCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+  "originMain": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+  "runtimeSourceSHA256": "28ae1dd095725f4b27621a11301551768e58eb3fbc1ec16a72c6c1866a0d3c8e",
+  "runtimeLibrarySHA256": "bc256a6926f0f37054d8a7c83576b6bc46af04f08a678831b5551c861e436cd2",
+  "runtimeChange": "Historical experiment: after an open drop, horizontal walking used a 4/3-pixel-per-tick accumulator. This runtime change was removed because the retained source trace does not follow that cadence consistently.",
+  "sourceBasis": {
+    "observation": "The source trace records feet at y=192 and centre x positions 112, 114, 115, 117, 118, 119, 120, 122 at ticks 182-189. The 4/3 candidate first differs at tick 185 (116 instead of 117), matches again at ticks 186-189, and differs at tick 190 (123 instead of 126).",
+    "comparison": "The historical cadence probe has 191/344 exact air-gap positions versus 179/344 on current main and 139/329 left-facing positions. Aggregate improvement does not establish a movement rule.",
+    "limitation": "Pointwise samples disprove a uniform 4/3 cadence across this post-drop segment. No replacement cadence is established. This experiment is not current runtime or release evidence."
+  },
+  "runtimeSuite": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/run-lemmings3-runtime-tests.sh",
+    "exitCode": 0,
+    "result": "Passed, including the new post-drop cadence regression."
+  },
+  "sourceTraces": {
+    "steel-air-gap": {
+      "exactPositionMatches": 191,
+      "samples": 344,
+      "matchingTickRanges": [
+        [
+          4,
+          4
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          184
+        ],
+        [
+          186,
+          189
+        ],
+        [
+          195,
+          196
+        ],
+        [
+          198,
+          201
+        ],
+        [
+          207,
+          208
+        ],
+        [
+          210,
+          213
+        ],
+        [
+          219,
+          220
+        ],
+        [
+          222,
+          225
+        ],
+        [
+          231,
+          232
+        ],
+        [
+          234,
+          237
+        ],
+        [
+          243,
+          244
+        ],
+        [
+          246,
+          248
+        ],
+        [
+          321,
+          321
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-worktree-cadence-air-gap-e613a5e9-2026-10-17.json",
+      "traceSHA256": "7221496883271609c10760e8337647114d95f480a0874f0566d0d2f70212afbf",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    },
+    "steel-left-facing": {
+      "exactPositionMatches": 139,
+      "samples": 329,
+      "matchingTickRanges": [
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          153
+        ],
+        [
+          173,
+          187
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-worktree-cadence-left-facing-e613a5e9-2026-10-17.json",
+      "traceSHA256": "d852c3dd2742331bb220c6c27358b88d36a6bb80dee6cbd18663ddbd49189f07",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    }
+  },
+  "fixtureAudit": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-e613-cadence-fixture-audit.json",
+    "rawReport": "L3MoleVerification-2026-10-15/current-worktree-cadence-fixture-audit-e613a5e9-2026-10-17.json",
+    "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "rawReportFileSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "staleIdentityWins": 0,
+    "routeFailures": 17,
+    "standaloneFailures": 4,
+    "carriedFailures": 13,
+    "result": "No new route regression. The same 17 schedules fail."
+  },
+  "strictGate": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-mole-production-trace L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+    "exitCode": 1,
+    "manifest": "322 fixture hashes and coverage passed.",
+    "negativeChecks": "passed.",
+    "standalone": "Fails at 107.json.",
+    "campaign": "Fails at carried fixture 107-1.json.",
+    "result": "Strict bundled L3 closure remains open."
+  },
+  "shadow07Searches": {
+    "solverSHA256": "4561549c64dddd6710bbbdc2d1b100ee10387f043d0098175cffe55bf8a8ca0e",
+    "level": 107,
+    "result": "No winning route found in either bounded search. The candidate adds no fixture route and does not close the strict gate.",
+    "runs": [
+      {
+        "kind": "unseeded",
+        "budgetSeconds": 60,
+        "beamWidth": 8192,
+        "toolSiteCellPixels": 2,
+        "pairedActors": true,
+        "fewerInputsFirst": true,
+        "decisionPoints": 4827,
+        "depth": 4867,
+        "roundsToBeam": 1,
+        "expandedCandidates": 486694,
+        "bestSaved": 0,
+        "bestLost": 0,
+        "result": "UNSOLVED"
+      },
+      {
+        "kind": "seeded-through-1666",
+        "budgetSeconds": 60,
+        "beamWidth": 8192,
+        "toolSiteCellPixels": 2,
+        "pairedActors": true,
+        "fewerInputsFirst": true,
+        "seedFixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+        "seedThroughTick": 1666,
+        "refreshEngineSeed": true,
+        "decisionPoints": 4288,
+        "depth": 4328,
+        "roundsToBeam": 1,
+        "expandedCandidates": 554816,
+        "bestSaved": 0,
+        "bestLost": 0,
+        "result": "UNSOLVED"
+      }
+    ]
+  },
+  "egyptian06Search": {
+    "solverSHA256": "4561549c64dddd6710bbbdc2d1b100ee10387f043d0098175cffe55bf8a8ca0e",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/solve-lemmings3-levels.sh 206 --budget 60 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-worktree-cadence/egyptian06",
+    "budgetSeconds": 60,
+    "beamWidth": 8192,
+    "toolSiteCellPixels": 2,
+    "pairedActors": true,
+    "fewerInputsFirst": true,
+    "decisionPoints": 5049,
+    "depth": 5089,
+    "roundsToBeam": 1,
+    "expandedCandidates": 859666,
+    "bestSaved": 0,
+    "bestLost": 0,
+    "result": "UNSOLVED. No winning route found in this bounded search."
+  }
+}

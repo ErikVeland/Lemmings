@@ -11,7 +11,6 @@ import tempfile
 
 project = Path(__file__).resolve().parents[1]
 evidence = project / "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15"
-runtime = project / "Sources/NxlvKit/Lemmings3Runtime.swift"
 if sys.argv[1:]:
     raise SystemExit("Usage: verify-l3-mole-trace.py")
 
@@ -73,20 +72,39 @@ for sample in samples:
 current_commit = subprocess.run(
     ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
 ).stdout.strip()
-fetched_commit = subprocess.run(
-    ["git", "rev-parse", "FETCH_HEAD"], check=True, capture_output=True, text=True
+origin_main_commit = subprocess.run(
+    ["git", "rev-parse", "refs/remotes/origin/main"], check=True, capture_output=True, text=True
 ).stdout.strip()
-main_record = json.loads((evidence / "current-main-steel-contact-183bc8a8-2026-10-17.json").read_text())
-main_source = subprocess.run(
+if current_commit != origin_main_commit:
+    raise SystemExit("FAIL HEAD does not match origin/main.")
+
+runtime_bytes = subprocess.run(
     ["git", "show", f"{current_commit}:{source_path}"], check=True, capture_output=True
 ).stdout
-runtime_hash = hashlib.sha256(main_source).hexdigest()
-if current_commit != fetched_commit or main_record["headCommit"] != current_commit:
-    raise SystemExit("FAIL current-main Mole evidence does not match fetched HEAD.")
-if hashlib.sha256(runtime.read_bytes()).hexdigest() != runtime_hash:
-    raise SystemExit("FAIL worktree runtime source differs from HEAD.")
-if main_record["runtimeSourceSHA256"] != runtime_hash:
-    raise SystemExit("FAIL current-main runtime source differs from its evidence record.")
+runtime_hash = hashlib.sha256(runtime_bytes).hexdigest()
+main_records = [
+    json.loads(path.read_text()) for path in sorted(evidence.glob("current-main-*.json"), reverse=True)
+]
+current_record = next(
+    (
+        record for record in main_records
+        if isinstance(record, dict)
+        and record.get("runtimeSourceSHA256") == runtime_hash
+        and record.get("headCommit")
+        and subprocess.run(
+            ["git", "merge-base", "--is-ancestor", record["headCommit"], current_commit],
+            check=False,
+        ).returncode == 0
+        and "sourceTraces" in record
+    ),
+    None,
+)
+if current_record is None:
+    raise SystemExit("FAIL origin/main Mole source has no matching retained evidence.")
+recorded_engine_commit = current_record["headCommit"]
+record_label = f"current-main engine source recorded at {recorded_engine_commit[:8]}"
+if current_record["runtimeSourceSHA256"] != runtime_hash:
+    raise SystemExit(f"FAIL {record_label} runtime source differs from its evidence record.")
 
 
 def compare_trace(case_name, trace, expected_matches, expected_ranges):
@@ -98,6 +116,11 @@ def compare_trace(case_name, trace, expected_matches, expected_ranges):
         raise SystemExit(f"FAIL {case_name} trace hash differs from its record.")
     native = {sample["tick"]: (sample["x"], sample["y"]) for sample in json.loads(trace_bytes)}
     matches = [tick for tick, position in source_positions.items() if native.get(tick) == position]
+    mismatches = [
+        (tick, source_positions[tick], native.get(tick))
+        for tick in source_positions
+        if native.get(tick) != source_positions[tick]
+    ]
     ranges = []
     for tick in matches:
         if not ranges or tick > ranges[-1][-1] + 1:
@@ -107,40 +130,77 @@ def compare_trace(case_name, trace, expected_matches, expected_ranges):
     actual_ranges = [[ticks[0], ticks[-1]] for ticks in ranges]
     if len(matches) != expected_matches or actual_ranges != expected_ranges:
         raise SystemExit(f"FAIL {case_name} trace positions differ from its summary.")
-    return len(source_positions), len(matches)
+    return len(source_positions), len(matches), mismatches
 
 
-left = main_record["sourceTraces"]["steel-left-facing"]
-air = main_record["sourceTraces"]["steel-air-gap"]
-left_count, left_matches = compare_trace(
+left = current_record["sourceTraces"]["steel-left-facing"]
+air = current_record["sourceTraces"]["steel-air-gap"]
+left_count, left_matches, _ = compare_trace(
     "steel-left-facing", left, left["exactPositionMatches"], left["matchingTickRanges"]
 )
-air_count, air_matches = compare_trace(
+air_count, air_matches, air_mismatches = compare_trace(
     "steel-air-gap", air, air["exactPositionMatches"], air["matchingTickRanges"]
 )
-parity_summary = f"current main traces match {left_matches}/{left_count} left-facing and {air_matches}/{air_count} air-gap positions"
-audit_bytes = (evidence / "current-head-fixture-audit-183bc8a8.json").read_bytes()
-if hashlib.sha256(audit_bytes).hexdigest() != main_record["fixtureAudit"]["rawReportFileSHA256"]:
-    raise SystemExit("FAIL current-main fixture audit hash differs from its record.")
+parity_summary = f"{record_label} traces match {left_matches}/{left_count} left-facing and {air_matches}/{air_count} air-gap positions"
+post_drop = current_record["sourceBasis"]["postDropPatrol"]
+first_mismatch = next(mismatch for mismatch in air_mismatches if mismatch[0] > 182)
+first_mismatch_tick, first_source_position, first_runtime_position = first_mismatch
+expected_first = post_drop["firstDivergence"]
+if (
+    first_mismatch_tick != expected_first["tick"]
+    or list(first_source_position) != expected_first["sourceCentreFeet"]
+    or list(first_runtime_position) != expected_first["runtimeCentreFeet"]
+):
+    raise SystemExit("FAIL recorded first post-drop source mismatch differs from the traces.")
+tick_positions = {
+    tick: (source_x, runtime_x)
+    for tick, source_x, runtime_x in zip(
+        range(182, 191),
+        post_drop["sourceCentreXByTick182Through190"],
+        post_drop["runtimeCentreXByTick182Through190"],
+    )
+}
+air_source_case = next(item for item in followup["cases"] if item["name"] == "steel-air-gap")
+air_source_positions = {
+    tick: left + 8 for tick, left, top, *_ in air_source_case["samples"]
+}
+air_runtime_samples = json.loads((evidence / Path(air["trace"]).name).read_text())
+air_runtime_positions = {sample["tick"]: sample["x"] for sample in air_runtime_samples}
+for tick, (source_x, runtime_x) in tick_positions.items():
+    if source_x != air_source_positions[tick]:
+        raise SystemExit(f"FAIL recorded source post-drop position differs at tick {tick}.")
+    if runtime_x != air_runtime_positions[tick]:
+        raise SystemExit(f"FAIL recorded runtime post-drop position differs at tick {tick}.")
+audit_name = Path(current_record["fixtureAudit"]["rawReport"]).name
+audit_bytes = (evidence / audit_name).read_bytes()
+if hashlib.sha256(audit_bytes).hexdigest() != current_record["fixtureAudit"]["rawReportFileSHA256"]:
+    raise SystemExit(f"FAIL {record_label} fixture audit hash differs from its record.")
 audit = json.loads(audit_bytes)
 exact_routes = sum(result["passed"] and result["routeStatus"] == "exact" for result in audit["results"])
 route_failures = sum(result["routeStatus"] == "route-fails" for result in audit["results"])
 if (len(audit["results"]), exact_routes, route_failures) != (
-    main_record["fixtureAudit"]["fixtures"],
-    main_record["fixtureAudit"]["exactDoubleReplays"],
-    main_record["fixtureAudit"]["routeFailures"],
+    current_record["fixtureAudit"]["fixtures"],
+    current_record["fixtureAudit"]["exactDoubleReplays"],
+    current_record["fixtureAudit"]["routeFailures"],
 ):
-    raise SystemExit("FAIL current-main fixture audit counts differ from its record.")
-print(f"PASS current main {current_commit[:8]} matches freshly fetched origin/main")
+    raise SystemExit(f"FAIL {record_label} fixture audit counts differ from its record.")
+print(f"PASS current main {current_commit[:8]} matches origin/main")
+print(
+    f"PASS current main uses Mole runtime source recorded at {recorded_engine_commit[:8]}"
+)
 
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
 print(f"PASS recorded DOS/prototype samples: {len(samples)} positions, ticks {first}–{last}")
 print("PASS isolated prototype patch reconstructs from its recorded baseline")
-print("PASS current-main source and trace hashes match the retained evidence")
-print(f"PASS current-main fixture audit: {exact_routes}/{len(audit['results'])} exact, {route_failures} route failures")
+print(f"PASS {record_label} source and trace hashes match the retained evidence")
+print(
+    f"PASS post-drop mismatch is recorded at tick {first_mismatch_tick}: "
+    f"source={first_source_position}, runtime={first_runtime_position}"
+)
+print(f"PASS {record_label} fixture audit: {exact_routes}/{len(audit['results'])} exact, {route_failures} route failures")
 print(f"OPEN production-to-DOS trajectory parity: {parity_summary}")
-print("OPEN source fall transition and full Mole rules remain unmatched")
+print("OPEN post-drop movement cadence and full Mole rules remain unmatched")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")

@@ -568,3 +568,56 @@ L3 engine fidelity. See the [current-main record]
 (current-head-fixture-audit-183bc8a8.json), [left-facing trace]
 (current-main-steel-contact-left-facing-trace-2026-10-17.json) and [air-gap
 trace](current-main-steel-contact-air-gap-trace-2026-10-17.json).
+
+### 17 October current-main recheck at e613a5e9
+
+A fresh fetch confirms `HEAD`, `origin/main` and `FETCH_HEAD` match at
+`e613a5e9`. The L3 runtime suite passes with bundled resources. A fresh audit
+checks 416 fixtures. It verifies 399 exact double replays, zero stale-identity
+wins and 17 route failures. The strict gate fails at `107.json` and `107-1.json`.
+
+The open-drop change matches the captured air-gap Mole position through tick
+183. The first patrol step then differs: at tick 184 the source centre is
+`(115, 192)` and current main is `(116, 192)`. Source and runtime positions for
+ticks 182-190 are retained in the [current-main record](current-main-open-drop-e613a5e9-2026-10-17.json).
+The full trace matches 179/344 air-gap positions and 139/329 left-facing
+positions. Two of four tunnel-edge checks remain open. This does not close the
+17 route failures or prove full L3 fidelity. See the
+[current-main record](current-main-open-drop-e613a5e9-2026-10-17.json),
+[fixture audit](current-head-fixture-audit-e613a5e9.json),
+[strict gate](current-main-strict-gate-e613a5e9-2026-10-17.json),
+[left-facing trace](current-main-open-drop-left-facing-e613a5e9-2026-10-17.json)
+and [air-gap trace](current-main-open-drop-air-gap-e613a5e9-2026-10-17.json).
+
+### 17 October rejected post-drop cadence experiment
+
+A historical worktree experiment used a 4/3-pixel-per-tick accumulator after
+the source-observed open-drop landing. The runtime test passed, and its trace
+matched 191/344 air-gap positions compared with 179/344 on current main. That
+aggregate count did not prove source fidelity. Direct pointwise comparison
+shows the source centre positions at ticks 182-189 are 112, 114, 115, 117,
+118, 119, 120 and 122. The candidate first differs at tick 185 (116 instead
+of 117), then matches again at ticks 186-189 before differing at tick 190
+(123 instead of 126). The candidate runtime change and its regression test
+were removed. No replacement cadence is established. See the [rejected
+experiment record](current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json)
+and its retained [source trace](original-followup-traces.json).
+
+The historical candidate also ran two 60-second Shadow 7 searches and one
+60-second Egyptian 6 search. They found no routes and did not change fixtures.
+These bounded searches do not prove that the levels are impossible. They used
+the rejected candidate runtime, so they are not evidence for current main.
+Search details remain in the [experiment record](current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json).
+
+### 18 October current-main check at 0659e3a6
+
+Main advanced from `e613a5e9` through four release-preparation commits. The L3
+runtime source hash remains `97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750`.
+The L3 runtime suite passes on `0659e3a6`. The trace verifier selects the
+retained `e613a5e9` audit by its matching runtime hash and reports the first
+post-drop patrol mismatch at tick 184: source `(115, 192)`, runtime
+`(116, 192)`. The full 416-fixture audit remains the retained `e613a5e9` run:
+399 exact double replays, zero stale-identity wins and 17 route failures. The
+release-preparation commits did not change the L3 runtime source, but no build
+88 app-package audit is recorded. See the [current-main reconciliation](../2.0-build83/current-main-sync-reconciliation-2026-10-17.json)
+and [pointwise trace record](current-main-open-drop-e613a5e9-2026-10-17.json).

@@ -1,41 +1,52 @@
 {
   "schemaVersion": 1,
-  "date": "2026-10-17",
-  "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
+  "date": "2026-10-18",
+  "purpose": "Reconcile bundled-content scope with the latest retained Mac, iOS and tvOS package evidence and the current 2.0.5 source preparation. Imported content remains open-ended.",
   "sourceState": {
-    "branch": "main",
-    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-    "originMain": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-    "fetchHead": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "branch": "codex/complete-bundled-engine-recreation",
+    "head": "0659e3a6365abe81628c94f5ba530b37c466261e",
+    "originMain": "0659e3a6365abe81628c94f5ba530b37c466261e",
+    "fetchHead": "0659e3a6365abe81628c94f5ba530b37c466261e",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "A fresh fetch confirms HEAD, origin/main and FETCH_HEAD equal 183bc8a8, with zero commits ahead or behind. Main includes the steel-contact Mole change and its trace verifier.",
-    "postFastForwardValidation": "The current-main runtime source has the exact SHA-256 validated by the runtime suite and 416-fixture audit. Traces match 139/329 left-facing and 140/344 air-gap positions. Seventeen schedules fail and the strict gate stops at 107.json and 107-1.json. Imported content remains open-ended.",
+    "currentMainUpdate": "Explicit fetch and rebase place this topic branch on current main 0659e3a6, with zero commits ahead or behind. The 2.0.5 build 88 source preparation is present; the appcast remains on 2.0.4 build 87 and no build 88 package acceptance record is present.",
+    "postFastForwardValidation": "The L3 runtime suite passes on current main 0659e3a6. Its L3 runtime source hash matches the e613a5e9 evidence source. The retained full fixture audit verifies 399/416 exact double replays, zero stale-identity wins and 17 route failures; the strict gate fails at 107.json and 107-1.json. Imported content remains open-ended.",
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
+    "latestFetchCheck": {
+      "date": "2026-10-18",
+      "head": "0659e3a6365abe81628c94f5ba530b37c466261e",
+      "originMain": "0659e3a6365abe81628c94f5ba530b37c466261e",
+      "fetchHead": "0659e3a6365abe81628c94f5ba530b37c466261e",
+      "ahead": 0,
+      "behind": 0,
+      "result": "Explicit fetch confirms the rebased topic branch matches origin/main."
+    },
     "uncommittedPaths": [
       "Documentation/ContentUniverseRoadmap.md",
+      "Documentation/ModernReleasePlan.md",
       "Documentation/Overview.md",
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
       "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
       "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
       "Documentation/ReleaseScope.md",
+      "README.md",
       "Scripts/verify-l3-mole-trace.py",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-steel-contact-left-facing-trace-2026-10-17.json"
-    ],
-    "latestFetchCheck": {
-      "date": "2026-10-17",
-      "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-      "originMain": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-      "fetchHead": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-      "ahead": 0,
-      "behind": 0,
-      "result": "Fresh fetch confirms the worktree matches current main."
-    }
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-air-gap-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-left-facing-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-strict-gate-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-cadence-air-gap-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-cadence-fixture-audit-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-cadence-left-facing-e613a5e9-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-open-drop-183bc8a8-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-open-drop-air-gap-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-open-drop-fixture-audit-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-open-drop-left-facing-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json"
+    ]
   },
   "releasePackageStates": {
     "macOS": {
@@ -43,31 +54,82 @@
       "build": 86,
       "sourceCommit": "b6b1ca19e5753efcf328c043d0e7ae6f4c21ec76",
       "packageEvidence": "Build 86 records no non-localisation resource-index differences from build 85 and reuses selected build 85 engine evidence. The complete build 86 app audit and campaign closure were not rerun.",
-      "status": "Current main includes a 2.0.5 Trolley history hotfix. The update feed still advertises 2.0.4 build 87. The latest retained package acceptance evidence is 2.0.3 build 86. Bundled engine/content closure remains open.",
+      "status": "The latest Mac package with retained acceptance evidence is 2.0.3 build 86. Main prepares 2.0.5 build 88, but no build 88 package or acceptance record is present. The appcast advertises 2.0.4 build 87. Bundled engine/content closure remains open.",
       "evidence": [
         "2.0.3-build86/distribution.json",
         "2.0.3-build86/README.md",
-        "2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json"
+        "2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json",
+        "../ReleaseNotes-2.0.5-build88.md"
       ],
       "updateFeed": {
         "advertisedVersion": "2.0.4",
         "build": 87,
         "sourceCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-        "evidence": "The appcast contains the build 87 package and delta enclosures. This reconciliation has no build 87 distribution record or accepted-package audit."
+        "evidence": "The checked-in appcast advertises 2.0.4 build 87 and lists its package and delta enclosures. It has no 2.0.5 build 88 entry."
+      },
+      "releasePreparation": {
+        "version": "2.0.5",
+        "build": 88,
+        "releaseBase": "v2.0.4",
+        "preparationCommit": "7ad3dae7f2239fbc67cbd7d31b1588cf1770caa9",
+        "currentMainHead": "0659e3a6365abe81628c94f5ba530b37c466261e",
+        "evidence": [
+          "../ReleaseNotes-2.0.5-build88.md",
+          "../../Resources/Info.plist"
+        ],
+        "status": "Source version and release notes are prepared. No matching archive, distribution record or accepted-package audit is retained.",
+        "trolleyEvidence": {
+          "engineSourceFingerprint": "ecf58f83f60a7f4858795c87e78767ab8ecadc112918e40902732de4bfe17d6c",
+          "auditConfigurations": 615,
+          "verified": 294,
+          "observed": 315,
+          "unknown": 6,
+          "resourceRows": 609,
+          "reconciliation": "The current audit and bundled resource catalogue have matching engine fingerprints. All 609 non-UNKNOWN audit identities match resource statuses, best-save values and witness hashes. Six UNKNOWN configurations remain open.",
+          "evidence": [
+            "../TrolleyVerification/audit.json",
+            "../../Resources/Trolley/verified-maxima.json",
+            "../../Resources/Trolley/engine-fingerprint.txt"
+          ]
+        }
       }
     },
     "iOS": {
       "lastInstalledCandidate": "2.0 build 8",
       "candidateSourceCommit": "0398d081d0aa4b1f25717eb59d2095f35d81f542",
       "manifest": "Build 8 packages 120 Classic campaign levels and 26 files. Its content validation lists no L2 or L3 mobile library.",
-      "currentSourceStatus": "Later 2.0 source connects L2, L3 and supported NeoLemmix import and gameplay paths. No accepted iOS release package for that source is recorded here.",
+      "currentSourceStatus": "Main sets 2.0.5 build 14. No accepted iOS release package for this source is recorded. Source support for L2, L3 and NeoLemmix does not prove bundled mobile package coverage.",
       "status": "Current source scope is broader than the last accepted iOS package. Do not count source support as bundled release coverage.",
       "evidence": [
         "2.0DeviceBeta-2026-10-11/Build8/evidence.json",
         "2.0DeviceBeta-2026-10-11/Build8/content-manifest.json",
         "2.0DeviceBeta-2026-10-11/Build8/content-validation.json",
         "../2.0Roadmap.md"
-      ]
+      ],
+      "preparedSource": {
+        "version": "2.0.5",
+        "build": 14,
+        "preparationCommit": "7ad3dae7f2239fbc67cbd7d31b1588cf1770caa9",
+        "evidence": [
+          "../../Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj",
+          "../ReleaseNotes-2.0.5-build88.md"
+        ],
+        "status": "Project version is prepared for TestFlight. No build 14 archive, installation or acceptance record is retained."
+      }
+    },
+    "tvOS": {
+      "preparedSource": {
+        "version": "2.0.5",
+        "build": 4,
+        "preparationCommit": "7ad3dae7f2239fbc67cbd7d31b1588cf1770caa9",
+        "evidence": [
+          "../../Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/project.pbxproj",
+          "../../Apps/UltimateLemmingsTV/BuildChanges.json",
+          "../ReleaseNotes-2.0.5-build88.md"
+        ],
+        "status": "Project version and release notes are prepared for TestFlight. No build 4 archive, installation or acceptance record is retained."
+      },
+      "status": "No accepted tvOS package is recorded. The TV experience and distribution gates remain separate from Mac and iOS evidence."
     }
   },
   "bundledEngineStatus": {
@@ -94,8 +156,8 @@
     },
     "lemmings3": {
       "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
-      "verified": "Current main 183bc8a8 passes the L3 runtime suite and verifies 399/416 exact fixture replays with zero stale-identity wins. Six level-113 outcome hashes match this runtime. The steel-contact Mole change matches 139/329 left-facing and 140/344 air-gap source positions. These checks do not establish complete original-engine parity.",
-      "open": "Seventeen schedules do not win (four standalone, 13 carried). Strict gate fails at 107.json and 107-1.json. The source fall after tick 167 and two of four tunnel-edge checks remain unmatched. Built-brick trigger, remaining Mole rules, environmental effects, movie audio, story transitions and package recovery remain open.",
+      "verified": "Current main 0659e3a6 passes the L3 runtime suite. Its L3 runtime source hash matches the audited e613a5e9 source. The retained full audit verifies 399/416 exact fixture replays with zero stale-identity wins; six level-113 outcome hashes match that runtime. Mole traces match 139/329 left-facing and 179/344 air-gap positions. The captured air-gap fall matches through tick 183.",
+      "open": "Seventeen schedules do not win (four standalone, 13 carried). Strict gate fails at 107.json and 107-1.json. The first post-drop patrol mismatch is at tick 184. Later air-gap movement and two of four tunnel-edge checks remain unmatched. The excavation mask, built-brick trigger, remaining Mole rules, environmental effects, movie audio, story transitions and package recovery remain open.",
       "evidence": [
         "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
         "L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json",
@@ -108,10 +170,11 @@
         "L3MoleVerification-2026-10-15/current-head-fixture-audit-8d65e927.json",
         "L3MoleVerification-2026-10-15/current-head-strict-gate-8d65e927.json",
         "L3MoleVerification-2026-10-15/current-head-production-air-gap-trace-2026-10-17.json",
-        "L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
-        "L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
+        "L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json",
+        "L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json",
         "L3MoleVerification-2026-10-15/current-main-steel-contact-left-facing-trace-2026-10-17.json",
-        "L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json"
+        "L3MoleVerification-2026-10-15/current-main-steel-contact-air-gap-trace-2026-10-17.json",
+        "L3MoleVerification-2026-10-15/current-main-strict-gate-e613a5e9-2026-10-17.json"
       ]
     },
     "neoLemmix": {
@@ -132,35 +195,56 @@
     "Player-imported content is outside bundled closure counts. Keep support claims limited by engine, version and tested features."
   ],
   "overallStatus": "open",
-  "reason": "Bundled route, fidelity, dependency-rights, source-parity and release-package gaps remain. Fresh fetch confirms current main 183bc8a8, with zero commits ahead or behind. L3 runtime checks pass and trace agreement is 139/329 and 140/344, but 17 routes still fail and strict completion stops at 107.json and 107-1.json. Build 87 package acceptance is not recorded, and installed iOS evidence lacks complete 2.0 scope. Imported content remains open-ended and separately gated.",
+  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. Main 0659e3a6 prepares 2.0.5 build 88, but the appcast remains at 2.0.4 build 87 and no build 88 package acceptance record is present. L3 still has 17 failing routes and strict completion stops at 107.json and 107-1.json. Imported content remains open-ended and separately gated.",
   "importedContentStatus": {
     "scope": "Open-ended; excluded from bundled closure counts.",
     "supportRule": "State support by engine, content version and verified features. Do not infer full support for every imported pack or level.",
     "bundledDependencyRule": "A dependency required by an indexed bundled level remains in bundled scope even if its source is community content."
   },
   "latestCurrentMainRecheck": {
-    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-    "originMain": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+    "head": "0659e3a6365abe81628c94f5ba530b37c466261e",
+    "originMain": "0659e3a6365abe81628c94f5ba530b37c466261e",
     "ahead": 0,
     "behind": 0,
-    "l3Audit": "L3MoleVerification-2026-10-15/current-head-fixture-audit-183bc8a8.json",
-    "l3StrictGate": "L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
-    "result": "399/416 exact double replays; zero stale-identity wins; 17 route failures. Strict gate fails at 107.json and 107-1.json. Runtime suite passes. Imported content remains open-ended.",
-    "l3RuntimeTest": "Passed with the current main runtime source hash and bundled resources.",
-    "moleTrace": "139/329 left-facing and 140/344 air-gap production positions. Source fall and two tunnel-edge checks remain unmatched."
+    "l3Audit": "L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json",
+    "l3StrictGate": "L3MoleVerification-2026-10-15/current-main-strict-gate-e613a5e9-2026-10-17.json",
+    "result": "Runtime suite passes on current main. The L3 runtime source hash matches its retained audit. The audit verifies 399/416 exact double replays, zero stale-identity wins and 17 route failures; strict gate fails at 107.json and 107-1.json.",
+    "l3RuntimeTest": "Passed on fetched current main with bundled resources.",
+    "moleTrace": "139/329 left-facing and 179/344 air-gap positions. The captured air-gap drop matches through tick 183. Later movement and two of four tunnel-edge checks remain open.",
+    "l3RuntimeSourceSHA256": "97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750",
+    "l3EvidenceCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+    "l3RuntimeSuite": "Passed on current main 0659e3a6 with bundled resources."
   },
   "latestL3Implementation": {
-    "commit": "5b2306ed",
-    "head": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
-    "runtimeSourceSHA256": "069a55e44d588018fbeec65a1a1bacbe427e1628f100cb664908b3623966a754",
-    "record": "L3MoleVerification-2026-10-15/current-main-steel-contact-183bc8a8-2026-10-17.json",
+    "commit": "e613a5e9",
+    "head": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+    "runtimeSourceSHA256": "97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750",
+    "record": "L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json",
     "runtimeSuite": "Passed with bundled resources.",
     "traces": {
       "leftFacing": "139/329",
-      "airGap": "140/344"
+      "airGap": "179/344",
+      "airGapDrop": "Matches source positions through tick 183."
     },
     "fixtureAudit": "399/416 exact double replays; zero stale-identity wins; 17 route failures.",
     "strictGate": "Fails at 107.json and 107-1.json.",
-    "status": "Integrated in current main; route completion and full Mole fidelity remain open."
+    "status": "Integrated in current main. Post-drop movement, two tunnel-edge checks, route completion and full Mole fidelity remain open."
+  },
+  "latestWorktreeCandidate": {
+    "baseCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+    "runtimeSourceSHA256": "28ae1dd095725f4b27621a11301551768e58eb3fbc1ec16a72c6c1866a0d3c8e",
+    "record": "L3MoleVerification-2026-10-15/current-worktree-post-drop-cadence-candidate-e613a5e9-2026-10-17.json",
+    "runtimeSuite": "Passed for the historical experiment, but did not prove source parity. Its runtime change and regression test were removed.",
+    "traces": {
+      "leftFacing": "139/329",
+      "airGap": "191/344",
+      "currentMainAirGap": "179/344"
+    },
+    "fixtureAudit": "399/416 exact double replays; no stale-identity wins; same 17 route failures.",
+    "strictGate": "Fails at 107.json and 107-1.json.",
+    "status": "Rejected historical experiment. Pointwise source comparison differs at ticks 185 and 190 after landing. The 4/3-pixel runtime change and regression test were removed; full Mole parity and bundled routes remain open.",
+    "pointwiseSourceCheck": "Source centre positions at ticks 182-189 are 112, 114, 115, 117, 118, 119, 120 and 122. Candidate positions first differ at tick 185 and again at tick 190. Aggregate trace match counts do not prove the movement rule.",
+    "shadow07Searches": "Two 60-second bounded searches found no route: one unseeded, one seeded through tick 1666. They do not prove the level is impossible.",
+    "egyptian06Search": "A 60-second bounded search expanded 859,666 candidates at an 8,192 beam and found no route. It does not prove the level is impossible."
   }
 }

@@ -1,11 +1,13 @@
 # Modern Lemmings release plan
 
-Updated 16 October 2026. This plan records the published Mac release and the remaining platform and fidelity work.
+Updated 18 October 2026. This plan records package evidence and the remaining platform and fidelity work.
 
 The next platform milestone is a full 2.0 iOS release for iPad, iPhone and
-iPhone Duo, with Classic, Lemmings 2 and Lemmings 3 at launch. Macintosh
-2.0.3 build 86 is public, with the language-picker fix and repository maintenance.
-The earlier 1.3 mobile work remains historical development evidence. See [release scope](ReleaseScope.md) for current
+iPhone Duo, with Classic, Lemmings 2 and Lemmings 3 at launch. The latest Mac
+package with retained acceptance evidence is 2.0.3 build 86. The appcast
+advertises 2.0.4 build 87. Main prepares Mac 2.0.5 build 88, iOS build 14 and
+tvOS build 4, but no matching packages or acceptance records are present. The
+earlier 1.3 mobile work remains historical development evidence. See [release scope](ReleaseScope.md) for current
 release claims and the [2.0 roadmap](2.0Roadmap.md) for the delivery sequence.
 
 The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
