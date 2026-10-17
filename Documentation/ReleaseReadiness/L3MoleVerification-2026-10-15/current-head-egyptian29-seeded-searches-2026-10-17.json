@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "headCommit": "a78098f254d816325647a44de570029df2083df6",
+  "sourceContinuity": {
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "solverSearchSourceSHA256": "f359fa8171880fc0db1c0a91cd76f552573e42258b76cd0456305fade04ff6d3",
+    "solverMainSourceSHA256": "15d76aeadb9400cb1aefa938085ef1684d0f03f0f72fa24f11a7c8820eac5b1c",
+    "solverSHA256": "9e43d0ae0f98830a254818fc1bf16efc82deed050e51a8a781c74935a294a5ab",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+    "toolchain": "Apple Swift 6.3.3, Xcode 26.6",
+    "interpretation": "The runtime and solver sources match the retained current-main audit inputs. Commit a78098f2 changes no L3 runtime, route, replay or solver source."
+  },
+  "resources": {
+    "root": "/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD",
+    "bundle": "build 83 extraction",
+    "level": 229,
+    "name": "Egyptian 29",
+    "levelSHA256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505",
+    "placementFiles": {
+      "PERM229.OBS": "c78179aa257618241bad88bc0ed3f6985497558e26b7ece63172895c210615f7",
+      "TEMP229.OBS": "81e07c69de5109207aa2a88aaaae8c7f2a2cac8e27f099791b6f38ca13fc90df"
+    }
+  },
+  "seedFixture": {
+    "path": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+    "sha256": "fc4eddbc9b818e2bf8aed34a275c2e8bb27f64fd705a6ccae395d5b9b318c650",
+    "changed": false
+  },
+  "searches": [
+    {
+      "seedThroughTick": 1560,
+      "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/solve-lemmings3-levels.sh 229 --budget 600 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --seed Tests/Lemmings3CompletionTests/Fixtures/229.json --seed-through 1560 --refresh-engine-seed --out .build/l3-current-main-a780-egypt29-beam8192",
+      "budgetSeconds": 600,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "decisionPoints": 2462,
+      "depth": 2502,
+      "roundsToBeam": 1,
+      "expandedCandidates": 7975174,
+      "bestSaved": 0,
+      "bestLost": 0,
+      "result": "No route found",
+      "candidateWritten": false
+    },
+    {
+      "seedThroughTick": 1200,
+      "command": "L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD .build/l3-solver/solver 229 --budget 600 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --seed Tests/Lemmings3CompletionTests/Fixtures/229.json --seed-through 1200 --refresh-engine-seed --out .build/l3-current-main-a780-egypt29-seed1200-beam8192",
+      "budgetSeconds": 600,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "decisionPoints": 1141,
+      "depth": 1181,
+      "roundsToBeam": 1,
+      "expandedCandidates": 6634249,
+      "bestSaved": 0,
+      "bestLost": 0,
+      "result": "No route found",
+      "candidateWritten": false,
+      "executionNote": "Reused the solver built by the first run because the repository wrapper rebuilds NxlvKit."
+    }
+  ],
+  "interpretation": "Both current-source bounded searches failed to find a route. They do not show that Egyptian 29 is impossible. The accepted fixture is unchanged, and the L3 route and campaign gates remain open."
+}

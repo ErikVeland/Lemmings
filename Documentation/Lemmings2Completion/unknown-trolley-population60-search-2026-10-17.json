@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "sourceCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+  "scope": "Search the two Lemmings 2 Trolley rescue targets that have no witness at population 60. The existing standalone routes use smaller populations.",
+  "engineSourceFingerprint": "dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c",
+  "resources": {
+    "root": "Sources/Ports/Lemm2",
+    "levels": [
+      {
+        "name": "cavelem-06",
+        "levelID": "2:5",
+        "levelFileSHA256": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5",
+        "trolleyConditions": {
+          "gameID": "lemmings2",
+          "levelFingerprint": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+          "levelID": "2:5",
+          "modifiers": {
+            "firstReleaseTick": "50",
+            "goldRequirement": "60",
+            "practice": "false",
+            "releaseInterval": "21"
+          },
+          "packID": "tribes",
+          "physicsMode": "l2-native-v1",
+          "population": 60,
+          "rescueRequirement": 1,
+          "rewindPolicy": "separate-assisted-v1",
+          "rulesetVersion": "l2-native-v1",
+          "startingSkills": {
+            "builder": 2,
+            "fencer": 2,
+            "filler": 5,
+            "glue_pourer": 2,
+            "jet_pack": 2,
+            "jumper": 7,
+            "roper": 1,
+            "stomper": 2
+          },
+          "timeLimitSeconds": 180
+        },
+        "standaloneFixture": {
+          "path": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json",
+          "sha256": "2fa2ec4fe1252502bce10c0e1f10504c525103b2b1bde4ee2f7c24a9f85834b3",
+          "population": 2,
+          "expectedSaved": 2
+        },
+        "attempts": [
+          {
+            "seed": null,
+            "budgetSeconds": 180,
+            "beamWidth": 8192,
+            "depth": 100,
+            "decisionPoints": 380943,
+            "expanded": 380942,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/solve-lemmings2-level.sh cavelem-06 --population 60 --beam 8192 --budget 180 --depth 100 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60"
+          },
+          {
+            "seed": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json",
+            "budgetSeconds": 180,
+            "beamWidth": 8192,
+            "depth": 100,
+            "decisionPoints": 514454,
+            "expanded": 514454,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 8192 --budget 180 --depth 100 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded"
+          },
+          {
+            "seed": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json",
+            "budgetSeconds": 600,
+            "beamWidth": 16384,
+            "depth": 120,
+            "decisionPoints": 1275816,
+            "expanded": 1275815,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 32768 --budget 600 --depth 120 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded-beam32768"
+          }
+        ]
+      },
+      {
+        "name": "highland-10",
+        "levelID": "5:9",
+        "levelFileSHA256": "fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8",
+        "trolleyConditions": {
+          "gameID": "lemmings2",
+          "levelFingerprint": "fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+          "levelID": "5:9",
+          "modifiers": {
+            "firstReleaseTick": "49",
+            "goldRequirement": "59",
+            "practice": "false",
+            "releaseInterval": "21"
+          },
+          "packID": "tribes",
+          "physicsMode": "l2-native-v1",
+          "population": 60,
+          "rescueRequirement": 1,
+          "rewindPolicy": "separate-assisted-v1",
+          "rulesetVersion": "l2-native-v1",
+          "startingSkills": {
+            "attractor": 4,
+            "ballooner": 1,
+            "exploder": 5,
+            "jumper": 5,
+            "mortar": 2,
+            "platformer": 2,
+            "rock_climber": 1,
+            "slider": 3
+          },
+          "timeLimitSeconds": 240
+        },
+        "standaloneFixture": {
+          "path": "Tests/Lemmings2CompletionTests/Fixtures/highland-10.json",
+          "sha256": "bf10d26ea1525e99b8edf4c7f4c92e35416ae5c9fc5f9f463897738dc0817c41",
+          "population": 4,
+          "expectedSaved": 1
+        },
+        "attempts": [
+          {
+            "seed": null,
+            "budgetSeconds": 180,
+            "beamWidth": 8192,
+            "depth": 100,
+            "decisionPoints": 317884,
+            "expanded": 317884,
+            "fallback": 48959,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 highland-10 --population 60 --beam 8192 --budget 180 --depth 100 --out .build/lemmings-bundled-gap-20261017/highland10-pop60"
+          },
+          {
+            "seed": "Tests/Lemmings2CompletionTests/Fixtures/highland-10.json",
+            "budgetSeconds": 180,
+            "beamWidth": 8192,
+            "depth": 100,
+            "decisionPoints": 585159,
+            "expanded": 585159,
+            "fallback": 7269,
+            "bestSaved": 0,
+            "result": "UNSOLVED",
+            "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 highland-10 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/highland-10.json --beam 8192 --budget 180 --depth 100 --out .build/lemmings-bundled-gap-20261017/highland10-pop60-seeded"
+          }
+        ]
+      }
+    ]
+  },
+  "solver": {
+    "buildCommand": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/solve-lemmings2-level.sh",
+    "binary": ".build/l2-solver/solver",
+    "binarySHA256": "a51eaaad4a901bfc17e3d3dd1784e2b666ceffa43287c21172a62a206afa861a",
+    "runtimeLibrary": ".build/l2-solver/libNxlvKit.dylib",
+    "runtimeLibrarySHA256": "c004722f6f7cafa525036715c313a01862d38bd188d9173f8e2693e03f9bde03",
+    "toolchain": "Apple Swift 6.3.3, Xcode developer directory",
+    "options": "--population 60 --beam 8192 --budget 180 --depth 100",
+    "seededRuns": "The same built solver was called directly because the repository script always rebuilds NxlvKit. No L2 or solver source changed between the build and these searches.",
+    "currentMainContinuity": "The solver binary was built at dd0f1578. The later a78098f2 commit changes only Trolley audit tooling, evidence and tests. It changes no L2 runtime, level, or solver source."
+  },
+  "outcome": {
+    "wins": 0,
+    "newRoutes": 0,
+    "trolleyStatusesChanged": 0,
+    "interpretation": "Five completed bounded searches ended without a route. Best saved count was 0 of 60 in every run. The existing routes at populations two and four do not establish a solution at population 60. One wider attempt ended before a result.",
+    "limits": "These search results do not prove either level unsolvable. They do not close the Trolley rescue targets or establish original DOS parity."
+  },
+  "currentMainCommit": "a78098f254d816325647a44de570029df2083df6",
+  "abortedAttempts": [
+    {
+      "levelID": "2:5",
+      "seed": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json",
+      "budgetSeconds": 600,
+      "beamWidth": 32768,
+      "depth": 120,
+      "exitCode": 137,
+      "result": "Process terminated before a final solver result. No candidate file was written.",
+      "interpretation": "Exit 137 is consistent with memory pressure, but the cause was not confirmed. This attempt does not support a route conclusion.",
+      "command": ".build/l2-solver/solver level Sources/Ports/Lemm2 cavelem-06 --population 60 --seed Tests/Lemmings2CompletionTests/Fixtures/cavelem-06.json --beam 32768 --budget 600 --depth 120 --out .build/lemmings-bundled-gap-20261017/cavelem06-pop60-seeded-beam32768"
+    }
+  ]
+}

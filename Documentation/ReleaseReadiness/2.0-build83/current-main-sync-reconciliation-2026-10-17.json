@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-  "upstreamCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+  "sourceCommit": "a78098f254d816325647a44de570029df2083df6",
+  "upstreamCommit": "a78098f254d816325647a44de570029df2083df6",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "commit": "a78098f254d816325647a44de570029df2083df6",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -32,7 +32,7 @@
       "trolleyAudit": "At b0db98cf, the standard verifier replays 615 configurations covering 562 campaign level identities. Conditions, status, maximum, best-save outcome, witness and tested-candidate counts match the prior audit for every identity. The merge reports 294 population-bound certificates, 315 best-known rescue records and six unknown configurations. Candidate search was disabled; the 1,535 recorded attempts were retained only for identical conditions and engine fingerprint. This audit does not cover Classic fan packs or prove source fidelity."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
-    "result": "Current main is b0db98cfda178d4be9088b8ce1173783f810a74d. The latest commit is documentation-only. Since the 9a95012e route-check baseline, simulation rules and loaders have no changes. Main changes Classic rewind replay fingerprint handling and refreshes Trolley proof metadata. The current full replay audit at engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c verifies all 615 stored rescue configurations against exact current identities; source fidelity and the six unknown rescue configurations remain open. The L3 production-to-DOS trajectory remains 0/329 at its recorded source. The L3 fixture audit remains 399/416 with 17 route gaps.",
+    "result": "Current main is a78098f254d816325647a44de570029df2083df6. Its latest commit adds Trolley audit tooling, evidence and tests. It changes no game simulation, loader or level data. The full Trolley replay audit at engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1 verifies 615 stored configurations. Six rescue configurations remain unknown. A direct L3 production-to-DOS comparison at dd0f1578 matches 0/329 positions. The L3 fixture audit remains 399/416 with 17 route gaps.",
     "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members, which changes search inputs but not simulation or replay behaviour."
   },
   "classic": {
@@ -264,27 +264,23 @@
   "headMatchesOriginMain": true,
   "workingTreeHasUncommittedChanges": true,
   "uncommittedPaths": [
-    "Documentation/ContentUniverseRoadmap.md",
+    "Documentation/Lemmings2Completion/README.md",
+    "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json",
     "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
     "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
-    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+    "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json",
     "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
-    "Documentation/ReleaseScope.md",
-    "Documentation/TrolleyVerification/audit.json",
-    "Resources/Trolley/verified-maxima.json",
-    "Scripts/verify-trolley-maxima.sh",
-    "Tools/TrolleyVerification/catalogue.py",
-    "Tools/TrolleyVerification/test_retained_targets.py"
+    "Documentation/ReleaseScope.md"
   ],
   "remoteVerification": {
     "method": "git fetch origin main followed by HEAD, origin/main and FETCH_HEAD comparison",
-    "head": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-    "originMain": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-    "fetchHead": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "head": "a78098f254d816325647a44de570029df2083df6",
+    "originMain": "a78098f254d816325647a44de570029df2083df6",
+    "fetchHead": "a78098f254d816325647a44de570029df2083df6",
     "upToDate": true
   },
   "lemmings3": {
-    "currentMainHead": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "currentMainHead": "a78098f254d816325647a44de570029df2083df6",
     "currentMainRuntimeContinuity": "The diff from the recorded route and trace evidence contains no Lemmings3Runtime.swift change. The production Mole trace and trace verifier were both rerun at b2dd57a; production-to-DOS trajectory parity remains open.",
     "latestFullFixtureAuditSource": "1111ece8",
     "fixtureResults": {
@@ -375,6 +371,29 @@
       "interpretation": "At b2dd57a, current production remains horizontal and diverges from 329 source positions. The prototype matches the recorded burrow segment but then tunnels through a source opening; its carve mask also conflicts with two of four source tunnel-edge witnesses. No runtime or route fixture changed.",
       "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
       "audit": "Scripts/audit-l3-mole-production-trace.sh"
+    },
+    "latestCurrentMainHeadVerifiedByFetch": "a78098f254d816325647a44de570029df2083df6",
+    "latestCurrentMainSeededSearches": {
+      "level": 229,
+      "name": "Egyptian 29",
+      "searches": [
+        {
+          "seedThroughTick": 1560,
+          "budgetSeconds": 600,
+          "beamWidth": 8192,
+          "expandedCandidates": 7975174,
+          "result": "no route; bounded search"
+        },
+        {
+          "seedThroughTick": 1200,
+          "budgetSeconds": 600,
+          "beamWidth": 8192,
+          "expandedCandidates": 6634249,
+          "result": "no route; bounded search"
+        }
+      ],
+      "fixtureChanged": false,
+      "record": "../L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json"
     }
   },
   "neoLemmix": {
@@ -455,7 +474,7 @@
     }
   },
   "currentHeadFollowUpValidation": {
-    "commit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "commit": "a78098f254d816325647a44de570029df2083df6",
     "l3TraceVerifier": {
       "command": "python3 Scripts/verify-l3-mole-trace.py",
       "exitCode": 0,
@@ -463,8 +482,9 @@
     },
     "productionMoleTrace": {
       "measuredAt": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-      "result": "Direct production-to-DOS comparison at dd0f1578 matches 0 of 329 positions; first mismatch at tick 2 (source 154,110; production 156,110). The incoming change affects audio presentation only. Excavation-mask and built-brick trigger evidence remain incomplete.",
-      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json"
+      "result": "Direct production-to-DOS comparison at dd0f1578 matches 0 of 329 positions; first mismatch at tick 2 (source 154,110; production 156,110). The later a78098f2 commit changes only Trolley tooling, docs and tests. L3 runtime sources remain unchanged.",
+      "record": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "currentMainCommit": "a78098f254d816325647a44de570029df2083df6"
     },
     "trolleyFullReplayAudit": {
       "engineSourceFingerprint": "dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c",
@@ -472,17 +492,19 @@
       "unknownConfigurations": 6,
       "record": "Documentation/TrolleyVerification/audit.json",
       "currentMainCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4"
-    }
+    },
+    "lemmings2Population60Search": "Documentation/Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json"
   },
   "mainUpdateToCurrent": {
     "fromCommit": "b2dd57a6991f5f9685435d3df6533f6245b794f4",
-    "toCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "toCommit": "a78098f254d816325647a44de570029df2083df6",
     "commits": [
       "82b6509e Prepare 2.0.4 build 87 release notes",
       "8e8066b6 Refresh rescue proofs and hints for build 87",
       "b92386eb Fingerprint the starting level in rewind replays",
       "b0db98cf Another round (documentation-only; no runtime, content or Trolley fingerprint changes)",
-      "dd0f1578 Report a suspended level-entry fade as crossfading"
+      "dd0f1578 Report a suspended level-entry fade as crossfading",
+      "a78098f2 Trolley"
     ],
     "findings": [
       "Classic rewind replay export now uses the starting level fingerprint, so terrain edits during a run do not produce a mismatched replay identity. Older checkpoints remain decodable.",
@@ -491,11 +513,13 @@
       "Build 87 release notes are prepared on main. Published/accepted package evidence remains at macOS 2.0.3 build 86.",
       "A fresh full replay-only Trolley audit at b0db98cf confirms all 615 existing rescue configurations match their exact conditions and outcomes. The audit gate packaged 294 proofs and 315 rescue records; six configurations remain unknown.",
       "The dd0f1578 change reports a suspended level-entry fade as crossfading in AdaptiveDJPlayer. It changes no game simulation, content, loader or Trolley input.",
-      "No Classic, L2, L3 or NeoLemmix simulation rules or level data changed in the three release-preparation commits or the two later evidence/audio commits."
+      "No Classic, L2, L3 or NeoLemmix simulation rules or level data changed in the three release-preparation commits or the two later evidence/audio commits.",
+      "Commit a78098f2 adds Trolley audit and replay tooling, catalogue evidence and tests. It changes no game simulation, loader or level data. The current L2 population-60 search record leaves both audited rescue rows open.",
+      "The dd0f1578 L3 production trace remains applicable at a78098f2 because the incoming commit changes no NxlvKit source. It matches 0 of 329 source positions."
     ]
   },
   "postFastForwardValidation": {
-    "commit": "b0db98cfda178d4be9088b8ce1173783f810a74d",
+    "commit": "a78098f254d816325647a44de570029df2083df6",
     "classicRewind": {
       "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache Scripts/run-classic-dos-rewind-tests.sh '/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30'",
       "exitCode": 0,
@@ -517,9 +541,9 @@
       "command": "env DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache TROLLEY_RESOURCES='/Applications/Ultimate Lemmings.app/Contents/Resources' TROLLEY_OUTPUT=/private/tmp/lemmings-trolley-script-b0db TROLLEY_AUDIT_SEARCH=0 TROLLEY_AUDIT_JOBS=8 zsh Scripts/verify-trolley-maxima.sh",
       "exitCode": 0,
       "sourceCommit": "b0db98cfda178d4be9088b8ce1173783f810a74d",
-      "currentMainCommit": "b0db98cfda178d4be9088b8ce1173783f810a74d",
+      "currentMainCommit": "a78098f254d816325647a44de570029df2083df6",
       "engineSourceFingerprint": "dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c",
-      "resourceInputs": "The installed 1.9.1 build 76 resource root. The retained build 85 content comparison records matching Classic, L2 and L3 inputs; build 86 has the same non-localisation resource indexes as build 85. The seven-file b0db98cf advance is documentation-only.",
+      "resourceInputs": "The installed 1.9.1 build 76 resource root. The retained build 85 content comparison records matching Classic, L2 and L3 inputs; build 86 has the same non-localisation resource indexes as build 85. Main commit a78098f2 changes Trolley audit tooling and evidence only. It does not change Trolley simulation inputs or the engine fingerprint.",
       "search": "Disabled. The merge retained prior testedCandidates values only when engine fingerprint and exact conditions matched.",
       "result": "562 campaign level identities and 615 configurations replayed. All conditions, statuses, maximum values, best-save outcomes, witness records and testedCandidates match the pre-run catalogue. 294 exact population proofs, 315 rescue records, six UNKNOWN configurations.",
       "merge": "Audited 562 levels (615 configurations); packaged 294 exact-condition certificates and 315 best-known rescue targets.",
@@ -527,12 +551,22 @@
     }
   },
   "mainAdvanceSincePreviousSync": {
-    "fromCommit": "b0db98cfda178d4be9088b8ce1173783f810a74d",
-    "toCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-    "commitTitle": "Report a suspended level-entry fade as crossfading",
+    "fromCommit": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "toCommit": "a78098f254d816325647a44de570029df2083df6",
+    "commitTitle": "Trolley",
     "changedPaths": [
-      "Sources/LemmingsAudio/AdaptiveDJPlayer.swift"
+      "Documentation/ContentUniverseRoadmap.md",
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/README.md",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseScope.md",
+      "Documentation/TrolleyVerification/audit.json",
+      "Resources/Trolley/verified-maxima.json",
+      "Scripts/verify-trolley-maxima.sh",
+      "Tools/TrolleyVerification/catalogue.py",
+      "Tools/TrolleyVerification/test_retained_targets.py"
     ],
-    "sourceImpact": "Audio presentation state only. No engine, loader, content, route solver, Trolley input or L3 production-trace source changed. The direct production Mole comparison was rerun at dd0f1578."
+    "sourceImpact": "Trolley verifier, catalogue, tests, proof metadata and documentation only. No Classic, L2, L3 or NeoLemmix simulation, loader or level resource changed. The engine source fingerprint remains unchanged."
   }
 }

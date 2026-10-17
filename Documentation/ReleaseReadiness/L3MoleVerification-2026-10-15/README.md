@@ -467,3 +467,15 @@ and compared the production Mole with all 329 retained positions. It matched
 This confirms a current-source fidelity gap. The partial prototype remains
 unpromoted because its excavation mask and fall transitions do not match the
 source evidence.
+
+
+### 17 October Egyptian 29 seeded searches
+
+Two current-source searches resumed the accepted Egyptian 29 input schedule. One
+refreshed the seed through tick 1,560; the second used a shorter seed through
+tick 1,200. Both used an 8,192-state beam, two-pixel tool-site sampling, paired
+actors and a 600-second budget. They expanded 7,975,174 and 6,634,249
+candidates, respectively, and neither found a route. No candidate was written
+and fixture `229.json` is unchanged. These bounded searches do not show that the
+level is impossible. See the [search record]
+(current-head-egyptian29-seeded-searches-2026-10-17.json).

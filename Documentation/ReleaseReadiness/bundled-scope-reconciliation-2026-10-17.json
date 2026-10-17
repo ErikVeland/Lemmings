@@ -4,12 +4,12 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-    "originMain": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
-    "fetchHead": "dd0f1578ec2efb8b1e587949d708610931cc0ae4",
+    "head": "a78098f254d816325647a44de570029df2083df6",
+    "originMain": "a78098f254d816325647a44de570029df2083df6",
+    "fetchHead": "a78098f254d816325647a44de570029df2083df6",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "Fetched origin/main at dd0f1578ec2efb8b1e587949d708610931cc0ae4. The latest commit changes an audio presentation state report only; it changes no engine source, resource input or Trolley fingerprint after b92386eb. The standard Trolley verifier now accepts explicit resource/output paths. A replay-only audit at current engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c checked all 615 exact configurations across 562 campaign identities. Conditions, statuses, best outcomes, witnesses and candidate-history counts match the prior catalogue. It packages 294 population certificates and 315 rescue records; six configurations remain unknown. Classic fan routes, the L2 Gold ark, 17 L3 fixtures, NeoLemmix style dependencies and source-fidelity gates remain open. Published package evidence remains macOS 2.0.3 build 86; build 87 is prepared on main.",
-    "postFastForwardValidation": "At b0db98cf (the full Trolley replay audit ran at this source; the later dd0f1578 audio-only change leaves its engine fingerprint unchanged), Scripts/run-classic-dos-rewind-tests.sh passes all focused checks, including replay export after terrain edits; it uses installed 1.9.1 build 76 data and does not certify build 87. python3 Tools/TrolleyVerification/catalogue.py check passes 294 population proofs, 315 rescue records and replay hashes. The full replay-only verifier checked all 615 exact rescue configurations across 562 campaign identities at engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c; all identity conditions and outcomes match the prior catalogue. python3 Scripts/verify-l3-mole-trace.py passes its 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, 673 repeated source samples and four tunnel-edge checks. A direct production-to-DOS comparison at b0db98cf matches 0/329 positions; the first mismatch is tick 2. None of these checks closes the six unknown rescue configurations, all 3,617 Classic fan route gaps, L2 Gold ark, 17 L3 route fixtures, NeoLemmix dependencies, full engine fidelity or release-package acceptance."
+    "currentMainUpdate": "Fetched origin/main at a78098f254d816325647a44de570029df2083df6. The latest commit adds Trolley audit tooling, replay evidence and tests. It changes no game simulation or level data, and the Trolley engine fingerprint remains unchanged. The standard Trolley verifier now accepts explicit resource/output paths. A replay-only audit at current engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c checked all 615 exact configurations across 562 campaign identities. Conditions, statuses, best outcomes, witnesses and candidate-history counts match the prior catalogue. It packages 294 population certificates and 315 rescue records; six configurations remain unknown. Classic fan routes, the L2 Gold ark, 17 L3 fixtures, NeoLemmix style dependencies and source-fidelity gates remain open. Published package evidence remains macOS 2.0.3 build 86; build 87 is prepared on main. New population-60 searches for the two L2 Trolley rows found no route: five bounded runs ended at 0/60, and one wider run was terminated before a result. Both rows remain UNKNOWN. A fresh fetch before continuing verified that HEAD, origin/main and FETCH_HEAD all match a78098f254d816325647a44de570029df2083df6 (zero ahead/behind). Current-source Egyptian 29 searches add no route and leave fixture 229 unchanged.",
+    "postFastForwardValidation": "At b0db98cf (the full Trolley replay audit ran at this source; the later dd0f1578 audio-only change leaves its engine fingerprint unchanged), Scripts/run-classic-dos-rewind-tests.sh passes all focused checks, including replay export after terrain edits; it uses installed 1.9.1 build 76 data and does not certify build 87. python3 Tools/TrolleyVerification/catalogue.py check passes 294 population proofs, 315 rescue records and replay hashes. The full replay-only verifier checked all 615 exact rescue configurations across 562 campaign identities at engine fingerprint dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c; all identity conditions and outcomes match the prior catalogue. python3 Scripts/verify-l3-mole-trace.py passes its 53 recorded DOS/prototype positions, prototype reconstruction, production movement source hash, 673 repeated source samples and four tunnel-edge checks. A direct production-to-DOS comparison at dd0f1578 matches 0/329 positions; the first mismatch is tick 2. The later a78098f2 commit changes no L3 runtime source. None of these checks closes the six unknown rescue configurations, all 3,617 Classic fan route gaps, L2 Gold ark, 17 L3 route fixtures, NeoLemmix dependencies, full engine fidelity or release-package acceptance."
   },
   "releasePackageStates": {
     "macOS": {
@@ -52,18 +52,20 @@
     "lemmings2": {
       "scope": "120 campaign levels, 70 carry-over variants and 12 continuous tribe chains in the Mac content evidence.",
       "verified": "All 120 standalone routes, 70 carry-over variants and 12 chains replay successfully.",
-      "open": "The chains end with one survivor and a Bronze talisman. Gold Ark completion and source-engine parity remain open.",
+      "open": "The chains end with one survivor and a Bronze talisman. Gold Ark completion and source-engine parity remain open. Five completed bounded population-60 searches for Cavelems 6 and Highland 10 found no route; one wider Cavelems 6 attempt ended before a result. Both Trolley rows remain UNKNOWN. See the population-60 search record.",
       "evidence": [
         "../Lemmings2Completion/README.md",
-        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
+        "2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+        "../Lemmings2Completion/unknown-trolley-population60-search-2026-10-17.json"
       ]
     },
     "lemmings3": {
       "scope": "90 levels with 416 standalone and carried route fixtures in the current strict audit.",
       "verified": "399 of 416 fixtures pass exact double replay in the fresh fe11bd5d audit; the 322-entry manifest and negative checks pass.",
-      "open": "17 route fixtures fail (four standalone, 13 carried). A current-runtime retiming probe for Egyptian 29 repaired two stale action ticks but then reached an action with a depleted tool; delay-only repair is insufficient, so no route count changed. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
+      "open": "17 route fixtures fail (four standalone, 13 carried). Two additional 600-second seeded searches for Egyptian 29 expanded 7,975,174 and 6,634,249 candidates without finding a route; no fixture changed. Bounded searches do not prove impossibility. The excavation mask, built-brick trigger, wider Mole rules, environmental effects, movie audio, story transitions and release-package recovery also remain open.",
       "evidence": [
         "L3MoleVerification-2026-10-15/current-fixture-audit-provenance.json",
+        "L3MoleVerification-2026-10-15/current-head-egyptian29-seeded-searches-2026-10-17.json",
         "L3MoleVerification-2026-10-15/current-head-strict-gate-2026-10-17.json",
         "2.0-build83/current-main-sync-reconciliation-2026-10-17.json"
       ]

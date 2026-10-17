@@ -275,3 +275,19 @@ verifiers, and completion fixtures have no changes after the 16 October source
 check at `9a95012e`. Its 120 standalone routes, 70 carry-over variants and 12
 chains remain source-current for the recorded build 83 payload. This does not
 close original-engine parity or the Gold Ark requirement.
+
+## 17 October population-60 Trolley search
+
+The Trolley audit has no population-60 witness for Cavelems 6 or Highland 10.
+Their standalone fixtures use populations two and four. I searched each level at
+population 60 with an 8,192-state beam for 180 seconds. The seeded searches used
+the accepted standalone route as input. None of the four searches found a win.
+
+The best saved count was 0 of 60 in the four 180-second runs. A seeded
+600-second Cavelems 6 search also saved 0 of 60 after 1,275,815 expansions.
+A 32,768-state attempt stopped with exit 137 before it returned a result. The
+cause was not confirmed. These bounded searches do not prove that either level
+is unsolvable. They leave both Trolley targets open and do not prove original
+DOS parity. See the [search record]
+(unknown-trolley-population60-search-2026-10-17.json) for exact conditions,
+commands, hashes and candidate counts.
