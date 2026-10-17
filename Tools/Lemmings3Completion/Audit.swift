@@ -10,6 +10,7 @@ import NxlvKit
         let passed: Bool
         let failure: String?
         let routeStatus: String
+        let currentInitialStateHash: String?
         let rebasedOutcome: L3Replay.Outcome?
         let rebasedFailure: String?
     }
@@ -42,6 +43,7 @@ import NxlvKit
                 var replay: L3Replay?
                 var base: Lemmings3Runtime?
                 var levelData: Data?
+                var currentInitialStateHash: String?
                 do {
                     let fixture = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: file))
                     replay = fixture
@@ -69,11 +71,13 @@ import NxlvKit
                         permanent: permanent, temporary: temporary, total: fixture.population)
                     base = initial
                     levelData = level.rawData
+                    currentInitialStateHash = L3Replay.stateHash(initial)
                     _ = try fixture.replay(from: initial, levelData: level.rawData)
                     _ = try fixture.replay(from: initial, levelData: level.rawData)
                     results.append(.init(fixture: file.path, level: fixture.level,
                         population: fixture.population, passed: true, failure: nil,
-                        routeStatus: "exact", rebasedOutcome: nil, rebasedFailure: nil))
+                        routeStatus: "exact", currentInitialStateHash: currentInitialStateHash,
+                        rebasedOutcome: nil, rebasedFailure: nil))
                 } catch {
                     let strictFailure = String(describing: error)
                     var rebasedOutcome: L3Replay.Outcome?
@@ -88,7 +92,8 @@ import NxlvKit
                     let routeStatus = rebasedOutcome == nil ? (replay == nil ? "invalid" : "route-fails") : "rebased-win"
                     results.append(.init(fixture: file.path, level: levelNumber,
                         population: population, passed: false, failure: strictFailure,
-                        routeStatus: routeStatus, rebasedOutcome: rebasedOutcome, rebasedFailure: rebasedFailure))
+                        routeStatus: routeStatus, currentInitialStateHash: currentInitialStateHash,
+                        rebasedOutcome: rebasedOutcome, rebasedFailure: rebasedFailure))
                     print("FAIL \(file.path): \(strictFailure)")
                     if let rebasedOutcome {
                         print("REBASED WIN \(file.lastPathComponent): saved \(rebasedOutcome.saved), lost \(rebasedOutcome.lost)")

@@ -1150,11 +1150,15 @@ func testCelebrationProgress() throws {
     let suite = "Lemmings.GameCenter.Tests." + UUID().uuidString
     let defaults = UserDefaults(suiteName: suite)!
     defer { defaults.removePersistentDomain(forName: suite) }
+    let storage = try AppStorage.temporary(named: "GameCenter")
+    defer { storage.removeTemporaryFiles() }
+    let recordsStore = ArcadeStore(storage: storage, bundledProofs: nil)
     let transport = TestGameCenterTransport()
     let config = TrolleyOnlineConfiguration(enabled: true, starsID: "stars", clearsID: "clears", perfectID: "perfect",
         levels: [.init(conditions: conditions(), maximum: evidence(58), leaderboardID: "level")])
     var records = try verifiedRecords(); _ = records.record(run(58))
-    let service = GameCenterScores(configuration: config, transport: transport, defaults: defaults)
+    let service = GameCenterScores(configuration: config, transport: transport, defaults: defaults,
+                                   recordsStoreProvider: { recordsStore })
     func settle() async throws {
         for _ in 0..<100 where service.busy { try await Task.sleep(nanoseconds: 10_000_000) }
         try require(!service.busy, "Game Center operation failed to settle")
@@ -1206,7 +1210,8 @@ func testCelebrationProgress() throws {
     try require(service.board == currentBoard && !service.busy, "Old authentication callback cleared current scores")
     print("PASS Game Center sign-out, account switching, delayed responses and superseded authentication")
     let disabled = TrolleyOnlineConfiguration(enabled: false, starsID: "stars", clearsID: "clears", perfectID: "perfect", levels: config.levels)
-    let unavailable = GameCenterScores(configuration: disabled, transport: transport, defaults: defaults)
+    let unavailable = GameCenterScores(configuration: disabled, transport: transport, defaults: defaults,
+                                       recordsStoreProvider: { recordsStore })
     let loads = transport.loads
     unavailable.connect(profileID: ArcadeProfile.legacyID, window: nil, boardID: "stars", history: records.trolley)
     try require(!unavailable.busy && unavailable.board == nil && transport.loads == loads, "Disabled Game Center called the network")

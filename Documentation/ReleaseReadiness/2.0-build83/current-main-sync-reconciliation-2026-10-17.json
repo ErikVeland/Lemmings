@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "date": "2026-10-17",
-  "sourceCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
-  "upstreamCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+  "sourceCommit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+  "upstreamCommit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
   "fetchedRemoteMain": {
     "ref": "origin/main",
-    "commit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "commit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
     "checkedDate": "2026-10-17"
   },
   "branch": "main",
@@ -32,7 +32,7 @@
       "trolleyAudit": "At b0db98cf, the standard verifier replays 615 configurations covering 562 campaign level identities. Conditions, status, maximum, best-save outcome, witness and tested-candidate counts match the prior audit for every identity. The merge reports 294 population-bound certificates, 315 best-known rescue records and six unknown configurations. Candidate search was disabled; the 1,535 recorded attempts were retained only for identical conditions and engine fingerprint. This audit does not cover Classic fan packs or prove source fidelity."
     },
     "method": "git diff --name-status 9a95012e HEAD -- Sources/NxlvKit Sources/LemmingsLocal/FanLevelLibrary.swift Sources/LemmingsLocal/GameAssetCache.swift Tools/ClassicSolver Tools/Lemmings2Completion Tools/Lemmings3Completion Tools/NeoLemmix Scripts",
-    "result": "Current main is 3e1c749854f433fe6cce279a5d165ef48fef1b2f. The L2 solver now bounds pending candidates and has a memory-bound regression. No engine runtime, loader or bundled level resources changed. Bundled route and source-behaviour gaps remain open. This worktree now has four uncommitted release-record updates. The current-head L3 Mole rerun also matches the retained runtime and trace hashes, with 0/329 source positions.",
+    "result": "Current main is 0803e8bd99e3c2d63429bf3a2866c37f528e3842. The 2.0.5 Trolley commits change history lookup and deterministic classification, but no Classic, L2, L3 or NeoLemmix runtime or bundled level inputs. Current L3 Mole evidence remains applicable by exact runtime hash: 141/329 source positions and 393/416 exact double replays, with six stale-identity rebased wins and 17 route failures. The full Trolley runner passes its Game Center recovery and profile tests, then stops because the local app bundle lacks MacArtwork/lemmings/manifest.json. Build 87 package acceptance and bundled closure remain open.",
     "classicSolver": "The 368e7e72 geometry-output formatting change is descriptive only. The later batch-driver change selects exact unresolved rows and exact members. Commit 833f396b changes only appcast.xml. Commit 3e1c7498 changes L2 solver tools only. It does not change Classic simulation or replay behaviour."
   },
   "classic": {
@@ -673,21 +673,31 @@
     }
   },
   "mainAdvanceSincePreviousSync": {
-    "fromCommit": "aa21fa0ed4c7905942bd707dfbc2d70aa23d0c3a",
-    "toCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
-    "commitTitle": "2.0.5 Trolley hotfix and evidence merge",
+    "fromCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "toCommit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "commitTitle": "2.0.5 Hotfix of bottlenecks",
     "changedPaths": [
-      "Sources/NxlvKit/TrolleyAchievementCollection.swift",
-      "Sources/NxlvKit/TrolleyHistory.swift",
+      "Sources/NxlvKit/TrolleyPhilosophy.swift",
+      "Tests/TrolleyTests/main.swift",
+      "Documentation/ContentUniverseRoadmap.md",
+      "Documentation/Overview.md",
       "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json",
       "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
-      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-strict-gate-aa21fa0.json",
       "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/gates.json",
       "Documentation/ReleaseScope.md"
     ],
-    "sourceImpact": "The new Trolley history hotfix filters to the requested profile/comparison before reassessing attempts and caches language-independent achievement traits. The focused Trolley script could not start because its Sparkle bootstrap could not resolve github.com. The change does not alter game simulation, level data or L3 runtime. Current L3 trace and full fixture audit remain applicable by runtime hash."
+    "sourceImpact": "Trolley classification now sums score dimensions in a stable order. Its repeated-analysis test exposed floating-point differences from dictionary iteration. The focused test uses a temporary ArcadeStore and passes Game Center offline recovery, rank loading, retry suppression and profile ownership. The full runner later fails at the Play replay UI assertion. The local app bundle cannot be rebuilt because Content/LevelPacks/packs.json is absent. This commit changes no game simulation, level data or L3 runtime. Current L3 trace and full fixture audit remain applicable by runtime and fixture hashes."
   },
   "currentMainReleaseFeedCommit": "833f396b9edee8f0059deb010286439ac97c4e0a",
-  "currentMainReleaseFeedNote": "Current main includes the 2.0.5 Trolley source hotfix, but appcast.xml still advertises macOS 2.0.4 build 87. The latest retained package acceptance evidence is build 86. Neither accepted-package evidence for the hotfix nor bundled-engine closure is established."
+  "currentMainReleaseFeedNote": "Current main includes the 2.0.5 Trolley source hotfix, but appcast.xml still advertises macOS 2.0.4 build 87. The latest retained package acceptance evidence is build 86. Neither accepted-package evidence for the hotfix nor bundled-engine closure is established.",
+  "latestFetchRefresh": {
+    "checkedAt": "2026-10-17",
+    "head": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "originMain": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "fetchHead": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "ahead": 0,
+    "behind": 0,
+    "validation": "The current L3 runtime hash and fixture inputs match the aa21fa0 full audit. That audit records 393/416 exact double replays, six stale-identity routes that win when rebased, and 17 route failures. Mole source parity remains 141/329. The strict gate fails at 107.json and 107-1.json. The Trolley Game Center reconnect, rank, account-switch and profile tests pass. The full runner later fails at the Play replay UI assertion. Rebuilding the local app bundle is blocked because Content/LevelPacks/packs.json is absent."
+  }
 }

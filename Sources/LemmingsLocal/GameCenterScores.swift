@@ -87,9 +87,11 @@ import NxlvKit
     static let shared = GameCenterScores()
     private let adapter: MacGameCenterTransport
     init(configuration: TrolleyOnlineConfiguration? = nil, transport: (any GameCenterTransport)? = nil,
-         defaults: UserDefaults = .standard) {
+         defaults: UserDefaults = .standard,
+         recordsStoreProvider: @escaping @MainActor () -> ArcadeStore = { ArcadeStore.shared }) {
         adapter = MacGameCenterTransport(transport ?? AppleGameCenterTransport())
-        super.init(configuration: configuration, transport: adapter, defaults: defaults, recordsStoreProvider: { ArcadeStore.shared })
+        super.init(configuration: configuration, transport: adapter, defaults: defaults,
+                   recordsStoreProvider: recordsStoreProvider)
     }
     func connect(profileID: String, window: NSWindow?, boardID: String, history: TrolleyHistory) {
         adapter.window = window

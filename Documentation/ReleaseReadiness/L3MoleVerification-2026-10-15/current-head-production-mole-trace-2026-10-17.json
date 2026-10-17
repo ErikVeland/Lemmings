@@ -214,7 +214,7 @@
         112
       ]
     },
-    "result": "The optimised runtime build and trace completed. The comparison returned nonzero because current production matched 141/329 positions. The independent no-optimisation build produced the same trace hash. Commit aa21fa0 changes the verifier and evidence records only; the audited L3 runtime path and source hash are unchanged. Current HEAD 4a8e2fa retains the identical L3 runtime source hash; its added source changes affect Trolley history only.",
+    "result": "The optimised build and trace ran at 4a8e2fa against the production runtime source introduced at dc9c596. HEAD 0803e8bd changes Trolley classification and documentation only. The independent no-optimisation build produced the same trace hash. The result remains applicable at 0803e8bd by the unchanged L3 runtime hash.",
     "currentHeadCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
     "runtimeUnchangedInCurrentHeadCommit": true,
     "fixtureAuditRecord": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-fixture-audit-aa21fa0.json"
@@ -241,9 +241,9 @@
     },
     "result": "The current-head rebuild produced the same runtime, library and trace hashes as the retained dd0f1578 run. It still matches 0 of 329 source positions."
   },
-  "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. A fresh optimised trace gives 141/329 exact positions; parity and full fixture gates remain open.",
+  "productionStatusAtCurrentHead": "The cell-carve implementation is in production at dc9c596. The 4a8e2fa optimised trace gives 141/329 exact positions. HEAD 0803e8bd retains the audited L3 runtime source and fixture inputs. Parity and full fixture gates remain open.",
   "initialReportHead": "3e1c749854f433fe6cce279a5d165ef48fef1b2f",
-  "headCommit": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+  "headCommit": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
   "noOptimisationDiagnostic": {
     "runtimeSourceSHA256": "493610334a5404ebd2d205d7bcd508613248c4d39457ad006aa2027344f58ea8",
     "runtimeLibrarySHA256": "d91881987648e8b1eda9c923e1b865e4d1a215a0b304abff433e8340a62f57da",
@@ -260,5 +260,9 @@
     "currentRuntimeRouteFailures": 17,
     "standaloneFailures": 4,
     "carriedFailures": 13
+  },
+  "currentApplicability": {
+    "head": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "basis": "The 4a8e2fa trace remains applicable because 4a8e2fa through 0803e8bd changes no L3 runtime source or fixture inputs."
   }
 }

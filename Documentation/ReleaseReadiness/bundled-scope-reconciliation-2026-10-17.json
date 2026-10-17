@@ -4,20 +4,24 @@
   "purpose": "Reconcile bundled content scope with the latest accepted Mac and iOS package evidence. Imported content remains open-ended.",
   "sourceState": {
     "branch": "main",
-    "head": "4a8e2fa191ef69779366f7109d7f8b750053182c",
-    "originMain": "4a8e2fa191ef69779366f7109d7f8b750053182c",
-    "fetchHead": "4a8e2fa191ef69779366f7109d7f8b750053182c",
+    "head": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "originMain": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
+    "fetchHead": "0803e8bd99e3c2d63429bf3a2866c37f528e3842",
     "worktreeHasUncommittedChanges": true,
-    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal 4a8e2fa191ef69779366f7109d7f8b750053182c, zero commits ahead or behind. The merge adds the 2.0.5 Trolley history hotfix and L3 evidence. It does not change L3 runtime or content; the aa21fa0 L3 trace and fixture audit remain applicable by exact source hash. The focused Trolley test script could not start because Sparkle bootstrap could not resolve github.com. Bundled gaps remain; imported content stays open-ended.",
+    "currentMainUpdate": "A fresh fetch confirms that HEAD, origin/main and FETCH_HEAD equal 0803e8bd99e3c2d63429bf3a2866c37f528e3842, with zero commits ahead or behind. Commit 0803e8bd adds deterministic Trolley classification and documentation updates. The L3 runtime and content inputs are unchanged, so the aa21fa0 trace and fixture audit remain applicable by exact hashes. Trolley history, Game Center reconnect, rank, account-switch and profile tests pass. The full Trolley runner stops at a replay-control UI assertion. A local app rebuild is blocked because Content/LevelPacks/packs.json is absent. Bundled gaps remain; imported content stays open-ended.",
     "postFastForwardValidation": "The recorded Trolley replay audit checked 615 configurations across 562 campaign identities. A fresh optimised L3 audit at aa21fa0 checked 416 fixtures: 393 exact double replays, six stale-identity routes that still win when rebased, and 17 schedules that do not win (four standalone, 13 carried). The Mole trace matches 141/329 source positions and diverges after tick 187; two of four terrain-edge witnesses fail. The independent no-optimisation trace matches the same positions. Bundled gaps remain: 3,617 Classic fan routes, L2 Gold Ark and two UNKNOWN Trolley rows, L3 failures and identity reconciliation, NeoLemmix style dependencies and source-behaviour coverage. Build 87 package acceptance is not recorded.",
     "aheadBehindOriginMain": {
       "ahead": 0,
       "behind": 0
     },
     "uncommittedPaths": [
-      "Documentation/ContentUniverseRoadmap.md",
-      "Documentation/Overview.md",
-      "Documentation/ReleaseReadiness/gates.json"
+      "Documentation/ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-head-production-mole-trace-2026-10-17.json",
+      "Documentation/ReleaseReadiness/bundled-scope-reconciliation-2026-10-17.json",
+      "Documentation/ReleaseReadiness/gates.json",
+      "Documentation/ReleaseScope.md",
+      "Sources/LemmingsLocal/GameCenterScores.swift",
+      "Tests/TrolleyTests/main.swift"
     ]
   },
   "releasePackageStates": {
@@ -106,7 +110,7 @@
     "Player-imported content is outside bundled closure counts. Keep support claims limited by engine, version and tested features."
   ],
   "overallStatus": "open",
-  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. The latest L3 runtime change lacks a fresh current-head trace and full fixture audit. The appcast advertises build 87, but retained package acceptance evidence is for build 86. The latest installed iOS candidate does not contain the full 2.0 engine scope. Imported content remains open-ended and is tracked separately.",
+  "reason": "Bundled route, fidelity, dependency-rights and source-parity gaps remain. The current L3 trace and fixture audit apply to HEAD because the L3 runtime and fixture inputs have not changed. The appcast advertises build 87, but retained package acceptance evidence is for build 86. The latest installed iOS candidate does not contain the full 2.0 engine scope. Imported content remains open-ended and is tracked separately.",
   "importedContentStatus": {
     "scope": "Open-ended; excluded from bundled closure counts.",
     "supportRule": "State support by engine, content version and verified features. Do not infer full support for every imported pack or level.",
