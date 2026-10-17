@@ -49,26 +49,20 @@ match build 85, and it retains the shared engine libraries. The complete build
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
 On 17 October, a fresh fetch confirmed that `HEAD`, `origin/main` and
-`FETCH_HEAD` match at `3e1c749854f433fe6cce279a5d165ef48fef1b2f`, with a clean worktree at fetch and zero
-commits ahead or behind. This reconciliation adds local release-record edits. Commit `833f396b` updates the 2.0.4
-appcast. Commit `3e1c7498` adds a bounded pending-candidate frontier to the L2
-search solver and a memory-bound regression. It also updates evidence records.
-It changes no engine runtime, loader or bundled level resources. The current-main
-reconciliation records earlier changes to
-Classic rewind fingerprints and Trolley evidence. A full replay-only Trolley
-audit at engine fingerprint
-`dfc8f264da17da32791b0fd8360637daa280810a77b8a3bc247916532ca74e1c` checked 615
-configurations across 562 campaign identities. Every condition, status,
-best-save result and witness matches the prior catalogue. The merge retained
-1,535 search attempts for the same engine and exact conditions. It reports 294
-population proofs, 315 rescue records and six unknown configurations. This
-evidence does not establish source fidelity or close the fan, Gold ark, L3
-route or NeoLemmix style gaps. A direct L3 production-to-DOS trace at `dd0f1578`
-matches 0/329 positions.
-The runtime lacks source-observed Mole excavation; its exact carve mask and
-built-brick trigger remain unverified. The appcast advertises build 87, while
-the latest package acceptance record remains build 86. The full command, input
-limits and audit record are in the [current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+`FETCH_HEAD` match at `dc9c59614a710705f6bd4701deb7d34cf3796870`, with zero
+commits ahead or behind. Two local release-record edits were present at fetch.
+Commit `833f396b` updates the 2.0.4 appcast. Commit `dc9c5961` adds an 8x2
+Mole carve to the production L3 runtime and updates its evidence. A fresh no-optimisation build of the current source matches 141/329 Mole
+positions, with first divergence at tick 2 and further divergence after tick
+187; two of four terrain-edge checks fail. This is not a release-optimised
+build. No current-head full L3 fixture audit is recorded. The previous full
+fixture audit at `fe11bd5d` had 399/416 passing fixtures and 17 route failures;
+it predates this runtime change. Earlier Trolley evidence checks 615 configurations across 562 campaign
+identities, with 294 population proofs, 315 rescue records and six unknown
+configurations. These results do not establish source fidelity or close the
+fan, Gold Ark, L3 route or NeoLemmix style gaps. The appcast advertises build
+87, while the latest package acceptance record remains build 86. See the
+[current-main reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 
 The published Mac build 86 and the current 2.0 iOS source are separate package
 states. Build 86 records no non-localisation resource-index changes from build

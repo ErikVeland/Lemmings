@@ -11,6 +11,7 @@ import tempfile
 project = Path(__file__).resolve().parents[1]
 evidence = project / "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15"
 runtime = project / "Sources/NxlvKit/Lemmings3Runtime.swift"
+current_report = evidence / "current-head-production-mole-trace-2026-10-17.json"
 
 source = json.loads((evidence / "original-steel-actor-trace.json").read_text())
 comparison = json.loads((evidence / "prototype-steel-comparison.json").read_text())
@@ -28,6 +29,12 @@ baseline_source = subprocess.run(
 ).stdout
 if hashlib.sha256(baseline_source).hexdigest() != comparison["baselineRuntimeSHA256"]:
     raise SystemExit("FAIL prototype base source differs from the recorded baseline.")
+baseline_text = baseline_source.decode()
+movement_start = baseline_text.index("    private mutating func updateCreatures()")
+movement_end = baseline_text.index("    public mutating func step()", movement_start)
+baseline_movement_hash = hashlib.sha256(baseline_text[movement_start:movement_end].encode()).hexdigest()
+if baseline_movement_hash != comparison["moleMovementSourceSHA256"]:
+    raise SystemExit("FAIL recorded Mole movement checksum differs from the prototype baseline.")
 with tempfile.TemporaryDirectory() as temporary_directory:
     prototype_root = Path(temporary_directory)
     prototype_source = prototype_root / source_path
@@ -61,22 +68,40 @@ for sample in samples:
     if source_position != recorded_source or native_position != recorded_source or not sample["matches"]:
         raise SystemExit(f"FAIL Mole position differs at tick {sample['tick']}.")
 
-runtime_text = runtime.read_text()
-runtime_hash = hashlib.sha256(runtime_text.encode()).hexdigest()
-movement_start = runtime_text.index("    private mutating func updateCreatures()")
-movement_end = runtime_text.index("    public mutating func step()", movement_start)
-movement_hash = hashlib.sha256(runtime_text[movement_start:movement_end].encode()).hexdigest()
-if movement_hash != comparison["moleMovementSourceSHA256"]:
-    raise SystemExit("FAIL Mole movement source differs from the trace comparison baseline.")
-if runtime_hash == comparison["prototypeRuntimeSHA256"]:
-    raise SystemExit("FAIL prototype comparison is being reported as an isolated production check.")
+runtime_hash = hashlib.sha256(runtime.read_bytes()).hexdigest()
+report = json.loads(current_report.read_text())
+current_commit = subprocess.run(
+    ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+).stdout.strip()
+if report["headCommit"] != current_commit:
+    raise SystemExit("FAIL current production report does not match HEAD.")
+current_head = report["currentHeadRerun"]
+if current_head["runtimeSourceSHA256"] != runtime_hash:
+    raise SystemExit("FAIL production runtime source differs from the current-head report.")
+if current_head["freshTraceProduced"]:
+    if "exactPositionMatches" not in current_head or "traceSHA256" not in current_head:
+        raise SystemExit("FAIL fresh current-head trace summary is incomplete.")
+    parity_summary = (
+        f"fresh current-head trace matches "
+        f"{current_head['exactPositionMatches']}/{current_head['samples']} positions"
+    )
+else:
+    cell_carve = report["cellCarveVariant"]
+    if cell_carve["candidateRuntimeSHA256"] != runtime_hash:
+        raise SystemExit("FAIL current production source differs from its recorded cell-carve evidence.")
+    if current_head["sourceHashMatchedEvidence"] != "cellCarveVariant":
+        raise SystemExit("FAIL isolated candidate evidence is not identified in the current-head report.")
+    parity_summary = (
+        f"matching source hash has prior {current_head['candidateExactMatches']}/"
+        f"{current_head['samples']} candidate matches, not a fresh current-head trace"
+    )
 if comparison["coordinateDifferences"] != 0 or comparison["samplesCompared"] != len(samples):
     raise SystemExit("FAIL Mole comparison summary does not match its samples.")
 
 print(f"PASS recorded DOS/prototype samples: {len(samples)} positions, ticks {first}–{last}")
 print("PASS isolated prototype patch reconstructs from its recorded baseline")
-print("PASS production Mole movement source matches the pre-prototype baseline")
-print("OPEN production-to-DOS trajectory parity: the prototype comparison is not production evidence")
+print("PASS current production runtime hash matches the current-head report")
+print(f"OPEN production-to-DOS trajectory parity: {parity_summary}")
 
 if followup["schemaVersion"] != 1 or not followup["headless"] or followup["audio"] != "muted":
     raise SystemExit("FAIL original-engine follow-up metadata is incomplete.")
