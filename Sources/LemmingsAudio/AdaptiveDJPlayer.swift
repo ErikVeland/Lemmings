@@ -150,7 +150,8 @@ import NxlvKit
   public init() {}
 
   public var isPlaying: Bool { playingDeckCount > 0 }
-  public var isCrossfading: Bool { fadeTask != nil }
+  /// A suspended fade keeps its decks and position but drops its task until resume.
+  public var isCrossfading: Bool { fadeTask != nil || (outputSuspended && fadingIn != nil) }
   public var playingDeckCount: Int { allDecks.filter(\.isPlaying).count }
   /// The mix needs somewhere to travel between.
   public var hasTracks: Bool { !pools.isEmpty }
