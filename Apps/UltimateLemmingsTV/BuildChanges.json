@@ -1,10 +1,10 @@
 {
   "changes": [
+    "Results and saves no longer pause play",
+    "Chronicles Moles act more like the original at steel",
     "Journey resumes after your furthest level",
     "Leaderboard routes identify the exact level",
     "Faster Classic, Tribes and NeoLemmix simulation",
-    "Achievement status on results",
-    "Build number and date on Home",
-    "Latest changes on first launch"
+    "Achievement status on results"
   ]
 }
