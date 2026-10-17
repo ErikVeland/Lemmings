@@ -550,3 +550,21 @@ that matches both source scenes. See the [current fixture audit]
 (current-head-fixture-audit-8d65e927.json), [strict gate]
 (current-head-strict-gate-8d65e927.json) and [air-gap trace]
 (current-head-production-air-gap-trace-2026-10-17.json).
+
+### 17 October current-main recheck at 183bc8a8
+
+A fresh fetch confirms `HEAD`, `origin/main` and `FETCH_HEAD` match at
+`183bc8a8`. The L3 runtime suite passes with bundled resources. The fresh audit
+checks 416 fixtures. It verifies 399 exact double replays, zero stale-identity
+wins and 17 route failures. The strict gate still fails at `107.json` and
+`107-1.json`.
+
+The explicit-steel Mole contact change is in main at `5b2306ed`. Its source
+matches 139/329 left-facing positions and 140/344 air-gap positions. It does
+not match the source fall after tick 167. Two of four tunnel-edge checks also
+remain open. These results do not close the 17 failing schedules or prove full
+L3 engine fidelity. See the [current-main record]
+(current-main-steel-contact-183bc8a8-2026-10-17.json), [fixture audit]
+(current-head-fixture-audit-183bc8a8.json), [left-facing trace]
+(current-main-steel-contact-left-facing-trace-2026-10-17.json) and [air-gap
+trace](current-main-steel-contact-air-gap-trace-2026-10-17.json).
