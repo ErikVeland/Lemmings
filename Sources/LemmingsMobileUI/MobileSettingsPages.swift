@@ -174,7 +174,7 @@ extension MobileLibraryViewController {
             case "fall": settings.classic.bottomFallSounds.toggle()
             case "soundtrackChoice":
                 settings.soundtrack = cycle(settings.soundtrack, MobileMusic.shared.soundtrackNames)
-                settings.classic.music = settings.soundtrack == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
+                settings.classic.music = MobileMusic.source(soundtrack: settings.soundtrack)
             case "djOther": settings.classic.djIncludesOtherSoundtracks.toggle()
             case "djShuffleScope": settings.djShuffleScope = cycle(settings.djShuffleScope, SoundtrackCatalogue.ShuffleScope.allCases)
             case "uiSize": settings.classic.interfaceSize = cycle(settings.classic.interfaceSize, ClassicInterfaceSize.allCases)

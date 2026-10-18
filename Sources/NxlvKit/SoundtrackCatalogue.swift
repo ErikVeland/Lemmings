@@ -6,6 +6,7 @@ public struct SoundtrackCatalogue: Codable, Sendable {
         switch identifier {
         case "Original": L10n.text("Original")
         case "Adaptive DJ": L10n.text("Adaptive DJ")
+        case "Macintosh": L10n.text("Macintosh")
         default: identifier
         }
     }

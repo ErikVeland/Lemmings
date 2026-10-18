@@ -46,16 +46,18 @@ import UIKit
 
     private var settings: MobileSettings { cachedSettings }
     private var musicRoot: URL? { Bundle.main.resourceURL?.appendingPathComponent("Music") }
+    /// The rendered Macintosh SONG bank, as in the Mac app.
+    let macintoshMusic = Bundle.main.resourceURL.flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     var soundtrackNames: [String] {
-        ["Original", "Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
+        ["Original"] + (macintoshMusic == nil ? [] : [Self.macintosh]) + ["Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
     }
     var soundtrack: String {
         get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original" }
         set {
             var value = settings; value.soundtrack = newValue
-            value.classic.music = newValue == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
+            value.classic.music = Self.source(soundtrack: newValue)
             value.save(to: .standard, profileID: profileID)
             cachedSettings = value
             stop()
@@ -64,6 +66,11 @@ import UIKit
     var isEnabled: Bool {
         get { settings.musicEnabled }
         set { var value = settings; value.musicEnabled = newValue; value.save(to: .standard, profileID: profileID); applySettings() }
+    }
+    static let macintosh = "Macintosh"
+    /// The shared setting that matches a mobile soundtrack choice.
+    static func source(soundtrack: String) -> ClassicMusicSource {
+        soundtrack == "Adaptive DJ" ? .adaptiveDJ : soundtrack == macintosh ? .macintoshMIDI : .amigaModules
     }
     func cycleSoundtrack() {
         let names = soundtrackNames
@@ -98,20 +105,25 @@ import UIKit
         if playing == menuKey { active ? resume() : suspend(); return }
         // A level's attempt owns the decks until it exits and stops them.
         guard active, playing == nil else { return }
-        let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: false,
+        let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: macintoshMusic != nil,
             otherVersions: musicRoot.map(MenuThemeSelection.otherVersions(at:)) ?? [])
         menuTheme = theme
         usingDJ = false; dj.stop()
         paused = false; inactive = false; resultComplete = false
-        if case let .recording(path) = theme, let url = musicRoot?.appendingPathComponent(path) {
+        let recording: URL? = switch theme {
+        case .macintoshLemming1: macintoshMusic?.root.appendingPathComponent("classic/lemming1.m4a")
+        case let .recording(path): musicRoot?.appendingPathComponent(path)
+        case .amigaIntro: nil
+        }
+        if let url = recording {
             module.stop()
-            recordings.load([url], originalMix: settings.classic.musicStyle == .faithful)
+            recordings.load([url], originalMix: theme == .macintoshLemming1 || settings.classic.musicStyle == .faithful)
             if recordings.play(index: 0) != nil {
                 usingRecording = true; playing = menuKey
                 announce(url, soundtrack: soundtrack); applyOutputState(); return
             }
         }
-        // iPad and Apple TV do not bundle the Macintosh bank, so the Amiga intro is the main theme.
+        // Any recording that fails to open falls back to the Amiga intro.
         recordings.stop(); usingRecording = false
         guard let intro = BundledGameResources.music("lemmings_music_mod")?.appendingPathComponent("intro.mod") else { return }
         do {
@@ -133,6 +145,10 @@ import UIKit
         compositionID = tune.game + "." + tune.track.lowercased()
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
         let source = moduleURL(tune)
+        if playMacintosh(tune: tune, index: position, title: title) {
+            module.stop(); usingDJ = false; dj.stop(); usingRecording = true; playing = key
+            applyOutputState(); return
+        }
         if let root = musicRoot {
             var pools = SoundtrackPlayer.djSoundtracks(at: root,
                 includeOtherSoundtracks: true,
@@ -195,6 +211,16 @@ import UIKit
             SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)
         }
     }
+    /// The Mac app's Macintosh source: the original song for this level, without the modern mix.
+    private func playMacintosh(tune: MobileMusicAssignment.Tune, index: Int, title: String) -> Bool {
+        guard soundtrack == Self.macintosh, let macintoshMusic else { return false }
+        let release: ClassicTitle? = tune.game == "holiday" ? .xmasLemmings1991 : tune.game == "ohno" ? .ohNoMoreLemmings : nil
+        guard let url = macintoshMusic.track(index: index, levelTitle: title, title: release) else { return false }
+        recordings.load([url], originalMix: true)
+        guard recordings.play(index: 0) != nil else { return false }
+        announce(url, soundtrack: soundtrack)
+        return true
+    }
     private func playRecording(tune: MobileMusicAssignment.Tune) -> Bool {
         guard let selected = recordingURL(tune: tune) else { return false }
         recordings.load([selected], originalMix: settings.classic.musicStyle == .faithful)
@@ -206,6 +232,18 @@ import UIKit
         guard let url else { return }
         guard url != lastTrack else { return }
         lastTrack = url
+        // Name Macintosh songs as the Mac app does: the catalogue title of the composition.
+        if let macintoshMusic, let relative = SoundtrackPlayer.relativePath(url, under: macintoshMusic.root),
+           ClassicMacMusicLibrary.requiredPaths.contains(relative) {
+            let family = relative.split(separator: "/").first.map(String.init) ?? "classic"
+            let name = url.deletingPathExtension().lastPathComponent
+            let catalogue = musicRoot.flatMap { SoundtrackCatalogue.load(at: $0) }
+            let title = catalogue?.track(id: (family == "xmas" ? "holiday" : family) + "." + name)?.title ?? name.capitalized
+            currentTrackTitle = title
+            currentSoundtrackName = L10n.text("Macintosh (original)")
+            onTrackChange?(title, L10n.text("Macintosh (original)"))
+            return
+        }
         let path = musicRoot.flatMap { SoundtrackPlayer.cataloguePath(url, root: $0) }
         let entry = musicRoot.flatMap { root in
             path.flatMap { SoundtrackCatalogue.load(at: root)?.entry(path: $0) }

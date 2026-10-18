@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Copy the soundtrack bundle into an iOS app.
+"""Copy the soundtrack bundle into an iOS or tvOS app.
 
 Local builds include all soundtracks. Distribution builds can select main scope
-and download the optional libraries on demand.
+and download the optional libraries on demand. Both scopes bundle the Amiga
+modules and the Macintosh song bank.
 """
 import argparse
 import os
@@ -30,6 +31,22 @@ def copy_into_app(app, scope="full"):
         subprocess.run(["zsh", str(ROOT / "Scripts/compact-bundled-music.sh"), str(target)], check=True)
         subprocess.run([sys.executable, str(ROOT / "Tools/MusicCatalogue/library.py"), "playback",
                         "--output", str(target)], check=True)
+    copy_mac_music(app)
+
+
+def copy_mac_music(app):
+    """Render the Macintosh SONG bank as the Mac app does. Renders are cached in .build/mac-music."""
+    target = app / "MacMusic"
+    if target.is_symlink():
+        raise ValueError("MacMusic destination must not be a link.")
+    artwork = ROOT / ".build/mac-artwork"
+    # Mac artwork preparation extracts the Music resource forks from the supplied disks.
+    if not all((artwork / game / "Music.rsrc").is_file() for game in ("original", "ohno")):
+        subprocess.run([sys.executable, str(ROOT / "Tools/MacArtwork/prepare.py"), str(artwork / "export")], check=True)
+    tools = subprocess.run(["zsh", str(ROOT / "Scripts/ensure-mac-music-tools.sh")],
+                           check=True, stdout=subprocess.PIPE, text=True).stdout.strip()
+    subprocess.run([sys.executable, str(ROOT / "Tools/MacMusic/prepare.py"),
+                    "--output", str(target), "--tools", tools], check=True)
 
 
 def main():
