@@ -4,7 +4,7 @@ import LemmingsMobileCore
 import NxlvKit
 import UIKit
 
-private actor MobileTeachingLoader {
+actor MobileTeachingLoader {
     static let shared = MobileTeachingLoader()
     private var catalogue: (LevelHintCatalogue, String)?
     private var results: [String: (LevelHintDeck, VerifiedSolution?)] = [:]

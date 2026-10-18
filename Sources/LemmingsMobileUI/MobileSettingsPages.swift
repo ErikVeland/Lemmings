@@ -110,7 +110,11 @@ extension MobileLibraryViewController {
             navigate(.settingsGroup(group)); return true
         }
         if id == "controllerMappings" { navigate(.controllerMappings); return true }
-        if id == "playInsights" { navigate(.playInsights); return true }
+        if id == "playInsights" {
+            if route == .progress { insightsBackID = "records" }
+            else if case .settingsGroup = route { insightsBackID = "settingsGroup.privacy" }
+            navigate(.playInsights); return true
+        }
         if id == "setting.language" { beginLanguageSelection(); navigate(.language); return true }
         if id == "language.cancel" || id == "language.apply" {
             finishLanguageSelection(apply: id == "language.apply")

@@ -80,7 +80,8 @@ import NxlvKit
             journey: journey, families: homeFamilies, initials: "AB v CD")
         guard home.rows.map(\.id) == ["journey", "family.classic", "family.ohNo", "family.holiday",
             "family.ohYes", "family.fan", "neolemmix", "l2", "l3"],
-            home.footer.map(\.id) == ["players", "records", "collections", "settings", "whatsNew"]
+            home.footer.map(\.id) == ["players", "records", "collections", "settings", "whatsNew"],
+            home.footer.prefix(3).map(\.title) == ["Players", "Progress", "Playlists"]
             else { throw Failure.invalidTargets }
         var pages: [(String, GameFrontEnd.Page)] = [
             ("long-title", .init(title: library.levels.max(by: { $0.title.count < $1.title.count })!.title,
@@ -267,7 +268,34 @@ import NxlvKit
         let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
             .init("rankBoard.board-\($0.offset)", $0.element, selected: $0.offset == 0)
         }
+        let progress = MobileCareerArt.progressPage(records: records, profileID: profiles.activeID, profileName: "AB",
+                                                    subtitle: "", campaign: campaign)
+        let replayRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID,
+                                                           profileName: "AB", subtitle: "", replayAvailable: true)
+        let recordCard = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID,
+            profileName: "AB", subtitle: "", replayAvailable: true, hintAvailable: true, playable: true, preview: true)
+        let hintCard = MobileCareerArt.recordHintPage(level: level.title, title: "Dig straight down",
+            body: "Give the first lemming the digger.\nThe crowd follows it into the tunnel.", stage: 1, count: 3,
+            solution: true, playable: true, preview: true)
+        let savedSeats = MobileCareerArt.players(profiles, subtitle: "", canDelete: true, hasSavedHotSeats: true)
+        // Progress is the one hub for records, awards, rankings and counts. Each child page returns to it.
+        guard progress.rows.map(\.id) == ["recordList", "achievements", "worldwide", "playInsights"],
+              progress.footer.map(\.id) == ["home"],
+              MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],
+              MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],
+              replayRecord.orderedFooter.map(\.id) == ["recordList", "recordReplay"], replayRecord.footer.last?.primary == true,
+              recordCard.orderedFooter.map(\.id) == ["recordList", "recordHint", "recordReplay", "recordPlay"],
+              recordCard.footer.filter(\.primary).map(\.id) == ["recordPlay"], recordCard.stars == 3,
+              hintCard.orderedFooter.map(\.id) == ["recordHintBack", "recordHintPrevious", "recordHintNext", "recordSolution", "recordPlay"],
+              officialRecord.footer.map(\.id) == ["recordList"],
+              savedSeats.rows.suffix(2).map(\.id) == ["hotSeat", "seatSaved"] else { throw Failure.invalidTargets }
         return [
+            ("progress-empty", MobileCareerArt.progressPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("progress-earned", progress),
+            ("records-replay", replayRecord),
+            ("records-card", recordCard),
+            ("records-hint", hintCard),
+            ("players-saved-hot-seats", savedSeats),
             ("players-full", MobileCareerArt.players(profiles, subtitle: "", canDelete: true)),
             ("players-protected", MobileCareerArt.players(profiles, subtitle: "", canDelete: false)),
             ("players-delete", MobileCareerArt.players(profiles, subtitle: "", canDelete: true, confirmingDelete: true)),

@@ -72,6 +72,8 @@ public struct GameFrontEnd {
         public var televisionPageIndex = 0
         public var result = false
         public var achievementItems: [MobileResultAchievementsArt.Item]?
+        /// Earned rescue stars, 0 to 3, drawn as filled or outlined stars below the subtitle.
+        public var stars: Int?
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
@@ -95,6 +97,7 @@ public struct GameFrontEnd {
         public let details: [CGRect]
         public let targets: [Target]
         public var initials: CGRect = .zero
+        public var stars: CGRect = .zero
         public var secondaryBoard: CGRect? = nil
         public var libraryHeading: CGRect? = nil
         public func action(at point: CGPoint) -> String? {
@@ -128,6 +131,11 @@ public struct GameFrontEnd {
         let heading = CGRect(x: x + 20, y: compact ? 28 : 32, width: boardWidth - 40, height: headingHeight)
         let subtitle = CGRect(x: x + 20, y: heading.maxY + (compact ? 2 : 8), width: boardWidth - 40, height: GameTextLayout.height(page.subtitle, width: boardWidth - 40))
         var y = subtitle.maxY + (compact ? 8 : 16)
+        var stars = CGRect.zero
+        if page.stars != nil {
+            stars = CGRect(x: x + (boardWidth - 123) / 2, y: y - 4, width: 123, height: 27)
+            y = stars.maxY + 12
+        }
         var targets: [Target] = []
         let rowHeight = max(52, page.rows.map { GameTextLayout.height($0.title, width: boardWidth - 88) + 12 }.max() ?? 52)
         for row in page.rows {
@@ -185,10 +193,12 @@ public struct GameFrontEnd {
             targets.append(Target(action: slot.action, frame: CGRect(x: x + 20 + CGFloat(slot.column) * (cell + 12),
                 y: y + CGFloat(slot.row) * footerPitch, width: cell * CGFloat(slot.span) + CGFloat(slot.span - 1) * 12, height: footerHeight)))
         }
-        return Layout(size: CGSize(width: width, height: height),
+        var layout = Layout(size: CGSize(width: width, height: height),
                       board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
                       heading: heading, subtitle: subtitle, preview: preview,
                       details: details, targets: targets)
+        layout.stars = stars
+        return layout
     }
 
     private static func boxedHomeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
@@ -387,6 +397,12 @@ public struct GameFrontEnd {
             if let preview {
                 let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
                 drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
+            }
+        }
+        if let earned = page.stars, layout.stars != .zero {
+            for index in 0..<3 {
+                GameStarArt.draw(at: CGPoint(x: layout.stars.minX + CGFloat(index) * 45, y: layout.stars.minY),
+                                 earned: index < earned, size: 3, context: context)
             }
         }
         if page.achievementItems != nil {

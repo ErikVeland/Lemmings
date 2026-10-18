@@ -68,7 +68,7 @@ extension MobileLibraryViewController {
             let names = seat.players.map { String(playerName($0).prefix(6)) }.joined(separator: " ")
             return .init("seatResume." + seat.id, names)
         }
-        return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows, footer: [.init("hotSeat", L10n.text("Back"))])
+        return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows, footer: [.init(savedSeatsBackID, L10n.text("Back"))])
     }
 
     // MARK: - Actions
@@ -94,7 +94,9 @@ extension MobileLibraryViewController {
             if var seat = hotSeat { seat.policy = hotSeats.policy; hotSeats.update(seat) }
             saveHotSeats()
             rebuild()
-        case "seatSaved": navigate(.hotSeats)
+        case "seatSaved":
+            if route == .players { savedSeatsBackID = "players" } else if route == .hotSeat { savedSeatsBackID = "hotSeat" }
+            navigate(.hotSeats)
         case "seatStart": startHotSeat()
         case "seatRestart":
             if !confirmingRestart { confirmingRestart = true; rebuild(); break }

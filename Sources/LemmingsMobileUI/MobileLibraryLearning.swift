@@ -82,7 +82,7 @@ extension MobileLibraryViewController {
     func progressionPage(subtitle: String) -> GameFrontEnd.Page {
         .init(title: L10n.text("Progression"), subtitle: subtitle,
               rows: ProgressionPolicy.allCases.map { .init("policy." + $0.rawValue, $0.name) },
-              footer: [.init("journey", L10n.text("Back"))])
+              footer: [.init(progressionBackID, L10n.text("Back"))])
     }
     func techniquePage(subtitle: String) -> GameFrontEnd.Page {
         .init(title: L10n.text("Techniques"), subtitle: subtitle,
@@ -106,7 +106,9 @@ extension MobileLibraryViewController {
                 try saved.start(entries, name: LearningJourney.title, poolID: journey.version)
                 try learningStorage.save(saved, name: "learning"); openLearningRun()
             } catch { notice = error.localizedDescription; rebuild() }
-        case "progression": navigate(.progression)
+        case "progression":
+            if route == .collections { progressionBackID = "collections" } else if route == .journey { progressionBackID = "journey" }
+            navigate(.progression)
         default:
             if id.hasPrefix("policy."), let policy = ProgressionPolicy(rawValue: String(id.dropFirst(7))) {
                 if policy == .techniqueCurriculum { navigate(.techniques) }
@@ -199,6 +201,16 @@ extension MobileLibraryViewController {
     }
 
     func loadMobileRankedContent(_ conditions: TrolleyConditions) throws -> MobileLevelContent {
+        let location = try mobileRankedLocation(conditions)
+        let content = try location.library.loadLevel(at: location.index)
+        guard let classic = content.session as? ClassicMobileSession,
+              TrolleyCapture.classicFingerprint(classic.initialSimulation) == conditions.levelFingerprint else {
+            throw MobileSessionError.changedLevel
+        }
+        return content
+    }
+    /// The catalogue pack and level index that recorded conditions name.
+    func mobileRankedLocation(_ conditions: TrolleyConditions) throws -> (pack: MobileContentPack, index: Int, library: any MobileGameLibrary) {
         guard let catalogue else { throw MobileSessionError.changedLevel }
         let pack: MobileContentPack?
         if conditions.gameID == "fan" {
@@ -215,12 +227,7 @@ extension MobileLibraryViewController {
         } else if conditions.levelID.hasPrefix("level-") { index = Int(conditions.levelID.dropFirst(6)) }
         else { index = source.levels.indices.first { conditions.levelID.hasSuffix("/" + source.levelKey(at: $0)) } }
         guard let index, source.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
-        let content = try source.loadLevel(at: index)
-        guard let classic = content.session as? ClassicMobileSession,
-              TrolleyCapture.classicFingerprint(classic.initialSimulation) == conditions.levelFingerprint else {
-            throw MobileSessionError.changedLevel
-        }
-        return content
+        return (pack, index, source)
     }
 }
 #endif

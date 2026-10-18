@@ -14,7 +14,7 @@ public enum MobileCareerArt {
                                creating: Bool = false, portrait: Int = 0,
                                canDelete: Bool = false, confirmingDelete: Bool = false,
                                hotSeatTurn: String? = nil, holdToEdit: Bool = false,
-                               editingPlayerID: String? = nil) -> GameFrontEnd.Page {
+                               editingPlayerID: String? = nil, hasSavedHotSeats: Bool = false) -> GameFrontEnd.Page {
         if let draft {
             var page: GameFrontEnd.Page
             if confirmingDelete && !creating {
@@ -41,6 +41,7 @@ public enum MobileCareerArt {
         if !holdToEdit { rows.append(.init("playerRename", L10n.text("Edit: \(profiles.active.name)"))) }
         rows.append(.init("playerNew", L10n.text("New player"), enabled: profiles.players.count < MobileProfiles.maximum))
         rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")))
+        if hasSavedHotSeats { rows.append(.init("seatSaved", L10n.text("Saved Hot Seats"))) }
         return .init(title: L10n.text("Players"), subtitle: subtitle, rows: rows,
             footer: [.init("home", L10n.text("Back"))])
     }
@@ -86,11 +87,27 @@ public enum MobileCareerArt {
         return .init(title: L10n.text("Records"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: levels.map { .init("record." + ($0.assisted ? "assisted|" : "direct|") + $0.level.boardID,
                                     $0.level.title + ($0.assisted ? "  Rewind" : "") + (sourceLabel($0.level).isEmpty ? "" : "\n" + sourceLabel($0.level))) },
-            details: levels.isEmpty ? [L10n.text("No records")] : [], footer: [.init("home", L10n.text("Back")), .init("achievements", L10n.text("Achievements")), .init("worldwide", L10n.text("Worldwide"))], footerColumns: 1)
+            details: levels.isEmpty ? [L10n.text("No records")] : [], footer: [.init("records", L10n.text("Back"))])
     }
 
-    /// The board and assist mode named by a Records row key.
-    public static func recordBoard(_ key: String) -> (board: String, assisted: Bool) {
+    /// Progress gathers records, awards, rankings and play counts behind one Home action.
+    public static func progressPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
+                                    campaign: ClassicAchievementProgress = .init(), insightsAvailable: Bool = true) -> GameFrontEnd.Page {
+        let levels = Set(records.runs.filter { $0.profileID == profileID }.map { ($0.assisted ? "a|" : "d|") + $0.level.boardID }).count
+        let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
+                                      subtitle: "", campaign: campaign).rows
+        return .init(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
+            rows: [.init("recordList", L10n.text("Records") + "  \(levels)"),
+                   .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
+                   .init("worldwide", L10n.text("Worldwide")),
+                   .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],
+            footer: [.init("home", L10n.text("Back"))])
+    }
+
+    /// The record card. `preview` reserves the level artwork well; Play, Hint and Replay appear when available.
+    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
+                                       replayAvailable: Bool = false, hintAvailable: Bool = false,
+                                       playable: Bool = false, preview: Bool = false) -> GameFrontEnd.Page {
         let assisted = key.hasPrefix("assisted|")
         return (String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0)), assisted)
     }
@@ -103,17 +120,48 @@ public enum MobileCareerArt {
         let best = runs.map(\.saved).max() ?? 0
         let time = runs.filter(\.qualifies).map(\.seconds).min()
         let stats = records.stats(level: level, profileID: profileID, assisted: assisted)
-        var details = [L10n.text("Most saved: \(best)/\(level.total)"), L10n.text("Attempts: \(stats.attempts)  Clears: \(stats.clears)")]
-        if let time { details.append(L10n.text("Best time: \(String(format: "%.1f", time)) S")) }
+        var maximum = TrolleyMaximum()
+        var maximumText = best == level.total ? String(level.total) : "?"
         if let conditions = level.conditions {
-            let maximum = records.trolley.maximum(conditions: conditions, assisted: assisted)
-            details.append(L10n.text("Maximum: \((maximum.value.map(String.init) ?? "?"))"))
-        } else { details.append(L10n.text("Maximum: \((best == level.total ? String(level.total) : "?"))")) }
+            maximum = records.trolley.maximum(conditions: conditions, assisted: assisted)
+            maximumText = maximum.value.map(String.init) ?? "?"
+        }
+        var details = [L10n.text("Records"),
+                       L10n.text("Most saved: \(best)/\(level.total)") + "   " + L10n.text("Maximum: \(maximumText)"),
+                       L10n.text("Attempts: \(stats.attempts)  Clears: \(stats.clears)")]
+        if let time { details.append(L10n.text("Best time: \(String(format: "%.1f", time)) S")) }
+        var headings: Set<Int> = [0]
         let awards = stats.achievements.sorted { $0.rawValue < $1.rawValue }.map(\.title)
-        return .init(title: level.title, subtitle: [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: "\n"),
-                     details: details + awards,
-                     footer: (replayRunID.map { [.init("recordReplay." + $0.uuidString, L10n.text("Replay"))] } ?? [])
-                        + [.init("records", L10n.text("Back"))])
+        if !awards.isEmpty {
+            headings.insert(details.count)
+            details += [L10n.text("Achievements"), awards.joined(separator: ", ")]
+        }
+        let identity = [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: " - ")
+        var footer: [GameFrontEnd.Action] = [.init("recordList", L10n.text("Back"))]
+        if hintAvailable { footer.append(.init("recordHint", L10n.text("Hints"))) }
+        if replayAvailable { footer.append(.init("recordReplay", L10n.text("Replay"), primary: !playable)) }
+        if playable { footer.append(.init("recordPlay", stats.clears > 0 ? L10n.text("Play again") : L10n.text("Play"), primary: true)) }
+        var page = GameFrontEnd.Page(title: level.title,
+            subtitle: identity + "\n" + L10n.text("\(level.total) Lemmings   Save \(level.required)"),
+            details: details, footer: footer, preview: preview, footerColumns: 2)
+        page.detailHeadings = headings
+        page.stars = runs.map { TrolleyRescueGoals(run: $0, maximum: maximum).stars }.max() ?? 0
+        return page
+    }
+
+    /// One hint card for a recorded level, opened from its record card.
+    public static func recordHintPage(level: String, title: String, body: String, stage: Int, count: Int,
+                                      solution: Bool, playable: Bool, preview: Bool) -> GameFrontEnd.Page {
+        var footer: [GameFrontEnd.Action] = [.init("recordHintBack", L10n.text("Back"))]
+        if stage > 0 { footer.append(.init("recordHintPrevious", L10n.text("Previous"))) }
+        if stage + 1 < count { footer.append(.init("recordHintNext", L10n.text("NEXT HINT"))) }
+        if solution { footer.append(.init("recordSolution", L10n.text("Solution"))) }
+        if playable { footer.append(.init("recordPlay", L10n.text("Play"), primary: true)) }
+        var page = GameFrontEnd.Page(title: level, subtitle: "\(stage + 1)/\(count)",
+            details: [title] + body.components(separatedBy: "\n").filter { !$0.isEmpty },
+            footer: footer, preview: preview, footerColumns: 2)
+        page.detailHeadings = [0]
+        return page
     }
 
     public static func campaignProgress(records: ArcadeRecords, profileID: String,
@@ -142,7 +190,7 @@ public enum MobileCareerArt {
         return .init(title: L10n.text("Achievements"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: levelRows + careerRows + ClassicAchievement.catalog.map {
                 .init("campaignAward." + $0.id.rawValue, $0.title, selected: campaign.isUnlocked($0.id))
-            }, footer: [.init("home", L10n.text("Back"))])
+            }, footer: [.init("records", L10n.text("Back"))])
     }
 
 }

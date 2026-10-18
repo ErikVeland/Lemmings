@@ -24,7 +24,7 @@ extension MobileLibraryViewController {
         counts["installs"] = mobileInsights.summary?.optedInInstalls
         return MobileInformationArt.insights(counts: counts, shared: mobileInsights.summary != nil,
             days: mobileInsights.days, sharingAvailable: AnonymousTelemetry.shared.sharingAvailable,
-            loading: mobileInsights.loading, notice: notice)
+            loading: mobileInsights.loading, notice: notice, backID: insightsBackID)
     }
     func insightsTokenPage() -> GameFrontEnd.Page { MobileInformationArt.insightsToken(length: mobileInsights.token.count) }
     func insightsClearPage() -> GameFrontEnd.Page { MobileInformationArt.insightsClear() }
