@@ -279,11 +279,15 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
     lock.lock()
-    if outputSuspended { spinUpFrames = Int(sampleRate * spinUpSeconds) }
+    // Launch, focus and engine-configuration events resume a playing module.
+    // Restarting the fade there cut the music to silence each time.
+    if outputSuspended {
+      spinUpFrames = Int(sampleRate * spinUpSeconds)
+      startFadeFrames = Int(sampleRate * 0.14)
+    }
     outputSuspended = false
     rhythmTarget = 0
     pauseFadeFrames = 0
-    startFadeFrames = Int(sampleRate * 0.14)
     lock.unlock()
     reverb.wetDryMix = 0
     if !engine.isRunning { try engine.start() }

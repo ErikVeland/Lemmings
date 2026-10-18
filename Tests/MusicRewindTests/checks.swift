@@ -165,6 +165,9 @@ extension ModuleMusicPlayer {
             synthesisQueue.sync {}
         }
         try assertMusicRewind(rewindAudio.capturedFrames > 4096, "The MOD mixer did not capture its own samples")
+        try resumeOutput()
+        try assertMusicRewind(startFadeFrames == 0 && spinUpFrames == 0,
+            "Resuming a playing MOD restarted its fade-in and dropped the music to silence")
         suspendOutput()
         for _ in 0..<32 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
         RunLoop.current.run(until: Date().addingTimeInterval(1.8))
