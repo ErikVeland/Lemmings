@@ -151,7 +151,7 @@ Current source status:
 - Current main `b92386eb` fixes Classic rewind replay export to retain the
   starting level fingerprint after terrain edits. The focused rewind suite
   passes, including a digger replay. It used installed 1.9.1 build 76 data; it
-  does not certify the 2.0.5 build 88 preparation. See the [current-main
+  does not certify the 2.0.5 build 89 preparation. See the [current-main
   reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 - A 17 October 8,192-beam search tried three previously unattempted exact fan
   identities. Two full 60-second searches found no candidate win. The third
@@ -332,8 +332,8 @@ close the level's MVP gap. The audit records the evidence and hashes.
 Three wider current-main searches used a 4,096 beam and a 4-pixel tool-site
 grid. Egyptian 13 expanded 3,889,087 candidates, Egyptian 6 expanded
 5,181,833, and seeded Egyptian 29 expanded 3,620,601. None found a route.
-Main `8c66ef3e` prepares macOS 2.0.5 build 88, iOS build 14 and tvOS build 4.
-The appcast still advertises macOS 2.0.4 build 87, and no build 88 package or
+Main `8c66ef3e` prepares macOS 2.0.5 build 89, iOS build 14 and tvOS build 4.
+The appcast still advertises macOS 2.0.4 build 87, and no build 89 package or
 acceptance record is present. The latest retained Mac acceptance record is
 build 86. Imported content remains open-ended and is excluded from bundled
 closure counts. See the

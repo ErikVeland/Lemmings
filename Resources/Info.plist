@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>LemmingsCloudProgressEnabled</key><false/>
-    <key>CloudLibraryCloudKitEnabled</key><false/>
-    <key>CloudLibraryURL</key>
-    <string>https://glasscode.academy/lemmings-api/cloud</string>
-	<key>HostedRankingsURL</key>
-	<string>https://glasscode.academy/lemmings-api/rankings</string>
 	<key>AnonymousTelemetryURL</key>
 	<string>https://glasscode.academy/lemmings-api</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -20,6 +14,8 @@
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>academy.glasscode.lemmings</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -32,8 +28,6 @@
 		<string>nb</string>
 		<string>ta</string>
 	</array>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Ultimate Lemmings</string>
 	<key>CFBundlePackageType</key>
@@ -41,9 +35,17 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.0.5</string>
 	<key>CFBundleVersion</key>
-	<string>88</string>
+	<string>89</string>
+	<key>CloudLibraryCloudKitEnabled</key>
+	<false/>
+	<key>CloudLibraryURL</key>
+	<string>https://glasscode.academy/lemmings-api/cloud</string>
+	<key>HostedRankingsURL</key>
+	<string>https://glasscode.academy/lemmings-api/rankings</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.3</string>
+	<key>LemmingsCloudProgressEnabled</key>
+	<false/>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>SUAllowsAutomaticUpdates</key>

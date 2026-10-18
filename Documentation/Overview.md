@@ -14,10 +14,10 @@ Entertainment, which holds the Lemmings rights today. See
 This document is a status summary, not a product announcement.
 
 The latest macOS package with retained acceptance evidence is 2.0.3 build 86.
-The appcast advertises 2.0.4 build 87. The 2.0 preparation branch prepares build 88, but this
-repository has no build 88 package or acceptance record. See the
+The appcast advertises 2.0.4 build 87. The 2.0 preparation branch prepares build 89, but this
+repository has no build 89 package or acceptance record. See the
 [build 86 release evidence](ReleaseReadiness/2.0.3-build86/README.md) and
-[build 88 notes](ReleaseNotes-2.0.5-build88.md).
+[build 89 notes](ReleaseNotes-2.0.5-build89.md).
 
 ## The proposition
 
@@ -111,10 +111,10 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The latest macOS package with retained acceptance evidence is 2.0.3 build 86.
-The appcast advertises 2.0.4 build 87, while the 2.0 preparation branch prepares build 88.
-No build 88 package or acceptance record is present. See the
+The appcast advertises 2.0.4 build 87, while the 2.0 preparation branch prepares build 89.
+No build 89 package or acceptance record is present. See the
 [build 86 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md) and
-[build 88 notes](ReleaseNotes-2.0.5-build88.md). Full bundled-content closure
+[build 89 notes](ReleaseNotes-2.0.5-build89.md). Full bundled-content closure
 remains open. The 2.0 source connects all three native games and supported
 NeoLemmix to mobile sessions. Its latest recorded signed build 12 contains
 Classic only. The 2.0 preparation branch sets source versions for iOS build 14 and tvOS build 4, but

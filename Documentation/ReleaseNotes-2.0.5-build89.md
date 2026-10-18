@@ -1,6 +1,6 @@
 # Ultimate Lemmings 2.0.5 for Macintosh
 
-Build: 88
+Build: 89
 Release base: v2.0.4
 
 This optimisation and hotfix release removes pauses at the end of a level, on
@@ -25,6 +25,19 @@ Earlier saves load without changes.
 
 The death counter's skull no longer shrinks the gameplay status text. The
 bitmap fonts now draw the skull in their own style, at capital height.
+
+## Macintosh exits
+
+With Macintosh graphics, a lemming now jumps into the centre of the drawn
+exit. Before, the fire and crystal exits showed the jump up to four pixels
+beside the door. The game still uses the same exit position, so replays and
+saves do not change.
+
+## Skill panel pointer
+
+The pointer shows the Amiga cross over the skill panel buttons in every
+pointer style. Classic, The Tribes and Chronicles use the same cross. The
+arrow stays on the rest of the panel and on system controls.
 
 ## Chronicles Moles
 
