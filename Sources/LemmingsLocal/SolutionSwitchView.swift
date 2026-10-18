@@ -41,11 +41,11 @@ import NxlvKit
             options: [.activeInKeyWindow, .mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .inVisibleRect], owner: self)
         addTrackingArea(area); pointerTracking = area
     }
-    override func resetCursorRects() { addCursorRect(bounds, cursor: .arrow) }
+    override func resetCursorRects() { addCursorRect(bounds, cursor: GameCursor.controlCursor()) }
     override func cursorUpdate(with event: NSEvent) { showSystemPointer() }
     override func mouseEntered(with event: NSEvent) { showSystemPointer() }
     override func mouseMoved(with event: NSEvent) { showSystemPointer() }
-    private func showSystemPointer() { onPointerEntered?(); NSCursor.arrow.set() }
+    private func showSystemPointer() { onPointerEntered?(); GameCursor.controlCursor().set() }
     override func layout() {
         super.layout()
         for (button, frame) in zip(buttons, SolutionSwitchArt.frames(in: switchFrame)) { button.frame = frame }

@@ -217,25 +217,15 @@ enum PanelButton: Equatable {
 
   override var isFlipped: Bool { true }
 
-  /// The contiguous button row that shows the Amiga cross, in view coordinates.
-  var buttonCursorRect: CGRect? {
-    guard !isMenuMode else { return nil }
-    layoutControls()
-    let rect = buttonFrames.reduce(CGRect.null) { $0.union($1.1) }
-    return rect.isNull || rect.isEmpty ? nil : rect
-  }
-  var buttonCursorScale: CGFloat { panelScale }
+  /// The skill bar shows the Amiga cross in place of the system cursor. Menus keep the arrow.
+  var controlCursorScale: CGFloat? { isMenuMode ? nil : panelScale }
 
   override func resetCursorRects() {
-    guard let buttons = buttonCursorRect?.intersection(bounds), !buttons.isEmpty else {
-      addCursorRect(bounds, cursor: NSCursor.arrow); return
-    }
-    GameCursor.addCursorRects(in: self, [(buttons, GameCursor.buttonCursor(scale: panelScale))])
+    addCursorRect(bounds, cursor: controlCursorScale.map { GameCursor.controlCursor(scale: $0) } ?? .arrow)
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    GameCursor.update(at: convert(event.locationInWindow, from: nil), hidingInside: nil,
-      buttonsRect: buttonCursorRect, buttonScale: panelScale)
+    GameCursor.update(at: nil, hidingInside: nil, controlScale: controlCursorScale)
   }
 
   private let inset = 8.0

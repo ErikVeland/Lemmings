@@ -178,12 +178,12 @@ private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
     check(!GameCursor.hidesSystemCursor(at: CGPoint(x: 20, y: 20), inside: playfield),
         "A dialog retained the drawn gameplay pointer")
     GameCursor.gameplaySuppressed = false
-    let button = GameCursor.buttonCursor(scale: 3)
-    check(button !== NSCursor.arrow && button.image.size == NSSize(width: 42, height: 42)
-        && button.hotSpot == NSPoint(x: 21, y: 21), "Skill buttons lost the centred Amiga cross")
-    check(GameCursor.buttonCursor(scale: 3) === button, "The Amiga cross was rebuilt for the same scale")
+    let control = GameCursor.controlCursor(scale: 3)
+    check(control !== NSCursor.arrow && control.image.size == NSSize(width: 42, height: 42)
+        && control.hotSpot == NSPoint(x: 21, y: 21), "Controls lost the centred Amiga cross")
+    check(GameCursor.controlCursor() === control, "An overlay did not reuse the game's Amiga cross")
     GameCursor.gameplaySuppressed = true
-    check(GameCursor.buttonCursor(scale: 3) === NSCursor.arrow, "A dialog kept the Amiga cross on skill buttons")
+    check(GameCursor.controlCursor(scale: 3) === NSCursor.arrow, "A dialog kept the Amiga cross")
     GameCursor.gameplaySuppressed = false
     testSystemControlRegions()
     testOriginalCursor()

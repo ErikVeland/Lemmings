@@ -1155,10 +1155,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.panel.handlePointerDrag(at: CGPoint(x: point.x, y: point.y - 320))
       }
       crtView.onMouseExited = { [weak self] in self?.playfield.clearPointer() }
-      crtView.buttonCursorArea = { [weak self] in
-        guard let self, let rect = self.panel.buttonCursorRect else { return nil }
-        return (rect.offsetBy(dx: 0, dy: 320), self.panel.buttonCursorScale)
-      }
       crtView.onMouseMoved = { [weak self] point in self?.tubeMove(point) }
       crtView.onScroll = { [weak self] event, point in
         guard let self else { return }
@@ -7667,7 +7663,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let point = pointerCapture.update(in: root, active: active) else { return }
     if GameCursor.isOverSystemControl(at: point, in: root)
       || gameplayKeyboard?.navigationFrame(in: root)?.contains(point) == true {
-      NSCursor.arrow.set(); playfield.clearPointer(); return
+      GameCursor.controlCursor().set(); playfield.clearPointer(); return
     }
     if tubeIsActive {
       let viewPoint = crtView.convert(point, from: root)
@@ -7680,8 +7676,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         ? root.convert(playfield.bounds, from: playfield)
         : nil
       GameCursor.update(at: point, hidingInside: gameplayRect,
-        buttonsRect: panel.buttonCursorRect.map { root.convert($0, from: panel) },
-        buttonScale: panel.buttonCursorScale)
+        controlScale: playfield.phase == .playing ? panel.controlCursorScale : nil)
       let local = playfield.convert(point, from: root)
       if playfield.bounds.contains(local) { playfield.handleMove(to: local) }
       else { playfield.clearPointer() }

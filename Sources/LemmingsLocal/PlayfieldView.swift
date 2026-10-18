@@ -638,9 +638,9 @@ struct ReticleFeedback {
 
   override func cursorUpdate(with event: NSEvent) {
     let point = convert(event.locationInWindow, from: nil)
-    if phase == .playing, !GameCursor.isOverSystemControl(at: point, in: self) {
-      GameCursor.gameplayCursor.set()
-    } else { NSCursor.arrow.set() }
+    if phase != .playing { NSCursor.arrow.set() }
+    else if GameCursor.isOverSystemControl(at: point, in: self) { GameCursor.controlCursor(scale: viewport.zoom).set() }
+    else { GameCursor.gameplayCursor.set() }
   }
 
   /// Takes a cursor position directly.
@@ -650,7 +650,9 @@ struct ReticleFeedback {
   func handleMove(to point: CGPoint) {
     controllerPointer = nil
     if GameCursor.isOverSystemControl(at: point, in: self) {
-      clearPointer(); NSCursor.arrow.set(); return
+      clearPointer()
+      if phase == .playing { GameCursor.controlCursor(scale: viewport.zoom).set() } else { NSCursor.arrow.set() }
+      return
     }
     if phase == .playing { GameCursor.gameplayCursor.set() }
     assignmentHighlight.clear()

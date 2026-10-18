@@ -1,7 +1,7 @@
 #if os(macOS)
 import AppKit
 
-/// Bitmap control groups use the system pointer across their buttons and gaps.
+/// Bitmap control groups show the control cursor across their buttons and gaps.
 @MainActor protocol GameSystemCursorRegion: AnyObject {}
 
 /// Cursor presentation shared by gameplay views and their controls.
@@ -36,27 +36,28 @@ import AppKit
   }
 
   /**
-   * Keeps the system arrow on controls and hides it behind a drawn gameplay pointer.
+   * Hides the system cursor behind a drawn gameplay pointer and shows the Amiga cross elsewhere.
+   * Without a control scale, as on menus, the area outside gameplay keeps the system arrow.
    */
-  static func update(at point: CGPoint?, hidingInside gameplayRect: CGRect?,
-                     buttonsRect: CGRect? = nil, buttonScale: CGFloat = 1) {
+  static func update(at point: CGPoint?, hidingInside gameplayRect: CGRect?, controlScale: CGFloat? = nil) {
     if hidesSystemCursor(at: point, inside: gameplayRect) {
       invisible.set()
-    } else if let point, let buttonsRect, buttonsRect.contains(point) {
-      buttonCursor(scale: buttonScale).set()
+    } else if let controlScale {
+      controlCursor(scale: controlScale).set()
     } else {
       NSCursor.arrow.set()
     }
   }
 
   /**
-   * Returns the Amiga cross for skill panel buttons in every pointer style.
+   * Returns the Amiga cross shown around gameplay in every pointer style.
+   * Views without their own pixel scale reuse the last game scale.
    */
-  static func buttonCursor(scale: CGFloat) -> NSCursor {
+  static func controlCursor(scale: CGFloat? = nil) -> NSCursor {
     guard !gameplaySuppressed else { return .arrow }
-    let pixel = min(4, max(1, floor(scale)))
-    if let cursor = buttonCursors[pixel] { return cursor }
-    let side = 14 * pixel
+    if let scale { controlScale = min(4, max(1, floor(scale))) }
+    if let cursor = controlCursors[controlScale] { return cursor }
+    let side = 14 * controlScale
     let image = NSImage(size: NSSize(width: side, height: side), flipped: true) { rect in
       NSGraphicsContext.current?.imageInterpolation = .none
       originalCross.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
@@ -64,20 +65,20 @@ import AppKit
       return true
     }
     let cursor = NSCursor(image: image, hotSpot: NSPoint(x: side / 2, y: side / 2))
-    buttonCursors[pixel] = cursor
+    controlCursors[controlScale] = cursor
     return cursor
   }
-  private static var buttonCursors: [CGFloat: NSCursor] = [:]
+  private static var controlScale: CGFloat = 2
+  private static var controlCursors: [CGFloat: NSCursor] = [:]
 
   /**
-   * Adds each region's cursor and the arrow over the rest of the view, without overlapping rects.
-   * The regions must tile their bounding box.
+   * Adds `cursor` over `rect` and `elsewhere` over the rest of the view, without overlapping rects.
    */
-  static func addCursorRects(in view: NSView, _ regions: [(CGRect, NSCursor)]) {
+  static func addCursorRects(in view: NSView, cursor: NSCursor, over rect: CGRect, elsewhere: NSCursor) {
     let bounds = view.bounds
-    let rect = regions.reduce(CGRect.null) { $0.union($1.0) }
-    guard !rect.isNull, !rect.isEmpty else { view.addCursorRect(bounds, cursor: .arrow); return }
-    for (area, cursor) in regions where !area.isEmpty { view.addCursorRect(area, cursor: cursor) }
+    let rect = rect.intersection(bounds)
+    guard !rect.isNull, !rect.isEmpty else { view.addCursorRect(bounds, cursor: elsewhere); return }
+    view.addCursorRect(rect, cursor: cursor)
     let rest = [
       CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: max(0, rect.minY - bounds.minY)),
       CGRect(x: bounds.minX, y: rect.maxY, width: bounds.width, height: max(0, bounds.maxY - rect.maxY)),
@@ -85,7 +86,7 @@ import AppKit
       CGRect(x: rect.maxX, y: rect.minY, width: max(0, bounds.maxX - rect.maxX), height: rect.height),
     ]
     for area in rest where area.width > 0 && area.height > 0 {
-      view.addCursorRect(area, cursor: .arrow)
+      view.addCursorRect(area, cursor: elsewhere)
     }
   }
 

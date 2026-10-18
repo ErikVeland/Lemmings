@@ -96,8 +96,13 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
       if oldValue != gameplayCursorRect { window?.invalidateCursorRects(for: self) }
     }
   }
-  /// Source-space skill panel buttons and their pixel scale, which show the Amiga cross.
-  var buttonCursorArea: (() -> (rect: CGRect, scale: CGFloat)?)?
+  /// Source pixel scale of the controls, which show the Amiga cross during gameplay.
+  var controlCursorScale: CGFloat = 2
+  private var controlCursor: NSCursor {
+    guard gameplayCursorRect != nil else { return .arrow }
+    let displayScale = sourceSize.width > 0 ? bounds.width / sourceSize.width : 1
+    return GameCursor.controlCursor(scale: controlCursorScale * displayScale)
+  }
   private var trackingArea: NSTrackingArea?
   private(set) var failureReason: String?
   var isAvailable: Bool { compositePipeline != nil }
@@ -170,7 +175,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   }
 
   override func resetCursorRects() {
-    addCursorRect(bounds, cursor: NSCursor.arrow)
+    addCursorRect(bounds, cursor: controlCursor)
   }
 
   override func cursorUpdate(with event: NSEvent) {
@@ -182,14 +187,13 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
    */
   func updateSystemCursor(at viewPoint: CGPoint) {
     if GameCursor.isOverSystemControl(at: viewPoint, in: self) {
-      NSCursor.arrow.set(); onMouseExited?(); return
+      controlCursor.set(); onMouseExited?(); return
     }
-    let buttons = gameplayCursorRect == nil ? nil : buttonCursorArea?()
-    let displayScale = sourceSize.width > 0 ? bounds.width / sourceSize.width : 1
-    GameCursor.update(
-      at: sourcePoint(from: viewPoint),
-      hidingInside: gameplayCursorRect,
-      buttonsRect: buttons?.rect, buttonScale: (buttons?.scale ?? 1) * displayScale)
+    if GameCursor.hidesSystemCursor(at: sourcePoint(from: viewPoint), inside: gameplayCursorRect) {
+      GameCursor.invisible.set()
+    } else {
+      controlCursor.set()
+    }
   }
 
   override var acceptsFirstResponder: Bool { true }

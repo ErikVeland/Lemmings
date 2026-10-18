@@ -2313,19 +2313,12 @@ import NxlvKit
         updateSystemCursor(at: convert(event.locationInWindow, from: nil))
     }
     private func updateSystemCursor(at point: CGPoint) {
-        let navigation = navigationFrame?.contains(point) == true
-        GameCursor.update(at: point, hidingInside: navigation ? nil : gameplayRect,
-            buttonsRect: navigation ? nil : buttonCursorRect, buttonScale: zoom)
+        GameCursor.update(at: point, hidingInside: navigationFrame?.contains(point) == true ? nil : gameplayRect,
+            controlScale: zoom)
     }
     override func resetCursorRects() {
-        addCursorRect(bounds, cursor: NSCursor.arrow)
-        if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.gameplayCursor) }
-        if let buttons = buttonCursorRect { addCursorRect(buttons, cursor: GameCursor.buttonCursor(scale: zoom)) }
-    }
-    /// The skill panel, where every source pixel maps to a control slot.
-    private var buttonCursorRect: CGRect? {
-        guard !readOnlyReplay, panel != nil else { return nil }
-        return CGRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom)
+        GameCursor.addCursorRects(in: self, cursor: GameCursor.gameplayCursor, over: gameplayRect,
+            elsewhere: GameCursor.controlCursor(scale: zoom))
     }
     var gameplayRect: CGRect {
         CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)
@@ -2416,7 +2409,7 @@ import NxlvKit
                 }
             }
             if window.isKeyWindow, bounds.contains(point) {
-                GameCursor.update(at: point, hidingInside: navigationFrame?.contains(point) == true ? nil : gameplayRect)
+                updateSystemCursor(at: point)
             }
         }
         return label
@@ -3170,7 +3163,7 @@ import NxlvKit
         trackPointer(at:convert(event.locationInWindow,from:nil),held:held)
     }
     private func trackPointer(at p: NSPoint, held: Bool) {
-        if navigationFrame?.contains(p) == true { NSCursor.arrow.set(); onRelease?(); return }
+        if navigationFrame?.contains(p) == true { GameCursor.controlCursor(scale: zoom).set(); onRelease?(); return }
         guard gameplayRect.contains(p) else { onRelease?(); return }
         let source = precisionLens.source(p)
         let x = (source.x-origin.x)/zoom, y = (source.y-origin.y)/(zoom*1.2)
