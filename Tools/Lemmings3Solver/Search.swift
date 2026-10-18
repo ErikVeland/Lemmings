@@ -388,6 +388,13 @@ struct L3Report: Sendable {
     var bestPartial: L3Candidate?
     var expanded = 0
     var seconds = 0.0
+
+    @discardableResult
+    mutating func recordFirstWinningCandidate(_ candidate: L3Candidate) -> Bool {
+        guard best == nil, candidate.game.isComplete, candidate.game.saved > 0 else { return false }
+        best = candidate
+        return true
+    }
 }
 
 /// Runs a candidate until its next decision point, the end of the level or the search deadline.
@@ -412,13 +419,11 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
     let searchDeadline = deadline ?? started.addingTimeInterval(limits.budgetSeconds)
     let field = L3DistanceField(start)
     var report = L3Report()
-    func consider(_ candidate: L3Candidate) {
+    func consider(_ candidate: L3Candidate) -> Bool {
         let score = L3Score(candidate, field: field)
-        if candidate.game.isComplete && candidate.game.saved > 0,
-           report.best.map({ L3Score($0, field: field) < score }) ?? true {
-            report.best = candidate
-        }
+        if report.recordFirstWinningCandidate(candidate) { return true }
         if report.bestPartial.map({ L3Score($0, field: field) < score }) ?? true { report.bestPartial = candidate }
+        return false
     }
     func finish(_ candidate: L3Candidate) -> L3Candidate {
         var tail = candidate
@@ -429,13 +434,20 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
                                                                    toolSiteCell: limits.toolSiteCell))
     if seed == nil { _ = l3Advance(&root, limits: limits, deadline: searchDeadline) }
     root.fingerprint = l3Fingerprint(root.game)
-    consider(root)
+    if consider(root) {
+        report.seconds = Date().timeIntervalSince(started)
+        return report
+    }
     let prefixInputCount = root.inputs.count
     var beam = root.game.isComplete ? [] : [root]
-    while !beam.isEmpty && Date() < searchDeadline {
+    while !beam.isEmpty && Date() < searchDeadline && report.best == nil {
         var next: [UInt64: L3Candidate] = [:]
         for node in beam {
-            if node.depth >= limits.maxDepth { consider(finish(node)); continue }
+            if node.depth >= limits.maxDepth {
+                _ = consider(finish(node))
+                if report.best != nil { break }
+                continue
+            }
             var choices: [[L3Replay.Input]] = [[]]
             let actorChoices = node.decision.map { l3Actions(node.game, lemming: $0) }
             for actions in actorChoices { choices += actions }
@@ -451,14 +463,17 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
                 report.expanded += 1
                 _ = l3Advance(&child, limits: limits, deadline: searchDeadline)
                 child.fingerprint = l3Fingerprint(child.game)
-                consider(child)
+                _ = consider(child)
+                if report.best != nil { break }
                 guard !child.game.isComplete, child.game.tick < limits.maxTicks else { continue }
                 if let existing = next[child.fingerprint],
                    !(L3Score(existing, field: field) < L3Score(child, field: field)) { continue }
                 next[child.fingerprint] = child
             }
+            if report.best != nil { break }
             if Date() >= searchDeadline { break }
         }
+        if report.best != nil { break }
         beam = next.values.sorted { L3Score($1, field: field) < L3Score($0, field: field) }.prefix(limits.beamWidth).map { $0 }
         // Keep the line that has only waited. A useful action often scores no better than a harmful
         // one until long after it happens, so the untouched line must stay available to branch from.
@@ -472,7 +487,7 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
             print("ROUND expanded \(report.expanded) beam \(beam.count) top tick \(g.tick) depth \(top.depth) saved \(g.saved) lost \(g.lost) released \(g.released) states \(g.lemmings.filter(\.active).map { "\($0.state.rawValue)@\($0.x),\($0.y)\($0.tool.map { " \($0)" } ?? "")" }.prefix(4))")
         }
     }
-    if let top = beam.first { consider(finish(top)) }
+    if report.best == nil, let top = beam.first { _ = consider(finish(top)) }
     report.seconds = Date().timeIntervalSince(started)
     return report
 }

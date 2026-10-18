@@ -17,6 +17,10 @@ swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit
 swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Derive" \
   Tools/Lemmings3Completion/Replay.swift Tools/Lemmings3Completion/Derive.swift
+swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
+  -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/StateHashTests" \
+  Tools/Lemmings3Completion/Replay.swift Tests/Lemmings3CompletionTests/test_state_hash.swift
+"$build_dir/StateHashTests"
 python3 Tools/CampaignCompletion/report.py --check
 python3 Tests/Lemmings3CompletionTests/test_refresh.py "$build_dir/Verify" "$build_dir/Derive"
 failed=0

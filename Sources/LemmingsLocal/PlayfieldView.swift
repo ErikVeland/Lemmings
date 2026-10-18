@@ -1739,8 +1739,10 @@ struct ReticleFeedback {
       if let sprite {
         if spriteCache.count < 1500 { spriteCache[key] = sprite }
         let padding = monochrome ? Double(sprite.size.width - CGFloat(frame.width)) / 4 : backpackPadding
+        let doorShift = pose == .exiting
+          ? macScene?.exitingShift(footX: lemming.x, footY: lemming.y, spriteOffsetX: animation.offsetX) ?? 0 : 0
         let origin = viewport.viewPoint(fromLevel: CGPoint(
-          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2 - padding,
+          x: Double(lemming.x + animation.offsetX) + Double(frame.x + doorShift) / 2 - padding,
           y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
         var rect = CGRect(x: origin.x, y: origin.y,
           width: sprite.size.width * viewport.zoom / 2, height: sprite.size.height * viewport.zoom / 2)

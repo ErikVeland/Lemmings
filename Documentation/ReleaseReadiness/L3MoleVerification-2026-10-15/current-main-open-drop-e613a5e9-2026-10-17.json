@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "baseCommit": "183bc8a800cdd395dd57035ebedd738e9eb46a42",
+  "runtimeSourceSHA256": "97be04c8eeb386689581c7d22b85a46c7b30c1b0803d0e33c2d4a1143c42e750",
+  "runtimeLibrarySHA256": "cf4043b517e395244b3c709b6b6c9e94cd862feb72fc90a95f3968aa7bcaf467",
+  "runtimeChange": "After a downward Mole tunnel reaches an aligned, open drop with the remaining wall behind it, the Mole completes its source-observed alignment delay, falls at four pixels per tick, then resumes horizontal patrol at centre-column support.",
+  "sourceBasis": {
+    "sourceTrace": "L3MoleVerification-2026-10-15/original-followup-traces.json",
+    "falseTriggerGuard": "The earlier tunnel section also has empty Mole footprints and a deep shaft, but its remaining wall is ahead of the Mole. The runtime continues the down-left dig there.",
+    "dropWitness": "At source tick 167 the Mole is at mapped (120,152). It pauses and aligns left, reaches (112,156) at tick 173, falls four pixels per tick to (112,192) at tick 182, then resumes patrol.",
+    "postDropPatrol": {
+      "sourceTrace": "L3MoleVerification-2026-10-15/original-followup-traces.json",
+      "runtimeTrace": "L3MoleVerification-2026-10-15/current-main-open-drop-air-gap-e613a5e9-2026-10-17.json",
+      "firstDivergence": {
+        "tick": 184,
+        "previousTick": 183,
+        "sourceCentreFeetAtPreviousTick": [114, 192],
+        "runtimeCentreFeetAtPreviousTick": [114, 192],
+        "sourceCentreFeet": [115, 192],
+        "runtimeCentreFeet": [116, 192]
+      },
+      "sourceCentreXByTick182Through190": [112, 114, 115, 117, 118, 119, 120, 122, 126],
+      "runtimeCentreXByTick182Through190": [112, 114, 116, 116, 118, 120, 120, 122, 124],
+      "status": "Exact landing and fall are followed by a one-pixel first patrol-step mismatch. Later steps do not follow a uniform 4/3-pixel cadence."
+    },
+    "runtimeRegression": "Synthetic tests cover the open drop and the wall-ahead case."
+  },
+  "runtimeSuite": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD zsh Scripts/run-lemmings3-runtime-tests.sh",
+    "exitCode": 0,
+    "result": "Passed on fetched current main e613a5e9, including open-drop, wall-ahead, source Mole and bundled runtime checks."
+  },
+  "sourceTraces": {
+    "steel-left-facing": {
+      "exactPositionMatches": 139,
+      "samples": 329,
+      "matchingTickRanges": [
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          153
+        ],
+        [
+          173,
+          187
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-main-open-drop-left-facing-e613a5e9-2026-10-17.json",
+      "traceSHA256": "d852c3dd2742331bb220c6c27358b88d36a6bb80dee6cbd18663ddbd49189f07",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    },
+    "steel-air-gap": {
+      "exactPositionMatches": 179,
+      "samples": 344,
+      "matchingTickRanges": [
+        [
+          4,
+          4
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          25,
+          30
+        ],
+        [
+          36,
+          183
+        ],
+        [
+          186,
+          186
+        ],
+        [
+          188,
+          189
+        ],
+        [
+          195,
+          195
+        ],
+        [
+          198,
+          198
+        ],
+        [
+          200,
+          201
+        ],
+        [
+          207,
+          207
+        ],
+        [
+          210,
+          210
+        ],
+        [
+          212,
+          213
+        ],
+        [
+          219,
+          219
+        ],
+        [
+          222,
+          222
+        ],
+        [
+          224,
+          225
+        ],
+        [
+          231,
+          231
+        ],
+        [
+          234,
+          234
+        ],
+        [
+          236,
+          237
+        ],
+        [
+          243,
+          243
+        ],
+        [
+          246,
+          246
+        ],
+        [
+          248,
+          248
+        ],
+        [
+          253,
+          253
+        ]
+      ],
+      "trace": "L3MoleVerification-2026-10-15/current-main-open-drop-air-gap-e613a5e9-2026-10-17.json",
+      "traceSHA256": "29f337b7b66cf8b878fe792a748c00eb6eff85d7eede8c6c7e636ff4fdcaedfb",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    }
+  },
+  "fixtureAudit": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/audit-l3-fixtures.sh .build/l3-main-drop-fixture-audit.json",
+    "rawReport": "L3MoleVerification-2026-10-15/current-head-fixture-audit-e613a5e9.json",
+    "rawReportSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "rawReportFileSHA256": "75430335606a8d21cb7016ec6f5eace1bea00a62a9664d41811028e7d01e96d8",
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "staleIdentityWins": 0,
+    "routeFailures": 17,
+    "standaloneFailures": 4,
+    "carriedFailures": 13,
+    "result": "Fresh audit at e613a5e9 reproduces 399/416 exact double replays, zero stale-identity wins and the same 17 route failures.",
+    "headCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e"
+  },
+  "strictGate": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache L3_TEST_LIBRARY_DIR=.build/l3-runtime-tests L3_PORTS_ROOT=/private/tmp/lemmings-bundled-closure/Resources/Ports/LEM3CD L3_COMPLETION_FIXTURES=Tests/Lemmings3CompletionTests/Fixtures L3_CAMPAIGN_FIXTURES=Tests/Lemmings3CampaignTests/Fixtures zsh Scripts/verify-l3-completion.sh --require-all",
+    "exitCode": 1,
+    "manifest": "322 fixture hashes and coverage passed",
+    "negativeChecks": "passed",
+    "standalone": "Fails at 107.json after levels 1-30 and 101-106 pass.",
+    "campaign": "Fails at 107-1.json.",
+    "result": "Strict bundled L3 closure remains open."
+  },
+  "limits": [
+    "The exact air-gap source match ends at tick 183, then later frames diverge.",
+    "Left-facing trace agreement remains 139/329.",
+    "Seventeen L3 route schedules fail.",
+    "The change does not establish all Mole excavation, obstacle or falling rules."
+  ],
+  "status": "Worktree candidate based on freshly fetched main. It adds a source-supported drop transition, passes runtime tests and leaves route counts unchanged. It does not close full L3 fidelity.",
+  "headCommit": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+  "fetchedOriginMain": "e613a5e95f76e82fdcf62601122ec12f4e86100e",
+  "evidenceContinuity": "The former worktree candidate is committed in current main. Its runtime source hash is identical at 183bc8a8 and e613a5e9. The 416-fixture audit and source traces therefore apply to the exact current-main runtime source; the full audit was rerun at e613a5e9."
+}

@@ -32,8 +32,34 @@
     "bundledClassicPopulationAndRequirement": "40/40",
     "bundledClassicInitialReleaseRate": 1,
     "publishedReplayUsesLemmingsBeyondBundledPopulation": true,
-    "assessment": "A useful source-solution lead, but its event sequence cannot be copied unchanged to the exact bundled Classic target: it references worker indices 51, 52 and 56, and the source port has 60 lemmings versus 40 in the bundled level. No candidate has been replayed or scored on the bundled target."
+    "assessment": "The public replay cannot copy unchanged: it uses worker indices 51, 52 and 56, and its 60-lemming source level differs from this 40-lemming target. Two event remappings are recorded in the transfer artifact; neither produced a win. No candidate passed strict replay or was scored.",
+    "transferEvidence": "Artifacts/DifficultyEvaluation/classic-geoo-crossing-stairs-transfer.json"
   },
-  "status": "source candidate located; exact Classic transfer remains unverified",
-  "nextCheck": "Compare the two terrain/object maps and derive a target-population timing transfer before strict playback on geooPk0.dat#2."
+  "status": "source rules reconciled; public replay transfer failed; exact bundled Classic route remains unverified",
+  "nextCheck": "Find one winning route for the bundled target under the confirmed CustLem2-compatible original rules. Keep the first verified win.",
+  "sourceEngineRuleReconciliation": {
+    "sourcePackIdentity": "The Lemmings Forums post identifies geooPk0 as a CustLem2 pack.",
+    "fallRule": "Forum evidence distinguishes the earlier CustLemm 66-pixel safe fall from CustLem2, which was changed to match Lemmings.",
+    "currentEngineMapping": "ClassicDOSMechanics.original uses the standard 60-pixel fall counter and the simulation initialises a fall at 3. This matches the normal 63-pixel safe fall.",
+    "scope": "This supports the source-rule selection only. It does not validate replay transfer or prove the bundled target has a winning route.",
+    "sources": [
+      {
+        "url": "https://www.lemmingsforums.net/index.php?topic=555.0",
+        "finding": "geoo identifies geooPk0 as a CustLem2 pack."
+      },
+      {
+        "url": "https://www.lemmingsforums.net/index.php?topic=179.120",
+        "finding": "Forum discussion records the 66-pixel earlier CustLemm behaviour."
+      },
+      {
+        "url": "https://www.lemmingsforums.net/index.php?topic=179.135",
+        "finding": "Forum discussion says CustLem2 changed the fall distance to match Lemmings."
+      },
+      {
+        "url": "https://www.lemmingsforums.net/index.php?topic=1553.0",
+        "finding": "Forum summary reports 60 as the fall counter for most DOS versions and 63 for CustLemm."
+      }
+    ],
+    "checkedAgainst": "Sources/NxlvKit/ClassicDOSSimulation.swift"
+  }
 }

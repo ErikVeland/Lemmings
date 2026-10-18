@@ -11,10 +11,16 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | Current audit: 399/416 fixtures double-replay. Five Shadow 13 identities are refreshed. Four standalone and 13 carried schedules still fail. | Recover the 17 failed routes, then rerun all 90 routes and the carried chains. Verify original-engine parity, media and the campaign finale. |
+| Lemmings 3 | Current worktree audit: 399/416 fixtures double-replay. Four standalone level identities lack a current win: Shadow 7 and Egyptian 6, 13 and 29. Thirteen failed carried schedules overlap those same four levels. | Find one verified win for each of the four levels. Then verify one complete carried campaign path for each bundled tribe. Check source-engine parity, media and the campaign finale. |
 
-These counts come from the committed [fixture manifest](evidence.json).
+These counts come from the committed [fixture manifest](evidence.json). The worktree audit records the current runtime source hash in the [MVP audit](../ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
+
+For bundled levels, route closure means one verified winning route per level.
+The 416-fixture L3 audit includes extra population-specific carried schedules;
+its 17 failed scenarios do not represent 17 different levels. Do not search to
+improve a route that already wins. Keep the broader fixture audit as diagnostic
+evidence, and check the chosen full campaign paths separately.
 
 Run `zsh Scripts/verify-campaign-completion.sh` after building the local app.
 The script uses its native NxlvKit library, checks the committed
@@ -44,24 +50,33 @@ engine state. It must be regenerated after the current route repairs. It replays
 its first level with the population carried from the preceding result. It uses
 population-specific fixtures when a standalone input schedule does not work at
 the carried population. `zsh Scripts/verify-l3-campaign.sh` checks the
-recorded fixture hashes, outcomes and first gap in each tribe; `--require-all`
-fails until all three 30-level chains complete with at least 50 survivors at
-each tribe's final result. This is native simulation evidence. Focused tests
-check the ending decision and movie handover. Player input, recovery, original
-engine parity and a played three-tribe finale need separate checks.
+recorded fixture hashes, outcomes and first gap in each tribe.
+`zsh Scripts/verify-l3-campaign.sh --require-routes` fails when a level has no
+verified route through a complete carried path for its tribe. `--require-all`
+also requires at least 50 survivors at each tribe's final result, as required
+for the original finale. The 50-survivor ending is a stretch goal for bundled
+MVP route closure. This is native simulation evidence. Focused tests check the
+ending decision and movie handover. Player input, recovery, original engine
+parity and a played three-tribe finale need separate checks.
+
+After route repairs, regenerate `l3-chain-evidence.json` with
+`zsh Scripts/verify-l3-campaign.sh --write`, review the new outcomes, then run
+`--require-routes` for the bundled MVP gate.
 
 The 13 October 2026 native gate passed all ninety standalone routes and all
 326 carried fixtures. The 15 October Mole direction and patrol corrections
 invalidated route witnesses. The current fixture hash manifest passes for its
 322 fixed-input Classic-family and L3 fixtures. The exhaustive audit now double-
-replays 399 of 416 retained fixtures. The 17 route failures are four
+replays 399 of 416 retained fixtures. The 17 scenario failures are four
 standalone routes—Shadow 7 and Egyptian 6, 13 and 29—and thirteen carried
-schedules: `107-1`, `107-22`, `107-23`; `206-1`, `206-11`, `206-22`, `206-23`;
+schedules for those same levels: `107-1`, `107-22`, `107-23`; `206-1`, `206-11`, `206-22`, `206-23`;
 `213-1`, `213-8`, `213-21`, `213-22`; and `229-15`, `229-43`. The five
 carried Shadow 13 routes (`113-1`, `113-21`, `113-22`, `113-25`, `113-26`)
 were refreshed from retained inputs and now double-replay exactly. Current
-campaign and 50-survivor results remain unproved until replacement witnesses
-pass the strict gate. See the [L3 Mole verification record](../ReleaseReadiness/L3MoleVerification-2026-10-15/README.md).
+campaign and 50-survivor results remain unproved until a current continuous
+campaign path passes the gate. MVP route work does not require replacing every
+population-specific schedule. See the [L3 Mole verification
+record](../ReleaseReadiness/L3MoleVerification-2026-10-15/README.md).
 
 A 15 October follow-up searched Shadow 7 at its one-lemming carried population
 for 120 seconds from the start and for another 120 seconds from the accepted

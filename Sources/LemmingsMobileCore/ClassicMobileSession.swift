@@ -763,8 +763,12 @@ public final class ClassicMobileSession: MobileGameSession {
             spriteFrames[key] = sprite
         }
         let reduced = settings?.reduceMotion == true || settings?.reduceFlashes == true
+        // The cached rect follows the foot; the Mac door offset depends on the exit.
+        let doorShift = pose == .exiting && nativeArtwork?.lemming(pose: pose, left: left, tick: lemming.animationFrame) != nil
+            ? Double(nativeScene?.exitingShift(footX: lemming.foot.x, footY: lemming.foot.y,
+                spriteOffsetX: animation.offsetX) ?? 0) / 2 : 0
         return .init(frame: sprite.frame,
-            rect: .init(x: sprite.rect.x + Double(lemming.foot.x), y: sprite.rect.y + Double(lemming.foot.y),
+            rect: .init(x: sprite.rect.x + Double(lemming.foot.x) + doorShift, y: sprite.rect.y + Double(lemming.foot.y),
                 width: sprite.rect.width, height: sprite.rect.height),
             cacheKey: sprite.cacheKey, time: reduced ? nil : Double(simulation.tickCount) / ticksPerSecond)
     }

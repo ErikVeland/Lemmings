@@ -96,6 +96,8 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
       if oldValue != gameplayCursorRect { window?.invalidateCursorRects(for: self) }
     }
   }
+  /// Source-space skill panel buttons and their pixel scale, which show the Amiga cross.
+  var buttonCursorArea: (() -> (rect: CGRect, scale: CGFloat)?)?
   private var trackingArea: NSTrackingArea?
   private(set) var failureReason: String?
   var isAvailable: Bool { compositePipeline != nil }
@@ -182,9 +184,12 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     if GameCursor.isOverSystemControl(at: viewPoint, in: self) {
       NSCursor.arrow.set(); onMouseExited?(); return
     }
+    let buttons = gameplayCursorRect == nil ? nil : buttonCursorArea?()
+    let displayScale = sourceSize.width > 0 ? bounds.width / sourceSize.width : 1
     GameCursor.update(
       at: sourcePoint(from: viewPoint),
-      hidingInside: gameplayCursorRect)
+      hidingInside: gameplayCursorRect,
+      buttonsRect: buttons?.rect, buttonScale: (buttons?.scale ?? 1) * displayScale)
   }
 
   override var acceptsFirstResponder: Bool { true }

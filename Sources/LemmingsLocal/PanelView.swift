@@ -24,7 +24,7 @@ enum PanelButton: Equatable {
 
   var session: (any GameSession)? {
     didSet {
-      if oldValue !== session { nukeGesture.reset(); needsDisplay = true }
+      if oldValue !== session { nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
       toolTip = nil
     }
   }
@@ -217,12 +217,25 @@ enum PanelButton: Equatable {
 
   override var isFlipped: Bool { true }
 
+  /// The contiguous button row that shows the Amiga cross, in view coordinates.
+  var buttonCursorRect: CGRect? {
+    guard !isMenuMode else { return nil }
+    layoutControls()
+    let rect = buttonFrames.reduce(CGRect.null) { $0.union($1.1) }
+    return rect.isNull || rect.isEmpty ? nil : rect
+  }
+  var buttonCursorScale: CGFloat { panelScale }
+
   override func resetCursorRects() {
-    addCursorRect(bounds, cursor: NSCursor.arrow)
+    guard let buttons = buttonCursorRect?.intersection(bounds), !buttons.isEmpty else {
+      addCursorRect(bounds, cursor: NSCursor.arrow); return
+    }
+    GameCursor.addCursorRects(in: self, [(buttons, GameCursor.buttonCursor(scale: panelScale))])
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    NSCursor.arrow.set()
+    GameCursor.update(at: convert(event.locationInWindow, from: nil), hidingInside: nil,
+      buttonsRect: buttonCursorRect, buttonScale: panelScale)
   }
 
   private let inset = 8.0

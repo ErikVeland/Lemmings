@@ -181,6 +181,13 @@ public struct ClassicMacScene: Sendable {
     private let match: ClassicMacPieceMatch?
     /// Reconstructed frames for objects the pack changed, by position in `level.objects`.
     private let reconstructedObjects: [Int: [ClassicMacArtwork.Frame]]
+    /// Exit triggers drawn with Mac artwork, with the drawn door's centre.
+    private struct ExitDoor: Sendable {
+        let x1: Int, y1: Int, x2: Int, y2: Int
+        /// Twice the door's centre in scene pixels, so half pixels stay exact.
+        let doubledCentre: Int
+    }
+    private let exitDoors: [ExitDoor]
 
     /// `match` lists the pieces allowed to use the artwork. Without it every piece does.
     /// Pieces left out use their source geometry with inferred Macintosh detail.
@@ -216,6 +223,20 @@ public struct ClassicMacScene: Sendable {
             }
         }
         self.reconstructedObjects = reconstructedObjects
+        var exitDoors: [ExitDoor] = []
+        for (position, object) in rendered.objects.enumerated() where reconstructedObjects[position] == nil {
+            let placement = object.placement, graphic = object.graphic
+            guard placement.slot < rendered.interactiveObjectSlotLimit,
+                  graphic.triggerEffect == ClassicDOSObjectEffect.exit.rawValue,
+                  let definitions = artwork.objects[style], definitions.indices.contains(placement.id),
+                  definitions[placement.id].count > 0,
+                  let frame = artwork.frame(1600 + style, definitions[placement.id].base + definitions[placement.id].first),
+                  let span = Self.opaqueColumns(frame) else { continue }
+            let x = (placement.x & ~3) + graphic.triggerLeft, y = (placement.y & ~3) + graphic.triggerTop
+            exitDoors.append(ExitDoor(x1: x, y1: y, x2: x + graphic.triggerWidth, y2: y + graphic.triggerHeight,
+                doubledCentre: (placement.x * 2 + frame.x) * 2 + span.lowerBound + span.upperBound))
+        }
+        self.exitDoors = exitDoors
         var pixels = [UInt8](repeating: 0, count: width * height * 4)
         if source.specialStyle > 0 {
             if (match?.special ?? true), let frame = artwork.frame(1699 + source.specialStyle) {
@@ -265,6 +286,30 @@ public struct ClassicMacScene: Sendable {
                 flipped: tile.draw.isUpsideDown, erase: tile.draw.isErase, behind: tile.draw.noOverwrite)
         }
         terrainRGBA = artwork.monochrome ? Self.monochromeRGBA(Data(pixels), width: width) : Data(pixels)
+    }
+
+    /// Returns the scene pixels to move an exiting lemming onto the drawn door.
+    ///
+    /// The simulation keeps the DOS exit trigger. Some Mac exits put the door
+    /// up to four pixels to one side of it, so the jump missed the opening.
+    /// `spriteOffsetX` is the DOS exiting animation's horizontal offset.
+    public func exitingShift(footX: Int, footY: Int, spriteOffsetX: Int) -> Int {
+        guard let door = exitDoors.last(where: {
+                  $0.x1 <= footX && footX < $0.x2 && $0.y1 <= footY && footY < $0.y2 }),
+              let sprite = artwork.lemming(pose: .exiting, left: false, tick: 0),
+              let span = Self.opaqueColumns(sprite) else { return 0 }
+        let doubledSprite = ((footX + spriteOffsetX) * 2 + sprite.x) * 2 + span.lowerBound + span.upperBound
+        return Int(((Double(door.doubledCentre - doubledSprite)) / 2).rounded())
+    }
+
+    /// The first and one-past-last columns that hold a visible pixel.
+    private static func opaqueColumns(_ frame: ClassicMacArtwork.Frame) -> Range<Int>? {
+        let rgba = [UInt8](frame.rgba)
+        let columns = (0..<frame.width).filter { x in
+            (0..<frame.height).contains { rgba[($0 * frame.width + x) * 4 + 3] != 0 }
+        }
+        guard let first = columns.first, let last = columns.last else { return nil }
+        return first..<(last + 1)
     }
 
     public func terrainFrame(terrain: ClassicDOSTerrain) -> Data {

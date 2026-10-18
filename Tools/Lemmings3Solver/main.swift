@@ -91,6 +91,19 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
         let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
         let base = try Lemmings3Runtime(level: level, style: style, permanent: perm, temporary: temp, total: population)
+        let retainedRouteWins: Bool
+        if let existing, let first = try? existing.replay(from: base, levelData: level.rawData),
+           let second = try? existing.replay(from: base, levelData: level.rawData) {
+            retainedRouteWins = first.isComplete && first.saved > 0 &&
+                L3Replay.stateHash(first) == L3Replay.stateHash(second)
+        } else {
+            retainedRouteWins = false
+        }
+        if promoting && retainedRouteWins {
+            print(String(format: "KEPT MVP %03d: retained route wins", number))
+            fflush(stdout)
+            continue
+        }
         let seeded: L3Candidate?
         if let seed, let seedThrough {
             do {
@@ -122,9 +135,9 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
             guard run.budgetSeconds > 0 else { break }
             let attempt = l3Search(from: base, limits: run, seed: seeded, deadline: deadline)
             report.expanded += attempt.expanded
-            if let found = attempt.best, report.best.map({ $0.game.saved < found.game.saved || ($0.game.saved == found.game.saved && $0.game.survivors < found.game.survivors) }) ?? true { report.best = found }
+            if report.best == nil { report.best = attempt.best }
             if report.bestPartial == nil || (attempt.bestPartial?.game.saved ?? 0) > (report.bestPartial?.game.saved ?? 0) { report.bestPartial = attempt.bestPartial }
-            if report.best?.game.lost == 0 || attempt.seconds >= run.budgetSeconds || run.beamWidth >= 4096 { break }
+            if report.best != nil || attempt.seconds >= run.budgetSeconds || run.beamWidth >= 4096 { break }
             run.beamWidth *= 2
         }
         report.seconds = Date().timeIntervalSince(started)
@@ -154,13 +167,11 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         var line = String(format: "SOLVED %03d: saved %d, lost %d, reserve %d, %d ticks, %d inputs; ", number, game.saved,
                           game.lost, game.reserve, game.tick, best.inputs.count) + summary
         if promoting {
-            // A route replaces a fixture only when it keeps more lemmings, or keeps as many and saves more.
-            let retained = existing.map { $0.expected.saved + $0.expected.reserves } ?? -1
-            if game.survivors > retained || (game.survivors == retained && game.saved > (existing?.expected.saved ?? -1)) {
+            if !retainedRouteWins {
                 try encoder.encode(replay).write(to: file, options: .atomic)
-                line += existing == nil ? "; PROMOTED new fixture" : "; PROMOTED over \(existing!.expected.saved) saved"
+                line += existing == nil ? "; PROMOTED MVP fixture" : "; PROMOTED MVP replacement for invalid route"
             } else {
-                line += "; KEPT fixture keeps \(retained)"
+                line += "; KEPT verified MVP fixture"
             }
         }
         print(line)

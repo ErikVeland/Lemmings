@@ -2310,12 +2310,22 @@ import NxlvKit
         onRelease?(); onHover?(); NSCursor.arrow.set()
     }
     override func cursorUpdate(with event: NSEvent) {
-        let point = convert(event.locationInWindow, from: nil)
-        GameCursor.update(at: point, hidingInside: navigationFrame?.contains(point) == true ? nil : gameplayRect)
+        updateSystemCursor(at: convert(event.locationInWindow, from: nil))
+    }
+    private func updateSystemCursor(at point: CGPoint) {
+        let navigation = navigationFrame?.contains(point) == true
+        GameCursor.update(at: point, hidingInside: navigation ? nil : gameplayRect,
+            buttonsRect: navigation ? nil : buttonCursorRect, buttonScale: zoom)
     }
     override func resetCursorRects() {
         addCursorRect(bounds, cursor: NSCursor.arrow)
         if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.gameplayCursor) }
+        if let buttons = buttonCursorRect { addCursorRect(buttons, cursor: GameCursor.buttonCursor(scale: zoom)) }
+    }
+    /// The skill panel, where every source pixel maps to a control slot.
+    private var buttonCursorRect: CGRect? {
+        guard !readOnlyReplay, panel != nil else { return nil }
+        return CGRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom)
     }
     var gameplayRect: CGRect {
         CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)

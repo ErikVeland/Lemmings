@@ -1,61 +1,61 @@
 {
-  "expected" : {
-    "lost" : 8,
-    "reserves" : 0,
-    "saved" : 1,
-    "stateHash" : "099dbb5b8b5f2a0268c04ee9f2a905e595e7df65805cbe4080601d6f37fda440",
-    "ticks" : 4140
+  "expected": {
+    "lost": 8,
+    "reserves": 0,
+    "saved": 1,
+    "stateHash": "099dbb5b8b5f2a0268c04ee9f2a905e595e7df65805cbe4080601d6f37fda440",
+    "ticks": 4140
   },
-  "initialStateHash" : "efb2bb410cd7d9671835a7ffe1e2b538467a5697088bcc1805d190bae3f968ec",
-  "inputs" : [
+  "initialStateHash": "dfe10ea4c91baa274e0182b807004a1e3c586e9bd33850912d17edce0dd91fd2",
+  "inputs": [
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 120
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 120
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 145
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 145
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 207
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 207
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 290
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 290
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 405
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 405
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 515
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 515
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 550
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 550
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 560
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 560
     },
     {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 750
+      "action": "jumper",
+      "lemming": 1,
+      "tick": 750
     }
   ],
-  "level" : 213,
-  "levelSHA256" : "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d",
-  "population" : 8,
-  "version" : 1
+  "level": 213,
+  "levelSHA256": "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d",
+  "population": 8,
+  "version": 1
 }

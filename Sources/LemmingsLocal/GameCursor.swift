@@ -38,11 +38,54 @@ import AppKit
   /**
    * Keeps the system arrow on controls and hides it behind a drawn gameplay pointer.
    */
-  static func update(at point: CGPoint?, hidingInside gameplayRect: CGRect?) {
+  static func update(at point: CGPoint?, hidingInside gameplayRect: CGRect?,
+                     buttonsRect: CGRect? = nil, buttonScale: CGFloat = 1) {
     if hidesSystemCursor(at: point, inside: gameplayRect) {
       invisible.set()
+    } else if let point, let buttonsRect, buttonsRect.contains(point) {
+      buttonCursor(scale: buttonScale).set()
     } else {
       NSCursor.arrow.set()
+    }
+  }
+
+  /**
+   * Returns the Amiga cross for skill panel buttons in every pointer style.
+   */
+  static func buttonCursor(scale: CGFloat) -> NSCursor {
+    guard !gameplaySuppressed else { return .arrow }
+    let pixel = min(4, max(1, floor(scale)))
+    if let cursor = buttonCursors[pixel] { return cursor }
+    let side = 14 * pixel
+    let image = NSImage(size: NSSize(width: side, height: side), flipped: true) { rect in
+      NSGraphicsContext.current?.imageInterpolation = .none
+      originalCross.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
+        respectFlipped: true, hints: nil)
+      return true
+    }
+    let cursor = NSCursor(image: image, hotSpot: NSPoint(x: side / 2, y: side / 2))
+    buttonCursors[pixel] = cursor
+    return cursor
+  }
+  private static var buttonCursors: [CGFloat: NSCursor] = [:]
+
+  /**
+   * Adds each region's cursor and the arrow over the rest of the view, without overlapping rects.
+   * The regions must tile their bounding box.
+   */
+  static func addCursorRects(in view: NSView, _ regions: [(CGRect, NSCursor)]) {
+    let bounds = view.bounds
+    let rect = regions.reduce(CGRect.null) { $0.union($1.0) }
+    guard !rect.isNull, !rect.isEmpty else { view.addCursorRect(bounds, cursor: .arrow); return }
+    for (area, cursor) in regions where !area.isEmpty { view.addCursorRect(area, cursor: cursor) }
+    let rest = [
+      CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: max(0, rect.minY - bounds.minY)),
+      CGRect(x: bounds.minX, y: rect.maxY, width: bounds.width, height: max(0, bounds.maxY - rect.maxY)),
+      CGRect(x: bounds.minX, y: rect.minY, width: max(0, rect.minX - bounds.minX), height: rect.height),
+      CGRect(x: rect.maxX, y: rect.minY, width: max(0, bounds.maxX - rect.maxX), height: rect.height),
+    ]
+    for area in rest where area.width > 0 && area.height > 0 {
+      view.addCursorRect(area, cursor: .arrow)
     }
   }
 
