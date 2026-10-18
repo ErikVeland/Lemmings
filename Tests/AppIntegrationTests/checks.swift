@@ -2842,10 +2842,11 @@ extension AppDelegate {
           GameCursor.invisible.set()
           if tubeIsActive { crtView.mouseMoved(with: event) }
           else { playfield.mouseMoved(with: event) }
-          try check(NSCursor.current == NSCursor.arrow && playfield.edgeScrollVector == nil,
-            "Selector hover hid the arrow or retained a gameplay pointer")
+          // Controls around gameplay show the Amiga cross. Menus keep the system arrow.
+          try check(NSCursor.current == GameCursor.controlCursor() && playfield.edgeScrollVector == nil,
+            "Selector hover hid the control cursor or retained a gameplay pointer")
           pointerSelector.cursorUpdate(with: event)
-          try check(NSCursor.current == NSCursor.arrow, "Selector cursor tracking did not restore the system arrow")
+          try check(NSCursor.current == GameCursor.controlCursor(), "Selector cursor tracking did not restore the control cursor")
         }
         let terrain = CGPoint(x: surface.bounds.midX, y: surface.bounds.midY)
         try check(!GameCursor.isOverSystemControl(at: terrain, in: surface), "Terrain remained a system pointer region")
@@ -4872,6 +4873,11 @@ extension AppDelegate {
     guard let journey = LearningJourneyLibrary.journey else {
       throw IntegrationFailure(message: "The bundled learning journey did not load")
     }
+    // The menu theme is random for each launch. These checks follow a module
+    // from the menu into the journey, so they need the Amiga intro module.
+    let previousMenuTheme = menuTheme
+    menuTheme = .amigaIntro
+    defer { menuTheme = previousMenuTheme }
     let previousMusic = settings.music
     let previousMusicVolume = settings.musicVolume
     let previousShuffleMusic = settings.shuffleMusic
@@ -5065,7 +5071,7 @@ extension AppDelegate {
       "The second journey lesson did not start: fan=\(fanPlaying), sequence=\(String(describing: sequencePlayingIdentity)), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "none")")
     try check(music.isOutputRunning && sameFile(music.currentURL, openingTrack)
       && music.sourceSeconds >= duringHandoff,
-      "The outgoing module did not continue during the second lesson")
+      "The outgoing module did not continue during the second lesson: running=\(music.isOutputRunning), url=\(music.currentURL?.lastPathComponent ?? "none"), seconds=\(music.sourceSeconds) from \(duringHandoff), soundtrack=\(soundtrack.isPlaying ? soundtrack.currentURL?.lastPathComponent ?? "?" : "stopped"), dj=\(dj.isPlaying ? dj.currentURL?.lastPathComponent ?? "?" : "stopped"), handoff=\(legacyMusicHandoffTask != nil), identity=\(startedMusicIdentity ?? "none")")
     try check(dj.isPlaying && sameFile(dj.currentURL, nextTrack),
       "The second journey lesson did not select lemming1.mod: DJ playing=\(dj.isPlaying), URL=\(dj.currentURL?.path ?? "none")")
     let beforeInterruptedBridge = music.sourceSeconds
@@ -5176,7 +5182,7 @@ extension AppDelegate {
       && !music.muted && music.volume > 0
       && store.activeRun?.id != firstSoloID
       && store.savedRuns.contains(where: { $0.run.id == firstSoloID }),
-      "New solo did not replace and save the learning journey session")
+      "New solo did not replace and save the learning journey session: entry=\(store.activeRun?.currentEntry.identity == first), sequence=\(sequencePlayingIdentity == first), hotSeat=\(arcade.hotSeatIsActive), running=\(music.isOutputRunning), url=\(music.currentURL?.lastPathComponent ?? "none"), muted=\(music.muted), volume=\(music.volume), soundtrack=\(soundtrack.isPlaying ? soundtrack.currentURL?.lastPathComponent ?? "?" : "stopped"), dj=\(dj.isPlaying), newRun=\(store.activeRun?.id != firstSoloID), saved=\(store.savedRuns.contains(where: { $0.run.id == firstSoloID }))")
     let soloID = store.activeRun!.id
     returnToLibrary()
     startLearningEntries(pending, in: store)
@@ -6323,16 +6329,20 @@ extension AppDelegate {
     let selected = gamePicker.indexOfSelectedItem
     let oldFan = fanPlaying
     let oldURL = currentNxlvURL
+    let oldPhase = phase
     defer {
       gamePicker.selectItem(at: selected)
       fanPlaying = oldFan
       currentNxlvURL = oldURL
+      phase = oldPhase
       settings.music = .amigaModules
       levelMusic = nil
       suspendCurrentEngine()
     }
     fanPlaying = false
     currentNxlvURL = nil
+    // Level music plays during a level. The title and rank menus play the menu theme.
+    phase = .playing
     for title in [ClassicTitle.holidayLemmings1994, .lemmings, .xmasLemmings1991, .ohNoMoreLemmings, .xmasLemmings1992, .holidayLemmings1993] {
       guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
         throw NSError(domain: "MusicTests", code: 1, userInfo: [NSLocalizedDescriptionKey: "Missing campaign \(title)"])
@@ -9020,7 +9030,7 @@ extension AppDelegate {
           try nativeL3Window!.testExitAndSequenceResult(won: won)
         }
         let reopened = try LevelPlaylistStore(file: file)
-        try check(reopened.learningProgress.completed.contains(entry.identity) == won, "\(engine) did not save the actual result before Next")
+        try check(reopened.learningProgress.completed.contains(entry.identity) == won, "\(engine) did not save the actual result before Next: won=\(won), saved=\(reopened.learningProgress.completed.contains(entry.identity)), live=\(store.learningProgress.completed.contains(entry.identity)), phase=\(phase), sequence=\(sequencePlayingIdentity == entry.identity)")
         try check(reopened.activeRun == run && reopened.activeRunHotSeatID == "same-turn", "\(engine) completion advanced or changed ownership")
         if won {
           let before = try Data(contentsOf: file)

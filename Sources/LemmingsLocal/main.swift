@@ -1715,7 +1715,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // engages when the setting is next touched, so a player who chose a
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
+    // A sequence passes through the library between lessons. Keep the
+    // outgoing lesson music there instead of starting the menu theme.
+    preservingLibraryMusic = preservingMusic
     renderScreen()
+    preservingLibraryMusic = false
     measureFanPacks()
     if resumeMusic { playMusicForCurrentLevel() }
     window.makeKeyAndOrderFront(nil)
@@ -2499,6 +2503,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     .flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
   /// One main theme plays on the menus for the whole launch.
   private var menuTheme: MenuThemeSelection.Choice?
+  /// True while a library render must keep the music that is playing.
+  private var preservingLibraryMusic = false
   private var showsMainMenu: Bool {
     guard !fanPlaying, currentNxlvURL == nil, phase != .playing, let screen = flow?.screen else { return false }
     switch screen {
@@ -3768,7 +3774,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       store = try LevelPlaylistStore(profileID: profileID, won: learningWins(profileID: profileID))
       playlistStoreCache = (profileID, store)
     }
-    try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID))
+    // Synced lessons belong to the profile's own store, as in saveCloudLearning.
+    if store.file == LevelPlaylistStore.fileURL(profileID: profileID) {
+      try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID))
+    }
     try saveCloudLearning(store)
     return store
   }
@@ -6973,11 +6982,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       showHomeSavedCounts()
       refreshHomeSavedCountsIfNeeded()
       refreshHomeBackdrop()
-      playMusicForCurrentLevel()
+      if !preservingLibraryMusic { playMusicForCurrentLevel() }
 
     case .rankSelect:
       phase = .briefing
-      playMusicForCurrentLevel()
+      if !preservingLibraryMusic { playMusicForCurrentLevel() }
       playfield.phase = .briefing
       playfield.overlayShowsLemmings = false
       playfield.overlayTitle = L10n.text("Choose a rating")
