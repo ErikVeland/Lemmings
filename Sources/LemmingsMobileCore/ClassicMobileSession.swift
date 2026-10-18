@@ -482,7 +482,17 @@ public final class ClassicMobileSession: MobileGameSession {
                 ?? ClassicSceneFrame.terrainRGBA(renderedLevel, terrain: simulation.terrain)
         }
         // The frame stays in one buffer from composition to presentation.
-        var pixels = nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
+        // Apple TV has no app EDR. Reduced colour depth keeps the period look.
+        #if os(tvOS)
+        let wantsGlints = false
+        #else
+        let wantsGlints = settings?.hdEffectsEnabled != false && settings?.colorDepth != .amigaOCS
+        #endif
+        let native = nativeScene.map { scene in
+            wantsGlints ? scene.rgbaWithArrowGlints(simulation: simulation, terrain: terrainFrame)
+                : (rgba: scene.rgba(simulation: simulation, terrain: terrainFrame), glints: nil)
+        }
+        var pixels = native?.rgba
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
         drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
         if assets != nil, palette.count >= 8 {
@@ -514,7 +524,7 @@ public final class ClassicMobileSession: MobileGameSession {
                 }
             }
         }
-        let frame = try MobilePixelFrame(width: width, height: height, rgba: pixels)
+        let frame = try MobilePixelFrame(width: width, height: height, rgba: pixels, arrowGlints: native?.glints)
         cachedRender = (highlight, frame)
         return frame
     }

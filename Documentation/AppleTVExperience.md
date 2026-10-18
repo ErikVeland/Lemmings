@@ -82,7 +82,7 @@ The TV default layout uses PlayStation names with their Xbox equivalents:
 | L2/LT | Hold rewind |
 | R2/RT | Resume planning/rewind pause, tap fast-forward, hold temporary variable-speed boost |
 | D-pad left/right | Minimum/maximum release rate where supported |
-| D-pad up/down | Increase/decrease release rate where supported |
+| D-pad up/down | Increase/decrease release rate where supported. Hold to repeat |
 | Options / Menu | Open/close pause menu |
 | L3/R3 | Entrance/goal |
 | DualSense touchpad click | DJ shuffle |

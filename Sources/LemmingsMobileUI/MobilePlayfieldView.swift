@@ -37,6 +37,7 @@ import UIKit
     private var automaticallyFitsViewport: Bool
     private let initialCameraFocus: MobilePoint?
     private(set) var bitmap: CGImage?
+    private var arrowGlints: ClassicMacScene.ArrowGlints?
     private var tubeViewport: MobileViewport?
     private let tubeSurface = MobileBitmapSurface()
     private let tube = MobileCRTView(tubeDevice: true)
@@ -226,6 +227,11 @@ import UIKit
         }
         guard enhancedEffects else { releaseHDR(); return }
         let content = gameViewport.contentFrame
+        let glints = displaySettings.hdEffectsEnabled && !MobileDevicePerformance.constrained ? arrowGlints : nil
+        if glints != nil { prepareHDR() }
+        let glintPlacement = glints.flatMap(arrowGlintRect)
+        hdr?.setArrowGlints(glintPlacement == nil ? nil : glints, in: glintPlacement ?? .null,
+            clip: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
         hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.constrained,
             field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
                 guard let self else { return .zero }
@@ -270,6 +276,7 @@ import UIKit
     func update(frame: MobilePixelFrame) throws {
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
+        arrowGlints = frame.arrowGlints
         #if os(iOS)
         let now = ProcessInfo.processInfo.systemUptime
         let liveIDs = Set(explosions.map(\.id))
@@ -295,7 +302,7 @@ import UIKit
 
     func purgeBitmap() {
         hdr?.clear(); explosionBirths.removeAll()
-        bitmap = nil
+        bitmap = nil; arrowGlints = nil
         updateBombCountdowns()
         tube?.isHidden = true
         setNeedsDisplay()
@@ -317,6 +324,18 @@ import UIKit
 
     /// Larger bitmaps than every supported GPU's texture limit keep the CPU path.
     private var bitmapUsesLayer: Bool { bitmap.map { max($0.width, $0.height) <= 8192 } ?? false }
+
+    /// The view area of the arrow glint mask on the flat bitmap layer. The curved tube has no glints.
+    private func arrowGlintRect(_ glints: ClassicMacScene.ArrowGlints) -> CGRect? {
+        guard tube?.isHidden != false, let bitmap, bitmapUsesLayer, bitmap.width > 0, bitmap.height > 0 else { return nil }
+        let content = gameViewport.contentFrame
+        let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
+        let pixelX = gameViewport.levelSize.width * scaleX / Double(bitmap.width)
+        let pixelY = gameViewport.levelSize.height * scaleY / Double(bitmap.height)
+        return CGRect(x: content.x - gameViewport.origin.x * scaleX + Double(glints.x) * pixelX,
+            y: content.y - gameViewport.origin.y * scaleY + Double(glints.y) * pixelY,
+            width: Double(glints.width) * pixelX, height: Double(glints.height) * pixelY)
+    }
 
     /// Places the bitmap with the camera used for touch input. Fractional pan keeps its pixel alignment.
     private func layoutBitmap() {

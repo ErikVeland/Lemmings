@@ -257,5 +257,28 @@ public enum GameplayHDRShaders {
     float peak = 1+(clamp(u.animation.w,1.0f,8.0f)-1)*.48;
     return float4(min(light*strength*peak,float3(alpha*peak)),alpha);
   }
+
+  // Adds white light above the drawn frame. Zero alpha keeps the pixels below.
+  struct GlintUniforms { float4 scene; float4 clip; float gain; };
+  fragment float4 glint_fragment(Vertex v [[stage_in]], texture2d<float> mask [[texture(0)]],
+                                 constant GlintUniforms &u [[buffer(0)]]) {
+    if (u.gain <= 0 || any(v.uv < u.clip.xy) || any(v.uv >= u.clip.xy+u.clip.zw)) return float4(0);
+    constexpr sampler s(filter::nearest,address::clamp_to_zero);
+    float glint = mask.sample(s,(v.uv-u.scene.xy)/u.scene.zw).r;
+    return float4(float3(glint*u.gain),0);
+  }
   """
+}
+
+/// Places the arrow glint mask on an HDR overlay. Rectangles are fractions of the overlay.
+public struct ArrowGlintUniforms: Sendable {
+  public init(scene: SIMD4<Float>, clip: SIMD4<Float>, headroom: Float) {
+    self.scene = scene; self.clip = clip
+    gain = min(max(0, headroom - 1), Self.peak)
+  }
+  /// Light the brightest glint adds above SDR white. Arrows are scenery, not a blast.
+  public static let peak: Float = 1.5
+  public var scene: SIMD4<Float>
+  public var clip: SIMD4<Float>
+  public var gain: Float
 }

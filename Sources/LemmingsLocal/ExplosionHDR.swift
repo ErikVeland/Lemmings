@@ -76,6 +76,16 @@ enum ExplosionHDR {
   private var pipeline: MTLRenderPipelineState?
   private var nuclearPipeline: MTLRenderPipelineState?
   private var speedPipeline: MTLRenderPipelineState?
+  private var glintPipeline: MTLRenderPipelineState?
+  private var glints: ClassicMacScene.ArrowGlints?
+  private var glintRect = CGRect.null
+  private var glintTexture: MTLTexture?
+  /// The glints moved or changed since the last presented frame.
+  private var glintPending = false
+  private var glintChangedAt = -Double.infinity
+  private var presentedGlintRect = CGRect.null
+  /// The last frame held only glints, at this headroom. It stays valid until something changes.
+  private var presentedGlintHeadroom: Float?
   private var rescueRenderer: LemmingSelectionRenderer?
   private var rescueAuras: [LemmingSelectionEffect] = []
   private var surface: CAMetalLayer?
@@ -152,6 +162,8 @@ enum ExplosionHDR {
 
   func clear() {
     rescueAuras.removeAll()
+    glints = nil; glintRect = .null; glintTexture = nil; glintPending = false
+    presentedGlintRect = .null; presentedGlintHeadroom = nil
     speed = SuperSpeedTimeline()
     speedMotionTime = 0; speedMotionLast = nil
     clearExplosions()
@@ -203,6 +215,8 @@ enum ExplosionHDR {
       nuclearPipeline = try gpu.makeRenderPipelineState(descriptor:descriptor)
       descriptor.fragmentFunction = library.makeFunction(name:"speed_fragment")
       speedPipeline = try gpu.makeRenderPipelineState(descriptor:descriptor)
+      descriptor.fragmentFunction = library.makeFunction(name:"glint_fragment")
+      glintPipeline = try gpu.makeRenderPipelineState(descriptor:descriptor)
     } catch {
       // AppKit still draws a visible blast if Metal compilation fails.
       self.layer = CALayer(); surface = nil; pipeline = nil
@@ -235,6 +249,17 @@ enum ExplosionHDR {
     if force || changed || !flashes.isEmpty || texture == nil { render() }
   }
 
+  /// HDR light on lit arrow edges. `rect` is the view area that the mask covers.
+  /// SDR screens draw nothing, because the frame already holds the glint up to white.
+  func setArrowGlints(_ glints: ClassicMacScene.ArrowGlints?, in rect: CGRect) {
+    let rect = glints == nil ? CGRect.null : rect
+    guard glints != self.glints || rect != glintRect else { return }
+    if glints != self.glints { glintTexture = nil }
+    self.glints = glints; glintRect = rect; glintPending = true
+    glintChangedAt = ProcessInfo.processInfo.systemUptime
+    scheduleExpiration()
+  }
+
   func setRescueAuras(_ effects: [LemmingSelectionEffect]) {
     guard !effects.isEmpty || !rescueAuras.isEmpty else { return }
     rescueAuras = effects
@@ -245,7 +270,7 @@ enum ExplosionHDR {
     expiration?.cancel()
     let now = ProcessInfo.processInfo.systemUptime
     let end: TimeInterval
-    if !timeline.bursts.isEmpty || !worldFlashes.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/MacFXPerformance.shared.presentation.effectHz }
+    if !timeline.bursts.isEmpty || !worldFlashes.isEmpty || speed.isAnimating(now: now) || glintPending { end = now + 1.0/MacFXPerformance.shared.presentation.effectHz }
     else if let expiry = (flashes + worldFlashes).map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
@@ -285,7 +310,10 @@ enum ExplosionHDR {
     // An idle overlay has no pixels to present. Hide the previous frame without
     // allocating a full-window mask or waiting for a Metal drawable.
     let currentFlashes = renderedFlashes
-    let active = !rescueAuras.isEmpty || !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    let showsGlints = glints != nil && glintPipeline != nil && glintRect.intersects(bounds)
+      && (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
+    if !showsGlints { glintPending = false }
+    let active = showsGlints || !rescueAuras.isEmpty || !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
     // AppKit can restore a backing layer's visibility during display. Hide the
     // view too, so idle effects stay out of window composition.
     isHidden = !active
@@ -304,7 +332,13 @@ enum ExplosionHDR {
     // Request display headroom only while the overlay has visible effects.
     surface.wantsExtendedDynamicRangeContent = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
     MacFXPerformance.shared.configureDisplay(screen)
-    guard outstandingSubmissions < 2, now - lastPresented >= 1 / quality.effectHz else { return }
+    // A moved glint skips the frame limit so it stays on the scrolled terrain.
+    let glintMoved = showsGlints && glintRect != presentedGlintRect
+    let onlyGlints = showsGlints && rescueAuras.isEmpty && currentFlashes.isEmpty
+      && timeline.bursts.isEmpty && !speed.isAnimating(now: now)
+    if onlyGlints, !glintMoved, glintTexture != nil, presentedGlintHeadroom
+      == ExplosionHDR.headroom(screen.maximumExtendedDynamicRangeColorComponentValue) { return }
+    guard outstandingSubmissions < 2, glintMoved || now - lastPresented >= 1 / quality.effectHz else { return }
     let scale = CGFloat(quality.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
                                           nativeScale: Double(window?.backingScaleFactor ?? 1)))
     surface.contentsScale = scale
@@ -344,6 +378,30 @@ enum ExplosionHDR {
       encoder.setFragmentBytes(&headroom,length:MemoryLayout<Float>.size,index:0)
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
     }
+    // The flash pass replaces every pixel, so light is added after it.
+    if showsGlints, headroom > 1, let glintPipeline, let glints {
+      if glintTexture == nil {
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.r8Unorm,
+          width:glints.width,height:glints.height,mipmapped:false)
+        descriptor.usage = .shaderRead
+        // A new texture each change keeps submitted frames immutable.
+        glintTexture = gpu.makeTexture(descriptor:descriptor)
+        glints.strength.withUnsafeBytes { bytes in
+          glintTexture?.replace(region:MTLRegionMake2D(0,0,glints.width,glints.height),mipmapLevel:0,
+            withBytes:bytes.baseAddress!,bytesPerRow:glints.width)
+        }
+      }
+      if let glintTexture {
+        var uniforms = ArrowGlintUniforms(
+          scene: SIMD4(Float(glintRect.minX/bounds.width),Float(glintRect.minY/bounds.height),
+            Float(glintRect.width/bounds.width),Float(glintRect.height/bounds.height)),
+          clip: SIMD4(0,0,1,1), headroom: headroom)
+        encoder.setRenderPipelineState(glintPipeline)
+        encoder.setFragmentTexture(glintTexture,index:0)
+        encoder.setFragmentBytes(&uniforms,length:MemoryLayout<ArrowGlintUniforms>.stride,index:0)
+        encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
+      }
+    }
     if let speedPipeline, speed.isAnimating(now: now) {
       var uniforms = SuperSpeedUniforms(
         field: SIMD4(Float(speedField.minX),Float(speedField.minY),Float(speedField.width),Float(speedField.height)),
@@ -378,6 +436,10 @@ enum ExplosionHDR {
       }
     }
     lastPresented = now
+    presentedGlintRect = showsGlints ? glintRect : .null
+    presentedGlintHeadroom = onlyGlints ? headroom : nil
+    // The screen grants EDR headroom a moment after the layer asks for it.
+    glintPending = showsGlints && headroom <= 1 && now - glintChangedAt < 1
     command.present(drawable)
     command.commit()
     #if PERFORMANCE_TESTS

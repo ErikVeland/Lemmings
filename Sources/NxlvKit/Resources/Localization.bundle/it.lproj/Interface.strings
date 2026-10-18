@@ -3180,3 +3180,6 @@
 "{0}/{1} packs" = "{0}/{1} pacchetti";
 "{0}: replay analysis failed: {1}" = "{0}: analisi del replay non riuscita: {1}";
 "{0}{1} more to rescue for three stars." = "Salva altri {0}{1} per ottenere tre stelle.";
+"GHOST SOLUTION" = "SOLUZIONE FANTASMA";
+"Show ghost solution?" = "Mostrare la soluzione fantasma?";
+"SHOW" = "MOSTRA";

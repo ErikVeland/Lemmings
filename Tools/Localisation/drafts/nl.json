@@ -3178,5 +3178,8 @@
   "{0}/{1} levels passed in this rating.": "{0}/{1} levels voltooid in deze beoordeling.",
   "{0}/{1} packs": "{0}/{1} pakketten",
   "{0}: replay analysis failed: {1}": "{0}: replayanalyse mislukt: {1}",
-  "{0}{1} more to rescue for three stars.": "Nog {0}{1} redden voor drie sterren."
+  "{0}{1} more to rescue for three stars.": "Nog {0}{1} redden voor drie sterren.",
+  "GHOST SOLUTION": "SPOOKOPLOSSING",
+  "Show ghost solution?": "Spookoplossing tonen?",
+  "SHOW": "TONEN"
 }

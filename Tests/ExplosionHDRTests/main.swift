@@ -358,6 +358,29 @@ func require(_ value: Bool, _ message: String) throws {
     try require(image[greenIndex + 1] == 8 && image[greenIndex] < 2 && image[greenIndex + 2] < 2,
       "Assignment pulse lost green HDR colour in flat or CRT output")
   }
+
+  // Arrow glints add white light above the frame and nothing on SDR screens.
+  var glintBytes = [UInt8](repeating: 0, count: 64)
+  glintBytes[1 * 8 + 1] = 255; glintBytes[2 * 8 + 6] = 255
+  let glintTexture = texture(.r8Unorm, bytes: glintBytes, row: 8)
+  func glint(scene: SIMD4<Float>, clip: SIMD4<Float> = SIMD4(0, 0, 1, 1), headroom: Float) throws -> [Float] {
+    try render(code: GameplayHDRShaders.source, vertex: "flash_vertex", fragment: "glint_fragment",
+      textures: [glintTexture], uniforms: ArrowGlintUniforms(scene: scene, clip: clip, headroom: headroom))
+  }
+  let full = SIMD4<Float>(0, 0, 1, 1)
+  try require(try glint(scene: full, headroom: 1).allSatisfy { $0 == 0 }, "Arrow glint changed the SDR frame")
+  let lit = try glint(scene: full, headroom: 3), litIndex = (1 * 8 + 1) * 4
+  try require(lit[litIndex] == ArrowGlintUniforms.peak && lit[litIndex + 1] == lit[litIndex]
+    && lit[litIndex + 2] == lit[litIndex] && lit[litIndex + 3] == 0, "Arrow glint lost white HDR light or covered the frame")
+  try require(lit.enumerated().allSatisfy { $0.offset / 4 == 1 * 8 + 1 || $0.offset / 4 == 2 * 8 + 6 || $0.element == 0 },
+    "Arrow glint lit pixels off the mask")
+  try require(try glint(scene: full, headroom: 2)[litIndex] == 1, "Arrow glint ignored the display headroom")
+  try require(try glint(scene: full, clip: SIMD4(0, 0, 0.5, 1), headroom: 3)[(2 * 8 + 6) * 4] == 0,
+    "Arrow glint escaped the playfield clip")
+  let panned = try glint(scene: SIMD4(0.5, 0.5, 0.5, 0.5), headroom: 3)
+  try require(panned[(4 * 8 + 4) * 4] == ArrowGlintUniforms.peak && panned[litIndex] == 0,
+    "Arrow glint did not follow the camera")
+  print("PASS arrow glints: white HDR light, bounded peak, clip, camera and unchanged SDR")
   try require(greenHDR[3] == 0, "Assignment pulse changed pixels outside the reticle")
 
   // Regressions for the enabled effect doing nothing on an SDR display.

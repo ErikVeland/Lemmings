@@ -3178,5 +3178,8 @@
   "{0}/{1} levels passed in this rating.": "{0}/{1} Level in dieser Wertung geschafft.",
   "{0}/{1} packs": "{0}/{1} Pakete",
   "{0}: replay analysis failed: {1}": "{0}: Wiedergabeanalyse fehlgeschlagen: {1}",
-  "{0}{1} more to rescue for three stars.": "Noch {0}{1} retten für drei Sterne."
+  "{0}{1} more to rescue for three stars.": "Noch {0}{1} retten für drei Sterne.",
+  "GHOST SOLUTION": "GEISTERLÖSUNG",
+  "Show ghost solution?": "Geisterlösung anzeigen?",
+  "SHOW": "ANZEIGEN"
 }

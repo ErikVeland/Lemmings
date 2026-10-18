@@ -36,6 +36,33 @@ struct ControllerBindingsTests {
         }
     }
 
+    @Test func heldDPadRepeatsTheReleaseRateLikeAHeldButton() {
+        var bindings = ControllerBindings(rateRepeat: .touch)
+        _ = bindings.update(pressed: [], at: 0)
+        #expect(bindings.update(pressed: [.up], at: 1) == [.rate(1)])
+        #expect(bindings.update(pressed: [.up], at: 1.34) == [])
+        #expect(bindings.update(pressed: [.up], at: 1.35) == [.rate(1)])
+        #expect(bindings.update(pressed: [.up], at: 1.40) == [])
+        #expect(bindings.update(pressed: [.up], at: 1.44) == [.rate(1)])
+        // A stall catches up a few steps, not the whole gap.
+        #expect(bindings.update(pressed: [.up], at: 5) == Array(repeating: .rate(1), count: 4))
+        #expect(bindings.update(pressed: [], at: 5.1) == [])
+        #expect(bindings.update(pressed: [.down], at: 6) == [.rate(-1)])
+        #expect(bindings.update(pressed: [.down], at: 6.35) == [.rate(-1)])
+        // The modifier ends the hold, and releasing it does not restart it.
+        #expect(bindings.update(pressed: [.down, .leftTrigger], at: 6.5) == [])
+        #expect(bindings.update(pressed: [.down], at: 7) == [])
+    }
+
+    @Test func heldDPadStepsOnceInMenusAndWithoutATime() {
+        var menu = ControllerBindings(); _ = menu.update(pressed: [], inMenu: true, at: 0)
+        #expect(menu.update(pressed: [.up], inMenu: true, at: 1) == [.rate(1)])
+        #expect(menu.update(pressed: [.up], inMenu: true, at: 3) == [])
+        var untimed = ControllerBindings(); _ = untimed.update(pressed: [])
+        #expect(untimed.update(pressed: [.up]) == [.rate(1)])
+        #expect(untimed.update(pressed: [.up]) == [])
+    }
+
     @Test func faceButtonsKeepTheMenuOnItsDedicatedButton() {
         for (button, action): (ControllerBindings.Button, ControllerBindings.Action) in [
             (.a, .assign), (.b, .pause), (.x, .speedReset), (.y, .endRun), (.menu, .cancel)

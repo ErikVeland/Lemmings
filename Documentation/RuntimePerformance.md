@@ -1,5 +1,35 @@
 # Runtime performance
 
+## Crowded play, 18 October 2026
+
+A 100-lemming Classic crowd and real L2/L3 levels were measured with optimised
+builds on Apple silicon. Engine ticks, targeting and checkpoints cost less than
+0.1 ms. The frame cost came from presentation, not from the number of lemmings.
+
+The shared iOS and tvOS playfield drew the whole level on the CPU for each tick
+and camera move. Fitted zoom and the 1.2 pixel aspect use non-integer scales,
+which force the slow Core Graphics path. One iPad-sized draw took 7–9 ms on
+Apple silicon. Core Animation now scales the engine bitmap on the GPU with
+nearest filtering. Selection, cursor and effect overlays draw above it, and an
+empty overlay keeps no backing store. Bitmaps above 8,192 pixels keep the CPU
+path. CRT display is unchanged.
+
+The minimap colour-matched the full level image to draw a small map. A shared
+thumbnail now samples each new frame once at the map's device-pixel size. This
+applies to the Mac panel and the mobile and TV HUD. The Mac panel draw fell from
+3.9 ms to 1.65 ms with Macintosh artwork on a P3 display. The Mac Classic and
+NeoLemmix playfield retains its level crop between ticks. Redraws between ticks
+then reuse the colour-matched pixels: 2.40 ms became 1.69 ms in isolation. The
+mobile Classic renderer reads sprite and frame bytes in place. Its render time
+fell by about a third.
+
+Recorded crowd pixel digests, the TV console checks and the Mac scene pixel
+checks pass offscreen and muted. The iOS Simulator build shows the GPU-scaled
+playfield, overlays and minimap. Camera panning, sustained frame timing and
+older iPad, Apple TV and Intel Mac hardware still need device validation.
+The L2 and L3 Mac canvases already reuse their terrain images; their CPU fill
+cost is unchanged.
+
 ## Loading and frame budgets, 14 October 2026
 
 The shipping Mac, iOS and tvOS paths retain their authored simulation rates.

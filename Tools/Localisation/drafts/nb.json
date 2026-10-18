@@ -3178,5 +3178,8 @@
   "{0}/{1} levels passed in this rating.": "{0}/{1} brett fullført med denne vurderingen.",
   "{0}/{1} packs": "{0}/{1} pakker",
   "{0}: replay analysis failed: {1}": "{0}: repriseanalysering mislyktes: {1}",
-  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner."
+  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner.",
+  "GHOST SOLUTION": "SPØKELSESLØSNING",
+  "Show ghost solution?": "Vise spøkelsesløsning?",
+  "SHOW": "VIS"
 }

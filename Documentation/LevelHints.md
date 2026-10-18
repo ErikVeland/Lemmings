@@ -1,7 +1,7 @@
 # Level hints
 
 Press **i**, or choose **Help > Level hints**, or press **F1** (Fn-F1 on keyboards
-with brightness keys), or choose **Level hints** from the controls help. Classic also offers hints in its pause menu.
+with brightness keys), or choose **Level hints** from the controls help. Classic also offers hints in its pause menu. On iOS and tvOS, Hint is the first pause action in Classic, Lemmings 2 and Lemmings 3.
 **Command-/** opens the same page from the menu bar.
 On a controller, use **LT + Y**. Choose a button with the D-pad, press **A** to reveal one tier,
 and press **B** to return to the game. Held buttons do not reveal hints when the page opens.

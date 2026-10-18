@@ -12,6 +12,14 @@ import UIKit
     private let speedPipeline: MTLRenderPipelineState
     private let popPipeline: MTLRenderPipelineState
     private let flashPipeline: MTLRenderPipelineState
+    private let glintPipeline: MTLRenderPipelineState
+    private var glints: ClassicMacScene.ArrowGlints?
+    private var glintRect = CGRect.null
+    private var glintClip = CGRect.null
+    private var glintTexture: MTLTexture?
+    private var paintedGlintRect = CGRect.null
+    /// The last frame held only glints, at this headroom. It stays valid until something changes.
+    private var paintedGlintHeadroom: Float?
     private var speed = SuperSpeedTimeline()
     private var pops = NuclearExplosionTimeline()
     private var cores: [(rect: CGRect, expires: Double)] = []
@@ -42,8 +50,9 @@ import UIKit
             return try? device.makeRenderPipelineState(descriptor: descriptor)
         }
         guard let speed = pipeline("speed_fragment"), let pop = pipeline("nuclear_fragment"),
-              let flash = pipeline("flash_fragment") else { return nil }
+              let flash = pipeline("flash_fragment"), let glint = pipeline("glint_fragment") else { return nil }
         self.commands = commands; speedPipeline = speed; popPipeline = pop; flashPipeline = flash
+        glintPipeline = glint
         super.init(frame: .zero, device: device)
         colorPixelFormat = .rgba16Float
         framebufferOnly = true; autoResizeDrawable = false
@@ -65,6 +74,24 @@ import UIKit
         }
     }
 
+    /// HDR light on lit arrow edges. `rect` is the view area of the mask; `clip` is the visible playfield.
+    /// SDR screens draw nothing, because the frame already holds the glint up to white.
+    func setArrowGlints(_ glints: ClassicMacScene.ArrowGlints?, in rect: CGRect, clip: CGRect) {
+        if glints != self.glints { glintTexture = nil }
+        self.glints = glints
+        glintRect = glints == nil ? .null : rect; glintClip = glints == nil ? .null : clip
+    }
+
+    private var currentHeadroom: Float { Float(min(8, max(1, window?.screen.currentEDRHeadroom ?? 1))) }
+
+    private var showsGlints: Bool {
+#if os(iOS)
+        glints != nil && glintRect.intersects(glintClip) && (window?.screen.potentialEDRHeadroom ?? 1) > 1
+#else
+        false
+#endif
+    }
+
     func advance(at now: Double, multiplier: Double, enabled: Bool, field: CGRect,
                  project: @escaping (SIMD2<Float>) -> CGPoint) {
         self.now = now; self.field = field; self.project = project
@@ -72,10 +99,10 @@ import UIKit
         if let lastTime, speed.enabled { motionTime += min(0.1, max(0, now - lastTime)) * (0.5 + multiplier / 6) }
         self.lastTime = now
         pops.expire(now: now); cores.removeAll { $0.expires <= now }
-        let active = speed.isAnimating(now: now) || !pops.bursts.isEmpty || !cores.isEmpty
+        let active = speed.isAnimating(now: now) || !pops.bursts.isEmpty || !cores.isEmpty || showsGlints
         isHidden = !active
         if !active {
-            flashTexture = nil
+            flashTexture = nil; paintedGlintRect = .null; paintedGlintHeadroom = nil
             releaseDrawables()
             drawableSize = CGSize(width: 1, height: 1)
 #if os(iOS)
@@ -85,7 +112,11 @@ import UIKit
         }
         let budget = MobileDevicePerformance.presentation
         let effectHz = MobileDevicePerformance.constrained ? min(20, budget.effectHz) : budget.effectHz
-        if let lastPaint, now - lastPaint < 1.0 / effectHz { return }
+        // A moved glint skips the frame limit so it stays on the panned terrain.
+        let glintMoved = showsGlints && glintRect != paintedGlintRect
+        if !glintMoved, let lastPaint, now - lastPaint < 1.0 / effectHz { return }
+        let onlyGlints = !speed.isAnimating(now: now) && pops.bursts.isEmpty && cores.isEmpty
+        if onlyGlints, !glintMoved, glintTexture != nil, paintedGlintHeadroom == currentHeadroom { return }
         lastPaint = now
         let scale = CGFloat(budget.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
                                                      nativeScale: Double(min(2, window?.screen.scale ?? 1))))
@@ -101,6 +132,8 @@ import UIKit
 
     func clear() {
         speed = SuperSpeedTimeline(); pops.clear(); cores.removeAll()
+        glints = nil; glintRect = .null; glintClip = .null; glintTexture = nil
+        paintedGlintRect = .null; paintedGlintHeadroom = nil
         flashTexture = nil; lastTime = nil; lastPaint = nil; motionTime = 0
         releaseDrawables(); drawableSize = CGSize(width: 1, height: 1)
         isHidden = true
@@ -113,7 +146,7 @@ import UIKit
         guard outstandingSubmissions == 0, MobileDevicePerformance.enhancedEffectsAllowed,
               !isHidden, bounds.width > 0, bounds.height > 0, let project,
               let drawable = currentDrawable, let buffer = commands.makeCommandBuffer() else { return }
-        let headroom = Float(min(8, max(1, window?.screen.currentEDRHeadroom ?? 1)))
+        let headroom = currentHeadroom
         let pass = MTLRenderPassDescriptor()
         pass.colorAttachments[0].texture = drawable.texture
         pass.colorAttachments[0].loadAction = .clear; pass.colorAttachments[0].storeAction = .store
@@ -172,6 +205,34 @@ import UIKit
                 encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             }
         }
+        // The flash pass replaces every pixel, so light is added after it.
+        if showsGlints, headroom > 1, let glints, let device {
+            if glintTexture == nil {
+                let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r8Unorm,
+                    width: glints.width, height: glints.height, mipmapped: false)
+                descriptor.usage = .shaderRead
+                // A new texture each change keeps submitted frames immutable.
+                glintTexture = device.makeTexture(descriptor: descriptor)
+                glints.strength.withUnsafeBytes { bytes in
+                    glintTexture?.replace(region: MTLRegionMake2D(0, 0, glints.width, glints.height), mipmapLevel: 0,
+                        withBytes: bytes.baseAddress!, bytesPerRow: glints.width)
+                }
+            }
+            if let glintTexture {
+                func fraction(_ rect: CGRect) -> SIMD4<Float> {
+                    SIMD4(Float(rect.minX / bounds.width), Float(rect.minY / bounds.height),
+                          Float(rect.width / bounds.width), Float(rect.height / bounds.height))
+                }
+                var uniforms = ArrowGlintUniforms(scene: fraction(glintRect), clip: fraction(glintClip), headroom: headroom)
+                encoder.setRenderPipelineState(glintPipeline)
+                encoder.setFragmentTexture(glintTexture, index: 0)
+                encoder.setFragmentBytes(&uniforms, length: MemoryLayout<ArrowGlintUniforms>.stride, index: 0)
+                encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+            }
+        }
+        paintedGlintRect = showsGlints ? glintRect : .null
+        paintedGlintHeadroom = showsGlints && !speed.isAnimating(now: now) && samples.isEmpty && cores.isEmpty
+            ? headroom : nil
         encoder.endEncoding()
         outstandingSubmissions += 1
         buffer.addCompletedHandler { [weak self] completed in

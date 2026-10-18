@@ -11,7 +11,7 @@ button positions.
 | X / Y | Reset speed / nuke or undo where supported |
 | LB / RB | Previous / next available skill |
 | D-pad left / right | Previous / next unassigned lemming |
-| D-pad up / down | Increase / decrease release rate where supported |
+| D-pad up / down | Increase / decrease release rate where supported. Hold to repeat, with the same timing as the on-screen rate button |
 | Tap RT / hold RT | Toggle fast-forward / temporary speed boost |
 | Menu | Game menu |
 | View / Options | Show keyboard and controller help |

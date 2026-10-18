@@ -5,8 +5,10 @@ public struct MobilePixelFrame: Equatable, Sendable {
     public let width: Int
     public let height: Int
     public let rgba: Data
+    /// HDR light on lit Mac arrow edges, in frame pixels. SDR screens ignore it.
+    public let arrowGlints: ClassicMacScene.ArrowGlints?
 
-    public init(width: Int, height: Int, rgba: Data) throws {
+    public init(width: Int, height: Int, rgba: Data, arrowGlints: ClassicMacScene.ArrowGlints? = nil) throws {
         guard width > 0,
               height > 0,
               width <= Int.max / height,
@@ -16,6 +18,7 @@ public struct MobilePixelFrame: Equatable, Sendable {
         self.width = width
         self.height = height
         self.rgba = rgba
+        self.arrowGlints = arrowGlints
     }
 
     /// Keeps the original pixels and clips the loupe to the level boundary.

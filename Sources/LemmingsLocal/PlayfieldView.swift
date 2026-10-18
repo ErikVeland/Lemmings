@@ -348,8 +348,10 @@ struct ReticleFeedback {
   private var sceneTick: Int?
   private var sceneTerrainRevision: UInt64?
   private var sceneTerrain: Data?
+  /// HDR light on the Mac arrows of the current frame, in scene pixels.
+  private var arrowGlints: ClassicMacScene.ArrowGlints?
   private func invalidateClassicScene() {
-    sceneTick = nil; sceneTerrainRevision = nil; sceneTerrain = nil; needsDisplay = true
+    sceneTick = nil; sceneTerrainRevision = nil; sceneTerrain = nil; arrowGlints = nil; needsDisplay = true
   }
   #if PERFORMANCE_TESTS
   var sceneRenderSeconds = 0.0
@@ -371,7 +373,13 @@ struct ReticleFeedback {
       terrainRenderCount += 1
       #endif
     }
-    let rgba = macScene?.rgba(simulation: session.simulation, terrain: sceneTerrain)
+    let macFrame = macScene.map { scene in
+      presentsHDR && hdEffectsEnabled
+        ? scene.rgbaWithArrowGlints(simulation: session.simulation, terrain: sceneTerrain)
+        : (rgba: scene.rgba(simulation: session.simulation, terrain: sceneTerrain), glints: nil)
+    }
+    arrowGlints = macFrame?.glints
+    let rgba = macFrame?.rgba
       ?? ClassicSceneFrame.rgba(classicScene, simulation: session.simulation, terrain: sceneTerrain)
     imageScale = macScene == nil ? 1 : 2
     let width = macScene?.width ?? classicScene.width
@@ -890,7 +898,11 @@ struct ReticleFeedback {
     let tick = session?.currentTick ?? 0
     if tick < hdrLastTick { hdrBirths.removeAll(); selectionFade.reset() }
     hdrLastTick = tick
-    defer { hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : []) }
+    defer {
+      hdrOverlay?.setArrowGlints(presentsHDR && hdEffectsEnabled && phase == .playing && !usesHomeLayout
+        && levelImage != nil ? arrowGlints : nil, in: arrowGlintRect())
+      hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [])
+    }
     refreshClassicScene()
     refreshNeoScene()
     // Fill the view's own area, not the dirty rectangle. AppKit passes a
@@ -1498,6 +1510,16 @@ struct ReticleFeedback {
   }
 
   private var levelCrop: (source: CGImage, rect: CGRect, image: CGImage)?
+
+  /// The view area of the arrow glint mask, drawn through the same camera as the level.
+  private func arrowGlintRect() -> CGRect {
+    guard let glints = arrowGlints else { return .null }
+    let origin = viewport.viewPoint(fromLevel: CGPoint(x: CGFloat(glints.x) / imageScale,
+      y: CGFloat(glints.y) / imageScale))
+    return precisionLens.display(CGRect(x: origin.x, y: origin.y,
+      width: CGFloat(glints.width) * viewport.zoom / imageScale,
+      height: CGFloat(glints.height) * viewport.zoom / imageScale))
+  }
 
   private func drawLevel(_ image: CGImage) {
     // Crop in image pixels. CGImage uses a top-left origin, which matches the

@@ -106,7 +106,7 @@ import UIKit
         ]
         for (button, input) in buttons where input?.isPressed == true { pressed.insert(button) }
         if !isMenu() { pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings) }
-        for action in bindings.update(pressed: pressed, inMenu: isMenu()) { perform(action) }
+        for action in bindings.update(pressed: pressed, inMenu: isMenu(), at: now) { perform(action) }
         let left = settings().controllerSwapSticks ? pad.rightThumbstick : pad.leftThumbstick
         let right = settings().controllerSwapSticks ? pad.leftThumbstick : pad.rightThumbstick
         if isMenu() {

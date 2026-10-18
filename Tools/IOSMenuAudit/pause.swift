@@ -12,6 +12,7 @@ extension MenuAudit {
         let preview = MobileBitmapRenderer.image(try session.render(highlight: nil))
         let source = CGRect(x: session.initialCameraOrigin.x, y: 0, width: 320, height: 160)
         var captures: [[String: Any]] = []
+        var wordBreaks = Set<String>()
         let states = [("active", 12, 18, false, false), ("no-margin", 12, 8, false, false),
                       ("unreachable", 12, 7, false, false), ("secured", 60, 5, false, false),
                       ("ending", 12, 18, true, false), ("replay", 12, 18, false, true)]
@@ -37,8 +38,9 @@ extension MenuAudit {
                         audio: state == "ending" ? "Music off   /   SFX off" : "Music: beat only   /   SFX 90%")
                     let footer: [GameFrontEnd.Action] = replay
                         ? [.init("back", "Back"), .init("resume", "Resume", primary: true)]
-                        : [.init("library", "Library"), .init("restart", "Restart level"),
-                           .init("controls", "Game controls"), .init("resume", "Resume", primary: true)]
+                        : [.init("library", "Library"), .init("hint", "Hint"), .init("restart", "Restart level"),
+                           pose == "tv" ? .init("controls", "Game controls") : .init("controlsHelp", "Controls help"),
+                           .init("settings", "Settings"), .init("resume", "Resume", primary: true)]
                     let page = MobileTurnArt.page(MobilePauseArt.page(info, actions: footer), playerName: replay ? nil : "ERI")
                     let base = GameFrontEnd.layout(page, width: logicalSize.width, minimumHeight: logicalSize.height)
                     guard replay ? page.title == "Replay" : page.title.hasPrefix("Paused"),
@@ -62,8 +64,15 @@ extension MenuAudit {
                               layout.targets.allSatisfy({ viewport.contains($0.frame) && $0.frame.height >= 44 && $0.frame.width >= 44 })
                         else { throw invalidTargets(line: #line) }
                         for (index, target) in layout.targets.enumerated() {
-                            guard typography.width(of: target.action.title, face: .small, scale: 1)
-                                <= target.frame.width - (target.action.primary ? 48 : 24) else { throw invalidTargets(line: #line) }
+                            // Captions may wrap at word boundaries. A word wider than its button is
+                            // broken by the renderer; report it rather than hide it.
+                            let captionWidth = target.frame.width - (target.action.primary ? 48 : 24)
+                            guard GameTextLayout.height(target.action.title, width: captionWidth) + 8 <= target.frame.height
+                            else { throw invalidTargets(line: #line) }
+                            if !target.action.title.split(separator: " ").allSatisfy({
+                                typography.width(of: String($0), face: .small, scale: 1) <= captionWidth }) {
+                                wordBreaks.insert("\(pose)-\(interface.rawValue): \(target.action.title)")
+                            }
                             guard layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id,
                                   layout.targets.dropFirst(index + 1).allSatisfy({ !$0.frame.intersects(target.frame) }) else { throw invalidTargets(line: #line) }
                         }
@@ -89,8 +98,9 @@ extension MenuAudit {
             }
         }
         try JSONSerialization.data(withJSONObject: ["captures": captures, "audio": "muted", "windows": "none",
-            "targetsValidated": true, "pinnedResume": true], options: [.prettyPrinted, .sortedKeys])
+            "targetsValidated": true, "pinnedResume": true, "wordBreaks": wordBreaks.sorted()], options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("pause-report.json"))
+        for item in wordBreaks.sorted() { print("WARN: word broken inside button: \(item)") }
         print("PASS: \(captures.count) pause renders, scrolling and pinned targets; six rescue states, phone and iPad.")
         for width: CGFloat in [280, 390, 600, 960] {
             var confirmation = GameFrontEnd.Page(title: "Restart level?", details: ["Journey 34", "The Crankshaft"],

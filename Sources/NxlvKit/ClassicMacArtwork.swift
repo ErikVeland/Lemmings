@@ -188,6 +188,7 @@ public struct ClassicMacScene: Sendable {
         let doubledCentre: Int
     }
     private let exitDoors: [ExitDoor]
+    private let arrowGlintBounds: (x: Int, y: Int, width: Int, height: Int)?
 
     /// `match` lists the pieces allowed to use the artwork. Without it every piece does.
     /// Pieces left out use their source geometry with inferred Macintosh detail.
@@ -237,6 +238,8 @@ public struct ClassicMacScene: Sendable {
                 doubledCentre: (placement.x * 2 + frame.x) * 2 + span.lowerBound + span.upperBound))
         }
         self.exitDoors = exitDoors
+        arrowGlintBounds = Self.arrowGlintBounds(level: rendered, artwork: artwork, style: style,
+            reconstructed: reconstructedObjects, width: width, height: height)
         var pixels = [UInt8](repeating: 0, count: width * height * 4)
         if source.specialStyle > 0 {
             if (match?.special ?? true), let frame = artwork.frame(1699 + source.specialStyle) {
@@ -334,11 +337,34 @@ public struct ClassicMacScene: Sendable {
         return pixels
     }
 
+    /// Light above SDR white on the lit arrow edges, by scene pixel.
+    ///
+    /// `strength` covers one byte per pixel of the rectangle at `x`, `y`.
+    /// 255 means the glint adds up to the full HDR peak. The SDR frame
+    /// already holds the glint up to white; this is only the light it clips.
+    public struct ArrowGlints: Equatable, Sendable {
+        public let x: Int, y: Int, width: Int, height: Int
+        public let strength: Data
+    }
+
     public func rgba(simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
+        render(simulation: simulation, terrain: terrain, glints: false).rgba
+    }
+
+    /// The frame from `rgba(simulation:terrain:)`, with the arrow glints for
+    /// HDR displays. `glints` is nil when no arrow edge catches the light.
+    public func rgbaWithArrowGlints(simulation: ClassicDOSSimulation,
+        terrain: Data? = nil) -> (rgba: Data, glints: ArrowGlints?) {
+        render(simulation: simulation, terrain: terrain, glints: !artwork.monochrome)
+    }
+
+    private func render(simulation: ClassicDOSSimulation, terrain: Data?,
+        glints wantsGlints: Bool) -> (rgba: Data, glints: ArrowGlints?) {
         let solid = [UInt8](simulation.terrain.solidMask)
-        guard solid.count == level.solidMask.count else { return terrainRGBA }
+        guard solid.count == level.solidMask.count else { return (terrainRGBA, nil) }
         let visualTerrain = terrain ?? Data(terrainPixels(solid: solid))
         var pixels = [UInt8](visualTerrain)
+        var glints: GlintCanvas? = wantsGlints ? arrowGlintCanvas() : nil
         var triggerIndex = 0
         for (position, object) in level.objects.enumerated() {
             let placement = object.placement, graphic = object.graphic
@@ -376,13 +402,64 @@ public struct ClassicMacScene: Sendable {
                     height: height, solid: solid, scale: 2,
                     minimumBottom: (placement.y + graphic.height) * 2, visualTerrain: visualTerrain)
             }
+            let isArrow = graphic.triggerEffect == ClassicDOSObjectEffect.oneWayLeft.rawValue
+                || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue
+            if isArrow, placement.draw.onlyOverwrite, !placement.draw.noOverwrite {
+                // Clip arrows to the drawn Mac terrain, not the DOS collision cells.
+                Self.wrapArrows(frame, into: &pixels, width: width, height: height,
+                    x: placement.x * 2 + frame.x, y: placement.y * 2 + frame.y,
+                    flipped: placement.draw.isUpsideDown, visualTerrain: [UInt8](visualTerrain),
+                    shaded: !artwork.monochrome, glints: &glints)
+                continue
+            }
             Self.blit(frame, into: &pixels, width: width, height: height,
                 x: placement.x * 2 + frame.x, y: placement.y * 2 + frame.y,
                 flipped: placement.draw.isUpsideDown, behind: placement.draw.noOverwrite,
                 onlyTerrain: placement.draw.onlyOverwrite, solid: solid,
                 visualTerrain: isLiquid ? visualTerrain : nil)
         }
-        return Data(pixels)
+        return (Data(pixels), glints.flatMap { $0.lit ? ArrowGlints(x: $0.x, y: $0.y,
+            width: $0.width, height: $0.height, strength: Data($0.strength)) : nil })
+    }
+
+    /// The glint buffer, sized to the drawn arrows rather than the scene.
+    private struct GlintCanvas {
+        let x: Int, y: Int, width: Int, height: Int
+        var strength: [UInt8]
+        var lit = false
+    }
+
+    private func arrowGlintCanvas() -> GlintCanvas? {
+        arrowGlintBounds.map { GlintCanvas(x: $0.x, y: $0.y, width: $0.width, height: $0.height,
+            strength: [UInt8](repeating: 0, count: $0.width * $0.height)) }
+    }
+
+    /// The scene rectangle that every frame of every wrapped arrow can cover.
+    private static func arrowGlintBounds(level: ClassicRenderedLevel, artwork: ClassicMacArtwork,
+        style: Int, reconstructed: [Int: [ClassicMacArtwork.Frame]], width: Int, height: Int)
+        -> (x: Int, y: Int, width: Int, height: Int)? {
+        guard !artwork.monochrome else { return nil }
+        var x0 = Int.max, y0 = Int.max, x1 = Int.min, y1 = Int.min
+        for (position, object) in level.objects.enumerated() {
+            let placement = object.placement, graphic = object.graphic
+            guard graphic.triggerEffect == ClassicDOSObjectEffect.oneWayLeft.rawValue
+                || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue,
+                placement.draw.onlyOverwrite, !placement.draw.noOverwrite else { continue }
+            let frames: [ClassicMacArtwork.Frame]
+            if let own = reconstructed[position] { frames = own }
+            else if let definitions = artwork.objects[style], definitions.indices.contains(placement.id) {
+                let seq = definitions[placement.id]
+                frames = (0..<seq.count).compactMap { artwork.frame(1600 + style, seq.base + $0) }
+            } else { continue }
+            for frame in frames {
+                let x = placement.x * 2 + frame.x, y = placement.y * 2 + frame.y
+                x0 = min(x0, x); y0 = min(y0, y)
+                x1 = max(x1, x + frame.width); y1 = max(y1, y + frame.height)
+            }
+        }
+        let left = max(0, x0), top = max(0, y0), right = min(width, x1), bottom = min(height, y1)
+        guard left < right, top < bottom else { return nil }
+        return (left, top, right - left, bottom - top)
     }
 
     /// Dithers fallback pixels while retaining every source alpha value.
@@ -510,6 +587,115 @@ public struct ClassicMacScene: Sendable {
                 if onlyTerrain && !occupied { continue }
                 if erase { pixels[d+3] = 0 }
                 else { pixels[d] = source[s]; pixels[d+1] = source[s+1]; pixels[d+2] = source[s+2]; pixels[d+3] = source[s+3] }
+            }
+        }
+    }
+
+    /// Mac pixels over which arrows curve away from the terrain edge.
+    private static let arrowBevel = 7
+    /// How much terrain shows through the arrows.
+    private static let arrowOpacity = 0.68
+
+    /**
+     * Draws one-way arrows as a decal wrapped over the drawn terrain.
+     *
+     * The arrows stop one pixel short of each terrain edge. Near the edge they
+     * darken as the surface turns away and catch light on edges that face up
+     * and left. `shaded` is false for monochrome art, which keeps plain clipping.
+     * `glints` collects the edge light for HDR displays, without changing `pixels`.
+     */
+    private static func wrapArrows(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],
+        width: Int, height: Int, x: Int, y: Int, flipped: Bool,
+        visualTerrain: [UInt8], shaded: Bool, glints: inout GlintCanvas?) {
+        let source = [UInt8](frame.rgba)
+        let x0 = max(0, -x), y0 = max(0, -y)
+        let x1 = min(frame.width, width - x), y1 = min(frame.height, height - y)
+        guard x0 < x1, y0 < y1 else { return }
+
+        // Chamfer distance to the nearest empty terrain pixel, in half pixels
+        // (2 straight, 3 diagonal). The field extends past the frame so edges
+        // just outside it still shape the arrows.
+        let margin = arrowBevel + 1
+        let fx = x + x0 - margin, fy = y + y0 - margin
+        let fw = x1 - x0 + margin * 2, fh = y1 - y0 + margin * 2
+        let far = (arrowBevel + 2) * 2
+        var distance = [Int](repeating: far, count: fw * fh)
+        for row in 0..<fh {
+            let ly = fy + row
+            for col in 0..<fw {
+                let lx = fx + col
+                // The level border is not a terrain edge.
+                guard (0..<width).contains(lx), (0..<height).contains(ly) else { continue }
+                if visualTerrain[(ly * width + lx) * 4 + 3] == 0 { distance[row * fw + col] = 0 }
+            }
+        }
+        for row in 0..<fh {
+            for col in 0..<fw {
+                let i = row * fw + col
+                var d = distance[i]
+                if col > 0 { d = min(d, distance[i - 1] + 2) }
+                if row > 0 {
+                    d = min(d, distance[i - fw] + 2)
+                    if col > 0 { d = min(d, distance[i - fw - 1] + 3) }
+                    if col < fw - 1 { d = min(d, distance[i - fw + 1] + 3) }
+                }
+                distance[i] = d
+            }
+        }
+        for row in stride(from: fh - 1, through: 0, by: -1) {
+            for col in stride(from: fw - 1, through: 0, by: -1) {
+                let i = row * fw + col
+                var d = distance[i]
+                if col < fw - 1 { d = min(d, distance[i + 1] + 2) }
+                if row < fh - 1 {
+                    d = min(d, distance[i + fw] + 2)
+                    if col < fw - 1 { d = min(d, distance[i + fw + 1] + 3) }
+                    if col > 0 { d = min(d, distance[i + fw - 1] + 3) }
+                }
+                distance[i] = d
+            }
+        }
+
+        for row in y0..<y1 {
+            let sy = flipped ? frame.height - 1 - row : row
+            for col in x0..<x1 {
+                let s = (sy * frame.width + col) * 4
+                guard source[s + 3] != 0 else { continue }
+                let fi = (row - y0 + margin) * fw + (col - x0 + margin)
+                let d = distance[fi]
+                // Bevel in: leave the outermost terrain pixel bare.
+                guard d > 2 else { continue }
+                let p = ((y + row) * width + x + col) * 4
+                guard shaded else {
+                    pixels[p] = source[s]; pixels[p + 1] = source[s + 1]; pixels[p + 2] = source[s + 2]
+                    continue
+                }
+                var light = 1.0, glint = 0.0
+                let edge = 1 - Double(d - 2) / Double(arrowBevel * 2)
+                if edge > 0 {
+                    // The distance gradient points into the terrain. Its reverse is
+                    // the outward surface normal; light comes from the upper left.
+                    let gx = Double(distance[fi + 1] - distance[fi - 1])
+                    let gy = Double(distance[fi + fw] - distance[fi - fw])
+                    let length = (gx * gx + gy * gy).squareRoot()
+                    let facing = length > 0 ? (gx + gy) / (length * 2.0.squareRoot()) : 0
+                    let curve = edge * edge
+                    light = 1 - 0.65 * curve + 0.3 * min(0, facing) * curve
+                    glint = max(0, facing) * curve * 150
+                }
+                if glint > 0, glints != nil {
+                    let gx = x + col - glints!.x, gy = y + row - glints!.y
+                    if (0..<glints!.width).contains(gx), (0..<glints!.height).contains(gy) {
+                        let value = UInt8((glint / 150 * arrowOpacity * 255).rounded())
+                        let g = gy * glints!.width + gx
+                        if value > glints!.strength[g] { glints!.strength[g] = value; glints!.lit = true }
+                    }
+                }
+                for c in 0..<3 {
+                    let arrow = min(255, Double(source[s + c]) * light + glint)
+                    let ground = Double(pixels[p + c])
+                    pixels[p + c] = UInt8(ground + (arrow - ground) * arrowOpacity)
+                }
             }
         }
     }

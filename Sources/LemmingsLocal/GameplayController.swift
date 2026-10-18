@@ -7,7 +7,7 @@ import NxlvKit
 @MainActor final class GameplayController {
     private weak var keyboard: GameplayKeyboard?
     nonisolated(unsafe) private var timer: Timer?
-    private var bindings = ControllerBindings()
+    private var bindings = ControllerBindings(rateRepeat: .mac)
     private var previousMapping: [String: String] = [:]
     private var device: ObjectIdentifier?
     private var context: ObjectIdentifier?
@@ -100,7 +100,7 @@ import NxlvKit
         keyboard.controllerRewindHeld(playing && pressed.contains(.leftTrigger) && pressed.contains(.b))
         wasActive = playing; context = keyboard.controllerContext
         let wasFast = keyboard.speedControl?.isFast == true
-        for action in bindings.update(pressed: pressed, inMenu: !playing) {
+        for action in bindings.update(pressed: pressed, inMenu: !playing, at: now) {
             guard (!playing || keyboard.controllerEnabled()), keyboard.ownsController() else { stopBoost(at: now); break }
             if action != .boost(false) { receivedInput = true }
             if !playing {

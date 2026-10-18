@@ -7,11 +7,14 @@ bottom or right. The action shelf stays visible while the information scrolls.
 The opening fade respects Reduce Motion, Reduce Flashes and the system setting.
 Ready handovers retain their existing paused boundary.
 
-Library, Restart level, Game controls and Resume share the action shelf.
+The iOS action shelf holds Hint, Restart level, Controls help, Settings,
+Library and Resume. Lemmings 2 adds its Fan / Skill mode toggle. Hint is the
+first action, so a hint is one tap from Pause. Library stays at bottom-left and
+Resume at bottom-right. The tvOS shelf holds Hint, Restart level, Game controls,
+Settings, Library and Resume. TV Game controls keeps the remote command list.
 Restart level opens a confirmation with Cancel focused. Confirmation retires
 the old checkpoint and starts a fresh attempt with the current owner.
-Hot Seat waits at Ready. Replays omit Restart level. Hints, settings, control
-help and L2 fan mode remain available through Game controls.
+Hot Seat waits at Ready. Replays omit Hint and Restart level.
 The TV Game controls overview lets the remote scroll all level and music details.
 Large lettering adapts in landscape to keep the action targets within the viewport.
 
@@ -117,6 +120,20 @@ The renderer checks use fixture rescue counts and track names. Native UIKit
 scrolling, VoiceOver dispatch and the opening fade still need a device check.
 L2/L3 session adapters were checked headlessly. Native sequel campaigns and
 imports still need device checks. No test window or audible playback was used.
+
+Pause shelf follow-up, 18 October 2026:
+
+- 246 muted, windowless pause renders pass with the new shelf on phone, narrow
+  phone, iPad and TV geometries. Representative iPhone, landscape, narrow and
+  TV renders were inspected.
+- The audit now accepts captions that wrap at word boundaries, as the renderer
+  does. It reports words that are wider than their button. At 320 points with
+  the Large interface size, Library, Resume, Settings, Restart and Controls
+  break inside the word. The old shelf had the same defect.
+- The restart-confirmation check later in the same audit fails before and after
+  this change. It still expects single-line captions.
+- The shared mobile modules compile for the arm64 iOS and tvOS simulators.
+  Physical touch, VoiceOver and Siri Remote focus remain device checks.
 
 The focused render check is `LemmingsMobileMenuAudit ARTWORK CLASSIC_DATA OUTPUT --pause`,
 run through `Tools/UITestRunner/run.py` with its default offscreen, muted settings.

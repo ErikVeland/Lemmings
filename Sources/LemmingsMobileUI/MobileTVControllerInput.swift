@@ -109,7 +109,7 @@ import UIKit
         let elapsed = buttonState == nil ? min(0.05, max(0, lastTime == 0 ? 0 : time - lastTime)) : 0
         if buttonState == nil { lastTime = time }
         let roles = ControllerBindings.remap(buttonState ?? buttonEvents.pressedButtons, using: settings.controllerMappings)
-        let actions = bindings.update(pressed: roles)
+        let actions = bindings.update(pressed: roles, at: time)
         applyTimeline(timeline.update(pressed: roles, at: time, speed: adapter.controllerSpeed()))
         if bindings.menuRequested { adapter.onGameMenu?(); reset(); return }
         if bindings.shuffleRequested || shuffleTouchpad { adapter.onDJShuffle?() }

@@ -45,17 +45,31 @@ extension MobileGameViewController {
         if let solution {
             actions.append((L10n.text("WATCH SOLUTION"), { [weak self] in
                 if self?.hasSolutionPair == true { self?.selectSolutionMode(.solution); return }
-                self?.showCustomOverlay(title: L10n.text("Watch solution?"), details: [], actions: [
-                    (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: index) }),
-                    (L10n.text("WATCH"), { [weak self] in
-                        guard let data = try? JSONEncoder().encode(solution.replay) else { return }
-                        self?.showReplay(document: data, solution: true)
-                    })])
+                self?.confirmSolution(solution, stage: index, title: L10n.text("Watch solution?"),
+                                      confirm: L10n.text("WATCH"), ghostOnly: false)
             }))
+            // The ghost replays the verified solution behind the live lemmings without leaving the attempt.
+            if session is ClassicMobileSession {
+                actions.append((L10n.text("GHOST SOLUTION"), { [weak self] in
+                    if self?.hasSolutionPair == true { self?.showGhostSolution(); return }
+                    self?.confirmSolution(solution, stage: index, title: L10n.text("Show ghost solution?"),
+                                          confirm: L10n.text("SHOW"), ghostOnly: true)
+                }))
+            }
         }
         actions.append((L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }))
         let width = max(24, min(68, Int(view.bounds.width / 8) - 10))
         showCustomOverlay(title: hint.title, details: Self.wrapHint(hint.body, columns: width), actions: actions)
+    }
+
+    /// Both reveals keep the spoiler confirmation, with Cancel returning to the same hint.
+    private func confirmSolution(_ solution: VerifiedSolution, stage: Int, title: String, confirm: String, ghostOnly: Bool) {
+        showCustomOverlay(title: title, details: [], actions: [
+            (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: stage) }),
+            (confirm, { [weak self] in
+                guard let data = try? JSONEncoder().encode(solution.replay) else { return }
+                self?.showReplay(document: data, solution: true, ghostOnly: ghostOnly)
+            })])
     }
 
     static func wrapHint(_ text: String, columns: Int) -> [String] {

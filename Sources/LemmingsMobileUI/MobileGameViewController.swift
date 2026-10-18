@@ -1115,6 +1115,7 @@ typealias MobileGameControllerBase = UIViewController
             (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
             (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
         ] + (session.isReadOnly ? [] : [
+            (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
             (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
         ]) + [(L10n.text("GAME CONTROLS"), { [weak self] in self?.showTVControls() })], pauseOverview: true)
         #else
@@ -1123,10 +1124,7 @@ typealias MobileGameControllerBase = UIViewController
             actions: [
                 (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
                 (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
-            ] + (session.isReadOnly ? [] : [
-                (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
-                (L10n.text("GAME CONTROLS"), { [weak self] in self?.showPauseTools() }),
-            ]),
+            ] + (session.isReadOnly ? [] : pauseShelfTools()),
             pauseOverview: true
         )
         #endif
@@ -1144,12 +1142,13 @@ typealias MobileGameControllerBase = UIViewController
         }
     }
 
-    private func showPauseTools() {
+    /// Pause tools sit on the pinned shelf beside Resume, one tap from gameplay.
+    /// Settings is appended by the caller so every pause variant keeps it.
+    private func pauseShelfTools() -> [(String, () -> Void)] {
         var actions: [(String, () -> Void)] = [
-            (L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }),
             (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
+            (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
             (L10n.text("CONTROLS HELP"), { [weak self] in self?.onControlsHelp?() }),
-            (L10n.text("SETTINGS"), { [weak self] in self?.showInGameSettings() }),
         ]
         if session is Lemmings2MobileSession {
             actions.append((fanMode ? L10n.text("SKILL MODE") : L10n.text("FAN"), { [weak self] in
@@ -1158,8 +1157,7 @@ typealias MobileGameControllerBase = UIViewController
                 self.resumePlay()
             }))
         }
-        showCustomOverlay(title: L10n.text("Game controls"), details: [], actions: actions)
-        overlayCanvas.page.footerColumns = 1
+        return actions
     }
 
     func showRestartLevel() {
@@ -1800,8 +1798,10 @@ typealias MobileGameControllerBase = UIViewController
         onExit?(destination)
     }
 
-    func showReplay(document: Data, solution: Bool = false) {
+    /// `ghostOnly` reveals the solution as a ghost over the live attempt and stays in the game.
+    func showReplay(document: Data, solution: Bool = false, ghostOnly: Bool = false) {
         do {
+            if solution, ghostOnly, retainedSolution != nil { showGhostSolution(); return }
             if solution, retainedSolution != nil { selectSolutionMode(.solution); return }
             guard let replay = try session.makeReplaySession(document: document) else { return }
             let player = MobileGameViewController(summary: summary, session: replay,
@@ -1814,7 +1814,7 @@ typealias MobileGameControllerBase = UIViewController
                 }
                 retainedSolution = player
                 player.solutionGame = self
-                selectSolutionMode(.solution)
+                if ghostOnly { showGhostSolution() } else { selectSolutionMode(.solution) }
                 return
             }
             pausePlay(showControls: false)
@@ -1884,6 +1884,16 @@ typealias MobileGameControllerBase = UIViewController
             } else { game.pausePlay(showControls: true) }
             game.view.setNeedsLayout()
         }
+    }
+
+    /// Turns the ghost on and returns to the paused game, where the selector shows its state.
+    func showGhostSolution() {
+        guard solutionGame == nil, let classic = session as? ClassicMobileSession, classic.hasGhostSolution else {
+            pausePlay(showControls: true); return
+        }
+        classic.ghostSolutionEnabled = true
+        pausePlay(showControls: true)
+        renderCurrentFrame(force: true)
     }
 
     func toggleGhostSolution() {

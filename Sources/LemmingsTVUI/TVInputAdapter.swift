@@ -60,7 +60,7 @@ import UIKit
         }
         guard let owner else { return }
         let elapsed = min(0.05, max(0, lastTime == 0 ? 0 : now - lastTime)); lastTime = now
-        let actions = bindings.update(pressed: ControllerBindings.remap(pressed(owner), using: preferences.mappings))
+        let actions = bindings.update(pressed: ControllerBindings.remap(pressed(owner), using: preferences.mappings), at: now)
         for action in actions {
             onAction?(action)
             // Navigation may invalidate the remaining buttons in this frame.

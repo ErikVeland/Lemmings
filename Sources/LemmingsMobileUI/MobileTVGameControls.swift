@@ -77,7 +77,6 @@ extension MobileGameViewController {
         }
         if !session.isReadOnly {
             commands += [
-                (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
                 (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
                 (snapshot.isEndingRun ? L10n.text("UNDO END RUN") : L10n.text("END RUN"), { [weak self] in self?.showTVEndRun() }),
             ]

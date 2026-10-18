@@ -45,14 +45,37 @@ public struct ControllerBindings {
         case .rightStick: return L10n.text("Centre on exit")
         }
     }
+    /// Timing for a held D-pad up / down. Each platform passes the timing of
+    /// its own held rate button, so a controller hold feels the same as a
+    /// mouse or finger hold.
+    public struct RateRepeat: Sendable {
+        public var delay: Double
+        public var interval: Double
+        public init(delay: Double, interval: Double) { self.delay = delay; self.interval = interval }
+        /// The Mac skill panel's held rate button.
+        public static let mac = RateRepeat(delay: 0.3, interval: 0.02)
+        /// The iPad, iPhone and Apple TV held rate button.
+        public static let touch = RateRepeat(delay: 0.35, interval: 0.08)
+    }
     private var previous: Set<Button> = []
     private var primed = false
-    public init() {}
-    public mutating func reset() { previous = []; primed = false }
-    public mutating func update(pressed: Set<Button>, inMenu: Bool = false) -> [Action] {
+    private let rateRepeat: RateRepeat
+    private var heldRate: (button: Button, direction: Int, next: Double)?
+    public init(rateRepeat: RateRepeat = .touch) { self.rateRepeat = rateRepeat }
+    public mutating func reset() { previous = []; primed = false; heldRate = nil }
+    /// Pass `now` to repeat a held release-rate step. Without it, every action fires once per press.
+    public mutating func update(pressed: Set<Button>, inMenu: Bool = false, at now: Double? = nil) -> [Action] {
         defer { previous = pressed; primed = true }
         guard primed else { return [] }
         var actions: [Action] = []
+        // The release rate is held rather than tapped. A changed modifier or a
+        // menu ends the hold, so the step never turns into another action.
+        if let held = heldRate, let now, !inMenu, pressed.contains(held.button), !pressed.contains(.leftTrigger) {
+            // A stalled frame catches up a few steps, not the whole stall.
+            var next = held.next, steps = 0
+            while next <= now, steps < 4 { actions.append(.rate(held.direction)); next += rateRepeat.interval; steps += 1 }
+            heldRate?.next = max(next, now - rateRepeat.interval)
+        } else { heldRate = nil }
         if previous.contains(.rightTrigger) && !pressed.contains(.rightTrigger) { actions.append(.boost(false)) }
         let extra = pressed.contains(.leftTrigger)
         // Fixed order makes simultaneous presses reproducible.
@@ -68,8 +91,11 @@ public struct ControllerBindings {
             case .rightShoulder: actions.append(extra && !inMenu ? .step(1) : .cycle(1))
             case .left: actions.append(extra && !inMenu ? .speedStep(-1) : .focusUnassigned(-1))
             case .right: actions.append(extra && !inMenu ? .speedStep(1) : .focusUnassigned(1))
-            case .up: actions.append(extra && !inMenu ? .centre(true) : .rate(1))
-            case .down: actions.append(extra && !inMenu ? .centre(false) : .rate(-1))
+            case .up, .down:
+                let direction = button == .up ? 1 : -1
+                if extra && !inMenu { actions.append(.centre(direction > 0)); break }
+                actions.append(.rate(direction))
+                if let now, !inMenu { heldRate = (button, direction, now + rateRepeat.delay) }
             case .leftStick: actions.append(extra && !inMenu ? .djShuffle : .centre(true))
             case .rightStick: actions.append(extra && !inMenu ? .focusLast : .centre(false))
             case .rightTrigger: actions.append(.boost(true))

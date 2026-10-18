@@ -3178,5 +3178,8 @@
   "{0}/{1} levels passed in this rating.": "{0}/{1} niveaux terminés dans cette catégorie.",
   "{0}/{1} packs": "{0}/{1} packs",
   "{0}: replay analysis failed: {1}": "{0} : échec de l’analyse du rejeu : {1}",
-  "{0}{1} more to rescue for three stars.": "Encore {0}{1} à sauver pour obtenir trois étoiles."
+  "{0}{1} more to rescue for three stars.": "Encore {0}{1} à sauver pour obtenir trois étoiles.",
+  "GHOST SOLUTION": "SOLUTION FANTÔME",
+  "Show ghost solution?": "Afficher la solution fantôme ?",
+  "SHOW": "AFFICHER"
 }

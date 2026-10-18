@@ -6,6 +6,16 @@ Solution selector. iOS uses a full-width toggle in the paused replay panel.
 tvOS uses large, focusable rows beside that panel. The whole ghost row is one
 input target. The switch position, On/Off value and focus border distinguish its states.
 
+On iOS and tvOS, open a ghost from Pause > Hint > Ghost solution. It uses the
+same spoiler confirmation as Watch solution. Confirmation turns the ghost on and
+returns to the paused attempt. The Solution view stays available through the
+selector. If the solution is already revealed, Ghost solution turns the ghost
+on immediately. The Hint page shows Ghost solution only for Classic sessions
+with a verified solution.
+
+Mac Hot Seat also shows ghosts of earlier players' turns (see
+[Hot Seat](HotSeat.md)). iOS and tvOS do not have these Hot Seat ghosts yet.
+
 On Mac, the whole selector uses the system arrow, including the gaps between
 Your game, Solution and Ghost solution. Hover clears the gameplay reticle and
 skill badge. Gameplay restores the selected cursor when the pointer leaves the

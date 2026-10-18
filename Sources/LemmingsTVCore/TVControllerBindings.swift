@@ -15,7 +15,7 @@ public struct TVControllerBindings {
         bindings.reset(); previous = []; modifierUsed = false
         rewindArmed = false; rewindHeld = false; optionsArmed = false; menuRequested = false; shuffleRequested = false
     }
-    public mutating func update(pressed: Set<ControllerBindings.Button>) -> [ControllerBindings.Action] {
+    public mutating func update(pressed: Set<ControllerBindings.Button>, at now: Double? = nil) -> [ControllerBindings.Action] {
         menuRequested = false
         shuffleRequested = false
         if !pressed.contains(.leftTrigger) { rewindArmed = true }
@@ -27,7 +27,7 @@ public struct TVControllerBindings {
         roles.remove(.leftTrigger)
         roles.remove(.options)
         if pressed.contains(.options) { roles.insert(.leftTrigger) }
-        var actions = bindings.update(pressed: roles)
+        var actions = bindings.update(pressed: roles, at: now)
         if !pressed.contains(.options) {
             actions = actions.compactMap { action in
                 switch action {
