@@ -104,16 +104,16 @@ public enum MobileCareerArt {
             footer: [.init("home", L10n.text("Back"))])
     }
 
-    /// The record card. `preview` reserves the level artwork well; Play, Hint and Replay appear when available.
-    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
-                                       replayAvailable: Bool = false, hintAvailable: Bool = false,
-                                       playable: Bool = false, preview: Bool = false) -> GameFrontEnd.Page {
+    /// Strips the "direct|" or "assisted|" prefix from a record key and returns the board ID and assisted flag.
+    private static func recordBoard(_ key: String) -> (String, Bool) {
         let assisted = key.hasPrefix("assisted|")
         return (String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0)), assisted)
     }
 
-    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String,
-                                       subtitle: String, replayRunID: UUID? = nil) -> GameFrontEnd.Page {
+    /// The record card. `preview` reserves the level artwork well; Play, Hint and Replay appear when available.
+    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
+                                       replayAvailable: Bool = false, hintAvailable: Bool = false,
+                                       playable: Bool = false, preview: Bool = false) -> GameFrontEnd.Page {
         let (board, assisted) = recordBoard(key)
         let runs = records.runs.filter { $0.profileID == profileID && $0.level.boardID == board && $0.assisted == assisted }
         guard let level = runs.first?.level else { return recordsPage(records: records, profileID: profileID, profileName: profileName, subtitle: subtitle) }
@@ -144,6 +144,44 @@ public enum MobileCareerArt {
         var page = GameFrontEnd.Page(title: level.title,
             subtitle: identity + "\n" + L10n.text("\(level.total) Lemmings   Save \(level.required)"),
             details: details, footer: footer, preview: preview, footerColumns: 2)
+        page.detailHeadings = headings
+        page.stars = runs.map { TrolleyRescueGoals(run: $0, maximum: maximum).stars }.max() ?? 0
+        return page
+    }
+
+    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String,
+                                       subtitle: String, replayRunID: UUID? = nil) -> GameFrontEnd.Page {
+        let (board, assisted) = recordBoard(key)
+        let runs = records.runs.filter { $0.profileID == profileID && $0.level.boardID == board && $0.assisted == assisted }
+        guard let level = runs.first?.level else { return recordsPage(records: records, profileID: profileID, profileName: profileName, subtitle: subtitle) }
+        let best = runs.map(\.saved).max() ?? 0
+        let time = runs.filter(\.qualifies).map(\.seconds).min()
+        let stats = records.stats(level: level, profileID: profileID, assisted: assisted)
+        var maximum = TrolleyMaximum()
+        var maximumText = best == level.total ? String(level.total) : "?"
+        if let conditions = level.conditions {
+            maximum = records.trolley.maximum(conditions: conditions, assisted: assisted)
+            maximumText = maximum.value.map(String.init) ?? "?"
+        }
+        var details = [L10n.text("Records"),
+                       L10n.text("Most saved: \(best)/\(level.total)") + "   " + L10n.text("Maximum: \(maximumText)"),
+                       L10n.text("Attempts: \(stats.attempts)  Clears: \(stats.clears)")]
+        if let time { details.append(L10n.text("Best time: \(String(format: "%.1f", time)) S")) }
+        var headings: Set<Int> = [0]
+        let awards = stats.achievements.sorted { $0.rawValue < $1.rawValue }.map(\.title)
+        if !awards.isEmpty {
+            headings.insert(details.count)
+            details += [L10n.text("Achievements"), awards.joined(separator: ", ")]
+        }
+        let identity = [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: " - ")
+        var footer: [GameFrontEnd.Action] = []
+        if let runID = replayRunID {
+            footer.append(.init("recordReplay." + runID.uuidString, L10n.text("Replay")))
+        }
+        footer.append(.init("records", L10n.text("Back")))
+        var page = GameFrontEnd.Page(title: level.title,
+            subtitle: identity + "\n" + L10n.text("\(level.total) Lemmings   Save \(level.required)"),
+            details: details, footer: footer, preview: false, footerColumns: 2)
         page.detailHeadings = headings
         page.stars = runs.map { TrolleyRescueGoals(run: $0, maximum: maximum).stars }.max() ?? 0
         return page

@@ -3,13 +3,13 @@
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
 The update feed advertises macOS 2.0.4 build 87. The latest package with
 retained acceptance evidence in this repository is 2.0.3 build 86: its
-universal packages are signed, notarised and accepted by Gatekeeper. This 2.0
-preparation branch sets macOS build 88, but no matching package or acceptance record is
-present. The build 87 appcast entry lists its package and deltas, but this
-repository has no build 87 distribution record or accepted-package audit. See
-the [2.0.3 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md),
-[2.0.5 build 88 notes](ReleaseNotes-2.0.5-build88.md) and [branch ancestry
-reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+universal packages are signed, notarised and accepted by Gatekeeper. Main is at
+2.0.6 Mac build 90 (iOS build 16, tvOS build 6), but no matching package or
+acceptance record is present yet. The build 87 appcast entry lists its package
+and deltas, but this repository has no build 87 distribution record or
+accepted-package audit. See
+the [2.0.3 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md)
+and [branch ancestry reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 The stricter bundled-content closure remains open.
 
 Version 2.0.3 build 86 fixes the Mac language

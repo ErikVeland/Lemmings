@@ -820,7 +820,8 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:101",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:137",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:190",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:174",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:228",
       "Sources/LemmingsGameArt/MobileResultAchievementsArt.swift:36",
       "Sources/LemmingsLocal/ArcadeWindow.swift:538",
       "Sources/LemmingsLocal/ArcadeWindow.swift:879",
@@ -1574,7 +1575,8 @@
   "Attempts: {0}  Clears: {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:131"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:131",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:168"
     ]
   },
   "Attractor": {
@@ -1800,8 +1802,9 @@
       "Sources/LemmingsGameArt/GameFrontEnd.swift:29",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:104",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:140",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:155",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:181",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:193",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:231",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:46",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:65",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:76",
@@ -2024,7 +2027,8 @@
   "Best time: {0} S": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:132"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:132",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:169"
     ]
   },
   "Best-known rescue": {
@@ -9155,7 +9159,8 @@
   "Maximum: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:130"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:130",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:167"
     ]
   },
   "Measurable rescue benefit per scarce resource.": {
@@ -9466,7 +9471,8 @@
   "Most saved: {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:130"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:130",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:167"
     ]
   },
   "Most used skill": {
@@ -9660,7 +9666,7 @@
   "NEXT HINT": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:157",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:195",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:44"
     ]
   },
@@ -11509,7 +11515,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:143",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:159",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:197",
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:121",
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:46",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1792",
@@ -12022,7 +12028,7 @@
   "Previous": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:156",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:194",
       "Sources/LemmingsGameArt/TVMenuPresentation.swift:109",
       "Sources/LemmingsGameArt/TVMenuPresentation.swift:141",
       "Sources/LemmingsLocal/LevelHintWindow.swift:118",
@@ -12628,6 +12634,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:100",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:129",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:166",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:87",
       "Sources/LemmingsLocal/PlayfieldView.swift:1061",
       "Sources/LemmingsLocal/PlayfieldView.swift:261",
@@ -12865,6 +12872,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:142",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:179",
       "Sources/LemmingsGameArt/MobilePauseArt.swift:18",
       "Sources/LemmingsLocal/ReplayWindow.swift:318",
       "Sources/LemmingsLocal/ResultLayout.swift:75",
@@ -15070,7 +15078,7 @@
   "Solution": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:158",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:196",
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:52",
       "Sources/LemmingsGameArt/SolutionSwitchArt.swift:25",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:28",
@@ -20023,6 +20031,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:145",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:183",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2040",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:562"
     ]
