@@ -61,6 +61,27 @@ Their full mobile gameplay renderers remain unavailable; these adapters provide
 the effects path when a renderer is supplied. No new Apple TV gameplay target
 is added by this change.
 
+## Arrow glints
+
+Classic one-way arrows with Macintosh colour art catch light on edges that face
+up and left. The SDR frame holds that glint up to white. On an EDR display the
+HD effects overlay adds the clipped light above SDR white. The peak is 1.5 above
+SDR white, or less when the screen has less headroom.
+
+`ClassicMacScene.rgbaWithArrowGlints` returns the unchanged frame and a sparse
+mask that covers only the arrows. The overlay redraws the mask when the camera
+moves or the arrows animate. It keeps its last frame when nothing changes.
+SDR screens get no glint pass, and their pixels stay byte-identical.
+
+Limits:
+
+- Monochrome Mac art has no glints.
+- Apple TV has no app EDR path, so tvOS frames carry no glints.
+- CRT mode on Mac and iOS has no glints. The tube draws its own curved image.
+- Constrained iOS devices turn the glints off. So does the Amiga OCS colour
+  depth on iOS, which reduces the drawn frame.
+- A lemming that walks over a lit edge also gets the added light.
+
 ## Validation
 
 - `MobileExplosionParityTests` checks bombs and nukes with DOS, Macintosh and
@@ -74,6 +95,9 @@ is added by this change.
   HDR peaks, changing fireball frames, pressure-ring expansion, blast position,
   valid premultiplied colour, expiry, nuke limits, and CRT coordinate mapping.
   It also retains the original local-core and CRT regression checks.
+- `MacArrowWrapTests` checks that glints sit only on drawn arrow pixels, that
+  the SDR frame is unchanged, and that monochrome art has no glints. The HDR
+  script renders `glint_fragment` and checks SDR output, peak, clip and camera.
 - `Scripts/run-playfield-draw-tests.sh` checks PC/Mac explosion frames, core
   expiry, panel input, and exact nuke undo.
 - `Scripts/run-explosion-hdr-tests.sh --preview .build/explosion-preview`
