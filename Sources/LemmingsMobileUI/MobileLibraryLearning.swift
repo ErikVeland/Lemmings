@@ -35,6 +35,14 @@ extension MobileLibraryViewController {
         }
     }
     var bundledJourney: LearningJourney? { LearningJourneyLibrary.journey }
+    /// Resume can switch to another saved session. Count the wins of the session it restores,
+    /// so an empty current session does not show 0 solved beside a saved journey.
+    var shownJourneyProgress: LearningJourneyProgress {
+        guard let resume = resumableLearningJourney, resume.scope != (hotSeat?.scope ?? profiles.activeID)
+        else { return learning.progress }
+        return GameProgressValue.mergeLearning(resume.state.progress,
+            GameProgressPreferences.learning(profileID: profiles.activeID, sessionID: resume.seat?.id))
+    }
     var resumableLearningJourney: MobileLearningResume? {
         MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
     }
@@ -63,7 +71,7 @@ extension MobileLibraryViewController {
             footer.append(.init("learningResume", L10n.text("Resume  \(run.currentIndex + 1)/\(run.entries.count)"), primary: true))
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
-        footer.append(.init("learningStart", L10n.text("Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)"),
+        footer.append(.init("learningStart", L10n.text("Continue journey  \(shownJourneyProgress.solvedCount(in: journey))/\(journey.lessons.count)"),
                             enabled: !unseen.isEmpty || MobileSettings.current(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
         let rows: [GameFrontEnd.Action] = [
             .init("learningBrowse", L10n.text("Choose level"), enabled: resumableLearningJourney != nil),

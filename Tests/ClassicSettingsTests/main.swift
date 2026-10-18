@@ -296,6 +296,7 @@ private func testOlderSettingsStillLoad() throws {
     try require(!restored.shuffleMusic, "a missing setting should default to off")
     try require(!restored.unlockAllClassicLevels, "a missing level-unlock setting should default to off")
     try require(restored.favorApproachingLemmings, "a missing setting should default to on")
+    try require(restored.menuMusic, "older settings must keep the main menu theme")
 
     // And the new settings survive a round trip.
     var shuffled = restored
@@ -303,11 +304,13 @@ private func testOlderSettingsStillLoad() throws {
     shuffled.shuffleMusic = true
     shuffled.favorApproachingLemmings = false
     shuffled.unlockAllClassicLevels = true
+    shuffled.menuMusic = false
     let again = try JSONDecoder().decode(
         ClassicSettings.self, from: try JSONEncoder().encode(shuffled))
     try require(again.shuffleGraphics && again.shuffleMusic, "shuffle did not survive saving")
     try require(!again.favorApproachingLemmings, "favor-approaching did not survive saving")
     try require(again.unlockAllClassicLevels, "the Classic level unlock did not survive saving")
+    try require(!again.menuMusic, "a silent main menu did not survive saving")
     print("PASS settings written by an older build still load")
 }
 

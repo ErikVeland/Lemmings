@@ -32,6 +32,7 @@ import NxlvKit
   private var graphicsShuffleCheck: NSButton?
   private var musicShuffleCheck: NSButton?
   private var pauseBeatCheck: NSButton?
+  private var menuMusicCheck: NSButton?
   private var sequelArtworkCheck: NSButton?
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
@@ -655,10 +656,14 @@ import NxlvKit
     beat.setAccessibilityLabel(L10n.text("Pause: Keep the rhythm"))
     beat.state = settings.pauseMusicBeatOnly ? .on : .off
     pauseBeatCheck = beat
+    let menuTheme = GameCheckButton(title: L10n.text("Play main theme"), target: self, action: #selector(menuMusicChanged))
+    menuTheme.setAccessibilityLabel(L10n.text("Main menu: Play main theme"))
+    menuTheme.state = settings.menuMusic ? .on : .off
+    menuMusicCheck = menuTheme
     return groupedPane([
       (L10n.text("Music"), [(L10n.text("Soundtrack"), music), (L10n.text("Style"), style), (L10n.text("Volume"), musicLevel), (L10n.text("Shuffle"), shuffle), (L10n.text("DJ Mix"), mixes), (L10n.text("DJ shuffle"), shuffleScope)]),
       (L10n.text("Sound effects"), [(L10n.text("Source"), sound), (L10n.text("Volume"), soundLevel)]),
-      (L10n.text("Playback behaviour"), [(L10n.text("Pause"), beat), (L10n.text("Bottom Falls"), falls)]),
+      (L10n.text("Playback behaviour"), [(L10n.text("Main menu"), menuTheme), (L10n.text("Pause"), beat), (L10n.text("Bottom Falls"), falls)]),
       ("", [("", folders)]),
     ])
   }
@@ -736,6 +741,7 @@ import NxlvKit
     graphicsShuffleCheck?.state = settings.shuffleGraphics ? .on : .off
     musicShuffleCheck?.state = settings.shuffleMusic ? .on : .off
     pauseBeatCheck?.state = settings.pauseMusicBeatOnly ? .on : .off
+    menuMusicCheck?.state = settings.menuMusic ? .on : .off
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
@@ -899,6 +905,7 @@ import NxlvKit
     applied.experiencePreset = settings.experiencePreset
     applied.musicStyle = settings.musicStyle
     applied.pauseMusicBeatOnly = settings.pauseMusicBeatOnly
+    applied.menuMusic = settings.menuMusic
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
@@ -992,6 +999,11 @@ import NxlvKit
 
   @objc private func pauseBeatChanged(_ sender: NSButton) {
     settings.pauseMusicBeatOnly = sender.state == .on
+    changed()
+  }
+
+  @objc private func menuMusicChanged(_ sender: NSButton) {
+    settings.menuMusic = sender.state == .on
     changed()
   }
 

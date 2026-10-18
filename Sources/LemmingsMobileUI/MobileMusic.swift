@@ -27,6 +27,9 @@ import UIKit
     private var cachedSettings = MobileSettings.current(from: .standard)
     private var profileID = MobileProfiles.defaultID
     private var compositionID: String?
+    /// One main theme plays on the library menus for the whole launch.
+    private var menuTheme: MenuThemeSelection.Choice?
+    private var menuKey: String { "menu|" + soundtrack }
     private(set) var currentTrackTitle: String?
     private(set) var currentSoundtrackName: String?
     var onTrackChange: ((String, String) -> Void)?
@@ -82,7 +85,41 @@ import UIKit
         module.setMuted(!isEnabled || isTestAudioMuted)
         recordings.setMuted(!isEnabled || isTestAudioMuted)
         dj.setMuted(!isEnabled || isTestAudioMuted)
-        if !isEnabled || volume <= 0 || isTestAudioMuted { stop() }
+        if !isEnabled || volume <= 0 || isTestAudioMuted || (playing == menuKey && !c.menuMusic) { stop() }
+    }
+
+    /// Plays the main theme while the library shows and no level is open.
+    func setMenu(visible: Bool, active: Bool) {
+        applySettings()
+        guard visible, isEnabled, settings.classic.menuMusic, settings.classic.musicVolume > 0, !isTestAudioMuted else {
+            if playing == menuKey { stop() }
+            return
+        }
+        if playing == menuKey { active ? resume() : suspend(); return }
+        // A level's attempt owns the decks until it exits and stops them.
+        guard active, playing == nil else { return }
+        let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: false,
+            otherVersions: musicRoot.map(MenuThemeSelection.otherVersions(at:)) ?? [])
+        menuTheme = theme
+        usingDJ = false; dj.stop()
+        paused = false; inactive = false; resultComplete = false
+        if case let .recording(path) = theme, let url = musicRoot?.appendingPathComponent(path) {
+            module.stop()
+            recordings.load([url], originalMix: settings.classic.musicStyle == .faithful)
+            if recordings.play(index: 0) != nil {
+                usingRecording = true; playing = menuKey
+                announce(url, soundtrack: soundtrack); applyOutputState(); return
+            }
+        }
+        // iPad and Apple TV do not bundle the Macintosh bank, so the Amiga intro is the main theme.
+        recordings.stop(); usingRecording = false
+        guard let intro = BundledGameResources.music("lemmings_music_mod")?.appendingPathComponent("intro.mod") else { return }
+        do {
+            try module.start()
+            guard module.play(url: intro) != nil else { return }
+            playing = menuKey; announce(intro, soundtrack: "Original")
+            applyOutputState()
+        } catch { playing = nil }
     }
 
     func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {

@@ -78,6 +78,7 @@ public enum MobileSettingsArt {
                     choice("musicVolume", L10n.text("Music volume"), "\(Int(c.musicVolume * 100))%"),
                     choice("soundSource", L10n.text("Sound effects"), c.sound.displayName),
                     choice("effectsVolume", L10n.text("Effects volume"), "\(Int(c.soundVolume * 100))%"),
+                    toggle("menuMusic", L10n.text("Main menu music"), c.menuMusic),
                     toggle("pauseBeat", L10n.text("Rhythm on pause"), c.pauseMusicBeatOnly),
                     toggle("fall", L10n.text("Fall sounds"), c.bottomFallSounds),
                     choice("soundtrackChoice", L10n.text("Soundtrack"), SoundtrackCatalogue.interfaceTitle(settings.soundtrack)),

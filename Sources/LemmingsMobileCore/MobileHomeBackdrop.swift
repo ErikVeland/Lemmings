@@ -15,6 +15,7 @@ public struct MobileHomeBackdrop: Sendable {
     public let frame: MobilePixelFrame
     public let start: MobilePoint
     public let goal: MobilePoint
+    public internal(set) var title: String?
     public init(session: any MobileGameSession) throws {
         frame = try session.render(highlight: nil)
         let scale = session.renderScale
@@ -59,7 +60,9 @@ public actor MobileHomeBackdropLoader {
             let session = try library.loadLevel(at: index).session
             session.applySettings(settings)
             try Task.checkCancellation()
-            return try MobileHomeBackdrop(session: session)
+            var result = try MobileHomeBackdrop(session: session)
+            result.title = library.levels.indices.contains(index) ? library.levels[index].title : nil
+            return result
         }
         let last = preferred ?? recent.map { MobileHomeBackdropReference(kind: .classic, pack: $0.pack, level: $0.level) }
         if let last, let library = try? open(last),

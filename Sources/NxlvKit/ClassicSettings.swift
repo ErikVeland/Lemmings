@@ -246,6 +246,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var musicStyle: ClassicMusicStyle
     public var musicVolume: Double
     public var pauseMusicBeatOnly: Bool
+    /// Plays a main theme on the home screen. Off keeps the menu silent.
+    public var menuMusic: Bool
     public var sound: ClassicSoundSource
     public var soundVolume: Double
     public var bottomFallSounds: Bool
@@ -299,6 +301,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
         pauseMusicBeatOnly: Bool = false,
+        menuMusic: Bool = true,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
         bottomFallSounds: Bool = true,
@@ -345,6 +348,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.musicStyle = musicStyle
         self.musicVolume = musicVolume
         self.pauseMusicBeatOnly = pauseMusicBeatOnly
+        self.menuMusic = menuMusic
         self.sound = sound
         self.soundVolume = soundVolume
         self.bottomFallSounds = bottomFallSounds
@@ -425,6 +429,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         musicVolume = try values.decodeIfPresent(
             Double.self, forKey: .musicVolume) ?? fallback.musicVolume
         pauseMusicBeatOnly = try values.decodeIfPresent(Bool.self, forKey: .pauseMusicBeatOnly) ?? false
+        menuMusic = try values.decodeIfPresent(Bool.self, forKey: .menuMusic) ?? true
         sound = source(.sound, fallback.sound)
         soundVolume = try values.decodeIfPresent(
             Double.self, forKey: .soundVolume) ?? fallback.soundVolume

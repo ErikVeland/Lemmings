@@ -5,6 +5,21 @@ import Foundation
 public enum GameHomeBackdropArt {
     public static func source(imageSize: CGSize, viewSize: CGSize, start: CGPoint, goal: CGPoint,
                               elapsed: TimeInterval) -> CGRect {
+        let (from, to, size) = endpoints(imageSize: imageSize, viewSize: viewSize, start: start, goal: goal)
+        let duration = legDuration(imageSize: imageSize, viewSize: viewSize, start: start, goal: goal)
+        let amount = (1 - cos(max(0, elapsed) * .pi / duration)) / 2
+        return CGRect(x: from.x + (to.x - from.x) * amount, y: from.y + (to.y - from.y) * amount,
+                      width: size.width, height: size.height)
+    }
+
+    /// Seconds for one pass from the opening to the goal; the camera then eases back.
+    public static func legDuration(imageSize: CGSize, viewSize: CGSize, start: CGPoint, goal: CGPoint) -> TimeInterval {
+        let (from, to, _) = endpoints(imageSize: imageSize, viewSize: viewSize, start: start, goal: goal)
+        return max(60, hypot(to.x - from.x, to.y - from.y) * .pi / 6)
+    }
+
+    private static func endpoints(imageSize: CGSize, viewSize: CGSize, start: CGPoint,
+                                  goal: CGPoint) -> (CGPoint, CGPoint, CGSize) {
         let scale = max(viewSize.width / max(1, imageSize.width), viewSize.height / max(1, imageSize.height))
         let size = CGSize(width: min(imageSize.width, viewSize.width / max(0.001, scale)),
                           height: min(imageSize.height, viewSize.height / max(0.001, scale)))
@@ -12,11 +27,7 @@ public enum GameHomeBackdropArt {
             CGPoint(x: min(max(0, point.x - size.width / 2), imageSize.width - size.width),
                     y: min(max(0, point.y - size.height / 2), imageSize.height - size.height))
         }
-        let from = origin(start), to = origin(goal)
-        let duration = max(60, hypot(to.x - from.x, to.y - from.y) * .pi / 6)
-        let amount = (1 - cos(max(0, elapsed) * .pi / duration)) / 2
-        return CGRect(x: from.x + (to.x - from.x) * amount, y: from.y + (to.y - from.y) * amount,
-                      width: size.width, height: size.height)
+        return (origin(start), origin(goal), size)
     }
 
     public static func draw(image: CGImage, source: CGRect, in frame: CGRect, context: CGContext) {

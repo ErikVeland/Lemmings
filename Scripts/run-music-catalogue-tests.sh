@@ -6,6 +6,7 @@ mkdir -p "$build_dir"
 swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Sources/NxlvKit/SoundtrackCatalogue.swift" \
+  "$project_dir/Sources/NxlvKit/MenuThemeSelection.swift" \
   "$project_dir/Tests/MusicCatalogueTests/main.swift" -o "$build_dir/MusicCatalogueTests"
 "$build_dir/MusicCatalogueTests" "$project_dir"
 python3 "$project_dir/Tests/MusicCatalogueTests/check-assets.py"

@@ -1287,6 +1287,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func apply(_ updated: ClassicSettings, forceArtworkRefresh: Bool = false) {
     let artworkChanged = forceArtworkRefresh || settings.graphics != updated.graphics
     let musicChanged = settings.music != updated.music || settings.shuffleMusic != updated.shuffleMusic
+      || settings.menuMusic != updated.menuMusic
     let djPoolChanged = settings.djIncludesOtherSoundtracks != updated.djIncludesOtherSoundtracks
     let classicUnlockChanged = settings.unlockAllClassicLevels != updated.unlockAllClassicLevels
     let reduceMotionChanged = settings.reduceMotion != updated.reduceMotion
@@ -2500,6 +2501,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var seasonalMusic: Bool { SoundtrackPlayer.isSeasonal(musicTitle) }
   private lazy var macintoshMusic: ClassicMacMusicLibrary? = Bundle.main.resourceURL
     .flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
+  /// One main theme plays on the menus for the whole launch.
+  private var menuTheme: MenuThemeSelection.Choice?
+  private var showsMainMenu: Bool {
+    guard !fanPlaying, currentNxlvURL == nil, phase != .playing, let screen = flow?.screen else { return false }
+    switch screen {
+    case .title, .rankSelect: return true
+    default: return false
+    }
+  }
   private var activeMusic: ClassicMusicSource {
     let source = levelMusic ?? settings.music
     if seasonalMusic, source != .silent, source != .adaptiveDJ, source != .macintoshMIDI { return .amigaModules }
@@ -6967,9 +6977,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       showHomeSavedCounts()
       refreshHomeSavedCountsIfNeeded()
       refreshHomeBackdrop()
+      playMusicForCurrentLevel()
 
     case .rankSelect:
       phase = .briefing
+      playMusicForCurrentLevel()
       playfield.phase = .briefing
       playfield.overlayShowsLemmings = false
       playfield.overlayTitle = L10n.text("Choose a rating")
@@ -8035,6 +8047,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       startedMusicIdentity = nil
       return
     }
+    if showsMainMenu { playMenuTheme(); return }
     let identity = arcadeRunID.uuidString + String(describing: activeMusic)
     guard startedMusicIdentity != identity else { return }
     startedMusicIdentity = identity
@@ -8121,6 +8134,43 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       startedMusicIdentity = nil
       setStatus(L10n.text("Assigned music unavailable: \(assignedName)"))
+    }
+  }
+
+  private func playMenuTheme() {
+    let identity = settings.menuMusic ? "menu" : "menu-silent"
+    guard startedMusicIdentity != identity else { return }
+    startedMusicIdentity = identity
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
+    legacyMusicHandoffReversing = false
+    dj.stop()
+    guard settings.menuMusic else { music.stop(); soundtrack.stop(); return }
+    let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music")
+    let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: macintoshMusic != nil,
+      otherVersions: musicRoot.map(MenuThemeSelection.otherVersions(at:)) ?? [])
+    menuTheme = theme
+    let recording: URL? = switch theme {
+    case .macintoshLemming1: macintoshMusic?.root.appendingPathComponent("classic/lemming1.m4a")
+    case let .recording(path): musicRoot?.appendingPathComponent(path)
+    case .amigaIntro: nil
+    }
+    if let recording {
+      music.stop()
+      soundtrack.load([recording], originalMix: theme == .macintoshLemming1)
+      if soundtrack.play(index: 0) != nil { return }
+    }
+    // Any recording that fails to open falls back to the Amiga intro.
+    soundtrack.stop()
+    guard let intro = BundledGameResources.music("lemmings_music_mod")?.appendingPathComponent("intro.mod"),
+          music.play(url: intro) != nil else { music.stop(); return }
+    do {
+      try music.start()
+    } catch {
+      music.stop()
+      startedMusicIdentity = nil
+      setStatus(L10n.text("Audio unavailable: \(error.localizedDescription)"))
     }
   }
 

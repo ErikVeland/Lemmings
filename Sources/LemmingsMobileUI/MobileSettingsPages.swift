@@ -170,6 +170,7 @@ extension MobileLibraryViewController {
             case "effectsVolume": settings.classic.soundVolume = nextVolume(settings.classic.soundVolume)
             case "soundSource": settings.classic.sound = cycle(settings.classic.sound, ClassicSettingsOptions.playableSound)
             case "pauseBeat": settings.classic.pauseMusicBeatOnly.toggle()
+            case "menuMusic": settings.classic.menuMusic.toggle()
             case "fall": settings.classic.bottomFallSounds.toggle()
             case "soundtrackChoice":
                 settings.soundtrack = cycle(settings.soundtrack, MobileMusic.shared.soundtrackNames)
@@ -190,6 +191,7 @@ extension MobileLibraryViewController {
         } else { return false }
         mobileSettings = settings
         MobileMusic.shared.applySettings(profileID: settingsProfileID)
+        syncMenuMusic()
         rebuild()
         return true
     }

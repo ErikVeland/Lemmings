@@ -92,3 +92,33 @@ require(catalogue.sourceOnlyPaths.contains("Lemmings (MP3)/13 As Long As You Try
     "Broken MP3 remained a playable variant")
 require(catalogue.entry(path: "Lemmings (MP3)/13 As Long As You Try Your Best.m4a")?.track.id == "classic.tim6",
     "Decoder-safe copy lost its composition identity")
+
+// The main menu usually plays the Amiga or Macintosh theme, rarely another port's title theme.
+let menuOthers = MenuThemeSelection.otherVersions(in: catalogue) { paths.contains($0) }
+require(!menuOthers.contains("lemmings_music_mod/intro.mod"), "The Amiga intro counted as a rare version")
+require(menuOthers.contains("Lemmings_(Arcade)/02 March of the Mods (The Finnjenka Dance).m4a")
+    && menuOthers.contains("Lemmings_(NES)/01 Title Screen.m4a"), "Another port's title theme was left out")
+require(menuOthers.allSatisfy { catalogue.entry(path: $0).map { $0.track.game == "classic" && $0.track.role == "menu" } == true },
+    "A non-menu or sequel track entered the main menu pool")
+require(MenuThemeSelection.otherVersions(in: catalogue) { _ in false }.isEmpty, "A missing recording was offered")
+struct MenuDice: RandomNumberGenerator {
+    var state: UInt64
+    mutating func next() -> UInt64 { state = state &* 6364136223846793005 &+ 1442695040888963407; return state }
+}
+var dice = MenuDice(state: 7)
+var menuCounts: [String: Int] = [:]
+for _ in 0..<8000 {
+    let key: String = switch MenuThemeSelection.choose(macintoshAvailable: true, otherVersions: menuOthers, using: &dice) {
+    case .amigaIntro: "amiga"
+    case .macintoshLemming1: "mac"
+    case .recording: "other"
+    }
+    menuCounts[key, default: 0] += 1
+}
+require((800...1200).contains(menuCounts["other"] ?? 0), "Other versions are not rare: \(menuCounts)")
+require(abs((menuCounts["amiga"] ?? 0) - (menuCounts["mac"] ?? 0)) < 600, "Amiga and Macintosh are not even: \(menuCounts)")
+for _ in 0..<200 {
+    require(MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: [], using: &dice) == .amigaIntro,
+        "Without the Macintosh bank or other versions, the Amiga intro must play")
+}
+print("PASS main menu theme selection")

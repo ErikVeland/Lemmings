@@ -30,6 +30,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
+    #if os(tvOS)
+    private var topShelfTask: Task<Void, Never>?
+    #endif
     private var usesHomeBox: Bool {
         #if os(tvOS)
         true
@@ -444,6 +447,22 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             self.homeBackdropTask = nil
             self.homeBackdropView.show(scenery)
             self.updateLibraryDisplayLink()
+            #if os(tvOS)
+            // Top Shelf picks one of the two Macintosh looks for each newly exported level.
+            var shelfSettings = settings
+            shelfSettings.graphics = Bool.random() ? .macintosh : .macintoshMonochrome
+            let shelfKey = MobileTopShelfScenery.seasonalKey(key)
+            if scenery != nil, self.topShelfTask == nil, MobileTopShelfScenery.needsExport(key: shelfKey) {
+                self.topShelfTask = Task.detached(priority: .background) { [weak self, homeBackdropLoader] in
+                    if let shelf = try? await homeBackdropLoader.load(preferred: preferred, recent: recent, ports: ports,
+                        fanFolders: fan, native: native, classicDirectory: classic, storage: storage, settings: shelfSettings,
+                        neoLibrary: { try NeoLemmixMobileLibrary(directory: $0, storage: $1) }) {
+                        try? await MobileTopShelfScenery.export(shelf, key: shelfKey)
+                    }
+                    await MainActor.run { self?.topShelfTask = nil }
+                }
+            }
+            #endif
         }
     }
 
@@ -489,7 +508,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                  .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
                  .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
             let journey = bundledJourney
-            let journeyTitle = L10n.text("Journey map  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
+            let journeyTitle = L10n.text("Journey map  \(journey.map { shownJourneyProgress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             #if os(tvOS)
             let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
@@ -645,6 +664,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             browser.configure(levels: library.levels.filter { canSelectJourneyLevel($0.index) }, selected: selectedIndex)
         }
         browserShown = show
+        syncMenuMusic()
+    }
+
+    func syncMenuMusic() {
+        MobileMusic.shared.selectProfile(settingsProfileID)
+        MobileMusic.shared.setMenu(visible: game == nil && viewIsVisible, active: sceneIsActive)
     }
 
     private func coverArtwork(_ index: Int) async -> CGImage? {
@@ -1260,6 +1285,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     self.game = nil
                     if action == .menu { self.navigate(.home) }
                     self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
+                    self.syncMenuMusic()
                     self.measureMobileFanPacks()
                     #if os(iOS)
                     self.cloudProgress.requestSync()

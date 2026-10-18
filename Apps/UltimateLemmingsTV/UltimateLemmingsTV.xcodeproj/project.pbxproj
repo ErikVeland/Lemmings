@@ -11,7 +11,33 @@
 		100000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* PrivacyInfo.xcprivacy */; };
 		100000000000000000000003 /* LemmingsTVUI in Frameworks */ = {isa = PBXBuildFile; productRef = 100000000000000000000081 /* LemmingsTVUI */; };
 		100000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* Assets.xcassets */; };
+		200000000000000000000001 /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* ContentProvider.swift */; };
+		200000000000000000000002 /* TopShelf.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		200000000000000000000090 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100000000000000000000060 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 200000000000000000000050;
+			remoteInfo = TopShelf;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		200000000000000000000043 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				200000000000000000000002 /* TopShelf.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		100000000000000000000010 /* UltimateLemmingsTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltimateLemmingsTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +45,10 @@
 		100000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		100000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		100000000000000000000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		200000000000000000000010 /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		200000000000000000000011 /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
+		200000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		200000000000000000000013 /* TopShelf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TopShelf.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +60,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		200000000000000000000020 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -37,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				100000000000000000000031 /* . */,
+				200000000000000000000031 /* TopShelf */,
 				100000000000000000000033 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,8 +94,19 @@
 			isa = PBXGroup;
 			children = (
 				100000000000000000000010 /* UltimateLemmingsTV.app */,
+				200000000000000000000010 /* TopShelf.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		200000000000000000000031 /* TopShelf */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000011 /* ContentProvider.swift */,
+				200000000000000000000012 /* Info.plist */,
+				200000000000000000000013 /* TopShelf.entitlements */,
+			);
+			path = TopShelf;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -76,10 +125,12 @@
 				100000000000000000000047 /* Soundtracks */,
 				100000000000000000000048 /* Sound effects */,
 				100000000000000000000049 /* Build changes */,
+				200000000000000000000043 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				200000000000000000000091 /* PBXTargetDependency */,
 			);
 			name = UltimateLemmingsTV;
 			packageProductDependencies = (
@@ -88,6 +139,22 @@
 			productName = UltimateLemmingsTV;
 			productReference = 100000000000000000000010 /* UltimateLemmingsTV.app */;
 			productType = "com.apple.product-type.application";
+		};
+		200000000000000000000050 /* TopShelf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 200000000000000000000070 /* Build configuration list for PBXNativeTarget "TopShelf" */;
+			buildPhases = (
+				200000000000000000000040 /* Sources */,
+				200000000000000000000020 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TopShelf;
+			productName = TopShelf;
+			productReference = 200000000000000000000010 /* TopShelf.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -106,6 +173,9 @@
 								enabled = 1;
 							};
 						};
+					};
+					200000000000000000000050 = {
+						CreatedOnToolsVersion = 27.1;
 					};
 				};
 			};
@@ -126,6 +196,7 @@
 			projectRoot = "";
 			targets = (
 				100000000000000000000050 /* UltimateLemmingsTV */,
+				200000000000000000000050 /* TopShelf */,
 			);
 		};
 /* End PBXProject section */
@@ -244,7 +315,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		200000000000000000000040 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				200000000000000000000001 /* ContentProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		200000000000000000000091 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 200000000000000000000050 /* TopShelf */;
+			targetProxy = 200000000000000000000090 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		100000000000000000000100 /* Debug */ = {
@@ -392,6 +479,58 @@
 			};
 			name = Release;
 		};
+		200000000000000000000102 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TopShelf/TopShelf.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.5;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.TopShelf;
+				SDKROOT = appletvos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+			};
+			name = Debug;
+		};
+		200000000000000000000103 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TopShelf/TopShelf.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.5;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.TopShelf;
+				SDKROOT = appletvos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -409,6 +548,15 @@
 			buildConfigurations = (
 				100000000000000000000100 /* Debug */,
 				100000000000000000000101 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		200000000000000000000070 /* Build configuration list for PBXNativeTarget "TopShelf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				200000000000000000000102 /* Debug */,
+				200000000000000000000103 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
