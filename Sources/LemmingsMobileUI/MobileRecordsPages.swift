@@ -38,7 +38,30 @@ extension MobileLibraryViewController {
     }
     func recordLevelPage(_ key: String, subtitle: String) -> GameFrontEnd.Page {
         MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: profiles.activeID,
-                                        profileName: profiles.active.name, subtitle: subtitle)
+                                        profileName: profiles.active.name, subtitle: subtitle,
+                                        replayRunID: recordReplayRun(key)?.id)
+    }
+
+    /// The fastest clear, as on the Mac replay boards, else the most saved. Only engines iOS can play back.
+    func recordReplayRun(_ key: String) -> ArcadeRun? {
+        let (board, assisted) = MobileCareerArt.recordBoard(key)
+        let runs = arcadeStore.records.runs.filter {
+            $0.profileID == profiles.activeID && $0.level.boardID == board && $0.assisted == assisted
+        }
+        let ordered = runs.filter(\.qualifies).sorted { $0.seconds < $1.seconds } + runs.sorted { $0.saved > $1.saved }
+        return ordered.first { run in
+            guard let game = run.level.conditions?.gameID, !["lemmings2", "lemmings3", "neolemmix"].contains(game) else { return false }
+            return arcadeStore.actionReplayURL(attemptID: run.id) != nil
+        }
+    }
+
+    private func watchRecordReplay(_ runID: UUID) {
+        do {
+            guard let run = arcadeStore.records.runs.first(where: { $0.id == runID }),
+                  let url = arcadeStore.actionReplayURL(attemptID: runID) else { throw MobileSessionError.invalidCheckpoint }
+            let replay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: Data(contentsOf: url))
+            showRankedActionReplay(replay, title: run.level.title)
+        } catch { notice = error.localizedDescription; rebuild() }
     }
     func mobileCampaignProgress(profileID: String) -> ClassicAchievementProgress {
         let packs = catalogue.map { value in value.families.flatMap { value.packs(in: $0) } } ?? []
@@ -71,6 +94,7 @@ extension MobileLibraryViewController {
         case "achievements": navigate(.achievements)
         default:
             if id.hasPrefix("record.") { navigate(.recordLevel(String(id.dropFirst(7)))) }
+            else if id.hasPrefix("recordReplay."), let runID = UUID(uuidString: String(id.dropFirst(13))) { watchRecordReplay(runID) }
             else if id.hasPrefix("award."), let award = ArcadeLevelAchievement(rawValue: String(id.dropFirst(6))) {
                 canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
             } else if id.hasPrefix("careerAward."), let award = TrolleyAchievement(rawValue: String(id.dropFirst(12))) {
@@ -82,7 +106,8 @@ extension MobileLibraryViewController {
         return true
     }
 
-    func recordMobileCompletion(_ run: ArcadeRun, session: (any MobileGameSession)? = nil) -> (details: [String], error: String?) {
+    func recordMobileCompletion(_ run: ArcadeRun, session: (any MobileGameSession)? = nil,
+                                hotSeat seat: MobileHotSeat? = nil) -> (details: [String], error: String?) {
         AnonymousTelemetry.shared.finish(run.level, hotSeat: hotSeat != nil, attemptID: run.id, won: run.didWin, saved: run.saved)
         // A completed checkpoint can reopen. The attempt UUID makes its result idempotent.
         if arcadeStore.records.runs.contains(where: { $0.id == run.id })
@@ -117,16 +142,16 @@ extension MobileLibraryViewController {
         if report.newSkillBest { details.append(L10n.text("New skill record")) }
         if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append(L10n.text("New time record  \(Int(run.seconds) / 60):\(String(format: "%05.2f", run.seconds.truncatingRemainder(dividingBy: 60)))")) }
         if report.earnedLevelSkip { details.append(L10n.text("Level skip earned")) }
-        if let classic = session as? ClassicMobileSession {
-            do {
-                if let data = try classic.replayDocument() {
-                    let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: data)
-                    let commands = try replay.events.map(LeaderboardActionReplay.Command.classic)
-                    arcadeStore.preserveActions(run: run, initial: .classic(classic.initialSimulation),
-                                               final: .classic(classic.finalSimulation), commands: commands)
+        do {
+            if let capture = try session?.actionCapture() {
+                arcadeStore.preserveActions(run: run, initial: capture.initial, final: capture.final, commands: capture.commands)
+                // Losses count too. The next player sees this turn behind their own lemmings.
+                if let seat {
+                    arcadeStore.preserveHotSeatGhost(run: run, sessionID: seat.id, players: seat.players,
+                        initial: capture.initial, final: capture.final, commands: capture.commands)
                 }
-            } catch { notice = error.localizedDescription }
-        }
+            }
+        } catch { notice = error.localizedDescription }
         mobileRankings.completed(run.profileID, history: arcadeStore.records.trolley)
         return (details, nil)
     }

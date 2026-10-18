@@ -80,6 +80,7 @@ import QuartzCore
     let colours = ReplayGhostColour.allCases.map { SolutionGhostPixels(rgba: Data([255, 255, 255, 255]),
         width: 1, height: 1, colour: $0).rgba }
     try checkGhost(Set(colours).count == 8, "Roster colours are not distinct")
+    try runMobileGhostChecks()
 }
 
 @MainActor func fieldImage(_ scene: ClassicRenderedLevel, terrain: ClassicDOSTerrain) -> CGImage? {

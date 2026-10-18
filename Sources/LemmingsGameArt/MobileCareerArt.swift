@@ -89,9 +89,15 @@ public enum MobileCareerArt {
             details: levels.isEmpty ? [L10n.text("No records")] : [], footer: [.init("home", L10n.text("Back")), .init("achievements", L10n.text("Achievements")), .init("worldwide", L10n.text("Worldwide"))], footerColumns: 1)
     }
 
-    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
+    /// The board and assist mode named by a Records row key.
+    public static func recordBoard(_ key: String) -> (board: String, assisted: Bool) {
         let assisted = key.hasPrefix("assisted|")
-        let board = String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0))
+        return (String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0)), assisted)
+    }
+
+    public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String,
+                                       subtitle: String, replayRunID: UUID? = nil) -> GameFrontEnd.Page {
+        let (board, assisted) = recordBoard(key)
         let runs = records.runs.filter { $0.profileID == profileID && $0.level.boardID == board && $0.assisted == assisted }
         guard let level = runs.first?.level else { return recordsPage(records: records, profileID: profileID, profileName: profileName, subtitle: subtitle) }
         let best = runs.map(\.saved).max() ?? 0
@@ -105,7 +111,9 @@ public enum MobileCareerArt {
         } else { details.append(L10n.text("Maximum: \((best == level.total ? String(level.total) : "?"))")) }
         let awards = stats.achievements.sorted { $0.rawValue < $1.rawValue }.map(\.title)
         return .init(title: level.title, subtitle: [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: "\n"),
-                     details: details + awards, footer: [.init("records", L10n.text("Back"))])
+                     details: details + awards,
+                     footer: (replayRunID.map { [.init("recordReplay." + $0.uuidString, L10n.text("Replay"))] } ?? [])
+                        + [.init("records", L10n.text("Back"))])
     }
 
     public static func campaignProgress(records: ArcadeRecords, profileID: String,

@@ -600,12 +600,20 @@ import NxlvKit
 
     public func hotSeatGhosts(initial: ActionReplayState, level: ArcadeLevel?, playerID: String,
                               sessionID: String?) -> HotSeatGhostPlayback? {
-        guard let sessionID, sessionID == hotSeatID, hotSeatIsActive,
+        guard let sessionID, sessionID == hotSeatID, hotSeatIsActive else { return nil }
+        return hotSeatGhosts(initial: initial, level: level, playerID: playerID, sessionID: sessionID,
+                             players: sessionProfileIDs)
+    }
+
+    /// iOS and tvOS keep their own Hot Seat roster, so they name the session and players.
+    public func hotSeatGhosts(initial: ActionReplayState, level: ArcadeLevel?, playerID: String,
+                              sessionID: String, players: [String]) -> HotSeatGhostPlayback? {
+        guard players.count > 1, players.contains(playerID),
               let conditions = level?.conditions, let hash = try? initial.hash() else { return nil }
         let attempts = hotSeatGhostArchive.attempts(sessionID: sessionID, conditions: conditions.fingerprint,
-            initialHash: hash, excluding: playerID, players: sessionProfileIDs)
+            initialHash: hash, excluding: playerID, players: players)
         let rosterColours = attempts.compactMap { attempt -> HotSeatGhostAttempt? in
-            guard let slot = sessionProfileIDs.firstIndex(of: attempt.playerID) else { return nil }
+            guard let slot = players.firstIndex(of: attempt.playerID) else { return nil }
             return .init(playerID: attempt.playerID,
                 colour: ReplayGhostColour.allCases[slot % ReplayGhostColour.allCases.count], replay: attempt.replay)
         }
@@ -614,13 +622,20 @@ import NxlvKit
 
     public func preserveHotSeatGhost(run: ArcadeRun, sessionID: String?, initial: ActionReplayState,
                                      final: ActionReplayState, commands: [LeaderboardActionReplay.Command]) {
-        guard canWrite, storageError == nil, let sessionID, sessionID == hotSeatID,
-              let slot = sessionProfileIDs.firstIndex(of: run.profileID) else { return }
+        guard let sessionID, sessionID == hotSeatID else { return }
+        preserveHotSeatGhost(run: run, sessionID: sessionID, players: sessionProfileIDs,
+                             initial: initial, final: final, commands: commands)
+    }
+
+    public func preserveHotSeatGhost(run: ArcadeRun, sessionID: String, players: [String], initial: ActionReplayState,
+                                     final: ActionReplayState, commands: [LeaderboardActionReplay.Command]) {
+        guard canWrite, storageError == nil, players.count > 1,
+              let slot = players.firstIndex(of: run.profileID) else { return }
         do {
             let replay = try LeaderboardActionReplay.capture(run: run, initial: initial, final: final, commands: commands)
             let colour = ReplayGhostColour.allCases[slot % ReplayGhostColour.allCases.count]
             try hotSeatGhostArchive.save(.init(playerID: run.profileID, colour: colour, replay: replay),
-                                         sessionID: sessionID, players: sessionProfileIDs)
+                                         sessionID: sessionID, players: players)
         } catch { NSLog("Hot Seat ghost not retained: %@", error.localizedDescription) }
     }
 

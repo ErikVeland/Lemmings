@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 public struct MobilePixelFrame: Equatable, Sendable {
@@ -230,6 +231,13 @@ public protocol MobileGameSession: AnyObject {
     func prepareCheckpointPayload() throws -> MobileCheckpointPayload
     func restoreCheckpointPayload(_ data: Data) throws
     func releaseTransientResources()
+
+    /// Earlier Hot Seat turns, drawn behind live lemmings. Nil in solo play.
+    var hotSeatGhosts: HotSeatGhostPlayback? { get set }
+    /// The level start in the shared action format, or nil when this engine has none.
+    var actionReplayInitial: ActionReplayState? { get }
+    /// The attempt so far in the shared action format, or nil when it cannot be expressed.
+    func actionCapture() throws -> MobileActionCapture?
 }
 
 public extension MobileGameSession {
@@ -279,4 +287,7 @@ public extension MobileGameSession {
     var assignmentProgress: Double? { nil }
     func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? { nil }
     func releaseTransientResources() {}
+    var hotSeatGhosts: HotSeatGhostPlayback? { get { nil } set {} }
+    var actionReplayInitial: ActionReplayState? { nil }
+    func actionCapture() throws -> MobileActionCapture? { nil }
 }

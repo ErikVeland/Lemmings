@@ -1804,6 +1804,8 @@ typealias MobileGameControllerBase = UIViewController
         do {
             if solution, retainedSolution != nil { selectSolutionMode(.solution); return }
             guard let replay = try session.makeReplaySession(document: document) else { return }
+            // Watching an attempt keeps the Hot Seat ghosts it was played against. Solutions have none.
+            if !solution { replay.hotSeatGhosts = session.hotSeatGhosts }
             let player = MobileGameViewController(summary: summary, session: replay,
                 checkpointStore: checkpointStore, restoredCheckpoint: nil, turn: turn, settingsProfileID: settingsProfileID)
             player.musicContext = musicContext

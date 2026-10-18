@@ -1252,6 +1252,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }
             }
             AnonymousTelemetry.shared.start(recordLevel, hotSeat: hotSeat != nil, attemptID: attemptID)
+            let ghostSeat = hotSeat
+            if let ghostSeat, let initial = content.session.actionReplayInitial {
+                content.session.hotSeatGhosts = arcadeStore.hotSeatGhosts(initial: initial, level: recordLevel,
+                    playerID: ownerID, sessionID: ghostSeat.id, players: ghostSeat.players)
+            }
             next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in
                 guard let self, let session else { return ([], L10n.text("Records are not available.")) }
                 if inLearning {
@@ -1260,7 +1265,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }
                 let run = MobileGameResult.capture(id: attemptID, profileID: ownerID,
                     level: recordLevel, session: session)
-                return self.recordMobileCompletion(run, session: session)
+                return self.recordMobileCompletion(run, session: session, hotSeat: ghostSeat)
             }
             next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
