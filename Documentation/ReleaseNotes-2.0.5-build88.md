@@ -21,6 +21,11 @@ longer rewrites its local file when nothing has changed.
 Saved records, attempts and leaderboards keep the same format and content.
 Earlier saves load without changes.
 
+## Status text
+
+The death counter's skull no longer shrinks the gameplay status text. The
+bitmap fonts now draw the skull in their own style, at capital height.
+
 ## Chronicles Moles
 
 In Chronicles, a Mole that touches steel now follows the original game more
