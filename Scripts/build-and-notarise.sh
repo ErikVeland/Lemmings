@@ -28,6 +28,7 @@
 #   RELEASE_TAG       public GitHub release tag, default vVERSION
 #   DOWNLOAD_URL_PREFIX public HTTPS URL prefix for Sparkle update archives
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
+#   SKIP_RELEASE_TESTS  1 skips the integration tests and launch checks
 #
 # Credentials are never accepted on the command line or written to disk by
 # this script. The Game Center target is signed for registered devices and
@@ -44,6 +45,9 @@ updates_dir="${updates_dir:A}"
 monterey_worktree="${MONTEREY_WORKTREE:-$project_dir/.claude/worktrees/macos12}"
 monterey_worktree="${monterey_worktree:A}"
 dry_run=0
+# A hotfix whose tests already passed can skip gates 6 and 7 when the release
+# owner asks. Signing, notarisation and Gatekeeper checks still run.
+skip_tests="${SKIP_RELEASE_TESTS:-0}"
 
 usage() {
   print "Usage: zsh Scripts/build-and-notarise.sh [--dry-run] [--notary-profile NAME] [--notary-keychain PATH]"
@@ -69,6 +73,7 @@ usage() {
   print "  UPDATES_DIR                 Sparkle update archive directory"
   print "  RELEASE_TAG                 public release tag, default vVERSION"
   print "  DOWNLOAD_URL_PREFIX         public HTTPS URL prefix for update archives"
+  print "  SKIP_RELEASE_TESTS          1 skips gates 6 and 7 for an approved hotfix"
   print "  Publication is a separate step after package and hardware checks."
 }
 
@@ -234,8 +239,12 @@ sys.exit(hints['engineFingerprint'] != proofs['engineSourceFingerprint'])
 CHECK_HINTS
   fail "Level hints do not match the engine. Run Scripts/generate-level-hints.sh."
 print "Gate 5: rescue proofs and level hints match the engine"
-print "Gate 6: app integration tests run on the standard build"
-print "Gate 7: each signed target launches as a new user"
+if (( skip_tests )); then
+  print "Gate 6-7: SKIPPED by SKIP_RELEASE_TESTS=1. Record this in the release evidence."
+else
+  print "Gate 6: app integration tests run on the standard build"
+  print "Gate 7: each signed target launches as a new user"
+fi
 
 if (( dry_run )); then
   print "Dry run: no build, signing, notarisation or upload performed."
@@ -351,22 +360,35 @@ verify_gatekeeper() {
   rm -rf -- "$verify_dir"
 }
 
+# Gate 7 runs each signed bundle as a new user. It needs the real desktop.
+launch_check() {
+  if (( skip_tests )); then
+    print "==> Gate 7: launch check skipped for ${1:h:t}"
+    return 0
+  fi
+  zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$1"
+}
+
 standard_dir="$run_dir/standard"
 standard_app="$standard_dir/Ultimate Lemmings.app"
 standard_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-standard.zip"
 print "==> Building and notarising Developer ID standard target (full soundtrack)"
 build_app "$project_dir" "$standard_dir" 0 full
 check_music_scope "$standard_app" full || fail "The update build does not carry the full soundtrack."
-print "==> Gate 6: running app integration tests"
-LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-localisation-tests.sh" ||
-  fail "The language catalogue or picker regressions failed. Do not release this build."
-# Mechanical integration tests stay headless. Only the launch checks need the real desktop.
-LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
-  fail "The app integration tests failed. Do not release this build."
+if (( skip_tests )); then
+  print "==> Gate 6: skipped by SKIP_RELEASE_TESTS=1"
+else
+  print "==> Gate 6: running app integration tests"
+  LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-localisation-tests.sh" ||
+    fail "The language catalogue or picker regressions failed. Do not release this build."
+  # Mechanical integration tests stay headless. Only the launch checks need the real desktop.
+  LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
+    fail "The app integration tests failed. Do not release this build."
+fi
 sign_developer_id "$standard_app"
 notarise_app "$standard_app" "$run_dir/standard-submission.zip" "$standard_zip"
 verify_gatekeeper "$standard_zip"
-zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
+launch_check "$standard_app" ||
   fail "The standard target did not launch cleanly."
 
 # Sparkle updates contain only the notarised app. The public release process
@@ -398,7 +420,7 @@ sign_developer_id "$slim_app"
 notarise_app "$slim_app" "$run_dir/slim-submission.zip" "$slim_zip"
 check_asset_size "$slim_zip"
 verify_gatekeeper "$slim_zip"
-zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$slim_app" ||
+launch_check "$slim_app" ||
   fail "The slim download did not launch cleanly."
 
 monterey_dir="$run_dir/monterey"
@@ -410,7 +432,7 @@ check_music_scope "$monterey_app" full || fail "The Monterey build does not carr
 sign_developer_id "$monterey_app"
 notarise_app "$monterey_app" "$run_dir/monterey-submission.zip" "$monterey_zip"
 verify_gatekeeper "$monterey_zip"
-zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$monterey_app" ||
+launch_check "$monterey_app" ||
   fail "The Monterey target did not launch cleanly."
 
 game_center_dir="$run_dir/gamecenter"
@@ -422,7 +444,7 @@ codesign --verify --deep --strict --verbose=1 "$game_center_app"
 codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
   grep -q 'com.apple.developer.game-center' ||
   fail "Game Center entitlement is missing from the Game Center target."
-zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$game_center_app" ||
+launch_check "$game_center_app" ||
   fail "The Game Center target did not launch cleanly."
 package_app "$game_center_app" "$game_center_zip"
 check_release_snapshot
