@@ -17,5 +17,6 @@
   "ProgressionPlaylist.swift",
   "DeviceEffectResources.swift",
   "LevelPlaylist.swift",
-  "SoundtrackCatalogue.swift"
+  "SoundtrackCatalogue.swift",
+  "TouchpadJog.swift"
 ]
