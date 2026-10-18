@@ -126,7 +126,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/ResultAwards.swift:24",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2151"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2153"
     ]
   },
   "+{0} SUPERZOOM": {
@@ -556,7 +556,7 @@
   "A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
     ]
   },
   "A saved player is unavailable": {
@@ -819,8 +819,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:101",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:132",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:185",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:137",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:190",
       "Sources/LemmingsGameArt/MobileResultAchievementsArt.swift:36",
       "Sources/LemmingsLocal/ArcadeWindow.swift:538",
       "Sources/LemmingsLocal/ArcadeWindow.swift:879",
@@ -1574,7 +1574,7 @@
   "Attempts: {0}  Clears: {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:126"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:131"
     ]
   },
   "Attractor": {
@@ -1598,7 +1598,7 @@
   "Audio suspended": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2002"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2004"
     ]
   },
   "Audio unavailable: {0}": {
@@ -1660,7 +1660,7 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1280",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1285",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1316",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1825",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1827",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:382",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:79",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:47",
@@ -1799,9 +1799,9 @@
       "Sources/LemmingsGameArt/CloudSyncArt.swift:38",
       "Sources/LemmingsGameArt/GameFrontEnd.swift:29",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:104",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:135",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:150",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:188",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:140",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:155",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:193",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:46",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:65",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:76",
@@ -1982,7 +1982,7 @@
   "Begin level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1381",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1393",
       "Sources/LemmingsLocal/PlayfieldView.swift:253"
     ]
   },
@@ -2024,7 +2024,7 @@
   "Best time: {0} S": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:127"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:132"
     ]
   },
   "Best-known rescue": {
@@ -2799,7 +2799,7 @@
   "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
     ]
   },
   "Choose a pack": {
@@ -3133,7 +3133,7 @@
   "Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Classic effects": {
@@ -3532,7 +3532,7 @@
   "Collections / Playlists": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1049"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1061"
     ]
   },
   "Collections unavailable": {
@@ -3622,7 +3622,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
     ]
   },
   "Complete": {
@@ -3756,7 +3756,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:253",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:89",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:91",
       "Sources/LemmingsLocal/main.swift:8472",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
@@ -3798,7 +3798,7 @@
   "Controller (Xbox-style button names)\nLeft stick: aim • Right stick: pan camera\nA: assign selected skill • B: reset fast speed, then pause / resume\nX: reset speed • Y: end run / undo\nLB / RB: previous / next available skill\nD-pad left / right: previous / next unassigned lemming\nD-pad up / down: increase / decrease release rate (where supported)\nAt fast speed, RT resets to 1×. Release before pressing it again.\nTap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed\nX: immediately return to 1× • Menu: game menu\nL3 / R3: entrance / exit • View / Options: help\nHold LT + D-pad left / right: decrease / increase speed\nHold LT + D-pad up / down: entrance / exit\nHold LT + X: reset speed • Hold LT + Y: level hints\nHold LT + LB / RB: step back / forward where supported\nHold LT + B: rewind where supported • LT + Menu: retry\nHold LT + A: repeat last assignment • LT + View / Options: settings\nHold LT + R3: focus last assignment\nHold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle\nMenus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs\nRight stick scrolls long pages. Release buttons before using a new page.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/ControllerBindings.swift:81"
+      "Sources/NxlvKit/ControllerBindings.swift:107"
     ]
   },
   "Controller button": {
@@ -4203,7 +4203,7 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:520",
       "Sources/LemmingsLocal/SettingsWindow.swift:664",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:34",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:110"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:111"
     ]
   },
   "DJ uses other soundtracks": {
@@ -4505,7 +4505,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:144",
       "Sources/LemmingsMobileUI/MobileHUDView.swift:379",
-      "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:57"
+      "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:59"
     ]
   },
   "Down-left": {
@@ -4723,7 +4723,7 @@
   "Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
     ]
   },
   "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels": {
@@ -5914,7 +5914,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:210",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:151"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:152"
     ]
   },
   "Game resumed": {
@@ -6023,7 +6023,7 @@
   "Ghost solutions": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Glider": {
@@ -6286,7 +6286,7 @@
   "Hints": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:136",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:141",
       "Sources/LemmingsLocal/LearningJourneyMenu.swift:33",
       "Sources/LemmingsLocal/ResultLayout.swift:70",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:28",
@@ -6383,7 +6383,7 @@
   "Hot Seat ghosts": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
     ]
   },
   "Hot Seat player HUD": {
@@ -7259,7 +7259,7 @@
   "Journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:22",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:67"
     ]
   },
@@ -7795,9 +7795,9 @@
   "LEMMINGS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1035",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1150",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1243",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1047",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1162",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1255",
       "Sources/LemmingsLocal/PlayfieldView.swift:270",
       "Sources/LemmingsLocal/main.swift:6953"
     ]
@@ -7896,8 +7896,8 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1046",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1116",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1126",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1882",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1995",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1884",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1997",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:382",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:500",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:506",
@@ -7928,7 +7928,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:108",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:44",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:23",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25",
       "Sources/LemmingsLocal/SettingsWindow.swift:289",
       "Sources/LemmingsLocal/SettingsWindow.swift:343",
       "Sources/LemmingsLocal/SettingsWindow.swift:814"
@@ -8019,7 +8019,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:538",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
     ]
   },
   "Least skills": {
@@ -8101,7 +8101,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileHomeArt.swift:18",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1056",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1068",
       "Sources/LemmingsLocal/ReplayWindow.swift:123",
       "Sources/LemmingsLocal/ReplayWindow.swift:16",
       "Sources/LemmingsLocal/main.swift:6814",
@@ -8200,7 +8200,7 @@
   "Lemmings 3 progress could not be saved: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/Lemmings3MobileLibrary.swift:238"
+      "Sources/LemmingsMobileCore/Lemmings3MobileLibrary.swift:239"
     ]
   },
   "Lemmings 3 · {0}": {
@@ -8309,7 +8309,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:7010",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2048",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2050",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:243"
     ]
   },
@@ -8447,9 +8447,9 @@
   "Level skip earned": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2151",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2153",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:69",
-      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:237"
+      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:238"
     ]
   },
   "Level starts": {
@@ -9155,7 +9155,7 @@
   "Maximum: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:125"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:130"
     ]
   },
   "Measurable rescue benefit per scarce resource.": {
@@ -9195,6 +9195,12 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2020",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MEDALS.IFF:1",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PREFS.IFF:1"
+    ]
+  },
+  "Menu themes": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Menus & results": {
@@ -9295,7 +9301,7 @@
   "Missing Mac terrain piece {0}.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/ClassicMacArtwork.swift:282"
+      "Sources/NxlvKit/ClassicMacArtwork.swift:285"
     ]
   },
   "Missing native L2 Twister mask.": {
@@ -9438,6 +9444,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1"
     ]
   },
+  "Most launches play the Amiga or Macintosh title theme. Sometimes the menu plays the title theme from another version of the game.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+    ]
+  },
   "Most rescued, then fewest skills and fastest time.": {
     "kind": "text",
     "references": [
@@ -9454,7 +9466,7 @@
   "Most saved: {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:125"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:130"
     ]
   },
   "Most used skill": {
@@ -9533,13 +9545,13 @@
   "Music muted": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2001"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2003"
     ]
   },
   "Music off": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2001"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2003"
     ]
   },
   "Music output interrupted. Previous track continues.": {
@@ -9551,7 +9563,7 @@
   "Music paused": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2003"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2005"
     ]
   },
   "Music style": {
@@ -9570,7 +9582,7 @@
   "Music: beat only": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2003"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2005"
     ]
   },
   "Mute": {
@@ -9648,7 +9660,7 @@
   "NEXT HINT": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:152",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:157",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:44"
     ]
   },
@@ -9868,17 +9880,17 @@
   "New rescue record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2152",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2154",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:67",
-      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:234"
+      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:235"
     ]
   },
   "New skill record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2153",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2155",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:68",
-      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:235"
+      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:236"
     ]
   },
   "New solo": {
@@ -9890,14 +9902,14 @@
   "New time record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2044",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2046"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2046",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2048"
     ]
   },
   "New time record  {0}:{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:236"
+      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:237"
     ]
   },
   "Next": {
@@ -10298,8 +10310,8 @@
   "No time limit": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2039",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:555"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2041",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:563"
     ]
   },
   "No unassigned lemmings": {
@@ -10710,6 +10722,12 @@
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:80"
     ]
   },
+  "On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+    ]
+  },
   "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games.": {
     "kind": "text",
     "references": [
@@ -10872,7 +10890,7 @@
   "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Original PC": {
@@ -11121,7 +11139,7 @@
   "PLAYLISTS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1392"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1404"
     ]
   },
   "POLE VAULTER": {
@@ -11175,7 +11193,7 @@
   "PROFILES": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1392"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1404"
     ]
   },
   "PROGRAMMERS": {
@@ -11490,8 +11508,8 @@
   "Play": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:138",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:154",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:143",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:159",
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:121",
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:46",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1792",
@@ -11549,7 +11567,7 @@
   "Play again": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:138",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:143",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:575"
     ]
   },
@@ -12004,7 +12022,7 @@
   "Previous": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:151",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:156",
       "Sources/LemmingsGameArt/TVMenuPresentation.swift:109",
       "Sources/LemmingsGameArt/TVMenuPresentation.swift:141",
       "Sources/LemmingsLocal/LevelHintWindow.swift:118",
@@ -12107,7 +12125,7 @@
   "Profiles": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1049"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1061"
     ]
   },
   "Profiles and Hot Seats.": {
@@ -12288,14 +12306,14 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1107",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1881",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1883",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:381"
     ]
   },
   "RECORDS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1392"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1404"
     ]
   },
   "RELEASE RATE {0}": {
@@ -12361,7 +12379,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1189",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1196",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1166",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1178",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1115",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1125",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:505",
@@ -12609,9 +12627,9 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:100",
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:124",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:129",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:87",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1049",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1061",
       "Sources/LemmingsLocal/PlayfieldView.swift:261",
       "Sources/LemmingsLocal/ResultLayout.swift:76"
     ]
@@ -12619,7 +12637,7 @@
   "Records are not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1269"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1274"
     ]
   },
   "Records cannot be read": {
@@ -12670,7 +12688,7 @@
   "Records were not saved. Retry the save before continuing.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:213"
+      "Sources/LemmingsMobileUI/MobileRecordsPages.swift:214"
     ]
   },
   "Recovery key saved": {
@@ -12731,7 +12749,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:57"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:59"
     ]
   },
   "Release rate": {
@@ -12846,7 +12864,7 @@
   "Replay": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:137",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:142",
       "Sources/LemmingsGameArt/MobilePauseArt.swift:18",
       "Sources/LemmingsLocal/ReplayWindow.swift:318",
       "Sources/LemmingsLocal/ResultLayout.swift:75",
@@ -13095,7 +13113,7 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:229"
     ]
   },
-  "Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel.": {
+  "Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
@@ -13186,7 +13204,7 @@
   "Resume your journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Resume {0}  {1}/{2}": {
@@ -13705,19 +13723,19 @@
   "SFX muted": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2004"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2006"
     ]
   },
   "SFX off": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2004"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2006"
     ]
   },
   "SFX {0}%": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2004"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2006"
     ]
   },
   "SH": {
@@ -13959,7 +13977,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1107",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1881",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1883",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:381"
     ]
   },
@@ -14273,7 +14291,7 @@
   "Saved {0}/{1}   Goal {2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2045"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2047"
     ]
   },
   "Saved: {0}": {
@@ -14531,7 +14549,7 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:118",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:120",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:518",
-      "Sources/LemmingsLocal/PlayfieldView.swift:1050",
+      "Sources/LemmingsLocal/PlayfieldView.swift:1062",
       "Sources/LemmingsLocal/PlayfieldView.swift:220",
       "Sources/LemmingsLocal/SettingsWindow.swift:108",
       "Sources/LemmingsLocal/SettingsWindow.swift:203",
@@ -14685,6 +14703,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/SkillVocabulary.swift:57"
+    ]
+  },
+  "Shining arrows": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages.": {
@@ -15025,7 +15049,7 @@
       "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
-  "Smoother results and saves": {
+  "Smoother play and shining arrows": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
@@ -15046,7 +15070,7 @@
   "Solution": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileCareerArt.swift:153",
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:158",
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:52",
       "Sources/LemmingsGameArt/SolutionSwitchArt.swift:25",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:28",
@@ -15639,7 +15663,7 @@
   "Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Surfer": {
@@ -15895,7 +15919,7 @@
   "Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:152"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:153"
     ]
   },
   "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost.": {
@@ -16502,7 +16526,7 @@
   "The art of one bit": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "The attempt was not saved.": {
@@ -16605,7 +16629,7 @@
   "The game produced an invalid image.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/MobileGameSession.swift:156"
+      "Sources/LemmingsMobileCore/MobileGameSession.swift:160"
     ]
   },
   "The game will wait. Give the controls to {0}, then choose Ready.": {
@@ -17081,7 +17105,7 @@
   "The saved run belongs to different level data.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/MobileGameSession.swift:162"
+      "Sources/LemmingsMobileCore/MobileGameSession.swift:166"
     ]
   },
   "The saved run changed in another app. Reopen the game before saving again.": {
@@ -17093,7 +17117,7 @@
   "The saved run could not be verified.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/MobileGameSession.swift:160"
+      "Sources/LemmingsMobileCore/MobileGameSession.swift:164"
     ]
   },
   "The saved run could not be verified. Its backup was preserved.": {
@@ -17536,7 +17560,7 @@
   "This control is not available in the current game.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/MobileGameSession.swift:164"
+      "Sources/LemmingsMobileCore/MobileGameSession.swift:168"
     ]
   },
   "This device": {
@@ -17549,7 +17573,7 @@
   "This game has no mobile renderer.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileCore/MobileGameSession.swift:158"
+      "Sources/LemmingsMobileCore/MobileGameSession.swift:162"
     ]
   },
   "This level": {
@@ -17757,7 +17781,7 @@
   "Time ": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2045"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2047"
     ]
   },
   "Time and actions": {
@@ -17784,8 +17808,8 @@
     "references": [
       "Sources/LemmingsLocal/main.swift:7101",
       "Sources/LemmingsLocal/main.swift:7734",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2039",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:555"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2041",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:563"
     ]
   },
   "Timing probes: {0}. Untested alternatives remain unknown.": {
@@ -17991,7 +18015,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:221",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2048",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2050",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:243"
     ]
   },
@@ -18264,7 +18288,7 @@
   "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
     ]
   },
   "Unknown": {
@@ -18510,7 +18534,7 @@
   "Update": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/PlayfieldView.swift:1051"
+      "Sources/LemmingsLocal/PlayfieldView.swift:1063"
     ]
   },
   "Use": {
@@ -18904,7 +18928,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:49"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:51"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {
@@ -19004,7 +19028,7 @@
   "Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
     ]
   },
   "Worldwide rankings are not enabled in this build. Local records are saved.": {
@@ -19998,8 +20022,9 @@
   "{0} Lemmings   Save {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2038",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:554"
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:145",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2040",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:562"
     ]
   },
   "{0} NEW {1}{2}": {

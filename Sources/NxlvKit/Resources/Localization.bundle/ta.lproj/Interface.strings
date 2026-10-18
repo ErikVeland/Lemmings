@@ -895,6 +895,7 @@
 "G / End: Goal" = "G / முடிவு: இலக்கு";
 "GAME CONTROLS" = "விளையாட்டுக் கட்டுப்பாடுகள்";
 "GARY TIMMONS" = "GARY TIMMONS";
+"GHOST SOLUTION" = "நிழல் தீர்வு";
 "GLIDE" = "கிளீட்";
 "GLUE POURER" = "பசை ஊற்றுபவர்";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1431,6 +1432,7 @@
 "Medieval" = "இடைக்காலம்";
 "Medieval Tribe" = "இடைக்காலக் குலம்";
 "Menu" = "பட்டி";
+"Menu themes" = "பட்டி இசைகள்";
 "Menus & results" = "பட்டிகளும் முடிவுகளும்";
 "Menus always use standard controls: D-pad selects, {0} confirms, {1} returns." = "மெனுக்கள் எப்போதும் நிலையான கட்டுப்பாடுகளைப் பயன்படுத்துகின்றன: D-pad தேர்ந்தெடுக்கிறது, {0} உறுதிப்படுத்துகிறது, {1} திரும்புகிறது.";
 "Met. " = "நிறைவேறியது. ";
@@ -1468,6 +1470,7 @@
 "More rescued than the previous best-known target." = "முந்தைய மிகவும் அறியப்பட்ட இலக்கு விட அதிகமாக மீட்கப்பட்டது.";
 "More {0}/{1} >" = "மேலும் {0}/{1} >";
 "Mortar" = "எறிகணைப் பீரங்கி";
+"Most launches play the Amiga or Macintosh title theme. Sometimes the menu plays the title theme from another version of the game." = "பெரும்பாலான தொடக்கங்களில் Amiga அல்லது Macintosh தலைப்பு இசை ஒலிக்கும். சில நேரங்களில் பட்டி விளையாட்டின் வேறொரு பதிப்பின் தலைப்பு இசையை ஒலிக்கும்.";
 "Most rescued, then fewest skills and fastest time." = "பெரும்பாலான மீட்கப்பட்டது, பின்னர் குறைவான திறன்கள் மற்றும் வேகமாக நேரம்.";
 "Most saved" = "அதிகபட்ச மீட்பு";
 "Most saved: {0}/{1}" = "அதிகபட்ச மீட்பு: {0}/{1}";
@@ -1664,6 +1667,7 @@
 "Oh dear!" = "ஆஹா கடவுளே!";
 "Old school" = "பழைய பாணி";
 "On" = "இயக்கம்";
+"On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges." = "HDR திரையில், Macintosh வண்ணக் கலையில் உள்ள ஒருவழி அம்புகள் அவற்றின் மேல் மற்றும் இடது விளிம்புகளில் ஒளியைப் பிடிக்கின்றன.";
 "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games." = "இடைவெளியில், தனிமைப்படுத்தப்பட்ட துடுப்பாட்டத்தை மட்டுமே விளையாடுங்கள். ரித்தமிக் பகுதி நிறுத்தமின்றி பாடல்கள். மூன்று விளையாட்டுகளுக்கும் பொருந்தும்.";
 "One Lemming left behind" = "ஒரு லெம்மிங் பின்னால் விட்டு";
 "One Lemming left behind. Bring home {0}." = "ஒரு லெம்மிங் பின்தங்கியுள்ளது. {0} பேரை வீட்டுக்குக் கொண்டு வரவும்.";
@@ -2032,7 +2036,7 @@
 "Restore TV saves?" = "TV சேமிப்புகளை மீட்டமைக்கவா?";
 "Restore recovery key" = "மீட்பு விசை மீட்டெடுக்கவும்";
 "Restore the default gameplay actions for every controller button." = "ஒவ்வொரு கட்டுப்பாட்டு பொத்தானிற்கும் இயல்புநிலை விளையாட்டு நடவடிக்கைகளை மீட்டெடுக்கவும்.";
-"Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel." = "முடிவுகள், பதிவுகள் மற்றும் விளையாட்டு வாழ்நாள் தரவரிசை இனி விளையாட்டை இடைநிறுத்தாது. நூற்றுக்கணக்கான முயற்சிகளுக்குப் பிறகும் இது பொருந்தும். Chronicles அகழெலிகள் எஃகை அடையும்போது மூல விளையாட்டை இன்னும் நெருக்கமாகப் பின்பற்றுகின்றன.";
+"Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel." = "முடிவுகள், பதிவுகள் மற்றும் விளையாட்டு வாழ்நாள் தரவரிசை இனி விளையாட்டை இடைநிறுத்தாது. விளையாட்டுக் களமும் சிறு வரைபடமும் வேகமாக வரையப்படுகின்றன. தொடக்கத்தில் பட்டி இசை இனி கரகரக்காது. Chronicles அகழெலிகள் எஃகை அடையும்போது மூல விளையாட்டை இன்னும் நெருக்கமாகப் பின்பற்றுகின்றன.";
 "Resume" = "தொடர்";
 "Resume  {0}/{1}" = "தொடக்கம் {0}/{1}";
 "Resume Hot Seat run" = "மாறிமுறை ஆட்டத்தைத் தொடர்";
@@ -2131,6 +2135,7 @@
 "SHIM" = "சிம்";
 "SHIMMIER" = "தொங்கிச் செல்பவர்";
 "SHOULDERS: SKILLS  /  D-PAD: TARGETS" = "கடன் வாங்குபவர்கள்: திறமைகள் / D-PAD: இலக்குகள்";
+"SHOW" = "காட்டு";
 "SHUFFLE" = "கலைத்து இயக்கு";
 "SIMON LITTLE" = "SIMON LITTLE";
 "SKATER" = "சறுக்கு வீரர்";
@@ -2273,10 +2278,12 @@
 "Shift+Tab: Previous skill" = "Shift+Tab: முந்தைய திறன்";
 "Shimmier" = "தொங்கிச் செல்பவர்";
 "Shimmy" = "சிம்மி";
+"Shining arrows" = "மின்னும் அம்புகள்";
 "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages." = "தோள் பொத்தான்கள் தாவல்களை மாற்றும். வலது குச்சி உருட்டும். பக்கங்களை மாற்றும்போது பொத்தான்களை விடவும்.";
 "Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork." = "Classic லெம்மிங்களில் ஏறுபவர் மற்றும் மிதப்பவர் முதுகுப்பைகளைக் காட்டு. L2 மற்றும் L3 அவற்றின் சொந்தத் திறன் ஓவியங்களையே பயன்படுத்தும்.";
 "Show Recorded Routes" = "பதிவுசெய்யப்பட்ட பாதைகளைக் காண்பி";
 "Show full solution" = "முழுத் தீர்வைக் காட்டு";
+"Show ghost solution?" = "நிழல் தீர்வைக் காட்டவா?";
 "Show lemming count" = "லெம்மிங் எண்ணிக்கை காட்டு";
 "Show practice tips" = "பயிற்சிக் குறிப்புகளைக் காட்டு";
 "Show skill backpacks" = "திறமையான முதுகெலும்புகளை காட்டவும்";
@@ -2323,7 +2330,7 @@
 "Smooth Progression" = "மென்மையான முன்னேற்றம்";
 "Smooth music loops" = "சீரான இசைச் சுழற்சிகள்";
 "Smoother play" = "மென்மையான விளையாட்டு";
-"Smoother results and saves" = "மென்மையான முடிவுகளும் சேமிப்புகளும்";
+"Smoother play and shining arrows" = "மென்மையான விளையாட்டும் மின்னும் அம்புகளும்";
 "Solo / Hot Seat" = "தனி / மாறிமுறை";
 "Solo starts" = "தனி ஆட்டத் தொடக்கங்கள்";
 "Solution" = "தீர்வு";
@@ -3181,6 +3188,3 @@
 "{0}/{1} packs" = "{0}/{1} தொகுப்புகள்";
 "{0}: replay analysis failed: {1}" = "{0}: மறு இயக்கப் பகுப்பாய்வு தோல்வி: {1}";
 "{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";
-"GHOST SOLUTION" = "நிழல் தீர்வு";
-"Show ghost solution?" = "நிழல் தீர்வைக் காட்டவா?";
-"SHOW" = "காட்டு";

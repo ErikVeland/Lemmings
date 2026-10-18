@@ -9,11 +9,13 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.5"
-    static var subtitle: String { L10n.text("Smoother results and saves") }
+    static let notesVersion = "2.0.6"
+    static var subtitle: String { L10n.text("Smoother play and shining arrows") }
     // A patch describes the whole 2.0 line, so players who skip patches see every change.
     static var sections: [(String, String)] { [
-        (L10n.text("Smoother play"), L10n.text("Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel.")),
+        (L10n.text("Smoother play"), L10n.text("Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel.")),
+        (L10n.text("Shining arrows"), L10n.text("On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges.")),
+        (L10n.text("Menu themes"), L10n.text("Most launches play the Amiga or Macintosh title theme. Sometimes the menu plays the title theme from another version of the game.")),
         (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
         (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),
         (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),

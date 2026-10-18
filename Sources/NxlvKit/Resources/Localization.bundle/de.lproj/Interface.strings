@@ -895,6 +895,7 @@
 "G / End: Goal" = "G / Ende: Ziel";
 "GAME CONTROLS" = "SPIELSTEUERUNG";
 "GARY TIMMONS" = "GARY TIMMONS";
+"GHOST SOLUTION" = "GEISTERLÖSUNG";
 "GLIDE" = "GLEITEN";
 "GLUE POURER" = "Klebergießer";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1431,6 +1432,7 @@
 "Medieval" = "Mittelalterlich";
 "Medieval Tribe" = "Mittelalterlicher Stamm";
 "Menu" = "Menü";
+"Menu themes" = "Menüthemen";
 "Menus & results" = "Menüs und Ergebnisse";
 "Menus always use standard controls: D-pad selects, {0} confirms, {1} returns." = "Menüs verwenden immer die Standardsteuerung: Steuerkreuz wählt aus, {0} bestätigt, {1} geht zurück.";
 "Met. " = "Erreicht. ";
@@ -1468,6 +1470,7 @@
 "More rescued than the previous best-known target." = "Mehr gerettet als beim bisherigen besten bekannten Ziel.";
 "More {0}/{1} >" = "Mehr {0}/{1} >";
 "Mortar" = "Mörser";
+"Most launches play the Amiga or Macintosh title theme. Sometimes the menu plays the title theme from another version of the game." = "Die meisten Starts spielen das Titelthema von Amiga oder Macintosh. Manchmal spielt das Menü das Titelthema einer anderen Version des Spiels.";
 "Most rescued, then fewest skills and fastest time." = "Zuerst zählen die meisten Geretteten, dann die wenigsten Fähigkeiten und die kürzeste Zeit.";
 "Most saved" = "Meiste gerettet";
 "Most saved: {0}/{1}" = "Meiste gerettet: {0}/{1}";
@@ -1664,6 +1667,7 @@
 "Oh dear!" = "Ach, schade!";
 "Old school" = "Klassisch";
 "On" = "Ein";
+"On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges." = "Auf einem HDR-Bildschirm fangen Einbahnpfeile in der Macintosh-Farbgrafik an ihren oberen und linken Kanten das Licht ein.";
 "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games." = "Bei Pause nur einzelne Schlaginstrumente abspielen. Titel ohne Rhythmuspart werden angehalten. Gilt für alle drei Spiele.";
 "One Lemming left behind" = "Ein Lemming bleibt zurück";
 "One Lemming left behind. Bring home {0}." = "Ein Lemming bleibt zurück. Rette {0}.";
@@ -2032,7 +2036,7 @@
 "Restore TV saves?" = "TV-Spielstände wiederherstellen?";
 "Restore recovery key" = "Wiederherstellungsschlüssel wiederherstellen";
 "Restore the default gameplay actions for every controller button." = "Spielaktionen aller Controller-Tasten auf die Standardwerte zurücksetzen.";
-"Results, records and the career leaderboard no longer pause the game, even after hundreds of attempts. Chronicles Moles follow the original game more closely at steel." = "Ergebnisse, Rekorde und die Karrierebestenliste halten das Spiel nicht mehr an, auch nach Hunderten von Versuchen. Maulwürfe in Chronicles verhalten sich an Stahl jetzt näher am Original.";
+"Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel." = "Ergebnisse, Rekorde und die Karrierebestenliste halten das Spiel nicht mehr an. Spielfeld und Minikarte werden schneller gezeichnet, und die Menümusik knistert beim Start nicht mehr. Maulwürfe in Chronicles verhalten sich an Stahl jetzt näher am Original.";
 "Resume" = "Fortsetzen";
 "Resume  {0}/{1}" = "Fortsetzen  {0}/{1}";
 "Resume Hot Seat run" = "Hot-Seat-Lauf fortsetzen";
@@ -2131,6 +2135,7 @@
 "SHIM" = "SHIM";
 "SHIMMIER" = "Hangler";
 "SHOULDERS: SKILLS  /  D-PAD: TARGETS" = "SCHULTERRTASTEN: FÄHIGKEITEN  /  STEUERKREUZ: ZIELE";
+"SHOW" = "ANZEIGEN";
 "SHUFFLE" = "ZUFALLSWIEDERGABE";
 "SIMON LITTLE" = "SIMON LITTLE";
 "SKATER" = "Schlittschuhläufer";
@@ -2273,10 +2278,12 @@
 "Shift+Tab: Previous skill" = "Umschalt+Tab: vorherige Fähigkeit";
 "Shimmier" = "Hangler";
 "Shimmy" = "Hangeln";
+"Shining arrows" = "Glänzende Pfeile";
 "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages." = "Schultertasten wechseln Tabs. Der rechte Stick scrollt. Lass die Tasten beim Seitenwechsel los.";
 "Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork." = "Rucksäcke für Kletterer und Fallschirmspringer bei Classic-Lemmingen anzeigen. L2 und L3 behalten ihre eigene Fähigkeitsgrafik.";
 "Show Recorded Routes" = "Aufgezeichnete Routen anzeigen";
 "Show full solution" = "Vollständige Lösung anzeigen";
+"Show ghost solution?" = "Geisterlösung anzeigen?";
 "Show lemming count" = "Lemminganzahl anzeigen";
 "Show practice tips" = "Übungstipps anzeigen";
 "Show skill backpacks" = "Fähigkeitsrucksäcke anzeigen";
@@ -2323,7 +2330,7 @@
 "Smooth Progression" = "Fließender Fortschritt";
 "Smooth music loops" = "Nahtlose Musikschleifen";
 "Smoother play" = "Flüssigeres Spiel";
-"Smoother results and saves" = "Flüssigere Ergebnisse und Speichervorgänge";
+"Smoother play and shining arrows" = "Flüssigeres Spiel und glänzende Pfeile";
 "Solo / Hot Seat" = "Einzelspiel / Hot Seat";
 "Solo starts" = "Einzelspielstarts";
 "Solution" = "Lösung";
@@ -3181,6 +3188,3 @@
 "{0}/{1} packs" = "{0}/{1} Pakete";
 "{0}: replay analysis failed: {1}" = "{0}: Wiedergabeanalyse fehlgeschlagen: {1}";
 "{0}{1} more to rescue for three stars." = "Noch {0}{1} retten für drei Sterne.";
-"GHOST SOLUTION" = "GEISTERLÖSUNG";
-"Show ghost solution?" = "Geisterlösung anzeigen?";
-"SHOW" = "ANZEIGEN";
