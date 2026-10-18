@@ -149,6 +149,7 @@ enum PanelButton: Equatable {
   var panelImage: CGImage?
   var neoSprites: NeoLemmixSpriteSet?
   var terrainImage: CGImage?
+  private let minimapThumbnail = GameMinimapThumbnail()
   /// The skill bar belongs to a level in progress, not to a menu.
   var isMenuMode = false {
     didSet { if oldValue != isMenuMode { needsDisplay = true; window?.invalidateCursorRects(for: self) } }
@@ -756,9 +757,10 @@ enum PanelButton: Equatable {
     let drawn = minimapContentFrame.size
     let origin = minimapContentFrame.origin
 
-    if let terrainImage {
+    if let terrainImage, let context = NSGraphicsContext.current?.cgContext {
       NSGraphicsContext.current?.imageInterpolation = .none
-      NSImage(cgImage: terrainImage, size: levelSize).draw(
+      let map = minimapThumbnail.image(for: terrainImage, in: CGRect(origin: origin, size: drawn), context: context) ?? terrainImage
+      NSImage(cgImage: map, size: levelSize).draw(
         in: CGRect(origin: origin, size: drawn), from: .zero,
         operation: .sourceOver, fraction: isMonochrome ? 1 : 0.8, respectFlipped: true, hints: nil)
     }

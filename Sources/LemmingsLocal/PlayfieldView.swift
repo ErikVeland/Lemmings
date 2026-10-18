@@ -1497,6 +1497,8 @@ struct ReticleFeedback {
       height: min(ceil(rawHeight / imageScale) * imageScale, imageSize.height - originY))
   }
 
+  private var levelCrop: (source: CGImage, rect: CGRect, image: CGImage)?
+
   private func drawLevel(_ image: CGImage) {
     // Crop in image pixels. CGImage uses a top-left origin, which matches the
     // level coordinate system, so no vertical flip is needed here.
@@ -1507,7 +1509,16 @@ struct ReticleFeedback {
     let crop = Self.levelCropRect(
       visible: visible, imageScale: imageScale,
       imageSize: CGSize(width: image.width, height: image.height))
-    guard crop.width > 0, crop.height > 0, let cropped = image.cropping(to: crop) else { return }
+    guard crop.width > 0, crop.height > 0 else { return }
+    // A retained crop keeps Core Graphics' colour-matched copy between ticks.
+    let cropped: CGImage
+    if let retained = levelCrop, retained.source === image, retained.rect == crop {
+      cropped = retained.image
+    } else {
+      guard let made = image.cropping(to: crop) else { return }
+      levelCrop = (image, crop, made)
+      cropped = made
+    }
 
     let origin = viewport.viewPoint(fromLevel: CGPoint(x: crop.minX / imageScale, y: crop.minY / imageScale))
     let destination = CGRect(

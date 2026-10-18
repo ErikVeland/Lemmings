@@ -581,6 +581,8 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     /// Prioritise rescue progress and the clock. Extra statistics use available horizontal space.
+    /// Each statistic owns a fixed slot sized for its widest possible value, and its text stays
+    /// centred in that slot. Changing digits, states or speeds never moves another statistic.
     public static func statusFields(in frame: CGRect, snapshot: MobileGameSnapshot, details: StatusDetails?,
                                     engineIdentifier: String, paused: Bool, speed: Double,
                                     typography: GameMenuTypography?) -> [StatusField] {
@@ -589,53 +591,79 @@ public enum MobileHUDAction: Equatable, Sendable {
         let gap: CGFloat = compact ? 8 : 20
         let row = frame.insetBy(dx: 6, dy: 2)
         let percent = snapshot.saved * 100 / max(1, snapshot.total)
+        let minutes = max(0, snapshot.remainingSeconds ?? 0) / 60
         let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
         let bitmap = compact || typography == nil
         func width(_ text: String, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGFloat {
             if bitmap { return CGFloat(GamePixelTypography.width(of: text)) * scale }
             return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: 1) ?? 0
         }
+        // Slot templates use the widest digit at the largest digit count a value can reach.
+        let digit = (0...9).map(String.init).max { width($0) < width($1) } ?? "8"
+        func wide(_ bound: Int) -> String { String(repeating: digit, count: String(max(0, bound)).count) }
+        let count = wide(max(snapshot.total, snapshot.saved, snapshot.released))
+        let clockTemplate = "\(wide(max(10, minutes))):\(digit)\(digit)"
         let clock = compact ? time : L10n.text("TIME \(time)")
-        let clockWidth = width(clock)
+        let clockWidth = max(width(clock), width(compact ? clockTemplate : L10n.text("TIME \(clockTemplate)")))
         let scoreScale: CGFloat = bitmap ? 2 : 1
         let scoreFace: GameMenuTypography.Face = !bitmap && frame.width >= 1200 ? .large : .small
-        var score = compact ? "\(snapshot.saved)/\(snapshot.required) \(percent)%"
-            : L10n.text("HOME \(snapshot.saved)/\(snapshot.required)") + " (\(percent)%)"
-        if width(score, scale: scoreScale, face: scoreFace) + clockWidth + gap > row.width {
-            score = "\(snapshot.saved)/\(snapshot.required)"
+        func scoreText(_ saved: String, _ percent: String, full: Bool) -> String {
+            guard full else { return "\(saved)/\(snapshot.required)" }
+            return compact ? "\(saved)/\(snapshot.required) \(percent)%"
+                : L10n.text("HOME \(saved)/\(snapshot.required)") + " (\(percent)%)"
         }
-        let scoreWidth = min(row.width, width(score, scale: scoreScale, face: scoreFace))
-        let scoreFrame = CGRect(x: row.maxX - scoreWidth, y: row.minY, width: scoreWidth, height: row.height)
-        var fields = [StatusField(id: "score", text: score, frame: scoreFrame, palette: .green,
-                                  bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
+        let full = width(scoreText(count, wide(100), full: true), scale: scoreScale, face: scoreFace) + clockWidth + gap <= row.width
+        let score = scoreText("\(snapshot.saved)", "\(percent)", full: full)
+        let scoreSlot = min(row.width, width(scoreText(count, wide(100), full: full), scale: scoreScale, face: scoreFace))
+        let scoreFrame = CGRect(x: row.maxX - scoreSlot, y: row.minY, width: scoreSlot, height: row.height)
+        func centred(_ text: String, in slot: CGRect, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGRect {
+            let extent = min(slot.width, width(text, scale: scale, face: face))
+            return CGRect(x: floor(slot.midX - extent / 2), y: slot.minY, width: extent, height: slot.height)
+        }
+        var fields = [StatusField(id: "score", text: score, frame: centred(score, in: scoreFrame, scale: scoreScale, face: scoreFace),
+                                  palette: .green, bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
         let available = max(0, scoreFrame.minX - gap - row.minX)
         guard available >= clockWidth else { return fields }
-        var candidates: [(String, String)] = [("time", clock)]
-        if snapshot.isComplete { candidates.append(("state", snapshot.didWin ? L10n.text("COMPLETE") : L10n.text("FAILED"))) }
-        else if snapshot.isEndingRun { candidates.append(("state", L10n.text("NUKING"))) }
-        else if paused { candidates.append(("state", L10n.text("PAUSED"))) }
-        if let details { candidates.append(("allowance", details.deathCounter)) }
-        candidates.append(("out", L10n.text("OUT \(snapshot.released)/\(snapshot.total)")))
-        if let details { candidates.append(("lost", L10n.text("LOST \(details.lost)"))) }
-        if engineIdentifier == "lemmings3" { candidates.append(("reserve", L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))"))) }
-        if let rate = snapshot.releaseRate { candidates.append(("rate", L10n.text("RATE \(rate)"))) }
-        candidates.append(("speed", L10n.text("SPEED \(speedLabel(speed))")))
-        var selected: [(String, String)] = []
+        // The state slot is reserved even while empty so a pause never shifts its neighbours.
+        let states = [L10n.text("COMPLETE"), L10n.text("FAILED"), L10n.text("NUKING"), L10n.text("PAUSED")]
+        let state = snapshot.isComplete ? (snapshot.didWin ? states[0] : states[1])
+            : snapshot.isEndingRun ? states[2] : paused ? states[3] : ""
+        let speeds = ["\(digit)\(digit)X", "\(digit).\(digit)X"].map { L10n.text("SPEED \($0)") }
+        var candidates: [(id: String, text: String, slot: CGFloat)] = [("time", clock, clockWidth),
+            ("state", state, states.map { width($0) }.max() ?? 0)]
+        if let details {
+            candidates.append(("allowance", details.deathCounter,
+                max(width("SAFE"), width("\(count)/\(count) 💀"), width(details.deathCounter))))
+        }
+        candidates.append(("out", L10n.text("OUT \(snapshot.released)/\(snapshot.total)"),
+                           width(L10n.text("OUT \(count)/\(snapshot.total)"))))
+        if let details { candidates.append(("lost", L10n.text("LOST \(details.lost)"), width(L10n.text("LOST \(count)")))) }
+        if engineIdentifier == "lemmings3" {
+            candidates.append(("reserve", L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))"),
+                               width(L10n.text("LEFT \(count)"))))
+        }
+        if let rate = snapshot.releaseRate {
+            candidates.append(("rate", L10n.text("RATE \(rate)"), width(L10n.text("RATE \(wide(max(99, rate)))"))))
+        }
+        let speedText = L10n.text("SPEED \(speedLabel(speed))")
+        candidates.append(("speed", speedText, max(width(speedText), speeds.map { width($0) }.max() ?? 0)))
+        var selected: [(id: String, text: String, slot: CGFloat)] = []
         var used: CGFloat = 0
         for candidate in candidates {
-            let needed = width(candidate.1) + (selected.isEmpty ? 0 : gap)
+            let needed = candidate.slot + (selected.isEmpty ? 0 : gap)
             if used + needed <= available { selected.append(candidate); used += needed }
         }
         // Stable groups read left to right, with the clock nearest the rescue score.
-        selected = selected.filter { $0.0 != "time" } + selected.filter { $0.0 == "time" }
-        let spacing = selected.count > 1 ? (available - selected.reduce(0) { $0 + width($1.1) }) / CGFloat(selected.count - 1) : 0
+        selected = selected.filter { $0.id != "time" } + selected.filter { $0.id == "time" }
+        let spacing = selected.count > 1 ? (available - selected.reduce(0) { $0 + $1.slot }) / CGFloat(selected.count - 1) : 0
         var x = selected.count == 1 ? row.minX + available - clockWidth : row.minX
-        for (id, text) in selected {
-            let extent = width(text)
-            fields.append(StatusField(id: id, text: text,
-                frame: CGRect(x: floor(x), y: row.minY, width: extent, height: row.height),
-                palette: .blue, bitmapOnly: bitmap, scale: 1, face: .small))
-            x += extent + spacing
+        for candidate in selected {
+            let slot = CGRect(x: floor(x), y: row.minY, width: candidate.slot, height: row.height)
+            if !candidate.text.isEmpty {
+                fields.append(StatusField(id: candidate.id, text: candidate.text, frame: centred(candidate.text, in: slot),
+                    palette: .blue, bitmapOnly: bitmap, scale: 1, face: .small))
+            }
+            x += candidate.slot + spacing
         }
         return fields
     }

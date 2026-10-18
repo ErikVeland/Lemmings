@@ -455,7 +455,7 @@ public final class ClassicMobileSession: MobileGameSession {
         ghostSolutionEnabled = previous.ghostSolutionEnabled
     }
 
-    private func drawSolutionGhost(into pixels: inout [UInt8], width: Int, height: Int, scale: Int) {
+    private func drawSolutionGhost(into pixels: inout Data, width: Int, height: Int, scale: Int) {
         guard ghostSolutionEnabled, solutionGhost != nil else { return }
         solutionGhost?.synchronise(to: simulation.tickCount)
         guard let ghost = solutionGhost else { return }
@@ -465,7 +465,7 @@ public final class ClassicMobileSession: MobileGameSession {
                 width: sprite.frame.width, height: sprite.frame.height, pixelScale: scale)
             if ghostFrames.count >= 512 { ghostFrames.removeAll(keepingCapacity: true) }
             ghostFrames[sprite.cacheKey] = frame
-            Self.composite([UInt8](frame.rgba), sourceWidth: frame.width, sourceHeight: frame.height,
+            Self.composite(frame.rgba, sourceWidth: frame.width, sourceHeight: frame.height,
                 atX: Int(sprite.rect.x * Double(scale)) - frame.padding,
                 y: Int(sprite.rect.y * Double(scale)) - frame.padding,
                 into: &pixels, width: width, height: height)
@@ -481,8 +481,9 @@ public final class ClassicMobileSession: MobileGameSession {
             terrainFrame = nativeScene?.terrainFrame(terrain: simulation.terrain)
                 ?? ClassicSceneFrame.terrainRGBA(renderedLevel, terrain: simulation.terrain)
         }
-        var pixels = [UInt8](nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
-            ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame))
+        // The frame stays in one buffer from composition to presentation.
+        var pixels = nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
+            ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
         drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
         if assets != nil, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
@@ -490,7 +491,7 @@ public final class ClassicMobileSession: MobileGameSession {
                    !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
                        enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
                 if let sprite = spriteHighlight(lemming) {
-                    Self.composite([UInt8](sprite.frame.rgba), sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
+                    Self.composite(sprite.frame.rgba, sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
                         atX: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)), into: &pixels, width: width, height: height)
                 }
             }
@@ -507,11 +508,13 @@ public final class ClassicMobileSession: MobileGameSession {
             Self.drawReticle(highlight, into: &pixels, width: width, height: height, scale: scale)
         }
         if settings?.colorDepth == .amigaOCS {
-            for offset in stride(from: 0, to: pixels.count, by: 4) {
-                for channel in 0..<3 { pixels[offset + channel] = UInt8((Int(pixels[offset + channel]) * 15 + 127) / 255 * 17) }
+            pixels.withUnsafeMutableBytes { (pixels: UnsafeMutableRawBufferPointer) in
+                for offset in stride(from: 0, to: pixels.count, by: 4) {
+                    for channel in 0..<3 { pixels[offset + channel] = UInt8((Int(pixels[offset + channel]) * 15 + 127) / 255 * 17) }
+                }
             }
         }
-        let frame = try MobilePixelFrame(width: width, height: height, rgba: Data(pixels))
+        let frame = try MobilePixelFrame(width: width, height: height, rgba: pixels)
         cachedRender = (highlight, frame)
         return frame
     }
@@ -900,40 +903,44 @@ public final class ClassicMobileSession: MobileGameSession {
         return (pixels, outputWidth, padding)
     }
 
+    /// Reads sprite bytes in place. Each actor's frame is composited every tick.
     private static func composite(
-        _ source: [UInt8],
+        _ source: Data,
         sourceWidth: Int,
         sourceHeight: Int,
         atX originX: Int,
         y originY: Int,
-        into destination: inout [UInt8],
+        into destination: inout Data,
         width: Int,
         height: Int
     ) {
-        guard source.count == sourceWidth * sourceHeight * 4 else { return }
-        for y in 0..<sourceHeight {
-            let destinationY = originY + y
-            guard (0..<height).contains(destinationY) else { continue }
-            for x in 0..<sourceWidth {
-                let destinationX = originX + x
-                guard (0..<width).contains(destinationX) else { continue }
-                let src = (y * sourceWidth + x) * 4
-                let alpha = Int(source[src + 3])
-                guard alpha > 0 else { continue }
-                let dst = (destinationY * width + destinationX) * 4
-                if alpha == 255 {
-                    destination[dst] = source[src]
-                    destination[dst + 1] = source[src + 1]
-                    destination[dst + 2] = source[src + 2]
-                    destination[dst + 3] = 255
-                } else {
-                    let inverse = 255 - alpha
-                    for channel in 0..<3 {
-                        destination[dst + channel] = UInt8(
-                            (Int(source[src + channel]) * alpha + Int(destination[dst + channel]) * inverse) / 255
-                        )
+        guard source.count == sourceWidth * sourceHeight * 4, destination.count >= width * height * 4 else { return }
+        let rows = max(0, -originY)..<min(sourceHeight, height - originY)
+        let columns = max(0, -originX)..<min(sourceWidth, width - originX)
+        guard !rows.isEmpty, !columns.isEmpty else { return }
+        source.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
+            destination.withUnsafeMutableBytes { (destination: UnsafeMutableRawBufferPointer) in
+                for y in rows {
+                    let sourceRow = y * sourceWidth, destinationRow = (originY + y) * width + originX
+                    for x in columns {
+                        let src = (sourceRow + x) * 4
+                        let alpha = Int(source[src + 3])
+                        guard alpha > 0 else { continue }
+                        let dst = (destinationRow + x) * 4
+                        if alpha == 255 {
+                            destination[dst] = source[src]
+                            destination[dst + 1] = source[src + 1]
+                            destination[dst + 2] = source[src + 2]
+                        } else {
+                            let inverse = 255 - alpha
+                            for channel in 0..<3 {
+                                destination[dst + channel] = UInt8(
+                                    (Int(source[src + channel]) * alpha + Int(destination[dst + channel]) * inverse) / 255
+                                )
+                            }
+                        }
+                        destination[dst + 3] = 255
                     }
-                    destination[dst + 3] = 255
                 }
             }
         }
@@ -941,7 +948,7 @@ public final class ClassicMobileSession: MobileGameSession {
 
     private static func drawReticle(
         _ selection: MobileTargetSelection,
-        into pixels: inout [UInt8],
+        into pixels: inout Data,
         width: Int,
         height: Int, scale: Int = 1
     ) {

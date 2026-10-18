@@ -62,6 +62,11 @@ import UIKit
     private let bombCountdownView = MobileBombCountdownView()
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
+    // Core Animation scales the engine bitmap on the GPU. CPU drawing covers only the overlays above it.
+    private let bitmapClip = CALayer()
+    private let bitmapLayer = CALayer()
+    private var layerBitmap: CGImage?
+    private let overlay = MobilePlayfieldOverlay()
     private let failureMood = FailureMoodTransition()
     private var failureAmount: CGFloat = 0
     #if os(iOS)
@@ -85,6 +90,17 @@ import UIKit
         backgroundColor = .black
         isOpaque = true
         contentMode = .redraw
+        let immediate: [String: any CAAction] = ["contents": NSNull(), "bounds": NSNull(), "position": NSNull(), "hidden": NSNull()]
+        bitmapClip.actions = immediate
+        bitmapClip.masksToBounds = true
+        bitmapClip.isHidden = true
+        bitmapLayer.actions = immediate
+        bitmapLayer.magnificationFilter = .nearest
+        bitmapLayer.minificationFilter = .nearest
+        bitmapClip.addSublayer(bitmapLayer)
+        layer.addSublayer(bitmapClip)
+        overlay.drawContent = { [weak self] context in self?.drawOverlay(in: context) }
+        addSubview(overlay)
         #if os(iOS)
         isMultipleTouchEnabled = true
         let shuffle = UITapGestureRecognizer(target: self, action: #selector(shuffleTapped(_:)))
@@ -294,13 +310,50 @@ import UIKit
         onTouchEffects?(router.cancel())
     }
 
-    override func draw(_ rect: CGRect) {
-        guard tube?.isHidden != false, let context = UIGraphicsGetCurrentContext(), let bitmap else { return }
+    override func setNeedsDisplay() {
+        super.setNeedsDisplay()
+        layoutBitmap()
+    }
+
+    /// Larger bitmaps than every supported GPU's texture limit keep the CPU path.
+    private var bitmapUsesLayer: Bool { bitmap.map { max($0.width, $0.height) <= 8192 } ?? false }
+
+    /// Places the bitmap with the camera used for touch input. Fractional pan keeps its pixel alignment.
+    private func layoutBitmap() {
+        let content = gameViewport.contentFrame
+        let flat = tube?.isHidden != false
+        if flat, let bitmap, bitmapUsesLayer, content.width > 0, content.height > 0 {
+            if layerBitmap !== bitmap { bitmapLayer.contents = bitmap; layerBitmap = bitmap }
+            let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
+            bitmapClip.frame = CGRect(x: content.x, y: content.y, width: content.width, height: content.height)
+            bitmapLayer.frame = CGRect(x: -gameViewport.origin.x * scaleX, y: -gameViewport.origin.y * scaleY,
+                width: gameViewport.levelSize.width * scaleX, height: gameViewport.levelSize.height * scaleY)
+            bitmapClip.isHidden = false
+        } else {
+            bitmapClip.isHidden = true
+            bitmapLayer.contents = nil; layerBitmap = nil
+        }
+        // An empty overlay keeps no backing store and costs no drawing.
+        let showsOverlay = flat && bitmap != nil && (!bitmapUsesLayer || hasOverlayContent)
+        overlay.isHidden = !showsOverlay
+        if showsOverlay { overlay.setNeedsDisplay() }
+    }
+
+    private var hasOverlayContent: Bool {
+        (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil
+            || (assignmentSprite != nil && assignmentProgress != nil) || !explosions.isEmpty
+            || cursorPoint != nil || failureAmount > 0
+    }
+
+    private func drawOverlay(in context: CGContext) {
+        guard tube?.isHidden != false, let bitmap else { return }
         let drawStarted = ProcessInfo.processInfo.systemUptime
         defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "bitmap") }
-        context.setFillColor(CGColor(gray: 0, alpha: 1))
-        context.fill(bounds)
-        MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
+        if !bitmapUsesLayer {
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(bounds)
+            MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
+        }
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -315,6 +368,7 @@ import UIKit
     override func layoutSubviews() {
         super.layoutSubviews()
         decoration.frame = bounds
+        overlay.frame = bounds
         hdr?.frame = bounds
         guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)
@@ -334,6 +388,7 @@ import UIKit
         guard let tube else { return }
         tube.frame = bounds
         tube.isHidden = displaySettings.display == .flat || bitmap == nil
+        layoutBitmap()
         guard !tube.isHidden, let bitmap, bounds.width > 1, bounds.height > 1 else { return }
         // Draw at native vertical resolution. The tube supplies the final display scale.
         let width = max(1, Int(ceil(bounds.width / max(0.1, gameViewport.zoom) * renderScale)))
@@ -566,6 +621,24 @@ import UIKit
 #if os(iOS)
 extension MobilePlayfieldView: UIPointerInteractionDelegate {}
 #endif
+/// Selection, cursor and effect overlays above the GPU-scaled bitmap.
+@MainActor private final class MobilePlayfieldOverlay: UIView {
+    var drawContent: ((CGContext) -> Void)?
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        accessibilityElementsHidden = true
+        isOpaque = false
+        backgroundColor = .clear
+        contentMode = .redraw
+        isHidden = true
+    }
+    required init?(coder: NSCoder) { nil }
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        drawContent?(context)
+    }
+}
 @MainActor private final class MobilePlayfieldDecoration: UIView {
     var rescueAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }
     override func draw(_ rect: CGRect) {

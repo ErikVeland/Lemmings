@@ -6,11 +6,12 @@ import UIKit
 
 /// The level overview with its current camera window.
 @MainActor final class MobileMinimapView: UIView {
-    var image: CGImage? { didSet { setNeedsDisplay() } }
-    var visible = CGRect.zero { didSet { setNeedsDisplay() } }
-    var levelSize = CGSize.zero { didSet { setNeedsDisplay() } }
+    var image: CGImage? { didSet { if oldValue !== image { setNeedsDisplay() } } }
+    var visible = CGRect.zero { didSet { if oldValue != visible { setNeedsDisplay() } } }
+    var levelSize = CGSize.zero { didSet { if oldValue != levelSize { setNeedsDisplay() } } }
     var overlay = false
     var onSeek: ((CGPoint) -> Void)?
+    private let thumbnail = GameMinimapThumbnail()
 
     /// The level, fitted whole inside the touch area.
     var content: CGRect {
@@ -29,7 +30,8 @@ import UIKit
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        GameMinimapArt.draw(in: context, bounds: bounds, image: image, visible: visible, levelSize: levelSize, overlay: overlay)
+        GameMinimapArt.draw(in: context, bounds: bounds, image: image, visible: visible, levelSize: levelSize, overlay: overlay,
+                            thumbnail: thumbnail)
     }
     override func accessibilityIncrement() { seek(1) }
     override func accessibilityDecrement() { seek(-1) }
