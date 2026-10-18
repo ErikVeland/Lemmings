@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Loads user-selected DOS data once and creates sessions from the authored order.
@@ -455,6 +456,44 @@ public final class ClassicMobileSession: MobileGameSession {
         ghostSolutionEnabled = previous.ghostSolutionEnabled
     }
 
+    private var ghostPlayback: HotSeatGhostPlayback?
+    public var hotSeatGhosts: HotSeatGhostPlayback? {
+        get { ghostPlayback }
+        set { ghostPlayback = newValue; cachedRender = nil }
+    }
+    public var actionReplayInitial: ActionReplayState? { .classic(levelInitial) }
+
+    public func actionCapture() throws -> MobileActionCapture? {
+        // Older checkpoints without history start part-way through. Their commands cannot replay from tick 0.
+        guard !isReadOnly, replayInitial.tickCount == 0 else { return nil }
+        let commands = try history.appliedCommands.map {
+            try LeaderboardActionReplay.Command.classic(.init(tick: $0.tick, action: $0.action, afterTick: true))
+        }
+        return .init(initial: .classic(levelInitial), final: .classic(simulation), commands: commands)
+    }
+
+    private func drawHotSeatGhosts(into pixels: inout Data, width: Int, height: Int, scale: Int) {
+        guard ghostPlayback != nil else { return }
+        let ghosts = ghostPlayback!.states(at: simulation.tickCount) { state -> ClassicDOSSimulation? in
+            if case let .classic(ghost) = state { return ghost }
+            return nil
+        }
+        for ghost in ghosts {
+            for lemming in ghost.state.lemmings where lemming.isActive {
+                guard let sprite = spriteHighlight(lemming) else { continue }
+                let key = "\(sprite.cacheKey)|\(ghost.colour.rawValue)"
+                let frame = ghostFrames[key] ?? SolutionGhostPixels(rgba: sprite.frame.rgba,
+                    width: sprite.frame.width, height: sprite.frame.height, pixelScale: scale, colour: ghost.colour)
+                if ghostFrames.count >= 512 { ghostFrames.removeAll(keepingCapacity: true) }
+                ghostFrames[key] = frame
+                Self.composite(frame.rgba, sourceWidth: frame.width, sourceHeight: frame.height,
+                    atX: Int(sprite.rect.x * Double(scale)) - frame.padding,
+                    y: Int(sprite.rect.y * Double(scale)) - frame.padding,
+                    into: &pixels, width: width, height: height)
+            }
+        }
+    }
+
     private func drawSolutionGhost(into pixels: inout Data, width: Int, height: Int, scale: Int) {
         guard ghostSolutionEnabled, solutionGhost != nil else { return }
         solutionGhost?.synchronise(to: simulation.tickCount)
@@ -495,6 +534,7 @@ public final class ClassicMobileSession: MobileGameSession {
         var pixels = native?.rgba
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
         drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
+        drawHotSeatGhosts(into: &pixels, width: width, height: height, scale: scale)
         if assets != nil, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
                 if lemming.action == .exploding,

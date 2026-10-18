@@ -155,6 +155,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
             levelFingerprint: fingerprint, panelFrame: panel,
             directionPickerFrames: try renderer.directionPickerFrames(), renderer: renderer.render,
+            ghostRenderer: renderer.render,
             soundBank: soundBank) { [weak self] completed in
                 self?.record(completed, at: localIndex, tribe: tribe)
             }

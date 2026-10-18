@@ -28,7 +28,7 @@ swiftc -swift-version 6 -D HOT_SEAT_GHOST_TESTS -target "$(uname -m)-apple-macos
   -Xlinker -rpath -Xlinker "$shared_dir" -F "${sparkle_framework:h}" -framework Sparkle \
   -Xlinker -rpath -Xlinker "${sparkle_framework:h}" \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
-  -o "$test_app/Contents/MacOS/HotSeatGhostTests" "${sources[@]}" Tests/HotSeatGhostTests/core.swift Tests/HotSeatGhostTests/main.swift
+  -o "$test_app/Contents/MacOS/HotSeatGhostTests" "${sources[@]}" Tests/HotSeatGhostTests/core.swift Tests/HotSeatGhostTests/mobile.swift Tests/HotSeatGhostTests/main.swift
 if [[ "${TEST_COMPILE_ONLY:-0}" != 1 ]]; then
   python3 Tools/UITestRunner/run.py "$test_app/Contents/MacOS/HotSeatGhostTests"
 fi

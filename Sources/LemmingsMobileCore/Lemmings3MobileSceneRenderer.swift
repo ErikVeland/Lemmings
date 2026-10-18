@@ -60,6 +60,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     private let toolFrames: [Int: SequelIndexedImage]
     private let creatureBanks: [Lemmings3Runtime.Creature.Kind: CreatureBank]
     private let animatedObjects: [Int: AnimatedObject]
+    private let ghostCache = MobileGhostSpriteCache()
 
     public init(scene: Lemmings3Scene, style: Lemmings3Style,
                 sprites: Lemmings3Sprites, palette: [UInt8],
@@ -131,6 +132,11 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     }
 
     public func render(_ runtime: Lemmings3Runtime, highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        try render(runtime, highlight: highlight, ghosts: [])
+    }
+
+    public func render(_ runtime: Lemmings3Runtime, highlight: MobileTargetSelection?,
+                       ghosts: [MobileReplayGhost<Lemmings3Runtime>]) throws -> MobilePixelFrame {
         let width = scene.image.width
         let height = scene.image.height
         guard width > 0, height > 0, width <= Int.max / height,
@@ -170,6 +176,23 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         for fireball in runtime.fireballs {
             Self.compositeFireball(x: fireball.x - 3, y: fireball.y - 2,
                                    width: width, height: height, into: &rgba)
+        }
+        for ghost in ghosts {
+            for lemming in ghost.state.lemmings where lemming.active {
+                let animationIndex = lemming.direction > 0 ? 0 : 1
+                guard animations.indices.contains(animationIndex),
+                      !animations[animationIndex].frames.isEmpty else { continue }
+                let animation = animations[animationIndex]
+                let index = (lemming.state == .blocking ? 0 : lemming.age) % animation.frames.count
+                guard let pixels = ghostCache.ghost(key: "\(animationIndex)-\(index)", colour: ghost.colour, sprite: {
+                    var sprite = [UInt8](repeating: 0, count: animation.width * animation.height * 4)
+                    Self.composite(animation.frames[index], animation: animation, palette: palette, x: 0, y: 0,
+                                   width: animation.width, height: animation.height, into: &sprite)
+                    return (sprite, animation.width, animation.height)
+                }) else { continue }
+                MobileGhostSpriteCache.blend(pixels, atX: lemming.x - animation.width / 2,
+                    y: lemming.y - animation.height, into: &rgba, width: width, height: height)
+            }
         }
         for lemming in runtime.lemmings where lemming.active {
             let animationIndex = lemming.direction > 0 ? 0 : 1

@@ -1,9 +1,17 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 public typealias Lemmings2MobileRenderer = (
     _ runtime: Lemmings2Runtime,
     _ highlight: MobileTargetSelection?
+) throws -> MobilePixelFrame
+
+/// Draws earlier Hot Seat turns behind the live lemmings.
+public typealias Lemmings2MobileGhostRenderer = (
+    _ runtime: Lemmings2Runtime,
+    _ highlight: MobileTargetSelection?,
+    _ ghosts: [MobileReplayGhost<Lemmings2Runtime>]
 ) throws -> MobilePixelFrame
 
 public final class Lemmings2MobileSession: MobileGameSession {
@@ -44,6 +52,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     private let initial: Lemmings2Runtime
     private let renderer: Lemmings2MobileRenderer?
+    private let ghostRenderer: Lemmings2MobileGhostRenderer?
+    public var hotSeatGhosts: HotSeatGhostPlayback?
     private var runtime: Lemmings2Runtime
     public let soundBank: Lemmings2SoundBank?
     private var soundRequests: [Lemmings2SoundRequest] = []
@@ -68,9 +78,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         levelIndex: Int,
         levelFingerprint: String,
         renderer: Lemmings2MobileRenderer? = nil,
+        ghostRenderer: Lemmings2MobileGhostRenderer? = nil,
         soundBank: Lemmings2SoundBank? = nil,
         onCompletion: ((Lemmings2Runtime) -> Void)? = nil
     ) {
+        self.ghostRenderer = ghostRenderer
         initial = runtime
         self.runtime = runtime
         self.engineFingerprint = engineFingerprint
@@ -213,7 +225,27 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
         guard let renderer else { throw MobileSessionError.frameUnavailable }
+        if let ghostRenderer, hotSeatGhosts != nil {
+            let ghosts = hotSeatGhosts!.states(at: runtime.tick) { state -> Lemmings2Runtime? in
+                if case let .lemmings2(ghost) = state { return ghost }
+                return nil
+            }
+            if !ghosts.isEmpty { return try ghostRenderer(runtime, highlight, ghosts) }
+        }
         return try renderer(runtime, highlight)
+    }
+
+    public var actionReplayInitial: ActionReplayState? { .lemmings2(initial) }
+
+    public func actionCapture() -> MobileActionCapture? {
+        let commands = inputs.map { input -> LeaderboardActionReplay.Command in
+            switch input {
+            case let .assign(tick, control, target): .init(tick: tick, action: "assign", lemming: target, skill: control)
+            case let .endRun(tick): .init(tick: tick, action: "nuke")
+            case let .fan(tick, x, y, active): .init(tick: tick, action: "fan", x: x, y: y, held: active)
+            }
+        }
+        return .init(initial: .lemmings2(initial), final: .lemmings2(runtime), commands: commands)
     }
 
     public func checkpointPayload() throws -> Data {
@@ -336,6 +368,13 @@ public typealias Lemmings3MobileRenderer = (
     _ highlight: MobileTargetSelection?
 ) throws -> MobilePixelFrame
 
+/// Draws earlier Hot Seat turns behind the live lemmings.
+public typealias Lemmings3MobileGhostRenderer = (
+    _ runtime: Lemmings3Runtime,
+    _ highlight: MobileTargetSelection?,
+    _ ghosts: [MobileReplayGhost<Lemmings3Runtime>]
+) throws -> MobilePixelFrame
+
 public final class Lemmings3MobileSession: MobileGameSession {
     private let skillStates = Lemmings3Runtime.Action.allCases.map {
         MobileSkillState(name: $0.rawValue.capitalized, count: 0, isUnlimited: true)
@@ -383,6 +422,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
+    private let ghostRenderer: Lemmings3MobileGhostRenderer?
+    public var hotSeatGhosts: HotSeatGhostPlayback?
     private var runtime: Lemmings3Runtime
     public let soundBank: Lemmings3SoundBank?
     private var soundCues: [PositionedSoundCue] = []
@@ -406,9 +447,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
         panelFrame: MobilePixelFrame? = nil,
         directionPickerFrames: [MobilePixelFrame] = [],
         renderer: Lemmings3MobileRenderer? = nil,
+        ghostRenderer: Lemmings3MobileGhostRenderer? = nil,
         soundBank: Lemmings3SoundBank? = nil,
         onCompletion: ((Lemmings3Runtime) -> Void)? = nil
     ) {
+        self.ghostRenderer = ghostRenderer
         initial = runtime
         self.runtime = runtime
         self.engineFingerprint = engineFingerprint
@@ -505,7 +548,9 @@ public final class Lemmings3MobileSession: MobileGameSession {
                 at: .init(x: Double(lemming.x), y: Double(lemming.y))))
         }
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
-        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: nil))
+        // A tool use follows the facing direction. Recording it keeps the shared action format exact.
+        let facing = action == .use ? lemming.map { ($0.direction > 0 ? Lemmings3Runtime.Direction.right : .left).rawValue } : nil
+        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: facing))
         return true
     }
 
@@ -549,7 +594,25 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
         guard let renderer else { throw MobileSessionError.frameUnavailable }
+        if let ghostRenderer, hotSeatGhosts != nil {
+            let ghosts = hotSeatGhosts!.states(at: runtime.tick) { state -> Lemmings3Runtime? in
+                if case let .lemmings3(ghost) = state { return ghost }
+                return nil
+            }
+            if !ghosts.isEmpty { return try ghostRenderer(runtime, highlight, ghosts) }
+        }
         return try renderer(runtime, highlight)
+    }
+
+    public var actionReplayInitial: ActionReplayState? { .lemmings3(initial) }
+
+    public func actionCapture() -> MobileActionCapture? {
+        // Runs saved before tool directions were recorded cannot be expressed exactly.
+        guard inputs.allSatisfy({ $0.action != Lemmings3Runtime.Action.use.rawValue || $0.direction != nil }) else { return nil }
+        let commands = inputs.map {
+            LeaderboardActionReplay.Command(tick: $0.tick, action: $0.action, lemming: $0.target, direction: $0.direction)
+        }
+        return .init(initial: .lemmings3(initial), final: .lemmings3(runtime), commands: commands)
     }
 
     public func checkpointPayload() throws -> Data {

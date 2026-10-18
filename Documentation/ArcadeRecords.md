@@ -65,6 +65,15 @@ The detailed pages separate three kinds of information:
 - **Run details:** most-used skill, time, none/all rescued, attempt history and
   maximum-rescue information.
 
+On iOS and tvOS, **Records** lists each level with stored scores. A level page
+shows **Replay** when the player has a saved action file for a Classic-family
+run. Replay plays the fastest clear, or the attempt with the most lemmings saved
+when no clear has a file. The replay is read-only and uses the same player as
+leaderboard action replays. The Mac plays saved replay movies from its boards
+instead. iOS and tvOS record no movies. L2, L3 and NeoLemmix runs save action
+files on iOS and tvOS, but the mobile app has no read-only player for them, so
+their pages show no Replay action.
+
 **Level Records** (Command-Shift-B) opens the current level's boards. The record
 browser also lets you revisit levels with stored scores. The three boards are:
 

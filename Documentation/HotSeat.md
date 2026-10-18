@@ -56,7 +56,7 @@ only resume in their matching shared campaign. Solo recovery cannot load them.
 A player/session mismatch preserves the run and asks you to resume its session.
 It does not report changed game rules or offer to discard that valid run.
 
-## Previous-player ghosts on Mac
+## Previous-player ghosts
 
 When another player retries the same level, their live attempt includes a silent
 ghost of each earlier player's latest completed turn, including losses. Each
@@ -81,8 +81,33 @@ the live renderer.
 
 Watch replay and saved replay movies include the ghosts visible during that
 attempt. Existing movies keep their recorded pixels. Leaderboard action replays
-remain individual runs. iOS and tvOS do not yet attach this Hot Seat archive;
-their existing Classic solution ghost is separate.
+remain individual runs. The Classic solution ghost is separate.
+
+### iOS and tvOS
+
+iPhone, iPad and Apple TV show the same ghosts in a Hot Seat session. The
+mobile Hot Seat roster gives the session ID and the player order, so the roster
+colours match the Mac order. Each completed turn, including a loss, replaces
+that player's ghost when the result is saved. A retry or the next player's turn
+loads the ghosts again for the new owner. The Ready handover stays paused until
+the player selects Ready. **Review** on the result page keeps the ghosts that
+the attempt showed. The solution replay shows no Hot Seat ghosts.
+
+Mobile engine limits:
+
+- Classic, L2 and L3 draw ghosts. NeoLemmix sessions record no ghost turns and
+  show no ghosts on iOS or tvOS.
+- L2 ghosts show the primary lemming sprite, as on Mac. Equipment,
+  projectiles, countdowns and blast particles are omitted.
+- L3 ghosts use the live two-direction animation mapping.
+- An L3 run saved by an earlier build can contain a facing-direction tool use
+  without a recorded direction. That turn creates no ghost or action file.
+  New L3 turns record the direction.
+- A Classic checkpoint from before rewind history starts part-way through the
+  level. That turn creates no ghost or action file.
+- The legacy `TVLibraryViewController` path, used only when an app registers
+  its own library sources, has no Hot Seat roster and shows no ghosts. The
+  shipped Apple TV app uses the shared mobile library.
 
 ## Playlists and shuffle
 
@@ -144,3 +169,12 @@ solution completed by two people does not become one person's individual record.
   also passed for NeoLemmix. Native NeoLemmix artwork and composited CRT/HDR
   output remain unchecked for this feature. MP4 export uses the existing
   encoder; this check verifies its source frames rather than decoding a new MP4.
+- The same script also runs the iOS and tvOS session checks with the shipped
+  Classic, L2 and L3 data. Each mobile command log must pass action-replay
+  validation and rebuild the exact final state. A second turn must draw the
+  ghost, keep the same input targets and live state, and draw the ghost again
+  after rewind. The checks also cover roster storage, own-turn exclusion,
+  session isolation, the Records **Replay** action and Classic playback of a
+  saved action file. `.build/hot-seat-ghosts/screens/mobile-*.png` holds each
+  ghost frame beside the plain frame for review. The iOS and tvOS view
+  controllers have no automated UI test for this feature.

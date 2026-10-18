@@ -6,6 +6,7 @@ import NxlvKit
  */
 public struct Lemmings2MobileSceneRenderer: Sendable {
     private let terrainCache = MobileIndexedTerrainCache()
+    private let ghostCache = MobileGhostSpriteCache()
     private let objects: Lemmings2Objects
     private let animations: [String: [Lemmings2SpriteFrame]]
     private let walker: Lemmings2Walker?
@@ -36,7 +37,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
      * Returns the current native playfield as an unscaled RGBA frame.
      */
     public func render(_ runtime: Lemmings2Runtime,
-                       highlight: MobileTargetSelection? = nil) throws -> MobilePixelFrame {
+                       highlight: MobileTargetSelection? = nil,
+                       ghosts: [MobileReplayGhost<Lemmings2Runtime>] = []) throws -> MobilePixelFrame {
         let width = runtime.configuration.width
         let height = runtime.configuration.height
         guard width > 0, height > 0, width <= Int.max / height,
@@ -82,6 +84,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                                width: width, height: height, into: &rgba)
             }
         }
+
+        drawGhosts(ghosts, palette: runtime.configuration.palette, width: width, height: height, into: &rgba)
 
         for lemming in runtime.lemmings where lemming.active && lemming.state != .trapped {
             if lemming.state == .exploding, lemming.age >= 17,
@@ -182,6 +186,37 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         }
     }
 
+    /// Ghosts show the primary lemming sprite only, as on Mac. Equipment and particles stay live-only.
+    private func drawGhosts(_ ghosts: [MobileReplayGhost<Lemmings2Runtime>], palette: [UInt8],
+                            width: Int, height: Int, into rgba: inout [UInt8]) {
+        for ghost in ghosts {
+            for lemming in ghost.state.lemmings where lemming.active && lemming.state != .trapped
+                && !(lemming.state == .exploding && lemming.age >= 17) {
+                let frame: Lemmings2SpriteFrame, x: Int, y: Int, mirrored: Bool, key: String
+                if lemming.state == .walking, let walker {
+                    let phase = Lemmings2Walker.phase(x: lemming.x, direction: lemming.direction)
+                    frame = walker.frames[phase]
+                    x = lemming.x - 2 + frame.x; y = lemming.y - 10 + frame.y
+                    mirrored = false; key = "walker-\(phase)"
+                } else {
+                    guard let pose = sprite(for: lemming, tribe: ghost.state.configuration.tribe),
+                          let frames = animations[pose.name], !frames.isEmpty else { continue }
+                    let index = pose.phase % frames.count
+                    frame = frames[index]
+                    x = lemming.x + pose.offsetX + frame.x; y = lemming.y + pose.offsetY + frame.y
+                    mirrored = pose.mirrored; key = "\(pose.name)-\(index)-\(mirrored)"
+                }
+                guard let pixels = ghostCache.ghost(key: key, colour: ghost.colour, sprite: {
+                    var sprite = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
+                    Self.composite(frame, palette: palette, atX: 0, y: 0, width: frame.width, height: frame.height,
+                                   mirrored: mirrored, into: &sprite)
+                    return (sprite, frame.width, frame.height)
+                }) else { continue }
+                MobileGhostSpriteCache.blend(pixels, atX: x, y: y, into: &rgba, width: width, height: height)
+            }
+        }
+    }
+
     public func makeSession(runtime: Lemmings2Runtime, engineFingerprint: String,
                             levelIdentifier: String, levelIndex: Int,
                             levelFingerprint: String,
@@ -192,6 +227,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                               levelFingerprint: levelFingerprint,
                               renderer: { [self] runtime, highlight in
             try render(runtime, highlight: highlight)
+        }, ghostRenderer: { [self] runtime, highlight, ghosts in
+            try render(runtime, highlight: highlight, ghosts: ghosts)
         }, soundBank: soundBank, onCompletion: onCompletion)
     }
 

@@ -42,7 +42,7 @@ subsequent sequel and supported NeoLemmix source work and its remaining limits.
 | Collections | Shared authoritative playlist store with mobile adapters; legacy favourites, recents, playlist order, run position and shuffle seed retained |
 | Rewind and replay | Backward/forward step, held rewind, saved rewind history, read-only review with the last three successful skill uses and their ticks, verified solutions, cancellable movie export with offline effect audio |
 | Teaching | Progressive hints, bundled learning journey with saved solo/Hot Seat lookup, revisit/defer progress, shared source revisions and real progression-policy analysis |
-| Hot Seat | Attempt-owner records, scoped checkpoints, paused Ready pages, transactional turn saves and duplicate transition guards |
+| Hot Seat | Attempt-owner records, scoped checkpoints, paused Ready pages, transactional turn saves, duplicate transition guards and previous-player ghosts for Classic, L2 and L3 |
 | Online | Shared Game Center IDs and score rules, iOS authentication adapter, hosted board consent, worldwide pages and verified action replay loading |
 | Input | Shared command data, keyboard discovery and presses including Command+Z step back, controller remapping/aim/pan/tap/hold speed, page focus/scrolling and pointer targeting |
 | Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, calmer sprite rescue auras and shared cached scenery haze, failure transitions and result stars |
