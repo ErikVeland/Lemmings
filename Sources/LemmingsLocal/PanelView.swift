@@ -24,7 +24,7 @@ enum PanelButton: Equatable {
 
   var session: (any GameSession)? {
     didSet {
-      if oldValue !== session { nukeGesture.reset(); needsDisplay = true }
+      if oldValue !== session { nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
       toolTip = nil
     }
   }
@@ -217,12 +217,25 @@ enum PanelButton: Equatable {
 
   override var isFlipped: Bool { true }
 
+  /// The contiguous button row that shows the Amiga cross, in view coordinates.
+  var buttonCursorRect: CGRect? {
+    guard !isMenuMode else { return nil }
+    layoutControls()
+    let rect = buttonFrames.reduce(CGRect.null) { $0.union($1.1) }
+    return rect.isNull || rect.isEmpty ? nil : rect
+  }
+  var buttonCursorScale: CGFloat { panelScale }
+
   override func resetCursorRects() {
-    addCursorRect(bounds, cursor: NSCursor.arrow)
+    guard let buttons = buttonCursorRect?.intersection(bounds), !buttons.isEmpty else {
+      addCursorRect(bounds, cursor: NSCursor.arrow); return
+    }
+    GameCursor.addCursorRects(in: self, [(buttons, GameCursor.buttonCursor(scale: panelScale))])
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    NSCursor.arrow.set()
+    GameCursor.update(at: convert(event.locationInWindow, from: nil), hidingInside: nil,
+      buttonsRect: buttonCursorRect, buttonScale: panelScale)
   }
 
   private let inset = 8.0
@@ -834,15 +847,19 @@ enum PanelButton: Equatable {
     if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= Int(box.height) {
       macInterface.menuLine(text, in: box, alignment: .left, palette: panelPalette)
     } else {
-      let naturalWidth = CGFloat(GamePixelTypography.width(of: text))
-      let width = statusTextWidth()
       NSGraphicsContext.saveGraphicsState()
       NSBezierPath(rect: box).addClip()
-      GamePixelText.draw(text, in: CGRect(x: inset, y: y, width: width, height: 20),
-        maxScale: width / naturalWidth, palette: panelPalette)
+      GamePixelText.draw(text, in: CGRect(x: inset, y: y, width: statusTextWidth(), height: 20),
+        maxScale: pixelStatusScale(text), palette: panelPalette)
       NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
+  }
+
+  /// GamePixelText fits `width + 1` columns per scale step, so the box must too.
+  private func pixelStatusScale(_ text: String) -> CGFloat {
+    let columns = CGFloat(GamePixelTypography.width(of: text) + 1)
+    return max(1, min(2, floor((bounds.width - inset * 2) / columns)))
   }
 
   private func statusTextWidth() -> CGFloat {
@@ -850,9 +867,7 @@ enum PanelButton: Equatable {
     if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= 20 {
       return macInterface.width(of: text, face: .small, scale: 1)
     }
-    let naturalWidth = CGFloat(GamePixelTypography.width(of: text))
-    let scale = max(1, min(2, floor((bounds.width - inset * 2) / naturalWidth)))
-    return naturalWidth * scale
+    return CGFloat(GamePixelTypography.width(of: text) + 1) * pixelStatusScale(text)
   }
 
   /// Drawn from the right edge inward, so it cannot collide with the status text

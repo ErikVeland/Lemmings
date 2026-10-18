@@ -2375,20 +2375,16 @@ import NxlvKit
             addCursorRect(bounds, cursor: NSCursor.arrow)
             return
         }
-        addCursorRect(gameplay, cursor: GameCursor.gameplayCursor)
-        let controls = [
-            CGRect(x: bounds.minX, y: bounds.minY,
-                width: bounds.width, height: max(0, gameplay.minY - bounds.minY)),
-            CGRect(x: bounds.minX, y: gameplay.maxY,
-                width: bounds.width, height: max(0, bounds.maxY - gameplay.maxY)),
-            CGRect(x: bounds.minX, y: gameplay.minY,
-                width: max(0, gameplay.minX - bounds.minX), height: gameplay.height),
-            CGRect(x: gameplay.maxX, y: gameplay.minY,
-                width: max(0, bounds.maxX - gameplay.maxX), height: gameplay.height),
-        ]
-        for rect in controls where rect.width > 0 && rect.height > 0 {
-            addCursorRect(rect, cursor: NSCursor.arrow)
+        var regions = [(gameplay, GameCursor.gameplayCursor)]
+        if let buttons = buttonCursorRect?.intersection(bounds), !buttons.isEmpty {
+            regions.append((buttons, GameCursor.buttonCursor(scale: zoom)))
         }
+        GameCursor.addCursorRects(in: self, regions)
+    }
+    /// The skill panel row, directly below the playfield.
+    private var buttonCursorRect: CGRect? {
+        guard menuRows == nil, !readOnlyReplay else { return nil }
+        return CGRect(x: screenOrigin.x, y: screenOrigin.y + 172 * zoom, width: 320 * zoom, height: 40 * zoom)
     }
     override func cursorUpdate(with event: NSEvent) {
         updateSystemCursor(at: convert(event.locationInWindow, from: nil))
@@ -2399,9 +2395,11 @@ import NxlvKit
         trackPointer(at: point)
     }
     private func updateSystemCursor(at point: CGPoint) {
+        let navigation = navigationFrame?.contains(point) == true
         GameCursor.update(
             at: point,
-            hidingInside: menuRows == nil && navigationFrame?.contains(point) != true ? playfieldRect : nil)
+            hidingInside: menuRows == nil && !navigation ? playfieldRect : nil,
+            buttonsRect: navigation || directionPoint != nil ? nil : buttonCursorRect, buttonScale: zoom)
     }
     private func trackPointer(at p: CGPoint) {
         controllerPointer = nil
