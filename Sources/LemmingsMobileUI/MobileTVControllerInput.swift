@@ -1,6 +1,7 @@
 #if os(tvOS)
 import GameController
 import NxlvKit
+import LemmingsAppCore
 import LemmingsTVCore
 import UIKit
 
@@ -29,7 +30,7 @@ import UIKit
         buttonEvents.stop()
         applyTimeline(timeline.reset())
         bindings.reset(); lastTime = 0
-        touchpadClick.reset()
+        touchpadClick.reset(); adapter?.stepFeedback.reset()
         if rewindHeld { rewindHeld = false; adapter?.onRewindHeld?(false) }
         clearFeedback()
     }
@@ -116,9 +117,16 @@ import UIKit
         for action in actions {
             if action == .pause { applyTimeline(timeline.reset()) }
             adapter.perform(action)
+            if case .step(let direction) = action { adapter.stepFeedback.tick(direction, on: owner, at: time) }
             if adapter.isMenu() { reset(); return }
         }
         guard buttonState == nil else { return }
+        let jog = adapter.stepFeedback.jogSteps(on: owner, active: true)
+        if jog != 0 {
+            for _ in 0..<abs(jog) where !adapter.isMenu() { adapter.onCommand?(.step(jog < 0 ? -1 : 1)) }
+            adapter.stepFeedback.tick(jog, on: owner, at: time)
+            if adapter.isMenu() { reset(); return }
+        }
         if let pad = owner.extendedGamepad {
             updateFeedback(pad: pad, settings: settings)
             let aim = settings.controllerSwapSticks ? pad.rightThumbstick : pad.leftThumbstick
@@ -141,7 +149,9 @@ import UIKit
             switch event {
             case .resetSpeed: adapter?.onCommand?(.speedReset)
             case .park: adapter?.onTimelinePark?()
-            case .step(let direction): adapter?.onCommand?(.step(direction))
+            case .step(let direction):
+                adapter?.onCommand?(.step(direction))
+                adapter?.stepFeedback.tick(direction, on: owner)
             case .scrub(let direction, let held):
                 if direction < 0 { rewindHeld = held; adapter?.onRewindHeld?(held) }
             }

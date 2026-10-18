@@ -39,6 +39,13 @@ off, clear **Settings > Audio > Main menu: Play main theme**.
 The tracker music no longer crackles at startup. Before, each launch and focus
 event restarted the fade-in of the menu theme.
 
+## Controller steps
+
+Hold LT + LB / RB (Create + L1 / R1 on Apple TV) to scrub one tick at a time.
+On a DualSense, slide a finger left or right on the touchpad to step back or
+forward. Each step gives a light haptic tick. This works in Classic, The Tribes
+and Chronicles on Mac, iPhone, iPad and Apple TV.
+
 ## Pointer
 
 The Amiga cross now shows around gameplay in every pointer style, in Classic,

@@ -83,6 +83,17 @@ struct TVControllerBindingsTests {
             #expect(input.update(pressed: []).isEmpty)
         }
     }
+    @Test func heldCreateStepScrubsAndStopsWithCreate() {
+        var input = TVControllerBindings()
+        _ = input.update(pressed: [], at: 0)
+        _ = input.update(pressed: [.options], at: 0.5)
+        #expect(input.update(pressed: [.options, .rightShoulder], at: 1) == [.step(1)])
+        #expect(input.update(pressed: [.options, .rightShoulder], at: 1.1).isEmpty)
+        #expect(input.update(pressed: [.options, .rightShoulder], at: 1.2) == [.step(1)])
+        #expect(input.update(pressed: [.rightShoulder], at: 1.5).isEmpty)
+        #expect(input.update(pressed: [.rightShoulder], at: 3).isEmpty)
+    }
+
     @Test func requestedFaceAndRateLayoutKeepsSelectBackAndSkills() {
         let actions: [(ControllerBindings.Button, ControllerBindings.Action)] = [
             (.a, .assign), (.b, .pause), (.x, .speedReset), (.y, .endRun),

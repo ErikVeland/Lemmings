@@ -37,6 +37,29 @@ Input is limited to the active app and the window's owning engine. Changing wind
 or entering a different page clears button history. A button held during that transition must be released before it can act.
 The first page selection is the back/default control. Hint details still require an explicit new press.
 
+## Step controls
+
+Hold LT + LB / RB on Mac and iOS, or Create / View + L1 / R1 on TV, to step
+one tick back or forward. Keep both buttons down to scrub: after 0.18 s the
+step repeats 15 times a second, like the held `,` and `.` keys. Release either
+button to stop. The run stays paused. A stalled frame catches up four ticks at
+most. In menus the shoulder buttons change tabs and do not repeat.
+
+On a DualSense or DualShock 4, slide a finger left or right on the touchpad to
+step back or forward. One slide across the pad moves 16 ticks. A touchpad click
+still starts a DJ shuffle and never steps. Lifting the finger, a menu or a new
+touch far from the last one starts a new slide.
+
+Each step plays a short haptic tick on controllers with haptics. A backward
+step is softer than a forward step. Fast scrubbing plays one tick each 30 ms.
+`LEMMINGS_TEST_AUDIO=muted` also silences these ticks.
+
+The shared logic is `ControllerBindings` (held repeat), `TouchpadJog` and
+`ControllerStepFeedback`. Classic, Lemmings 2 and Lemmings 3 use their existing
+step handlers, so engine limits for backward steps are unchanged. Known limits:
+the haptic ticks have no separate setting, and touchpad travel, haptic strength
+and held scrubbing need physical controller validation.
+
 ## Validation
 
 - `Scripts/run-controller-qol-tests.sh` runs the pure button and trigger tests without requiring SwiftPM.

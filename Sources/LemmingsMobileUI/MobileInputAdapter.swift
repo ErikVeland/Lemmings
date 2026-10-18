@@ -40,11 +40,12 @@ import UIKit
     private var context: ObjectIdentifier?
     private var lastPoll = 0.0
     private var touchpadClick = ControllerButtonEdge()
+    let stepFeedback = ControllerStepFeedback()
     private var disabledMenuButton = ControllerButtonEdge()
 
     func reset() {
         onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
-        touchpadClick.reset()
+        touchpadClick.reset(); stepFeedback.reset()
         #if os(tvOS)
         tvInput.reset()
         #endif
@@ -106,7 +107,15 @@ import UIKit
         ]
         for (button, input) in buttons where input?.isPressed == true { pressed.insert(button) }
         if !isMenu() { pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings) }
-        for action in bindings.update(pressed: pressed, inMenu: isMenu(), at: now) { perform(action) }
+        for action in bindings.update(pressed: pressed, inMenu: isMenu(), at: now) {
+            perform(action)
+            if case .step(let direction) = action, !isMenu() { stepFeedback.tick(direction, on: controller, at: now) }
+        }
+        let jog = stepFeedback.jogSteps(on: controller, active: !isMenu())
+        if jog != 0 {
+            for _ in 0..<abs(jog) where !isMenu() { perform(.step(jog < 0 ? -1 : 1)) }
+            stepFeedback.tick(jog, on: controller, at: now)
+        }
         let left = settings().controllerSwapSticks ? pad.rightThumbstick : pad.leftThumbstick
         let right = settings().controllerSwapSticks ? pad.leftThumbstick : pad.rightThumbstick
         if isMenu() {

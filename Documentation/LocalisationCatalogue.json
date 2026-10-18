@@ -556,7 +556,7 @@
   "A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
     ]
   },
   "A saved player is unavailable": {
@@ -2803,7 +2803,7 @@
   "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
     ]
   },
   "Choose a pack": {
@@ -3137,7 +3137,7 @@
   "Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
     ]
   },
   "Classic effects": {
@@ -3626,7 +3626,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:27"
     ]
   },
   "Complete": {
@@ -3760,7 +3760,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:253",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:91",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:92",
       "Sources/LemmingsLocal/main.swift:8472",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
@@ -3802,7 +3802,7 @@
   "Controller (Xbox-style button names)\nLeft stick: aim • Right stick: pan camera\nA: assign selected skill • B: reset fast speed, then pause / resume\nX: reset speed • Y: end run / undo\nLB / RB: previous / next available skill\nD-pad left / right: previous / next unassigned lemming\nD-pad up / down: increase / decrease release rate (where supported)\nAt fast speed, RT resets to 1×. Release before pressing it again.\nTap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed\nX: immediately return to 1× • Menu: game menu\nL3 / R3: entrance / exit • View / Options: help\nHold LT + D-pad left / right: decrease / increase speed\nHold LT + D-pad up / down: entrance / exit\nHold LT + X: reset speed • Hold LT + Y: level hints\nHold LT + LB / RB: step back / forward where supported\nHold LT + B: rewind where supported • LT + Menu: retry\nHold LT + A: repeat last assignment • LT + View / Options: settings\nHold LT + R3: focus last assignment\nHold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle\nMenus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs\nRight stick scrolls long pages. Release buttons before using a new page.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/ControllerBindings.swift:107"
+      "Sources/NxlvKit/ControllerBindings.swift:119"
     ]
   },
   "Controller button": {
@@ -3815,6 +3815,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:432"
+    ]
+  },
+  "Controller steps": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Controls": {
@@ -4584,6 +4590,14 @@
       "Sources/LemmingsMobileUI/MobileGameInput.swift:385"
     ]
   },
+  "DualSense touchpad swipe: step back / forward": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:84",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:383",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:385"
+    ]
+  },
   "Duplicate Chronicles object ID {0}.": {
     "kind": "text",
     "references": [
@@ -4727,7 +4741,7 @@
   "Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
     ]
   },
   "Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels": {
@@ -6027,7 +6041,7 @@
   "Ghost solutions": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
     ]
   },
   "Glider": {
@@ -6297,6 +6311,12 @@
       "Sources/LemmingsMobileUI/MobileGameInput.swift:28"
     ]
   },
+  "Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+    ]
+  },
   "Hold to edit player": {
     "kind": "text",
     "references": [
@@ -6387,7 +6407,7 @@
   "Hot Seat ghosts": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:22"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
     ]
   },
   "Hot Seat player HUD": {
@@ -7263,7 +7283,7 @@
   "Journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:24",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:67"
     ]
   },
@@ -7932,7 +7952,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:108",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:44",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:25",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26",
       "Sources/LemmingsLocal/SettingsWindow.swift:289",
       "Sources/LemmingsLocal/SettingsWindow.swift:343",
       "Sources/LemmingsLocal/SettingsWindow.swift:814"
@@ -8023,7 +8043,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:538",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
     ]
   },
   "Least skills": {
@@ -9226,7 +9246,7 @@
   "Menus always use standard controls: D-pad selects, {0} confirms, {1} returns.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:85"
+      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:86"
     ]
   },
   "Met. ": {
@@ -10896,7 +10916,7 @@
   "Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "Original PC": {
@@ -12756,7 +12776,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:59"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:60"
     ]
   },
   "Release rate": {
@@ -13212,7 +13232,7 @@
   "Resume your journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Resume {0}  {1}/{2}": {
@@ -14722,7 +14742,7 @@
   "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:86"
+      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:87"
     ]
   },
   "Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork.": {
@@ -15449,12 +15469,6 @@
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:211"
     ]
   },
-  "Step back / forward where supported": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:76"
-    ]
-  },
   "Step backward one tick": {
     "kind": "text",
     "references": [
@@ -15478,6 +15492,7 @@
   "Step one tick; hold to scrub; release to pause": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:76",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:462",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:423",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:448"
@@ -15498,7 +15513,7 @@
   "Sticks: aim and pan, following the Swap sticks setting.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:84"
+      "Sources/LemmingsLocal/ControllerDevicePresentation.swift:85"
     ]
   },
   "Stomper": {
@@ -15671,7 +15686,7 @@
   "Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:21"
     ]
   },
   "Surfer": {
@@ -16534,7 +16549,7 @@
   "The art of one bit": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "The attempt was not saved.": {
@@ -18296,7 +18311,7 @@
   "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:27"
     ]
   },
   "Unknown": {
@@ -18936,7 +18951,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:51"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:52"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {
@@ -19036,7 +19051,7 @@
   "Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:23"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:24"
     ]
   },
   "Worldwide rankings are not enabled in this build. Local records are saved.": {

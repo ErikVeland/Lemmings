@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import GameController
+import LemmingsAppCore
 import NxlvKit
 
 /// Polls connected extended gamepads without taking over input in other apps.
@@ -19,6 +20,8 @@ import NxlvKit
     private var boostCanTap = false
     private var receivedInput = false
     private var touchpadClick = ControllerButtonEdge()
+    private let stepFeedback = ControllerStepFeedback()
+    private weak var controller: GCController?
 
     init(keyboard: GameplayKeyboard, pollsAutomatically: Bool = true) {
         self.keyboard = keyboard
@@ -43,7 +46,7 @@ import NxlvKit
         receivedInput = false
         keyboard?.controllerRewindHeld(false)
         bindings.reset(); device = nil; context = nil; wasActive = false
-        touchpadClick.reset()
+        touchpadClick.reset(); stepFeedback.stop(); controller = nil
     }
     private func poll() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -56,8 +59,8 @@ import NxlvKit
         }
         let identity = ObjectIdentifier(controller)
         let playing = keyboard.controllerPlaying
-        if identity != device { stopBoost(at: now); bindings.reset(); touchpadClick.reset() }
-        device = identity
+        if identity != device { stopBoost(at: now); bindings.reset(); touchpadClick.reset(); stepFeedback.stop() }
+        device = identity; self.controller = controller
         var pressed: Set<ControllerBindings.Button> = []
         let buttons: [(ControllerBindings.Button, GCControllerButtonInput?)] = [
             (.a,pad.buttonA), (.b,pad.buttonB), (.x,pad.buttonX), (.y,pad.buttonY),
@@ -70,6 +73,12 @@ import NxlvKit
         processButtons(pressed, at: now, playing: playing)
         if touchpadClick.update(pressed: (pad as? GCDualSenseGamepad)?.touchpadButton.isPressed == true,
             active: keyboard.controllerPlaying) { keyboard.controllerAction(.djShuffle) }
+        let jog = stepFeedback.jogSteps(on: controller, active: playing && keyboard.controllerEnabled() && keyboard.ownsController())
+        if jog != 0 {
+            receivedInput = true; stopBoost(at: now)
+            for _ in 0..<abs(jog) { keyboard.controllerAction(.step(jog < 0 ? -1 : 1)) }
+            stepFeedback.tick(jog, on: controller, at: now)
+        }
         func axis(_ value: Float) -> Double {
             let magnitude = abs(Double(value))
             return magnitude > 0.18 ? (magnitude - 0.18) / 0.82 * (value < 0 ? -1 : 1) : 0
@@ -126,6 +135,9 @@ import NxlvKit
                     }
                     else { keyboard.speedControl?.setFast(true) }
                 } else { stopBoost(at: now, interrupted: false) }
+            case let .step(direction):
+                keyboard.controllerAction(action)
+                stepFeedback.tick(direction, on: controller, at: now)
             default: keyboard.controllerAction((action == .cancel || action == .pause) && wasFast ? .speedReset : action)
             }
             if context != keyboard.controllerContext || !keyboard.active() { stopBoost(at: now); break }

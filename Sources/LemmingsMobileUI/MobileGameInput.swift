@@ -380,9 +380,9 @@ extension MobileGameViewController {
 
     func showControlsHelp() {
         #if os(tvOS)
-        let help = TVControllerBindings.help.components(separatedBy: "\n")
+        let help = TVControllerBindings.help.components(separatedBy: "\n") + [L10n.text("DualSense touchpad swipe: step back / forward")]
         #else
-        let help = GameplayCommands.help + [L10n.text("Two-finger tap on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle")]
+        let help = GameplayCommands.help + [L10n.text("Two-finger tap on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"), L10n.text("DualSense touchpad swipe: step back / forward")]
         #endif
         showCustomOverlay(title: L10n.text("Controls"), details: help,
                           actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])

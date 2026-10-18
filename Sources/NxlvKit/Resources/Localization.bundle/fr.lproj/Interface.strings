@@ -592,6 +592,7 @@
 "Controller (Xbox-style button names)\nLeft stick: aim • Right stick: pan camera\nA: assign selected skill • B: reset fast speed, then pause / resume\nX: reset speed • Y: end run / undo\nLB / RB: previous / next available skill\nD-pad left / right: previous / next unassigned lemming\nD-pad up / down: increase / decrease release rate (where supported)\nAt fast speed, RT resets to 1×. Release before pressing it again.\nTap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed\nX: immediately return to 1× • Menu: game menu\nL3 / R3: entrance / exit • View / Options: help\nHold LT + D-pad left / right: decrease / increase speed\nHold LT + D-pad up / down: entrance / exit\nHold LT + X: reset speed • Hold LT + Y: level hints\nHold LT + LB / RB: step back / forward where supported\nHold LT + B: rewind where supported • LT + Menu: retry\nHold LT + A: repeat last assignment • LT + View / Options: settings\nHold LT + R3: focus last assignment\nHold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle\nMenus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs\nRight stick scrolls long pages. Release buttons before using a new page." = "Manette (noms des boutons de type Xbox)\nStick gauche : viser • Stick droit : déplacer la caméra\nA : attribuer la compétence sélectionnée • B : réinitialiser la vitesse rapide, puis mettre en pause / reprendre\nX : réinitialiser la vitesse • Y : terminer la partie / annuler\nLB / RB : compétence disponible précédente / suivante\nCroix directionnelle gauche / droite : lemming sans compétence précédent / suivant\nCroix directionnelle haut / bas : augmenter / diminuer le débit (si pris en charge)\nÀ vitesse rapide, RT revient à 1×. Relâche avant d’appuyer à nouveau.\nAppui sur RT à 1× : activer l’avance rapide • Maintenir RT : accélérer progressivement ; relâcher : vitesse précédente\nX : revenir immédiatement à 1× • Menu : menu du jeu\nL3 / R3 : entrée / sortie • View / Options : aide\nMaintenir LT + croix directionnelle gauche / droite : diminuer / augmenter la vitesse\nMaintenir LT + croix directionnelle haut / bas : entrée / sortie\nMaintenir LT + X : réinitialiser la vitesse • Maintenir LT + Y : indices du niveau\nMaintenir LT + LB / RB : reculer / avancer d’un cycle si pris en charge\nMaintenir LT + B : revenir en arrière si pris en charge • LT + Menu : réessayer\nMaintenir LT + A : répéter la dernière attribution • LT + View / Options : réglages\nMaintenir LT + R3 : recentrer sur la dernière attribution\nMaintenir LT + L3 : lecture aléatoire du DJ • Clic sur le pavé tactile DualSense : lecture aléatoire du DJ\nMenus : la croix directionnelle sélectionne ou règle, A confirme, B revient, LB / RB change d’onglet\nLe stick droit fait défiler les longues pages. Relâche les boutons avant d’ouvrir une autre page.";
 "Controller button" = "Bouton de la manette";
 "Controller buttons" = "Boutons de la manette";
+"Controller steps" = "Pas à pas à la manette";
 "Controls" = "Commandes";
 "Controls help" = "Aide des commandes";
 "Copied" = "Copié";
@@ -711,6 +712,7 @@
 "Drop tool" = "Lâcher l’outil";
 "DualSense touchpad click" = "Clic sur le pavé tactile DualSense";
 "DualSense touchpad click: DJ shuffle" = "Clic sur le pavé tactile DualSense : lecture aléatoire du DJ";
+"DualSense touchpad swipe: step back / forward" = "Glisser sur le pavé tactile DualSense : reculer / avancer d’un cycle";
 "Duplicate Chronicles object ID {0}." = "L’identifiant d’objet Chronicles {0} est en double.";
 "Duplicate L2 sprite animation." = "Animation de sprite L2 en double.";
 "During the winding course of Lemmings the Second, the following occurred:" = "Au fil des péripéties de Lemmings 2, les événements suivants se sont produits :";
@@ -979,6 +981,7 @@
 "Highland" = "Montagnes";
 "Hint text" = "Texte de l’indice";
 "Hints" = "Indices";
+"Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick." = "Maintenez LT et LB ou RB pour avancer cycle par cycle. Sur une DualSense, glissez un doigt sur le pavé tactile pour reculer ou avancer d’un cycle. Chaque pas donne une légère vibration.";
 "Hold to edit player" = "Maintenir pour modifier le joueur";
 "Hold: fixed fast-forward" = "Maintenir : avance rapide fixe";
 "Hold: ramp up; release: previous speed" = "Maintenir : accélérer progressivement ; relâcher : vitesse précédente";
@@ -2391,7 +2394,6 @@
 "Static home screen" = "Écran d’accueil statique";
 "Step +1" = "Avancer d’un cycle";
 "Step back" = "Reculer d’un cycle";
-"Step back / forward where supported" = "Reculer / avancer d’un cycle si pris en charge";
 "Step backward one tick" = "Reculer d’un cycle";
 "Step forward" = "Avancer d’un cycle";
 "Step forward one tick" = "Avancer d’un cycle";

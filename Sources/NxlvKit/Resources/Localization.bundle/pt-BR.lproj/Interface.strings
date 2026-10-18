@@ -592,6 +592,7 @@
 "Controller (Xbox-style button names)\nLeft stick: aim • Right stick: pan camera\nA: assign selected skill • B: reset fast speed, then pause / resume\nX: reset speed • Y: end run / undo\nLB / RB: previous / next available skill\nD-pad left / right: previous / next unassigned lemming\nD-pad up / down: increase / decrease release rate (where supported)\nAt fast speed, RT resets to 1×. Release before pressing it again.\nTap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed\nX: immediately return to 1× • Menu: game menu\nL3 / R3: entrance / exit • View / Options: help\nHold LT + D-pad left / right: decrease / increase speed\nHold LT + D-pad up / down: entrance / exit\nHold LT + X: reset speed • Hold LT + Y: level hints\nHold LT + LB / RB: step back / forward where supported\nHold LT + B: rewind where supported • LT + Menu: retry\nHold LT + A: repeat last assignment • LT + View / Options: settings\nHold LT + R3: focus last assignment\nHold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle\nMenus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs\nRight stick scrolls long pages. Release buttons before using a new page." = "Controle (nomes dos botões no estilo Xbox)\nAlavanca esquerda: mirar • Alavanca direita: mover a câmera\nA: atribuir habilidade selecionada • B: redefinir velocidade rápida e, depois, pausar / retomar\nX: redefinir velocidade • Y: encerrar partida / desfazer\nLB / RB: habilidade disponível anterior / próxima\nD-pad esquerda / direita: lemming sem habilidade atribuída anterior / próximo\nD-pad para cima / para baixo: aumentar / diminuir frequência de saída (quando disponível)\nNa velocidade rápida, RT volta a 1×. Solte antes de pressionar novamente.\nToque em RT a 1×: alternar avanço rápido • Mantenha RT pressionado: acelerar; solte: voltar à velocidade anterior\nX: voltar imediatamente a 1× • Menu: menu do jogo\nL3 / R3: entrada / saída • View / Options: ajuda\nMantenha LT + D-pad esquerda / direita pressionados: diminuir / aumentar velocidade\nMantenha LT + D-pad para cima / para baixo pressionados: entrada / saída\nMantenha LT + X pressionados: redefinir velocidade • LT + Y: dicas da fase\nMantenha LT + LB / RB pressionados: voltar / avançar um passo, quando disponível\nMantenha LT + B pressionados: retroceder, quando disponível • LT + Menu: tentar de novo\nMantenha LT + A pressionados: repetir última atribuição • LT + View / Options: ajustes\nMantenha LT + R3 pressionados: focar na última atribuição\nMantenha LT + L3 pressionados: embaralhar DJ • Clique no touchpad do DualSense: embaralhar DJ\nMenus: D-pad seleciona ou ajusta, A confirma, B volta, LB / RB troca de aba\nA alavanca direita rola páginas longas. Solte os botões antes de abrir outra página.";
 "Controller button" = "Botão do comando";
 "Controller buttons" = "Botões do comando";
+"Controller steps" = "Passos no controle";
 "Controls" = "Controles";
 "Controls help" = "Ajuda de controles";
 "Copied" = "Copiado";
@@ -711,6 +712,7 @@
 "Drop tool" = "Soltar ferramenta";
 "DualSense touchpad click" = "Clique no touchpad do DualSense";
 "DualSense touchpad click: DJ shuffle" = "Clique no touchpad do DualSense: embaralhar DJ";
+"DualSense touchpad swipe: step back / forward" = "Deslizar no touchpad do DualSense: voltar / avançar um passo";
 "Duplicate Chronicles object ID {0}." = "ID de objeto {0} duplicado em Chronicles.";
 "Duplicate L2 sprite animation." = "Animação de sprite L2 duplicada.";
 "During the winding course of Lemmings the Second, the following occurred:" = "Durante a longa jornada de Lemmings the Second, aconteceram os seguintes fatos:";
@@ -979,6 +981,7 @@
 "Highland" = "Terras Altas";
 "Hint text" = "Texto da dica";
 "Hints" = "Dicas";
+"Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick." = "Segure LT e LB ou RB para percorrer um ciclo de cada vez. Em um DualSense, deslize um dedo no touchpad para voltar ou avançar um passo. Cada passo dá uma vibração leve.";
 "Hold to edit player" = "Mantenha pressionado para editar o jogador";
 "Hold: fixed fast-forward" = "Mantenha pressionado: avanço rápido fixo";
 "Hold: ramp up; release: previous speed" = "Mantenha pressionado: acelerar; solte: velocidade anterior";
@@ -2391,7 +2394,6 @@
 "Static home screen" = "Tela inicial estática";
 "Step +1" = "Avançar +1";
 "Step back" = "Voltar um passo";
-"Step back / forward where supported" = "Voltar / avançar um passo, quando disponível";
 "Step backward one tick" = "Voltar um ciclo";
 "Step forward" = "Avançar";
 "Step forward one tick" = "Avançar um ciclo";

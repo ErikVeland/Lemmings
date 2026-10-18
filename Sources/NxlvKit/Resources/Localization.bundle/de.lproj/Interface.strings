@@ -592,6 +592,7 @@
 "Controller (Xbox-style button names)\nLeft stick: aim • Right stick: pan camera\nA: assign selected skill • B: reset fast speed, then pause / resume\nX: reset speed • Y: end run / undo\nLB / RB: previous / next available skill\nD-pad left / right: previous / next unassigned lemming\nD-pad up / down: increase / decrease release rate (where supported)\nAt fast speed, RT resets to 1×. Release before pressing it again.\nTap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed\nX: immediately return to 1× • Menu: game menu\nL3 / R3: entrance / exit • View / Options: help\nHold LT + D-pad left / right: decrease / increase speed\nHold LT + D-pad up / down: entrance / exit\nHold LT + X: reset speed • Hold LT + Y: level hints\nHold LT + LB / RB: step back / forward where supported\nHold LT + B: rewind where supported • LT + Menu: retry\nHold LT + A: repeat last assignment • LT + View / Options: settings\nHold LT + R3: focus last assignment\nHold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle\nMenus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs\nRight stick scrolls long pages. Release buttons before using a new page." = "Controller (Tastenbezeichnungen wie bei Xbox)\nLinker Stick: zielen • Rechter Stick: Kamera verschieben\nA: ausgewählte Fähigkeit zuweisen • B: Schnelltempo zurücksetzen, dann pausieren / fortsetzen\nX: Tempo zurücksetzen • Y: Lauf beenden / rückgängig machen\nLB / RB: vorherige / nächste verfügbare Fähigkeit\nSteuerkreuz links / rechts: vorheriger / nächster Lemming ohne Fähigkeit\nSteuerkreuz oben / unten: Auslassrate erhöhen / verringern (falls unterstützt)\nBei Schnelltempo setzt RT auf 1× zurück. Vor erneutem Drücken loslassen.\nRT bei 1× antippen: Vorspulen umschalten • RT halten: beschleunigen; loslassen: vorheriges Tempo\nX: sofort zu 1× zurückkehren • Menü: Spielmenü\nL3 / R3: Eingang / Ausgang • Ansicht / Optionen: Hilfe\nLT halten + Steuerkreuz links / rechts: Tempo verringern / erhöhen\nLT halten + Steuerkreuz oben / unten: Eingang / Ausgang\nLT halten + X: Tempo zurücksetzen • LT halten + Y: Levelhinweise\nLT halten + LB / RB: Schritt zurück / vor, falls unterstützt\nLT halten + B: zurückspulen, falls unterstützt • LT + Menü: erneut versuchen\nLT halten + A: letzte Zuweisung wiederholen • LT + Ansicht / Optionen: Einstellungen\nLT halten + R3: letzte Zuweisung fokussieren\nLT halten + L3: DJ-Zufallswiedergabe • DualSense-Touchpad-Klick: DJ-Zufallswiedergabe\nMenüs: Steuerkreuz wählt aus oder passt an, A bestätigt, B geht zurück, LB / RB wechselt Tabs\nMit dem rechten Stick scrollst du lange Seiten. Lass Tasten los, bevor du eine neue Seite nutzt.";
 "Controller button" = "Controller-Taste";
 "Controller buttons" = "Controller-Tasten";
+"Controller steps" = "Schritte mit dem Controller";
 "Controls" = "Steuerung";
 "Controls help" = "Steuerungshilfe";
 "Copied" = "Kopiert";
@@ -711,6 +712,7 @@
 "Drop tool" = "Werkzeug ablegen";
 "DualSense touchpad click" = "DualSense-Touchpad-Klick";
 "DualSense touchpad click: DJ shuffle" = "DualSense-Touchpad-Klick: DJ-Zufallswiedergabe";
+"DualSense touchpad swipe: step back / forward" = "DualSense-Touchpad wischen: Schritt zurück / vor";
 "Duplicate Chronicles object ID {0}." = "Doppelte Chronicles-Objekt-ID {0}.";
 "Duplicate L2 sprite animation." = "Doppelte L2-Spriteanimation.";
 "During the winding course of Lemmings the Second, the following occurred:" = "Im wechselvollen Verlauf von Lemmings the Second geschah Folgendes:";
@@ -979,6 +981,7 @@
 "Highland" = "Hochland";
 "Hint text" = "Hinweistext";
 "Hints" = "Hinweise";
+"Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick." = "Halte LT und LB oder RB, um Tick für Tick zu spulen. Wische auf einem DualSense über das Touchpad, um einen Schritt zurück oder vor zu gehen. Jeder Schritt gibt ein leichtes haptisches Signal.";
 "Hold to edit player" = "Zum Bearbeiten des Spielers halten";
 "Hold: fixed fast-forward" = "Halten: festes Vorspulen";
 "Hold: ramp up; release: previous speed" = "Halten: beschleunigen; loslassen: vorheriges Tempo";
@@ -2391,7 +2394,6 @@
 "Static home screen" = "Statischer Startbildschirm";
 "Step +1" = "Schritt +1";
 "Step back" = "Schritt zurück";
-"Step back / forward where supported" = "Schritt zurück / vor, falls unterstützt";
 "Step backward one tick" = "Einen Takt zurück";
 "Step forward" = "Schritt vor";
 "Step forward one tick" = "Einen Takt vor";

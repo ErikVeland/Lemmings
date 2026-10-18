@@ -73,7 +73,7 @@ import NxlvKit
         append("\(modifier) + \(physical(.x))", L10n.text("Reset speed"))
         if variableSpeed { append("\(modifier) + \(physical(.left)) / \(physical(.right))", L10n.text("Decrease / increase speed")) }
         append("\(modifier) + \(physical(.up)) / \(physical(.down))", L10n.text("Entrance / exit"))
-        if stepping { append("\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder))", L10n.text("Step back / forward where supported")) }
+        if stepping { append("\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder))", L10n.text("Step one tick; hold to scrub; release to pause")) }
         if rewind { append("\(modifier) + \(physical(.b))", L10n.text("Rewind")) }
         append("\(modifier) + \(physical(.menu))", L10n.text("Retry"))
         append("\(modifier) + \(physical(.a))", L10n.text("Repeat last assignment"))
@@ -81,6 +81,7 @@ import NxlvKit
         append("\(modifier) + \(physical(.leftStick))", L10n.text("DJ shuffle"))
         append("\(modifier) + \(physical(.rightStick))", L10n.text("Focus last assignment"))
         append(L10n.text("DualSense touchpad click"), L10n.text("DJ shuffle"))
+        if stepping { append("", L10n.text("DualSense touchpad swipe: step back / forward")) }
         append("", L10n.text("Sticks: aim and pan, following the Swap sticks setting."))
         append("", L10n.text("Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns."))
         append("", L10n.text("Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages."))

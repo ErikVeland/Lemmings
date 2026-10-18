@@ -56,13 +56,16 @@ public struct ControllerBindings {
         public static let mac = RateRepeat(delay: 0.3, interval: 0.02)
         /// The iPad, iPhone and Apple TV held rate button.
         public static let touch = RateRepeat(delay: 0.35, interval: 0.08)
+        /// A held step matches the held `,` / `.` keys: one tick, then 15 ticks a second.
+        public static let step = RateRepeat(delay: 0.18, interval: 1.0 / 15)
     }
     private var previous: Set<Button> = []
     private var primed = false
     private let rateRepeat: RateRepeat
     private var heldRate: (button: Button, direction: Int, next: Double)?
+    private var heldStep: (button: Button, direction: Int, next: Double)?
     public init(rateRepeat: RateRepeat = .touch) { self.rateRepeat = rateRepeat }
-    public mutating func reset() { previous = []; primed = false; heldRate = nil }
+    public mutating func reset() { previous = []; primed = false; heldRate = nil; heldStep = nil }
     /// Pass `now` to repeat a held release-rate step. Without it, every action fires once per press.
     public mutating func update(pressed: Set<Button>, inMenu: Bool = false, at now: Double? = nil) -> [Action] {
         defer { previous = pressed; primed = true }
@@ -76,6 +79,12 @@ public struct ControllerBindings {
             while next <= now, steps < 4 { actions.append(.rate(held.direction)); next += rateRepeat.interval; steps += 1 }
             heldRate?.next = max(next, now - rateRepeat.interval)
         } else { heldRate = nil }
+        // A held step keeps both the modifier and the shoulder button down.
+        if let held = heldStep, let now, !inMenu, pressed.contains(held.button), pressed.contains(.leftTrigger) {
+            var next = held.next, steps = 0
+            while next <= now, steps < 4 { actions.append(.step(held.direction)); next += RateRepeat.step.interval; steps += 1 }
+            heldStep?.next = max(next, now - RateRepeat.step.interval)
+        } else { heldStep = nil }
         if previous.contains(.rightTrigger) && !pressed.contains(.rightTrigger) { actions.append(.boost(false)) }
         let extra = pressed.contains(.leftTrigger)
         // Fixed order makes simultaneous presses reproducible.
@@ -87,8 +96,11 @@ public struct ControllerBindings {
             case .y: actions.append(extra ? .hints : .endRun)
             case .menu: actions.append(extra && !inMenu ? .retry : .cancel)
             case .options: actions.append(extra ? .settings : .help)
-            case .leftShoulder: actions.append(extra && !inMenu ? .step(-1) : .cycle(-1))
-            case .rightShoulder: actions.append(extra && !inMenu ? .step(1) : .cycle(1))
+            case .leftShoulder, .rightShoulder:
+                let direction = button == .leftShoulder ? -1 : 1
+                guard extra && !inMenu else { actions.append(.cycle(direction)); break }
+                actions.append(.step(direction))
+                if let now { heldStep = (button, direction, now + RateRepeat.step.delay) }
             case .left: actions.append(extra && !inMenu ? .speedStep(-1) : .focusUnassigned(-1))
             case .right: actions.append(extra && !inMenu ? .speedStep(1) : .focusUnassigned(1))
             case .up, .down:

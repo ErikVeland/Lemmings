@@ -63,6 +63,38 @@ struct ControllerBindingsTests {
         #expect(untimed.update(pressed: [.up]) == [])
     }
 
+    @Test func heldStepChordScrubsLikeTheHeldTimelineKeys() {
+        var bindings = ControllerBindings(rateRepeat: .mac)
+        _ = bindings.update(pressed: [], at: 0)
+        _ = bindings.update(pressed: [.leftTrigger], at: 0.5)
+        #expect(bindings.update(pressed: [.leftTrigger, .rightShoulder], at: 1) == [.step(1)])
+        #expect(bindings.update(pressed: [.leftTrigger, .rightShoulder], at: 1.1).isEmpty)
+        #expect(bindings.update(pressed: [.leftTrigger, .rightShoulder], at: 1.2) == [.step(1)])
+        #expect(bindings.update(pressed: [.leftTrigger, .rightShoulder], at: 1.2 + 1.0 / 15) == [.step(1)])
+        // A stalled frame catches up a few ticks, not the whole stall.
+        #expect(bindings.update(pressed: [.leftTrigger, .rightShoulder], at: 5) == Array(repeating: .step(1), count: 4))
+        // Releasing the modifier ends the scrub and leaves skill cycling alone.
+        #expect(bindings.update(pressed: [.rightShoulder], at: 5.5).isEmpty)
+        _ = bindings.update(pressed: [], at: 6)
+        _ = bindings.update(pressed: [.leftTrigger], at: 6.1)
+        #expect(bindings.update(pressed: [.leftTrigger, .leftShoulder], at: 6.2) == [.step(-1)])
+        #expect(bindings.update(pressed: [.leftTrigger, .leftShoulder], at: 6.4) == [.step(-1)])
+        #expect(bindings.update(pressed: [.leftTrigger], at: 6.6).isEmpty)
+        #expect(bindings.update(pressed: [.leftTrigger], at: 9).isEmpty)
+    }
+
+    @Test func heldShoulderCyclesOnceWithoutTheModifierOrInMenus() {
+        var bindings = ControllerBindings(rateRepeat: .mac)
+        _ = bindings.update(pressed: [], at: 0)
+        #expect(bindings.update(pressed: [.rightShoulder], at: 1) == [.cycle(1)])
+        #expect(bindings.update(pressed: [.rightShoulder], at: 3).isEmpty)
+        var menu = ControllerBindings(rateRepeat: .mac)
+        _ = menu.update(pressed: [], inMenu: true, at: 0)
+        _ = menu.update(pressed: [.leftTrigger], inMenu: true, at: 0.5)
+        #expect(menu.update(pressed: [.leftTrigger, .rightShoulder], inMenu: true, at: 1) == [.cycle(1)])
+        #expect(menu.update(pressed: [.leftTrigger, .rightShoulder], inMenu: true, at: 3).isEmpty)
+    }
+
     @Test func faceButtonsKeepTheMenuOnItsDedicatedButton() {
         for (button, action): (ControllerBindings.Button, ControllerBindings.Action) in [
             (.a, .assign), (.b, .pause), (.x, .speedReset), (.y, .endRun), (.menu, .cancel)
