@@ -26,7 +26,9 @@ import Testing
             ("failed", CloudSyncArt.page(status: "Cloud saves", providers: "Cloud", enabled: true, message: "Existing saves were kept.")),
             ("code", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, code: "ABCD2345EFGH")),
             ("entry-empty", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, draft: "")),
-            ("entry-ready", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, draft: "ABCD2345EFGH"))]
+            ("entry-ready", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, draft: "ABCD2345EFGH")),
+            ("password-short", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, password: "uva")),
+            ("password-ready", CloudSyncArt.page(status: "Synced", providers: "Cloud", enabled: true, password: String(repeating: "x", count: 64)))]
         for (device, width, height) in [("mac", 1120, 720), ("iphone", 390, 763), ("narrow", 320, 548), ("landscape", 568, 300)] {
             for (name, page) in states {
                 let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: CGFloat(height))
@@ -64,8 +66,24 @@ import Testing
         #expect(view.page.footer.first { $0.id == "syncJoin" }?.enabled == false)
         view.handle("syncCancel")
         #expect(view.page.title == "Cloud saves")
+        view.handle("syncEnterPassword")
+        #expect(view.page.title == "Sync password")
+        let secure = try #require(view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .textField })
+        #expect(secure.accessibilitySubrole() == .secureTextField)
+        secure.writeValue?("test")
+        #expect(view.page.rows[0].title == "Password: ****_" && secure.readValue?() == "****")
+        #expect(view.page.footer.first { $0.id == "syncJoinPassword" }?.enabled == true)
+        view.keyDown(with: event)
+        #expect(view.page.footer.first { $0.id == "syncJoinPassword" }?.enabled == false)
+        let typed = try #require(NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+            windowNumber: 0, context: nil, characters: "r", charactersIgnoringModifiers: "r", isARepeat: false, keyCode: 15))
+        view.keyDown(with: typed)
+        #expect(view.page.footer.first { $0.id == "syncJoinPassword" }?.enabled == true)
+        view.handle("syncCancel")
+        #expect(view.page.title == "Cloud saves")
         view.handle("syncToggle")
         #expect(!sync.enabled)
+        #expect(view.page.rows.first { $0.id == "syncEnterPassword" }?.enabled == false)
         #expect(view.page.rows.first { $0.id == "syncNow" }?.enabled == false)
     }
 }

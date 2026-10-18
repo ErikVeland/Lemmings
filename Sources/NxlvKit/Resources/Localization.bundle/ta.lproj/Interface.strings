@@ -252,6 +252,7 @@
 "Assigned music unavailable: {0}" = "ஒதுக்கீடு செய்யப்பட்ட இசை கிடைக்கவில்லை: {0}";
 "Assignment changes a worker from an active skill to another action." = "பணி ஒரு தொழிலாளியை ஒரு செயலில் இருந்து மற்றொரு செயலாக மாற்றுகிறது.";
 "At first fail" = "முதல் தோல்வியில்";
+"At least 4 characters." = "குறைந்தது 4 எழுத்துகள்.";
 "Atari ST 16-Color Palette" = "அடாரி ST 16 வண்ண பாலெட்";
 "Attempts" = "முயற்சிகள்";
 "Attempts: {0}  Clears: {1}" = "முயற்சிகள்: {0}  வெற்றிகள்: {1}";
@@ -1387,6 +1388,9 @@
 "Macintosh-style 2× artwork" = "Macintosh பாணியில் 2x கலைப்படைப்பு";
 "Magic Carpet" = "பறக்கும் கம்பளம்";
 "Magno Booter" = "காந்தக் காலணியாளர்";
+"Main menu" = "முதன்மைப் பட்டி";
+"Main menu music" = "முதன்மைப் பட்டி இசை";
+"Main menu: Play main theme" = "முதன்மைப் பட்டி: முதன்மை இசையை இயக்கு";
 "Maintune" = "மெயின்டூன்";
 "Make a small plan" = "சிறு திட்டம் அமை";
 "Malformed VGASPEC data: {0}" = "தவறான VGASPEC தரவு: {0}";
@@ -1755,6 +1759,7 @@
 "Pass every level the other machines kept to themselves." = "மற்ற இயந்திரங்கள் தங்களுக்கு வைத்திருக்கும் ஒவ்வொரு மட்டத்தையும் கடந்து செல்லுங்கள்.";
 "Pass the turn" = "முறையை ஒப்படை";
 "Pass your first level." = "உங்கள் முதல் நிலை கடந்து.";
+"Password: {0}_" = "கடவுச்சொல்: {0}_";
 "Paste" = "ஒட்டு";
 "Paula 8364 4-Channel 8-Bit PCM / MOD" = "Paula 8364 4-சேனல் 8-பிட் PCM / MOD";
 "Pause" = "இடைநிறுத்து";
@@ -1792,6 +1797,7 @@
 "Play death sound" = "இறப்பு ஒலியை இயக்கு";
 "Play insights" = "விளையாட்டுப் புள்ளிவிவரங்கள்";
 "Play levels in order to work towards the next trophy." = "அடுத்த கோப்பையை நோக்கி வேலை செய்ய, நிலைகளை விளையாடுங்கள்.";
+"Play main theme" = "முதன்மை இசையை இயக்கு";
 "Play or pause. Space or P." = "விளையாட அல்லது இடைநிறுத்த. Space அல்லது P.";
 "Play replay >" = "மறு இயக்கத்தை இயக்கு >";
 "Play style" = "விளையாடும் பாணி";
@@ -2419,6 +2425,7 @@
 "Switch player?" = "வீரரை மாற்றவா?";
 "Sync incomplete. Retry to share local records." = "ஒத்திசைவு முழுமையடையவில்லை. உள்ளூர் பதிவுகளை மீண்டும் பகிர்ந்து கொள்ள முயற்சிக்கவும்.";
 "Sync now" = "இப்போது ஒத்திசை";
+"Sync password" = "ஒத்திசைவுக் கடவுச்சொல்";
 "Sync this library before saving its recovery key." = "மீட்பு விசையை சேமிப்பதற்கு முன் இந்த நூலகத்தை ஒத்திசைக்கவும்.";
 "Synced" = "ஒத்திசைக்கப்பட்டது";
 "Syncing" = "ஒத்திசைக்கப்படுகிறது";
@@ -2879,6 +2886,7 @@
 "Use one play style on {0} more levels." = "{0} மேலும் நிலைகளில் ஒரு விளையாட்டு பாணியைப் பயன்படுத்தவும்.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Lemmings 2 மற்றும் Lemmings 3 இல் மீளுருவாக்கிய Macintosh பாணி ஓவியத்தைப் பயன்படுத்தவும்.";
 "Use the right stick to aim and the left stick to move the camera." = "கேமராவை நகர்த்த வலது தண்டு மற்றும் இடது தண்டு பயன்படுத்தவும்.";
+"Use the same password on every device." = "ஒவ்வொரு சாதனத்திலும் ஒரே கடவுச்சொல்லைப் பயன்படுத்து.";
 "Use tool" = "கருவியைப் பயன்படுத்து";
 "Used" = "பயன்படுத்தப்பட்டது";
 "Used {0} skills instead of {1}, with at least as many rescued." = "மீட்பு எண்ணிக்கையைக் குறைக்காமல் {1} திறன்களுக்குப் பதிலாக {0} திறன்கள் பயன்படுத்தப்பட்டன.";

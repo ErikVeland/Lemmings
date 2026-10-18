@@ -13,13 +13,14 @@ import UniformTypeIdentifiers
     private let accessible = GameAccessibleElements()
     private var code: String?
     private var draft: String?
+    private var password: String?
     private var message = ""
     private var busy = false
     private var focus: String?
     var onBack: (() -> Void)?
     var page: GameFrontEnd.Page {
         CloudSyncArt.page(status: sync.status, providers: sync.providerNames, enabled: sync.enabled,
-            busy: busy || sync.state == .syncing, code: code, draft: draft, message: message)
+            busy: busy || sync.state == .syncing, code: code, draft: draft, password: password, message: message)
     }
     var pageLayout: GameFrontEnd.Layout { GameFrontEnd.layout(page, width: bounds.width, minimumHeight: bounds.height) }
     override var isFlipped: Bool { true }
@@ -40,9 +41,10 @@ import UniformTypeIdentifiers
     }
     override func keyDown(with event: NSEvent) {
         if event.isARepeat && [36, 76, 53].contains(event.keyCode) { return }
+        if password != nil, handlePasswordKey(event) { needsDisplay = true; return }
         if draft != nil, event.modifierFlags.contains(.command), event.charactersIgnoringModifiers?.lowercased() == "v" {
             draft = String(AppleCloudLibraryTransport.cleanCode(NSPasteboard.general.string(forType: .string) ?? "").prefix(12))
-        } else if event.keyCode == 53 { handle(draft != nil || code != nil ? "syncCancel" : "syncBack") }
+        } else if event.keyCode == 53 { handle(draft != nil || code != nil || password != nil ? "syncCancel" : "syncBack") }
         else if [48, 123, 124, 125, 126].contains(event.keyCode) {
             let actions = (page.rows + page.footer).filter(\.enabled)
             let backward = event.keyCode == 48 ? event.modifierFlags.contains(.shift) : [123, 126].contains(event.keyCode)
@@ -56,6 +58,23 @@ import UniformTypeIdentifiers
             draft = String((draft! + AppleCloudLibraryTransport.cleanCode(characters)).prefix(12))
         } else { super.keyDown(with: event) }
         needsDisplay = true
+    }
+    /// Password text is free-form, so it bypasses the device-code filter.
+    private func handlePasswordKey(_ event: NSEvent) -> Bool {
+        let flags = event.modifierFlags.intersection([.command, .control, .option])
+        if flags == .command, event.charactersIgnoringModifiers?.lowercased() == "v" {
+            let pasted = (NSPasteboard.general.string(forType: .string) ?? "").filter { !$0.isNewline }
+            password = String((password! + pasted).prefix(CloudSyncArt.passwordMaximum))
+        } else if event.keyCode == 51 { password = String(password!.dropLast()) }
+        else if flags.isEmpty, ![36, 76, 53, 48].contains(event.keyCode) {
+            // Drop control characters and the private-use codes of arrow and function keys.
+            let typed = (event.characters ?? "").filter { character in
+                character.unicodeScalars.allSatisfy { $0.value >= 0x20 && $0.value != 0x7F && !(0xF700...0xF8FF).contains($0.value) }
+            }
+            guard !typed.isEmpty else { return false }
+            password = String((password! + typed).prefix(CloudSyncArt.passwordMaximum))
+        } else { return false }
+        return true
     }
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
@@ -71,6 +90,12 @@ import UniformTypeIdentifiers
                 press: target.action.enabled ? { [weak self] in self?.handle(id) } : nil)
             element.setAccessibilityEnabled(target.action.enabled)
             element.onFocus = { [weak self] in self?.focus = id; self?.needsDisplay = true }
+            if id == "syncPasswordField" {
+                element.setAccessibilityRole(.textField)
+                element.setAccessibilitySubrole(.secureTextField)
+                element.readValue = { [weak self] in CloudSyncArt.masked(self?.password ?? "") }
+                element.writeValue = { [weak self] value in self?.password = String(value.prefix(CloudSyncArt.passwordMaximum)); self?.needsDisplay = true }
+            }
             if id == "syncCodeField" {
                 element.setAccessibilityRole(.textField)
                 element.readValue = { [weak self] in self?.draft ?? "" }
@@ -86,9 +111,10 @@ import UniformTypeIdentifiers
         switch id {
         case "syncBack": onBack?()
         case "syncToggle": sync.enabled.toggle()
-        case "syncCancel": code = nil; draft = nil; focus = nil
+        case "syncCancel": code = nil; draft = nil; password = nil; focus = nil
         case "syncEnterCode": draft = ""; focus = "syncCodeField"
-        case "syncCodeField": focus = id
+        case "syncCodeField", "syncPasswordField": focus = id
+        case "syncEnterPassword": password = ""; focus = "syncPasswordField"
         case "syncCopy":
             NSPasteboard.general.clearContents(); NSPasteboard.general.setString(code ?? "", forType: .string); message = L10n.text("Copied")
         case "syncExportKey", "syncImportKey":
@@ -119,13 +145,14 @@ import UniformTypeIdentifiers
                 } catch { message = error.localizedDescription }
                 busy = false; needsDisplay = true
             }
-        case "syncNow", "syncMakeLink", "syncJoin":
+        case "syncNow", "syncMakeLink", "syncJoin", "syncJoinPassword":
             busy = true
             Task { [weak self] in
                 guard let self else { return }
                 do {
                     if id == "syncNow" { await sync.syncNow() }
                     else if id == "syncMakeLink" { code = try await sync.makeLink(); focus = "syncCopy" }
+                    else if id == "syncJoinPassword" { try await sync.joinPassword(password ?? ""); password = nil }
                     else { try await sync.join(draft ?? ""); draft = nil; await sync.syncNow() }
                 } catch { message = error.localizedDescription }
                 busy = false; needsDisplay = true

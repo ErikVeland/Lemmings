@@ -94,6 +94,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var syncCode: String?
     var syncBackRoute: Route = .players
     var syncDraft: String?
+    var syncPassword: String?
     var syncMessage = ""
     var syncBusy = false
     var importingSyncKey = false
@@ -241,7 +242,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         searchField.frame = CGRect(x: -100, y: -100, width: 10, height: 10)
         searchField.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            if self.route == .cloudSaves, self.syncDraft != nil { self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12)) }
+            if self.route == .cloudSaves, self.syncPassword != nil {
+                self.syncPassword = String((self.searchField.text ?? "").filter { !$0.isNewline }.prefix(CloudSyncArt.passwordMaximum))
+            } else if self.route == .cloudSaves, self.syncDraft != nil { self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12)) }
             else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
             else { self.searchQuery = self.searchField.text ?? "" }
             self.rebuild()
@@ -603,10 +606,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .cloudSaves:
             canvas.page = CloudSyncArt.page(status: libraryCloud.status, providers: libraryCloud.providerNames,
                 enabled: libraryCloud.enabled, busy: syncBusy || libraryCloud.state == .syncing,
-                code: syncCode, draft: syncDraft, message: syncMessage); canvas.preview = nil
+                code: syncCode, draft: syncDraft, password: syncPassword, message: syncMessage); canvas.preview = nil
             #if os(tvOS)
             canvas.page = TVSharedMenuArt.cloud(canvas.page, restoring: tvBackupDraft != nil,
-                hasCode: syncCode != nil, enteringCode: syncDraft != nil, busy: syncBusy)
+                hasCode: syncCode != nil, enteringCode: syncDraft != nil || syncPassword != nil, busy: syncBusy)
             #endif
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
@@ -682,6 +685,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func navigate(_ next: Route) {
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
+        if route == .cloudSaves && next != .cloudSaves { endSyncPassword() }
         confirmingRecordsReset = false
         #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.

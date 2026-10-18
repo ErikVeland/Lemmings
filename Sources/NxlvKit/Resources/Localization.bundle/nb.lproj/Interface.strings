@@ -252,6 +252,7 @@
 "Assigned music unavailable: {0}" = "Den valgte musikken er utilgjengelig: {0}";
 "Assignment changes a worker from an active skill to another action." = "En tildeling endrer en arbeider fra en aktiv ferdighet til en annen handling.";
 "At first fail" = "Ved første nederlag";
+"At least 4 characters." = "Minst 4 tegn.";
 "Atari ST 16-Color Palette" = "Atari ST-palett med 16 farger";
 "Attempts" = "Forsøk";
 "Attempts: {0}  Clears: {1}" = "Forsøk: {0}  Fullføringer: {1}";
@@ -1387,6 +1388,9 @@
 "Macintosh-style 2× artwork" = "Macintosh-grafikk 2×";
 "Magic Carpet" = "Flygende teppe";
 "Magno Booter" = "Magnetstøvler";
+"Main menu" = "Hovedmeny";
+"Main menu music" = "Hovedmenymusikk";
+"Main menu: Play main theme" = "Hovedmeny: Spill hovedtemaet";
 "Maintune" = "Maintune";
 "Make a small plan" = "Lag en enkel plan";
 "Malformed VGASPEC data: {0}" = "Feilformatert VGASPEC-data: {0}";
@@ -1755,6 +1759,7 @@
 "Pass every level the other machines kept to themselves." = "Fullfør alle brettene som de andre maskinene holdt for seg selv.";
 "Pass the turn" = "Gi fra deg turen";
 "Pass your first level." = "Fullfør ditt første brett.";
+"Password: {0}_" = "Passord: {0}_";
 "Paste" = "Lim inn";
 "Paula 8364 4-Channel 8-Bit PCM / MOD" = "Paula 8364 4-kanals 8-biters PCM / MOD";
 "Pause" = "Pause";
@@ -1792,6 +1797,7 @@
 "Play death sound" = "Spill av dødslyd";
 "Play insights" = "Spillinnsikt";
 "Play levels in order to work towards the next trophy." = "Spill brettene i rekkefølge for å jobbe mot neste trofé.";
+"Play main theme" = "Spill hovedtemaet";
 "Play or pause. Space or P." = "Spill eller sett på pause. Mellomrom eller P.";
 "Play replay >" = "Spill av reprise >";
 "Play style" = "Spillestil";
@@ -2419,6 +2425,7 @@
 "Switch player?" = "Bytte spiller?";
 "Sync incomplete. Retry to share local records." = "Synkroniseringen er ufullstendig. Prøv igjen for å dele lokale rekorder.";
 "Sync now" = "Synkroniser nå";
+"Sync password" = "Synkroniseringspassord";
 "Sync this library before saving its recovery key." = "Synkroniser dette biblioteket før du lagrer gjenopprettingsnøkkelen.";
 "Synced" = "Synkronisert";
 "Syncing" = "Synkroniserer";
@@ -2879,6 +2886,7 @@
 "Use one play style on {0} more levels." = "Bruk én spillestil på {0} flere brett.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Bruk gjenskapt Macintosh-grafikk i Lemmings 2 og Lemmings 3.";
 "Use the right stick to aim and the left stick to move the camera." = "Bruk høyre spak til å sikte og venstre spak til å flytte kameraet.";
+"Use the same password on every device." = "Bruk samme passord på alle enheter.";
 "Use tool" = "Bruk verktøy";
 "Used" = "Brukt";
 "Used {0} skills instead of {1}, with at least as many rescued." = "Brukte {0} ferdigheter i stedet for {1}, med minst like mange reddet.";

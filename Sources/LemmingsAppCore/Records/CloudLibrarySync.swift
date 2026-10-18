@@ -315,6 +315,19 @@ import NxlvKit
         try apple.storeCredentials(combined); identities = combined
         requestSync()
     }
+    /// Joins the vault that the password opens, then syncs through it at once.
+    /// Unlike a device code, the password does not expire and needs no second device online.
+    public func joinPassword(_ password: String) async throws {
+        guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid(L10n.text("Return to the library before linking devices.")) }
+        let shared = try await Task.detached(priority: .userInitiated) { try CloudLibraryIdentity(password: password) }.value
+        var combined = identities.isEmpty ? try apple.credentials() : identities
+        if !combined.contains(where: { $0.id == shared.id }) { combined.append(shared) }
+        try apple.storeCredentials(combined); identities = combined
+        await syncNow()
+        guard apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else {
+            throw SequelDataError.invalid(L10n.text("Connect to the internet to link a device."))
+        }
+    }
     /// A portable private key restores an account-free library after losing a device.
     public func recoveryData() throws -> Data {
         let keys = identities.isEmpty ? try (transport as? AppleCloudLibraryTransport)?.credentials() ?? [] : identities

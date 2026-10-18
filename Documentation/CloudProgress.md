@@ -22,6 +22,16 @@ expires after ten minutes. It gives access to the whole library, including all
 players and shared campaigns. Linking combines existing libraries; it does not
 discard either device's records.
 
+**Sync password** links devices without a code. It is a temporary testing aid.
+Remove it before the final release. Type the same password, with at least 4
+characters, on each device. A short shared password such as `test99` is
+acceptable for internal and external testers. Each device then joins the same hosted
+library and syncs immediately. The password does not expire, and the other
+device does not have to be online. Testers on different Apple and Game Center
+accounts can use it to share progress and Hot Seat campaigns. The password
+merges libraries in the same way as a device code. Anyone who knows or
+guesses the password gets access to the whole library. Leading and trailing spaces are ignored. Letter case is significant.
+
 **Save recovery key** exports a private `.lemmingssync` file. **Restore recovery
 key** restores access after a device is lost. The key grants access to the whole
 library and must be kept private. Without iCloud, a linked surviving device or
@@ -74,7 +84,11 @@ the hash of the bearer credential, opaque ciphertext, device slots and update
 times. It has no player names, email addresses or game results in plaintext.
 Device-link credentials are encrypted with a key derived from the code; the
 server receives a separate, domain-separated lookup digest. That digest cannot
-decrypt the credentials. Background Keychain access cannot display an
+decrypt the credentials. A sync password derives a library identity with
+PBKDF2-SHA256 (600,000 rounds) and then HKDF. The server receives the derived
+vault UUID and the bearer credential. It never receives the password or the
+encryption key. The device stores the derived identity in the Keychain next to
+its own library key. Background Keychain access cannot display an
 authentication dialog.
 
 ## Merge and safety

@@ -252,6 +252,7 @@
 "Assigned music unavailable: {0}" = "La música asignada no está disponible: {0}";
 "Assignment changes a worker from an active skill to another action." = "La asignación cambia al trabajador de una habilidad activa a otra acción.";
 "At first fail" = "Al primer fallo";
+"At least 4 characters." = "Al menos 4 caracteres.";
 "Atari ST 16-Color Palette" = "Paleta de 16 colores de Atari ST";
 "Attempts" = "Intentos";
 "Attempts: {0}  Clears: {1}" = "Intentos: {0}  Victorias: {1}";
@@ -1387,6 +1388,9 @@
 "Macintosh-style 2× artwork" = "Gráficos estilo Macintosh 2×";
 "Magic Carpet" = "Alfombra mágica";
 "Magno Booter" = "Botas magnéticas";
+"Main menu" = "Menú principal";
+"Main menu music" = "Música del menú principal";
+"Main menu: Play main theme" = "Menú principal: Reproducir el tema principal";
 "Maintune" = "Maintune";
 "Make a small plan" = "Preparar un plan";
 "Malformed VGASPEC data: {0}" = "Los datos de VGASPEC tienen un formato incorrecto: {0}";
@@ -1755,6 +1759,7 @@
 "Pass every level the other machines kept to themselves." = "Completa todos los niveles que las otras máquinas se guardaron para sí.";
 "Pass the turn" = "Pasar el turno";
 "Pass your first level." = "Completa tu primer nivel.";
+"Password: {0}_" = "Contraseña: {0}_";
 "Paste" = "Pegar";
 "Paula 8364 4-Channel 8-Bit PCM / MOD" = "PCM de 8 bits y 4 canales Paula 8364 / MOD";
 "Pause" = "Pausar";
@@ -1792,6 +1797,7 @@
 "Play death sound" = "Reproducir sonido de muerte";
 "Play insights" = "Estadísticas de juego";
 "Play levels in order to work towards the next trophy." = "Completa los niveles en orden para conseguir el siguiente trofeo.";
+"Play main theme" = "Reproducir el tema principal";
 "Play or pause. Space or P." = "Jugar o pausar. Espacio o P.";
 "Play replay >" = "Reproducir repetición >";
 "Play style" = "Estilo de juego";
@@ -2419,6 +2425,7 @@
 "Switch player?" = "¿Cambiar de jugador?";
 "Sync incomplete. Retry to share local records." = "Sincronización incompleta. Vuelve a intentarlo para compartir los récords locales.";
 "Sync now" = "Sincronizar ahora";
+"Sync password" = "Contraseña de sincronización";
 "Sync this library before saving its recovery key." = "Sincroniza esta biblioteca antes de guardar su clave de recuperación.";
 "Synced" = "Sincronizado";
 "Syncing" = "Sincronizando";
@@ -2879,6 +2886,7 @@
 "Use one play style on {0} more levels." = "Usa un estilo de juego en {0} niveles más.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Usa gráficos recreados al estilo de Macintosh en Lemmings 2 y Lemmings 3.";
 "Use the right stick to aim and the left stick to move the camera." = "Usa el joystick derecho para apuntar y el izquierdo para mover la cámara.";
+"Use the same password on every device." = "Usa la misma contraseña en cada dispositivo.";
 "Use tool" = "Usar herramienta";
 "Used" = "Usado";
 "Used {0} skills instead of {1}, with at least as many rescued." = "Usaste {0} habilidades en lugar de {1}, rescatando al menos la misma cantidad.";

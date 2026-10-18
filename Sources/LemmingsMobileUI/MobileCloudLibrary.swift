@@ -66,7 +66,7 @@ extension MobileLibraryViewController {
         libraryCloud.start()
     }
     func handleCloudSync(_ id: String) -> Bool {
-        if id == "cloudSaves" { syncBackRoute = route; syncCode = nil; syncDraft = nil; syncMessage = ""; navigate(.cloudSaves); return true }
+        if id == "cloudSaves" { syncBackRoute = route; syncCode = nil; syncDraft = nil; endSyncPassword(); syncMessage = ""; navigate(.cloudSaves); return true }
         guard route == .cloudSaves, id.hasPrefix("sync") else { return false }
         guard (canvas.page.rows + canvas.page.footer).contains(where: { $0.id == id && $0.enabled }) else { return true }
         #if os(tvOS)
@@ -76,9 +76,12 @@ extension MobileLibraryViewController {
         switch id {
         case "syncBack": navigate(syncBackRoute)
         case "syncToggle": libraryCloud.enabled.toggle()
-        case "syncCancel": syncCode = nil; syncDraft = nil; searchField.resignFirstResponder()
+        case "syncCancel": syncCode = nil; syncDraft = nil; endSyncPassword(); searchField.resignFirstResponder()
         case "syncEnterCode": syncDraft = ""; searchField.text = ""; searchField.becomeFirstResponder()
-        case "syncCodeField": searchField.becomeFirstResponder()
+        case "syncCodeField", "syncPasswordField": searchField.becomeFirstResponder()
+        case "syncEnterPassword":
+            syncPassword = ""; searchField.text = ""; searchField.isSecureTextEntry = true
+            searchField.becomeFirstResponder()
         case "syncCopy":
             #if os(iOS)
             UIPasteboard.general.string = syncCode; syncMessage = L10n.text("Copied")
@@ -114,13 +117,14 @@ extension MobileLibraryViewController {
             picker.delegate = self; picker.allowsMultipleSelection = false
             present(picker, animated: true)
             #endif
-        case "syncNow", "syncMakeLink", "syncJoin":
+        case "syncNow", "syncMakeLink", "syncJoin", "syncJoinPassword":
             syncBusy = true; searchField.resignFirstResponder()
             Task { [weak self] in
                 guard let self else { return }
                 do {
                     if id == "syncNow" { await libraryCloud.syncNow() }
                     else if id == "syncMakeLink" { syncCode = try await libraryCloud.makeLink() }
+                    else if id == "syncJoinPassword" { try await libraryCloud.joinPassword(syncPassword ?? ""); endSyncPassword() }
                     else { try await libraryCloud.join(syncDraft ?? ""); syncDraft = nil; await libraryCloud.syncNow() }
                 } catch { syncMessage = error.localizedDescription }
                 syncBusy = false; rebuild()
@@ -128,6 +132,11 @@ extension MobileLibraryViewController {
         default: break
         }
         rebuild(); return true
+    }
+    /// The hidden field is shared with search and names, so it must not stay secure.
+    func endSyncPassword() {
+        guard syncPassword != nil || searchField.isSecureTextEntry else { return }
+        syncPassword = nil; searchField.isSecureTextEntry = false; searchField.text = ""
     }
     func importCloudRecoveryKey(_ source: URL) {
         let accessed = source.startAccessingSecurityScopedResource()

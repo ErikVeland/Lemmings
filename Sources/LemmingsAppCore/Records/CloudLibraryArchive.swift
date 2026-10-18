@@ -1,3 +1,4 @@
+import CommonCrypto
 import CryptoKit
 import Foundation
 import NxlvKit
@@ -12,6 +13,35 @@ public struct CloudLibraryIdentity: Codable, Equatable, Sendable {
         version = 1; id = UUID().uuidString.lowercased()
         key = Self.randomBytes()
         token = Self.randomBytes().map { String(format: "%02x", $0) }.joined()
+    }
+    public static let minimumPasswordLength = 4
+    /// Every device that enters the same password opens the same hosted vault,
+    /// whatever its Apple or Game Center account. The server sees only the
+    /// vault ID, a token hash and ciphertext.
+    public init(password: String) throws {
+        let normalized = password.trimmingCharacters(in: .whitespacesAndNewlines).precomposedStringWithCanonicalMapping
+        guard normalized.count >= Self.minimumPasswordLength else {
+            throw SequelDataError.invalid(L10n.text("At least 4 characters."))
+        }
+        // PBKDF2 slows guessing. HKDF then separates the vault ID, token and key.
+        var master = [UInt8](repeating: 0, count: 32)
+        let salt = Array("UL-Sync-Password-v1".utf8)
+        let status = normalized.withCString { text in
+            CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2), text, strlen(text), salt, salt.count,
+                CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256), 600_000, &master, master.count)
+        }
+        guard status == kCCSuccess else { throw SequelDataError.invalid(L10n.text("The library key is invalid.")) }
+        func derive(_ label: String, _ count: Int) -> Data {
+            HKDF<SHA256>.deriveKey(inputKeyMaterial: SymmetricKey(data: master), info: Data(label.utf8), outputByteCount: count)
+                .withUnsafeBytes { Data($0) }
+        }
+        var raw = [UInt8](derive("UL-Sync-Vault-v1", 16))
+        raw[6] = raw[6] & 0x0f | 0x40; raw[8] = raw[8] & 0x3f | 0x80
+        version = 1
+        id = UUID(uuid: (raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7],
+                         raw[8], raw[9], raw[10], raw[11], raw[12], raw[13], raw[14], raw[15])).uuidString.lowercased()
+        token = derive("UL-Sync-Token-v1", 32).map { String(format: "%02x", $0) }.joined()
+        key = derive("UL-Sync-Key-v1", 32)
     }
     private static func randomBytes() -> Data {
         // CryptoKit obtains key material from the operating system CSPRNG.

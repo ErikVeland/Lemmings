@@ -252,6 +252,7 @@
 "Assigned music unavailable: {0}" = "Toegewezen muziek niet beschikbaar: {0}";
 "Assignment changes a worker from an active skill to another action." = "Een nieuwe opdracht haalt een werker uit een actieve vaardigheid en laat die een andere actie uitvoeren.";
 "At first fail" = "Ved første nederlag";
+"At least 4 characters." = "Minstens 4 tekens.";
 "Atari ST 16-Color Palette" = "Atari ST-palet met 16 kleuren";
 "Attempts" = "Pogingen";
 "Attempts: {0}  Clears: {1}" = "Pogingen: {0}  Voltooide levels: {1}";
@@ -1387,6 +1388,9 @@
 "Macintosh-style 2× artwork" = "Macintosh-stijl artwork 2×";
 "Magic Carpet" = "Vliegend tapijt";
 "Magno Booter" = "Magneetlaarzen";
+"Main menu" = "Hoofdmenu";
+"Main menu music" = "Hoofdmenumuziek";
+"Main menu: Play main theme" = "Hoofdmenu: Hoofdthema afspelen";
 "Maintune" = "Hoofdmuziek";
 "Make a small plan" = "Maak een eenvoudig plan";
 "Malformed VGASPEC data: {0}" = "Ongeldige VGASPEC-gegevens: {0}";
@@ -1755,6 +1759,7 @@
 "Pass every level the other machines kept to themselves." = "Voltooi elk level dat de andere machines voor zichzelf hielden.";
 "Pass the turn" = "Beurt doorgeven";
 "Pass your first level." = "Voltooi je eerste level.";
+"Password: {0}_" = "Wachtwoord: {0}_";
 "Paste" = "Plakken";
 "Paula 8364 4-Channel 8-Bit PCM / MOD" = "Paula 8364, 4-kanaals 8-bits PCM / MOD";
 "Pause" = "Pauzeren";
@@ -1792,6 +1797,7 @@
 "Play death sound" = "Doodsgeluid afspelen";
 "Play insights" = "Spelinzichten";
 "Play levels in order to work towards the next trophy." = "Speel niveaus op volgorde om naar de volgende trofee toe te werken.";
+"Play main theme" = "Hoofdthema afspelen";
 "Play or pause. Space or P." = "Afspelen of pauzeren. Spatie of P.";
 "Play replay >" = "Replay afspelen >";
 "Play style" = "Speelstijl";
@@ -2419,6 +2425,7 @@
 "Switch player?" = "Van speler wisselen?";
 "Sync incomplete. Retry to share local records." = "Synchronisatie onvolledig. Probeer het opnieuw om lokale records te delen.";
 "Sync now" = "Nu synchroniseren";
+"Sync password" = "Synchronisatiewachtwoord";
 "Sync this library before saving its recovery key." = "Synchroniseer deze bibliotheek voordat je de herstelsleutel opslaat.";
 "Synced" = "Gesynchroniseerd";
 "Syncing" = "Synchroniseren";
@@ -2879,6 +2886,7 @@
 "Use one play style on {0} more levels." = "Gebruik één speelstijl op nog {0} levels.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Gebruik nagebouwde Macintosh-illustraties in Lemmings 2 en Lemmings 3.";
 "Use the right stick to aim and the left stick to move the camera." = "Gebruik de rechterstick om te richten en de linkerstick om de camera te bewegen.";
+"Use the same password on every device." = "Gebruik op elk apparaat hetzelfde wachtwoord.";
 "Use tool" = "Gereedschap gebruiken";
 "Used" = "Gebruikt";
 "Used {0} skills instead of {1}, with at least as many rescued." = "{0} vaardigheden gebruikt in plaats van {1}, met minstens evenveel geredde lemmings.";

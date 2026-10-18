@@ -363,4 +363,15 @@ import Testing
         if case .failed = sync.state {} else { Issue.record("Expected a preserved malformed archive") }
         #expect(transport.writes == 0 && store.records == before)
     }
+    @Test func syncPasswordGivesEveryDeviceTheSameValidVault() throws {
+        let first = try CloudLibraryIdentity(password: "  Uva and Erik  ")
+        let second = try CloudLibraryIdentity(password: "Uva and Erik")
+        #expect(first == second)
+        try first.validate()
+        #expect(try CloudLibraryIdentity(password: "uva and erik") != first)
+        let opened = try second.open(first.seal(Data("progress".utf8)))
+        #expect(opened == Data("progress".utf8))
+        #expect(throws: SequelDataError.self) { try CloudLibraryIdentity(password: " ab ") }
+        try CloudLibraryIdentity(password: "test99").validate()
+    }
 }
