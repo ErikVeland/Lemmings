@@ -73,6 +73,7 @@ public enum BitmapLatinGlyphs {
             for mark in marks { glyph = builder.accent(mark, on: glyph) }
             result[character] = glyph
         }
+        if result["💀"] == nil, let skull = builder.skull() { result["💀"] = skull }
         return result
     }
 
@@ -310,6 +311,28 @@ public enum BitmapLatinGlyphs {
                 return Frame(x: glyph.x, y: glyph.y, width: glyph.width, height: glyph.height, rgba: Data(bytes))
             default: return nil
             }
+        }
+        /// The death counter's skull, drawn in the font's own ramp at capital height.
+        func skull() -> Frame? {
+            if compact {
+                let blank = Frame(x: 0, y: 0, width: width, height: height, rgba: Data(repeating: 0, count: width * height * 4))
+                return render(blank, adding: mask([".###.", "#####", "#.#.#", "#####", ".###.", ".###.", ".#.#."], x: 0, y: 0))
+            }
+            guard let capital = base("O") else { return nil }
+            let rows = ["..######..", ".########.", "##########", "##########", "##########", "#...##...#", "#...##...#",
+                        "#...##...#", "##########", "####..####", ".########.", "..######..", "..#.##.#..", "..######..",
+                        "...####..."]
+            // Capital faces start on the glyph's first row, with the outline and shadow below.
+            let top = capital.y
+            let w = width - 2 * outline, h = capital.height - outline - shadow
+            guard w >= 5, h >= 7 else { return nil }
+            var shape = Set<Point>()
+            // Sample the left half and mirror it, so odd scaling stays symmetric.
+            for y in 0..<h { for x in 0..<w where Array(rows[y * rows.count / h])[min(x, w - 1 - x) * 10 / w] == "#" {
+                shape.insert(Point(x: x + outline, y: y + top))
+            }}
+            let blank = Frame(x: 0, y: top, width: width, height: h, rgba: Data(repeating: 0, count: width * h * 4))
+            return render(blank, adding: shape)
         }
         func sharpS(lowercase: Bool) -> Frame? {
             guard let b = base(lowercase ? "b" : "B") else { return nil }

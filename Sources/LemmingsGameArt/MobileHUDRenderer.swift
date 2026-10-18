@@ -657,7 +657,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawStatusLabel(_ text: String, in row: CGRect, palette: GamePixelTypography.Palette, face: GameMenuTypography.Face, context: CGContext) {
-        guard text.contains("💀"), let typography, let font = typography.font(.small) else {
+        guard text.contains("💀"), let typography, let font = typography.font(.small), !font.covers("💀") else {
             GamePixelTypography.draw(text, in: row, context: context, typography: typography,
                 palette: palette, maximumScale: 1, alignment: .left, face: face)
             return
