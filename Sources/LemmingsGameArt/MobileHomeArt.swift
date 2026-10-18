@@ -16,7 +16,7 @@ public enum MobileHomeArt {
             for row in rows.indices { rows[row].primary = row == index }
         }
         return .init(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
-            footer: [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")),
+            footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
                      .init("collections", L10n.text("Playlists"), enabled: collectionsAvailable),
                      .init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
     }

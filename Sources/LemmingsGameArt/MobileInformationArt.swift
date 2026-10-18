@@ -37,7 +37,8 @@ public enum MobileInformationArt {
         return page
     }
     public static func insights(counts: [String: Int], shared: Bool, days: Int,
-                                sharingAvailable: Bool, loading: Bool = false, notice: String = "") -> GameFrontEnd.Page {
+                                sharingAvailable: Bool, loading: Bool = false, notice: String = "",
+                                backID: String = "settingsGroup.privacy") -> GameFrontEnd.Page {
         let names = [("starts", L10n.text("Level starts")), ("wins", L10n.text("Wins")), ("fails", L10n.text("Fails")),
                      ("abandoned", L10n.text("Unfinished")), ("saved", L10n.text("Lemmings saved")),
                      ("solo", L10n.text("Solo starts")), ("hotSeat", L10n.text("Hot Seat starts")),
@@ -50,7 +51,7 @@ public enum MobileInformationArt {
             footer: [.init("insightsLocal", L10n.text("This device"), selected: !shared),
                      .init("insightsDays", L10n.text("Last \(days) days"), enabled: sharingAvailable),
                      .init("insightsShared", L10n.text("Load shared"), enabled: sharingAvailable && !loading),
-                     .init("insightsClear", L10n.text("Clear local counts")), .init("settingsGroup.privacy", L10n.text("Back"))])
+                     .init("insightsClear", L10n.text("Clear local counts")), .init(backID, L10n.text("Back"))])
     }
     public static func insightsToken(length: Int) -> GameFrontEnd.Page {
         .init(title: L10n.text("Shared play counts"), rows: [.init("insightsTokenEdit", L10n.text("Access token: \(String(repeating: "*", count: min(16, max(0, length))))"))],

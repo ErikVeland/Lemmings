@@ -33,6 +33,56 @@ unavailable. UIKit binds targets by action ID. Keyboard/controller traversal
 and accessibility follow the rendered order. Mac messages use the normal
 footer positions, and return controls lead movie, replay and result rows.
 
+## iOS and tvOS page tree
+
+iOS and tvOS share `MobileLibraryViewController`. The tree below shows each page
+and every place that opens it. Footer action IDs stay the same on Mac, book Home
+and the TV board. Only the iOS and tvOS captions changed.
+
+```text
+Home
+├─ Resume rows: saved level, journey run, playlist run
+├─ Journey map ─ Choose level, Revisit, Progression playlists ¹
+├─ Classic, Oh No, Holiday, Oh Yes, Fan ─ packs ─ level select
+│   └─ Fan ─ Search, Shuffle all ², Check for new packs
+├─ NeoLemmix, Lemmings 2, Lemmings 3 (or Game Data when absent)
+├─ Players  [players]
+│   ├─ player rows, Edit, New player
+│   ├─ Hot Seat ─ Saved Hot Seats ³
+│   ├─ Saved Hot Seats ³ (when one exists)
+│   └─ Cloud saves ⁴
+├─ Progress  [records]
+│   ├─ Records ─ record card ─ Hints, Replay, Play (Classic)
+│   ├─ Achievements ─ award detail
+│   ├─ Worldwide ─ community replays, Game Center boards
+│   └─ Play Insights ⁵
+├─ Playlists  [collections]
+│   ├─ Favourites, Recently played, Playlists ─ playlist
+│   ├─ Progression playlists ¹ ─ Technique curriculum ─ Techniques
+│   └─ Shuffle all ²
+├─ Settings icon ─ groups, Game Data
+│   ├─ Audio ─ Soundtrack libraries
+│   └─ Privacy ─ Cloud saves ⁴, Play Insights ⁵
+└─ What's New icon
+```
+
+Numbered pages open from two places. Back returns to the page that opened them.
+Level select keeps Favourite and Playlist actions for the selected level.
+
+The ghost solution is an in-game feature. Open Pause, then Hint, then Ghost
+solution. It is not on the Home tree.
+
+The record level page is a record card. It shows the level artwork, earned
+stars, the paired statistics and the achievements. Its footer keeps Back at
+bottom-left and Play at bottom-right. Hints and Replay fill the row above.
+Hints opens the level hint cards. Each card offers Previous, Next hint,
+Solution and Play. Solution plays the verified Classic solution.
+
+Replay plays the newest kept action replay for the record. Only Classic attempts
+keep action replays. Artwork, Hints, Solution and Play load for Classic and fan
+catalogue levels. Lemmings 2 and Lemmings 3 records show statistics and stars
+only. Worldwide community replays follow the same Classic limit.
+
 ## Validation
 
 - The iOS UI target compiles for arm64 iOS 16.
@@ -59,6 +109,11 @@ The latest offscreen AppKit composite capture omitted some stone controls even
 though native geometry and activation checks passed. Shared bitmap footer captures
 verify the column layouts. Full shipping-app message compositing still needs a
 manual check; no foreground test was launched.
+
+The menu audit checks the Home captions, the Progress rows and their Back
+targets, the record card and hint card footers, stars, and Saved Hot Seats on
+Players. The default and `--navigation` audits pass with 495 pages and 87
+navigation states. Live replay playback on a device remains a manual check.
 
 Reproduce captures with the `LemmingsMobileMenuAudit` executable using `--hierarchy`
 and `--pause`. Run native checks through `Tools/UITestRunner/run.py`, including

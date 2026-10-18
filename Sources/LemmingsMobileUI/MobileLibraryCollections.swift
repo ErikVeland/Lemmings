@@ -14,6 +14,8 @@ extension MobileLibraryViewController {
             .init("favourites", L10n.text("Favourites  \(favourites.entries.count)"), enabled: !favourites.entries.isEmpty),
             .init("recents", L10n.text("Recently played  \(recents.entries.count)"), enabled: !recents.entries.isEmpty),
             .init("playlists", L10n.text("Playlists  \(playlists.playlists.count)")),
+            .init("progression", L10n.text("Progression playlists")),
+            .init("shuffleAll", L10n.text("Shuffle all"), enabled: catalogue?.packs(in: .fan).isEmpty == false),
         ]
         var footer = [GameFrontEnd.Action("home", L10n.text("Back"))]
         if let run = playlists.run {
@@ -76,7 +78,7 @@ extension MobileLibraryViewController {
         case "collections": navigate(.collections)
         case "players": navigate(.players)
         case "fanBack": navigate(.family(.fan))
-        case "shuffleAll": beginShuffleAll()
+        case "shuffleAll": shuffleBackID = route == .collections ? "collections" : "fanBack"; beginShuffleAll()
         case "shuffleStart": startShuffleAll()
         case "playerNew": newPlayer()
         case "playerRename": beginRenamingPlayer()
@@ -279,7 +281,7 @@ extension MobileLibraryViewController {
         else if let pool = shufflePool { details = [L10n.plural("count.levels", count: pool.entries.count, one: "%ld level", other: "%ld levels"), L10n.plural("count.packs", count: pool.packs, one: "%ld pack", other: "%ld packs")] }
         else { details = [L10n.text("Fan levels are not available.")] }
         return .init(title: L10n.text("Shuffle all"), subtitle: subtitle, details: details,
-                     footer: [.init("fanBack", L10n.text("Back")),
+                     footer: [.init(shuffleBackID, L10n.text("Back")),
                               .init("shuffleStart", L10n.text("Start"), enabled: !shuffleScanning && (shufflePool?.entries.isEmpty == false),
                                     primary: true)])
     }

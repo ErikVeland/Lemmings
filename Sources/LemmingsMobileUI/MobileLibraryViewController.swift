@@ -17,7 +17,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
-        case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
+        case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -93,6 +93,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     lazy var libraryCloud = CloudLibrarySync(store: arcadeStore, transport: libraryCloudTransport)
     var syncCode: String?
     var syncBackRoute: Route = .players
+    /// Play Insights opens from Progress and from Settings > Privacy; Back returns to its source.
+    var insightsBackID = "settingsGroup.privacy"
+    /// Progression and Shuffle all open from Playlists as well as from Journey and the fan library.
+    var progressionBackID = "journey"
+    var shuffleBackID = "fanBack"
+    var savedSeatsBackID = "hotSeat"
+    /// The open record card's artwork, hints and catalogue location.
+    var recordDetail: MobileRecordDetail?
     var syncDraft: String?
     var syncPassword: String?
     var syncMessage = ""
@@ -611,12 +619,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = TVSharedMenuArt.cloud(canvas.page, restoring: tvBackupDraft != nil,
                 hasCode: syncCode != nil, enteringCode: syncDraft != nil || syncPassword != nil, busy: syncBusy)
             #endif
+        case .progress:
+            canvas.page = progressPage(subtitle: subtitle); canvas.preview = nil
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
         case .achievements:
             canvas.page = achievementsPage(subtitle: subtitle); canvas.preview = nil
         case let .recordLevel(board):
-            canvas.page = recordLevelPage(board, subtitle: subtitle); canvas.preview = nil
+            canvas.page = recordLevelPage(board, subtitle: subtitle); showRecordPreview(board)
+        case let .recordHint(board):
+            canvas.page = recordHintPage(board); showRecordPreview(board)
         case .players:
             canvas.page = playersPage(subtitle: subtitle); canvas.preview = nil
         case .shuffleAll:
@@ -644,7 +656,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                 footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
         }
-        canvas.previewSource = route == .levels ? canvas.previewSource : nil
+        if !{ switch route { case .levels, .recordLevel, .recordHint: true; default: false } }() { canvas.previewSource = nil }
         view.setNeedsLayout()
         syncPages()
     }
@@ -856,7 +868,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     /// Makes a pack the current library and shows its levels.
-    private func openPack(_ pack: MobileContentPack, back: Route, checkpoint: MobileCheckpointEnvelope? = nil) {
+    func openPack(_ pack: MobileContentPack, back: Route, checkpoint: MobileCheckpointEnvelope? = nil, play index: Int? = nil) {
         guard let catalogue else { return }
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders
         openLibrary({ try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }) { [self] loaded in
@@ -868,6 +880,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             levelsBackRoute = back
             navigate(.levels)
             if let checkpoint { startLevel(checkpoint.levelIndex, checkpoint: checkpoint) }
+            else if let index, loaded.levels.indices.contains(index) { selectedIndex = index; startLevel(index, checkpoint: nil) }
             else { selectLevel(0) }
         }
     }
