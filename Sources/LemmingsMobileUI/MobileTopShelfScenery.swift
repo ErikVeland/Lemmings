@@ -14,6 +14,8 @@ enum MobileTopShelfScenery {
         var title: String?
         var image: String
         var video: String?
+        /// The still is live but its clip is still being written.
+        var partial: Bool?
     }
 
     static let group = "group.academy.glasscode.lemmings"
@@ -40,12 +42,13 @@ enum MobileTopShelfScenery {
         guard let folder, let data = try? Data(contentsOf: folder.appendingPathComponent("manifest.json")),
               let manifest = try? JSONDecoder().decode(Manifest.self, from: data) else { return folder != nil }
         let files = [manifest.image] + (manifest.video.map { [$0] } ?? [])
-        return manifest.key != key || !files.allSatisfy {
+        return manifest.key != key || manifest.partial == true || !files.allSatisfy {
             FileManager.default.fileExists(atPath: folder.appendingPathComponent($0).path)
         }
     }
 
-    /// Writes a still and a seamless out-and-back clip, then swaps the manifest and removes older files.
+    /// Publishes the still at once, because the clip can take minutes on Apple TV hardware.
+    /// The seamless out-and-back clip follows in a second manifest.
     static func export(_ scenery: MobileHomeBackdrop, key: String) async throws {
         guard let folder, let image = MobileBitmapRenderer.image(scenery.frame) else { return }
         let logo = logo(holiday: isHolidaySeason())
@@ -63,6 +66,7 @@ enum MobileTopShelfScenery {
         guard let frame = render(image, source: first, logo: logo),
               let png = UIImage(cgImage: frame).pngData() else { return }
         try png.write(to: folder.appendingPathComponent(still), options: .atomic)
+        try publish(Manifest(key: key, title: scenery.title, image: still, video: nil, partial: moves), in: folder)
 
         var video: String?
         if moves {
@@ -76,9 +80,15 @@ enum MobileTopShelfScenery {
         }
         try Task.checkCancellation()
 
-        let manifest = Manifest(key: key, title: scenery.title, image: still, video: video)
+        if let video {
+            try publish(Manifest(key: key, title: scenery.title, image: still, video: video), in: folder)
+        }
+    }
+
+    /// Swaps the manifest, removes files it no longer names and asks tvOS to reload the shelf.
+    private static func publish(_ manifest: Manifest, in folder: URL) throws {
         try JSONEncoder().encode(manifest).write(to: folder.appendingPathComponent("manifest.json"), options: .atomic)
-        let keep = Set(["manifest.json", still] + (video.map { [$0] } ?? []))
+        let keep = Set(["manifest.json", manifest.image] + (manifest.video.map { [$0] } ?? []))
         for old in (try? FileManager.default.contentsOfDirectory(atPath: folder.path)) ?? [] where !keep.contains(old) {
             try? FileManager.default.removeItem(at: folder.appendingPathComponent(old))
         }

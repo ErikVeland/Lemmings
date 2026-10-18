@@ -453,7 +453,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             shelfSettings.graphics = Bool.random() ? .macintosh : .macintoshMonochrome
             let shelfKey = MobileTopShelfScenery.seasonalKey(key)
             if scenery != nil, self.topShelfTask == nil, MobileTopShelfScenery.needsExport(key: shelfKey) {
-                self.topShelfTask = Task.detached(priority: .background) { [weak self, homeBackdropLoader] in
+                self.topShelfTask = Task.detached(priority: .utility) { [weak self, homeBackdropLoader] in
                     if let shelf = try? await homeBackdropLoader.load(preferred: preferred, recent: recent, ports: ports,
                         fanFolders: fan, native: native, classicDirectory: classic, storage: storage, settings: shelfSettings,
                         neoLibrary: { try NeoLemmixMobileLibrary(directory: $0, storage: $1) }) {
