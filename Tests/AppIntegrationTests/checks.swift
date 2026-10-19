@@ -6214,6 +6214,33 @@ extension AppDelegate {
     try check(descendants(offlinePage).compactMap({ $0 as? GameLabel }).contains(where: { $0.stringValue == "First supporter" }),
       "Offline contributors lost the cached list")
     try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
+    try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
+    GameScreen.shared.dismissAll()
+    let home = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    home.phase = .briefing
+    home.overlayTitle = L10n.text("LEMMINGS")
+    home.overlayProfileInitials = "PLA"
+    home.overlayLines = ["Journey", "Classic Lemmings", "Oh No! More Lemmings", "Holiday Lemmings", "Lemmings 2", "Lemmings 3"]
+    home.overlayShowsSettingsButton = true
+    var donations = 0
+    home.onDonate = { donations += 1 }
+    for size in [CGSize(width: 640, height: 420), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
+      home.frame.size = size
+      home.overlayHighlight = home.overlayLines.count + 3
+      try capture(home, "home-donate-\(Int(size.width))")
+      guard let donate = home.accessibleControls(owner: home).compactMap({ $0 as? GameAccessibleElement })
+        .first(where: { $0.accessibilityLabel() == L10n.text("Donate") }) else {
+        throw IntegrationFailure(message: "Home Donate target is missing")
+      }
+      try check(home.bounds.contains(donate.localFrame) && donate.localFrame.width >= 44 && donate.localFrame.height >= 28,
+        "Home Donate target left its viewport")
+      let before = donations
+      home.handleClick(at: CGPoint(x: donate.localFrame.midX, y: donate.localFrame.midY))
+      try check(home.activateHomeSelection(home.overlayLines.count + 3), "Keyboard cannot activate Donate")
+      try check(donate.accessibilityPerformPress() && donations == before + 3,
+        "Home mouse, keyboard or accessibility dispatched the wrong action")
+    }
+    print("PASS Home Donate mouse, keyboard and accessibility actions at three sizes; Home and About share the coffee destination")
     print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")
   }
 

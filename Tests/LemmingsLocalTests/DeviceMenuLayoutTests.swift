@@ -255,7 +255,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 let footerChoice = try XCTUnwrap(field.homeSelection(from: field.overlayLines.count - 1, direction: "down"))
                 XCTAssertGreaterThanOrEqual(footerChoice, field.overlayLines.count)
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count)); XCTAssertTrue(profiles)
-                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 3)); XCTAssertTrue(settings)
+                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 4)); XCTAssertTrue(settings)
                 field.overlayHighlight = footerChoice
                 _ = try capture("keyboard-footer")
                 let event = try XCTUnwrap(NSEvent(cgEvent: try XCTUnwrap(CGEvent(scrollWheelEvent2Source: nil,

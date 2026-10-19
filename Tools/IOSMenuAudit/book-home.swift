@@ -72,7 +72,7 @@ extension MenuAudit {
                     for region in regions where region.kind == .division {
                         guard layout.action(at: .init(x: region.frame.midX / scale, y: 200)) == nil else { throw invalidTargets(line: #line) }
                     }
-                    let footer = layout.targets.first { $0.action.id == "collections" }!.frame
+                    let footer = layout.targets.first { $0.action.id == "donate" }!.frame
                     for (position, scroll) in [("top", CGFloat.zero), ("footer", max(0, min(layout.size.height - viewport.height, footer.maxY - viewport.height + 12)))] {
                         let context = try bitmapContext(size: .init(width: size.width, height: size.height))
                         context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
@@ -80,7 +80,7 @@ extension MenuAudit {
                         context.clip(to: CGRect(x: 0, y: 0, width: safe.width, height: safe.height))
                         context.scaleBy(x: scale, y: scale); context.translateBy(x: 0, y: -scroll)
                         GameFrontEnd.draw(page, layout: layout, typography: typography,
-                            highlighted: position == "top" ? "resume" : "collections", in: context)
+                            highlighted: position == "top" ? "resume" : "donate", in: context)
                         context.restoreGState()
                         for region in regions {
                             context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame))

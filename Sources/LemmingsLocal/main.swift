@@ -1873,6 +1873,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onPlaylists = { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
     playfield.onUpdate = { [weak self] in self?.updates.showUpdate() }
     playfield.onSettings = { [weak self] in self?.showSettings() }
+    playfield.onDonate = { NSWorkspace.shared.open(GameSupport.coffeeURL) }
     playfield.onSelectOverlayLine = { [weak self] index in
       guard let self else { return }
       if self.fanScreen != .off {

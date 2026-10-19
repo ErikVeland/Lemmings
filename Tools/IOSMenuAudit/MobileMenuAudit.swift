@@ -14,6 +14,7 @@ import NxlvKit
         let tableResult = ["--table-result", "--book-result"].contains(CommandLine.arguments.last ?? "")
         let roundedHUD = CommandLine.arguments.last == "--rounded-hud"
         let bookHome = CommandLine.arguments.last == "--book-home"
+        let support = CommandLine.arguments.last == "--support"
         let duo = CommandLine.arguments.last == "--duo"
         let staticHome = CommandLine.arguments.last == "--static-home"
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
@@ -30,7 +31,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (tableResult || roundedHUD || bookHome || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -41,6 +42,7 @@ import NxlvKit
         if tableResult { try checkTableResult(typography: typography, content: content, output: output); return }
         if roundedHUD { try checkRoundedHUD(typography: typography, content: content, output: output); return }
         if bookHome { try checkBookHome(typography: typography, content: content, output: output); return }
+        if support { try checkSupport(typography: typography, output: output); return }
         if duo { try checkDuo(typography: typography, content: content, output: output); return }
         if staticHome { try checkStaticHome(typography: typography, output: output); return }
         if regionalBrand { try checkRegionalBrand(typography: typography, resources: content, output: output); return }
@@ -80,7 +82,7 @@ import NxlvKit
             journey: journey, families: homeFamilies, initials: "AB v CD")
         guard home.rows.map(\.id) == ["journey", "family.classic", "family.ohNo", "family.holiday",
             "family.ohYes", "family.fan", "neolemmix", "l2", "l3"],
-            home.footer.map(\.id) == ["players", "records", "collections", "settings", "whatsNew"],
+            home.footer.map(\.id) == ["players", "records", "collections", "donate", "settings", "whatsNew"],
             home.footer.prefix(3).map(\.title) == ["Players", "Progress", "Playlists"]
             else { throw Failure.invalidTargets }
         var pages: [(String, GameFrontEnd.Page)] = [

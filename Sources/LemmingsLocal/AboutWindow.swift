@@ -1,11 +1,12 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 /// Credits remain server-editable. Only plain Markdown text is displayed.
 @MainActor final class AboutWindow {
     static let shared = AboutWindow()
-    static let coffeeURL = URL(string: "https://coff.ee/generik")!
+    static let coffeeURL = GameSupport.coffeeURL
     static let contributorsURL = URL(string: "https://glasscode.academy/lemmings-api/v1/contributors.md")!
     private let resources: URL
     private let defaults: UserDefaults

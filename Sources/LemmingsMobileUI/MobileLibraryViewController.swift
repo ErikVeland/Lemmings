@@ -14,7 +14,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
 @MainActor final class MobileLibraryViewController: UIViewController {
     enum Route: Equatable {
-        case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
+        case home, support, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
         case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
@@ -530,6 +530,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
                 families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
             canvas.preview = nil
+        case .support:
+            canvas.page = GameSupport.page
+            canvas.preview = GameSupport.qrCode
+            canvas.previewSource = nil
         case let .family(family):
             let all = catalogue?.packs(in: family) ?? []
             let query = searchQuery.trimmingCharacters(in: .whitespaces).lowercased()
@@ -757,6 +761,17 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if searchField.isFirstResponder { searchField.resignFirstResponder() } else { searchField.becomeFirstResponder() }
             rebuild()
         case "settings": navigate(.settings)
+        case "donate":
+            #if os(tvOS)
+            navigate(.support)
+            #else
+            UIApplication.shared.open(GameSupport.coffeeURL, options: [:]) { [weak self] opened in
+                guard !opened else { return }
+                Task { @MainActor [weak self] in
+                    if self?.route == .home { self?.navigate(.support) }
+                }
+            }
+            #endif
         case "data": navigate(.data)
         case "import": chooseGameData(for: .classic)
         case "import.classic": chooseGameData(for: .classic)

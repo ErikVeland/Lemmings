@@ -258,7 +258,7 @@ struct ReticleFeedback {
     for (index, rect) in overlayFooterButtons.enumerated() {
       let rect = visibleFrame(rect)
       if rect.isEmpty { continue }
-      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: [L10n.text("Player profiles"), L10n.text("Records"), L10n.text("Playlists")][index], frame: transform(rect)) { [weak self] in
+      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: [L10n.text("Player profiles"), L10n.text("Records"), L10n.text("Playlists"), L10n.text("Donate")][index], frame: transform(rect)) { [weak self] in
         self?.activateFooterButton(index)
       })
     }
@@ -286,6 +286,7 @@ struct ReticleFeedback {
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
   var onPlaylists: (() -> Void)?
+  var onDonate: (() -> Void)?
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
   var overlayAvailableUpdate: String?
@@ -297,6 +298,7 @@ struct ReticleFeedback {
     case 0: onProfiles?()
     case 1: onRecords?()
     case 2: onPlaylists?()
+    case 3: onDonate?()
     default: break
     }
   }
@@ -1058,7 +1060,7 @@ struct ReticleFeedback {
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists"))]
+    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists")), GameSupport.menuAction]
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices {
@@ -1086,6 +1088,7 @@ struct ReticleFeedback {
     case "players": onProfiles?()
     case "records": onRecords?()
     case "playlists": onPlaylists?()
+    case "donate": onDonate?()
     case "settings": onSettings?()
     case "whatsNew": onUpdate?()
     default: return false
@@ -1133,7 +1136,7 @@ struct ReticleFeedback {
     overlayLineRects = home.page.rows.compactMap { row in
       home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
-    overlayFooterButtons = ["players", "records", "playlists"].compactMap { id in
+    overlayFooterButtons = ["players", "records", "playlists", "donate"].compactMap { id in
       home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     let hovered = cursorViewPoint.flatMap { point in
@@ -1401,7 +1404,7 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      let labels = [L10n.text("PROFILES"), L10n.text("RECORDS"), L10n.text("PLAYLISTS")]
+      let labels = [L10n.text("PROFILES"), L10n.text("RECORDS"), L10n.text("PLAYLISTS"), L10n.text("Donate")]
       let count = CGFloat(labels.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
