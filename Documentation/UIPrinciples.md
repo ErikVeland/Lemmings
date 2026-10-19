@@ -7,6 +7,13 @@ Contributor delivery retains saved content during loading or failure and offers
 Retry in the offline state. Markdown supplies text only, with bitmap headings
 and body lettering.
 
+Home keeps Donate with its secondary footer actions on Mac, iPhone, iPad and
+TV. Preserve the gameplay primary action and keep Donate enabled without game
+data. Mac and iOS open the shared coffee URL. TV shows its QR code and address
+with Back at bottom-left. iOS uses the same page if browser opening fails.
+Fit the code and Back together at a whole-pixel scale. Compact preview pages
+reserve the gap after the preview before placing the footer.
+
 Privacy count reset opens ARE YOU SURE? with Back focused. Restore previous
 counts becomes available after clearing and disables after recovery. The backup
 retains counts earned after the reset. These shared local counts cover Classic,

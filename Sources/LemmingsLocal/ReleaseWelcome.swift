@@ -9,13 +9,15 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.6"
-    static var subtitle: String { L10n.text("Smoother play and shining arrows") }
+    static let notesVersion = "2.0.7"
+    static var subtitle: String { L10n.text("Safer resets and supporter credits") }
     // A patch describes the whole 2.0 line, so players who skip patches see every change.
     static var sections: [(String, String)] { [
+        (L10n.text("Safer count reset"), L10n.text("Clearing this Mac's play counts now asks for confirmation. Restore previous counts recovers the saved totals and retains rescues earned since the reset.")),
+        (L10n.text("About and supporters"), L10n.text("About now includes published version history and contributor credits. The contributor list refreshes from the server. Donate is available on Home and in About.")),
         (L10n.text("Smoother play"), L10n.text("Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel.")),
         (L10n.text("Shining arrows"), L10n.text("On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges.")),
-        (L10n.text("Menu themes"), L10n.text("Most launches play the Amiga or Macintosh title theme. Sometimes the menu plays the title theme from another version of the game.")),
+        (L10n.text("Menu themes"), L10n.text("Most launches play the Amiga title theme. Sometimes the menu plays a title theme from another version, including Macintosh.")),
         (L10n.text("Controller steps"), L10n.text("Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick.")),
         (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
         (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),

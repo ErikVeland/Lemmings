@@ -146,7 +146,7 @@ public struct GameFrontEnd {
         var details: [CGRect] = []
         if compact {
             let footerRows = footerGrid.rows
-            let room = max(80, minimumHeight - y - CGFloat(footerRows) * 60 - 36)
+            let room = max(80, minimumHeight - y - CGFloat(footerRows) * 60 - 36 - 12)
             let previewWidth = min((boardWidth - 40) * 0.55, room * 2)
             preview = CGRect(x: x + 20, y: y, width: previewWidth, height: previewWidth / 2)
             let side = boardWidth - 40 - previewWidth - 16

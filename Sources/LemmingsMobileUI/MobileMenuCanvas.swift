@@ -34,6 +34,9 @@ import UIKit
         return result
     }
     var splitResult = false
+    var fitsSupportPage = false {
+        didSet { if fitsSupportPage != oldValue { rebuild() } }
+    }
     var boxesHome = false {
         didSet { if boxesHome != oldValue { setNeedsLayout(); setNeedsDisplay() } }
     }
@@ -126,6 +129,15 @@ import UIKit
     private func interfaceScale(width: CGFloat, viewportHeight: CGFloat? = nil) -> CGFloat {
         let setting = MobileSettings.current(from: .standard).classic.interfaceSize
         let height = viewportHeight ?? (superview as? UIScrollView)?.bounds.height ?? bounds.height
+        if fitsSupportPage {
+            #if os(tvOS)
+            let preferred = MobileSettingsArt.interfaceScale(setting, width: width, television: true)
+            #else
+            let preferred = MobileSettingsArt.interfaceScale(setting, width: width)
+            #endif
+            let source = MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+            return GameSupport.fittedScale(preferred, page: source, width: width, height: height)
+        }
         #if os(tvOS)
         if page.home {
             return televisionScale(MobileSettingsArt.interfaceScale(setting, width: width, television: true),

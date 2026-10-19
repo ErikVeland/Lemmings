@@ -6217,6 +6217,8 @@ extension AppDelegate {
     try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
     GameScreen.shared.dismissAll()
     let home = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    window.contentView!.addSubview(home)
+    defer { home.removeFromSuperview() }
     home.phase = .briefing
     home.overlayTitle = L10n.text("LEMMINGS")
     home.overlayProfileInitials = "PLA"
@@ -6236,9 +6238,11 @@ extension AppDelegate {
         "Home Donate target left its viewport")
       let before = donations
       home.handleClick(at: CGPoint(x: donate.localFrame.midX, y: donate.localFrame.midY))
-      try check(home.activateHomeSelection(home.overlayLines.count + 3), "Keyboard cannot activate Donate")
+      try check(donations == before + 1, "Home mouse dispatched the wrong action")
+      try check(home.activateHomeSelection(home.overlayLines.count + 3) && donations == before + 2,
+        "Keyboard cannot activate Donate")
       try check(donate.accessibilityPerformPress() && donations == before + 3,
-        "Home mouse, keyboard or accessibility dispatched the wrong action")
+        "Home accessibility dispatched the wrong action")
     }
     print("PASS Home Donate mouse, keyboard and accessibility actions at three sizes; Home and About share the coffee destination")
     print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")

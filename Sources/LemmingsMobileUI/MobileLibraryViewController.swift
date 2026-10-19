@@ -485,6 +485,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func rebuild() {
+        canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
         canvas.playerName = route == .players && renamingPlayer ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
@@ -705,7 +706,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         confirmingRecordsReset = false
         #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.
-        let welcomeRoutes: [Route] = [.home, .whatsNew, .effectsWelcome, .telemetryConsent]
+        let welcomeRoutes: [Route] = [.home, .support, .whatsNew, .effectsWelcome, .telemetryConsent]
         let preserveWelcomeLoad = library == nil && libraryTask != nil
             && welcomeRoutes.contains(route) && welcomeRoutes.contains(next)
         #else

@@ -28,14 +28,44 @@ the backed-up source replacement and service restart. The preceding source is
 at `/var/backups/lemmings-telemetry/20261019T070111Z-about/server.py` on the host.
 The Markdown file is `/opt/lemmings-telemetry/contributors.md`.
 
+The initial opted-in supporter credits were published on 2026-10-19. The prior
+Markdown is retained at
+`/var/backups/lemmings-supporters/20261019T084206102238Z-initial-credits/contributors.md`.
+Internal and public HTTPS checks returned the exact prepared Markdown with the
+expected content type, no-store and nosniff headers. The separate private ledger
+passed its root ownership and `0700` directory/`0600` file checks. The saved-total
+health check passed. This content update required no service replacement or restart.
+
 The coffee button opens `https://coff.ee/generik`. Opening the link does not
 establish a donation or award a badge.
+
+Home also offers Donate beside its other footer actions on Mac, iPhone, iPad
+and TV. It remains enabled without an installed game catalogue. Mac and iOS
+open the same destination as About. TV shows a QR code and the address, with
+Back returning to Home. iOS uses that page if it cannot open the browser.
+The shared Home covers Classic, Lemmings 2 and Lemmings 3.
+The QR page chooses a whole-pixel scale that keeps the code and Back together.
+Opening it on TV preserves the initial library load.
 
 ## Donation tracking proposal
 
 The chosen policy is **opt-in public names and ranking, private amounts**.
 The Markdown list preserves server order. Donation sorting must occur privately
 on the server before names are published.
+
+Manual supporter records live in `/var/lib/lemmings-supporters/manual-supporters.json`
+on the host. The directory is root-only and the ledger has mode `0600`.
+It retains reported currency amounts, creator-confirmed consent and the recorded
+conversion basis. The public Markdown contains only opted-in display names.
+The bundled fallback keeps the same order.
+
+The initial manual entries use reported gross amounts converted to AUD with
+the [RBA reference rate](https://www.rba.gov.au/statistics/frequency/exchange-rates.html)
+on the recognition date. Their donation dates were not
+provided. Freeze that rate per entry, round to AUD minor units with half-up
+rounding, and sort descending with a case-insensitive name tie-break.
+Reconcile refunds and corrections manually. These notification records do not
+verify provider identities or grant profile badges.
 
 Buy Me a Coffee supports `donation.created` and `donation.refunded` webhooks.
 Its [webhook documentation](https://help.buymeacoffee.com/en/articles/15743173-how-to-setup-and-use-buy-me-a-coffee-webhooks)
@@ -87,3 +117,14 @@ exact deployed Markdown with `text/markdown; charset=utf-8`, `no-store` and
 `nosniff` headers. The existing saved-total endpoint also passes its health check,
 with 50,020 before and after the restart. Physical VoiceOver navigation and
 browser opening were not exercised by the automated checks.
+
+The Home donation checks verify Mac mouse, keyboard and accessibility actions
+at three sizes, with callbacks substituted for browser opening. The muted,
+windowless `LemmingsMobileMenuAudit --book-home` check passes 120 captures,
+including Donate, footer scrolling and Duo hinge/camera clearance.
+`--support` passes 54 phone, tablet and TV captures. It checks Home targets and
+decodes the rendered QR preview at each interface size. Representative Mac,
+phone, Duo and TV captures were visually inspected. iOS and tvOS GameArt/UIKit
+modules compile.
+Physical touch, remote focus, camera scanning and browser opening remain
+manual checks.

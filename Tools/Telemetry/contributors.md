@@ -14,4 +14,6 @@ Thank you to the players, testers, level authors and preservation projects that 
 
 ## Supporters
 
-No public supporters listed yet.
+tobiasampersand
+
+hays60

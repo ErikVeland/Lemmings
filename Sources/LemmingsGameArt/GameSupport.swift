@@ -12,6 +12,16 @@ public enum GameSupport {
               footer: [.init("home", L10n.text("Back"))], preview: true)
     }
 
+    /// Keep the code and Back visible together on short screens.
+    public static func fittedScale(_ preferred: CGFloat, page: GameFrontEnd.Page, width: CGFloat, height: CGFloat) -> CGFloat {
+        for value in stride(from: max(1, Int(preferred)), through: 1, by: -1) {
+            let scale = CGFloat(value)
+            let layout = GameFrontEnd.layout(page, width: width / scale, minimumHeight: height / scale)
+            if layout.size.height <= height / scale { return scale }
+        }
+        return 1
+    }
+
     public static let qrCode: CGImage? = {
         guard let filter = CIFilter(name: "CIQRCodeGenerator", parameters: [
             "inputMessage": Data(coffeeURL.absoluteString.utf8), "inputCorrectionLevel": "M"]),
