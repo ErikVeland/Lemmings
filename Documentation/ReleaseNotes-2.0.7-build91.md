@@ -46,3 +46,8 @@ patch. Engine, gameplay and launch tests were not rerun.
 iPhone, iPad and Apple TV are not published by this Mac release. Their source
 includes the shared Donate action and simulator effect/pointer fixes for a
 later device build.
+
+## Packaging note
+
+The existing rescue-target proof certificates do not match this source fingerprint.
+The app keeps those targets unverified. No engine verification was rerun for this patch.
