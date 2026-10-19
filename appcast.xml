@@ -3,6 +3,39 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.0.7</title>
+            <pubDate>Mon, 19 Oct 2026 19:28:00 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>91</sparkle:version>
+            <sparkle:shortVersionString>2.0.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Safer count reset</h3>
+<p>Clearing this Mac's play counts now asks <b>ARE YOU SURE?</b>, with Back selected. <b>Restore previous counts</b> recovers the preceding totals and keeps rescues earned after the reset.</p>
+<h3>About and supporters</h3>
+<p>About now has tabs for published version history and contributor credits. Version history works offline. Contributor credits refresh from the server, with a saved list available when offline.</p>
+<p>Donate is available on Home and in About. Thank you to tobiasampersand and hays60 for supporting Ultimate Lemmings. Public credits show opted-in names in contribution order and keep amounts private.</p>
+<h3>Menu music</h3>
+<p>Most launches now play the Amiga title theme. The occasional alternative can include the Macintosh theme and recordings from other versions.</p>
+<h3>Earlier 2.0 updates</h3>
+<p>Earlier updates added Original Macintosh 1-bit artwork, resumed journeys and playlists, Classic ghost solutions, Hot Seat ghosts, clearer worldwide level identification, controller stepping and faster drawing, records and results. See the About version-history tab for the published notes.</p>
+<h3>Compatibility and scope</h3>
+<p>This release publishes the universal macOS app for Apple silicon and Intel, with macOS 12.3 or later. The slim fresh-install download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<p>Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Existing device and engine validation limits remain documented. Release gates were approved by the release owner for this quick patch. Engine, gameplay and launch tests were not rerun.</p>
+<p>iPhone, iPad and Apple TV are not published by this Mac release. Their source includes the shared Donate action and simulator effect/pointer fixes for a later device build.</p>
+<h3>Packaging note</h3>
+<p>The existing rescue-target proof certificates do not match this source fingerprint. The app keeps those targets unverified. No engine verification was rerun for this patch.</p>
+<p class="meta">Build: 91<br>Release commit: a851d3577bf1a21bc023db94357ea3693bd29e63<br>Release base: v2.0.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-2.0.7-build91.zip" length="2054887507" type="application/octet-stream" sparkle:edSignature="RxBpDu1OwVTcgy/zGu2gy0FdtJnNkM/bJPihPT7H8HjGnyhExDHVTvv8fu0P7nferg9Wxu9Vb4wimNGQwSnkBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from90.delta" sparkle:deltaFrom="90" length="1814206" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="e1gIl8AClEeaWUId1H3CGAkHTtetzCpl/VlCz0UP2wWabLCsn/6BfRg9SRukzzJCdXIGlVXseYM+a44gO7QBCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from87.delta" sparkle:deltaFrom="87" length="49383170" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="xnAFtGvm/fU9nPQ99hWwcl+KrBQCCYr+QXP1BDwXeUATWsFmYM/8PUG6izNyDsbLGKsWtcKDftOgi7B0rBW/Bg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from86.delta" sparkle:deltaFrom="86" length="49842530" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="/SiOiSW2RC/ONG2Q7nv7ptgOW9XY8O92se637mg6SCVV6aevsICvAwbZ/AdT1+uw6+pna5EmVf8+j6fQnxTPDg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from85.delta" sparkle:deltaFrom="85" length="49845822" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="W5NUJTifYtlvKh266S0Ai3oW9KbLm4zc5hMHyaBogHpMek7U/FAZijm2Y468w+r8zZVQOEyNSZuEhlotLCnvBA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from84.delta" sparkle:deltaFrom="84" length="50736462" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="7Okt6QiwfZuUW+D+YGadlsX7IcLIkUW1DDVqUAYhfJsiH/yWY6Ik5UkUqsHHHiVz9ODZruqUFoIBU8BG1YupBA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.6</title>
             <pubDate>Mon, 19 Oct 2026 15:05:46 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
