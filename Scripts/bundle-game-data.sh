@@ -15,6 +15,7 @@ if [[ "$resources_dir" != *.app/Contents/Resources ]]; then
   echo "Game data must be copied into an app's Contents/Resources directory." >&2
   exit 1
 fi
+python3 "$project_dir/Scripts/bundle-about.py" "$resources_dir/About"
 for required in LEVELS/LEVEL000.DAT STYLES/CLASSIC.DAT VLEMMS.DAT MASKS.DAT INTERN.DAT FONT.DAT PANEL.DAT ICONS.DAT FRONTEND/GFXIFFS/MENU.IFF FRONTEND/SCREENS/MENU.DAT; do
   if [[ "$2" != l3 && ! -f "$project_dir/Sources/Ports/Lemm2/$required" ]]; then
     echo "Missing L2 source asset: $required" >&2

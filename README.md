@@ -1,12 +1,11 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The latest macOS package with retained acceptance evidence is **2.0.3 build
-86**. The appcast advertises 2.0.4 build 87. The 2.0 preparation branch prepares build 88,
-but this repository has no build 88 package or acceptance record. See the
-[release notes](Documentation/ReleaseNotes-2.0.3-build86.md),
-[release evidence](Documentation/ReleaseReadiness/2.0.3-build86/README.md) and
-[2.0.5 build 88 notes](Documentation/ReleaseNotes-2.0.5-build88.md).
+Start with the [developer handover](Documentation/DeveloperHandover.md) to build
+and test the source without private game data. Current feed versions, package
+evidence and completion limits are recorded in
+[release scope](Documentation/ReleaseScope.md). An update-feed entry is not
+acceptance evidence for its binary.
 Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
 work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
@@ -21,13 +20,13 @@ before distributing a build.
 
 ## Download
 
-Download [2.0.3 build 86](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.3),
-the latest macOS release with retained signed and notarised acceptance evidence
-in this repository for Apple silicon and Intel.
-Installed copies update automatically. Read the
-[2.0.3 notes](Documentation/ReleaseNotes-2.0.3-build86.md),
-[release evidence](Documentation/ReleaseReadiness/2.0.3-build86/README.md) and
-the [tester guide](Documentation/BetaTesting.md).
+Find published downloads on the
+[releases page](https://github.com/ErikVeland/Lemmings/releases).
+Installed Mac copies use the [update feed](appcast.xml). The
+[release-note index](Documentation/ReleaseNotes.md) links current and earlier
+notes. Read [release scope](Documentation/ReleaseScope.md) for the distinction
+between advertised versions and retained acceptance evidence, and the
+[tester guide](Documentation/BetaTesting.md) for manual testing.
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite
 levels and the last 50 distinct levels played. Bookmark levels from Level Select
@@ -35,6 +34,8 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 ## Start here
 
+- [Developer handover](Documentation/DeveloperHandover.md) — start without private assets, verify an isolated source snapshot, and find the code and checks for a change.
+- [Handover dependencies](Documentation/HandoverDependencies.md) — code ownership, asset rights, optional services and signing inputs still to establish.
 - [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — eight translated languages, review workflow and remaining validation.
@@ -57,15 +58,16 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [Music timing audit](Documentation/MusicTiming.md) — measured beats, bar estimates and DJ fallback rules.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The recorded iPhone/iPad 1.3 source and Simulator gates pass for their exact
+Historical iPhone/iPad 1.3 source and Simulator gates pass for their recorded
 commits. The 2.0 source connects Classic, Lemmings 2, Lemmings 3 and supported
 NeoLemmix packs to mobile libraries and sessions. L2 and L3 have native scene
 renderers, campaign records and checkpoint routes. NeoLemmix import validates
 styles, sprites, rendering and supported simulation features. The 2.0 source
 snapshot at `c7305724` passes the Xcode 27.2 source gate, the Mac workflow and
-the NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. Local
-Xcode 26.6 lacks the iOS 27 APIs used by the full app,
-and CoreSimulatorService cannot provide a local runtime. Real-data parity,
+the NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. That
+record also describes the older Xcode 26.6 SDK and Simulator limitations. The
+[handover verification](Documentation/DeveloperHandover.md#verification-record)
+records the newer source-test toolchain separately. Real-data parity,
 physical-device and accessibility acceptance, audio, controller, Duo and
 distribution gates remain open. See the
 [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
@@ -163,7 +165,8 @@ app's real launch and full-screen presentation.
 The iOS source target supports iOS 16 or later. The 2.0 source supports
 player-owned Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix imports
 through the system document picker. It does not package commercial game data.
-The signed build 12 remains Classic-only. See the
+Historical signed build 12 evidence covers Classic only. It does not certify
+later three-game packages. See the
 [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md)
 for current source evidence and open device and distribution checks.
 

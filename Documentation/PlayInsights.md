@@ -25,8 +25,10 @@ is unavailable; it does not mean zero.
 - **Level starts, wins and fails:** attempt events for Classic, Lemmings 2 and
   Lemmings 3. Hot Seat and solo starts are counted separately. A start without a
   later win can mean a failure, retry, exit, crash or an attempt still in progress.
-  The dashboard ranks levels by failed or unfinished starts; it does not prove
-  why a player stopped.
+  The dashboard ranks levels by fails per start, so a level that many players
+  open and leave does not outrank a level that players fail. Levels with fewer
+  than 5 starts come after the others. The rank does not prove why a player
+  stopped.
 - **Lemmings saved:** the rescued number from each completed attempt, including
   retries, failed attempts and Hot Seat. The local home count is all-time and
   works without sharing. The global home count is the all-time sum received

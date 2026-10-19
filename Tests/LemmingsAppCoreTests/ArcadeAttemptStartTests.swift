@@ -37,6 +37,8 @@ import Testing
         let first = UUID(), retry = UUID()
         #expect(store.beginAttempt(id: first, profileID: owner, level: level, previousID: nil))
         #expect(store.beginAttempt(id: retry, profileID: owner, level: level, previousID: first))
+        // Attempt starts queue their writes. Reopening models a completed handover or shutdown.
+        store.flushPendingSaves()
         let reopened = ArcadeStore(storage: storage, bundledProofs: nil)
         let start = try #require(reopened.records.trolley.starts.first { $0.id == retry })
         #expect(start.kind == .restartDuringPlay && start.parentAttemptID == first)

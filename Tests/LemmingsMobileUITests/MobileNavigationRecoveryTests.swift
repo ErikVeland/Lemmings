@@ -7,6 +7,14 @@ import NxlvKit
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
 
+#if os(iOS)
+@MainActor private final class PointerFixtureHover: UIHoverGestureRecognizer {
+    var fixtureState: UIGestureRecognizer.State = .changed
+    override var state: UIGestureRecognizer.State { get { fixtureState } set { fixtureState = newValue } }
+    override func location(in view: UIView?) -> CGPoint { CGPoint(x: 80, y: 60) }
+}
+#endif
+
 @MainActor struct MobileNavigationRecoveryTests {
     private func withGame(rendered: @escaping () -> Void = {},
                           _ body: (MobileGameViewController) async throws -> Void) async throws {
@@ -14,7 +22,7 @@ import LemmingsMobileCore
         let previous = UserDefaults.standard.object(forKey: MobileSettings.activeProfileKey)
         let runtime = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
             attributes: [UInt16](repeating: 0, count: 128 * 64), entrance: .init(x: 20, y: 20),
-            exits: [], total: 1, releaseInterval: 20, releaseDelay: 0))
+            exits: [.init(x: 110, y: 46)], total: 1, releaseInterval: 20, releaseDelay: 0))
         let session = Lemmings3MobileSession(runtime: runtime, engineFingerprint: "fixture", levelIdentifier: "fixture",
             levelIndex: 0, levelFingerprint: "fixture", renderer: { _, _ in
                 rendered()
@@ -29,6 +37,7 @@ import LemmingsMobileCore
             try? FileManager.default.removeItem(at: root)
         }
         controller.loadViewIfNeeded()
+        _ = controller.inputAdapter
         controller.view.frame = CGRect(x: 0, y: 0, width: 834, height: 1194)
         try await body(controller)
     }
@@ -71,6 +80,43 @@ import LemmingsMobileCore
             game.processTVControllerButtonEvent { game.performCommand(.skill(1)) }
             #expect(game.selectedControl == selected)
             #expect(!game.pollingController)
+        }
+    }
+    #endif
+
+    #if os(iOS)
+    @Test(arguments: [MobileTargetInput.touch, .precision])
+    func releasedContactClearsAimWithoutHover(input: MobileTargetInput) async throws {
+        try await withGame { game in
+            _ = game.lifecycle.handle(.becameActive)
+            _ = game.playState.resume(isForeground: true, isInterrupted: false)
+            game.overlay.isHidden = true
+            let point = MobilePoint(x: 80, y: 60)
+            game.handle([.preview(point)], input: input)
+            #expect(game.previewPoint == point)
+            #expect(game.playfieldView.cursorPoint != nil)
+            game.handle([.commit(point)], input: input)
+            #expect(game.previewPoint == nil)
+            #expect(game.highlightedTarget == nil)
+            #expect(game.playfieldView.cursorPoint == nil)
+            game.handle([.preview(point), .cancelPreview], input: input)
+            #expect(game.previewPoint == nil && game.playfieldView.cursorPoint == nil)
+        }
+    }
+
+    @Test func releasedClickReturnsToHoverAndHoverExitClearsAim() async throws {
+        try await withGame { game in
+            _ = game.lifecycle.handle(.becameActive)
+            _ = game.playState.resume(isForeground: true, isInterrupted: false)
+            game.overlay.isHidden = true
+            let hover = PointerFixtureHover(target: nil, action: nil)
+            game.playfieldView.perform(NSSelectorFromString("handleHover:"), with: hover)
+            let click = MobilePoint(x: 40, y: 30)
+            game.handle([.preview(click), .commit(click)], input: .precision)
+            #expect(game.previewPoint == .init(x: 80, y: 60))
+            hover.fixtureState = .ended
+            game.playfieldView.perform(NSSelectorFromString("handleHover:"), with: hover)
+            #expect(game.previewPoint == nil && game.playfieldView.cursorPoint == nil)
         }
     }
     #endif

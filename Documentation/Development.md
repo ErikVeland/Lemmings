@@ -1,5 +1,8 @@
 # Development workflow
 
+Start with the [developer handover](DeveloperHandover.md) for an asset-free
+source build, isolated verification, ownership map and dependency inventory.
+
 `main` is the combined development branch for the Mac and iOS apps. It can
 contain unreleased work. Release tags identify shipped source. Read the
 [release scope](ReleaseScope.md) before making compatibility claims.
@@ -19,6 +22,11 @@ Keep recoverable snapshots in the ignored `.archive/` directory. Preserve
 branch history, changed files and untracked source files before pruning.
 Keep worktrees with local assets or signing inputs until those inputs are
 accounted for. Remote branch deletion and publication are separate actions.
+
+Keep only current release notes in the documentation root. The
+[release-note index](ReleaseNotes.md) links earlier notes to their exact Git
+revision. Preserve packaged notes and acceptance evidence cited by a release
+gate. Do not rewrite historical input manifests to match a newer checkout.
 
 ## Shared Mac build modules
 
@@ -40,6 +48,20 @@ Python and shell syntax, JSON/plist validation, local Markdown links and matchin
 release metadata. This check also runs in Mac CI. It does not need game assets.
 Run `zsh Scripts/run-localisation-tests.sh` for the catalogue and native Mac
 language-picker regressions. The picker checks need the shipped bitmap artwork.
+
+`Tools/RepositoryMaintenance/repository_policy.py` owns the file exclusions used
+by both the repository checker and the handover verifier. Update that policy
+when adding a local-only input rather than maintaining a separate export rule.
+
+Run `zsh Scripts/run-source-tests.sh` for shared source regressions without
+commercial data. Run `python3 Tools/DeveloperHandover/verify.py` to exercise that
+route in a separate copy without ignored game data or local build output.
+Tooling regressions run with:
+
+```sh
+python3 -m unittest discover -s Tests/DeveloperHandoverTests -v
+python3 -m unittest discover -s Tests/ReleaseReadinessTests -p test_repository_maintenance.py -v
+```
 
 Use focused checks for the changed behaviour. Keep native UI tests offscreen
 and muted through `Tools/UITestRunner/run.py`. Report checks that require

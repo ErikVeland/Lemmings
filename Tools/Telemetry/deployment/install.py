@@ -20,6 +20,8 @@ shutil.copy2(site, backup / "nginx-site.conf")
 application = Path("/opt/lemmings-telemetry")
 application.mkdir(mode=0o755, exist_ok=True)
 shutil.copy2(source.parent / "server.py", application / "server.py")
+if not (application / "contributors.md").exists():
+    shutil.copy2(source.parent / "contributors.md", application / "contributors.md")
 env = Path("/etc/lemmings-telemetry.env")
 if not env.exists():
     fd = os.open(env, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

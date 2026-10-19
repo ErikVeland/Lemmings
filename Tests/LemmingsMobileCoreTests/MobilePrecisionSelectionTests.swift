@@ -141,8 +141,10 @@ struct MobilePrecisionSelectionTests {
             MobileTargetCandidate(id: 1, point: .init(x: 41, y: 40), direction: 1, assignment: .eligible),
             MobileTargetCandidate(id: 2, point: .init(x: 40, y: 40), direction: -1, assignment: .eligible),
         ]
-        #expect(MobileTargetSelector.select(candidates: actors, touch: .init(x: 41, y: 40),
-            viewport: viewport, input: .precision)?.id == 2)
+        for actor in actors {
+            #expect(MobileTargetSelector.select(candidates: actors, touch: actor.point,
+                viewport: viewport, input: .precision)?.id == actor.id)
+        }
     }
 
     private func pick(_ point: MobilePoint, viewport: MobileViewport) -> MobileTargetSelection? {

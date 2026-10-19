@@ -6120,6 +6120,103 @@ extension AppDelegate {
     print("PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable")
   }
 
+  fileprivate func testAboutAndCountRecovery() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let suite = "about-counts-\(UUID())"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite); GameScreen.shared.dismissAll() }
+    let telemetry = AnonymousTelemetry(defaults: defaults)
+    defaults.set(["lemmings_saved|||": 4768], forKey: "AnonymousTelemetryCountsV1")
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions(), telemetry: telemetry)
+    preferences.show()
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+    func button(_ title: String, in view: NSView) throws -> NSButton {
+      guard let button = descendants(view).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
+        throw IntegrationFailure(message: "Missing About/reset action: " + title)
+      }
+      return button
+    }
+    let folder = URL(fileURLWithPath: ".build/about-renders")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    func capture(_ page: NSView, _ name: String) throws {
+      page.needsLayout = true
+      page.layoutSubtreeIfNeeded()
+      descendants(page).forEach { $0.needsDisplay = true }
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    let settingsPage = GameScreen.shared.controllerPage(in: window)!
+    try button("Privacy", in: settingsPage).performClick(nil)
+    try capture(settingsPage, "privacy-before-reset")
+    let clear = try button("Clear this Mac's counts", in: settingsPage)
+    let clearRect = clear.convert(clear.bounds, to: settingsPage)
+    try check(settingsPage.hitTest(CGPoint(x: clearRect.midX, y: clearRect.midY)) === clear,
+      "Count reset target is obscured")
+    clear.performClick(nil)
+    try check(telemetry.localSavedTotal == 4768, "Opening confirmation reset counts")
+    let confirmation = GameScreen.shared.controllerPage(in: window) as! GameMenuPage
+    try check(window.firstResponder === confirmation.controllerBackButton, "Count reset did not default to Back")
+    try capture(confirmation, "reset-confirmation")
+    confirmation.controllerBackButton.performClick(nil)
+    try check(telemetry.localSavedTotal == 4768, "Cancelling reset changed counts")
+    clear.performClick(nil)
+    try button("Clear counts", in: GameScreen.shared.controllerPage(in: window)!).performClick(nil)
+    try check(telemetry.localSavedTotal == 0 && telemetry.hasLocalCountsBackup, "Confirmed reset lost its recovery")
+    try capture(settingsPage, "privacy-recovery-available")
+    defaults.set(["lemmings_saved|||": 12], forKey: "AnonymousTelemetryCountsV1")
+    try button("Restore previous counts", in: settingsPage).performClick(nil)
+    try check(telemetry.localSavedTotal == 4780 && !telemetry.hasLocalCountsBackup, "Recovery lost new rescues or remained reusable")
+    try capture(settingsPage, "privacy-recovered")
+    telemetry.restoreLocalCounts()
+    try check(telemetry.localSavedTotal == 4780, "Recovery duplicated counts")
+    GameScreen.shared.dismissAll()
+
+    let about = AboutWindow(defaults: defaults, loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
+    let page = about.show(owner: window)
+    for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    try check(defaults.string(forKey: "ContributorsMarkdownV1")?.contains("First supporter") == true,
+      "Server contributor list was not cached")
+    let originalSize = page.frame.size
+    for size in [CGSize(width: 900, height: 620), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
+      page.frame.size = size; page.needsLayout = true
+      for name in ["About", "Version history", "Contributors"] {
+        try button(name, in: page).performClick(nil)
+        page.layoutSubtreeIfNeeded()
+        try capture(page, "\(Int(size.width))-\(name.replacingOccurrences(of: " ", with: "-"))")
+        let visible = descendants(page).compactMap { $0 as? NSButton }.filter { !$0.isHiddenOrHasHiddenAncestor }
+        for target in visible {
+          let rect = target.convert(target.bounds, to: page)
+          try check(page.bounds.contains(rect), "About action left the page")
+          let hit = page.hitTest(CGPoint(x: rect.midX, y: rect.midY))
+          try check(hit === target || hit?.isDescendant(of: target) == true, "About action is obscured: " + target.title)
+        }
+        if name == "Version history", let document = descendants(page).compactMap({ $0 as? AboutMarkdownView })
+          .first(where: { !$0.isHiddenOrHasHiddenAncestor })?.scroll.documentView {
+          try check(document.bounds.height > 4000, "Version history is missing its published releases")
+          try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) }, "History text left document bounds")
+        }
+      }
+    }
+    page.frame.size = originalSize
+    GameScreen.shared.dismissAll()
+    let offline = AboutWindow(defaults: defaults, loadContributors: { throw URLError(.notConnectedToInternet) })
+    let offlinePage = offline.show(owner: window)
+    try button("Contributors", in: offlinePage).performClick(nil)
+    for _ in 0..<100 where !descendants(offlinePage).compactMap({ $0 as? GameLabel })
+      .contains(where: { $0.stringValue == "Saved list · Offline" }) {
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    try capture(offlinePage, "contributors-offline")
+    try check(descendants(offlinePage).compactMap({ $0 as? GameLabel }).contains(where: { $0.stringValue == "First supporter" }),
+      "Offline contributors lost the cached list")
+    try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
+    print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")
+  }
+
   fileprivate func testGamePages() throws {
     playfield.startCountdown.cancel()
     let running = FinalTickSession(win: false, finalTick: 1000)
@@ -7703,9 +7800,12 @@ Task { @MainActor in
     try subject.testFanRunRecovery()
     try subject.testNeoRunRecovery()
     print("Collections integration tests passed.")
+    #elseif ABOUT_TESTS
+    try await subject.testAboutAndCountRecovery()
     #elseif RELEASE_NOTES_TESTS
     try await subject.testSequelReleaseStatus()
     try subject.testScrollableReleaseNotes()
+    try await subject.testAboutAndCountRecovery()
     #elseif RELEASE_REMAINING_TESTS
     try await subject.testRetainedSolutionSwitching()
     try await subject.testSequenceCheckpointResume()

@@ -5,7 +5,7 @@ The language-picker fix is committed in `f5d1c4c5`. The release also refreshes
 release metadata, translated notes, release checks and repository maintenance.
 What's New now resolves its text when opened, so a language preview cannot
 leave its cached subtitle and sections in the first language used.
-See the [release notes](../../ReleaseNotes-2.0.3-build86.md).
+See the [release notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5ebdcce8a6dbf636f5a93f74d76fff/Documentation/ReleaseNotes-2.0.3-build86.md).
 
 ## Scope
 

@@ -23,7 +23,13 @@ import NxlvKit
             && ProcessInfo.processInfo.thermalState != .serious && ProcessInfo.processInfo.thermalState != .critical
     }
     // A12 iPads support the shaders, but cannot afford desktop-sized effects.
+    #if targetEnvironment(simulator)
+    // Simulator's GPU family does not describe the host's performance. Keep the
+    // bounded overlay budget and measured pressure checks instead of omitting FX.
+    static let constrained = false
+    #else
     static let constrained = MTLCreateSystemDefaultDevice()?.supportsFamily(.apple7) != true
+    #endif
     static var cpuFrameCost: Double { adaptive.cpu.smoothedCost }
     static var gpuFrameCost: Double { adaptive.gpu.smoothedCost }
 

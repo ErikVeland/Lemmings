@@ -171,25 +171,14 @@ import NxlvKit
               x: 0, y: 287, width: 992, role: .heading, in: page.body)
         label(L10n.text("LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS"), x: 0, y: 240,
               width: 992, role: .heading, in: page.body)
-        let grouped = Dictionary(grouping: counts.filter { $0.game != nil && $0.level != nil },
-                                 by: { ($0.game ?? "") + "|" + ($0.level ?? "") })
-        let levels = grouped.map { key, rows -> (String, Int, Int, Int) in
-            func sum(_ kind: AnonymousTelemetryEvent.Kind) -> Int {
-                rows.filter { $0.event == kind.rawValue }.reduce(0) { $0 + $1.count }
-            }
-            return (key, sum(.levelStart), sum(.levelWin), sum(.levelFail))
-        }.filter { $0.1 > 0 }
-            .sorted { lhs, rhs in
-                let a = max(lhs.3, lhs.1 - lhs.2), b = max(rhs.3, rhs.1 - rhs.2)
-                return a == b ? lhs.1 > rhs.1 : a > b
-            }
+        let levels = summary.hardestLevels
         if levels.isEmpty {
             label(L10n.text("No level starts yet"), x: 0, y: 202, width: 992, in: page.body)
         }
         for (index, level) in levels.prefix(5).enumerated() {
             let y = CGFloat(202 - index * 39)
-            label(Self.levelName(level.0), x: 0, y: y, width: 590, in: page.body)
-            label(L10n.text("\(level.1) starts   \(level.2) wins   \(level.3) fails"), x: 594, y: y,
+            label(Self.levelName(level.key), x: 0, y: y, width: 590, in: page.body)
+            label(L10n.text("\(level.starts) starts   \(level.wins) wins   \(level.fails) fails"), x: 594, y: y,
                   width: 398, in: page.body)
         }
         label(notice, x: 0, y: 0, width: 992, in: page.body)

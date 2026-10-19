@@ -854,16 +854,17 @@ typealias MobileGameControllerBase = UIViewController
         view.bringSubviewToFront(solutionSelector)
     }
 
-    private func handle(_ touchEffects: [MobileTouchEffect]) {
+    func handle(_ touchEffects: [MobileTouchEffect], input: MobileTargetInput? = nil) {
         guard !session.isReadOnly, overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
               !session.snapshot.isComplete else { return }
         var needsFrame = false
+        let touchInput = input ?? playfieldView.touchInput
         for effect in touchEffects {
             switch effect {
             case let .preview(point), let .movePreview(point):
                 hoverAimActive = false
-                previewInput = playfieldView.touchInput
+                previewInput = touchInput
                 previewPoint = point
                 highlightedTarget = target(at: point)
                 needsFrame = true
@@ -871,11 +872,11 @@ typealias MobileGameControllerBase = UIViewController
                 if fanMode {
                     previewPoint = point
                     updateFan(at: point, active: (session as? Lemmings2MobileSession)?.isFanActive != true)
+                    restoreHoverAim()
                     needsFrame = true
                     continue
                 }
-                previewInput = playfieldView.touchInput
-                previewPoint = previewInput == .precision ? point : nil
+                previewInput = touchInput
                 if let selection = target(at: point), selection.state == .eligible {
                     if !beginL3ToolDirectionSelection(control: selectedControl,
                         target: selection.id, selection: selection) {
@@ -890,6 +891,7 @@ typealias MobileGameControllerBase = UIViewController
                 } else {
                     highlightedTarget = target(at: point)
                 }
+                restoreHoverAim()
                 needsFrame = true
             case let .pan(delta):
                 restoreHoverAim()
@@ -973,10 +975,10 @@ typealias MobileGameControllerBase = UIViewController
                                                         visible: playfieldView.gameViewport.visibleLevelRect)
                 // The actor highlight follows the lock. The reticule stays at the input position.
             } else if let previewPoint { highlightedTarget = selectTarget(at: previewPoint, candidates: candidates) }
-            else if hoverAimActive { highlightedTarget = nil }
+            else { highlightedTarget = nil }
             #else
             if let previewPoint { highlightedTarget = selectTarget(at: previewPoint, candidates: candidates) }
-            else if hoverAimActive { highlightedTarget = nil }
+            else { highlightedTarget = nil }
             #endif
         }
         if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects() }

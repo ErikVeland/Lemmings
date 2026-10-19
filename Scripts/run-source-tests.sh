@@ -5,9 +5,9 @@ project_dir="${0:A:h:h}"
 export LEMMINGS_TEST_AUDIO=muted
 export LEMMINGS_TEST_WINDOWS=offscreen
 cd "$project_dir"
-data_checks='BeastMixTests|ZipArchiveTests/everyBundledPackDecodesLikeUnzip|FanPackUpdaterTests/installsOnlyMissingValidPacks|RecoveryPerformanceTests/deferredHashUsesImmutableClassicAndSequelStates|MacMonochromeTests|MacMonochromeBackpackTests|MobileCatalogueTests|FanPackCorpusTests|MobileProgressionBuilderTests|MobileFanCountStoreTests|MobileArtworkTests|MobileExplosionParityTests|MobileBombCountdownTests|MobileFavouritesTests/favouritesSpanPacksAndPlayInTheirOwnSession|MobileShuffleAllTests|MobileLearningTests/curatedJourneyStartsWithoutScanningFuturePacks'
+data_checks='BeastMixTests|ZipArchiveTests/everyBundledPackDecodesLikeUnzip|FanPackUpdaterTests/installsOnlyMissingValidPacks|RecoveryPerformanceTests/deferredHashUsesImmutableClassicAndSequelStates|MacMonochromeTests|MacMonochromeBackpackTests|MacArrowWrapTests|MacExitDoorTests|MobileCatalogueTests|FanPackCorpusTests|MobileProgressionBuilderTests|MobileFanCountStoreTests|MobileArtworkTests|MobileExplosionParityTests|MobileBombCountdownTests|MobileFavouritesTests/favouritesSpanPacksAndPlayInTheirOwnSession|MobileShuffleAllTests|MobileLearningTests/curatedJourneyStartsWithoutScanningFuturePacks'
 print "Source gate excludes game-data corpus and artwork checks: $data_checks"
 print "Run the full local release audit with bundled data before publication."
 zsh Scripts/run-swift-tests.sh --disable-sandbox \
-  --filter 'NxlvKitTests|LemmingsMobileCoreTests|LemmingsAppCoreTests' \
+  --filter 'NxlvKitTests|LemmingsMobileCoreTests|LemmingsAppCoreTests|LemmingsTVCoreTests' \
   --skip "$data_checks" "$@"

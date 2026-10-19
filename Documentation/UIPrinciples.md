@@ -1,5 +1,17 @@
 # UI clarity
 
+Mac About uses the shared stone tabs for About, Version history and Contributors.
+Published history and contributor paragraphs scroll within the body. Back stays
+at bottom-left and starts focused. Buy me a coffee is the bottom-right action.
+Contributor delivery retains saved content during loading or failure and offers
+Retry in the offline state. Markdown supplies text only, with bitmap headings
+and body lettering.
+
+Privacy count reset opens ARE YOU SURE? with Back focused. Restore previous
+counts becomes available after clearing and disables after recovery. The backup
+retains counts earned after the reset. These shared local counts cover Classic,
+Lemmings 2 and Lemmings 3 without changing their turn or handover flows.
+
 Mac Home changes the update arrow to a pixel hourglass immediately after an
 update request and while an update downloads. Keep its mouse, keyboard and
 accessibility actions available in the same bounds. Its accessible name reports
@@ -146,6 +158,10 @@ strokes one display pixel wide at every zoom and no central crosshair.
 Original and Modern presets select their matching cursor styles.
 An individual choice selects Custom, persists, and survives machine presets.
 Both cursors remain at the input position and use the same targeting geometry.
+On iOS, lifting a touch, stylus or precise click returns aim to the actual hover
+position. Without hover, clear the skill badge and target, then let the existing
+selection fade finish. Hover exit clears aim. Fan toggles use the same release
+boundary. TV retains its persistent controller pointer and target lock.
 Place the selected skill sprite diagonally below
 and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
 skill icon sizes in Gameplay settings. The icon, empty-skill X and counter share
@@ -991,6 +1007,23 @@ UIKit's device-supplied corner values, physical touch, VoiceOver and composited
 CRT output remain device checks.
 
 ## Divided mobile screens
+
+Simulator exposes an Apple-family-2-like Metal device, including for iPhone Duo.
+Do not use that family to disable explosion and fast-forward previews. Allow
+the existing bounded overlay budget, shader creation and measured pressure
+checks to decide availability. Physical device capability limits, reduced
+flashes, low-power and thermal limits still apply. Use the reported EDR headroom
+without increasing it artificially. The tested Duo session reports 1.0, so its
+effect previews remain within SDR brightness.
+
+Muted, windowless checks in the booted Duo simulator verify Metal pipeline
+creation, speed and cinematic explosion activation, touch/precision release,
+cancellation, restoration to actual hover and hover exit across Classic,
+Lemmings 2 and Lemmings 3. Twelve bitmap captures cover active and released
+badges. Adaptive FX policy tests pass, including simulator capability and
+physical-device limits. iOS and tvOS shared modules and UIKit regression cases
+compile. Full composited effects, brighter-than-SDR output on a physical HDR
+screen and real touch delivery remain manual checks.
 
 Duo gameplay spans the upper part of the view. In book view, lemmings remain
 visible across both screens, with controls filling the lower part of both screens.

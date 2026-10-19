@@ -1445,10 +1445,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showAbout() {
-    let info = Bundle.main.infoDictionary ?? [:]
-    let version = info["CFBundleShortVersionString"] as? String ?? L10n.text("Unknown")
-    let build = info["CFBundleVersion"] as? String ?? L10n.text("Unknown")
-    GameScreen.shared.message(L10n.text("Ultimate Lemmings"), detail: L10n.text("Version \(version) · Build \(build)\nA rescue worth another try."))
+    AboutWindow.shared.show(owner: window)
   }
 
   @objc private func showAchievements() {

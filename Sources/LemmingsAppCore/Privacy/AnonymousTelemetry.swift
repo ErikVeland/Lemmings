@@ -91,6 +91,40 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         counts.filter { $0.event == event.rawValue && (mode == nil || $0.mode == mode) }
             .reduce(0) { $0 + $1.count }
     }
+
+    public struct LevelAttempts: Equatable, Sendable {
+        public let key: String
+        public let starts: Int
+        public let wins: Int
+        public let fails: Int
+    }
+
+    /// Levels needing this many starts before their fail rate outranks smaller samples.
+    public static let minimumRankedStarts = 5
+
+    /// Levels ordered by fails per start, so a popular first level does not outrank a hard one.
+    /// Levels with fewer than `minimumRankedStarts` starts follow the rest, so 1 fail in 1 start
+    /// does not lead the list.
+    public var hardestLevels: [LevelAttempts] {
+        let grouped = Dictionary(grouping: counts.filter { $0.game != nil && $0.level != nil },
+                                 by: { ($0.game ?? "") + "|" + ($0.level ?? "") })
+        return grouped.map { key, rows in
+            func sum(_ kind: AnonymousTelemetryEvent.Kind) -> Int {
+                rows.filter { $0.event == kind.rawValue }.reduce(0) { $0 + $1.count }
+            }
+            return LevelAttempts(key: key, starts: sum(.levelStart), wins: sum(.levelWin), fails: sum(.levelFail))
+        }.filter { $0.starts > 0 }
+            .sorted { lhs, rhs in
+                let lhsSampled = lhs.starts >= Self.minimumRankedStarts
+                let rhsSampled = rhs.starts >= Self.minimumRankedStarts
+                if lhsSampled != rhsSampled { return lhsSampled }
+                // Compare fails / starts without division: a/b > c/d ⇔ a·d > c·b for positive b, d.
+                let lhsRate = lhs.fails * rhs.starts, rhsRate = rhs.fails * lhs.starts
+                if lhsRate != rhsRate { return lhsRate > rhsRate }
+                if lhs.starts != rhs.starts { return lhs.starts > rhs.starts }
+                return lhs.key < rhs.key
+            }
+    }
 }
 
 @MainActor public struct SavedLemmingsCounter {
@@ -120,6 +154,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     public static let consentKey = "AnonymousTelemetryConsentV1"
     public static let decidedKey = "AnonymousTelemetryDecisionV1"
     private static let countsKey = "AnonymousTelemetryCountsV1"
+    private static let countsBackupKey = "AnonymousTelemetryCountsBeforeResetV1"
     private static let activeDayKey = "AnonymousTelemetryActiveDayV1"
     private static let installationRecordedKey = "AnonymousTelemetryInstallationRecordedV1"
     private static let installationDeliveredKey = "AnonymousTelemetryInstallationDeliveredV1"
@@ -178,7 +213,27 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     }
 
     public func clearLocalCounts() {
+        if let counts = defaults.dictionary(forKey: Self.countsKey), !counts.isEmpty {
+            defaults.set(counts, forKey: Self.countsBackupKey)
+        }
         defaults.removeObject(forKey: Self.countsKey)
+        onCountsChanged?()
+    }
+
+    public var hasLocalCountsBackup: Bool {
+        !(defaults.dictionary(forKey: Self.countsBackupKey) ?? [:]).isEmpty
+    }
+
+    /// Restore the last reset, retaining counts earned since then. Never upload a recovery.
+    public func restoreLocalCounts() {
+        guard let backup = defaults.dictionary(forKey: Self.countsBackupKey) as? [String: Int] else { return }
+        var counts = defaults.dictionary(forKey: Self.countsKey) as? [String: Int] ?? [:]
+        for (key, value) in backup {
+            let (sum, overflow) = counts[key, default: 0].addingReportingOverflow(value)
+            counts[key] = overflow ? Int.max : sum
+        }
+        defaults.set(counts, forKey: Self.countsKey)
+        defaults.removeObject(forKey: Self.countsBackupKey)
         onCountsChanged?()
     }
 

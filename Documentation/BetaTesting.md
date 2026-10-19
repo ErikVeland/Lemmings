@@ -1,7 +1,7 @@
 # Public testing
 
 The current public Mac release is 2.0.3 build 86.
-See its [release notes](ReleaseNotes-2.0.3-build86.md) and
+See its [release notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5ebdcce8a6dbf636f5a93f74d76fff/Documentation/ReleaseNotes-2.0.3-build86.md) and
 [release checks](ReleaseReadiness/2.0.3-build86/README.md). Freeze one source
 commit for a public candidate. Earlier package records do not certify it.
 

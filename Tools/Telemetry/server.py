@@ -209,6 +209,23 @@ class TelemetryHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed = urlsplit(self.path)
+        if parsed.path == "/v1/contributors.md" and not parsed.query and not parsed.fragment:
+            try:
+                body = Path(__file__).with_name("contributors.md").read_bytes()
+                if not 0 < len(body) <= 65_536:
+                    raise ValueError("Invalid contributor list size")
+                body.decode("utf-8")
+            except (OSError, ValueError, UnicodeError):
+                self.respond(503)
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "text/markdown; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if parsed.path == "/v1/saved":
             if parsed.query or parsed.fragment:
                 self.respond(400)

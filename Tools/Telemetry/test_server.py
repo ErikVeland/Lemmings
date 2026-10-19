@@ -133,6 +133,13 @@ class TelemetryTests(unittest.TestCase):
             self.assertEqual(json.loads(connection.getresponse().read()), {"saved": 7})
             connection.request("GET", "/v1/saved?days=30")
             self.assertEqual(connection.getresponse().status, 400)
+            connection.request("GET", "/v1/contributors.md")
+            response = connection.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers["Content-Type"], "text/markdown; charset=utf-8")
+            self.assertIn(b"# Contributors", response.read())
+            connection.request("GET", "/v1/contributors.md?private=1")
+            self.assertEqual(connection.getresponse().status, 404)
             connection.request("POST", "/v1/event", json.dumps(dict(payload, profile="LEM")),
                                {"Content-Type": "application/json"})
             self.assertEqual(connection.getresponse().status, 400)

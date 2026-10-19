@@ -27,10 +27,22 @@ public struct FXDeviceProfile: Sendable {
 
     public static func detect(device: MTLDevice?, mobile: Bool, television: Bool = false) -> Self {
         let cores = ProcessInfo.processInfo.processorCount
+        #if targetEnvironment(simulator)
+        let simulator = true
+        #else
+        let simulator = false
+        #endif
         return Self(hasMetal: device != nil, modernGPU: device?.supportsFamily(.apple7) == true,
-                    enhancedEffectsSupported: !mobile || (cores > 2 && device?.supportsFamily(.apple4) == true),
+                    enhancedEffectsSupported: allowsEnhancedEffects(hasMetal: device != nil, mobile: mobile,
+                        processorCount: cores, supportsApple4: device?.supportsFamily(.apple4) == true, simulator: simulator),
                     processorCount: cores, recommendedWorkingSet: device?.recommendedMaxWorkingSetSize ?? 0,
                     television: television, physicalMemory: ProcessInfo.processInfo.physicalMemory)
+    }
+
+    /// Simulator exposes an Apple 2-like translation layer, not the named phone's GPU.
+    static func allowsEnhancedEffects(hasMetal: Bool, mobile: Bool, processorCount: Int,
+                                      supportsApple4: Bool, simulator: Bool) -> Bool {
+        hasMetal && (!mobile || (processorCount > 2 && (supportsApple4 || simulator)))
     }
 }
 

@@ -93,7 +93,7 @@ require(catalogue.sourceOnlyPaths.contains("Lemmings (MP3)/13 As Long As You Try
 require(catalogue.entry(path: "Lemmings (MP3)/13 As Long As You Try Your Best.m4a")?.track.id == "classic.tim6",
     "Decoder-safe copy lost its composition identity")
 
-// The main menu usually plays the Amiga or Macintosh theme, rarely another port's title theme.
+// The main menu usually plays Amiga, with Macintosh sharing the rare pool equally.
 let menuOthers = MenuThemeSelection.otherVersions(in: catalogue) { paths.contains($0) }
 require(!menuOthers.contains("lemmings_music_mod/intro.mod"), "The Amiga intro counted as a rare version")
 require(menuOthers.contains("Lemmings_(Arcade)/02 March of the Mods (The Finnjenka Dance).m4a")
@@ -115,8 +115,22 @@ for _ in 0..<8000 {
     }
     menuCounts[key, default: 0] += 1
 }
-require((800...1200).contains(menuCounts["other"] ?? 0), "Other versions are not rare: \(menuCounts)")
-require(abs((menuCounts["amiga"] ?? 0) - (menuCounts["mac"] ?? 0)) < 600, "Amiga and Macintosh are not even: \(menuCounts)")
+let rareCount = (menuCounts["other"] ?? 0) + (menuCounts["mac"] ?? 0)
+require((800...1200).contains(rareCount), "Other versions are not rare: \(menuCounts)")
+let expectedMacCount = Double(rareCount) / Double(menuOthers.count + 1)
+require(abs(Double(menuCounts["mac"] ?? 0) - expectedMacCount) < 60,
+    "Macintosh does not share the rare pool equally: \(menuCounts)")
+var macOnlyCount = 0
+for _ in 0..<8000 {
+    if MenuThemeSelection.choose(macintoshAvailable: true, otherVersions: [], using: &dice) == .macintoshLemming1 {
+        macOnlyCount += 1
+    }
+}
+require((800...1200).contains(macOnlyCount), "Macintosh must stay rare without other recordings: \(macOnlyCount)")
+for _ in 0..<2000 {
+    require(MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: menuOthers, using: &dice) != .macintoshLemming1,
+        "An unavailable Macintosh bank entered the rare pool")
+}
 for _ in 0..<200 {
     require(MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: [], using: &dice) == .amigaIntro,
         "Without the Macintosh bank or other versions, the Amiga intro must play")

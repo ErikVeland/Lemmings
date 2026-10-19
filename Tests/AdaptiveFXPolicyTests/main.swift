@@ -7,6 +7,16 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
 
 @main struct AdaptiveFXPolicyTests {
     static func main() throws {
+        for simulator in [false, true] {
+            try require(FXDeviceProfile.allowsEnhancedEffects(hasMetal: true, mobile: true,
+                processorCount: 8, supportsApple4: false, simulator: simulator) == simulator,
+                "Simulator translation must not be treated as an old physical GPU")
+            for (metal, cores) in [(false, 8), (true, 2)] {
+                try require(!FXDeviceProfile.allowsEnhancedEffects(hasMetal: metal, mobile: true,
+                    processorCount: cores, supportsApple4: false, simulator: simulator),
+                    "Simulator must retain Metal and processor limits")
+            }
+        }
         let modern = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
                                      processorCount: 8, recommendedWorkingSet: 1_073_741_824)
         let older = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: false,

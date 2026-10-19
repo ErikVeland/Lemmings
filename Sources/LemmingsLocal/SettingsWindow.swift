@@ -68,6 +68,7 @@ import NxlvKit
   private var hdrFlashCheck: NSButton?
   private var djSoundtracksCheck: NSButton?
   private var telemetryCheck: NSButton?
+  private var restoreCountsButton: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
   var videoIsConnected = true { didSet { refreshVideoControls() } }
@@ -678,9 +679,12 @@ import NxlvKit
     let info = GameButton(title: L10n.text("Privacy info"), target: self, action: #selector(showPrivacyInfo(_:)))
     let insights = GameButton(title: L10n.text("View play insights"), target: self, action: #selector(openPlayInsights))
     let clear = GameButton(title: L10n.text("Clear this Mac's counts"), target: self, action: #selector(clearPlayInsights))
+    let restore = GameButton(title: L10n.text("Restore previous counts"), target: self, action: #selector(restorePlayInsights))
+    restore.isEnabled = telemetry.hasLocalCountsBackup
+    restoreCountsButton = restore
     return groupedPane([
       (L10n.text("Sharing"), [(L10n.text("Counts"), share), (L10n.text("Details"), info)]),
-      (L10n.text("This Mac"), [(L10n.text("Insights"), insights), (L10n.text("Reset"), clear)]),
+      (L10n.text("This Mac"), [(L10n.text("Insights"), insights), (L10n.text("Reset"), clear), (L10n.text("Recovery"), restore)]),
     ])
   }
 
@@ -701,9 +705,19 @@ import NxlvKit
 
   @objc private func clearPlayInsights(_ sender: NSButton) {
     help.dismiss()
-    telemetry.clearLocalCounts()
-    sender.title = L10n.text("Counts cleared")
-    sender.isEnabled = false
+    GameScreen.shared.confirm(L10n.text("ARE YOU SURE?"),
+      detail: L10n.text("Clear this Mac's play counts and local saved total? The shared total stays unchanged."),
+      actionTitle: L10n.text("Clear counts"), owner: page?.window) { [weak self] in
+        guard let self else { return }
+        self.telemetry.clearLocalCounts()
+        self.restoreCountsButton?.isEnabled = self.telemetry.hasLocalCountsBackup
+      }
+  }
+
+  @objc private func restorePlayInsights(_ sender: NSButton) {
+    help.dismiss()
+    telemetry.restoreLocalCounts()
+    sender.isEnabled = telemetry.hasLocalCountsBackup
   }
 
   /// Refills the source lists and reselects what is chosen.

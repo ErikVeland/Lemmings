@@ -2,7 +2,9 @@
 
 This document describes the maintained shape of Ultimate Lemmings. It is the
 technical source of truth for module boundaries, runtime flow, data ownership
-and release packaging. Product status belongs in
+and release packaging. Start with the
+[developer handover](Documentation/DeveloperHandover.md) for setup and checks.
+Product status belongs in
 [Documentation/Overview.md](Documentation/Overview.md); release claims belong
 in [Documentation/ReleaseScope.md](Documentation/ReleaseScope.md).
 
@@ -13,9 +15,11 @@ different 2D Lemmings engine families. It preserves the source rules and data
 model of each family. It does not turn every format into Classic rules and call
 the result universal compatibility.
 
-The repository contains source code, tests, tools, documentation and public
-non-commercial resources. Commercial game data, local signing credentials and
-generated application bundles stay outside Git.
+The repository contains source code, tests, tools, documentation and resources
+with different ownership and licence terms. Git tracking does not establish
+commercial clearance. Commercial game data, local signing credentials and
+generated application bundles stay outside Git. See the
+[handover dependency inventory](Documentation/HandoverDependencies.md).
 
 ## System shape
 
@@ -47,9 +51,27 @@ generated application bundles stay outside Git.
         data inspection        evidence and validation
 ```
 
-The diagram shows ownership, not a promise that every current type is already
-portable. `NxlvKit` still uses selected Apple frameworks for image, graphics
-and hashing work. The macOS and iOS shells own their platform services.
+The diagram is a high-level runtime view. The shared modules below sit between
+the shells and `NxlvKit`; their exact dependencies are in `Package.swift`.
+It is not a promise that every current type is portable. `NxlvKit` still uses
+selected Apple frameworks for image, graphics and hashing work. The macOS,
+iOS and tvOS shells adapt platform services.
+
+### Shared service and presentation modules
+
+| Module | Responsibility | Direct project dependencies |
+| --- | --- | --- |
+| `LemmingsAppCore` | Shared storage, records, recovery, privacy and online-service models | `NxlvKit` |
+| `LemmingsMobileCore` | Typed sessions, input and layout contracts, checkpoints | `LemmingsAppCore`, `NxlvKit` |
+| `LemmingsTVCore` | TV controller, activation, transport and migration policies | `LemmingsMobileCore`, `NxlvKit` |
+| `LemmingsGameArt` | Shared pixel menus, controls, typography and presentation effects | `NxlvKit`, `LemmingsMobileCore`, `LemmingsTVCore` |
+| `LemmingsAudio` | Sound and music playback, decks and playback transitions | `NxlvKit` |
+| `LemmingsTVUI` | TV platform adapters around the mobile flow | `LemmingsTVCore`, `LemmingsMobileUI`, `LemmingsMobileCore`, `LemmingsGameArt`, `LemmingsAudio`, `NxlvKit` |
+
+Keep simulation rules in `NxlvKit`. Shared services do not belong in a shell
+merely because the Mac implemented them first. Platform event recognition and
+view lifecycle remain in the corresponding shell or UI module. Consult
+`Package.swift` before introducing a dependency back toward a shell.
 
 ### `Sources/NxlvKit`
 
@@ -67,7 +89,7 @@ Its main areas are:
 | Lemmings 2 | Native level data, styles, masks, runtime, skills and campaign state |
 | Lemmings 3 | Native level data, tools, tribes, runtime and media-facing models |
 | Shared runtime | Replay, save/recovery contracts, campaign progress, records and common value types |
-| Audio and media | Portable model and decoding logic for supported source formats; playback remains a shell concern |
+| Audio and media | Model and decoding logic for supported source formats; playback lives in `LemmingsAudio` and platform adapters |
 
 An engine decides its own rules. A recognised file format does not select an
 engine by itself. The content catalogue and import boundary must record both
@@ -77,9 +99,10 @@ the format and the source engine family.
 
 `LemmingsLocal` is the macOS front end. It owns AppKit, GameController,
 AVFoundation, Metal, QuartzCore, menus, windows, input routing, audio output,
-save locations, bundled-resource discovery, Game Center and the unified game
-library. It adapts those services to `NxlvKit` rather than placing them in the
-shared engine code.
+save locations, bundled-resource discovery, Game Center integration and the
+unified game library. It uses `LemmingsAppCore`, `LemmingsAudio` and
+`LemmingsGameArt` for shared services, playback and presentation. It adapts those
+services to `NxlvKit` rather than placing them in shared engine code.
 
 The application presents content according to the release gate. Complete
 content is normal library content. Playable content states its limits. Preview
@@ -281,7 +304,10 @@ boundary, deployment requirements and count limits.
 `Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj` builds the iOS 16
 application. `Scripts/check-1.3-mobile.sh` validates the metadata and source,
 runs focused mobile tests and builds against the iOS Simulator SDK. The iOS app
-imports commercial data at runtime; it does not embed that data in its bundle.
+supports importing commercial data at runtime. The beta packaging tools can
+also include configured local game data. Source-only gates do not establish
+content rights or certify a signed beta bundle. See the
+[mobile content boundary](Documentation/2.0Roadmap.md).
 
 The release path is deliberately separate from the local build:
 
@@ -324,10 +350,13 @@ questions.
 | Question | Canonical document |
 | --- | --- |
 | What is the project and how do I build it? | [`README.md`](README.md) |
+| How does a receiving developer evaluate and maintain it? | [`Documentation/DeveloperHandover.md`](Documentation/DeveloperHandover.md) |
+| Which assets, accounts and ownership questions need a transfer decision? | [`Documentation/HandoverDependencies.md`](Documentation/HandoverDependencies.md) |
 | How is the code and release system shaped? | `ARCHITECTURE.md` |
 | How do I complete, review and enable a translation pack? | [`Documentation/Localisation.md`](Documentation/Localisation.md#translation-handover) and the per-locale review checkpoints |
 | What does a player see today? | [`Documentation/Overview.md`](Documentation/Overview.md) |
 | What does Complete, Playable or Preview mean? | [`Documentation/ReleaseScope.md`](Documentation/ReleaseScope.md) |
+| Where are current and historical release notes? | [`Documentation/ReleaseNotes.md`](Documentation/ReleaseNotes.md) |
 | What is in the iPhone/iPad milestone? | [`Documentation/2.0Roadmap.md`](Documentation/2.0Roadmap.md) |
 | What content is planned and how is it gated? | [`Documentation/ContentUniverseRoadmap.md`](Documentation/ContentUniverseRoadmap.md) |
 | What evidence closes a campaign or release gate? | [`Documentation/ReleaseReadiness/`](Documentation/ReleaseReadiness/) and the relevant completion README |

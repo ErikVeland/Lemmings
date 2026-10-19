@@ -16,6 +16,12 @@ Sources/lemmings_*/
 .build/
 main
 *.app
+*.swiftmodule
+*.swiftdoc
+*.swiftsourceinfo
+*.abi.json
+*.dylib
+*.o
 
 # Sparkle framework downloads. The pinned copy lives in .build/dependencies
 # via Scripts/ensure-sparkle.sh; never commit a manual download.
@@ -23,12 +29,19 @@ main
 
 # Local archive of superseded documentation. Current release and design docs stay tracked.
 .archive/
+/Documentation/ReleaseReadiness/**/build/
 
 # macOS
 .DS_Store
 
-# App Store Connect API private keys. Never commit.
+# Private signing and provisioning inputs. Never commit.
 *.p8
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
 
 # Python bytecode from the one-time asset import tools.
 __pycache__/

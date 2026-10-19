@@ -11,23 +11,22 @@ import re
 import subprocess
 from urllib.parse import unquote, urlsplit
 
+from repository_policy import contains_symlink, exclusion_reason, repository_files
+
+
 ROOT = Path(__file__).resolve().parents[2]
-
-
-def repository_files(root):
-    result = subprocess.check_output(
-        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=root
-    )
-    return sorted({Path(name.decode()) for name in result.split(b"\0") if name})
 
 
 def check_files(root, paths):
     errors, counts = [], Counter()
     for relative in paths:
         path = root / relative
-        if (any(part in {"xcuserdata", "__pycache__", ".DS_Store", ".build", ".archive"}
-                for part in relative.parts) or path.suffix in {".pyc", ".p8", ".xcuserstate"}):
-            errors.append(f"{relative}: local state or generated output must stay untracked")
+        if reason := exclusion_reason(relative):
+            errors.append(f"{relative}: {reason}")
+            continue
+        if contains_symlink(root, relative):
+            errors.append(f"{relative}: review symlinks before adding them to repository source")
+            continue
         if not path.is_file():
             continue
         counts["files"] += 1
@@ -42,7 +41,8 @@ def check_files(root, paths):
                 plistlib.loads(path.read_bytes())
                 counts["plist"] += 1
             elif path.suffix == ".sh":
-                interpreter = "zsh" if "zsh" in path.read_text().splitlines()[0] else "bash"
+                lines = path.read_text().splitlines()
+                interpreter = "zsh" if lines and "zsh" in lines[0] else "bash"
                 result = subprocess.run([interpreter, "-n", str(path)], capture_output=True, text=True)
                 if result.returncode:
                     errors.append(f"{relative}: {result.stderr.strip()}")

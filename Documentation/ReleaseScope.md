@@ -1,13 +1,14 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The update feed advertises macOS 2.0.4 build 87. The latest package with
+As of 19 October 2026, the update feed advertises macOS 2.0.6 build 90.
+The latest package with
 retained acceptance evidence in this repository is 2.0.3 build 86: its
 universal packages are signed, notarised and accepted by Gatekeeper. Main is at
-2.0.6 Mac build 90 (iOS build 16, tvOS build 6), but no matching package or
-acceptance record is present yet. The build 87 appcast entry lists its package
-and deltas, but this repository has no build 87 distribution record or
-accepted-package audit. See
+2.0.6 Mac build 90 (iOS build 16, tvOS build 6). The feed lists a build 90
+archive, but this repository has no matching distribution acceptance record.
+The [2.0.6 notes](ReleaseNotes-2.0.6-build90.md) describe the intended changes.
+Feed metadata does not certify that archive. See
 the [2.0.3 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md)
 and [branch ancestry reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 The stricter bundled-content closure remains open.
@@ -99,10 +100,9 @@ gate fails at Shadow 7 and carried fixture 107-1. Earlier Trolley evidence check
 315 rescue records and six unknown configurations. These results do not close
 the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.
 
-The appcast still advertises 2.0.4 build 87. The latest Mac package acceptance
-record remains build 86. The 2.0 preparation branch sets Mac build 88, iOS build 14 and
-tvOS build 4, but no matching packages or acceptance records are present. See
-the [build 88 notes](ReleaseNotes-2.0.5-build88.md) and [current-main
+The feed and source versions are recorded at the start of this document. The
+latest retained Mac package acceptance record remains build 86. See the
+[current notes](ReleaseNotes-2.0.6-build90.md) and [current-main
 reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 Build 86 records no non-localisation resource-index changes from build 85, but
 its complete app audit was not rerun. The last installed iOS beta, build 8,
@@ -272,7 +272,7 @@ Golden Path sessions, adds exact replay skill ticks and places identified
 engine-quirk routes late in Expert. Current game classifications and limits
 remain in force. See the
 [1.9.4 distribution record](ReleaseReadiness/1.9.4Build79Distribution.md) and
-[release notes](ReleaseNotes-1.9.4-build79.md).
+[release notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5ebdcce8a6dbf636f5a93f74d76fff/Documentation/ReleaseNotes-1.9.4-build79.md).
 
 The macOS 1.9.7 build 82 release consolidates the current shared controls,
 performance, rewind audio, recovery and lettering improvements. Its universal
@@ -282,7 +282,7 @@ signed automatic-update feed and delta from build 81 are live and verified.
 The owner explicitly approved the Apple and GitHub uploads on 15 October 2026.
 Existing game classifications and the separate mobile/TV gates remain in force.
 See the [release evidence](ReleaseReadiness/1.9.7-build82/README.md) and
-[1.9.7 notes](ReleaseNotes-1.9.7-build82.md).
+[1.9.7 notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5ebdcce8a6dbf636f5a93f74d76fff/Documentation/ReleaseNotes-1.9.7-build82.md).
 
 ## macOS 2.0 preparation
 

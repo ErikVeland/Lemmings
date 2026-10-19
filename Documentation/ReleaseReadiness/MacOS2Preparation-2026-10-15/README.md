@@ -7,7 +7,7 @@ the iOS 2.0 launch gates.
 ## Macintosh 2.0 release request
 
 The owner requested Macintosh 2.0 and announcement posts on 15 October.
-The proposed [build-83 release notes](../../ReleaseNotes-2.0-build83.md) lead
+The proposed [build-83 release notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5ebdcce8a6dbf636f5a93f74d76fff/Documentation/ReleaseNotes-2.0-build83.md) lead
 with the original 1-bit graphics and cover changes since 1.9.6. The BBCode and
 new-player Reddit drafts are saved outside the repository in
 `~/Documents/Ultimate Lemmings/Posts`.

@@ -352,6 +352,23 @@ final class AnonymousTelemetryTests: XCTestCase {
         }
     }
 
+    func testHardestLevelsRankByFailsPerStart() {
+        func rows(_ level: String, starts: Int, wins: Int, fails: Int) -> [AnonymousTelemetryCount] {
+            [("level_start", starts), ("level_win", wins), ("level_fail", fails)].map {
+                AnonymousTelemetryCount(day: nil, event: $0.0, game: "lemmings", level: level, mode: "solo", count: $0.1)
+            }
+        }
+        let summary = AnonymousTelemetrySummary(days: 30, counts:
+            rows("level-1", starts: 172, wins: 122, fails: 5)
+            + rows("level-3", starts: 128, wins: 79, fails: 8)
+            + rows("level-25", starts: 40, wins: 9, fails: 16)
+            + rows("level-10", starts: 51, wins: 21, fails: 17)
+            + rows("level-30", starts: 1, wins: 0, fails: 1))
+        XCTAssertEqual(summary.hardestLevels.map(\.key), [
+            "lemmings|level-25", "lemmings|level-10", "lemmings|level-3", "lemmings|level-1", "lemmings|level-30",
+        ])
+    }
+
     @MainActor func testOwnerSummaryUsesTokenAndDecodesCounts() async throws {
         let suite = UUID().uuidString
         let defaults = UserDefaults(suiteName: suite)!
