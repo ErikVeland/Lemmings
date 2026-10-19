@@ -29,6 +29,9 @@
 #   DOWNLOAD_URL_PREFIX public HTTPS URL prefix for Sparkle update archives
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
 #   SKIP_RELEASE_TESTS  1 skips the integration tests and launch checks
+#   RELEASE_TARGETS   public (default) builds the published update archive and
+#                     slim download; all also builds the local macOS 12 Monterey
+#                     and Game Center archives
 #
 # Credentials are never accepted on the command line or written to disk by
 # this script. The Game Center target is signed for registered devices and
@@ -44,6 +47,9 @@ updates_dir="${UPDATES_DIR:-$project_dir/.build/updates}"
 updates_dir="${updates_dir:A}"
 monterey_worktree="${MONTEREY_WORKTREE:-$project_dir/.claude/worktrees/macos12}"
 monterey_worktree="${monterey_worktree:A}"
+release_targets="${RELEASE_TARGETS:-public}"
+[[ "$release_targets" == public || "$release_targets" == all ]] ||
+  { print -u2 "RELEASE_TARGETS must be public or all."; exit 2; }
 dry_run=0
 # A hotfix whose tests already passed can skip gates 6 and 7 when the release
 # owner asks. Signing, notarisation and Gatekeeper checks still run.
@@ -52,8 +58,9 @@ skip_tests="${SKIP_RELEASE_TESTS:-0}"
 usage() {
   print "Usage: zsh Scripts/build-and-notarise.sh [--dry-run] [--notary-profile NAME] [--notary-keychain PATH]"
   print
-  print "Runs the local release gates, then emits three ZIP files in Downloads:"
-  print "  Developer ID standard, macOS 12 Monterey, and Game Center."
+  print "Runs the local release gates, then notarises the Sparkle update archive"
+  print "and the slim fresh-install download. RELEASE_TARGETS=all also builds the"
+  print "local macOS 12 Monterey and Game Center archives."
   print
   print "Environment:"
   print "  SIGNING_IDENTITY            optional Developer ID certificate name"
@@ -191,14 +198,16 @@ python3 "$project_dir/Tools/ReleaseReadiness/release_notes.py" \
   --commit "$current_head" --check || fail "The release notes draft is not current."
 
 [[ -x "$project_dir/Scripts/build-local-app.sh" ]] || fail "Missing build-local-app.sh."
-[[ -x "$monterey_worktree/Scripts/build-local-app.sh" ]] ||
-  fail "Missing Monterey worktree at $monterey_worktree. Set MONTEREY_WORKTREE."
-monterey_head="$(git -C "$monterey_worktree" rev-parse HEAD 2>/dev/null)" ||
-  fail "Monterey path is not a Git worktree: $monterey_worktree"
-[[ "$monterey_head" == "$current_head" ]] ||
-  fail "The Monterey worktree must use the exact release commit $current_short."
-[[ -z "$(git -C "$monterey_worktree" status --porcelain --untracked-files=all)" ]] ||
-  fail "The Monterey worktree has uncommitted changes."
+if [[ "$release_targets" == all ]]; then
+  [[ -x "$monterey_worktree/Scripts/build-local-app.sh" ]] ||
+    fail "Missing Monterey worktree at $monterey_worktree. Set MONTEREY_WORKTREE."
+  monterey_head="$(git -C "$monterey_worktree" rev-parse HEAD 2>/dev/null)" ||
+    fail "Monterey path is not a Git worktree: $monterey_worktree"
+  [[ "$monterey_head" == "$current_head" ]] ||
+    fail "The Monterey worktree must use the exact release commit $current_short."
+  [[ -z "$(git -C "$monterey_worktree" status --porcelain --untracked-files=all)" ]] ||
+    fail "The Monterey worktree has uncommitted changes."
+fi
 
 check_release_snapshot() {
   [[ "$(git -C "$project_dir" rev-parse HEAD)" == "$current_head" ]] ||
@@ -206,6 +215,7 @@ check_release_snapshot() {
   # The generator changes only the tracked appcast after the clean-source check.
   [[ -z "$(git -C "$project_dir" status --porcelain --untracked-files=all -- . ':(exclude)appcast.xml')" ]] ||
     fail "The release source changed during packaging. Discard these archives."
+  [[ "$release_targets" == all ]] || return 0
   [[ "$(git -C "$monterey_worktree" rev-parse HEAD)" == "$current_head" ]] ||
     fail "The Monterey commit changed during packaging. Discard these archives."
   [[ -z "$(git -C "$monterey_worktree" status --porcelain --untracked-files=all)" ]] ||
@@ -217,7 +227,8 @@ print "Version:       $version ($build_number)"
 print "Release base:  $release_base"
 print "Identity:      $signing_identity"
 print "Notary auth:   $notary_auth_description"
-print "Monterey:      $monterey_worktree"
+print "Targets:       $release_targets"
+if [[ "$release_targets" == all ]]; then print "Monterey:      $monterey_worktree"; fi
 print "Downloads:     $downloads_dir"
 print "Updates:       $updates_dir"
 print
@@ -225,7 +236,11 @@ print "Gate 1: source changes present"
 print -r -- "$source_changes"
 print "Gate 2-3: release notes current"
 print "             $release_notes_draft"
-print "Gate 4: three target archives configured"
+if [[ "$release_targets" == all ]]; then
+  print "Gate 4: four target archives configured"
+else
+  print "Gate 4: update archive and slim download configured"
+fi
 # Stale proofs or hints do not stop a build. The app then hides rescue
 # targets and level hints without a message.
 python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check ||
@@ -423,6 +438,7 @@ verify_gatekeeper "$slim_zip"
 launch_check "$slim_app" ||
   fail "The slim download did not launch cleanly."
 
+if [[ "$release_targets" == all ]]; then
 monterey_dir="$run_dir/monterey"
 monterey_app="$monterey_dir/Ultimate Lemmings.app"
 monterey_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-monterey.zip"
@@ -447,15 +463,18 @@ codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
 launch_check "$game_center_app" ||
   fail "The Game Center target did not launch cleanly."
 package_app "$game_center_app" "$game_center_zip"
+fi
 check_release_snapshot
 zsh "$project_dir/Scripts/check-release-inputs.sh" ||
   fail "The signed update feed changed during packaging. Discard these archives."
 
 print
-print "Three target archives created in $downloads_dir:"
+print "Target archives created in $downloads_dir:"
 print "  $standard_zip"
-print "  $monterey_zip"
-print "  $game_center_zip"
+if [[ "$release_targets" == all ]]; then
+  print "  $monterey_zip"
+  print "  $game_center_zip"
+fi
 print "Signed update ZIP (full soundtrack): $update_zip"
 print "Fresh-install download (slim): $slim_zip"
 print "Signed appcast: $project_dir/appcast.xml"
@@ -463,4 +482,6 @@ print "Stamped release notes: $release_notes"
 print "Frozen source commit: $current_head"
 shasum -a 256 "$update_zip" "$slim_zip" "$project_dir/appcast.xml"
 print "No public release was published. Review the packages before publication."
-print "The Game Center archive is signed for registered devices and is not notarised."
+if [[ "$release_targets" == all ]]; then
+  print "The Game Center archive is signed for registered devices and is not notarised."
+fi
