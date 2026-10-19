@@ -45,7 +45,7 @@
 /* Sources/LemmingsLocal/FanLevelUpdates.swift:20; Sources/NxlvKit/FanPackUpdater.swift:22 */
 " · CHECK INCOMPLETE" = " · CHECK INCOMPLETE";
 
-/* Sources/LemmingsLocal/main.swift:1800 */
+/* Sources/LemmingsLocal/main.swift:1804 */
 " — Import needed" = " — Import needed";
 
 /* Sources/NxlvKit/TrolleyCelebration.swift:73 */
@@ -189,7 +189,7 @@
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:76 */
 "A duty-shaped result: individual preservation without destructive assignments." = "A duty-shaped result: individual preservation without destructive assignments.";
 
-/* Sources/LemmingsLocal/main.swift:4518; Sources/LemmingsLocal/main.swift:5295 */
+/* Sources/LemmingsLocal/main.swift:4527; Sources/LemmingsLocal/main.swift:5304 */
 "A fan level pack changed or could not be read." = "A fan level pack changed or could not be read.";
 
 /* Sources/NxlvKit/TrolleyAffinity.swift:16 */
@@ -297,7 +297,7 @@
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:88 */
 "A strong result with little disturbance." = "A strong result with little disturbance.";
 
-/* Sources/LemmingsLocal/main.swift:6640 */
+/* Sources/LemmingsLocal/main.swift:6649 */
 "A styles directory is needed to draw NeoLemmix levels." = "A styles directory is needed to draw NeoLemmix levels.";
 
 /* Sources/NxlvKit/TrolleyAffinity.swift:32 */
@@ -399,7 +399,7 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:120; Sources/LemmingsMobileCore/MobileSettings.swift:127 */
 "Accessibility" = "Accessibility";
 
-/* Sources/LemmingsLocal/main.swift:7715 */
+/* Sources/LemmingsLocal/main.swift:7724 */
 "Achievement unlocked: {0}" = "Achievement unlocked: {0}";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:101; Sources/LemmingsGameArt/MobileCareerArt.swift:137; Sources/LemmingsGameArt/MobileCareerArt.swift:174; Sources/LemmingsGameArt/MobileCareerArt.swift:228; Sources/LemmingsGameArt/MobileResultAchievementsArt.swift:36; Sources/LemmingsLocal/ArcadeWindow.swift:538; Sources/LemmingsLocal/ArcadeWindow.swift:879; Sources/LemmingsLocal/TrolleyResultView.swift:114 */
@@ -450,7 +450,7 @@
 /* Sources/LemmingsMobileUI/MobileSettingsPages.swift:66 */
 "Adaptive triggers" = "Adaptive triggers";
 
-/* Sources/LemmingsLocal/main.swift:3507 */
+/* Sources/LemmingsLocal/main.swift:3513 */
 "Add" = "Add";
 
 /* Sources/LemmingsLocal/main.swift:1005 */
@@ -465,25 +465,25 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:241 */
 "Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects." = "Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects.";
 
-/* Sources/LemmingsLocal/main.swift:2233 */
+/* Sources/LemmingsLocal/main.swift:2237 */
 "Add a game folder, or open a .nxlv level." = "Add a game folder, or open a .nxlv level.";
 
 /* Sources/LemmingsLocal/GameControls.swift:151 */
 "Add favourite" = "Add favourite";
 
-/* Sources/LemmingsLocal/main.swift:4353 */
+/* Sources/LemmingsLocal/main.swift:4362 */
 "Add level" = "Add level";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:618; Sources/LemmingsTVUI/TVLibraryViewController.swift:227 */
 "Add player" = "Add player";
 
-/* Sources/LemmingsLocal/main.swift:3912; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:70 */
+/* Sources/LemmingsLocal/main.swift:3921; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:70 */
 "Add to playlist" = "Add to playlist";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:574; Sources/LemmingsLocal/SettingsWindow.swift:621 */
 "Added effects" = "Added effects";
 
-/* Sources/LemmingsLocal/main.swift:3938 */
+/* Sources/LemmingsLocal/main.swift:3947 */
 "Added to {0}" = "Added to {0}";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:238 */
@@ -561,7 +561,7 @@
 /* Sources/LemmingsLocal/KeyboardCommandsView.swift:30; Sources/LemmingsLocal/KeyboardOverlayView.swift:51 */
 "All commands" = "All commands";
 
-/* Sources/LemmingsLocal/main.swift:5276 */
+/* Sources/LemmingsLocal/main.swift:5285 */
 "All eligible fan levels - {0} from {1}" = "All eligible fan levels - {0} from {1}";
 
 /* Sources/LemmingsLocal/MusicLibraryWindow.swift:54 */
@@ -585,10 +585,10 @@
 /* Sources/NxlvKit/SoundtrackCatalogue.swift:15 */
 "All tracks" = "All tracks";
 
-/* Sources/LemmingsLocal/main.swift:9116 */
+/* Sources/LemmingsLocal/main.swift:9125 */
 "Already at the start of the history." = "Already at the start of the history.";
 
-/* Sources/LemmingsLocal/main.swift:3940; Sources/LemmingsLocal/main.swift:5009 */
+/* Sources/LemmingsLocal/main.swift:3949; Sources/LemmingsLocal/main.swift:5018 */
 "Already in playlist" = "Already in playlist";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1 */
@@ -612,7 +612,7 @@
 /* Sources/NxlvKit/ClassicSettings.swift:74 */
 "Amiga Voices" = "Amiga Voices";
 
-/* Sources/LemmingsLocal/main.swift:7930 */
+/* Sources/LemmingsLocal/main.swift:7939 */
 "Amiga sound effects: {0}" = "Amiga sound effects: {0}";
 
 /* Sources/NxlvKit/NxlvRenderer.swift:997 */
@@ -648,7 +648,7 @@
 /* Sources/NxlvKit/ClassicLevel.swift:110 */
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "An unpacked classic LVL file must contain exactly {0} bytes; found {1}.";
 
-/* Sources/LemmingsLocal/main.swift:4161 */
+/* Sources/LemmingsLocal/main.swift:4170 */
 "Analysing available levels" = "Analysing available levels";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/WAKING.IFF:1 */
@@ -747,7 +747,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1715 */
 "Assign {0}" = "Assign {0}";
 
-/* Sources/LemmingsLocal/main.swift:8062; Sources/LemmingsLocal/main.swift:8131 */
+/* Sources/LemmingsLocal/main.swift:8071; Sources/LemmingsLocal/main.swift:8140 */
 "Assigned music unavailable: {0}" = "Assigned music unavailable: {0}";
 
 /* Sources/NxlvKit/DifficultyTechniques.swift:56 */
@@ -777,7 +777,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2004 */
 "Audio suspended" = "Audio suspended";
 
-/* Sources/LemmingsLocal/main.swift:2017; Sources/LemmingsLocal/main.swift:2022; Sources/LemmingsLocal/main.swift:2024; Sources/LemmingsLocal/main.swift:2026; Sources/LemmingsLocal/main.swift:7839; Sources/LemmingsLocal/main.swift:7843; Sources/LemmingsLocal/main.swift:8120; Sources/LemmingsLocal/main.swift:8168 */
+/* Sources/LemmingsLocal/main.swift:2021; Sources/LemmingsLocal/main.swift:2026; Sources/LemmingsLocal/main.swift:2028; Sources/LemmingsLocal/main.swift:2030; Sources/LemmingsLocal/main.swift:7848; Sources/LemmingsLocal/main.swift:7852; Sources/LemmingsLocal/main.swift:8129; Sources/LemmingsLocal/main.swift:8177 */
 "Audio unavailable: {0}" = "Audio unavailable: {0}";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:576 */
@@ -816,10 +816,10 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2371 */
 "BAZOOKA" = "BAZOOKA";
 
-/* Sources/LemmingsLocal/main.swift:7344 */
+/* Sources/LemmingsLocal/main.swift:7353 */
 "BEST" = "BEST";
 
-/* Sources/LemmingsLocal/main.swift:1750 */
+/* Sources/LemmingsLocal/main.swift:1754 */
 "BETA" = "BETA";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/TALIS2.IFF:1 */
@@ -990,7 +990,7 @@
 /* Sources/NxlvKit/Lemmings2Campaign.swift:13 */
 "Bronze" = "Bronze";
 
-/* Sources/LemmingsLocal/main.swift:3307; Sources/LemmingsLocal/main.swift:4849 */
+/* Sources/LemmingsLocal/main.swift:3313; Sources/LemmingsLocal/main.swift:4858 */
 "Browse levels" = "Browse levels";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:16; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
@@ -1059,10 +1059,10 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:278 */
 "CLEARED" = "CLEARED";
 
-/* Sources/LemmingsLocal/main.swift:7044 */
+/* Sources/LemmingsLocal/main.swift:7053 */
 "CLICK OR PRESS ENTER FOR THE GAME LIBRARY" = "CLICK OR PRESS ENTER FOR THE GAME LIBRARY";
 
-/* Sources/LemmingsLocal/main.swift:7020; Sources/LemmingsLocal/main.swift:7030; Sources/LemmingsLocal/main.swift:7041 */
+/* Sources/LemmingsLocal/main.swift:7029; Sources/LemmingsLocal/main.swift:7039; Sources/LemmingsLocal/main.swift:7050 */
 "CLICK OR PRESS ENTER TO CONTINUE" = "CLICK OR PRESS ENTER TO CONTINUE";
 
 /* Sources/LemmingsGameArt/MobileHUDRenderer.swift:131; Sources/LemmingsLocal/PanelView.swift:603 */
@@ -1083,13 +1083,13 @@
 /* Sources/LemmingsLocal/FanLevelUpdates.swift:21; Sources/NxlvKit/FanPackUpdater.swift:23 */
 "COLLECTION UP TO DATE" = "COLLECTION UP TO DATE";
 
-/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:628; Sources/LemmingsGameArt/MobileHUDRenderer.swift:720; Sources/LemmingsLocal/main.swift:1749 */
+/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:628; Sources/LemmingsGameArt/MobileHUDRenderer.swift:720; Sources/LemmingsLocal/main.swift:1753 */
 "COMPLETE" = "COMPLETE";
 
-/* Sources/LemmingsLocal/main.swift:7739 */
+/* Sources/LemmingsLocal/main.swift:7748 */
 "COMPLETE — press N" = "COMPLETE — press N";
 
-/* Sources/LemmingsLocal/main.swift:6091 */
+/* Sources/LemmingsLocal/main.swift:6100 */
 "CONTINUE {0} - {1}" = "CONTINUE {0} - {1}";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1151; Sources/LemmingsMobileUI/MobileTVGameControls.swift:42 */
@@ -1098,7 +1098,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2567 */
 "COUNTDOWN" = "COUNTDOWN";
 
-/* Sources/LemmingsLocal/GameplayKeyboard.swift:457; Sources/LemmingsLocal/GameplayKeyboard.swift:490; Sources/LemmingsLocal/KeyboardOverlayView.swift:40; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444; Sources/LemmingsLocal/main.swift:8823; Sources/LemmingsMobileUI/MobileTVGameControls.swift:103; Sources/LemmingsTVUI/TVLibraryViewController.swift:188; Sources/LemmingsTVUI/TVLibraryViewController.swift:199 */
+/* Sources/LemmingsLocal/GameplayKeyboard.swift:457; Sources/LemmingsLocal/GameplayKeyboard.swift:490; Sources/LemmingsLocal/KeyboardOverlayView.swift:40; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444; Sources/LemmingsLocal/main.swift:8832; Sources/LemmingsMobileUI/MobileTVGameControls.swift:103; Sources/LemmingsTVUI/TVLibraryViewController.swift:188; Sources/LemmingsTVUI/TVLibraryViewController.swift:199 */
 "Camera" = "Camera";
 
 /* Sources/LemmingsLocal/AchievementsWindow.swift:19 */
@@ -1113,10 +1113,10 @@
 /* Sources/LemmingsMobileUI/MobileHUDView.swift:369 */
 "Cancel tool direction" = "Cancel tool direction";
 
-/* Sources/LemmingsLocal/main.swift:6552 */
+/* Sources/LemmingsLocal/main.swift:6561 */
 "Cannot add NeoLemmix packs" = "Cannot add NeoLemmix packs";
 
-/* Sources/LemmingsLocal/main.swift:7855 */
+/* Sources/LemmingsLocal/main.swift:7864 */
 "Cannot assign: {0}" = "Cannot assign: {0}";
 
 /* Sources/LemmingsLocal/SequelArtworkRenderer.swift:73 */
@@ -1134,7 +1134,7 @@
 /* Sources/LemmingsLocal/main.swift:1624 */
 "Cannot open Lemmings 3" = "Cannot open Lemmings 3";
 
-/* Sources/LemmingsLocal/main.swift:1766 */
+/* Sources/LemmingsLocal/main.swift:1770 */
 "Cannot open {0}: {1}" = "Cannot open {0}: {1}";
 
 /* Sources/NxlvKit/NxlvStyleResolver.swift:1869 */
@@ -1146,7 +1146,7 @@
 /* Sources/LemmingsLocal/main.swift:509; Sources/LemmingsLocal/main.swift:512 */
 "Cannot read saved run" = "Cannot read saved run";
 
-/* Sources/LemmingsLocal/main.swift:5430; Sources/LemmingsLocal/main.swift:632; Sources/LemmingsLocal/main.swift:636; Sources/LemmingsLocal/main.swift:639 */
+/* Sources/LemmingsLocal/main.swift:5439; Sources/LemmingsLocal/main.swift:632; Sources/LemmingsLocal/main.swift:636; Sources/LemmingsLocal/main.swift:639 */
 "Cannot restore run" = "Cannot restore run";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:768 */
@@ -1206,7 +1206,7 @@
 /* Sources/NxlvKit/DifficultyProfile.swift:6 */
 "Challenging" = "Challenging";
 
-/* Sources/LemmingsLocal/main.swift:8636 */
+/* Sources/LemmingsLocal/main.swift:8645 */
 "Change Hot Seat players?" = "Change Hot Seat players?";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:505 */
@@ -1224,7 +1224,7 @@
 /* Sources/LemmingsLocal/main.swift:361 */
 "Changed" = "Changed";
 
-/* Sources/LemmingsLocal/main.swift:4249 */
+/* Sources/LemmingsLocal/main.swift:4258 */
 "Changed - replace or remove  {0}" = "Changed - replace or remove  {0}";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:2181 */
@@ -1269,13 +1269,13 @@
 /* Sources/NxlvKit/Lemmings2ClassicCampaign.swift:33 */
 "Choose a Classic level from 1 to 10." = "Choose a Classic level from 1 to 10.";
 
-/* Sources/LemmingsLocal/main.swift:7893 */
+/* Sources/LemmingsLocal/main.swift:7902 */
 "Choose a Macintosh Lemmings disk image." = "Choose a Macintosh Lemmings disk image.";
 
-/* Sources/LemmingsLocal/main.swift:6512 */
+/* Sources/LemmingsLocal/main.swift:6521 */
 "Choose a NeoLemmix level file." = "Choose a NeoLemmix level file.";
 
-/* Sources/LemmingsLocal/main.swift:6524 */
+/* Sources/LemmingsLocal/main.swift:6533 */
 "Choose a NeoLemmix pack, or the 'levels' directory that contains packs." = "Choose a NeoLemmix pack, or the 'levels' directory that contains packs.";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:432 */
@@ -1284,10 +1284,10 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:233 */
 "Choose a different available Classic artwork source for each level." = "Choose a different available Classic artwork source for each level.";
 
-/* Sources/LemmingsLocal/main.swift:5009 */
+/* Sources/LemmingsLocal/main.swift:5018 */
 "Choose a different level." = "Choose a different level.";
 
-/* Sources/LemmingsLocal/main.swift:7874 */
+/* Sources/LemmingsLocal/main.swift:7883 */
 "Choose a folder of ProTracker .mod files." = "Choose a folder of ProTracker .mod files.";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:66; Sources/LemmingsLocal/ArcadeWindow.swift:735; Sources/LemmingsTVUI/TVLibraryViewController.swift:158 */
@@ -1296,10 +1296,10 @@
 /* Sources/LemmingsLocal/ReleaseWelcome.swift:26 */
 "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel." = "Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.";
 
-/* Sources/LemmingsLocal/main.swift:4845 */
+/* Sources/LemmingsLocal/main.swift:4854 */
 "Choose a pack" = "Choose a pack";
 
-/* Sources/LemmingsLocal/main.swift:6983 */
+/* Sources/LemmingsLocal/main.swift:6992 */
 "Choose a rating" = "Choose a rating";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:723 */
@@ -1308,7 +1308,7 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:247 */
 "Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries." = "Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries.";
 
-/* Sources/LemmingsLocal/main.swift:4115 */
+/* Sources/LemmingsLocal/main.swift:4124 */
 "Choose a technique" = "Choose a technique";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:136 */
@@ -1317,13 +1317,13 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1073 */
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera.";
 
-/* Sources/LemmingsLocal/main.swift:4017 */
+/* Sources/LemmingsLocal/main.swift:4026 */
 "Choose and order levels" = "Choose and order levels";
 
-/* Sources/LemmingsLocal/main.swift:3940 */
+/* Sources/LemmingsLocal/main.swift:3949 */
 "Choose another level or open Playlists to change the order." = "Choose another level or open Playlists to change the order.";
 
-/* Sources/LemmingsLocal/main.swift:4751 */
+/* Sources/LemmingsLocal/main.swift:4760 */
 "Choose at least two players for Hot Seat." = "Choose at least two players for Hot Seat.";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:769 */
@@ -1341,13 +1341,13 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1495; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1497; Sources/LemmingsMobileUI/MobileLibraryLearning.swift:77 */
 "Choose level" = "Choose level";
 
-/* Sources/LemmingsLocal/main.swift:4022; Sources/LemmingsLocal/main.swift:5016 */
+/* Sources/LemmingsLocal/main.swift:4031; Sources/LemmingsLocal/main.swift:5025 */
 "Choose one level pack" = "Choose one level pack";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:231 */
 "Choose player" = "Choose player";
 
-/* Sources/LemmingsLocal/main.swift:3985 */
+/* Sources/LemmingsLocal/main.swift:3994 */
 "Choose pool" = "Choose pool";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:425 */
@@ -1356,28 +1356,28 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:426 */
 "Choose practice skill" = "Choose practice skill";
 
-/* Sources/LemmingsLocal/main.swift:8826 */
+/* Sources/LemmingsLocal/main.swift:8835 */
 "Choose rank" = "Choose rank";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:231 */
 "Choose the Classic artwork source. Available sources depend on installed game data." = "Choose the Classic artwork source. Available sources depend on installed game data.";
 
-/* Sources/LemmingsLocal/main.swift:6639 */
+/* Sources/LemmingsLocal/main.swift:6648 */
 "Choose the NeoLemmix 'styles' directory." = "Choose the NeoLemmix 'styles' directory.";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:232 */
 "Choose the colour palette for Classic artwork." = "Choose the colour palette for Classic artwork.";
 
-/* Sources/LemmingsLocal/main.swift:2055 */
+/* Sources/LemmingsLocal/main.swift:2059 */
 "Choose the directory holding LEVEL000.DAT and MAIN.DAT." = "Choose the directory holding LEVEL000.DAT and MAIN.DAT.";
 
-/* Sources/LemmingsLocal/main.swift:6196 */
+/* Sources/LemmingsLocal/main.swift:6205 */
 "Choose the folder holding the level packs." = "Choose the folder holding the level packs.";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:226 */
 "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings." = "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings.";
 
-/* Sources/LemmingsLocal/main.swift:6540 */
+/* Sources/LemmingsLocal/main.swift:6549 */
 "Choose the matching NeoLemmix 'styles' directory." = "Choose the matching NeoLemmix 'styles' directory.";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:227 */
@@ -1578,7 +1578,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1964 */
 "Click or Return to practise" = "Click or Return to practise";
 
-/* Sources/LemmingsLocal/main.swift:7021 */
+/* Sources/LemmingsLocal/main.swift:7030 */
 "Click or press Enter to try again" = "Click or press Enter to try again";
 
 /* Sources/LemmingsLocal/PanelGlyphs.swift:207 */
@@ -1641,13 +1641,13 @@
 /* Sources/LemmingsGameArt/CloudSyncArt.swift:20 */
 "Code: {0}_" = "Code: {0}_";
 
-/* Sources/LemmingsLocal/main.swift:3321; Sources/LemmingsLocal/main.swift:3642; Sources/LemmingsLocal/main.swift:3968; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:24 */
+/* Sources/LemmingsLocal/main.swift:3327; Sources/LemmingsLocal/main.swift:3648; Sources/LemmingsLocal/main.swift:3977; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:24 */
 "Collections" = "Collections";
 
 /* Sources/LemmingsLocal/PlayfieldView.swift:1061 */
 "Collections / Playlists" = "Collections / Playlists";
 
-/* Sources/LemmingsLocal/main.swift:3652 */
+/* Sources/LemmingsLocal/main.swift:3658 */
 "Collections unavailable" = "Collections unavailable";
 
 /* Sources/NxlvKit/ClassicAchievements.swift:56 */
@@ -1662,7 +1662,7 @@
 /* Sources/NxlvKit/LearningJourney.swift:78 */
 "Combine: {0}" = "Combine: {0}";
 
-/* Sources/LemmingsLocal/main.swift:4619 */
+/* Sources/LemmingsLocal/main.swift:4628 */
 "Come back to these" = "Come back to these";
 
 /* Sources/LemmingsLocal/KeyboardCommandsView.swift:36 */
@@ -1701,10 +1701,10 @@
 /* Sources/NxlvKit/ClassicAchievements.swift:72 */
 "Complete the entire series from start to finish." = "Complete the entire series from start to finish.";
 
-/* Sources/LemmingsLocal/main.swift:5674 */
+/* Sources/LemmingsLocal/main.swift:5683 */
 "Complete the preceding level or choose an available level." = "Complete the preceding level or choose an available level.";
 
-/* Sources/LemmingsLocal/main.swift:1842; Sources/LemmingsLocal/main.swift:5687 */
+/* Sources/LemmingsLocal/main.swift:1846; Sources/LemmingsLocal/main.swift:5696 */
 "Complete the preceding level, or enable Unlock all Classic levels in Settings." = "Complete the preceding level, or enable Unlock all Classic levels in Settings.";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:24; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:62 */
@@ -1749,13 +1749,13 @@
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:72 */
 "Consequentialist optimisation with a strong rescue outcome." = "Consequentialist optimisation with a strong rescue outcome.";
 
-/* Sources/LemmingsGameArt/GameRecoveryArt.swift:17; Sources/LemmingsGameArt/MobileInformationArt.swift:19; Sources/LemmingsGameArt/MobileInformationArt.swift:28; Sources/LemmingsLocal/LearningJourneyMenu.swift:21; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1770; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1813; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2019; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496; Sources/LemmingsLocal/MusicLibraryWindow.swift:133; Sources/LemmingsLocal/PlayfieldView.swift:253; Sources/LemmingsLocal/ReleaseWelcome.swift:92; Sources/LemmingsLocal/main.swift:8472; Sources/LemmingsTVUI/TVLibraryViewController.swift:236 */
+/* Sources/LemmingsGameArt/GameRecoveryArt.swift:17; Sources/LemmingsGameArt/MobileInformationArt.swift:19; Sources/LemmingsGameArt/MobileInformationArt.swift:28; Sources/LemmingsLocal/LearningJourneyMenu.swift:21; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1770; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1813; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2019; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496; Sources/LemmingsLocal/MusicLibraryWindow.swift:133; Sources/LemmingsLocal/PlayfieldView.swift:253; Sources/LemmingsLocal/ReleaseWelcome.swift:92; Sources/LemmingsLocal/main.swift:8481; Sources/LemmingsTVUI/TVLibraryViewController.swift:236 */
 "Continue" = "Continue";
 
 /* Sources/LemmingsMobileUI/MobileLibraryLearning.swift:74 */
 "Continue journey  {0}/{1}" = "Continue journey  {0}/{1}";
 
-/* Sources/LemmingsLocal/main.swift:8827 */
+/* Sources/LemmingsLocal/main.swift:8836 */
 "Continue or start level" = "Continue or start level";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2024; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PREFS.IFF:1 */
@@ -1800,7 +1800,7 @@
 /* Sources/LemmingsMobileUI/MobileApplication.swift:100 */
 "Could not build the Lemmings 3 direction-picker test level: {0}" = "Could not build the Lemmings 3 direction-picker test level: {0}";
 
-/* Sources/LemmingsLocal/main.swift:7595 */
+/* Sources/LemmingsLocal/main.swift:7604 */
 "Could not clear completed checkpoint: {0}" = "Could not clear completed checkpoint: {0}";
 
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:147 */
@@ -1815,7 +1815,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1584; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1023 */
 "Could not move forward through this run: {0}" = "Could not move forward through this run: {0}";
 
-/* Sources/LemmingsLocal/main.swift:6664 */
+/* Sources/LemmingsLocal/main.swift:6673 */
 "Could not parse {0}." = "Could not parse {0}.";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1374 */
@@ -1824,16 +1824,16 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1349 */
 "Could not play the introduction: {0}" = "Could not play the introduction: {0}";
 
-/* Sources/LemmingsLocal/main.swift:5234 */
+/* Sources/LemmingsLocal/main.swift:5243 */
 "Could not read every installed fan pack. Check {0} and try again." = "Could not read every installed fan pack. Check {0} and try again.";
 
 /* Sources/LemmingsLocal/PrecisionZoomController.swift:44 */
 "Could not read saved Zoom uses." = "Could not read saved Zoom uses.";
 
-/* Sources/LemmingsLocal/main.swift:6660 */
+/* Sources/LemmingsLocal/main.swift:6669 */
 "Could not read {0}." = "Could not read {0}.";
 
-/* Sources/LemmingsLocal/main.swift:6680 */
+/* Sources/LemmingsLocal/main.swift:6689 */
 "Could not render {0}." = "Could not render {0}.";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1559; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:999 */
@@ -1842,16 +1842,16 @@
 /* Sources/LemmingsLocal/PrecisionZoomController.swift:96 */
 "Could not save Zoom uses." = "Could not save Zoom uses.";
 
-/* Sources/LemmingsLocal/main.swift:5493 */
+/* Sources/LemmingsLocal/main.swift:5502 */
 "Could not save completed lesson: {0}" = "Could not save completed lesson: {0}";
 
-/* Sources/LemmingsLocal/main.swift:7604 */
+/* Sources/LemmingsLocal/main.swift:7613 */
 "Could not save the input route: {0}" = "Could not save the input route: {0}";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:907 */
 "Could not show the talisman: {0}" = "Could not show the talisman: {0}";
 
-/* Sources/LemmingsLocal/main.swift:4669 */
+/* Sources/LemmingsLocal/main.swift:4678 */
 "Could not sync journey: {0}" = "Could not sync journey: {0}";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:68; Sources/LemmingsLocal/SettingsWindow.swift:521 */
@@ -1866,7 +1866,7 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:705 */
 "Counts cleared" = "Counts cleared";
 
-/* Sources/LemmingsLocal/main.swift:3984; Sources/LemmingsLocal/main.swift:5020 */
+/* Sources/LemmingsLocal/main.swift:3993; Sources/LemmingsLocal/main.swift:5029 */
 "Create" = "Create";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:133 */
@@ -1881,7 +1881,7 @@
 /* Sources/NxlvKit/DifficultyTechniques.swift:39 */
 "Crowd spacing" = "Crowd spacing";
 
-/* Sources/LemmingsLocal/main.swift:8567 */
+/* Sources/LemmingsLocal/main.swift:8576 */
 "Current level" = "Current level";
 
 /* Sources/LemmingsMobileUI/MobileHUDView.swift:149 */
@@ -2028,22 +2028,22 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:446 */
 "Defaults" = "Defaults";
 
-/* Sources/LemmingsGameArt/MobileCareerArt.swift:29; Sources/LemmingsLocal/ArcadeWindow.swift:819; Sources/LemmingsLocal/main.swift:4480; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:62 */
+/* Sources/LemmingsGameArt/MobileCareerArt.swift:29; Sources/LemmingsLocal/ArcadeWindow.swift:819; Sources/LemmingsLocal/main.swift:4489; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:62 */
 "Delete" = "Delete";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:21 */
 "Delete player?" = "Delete player?";
 
-/* Sources/LemmingsLocal/main.swift:4460; Sources/LemmingsLocal/main.swift:4478 */
+/* Sources/LemmingsLocal/main.swift:4469; Sources/LemmingsLocal/main.swift:4487 */
 "Delete playlist" = "Delete playlist";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:644 */
 "Delete {0}" = "Delete {0}";
 
-/* Sources/LemmingsLocal/main.swift:4475 */
+/* Sources/LemmingsLocal/main.swift:4484 */
 "Delete {0} and discard its saved runs?" = "Delete {0} and discard its saved runs?";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:642; Sources/LemmingsLocal/main.swift:4476 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:642; Sources/LemmingsLocal/main.swift:4485 */
 "Delete {0}?" = "Delete {0}?";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:22 */
@@ -2055,7 +2055,7 @@
 /* Sources/NxlvKit/LearningJourney.swift:27 */
 "Difficult" = "Difficult";
 
-/* Sources/LemmingsLocal/main.swift:4226 */
+/* Sources/LemmingsLocal/main.swift:4235 */
 "Difficulty" = "Difficulty";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:21; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
@@ -2076,7 +2076,7 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:22 */
 "Disarmer" = "Disarmer";
 
-/* Sources/LemmingsLocal/main.swift:5477 */
+/* Sources/LemmingsLocal/main.swift:5486 */
 "Discard run" = "Discard run";
 
 /* Sources/LemmingsLocal/main.swift:513; Sources/LemmingsLocal/main.swift:640 */
@@ -2160,19 +2160,19 @@
 /* Sources/LemmingsGameArt/GameMenuTypography.swift:132 */
 "ENTER" = "ENTER";
 
-/* Sources/LemmingsLocal/main.swift:6427 */
+/* Sources/LemmingsLocal/main.swift:6436 */
 "ENTER  *  ESC BACK" = "ENTER  *  ESC BACK";
 
-/* Sources/LemmingsLocal/main.swift:6418 */
+/* Sources/LemmingsLocal/main.swift:6427 */
 "ENTER FOR THE NEXT LEVEL" = "ENTER FOR THE NEXT LEVEL";
 
-/* Sources/LemmingsLocal/main.swift:6418 */
+/* Sources/LemmingsLocal/main.swift:6427 */
 "ENTER TO GO BACK" = "ENTER TO GO BACK";
 
-/* Sources/LemmingsLocal/main.swift:6416 */
+/* Sources/LemmingsLocal/main.swift:6425 */
 "ENTER TO RETRY LEVEL" = "ENTER TO RETRY LEVEL";
 
-/* Sources/LemmingsLocal/main.swift:6395 */
+/* Sources/LemmingsLocal/main.swift:6404 */
 "ENTER TO START  *  ESC BACK" = "ENTER TO START  *  ESC BACK";
 
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:107 */
@@ -2205,7 +2205,7 @@
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:668 */
 "Each zone must have a positive width and height." = "Each zone must have a positive width and height.";
 
-/* Sources/LemmingsLocal/main.swift:4281 */
+/* Sources/LemmingsLocal/main.swift:4290 */
 "Earlier" = "Earlier";
 
 /* Sources/LemmingsLocal/ReleaseWelcome.swift:23 */
@@ -2247,7 +2247,7 @@
 /* Sources/LemmingsLocal/OriginalMoviePlayer.swift:24 */
 "Egyptian tribe movie" = "Egyptian tribe movie";
 
-/* Sources/LemmingsLocal/main.swift:4028 */
+/* Sources/LemmingsLocal/main.swift:4037 */
 "Eligible fan levels" = "Eligible fan levels";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1692 */
@@ -2283,7 +2283,7 @@
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:115 */
 "End run?" = "End run?";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1055; Sources/LemmingsLocal/main.swift:8700 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1055; Sources/LemmingsLocal/main.swift:8709 */
 "End this run?" = "End this run?";
 
 /* Sources/LemmingsLocal/OriginalMoviePlayer.swift:25 */
@@ -2322,13 +2322,13 @@
 /* Sources/LemmingsAppCore/Input/GameplayCommands.swift:59 */
 "Escape / Q: Library" = "Escape / Q: Library";
 
-/* Sources/LemmingsLocal/main.swift:4226 */
+/* Sources/LemmingsLocal/main.swift:4235 */
 "Estimate" = "Estimate";
 
 /* Sources/NxlvKit/DifficultyTechniques.swift:125 */
 "Estimate from resources and object structure; no validated solution." = "Estimate from resources and object structure; no validated solution.";
 
-/* Sources/LemmingsLocal/main.swift:4013 */
+/* Sources/LemmingsLocal/main.swift:4022 */
 "Estimated difficulty" = "Estimated difficulty";
 
 /* Sources/LemmingsLocal/ProgressionMenu.swift:7 */
@@ -2352,7 +2352,7 @@
 /* Sources/LemmingsMobileCore/MobileHotSeat.swift:13 */
 "Every level" = "Every level";
 
-/* Sources/LemmingsLocal/main.swift:7040; Sources/LemmingsLocal/main.swift:7043 */
+/* Sources/LemmingsLocal/main.swift:7049; Sources/LemmingsLocal/main.swift:7052 */
 "Every rating is finished." = "Every rating is finished.";
 
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:197; Sources/LemmingsLocal/ResultCelebrationView.swift:200 */
@@ -2433,7 +2433,7 @@
 /* Sources/LemmingsGameArt/MobileHUDRenderer.swift:628; Sources/LemmingsGameArt/MobileHUDRenderer.swift:720 */
 "FAILED" = "FAILED";
 
-/* Sources/LemmingsLocal/main.swift:7739 */
+/* Sources/LemmingsLocal/main.swift:7748 */
 "FAILED — press R" = "FAILED — press R";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2387; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2390 */
@@ -2442,16 +2442,16 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1298; Sources/LemmingsMobileUI/MobileGameViewController.swift:1154; Sources/LemmingsMobileUI/MobileTVGameControls.swift:51 */
 "FAN" = "FAN";
 
-/* Sources/LemmingsLocal/main.swift:6042 */
+/* Sources/LemmingsLocal/main.swift:6051 */
 "FAN LEMMINGS  {0}/{1}" = "FAN LEMMINGS  {0}/{1}";
 
-/* Sources/LemmingsLocal/main.swift:6044 */
+/* Sources/LemmingsLocal/main.swift:6053 */
 "FAN LEMMINGS  {0}/{1}  — COUNTING" = "FAN LEMMINGS  {0}/{1}  — COUNTING";
 
-/* Sources/LemmingsLocal/main.swift:6037 */
+/* Sources/LemmingsLocal/main.swift:6046 */
 "FAN LEMMINGS  — NO PACKS" = "FAN LEMMINGS  — NO PACKS";
 
-/* Sources/LemmingsLocal/main.swift:6216 */
+/* Sources/LemmingsLocal/main.swift:6225 */
 "FAN LEVELS" = "FAN LEVELS";
 
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:65 */
@@ -2514,7 +2514,7 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:83 */
 "Fall sounds" = "Fall sounds";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2200; Sources/LemmingsLocal/main.swift:7603; Sources/LemmingsMobileUI/MobileGameViewController.swift:998 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2200; Sources/LemmingsLocal/main.swift:7612; Sources/LemmingsMobileUI/MobileGameViewController.swift:998 */
 "Fan" = "Fan";
 
 /* Sources/LemmingsLocal/main.swift:130; Sources/LemmingsMobileCore/MobileCatalogue.swift:18 */
@@ -2523,7 +2523,7 @@
 /* Sources/LemmingsLocal/main.swift:1003 */
 "Fan Levels…" = "Fan Levels…";
 
-/* Sources/LemmingsLocal/TelemetryDashboard.swift:221; Sources/LemmingsLocal/main.swift:6816 */
+/* Sources/LemmingsLocal/TelemetryDashboard.swift:221; Sources/LemmingsLocal/main.swift:6825 */
 "Fan levels" = "Fan levels";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:282 */
@@ -2568,7 +2568,7 @@
 /* Sources/LemmingsLocal/LevelCollections.swift:42 */
 "Favourite not saved" = "Favourite not saved";
 
-/* Sources/LemmingsLocal/main.swift:3643; Sources/LemmingsLocal/main.swift:3664; Sources/LemmingsLocal/main.swift:3672 */
+/* Sources/LemmingsLocal/main.swift:3649; Sources/LemmingsLocal/main.swift:3670; Sources/LemmingsLocal/main.swift:3678 */
 "Favourites" = "Favourites";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:14 */
@@ -2613,10 +2613,10 @@
 /* Sources/NxlvKit/TrolleyHistory.swift:30 */
 "Finish one below a verified maximum." = "Finish one below a verified maximum.";
 
-/* Sources/LemmingsLocal/main.swift:1536; Sources/LemmingsLocal/main.swift:1604; Sources/LemmingsLocal/main.swift:8446 */
+/* Sources/LemmingsLocal/main.swift:1536; Sources/LemmingsLocal/main.swift:1604; Sources/LemmingsLocal/main.swift:8455 */
 "Finish run" = "Finish run";
 
-/* Sources/LemmingsLocal/main.swift:5523 */
+/* Sources/LemmingsLocal/main.swift:5532 */
 "Finished {0} from {1}." = "Finished {0} from {1}.";
 
 /* Sources/LemmingsAppCore/Records/ResultAwards.swift:31 */
@@ -2721,7 +2721,7 @@
 /* Sources/NxlvKit/NxlvRenderer.swift:1036 */
 "Gadget '{0}:{1}' has coordinates outside the supported integer range." = "Gadget '{0}:{1}' has coordinates outside the supported integer range.";
 
-/* Sources/LemmingsGameArt/MobileSettingsArt.swift:68; Sources/LemmingsLocal/main.swift:1011; Sources/LemmingsLocal/main.swift:7036 */
+/* Sources/LemmingsGameArt/MobileSettingsArt.swift:68; Sources/LemmingsLocal/main.swift:1011; Sources/LemmingsLocal/main.swift:7045 */
 "Game" = "Game";
 
 /* Sources/NxlvKit/ArchivalCatalog.swift:145 */
@@ -2778,7 +2778,7 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:426 */
 "Gamepad" = "Gamepad";
 
-/* Sources/LemmingsLocal/GameplayKeyboard.swift:457; Sources/LemmingsLocal/GameplayKeyboard.swift:490; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:422; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:423; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:447; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:448; Sources/LemmingsLocal/SettingsWindow.swift:115; Sources/LemmingsLocal/main.swift:8824; Sources/LemmingsLocal/main.swift:8825; Sources/LemmingsMobileCore/MobileSettings.swift:122 */
+/* Sources/LemmingsLocal/GameplayKeyboard.swift:457; Sources/LemmingsLocal/GameplayKeyboard.swift:490; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:422; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:423; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:447; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:448; Sources/LemmingsLocal/SettingsWindow.swift:115; Sources/LemmingsLocal/main.swift:8833; Sources/LemmingsLocal/main.swift:8834; Sources/LemmingsMobileCore/MobileSettings.swift:122 */
 "Gameplay" = "Gameplay";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:443 */
@@ -2793,7 +2793,7 @@
 /* Sources/LemmingsLocal/LevelHintWindow.swift:259 */
 "General coaching for this level." = "General coaching for this level.";
 
-/* Sources/LemmingsLocal/main.swift:4012 */
+/* Sources/LemmingsLocal/main.swift:4021 */
 "Generate a learning sequence" = "Generate a learning sequence";
 
 /* Sources/NxlvKit/GenesisFMPlayer.swift:25 */
@@ -2973,7 +2973,7 @@
 /* Sources/LemmingsLocal/SolutionReplay.swift:145 */
 "Home" = "Home";
 
-/* Sources/LemmingsLocal/main.swift:7723 */
+/* Sources/LemmingsLocal/main.swift:7732 */
 "Home {0}/{1}" = "Home {0}/{1}";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:35; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
@@ -3123,7 +3123,7 @@
 /* Sources/NxlvKit/LearningJourney.swift:26 */
 "Intermediate" = "Intermediate";
 
-/* Sources/LemmingsLocal/GameSession.swift:555; Sources/LemmingsLocal/main.swift:8801 */
+/* Sources/LemmingsLocal/GameSession.swift:555; Sources/LemmingsLocal/main.swift:8810 */
 "Interval" = "Interval";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1 */
@@ -3387,13 +3387,13 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INTRO.IFF:1 */
 "JOHN WHYTE" = "JOHN WHYTE";
 
-/* Sources/LemmingsLocal/main.swift:6086 */
+/* Sources/LemmingsLocal/main.swift:6095 */
 "JOURNEY" = "JOURNEY";
 
-/* Sources/LemmingsLocal/main.swift:6101 */
+/* Sources/LemmingsLocal/main.swift:6110 */
 "JOURNEY MAP  {0}/{1} SOLVED" = "JOURNEY MAP  {0}/{1} SOLVED";
 
-/* Sources/LemmingsLocal/main.swift:7327 */
+/* Sources/LemmingsLocal/main.swift:7336 */
 "JOURNEY {0}/{1}" = "JOURNEY {0}/{1}";
 
 /* Sources/LemmingsGameArt/MobileHUDRenderer.swift:131; Sources/LemmingsLocal/PanelView.swift:602 */
@@ -3426,10 +3426,10 @@
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:522 */
 "Journey map  {0}/{1} solved" = "Journey map  {0}/{1} solved";
 
-/* Sources/LemmingsLocal/main.swift:4693 */
+/* Sources/LemmingsLocal/main.swift:4702 */
 "Journey not advanced" = "Journey not advanced";
 
-/* Sources/LemmingsLocal/main.swift:4600; Sources/LemmingsLocal/main.swift:4613 */
+/* Sources/LemmingsLocal/main.swift:4609; Sources/LemmingsLocal/main.swift:4622 */
 "Journey unavailable" = "Journey unavailable";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PREFS.IFF:1 */
@@ -3444,7 +3444,7 @@
 /* Sources/LemmingsLocal/KeyboardOverlayView.swift:39 */
 "KEYBOARD" = "KEYBOARD";
 
-/* Sources/LemmingsLocal/main.swift:7344 */
+/* Sources/LemmingsLocal/main.swift:7353 */
 "KNOWN" = "KNOWN";
 
 /* Sources/NxlvKit/TrolleyHistory.swift:11 */
@@ -3660,7 +3660,7 @@
 /* Sources/LemmingsGameArt/MobileHUDRenderer.swift:642; Sources/LemmingsGameArt/MobileHUDRenderer.swift:643; Sources/LemmingsGameArt/MobileHUDRenderer.swift:714 */
 "LEFT {0}" = "LEFT {0}";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:281; Sources/LemmingsLocal/ArcadeWindow.swift:609; Sources/LemmingsLocal/ArcadeWindow.swift:619; Sources/LemmingsLocal/ArcadeWindow.swift:715; Sources/LemmingsLocal/ArcadeWindow.swift:99; Sources/LemmingsLocal/ResultCelebrationView.swift:284; Sources/LemmingsLocal/ResultCelebrationView.swift:291; Sources/LemmingsLocal/TrolleyResultView.swift:54; Sources/LemmingsLocal/main.swift:6077; Sources/LemmingsLocal/main.swift:6097 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:281; Sources/LemmingsLocal/ArcadeWindow.swift:609; Sources/LemmingsLocal/ArcadeWindow.swift:619; Sources/LemmingsLocal/ArcadeWindow.swift:715; Sources/LemmingsLocal/ArcadeWindow.swift:99; Sources/LemmingsLocal/ResultCelebrationView.swift:284; Sources/LemmingsLocal/ResultCelebrationView.swift:291; Sources/LemmingsLocal/TrolleyResultView.swift:54; Sources/LemmingsLocal/main.swift:6086; Sources/LemmingsLocal/main.swift:6106 */
 "LEM" = "LEM";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2407 */
@@ -3669,7 +3669,7 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INTRO.IFF:1 */
 "LEMMING MYTHOS" = "LEMMING MYTHOS";
 
-/* Sources/LemmingsLocal/PlayfieldView.swift:1047; Sources/LemmingsLocal/PlayfieldView.swift:1162; Sources/LemmingsLocal/PlayfieldView.swift:1255; Sources/LemmingsLocal/PlayfieldView.swift:270; Sources/LemmingsLocal/main.swift:6953 */
+/* Sources/LemmingsLocal/PlayfieldView.swift:1047; Sources/LemmingsLocal/PlayfieldView.swift:1162; Sources/LemmingsLocal/PlayfieldView.swift:1255; Sources/LemmingsLocal/PlayfieldView.swift:270; Sources/LemmingsLocal/main.swift:6962 */
 "LEMMINGS" = "LEMMINGS";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:2468 */
@@ -3681,7 +3681,7 @@
 /* Sources/NxlvKit/ArcadeRecords.swift:57 */
 "LESS IS MORE" = "LESS IS MORE";
 
-/* Sources/LemmingsLocal/ResultCelebrationView.swift:74; Sources/LemmingsLocal/main.swift:6420 */
+/* Sources/LemmingsLocal/ResultCelebrationView.swift:74; Sources/LemmingsLocal/main.swift:6429 */
 "LEVEL COMPLETE" = "LEVEL COMPLETE";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1264 */
@@ -3705,10 +3705,10 @@
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:167 */
 "LEVEL STARTS" = "LEVEL STARTS";
 
-/* Sources/LemmingsLocal/main.swift:6390 */
+/* Sources/LemmingsLocal/main.swift:6399 */
 "LEVEL {0} OF {1}" = "LEVEL {0} OF {1}";
 
-/* Sources/LemmingsLocal/main.swift:7329; Sources/LemmingsLocal/main.swift:7332 */
+/* Sources/LemmingsLocal/main.swift:7338; Sources/LemmingsLocal/main.swift:7341 */
 "LEVEL {0}/{1}" = "LEVEL {0}/{1}";
 
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:172 */
@@ -3762,7 +3762,7 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:52 */
 "Last {0} days" = "Last {0} days";
 
-/* Sources/LemmingsLocal/main.swift:4297 */
+/* Sources/LemmingsLocal/main.swift:4306 */
 "Later" = "Later";
 
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:24 */
@@ -3774,7 +3774,7 @@
 /* Sources/LemmingsAppCore/Records/HostedRankings.swift:35; Sources/NxlvKit/TrolleyLeaderboards.swift:12 */
 "Least skills" = "Least skills";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:754; Sources/LemmingsLocal/main.swift:8611 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:754; Sources/LemmingsLocal/main.swift:8620 */
 "Leave Hot Seat?" = "Leave Hot Seat?";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:145; Sources/LemmingsMobileUI/MobileHUDView.swift:376 */
@@ -3807,7 +3807,7 @@
 /* Sources/LemmingsTVUI/TVPlayfieldView.swift:64 */
 "Lemming {0}, unavailable" = "Lemming {0}, unavailable";
 
-/* Sources/LemmingsGameArt/MobileHomeArt.swift:18; Sources/LemmingsLocal/PlayfieldView.swift:1068; Sources/LemmingsLocal/ReplayWindow.swift:123; Sources/LemmingsLocal/ReplayWindow.swift:16; Sources/LemmingsLocal/main.swift:6814; Sources/LemmingsLocal/main.swift:6816; Sources/LemmingsLocal/main.swift:6834; Sources/LemmingsLocal/main.swift:6930; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:10; Sources/LemmingsMobileUI/MobileTVBootstrap.swift:40; Sources/LemmingsTVCore/TVLibrarySource.swift:14; Sources/LemmingsTVUI/TVLibraryViewController.swift:160; Sources/LemmingsTVUI/TVLibraryViewController.swift:188; Sources/LemmingsTVUI/TVLibraryViewController.swift:205; Sources/NxlvKit/AmigaVersusCampaign.swift:28; Sources/NxlvKit/ClassicSaga.swift:27 */
+/* Sources/LemmingsGameArt/MobileHomeArt.swift:18; Sources/LemmingsLocal/PlayfieldView.swift:1068; Sources/LemmingsLocal/ReplayWindow.swift:123; Sources/LemmingsLocal/ReplayWindow.swift:16; Sources/LemmingsLocal/main.swift:6823; Sources/LemmingsLocal/main.swift:6825; Sources/LemmingsLocal/main.swift:6843; Sources/LemmingsLocal/main.swift:6939; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:10; Sources/LemmingsMobileUI/MobileTVBootstrap.swift:40; Sources/LemmingsTVCore/TVLibrarySource.swift:14; Sources/LemmingsTVUI/TVLibraryViewController.swift:160; Sources/LemmingsTVUI/TVLibraryViewController.swift:188; Sources/LemmingsTVUI/TVLibraryViewController.swift:205; Sources/NxlvKit/AmigaVersusCampaign.swift:28; Sources/NxlvKit/ClassicSaga.swift:27 */
 "Lemmings" = "Lemmings";
 
 /* Sources/LemmingsLocal/main.swift:132; Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift:11; Sources/LemmingsMobileCore/MobileContentStore.swift:27; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:519; Sources/LemmingsTVUI/TVLibraryViewController.swift:160; Sources/NxlvKit/LevelCatalogue.swift:14 */
@@ -3867,7 +3867,7 @@
 /* Sources/LemmingsLocal/LearningJourneyMenu.swift:21 */
 "Let's play" = "Let's play";
 
-/* Sources/LemmingsLocal/TelemetryDashboard.swift:219; Sources/LemmingsLocal/main.swift:1016; Sources/LemmingsLocal/main.swift:7107; Sources/LemmingsMobileCore/MobileLibrary.swift:25 */
+/* Sources/LemmingsLocal/TelemetryDashboard.swift:219; Sources/LemmingsLocal/main.swift:1016; Sources/LemmingsLocal/main.swift:7116; Sources/LemmingsMobileCore/MobileLibrary.swift:25 */
 "Level" = "Level";
 
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:570 */
@@ -3876,7 +3876,7 @@
 /* Sources/LemmingsLocal/main.swift:940 */
 "Level Records…" = "Level Records…";
 
-/* Sources/LemmingsLocal/SettingsWindow.swift:346; Sources/LemmingsLocal/main.swift:2813; Sources/LemmingsLocal/main.swift:3008 */
+/* Sources/LemmingsLocal/SettingsWindow.swift:346; Sources/LemmingsLocal/main.swift:2819; Sources/LemmingsLocal/main.swift:3014 */
 "Level Select" = "Level Select";
 
 /* Sources/LemmingsLocal/main.swift:1000 */
@@ -3897,19 +3897,19 @@
 /* Sources/NxlvKit/TrolleyAffinity.swift:34 */
 "Level cleared with extensive skill use, nukes or rewinds." = "Level cleared with extensive skill use, nukes or rewinds.";
 
-/* Sources/LemmingsLocal/main.swift:7010; Sources/LemmingsMobileUI/MobileGameViewController.swift:2050; Sources/LemmingsTVUI/TVLibraryViewController.swift:243 */
+/* Sources/LemmingsLocal/main.swift:7019; Sources/LemmingsMobileUI/MobileGameViewController.swift:2050; Sources/LemmingsTVUI/TVLibraryViewController.swift:243 */
 "Level complete" = "Level complete";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1 */
 "Level design" = "Level design";
 
-/* Sources/LemmingsLocal/main.swift:2680 */
+/* Sources/LemmingsLocal/main.swift:2686 */
 "Level error: could not create the level image" = "Level error: could not create the level image";
 
-/* Sources/LemmingsLocal/main.swift:2653 */
+/* Sources/LemmingsLocal/main.swift:2659 */
 "Level error: missing graphics style {0}" = "Level error: missing graphics style {0}";
 
-/* Sources/LemmingsLocal/main.swift:2707 */
+/* Sources/LemmingsLocal/main.swift:2713 */
 "Level error: {0}" = "Level error: {0}";
 
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:183 */
@@ -3921,7 +3921,7 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:521 */
 "Level goals and tiered hints" = "Level goals and tiered hints";
 
-/* Sources/LemmingsLocal/ControllerDevicePresentation.swift:72; Sources/LemmingsLocal/GameplayKeyboard.swift:588; Sources/LemmingsLocal/KeyboardOverlayView.swift:51; Sources/LemmingsLocal/LevelHintWindow.swift:111; Sources/LemmingsLocal/main.swift:8561; Sources/LemmingsLocal/main.swift:8859 */
+/* Sources/LemmingsLocal/ControllerDevicePresentation.swift:72; Sources/LemmingsLocal/GameplayKeyboard.swift:588; Sources/LemmingsLocal/KeyboardOverlayView.swift:51; Sources/LemmingsLocal/LevelHintWindow.swift:111; Sources/LemmingsLocal/main.swift:8570; Sources/LemmingsLocal/main.swift:8868 */
 "Level hints" = "Level hints";
 
 /* Sources/LemmingsLocal/TimelinePanelControls.swift:16 */
@@ -3930,19 +3930,19 @@
 /* Sources/LemmingsLocal/main.swift:1039 */
 "Level hints…" = "Level hints…";
 
-/* Sources/LemmingsLocal/main.swift:1841 */
+/* Sources/LemmingsLocal/main.swift:1845 */
 "Level locked" = "Level locked";
 
-/* Sources/LemmingsLocal/main.swift:2532 */
+/* Sources/LemmingsLocal/main.swift:2538 */
 "Level locked. Complete the preceding level or change the Classic unlock setting." = "Level locked. Complete the preceding level or change the Classic unlock setting.";
 
 /* Sources/LemmingsMobileUI/MobileHUDView.swift:25 */
 "Level map" = "Level map";
 
-/* Sources/LemmingsLocal/main.swift:3918 */
+/* Sources/LemmingsLocal/main.swift:3927 */
 "Level not added" = "Level not added";
 
-/* Sources/LemmingsLocal/main.swift:4331 */
+/* Sources/LemmingsLocal/main.swift:4340 */
 "Level not removed" = "Level not removed";
 
 /* Sources/LemmingsTVUI/TVPlayfieldView.swift:30 */
@@ -3954,7 +3954,7 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:33 */
 "Level results" = "Level results";
 
-/* Sources/LemmingsLocal/main.swift:8472 */
+/* Sources/LemmingsLocal/main.swift:8481 */
 "Level select" = "Level select";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:333 */
@@ -3969,37 +3969,37 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:42 */
 "Level starts" = "Level starts";
 
-/* Sources/LemmingsLocal/main.swift:5663 */
+/* Sources/LemmingsLocal/main.swift:5672 */
 "Level unavailable" = "Level unavailable";
 
-/* Sources/LemmingsLocal/main.swift:3059; Sources/LemmingsLocal/main.swift:3099; Sources/LemmingsLocal/main.swift:3136; Sources/LemmingsLocal/main.swift:3703; Sources/LemmingsLocal/main.swift:3743; Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:59 */
+/* Sources/LemmingsLocal/main.swift:3065; Sources/LemmingsLocal/main.swift:3105; Sources/LemmingsLocal/main.swift:3142; Sources/LemmingsLocal/main.swift:3709; Sources/LemmingsLocal/main.swift:3749; Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:59 */
 "Level {0}" = "Level {0}";
 
-/* Sources/LemmingsLocal/main.swift:4226 */
+/* Sources/LemmingsLocal/main.swift:4235 */
 "Level {0}  {1}" = "Level {0}  {1}";
 
-/* Sources/LemmingsLocal/main.swift:3555 */
+/* Sources/LemmingsLocal/main.swift:3561 */
 "Level {0}  {1}  {2}/{3}{4}" = "Level {0}  {1}  {2}/{3}{4}";
 
-/* Sources/LemmingsLocal/main.swift:4945 */
+/* Sources/LemmingsLocal/main.swift:4954 */
 "Level {0}  {1}/{2}" = "Level {0}  {1}/{2}";
 
-/* Sources/LemmingsLocal/main.swift:3999; Sources/LemmingsLocal/main.swift:4006 */
+/* Sources/LemmingsLocal/main.swift:4008; Sources/LemmingsLocal/main.swift:4015 */
 "Level {0} of {1}" = "Level {0} of {1}";
 
 /* Sources/LemmingsMobileCore/Lemmings3MobileLibrary.swift:57 */
 "Level {0} • {1}×{2}" = "Level {0} • {1}×{2}";
 
-/* Sources/LemmingsGameArt/GameFrontEnd.swift:371; Sources/LemmingsGameArt/MobileSettingsArt.swift:57; Sources/LemmingsLocal/main.swift:1015; Sources/LemmingsLocal/main.swift:3268; Sources/LemmingsLocal/main.swift:5055; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:222; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:372; Sources/LemmingsTVUI/TVLibraryViewController.swift:166 */
+/* Sources/LemmingsGameArt/GameFrontEnd.swift:371; Sources/LemmingsGameArt/MobileSettingsArt.swift:57; Sources/LemmingsLocal/main.swift:1015; Sources/LemmingsLocal/main.swift:3274; Sources/LemmingsLocal/main.swift:5064; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:222; Sources/LemmingsMobileUI/MobileMenuCanvas.swift:372; Sources/LemmingsTVUI/TVLibraryViewController.swift:166 */
 "Levels" = "Levels";
 
-/* Sources/LemmingsLocal/main.swift:4888 */
+/* Sources/LemmingsLocal/main.swift:4897 */
 "Levels  {0}/{1}" = "Levels  {0}/{1}";
 
 /* Sources/LemmingsAppCore/Records/HostedRankings.swift:37; Sources/LemmingsMobileUI/MobileRankings.swift:117 */
 "Levels cleared" = "Levels cleared";
 
-/* Sources/LemmingsGameArt/GameFrontEnd.swift:29; Sources/LemmingsLocal/main.swift:8472; Sources/LemmingsMobileUI/MobileGameInput.swift:27; Sources/LemmingsTVUI/TVLibraryViewController.swift:189; Sources/LemmingsTVUI/TVLibraryViewController.swift:260 */
+/* Sources/LemmingsGameArt/GameFrontEnd.swift:29; Sources/LemmingsLocal/main.swift:8481; Sources/LemmingsMobileUI/MobileGameInput.swift:27; Sources/LemmingsTVUI/TVLibraryViewController.swift:189; Sources/LemmingsTVUI/TVLibraryViewController.swift:260 */
 "Library" = "Library";
 
 /* Sources/LemmingsGameArt/CloudSyncArt.swift:33 */
@@ -4026,10 +4026,10 @@
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:114 */
 "Load shared play counts" = "Load shared play counts";
 
-/* Sources/LemmingsLocal/main.swift:7928 */
+/* Sources/LemmingsLocal/main.swift:7937 */
 "Loaded {0} Amiga sound effects." = "Loaded {0} Amiga sound effects.";
 
-/* Sources/LemmingsLocal/main.swift:7906 */
+/* Sources/LemmingsLocal/main.swift:7915 */
 "Loaded {0} sound effects." = "Loaded {0} sound effects.";
 
 /* Sources/LemmingsLocal/GameScreen.swift:13; Sources/LemmingsLocal/main.swift:775; Sources/LemmingsTVUI/TVLibraryViewController.swift:268 */
@@ -4059,10 +4059,10 @@
 /* Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:147 */
 "Local saves are not writable." = "Local saves are not writable.";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:885; Sources/LemmingsLocal/main.swift:359; Sources/LemmingsLocal/main.swift:3705; Sources/NxlvKit/LevelCatalogue.swift:50 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:885; Sources/LemmingsLocal/main.swift:359; Sources/LemmingsLocal/main.swift:3711; Sources/NxlvKit/LevelCatalogue.swift:50 */
 "Locked" = "Locked";
 
-/* Sources/LemmingsLocal/main.swift:4233 */
+/* Sources/LemmingsLocal/main.swift:4242 */
 "Locked  {0}" = "Locked  {0}";
 
 /* Sources/LemmingsLocal/LevelCoverFlowView.swift:904 */
@@ -4158,7 +4158,7 @@
 /* Sources/NxlvKit/ArchivalCatalog.swift:75 */
 "Macintosh Sound Manager 22 kHz PCM" = "Macintosh Sound Manager 22 kHz PCM";
 
-/* Sources/LemmingsLocal/main.swift:6593 */
+/* Sources/LemmingsLocal/main.swift:6602 */
 "Macintosh artwork could not be applied to this level." = "Macintosh artwork could not be applied to this level.";
 
 /* Sources/NxlvKit/PlatformProfile.swift:38 */
@@ -4200,10 +4200,10 @@
 /* Sources/LemmingsLocal/MusicLibraryWindow.swift:89 */
 "Manage installed soundtracks" = "Manage installed soundtracks";
 
-/* Sources/LemmingsLocal/main.swift:4018 */
+/* Sources/LemmingsLocal/main.swift:4027 */
 "Manual" = "Manual";
 
-/* Sources/LemmingsLocal/main.swift:4036 */
+/* Sources/LemmingsLocal/main.swift:4045 */
 "Manual order" = "Manual order";
 
 /* Sources/NxlvKit/DifficultyProfile.swift:6 */
@@ -4308,7 +4308,7 @@
 /* Sources/LemmingsLocal/ReleaseWelcome.swift:18 */
 "Menu themes" = "Menu themes";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:421; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:424; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:428; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:429; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446; Sources/LemmingsLocal/main.swift:8826; Sources/LemmingsLocal/main.swift:8827; Sources/LemmingsLocal/main.swift:8828 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:421; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:424; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:428; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:429; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446; Sources/LemmingsLocal/main.swift:8835; Sources/LemmingsLocal/main.swift:8836; Sources/LemmingsLocal/main.swift:8837 */
 "Menus & results" = "Menus & results";
 
 /* Sources/LemmingsLocal/ControllerDevicePresentation.swift:86 */
@@ -4341,7 +4341,7 @@
 /* Sources/LemmingsLocal/main.swift:362 */
 "Missing" = "Missing";
 
-/* Sources/LemmingsLocal/main.swift:4256 */
+/* Sources/LemmingsLocal/main.swift:4265 */
 "Missing - replace or remove  {0}" = "Missing - replace or remove  {0}";
 
 /* Sources/NxlvKit/Lemmings3Runtime.swift:288 */
@@ -4362,7 +4362,7 @@
 /* Sources/NxlvKit/Lemmings3Style.swift:140 */
 "Missing or ambiguous Chronicles construction tile." = "Missing or ambiguous Chronicles construction tile.";
 
-/* Sources/LemmingsLocal/main.swift:6670 */
+/* Sources/LemmingsLocal/main.swift:6679 */
 "Missing style data: {0}" = "Missing style data: {0}";
 
 /* Sources/NxlvKit/NxlvTypes.swift:150 */
@@ -4404,7 +4404,7 @@
 /* Sources/NxlvKit/TrolleyHistory.swift:18; Sources/NxlvKit/TrolleyLeaderboards.swift:14 */
 "Moral surplus" = "Moral surplus";
 
-/* Sources/LemmingsLocal/main.swift:4625 */
+/* Sources/LemmingsLocal/main.swift:4634 */
 "More" = "More";
 
 /* Sources/LemmingsLocal/TrolleyResultView.swift:172 */
@@ -4470,7 +4470,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2003 */
 "Music off" = "Music off";
 
-/* Sources/LemmingsLocal/main.swift:8291 */
+/* Sources/LemmingsLocal/main.swift:8300 */
 "Music output interrupted. Previous track continues." = "Music output interrupted. Previous track continues.";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2005 */
@@ -4491,10 +4491,10 @@
 /* Sources/LemmingsAppCore/Input/GameplayCommands.swift:58 */
 "N: End run / undo" = "N: End run / undo";
 
-/* Sources/LemmingsLocal/main.swift:6058 */
+/* Sources/LemmingsLocal/main.swift:6067 */
 "NEOLEMMIX  {0}/{1}" = "NEOLEMMIX  {0}/{1}";
 
-/* Sources/LemmingsLocal/main.swift:6050 */
+/* Sources/LemmingsLocal/main.swift:6059 */
 "NEOLEMMIX  — NO PACKS" = "NEOLEMMIX  — NO PACKS";
 
 /* Sources/NxlvKit/ArchivalAudioRegistry.swift:38 */
@@ -4533,22 +4533,22 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1140 */
 "NEXT MOVE" = "NEXT MOVE";
 
-/* Sources/LemmingsLocal/main.swift:1750 */
+/* Sources/LemmingsLocal/main.swift:1754 */
 "NO DATA" = "NO DATA";
 
 /* Sources/LemmingsLocal/ReplaySkillPanel.swift:30; Sources/LemmingsLocal/ReplaySkillPanel.swift:69 */
 "NONE" = "NONE";
 
-/* Sources/LemmingsLocal/main.swift:6420 */
+/* Sources/LemmingsLocal/main.swift:6429 */
 "NOT THIS TIME" = "NOT THIS TIME";
 
-/* Sources/LemmingsLocal/main.swift:6234 */
+/* Sources/LemmingsLocal/main.swift:6243 */
 "NOTHING HERE" = "NOTHING HERE";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1298 */
 "NUKE" = "NUKE";
 
-/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:628; Sources/LemmingsGameArt/MobileHUDRenderer.swift:722; Sources/LemmingsLocal/main.swift:7737 */
+/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:628; Sources/LemmingsGameArt/MobileHUDRenderer.swift:722; Sources/LemmingsLocal/main.swift:7746 */
 "NUKING" = "NUKING";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:231 */
@@ -4566,19 +4566,19 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1472 */
 "Need 50 survivors to complete this tribe." = "Need 50 survivors to complete this tribe.";
 
-/* Sources/LemmingsLocal/main.swift:7013 */
+/* Sources/LemmingsLocal/main.swift:7022 */
 "Needed {0}  ({1}%)" = "Needed {0}  ({1}%)";
 
-/* Sources/LemmingsLocal/main.swift:131; Sources/LemmingsLocal/main.swift:6530; Sources/LemmingsLocal/main.swift:6815; Sources/LemmingsMobileCore/MobileContentStore.swift:29; Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:27; Sources/NxlvKit/LevelCatalogue.swift:13 */
+/* Sources/LemmingsLocal/main.swift:131; Sources/LemmingsLocal/main.swift:6539; Sources/LemmingsLocal/main.swift:6824; Sources/LemmingsMobileCore/MobileContentStore.swift:29; Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:27; Sources/NxlvKit/LevelCatalogue.swift:13 */
 "NeoLemmix" = "NeoLemmix";
 
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:518 */
 "NeoLemmix Preview" = "NeoLemmix Preview";
 
-/* Sources/LemmingsLocal/main.swift:4151 */
+/* Sources/LemmingsLocal/main.swift:4160 */
 "NeoLemmix difficulty analysis is not yet available." = "NeoLemmix difficulty analysis is not yet available.";
 
-/* Sources/LemmingsLocal/main.swift:6741 */
+/* Sources/LemmingsLocal/main.swift:6750 */
 "NeoLemmix error: {0}" = "NeoLemmix error: {0}";
 
 /* Sources/NxlvKit/NeoLemmixPack.swift:16 */
@@ -4605,10 +4605,10 @@
 /* Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:190 */
 "NeoLemmix styles for {0} are incomplete." = "NeoLemmix styles for {0} are incomplete.";
 
-/* Sources/LemmingsLocal/main.swift:5789 */
+/* Sources/LemmingsLocal/main.swift:5798 */
 "NeoLemmix styles needed" = "NeoLemmix styles needed";
 
-/* Sources/LemmingsGameArt/MobileCareerArt.swift:61; Sources/LemmingsLocal/ArcadeWindow.swift:728; Sources/LemmingsLocal/main.swift:4774 */
+/* Sources/LemmingsGameArt/MobileCareerArt.swift:61; Sources/LemmingsLocal/ArcadeWindow.swift:728; Sources/LemmingsLocal/main.swift:4783 */
 "New Hot Seat" = "New Hot Seat";
 
 /* Sources/LemmingsLocal/TrolleyResultView.swift:143 */
@@ -4620,7 +4620,7 @@
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:26; Sources/LemmingsGameArt/MobileCareerArt.swift:42; Sources/LemmingsGameArt/MobileCareerArt.swift:56 */
 "New player" = "New player";
 
-/* Sources/LemmingsLocal/main.swift:4016; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:31; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:69 */
+/* Sources/LemmingsLocal/main.swift:4025; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:31; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:69 */
 "New playlist" = "New playlist";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2154; Sources/LemmingsMobileUI/MobileGameViewController.swift:67; Sources/LemmingsMobileUI/MobileRecordsPages.swift:235 */
@@ -4629,7 +4629,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2155; Sources/LemmingsMobileUI/MobileGameViewController.swift:68; Sources/LemmingsMobileUI/MobileRecordsPages.swift:236 */
 "New skill record" = "New skill record";
 
-/* Sources/LemmingsLocal/main.swift:4772 */
+/* Sources/LemmingsLocal/main.swift:4781 */
 "New solo" = "New solo";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2046; Sources/LemmingsMobileUI/MobileGameViewController.swift:2048 */
@@ -4665,7 +4665,7 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:179 */
 "Next graphics (F2)" = "Next graphics (F2)";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:208; Sources/LemmingsLocal/ArcadeWindow.swift:26; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1770; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:30; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:31; Sources/LemmingsLocal/main.swift:1536; Sources/LemmingsLocal/main.swift:1604; Sources/LemmingsLocal/main.swift:8446; Sources/LemmingsLocal/main.swift:8472; Sources/LemmingsLocal/main.swift:8824 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:208; Sources/LemmingsLocal/ArcadeWindow.swift:26; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1770; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:30; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1496; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:31; Sources/LemmingsLocal/main.swift:1536; Sources/LemmingsLocal/main.swift:1604; Sources/LemmingsLocal/main.swift:8455; Sources/LemmingsLocal/main.swift:8481; Sources/LemmingsLocal/main.swift:8833 */
 "Next level" = "Next level";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:534 */
@@ -4701,13 +4701,13 @@
 /* Sources/LemmingsMobileUI/MobileGameInput.swift:38; Sources/NxlvKit/ControllerBindings.swift:41 */
 "Next unassigned lemming" = "Next unassigned lemming";
 
-/* Sources/LemmingsGameArt/MobileTurnArt.swift:9; Sources/LemmingsLocal/main.swift:7040; Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:40 */
+/* Sources/LemmingsGameArt/MobileTurnArt.swift:9; Sources/LemmingsLocal/main.swift:7049; Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:40 */
 "Next: {0}" = "Next: {0}";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MEDALS.IFF:1 */
 "Nice one! But can you give that extra bit of effort?" = "Nice one! But can you give that extra bit of effort?";
 
-/* Sources/LemmingsLocal/main.swift:7878 */
+/* Sources/LemmingsLocal/main.swift:7887 */
 "No .mod files were found in that folder." = "No .mod files were found in that folder.";
 
 /* Sources/NxlvKit/TrolleyAchievementCollection.swift:40 */
@@ -4719,16 +4719,16 @@
 /* Sources/NxlvKit/TrolleyHistory.swift:12 */
 "No Lemming left behind" = "No Lemming left behind";
 
-/* Sources/LemmingsLocal/main.swift:2292 */
+/* Sources/LemmingsLocal/main.swift:2296 */
 "No Lemmings data found. {0}" = "No Lemmings data found. {0}";
 
-/* Sources/LemmingsLocal/main.swift:6530 */
+/* Sources/LemmingsLocal/main.swift:6539 */
 "No NeoLemmix packs were found in that folder." = "No NeoLemmix packs were found in that folder.";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1047; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1370; Sources/LemmingsLocal/main.swift:8346 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1047; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1370; Sources/LemmingsLocal/main.swift:8355 */
 "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels." = "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1046; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1063; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1369; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1387; Sources/LemmingsLocal/main.swift:8345; Sources/LemmingsLocal/main.swift:8358 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1046; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1063; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1369; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1387; Sources/LemmingsLocal/main.swift:8354; Sources/LemmingsLocal/main.swift:8367 */
 "No Zoom uses. Earn one for every 3 no-Rewind career stars." = "No Zoom uses. Earn one for every 3 no-Rewind career stars.";
 
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:26 */
@@ -4743,10 +4743,10 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:193 */
 "No established target for this level yet." = "No established target for this level yet.";
 
-/* Sources/LemmingsLocal/main.swift:5219; Sources/LemmingsLocal/main.swift:5283 */
+/* Sources/LemmingsLocal/main.swift:5228; Sources/LemmingsLocal/main.swift:5292 */
 "No fan level packs are available." = "No fan level packs are available.";
 
-/* Sources/LemmingsLocal/main.swift:3712 */
+/* Sources/LemmingsLocal/main.swift:3718 */
 "No favourites yet" = "No favourites yet";
 
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:198 */
@@ -4755,16 +4755,16 @@
 /* Sources/NxlvKit/AmigaVersusCampaign.swift:46 */
 "No level files were found for {0}." = "No level files were found for {0}.";
 
-/* Sources/LemmingsLocal/main.swift:3012 */
+/* Sources/LemmingsLocal/main.swift:3018 */
 "No level packs are available." = "No level packs are available.";
 
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:187 */
 "No level starts yet" = "No level starts yet";
 
-/* Sources/LemmingsLocal/main.swift:3712 */
+/* Sources/LemmingsLocal/main.swift:3718 */
 "No levels played yet" = "No levels played yet";
 
-/* Sources/LemmingsLocal/main.swift:4404 */
+/* Sources/LemmingsLocal/main.swift:4413 */
 "No levels yet" = "No levels yet";
 
 /* Sources/LemmingsLocal/KeyboardCommandsView.swift:70 */
@@ -4788,7 +4788,7 @@
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:90; Sources/LemmingsLocal/ArcadeWindow.swift:859; Sources/LemmingsLocal/TrolleyResultView.swift:77 */
 "No records" = "No records";
 
-/* Sources/LemmingsLocal/main.swift:4029 */
+/* Sources/LemmingsLocal/main.swift:4038 */
 "No repeats" = "No repeats";
 
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:34 */
@@ -4821,16 +4821,16 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2041; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:563 */
 "No time limit" = "No time limit";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:356; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:357; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:384; Sources/LemmingsLocal/main.swift:8747 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:356; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:357; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:384; Sources/LemmingsLocal/main.swift:8756 */
 "No unassigned lemmings" = "No unassigned lemmings";
 
-/* Sources/LemmingsLocal/main.swift:4187 */
+/* Sources/LemmingsLocal/main.swift:4196 */
 "No validated local solution demonstrates this technique." = "No validated local solution demonstrates this technique.";
 
 /* Sources/LemmingsLocal/GameCenterScores.swift:134 */
 "No worldwide score yet." = "No worldwide score yet.";
 
-/* Sources/LemmingsLocal/main.swift:2836 */
+/* Sources/LemmingsLocal/main.swift:2842 */
 "No {0} level packs are available in this build." = "No {0} level packs are available in this build.";
 
 /* Sources/NxlvKit/ClassicSettings.swift:148; Sources/NxlvKit/ClassicSettings.swift:188; Sources/NxlvKit/ClassicSettings.swift:56; Sources/NxlvKit/ClassicSettings.swift:79; Sources/NxlvKit/Lemmings2Campaign.swift:13 */
@@ -4857,7 +4857,7 @@
 /* Sources/LemmingsLocal/LevelCoverFlowView.swift:888 */
 "Not selected" = "Not selected";
 
-/* Sources/LemmingsLocal/main.swift:7010 */
+/* Sources/LemmingsLocal/main.swift:7019 */
 "Not this time" = "Not this time";
 
 /* Sources/LemmingsLocal/AchievementsWindow.swift:115 */
@@ -4920,7 +4920,7 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:2415 */
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "OUT {0} SAVE {1} LEFT {2} LOST {3}";
 
-/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:638; Sources/LemmingsGameArt/MobileHUDRenderer.swift:639; Sources/LemmingsGameArt/MobileHUDRenderer.swift:712; Sources/LemmingsLocal/main.swift:7347 */
+/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:638; Sources/LemmingsGameArt/MobileHUDRenderer.swift:639; Sources/LemmingsGameArt/MobileHUDRenderer.swift:712; Sources/LemmingsLocal/main.swift:7356 */
 "OUT {0}/{1}" = "OUT {0}/{1}";
 
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:36 */
@@ -5043,7 +5043,7 @@
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:23 */
 "One working route opens with:\n{0}\n\n{1}" = "One working route opens with:\n{0}\n\n{1}";
 
-/* Sources/LemmingsLocal/main.swift:3973; Sources/LemmingsLocal/main.swift:3987 */
+/* Sources/LemmingsLocal/main.swift:3982; Sources/LemmingsLocal/main.swift:3996 */
 "Open" = "Open";
 
 /* Sources/LemmingsLocal/GameCenterScores.swift:143 */
@@ -5130,7 +5130,7 @@
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/TALISMAN.IFF:1 */
 "Our lives have been rich and fruitful" = "Our lives have been rich and fruitful";
 
-/* Sources/LemmingsLocal/main.swift:7722 */
+/* Sources/LemmingsLocal/main.swift:7731 */
 "Out {0}/{1}" = "Out {0}/{1}";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MAP.IFF:1 */
@@ -5187,7 +5187,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1107; Sources/LemmingsMobileUI/MobileGameViewController.swift:1115; Sources/LemmingsMobileUI/MobileGameViewController.swift:1125; Sources/LemmingsMobileUI/MobileGameViewController.swift:381; Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:52 */
 "PLAY" = "PLAY";
 
-/* Sources/LemmingsLocal/main.swift:6223 */
+/* Sources/LemmingsLocal/main.swift:6232 */
 "PLAY ALL" = "PLAY ALL";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1197 */
@@ -5247,13 +5247,13 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INTRO.IFF:1 */
 "PSYGNOSIS  PRESENTS" = "PSYGNOSIS  PRESENTS";
 
-/* Sources/LemmingsLocal/main.swift:3301 */
+/* Sources/LemmingsLocal/main.swift:3307 */
 "Packs" = "Packs";
 
 /* Sources/LemmingsMobileUI/MobileGameInput.swift:48 */
 "Pan" = "Pan";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444; Sources/LemmingsLocal/main.swift:8823 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:419; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:444; Sources/LemmingsLocal/main.swift:8832 */
 "Pan the level" = "Pan the level";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:46; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
@@ -5343,7 +5343,7 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:656 */
 "Pause: Keep the rhythm" = "Pause: Keep the rhythm";
 
-/* Sources/LemmingsGameArt/MobilePauseArt.swift:18; Sources/LemmingsGameArt/MobileTurnArt.swift:17; Sources/LemmingsLocal/OriginalMoviePlayer.swift:105; Sources/LemmingsLocal/main.swift:8857; Sources/LemmingsMobileUI/MobileGameViewController.swift:500; Sources/LemmingsMobileUI/MobileGameViewController.swift:504; Sources/LemmingsTVUI/TVLibraryViewController.swift:187; Sources/LemmingsTVUI/TVPlayfieldView.swift:66 */
+/* Sources/LemmingsGameArt/MobilePauseArt.swift:18; Sources/LemmingsGameArt/MobileTurnArt.swift:17; Sources/LemmingsLocal/OriginalMoviePlayer.swift:105; Sources/LemmingsLocal/main.swift:8866; Sources/LemmingsMobileUI/MobileGameViewController.swift:500; Sources/LemmingsMobileUI/MobileGameViewController.swift:504; Sources/LemmingsTVUI/TVLibraryViewController.swift:187; Sources/LemmingsTVUI/TVPlayfieldView.swift:66 */
 "Paused" = "Paused";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1309 */
@@ -5376,7 +5376,7 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:48; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
 "Platformer" = "Platformer";
 
-/* Sources/LemmingsGameArt/MobileCareerArt.swift:143; Sources/LemmingsGameArt/MobileCareerArt.swift:197; Sources/LemmingsLocal/LeaderboardReplayWindow.swift:121; Sources/LemmingsLocal/LeaderboardReplayWindow.swift:46; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1792; Sources/LemmingsLocal/OriginalMoviePlayer.swift:101; Sources/LemmingsLocal/ReplayWindow.swift:326; Sources/LemmingsLocal/SettingsWindow.swift:343; Sources/LemmingsLocal/SolutionReplay.swift:387; Sources/LemmingsLocal/main.swift:4348; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:56; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:575; Sources/LemmingsTVUI/TVLibraryViewController.swift:152; Sources/LemmingsTVUI/TVLibraryViewController.swift:155; Sources/LemmingsTVUI/TVLibraryViewController.swift:201 */
+/* Sources/LemmingsGameArt/MobileCareerArt.swift:143; Sources/LemmingsGameArt/MobileCareerArt.swift:197; Sources/LemmingsLocal/LeaderboardReplayWindow.swift:121; Sources/LemmingsLocal/LeaderboardReplayWindow.swift:46; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1792; Sources/LemmingsLocal/OriginalMoviePlayer.swift:101; Sources/LemmingsLocal/ReplayWindow.swift:326; Sources/LemmingsLocal/SettingsWindow.swift:343; Sources/LemmingsLocal/SolutionReplay.swift:387; Sources/LemmingsLocal/main.swift:4357; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:56; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:575; Sources/LemmingsTVUI/TVLibraryViewController.swift:152; Sources/LemmingsTVUI/TVLibraryViewController.swift:155; Sources/LemmingsTVUI/TVLibraryViewController.swift:201 */
 "Play" = "Play";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:103; Sources/LemmingsGameArt/MobileInformationArt.swift:49; Sources/LemmingsGameArt/MobileSettingsArt.swift:97; Sources/LemmingsMobileUI/MobileSettingsPages.swift:92 */
@@ -5466,7 +5466,7 @@
 /* Sources/LemmingsLocal/PlayfieldView.swift:261 */
 "Player profiles" = "Player profiles";
 
-/* Sources/LemmingsLocal/main.swift:4726 */
+/* Sources/LemmingsLocal/main.swift:4735 */
 "Player records could not be saved." = "Player records could not be saved.";
 
 /* Sources/LemmingsMobileUI/MobileProfilePages.swift:180 */
@@ -5487,40 +5487,40 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:786; Sources/LemmingsLocal/OriginalMoviePlayer.swift:105; Sources/LemmingsTVUI/TVPlayfieldView.swift:66 */
 "Playing" = "Playing";
 
-/* Sources/LemmingsLocal/main.swift:3932; Sources/LemmingsLocal/main.swift:4066; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:572 */
+/* Sources/LemmingsLocal/main.swift:3941; Sources/LemmingsLocal/main.swift:4075; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:572 */
 "Playlist" = "Playlist";
 
-/* Sources/LemmingsLocal/main.swift:4436; Sources/LemmingsLocal/main.swift:4441 */
+/* Sources/LemmingsLocal/main.swift:4445; Sources/LemmingsLocal/main.swift:4450 */
 "Playlist name" = "Playlist name";
 
-/* Sources/LemmingsLocal/main.swift:4294; Sources/LemmingsLocal/main.swift:4311; Sources/LemmingsLocal/main.swift:4973; Sources/LemmingsLocal/main.swift:5011 */
+/* Sources/LemmingsLocal/main.swift:4303; Sources/LemmingsLocal/main.swift:4320; Sources/LemmingsLocal/main.swift:4982; Sources/LemmingsLocal/main.swift:5020 */
 "Playlist not changed" = "Playlist not changed";
 
-/* Sources/LemmingsLocal/main.swift:4071 */
+/* Sources/LemmingsLocal/main.swift:4080 */
 "Playlist not created" = "Playlist not created";
 
-/* Sources/LemmingsLocal/main.swift:4495 */
+/* Sources/LemmingsLocal/main.swift:4504 */
 "Playlist not deleted" = "Playlist not deleted";
 
-/* Sources/LemmingsLocal/main.swift:4100 */
+/* Sources/LemmingsLocal/main.swift:4109 */
 "Playlist not opened" = "Playlist not opened";
 
-/* Sources/LemmingsLocal/main.swift:4454 */
+/* Sources/LemmingsLocal/main.swift:4463 */
 "Playlist not renamed" = "Playlist not renamed";
 
-/* Sources/LemmingsLocal/main.swift:3942 */
+/* Sources/LemmingsLocal/main.swift:3951 */
 "Playlist not saved" = "Playlist not saved";
 
-/* Sources/LemmingsLocal/main.swift:4517; Sources/LemmingsLocal/main.swift:4524; Sources/LemmingsLocal/main.swift:4550 */
+/* Sources/LemmingsLocal/main.swift:4526; Sources/LemmingsLocal/main.swift:4533; Sources/LemmingsLocal/main.swift:4559 */
 "Playlist not started" = "Playlist not started";
 
-/* Sources/LemmingsLocal/main.swift:4263 */
+/* Sources/LemmingsLocal/main.swift:4272 */
 "Playlist unavailable" = "Playlist unavailable";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:91; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:93 */
 "Playlist {0}" = "Playlist {0}";
 
-/* Sources/LemmingsGameArt/MobileHomeArt.swift:20; Sources/LemmingsLocal/PlayfieldView.swift:261; Sources/LemmingsLocal/main.swift:2813; Sources/LemmingsLocal/main.swift:3318; Sources/LemmingsLocal/main.swift:3967; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:32 */
+/* Sources/LemmingsGameArt/MobileHomeArt.swift:20; Sources/LemmingsLocal/PlayfieldView.swift:261; Sources/LemmingsLocal/main.swift:2819; Sources/LemmingsLocal/main.swift:3324; Sources/LemmingsLocal/main.swift:3976; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:32 */
 "Playlists" = "Playlists";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:16 */
@@ -5532,7 +5532,7 @@
 /* Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift:24 */
 "Playlists need a different app version. Existing files were preserved." = "Playlists need a different app version. Existing files were preserved.";
 
-/* Sources/LemmingsLocal/main.swift:3964 */
+/* Sources/LemmingsLocal/main.swift:3973 */
 "Playlists unavailable" = "Playlists unavailable";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PREFS.IFF:1 */
@@ -5667,13 +5667,13 @@
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:99; Sources/LemmingsGameArt/MobileHomeArt.swift:19 */
 "Progress" = "Progress";
 
-/* Sources/LemmingsLocal/main.swift:7051 */
+/* Sources/LemmingsLocal/main.swift:7060 */
 "Progress is saved." = "Progress is saved.";
 
-/* Sources/LemmingsLocal/ProgressionMenu.swift:7; Sources/LemmingsLocal/main.swift:4011; Sources/LemmingsMobileUI/MobileLibraryLearning.swift:83 */
+/* Sources/LemmingsLocal/ProgressionMenu.swift:7; Sources/LemmingsLocal/main.swift:4020; Sources/LemmingsMobileUI/MobileLibraryLearning.swift:83 */
 "Progression" = "Progression";
 
-/* Sources/LemmingsLocal/main.swift:4209 */
+/* Sources/LemmingsLocal/main.swift:4218 */
 "Progression not created" = "Progression not created";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:17; Sources/LemmingsMobileUI/MobileLibraryLearning.swift:79 */
@@ -5688,10 +5688,10 @@
 /* Sources/LemmingsLocal/HostedRankingsView.swift:64 */
 "Public: initials, scores and action replays." = "Public: initials, scores and action replays.";
 
-/* Sources/LemmingsLocal/main.swift:8825 */
+/* Sources/LemmingsLocal/main.swift:8834 */
 "Q / Escape" = "Q / Escape";
 
-/* Sources/LemmingsLocal/main.swift:7052 */
+/* Sources/LemmingsLocal/main.swift:7061 */
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q AGAIN TO QUIT  *  ESCAPE TO STAY";
 
 /* Sources/LemmingsLocal/MusicLibraryWindow.swift:120 */
@@ -5700,16 +5700,16 @@
 /* Sources/LemmingsLocal/main.swift:968 */
 "Quit Ultimate Lemmings" = "Quit Ultimate Lemmings";
 
-/* Sources/LemmingsLocal/main.swift:8860 */
+/* Sources/LemmingsLocal/main.swift:8869 */
 "Quit to main menu" = "Quit to main menu";
 
-/* Sources/LemmingsLocal/main.swift:7050 */
+/* Sources/LemmingsLocal/main.swift:7059 */
 "Quit?" = "Quit?";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:429 */
 "R / B" = "R / B";
 
-/* Sources/LemmingsLocal/main.swift:6426; Sources/LemmingsLocal/main.swift:7015 */
+/* Sources/LemmingsLocal/main.swift:6435; Sources/LemmingsLocal/main.swift:7024 */
 "R RETRY - SAVE MORE, USE LESS" = "R RETRY - SAVE MORE, USE LESS";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:129 */
@@ -5748,7 +5748,7 @@
 /* Sources/LemmingsLocal/PlayfieldView.swift:1404 */
 "RECORDS" = "RECORDS";
 
-/* Sources/LemmingsLocal/main.swift:6387 */
+/* Sources/LemmingsLocal/main.swift:6396 */
 "RELEASE RATE {0}" = "RELEASE RATE {0}";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:239 */
@@ -5775,13 +5775,13 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1189; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1196; Sources/LemmingsLocal/PlayfieldView.swift:1178; Sources/LemmingsMobileUI/MobileGameViewController.swift:1115; Sources/LemmingsMobileUI/MobileGameViewController.swift:1125; Sources/LemmingsMobileUI/MobileGameViewController.swift:505; Sources/LemmingsMobileUI/MobileTVGameControls.swift:129; Sources/LemmingsMobileUI/MobileTVGameControls.swift:67 */
 "RESUME" = "RESUME";
 
-/* Sources/LemmingsLocal/main.swift:6098 */
+/* Sources/LemmingsLocal/main.swift:6107 */
 "RESUME - " = "RESUME - ";
 
-/* Sources/LemmingsLocal/main.swift:6098 */
+/* Sources/LemmingsLocal/main.swift:6107 */
 "RESUME LEVEL - " = "RESUME LEVEL - ";
 
-/* Sources/LemmingsLocal/main.swift:6091 */
+/* Sources/LemmingsLocal/main.swift:6100 */
 "RESUME {0} - {1}" = "RESUME {0} - {1}";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1279; Sources/LemmingsMobileUI/MobileGameViewController.swift:1284 */
@@ -5832,13 +5832,13 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:509 */
 "Ramp up to 10×; release to keep speed" = "Ramp up to 10×; release to keep speed";
 
-/* Sources/LemmingsLocal/main.swift:4021; Sources/LemmingsLocal/main.swift:5016; Sources/LemmingsLocal/main.swift:5079; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:573 */
+/* Sources/LemmingsLocal/main.swift:4030; Sources/LemmingsLocal/main.swift:5025; Sources/LemmingsLocal/main.swift:5088; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:573 */
 "Random 10" = "Random 10";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:196 */
 "Random 10 {0}" = "Random 10 {0}";
 
-/* Sources/LemmingsLocal/main.swift:5087 */
+/* Sources/LemmingsLocal/main.swift:5096 */
 "Random playlist not created" = "Random playlist not created";
 
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:568 */
@@ -5865,7 +5865,7 @@
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:214 */
 "Rate -" = "Rate -";
 
-/* Sources/LemmingsLocal/main.swift:3461 */
+/* Sources/LemmingsLocal/main.swift:3467 */
 "Ratings" = "Ratings";
 
 /* Sources/NxlvKit/TrolleyLeaderboards.swift:135 */
@@ -5880,7 +5880,7 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:228 */
 "Ready, {0}" = "Ready, {0}";
 
-/* Sources/LemmingsLocal/main.swift:3644; Sources/LemmingsLocal/main.swift:3664; Sources/LemmingsLocal/main.swift:3672 */
+/* Sources/LemmingsLocal/main.swift:3650; Sources/LemmingsLocal/main.swift:3670; Sources/LemmingsLocal/main.swift:3678 */
 "Recently Played" = "Recently Played";
 
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:15 */
@@ -5952,7 +5952,7 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:522 */
 "Release rate" = "Release rate";
 
-/* Sources/LemmingsLocal/main.swift:7098 */
+/* Sources/LemmingsLocal/main.swift:7107 */
 "Release rate {0}" = "Release rate {0}";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:115; Sources/LemmingsGameArt/MobileSettingsArt.swift:62 */
@@ -5964,13 +5964,13 @@
 /* Sources/LemmingsAppCore/Records/HostedRankings.swift:263 */
 "Removal queued. Retry when connected." = "Removal queued. Retry when connected.";
 
-/* Sources/LemmingsLocal/main.swift:4314; Sources/LemmingsLocal/main.swift:4320; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:60 */
+/* Sources/LemmingsLocal/main.swift:4323; Sources/LemmingsLocal/main.swift:4329; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:60 */
 "Remove" = "Remove";
 
 /* Sources/LemmingsLocal/GameControls.swift:151 */
 "Remove favourite" = "Remove favourite";
 
-/* Sources/LemmingsLocal/main.swift:4318 */
+/* Sources/LemmingsLocal/main.swift:4327 */
 "Remove level" = "Remove level";
 
 /* Sources/LemmingsLocal/HostedRankingsView.swift:69 */
@@ -5979,13 +5979,13 @@
 /* Sources/LemmingsLocal/MusicLibraryWindow.swift:172 */
 "Remove {0}" = "Remove {0}";
 
-/* Sources/LemmingsLocal/main.swift:4319 */
+/* Sources/LemmingsLocal/main.swift:4328 */
 "Remove {0} from this playlist?" = "Remove {0} from this playlist?";
 
-/* Sources/LemmingsLocal/main.swift:4343; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:38; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:61 */
+/* Sources/LemmingsLocal/main.swift:4352; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:38; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:61 */
 "Rename" = "Rename";
 
-/* Sources/LemmingsLocal/main.swift:4435 */
+/* Sources/LemmingsLocal/main.swift:4444 */
 "Rename playlist" = "Rename playlist";
 
 /* Sources/LemmingsLocal/ControllerDevicePresentation.swift:79 */
@@ -5994,10 +5994,10 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:497; Sources/LemmingsMobileUI/MobileGameInput.swift:41 */
 "Repeat last skill" = "Repeat last skill";
 
-/* Sources/LemmingsLocal/main.swift:4335; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:651 */
+/* Sources/LemmingsLocal/main.swift:4344; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:651 */
 "Replace" = "Replace";
 
-/* Sources/LemmingsLocal/main.swift:4538 */
+/* Sources/LemmingsLocal/main.swift:4547 */
 "Replace or remove each locked, missing or changed level before starting." = "Replace or remove each locked, missing or changed level before starting.";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:142; Sources/LemmingsGameArt/MobileCareerArt.swift:179; Sources/LemmingsGameArt/MobilePauseArt.swift:18; Sources/LemmingsLocal/ReplayWindow.swift:318; Sources/LemmingsLocal/ResultLayout.swift:75; Sources/LemmingsLocal/SolutionReplay.swift:387 */
@@ -6075,7 +6075,7 @@
 /* Sources/LemmingsAppCore/Records/ResultAwards.swift:32 */
 "Rescued all {0} lemmings." = "Rescued all {0} lemmings.";
 
-/* Sources/LemmingsLocal/main.swift:7012 */
+/* Sources/LemmingsLocal/main.swift:7021 */
 "Rescued {0} of {1}  ({2}%)" = "Rescued {0} of {1}  ({2}%)";
 
 /* Sources/LemmingsAppCore/Records/ResultAwards.swift:35 */
@@ -6120,7 +6120,7 @@
 /* Sources/LemmingsLocal/ReleaseWelcome.swift:16 */
 "Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel." = "Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel.";
 
-/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:91; Sources/LemmingsLocal/ArcadeWindow.swift:86; Sources/LemmingsLocal/ControllerMenuNavigator.swift:22; Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111; Sources/LemmingsLocal/GameScreen.swift:93; Sources/LemmingsLocal/GameplayKeyboard.swift:559; Sources/LemmingsLocal/LearningJourneyMenu.swift:21; Sources/LemmingsLocal/LearningJourneyMenu.swift:36; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1788; Sources/LemmingsLocal/PanelView.swift:182; Sources/LemmingsLocal/main.swift:3987; Sources/LemmingsLocal/main.swift:8858; Sources/LemmingsMobileCore/MobileLearning.swift:47; Sources/LemmingsTVUI/TVLibraryViewController.swift:184; Sources/LemmingsTVUI/TVLibraryViewController.swift:189 */
+/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:91; Sources/LemmingsLocal/ArcadeWindow.swift:86; Sources/LemmingsLocal/ControllerMenuNavigator.swift:22; Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111; Sources/LemmingsLocal/GameScreen.swift:93; Sources/LemmingsLocal/GameplayKeyboard.swift:559; Sources/LemmingsLocal/LearningJourneyMenu.swift:21; Sources/LemmingsLocal/LearningJourneyMenu.swift:36; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1788; Sources/LemmingsLocal/PanelView.swift:182; Sources/LemmingsLocal/main.swift:3996; Sources/LemmingsLocal/main.swift:8867; Sources/LemmingsMobileCore/MobileLearning.swift:47; Sources/LemmingsTVUI/TVLibraryViewController.swift:184; Sources/LemmingsTVUI/TVLibraryViewController.swift:189 */
 "Resume" = "Resume";
 
 /* Sources/LemmingsMobileUI/MobileLibraryLearning.swift:71 */
@@ -6138,16 +6138,16 @@
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:506; Sources/LemmingsTVUI/TVLibraryViewController.swift:153 */
 "Resume level - {0}" = "Resume level - {0}";
 
-/* Sources/LemmingsLocal/main.swift:4079; Sources/LemmingsLocal/main.swift:506 */
+/* Sources/LemmingsLocal/main.swift:4088; Sources/LemmingsLocal/main.swift:506 */
 "Resume run" = "Resume run";
 
 /* Sources/LemmingsLocal/main.swift:505 */
 "Resume saved run?" = "Resume saved run?";
 
-/* Sources/LemmingsLocal/main.swift:5344 */
+/* Sources/LemmingsLocal/main.swift:5353 */
 "Resume session" = "Resume session";
 
-/* Sources/LemmingsLocal/main.swift:5442 */
+/* Sources/LemmingsLocal/main.swift:5451 */
 "Resume session?" = "Resume session?";
 
 /* Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:193 */
@@ -6180,10 +6180,10 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:221; Sources/LemmingsLocal/ResultLayout.swift:61; Sources/LemmingsLocal/ResultLayout.swift:86 */
 "Retry as {0}" = "Retry as {0}";
 
-/* Sources/LemmingsLocal/main.swift:7116 */
+/* Sources/LemmingsLocal/main.swift:7125 */
 "Retry last level as {0}" = "Retry last level as {0}";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1769; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1494; Sources/LemmingsLocal/main.swift:8447; Sources/LemmingsLocal/main.swift:8858 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1769; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1494; Sources/LemmingsLocal/main.swift:8456; Sources/LemmingsLocal/main.swift:8867 */
 "Retry level" = "Retry level";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:262 */
@@ -6198,7 +6198,7 @@
 /* Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:40 */
 "Retry: {0}" = "Retry: {0}";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:421; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446; Sources/LemmingsLocal/main.swift:8827 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:421; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:446; Sources/LemmingsLocal/main.swift:8836 */
 "Return / Space" = "Return / Space";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1793 */
@@ -6210,7 +6210,7 @@
 /* Sources/LemmingsLocal/GameplayKeyboard.swift:560; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1788; Sources/LemmingsLocal/PanelView.swift:184 */
 "Return to normal speed" = "Return to normal speed";
 
-/* Sources/LemmingsGameArt/MobileCareerArt.swift:62; Sources/LemmingsLocal/ArcadeWindow.swift:726; Sources/LemmingsLocal/ArcadeWindow.swift:755; Sources/LemmingsLocal/ArcadeWindow.swift:823; Sources/LemmingsLocal/main.swift:8612 */
+/* Sources/LemmingsGameArt/MobileCareerArt.swift:62; Sources/LemmingsLocal/ArcadeWindow.swift:726; Sources/LemmingsLocal/ArcadeWindow.swift:755; Sources/LemmingsLocal/ArcadeWindow.swift:823; Sources/LemmingsLocal/main.swift:8621 */
 "Return to solo" = "Return to solo";
 
 /* Sources/LemmingsLocal/main.swift:1668 */
@@ -6225,10 +6225,10 @@
 /* Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:311; Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:321 */
 "Return to the library before linking devices." = "Return to the library before linking devices.";
 
-/* Sources/LemmingsLocal/main.swift:8639 */
+/* Sources/LemmingsLocal/main.swift:8648 */
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Return to the library to change players. The current attempt keeps its owner and is saved for later.";
 
-/* Sources/LemmingsLocal/main.swift:8638 */
+/* Sources/LemmingsLocal/main.swift:8647 */
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Return to the library to change players. Your saved run keeps its progress and next turn.";
 
 /* Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:339 */
@@ -6246,7 +6246,7 @@
 /* Sources/LemmingsLocal/LevelHintWindow.swift:121; Sources/LemmingsLocal/LevelHintWindow.swift:133 */
 "Reveal the approach" = "Reveal the approach";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/main.swift:8828 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/main.swift:8837 */
 "Review / save replay after a result" = "Review / save replay after a result";
 
 /* Sources/LemmingsLocal/LearningJourneyMenu.swift:21 */
@@ -6315,10 +6315,10 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:52; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
 "Roper" = "Roper";
 
-/* Sources/LemmingsLocal/main.swift:5522 */
+/* Sources/LemmingsLocal/main.swift:5531 */
 "Run complete" = "Run complete";
 
-/* Sources/LemmingsLocal/main.swift:5527 */
+/* Sources/LemmingsLocal/main.swift:5536 */
 "Run could not continue" = "Run could not continue";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:538; Sources/LemmingsLocal/ArcadeWindow.swift:891 */
@@ -6327,19 +6327,19 @@
 /* Sources/LemmingsLocal/main.swift:1667 */
 "Run in progress" = "Run in progress";
 
-/* Sources/LemmingsLocal/main.swift:5484 */
+/* Sources/LemmingsLocal/main.swift:5493 */
 "Run not discarded" = "Run not discarded";
 
-/* Sources/LemmingsLocal/main.swift:4812; Sources/LemmingsLocal/main.swift:4831 */
+/* Sources/LemmingsLocal/main.swift:4821; Sources/LemmingsLocal/main.swift:4840 */
 "Run not started" = "Run not started";
 
-/* Sources/LemmingsLocal/main.swift:5475 */
+/* Sources/LemmingsLocal/main.swift:5484 */
 "Run paused" = "Run paused";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1536; Sources/LemmingsLocal/main.swift:490 */
 "Run recovery save failed: {0}" = "Run recovery save failed: {0}";
 
-/* Sources/LemmingsLocal/main.swift:5354; Sources/LemmingsLocal/main.swift:5386; Sources/LemmingsLocal/main.swift:5655 */
+/* Sources/LemmingsLocal/main.swift:5363; Sources/LemmingsLocal/main.swift:5395; Sources/LemmingsLocal/main.swift:5664 */
 "Run unavailable" = "Run unavailable";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:53; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
@@ -6360,13 +6360,13 @@
 /* Sources/LemmingsLocal/ReplayWindow.swift:253; Sources/LemmingsMobileUI/MobileGameViewController.swift:1765 */
 "SAVE FAILED" = "SAVE FAILED";
 
-/* Sources/LemmingsLocal/main.swift:6386 */
+/* Sources/LemmingsLocal/main.swift:6395 */
 "SAVE {0}  ({1}%)" = "SAVE {0}  ({1}%)";
 
-/* Sources/LemmingsLocal/main.swift:6413 */
+/* Sources/LemmingsLocal/main.swift:6422 */
 "SAVED {0} OF {1}" = "SAVED {0} OF {1}";
 
-/* Sources/LemmingsLocal/main.swift:7336 */
+/* Sources/LemmingsLocal/main.swift:7345 */
 "SAVED {0}/{1}" = "SAVED {0}/{1}";
 
 /* Sources/LemmingsLocal/ReplayWindow.swift:225 */
@@ -6381,7 +6381,7 @@
 /* Sources/LemmingsLocal/KeyboardOverlayView.swift:46 */
 "SELECT A SKILL → CLICK A LEMMING" = "SELECT A SKILL → CLICK A LEMMING";
 
-/* Sources/LemmingsLocal/main.swift:6086 */
+/* Sources/LemmingsLocal/main.swift:6095 */
 "SESSION" = "SESSION";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1133; Sources/LemmingsMobileUI/MobileTVGameControls.swift:41 */
@@ -6417,7 +6417,7 @@
 /* Sources/LemmingsMobileUI/MobileGameHints.swift:56 */
 "SHOW" = "SHOW";
 
-/* Sources/LemmingsLocal/main.swift:6223 */
+/* Sources/LemmingsLocal/main.swift:6232 */
 "SHUFFLE" = "SHUFFLE";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INTRO.IFF:1 */
@@ -6489,7 +6489,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2354 */
 "SPEARER" = "SPEARER";
 
-/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:631; Sources/LemmingsGameArt/MobileHUDRenderer.swift:648; Sources/LemmingsGameArt/MobileHUDRenderer.swift:719; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1298; Sources/LemmingsLocal/main.swift:7736 */
+/* Sources/LemmingsGameArt/MobileHUDRenderer.swift:631; Sources/LemmingsGameArt/MobileHUDRenderer.swift:648; Sources/LemmingsGameArt/MobileHUDRenderer.swift:719; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1298; Sources/LemmingsLocal/main.swift:7745 */
 "SPEED {0}" = "SPEED {0}";
 
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1 */
@@ -6558,7 +6558,7 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:54; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
 "Sand Pourer" = "Sand Pourer";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2049; Sources/LemmingsLocal/main.swift:4444; Sources/LemmingsTVUI/TVLibraryViewController.swift:570; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/LOAD.IFF:1 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2049; Sources/LemmingsLocal/main.swift:4453; Sources/LemmingsTVUI/TVLibraryViewController.swift:570; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/LOAD.IFF:1 */
 "Save" = "Save";
 
 /* Sources/NxlvKit/TrolleyHistory.swift:32 */
@@ -6573,7 +6573,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1439 */
 "Save Lemmings run" = "Save Lemmings run";
 
-/* Sources/LemmingsLocal/main.swift:8640 */
+/* Sources/LemmingsLocal/main.swift:8649 */
 "Save and return to library" = "Save and return to library";
 
 /* Sources/NxlvKit/TrolleyAchievementCollection.swift:51 */
@@ -6594,13 +6594,13 @@
 /* Sources/NxlvKit/TrolleyLeaderboards.swift:134; Sources/NxlvKit/TrolleyLeaderboards.swift:145 */
 "Save one more" = "Save one more";
 
-/* Sources/LemmingsLocal/main.swift:4967 */
+/* Sources/LemmingsLocal/main.swift:4976 */
 "Save playlist" = "Save playlist";
 
 /* Sources/LemmingsGameArt/CloudSyncArt.swift:36 */
 "Save recovery key" = "Save recovery key";
 
-/* Sources/LemmingsLocal/GameplayKeyboard.swift:112; Sources/LemmingsLocal/GameplayKeyboard.swift:515; Sources/LemmingsLocal/main.swift:8825 */
+/* Sources/LemmingsLocal/GameplayKeyboard.swift:112; Sources/LemmingsLocal/GameplayKeyboard.swift:515; Sources/LemmingsLocal/main.swift:8834 */
 "Save run and return to library" = "Save run and return to library";
 
 /* Sources/LemmingsLocal/ReplayWindow.swift:234 */
@@ -6609,7 +6609,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1809 */
 "Save to selected slot" = "Save to selected slot";
 
-/* Sources/LemmingsLocal/main.swift:7097 */
+/* Sources/LemmingsLocal/main.swift:7106 */
 "Save {0}  ({1}%)" = "Save {0}  ({1}%)";
 
 /* Sources/NxlvKit/TrolleyCelebration.swift:55 */
@@ -6624,7 +6624,7 @@
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:44; Sources/LemmingsGameArt/MobileCareerArt.swift:59; Sources/LemmingsLocal/ArcadeWindow.swift:731; Sources/LemmingsLocal/ArcadeWindow.swift:82; Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:71 */
 "Saved Hot Seats" = "Saved Hot Seats";
 
-/* Sources/LemmingsLocal/main.swift:4023 */
+/* Sources/LemmingsLocal/main.swift:4032 */
 "Saved and editable" = "Saved and editable";
 
 /* Sources/NxlvKit/TrolleyHistory.swift:223; Sources/NxlvKit/TrolleyHistory.swift:229 */
@@ -6636,7 +6636,7 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:33 */
 "Saved lemmings" = "Saved lemmings";
 
-/* Sources/LemmingsLocal/main.swift:3967 */
+/* Sources/LemmingsLocal/main.swift:3976 */
 "Saved level sequences" = "Saved level sequences";
 
 /* Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:52 */
@@ -6759,13 +6759,13 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:34 */
 "Service sees IP" = "Service sees IP";
 
-/* Sources/LemmingsLocal/main.swift:8621; Sources/LemmingsLocal/main.swift:8642 */
+/* Sources/LemmingsLocal/main.swift:8630; Sources/LemmingsLocal/main.swift:8651 */
 "Session not changed" = "Session not changed";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:89; Sources/LemmingsLocal/main.swift:5436; Sources/LemmingsLocal/main.swift:5453; Sources/LemmingsLocal/main.swift:5468 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:89; Sources/LemmingsLocal/main.swift:5445; Sources/LemmingsLocal/main.swift:5462; Sources/LemmingsLocal/main.swift:5477 */
 "Session not resumed" = "Session not resumed";
 
-/* Sources/LemmingsLocal/main.swift:4715; Sources/LemmingsLocal/main.swift:4721; Sources/LemmingsLocal/main.swift:4726; Sources/LemmingsLocal/main.swift:4751; Sources/LemmingsLocal/main.swift:4765 */
+/* Sources/LemmingsLocal/main.swift:4724; Sources/LemmingsLocal/main.swift:4730; Sources/LemmingsLocal/main.swift:4735; Sources/LemmingsLocal/main.swift:4760; Sources/LemmingsLocal/main.swift:4774 */
 "Session not started" = "Session not started";
 
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:195 */
@@ -6885,16 +6885,16 @@
 /* Sources/LemmingsLocal/SettingsWindow.swift:244 */
 "Show the song title and soundtrack briefly when the music changes." = "Show the song title and soundtrack briefly when the music changes.";
 
-/* Sources/LemmingsLocal/SettingsWindow.swift:521; Sources/LemmingsLocal/SettingsWindow.swift:664; Sources/LemmingsLocal/main.swift:3986; Sources/LemmingsLocal/main.swift:4360; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:57 */
+/* Sources/LemmingsLocal/SettingsWindow.swift:521; Sources/LemmingsLocal/SettingsWindow.swift:664; Sources/LemmingsLocal/main.swift:3995; Sources/LemmingsLocal/main.swift:4369; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:57 */
 "Shuffle" = "Shuffle";
 
-/* Sources/LemmingsLocal/main.swift:4027; Sources/LemmingsLocal/main.swift:5219; Sources/LemmingsLocal/main.swift:5224; Sources/LemmingsLocal/main.swift:5245; Sources/LemmingsLocal/main.swift:5288; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:18; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:283; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:541 */
+/* Sources/LemmingsLocal/main.swift:4036; Sources/LemmingsLocal/main.swift:5228; Sources/LemmingsLocal/main.swift:5233; Sources/LemmingsLocal/main.swift:5254; Sources/LemmingsLocal/main.swift:5297; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:18; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:283; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:541 */
 "Shuffle all" = "Shuffle all";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:67 */
 "Shuffle artwork" = "Shuffle artwork";
 
-/* Sources/LemmingsLocal/main.swift:5233; Sources/LemmingsLocal/main.swift:5252; Sources/LemmingsLocal/main.swift:5283; Sources/LemmingsLocal/main.swift:5294; Sources/LemmingsLocal/main.swift:5310 */
+/* Sources/LemmingsLocal/main.swift:5242; Sources/LemmingsLocal/main.swift:5261; Sources/LemmingsLocal/main.swift:5292; Sources/LemmingsLocal/main.swift:5303; Sources/LemmingsLocal/main.swift:5319 */
 "Shuffle not started" = "Shuffle not started";
 
 /* Sources/LemmingsLocal/GameCenterScores.swift:42 */
@@ -7029,7 +7029,7 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:79; Sources/LemmingsLocal/SettingsWindow.swift:665; Sources/LemmingsTVUI/TVLibraryViewController.swift:222 */
 "Sound effects" = "Sound effects";
 
-/* Sources/LemmingsLocal/main.swift:7908 */
+/* Sources/LemmingsLocal/main.swift:7917 */
 "Sound effects: {0}" = "Sound effects: {0}";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1 */
@@ -7122,16 +7122,16 @@
 /* Sources/NxlvKit/ClassicSettings.swift:143 */
 "Standard (100%)" = "Standard (100%)";
 
-/* Sources/LemmingsLocal/main.swift:3499; Sources/LemmingsLocal/main.swift:3677; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:285; Sources/LemmingsTVUI/TVLibraryViewController.swift:184 */
+/* Sources/LemmingsLocal/main.swift:3505; Sources/LemmingsLocal/main.swift:3683; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:285; Sources/LemmingsTVUI/TVLibraryViewController.swift:184 */
 "Start" = "Start";
 
-/* Sources/LemmingsLocal/main.swift:8561 */
+/* Sources/LemmingsLocal/main.swift:8570 */
 "Start a level, then choose Help > Level hints or press i." = "Start a level, then choose Help > Level hints or press i.";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:763 */
 "Start a new Hot Seat?" = "Start a new Hot Seat?";
 
-/* Sources/LemmingsLocal/main.swift:4770 */
+/* Sources/LemmingsLocal/main.swift:4779 */
 "Start a new session?" = "Start a new session?";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1788 */
@@ -7146,25 +7146,25 @@
 /* Sources/LemmingsGameArt/GameRecoveryArt.swift:25; Sources/LemmingsLocal/ArcadeWindow.swift:667 */
 "Start new records" = "Start new records";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:461; Sources/LemmingsLocal/main.swift:8701 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:461; Sources/LemmingsLocal/main.swift:8710 */
 "Start nuke" = "Start nuke";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1806 */
 "Start practice" = "Start practice";
 
-/* Sources/LemmingsLocal/main.swift:4708 */
+/* Sources/LemmingsLocal/main.swift:4717 */
 "Start session" = "Start session";
 
-/* Sources/LemmingsLocal/main.swift:5247 */
+/* Sources/LemmingsLocal/main.swift:5256 */
 "Start shuffle" = "Start shuffle";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460; Sources/LemmingsLocal/main.swift:8700 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:460; Sources/LemmingsLocal/main.swift:8709 */
 "Start the nuke countdown for the remaining lemmings." = "Start the nuke countdown for the remaining lemmings.";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:764 */
 "Start with these players. Your current Hot Seat will stay saved." = "Start with these players. Your current Hot Seat will stay saved.";
 
-/* Sources/LemmingsLocal/main.swift:4511 */
+/* Sources/LemmingsLocal/main.swift:4520 */
 "Start {0}" = "Start {0}";
 
 /* Sources/LemmingsMobileUI/MobileSettingsPages.swift:92 */
@@ -7437,10 +7437,10 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1 */
 "Technical Help from the Wizard of the East" = "Technical Help from the Wizard of the East";
 
-/* Sources/LemmingsLocal/main.swift:4115; Sources/NxlvKit/ProgressionPlaylist.swift:11 */
+/* Sources/LemmingsLocal/main.swift:4124; Sources/NxlvKit/ProgressionPlaylist.swift:11 */
 "Technique Curriculum" = "Technique Curriculum";
 
-/* Sources/LemmingsLocal/main.swift:4187 */
+/* Sources/LemmingsLocal/main.swift:4196 */
 "Technique unavailable" = "Technique unavailable";
 
 /* Sources/LemmingsMobileUI/MobileLibraryLearning.swift:88 */
@@ -7530,7 +7530,7 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1 */
 "The Cast in Order of Appearance:" = "The Cast in Order of Appearance:";
 
-/* Sources/LemmingsLocal/main.swift:5748 */
+/* Sources/LemmingsLocal/main.swift:5757 */
 "The Classic graphics library is not available." = "The Classic graphics library is not available.";
 
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:67 */
@@ -7611,7 +7611,7 @@
 /* Sources/LemmingsMobileUI/NeoLemmixMobileSpriteSet.swift:303 */
 "The NeoLemmix lemming style {0} could not be loaded." = "The NeoLemmix lemming style {0} could not be loaded.";
 
-/* Sources/LemmingsLocal/main.swift:5803 */
+/* Sources/LemmingsLocal/main.swift:5812 */
 "The NeoLemmix pack changed. Open Level Select and choose the level again." = "The NeoLemmix pack changed. Open Level Select and choose the level again.";
 
 /* Sources/LemmingsLocal/NeoLemmixSpriteSet.swift:15 */
@@ -7653,7 +7653,7 @@
 /* Sources/NxlvKit/Lemmings2Runtime.swift:283 */
 "The Stomper terrain mask is required." = "The Stomper terrain mask is required.";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1004; Sources/LemmingsLocal/main.swift:3135 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1004; Sources/LemmingsLocal/main.swift:3141 */
 "The Tribes - {0}" = "The Tribes - {0}";
 
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/TALISMAN.IFF:1 */
@@ -7692,7 +7692,7 @@
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:59 */
 "The approach" = "The approach";
 
-/* Sources/LemmingsLocal/main.swift:3383 */
+/* Sources/LemmingsLocal/main.swift:3389 */
 "The archive changed or could not be read. Repair or replace it, then open Level Select and try again." = "The archive changed or could not be read. Repair or replace it, then open Level Select and try again.";
 
 /* Sources/NxlvKit/ZipArchive.swift:18 */
@@ -7746,7 +7746,7 @@
 /* Sources/LemmingsLocal/FanLevelLibrary.swift:523 */
 "The fan level archive could not be verified." = "The fan level archive could not be verified.";
 
-/* Sources/LemmingsLocal/main.swift:3919; Sources/LemmingsLocal/main.swift:4974 */
+/* Sources/LemmingsLocal/main.swift:3928; Sources/LemmingsLocal/main.swift:4983 */
 "The fan level pack changed or could not be read." = "The fan level pack changed or could not be read.";
 
 /* Sources/NxlvKit/ZipArchive.swift:14 */
@@ -7782,10 +7782,10 @@
 /* Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift:188 */
 "The imported NeoLemmix folder has no levels with resolved styles." = "The imported NeoLemmix folder has no levels with resolved styles.";
 
-/* Sources/LemmingsLocal/main.swift:5549; Sources/LemmingsLocal/main.swift:5581 */
+/* Sources/LemmingsLocal/main.swift:5558; Sources/LemmingsLocal/main.swift:5590 */
 "The imported game data changed. Open Level Select and choose the level again." = "The imported game data changed. Open Level Select and choose the level again.";
 
-/* Sources/LemmingsLocal/main.swift:4569 */
+/* Sources/LemmingsLocal/main.swift:4578 */
 "The learning path is missing from this build." = "The learning path is missing from this build.";
 
 /* Sources/NxlvKit/NxrpReplay.swift:210 */
@@ -7812,7 +7812,7 @@
 /* Sources/NxlvKit/NxlvLevel.swift:341 */
 "The level has no TITLE field." = "The level has no TITLE field.";
 
-/* Sources/LemmingsLocal/main.swift:5585; Sources/LemmingsLocal/main.swift:5629 */
+/* Sources/LemmingsLocal/main.swift:5594; Sources/LemmingsLocal/main.swift:5638 */
 "The level load was cancelled." = "The level load was cancelled.";
 
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:653 */
@@ -7893,13 +7893,13 @@
 /* Sources/NxlvKit/ArcadeRecords.swift:335 */
 "The player no longer exists." = "The player no longer exists.";
 
-/* Sources/LemmingsLocal/main.swift:4715 */
+/* Sources/LemmingsLocal/main.swift:4724 */
 "The player or saved session changed. Choose the playlist again." = "The player or saved session changed. Choose the playlist again.";
 
-/* Sources/LemmingsLocal/main.swift:4813 */
+/* Sources/LemmingsLocal/main.swift:4822 */
 "The player, Hot Seat session or saved run changed before the level loaded." = "The player, Hot Seat session or saved run changed before the level loaded.";
 
-/* Sources/LemmingsLocal/main.swift:4832 */
+/* Sources/LemmingsLocal/main.swift:4841 */
 "The player, Hot Seat session or saved run changed while the level was loading." = "The player, Hot Seat session or saved run changed while the level was loading.";
 
 /* Sources/NxlvKit/LevelPlaylist.swift:21 */
@@ -7968,13 +7968,13 @@
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:643 */
 "The save requirement cannot be negative." = "The save requirement cannot be negative.";
 
-/* Sources/LemmingsLocal/main.swift:5453 */
+/* Sources/LemmingsLocal/main.swift:5462 */
 "The saved Hot Seat or one of its players is no longer available." = "The saved Hot Seat or one of its players is no longer available.";
 
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1056 */
 "The saved NeoLemmix level is no longer available." = "The saved NeoLemmix level is no longer available.";
 
-/* Sources/LemmingsLocal/main.swift:3652 */
+/* Sources/LemmingsLocal/main.swift:3658 */
 "The saved collections could not be read." = "The saved collections could not be read.";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:451 */
@@ -8007,10 +8007,10 @@
 /* Sources/LemmingsAppCore/Recovery/RunRecovery.swift:158 */
 "The saved run uses different game data or rules. Its files were preserved." = "The saved run uses different game data or rules. Its files were preserved.";
 
-/* Sources/LemmingsLocal/main.swift:5656 */
+/* Sources/LemmingsLocal/main.swift:5665 */
 "The saved sequence changed before this level started." = "The saved sequence changed before this level started.";
 
-/* Sources/LemmingsLocal/main.swift:5436 */
+/* Sources/LemmingsLocal/main.swift:5445 */
 "The saved session changed. Choose it again." = "The saved session changed. Choose it again.";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:250 */
@@ -8031,43 +8031,43 @@
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:221 */
 "The selected Lemmings 3 level is no longer available." = "The selected Lemmings 3 level is no longer available.";
 
-/* Sources/LemmingsLocal/main.swift:6655 */
+/* Sources/LemmingsLocal/main.swift:6664 */
 "The selected NeoLemmix level changed. Open Level Select and choose it again." = "The selected NeoLemmix level changed. Open Level Select and choose it again.";
 
 /* Sources/NxlvKit/NxlvStyleResolver.swift:984 */
 "The selected NeoLemmix styles root is not a directory." = "The selected NeoLemmix styles root is not a directory.";
 
-/* Sources/LemmingsLocal/main.swift:5601; Sources/LemmingsLocal/main.swift:5624 */
+/* Sources/LemmingsLocal/main.swift:5610; Sources/LemmingsLocal/main.swift:5633 */
 "The selected archive changed. Open Level Select and choose the level again." = "The selected archive changed. Open Level Select and choose the level again.";
 
-/* Sources/LemmingsLocal/main.swift:5663; Sources/LemmingsLocal/main.swift:5976 */
+/* Sources/LemmingsLocal/main.swift:5672; Sources/LemmingsLocal/main.swift:5985 */
 "The selected catalogue entry changed. Open Level Select and choose it again." = "The selected catalogue entry changed. Open Level Select and choose it again.";
 
-/* Sources/LemmingsLocal/main.swift:5631 */
+/* Sources/LemmingsLocal/main.swift:5640 */
 "The selected fan level could not load: {0}" = "The selected fan level could not load: {0}";
 
-/* Sources/LemmingsLocal/main.swift:5587; Sources/LemmingsLocal/main.swift:5936 */
+/* Sources/LemmingsLocal/main.swift:5596; Sources/LemmingsLocal/main.swift:5945 */
 "The selected game data could not load: {0}" = "The selected game data could not load: {0}";
 
-/* Sources/LemmingsLocal/main.swift:2374; Sources/LemmingsLocal/main.swift:5695; Sources/LemmingsLocal/main.swift:5910 */
+/* Sources/LemmingsLocal/main.swift:2378; Sources/LemmingsLocal/main.swift:5704; Sources/LemmingsLocal/main.swift:5919 */
 "The selected game data is no longer available." = "The selected game data is no longer available.";
 
 /* Sources/LemmingsLocal/LevelPreviewStore.swift:335 */
 "The selected level data changed. Open Level Select and choose it again." = "The selected level data changed. Open Level Select and choose it again.";
 
-/* Sources/LemmingsLocal/main.swift:5552 */
+/* Sources/LemmingsLocal/main.swift:5561 */
 "The selected level is no longer available." = "The selected level is no longer available.";
 
 /* Sources/LemmingsLocal/LevelPreviewStore.swift:337 */
 "The selected level is not available." = "The selected level is not available.";
 
-/* Sources/LemmingsLocal/main.swift:5567 */
+/* Sources/LemmingsLocal/main.swift:5576 */
 "The selected level's graphics style is missing." = "The selected level's graphics style is missing.";
 
-/* Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift:32; Sources/LemmingsLocal/main.swift:4263 */
+/* Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift:32; Sources/LemmingsLocal/main.swift:4272 */
 "The selected playlist is no longer available." = "The selected playlist is no longer available.";
 
-/* Sources/LemmingsLocal/main.swift:2306 */
+/* Sources/LemmingsLocal/main.swift:2310 */
 "The selected release is not available." = "The selected release is not available.";
 
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:31 */
@@ -8226,13 +8226,13 @@
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:775 */
 "This level needs NeoLemmix features that are not yet supported: {0}." = "This level needs NeoLemmix features that are not yet supported: {0}.";
 
-/* Sources/LemmingsLocal/main.swift:5790 */
+/* Sources/LemmingsLocal/main.swift:5799 */
 "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles." = "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles.";
 
 /* Sources/LemmingsAppCore/Records/CloudLibraryArchive.swift:131 */
 "This library needs a newer app or exceeds its limits." = "This library needs a newer app or exceeds its limits.";
 
-/* Sources/LemmingsLocal/main.swift:3487; Sources/LemmingsLocal/main.swift:4909 */
+/* Sources/LemmingsLocal/main.swift:3493; Sources/LemmingsLocal/main.swift:4918 */
 "This pack has no playable levels." = "This pack has no playable levels.";
 
 /* Sources/LemmingsAppCore/Records/GameCenterProgressSync.swift:165 */
@@ -8244,7 +8244,7 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:643 */
 "This removes {0}'s progress, saved runs, scores and achievements. You cannot undo this." = "This removes {0}'s progress, saved runs, scores and achievements. You cannot undo this.";
 
-/* Sources/LemmingsLocal/main.swift:9030; Sources/LemmingsLocal/main.swift:9109 */
+/* Sources/LemmingsLocal/main.swift:9039; Sources/LemmingsLocal/main.swift:9118 */
 "This ruleset cannot rewind yet." = "This ruleset cannot rewind yet.";
 
 /* Sources/LemmingsLocal/AffinityPopoverView.swift:14; Sources/LemmingsLocal/AffinityPopoverView.swift:28; Sources/LemmingsLocal/AffinityPopoverView.swift:33; Sources/LemmingsLocal/ArcadeWindow.swift:897; Sources/LemmingsLocal/TrolleyResultView.swift:206 */
@@ -8322,7 +8322,7 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:112 */
 "Time {0}   Best {1}  >" = "Time {0}   Best {1}  >";
 
-/* Sources/LemmingsLocal/main.swift:7101; Sources/LemmingsLocal/main.swift:7734; Sources/LemmingsMobileUI/MobileGameViewController.swift:2041; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:563 */
+/* Sources/LemmingsLocal/main.swift:7110; Sources/LemmingsLocal/main.swift:7743; Sources/LemmingsMobileUI/MobileGameViewController.swift:2041; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:563 */
 "Time {0}:{1}" = "Time {0}:{1}";
 
 /* Sources/NxlvKit/DifficultyTechniques.swift:181 */
@@ -8481,10 +8481,10 @@
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:81 */
 "UNDO END RUN" = "UNDO END RUN";
 
-/* Sources/LemmingsLocal/main.swift:6989 */
+/* Sources/LemmingsLocal/main.swift:6998 */
 "UP AND DOWN TO CHOOSE  *  ENTER TO START" = "UP AND DOWN TO CHOOSE  *  ENTER TO START";
 
-/* Sources/LemmingsLocal/main.swift:6246 */
+/* Sources/LemmingsLocal/main.swift:6255 */
 "UP DOWN ENTER  *  ESC BACK" = "UP DOWN ENTER  *  ESC BACK";
 
 /* Sources/LemmingsGameArt/MobileReplaySkillArt.swift:17; Sources/LemmingsLocal/ReplaySkillPanel.swift:30; Sources/LemmingsLocal/ReplaySkillPanel.swift:78 */
@@ -8493,10 +8493,10 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MEDALS.IFF:1 */
 "Uh oh. That was a feeble effort." = "Uh oh. That was a feeble effort.";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:518; Sources/LemmingsLocal/main.swift:1451; Sources/LemmingsLocal/main.swift:1705; Sources/LemmingsLocal/main.swift:1946; Sources/LemmingsLocal/main.swift:6929; Sources/LemmingsTVUI/TVLibraryViewController.swift:143; Sources/LemmingsTVUI/TVMenuView.swift:14 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:518; Sources/LemmingsLocal/main.swift:1451; Sources/LemmingsLocal/main.swift:1705; Sources/LemmingsLocal/main.swift:1950; Sources/LemmingsLocal/main.swift:6938; Sources/LemmingsTVUI/TVLibraryViewController.swift:143; Sources/LemmingsTVUI/TVMenuView.swift:14 */
 "Ultimate Lemmings" = "Ultimate Lemmings";
 
-/* Sources/LemmingsLocal/main.swift:6736 */
+/* Sources/LemmingsLocal/main.swift:6745 */
 "Ultimate Lemmings — {0}" = "Ultimate Lemmings — {0}";
 
 /* Sources/LemmingsLocal/FanLevelUpdates.swift:34; Sources/NxlvKit/FanPackUpdater.swift:41 */
@@ -8511,10 +8511,10 @@
 /* Sources/LemmingsLocal/FanLevelLibrary.swift:855 */
 "Unambiguous {0}" = "Unambiguous {0}";
 
-/* Sources/LemmingsLocal/TrolleyResultView.swift:61; Sources/LemmingsLocal/main.swift:3266; Sources/LemmingsLocal/main.swift:360; Sources/NxlvKit/LevelCatalogue.swift:51 */
+/* Sources/LemmingsLocal/TrolleyResultView.swift:61; Sources/LemmingsLocal/main.swift:3272; Sources/LemmingsLocal/main.swift:360; Sources/NxlvKit/LevelCatalogue.swift:51 */
 "Unavailable" = "Unavailable";
 
-/* Sources/LemmingsLocal/main.swift:4241 */
+/* Sources/LemmingsLocal/main.swift:4250 */
 "Unavailable  {0}" = "Unavailable  {0}";
 
 /* Sources/LemmingsLocal/LevelCoverFlowView.swift:904 */
@@ -8700,13 +8700,13 @@
 /* Sources/LemmingsAppCore/Records/ResultAwards.swift:36 */
 "Used {0} skills instead of {1}, with at least as many rescued." = "Used {0} skills instead of {1}, with at least as many rescued.";
 
-/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/main.swift:8828 */
+/* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:420; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:445; Sources/LemmingsLocal/main.swift:8837 */
 "V / S" = "V / S";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2017 */
 "V Replay  S Save movie" = "V Replay  S Save movie";
 
-/* Sources/LemmingsLocal/main.swift:6424; Sources/LemmingsLocal/main.swift:7014 */
+/* Sources/LemmingsLocal/main.swift:6433; Sources/LemmingsLocal/main.swift:7023 */
 "V WATCH REPLAY  *  S SAVE MOVIE" = "V WATCH REPLAY  *  S SAVE MOVIE";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2343 */
@@ -8922,7 +8922,7 @@
 /* Sources/NxlvKit/ClassicSaga.swift:30 */
 "Xmas Lemmings 1992" = "Xmas Lemmings 1992";
 
-/* Sources/LemmingsLocal/main.swift:7113 */
+/* Sources/LemmingsLocal/main.swift:7122 */
 "YOUR TURN, {0}" = "YOUR TURN, {0}";
 
 /* Sources/NxlvKit/ArchivalCatalog.swift:115 */
@@ -8961,7 +8961,7 @@
 /* Sources/LemmingsLocal/main.swift:505 */
 "Your current attempt stays saved. The restored run starts paused." = "Your current attempt stays saved. The restored run starts paused.";
 
-/* Sources/LemmingsLocal/main.swift:4771; Sources/LemmingsLocal/main.swift:5442 */
+/* Sources/LemmingsLocal/main.swift:4780; Sources/LemmingsLocal/main.swift:5451 */
 "Your current session will stay saved." = "Your current session will stay saved.";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:68 */
@@ -8979,7 +8979,7 @@
 /* Sources/LemmingsLocal/AchievementsWindow.swift:19; Sources/LemmingsLocal/AchievementsWindow.swift:24 */
 "Your rescue story" = "Your rescue story";
 
-/* Sources/LemmingsLocal/ArcadeWindow.swift:754; Sources/LemmingsLocal/main.swift:8611 */
+/* Sources/LemmingsLocal/ArcadeWindow.swift:754; Sources/LemmingsLocal/main.swift:8620 */
 "Your shared campaign stays saved for later." = "Your shared campaign stays saved for later.";
 
 /* Sources/LemmingsLocal/GameplayPresentation.swift:382 */
@@ -9063,7 +9063,7 @@
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/MIDDLE.IFF:1 */
 "carry us to safety." = "carry us to safety.";
 
-/* Sources/LemmingsLocal/main.swift:5379 */
+/* Sources/LemmingsLocal/main.swift:5388 */
 "changed after this run was created" = "changed after this run was created";
 
 /* Sources/NxlvKit/ClassicMainDAT.swift:97 */
@@ -9120,10 +9120,10 @@
 /* Sources/NxlvKit/ClassicDOSReplay.swift:100 */
 "initial state hash mismatch: expected {0}, got {1}" = "initial state hash mismatch: expected {0}, got {1}";
 
-/* Sources/LemmingsLocal/main.swift:5382 */
+/* Sources/LemmingsLocal/main.swift:5391 */
 "is missing" = "is missing";
 
-/* Sources/LemmingsLocal/main.swift:5376 */
+/* Sources/LemmingsLocal/main.swift:5385 */
 "is not available" = "is not available";
 
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:32 */
@@ -9300,7 +9300,7 @@
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:30 */
 "the second lemming" = "the second lemming";
 
-/* Sources/LemmingsLocal/main.swift:5234 */
+/* Sources/LemmingsLocal/main.swift:5243 */
 "the unavailable packs" = "the unavailable packs";
 
 /* Sources/NxlvKit/NeoLemmixFinalState.swift:269 */
@@ -9339,10 +9339,10 @@
 /* Sources/LemmingsMobileUI/MobileLibraryCollections.swift:47 */
 "{0}  Unavailable" = "{0}  Unavailable";
 
-/* Sources/LemmingsLocal/main.swift:3466 */
+/* Sources/LemmingsLocal/main.swift:3472 */
 "{0}  {1}" = "{0}  {1}";
 
-/* Sources/LemmingsLocal/main.swift:4722 */
+/* Sources/LemmingsLocal/main.swift:4731 */
 "{0} ({1}) was locked, removed or changed. Check the playlist and try again." = "{0} ({1}) was locked, removed or changed. Check the playlist and try again.";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2045 */
@@ -9354,7 +9354,7 @@
 /* Sources/LemmingsAppCore/Records/HostedRankings.swift:286; Sources/LemmingsAppCore/Records/HostedRankings.swift:301 */
 "{0} - worldwide replay" = "{0} - worldwide replay";
 
-/* Sources/LemmingsLocal/main.swift:4543 */
+/* Sources/LemmingsLocal/main.swift:4552 */
 "{0} - {1}" = "{0} - {1}";
 
 /* Sources/LemmingsLocal/ArcadeWindow.swift:881 */
@@ -9378,7 +9378,7 @@
 /* Sources/LemmingsLocal/TrolleyResultView.swift:143 */
 "{0} achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. {1}{2}" = "{0} achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. {1}{2}";
 
-/* Sources/LemmingsLocal/main.swift:2766 */
+/* Sources/LemmingsLocal/main.swift:2772 */
 "{0} artwork unavailable for this level: {1}" = "{0} artwork unavailable for this level: {1}";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1176 */
@@ -9387,10 +9387,10 @@
 /* Sources/LemmingsLocal/ReplaySkillPanel.swift:58; Sources/LemmingsMobileUI/MobileReplaySkillView.swift:21 */
 "{0} at tick {1}" = "{0} at tick {1}";
 
-/* Sources/LemmingsLocal/main.swift:7028; Sources/LemmingsLocal/main.swift:7037 */
+/* Sources/LemmingsLocal/main.swift:7037; Sources/LemmingsLocal/main.swift:7046 */
 "{0} complete" = "{0} complete";
 
-/* Sources/LemmingsLocal/main.swift:5055 */
+/* Sources/LemmingsLocal/main.swift:5064 */
 "{0} eligible" = "{0} eligible";
 
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:1694 */
@@ -9417,7 +9417,7 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:242 */
 "{0} level skips. {1} more three-star levels for the next. " = "{0} level skips. {1} more three-star levels for the next. ";
 
-/* Sources/LemmingsLocal/main.swift:4889 */
+/* Sources/LemmingsLocal/main.swift:4898 */
 "{0} levels  {1}/{2}" = "{0} levels  {1}/{2}";
 
 /* Sources/LemmingsLocal/MusicLibraryWindow.swift:125 */
@@ -9468,7 +9468,7 @@
 /* Sources/LemmingsLocal/SolutionReplay.swift:382 */
 "{0} rescued" = "{0} rescued";
 
-/* Sources/LemmingsLocal/main.swift:7028 */
+/* Sources/LemmingsLocal/main.swift:7037 */
 "{0} run finished" = "{0} run finished";
 
 /* Sources/LemmingsLocal/TrolleyResultView.swift:70 */
@@ -9489,13 +9489,13 @@
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:182 */
 "{0} were never released. Lost counts only those released." = "{0} were never released. Lost counts only those released.";
 
-/* Sources/LemmingsLocal/main.swift:7121 */
+/* Sources/LemmingsLocal/main.swift:7130 */
 "{0} {1}   •   Click or space to begin   •   i: goals and hints" = "{0} {1}   •   Click or space to begin   •   i: goals and hints";
 
 /* Sources/NxlvKit/TrolleyPhilosophy.swift:178 */
 "{0} {1} unavoidable. None were avoidable." = "{0} {1} unavoidable. None were avoidable.";
 
-/* Sources/LemmingsLocal/main.swift:5476 */
+/* Sources/LemmingsLocal/main.swift:5485 */
 "{0} {1}. No replacement was chosen." = "{0} {1}. No replacement was chosen.";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:2185 */
@@ -9558,7 +9558,7 @@
 /* Sources/LemmingsLocal/TrolleyResultView.swift:133 */
 "{0}/{1} earned" = "{0}/{1} earned";
 
-/* Sources/LemmingsLocal/main.swift:7029 */
+/* Sources/LemmingsLocal/main.swift:7038 */
 "{0}/{1} levels passed in this rating." = "{0}/{1} levels passed in this rating.";
 
 /* Sources/LemmingsMobileUI/MobileLibraryViewController.swift:549 */
