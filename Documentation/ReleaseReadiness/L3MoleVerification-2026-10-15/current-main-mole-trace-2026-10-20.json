@@ -1,0 +1,223 @@
+{
+  "cases": [
+    {
+      "exactMatchRanges": [
+        {
+          "firstTick": 7,
+          "lastTick": 8
+        },
+        {
+          "firstTick": 11,
+          "lastTick": 11
+        },
+        {
+          "firstTick": 13,
+          "lastTick": 14
+        },
+        {
+          "firstTick": 20,
+          "lastTick": 20
+        },
+        {
+          "firstTick": 23,
+          "lastTick": 23
+        },
+        {
+          "firstTick": 25,
+          "lastTick": 30
+        },
+        {
+          "firstTick": 36,
+          "lastTick": 153
+        },
+        {
+          "firstTick": 173,
+          "lastTick": 187
+        }
+      ],
+      "exactPositionMatches": 146,
+      "firstMismatch": {
+        "runtime": [
+          156,
+          110
+        ],
+        "source": [
+          154,
+          110
+        ],
+        "tick": 2
+      },
+      "inputHashes": {
+        "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+        "PERM101.OBS": "ccae27cab491b0308394ec9a5bb5d8070ae06f5cfa075fae8ca8f2d9b627e09e",
+        "TEMP101.OBS": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8"
+      },
+      "level": 101,
+      "name": "steel-left-facing",
+      "productionTraceSHA256": "802200dc2a2a59207f1c156613859f20e837b28792b921e56b45e5c4c3bcf68c",
+      "sourceSamples": 329,
+      "sourceTraceRepeatPositionDifferences": 0,
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    },
+    {
+      "exactMatchRanges": [
+        {
+          "firstTick": 4,
+          "lastTick": 4
+        },
+        {
+          "firstTick": 6,
+          "lastTick": 8
+        },
+        {
+          "firstTick": 11,
+          "lastTick": 11
+        },
+        {
+          "firstTick": 13,
+          "lastTick": 14
+        },
+        {
+          "firstTick": 20,
+          "lastTick": 20
+        },
+        {
+          "firstTick": 23,
+          "lastTick": 23
+        },
+        {
+          "firstTick": 25,
+          "lastTick": 30
+        },
+        {
+          "firstTick": 36,
+          "lastTick": 183
+        },
+        {
+          "firstTick": 186,
+          "lastTick": 186
+        },
+        {
+          "firstTick": 188,
+          "lastTick": 189
+        },
+        {
+          "firstTick": 195,
+          "lastTick": 195
+        },
+        {
+          "firstTick": 198,
+          "lastTick": 198
+        },
+        {
+          "firstTick": 200,
+          "lastTick": 201
+        },
+        {
+          "firstTick": 207,
+          "lastTick": 207
+        },
+        {
+          "firstTick": 210,
+          "lastTick": 210
+        },
+        {
+          "firstTick": 212,
+          "lastTick": 213
+        },
+        {
+          "firstTick": 219,
+          "lastTick": 219
+        },
+        {
+          "firstTick": 222,
+          "lastTick": 222
+        },
+        {
+          "firstTick": 224,
+          "lastTick": 225
+        },
+        {
+          "firstTick": 231,
+          "lastTick": 231
+        },
+        {
+          "firstTick": 234,
+          "lastTick": 234
+        },
+        {
+          "firstTick": 236,
+          "lastTick": 237
+        },
+        {
+          "firstTick": 243,
+          "lastTick": 243
+        },
+        {
+          "firstTick": 246,
+          "lastTick": 246
+        },
+        {
+          "firstTick": 248,
+          "lastTick": 248
+        },
+        {
+          "firstTick": 253,
+          "lastTick": 253
+        }
+      ],
+      "exactPositionMatches": 186,
+      "firstMismatch": {
+        "runtime": [
+          164,
+          110
+        ],
+        "source": [
+          163,
+          110
+        ],
+        "tick": 2
+      },
+      "inputHashes": {
+        "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+        "PERM101.OBS": "789ff30f151bb922d0f34d3f95804a6e9e2ebd70bd5abedb80e514e309e73dcb",
+        "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+      },
+      "level": 101,
+      "name": "steel-air-gap",
+      "productionTraceSHA256": "d52803bebdf088263125637201982e96e79c0e2b62e51b1e5d232905a6c05eb7",
+      "sourceSamples": 344,
+      "sourceTraceRepeatPositionDifferences": 0,
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+    }
+  ],
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "limits": [
+    "Two controlled scenes do not cover all Mole states, excavation materials, levels or campaign paths.",
+    "The trace does not prove bundled route closure or original-engine parity outside the captured positions.",
+    "The route count is unchanged at 86/90 standalone L3 levels."
+  ],
+  "localOriginMain": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "method": {
+    "build": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/audit-l3-mole-production-trace.sh",
+    "comparison": "Tools/Lemmings3Completion/compare_mole_trace.py against original-followup-traces.json",
+    "scope": "Two controlled level-101 Mole scenes from the retained original-engine capture; source-built runtime traces compare the original actor positions."
+  },
+  "outcome": "Source-driven initial settling and steel-reaction timing increased exact positions to 146/329 for left-facing steel contact and 186/344 for the air-gap fall. Both still first differ at tick 2, and the late path remains incomplete. This is partial source parity evidence only; it does not prove full Mole behaviour or close an L3 route.",
+  "runtimeLibrarySHA256": "77bf4cba294553f576d4a8801cccf4fa4fdb849aad12f09be42fe2ac7abd1da6",
+  "runtimeSource": {
+    "path": "Sources/NxlvKit/Lemmings3Runtime.swift",
+    "sha256": "0525d7a013ff78343b8875c83374017db08674e21e0050470282637900c90e37"
+  },
+  "schemaVersion": 1,
+  "sourceTrace": {
+    "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json",
+    "sha256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "sourceExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018"
+  },
+  "runtimeChanges": [
+    "A grounded Mole settles two pixels at logic tick 7.",
+    "Steel contact holds through ticks 26 to 35; diagonal movement starts at tick 36."
+  ]
+}

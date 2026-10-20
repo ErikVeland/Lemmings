@@ -16,6 +16,13 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 These counts come from the committed [fixture manifest](evidence.json). The worktree audit records the current runtime source hash in the [MVP audit](../ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
 
+The 20 October source-driven Mole timing update left 399 of 416 L3 replay
+scenarios with exact double-replay evidence after six winning level-113 state
+identities were refreshed. Their input streams did not change. The runtime
+suite passes; the strict completion gate remains open at Shadow 7 and carried
+fixture `107-1`. Current Mole trace counts and source hashes are in the
+[current-source trace record](../ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-mole-trace-2026-10-20.json).
+
 For bundled levels, route closure means one verified winning route per level.
 The 416-fixture L3 audit includes extra population-specific carried schedules;
 its 17 failed scenarios do not represent 17 different levels. Do not search to

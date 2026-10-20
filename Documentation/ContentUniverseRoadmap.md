@@ -256,6 +256,31 @@ remains intact; this alternate path stops at 5/10. These bounded searches
 do not prove the level impossible. See the [candidate chain
 reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-10-16.json).
 
+On 20 October, a fresh fetch confirmed `HEAD` and `origin/main` at
+`440caebd`. The current-source audit verified 399/416 L3 fixtures twice, with
+17 failed schedules across four level identities. The standalone route count
+remains 86/90. The strict carried-campaign check fails at `107-1.json`, with
+zero saved and two lost. Focused route probes for Egyptian 6 and Egyptian 29
+tested 46 variants and found no win. See the
+[bundled closure and velocity record](ReleaseReadiness/BundledClosureVelocity.md)
+for the audit hashes and route results.
+
+A later 20 October source rebuild matches 146/329 left-facing and 186/344
+air-gap Mole positions, up from 139/329 and 179/344. The source shows a
+two-pixel settle at tick 7, a steel-contact reaction through tick 35 and
+diagonal movement from tick 36. The runtime now follows those observations.
+The trace remains partial and the route count stays 86/90. See the
+[current-source Mole trace](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-mole-trace-2026-10-20.json).
+
+The L3 runtime suite passes after this change. A 416-fixture audit found 393
+exact double replays, six level-113 schedules that still win twice, and the
+same 17 failing schedules. I refreshed only those six state identities; their
+inputs are unchanged. The strict gate remains open at Shadow 7 and carried
+fixture `107-1`.
+
+The following L3 audit and trace notes describe the 18 October snapshot.
+They remain historical evidence and do not describe current `main`.
+
 The 15 October L3 Mole direction and patrol corrections match captured starting
 directions and no-input patrols. Main `e613a5e9` includes the source-based
 open-drop transition after a down-tunnel. Worktree commit `8c66ef3e` keeps the same L3 runtime source. The source-built

@@ -163,11 +163,14 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         }
         for creature in runtime.creatures where creature.alive {
             guard let bank = creatureBanks[creature.kind] else { continue }
-            let animationIndex = creature.direction > 0 ? 0 : 1
+            let selectedFrame = creature.kind == .mole ? Self.moleAnimationFrame(for: creature) : nil
+            let animationIndex = selectedFrame?.animationIndex ?? (creature.direction > 0 ? 0 : 1)
             guard bank.animations.indices.contains(animationIndex) else { continue }
             let animation = bank.animations[animationIndex]
             guard !animation.frames.isEmpty else { continue }
-            let frame = animation.frames[(creature.age / 3) % animation.frames.count]
+            let frameIndex = selectedFrame?.frameIndex ?? (creature.age / 3) % animation.frames.count
+            guard animation.frames.indices.contains(frameIndex) else { continue }
+            let frame = animation.frames[frameIndex]
             Self.composite(frame, animation: animation, palette: bank.palette,
                            x: creature.x - animation.width / 2,
                            y: creature.y - animation.height,
@@ -208,6 +211,46 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
             Self.drawMarker(x: lemming.x, y: lemming.y - 12, width: width, height: height, into: &rgba)
         }
         return try MobilePixelFrame(width: width, height: height, rgba: Data(rgba))
+    }
+
+    /** Selects trace-derived frames for Mole states with a bank mapping. */
+    static func moleAnimationFrame(for creature: Lemmings3Runtime.Creature) -> (animationIndex: Int, frameIndex: Int)? {
+        guard creature.kind == .mole else { return nil }
+        let sourceFrame: Int
+        switch creature.digDirection {
+        case .right where creature.age == 7:
+            sourceFrame = 65
+        case .right where (8...25).contains(creature.age):
+            sourceFrame = ((creature.age - 8) / 6).isMultiple(of: 2) ? 26 : 27
+        case .downLeft where creature.cooldown > 0 && (26...35).contains(creature.age):
+            sourceFrame = 53
+        case .downLeft where (36...98).contains(creature.age):
+            sourceFrame = (creature.age / 2).isMultiple(of: 2) ? 58 : 57
+        case .upLeft where (100...118).contains(creature.age):
+            sourceFrame = (creature.age / 2).isMultiple(of: 2) ? 62 : 61
+        case .upRight where (120...144).contains(creature.age):
+            sourceFrame = (creature.age / 2).isMultiple(of: 2) ? 60 : 59
+        case .downRight where (146...172).contains(creature.age),
+             .down where (174...180).contains(creature.age):
+            sourceFrame = (creature.age / 2).isMultiple(of: 2) ? 56 : 55
+        default:
+            return nil
+        }
+        return switch sourceFrame {
+        case 26: (4, 2)
+        case 27: (4, 3)
+        case 53: (9, 3)
+        case 55: (9, 5)
+        case 56: (10, 0)
+        case 57: (10, 1)
+        case 58: (10, 2)
+        case 59: (10, 3)
+        case 60: (10, 4)
+        case 61: (10, 5)
+        case 62: (11, 0)
+        case 65: (11, 3)
+        default: nil
+        }
     }
 
     private static func expand(_ pixels: [UInt8], palette: [UInt8]) -> [UInt8] {

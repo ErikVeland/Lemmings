@@ -1,0 +1,511 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "family": "bundled Classic fan levels",
+    "verifiedRoutesBefore": "2403/6020",
+    "verifiedRoutesAfter": "2403/6020",
+    "newAcceptedRoutes": 0
+  },
+  "method": {
+    "solver": "ClassicSolver",
+    "solverSha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "nxlvKitLibrarySha256": "6e43c53fbdb84b4709e528dd3ebbf49090349d0d8854cfcfa51c596f2ea12f21",
+    "currentMainInputManifest": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/inputs.json",
+    "resultCount": 14
+  },
+  "results": [
+    {
+      "identity": "fan:lldb-249/MATTPCK2.DAT#7",
+      "title": "The Lemming Avalanche",
+      "initialStateHash": "01adb1f41fd01537398ea0e55cf925bf3a5535fd75a0830431d56aacd9b332c5",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0249-MATTPCK2.zip",
+      "archiveSha256": "8fe2186125d5d8f1bc76fa615c2667722e91c1eabb0e3435b6915a910cba212e",
+      "strategy": "fixed-rate-99-beam",
+      "configuredSeconds": 90,
+      "solverSeconds": 52,
+      "expanded": 128429,
+      "tick": 132,
+      "released": 20,
+      "lost": 0,
+      "active": 20,
+      "saved": 0,
+      "requiredToSave": 20,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/lemming-avalanche/candidate.json.partial.json",
+        "sha256": "21409594e9f2f882608caa66ce5183919c722fde1dd9e43f79db7a5b4c122dc5",
+        "initialLevelFingerprint": "885fe61656e81a752d04e6cfc2c1acb72fc207fdd94bb77c5399c333819ca818"
+      },
+      "parameters": {
+        "rate": 99,
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30,
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress",
+          "direct-exit-distance"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-249/MATTPCK2.DAT#7",
+      "title": "The Lemming Avalanche",
+      "initialStateHash": "01adb1f41fd01537398ea0e55cf925bf3a5535fd75a0830431d56aacd9b332c5",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0249-MATTPCK2.zip",
+      "archiveSha256": "8fe2186125d5d8f1bc76fa615c2667722e91c1eabb0e3435b6915a910cba212e",
+      "strategy": "fixed-rate-99-single-skill-sweep",
+      "configuredSeconds": 60,
+      "solverSeconds": 1,
+      "expanded": 7436,
+      "tick": 0,
+      "released": 0,
+      "lost": 0,
+      "active": 0,
+      "saved": 0,
+      "requiredToSave": 20,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/lemming-avalanche-single/candidate.json.partial.json",
+        "sha256": "959f2f9f2d53dc832bca4bbf50a65568397d4f6b8906efe4602260551c41edd8",
+        "initialLevelFingerprint": "885fe61656e81a752d04e6cfc2c1acb72fc207fdd94bb77c5399c333819ca818"
+      },
+      "waitingTick": 296,
+      "assignmentsStarted": 7436,
+      "assignmentsCompleted": 7436,
+      "deadlineExpired": false,
+      "parameters": {
+        "rate": 99,
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30
+      }
+    },
+    {
+      "identity": "fan:lldb-200/Gronklems #4 (v3)/Extras/E1) The Pendulemming CH.ini#0",
+      "title": "The Pendulemming",
+      "initialStateHash": "02982841b45b1c151269294ff118ef9b2ec4b7acd538213905ff9d12dbf964c1",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0200-Gronklems-4.zip",
+      "archiveSha256": "df9f798f55c909c8f0ef925a70b9dea3a607455ce9b63b3d40ebded40ff0d29f",
+      "strategy": "native-rate-beam",
+      "configuredSeconds": 60,
+      "solverSeconds": 0,
+      "expanded": 3,
+      "tick": 54,
+      "released": 1,
+      "lost": 0,
+      "active": 1,
+      "saved": 0,
+      "requiredToSave": 19,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/pendulemming/candidate.json.partial.json",
+        "sha256": "f6d7413d62012cba69bba171204af8102ca7508448e052c897e64b8db95aea85",
+        "initialLevelFingerprint": "e303c574f1d0e815179dfb3839e2386a5e4990557e43ce83222134dc990f8a3c"
+      },
+      "parameters": {
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30
+      }
+    },
+    {
+      "identity": "fan:lldb-283/GARJEN03.dat#0",
+      "title": "Out, away from the tune!     *",
+      "initialStateHash": "01bed0035cfa10f29733a9376dd7ece6454234125a6d2e262a40a96e95da77e6",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0283-GARJEN03.zip",
+      "archiveSha256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.43,
+      "expanded": 22297,
+      "tick": 318,
+      "released": 9,
+      "lost": 0,
+      "active": 9,
+      "saved": 0,
+      "requiredToSave": 49,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/2bdf21eb3488/01bed0035cfa10f29733a9376dd7ece6454234125a6d2e262a40a96e95da77e6.partial.json",
+        "sha256": "f7d30e8abd3e4536ac2f7e26d40c2fdd397c5a7708831f6a5d5b4d1d1b8e633d",
+        "initialLevelFingerprint": "94a88fc308b7df540c37b1f2fb3140c512768c3f1942d0821efb14991d550a5b"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-126/joe01.dat#5",
+      "title": "A home up high",
+      "initialStateHash": "02028faa6b8ab8ce001294be81597c8cb6b650863941c1801e1f52f97ab6180b",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0126-joe01.zip",
+      "archiveSha256": "d321d4b93fcc454f5bc50215c376590fe1c3399ea1f68a83ef1bfa9b9a6597c2",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.42,
+      "expanded": 23126,
+      "tick": 285,
+      "released": 7,
+      "lost": 0,
+      "active": 7,
+      "saved": 0,
+      "requiredToSave": 40,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/4955f4cb1586/02028faa6b8ab8ce001294be81597c8cb6b650863941c1801e1f52f97ab6180b.partial.json",
+        "sha256": "71d0e64d46123da927dfec19b4d91710488d96b01e6602f36f048396ff536fc2",
+        "initialLevelFingerprint": "f0f7bbb8af238efbb2bcf9d48cbe755684a5b3854260703a53db4ed09d0047c1"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-168/Giga pack 06.dat#0",
+      "title": "Happy birthday Giga",
+      "initialStateHash": "02077e0349dd5f687085e01e477fab454bf2ef40c1869cb77eb3a869e6552f81",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0168-Giga-pack-06.zip",
+      "archiveSha256": "eae7e3fa58312d0eb72c421203d92c09b4bd148c064335ae87be401ce3a05617",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.44,
+      "expanded": 23485,
+      "tick": 219,
+      "released": 6,
+      "lost": 0,
+      "active": 6,
+      "saved": 0,
+      "requiredToSave": 30,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/b858783b0c9f/02077e0349dd5f687085e01e477fab454bf2ef40c1869cb77eb3a869e6552f81.partial.json",
+        "sha256": "719044e906ac0ad74b13c1008e2111e4bd128300412b674e3c9b4ed31aca2a65",
+        "initialLevelFingerprint": "8a2d4fdb7716adaabfd18ab6eb54563692048a5873da05c0e96fb33b24cbd371"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-335/JM09.DAT#6",
+      "title": "The ground above has a gap",
+      "initialStateHash": "021dc6ea9b1e2c85172047fc3f4686fb60bb29709f9c662922b27cef1baa823e",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0335-JM09.zip",
+      "archiveSha256": "14d4e7ec91a5a1231c36f49dab8472c02e082fc8178e6df1ca0583b6d4911fed",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.43,
+      "expanded": 23220,
+      "tick": 138,
+      "released": 3,
+      "lost": 0,
+      "active": 3,
+      "saved": 0,
+      "requiredToSave": 50,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/7b9fea00513e/021dc6ea9b1e2c85172047fc3f4686fb60bb29709f9c662922b27cef1baa823e.partial.json",
+        "sha256": "8274840af142c08ceead21cb547ded9d1025639cb5c40b81396919cd58f2334e",
+        "initialLevelFingerprint": "e1fbdccf994adcf2b8cbb1b526c6cdcb977927c7f40db560c3e3274c48b83aba"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-203/Gronklems 6 v2/10) Bring it Together!.ini#0",
+      "title": "Bring it Together!",
+      "initialStateHash": "023a30eec96bb87fd9856638718c8c85f47a5b5530eef65f40899dfba0f18f56",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0203-Gronklems-6.zip",
+      "archiveSha256": "1900e4554d946d2e464f8a69cff2f2a915c72294c9c57bc2b563cbea3ebb9af0",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 0,
+      "elapsedSeconds": 1.83,
+      "expanded": 1,
+      "tick": 30,
+      "released": 0,
+      "lost": 0,
+      "active": 0,
+      "saved": 0,
+      "requiredToSave": 30,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/752a3a9e90af/023a30eec96bb87fd9856638718c8c85f47a5b5530eef65f40899dfba0f18f56.partial.json",
+        "sha256": "97eb62edae2853b87371c5f6c9f42f35cd0556fba66fb0f3781e7991d4a365c8",
+        "initialLevelFingerprint": "2c118102e31c11c564ddca6862a6f10afaa7ba4f1491f08af62b8fa7ba529847"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-199/TMChallenge.dat#0",
+      "title": "Just as complicated as it looks",
+      "initialStateHash": "028f47eee6b9930c18efc745e2b3e19b12195a17211c635158e801d84dad876d",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0199-TMChallenge.zip",
+      "archiveSha256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.41,
+      "expanded": 18911,
+      "tick": 90,
+      "released": 5,
+      "lost": 0,
+      "active": 5,
+      "saved": 0,
+      "requiredToSave": 76,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/992234cba976/028f47eee6b9930c18efc745e2b3e19b12195a17211c635158e801d84dad876d.partial.json",
+        "sha256": "d26529ccc8ce8b48eacac9f9a210019758a35538e8165f6d68371cef590648a5",
+        "initialLevelFingerprint": "1c1b94b53b95841b2b98462ea709d0f1405e5936dc254462341fc21ed04fc4e1"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-370/andi.DAT#7",
+      "title": "Two Sides in Lemmingland",
+      "initialStateHash": "029cd96b16ebd280c746f385f85c4ab68d83e1b01b316c528ef0b07c65b5362b",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0370-Andi.zip",
+      "archiveSha256": "381062615e1cada2707a86c161e34fd3d56c3ec375e7c4cf6784cefb91c53bcf",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.44,
+      "expanded": 23230,
+      "tick": 225,
+      "released": 4,
+      "lost": 0,
+      "active": 4,
+      "saved": 0,
+      "requiredToSave": 70,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/c198d1aebba4/029cd96b16ebd280c746f385f85c4ab68d83e1b01b316c528ef0b07c65b5362b.partial.json",
+        "sha256": "ec2d04acb9ccdd1d06ee3754f213514032524f8e2f888dc06efa0744660d1491",
+        "initialLevelFingerprint": "e2fa61855ec8e97f25fd8f6b3691e6d4656721b58d53110cbf400dae81413837"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-411/mobius05.dat#3",
+      "title": "Take a Giant Nose Dive",
+      "initialStateHash": "02a2e8d4c17907861b4ff87f67709078325bbec27a3c530759465fd7bb728008",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0411-mobius05.zip",
+      "archiveSha256": "6bb5948b6af1a7cd9f6ccbee0c2d6d304cb3341e3e05072c97307856d260208c",
+      "strategy": "short-beam-batch",
+      "configuredSeconds": 8.0,
+      "solverSeconds": 8,
+      "elapsedSeconds": 8.42,
+      "expanded": 23171,
+      "tick": 356,
+      "released": 11,
+      "lost": 0,
+      "active": 11,
+      "saved": 0,
+      "requiredToSave": 19,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/batch-8/per-level/874f76b81a7f/02a2e8d4c17907861b4ff87f67709078325bbec27a3c530759465fd7bb728008.partial.json",
+        "sha256": "718401014a41dcd33e461729225e8d0c6557ee160aa5cd87667300d2bd34a5cf",
+        "initialLevelFingerprint": "9eefb4cfcaf489a5a67b6354443221c60001ef1a5d5b783bf167a49b2f96955b"
+      },
+      "parameters": {
+        "width": 256,
+        "fallback": 30,
+        "refire": 30,
+        "clock": "golems",
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-126/joe01.dat#5",
+      "title": "A home up high",
+      "initialStateHash": "02028faa6b8ab8ce001294be81597c8cb6b650863941c1801e1f52f97ab6180b",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0126-joe01.zip",
+      "archiveSha256": "d321d4b93fcc454f5bc50215c376590fe1c3399ea1f68a83ef1bfa9b9a6597c2",
+      "strategy": "native-rate-beam",
+      "configuredSeconds": 60,
+      "solverSeconds": 60,
+      "expanded": 161168,
+      "tick": 135,
+      "released": 3,
+      "lost": 0,
+      "active": 3,
+      "saved": 0,
+      "requiredToSave": 40,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/home-up-high/candidate.json.partial.json",
+        "sha256": "4d929ce895eb2e34e7ed9c3bc612eebd1b4090e1499e6f6868bee1eefd81b45e",
+        "initialLevelFingerprint": "f0f7bbb8af238efbb2bcf9d48cbe755684a5b3854260703a53db4ed09d0047c1"
+      },
+      "parameters": {
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30,
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress",
+          "direct-exit-distance"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-126/joe01.dat#5",
+      "title": "A home up high",
+      "initialStateHash": "02028faa6b8ab8ce001294be81597c8cb6b650863941c1801e1f52f97ab6180b",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0126-joe01.zip",
+      "archiveSha256": "d321d4b93fcc454f5bc50215c376590fe1c3399ea1f68a83ef1bfa9b9a6597c2",
+      "strategy": "fixed-rate-99-beam",
+      "configuredSeconds": 60,
+      "solverSeconds": 60,
+      "expanded": 131220,
+      "tick": 157,
+      "released": 26,
+      "lost": 0,
+      "active": 26,
+      "saved": 0,
+      "requiredToSave": 40,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/home-up-high-rate99/candidate.json.partial.json",
+        "sha256": "570123559c596dbde3bad23f873f994d4af25974b97d41282e72f30f686061a6",
+        "initialLevelFingerprint": "f0f7bbb8af238efbb2bcf9d48cbe755684a5b3854260703a53db4ed09d0047c1"
+      },
+      "parameters": {
+        "rate": 99,
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30,
+        "ranking": [
+          "rescue-quota-distance",
+          "prefer-progress",
+          "direct-exit-distance"
+        ]
+      }
+    },
+    {
+      "identity": "fan:lldb-126/joe01.dat#5",
+      "title": "A home up high",
+      "initialStateHash": "02028faa6b8ab8ce001294be81597c8cb6b650863941c1801e1f52f97ab6180b",
+      "status": "rendered-and-smoke-tested-only",
+      "archive": "0126-joe01.zip",
+      "archiveSha256": "d321d4b93fcc454f5bc50215c376590fe1c3399ea1f68a83ef1bfa9b9a6597c2",
+      "strategy": "fixed-rate-99-single-skill-sweep",
+      "configuredSeconds": 60,
+      "solverSeconds": 60,
+      "expanded": 2404,
+      "tick": 122,
+      "released": 18,
+      "lost": 0,
+      "active": 18,
+      "saved": 0,
+      "requiredToSave": 40,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/home-up-high-single/candidate.json.partial.json",
+        "sha256": "76680b8325d510346d14a77827447b87facbd5ed33b2dab4b819f2ca20a5294b",
+        "initialLevelFingerprint": "f0f7bbb8af238efbb2bcf9d48cbe755684a5b3854260703a53db4ed09d0047c1"
+      },
+      "waitingTick": 122,
+      "assignmentsStarted": 2404,
+      "assignmentsCompleted": 2403,
+      "deadlineExpired": true,
+      "parameters": {
+        "rate": 99,
+        "width": 2048,
+        "fallback": 30,
+        "refire": 30
+      }
+    }
+  ],
+  "totals": {
+    "reportedSolverSeconds": 289,
+    "expanded": 588101,
+    "acceptedRoutes": 0
+  },
+  "limits": [
+    "Bounded solver failures do not prove that a level is impossible.",
+    "The A home up high one-skill sweep reached its deadline with one continuation incomplete.",
+    "No candidate produced a winning replay, so no strict replay verification was possible."
+  ]
+}

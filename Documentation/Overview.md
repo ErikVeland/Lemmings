@@ -33,19 +33,15 @@ Both paths run the same simulation and produce the same win.
 ## Content status
 
 The official Classic and conversion routes pass at 352/352. L2 has routes for
-all 120 levels. Its 16 October worktree replay passes against the staged build 83 app
-payload, but the ark ending and original-engine comparisons remain open. Worktree
-commit `8c66ef3e` descends from the freshly fetched remote main. The current-worktree L3 runtime adds a Mole response to player-built bricks.
-The original trigger timing and excavation mask remain unverified. The current-worktree audit passes 399/416 exact double
-replays. It refreshed 220 fixture identities and kept every input stream
-unchanged. Replay hashes now include Mole drop delay.
-Seventeen population-specific schedules still fail across four underlying
-levels (four standalone, 13 carried). The strict gate stops at `107.json` and
-`107-1.json`. Traces match 139/329 left-facing positions and 179/344 air-gap
-positions. The air-gap fall matches
-through tick 183. Later movement and two of four tunnel-edge checks remain
-unmatched. L3 route and source fidelity remain open. See [the worktree
-replay audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json)
+all 120 levels. Its 16 October replay passes against the staged build 83 app
+payload, but the ark ending and original-engine comparisons remain open.
+
+The 20 October current-source L3 evidence has 399/416 exact double replays.
+Seventeen schedules fail across four level identities. The standalone route
+count remains 86/90, and the carried-campaign verifier fails at `107-1.json`.
+The source-driven Mole timing correction raises matches to 146/329 left-facing
+and 186/344 air-gap positions. L3 route and source fidelity remain open. See
+the [bundled closure and velocity record](ReleaseReadiness/BundledClosureVelocity.md)
 and [release scope](ReleaseScope.md).
 
 The latest audit covers all 6,020 bundled fan levels. It verifies 2,403 winning

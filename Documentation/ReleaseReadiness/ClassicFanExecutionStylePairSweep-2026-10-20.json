@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "family": "Classic fan packs",
+    "identity": "fan:lldb-341/JM15.DAT#5",
+    "title": "Execution Style",
+    "verifiedRoutesBefore": 2403,
+    "verifiedRoutesAfter": 2403,
+    "newAcceptedRoutes": 0,
+    "totalLemmings": 20,
+    "requiredToSave": 1
+  },
+  "input": {
+    "archive": "0341-JM15.zip",
+    "archiveSha256": "f97109511fe42c7b93b22f90e22e71027999935be50fea8471d86bb886295617",
+    "initialStateHash": "f2121b6636a981c7b96191f730bb16442ca5c76e6f3cbe5aac2e0d1fd7f8b4a7",
+    "initialLevelFingerprint": "bd5c15ead6e22043d5def939e050797d04ffca5c36f3f6253c5c79ce6cece40b"
+  },
+  "method": {
+    "solver": "ClassicSolver",
+    "solverSha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "clock": "Golems",
+    "releaseRate": 99,
+    "mode": "fixed-rate pair sweep",
+    "firstSkill": "floater",
+    "secondSkill": "basher",
+    "firstTickRange": [
+      1,
+      300
+    ],
+    "secondGapRange": [
+      1,
+      100
+    ],
+    "configuredSeconds": 60,
+    "reportedSolverSeconds": 52,
+    "firstSkillAssignments": 1504,
+    "secondSkillAssignments": 1061870,
+    "completedContinuations": 1061870,
+    "expanded": 1061870,
+    "deadlineExpired": false
+  },
+  "result": {
+    "solved": false,
+    "saved": 0,
+    "acceptedRoutes": 0,
+    "winningReplayWritten": false
+  },
+  "limits": [
+    "This sweep tests two skill assignments followed by no further input.",
+    "The result does not show that the level has no winning route.",
+    "A route count changes only after strict replay acceptance."
+  ]
+}

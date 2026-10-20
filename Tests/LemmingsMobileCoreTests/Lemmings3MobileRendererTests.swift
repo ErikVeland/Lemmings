@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import NxlvKit
 @testable import LemmingsMobileCore
 
 struct Lemmings3MobileRendererTests {
@@ -46,6 +47,48 @@ struct Lemmings3MobileRendererTests {
         #expect(Lemmings3MobileSceneRenderer.animatedFrameIndex(-1, count: 3) == 0)
         #expect(Lemmings3MobileSceneRenderer.animatedFrameIndex(4, count: 3) == 2)
         #expect(Lemmings3MobileSceneRenderer.animatedFrameIndex(0, count: 0) == nil)
+    }
+
+    @Test func moleUsesTraceMappedFramesForKnownStates() {
+        var mole = Lemmings3Runtime.Creature(id: 1, kind: .mole, x: 0, y: 0)
+        mole.age = 7
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 11)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 3)
+
+        mole.age = 14
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 4)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 3)
+
+        mole.age = 31
+        mole.digDirection = .downLeft
+        mole.cooldown = 5
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 9)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 3)
+
+        mole.age = 40
+        mole.cooldown = 0
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 10)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 2)
+
+        mole.age = 101
+        mole.digDirection = .upLeft
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 11)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 0)
+
+        mole.age = 146
+        mole.digDirection = .downRight
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.animationIndex == 9)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole)?.frameIndex == 5)
+    }
+
+    @Test func moleFallsBackWhenStateHasNoCapturedSourceMapping() {
+        var mole = Lemmings3Runtime.Creature(id: 1, kind: .mole, x: 0, y: 0)
+        mole.age = 181
+        mole.digDirection = .down
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: mole) == nil)
+
+        let potato = Lemmings3Runtime.Creature(id: 2, kind: .potato, x: 0, y: 0)
+        #expect(Lemmings3MobileSceneRenderer.moleAnimationFrame(for: potato) == nil)
     }
 
     @Test func animatedTrapFrameCompositesItsPaletteAndKeepsTransparentPixels() throws {

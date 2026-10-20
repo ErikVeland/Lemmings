@@ -1,21 +1,19 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-As of 19 October 2026, the update feed advertises macOS 2.0.6 build 90.
-The latest package with
-retained acceptance evidence in this repository is 2.0.3 build 86: its
-universal packages are signed, notarised and accepted by Gatekeeper. Main is at
-2.0.6 Mac build 90 (iOS build 16, tvOS build 6). The feed lists a build 90
-archive, but this repository has no matching distribution acceptance record.
-The [2.0.6 notes](ReleaseNotes-2.0.6-build90.md) describe the intended changes.
-Feed metadata does not certify that archive. See
-the [2.0.3 distribution evidence](ReleaseReadiness/2.0.3-build86/README.md)
-and [branch ancestry reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
+As of 20 October 2026, public `main` and the update feed identify macOS 2.0.7
+build 91 as the current Mac release. Its package record verifies signatures,
+notarisation, stapling, Gatekeeper and public assets. The release owner waived
+engine, gameplay, integration, launch and hardware reruns for this quick patch.
+The build 91 app was not launched. Its record says rescue-target certificates
+are stale, so affected targets remain unverified. Build 91 adds no new engine
+or runtime acceptance. See the [2.0.7 release record](ReleaseReadiness/2.0.7-build91/README.md)
+and [publication evidence](ReleaseReadiness/2.0.7-build91/publication.json).
 The stricter bundled-content closure remains open.
 
-Version 2.0.3 build 86 fixes the Mac language
-picker without changing engine rules or bundled levels. Source checks and
-package status are recorded in the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
+Version 2.0.3 build 86 fixed the Mac language picker without changing engine
+rules or bundled levels. Its source checks and package status are recorded in
+the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
 
 The owner set a stricter bundled-content closure rule on 15 October 2026. Every
 bundled level needs a verified winning replay, and every bundled engine needs
@@ -25,7 +23,29 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-Macintosh 2.0.3 retains the published classifications and known limits. The release record documents the language-picker fix and five verified update deltas. Existing engine closure evidence and open limits remain in force.
+Macintosh 2.0.3 retained the published classifications and known limits. Its
+release record documents the language-picker fix and five verified update
+deltas. Existing engine closure evidence and open limits remain in force.
+
+## Current bundled route counts
+
+The latest retained evidence records 352/352 official Classic routes,
+2,403/6,020 Classic fan routes, 120 L2 standalone routes with 70 carry-over
+variants and 12 chains, 86/90 L3 routes, and 158/794 NeoLemmix routes. The
+evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,617
+Classic fan routes and 636 NeoLemmix routes remain open. See the
+[bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md)
+for dates, search outcomes and measurement limits.
+
+A 20 October structural scan decoded all 6,020 bundled fan levels across 535
+packs. It found 54 records without an active exit trigger. Fifty-one have a
+zero rescue requirement and already have winning replay evidence. Three
+positive-rescue records remain open: `fan:lldb-437` `LDChallenge08.dat#1`,
+`fan:lldb-508` `KillerMaster 1 Wicked 1.dat#3`, and `fan:lldb-509`
+`KillerMaster 1 Havoc 2.dat#7`. Each decoded record contains only a hatch
+object. These three levels cannot meet their rescue requirements as bundled.
+The scan found no level-load or pack errors and replayed no levels. See the
+[exit-structure audit](ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json).
 
 ## Bundled content closure
 
@@ -50,6 +70,9 @@ engine-rule or bundled-level changes. Its non-localisation resource indexes
 match build 85, and it retains the shared engine libraries. The complete build
 86 app audit was not rerun, so build 85 route and engine evidence carries
 forward only for unchanged inputs and code. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md).
+
+The following audit notes describe earlier source snapshots and worktrees.
+They do not establish current-main or 2.0.7 engine acceptance.
 
 On 18 October, a fresh fetch resolved remote `main` to `09155829`. The worktree
 at `8c66ef3e` contains that commit in its ancestry and is 1,153 commits ahead,
@@ -91,6 +114,12 @@ was rejected and removed from runtime. The retained [experiment record](ReleaseR
 is not current-worktree or release evidence.
 See the [current-main Mole record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json).
 
+A later 20 October source rebuild uses the captured tick-7 settle and tick-26
+steel-reaction timing. It matches 146/329 left-facing and 186/344 air-gap
+positions, up from 139/329 and 179/344. The full Mole model remains incomplete.
+The trace library, inputs and samples are hash-pinned in the
+[current-source trace record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-mole-trace-2026-10-20.json).
+
 The 17 October full L3 audit, run at `e613a5e9` against the unchanged current-main
 runtime source, records 399/416 exact double replays, zero
 stale-identity wins and 17 schedules that do not win (four standalone, 13
@@ -100,12 +129,30 @@ gate fails at Shadow 7 and carried fixture 107-1. Earlier Trolley evidence check
 315 rescue records and six unknown configurations. These results do not close
 the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.
 
-The feed and source versions are recorded at the start of this document. The
-latest retained Mac package acceptance record remains build 86. See the
-[current notes](ReleaseNotes-2.0.6-build90.md) and [current-main
-reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
-Build 86 records no non-localisation resource-index changes from build 85, but
-its complete app audit was not rerun. The last installed iOS beta, build 8,
+On 20 October, the worktree `HEAD` and cached `origin/main` ref both resolved
+to `440caebd`. A live remote refresh was unavailable, so the GitHub `main` tip
+was not confirmed. A current-source audit verified 399/416 L3 fixtures twice.
+Zero stale-identity routes won, and 17 schedules failed across the same four levels.
+The audit library hash matches a direct rebuild from current source. The strict
+carried-campaign verifier still fails at `107-1.json` with zero saved and two
+lost. The standalone count remains 86/90. See the
+[bundled velocity record](ReleaseReadiness/BundledClosureVelocity.md) for the
+source hashes and focused Egyptian 6 and 29 route results.
+
+After the source-driven timing correction, the headless L3 runtime suite passes.
+The 416-fixture audit found 393 exact replays, six level-113 fixtures whose
+unchanged inputs still won twice, and the same 17 failing schedules. I
+refreshed the six state identities without changing their routes. This returns
+the evidence to 399 exact double replays; the strict gate remains open at
+Shadow 7 (`107.json`) and carried fixture `107-1.json`.
+
+The latest Mac package publication record is 2.0.7 build 91. Its owner-approved
+waiver means its app was not launched and engine, gameplay, integration and
+hardware checks were not rerun. The 2.0.3 build 86 record also says its complete
+app audit was not rerun. Build 85 has the latest full package audit cited in
+these records. See the [2.0.7 release notes](ReleaseNotes-2.0.7-build91.md)
+and [release record](ReleaseReadiness/2.0.7-build91/README.md). The last
+installed iOS beta, build 8,
 contains 120 Classic campaign levels and no L2 or L3 mobile library. Later
 source support for L2, L3 and NeoLemmix does not prove those engines are in an
 accepted iOS release package. See the
@@ -171,7 +218,7 @@ and the [route record](ReleaseReadiness/2.0-build83/classic-fan-magical-world-ro
 | Official Classic and Oh Yes! | The current-source recheck passes all 352 routes and the full quest. The build 85 manifest has the same 1,307 `Ports` paths and hashes as the route-check baseline. | Finish any remaining variant-specific source checks. The 2.0 build 83 candidate has verified resources and retained plus focused regression evidence. See the [build 85 content comparison](ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json). |
 | Classic fan packs | A fresh 16 October current-main audit replayed all 6,020 bundled levels in 535 packs. It verifies 2,403 wins, leaves 3,599 levels without a matching candidate and 18 failed candidate replays, and reports zero load, decode or render failures. The input-drift report is clean. This supersedes the prior 2,402-win count; 3,617 bundled routes remain unverified. The 17 October reconciliation classified all 18 failed-candidate rows. Ten came from checked state-hash aliases between different puzzles. The other eight have candidate metadata that matches the target pack, level number and title. No route status changed. See the [state-hash alias reconciliation](ReleaseReadiness/2.0-build83/classic-fan-state-hash-alias-reconciliation-2026-10-17.json). The Classic route solver now considers every simultaneous decision actor. Its six-actor regression passes. Current bounded searches found no route for “crossing stairs” or “The mini-labyrinth”; two more current-source exact-member probes found no route for “Winter Solstice” (including the retained failed 9/9 candidate) or “Look Down!” (including all single-skill sweeps and all 12 ordered two-skill pairs at rate 99). No route status changed. See the [Winter Solstice and Look Down! search record](ReleaseReadiness/2.0-build83/classic-fan-winter-solstice-look-down-search-2026-10-17.json). the route count remains 2,403/6,020. Two 600-second, beam-16,384 exact-member searches for “The Frantic Lemming Antic” found no route. The searches used different distance rankings, expanded 1,663,361 and 1,675,731 candidates, and retained the same 0/2 partial. The stored “The Great Lemming Caper” replay also failed on this target. A further 89,771 bounded retiming trials produced no winning witness. These results do not prove that the level is impossible. See the [search and replay-repair record](ReleaseReadiness/2.0-build83/classic-fan-frantic-search-2026-10-17.json). See the [solver change and search evidence](ReleaseReadiness/2.0-build83/classic-solver-all-actor-search-2026-10-16.json). Three exact-member searches for “Getting Closer...” found no route: native-rate, adaptive-rate and seeded adaptive-rate runs expanded 837,512, 770,486 and 654,163 candidates. Its existing level-3 witness fails on level 6, and the same legacy state hash belongs to a different level fingerprint. The level remains unverified. See the [targeted repair record](ReleaseReadiness/2.0-build83/classic-fan-getting-closer-repair-2026-10-16.json). Four current exact-member searches for “Ups and Downs” found no route. The 21-command continuation expanded 309,612 candidates. Adding the recorded Golems source-assignment rule to the old replay still saved 0 of 20 on the current runtime. This conflicts with the 4 October recovery record’s 19/19 result, so that result and its score are historical and do not count as current verified evidence. The level remains unverified. See the [repair and replay reconciliation record](ReleaseReadiness/2.0-build83/classic-fan-ups-and-downs-repair-2026-10-16.json). The new “the last mohilem” witness passes twice with its static level fingerprint. The audit used installed 1.9.1 build 76 resources. All 535 fan archives match build 85, and build 86 reports no non-localisation resource-index changes. The source and content hashes are retained in the audit input manifest. All 2,755 winning routes (352 official and 2,403 fan) now have identity-pinned replay witnesses; each passed two strict deterministic runs, and the coverage checker verifies its state hash and static level fingerprint against the row. The replay witness file is retained beside the audit rows. This does not certify the 2.0.3 app binary. Both “Deep Deep Down” copies have verified fan routes. The two “It’s a Magical World” copies still lack winning routes. A 16 October current-engine continuation search used the retained route prefix through tick 880 on both exact archive identities. Each 300-second, beam-8,192 search found no win; a 300-second from-start search for the first copy also found no win after 709,892 expansions. These bounded searches do not prove either level impossible. See the [route repair record](ReleaseReadiness/2.0-build83/classic-fan-magical-world-route-repair-2026-10-16.json). Adaptive-rate searches and a partial timed Builder/Basher sweep found no win for “Only practice.” An earlier current-main beam-8,192 run covered actor IDs 0 through 3. Two later five-minute searches covered all 40 actors with balanced and progress-first rankings. They expanded 576,145 and 684,056 candidates and found no win. The level has no verified route. See the [current-main search record](ReleaseReadiness/2.0-build83/classic-fan-only-practice-search-2026-10-16.json). A targeted current-runtime search for “I Challenge You to a Duel!” also found no replacement route after 280,631 prefixed and 291,536 from-start expansions; its stored witness is refused at tick 943. See the [targeted repair record](ReleaseReadiness/2.0-build83/classic-fan-duel-route-repair-2026-10-16.json). A separate failed “Dude, where’s my exit?” copy shares its legacy state hash with a winning Earth copy, but has a different static level fingerprint. Two current-source searches and a seeded continuation found no replacement route; a Digger/Blocker sweep stopped after 206 continuations and is incomplete. See the [variant repair record](ReleaseReadiness/2.0-build83/classic-fan-dude-wheres-my-exit-repair-2026-10-16.json). Four additional 120-second current-main probes on Increasing step heights, The Arctic, Amazonian and Wait. I have a plan. found no winning route. A 300-second current-main continuation seeded with the source-derived Increasing step heights prefix expanded 598,444 candidates and found no win. These bounded searches do not prove that the levels are impossible. See the [route probe record](ReleaseReadiness/2.0-build83/classic-fan-route-probes-2026-10-16.json). Two 120-second searches on “Let’s play with stairs !” used 60-tick and 20-tick timing intervals. They expanded 343,698 and 348,757 candidates. Both partial routes used all 15 Builders and saved 0/1. These bounded searches do not prove the level impossible. See the [route probe record](ReleaseReadiness/2.0-build83/classic-fan-route-probes-2026-10-16.json). Three further low-population searches on “2 lemmings,” “New Message -From KillerMaster-” and “The strange spiral” found no winning route. One-skill sweeps completed 48, 76 and 5,990 assignments. Multi-input searches expanded 15,001 to 357,697 candidates. Four exhaustive two-skill timing sweeps for “New Message -From KillerMaster-” tested all Builder/Digger orderings, with first inputs through tick 122 and second-input gaps of 1 to 240 ticks; they found no route. The two-lemming Builder level also had a complete Builder-pair sweep (557 continuations) and a 101-delay Builder-broadcast sweep; neither found a route. These bounded attempts do not prove that the levels are impossible. See the [low-population search record](ReleaseReadiness/2.0-build83/classic-fan-low-population-searches-2026-10-16.json). A current-main five-minute search of “Mission at max-fall 60” found no win after 600,630 expansions; an exhaustive single-skill sweep tested 7,727 assignments and found no one-skill route. These searches do not prove the level impossible. See the [targeted search record](ReleaseReadiness/2.0-build83/classic-fan-mission-max-fall-60-search-2026-10-16.json). Two October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Verify the remaining bundled routes and source behaviour. Keep imported content open-ended under per-engine and per-version support claims. See the [build 83 replay audit](ReleaseReadiness/2.0-build83/classic-fan-build83-replay.json), [package audit](ReleaseReadiness/2.0-build83/classic-fan-package-audit.json), [build 85 manifest comparison](ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json), [2.0 build83/15 October engine-equivalence snapshot](ReleaseReadiness/2.0-build83/engine-content-equivalence-current-main.json) and [“Only practice” search](ReleaseReadiness/2.0-build83/classic-fan-only-practice-search-2026-10-16.json). |
 | Lemmings 2 | Current-main replay passes all 120 standalone routes, 70 carry-over variants, twelve chains, event checks and the runtime suite against the staged build 83 app payload. Every accepted chain reaches a Bronze talisman ending. Source captures support local sprite geometry but do not establish DOS tick alignment, continuous actor parity or full rendering fidelity. See the [frame comparison](ReleaseReadiness/L2GameplayParity-2026-10-16/frame-comparison-001.json) and [current-main matcher output](ReleaseReadiness/L2GameplayParity-2026-10-16/walker-match-2590-current-main-2026-10-17.txt). | MVP route coverage passes. Keep source-engine fidelity and ending rules in engine closure. A 30-survivor Gold Ark route is a stretch goal, not an MVP blocker; do not run more maximum-rescue searches for release closure. See the [build 83 payload replay](ReleaseReadiness/2.0-build83/lemmings2-build83-payload-replay.json) and [current-main follow-up](Lemmings2Completion/ark-reconnection-search-2026-10-16-current-main.json). |
-| Lemmings 3 | Worktree commit `8c66ef3e` passes a source-built L3 runtime suite. Its audit verifies 399/416 route scenarios twice after replay identity refreshes. No input stream changed. Seventeen scenarios still fail across four levels. The strict gate stops at `107.json` and `107-1.json`. The Mole trace and engine rules remain partial. | Close the four known L3 level route gaps with one verified winning route per level, then verify one complete carried path per tribe. Keep other population fixtures as continuity checks. Do not target 50 survivors or optimise routes for closure. Verify original Mole behaviour and remaining source rules, environmental effects, movie audio, story transitions and recovery. See the [worktree MVP audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json), [Mole verification](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json) and [source-parity record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json). |
+| Lemmings 3 | The 20 October current-source audit verifies 399/416 scenarios twice. Seventeen schedules fail across four level identities. The standalone route count is 86/90. A strict carried-campaign replay fails at `107-1.json` with zero saved and two lost. | Close the four known level gaps with one verified win per level, then verify one complete carried path per tribe. Keep other population fixtures as continuity checks. Do not target 50 survivors or optimise routes for closure. Verify original Mole behaviour and remaining source rules, environmental effects, movie audio, story transitions and recovery. See the [bundled closure and velocity record](ReleaseReadiness/BundledClosureVelocity.md), [Mole verification](ReleaseReadiness/L3MoleVerification-2026-10-15/current-main-open-drop-e613a5e9-2026-10-17.json) and [source-parity record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-source-parity-recheck-2026-10-16.json). |
 | NeoLemmix CE | The build 85 bundled-resource check indexes all 794 levels and resolves 719 through the 26 bundled DMA styles; the other 75 need 44 community styles. Exact-version winning replay evidence covers 158 levels. Build 86 records no non-localisation resource-index differences from build 85, but its full app audit was not rerun. | Keep all 794 levels in closure scope. Obtain rights for missing styles and verify every bundled route and source rule. See the [2.0.3 release record](ReleaseReadiness/2.0.3-build86/README.md), [2.0.2 resource check](ReleaseReadiness/2.0.2-build85/README.md), [build 84 content inventory](ReleaseReadiness/2.0.1-build84/neo-content.json) and [style rights inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json). |
 
 The table tracks engine and content closure. It does not certify a specific
@@ -181,6 +228,8 @@ summaries and the failed-replay investigation below: two Amiga routes and one
 Genesis Taxing route now replay as wins. The old search records remain historical
 and do not describe the latest route status. See the [current-worktree audit](ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/audit.json)
 and its per-level [results](ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/levels.jsonl).
+The dated baseline and route-closure measurement method are in the
+[bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md).
 
 On 17 October, the source-derived L2 walking-step boundary gained a native
 regression. The repository runtime suite passed against the installed bundle;
