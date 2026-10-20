@@ -335,7 +335,6 @@
 "Blocker" = "Blokkerer";
 "Blocker turnaround" = "Blokkererens snupunkt";
 "Bomb" = "Bombe";
-"Bomb countdowns" = "Bombenedtellinger";
 "Bomber" = "Sprenger";
 "Bonus records. No new rewards." = "Bonus records. No new rewards.";
 "Bonus runs keep separate records and earn no rewards." = "Bonus runs keep separate records and earn no rewards.";
@@ -345,9 +344,7 @@
 "Bricks" = "Murstein";
 "Bring {0} more home to match your best." = "Få {0} flere hjem for å tangere rekorden din.";
 "Bronze" = "Bronse";
-"Browse individual releases in About. Zoom and skip counters fade with the gameplay menu in Classic, The Tribes and Chronicles. Amiga Versus shows its two-controller requirement before play." = "Browse individual releases in About. Zoom and skip counters fade with the gameplay menu in Classic, The Tribes and Chronicles. Amiga Versus shows its two-controller requirement before play.";
 "Browse levels" = "Bla gjennom brett";
-"Browse optional five-level Classic and The Tribes openings. About includes original-team and port credits. Missing exact hints are labelled General coaching." = "Browse optional five-level Classic and The Tribes openings. About includes original-team and port credits. Missing exact hints are labelled General coaching.";
 "Builder" = "Bygger";
 "Built {0}" = "Bygde {0}";
 "But how?" = "Men hvordan?";
@@ -501,7 +498,6 @@
 "Circle / B" = "Sirkel / B";
 "Circus" = "Sirkus";
 "Classic" = "Classic";
-"Classic + fans" = "Classic + fanbrett";
 "Classic C64 SID chiptune music and VIC-II sprite graphics." = "Classic C64 SID-chiptune-musikk og VIC-II-spritegrafikk.";
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
@@ -548,6 +544,7 @@
 "Cleared the level without assigning a skill." = "Fullførte brettet uten å tildele en ferdighet.";
 "Cleared without assigning a skill." = "Fullført uten å tildele ferdigheter.";
 "Clearer controls" = "Clearer controls";
+"Clearer progress and automatic worldwide records" = "Clearer progress and automatic worldwide records";
 "Clears" = "Fullføringer";
 "Click or Return to practise" = "Klikk eller trykk Enter for å øve";
 "Click or press Enter to try again" = "Klikk eller trykk Enter for å prøve igjen";
@@ -564,7 +561,6 @@
 "Cloud player edits conflict." = "Endringer i skyspilleren er i konflikt.";
 "Cloud saves" = "Skylagringer";
 "Cloud saves paused" = "Skylagring satt på pause";
-"Cloud saves work in the background. Journey queues, fan completion and supported campaign progress sync with their owning session. Tester Sync shows whether saves are synced, waiting or offline." = "Cloud saves work in the background. Journey queues, fan completion and supported campaign progress sync with their owning session. Tester Sync shows whether saves are synced, waiting or offline.";
 "Cloud sync is unavailable in this build." = "Cloud sync is unavailable in this build.";
 "Cloud sync state could not be read. Existing saves were kept." = "Kunne ikke lese statusen for skysynkronisering. Eksisterende lagringer ble beholdt.";
 "Cloud tribes do not match." = "Stammene i skyen samsvarer ikke.";
@@ -577,8 +573,6 @@
 "Colour depth" = "Fargedybde";
 "Combine: {0}" = "Kombiner: {0}";
 "Come back to these" = "Kom tilbake til disse";
-"Comfortable play" = "Comfortable play";
-"Comfortable play, original character" = "Comfortable play, original character";
 "Command" = "Kommando";
 "Command category" = "Kommandokategori";
 "Command+Z: Step back" = "Command+Z: Gå ett trinn tilbake";
@@ -766,7 +760,6 @@
 "Earlier actions" = "Earlier actions";
 "Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
-"Earn one Extra skill for every ten qualifying three-star clears. Use at most one per attempt. Bonus clears have separate records and cannot earn rewards or enter online rankings." = "Earn one Extra skill for every ten qualifying three-star clears. Use at most one per attempt. Bonus clears have separate records and cannot earn rewards or enter online rankings.";
 "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "Oppnå samme spillestil på 5 ulike fullførte brett.";
 "Earned" = "Opptjent";
@@ -907,7 +900,6 @@
 "Find a better way" = "Finn en bedre måte";
 "Find a command by key, action or category. Your game pauses while this guide is open." = "Søk etter en kommando med tast, handling eller kategori. Spillet settes på pause mens denne veiledningen er åpen.";
 "Find a key or command, e.g. rewind, Shift, builder" = "Søk etter en tast eller kommando, for eksempel spole tilbake, Skift eller bygger";
-"Find your next level" = "Find your next level";
 "Finish a level to see each goal and your progress." = "Fullfør et brett for å se målene og fremgangen din.";
 "Finish one below a verified maximum." = "Fullfør med ett mindre enn et bekreftet maksimum.";
 "Finish run" = "Fullfør forsøket";
@@ -1031,6 +1023,7 @@
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
 "Home" = "Hjem";
+"Home counts include Journey wins. Older Hot Seat journeys recover their recorded history when a matching save or backup is available. Resume positions and turn ownership stay intact." = "Home counts include Journey wins. Older Hot Seat journeys recover their recorded history when a matching save or backup is available. Resume positions and turn ownership stay intact.";
 "Home {0}/{1}" = "Hjem {0}/{1}";
 "Hopper" = "Spretter";
 "Host" = "Vert";
@@ -1182,7 +1175,6 @@
 "Jet Pack" = "Jetpakke";
 "John Stuart Mill was a utilitarian. He valued everyone's well-being and distinguished higher and lower pleasures." = "John Stuart Mill var utilitarist. Han verdsatte alles velferd og skilte mellom høyere og lavere gleder.";
 "Journey" = "Reise";
-"Journey Map and Resume keep your selected player, roster and turn. Solo and Hot Seat lesson progress stay separate. Shared handovers wait for Ready." = "Journey Map and Resume keep your selected player, roster and turn. Solo and Hot Seat lesson progress stay separate. Shared handovers wait for Ready.";
 "Journey explored" = "Reise utforsket";
 "Journey is unavailable" = "Reisen er utilgjengelig";
 "Journey map  {0}/{1} solved" = "Reisekart  {0}/{1} løst";
@@ -1505,6 +1497,7 @@
 "Modern Sound" = "Moderne lyd";
 "Modern keyboard controls" = "Moderne tastaturkontroller";
 "Modern open level format (.nxlv) and custom style pack support." = "Støtte for det moderne, åpne brettformatet (.nxlv) og egendefinerte stilpakker.";
+"Modern pointer arrows wrap cleanly at the playfield edges. Paused inspection has its own saved preference. HDR presentation retains the existing reduced-flash and performance limits." = "Modern pointer arrows wrap cleanly at the playfield edges. Paused inspection has its own saved preference. HDR presentation retains the existing reduced-flash and performance limits.";
 "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings." = "Moderne snarveier er av. Bruk talltastene for ferdigheter, eller slå på moderne kontroller i Innstillinger.";
 "Modifier for extra actions" = "Tilleggstast for ekstra handlinger";
 "Monitor" = "Skjerm";
@@ -1738,7 +1731,6 @@
 "Original" = "Original";
 "Original Lemmings 3 movie" = "Opprinnelig Lemmings 3-film";
 "Original Macintosh" = "Opprinnelig Macintosh";
-"Original Macintosh 1-bit artwork, restored journeys and playlists, Classic solution ghosts, Hot Seat ghosts, controller stepping and safer count resets remain available. Find the full history in About > Version history." = "Original Macintosh 1-bit artwork, restored journeys and playlists, Classic solution ghosts, Hot Seat ghosts, controller stepping and safer count resets remain available. Find the full history in About > Version history.";
 "Original PC" = "Opprinnelig PC-grafikk";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
 "Original movie" = "Originalfilm";
@@ -1889,12 +1881,10 @@
 "Please set your preferences" = "Velg innstillingene dine";
 "Pointer" = "Peker";
 "Pointer and selection" = "Peker og valg";
-"Pointer targeting" = "Pekersikting";
 "Polar" = "Pol";
 "Polar Tribe" = "Polarstammen";
 "Pole Vaulter" = "Stavhopper";
 "Portrait" = "Portrett";
-"Portrait controls" = "Portrettkontroller";
 "Portrait: {0}" = "Portrett: {0}";
 "Practice" = "Øving";
 "Practice levels" = "Øvingsbrett";
@@ -2139,7 +2129,6 @@
 "Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Tilbakespoling aktiv, {0} tikk bakover. Hold inne punktum for å spole framover. Escape avbryter.";
 "Rewind one second." = "Spol ett sekund tilbake.";
 "Rewind one tick" = "Spol ett tikk tilbake";
-"Rewind scratch" = "Spol skrapelyd";
 "Rewind the current run" = "Spol tilbake i gjeldende forsøk";
 "Rewind two seconds" = "Spol to sekunder tilbake";
 "Rewinds" = "Tilbakespolinger";
@@ -2328,13 +2317,13 @@
 "Shared: {0} days" = "Delt: {0} dager";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
 "Sharing" = "Deling";
+"Sharing play counts also enables worldwide records and submits eligible saved scores. Explicit record-sharing opt-outs remain respected. Public records include initials, scores and action replays." = "Sharing play counts also enables worldwide records and submits eligible saved scores. Explicit record-sharing opt-outs remain respected. Public records include initials, scores and action replays.";
 "Sharing..." = "Deler …";
 "Shift+R: Retry" = "Shift+R: Prøv igjen";
 "Shift+Tab: Previous skill" = "Shift+Tab: Forrige ferdighet";
 "Shimmier" = "Armhenger";
 "Shimmy" = "Heng";
 "Short games" = "Short games";
-"Short games and heritage" = "Short games and heritage";
 "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages." = "Skulderknappene bytter fane. Høyre styrespak ruller. Slipp knappene når du bytter side.";
 "Show / hide Hot Seat ghosts" = "Show / hide Hot Seat ghosts";
 "Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork." = "Vis ryggsekker for Klatrer og Fallskjermhopper på Classic-lemminger. L2 og L3 beholder sin egen ferdighetsgrafikk.";
@@ -2387,8 +2376,6 @@
 "Slower. Shift+[." = "Saktere. Shift+[.";
 "Small Budget, Big Heart" = "Lite budsjett, stort hjerte";
 "Smooth Progression" = "Jevn framdrift";
-"Smooth music loops" = "Myke musikksløyfer";
-"Smoother sync" = "Smoother sync";
 "Solo / Hot Seat" = "Solo / Hot Seat";
 "Solo starts" = "Solostart";
 "Solution" = "Løsning";
@@ -2433,7 +2420,6 @@
 "Start a level, then choose Help > Level hints or press i." = "Start et brett, velg Hjelp > Bretthint eller trykk på i.";
 "Start a new Hot Seat?" = "Starte en ny Hot Seat?";
 "Start a new session?" = "Starte en ny økt?";
-"Start an official level from Play Insights. Normal level availability and campaign unlocks still apply." = "Start an official level from Play Insights. Normal level availability and campaign unlocks still apply.";
 "Start fast-forward" = "Start hurtigspoling";
 "Start fast-forward at " = "Start hurtigspoling på ";
 "Start journey" = "Start journey";

@@ -12,8 +12,8 @@ public enum MobileInformationArt {
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
-              details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
-                        L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
+              details: [L10n.text("Journey"), L10n.text("Share counts and records"), L10n.text("Individual lemmings"),
+                        L10n.text("Extra skills"), L10n.text("Hot Seat player HUD"), L10n.text("Shared saves/replays")],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
         return page

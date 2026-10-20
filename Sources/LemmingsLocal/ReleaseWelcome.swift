@@ -9,18 +9,14 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.1"
-    static var subtitle: String { L10n.text("Comfortable play, original character") }
+    static let notesVersion = "2.1.1"
+    static var subtitle: String { L10n.text("Clearer progress and automatic worldwide records") }
     static var sections: [(String, String)] { [
-        (L10n.text("Comfortable play"), L10n.text("Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review.")),
+        (L10n.text("Journey"), L10n.text("Home counts include Journey wins. Older Hot Seat journeys recover their recorded history when a matching save or backup is available. Resume positions and turn ownership stay intact.")),
+        (L10n.text("Worldwide"), L10n.text("Sharing play counts also enables worldwide records and submits eligible saved scores. Explicit record-sharing opt-outs remain respected. Public records include initials, scores and action replays.")),
         (L10n.text("Individual lemmings"), L10n.text("Pause to inspect names and recorded assignments. On Mac, hover over a lemming or press Command-I for its longer history. Character details have no effect on gameplay.")),
-        (L10n.text("Extra skills"), L10n.text("Earn one Extra skill for every ten qualifying three-star clears. Use at most one per attempt. Bonus clears have separate records and cannot earn rewards or enter online rankings.")),
-        (L10n.text("Short games and heritage"), L10n.text("Browse optional five-level Classic and The Tribes openings. About includes original-team and port credits. Missing exact hints are labelled General coaching.")),
-        (L10n.text("Journey"), L10n.text("Journey Map and Resume keep your selected player, roster and turn. Solo and Hot Seat lesson progress stay separate. Shared handovers wait for Ready.")),
-        (L10n.text("Smoother sync"), L10n.text("Cloud saves work in the background. Journey queues, fan completion and supported campaign progress sync with their owning session. Tester Sync shows whether saves are synced, waiting or offline.")),
-        (L10n.text("Find your next level"), L10n.text("Start an official level from Play Insights. Normal level availability and campaign unlocks still apply.")),
-        (L10n.text("Clearer controls"), L10n.text("Browse individual releases in About. Zoom and skip counters fade with the gameplay menu in Classic, The Tribes and Chronicles. Amiga Versus shows its two-controller requirement before play.")),
-        (L10n.text("Earlier updates"), L10n.text("Original Macintosh 1-bit artwork, restored journeys and playlists, Classic solution ghosts, Hot Seat ghosts, controller stepping and safer count resets remain available. Find the full history in About > Version history.")),
+        (L10n.text("Clearer controls"), L10n.text("Modern pointer arrows wrap cleanly at the playfield edges. Paused inspection has its own saved preference. HDR presentation retains the existing reduced-flash and performance limits.")),
+        (L10n.text("Earlier updates"), L10n.text("Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review.")),
         (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Mobile Journey playback remains Classic-only. Existing engine and device validation limits still apply."))
     ] }
     private let defaults: UserDefaults
