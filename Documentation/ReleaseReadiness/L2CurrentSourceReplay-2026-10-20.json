@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "99f92797b6dd200933761019fbb744327c0f77ba",
+  "branch": "codex/bundled-engine-recreation-main",
+  "liveMainRefreshed": false,
+  "scope": {
+    "engine": "lemmings2",
+    "bundledLevels": 120,
+    "standaloneRoutesVerified": 120,
+    "carryOverVariantsVerified": 70,
+    "completeTribeChains": 12,
+    "acceptedRouteClosures": 0,
+    "routeClosureTotal": "120/120"
+  },
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache zsh Scripts/verify-lemmings2-completion.sh --require-all",
+  "result": "PASS 120 routes, 70 carry-over variants and 12 tribe chains",
+  "evidence": {
+    "runtimeSource": "Sources/NxlvKit/Lemmings2Runtime.swift",
+    "runtimeSourceSha256": "61de3583267111615cee88e0f10741284b171f89ff253aeebe09b70e9c1c00e1",
+    "fixtureManifest": "Documentation/Lemmings2Completion/evidence.json",
+    "fixtureManifestSha256": "3bf694bc0375d409fa3416d8c7c3e310ee6595c3b05ab32a3fe9b421f5e58e54",
+    "verifierSha256": "fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91",
+    "librarySha256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562"
+  },
+  "limits": [
+    "This verifies native route and campaign completion, not original-engine tick or continuous-actor parity.",
+    "The Gold Ark is a stretch ending and remains outside the MVP route target.",
+    "The live GitHub main ref could not be refreshed because DNS resolution failed."
+  ]
+}

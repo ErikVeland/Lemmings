@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "99f92797b6dd200933761019fbb744327c0f77ba",
+  "worktreeBranch": "codex/bundled-engine-recreation-main",
+  "liveMainRefreshed": false,
+  "mainRefreshLimit": "github.com DNS resolution failed; results use the cached origin/main ref",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-325",
+    "levelID": "t3tesla.dat#8",
+    "solverNumber": 9,
+    "title": "A TOWERING PROBLEM",
+    "initialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5"
+  },
+  "source": {
+    "archive": ".build/classic-fan-solver/rebase-builder-resources/LevelPacks/0325-t3tesla.zip",
+    "archiveSha256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+    "audit": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/levels.jsonl",
+    "lemmings": 35,
+    "requiredToSave": 9
+  },
+  "solver": {
+    "buildCommand": "zsh Scripts/build-classic-solver.sh",
+    "binarySha256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySha256": "6c2422a2d58212dc41dd1849323d2daad0fc7dadc7305b9c29702cad6088727b",
+    "progressAdapter": "standalone only; route search does not read or write player progress"
+  },
+  "baselinePrefix": [
+    { "tick": 275, "lemmingID": 3, "skill": "builder" },
+    { "tick": 805, "lemmingID": 14, "skill": "builder" },
+    { "tick": 806, "releaseRate": 75 },
+    { "tick": 849, "releaseRate": 99 }
+  ],
+  "timingProbe": {
+    "variedCommand": "second Builder assignment to lemming 14",
+    "ticksInclusive": [795, 815],
+    "profile": {
+      "clock": "golems",
+      "width": 48,
+      "seconds": 5,
+      "fallback": 170,
+      "refire": 120
+    },
+    "results": [
+      { "tick": 795, "bestSaved": "0/9", "expanded": 403 },
+      { "tick": 796, "bestSaved": "0/9", "expanded": 403 },
+      { "tick": 797, "bestSaved": "0/9", "expanded": 419 },
+      { "tick": 798, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 799, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 800, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 801, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 802, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 803, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 804, "bestSaved": "0/9", "expanded": 420 },
+      { "tick": 805, "bestSaved": "8/9", "expanded": 451, "terminalTick": 1005, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 806, "bestSaved": "8/9", "expanded": 466, "terminalTick": 998, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 807, "bestSaved": "8/9", "expanded": 466, "terminalTick": 1007, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 808, "bestSaved": "8/9", "expanded": 466, "terminalTick": 1000, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 809, "bestSaved": "8/9", "expanded": 467, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 810, "bestSaved": "8/9", "expanded": 468, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 811, "bestSaved": "8/9", "expanded": 469, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 812, "bestSaved": "8/9", "expanded": 468, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 813, "bestSaved": "8/9", "expanded": 469, "terminalTick": 1005, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 814, "bestSaved": "8/9", "expanded": 469, "terminalTick": 1014, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 815, "bestSaved": "8/9", "expanded": 470, "terminalTick": 1007, "released": 35, "lost": 25, "active": 2 }
+    ],
+    "summary": {
+      "testedTimings": 21,
+      "expandedStates": 9294,
+      "winningRoutes": 0
+    }
+  },
+  "workerIdentityProbes": {
+    "secondBuilder": {
+      "fixedFirstBuilder": { "tick": 275, "lemmingID": 3 },
+      "fixedTick": 805,
+      "testedLemmingIDs": [8, 20],
+      "results": [
+        { "lemmingID": 8, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 9, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 10, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 11, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 12, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 13, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 14, "bestSaved": "8/9", "expanded": 451 },
+        { "lemmingID": 15, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 16, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 17, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 18, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 19, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 20, "bestSaved": "0/9", "expanded": 423 }
+      ],
+      "summary": { "testedWorkers": 13, "expandedStates": 5527, "winningRoutes": 0 }
+    },
+    "firstBuilder": {
+      "fixedSecondBuilder": { "tick": 805, "lemmingID": 14 },
+      "testedLemmingIDs": [0, 8],
+      "results": [
+        { "lemmingID": 0, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 1, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 2, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 3, "bestSaved": "8/9", "expanded": 451 },
+        { "lemmingID": 4, "bestSaved": "8/9", "expanded": 728 },
+        { "lemmingID": 5, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 6, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 7, "bestSaved": "0/9", "expanded": 100 },
+        { "lemmingID": 8, "bestSaved": "0/9", "expanded": 100 }
+      ],
+      "summary": { "testedWorkers": 9, "expandedStates": 1879, "winningRoutes": 0 }
+    },
+    "secondBuilderIDsZeroToSeven": {
+      "fixedFirstBuilder": { "tick": 275, "lemmingID": 3 },
+      "fixedTick": 805,
+      "results": [
+        { "lemmingID": 0, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 1, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 2, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 3, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 4, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 5, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 6, "bestSaved": "0/9", "expanded": 423 },
+        { "lemmingID": 7, "bestSaved": "0/9", "expanded": 423 }
+      ],
+      "summary": { "testedWorkers": 8, "expandedStates": 3384, "winningRoutes": 0 }
+    }
+  },
+  "alternateFirstBuilderFourteenTimingProbes": {
+    "firstBuilderID": 4,
+    "secondBuilderID": 14,
+    "results": [
+      { "tick": 795, "bestSaved": "0/9", "expanded": 666 },
+      { "tick": 796, "bestSaved": "0/9", "expanded": 666 },
+      { "tick": 797, "bestSaved": "0/9", "expanded": 691 },
+      { "tick": 798, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 799, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 800, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 801, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 802, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 803, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 804, "bestSaved": "0/9", "expanded": 692 },
+      { "tick": 805, "bestSaved": "8/9", "expanded": 728, "terminalTick": 997, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 806, "bestSaved": "8/9", "expanded": 752, "terminalTick": 1006, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 807, "bestSaved": "8/9", "expanded": 751, "terminalTick": 999, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 808, "bestSaved": "8/9", "expanded": 752, "terminalTick": 1008, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 809, "bestSaved": "8/9", "expanded": 753, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 810, "bestSaved": "8/9", "expanded": 754, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 811, "bestSaved": "8/9", "expanded": 753, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 812, "bestSaved": "8/9", "expanded": 753, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 813, "bestSaved": "8/9", "expanded": 754, "terminalTick": 1013, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 814, "bestSaved": "8/9", "expanded": 756, "terminalTick": 1006, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 815, "bestSaved": "8/9", "expanded": 756, "terminalTick": 1007, "released": 35, "lost": 25, "active": 2 }
+    ],
+    "summary": { "testedTimings": 21, "expandedStates": 15129, "winningRoutes": 0 }
+  },
+  "adaptiveRateContinuation": {
+    "profile": {
+      "width": 2048,
+      "secondsLimit": 60,
+      "fallback": 30,
+      "refire": 20,
+      "preferProgress": true,
+      "adaptiveRate": true
+    },
+    "result": {
+      "bestSaved": "3/9",
+      "expandedStates": 92587,
+      "solverSeconds": 32,
+      "terminalTick": 856,
+      "released": 18,
+      "lost": 11,
+      "active": 4
+    },
+    "winningRoute": false
+  },
+  "outcome": {
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "fixedSearchInvocations": 72,
+    "distinctTimingWorkerConfigurations": 70,
+    "fixedVariantExpandedStates": 35213,
+    "adaptiveContinuationExpandedStates": 92587,
+    "acceptedRouteClosures": 0,
+    "limitation": "Both searches are bounded. They do not prove that the level has no solution."
+  }
+}

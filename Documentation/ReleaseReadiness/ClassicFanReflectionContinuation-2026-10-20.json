@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "99f92797b6dd200933761019fbb744327c0f77ba",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-345",
+    "levelID": "MARSHY01.DAT#4",
+    "solverNumber": 5,
+    "title": "The Reflection",
+    "initialStateHash": "a2da6d080357709491ce7a92fc81b20c2f390772f4eaa6bb12deed5ecb2a7280"
+  },
+  "source": {
+    "archive": ".build/classic-fan-solver/rebase-builder-resources/LevelPacks/0345-MARSHY01.zip",
+    "archiveSha256": "6671b220493d84817904647aff660242ef1f9763453aab730073def1ba093866",
+    "audit": "Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/levels.jsonl",
+    "lemmings": 70,
+    "requiredToSave": 40
+  },
+  "solver": {
+    "buildCommand": "zsh Scripts/build-classic-solver.sh",
+    "binarySha256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySha256": "6c2422a2d58212dc41dd1849323d2daad0fc7dadc7305b9c29702cad6088727b"
+  },
+  "historicalPartial": {
+    "reportedBest": "35/40",
+    "prefix": [
+      { "tick": 135, "releaseRate": 99 },
+      { "tick": 282, "lemmingID": 0, "skill": "builder" }
+    ]
+  },
+  "currentMainContinuation": {
+    "profile": {
+      "clock": "golems",
+      "width": 1024,
+      "secondsLimit": 30,
+      "fallback": 30,
+      "refire": 20,
+      "preferProgress": true
+    },
+    "result": {
+      "bestSaved": "0/40",
+      "expandedStates": 81327,
+      "solverSeconds": 30,
+      "winningRoute": false
+    }
+  },
+  "outcome": {
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "acceptedRouteClosures": 0,
+    "limitation": "The bounded current-main continuation does not establish that the level has no solution."
+  }
+}

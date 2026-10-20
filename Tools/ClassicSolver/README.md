@@ -9,6 +9,8 @@ The decision detector offers every triggered lemming once. It does not cap the
 list at three actors. Build the solver from the current source with
 `zsh Scripts/build-classic-solver.sh`. Run
 `zsh Scripts/run-classic-solver-decision-tests.sh` to check the actor list.
+The standalone build uses a local fan-progress adapter because route search
+does not read or write player progress.
 
 The number is the sequential entry in the whole archive. For packs with
 multiple source files, it is not the zero-based `#section` in a level identity.
