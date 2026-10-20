@@ -1,6 +1,7 @@
 #if os(iOS) || os(tvOS)
 import AVFAudio
 import Foundation
+import LemmingsMobileCore
 
 /// Blocking audio-session configuration runs on this actor's executor.
 private actor MobileAudioSessionWorker {
@@ -20,7 +21,13 @@ private actor MobileAudioSessionWorker {
     }
 
     private func prepare(_ session: AVAudioSession) throws {
+        #if os(iOS)
+        let respectMute = MobileSettings.load(from: .standard).respectMuteSetting
+        try session.setCategory(respectMute ? .ambient : .playback, mode: .default,
+                                options: respectMute ? [] : [.mixWithOthers])
+        #else
         try session.setCategory(.ambient, mode: .default, options: [])
+        #endif
         // Give tracker synthesis and effects one 1,024-frame buffer at 44.1 kHz.
         try session.setPreferredIOBufferDuration(1024.0 / 44100.0)
     }
@@ -83,6 +90,12 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
                 self?.onEvent?(.interruptionEnded)
             }
         })
+    }
+
+    static func applySettings() {
+        _ = MobileAudioSessionWorkQueue.shared.enqueue({
+            try await MobileAudioSessionWorker.shared.perform(.prepare)
+        }, completion: { _ in })
     }
 
     func prepare() {

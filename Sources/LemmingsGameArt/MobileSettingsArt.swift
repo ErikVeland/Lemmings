@@ -29,7 +29,7 @@ public enum MobileSettingsArt {
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
                             sharing: Bool = false, sharingAvailable: Bool = false,
                             displayAvailable: Bool = false, inGame: Bool = false,
-                            language: InterfaceLanguage = .system) -> GameFrontEnd.Page {
+                            language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
@@ -42,10 +42,11 @@ public enum MobileSettingsArt {
         switch group {
         case .gameplay:
             rows = [choice("language", L10n.text("Language"), language.title),
-                    choice("preset", L10n.text("Preset"), c.experiencePreset.title),
+                    choice("preset", L10n.text("Presentation"), c.experiencePreset.title),
                     toggle("planning", L10n.text("Pause to assign"), settings.pauseToAssign),
                     choice("speed", L10n.text("Fast speed"), "\(settings.fastSpeed)X"),
                     toggle("variableSpeed", L10n.text("Variable speed"), c.variableSpeedEnabled),
+                    toggle("ridiculousSpeed", L10n.text("Ridiculous speed (25×)"), c.ridiculousSpeedEnabled, enabled: c.variableSpeedEnabled),
                     toggle("interrupt", L10n.text("Pause on interruption"), c.pauseOnInterruption),
                     toggle("approaching", L10n.text("Target approaching lemmings"), c.favorApproachingLemmings),
                     toggle("bombBlockers", L10n.text("Target blockers for bombs"), c.favorBombBlockers),
@@ -85,6 +86,9 @@ public enum MobileSettingsArt {
                     toggle("djOther", L10n.text("DJ uses other soundtracks"), c.djIncludesOtherSoundtracks),
                     choice("djShuffleScope", L10n.text("DJ shuffle"), settings.djShuffleScope.title),
                     .init("soundtrack", L10n.text("Soundtrack libraries"))]
+            if respectMuteAvailable {
+                rows.insert(toggle("respectMute", L10n.text("Respect Mute Setting"), settings.respectMuteSetting), at: 0)
+            }
         case .accessibility:
             rows = [choice("uiSize", L10n.text("UI size"), c.interfaceSize.title),
                     toggle("songInfo", L10n.text("Show song info"), c.showSongInfo),
@@ -93,7 +97,7 @@ public enum MobileSettingsArt {
                     toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Anonymous telemetry"), sharing, enabled: sharingAvailable),
-                    .init("cloudSaves", L10n.text("Cloud saves")),
+                    .init("cloudSaves", L10n.text("Tester sync")),
                     .init("playInsights", L10n.text("Play Insights"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" } }

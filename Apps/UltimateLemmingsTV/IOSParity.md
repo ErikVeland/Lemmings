@@ -58,6 +58,30 @@ UIKit focus delivery and VoiceOver remain device checks.
 | Recovery/cloud | Shared owner/session-scoped checkpoints and session navigation. Legacy TV profiles, portraits, solo/shared completion, rosters, exact turns, preferences and the surviving checkpoint migrate once. Old data is retained, and an existing shared run is not overwritten. Shared cloud-library/recovery-code routes are available; TV transfers recovery keys over LAN. | Live cloud linking and purge recovery. Cloud library sync does not back up complete checkpoint payloads or all local collection files. TV adds an explicit off-device save backup/restore adapter; transfer and purge recovery need physical acceptance. |
 | Accessibility/lifecycle | Shared accessible action names, interruption pause and explicit Resume. TV uses native focus over the same bitmap targets. Large transfer pages scroll to keep Back reachable. | Physical VoiceOver, system keyboard, background/termination/reconnect and sofa readability. |
 
+## Crowd targeting
+
+With the Modern cursor, gentle aiming movements cycle through the lemmings
+whose native precision pick boxes cover the cursor. Two points of deliberate
+screen movement advance one individual in stable actor-ID order. Travel in
+either direction counts, so a small back-and-forth motion can reach an entire
+overlapping stack without moving the cursor out of it. A stationary stick does
+not advance the selection. Larger movements return to ordinary aiming.
+
+The highlighted actor stays selected until another aiming movement or an
+existing target-reset action. Assignment checks that actor's current eligibility;
+it does not substitute a neighbour. Already-assigned and unavailable individuals
+retain their existing feedback. Existing skill, camera, rewind and explicit
+next/previous selection rules continue to govern actor locks. Original
+cursor and L2 fan aiming keep their existing behaviour. Ready handovers remain
+paused and require Ready.
+
+Classic, L2 and L3 use their shared session candidates and native pick boxes.
+The registered-library TV experience uses the same crowd selector. Focused
+checks cover an 80-actor stack, a lower worker, noise, release, zoom/pixel aspect
+and exact assignment to the chosen actor in all three native sessions. The
+existing 181 TV experience checks pass headlessly with muted audio. Siri Remote,
+gamepad feel and native UIKit delivery still require physical acceptance.
+
 ## TV effect budget
 
 The user's 14 October performance instruction removes completion glow on TV.

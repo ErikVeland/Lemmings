@@ -113,19 +113,24 @@ import NxlvKit
                   let asset = record["snapshot"] as? CKAsset, let file = asset.fileURL else {
                 throw SequelDataError.invalid(L10n.text("An iCloud save could not be read. Existing saves were kept."))
             }
-            let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? Int.max
-            guard size <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
-            let opened = try identity.open(Data(contentsOf: file))
-            _ = try CloudLibraryArchive.decode(opened)
+            let opened = try await Task.detached(priority: .utility) {
+                let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? Int.max
+                guard size <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
+                let opened = try identity.open(Data(contentsOf: file))
+                _ = try CloudLibraryArchive.decode(opened)
+                return opened
+            }.value
             data.append(opened)
         }
         return data
     }
     func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
-        _ = try CloudLibraryArchive.decode(data)
         guard UUID(uuidString: device) != nil else { throw SequelDataError.invalid("Invalid cloud device.") }
         let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try identity.seal(data).write(to: file, options: .atomic)
+        try await Task.detached(priority: .utility) {
+            _ = try CloudLibraryArchive.decode(data)
+            try identity.seal(data).write(to: file, options: .atomic)
+        }.value
         defer { try? FileManager.default.removeItem(at: file) }
         for attempt in 0..<3 {
             let existing = try await read("vault-" + identity.id)

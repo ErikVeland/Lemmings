@@ -3,6 +3,18 @@
 This document defines how Ultimate Lemmings expands beyond the current macOS
 release without showing unfinished work as completed content.
 
+## Curation before expansion — 19 October 2026
+
+The [2.1 roadmap](2.1Roadmap.md#priorities-and-acceptance) prioritises the first
+successful session and reliable native campaigns before a larger catalogue.
+Start Journey remains the primary new-player entrance. Keep existing campaigns,
+collections and imports accessible without requiring newcomers to understand
+the archive. A short curated sequence needs exact variants, winning routes and
+valid native population transitions. Do not infer source fidelity or novice
+suitability from a winning replay alone. Optional history and contributor context
+belongs in existing browsing/About flows. This order does not remove any bundled
+closure commitment or change existing content classifications.
+
 ## Bundled and imported scope
 
 The owner set this boundary on 15 October 2026:

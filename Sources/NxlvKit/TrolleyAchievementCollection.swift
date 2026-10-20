@@ -125,14 +125,14 @@ extension TrolleyAchievement {
         }
     }
     public func progress(attempts: [TrolleyAttempt], profileID: String) -> TrolleyAchievementProgress {
-        let personal = attempts.filter { $0.run.profileID == profileID }
+        let personal = attempts.filter { $0.run.profileID == profileID && !$0.run.usedBonusSkill }
         let earned = personal.contains { $0.achievements.contains(self) }
         let goal = self == .moralSurplus ? 100 : self == .absoluteMaximum ? 10 : Self.traits[self]?.goal ?? 1
         return .init(value: earned ? goal : min(goal, count(in: personal)), goal: goal, earned: earned)
     }
     static func collectionEarned(attempt: TrolleyAttempt, history: [TrolleyAttempt]) -> [Self] {
-        guard attempt.run.qualifies else { return [] }
-        let personal = history.filter { $0.run.profileID == attempt.run.profileID }
+        guard attempt.run.qualifies, !attempt.run.usedBonusSkill else { return [] }
+        let personal = history.filter { $0.run.profileID == attempt.run.profileID && !$0.run.usedBonusSkill }
         let same = personal.filter { $0.comparisonID == attempt.comparisonID && $0.run.qualifies }
         let all = personal + [attempt]
         var candidates = Set(collection.keys.filter { $0.count(in: all) >= collection[$0]!.goal })

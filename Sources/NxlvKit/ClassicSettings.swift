@@ -212,6 +212,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var integerScaling: Bool
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
+    public var ridiculousSpeedEnabled: Bool
     public var pauseOnInterruption: Bool
     public var gameplayCursorStyle: GameplayCursorStyle
     public var showClassicSkillBackpacks: Bool
@@ -273,6 +274,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         integerScaling: Bool = true,
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
+        ridiculousSpeedEnabled: Bool = false,
         pauseOnInterruption: Bool = true,
         gameplayCursorStyle: GameplayCursorStyle = .modern,
         showClassicSkillBackpacks: Bool = true,
@@ -295,8 +297,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         fadeMenuButton: Bool = true,
         hdEffectsEnabled: Bool = true,
         confinePointer: Bool = true,
-        fullScreenHDRFlashes: Bool = true,
-        djIncludesOtherSoundtracks: Bool = true,
+        fullScreenHDRFlashes: Bool = false,
+        djIncludesOtherSoundtracks: Bool = false,
         music: ClassicMusicSource = .amigaModules,
         musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
@@ -319,6 +321,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.integerScaling = integerScaling
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
+        self.ridiculousSpeedEnabled = ridiculousSpeedEnabled
         self.pauseOnInterruption = pauseOnInterruption
         self.gameplayCursorStyle = gameplayCursorStyle
         self.showClassicSkillBackpacks = showClassicSkillBackpacks
@@ -396,6 +399,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
+        ridiculousSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .ridiculousSpeedEnabled) ?? false
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
         let savedExperience = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset)
         let modernPresentation = savedExperience == .original ? false : savedExperience == .modern ? true : modernControlsEnabled
@@ -454,32 +458,32 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         }
     }
 
-    /// Changes the added conveniences while preserving the chosen machine and volumes.
+    /// Changes presentation without changing input, assistance or the chosen machine.
     public mutating func applyExperiencePreset(modern: Bool) {
         experiencePreset = modern ? .modern : .original
-        modernControlsEnabled = modern
-        variableSpeedEnabled = modern
-        pauseOnInterruption = modern
-        favorApproachingLemmings = modern
-        favorBombBlockers = modern
-        favorBuilders = modern
         skillCursorIconSize = modern ? .one : .none
         lemmingSelectionStyle = modern ? .modern : .none
         gameplayCursorStyle = modern ? .modern : .original
         showClassicSkillBackpacks = modern
         showReticleCount = false
-        controllerEnabled = modern
-        controllerTapSpeed = modern
-        controllerSwapSticks = false
-        controllerMappings = [:]
         hdEffectsEnabled = modern
-        fullScreenHDRFlashes = modern
-        confinePointer = modern
-        djIncludesOtherSoundtracks = modern
-        shuffleGraphics = false
-        shuffleMusic = false
+        fullScreenHDRFlashes = false
+        djIncludesOtherSoundtracks = false
         musicStyle = modern ? .modern : .faithful
-        if !modern, music == .adaptiveDJ { music = .amigaModules }
+    }
+
+    /// Independent controls and volumes do not change the presentation label.
+    public mutating func refreshExperiencePreset() {
+        experiencePreset = .custom
+        for modern in [false, true] {
+            var preset = self
+            preset.applyExperiencePreset(modern: modern)
+            preset.experiencePreset = .custom
+            if self == preset {
+                experiencePreset = modern ? .modern : .original
+                return
+            }
+        }
     }
 
     /// Settings that match a machine, as a starting point before mixing.

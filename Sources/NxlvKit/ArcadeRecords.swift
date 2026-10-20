@@ -125,7 +125,8 @@ public struct ArcadeReport: Sendable {
     public let trolley: TrolleyReport?
     /// This run brought the player's earned level skips up by one.
     public var earnedLevelSkip = false
-    public var maximumIsProven: Bool { trolley.map { $0.attempt.maximum.status == .verified } ?? bestKnown.savedAll }
+    public var earnedExtraSkill = false
+    public var maximumIsProven: Bool { !run.usedBonusSkill && (trolley.map { $0.attempt.maximum.status == .verified } ?? bestKnown.savedAll) }
     public var challenge: String {
         if let previousBest, run.saved < previousBest.saved {
             return "YOUR BEST IS \(previousBest.saved). BRING \(previousBest.saved - run.saved) MORE HOME."
@@ -153,12 +154,14 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     public private(set) var statistics: [String: ArcadeLevelStats] = [:]
     /// The level keys each player spent a skip on. See `LevelSkips.swift`.
     public internal(set) var skippedLevels: [String: [String]] = [:]
+    /// One immutable charge per attempt, shared by all games and cloud saves.
+    public internal(set) var extraSkillUses: [String: [ExtraSkillUse]] = [:]
 
     public init() {
         let first = ArcadeProfile(id: ArcadeProfile.legacyID, initials: "LEM")
         profiles = [first]; activeProfileID = first.id
     }
-    private enum CodingKeys: String, CodingKey { case version, profiles, activeProfileID, runs, statistics, trolley, skippedLevels }
+    private enum CodingKeys: String, CodingKey { case version, profiles, activeProfileID, runs, statistics, trolley, skippedLevels, extraSkillUses }
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let oldVersion = try c.decode(Int.self, forKey: .version)
@@ -170,11 +173,25 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         trolley = oldVersion == 1 ? (try c.decodeIfPresent(TrolleyHistory.self, forKey: .trolley) ?? TrolleyHistory())
             : try c.decode(TrolleyHistory.self, forKey: .trolley)
         skippedLevels = try c.decodeIfPresent([String: [String]].self, forKey: .skippedLevels) ?? [:]
+        extraSkillUses = try c.decodeIfPresent([String: [ExtraSkillUse]].self, forKey: .extraSkillUses) ?? [:]
         version = 2
     }
     public mutating func beginTrolleyAttempt(_ start: TrolleyStart) {
         guard profile(start.profileID) != nil else { return }
         trolley.begin(start)
+    }
+    mutating func upgradeTrolleyStartForBonusSkill(id: UUID, profileID: String,
+        original: TrolleyConditions, bonus: TrolleyConditions, originalStart: TrolleyStart) -> Bool {
+        guard bonus.isBonusUpgrade(of: original), !trolley.attempts.contains(where: { $0.id == id }) else { return false }
+        if let start = trolley.starts.first(where: { $0.id == id }) {
+            guard start.date == originalStart.date, start.parentAttemptID == originalStart.parentAttemptID,
+                  start.kind == originalStart.kind else { return false }
+        }
+        if let start = trolley.starts.first(where: { $0.id == id }), start.profileID == profileID, start.conditions == bonus { return true }
+        if !trolley.starts.contains(where: { $0.id == id }) {
+            trolley.begin(originalStart)
+        }
+        return trolley.upgradeStartForBonusSkill(id: id, profileID: profileID, original: original, bonus: bonus)
     }
     public mutating func acceptTrolleyMaximum(_ evidence: TrolleyMaximum, conditions: TrolleyConditions, assisted: Bool) throws {
         try trolley.acceptMaximum(evidence, conditions: conditions, assisted: assisted)
@@ -220,6 +237,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         if activeProfileID == id { activeProfileID = profiles[0].id }
         runs.removeAll { $0.profileID == id }
         skippedLevels[id] = nil
+        extraSkillUses[id] = nil
         statistics = statistics.filter { !$0.key.hasSuffix("|\(id)|true") && !$0.key.hasSuffix("|\(id)|false") }
         return trolley.removeProfile(id)
     }
@@ -274,8 +292,10 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     @discardableResult public mutating func record(_ run: ArcadeRun) -> ArcadeReport? {
         guard profile(run.profileID) != nil, !runs.contains(where: { $0.id == run.id }),
               !trolley.attempts.contains(where: { $0.id == run.id }),
+              bonusSkillUseMatches(run),
               run.telemetry == nil || TrolleyHistory.isLegitimate(run) else { return nil }
         let skipsBefore = levelSkips(profileID: run.profileID).earned
+        let extraSkillsBefore = extraSkills(profileID: run.profileID).earned
         let trolleyReport = trolley.record(run)
         guard run.telemetry == nil || trolleyReport != nil else { return nil }
         // Passing a skipped level returns its skip.
@@ -287,15 +307,21 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         var stats = statistics[key] ?? ArcadeLevelStats()
         let oldAwards = stats.achievements
         stats.attempts += 1
-        if run.qualifies { stats.clears += 1; stats.achievements.insert(.firstClear) }
+        if run.qualifies { stats.clears += 1 }
         if run.saved == 0 { stats.zeroSaved += 1 }
-        if run.savedAll { stats.allSaved += 1; stats.achievements.insert(.allHome) }
-        if run.qualifies && run.skillCount == 0 { stats.achievements.insert(.noSkills) }
-        if run.qualifies && run.skills.count == 1 { stats.achievements.insert(.oneSkill) }
+        if run.savedAll { stats.allSaved += 1 }
+        if !run.usedBonusSkill {
+            if run.qualifies { stats.achievements.insert(.firstClear) }
+            if run.savedAll { stats.achievements.insert(.allHome) }
+            if run.qualifies && run.skillCount == 0 { stats.achievements.insert(.noSkills) }
+            if run.qualifies && run.skills.count == 1 { stats.achievements.insert(.oneSkill) }
+        }
         let improved = previous.map { run.saved > $0.saved } ?? (run.saved > 0)
         let efficient = previous.map { run.qualifies && run.saved >= $0.saved && run.skillCount < $0.skillCount } ?? false
-        if improved && previous != nil { stats.achievements.insert(.betterRescue) }
-        if efficient { stats.achievements.insert(.fewerSkills) }
+        if !run.usedBonusSkill {
+            if improved && previous != nil { stats.achievements.insert(.betterRescue) }
+            if efficient { stats.achievements.insert(.fewerSkills) }
+        }
         statistics[key] = stats
         runs.append(run)
         let best = leaderboard(level: run.level, board: .rescue, assisted: run.assisted).first ?? run
@@ -311,6 +337,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
             earned: ArcadeLevelAchievement.allCases.filter { stats.achievements.contains($0) && !oldAwards.contains($0) },
             newRescueBest: improved, newSkillBest: efficient, trolley: trolleyReport)
         report.earnedLevelSkip = levelSkips(profileID: run.profileID).earned > skipsBefore
+        report.earnedExtraSkill = extraSkills(profileID: run.profileID).earned > extraSkillsBefore
         return report
     }
 
@@ -322,7 +349,8 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
                   && ArcadeProfile.portraitNames.indices.contains($0.portrait) }),
               runs.allSatisfy({ profile($0.profileID) != nil && $0.level.total > 0 && (0...$0.population).contains($0.saved)
                   && $0.seconds.isFinite && $0.seconds >= 0 && $0.skills.values.allSatisfy { $0 > 0 } }),
-              skippedLevels.allSatisfy({ profile($0.key) != nil && Set($0.value).count == $0.value.count })
+              skippedLevels.allSatisfy({ profile($0.key) != nil && Set($0.value).count == $0.value.count }),
+              extraSkillUsesAreValid()
         else { throw SequelDataError.invalid("Invalid arcade records.") }
         _ = try trolley.validated(profileIDs: Set(profiles.map(\.id)))
         return self
@@ -348,6 +376,9 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
             }
         }
         copy.skippedLevels = skippedLevels[profileID].map { [Self.cloudProfileID: $0.sorted()] } ?? [:]
+        copy.extraSkillUses = extraSkillUses[profileID].map {
+            [Self.cloudProfileID: $0.sorted { $0.attemptID.uuidString < $1.attemptID.uuidString }]
+        } ?? [:]
         copy.trolley = trolley.cloudHistory(profileID: profileID, destinationID: Self.cloudProfileID)
         return try copy.validated()
     }
@@ -366,6 +397,14 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         let localEvents = Self.cloudEventCounts(trolley.attempts)
         let remoteEvents = Self.cloudEventCounts(incoming.trolley.attempts)
         try trolley.mergeCloudHistory(incoming.trolley, sourceID: Self.cloudProfileID, destinationID: profileID)
+        var knownUses = Dictionary((extraSkillUses[profileID] ?? []).map { ($0.attemptID, $0) }, uniquingKeysWith: { first, _ in first })
+        for use in incoming.extraSkillUses[Self.cloudProfileID] ?? [] {
+            if let previous = knownUses[use.attemptID], previous != use {
+                throw SequelDataError.invalid(L10n.text("Saved extra-skill uses conflict."))
+            }
+            knownUses[use.attemptID] = use
+        }
+        extraSkillUses[profileID] = knownUses.isEmpty ? nil : knownUses.values.sorted { $0.attemptID.uuidString < $1.attemptID.uuidString }
         let mergedEvents = Self.cloudEventCounts(trolley.attempts)
         var knownRuns = Dictionary(runs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         for run in incoming.runs {

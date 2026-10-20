@@ -19,6 +19,67 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
         }
         let modern = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
                                      processorCount: 8, recommendedWorkingSet: 1_073_741_824)
+        let gib: UInt64 = 1_073_741_824
+        let desktop = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
+            processorCount: 12, recommendedWorkingSet: 18 * gib, physicalMemory: 24 * gib, desktop: true)
+        var mac = AdaptiveFXPerformance(profile: desktop)
+        let macResources = DeviceEffectResources(physicalMemory: 24 * gib, processorCount: 12)
+        mac.setPressure(ceiling: .full, framesPerSecond: 60, now: 0, resources: macResources)
+        for tick in 0..<600 {
+            let now = Double(tick) / 60
+            mac.recordCPU(0.025, now: now)
+            mac.recordGPU(0.002, source: "effects", now: now)
+        }
+        let roomy = mac.presentation
+        try require(roomy.cpuQuality == .full && roomy.gpuQuality == .full
+                    && roomy.enhancedEffectsAllowed && roomy.bloomAllowed && roomy.effectHz == 60
+                    && roomy.explosionLimit == 8 && roomy.trailLimit == 24,
+                    "A CPU-bound M4 Pro-class Mac lost unrelated GPU effects")
+        try require(roomy.overlayRenderScale(width: 3008, height: 1692, nativeScale: 2) == 2,
+                    "A capable desktop downscaled a native 6K overlay without GPU pressure")
+        // CPU/GPU timing can include capture, shader startup and unrelated system work.
+        // M-series Macs keep full effects throughout these samples.
+        for tick in 600..<1800 {
+            let now = Double(tick) / 60
+            mac.recordCPU(0.025, now: now)
+            mac.recordGPU(0.025, source: "effects", now: now)
+        }
+        try require(mac.presentation.gpuQuality == .full && mac.presentation.cpuQuality == .full
+                    && mac.presentation.enhancedEffectsAllowed && mac.presentation.effectHz == 60,
+                    "Routine frame timing reduced M-series desktop effects")
+        let warning = macResources.underPressure(thermalLevel: 0, lowPower: false, memoryPressure: true)
+        mac.setPressure(ceiling: .full, framesPerSecond: 60, now: 51, resources: warning)
+        try require(!mac.presentation.enhancedEffectsAllowed && mac.presentation.maximumOverlayPixels <= 262_144,
+                    "Desktop policy ignored a real memory warning")
+        mac.setPressure(ceiling: .minimal, framesPerSecond: 30, now: 52, resources: macResources)
+        try require(mac.presentation.gpuQuality == .minimal && mac.presentation.effectHz == 30,
+                    "Desktop policy ignored a real thermal ceiling")
+        mac.setPressure(ceiling: .full, framesPerSecond: 60, now: 53, resources: macResources)
+        try require(mac.presentation.gpuQuality == .full && mac.presentation.enhancedEffectsAllowed,
+                    "M-series effects remained reduced after real pressure cleared")
+        let baseM1 = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
+            processorCount: 8, recommendedWorkingSet: 5 * gib, physicalMemory: 8 * gib, desktop: true)
+        var entryMac = AdaptiveFXPerformance(profile: baseM1)
+        entryMac.setPressure(ceiling: .full, framesPerSecond: 60, now: 0,
+            resources: DeviceEffectResources(physicalMemory: 8 * gib, processorCount: 8))
+        try require(entryMac.presentation.cpuQuality == .full && entryMac.presentation.gpuQuality == .full
+                    && entryMac.presentation.enhancedEffectsAllowed
+                    && entryMac.presentation.overlayRenderScale(width: 3008, height: 1692, nativeScale: 2) == 2,
+                    "An 8 GiB M1 inherited mobile effect limits")
+        let smallMac = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: true,
+            processorCount: 4, recommendedWorkingSet: gib, physicalMemory: 8 * gib, desktop: true)
+        try require(smallMac.initialQuality == .balanced && smallMac.maximumOverlayPixels <= 2_097_152,
+                    "Resource-constrained desktops lost their conservative startup and surface limit")
+        var olderDesktop = AdaptiveFXPerformance(profile: smallMac)
+        for tick in 0..<600 { olderDesktop.recordGPU(0.025, source: "effects", now: Double(tick) / 60) }
+        try require(olderDesktop.presentation.gpuQuality == .minimal,
+                    "An older Intel-class desktop lost measured GPU scaling")
+        let saving = macResources.underPressure(thermalLevel: 0, lowPower: true, memoryPressure: false)
+        mac.setPressure(ceiling: .balanced, framesPerSecond: 30, now: 54, resources: saving)
+        try require(!mac.presentation.enhancedEffectsAllowed && mac.presentation.effectHz == 30,
+                    "M-series policy ignored explicit power saving")
+        print("PASS M-series Macs: full native 6K HDR on 8/24 GiB, timing immunity, real pressure limits and immediate recovery")
+
         let older = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: false,
                                     processorCount: 2, recommendedWorkingSet: 33_554_432)
         let unavailable = FXDeviceProfile(hasMetal: false, modernGPU: true, enhancedEffectsSupported: true,

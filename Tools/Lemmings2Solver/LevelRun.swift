@@ -30,6 +30,9 @@ func witness(_ candidate: Candidate, level: Lemmings2Level, population: Int) -> 
 /// file replays twice to the solver's outcome.
 func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2TerrainMasks, population: Int,
                 seed: [Lemmings2TimedEvent], limits base: SearchLimits, depth: Int? = nil) throws -> LevelResult {
+    guard !seed.contains(where: { if case .bonusSkill = $0.event { return true }; return false }) else {
+        throw SequelDataError.invalid("Bonus skills cannot prove original level completion.")
+    }
     let start = try Lemmings2Runtime(level: level, style: style, masks: masks, total: population)
     let started = Date()
     let deadline = started.addingTimeInterval(base.budgetSeconds)

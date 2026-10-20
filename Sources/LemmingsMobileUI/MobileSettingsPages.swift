@@ -53,10 +53,15 @@ extension MobileLibraryViewController {
         #endif
     }
     func settingsPage(_ group: MobileSettingsGroup, inGame: Bool = false) -> GameFrontEnd.Page {
+        #if os(iOS)
+        let respectMuteAvailable = true
+        #else
+        let respectMuteAvailable = false
+        #endif
         var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
-                               language: interfaceLanguage)
+                               language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable)
         #if os(tvOS)
         page.televisionGrid = true
         if group == .controller {
@@ -139,7 +144,10 @@ extension MobileLibraryViewController {
             switch key {
             case "preset": settings.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
             case "planning": settings.chooseSkillSelectionPause(!settings.pauseToAssign)
-            case "speed": settings.fastSpeed = cycle(settings.fastSpeed, MobileSettings.fastSpeeds)
+            case "speed": settings.fastSpeed = cycle(settings.fastSpeed, settings.availableFastSpeeds)
+            case "ridiculousSpeed":
+                settings.classic.ridiculousSpeedEnabled.toggle()
+                if !settings.classic.ridiculousSpeedEnabled { settings.fastSpeed = min(10, settings.fastSpeed) }
             case "variableSpeed": settings.classic.variableSpeedEnabled.toggle()
             case "interrupt": settings.classic.pauseOnInterruption.toggle()
             case "approaching": settings.classic.favorApproachingLemmings.toggle()
@@ -168,6 +176,7 @@ extension MobileLibraryViewController {
             case "pixels": settings.classic.integerScaling.toggle()
             case "hd": settings.classic.hdEffectsEnabled.toggle()
             case "explosions": settings.classic.fullScreenHDRFlashes.toggle()
+            case "respectMute": settings.respectMuteSetting.toggle()
             case "music": settings.musicEnabled.toggle()
             case "musicStyle": settings.classic.musicStyle = cycle(settings.classic.musicStyle, ClassicMusicStyle.allCases)
             case "musicVolume": settings.classic.musicVolume = nextVolume(settings.classic.musicVolume)
@@ -189,9 +198,7 @@ extension MobileLibraryViewController {
             case "telemetry": AnonymousTelemetry.shared.setSharing(!AnonymousTelemetry.shared.sharesCounts)
             default: return false
             }
-            if ["variableSpeed", "interrupt", "approaching", "bombBlockers", "builders", "skillIcon", "reticule", "selection", "backpacks"].contains(key) {
-                settings.classic.experiencePreset = .custom
-            }
+            if key != "preset" { settings.classic.refreshExperiencePreset() }
         } else { return false }
         mobileSettings = settings
         MobileMusic.shared.applySettings(profileID: settingsProfileID)

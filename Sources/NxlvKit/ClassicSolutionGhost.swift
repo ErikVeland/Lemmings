@@ -42,6 +42,7 @@ public struct ClassicSolutionGhost: Sendable {
                 switch event.action {
                 case let .releaseRate(value): simulation.setReleaseRate(value)
                 case .nuke: simulation.beginNuke()
+                case let .bonusSkill(skill): _ = simulation.grantBonusSkill(skill)
                 case .assign: break
                 }
             }
@@ -65,6 +66,7 @@ public struct ClassicSolutionGhost: Sendable {
                 else { _ = simulation.assign(skill, to: id) }
             case let .releaseRate(value): simulation.setReleaseRate(value)
             case .nuke: simulation.beginNuke()
+            case let .bonusSkill(skill): _ = simulation.grantBonusSkill(skill)
             }
         }
     }

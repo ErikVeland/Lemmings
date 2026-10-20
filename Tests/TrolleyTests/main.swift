@@ -502,6 +502,11 @@ func testEngineFamilies() throws {
         view.mode = .result
         view.report = helpStore.record(run(60, c: conditions(game: game)))
         try shot("achievement-\(game)-result")
+        let resultLabels = (view.accessibilityChildren() ?? []).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
+        try require(!resultLabels.contains(where: { $0.hasPrefix("Time ") || $0.hasPrefix("Zoom ") || $0.hasPrefix("Superzoom ") }),
+                    "Main results should leave time and resource accounting in optional review")
+        try require(view.mode == .result && view.primaryResultTitle == "Next level",
+                    "Career rewards took over the immediate Continue action")
         for name in ["Target met", "Extra rescue", "Three-star rescue"] {
             guard let hint = view.achievementHints.first(where: { $0.label == name }) else {
                 throw SequelDataError.invalid("Missing star help target: \(game) \(name)")
@@ -543,7 +548,8 @@ func testEngineFamilies() throws {
     let helpAwards = TrolleyAchievement.allCases.filter(\.isOffered).prefix(2)
     view.showResultAchievement(helpAwards.map { ($0.title, $0.detail) })
     try shot("achievement-next-before")
-    key("\t", code: 48); key(" ", code: 49)
+    // The primary Next award action starts focused.
+    key(" ", code: 49)
     try shot("achievement-next-after")
     try require(view.achievementDetailIndex == 1 && view.accessibilityLabel()?.contains(helpAwards.last!.detail) == true,
                 "Keyboard Next award did not change the explanation")
@@ -563,9 +569,43 @@ func testEngineFamilies() throws {
     }
     try clickButton("\(newAwards.count) new awards >")
     var visitedAwards = Set<TrolleyAchievement>()
+    var awardChrome: Data?
+    func persistentAwardChrome(_ name: String) throws -> Data {
+        let bitmap = NSBitmapImageRep(data: try Data(contentsOf: root.appendingPathComponent(name + ".png")))!
+        let bytesPerPixel = bitmap.bitsPerPixel / 8, data = bitmap.bitmapData!
+        var result = Data()
+        let regions = [(CGRect(x: 44, y: 17, width: 1032, height: 11), 20_000),
+                       (CGRect(x: 96, y: 48, width: 928, height: 82), 20_000),
+                       (CGRect(x: 80, y: 648, width: 208, height: 22), 3_000)]
+        for (rect, minimumPixels) in regions {
+            var visiblePixels = 0
+            for y in Int(rect.minY * 2)..<Int(rect.maxY * 2) {
+                result.append(data.advanced(by: y * bitmap.bytesPerRow + Int(rect.minX * 2) * bytesPerPixel),
+                              count: Int(rect.width * 2) * bytesPerPixel)
+                for x in Int(rect.minX * 2)..<Int(rect.maxX * 2) {
+                    let pixel = data.advanced(by: y * bitmap.bytesPerRow + x * bytesPerPixel)
+                    if max(pixel[0], pixel[1], pixel[2]) > 32 { visiblePixels += 1 }
+                }
+            }
+            try require(visiblePixels >= minimumPixels, "Awards capture omitted persistent frame, heading or Back text")
+        }
+        return result
+    }
     for index in 0..<newAwards.count {
         let name = "new-awards-\(index + 1)"
         try shot(name)
+        let chrome = try persistentAwardChrome(name)
+        if let awardChrome {
+            try require(chrome == awardChrome, "Repeated awards capture omitted persistent frame, heading or Back text")
+        } else { awardChrome = chrome }
+        let targets = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+            .filter { $0.accessibilityRole() == .button }
+        let footer = targets.first { $0.accessibilityLabel() == "Back to result" }!
+        for (offset, group) in TrolleyAchievementGroup.allCases.enumerated() {
+            let collection = targets.first { $0.accessibilityLabel() == "\(offset + 1) \(group.rawValue)" }!
+            try require(!collection.accessibilityFrame().intersects(footer.accessibilityFrame()),
+                        "Achievement collection target overlaps Back to result")
+        }
         guard let focused = view.focusedNewAward else { throw SequelDataError.invalid("New award was not focused") }
         try require(view.mode == .awards && newAwards.contains(focused) && visitedAwards.insert(focused).inserted,
                     "Next new repeated or opened an unrelated award")
@@ -685,8 +725,10 @@ func testEngineFamilies() throws {
     }
     var hostedPlayed = false
     view.onStoredReplay = { url, _ in hostedPlayed = FileManager.default.isReadableFile(atPath: url.path) }
-    try clickButton("Play replay >"); try await settleHosted()
-    try require(hostedPlayed, "Hosted replay did not reach the shared playback route")
+    let legacyMovieLinks = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+        .filter { $0.accessibilityLabel() == "Play replay >" }
+    try require(legacyMovieLinks.isEmpty && !hostedPlayed,
+                "A legacy hosted movie exposed playback outside the supported action-replay path")
     view.onStoredReplay = nil
     try clickButton("Used"); try await settleHosted(); try shot("hosted-assisted")
     try require(hostedTransport.requests.last?.url?.query?.contains("assisted=1") == true, "Rewind filter did not reload the hosted board")
@@ -759,24 +801,29 @@ func testEngineFamilies() throws {
     readyButton.performClick(nil)
     try require(readySounds == 1, "Dismissed Ready action repeated its sound")
     view.onReadySound = nil
+    // Use a current record so preservation is eligible after the earlier ranking exercises.
+    let movieID = UUID()
+    let movieReport = store.record(run(57, c: conditions(level: "retained-movie"), id: movieID))!
     // Preserve evidence through an immediate retry while the asynchronous encoder finishes.
     let movie = RunMovie(); movie.begin(ticksPerSecond: 17, title: "Trolley test")
     let image = ReplayFrameCapture.image(size: CGSize(width: 64, height: 48)) { NSColor.blue.setFill(); NSBezierPath(rect: CGRect(x: 0, y: 0, width: 64, height: 48)).fill() }!
     for _ in 0..<8 { movie.capture(image) }
-    movie.finish(); movie.preserveRecord(report)
+    movie.finish(); movie.preserveRecord(movieReport)
     movie.begin(ticksPerSecond: 17, title: "Immediate retry")
     for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(nanoseconds: 100_000_000) }
-    try require(store.records.trolley.replays.first?.attemptID == first, "Record movie lost on immediate retry")
+    try require(store.records.trolley.replays.first?.attemptID == movieID, "Record movie lost on immediate retry")
     try require(store.records.trolley.replays.first?.verification == .local, "Movie claimed verified replay")
-    try require(store.replayURL(attemptID: first) != nil, "Retained movie was not available for playback")
+    try require(store.replayURL(attemptID: movieID) != nil, "Retained movie was not available for playback")
+    view.report = movieReport; view.level = movieReport.run.level
     view.mode = .records; view.boardScope = .level; view.trolleyBoard = .fastestClear
     view.assisted = false
     var openedStored = false
-    view.onStoredReplay = { url, _ in openedStored = url == store.replayURL(attemptID: first) }
+    view.onStoredReplay = { url, _ in openedStored = url == store.replayURL(attemptID: movieID) }
     try shot("speed-replay-available")
     try clickButton("Play replay >")
     try require(openedStored, "Recorded speed run playback target did not open its movie")
     view.onStoredReplay = nil
+    view.level = report.run.level
     try store.acceptMaximum(.init(value: 58, status: .record, source: "Native test record", date: Date(), buildVersion: "test-1"), conditions: c, assisted: false)
     view.report = store.record(run(58))!; view.mode = .result
     try shot("best-known-result")
@@ -787,8 +834,14 @@ func testEngineFamilies() throws {
     view.mode = .details; try shot("best-known-details")
     view.report = store.record(run(59))!; view.mode = .result
     try shot("falsifier-result")
-    try require(view.accessibilityLabel()?.contains("Karl Popper") == true, "Falsifier is not accessible")
+    try require(view.accessibilityLabel()?.contains("Karl Popper") == false,
+                "Main results should leave philosophical interpretation in optional details")
     try shot("falsifier-result-640", size: CGSize(width: 640, height: 400))
+    key("d"); try shot("falsifier-details")
+    let optionalStyles = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    try require(optionalStyles.contains { $0.accessibilityLabel()?.contains("Karl Popper") == true },
+                "Optional details lost the Falsifier interpretation")
+    view.mode = .result
     view.mode = .awards
     for (index, group) in TrolleyAchievementGroup.allCases.enumerated() {
         key(String(index + 1))

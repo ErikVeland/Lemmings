@@ -92,9 +92,10 @@ These builds go to TestFlight external testers.
   took 7–9 ms on the CPU before.
 - **Apple TV Top Shelf:** The still shows at once. The clip follows when it is
   ready.
-- **Cloud saves:** Testers on different accounts can share one library with a
-  sync password. This is a testing aid and will be removed before the final
-  release.
+- **Cloud saves:** Devices on the same iCloud account sync automatically.
+  Enable Tester sync once on each test device to join the shared `test99`
+  library across Apple accounts. Every player and saved Hot Seat syncs in the
+  background, including offline retries.
 
 ## Compatibility and known limits
 

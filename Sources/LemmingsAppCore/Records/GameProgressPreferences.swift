@@ -1,9 +1,20 @@
 import Foundation
 import NxlvKit
 
+public struct JourneySessionSnapshot: Codable, Equatable, Sendable {
+    public var run: LevelSequenceRun?
+    public var l2Progress: [String: Data]
+    public var updatedAt: Date
+    public init(run: LevelSequenceRun?, l2Progress: [String: Data] = [:], updatedAt: Date = Date()) {
+        self.run = run; self.l2Progress = l2Progress; self.updatedAt = updatedAt
+    }
+}
+
 public enum GameProgressValue: Codable, Equatable, Sendable {
     case completed(Set<Int>)
+    case fanLevels(Set<String>)
     case learning(LearningJourneyProgress)
+    case journeySession(JourneySessionSnapshot)
     case classic(ClassicGameFlow.Progress)
     case modern(ModernCampaignProgress)
     case achievements(ClassicAchievementProgress)
@@ -13,7 +24,11 @@ public enum GameProgressValue: Codable, Equatable, Sendable {
     func merging(_ other: Self) throws -> Self {
         switch (self, other) {
         case let (.completed(a), .completed(b)): return .completed(a.union(b))
+        case let (.fanLevels(a), .fanLevels(b)): return .fanLevels(a.union(b))
         case let (.learning(a), .learning(b)): return .learning(Self.mergeLearning(a, b))
+        case let (.journeySession(a), .journeySession(b)):
+            if a.updatedAt != b.updatedAt { return .journeySession(a.updatedAt > b.updatedAt ? a : b) }
+            return .journeySession(try Self.stable(a).lexicographicallyPrecedes(Self.stable(b)) ? b : a)
         case let (.classic(a), .classic(b)):
             return .classic(.init(furthestReached: a.furthestReached.merging(b.furthestReached, uniquingKeysWith: max),
                 passed: Set(a.passed).union(b.passed).sorted()))
@@ -82,7 +97,9 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         values.values.contains { value in
             switch value {
             case .completed(let indices): return !indices.isEmpty
+            case .fanLevels(let levels): return !levels.isEmpty
             case .learning(let progress): return !progress.completed.isEmpty || !progress.later.isEmpty
+            case .journeySession(let snapshot): return snapshot.run != nil
             case .classic(let progress): return !progress.passed.isEmpty || progress.furthestReached.values.contains { $0 > 0 }
             case .modern(let progress): return !progress.results.isEmpty
             case .achievements(let progress):
@@ -115,11 +132,16 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
             if key.hasPrefix(scoped) { base = String(key.dropFirst(scoped.count)) }
             else if sessionID == nil && profileID == ArcadeProfile.legacyID { base = key }
             else { continue }
+            if base == "FanLevelsPassed", let levels = value as? [String] {
+                result.values[base] = .fanLevels(Set(levels)); continue
+            }
             guard let data = value as? Data else { continue }
             if portableClassicKey(base), let progress = try? decoder.decode(ClassicGameFlow.Progress.self, from: data) {
                 result.values[base] = .classic(progress)
             } else if base == "LearningJourneyProgress", let progress = try? decoder.decode(LearningJourneyProgress.self, from: data) {
                 result.values[base] = .learning(progress)
+            } else if base == "LearningJourneySession", let snapshot = try? decoder.decode(JourneySessionSnapshot.self, from: data) {
+                result.values[base] = .journeySession(snapshot)
             } else if base == "ModernCampaignProgress", let progress = try? decoder.decode(ModernCampaignProgress.self, from: data) {
                 result.values[base] = .modern(progress)
             } else if base == "ClassicAchievementProgress", let progress = try? decoder.decode(ClassicAchievementProgress.self, from: data) {
@@ -153,10 +175,17 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
             let valid: Bool
             switch value {
             case .completed(let indices): valid = key.hasPrefix("cleared/") && !key.contains(".hotseat.") && indices.allSatisfy { (0..<1_000_000).contains($0) }
+            case .fanLevels(let levels):
+                valid = key == "FanLevelsPassed" && levels.count <= 100_000
+                    && levels.allSatisfy { $0.count <= 2048 && !$0.contains("\0") }
             case .learning(let progress):
                 valid = key == "LearningJourneyProgress" && progress.completed.count + progress.later.count <= 100_000
                     && progress.completed.isDisjoint(with: progress.later)
                     && progress.completed.union(progress.later).allSatisfy { $0.packID.count <= 512 && $0.levelID.count <= 1024 }
+            case .journeySession(let snapshot):
+                valid = key == "LearningJourneySession" && snapshot.updatedAt.timeIntervalSinceReferenceDate.isFinite
+                    && (snapshot.run == nil || snapshot.run?.source == .playlist(LearningJourney.playlistID))
+                    && snapshot.l2Progress.count <= 256 && snapshot.l2Progress.values.allSatisfy { $0.count <= 1_000_000 }
             case .classic: valid = Self.portableClassicKey(key)
             case .modern: valid = key == "ModernCampaignProgress"
             case .achievements: valid = key == "ClassicAchievementProgress"
@@ -186,7 +215,9 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
                 defaults.set(indices.sorted(), forKey: Self.completedKey(pack: pack, profileID: sessionID.map { "hotseat." + $0 } ?? profileID))
                 let suffix = sessionID.map { ".hotseat." + $0 } ?? (profileID == "default" ? "" : "." + profileID)
                 defaults.set(indices.sorted(), forKey: "mobile.completed." + pack + suffix)
+            case .fanLevels(let levels): defaults.set(levels.sorted(), forKey: destination)
             case .learning(let progress): defaults.set(try encoder.encode(progress), forKey: destination)
+            case .journeySession(let snapshot): defaults.set(try encoder.encode(snapshot), forKey: destination)
             case .classic(let progress): defaults.set(try encoder.encode(progress), forKey: destination)
             case .modern(let progress): defaults.set(try encoder.encode(progress), forKey: destination)
             case .achievements(let progress): defaults.set(try encoder.encode(progress), forKey: destination)
@@ -201,9 +232,38 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         return defaults.data(forKey: key)
             .flatMap { try? JSONDecoder().decode(LearningJourneyProgress.self, from: $0) } ?? .init()
     }
-    @MainActor public static func saveLearning(_ progress: LearningJourneyProgress, profileID: String, defaults: UserDefaults = .standard) throws {
-        let merged = GameProgressValue.mergeLearning(learning(profileID: profileID, defaults: defaults), progress)
-        defaults.set(try JSONEncoder().encode(merged), forKey: ArcadeStore.progressKey("LearningJourneyProgress", profileID: profileID))
+    @MainActor public static func saveLearning(_ progress: LearningJourneyProgress, profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) throws {
+        let merged = GameProgressValue.mergeLearning(learning(profileID: profileID, sessionID: sessionID, defaults: defaults), progress)
+        let key = sessionID.map { "HotSeat.\($0).LearningJourneyProgress" } ?? ArcadeStore.progressKey("LearningJourneyProgress", profileID: profileID)
+        defaults.set(try JSONEncoder().encode(merged), forKey: key)
+    }
+    @MainActor public static func journeySession(profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) -> JourneySessionSnapshot? {
+        let key = sessionID.map { "HotSeat.\($0).LearningJourneySession" }
+            ?? ArcadeStore.progressKey("LearningJourneySession", profileID: profileID)
+        return defaults.data(forKey: key).flatMap { try? JSONDecoder().decode(JourneySessionSnapshot.self, from: $0) }
+    }
+    @MainActor public static func saveJourneySession(_ snapshot: JourneySessionSnapshot, profileID: String, sessionID: String? = nil,
+                                                    defaults: UserDefaults = .standard) throws {
+        let key = sessionID.map { "HotSeat.\($0).LearningJourneySession" }
+            ?? ArcadeStore.progressKey("LearningJourneySession", profileID: profileID)
+        let current = journeySession(profileID: profileID, sessionID: sessionID, defaults: defaults)
+        guard current == nil || snapshot.updatedAt > current!.updatedAt else { return }
+        defaults.set(try JSONEncoder().encode(snapshot), forKey: key)
+    }
+    public static func fanIdentifier(pack: URL, label: String) -> String {
+        let packKey = ClassicFanPack.packID(pack).map { "catalogue:\($0)" } ?? "file:" + pack.lastPathComponent.lowercased()
+        return "v2|" + packKey + "|" + label
+    }
+    @MainActor public static func fanLevels(profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) -> Set<String> {
+        let key = sessionID.map { "HotSeat.\($0).FanLevelsPassed" } ?? ArcadeStore.progressKey("FanLevelsPassed", profileID: profileID)
+        return Set(defaults.stringArray(forKey: key) ?? [])
+    }
+    @MainActor public static func saveFanLevel(pack: URL, label: String, profileID: String, sessionID: String? = nil,
+                                             defaults: UserDefaults = .standard) {
+        let key = sessionID.map { "HotSeat.\($0).FanLevelsPassed" } ?? ArcadeStore.progressKey("FanLevelsPassed", profileID: profileID)
+        var levels = fanLevels(profileID: profileID, sessionID: sessionID, defaults: defaults)
+        guard levels.insert(fanIdentifier(pack: pack, label: label)).inserted else { return }
+        defaults.set(levels.sorted(), forKey: key)
     }
     public static func completedKey(pack: String, profileID: String) -> String { "GameCenterProgress.cleared.\(profileID).\(pack)" }
     @MainActor public static func completed(pack: String, profileID: String, defaults: UserDefaults = .standard) -> Set<Int> {

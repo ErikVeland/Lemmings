@@ -29,6 +29,10 @@ for level in catalogue.levels {
 var rateContexts = 0
 for level in catalogue.levels {
     let deck = level.deck
+    let presentation = deck.presentation(at: 0)
+    require(presentation.title == "Checked example route", "Checked route must name its evidence")
+    require(!presentation.body.contains("No level-specific hints available."), "Checked route lost its availability")
+    require(presentation.accessibilityText.contains(presentation.title), "Accessible route lost its evidence")
     require(deck.stages.count == 3, "Each level must retain three tiers")
     require(!deck.stages[0].body.contains("Release rate in this example:"), "Nudge reveals opening rate changes")
     require(!deck.stages[1].body.contains("Release rate in this example:"), "Approach reveals opening rate changes")
@@ -40,6 +44,30 @@ for level in catalogue.levels {
         require(!deck.stages[2].body.contains("Release rate in this example:"), "Invented rate changes")
     }
 }
+
+for (title, skills, chronicles) in [("Unmatched Classic", ["builder"], false),
+                                    ("Lemmings 2", ["Hopper", "Fencer"], false),
+                                    ("Lemmings 3", [], true)] {
+    let deck = LevelHintDeck.practice(title: title, skills: skills, chronicles: chronicles)
+    require(!deck.checked, "Generic coaching claimed a checked route")
+    for index in deck.stages.indices {
+        let presentation = deck.presentation(at: index)
+        require(presentation.title == "General coaching", "Unmatched level must name general coaching")
+        require(presentation.body.hasPrefix("No level-specific hints available.\n\n"), "Missing availability before coaching")
+        require(presentation.progress.hasPrefix("COACHING"), "Generic coaching presented as bespoke hints")
+        require(presentation.accessibilityText.contains("No level-specific hints available."), "Accessible coaching hid its availability")
+        require(deck.stages[index].moves.isEmpty, "Generic coaching invented route markers")
+    }
+}
+require(catalogue.level(for: catalogue.levels[0].fingerprint, engine: "stale") == nil,
+    "A changed engine borrowed checked route hints")
+let firstLesson = catalogue.levels.first { $0.rank == "Fun" && $0.number == 1 }!
+require(firstLesson.deck.stages[0].body.contains("platform carrying the crowd"), "Exact first lesson lost obstacle reasoning")
+let changedIdentity = LevelHintCatalogue.Level(fingerprint: "changed", title: firstLesson.title, rank: firstLesson.rank,
+    number: firstLesson.number, width: firstLesson.width, height: firstLesson.height,
+    opening: firstLesson.opening, skillOrder: firstLesson.skillOrder, rates: firstLesson.rates)
+require(!changedIdentity.deck.stages[0].body.contains("platform carrying the crowd"),
+    "A matching title borrowed another level's obstacle reasoning")
 
 let fixture = LevelHintCatalogue.Level(fingerprint: "test", title: "Timing", rank: "Fun", number: 1,
     width: 100, height: 100,

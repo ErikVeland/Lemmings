@@ -63,6 +63,7 @@ public struct SuperSpeedTimeline: Sendable {
   private var targetStrength: Float = 0
 
   public mutating func setEnabled(_ enabled: Bool, now: TimeInterval, immediate: Bool = false, multiplier: Double = 3) {
+    let multiplier = min(10, max(1, multiplier))
     if immediate && !enabled { self = Self(); return }
     guard enabled != self.enabled || multiplier != self.multiplier else { return }
     let engaging = enabled && !self.enabled

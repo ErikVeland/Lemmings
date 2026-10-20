@@ -97,7 +97,11 @@ public struct TVGameCapabilities: Equatable, Sendable {
     public private(set) var lastAssignment: (control: Int, actor: Int)?
     public private(set) var assignmentPulse = 0.0
     public var preferences: TVPreferences
-    private var lockedActor: Int?
+    private var targetLock = TVTargetLock()
+    private var lockedActor: Int? {
+        get { targetLock.id }
+        set { if let newValue { targetLock.select(newValue) } else { targetLock.clear() } }
+    }
     private var clock: MobileTickClock
     private var inputSpeed = GameplaySpeed()
     private var foreground = true
@@ -205,8 +209,12 @@ public struct TVGameCapabilities: Equatable, Sendable {
 
     public func aim(dx: Double, dy: Double) {
         guard canInteract, dx.isFinite, dy.isFinite else { return }
-        if abs(dx) + abs(dy) > 0.01 { lockedActor = nil }
-        pointer = bounded(.init(x: pointer.x + dx, y: pointer.y + dy)); refreshTarget()
+        guard dx != 0 || dy != 0 else { return }
+        let displayed = target
+        pointer = bounded(.init(x: pointer.x + dx, y: pointer.y + dy))
+        target = targetLock.aim(at: pointer, movement: .init(x: dx, y: dy), displayed: displayed,
+            candidates: session.targetCandidates(for: selectedControl), viewport: viewport, granular: true)
+        refreshTarget()
     }
 
     public func advancePointer(at time: Double, enabled: Bool = true) {

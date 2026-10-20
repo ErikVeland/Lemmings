@@ -23,6 +23,20 @@ The library searches the bundled `Music` directory and the optional
 `~/Library/Application Support/Ultimate Lemmings/Soundtracks` directory,
 including nested folders.
 
+## iOS Silent Mode
+
+iOS Audio settings include **Respect Mute Setting**, enabled by default for
+new and existing installations. The device preference applies to menu music,
+Classic, Lemmings 2 and Lemmings 3. Enabled uses the ambient audio session.
+Disabled uses playback with mixing, allowing audio in Silent Mode without
+interrupting other apps. Existing music and effects controls still apply.
+Session preparation and resume reapply the preference, including after an
+interruption. tvOS does not show this option.
+
+Muted, windowless checks cover preference migration, persistence across player
+profiles, session request ordering, and 18 On/Off menu renders with input-target
+geometry. Physical Silent Mode, touch and VoiceOver require device verification.
+
 ## Continuous music output
 
 Mac and iOS use the same tracker and recording transports. Classic, NeoLemmix,

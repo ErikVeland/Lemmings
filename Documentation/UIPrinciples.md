@@ -1,11 +1,43 @@
 # UI clarity
 
+Extra skills use the shared bitmap chooser and stone controls in all three
+games. Show the record and earning limits before spending, one selected skill
+or tool carrier, Back at bottom-left and Use extra skill at bottom-right.
+Keep Ready handovers paused. Name newly earned consumables on results, with
+the rare Extra skill first when several arrive. Show Bonus skill used on the
+attempt and BONUS on its separate records. Preserve full receipt reasons.
+Gameplay reward badges share the menu fade and retain their hover area.
+Reveal them on hover or use, then resume fading. Paused Inspect must not hold
+the badges at full opacity.
+
+The 2.1 welcome page uses the same bounded bitmap reading column as About.
+Reflow paragraphs when the window changes size. Keep Continue visible at
+bottom-right. Lead with this release's access, inspection and Extra skill changes,
+then give a short pointer to the full earlier history.
+
+Tester Sync separates configuration from delivery. The selected On control
+means the library key is stored. The status reports Syncing, Synced, Saved on
+this device or Offline. Partial uploads and newer local saves cannot display
+Synced. Keep the shared library scope concise and make Back the primary next
+action after setup. Mac, iPhone, iPad and TV use the same bitmap page.
+
 Mac About uses the shared stone tabs for About, Version history and Contributors.
-Published history and contributor paragraphs scroll within the body. Back stays
+Version history has a scrollable release index and a separate reading pane.
+Open the installed version first. Keep the reading column bounded, with distinct
+section headings, paragraph spacing and indented list items. Changing versions
+returns the notes to their top. Bundle the installed version's notes before feed
+publication, without duplicating its feed entry.
+Release-index buttons retain at least 44-point input height.
+History and contributor paragraphs scroll within the body. Back stays
 at bottom-left and starts focused. Buy me a coffee is the bottom-right action.
 Contributor delivery retains saved content during loading or failure and offers
 Retry in the offline state. Markdown supplies text only, with bitmap headings
 and body lettering.
+
+Muted offscreen About checks cover three window sizes, release selection by
+keyboard and accessibility, both scroll panes, wrapped bullets, input targets
+and cached/offline contributors. Packaging checks cover the current notes before
+and after feed publication, with one entry for the installed release.
 
 Home keeps Donate with its secondary footer actions on Mac, iPhone, iPad and
 TV. Preserve the gameplay primary action and keep Donate enabled without game
@@ -123,6 +155,32 @@ normally takes priority over orange. When Build targeting favours a current buil
 keep that builder selected until it finishes. Show its actual eligibility and do
 not queue an early click. Honour the reduced-flash setting.
 
+## Anniversary foundation priorities
+
+Basic Zoom is free in Classic, Lemmings 2 and Lemmings 3. Show the action and
+active state without a balance or earning explanation. Earned Superzoom remains
+a separate optional resource. Preserve its saved ledger and existing rules.
+Original/Modern are presentation choices. They preserve controller, input,
+interruption, recovery and accessibility preferences. New profiles start with
+restrained modern presentation and enter play without a required style-choice
+page. Saved explicit choices remain intact.
+
+When exact checked hints are unavailable, show **General coaching** and
+**No level-specific hints available.** before advice. General tiers use neutral
+Observe/Plan/Practise labels. Checked routes identify themselves as examples.
+Keep pause restoration, Ready, spoiler boundaries and accessible evidence intact.
+
+Modern pointer states differ in shape as well as colour: short empty brackets,
+full eligible brackets and crossed unavailable brackets. Preserve the supplied
+Original cursor artwork. Pointer marks add no input target and cannot change
+selection geometry. Apply the shared geometry in native games and mobile/TV
+presentation. Verify monochrome captures as well as zoom and Retina output.
+
+Results lead with outcome, saved count, rescue stars and Continue/Retry. Career
+and Rewards earned are explicit review actions. Future milestone bars, resource
+balances and time records belong in those review pages. Phone and TV award rows
+remain static until selected. No reward page may take over the result.
+
 ## Typography
 
 Use the shipped green and blue bitmap fonts for all interface text, including
@@ -200,14 +258,18 @@ anatomy to place the marker and preserve foreground pixels. Keep every marker
 pixel black or white and use the same backpack preference and input targets.
 
 Gameplay settings offer None, Obvious and Modern selection effects. None adds no
-selection highlight. Obvious restores the game-scale coloured halo and overhead
-pixel marker. Original selects None, and the Modern preset selects Modern.
+selection highlight. Obvious uses the game-scale coloured halo and overhead
+green pixel diamond. Original selects None, and the Modern preset selects Modern.
 An individual choice persists as part of the Custom preset. Machine artwork
 presets preserve this choice.
 
 Modern gives the selected lemming a steady white silhouette outline exactly two
 physical display pixels wide after zoom, Retina scaling and CRT projection.
-Modern always includes a mint-green halo, including when HD effects are off.
+Modern always includes a mint-green halo and faceted green pixel diamond above
+the selected actor, including when HD effects are off. The diamond follows the
+rendered sprite through zoom, mirroring and CRT projection, and fades with the
+selection. Paused Mac inspection marks the inspected actor without skill-target
+bias. The marker adds no input target and does not change simulation state.
 A brighter inner glow and soft outer falloff follow the silhouette. Build the
 halo from distance to the silhouette so thin limbs do not lose their glow.
 Its brightness breathes gently over 2.8 seconds of simulation time, with a
@@ -511,13 +573,11 @@ waiting for the opening section or bar alignment. Do not repeat the transition
 on results. Keep silent music, alternate-soundtrack preferences and paused output
 intact. A missing compatible arrangement retains the current theme.
 
-Saved journey and playlist results contribute to the player’s career across all
-three engines. Result panels show each newly earned Zoom and Superzoom use in
-bitmap lettering, including accessibility. Credit follows existing thresholds:
-one Zoom per three no-Rewind stars and one Superzoom per three distinct no-Rewind
-three-star levels. Repeated clears do not add credit. Preview results do not claim
-a saved reward.
-
+Saved journey and playlist results contribute to the player's career across all
+three engines. Earned Superzoom follows three distinct no-Rewind three-star
+levels. Ordinary Zoom has no earning rule. Repeated clears do not add credit.
+Preview results do not claim a saved reward. New rewards remain available through
+the explicit Rewards earned action without delaying Continue or Retry.
 
 Mac level-end pages use complete action rows. Divide the row among the actions
 that exist, with consistent gaps and no vacant button slots. Group review actions
@@ -533,36 +593,15 @@ bounds in agreement when the panel height changes. Anchor the action row at the
 same bottom position across result, reward and achievement pages. Short panels
 shrink above the actions, so pagination does not move the navigation targets.
 
-Mac results keep Zoom, Superzoom and Level Skip balances as three compact counts
-in the Career panel. Keep all three visible after success and failure. Do not
-add perk cards, banners, confetti panels or an automatic reward-detail page.
-When an earning star arrives, update its count and apply one brief gold glow to
-the number. Let the glow fade in place without moving controls or hiding counts.
-Keep criteria and earning reasons behind the existing Rewards earned action.
+Mac results keep the Career card concise: career stars, awards and any explicit
+Rewards earned receipt. Resource balances and future milestone progress remain
+on Career and receipt pages. Phone and TV results show a static Awards count;
+selecting it opens optional details. Keep the attempt owner's data in Hot Seat.
+Returning from details never retries, advances or passes a turn.
 
-Animate the display only. Credit remains in the saved records. The count shows
-the balance before this attempt until its earning star arrives, then the saved
-balance. Glow only on the first presentation of a newly saved award. Reopened
-results, reduced motion, loss of focus and cancelled animations show the final
-counts without a glow. Keep the attempt owner's balances in Hot Seat. Returning
-from details never retries, advances or passes a turn.
-
-The passive-count regression passes across all three games, solo play and both
-Hot Seat rules. It checks the displayed before/after balances, exact earning
-stars, glow completion, reduced motion, cancellation, one-time presentation and
-unchanged credit and ownership. The final count spacing compiles and its compact
-and large renders were inspected. Counts are static accessibility values, with
-no additional button targets. Physical VoiceOver remains a manual check.
-
-The muted, offscreen `TEST_SCOPE=earned-rewards` Mac suite passes for Classic,
-Lemmings 2 and Lemmings 3, solo play and both Hot Seat rules. It checks actual
-resource milestones and a named career award, every reward and reason across
-pages, compact/large layouts, long titles, mouse/keyboard/accessibility targets,
-reopening and one-time presentation. It preserves ownership and verifies repeat,
-preview and rewind guards. Existing result navigation, Records, Worldwide and
-Hot Seat setup/return checks also pass. Representative currency, named-award and
-long-title captures were inspected. Physical VoiceOver and controller delivery
-remain manual checks. iOS/tvOS result presentation is unchanged.
+Historical earned-resource captures predate free basic Zoom and quiet results.
+Recheck those changed renders and targets before accepting the new source.
+Physical VoiceOver and controller delivery remain manual checks.
 
 ## Records level browsing and music notices
 
@@ -1125,3 +1164,23 @@ Hot Seat labels.
 Goal text, state shapes and action geometry have focused tests. iOS and tvOS SDK
 compiles pass. Physical folding, touch scrolling and VoiceOver delivery remain
 device checks.
+
+Mac zoom, superzoom and skip counters share the gameplay menu fade in Classic,
+Lemmings 2 and Lemmings 3. Fade the full bitmap badge, including its background
+and active outline. Keep its layout and accessibility counts available. Muted
+offscreen checks cover visible, partial, hidden and reduced-motion states,
+disabled fading and menu input targets.
+
+Both Amiga versus ranks warn before play that two controllers are required
+and must remain connected at the same time. Mac briefings use two short bitmap
+lines so narrow windows retain the full requirement. Mobile and TV level
+selection show the same requirement. Ordinary solo and sequel ranks omit it.
+Muted offscreen checks cover Mac briefings at two widths, shared level pages
+at phone and wide sizes, accessibility bounds and Back/Play targets.
+
+Mac Hot Seat exposes Ghosts on/off in setup and beside the gameplay menu. The
+button uses the shared stone control, a distinct selected state and explicit
+On/Off names. Command-G changes the same saved local choice before or during
+an attempt. Hide only the previous-player sprites. Retain their recorded turns
+and seek them to the current tick when shown again. Preserve Glider/goal keys,
+solution ghosts and the paused Ready handover across Classic, L2 and L3.

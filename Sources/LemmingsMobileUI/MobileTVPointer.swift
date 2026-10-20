@@ -67,10 +67,15 @@ extension MobileGameViewController {
               dx != 0 || dy != 0 else { return }
         ensureTVPointer()
         guard let point = tvPointerPoint else { return }
-        tvTargetLock.clear()
+        let displayed = highlightedTarget
         tvPointerPoint = CGPoint(x: min(view.bounds.maxX - 2, max(2, point.x + dx)),
                                  y: min(view.bounds.maxY - 2, max(2, point.y + dy)))
         ensureTVPointer()
+        if let previewPoint, gameSettings.classic.lemmingSelectionStyle == .modern, !fanMode {
+            highlightedTarget = tvTargetLock.aim(at: previewPoint, movement: .init(x: dx, y: dy),
+                displayed: displayed, candidates: session.targetCandidates(for: selectedControl),
+                viewport: playfieldView.gameViewport, granular: true)
+        } else { tvTargetLock.clear(); highlightedTarget = previewPoint == nil ? nil : displayed }
         renderCurrentFrame(force: true)
     }
 

@@ -95,6 +95,8 @@ private struct Content {
 // Every witness must complete the unmodified retail level and reproduce exactly.
 private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws -> ClassicDOSReplayOutcome {
     var simulation = base
+    try require(!replay.events.contains(where: { if case .bonusSkill = $0.action { return true }; return false }),
+        "bonus skills cannot prove original level completion")
     try require(replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: base), "initial state mismatch")
     if let expectedFingerprint = replay.initialLevelFingerprint {
         try require(expectedFingerprint == base.levelSourceFingerprint, "initial level fingerprint mismatch")
@@ -115,6 +117,7 @@ private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws 
                 try require(simulation.assign(skill, to: id) == .assigned, "assignment did not apply at tick \(tick)")
             case let .releaseRate(value): simulation.setReleaseRate(value)
             case .nuke: simulation.beginNuke()
+            case .bonusSkill: throw ReplayFailure(description: "bonus skills cannot prove original level completion")
             }
         }
     }
@@ -125,6 +128,7 @@ private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws 
             switch event.action {
             case let .releaseRate(value): simulation.setReleaseRate(value)
             case .nuke: simulation.beginNuke()
+            case .bonusSkill: throw ReplayFailure(description: "bonus skills cannot prove original level completion")
             case .assign: break
             }
         }
@@ -161,6 +165,7 @@ private func appliedInputs(_ inputs: [ClassicDOSReplayEvent], base: ClassicDOSSi
             switch event.action {
             case let .releaseRate(value): sim.setReleaseRate(value); result.append(event)
             case .nuke: sim.beginNuke(); result.append(event)
+            case .bonusSkill: break
             case .assign: break
             }
         }
@@ -330,7 +335,7 @@ private func guidedInputs(_ input: InputCandidate, base: ClassicDOSSimulation, t
         for event in grouped[tick] ?? [] {
             switch event.action {
             case let .releaseRate(value): sim.setReleaseRate(value); result.append(event)
-            case .nuke: break
+            case .nuke, .bonusSkill: break
             case .assign: break
             }
         }

@@ -5,24 +5,30 @@ public enum ResultAwards {
     public struct EarnedReward: Equatable, Sendable {
         public let title: String
         public let reason: String
+        public let isConsumable: Bool
+        public init(title: String, reason: String, isConsumable: Bool = false) {
+            self.title = title
+            self.reason = reason
+            self.isConsumable = isConsumable
+        }
     }
 
     /// A receipt for this attempt. Balances and previously earned awards are not new rewards.
     public static func earnedRewards(report: ArcadeReport, celebration: TrolleyCelebration) -> [EarnedReward] {
         let run = report.run
         var rewards: [EarnedReward] = []
-        if !run.assisted && run.qualifies {
-            if celebration.precisionRewards.zoomUses > 0 {
-                rewards.append(.init(title: L10n.text("+\(celebration.precisionRewards.zoomUses) ZOOM"),
-                    reason: L10n.text("Career stars: \(celebration.careerBefore.stars) to \(celebration.career.stars). One Zoom per 3 stars without rewind or undo.")))
-            }
+        if run.earnsConsumableRewards {
             if celebration.precisionRewards.superzoomUses > 0 {
                 rewards.append(.init(title: L10n.text("+\(celebration.precisionRewards.superzoomUses) SUPERZOOM"),
-                    reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Superzoom per 3 distinct levels without rewind or undo.")))
+                    reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Superzoom per 3 distinct levels without rewind, undo or a bonus skill."), isConsumable: true))
             }
             if report.earnedLevelSkip {
                 rewards.append(.init(title: L10n.text("+1 LEVEL SKIP"),
-                    reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Level Skip per 3 distinct levels without rewind or undo.")))
+                    reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Level Skip per 3 distinct levels without rewind, undo or a bonus skill."), isConsumable: true))
+            }
+            if report.earnedExtraSkill {
+                rewards.append(.init(title: L10n.text("RARE: +1 EXTRA SKILL"),
+                    reason: L10n.text("Ten distinct three-star levels without rewind, undo or a bonus skill."), isConsumable: true))
             }
         }
         rewards += report.earned.map { award in
@@ -47,7 +53,7 @@ public enum ResultAwards {
     }
 
     public static func ornament(report: ArcadeReport, celebration: TrolleyCelebration, history: TrolleyHistory) -> Bool {
-        guard report.run.qualifies else { return false }
+        guard report.run.qualifies, !report.run.usedBonusSkill else { return false }
         let improved = report.previousBest != nil && (report.newRescueBest || report.newSkillBest)
         let rareAward = celebration.newAwards.contains { $0.award.tier == .gold || $0.award.tier == .legendary }
         if improved || rareAward { return true }

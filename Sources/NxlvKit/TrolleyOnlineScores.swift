@@ -25,7 +25,7 @@ public struct TrolleyOnlineConfiguration: Codable, Sendable {
         guard isValid else { return [:] }
         let catalogue = Dictionary(levels.map { ($0.conditions.fingerprint, $0) }, uniquingKeysWith: { first, _ in first })
         var best: [String: Int] = [:], scores: [String: Int] = [:]
-        for attempt in attempts where attempt.run.profileID == profileID && !attempt.run.assisted && attempt.run.qualifies {
+        for attempt in attempts where attempt.run.profileID == profileID && attempt.run.earnsConsumableRewards {
             guard let c = attempt.run.level.conditions, let level = catalogue[c.fingerprint],
                   TrolleyHistory.isLegitimate(attempt.run) else { continue }
             let stars = TrolleyRescueGoals(run: attempt.run, maximum: level.maximum).stars

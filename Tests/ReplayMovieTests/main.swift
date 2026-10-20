@@ -11,8 +11,8 @@ func require(_ value: Bool, _ message: String) throws {
   let release = DispatchSemaphore(value: 0)
   encoder.async { release.wait() }
   defer { release.signal() }
-  let recorder = ReplayMovieRecorder(ticksPerSecond: 17, encodingQueue: encoder,
-    admissionTimeout: .milliseconds(10))
+  // Exercise the production default. An override would hide gameplay backpressure.
+  let recorder = ReplayMovieRecorder(ticksPerSecond: 17, encodingQueue: encoder)
   let frame = ReplayFrameCapture.image(size: CGSize(width: 16, height: 16)) {
     NSColor.black.setFill(); NSRect(x: 0, y: 0, width: 16, height: 16).fill()
   }!
@@ -23,7 +23,7 @@ func require(_ value: Bool, _ message: String) throws {
   let stopped = !recorder.isAcceptingFrames
   for _ in 0..<100 { recorder.append(frame); recorder.setMusic(url: nil, gain: 0) }
   let elapsed = ProcessInfo.processInfo.systemUptime - began
-  try require(stopped && blocked < 1 && elapsed < 1,
+  try require(stopped && blocked < 0.1 && elapsed < 0.1,
     "A stalled encoder blocked game input or kept accepting frames")
   let result = await withCheckedContinuation { continuation in
     recorder.finish { continuation.resume(returning: $0) }
@@ -124,7 +124,7 @@ extension RunMovie {
   }
   print("PASS 51 exact video ticks, upright frames, non-silent module/SFX audio, half/double-speed exports; \(String(format: "%.2f", ProcessInfo.processInfo.systemUptime - start))s")
   for fps in [17.5, 23.0] {
-    let fractional = ReplayMovieRecorder(ticksPerSecond: fps)
+    let fractional = ReplayMovieRecorder(ticksPerSecond: fps, admissionTimeout: .seconds(10))
     let image = ReplayFrameCapture.image(size: CGSize(width: 64, height: 48)) {
       NSColor.green.setFill(); NSRect(x:0,y:0,width:64,height:48).fill()
     }!

@@ -36,8 +36,9 @@ soundtrack so it does not overlap the movie audio.
 Frames are drawn at a fixed size, up to 1280 pixels wide, without resizing the
 live playfield. L2 records at its doubled artwork scale, up to 480 pixels high,
 to reduce the cost during fast-forward. A serial encoder queue holds at most twelve waiting images.
-If that queue cannot accept a frame within 500 ms, recording stops. Gameplay
-continues, and review or save reports that the encoder stalled. The app does not
+Live recording never waits for queue capacity. If the queue is full, recording
+stops so the encoder cannot limit fast-forward speed. Gameplay continues, and
+review or save reports that the encoder stalled. The app does not
 offer a movie with omitted ticks. Failed, finished and inactive recordings stop
 drawing capture images. This policy is shared by Classic, L2 and L3.
 Audio and video are encoded separately, then combined without another video

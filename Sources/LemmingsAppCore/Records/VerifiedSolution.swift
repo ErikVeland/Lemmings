@@ -35,6 +35,8 @@ public struct VerifiedSolution: Sendable {
     public static func validate(_ replay: ClassicDOSReplay, initial: ClassicDOSSimulation) -> Self? {
         guard let expected = replay.expected, expected.didWin,
               expected.ticks > 0,
+              !initial.bonusSkillUsed,
+              !replay.events.contains(where: { if case .bonusSkill = $0.action { return true }; return false }),
               replay.events.allSatisfy({ $0.tick >= ($0.afterTick == true ? 0 : 1) && $0.tick <= expected.ticks }),
               let outcome = try? ClassicDOSReplayPlayer.run(replay, simulation: initial,
                   tickLimit: max(ClassicDOSReplayPlayer.defaultTickLimit,

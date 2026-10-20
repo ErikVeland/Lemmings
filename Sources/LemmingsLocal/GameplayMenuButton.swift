@@ -10,6 +10,12 @@ import AppKit
     private(set) var artworkOpacity: CGFloat = 1
     private var tracking: NSTrackingArea?
 
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        performClick(nil)
+        return true
+    }
+
     func resetAppearance() {
         shownAt = nil
         wasAutoHiding = false
@@ -17,10 +23,15 @@ import AppKit
         setOpacity(1)
     }
 
+    func revealArtwork(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+        shownAt = now
+        setOpacity(1)
+    }
+
     func updateAppearance(at now: TimeInterval, autoHide: Bool, reduceMotion: Bool) {
         if shownAt == nil || (autoHide && !wasAutoHiding) { shownAt = now }
         wasAutoHiding = autoHide
-        guard autoHide, !isHovered, window?.firstResponder !== self else { setOpacity(1); return }
+        guard autoHide, !isHovered, !(isEnabled && window?.firstResponder === self) else { setOpacity(1); return }
         let elapsed = now - (shownAt ?? now) - 3
         let progress = min(1, max(0, elapsed / 0.6))
         let opacity = reduceMotion ? (elapsed >= 0 ? 0.0 : 1.0) : 1 - progress * progress * (3 - 2 * progress)

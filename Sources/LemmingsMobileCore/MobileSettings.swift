@@ -9,22 +9,26 @@ public struct MobileSettings: Codable, Equatable, Sendable {
     public private(set) var skillSelectionPauseChoiceMade: Bool
     public static let skillSelectionTutorialUses = 10
     public var fastSpeed: Int
+    public var respectMuteSetting: Bool
     public var musicEnabled: Bool
     public var soundtrack: String
     public var djShuffleScope: SoundtrackCatalogue.ShuffleScope
     public static let defaultsKey = "mobile.settings.v1"
     public static let activeProfileKey = "mobile.settings.player.v1"
     public static let fastSpeeds = [2, 3, 5, 10]
+    public var availableFastSpeeds: [Int] { classic.ridiculousSpeedEnabled ? Self.fastSpeeds + [25] : Self.fastSpeeds }
 
     public init(classic: ClassicSettings = ClassicSettings(), pauseToAssign: Bool = true,
                 fastSpeed: Int = 2, musicEnabled: Bool = true, soundtrack: String = "Original",
                 skillSelectionPauseCount: Int = 0, skillSelectionPauseChoiceMade: Bool = false,
-                djShuffleScope: SoundtrackCatalogue.ShuffleScope = .sameTrack) {
+                djShuffleScope: SoundtrackCatalogue.ShuffleScope = .sameTrack,
+                respectMuteSetting: Bool = true) {
         self.classic = classic
         self.pauseToAssign = pauseToAssign
         self.skillSelectionPauseCount = min(Self.skillSelectionTutorialUses, max(0, skillSelectionPauseCount))
         self.skillSelectionPauseChoiceMade = skillSelectionPauseChoiceMade || !pauseToAssign
-        self.fastSpeed = Self.fastSpeeds.contains(fastSpeed) ? fastSpeed : 2
+        self.fastSpeed = (classic.ridiculousSpeedEnabled ? Self.fastSpeeds + [25] : Self.fastSpeeds).contains(fastSpeed) ? fastSpeed : 2
+        self.respectMuteSetting = respectMuteSetting
         self.musicEnabled = musicEnabled
         self.soundtrack = soundtrack
         self.djShuffleScope = djShuffleScope
@@ -33,7 +37,7 @@ public struct MobileSettings: Codable, Equatable, Sendable {
     private enum CodingKeys: String, CodingKey {
         case classic, pauseToAssign, fastSpeed, musicEnabled, soundtrack
         case skillSelectionPauseCount, skillSelectionPauseChoiceMade
-        case djShuffleScope
+        case djShuffleScope, respectMuteSetting
     }
     public init(from decoder: Decoder) throws {
         let fields = try decoder.container(keyedBy: CodingKeys.self)
@@ -44,7 +48,8 @@ public struct MobileSettings: Codable, Equatable, Sendable {
                   soundtrack: try fields.decodeIfPresent(String.self, forKey: .soundtrack) ?? "Original",
                   skillSelectionPauseCount: try fields.decodeIfPresent(Int.self, forKey: .skillSelectionPauseCount) ?? 0,
                   skillSelectionPauseChoiceMade: try fields.decodeIfPresent(Bool.self, forKey: .skillSelectionPauseChoiceMade) ?? false,
-                  djShuffleScope: try fields.decodeIfPresent(SoundtrackCatalogue.ShuffleScope.self, forKey: .djShuffleScope) ?? .sameTrack)
+                  djShuffleScope: try fields.decodeIfPresent(SoundtrackCatalogue.ShuffleScope.self, forKey: .djShuffleScope) ?? .sameTrack,
+                  respectMuteSetting: try fields.decodeIfPresent(Bool.self, forKey: .respectMuteSetting) ?? true)
     }
 
     /// Migrate once. Keep legacy keys so a downgrade can still read its saved preferences.
@@ -111,7 +116,6 @@ public struct MobileSettings: Codable, Equatable, Sendable {
 
     public mutating func applyExperiencePreset(modern: Bool) {
         classic.applyExperiencePreset(modern: modern)
-        if !modern, soundtrack == "Adaptive DJ" { soundtrack = "Original" }
     }
 }
 

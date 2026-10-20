@@ -117,7 +117,7 @@ import NxlvKit
     var hasCompletedAttempt: Bool { game?.isComplete == true }
     private var arcadeLevelSnapshot: ArcadeLevel?
     private var arcadeLevel: ArcadeLevel? {
-        if let arcadeLevelSnapshot { return arcadeLevelSnapshot }
+        if let arcadeLevelSnapshot { return ExtraSkillMac.level(arcadeLevelSnapshot, attemptID: arcadeRunID, profileID: arcadeProfileID) }
         guard let game else { return nil }
         let c = game.configuration
         let skills = Dictionary(zip(c.skills, c.supplies).map { (TrolleyCapture.skillKey($0.0.name), $0.1) }, uniquingKeysWith: +)
@@ -378,6 +378,14 @@ import NxlvKit
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
         keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
+        keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
+        keyboard.extraSkillTitle = { [weak self] in
+            guard let self else { return L10n.text("Extra skill") }
+            return self.canvas.precisionStatus.bonusSkillUsed ? L10n.text("Extra skill used")
+                : L10n.text("Extra skill (\(self.canvas.precisionStatus.extraSkills))")
+        }
+        keyboard.extraSkillHelp = { L10n.text("Choose one extra use of a level skill. One per attempt. (⌘E)") }
+        keyboard.extraSkillAvailable = { [weak self] in self?.extraSkillAvailable ?? false }
         speedControl.onMusicPitchChange = { [weak self] cents in
             self?.music.setSpeedPitch(cents)
             self?.dj.setSpeedPitch(cents)
@@ -398,6 +406,11 @@ import NxlvKit
             self?.audioSettings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         }
         keyboard.showSongInfo = { [weak self] in self?.audioSettings.showSongInfo ?? true }
+        keyboard.navigationArtworkOpacityChanged = { [weak self] in self?.canvas.precisionStatusOpacity = $0 }
+        keyboard.rewardDisplayArea = { [weak self] in
+            guard let self, let root = self.window?.contentView else { return nil }
+            return root.convert(self.canvas.rewardBadgeRect, from: self.canvas)
+        }
         keyboard.fadeMenuButton = { [weak self] in self?.audioSettings.fadeMenuButton ?? true }
         keyboard.mainMenu = { [weak self] in
             guard let self else { return }
@@ -415,6 +428,29 @@ import NxlvKit
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false) }
+        keyboard.inspectionAvailable = { [weak self] in
+            guard let self else { return false }
+            return self.screen == .playing && self.paused && !self.canvas.startCountdown.isActive
+        }
+        canvas.inspectionSelectionAvailable = keyboard.inspectionAvailable
+        keyboard.inspectionHoverID = { [weak self] in self?.canvas.inspectionPointerID }
+        keyboard.inspectionHoverRevision = { [weak self] in
+            guard let self else { return "" }
+            return "\(self.arcadeRunID):\(self.game?.tick ?? 0):\(self.recoveryInputs.count)"
+        }
+        keyboard.inspectionHoverSnapshot = { [weak self] in
+            guard let self, let initial = self.initial, let game = self.game else { return nil }
+            return try? LemmingInspection(initial: .lemmings2(initial), current: .lemmings2(game),
+                commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2))
+        }
+        keyboard.inspectLemmings = { [weak self] in
+            guard let self, self.screen == .playing, self.paused, !self.canvas.startCountdown.isActive,
+                  let initial = self.initial, let game = self.game,
+                  let snapshot = try? LemmingInspection(initial: .lemmings2(initial), current: .lemmings2(game),
+                    commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2)) else { return }
+            GameScreen.shared.present(LemmingInspectionPage(snapshot: snapshot,
+                selectedID: self.canvas.inspectionPointerID ?? self.assignmentFocus.lastID), owner: self.window)
+        }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Pan the level"), group: L10n.text("Camera")),
              KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results")),
@@ -506,6 +542,7 @@ import NxlvKit
             recoveryInputs = saved.inputs; recoveryProgress = saved.progress; recoveryPractice = saved.practice
             recoveryInitialHash = recovery.initialStateHash
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
+            try ExtraSkillMac.restore(recovery, level: arcadeLevel)
             PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
             syncPrecisionZoom()
             recordCollectionVisit()
@@ -538,6 +575,76 @@ import NxlvKit
         try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings2")
         try checkGameplayQuickControl(try L2RunRecovery.stateHash(game!) == before && selected == selectedBefore && paused,
             "Lemmings 2 quick controls changed the run")
+    }
+    func testExtraSkillGrant() throws {
+        func require(_ value: Bool, _ message: String) throws {
+            if !value { throw SequelDataError.invalid(message) }
+        }
+        func buttons(_ view: NSView) -> [NSButton] {
+            (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+        }
+        GameScreen.shared.dismissAll()
+        timer?.invalidate(); timer = nil
+        prepareBriefing(); startLevel(); paused = true; canvas.startCountdown.cancel()
+        guard let base = initial, let slot = base.configuration.skills.indices.first(where: {
+            base.canGrantBonusSkill(slot: $0)
+        }), let window else { throw SequelDataError.invalid("L2 extra-skill fixture has no supplied slot") }
+        selected = slot
+        singleStep(); singleStep(); paused = true
+        syncPrecisionZoom()
+        let store = ArcadeStore.shared, attemptID = arcadeRunID, owner = arcadeProfileID
+        let balance = store.records.extraSkills(profileID: owner).available
+        try require(balance > 0 && extraSkillAvailable, "L2 earned extra skill was unavailable")
+        let originalStock = game!.supplies
+        let skill = TrolleyCapture.skillKey(base.configuration.skills[slot].name)
+        useExtraSkill()
+        guard let page = GameScreen.shared.controllerPage(in: window),
+              let use = buttons(page).first(where: { $0.title == L10n.text("Use extra skill") }) else {
+            throw SequelDataError.invalid("L2 did not open the extra-skill chooser")
+        }
+        try require(use.accessibilityPerformPress(), "L2 extra-skill action did not activate")
+        try require(game!.supplies[slot] == originalStock[slot] + 1 && game!.bonusSkillSlot == slot
+            && arcadeLevel?.conditions?.bonusSkillID == skill && paused,
+            "L2 chooser did not grant exactly one selected skill while paused")
+        try require(store.records.extraSkills(profileID: owner).available == balance - 1
+            && store.records.extraSkillSpent(attemptID: attemptID, profileID: owner) == skill
+            && !extraSkillAvailable && canvas.precisionStatus.bonusSkillUsed,
+            "L2 grant did not spend once or retain its bonus marker")
+        let grantCount = recoveryInputs.filter { if case .bonusSkill = $0.action { return true }; return false }.count
+        try require(grantCount == 1, "L2 grant was missing from its replay inputs")
+        let replayed = try L2RunRecovery.replay(initial: base, inputs: recoveryInputs, through: game!.tick)
+        try require(try L2RunRecovery.stateHash(replayed) == L2RunRecovery.stateHash(game!),
+            "L2 extra-skill replay changed the runtime")
+        guard var checkpoint = try makeCheckpoint(engine: "extra-skill-test"), let saved = checkpoint.l2 else {
+            throw SequelDataError.invalid("L2 extra-skill checkpoint was unavailable")
+        }
+        checkpoint.stateHash = try L2RunRecovery.stateHash(game!)
+        let decoded = try JSONDecoder().decode(RunRecovery.self, from: JSONEncoder().encode(checkpoint))
+        let restored = try saved.restore(initial: base, checkpoint: decoded).0
+        try require(restored.bonusSkillSlot == slot && decoded.extraSkillUse?.skill == skill,
+            "L2 checkpoint lost the extra skill or spending evidence")
+        useExtraSkill()
+        try require(GameScreen.shared.controllerPage(in: window) == nil
+            && store.records.extraSkills(profileID: owner).available == balance - 1,
+            "L2 offered or spent a second extra skill")
+        try require(rewind(seconds: 1), "L2 bonus attempt could not rewind before its grant")
+        syncPrecisionZoom()
+        try require(game?.bonusSkillUsed == false && arcadeLevel?.conditions?.bonusSkillID == skill
+            && !extraSkillAvailable && canvas.precisionStatus.bonusSkillUsed,
+            "L2 rewind lost bonus provenance or allowed another grant")
+        guard var branch = try makeCheckpoint(engine: "extra-skill-test") else {
+            throw SequelDataError.invalid("L2 rewound bonus checkpoint was unavailable")
+        }
+        branch.stateHash = try L2RunRecovery.stateHash(game!)
+        try require(try branch.validated().extraSkillUse?.skill == skill,
+            "L2 rewound checkpoint lost irreversible spending evidence")
+        restart()
+        try require(arcadeRunID != attemptID && game!.supplies == base.supplies
+            && game?.bonusSkillUsed == false && arcadeLevel?.conditions?.bonusSkillID == nil && paused
+            && !canStepForward && !stepForward(seconds: 1)
+            && store.records.extraSkills(profileID: owner).available == balance - 1,
+            "L2 retry retained its bonus stock, changed its pause, or refunded the reward")
+        print("PASS native L2 chooser grant, one spend, replay/checkpoint, rewind provenance and paused clean retry")
     }
     var testRecoveryIsPaused: Bool { paused }
     func testRecoveryAdvance(ticks: Int) {
@@ -600,6 +707,35 @@ import NxlvKit
             L10n.text("L2 repeated a handover track selection"))
     }
 
+    func testRidiculousSpeed() throws {
+        timer?.invalidate()
+        prepareBriefing(); startLevel()
+        canvas.startCountdown.cancel()
+        runMovie.discard()
+        var settings = ClassicSettings()
+        settings.music = .silent; settings.musicVolume = 0; settings.soundVolume = 0
+        settings.ridiculousSpeedEnabled = true
+        setAudioSettings(settings, muted: true)
+        let now = ProcessInfo.processInfo.systemUptime
+        for _ in 0..<5 { speedControl.step(1, at: now - 1) }
+        speedControl.update(at: now, active: true)
+        refreshGame()
+        guard speedControl.multiplier == 25, canvas.speedLabel == "25×" else {
+            throw SequelDataError.invalid("L2 did not apply the 25× preference")
+        }
+        let output = URL(fileURLWithPath: ".build/ridiculous-speed-renders")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let bitmap = canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds)!
+        canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
+        try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("l2-25x.png"))
+        settings.ridiculousSpeedEnabled = false
+        setAudioSettings(settings, muted: true)
+        guard speedControl.multiplier <= 10 else {
+            throw SequelDataError.invalid("L2 retained 25× after disabling the preference")
+        }
+        print("PASS L2 optional 25× preference, canvas label and disable clamp")
+    }
+
     func testPauseKeyboard() throws {
         timer?.invalidate()
         prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
@@ -609,6 +745,9 @@ import NxlvKit
             apply: { self.setAudioSettings($0, muted: true) }, current: { self.canvas.gameplayCursorStyle })
     }
     func testSelectionRendering() async throws {
+        let inspectionSelection = canvas.inspectionSelectionAvailable
+        defer { canvas.inspectionSelectionAvailable = inspectionSelection }
+        canvas.inspectionSelectionAvailable = { false }
         timer?.invalidate(); audioSettings.confinePointer = false
         prepareBriefing(); startLevel(); paused = true; canvas.startCountdown.cancel()
         for _ in 0..<120 { game?.step() }
@@ -709,6 +848,7 @@ import NxlvKit
         audioConfigured = true
         audioSettings = settings
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
+        speedControl.ridiculousEnabled = settings.ridiculousSpeedEnabled
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
@@ -1009,6 +1149,7 @@ import NxlvKit
     }
     private func beginReplay() {
         if restoringRun { return }
+        discardRewindOrigin()
         lastFanInput = nil; lastAimInput = nil
         recoveryInputs = []; recoveryProgress = campaign.progress
         recoveryPractice = practiceLevel == nil ? nil
@@ -1018,6 +1159,7 @@ import NxlvKit
         assignmentFocus = AssignmentFocus(); canvas.assignmentHighlight.clear()
         let previousAttemptID = arcadeRunID
         arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
+        arcadeLevelSnapshot = nil
         refreshPlayerControls()
         PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
         syncPrecisionZoom()
@@ -1040,12 +1182,13 @@ import NxlvKit
     }
     private func togglePrecisionZoom(_ kind: PrecisionZoomKind) {
         guard screen == .playing, game?.isComplete == false else { return }
+        gameplayKeyboard?.revealRewards()
         let wallet = PrecisionZoomController.shared
         guard wallet.toggle(kind) else {
-            message = wallet.storageError ?? (kind == .zoom
-                ? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
-                : L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels."))
-            canvas.showFocusNotice(message)
+            if kind == .superzoom {
+                message = wallet.storageError ?? L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.")
+                canvas.showFocusNotice(message)
+            }
             return
         }
         syncPrecisionZoom()
@@ -1057,11 +1200,10 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         switch wallet.applyScroll(action) {
         case .changed:
+            gameplayKeyboard?.revealRewards()
             syncPrecisionZoom(at: point)
             refreshGame()
-        case .unavailable:
-            message = wallet.storageError ?? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
-            canvas.showFocusNotice(message)
+        case .unavailable: break
         case .unchanged: break
         }
     }
@@ -1070,10 +1212,40 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         canvas.setPrecisionZoom(wallet.active != nil, at: point)
         speedControl.bulletTimeActive = wallet.active == .superzoom
-        canvas.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
-            superzoom: wallet.remaining(.superzoom),
+        canvas.precisionStatus = PrecisionZoomStatus(superzoom: wallet.remainingSuperzoom(),
             skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
+            extraSkills: ArcadeStore.shared.records.extraSkills(profileID: arcadeProfileID).available,
+            bonusSkillUsed: ArcadeStore.shared.records.extraSkillSpent(attemptID: arcadeRunID, profileID: arcadeProfileID) != nil,
             active: wallet.active, isEmpty: false)
+    }
+
+    private var extraSkillAvailable: Bool {
+        guard screen == .playing, let game, !game.isComplete, canvas.precisionStatus.extraSkills > 0,
+              ArcadeStore.shared.records.extraSkillSpent(attemptID: arcadeRunID, profileID: arcadeProfileID) == nil else { return false }
+        return game.configuration.skills.indices.contains { game.canGrantBonusSkill(slot: $0) }
+    }
+    private func useExtraSkill() {
+        guard extraSkillAvailable, let game else { return }
+        let attemptID = arcadeRunID
+        let choices = game.configuration.skills.indices.filter { game.canGrantBonusSkill(slot: $0) }.map {
+            ExtraSkillMac.Choice(id: $0, title: SkillVocabulary.title(game.configuration.skills[$0].name))
+        }
+        let resume = gameplayKeyboard?.pauseForHelp() ?? {}
+        ExtraSkillMac.choose(choices, selected: selected, owner: window, onDismiss: resume) { [weak self] slot in
+            guard let self, self.arcadeRunID == attemptID, self.extraSkillAvailable,
+                  self.game?.canGrantBonusSkill(slot: slot) == true,
+                  let conditions = self.arcadeLevel?.conditions else { return }
+            let skill = TrolleyCapture.skillKey(game.configuration.skills[slot].name)
+            guard ArcadeStore.shared.spendExtraSkill(attemptID: attemptID, profileID: self.arcadeProfileID,
+                skill: skill, conditions: conditions) else {
+                self.canvas.showFocusNotice(ArcadeStore.shared.storageError ?? L10n.text("Extra skill unavailable")); return
+            }
+            guard self.performRecoveryInput(.bonusSkill(slot: slot)) else { return }
+            self.selected = slot; self.fanSelected = false
+            self.syncPrecisionZoom(); self.gameplayKeyboard?.revealRewards()
+            self.canvas.showFocusNotice("+1 " + SkillVocabulary.title(game.configuration.skills[slot].name))
+            self.refreshGame(); self.saveCheckpoint(immediately: true)
+        }
     }
 
     private func captureReplayFrame() {
@@ -1192,6 +1364,7 @@ import NxlvKit
         checkpoint.sourcePath = root.path
         checkpoint.l2 = L2RunRecovery(progress: progress, inputs: recoveryInputs, practice: recoveryPractice)
         checkpoint.hotSeatID = arcadeHotSeatID
+        checkpoint.extraSkillUse = ArcadeStore.shared.records.extraSkillUse(attemptID: arcadeRunID, profileID: arcadeProfileID)
         checkpoint.sequence = sequenceRecovery
         return checkpoint
     }
@@ -1717,7 +1890,7 @@ import NxlvKit
         guard let arcadeLevel else { return }
         var used: [String: Int] = [:]
         for slot in game.supplies.indices {
-            let count = game.configuration.supplies[slot] - game.supplies[slot]
+            let count = game.configuration.supplies[slot] + (game.bonusSkillSlot == slot ? 1 : 0) - game.supplies[slot]
             if count > 0 { used[TrolleyCapture.skillKey(game.configuration.skills[slot].name), default: 0] += count }
         }
         let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
@@ -2238,6 +2411,11 @@ import NxlvKit
     private var precisionScroll = PrecisionZoomScrollGesture()
     private let precisionZoomAnimation = PrecisionZoomAnimation()
     var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
+    var rewardBadgeRect: CGRect {
+        CGRect(origin: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 12),
+            size: precisionStatus.size(scale: bounds.width >= 960 ? 2 : 1))
+    }
+    var precisionStatusOpacity: CGFloat = 1 { didSet { if oldValue != precisionStatusOpacity { needsDisplay = true } } }
     var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
     var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
     func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
@@ -2648,7 +2826,7 @@ import NxlvKit
     private func drawLemmings(_ game: Lemmings2Runtime, ghostsOnly: Bool, hotSeatColour: ReplayGhostColour? = nil) {
         let palette = game.configuration.palette
         var selectedID = !ghostsOnly && hotSeatColour == nil && !GameCursor.gameplaySuppressed
-            ? assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil) : nil
+            ? highlightedLemmingID : nil
         if !ghostsOnly && hotSeatColour == nil {
             if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed {
                 let now = ProcessInfo.processInfo.systemUptime
@@ -2963,7 +3141,7 @@ import NxlvKit
         defer { startCountdown.draw(in: gameplayRect) }
         defer {
             if lemmingSelectionStyle == .obvious, !GameCursor.gameplaySuppressed,
-               let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
+               let id = highlightedLemmingID,
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
                 let centre = precisionLens.display(CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2))
@@ -2981,9 +3159,10 @@ import NxlvKit
                     SkillCursorBadge.drawCount(count, at: point, scale: zoom, size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge, in: gameplayRect)
                 }
                 let target = pointerTarget(slot: selectedSkillSlot)
+                let eligible = pointerSelectionEnabled && target.map { game?.canAssign(slot: selectedSkillSlot, to: $0) == true } == true
                 GameCursor.drawPlayfieldPointer(at: point, scale: zoom,
-                    tint: GameCursor.targetTint(eligible: pointerSelectionEnabled && target.map { game?.canAssign(slot: selectedSkillSlot, to: $0) == true } == true,
-                        occupied: target != nil), original: gameplayCursorStyle == .original, occupied: target != nil)
+                    tint: GameCursor.targetTint(eligible: eligible, occupied: target != nil),
+                    original: gameplayCursorStyle == .original, occupied: target != nil, eligible: eligible)
                 if pointerSelectionEnabled {
                     let remaining = game.flatMap { game -> Int? in
                         guard game.supplies.indices.contains(selectedSkillSlot) else { return nil }
@@ -2996,7 +3175,7 @@ import NxlvKit
             }
             let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
             let badgeSize = precisionStatus.draw(at: CGPoint(x: gameplayRect.minX + 12,
-                y: gameplayRect.minY + 12), scale: badgeScale)
+                y: gameplayRect.minY + 12), scale: badgeScale, opacity: precisionStatusOpacity)
             if let focusNotice { GameTypography.annotation(focusNotice,
                 at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 16 + badgeSize.height)) }
             if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
@@ -3118,7 +3297,7 @@ import NxlvKit
                 drawPoint(point.x, point.y, artwork: poleArt)
             }
         }
-        for frame in hotSeatGhosts?.frames(at: game.tick) ?? [] {
+        for frame in visibleHotSeatFrames(at: game.tick) {
             if case .lemmings2(let ghost) = frame.state {
                 drawLemmings(ghost, ghostsOnly: false, hotSeatColour: frame.colour)
             }
@@ -3224,6 +3403,19 @@ import NxlvKit
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
         return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
             preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders)?.id
+    }
+    var inspectionSelectionAvailable: () -> Bool = { false }
+    private var highlightedLemmingID: Int? {
+        inspectionSelectionAvailable() ? inspectionPointerID
+            : assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil)
+    }
+    var inspectionPointerID: Int? {
+        guard let game, let p = cursorPoint(), gameplayRect.contains(p) else { return nil }
+        let source = precisionLens.source(p)
+        let point = CGPoint(x: (source.x - origin.x) / zoom + cameraX,
+            y: (source.y - origin.y) / (zoom * 1.2) + cameraY)
+        return LemmingInspectionHover.nearestID(at: point,
+            actors: game.lemmings.filter(\.active).map { ($0.id, $0.x, $0.y) })
     }
     private func cursorPoint() -> CGPoint? {
         guard let window else { return nil }

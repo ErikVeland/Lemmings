@@ -1,7 +1,8 @@
 import Foundation
 
-public enum SequelDataError: Error, Equatable, CustomStringConvertible {
+public enum SequelDataError: LocalizedError, Equatable, CustomStringConvertible {
     case invalid(String)
+    public var errorDescription: String? { description }
     public var description: String {
         switch self { case let .invalid(message): return message }
     }

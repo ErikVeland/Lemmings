@@ -51,11 +51,43 @@ import NxlvKit
     }
 }
 
+/// Resolves the public aggregate identifiers without guessing a private level identity.
+enum TelemetryLevelTarget: Equatable {
+    case classic(ClassicTitle, index: Int)
+    case lemmings2(tribe: Int, index: Int)
+    case lemmings3(tribe: Int, index: Int)
+
+    init?(key: String) {
+        let parts = key.split(separator: "|", omittingEmptySubsequences: false)
+        guard parts.count == 2 else { return nil }
+        let game = String(parts[0]), level = String(parts[1])
+        if game == "lemmings2" {
+            let components = level.split(separator: "-")
+            guard components.count == 2, components[0].first == "t", components[1].first == "l",
+                  let tribe = Int(components[0].dropFirst()), let number = Int(components[1].dropFirst()),
+                  (1...12).contains(tribe), (1...10).contains(number) else { return nil }
+            self = .lemmings2(tribe: tribe - 1, index: number - 1)
+        } else {
+            guard level.hasPrefix("level-"), let number = Int(level.dropFirst(6)), number > 0 else { return nil }
+            if game == "lemmings3" {
+                guard number <= 90 else { return nil }
+                self = .lemmings3(tribe: (number - 1) / 30, index: (number - 1) % 30)
+            } else {
+                guard let title = ClassicTitle(rawValue: game),
+                      title != .lemmings2TheTribes, title != .lemmings3TheChronicles,
+                      let maximum = title.expectedLevelCount, number <= maximum else { return nil }
+                self = .classic(title, index: number - 1)
+            }
+        }
+    }
+}
+
 /**
  * Shows local counts and, with an owner token, shared daily totals.
  */
 @MainActor final class TelemetryDashboard {
     static let shared = TelemetryDashboard()
+    var onStartLevel: ((TelemetryLevelTarget) -> Void)?
     private let telemetry: AnonymousTelemetry
     private var page: GameMenuPage?
     private var summary: AnonymousTelemetrySummary
@@ -177,9 +209,20 @@ import NxlvKit
         }
         for (index, level) in levels.prefix(5).enumerated() {
             let y = CGFloat(202 - index * 39)
-            label(Self.levelName(level.key), x: 0, y: y, width: 590, in: page.body)
-            label(L10n.text("\(level.starts) starts   \(level.wins) wins   \(level.fails) fails"), x: 594, y: y,
-                  width: 398, in: page.body)
+            let target = TelemetryLevelTarget(key: level.key)
+            let counts = L10n.text("\(level.starts) starts   \(level.wins) wins   \(level.fails) fails")
+            let button = TelemetryLevelButton(title: Self.levelName(level.key), counts: counts) { [weak self] in
+                guard let self, let target else { return }
+                self.onStartLevel?(target)
+            }
+            button.frame = CGRect(x: 0, y: y, width: 992, height: 34)
+            button.isEnabled = target != nil && onStartLevel != nil
+            let name = button.isEnabled ? L10n.text("Start \(Self.levelName(level.key))") : Self.levelName(level.key)
+            button.setAccessibilityLabel(name + ", " + counts)
+            if target == nil {
+                button.setAccessibilityHelp(L10n.text("These counts combine multiple levels."))
+            }
+            page.body.addSubview(button)
         }
         label(notice, x: 0, y: 0, width: 992, in: page.body)
         page.needsDisplay = true
@@ -218,6 +261,21 @@ import NxlvKit
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
         let parts = calendar.dateComponents([.year, .month, .day], from: Date())
         return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
+    }
+}
+
+@MainActor private final class TelemetryLevelButton: GameActionButton {
+    private let counts: String
+    init(title: String, counts: String, onPress: @escaping () -> Void) {
+        self.counts = counts
+        super.init(title: title, primary: false, onPress: onPress)
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func draw(_ dirtyRect: NSRect) {
+        GameStoneButton.draw(bounds, selected: isEnabled && isHighlighted, pixel: 1)
+        GameControlText.draw(title, in: CGRect(x: 12, y: 0, width: 570, height: bounds.height), enabled: isEnabled)
+        GameControlText.draw(counts, in: CGRect(x: 594, y: 0, width: 386, height: bounds.height), enabled: isEnabled)
+        GameControlText.focus(self)
     }
 }
 

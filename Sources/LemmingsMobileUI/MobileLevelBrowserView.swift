@@ -110,7 +110,8 @@ import UIKit
         guard levels.indices.contains(flow.selectedIndex) else { return }
         let level = levels[flow.selectedIndex]
         let rank = levels.filter { $0.rank == level.rank }
-        let subtitle = level.selectionSubtitle(rankCount: rank.count, status: statusText)
+        let subtitle = [level.selectionSubtitle(rankCount: rank.count, status: statusText),
+            AmigaVersusCampaign.controllerRequirement(rank: level.rank)].compactMap { $0 }.joined(separator: "\n")
         subtitleLabel.text = MobileTurnArt.subtitle(subtitle, playerName: playerName, role: .next)
     }
 

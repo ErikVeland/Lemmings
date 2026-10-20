@@ -107,6 +107,18 @@ public struct MobileSkillState: Codable, Equatable, Sendable {
     }
 }
 
+/// One existing level supply, or one lemming's held tool, that can receive a charge.
+public struct MobileExtraSkillChoice: Equatable, Sendable {
+    public let skillID: String
+    public let title: String
+    public let control: Int
+    public let target: Int?
+
+    public init(skillID: String, title: String, control: Int, target: Int? = nil) {
+        self.skillID = skillID; self.title = title; self.control = control; self.target = target
+    }
+}
+
 public struct MobileGameSnapshot: Codable, Equatable, Sendable {
     public let tick: Int
     public let released: Int
@@ -150,6 +162,7 @@ public struct MobileGameSnapshot: Codable, Equatable, Sendable {
 public enum MobileSessionError: Error, LocalizedError, Equatable {
     case invalidFrame
     case frameUnavailable
+    case journeyEngineUnavailable
     case invalidCheckpoint
     case changedLevel
     case unsupportedControl
@@ -160,6 +173,8 @@ public enum MobileSessionError: Error, LocalizedError, Equatable {
             return L10n.text("The game produced an invalid image.")
         case .frameUnavailable:
             return L10n.text("This game has no mobile renderer.")
+        case .journeyEngineUnavailable:
+            return L10n.text("This journey level is unavailable on this device. The saved session has been kept.")
         case .invalidCheckpoint:
             return L10n.text("The saved run could not be verified.")
         case .changedLevel:
@@ -203,6 +218,13 @@ public protocol MobileGameSession: AnyObject {
     var supportsRewind: Bool { get }
     var isReadOnly: Bool { get }
     var usedRewind: Bool { get }
+    /// Retained for the entire attempt, including rewinds before the extra charge.
+    var bonusSkillID: String? { get }
+    var extraSkillChoices: [MobileExtraSkillChoice] { get }
+    var existingLevelSkills: Set<String> { get }
+    @discardableResult func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool
+    /// Retains the spent attempt marker without adding stock to an earlier checkpoint.
+    @discardableResult func retainExtraSkillUse(_ skillID: String) -> Bool
     var assignedSkillCount: Int { get }
     var assignedSkills: [String: Int] { get }
     var nukeCount: Int { get }
@@ -241,9 +263,17 @@ public protocol MobileGameSession: AnyObject {
     var actionReplayInitial: ActionReplayState? { get }
     /// The attempt so far in the shared action format, or nil when it cannot be expressed.
     func actionCapture() throws -> MobileActionCapture?
+    /// Read-only details for released individuals. Unsupported engines return nil.
+    var lemmingInspection: LemmingInspection? { get }
 }
 
 public extension MobileGameSession {
+    var bonusSkillID: String? { nil }
+    var extraSkillChoices: [MobileExtraSkillChoice] { [] }
+    var existingLevelSkills: Set<String> { [] }
+    func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool { false }
+    func retainExtraSkillUse(_ skillID: String) -> Bool { false }
+    var lemmingInspection: LemmingInspection? { nil }
     func targetWallDirection(for target: Int) -> Int? { nil }
     var lostLemmingCount: Int { max(0, snapshot.released - snapshot.saved - activeLemmingCount) }
     func prepareCheckpointPayload() throws -> MobileCheckpointPayload {

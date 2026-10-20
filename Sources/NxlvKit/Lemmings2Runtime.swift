@@ -452,6 +452,23 @@ public struct Lemmings2Runtime: Sendable {
     private func change(_ lemming: inout Lemming, _ state: State) {
         lemming.state = state == .walking && lemming.runner ? .running : state; lemming.age = 0; lemming.work = 0
     }
+    public private(set) var bonusSkillSlot: Int?
+    public var bonusSkillUsed: Bool { bonusSkillSlot != nil }
+
+    public func canGrantBonusSkill(slot: Int) -> Bool {
+        !isComplete && !isNuking && !bonusSkillUsed
+            && supplies.indices.contains(slot) && configuration.skills.indices.contains(slot)
+            && configuration.supplies[slot] > 0 && configuration.skills[slot] != .unused
+            && supplies[slot] >= 0 && supplies[slot] < Int.max
+    }
+
+    @discardableResult public mutating func grantBonusSkill(slot: Int) -> Bool {
+        guard canGrantBonusSkill(slot: slot) else { return false }
+        supplies[slot] += 1
+        bonusSkillSlot = slot
+        return true
+    }
+
     public func canAssign(slot: Int, to id: Int) -> Bool {
         guard assignmentSlotAvailable(slot), let lem = lemmings.first(where: { $0.id == id }) else { return false }
         return canAssign(skill: configuration.skills[slot], to: lem)

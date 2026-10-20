@@ -291,14 +291,10 @@ enum ExplosionHDR {
   private func render() {
     let now = ProcessInfo.processInfo.systemUptime
     let quality = MacFXPerformance.shared.presentation
-    guard quality.enhancedEffectsAllowed else {
-      isHidden = true; surface?.isHidden = true; texture = nil
-      surface?.wantsExtendedDynamicRangeContent = false
-      surface?.drawableSize = CGSize(width: 1, height: 1)
-      timeline.clear(); flashes.removeAll(); worldFlashes.removeAll()
-      lastPresented = -.infinity
-      return
-    }
+    // Keep cinematic blasts visible at minimum quality. Clearing them here made
+    // the enabled setting silently stop working under sustained frame pressure.
+    // Other optional effects still yield their budget to the game.
+    let enhanced = quality.enhancedEffectsAllowed
     advanceSpeedMotion(at: now)
     timeline.expire(now: now)
     let hadWorldFlashes = !worldFlashes.isEmpty
@@ -309,11 +305,13 @@ enum ExplosionHDR {
     if flashes.count != previousCount { maskIsDirty = true }
     // An idle overlay has no pixels to present. Hide the previous frame without
     // allocating a full-window mask or waiting for a Metal drawable.
-    let currentFlashes = renderedFlashes
-    let showsGlints = glints != nil && glintPipeline != nil && glintRect.intersects(bounds)
+    let currentFlashes = enhanced ? renderedFlashes : []
+    let showsGlints = enhanced && glints != nil && glintPipeline != nil && glintRect.intersects(bounds)
       && (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
     if !showsGlints { glintPending = false }
-    let active = showsGlints || !rescueAuras.isEmpty || !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    let showsSpeed = enhanced && speed.isAnimating(now: now)
+    let showsRescues = enhanced && !rescueAuras.isEmpty
+    let active = showsGlints || showsRescues || !currentFlashes.isEmpty || !timeline.bursts.isEmpty || showsSpeed
     // AppKit can restore a backing layer's visibility during display. Hide the
     // view too, so idle effects stay out of window composition.
     isHidden = !active
@@ -334,13 +332,14 @@ enum ExplosionHDR {
     MacFXPerformance.shared.configureDisplay(screen)
     // A moved glint skips the frame limit so it stays on the scrolled terrain.
     let glintMoved = showsGlints && glintRect != presentedGlintRect
-    let onlyGlints = showsGlints && rescueAuras.isEmpty && currentFlashes.isEmpty
-      && timeline.bursts.isEmpty && !speed.isAnimating(now: now)
+    let onlyGlints = showsGlints && !showsRescues && currentFlashes.isEmpty
+      && timeline.bursts.isEmpty && !showsSpeed
     if onlyGlints, !glintMoved, glintTexture != nil, presentedGlintHeadroom
       == ExplosionHDR.headroom(screen.maximumExtendedDynamicRangeColorComponentValue) { return }
     guard outstandingSubmissions < 2, glintMoved || now - lastPresented >= 1 / quality.effectHz else { return }
-    let scale = CGFloat(quality.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
-                                          nativeScale: Double(window?.backingScaleFactor ?? 1)))
+    let nativeScale = quality.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
+                                          nativeScale: Double(window?.backingScaleFactor ?? 1))
+    let scale = CGFloat(enhanced ? nativeScale : min(nativeScale, sqrt(262_144 / Double(bounds.width * bounds.height))))
     surface.contentsScale = scale
     surface.drawableSize = CGSize(width: max(1, floor(bounds.width * scale)), height: max(1, floor(bounds.height * scale)))
     let maskScale = min(scale, 1, sqrt(CGFloat(min(720_000, quality.maximumOverlayPixels)) / bounds.width / bounds.height))
@@ -402,7 +401,7 @@ enum ExplosionHDR {
         encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
       }
     }
-    if let speedPipeline, speed.isAnimating(now: now) {
+    if let speedPipeline, showsSpeed {
       var uniforms = SuperSpeedUniforms(
         field: SIMD4(Float(speedField.minX),Float(speedField.minY),Float(speedField.width),Float(speedField.height)),
         animation: speed.sample(now:now,headroom:headroom),size: SIMD2(Float(bounds.width),Float(bounds.height)),
@@ -411,7 +410,7 @@ enum ExplosionHDR {
       encoder.setFragmentBytes(&uniforms,length:MemoryLayout<SuperSpeedUniforms>.stride,index:0)
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
     }
-    let samples = limitedExplosionSamples(now: now, limit: quality.explosionLimit)
+    let samples = limitedExplosionSamples(now: now, limit: enhanced ? quality.explosionLimit : 2)
     if let nuclearPipeline, !samples.isEmpty {
       var uniforms = NuclearExplosionUniforms(size: SIMD2(Float(bounds.width),Float(bounds.height)),
         headroom: headroom, count: UInt32(samples.count))
@@ -420,7 +419,7 @@ enum ExplosionHDR {
       samples.withUnsafeBytes { encoder.setFragmentBytes($0.baseAddress!,length:$0.count,index:1) }
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
     }
-    if let rescueRenderer {
+    if showsRescues, let rescueRenderer {
       for effect in rescueAuras {
         rescueRenderer.encode(effect, sourceSize: bounds.size, outputSize: surface.drawableSize, headroom: headroom, additive: true, into: encoder)
       }
@@ -453,7 +452,7 @@ enum ExplosionHDR {
     NSGraphicsContext.saveGraphicsState()
     defer { NSGraphicsContext.restoreGraphicsState() }
     bounds.clip()
-    drawSpeedFallback()
+    if MacFXPerformance.shared.presentation.enhancedEffectsAllowed { drawSpeedFallback() }
     for sample in samples {
       let t = CGFloat(sample.z), fade = max(0,min(1,(1.8-t)/0.85))
       let point = CGPoint(x: CGFloat(sample.x)*bounds.width,y: CGFloat(sample.y)*bounds.height)

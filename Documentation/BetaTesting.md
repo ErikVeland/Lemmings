@@ -5,6 +5,51 @@ See its [release notes](https://github.com/ErikVeland/Lemmings/blob/364803556c5e
 [release checks](ReleaseReadiness/2.0.3-build86/README.md). Freeze one source
 commit for a public candidate. Earlier package records do not certify it.
 
+## Newcomer and veteran playtests
+
+This protocol supports the [2.1 foundation priorities](2.1Roadmap.md#priorities-and-acceptance).
+Recruit a small varied group of children with a guardian, adults unfamiliar with
+games, returning players and veterans. Participation and observation need their
+agreement. No recruitment or completed human session is recorded by this update.
+
+Use a fresh disposable profile and record the exact build, language, device and
+input. Keep the player's ordinary saves separate. Let the first thirty minutes
+run without unsolicited coaching. Use the existing Journey and introductory
+levels. Experienced players may move on through the existing free Try later path.
+
+Observe these tasks in order:
+
+1. Start play from Home and identify the entrance and exit.
+2. Select a skill and give it to a lemming facing the intended direction.
+3. Describe what changed after the assignment.
+4. Pause and use basic Zoom before earning any stars.
+5. Make an ordinary mistake, recover and choose another idea.
+6. Open help and identify whether it is level-specific or general coaching.
+7. Request one further hint deliberately, then return to the same paused state.
+8. Finish a level and identify the primary next action without interpreting career rewards.
+9. Defer a difficult Journey lesson and find it again.
+10. Quit, return the next day and resume the same run and owner.
+11. Play one Hot Seat handover and wait for the next player's Ready.
+12. Repeat the key input, pause, help and recovery tasks in L2 and L3, recording their current limits.
+
+Record confusion, accidental assignments, recovery, voluntary retries, helpful
+hints, unwanted spoilers and whether the player asks to continue. Completion time
+and clears alone cannot measure discovery. Ask what the player noticed before
+asking about stars, names, music or emotion. Do not treat visible frustration as
+an instruction to reduce every puzzle's difficulty.
+
+Compare optional character/effect presentation enabled and disabled, varying the
+order across participants. Confirm that wants are understood as optional fiction,
+that ordinary failure remains safe and funny, and that a valid one-star clear
+feels successful. Human-review translated onboarding, hint availability and
+failure/recovery copy. Retain anonymised findings and actionable changes in the
+release evidence only with participant agreement.
+
+Automated preparation stays offscreen and muted through Tools/UITestRunner/run.py.
+Physical input, real screen-reader use, audible tone, HDR appearance, live sync and
+sustained device loads need separate human/device records. This protocol does not
+authorise foreground automated tests, audible tests, invitations or publication.
+
 ## Public beta boundary
 
 Do not send a Game Center snapshot to an open tester group. It is development

@@ -29,7 +29,16 @@ extension MenuAudit {
             ("insights-token-empty", MobileInformationArt.insightsToken(length: 0)),
             ("insights-token", MobileInformationArt.insightsToken(length: 12)),
             ("insights-clear", MobileInformationArt.insightsClear()),
+            ("short-games-ready", ShortGamesArt.page(classicAvailable: true)),
+            ("short-games-missing", ShortGamesArt.page(classicAvailable: false,
+                subtitle: "Matching Classic game data unavailable")),
+            ("short-games-loading", ShortGamesArt.page(classicAvailable: false, loading: true)),
         ]
+        let shortGames = ShortGamesArt.page(classicAvailable: true)
+        guard shortGames.rows.count == 3, shortGames.rows.filter(\.enabled).map(\.id) == ["shortSelect.classic"],
+              shortGames.footer.first?.isBackNavigation == true,
+              shortGames.footer.last?.id == "shortPlay", shortGames.footer.last?.primary == true,
+              !ShortGamesArt.page(classicAvailable: false).footer.last!.enabled else { throw invalidTargets(line: #line) }
         guard MobileInformationArt.effectsWelcome().backAction?.id == "welcomeOriginal",
               MobileInformationArt.telemetryConsent().backAction?.id == "telemetryNo",
               MobileInformationArt.whatsNew(version: "2.0").backAction?.id == "welcomeContinue",
@@ -44,17 +53,12 @@ extension MenuAudit {
         }
         pages += try careerPages()
         for busy in [false, true] {
-            for mode in ["off", "on", "code", "draft", "draft-ready"] {
-                let page = CloudSyncArt.page(status: busy ? "Syncing" : "Offline", providers: "Cloud",
-                    enabled: mode != "off", busy: busy, code: mode == "code" ? "ABCD1234EFGH" : nil,
-                    draft: mode.hasPrefix("draft") ? (mode == "draft-ready" ? "ABCD1234EFGH" : "") : nil)
-                pages.append(("cloud-\(mode)-\(busy)", page))
-                pages.append(("tv-cloud-\(mode)-\(busy)", TVSharedMenuArt.cloud(page, restoring: false,
-                    hasCode: mode == "code", enteringCode: mode.hasPrefix("draft"), busy: busy)))
+            for enabled in [false, true] {
+                let page = CloudSyncArt.page(testerEnabled: enabled, busy: busy)
+                pages.append(("cloud-tester-\(enabled)-\(busy)", page))
+                pages.append(("tv-cloud-tester-\(enabled)-\(busy)", page))
             }
         }
-        pages.append(("tv-restore-confirm", TVSharedMenuArt.cloud(CloudSyncArt.page(status: "", providers: "", enabled: true),
-            restoring: true, hasCode: false, enteringCode: false, busy: false)))
         for loading in [false, true] {
             pages.append(("insights-\(loading)", MobileInformationArt.insights(counts: [:], shared: false, days: 30,
                 sharingAvailable: false, loading: loading)))

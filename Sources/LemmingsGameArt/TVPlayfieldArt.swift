@@ -72,16 +72,16 @@ import NxlvKit
             : occupied ? CGColor(srgbRed: 1, green: 0.8, blue: 0.15, alpha: 1)
             : CGColor(gray: 0.85, alpha: 1)
         let frame = CGRect(x: floor(point.x) - 11, y: floor(point.y) - 11, width: 22, height: 22)
-        for left in [true, false] { for top in [true, false] {
-            let horizontal = CGRect(x: left ? frame.minX : frame.maxX - 7,
-                                    y: top ? frame.minY : frame.maxY - 2, width: 7, height: 2)
-            let vertical = CGRect(x: left ? frame.minX : frame.maxX - 2,
-                                  y: top ? frame.minY : frame.maxY - 7, width: 2, height: 7)
+        let marks = AssignmentPointerShape.marks(in: frame, arm: 7, stroke: 2,
+                                                 occupied: occupied, eligible: eligible)
+        for mark in marks {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
-            context.fill(horizontal.insetBy(dx: -1, dy: -1)); context.fill(vertical.insetBy(dx: -1, dy: -1))
-            context.setFillColor(colour)
-            context.fill(horizontal); context.fill(vertical)
-        } }
+            context.fill(mark.insetBy(dx: -1, dy: -1))
+        }
+        context.setFillColor(colour)
+        for mark in marks {
+            context.fill(mark)
+        }
     }
 
     private func drawHUD(_ game: TVGameExperience, context: CGContext) {

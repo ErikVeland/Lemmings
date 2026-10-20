@@ -37,6 +37,7 @@ import NxlvKit
     var resultIdentity: String {
         "\(player.initials)'s attempt - " + (report?.run.level.title ?? "")
             + (report?.run.assisted == true ? L10n.text(" - Rewinds used") : "")
+            + (report?.run.usedBonusSkill == true ? L10n.text(" - Bonus skill used") : "")
     }
     var resultIdentityHeight: CGFloat { achievementTextHeight(resultIdentity, width: 960) }
     var resultSummaryOffset: CGFloat { max(0, resultIdentityHeight - 36) }

@@ -14,6 +14,7 @@ extension MobileLibraryViewController {
             .init("favourites", L10n.text("Favourites  \(favourites.entries.count)"), enabled: !favourites.entries.isEmpty),
             .init("recents", L10n.text("Recently played  \(recents.entries.count)"), enabled: !recents.entries.isEmpty),
             .init("playlists", L10n.text("Playlists  \(playlists.playlists.count)")),
+            .init("shortGames", L10n.text("Short games")),
             .init("progression", L10n.text("Progression playlists")),
             .init("shuffleAll", L10n.text("Shuffle all"), enabled: catalogue?.packs(in: .fan).isEmpty == false),
         ]
@@ -76,6 +77,8 @@ extension MobileLibraryViewController {
     func handleCollections(_ id: String) -> Bool {
         switch id {
         case "collections": navigate(.collections)
+        case "shortGames": openShortGames()
+        case "shortPlay": playShortGame()
         case "players": navigate(.players)
         case "fanBack": navigate(.family(.fan))
         case "shuffleAll": shuffleBackID = route == .collections ? "collections" : "fanBack"; beginShuffleAll()
@@ -103,7 +106,8 @@ extension MobileLibraryViewController {
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()
         default:
-            if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
+            if id == "shortSelect.classic" { shortGamesSelection = "classic"; rebuild() }
+            else if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
             else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
             else if id.hasPrefix("add."), let uuid = UUID(uuidString: String(id.dropFirst(4))) { addCurrentLevel(to: uuid) }
             else if id.hasPrefix("entry."), let index = Int(id.dropFirst(6)) {

@@ -4,6 +4,49 @@ import NxlvKit
 @testable import LemmingsMobileCore
 
 struct MobileSettingsTests {
+    @Test func ridiculousSpeedIsOptionalAndPersists() throws {
+        #expect(!MobileSettings().classic.ridiculousSpeedEnabled)
+        #expect(!MobileSettings().availableFastSpeeds.contains(25))
+        var classic = ClassicSettings()
+        classic.ridiculousSpeedEnabled = true
+        let settings = MobileSettings(classic: classic, fastSpeed: 25)
+        #expect(settings.availableFastSpeeds.last == 25 && settings.fastSpeed == 25)
+        let restored = try JSONDecoder().decode(MobileSettings.self, from: JSONEncoder().encode(settings))
+        #expect(restored.classic.ridiculousSpeedEnabled && restored.fastSpeed == 25)
+        classic.ridiculousSpeedEnabled = false
+        #expect(MobileSettings(classic: classic, fastSpeed: 25).fastSpeed == 2)
+    }
+
+    @Test func presentationPreservesTouchPlanningControllerAndSoundtrackChoices() throws {
+        var settings = MobileSettings(pauseToAssign: false, fastSpeed: 5, musicEnabled: false,
+                                      soundtrack: "Adaptive DJ")
+        settings.classic.modernControlsEnabled = false
+        settings.classic.variableSpeedEnabled = false
+        settings.classic.controllerEnabled = false
+        settings.classic.controllerTapSpeed = false
+        settings.classic.controllerSwapSticks = true
+        settings.classic.controllerMappings = ["a": "b", "b": "a"]
+        settings.classic.pauseOnInterruption = false
+        settings.classic.favorApproachingLemmings = false
+        settings.classic.music = .adaptiveDJ
+        settings.classic.graphics = .amiga
+        settings.classic.musicVolume = 0.3
+        settings.classic.soundVolume = 0.4
+        let personal = PlayerControlSettings(settings.classic)
+        for modern in [false, true] {
+            settings.applyExperiencePreset(modern: modern)
+            #expect(PlayerControlSettings(settings.classic) == personal)
+            #expect(!settings.pauseToAssign && settings.fastSpeed == 5 && !settings.musicEnabled)
+            #expect(!settings.classic.modernControlsEnabled && !settings.classic.variableSpeedEnabled)
+            #expect(!settings.classic.pauseOnInterruption && !settings.classic.favorApproachingLemmings)
+            #expect(settings.soundtrack == "Adaptive DJ" && settings.classic.music == .adaptiveDJ)
+            #expect(settings.classic.graphics == .amiga && settings.classic.musicVolume == 0.3 && settings.classic.soundVolume == 0.4)
+            #expect(!settings.classic.fullScreenHDRFlashes && !settings.classic.djIncludesOtherSoundtracks)
+            #expect(settings.classic.gameplayCursorStyle == (modern ? .modern : .original))
+            #expect(try JSONDecoder().decode(MobileSettings.self, from: JSONEncoder().encode(settings)) == settings)
+        }
+    }
+
     @Test func playerInputAndAccessibilityStaySeparateWhileDeviceSettingsRemainShared() {
         let store = defaults()
         var legacy = MobileSettings()
@@ -26,6 +69,17 @@ struct MobileSettingsTests {
         #expect(MobileSettings.current(from: store) == second)
         #expect(MobileSettings.load(from: store).classic.interfaceSize == legacy.classic.interfaceSize)
     }
+    @Test func mutePreferenceDefaultsMigratesAndIsSharedAcrossProfiles() throws {
+        #expect(MobileSettings().respectMuteSetting)
+        #expect(try JSONDecoder().decode(MobileSettings.self, from: Data("{}".utf8)).respectMuteSetting)
+        let store = defaults()
+        var settings = MobileSettings.load(from: store, profileID: "first")
+        settings.respectMuteSetting = false
+        settings.save(to: store, profileID: "first")
+        #expect(!MobileSettings.load(from: store, profileID: "second").respectMuteSetting)
+        #expect(try JSONDecoder().decode(MobileSettings.self, from: JSONEncoder().encode(settings)) == settings)
+    }
+
     private func defaults() -> UserDefaults { UserDefaults(suiteName: "MobileSettingsTests.\(UUID())")! }
 
     @Test func testTutorialCountsTenAutomaticPausesAcrossLaunches() {

@@ -1,5 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
+import NxlvKit
+#endif
 
 /// Bitmap control groups show the control cursor across their buttons and gaps.
 @MainActor protocol GameSystemCursorRegion: AnyObject {}
@@ -107,7 +110,7 @@ import AppKit
    * Draws the modern reticle or the supplied Amiga cross and target square.
    */
   static func drawPlayfieldPointer(at point: CGPoint, scale: CGFloat, tint: NSColor,
-                                   original: Bool = false, occupied: Bool = false) {
+                                   original: Bool = false, occupied: Bool = false, eligible: Bool = false) {
     guard !gameplaySuppressed else { return }
     let frame = playfieldPointerFrame(at: point, scale: scale)
     let pixel = max(1, floor(scale))
@@ -121,12 +124,8 @@ import AppKit
     NSGraphicsContext.current?.shouldAntialias = false
     let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(CGSize(width: 1, height: 0)).width ?? 1)
     let stroke = 1 / max(1, deviceScale)
-    for x in [frame.minX, frame.maxX - stroke] {
-      for y in [frame.minY, frame.maxY - stroke] {
-        CGRect(x: x == frame.minX ? x : x - arm + stroke, y: y, width: arm, height: stroke).fill()
-        CGRect(x: x, y: y == frame.minY ? y : y - arm + stroke, width: stroke, height: arm).fill()
-      }
-    }
+    for mark in AssignmentPointerShape.marks(in: frame, arm: arm, stroke: stroke,
+                                             occupied: occupied, eligible: eligible) { mark.fill() }
     NSGraphicsContext.restoreGraphicsState()
   }
 

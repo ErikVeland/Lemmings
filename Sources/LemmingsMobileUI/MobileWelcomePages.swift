@@ -12,13 +12,13 @@ extension MobileLibraryViewController {
     func beginWelcomeIfNeeded() {
         guard game == nil else { return }
         let defaults = UserDefaults.standard
+        // Presentation choices are available in Settings. Preserve every saved preference.
+        defaults.set(true, forKey: "mobile.effectsChoice.v1")
         #if os(tvOS)
         if tvBuildInfo.needsWelcome(in: defaults) { navigate(.whatsNew); return }
-        if !defaults.bool(forKey: "mobile.effectsChoice.v1") { navigate(.effectsWelcome) }
-        else if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided { navigate(.telemetryConsent) }
+        if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided { navigate(.telemetryConsent) }
         #else
-        if !defaults.bool(forKey: "mobile.effectsChoice.v1") { navigate(.effectsWelcome) }
-        else if mobileBuild > defaults.integer(forKey: "mobile.whatsNew.seenBuild") { navigate(.whatsNew) }
+        if mobileBuild > defaults.integer(forKey: "mobile.whatsNew.seenBuild") { navigate(.whatsNew) }
         else if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided { navigate(.telemetryConsent) }
         #endif
     }

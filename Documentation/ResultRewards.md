@@ -1,5 +1,10 @@
 # Results and rewards
 
+[Extra skills](ExtraSkills.md) are rare consumable rewards: one per ten distinct
+three-star levels without rewind, undo or bonus skills. Results name newly earned
+consumables and retain their reasons in Rewards earned. Bonus attempts have
+separate records, advance the campaign, and earn no consumables or career stars.
+
 The result screen shows what the player achieved and what to try next. Its three
 stars use the existing rescue goals. A clear earns the first star and keeps
 **Next level** as the primary action. Extra stars never block campaign progression.
@@ -17,7 +22,7 @@ and Lemmings 3.
 
 On iOS and TV, select the award row to open its description. Back returns to the
 result, and Next award steps through the awards from that run. An iPad pointer
-also shows the description on hover and holds the award rotation while reading.
+also shows the description on hover without changing the result.
 Screen-reader help includes each award's condition.
 
 Earned stars arrive in a sequence of short stamps and rising chimes. The entire
@@ -26,22 +31,25 @@ the result page, uses six small redraws at most, and adds no gameplay rendering.
 Reduced Motion shows the complete rating immediately. Chimes follow the game's
 sound volume and mute state. Leaving the page cancels the sequence and sounds.
 
-The two result cards separate **This level** from **Career**:
+The two result cards separate **This level** from optional **Career** review:
 
-- The level card names new level awards and shows the old and new personal record.
-  Its named-award link opens the award condition. Level goals lists the rescue
-  targets and results. Impossible full-rescue
-  goals and unproven hands-off challenges are not advertised.
-- The career card names a new award, shows the total new awards, and lets the
-  player step through them. The award count opens the collection with gold **NEW** highlights.
-  With no unlock, the card shows progress towards the next career milestone.
+- The level card names a new level award and shows the personal record.
+  Level goals lists the rescue targets and results. Impossible full-rescue goals
+  and unproven hands-off challenges are not advertised.
+- The career card links to career stars, awards and any newly earned reward
+  receipt. It does not display resource balances, future milestone progress or
+  a philosophical interpretation. Reward reasons open only by explicit choice.
+- Time records, resource balances and future career milestones remain in Records,
+  Career and reward details. A clear never opens another reward page automatically.
 - Career stars add the best rating for each distinct level once. Repeating a
   clear does not add stars. Improving a rating adds only the difference.
-- Career progress lists cumulative targets, numerical progress, this run's gain,
-  and the remaining amount. **C** opens it. **G** opens level goals.
-- A shortfall of one rescue gets a **So close!** callout. Larger shortfalls show
-  the exact count. Failed clears, unknown targets and completed goals have
-  different messages.
+- **C** opens career progress. **G** opens level goals. Existing review shortcuts,
+  retry, continue, Hot Seat ownership and paused Ready handovers remain available.
+
+Phone and TV results use one static **Awards (N)** action instead of cycling
+award names automatically. Selecting it opens the first award. Next award visits
+the others, and Back returns to the same result. The optional second display
+region retains its full goals and award collection when that device supports it.
 
 Local result rankings use the existing compatible level boards. A climb displays
 both ranks, such as **#2 > #1**. **All levels** opens the local career board.

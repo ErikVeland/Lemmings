@@ -12,6 +12,38 @@ final class LearningJourneyDesktopTests: XCTestCase {
             levelNameSnapshot: "Lesson \(index)", levelNumberSnapshot: index + 1)
     }
 
+    @MainActor func testJourneyProgressAndSyncedQueueBelongOnlyToTheirSession() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = try LevelPlaylistStore(file: folder.appendingPathComponent("a.json"))
+        let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: [entry(0), entry(1)])
+        try source.add(playlist)
+        let run = try LevelSequenceRun(source: .playlist(playlist.id), pool: .init(id: LearningJourney.version, summary: playlist.name), entries: playlist.entries)
+        try source.startRun(run, hotSeatID: "Golden", l2Progress: ["fixture": Data([1, 2, 3])])
+        try source.recordLearningWin(runID: run.id, level: run.currentEntry.identity)
+        XCTAssertTrue(try source.advanceLearningJourney(runID: run.id, won: true))
+        XCTAssertTrue(source.learningProgress.completed.isEmpty)
+        XCTAssertEqual(source.learningProgress(hotSeatID: "Golden").completed, [playlist.entries[0].identity])
+        XCTAssertTrue(source.learningProgress(hotSeatID: "Christmas").completed.isEmpty)
+        let snapshot = try XCTUnwrap(source.journeySessions["Golden"])
+        let target = try LevelPlaylistStore(file: folder.appendingPathComponent("b.json"))
+        try target.add(playlist)
+        let old = try LevelSequenceRun(source: .playlist(playlist.id), pool: run.pool, entries: run.entries)
+        try target.startRun(old, hotSeatID: "Golden")
+        var incoming = snapshot; incoming.updatedAt = Date().addingTimeInterval(1)
+        try target.importJourneySession(incoming, hotSeatID: "Golden")
+        XCTAssertEqual(target.resumableLearningJourney(hotSeatID: "Golden")?.run.currentIndex, 1)
+        XCTAssertEqual(target.activeRunL2Progress, ["fixture": Data([1, 2, 3])])
+        XCTAssertNil(target.resumableLearningJourney(hotSeatID: nil))
+        XCTAssertNil(target.resumableLearningJourney(hotSeatID: "Christmas"))
+        let ended = JourneySessionSnapshot(run: nil, updatedAt: incoming.updatedAt.addingTimeInterval(1))
+        try target.importJourneySession(ended, hotSeatID: "Golden")
+        try target.importJourneySession(snapshot, hotSeatID: "Golden")
+        try target.ensureJourneySnapshots()
+        XCTAssertNil(target.resumableLearningJourney(hotSeatID: "Golden"))
+        XCTAssertNotNil(target.resumableRun(id: old.id))
+    }
+
     func testOhYesRevisionIgnoresUnrelatedPorts() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -91,7 +123,8 @@ final class LearningJourneyDesktopTests: XCTestCase {
             let campaign = try LevelSequenceRun.playlist(other, pool: .init(id: "campaign", summary: other.name))
             let nativeProgress = ["native": Data([1, 2, 3])]
             try store.startRun(campaign, hotSeatID: "other", l2Progress: nativeProgress)
-            let saved = try XCTUnwrap(store.resumableLearningJourney(hotSeatID: "other"))
+            XCTAssertNil(store.resumableLearningJourney(hotSeatID: "other"))
+            let saved = try XCTUnwrap(store.resumableLearningJourney(hotSeatID: "golden"))
             XCTAssertEqual(saved.run, golden)
             XCTAssertEqual(saved.hotSeatID, "golden")
             XCTAssertEqual(store.activeRun, campaign, "Opening the hub must not switch sessions")
@@ -107,7 +140,7 @@ final class LearningJourneyDesktopTests: XCTestCase {
         }
     }
 
-    @MainActor func testJourneyHubPrefersTheCurrentSessionAndFindsAnActiveSoloFallback() throws {
+    @MainActor func testJourneyHubNeverFallsBackToAnotherSession() throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
@@ -125,8 +158,13 @@ final class LearningJourneyDesktopTests: XCTestCase {
         try store.startRun(solo, hotSeatID: nil)
         XCTAssertEqual(store.resumableLearningJourney(hotSeatID: "Golden")?.run, hotSeat)
         XCTAssertEqual(store.resumableLearningJourney(hotSeatID: nil)?.run, solo)
-        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: "Christmas")?.run, solo)
+        XCTAssertNil(store.resumableLearningJourney(hotSeatID: "Christmas"))
         XCTAssertEqual(store.activeRun, solo)
+        let secondHotSeat = try run(0)
+        try store.startRun(secondHotSeat, hotSeatID: "Christmas")
+        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: nil)?.run, solo)
+        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: "Golden")?.run, hotSeat)
+        XCTAssertEqual(store.activeRun, secondHotSeat)
     }
 
     @MainActor func testLearningFailureActionsAndSharedEngineDefaults() throws {

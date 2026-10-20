@@ -2,13 +2,14 @@
 
 Updated 19 October 2026. This plan records package evidence and the remaining platform and fidelity work.
 
-The next platform milestone is a full 2.0 iOS release for iPad, iPhone and
-iPhone Duo, with Classic, Lemmings 2 and Lemmings 3 at launch. The latest Mac
-package with retained acceptance evidence is 2.0.3 build 86. The appcast
-advertises 2.0.4 build 87. Main is at 2.0.6 Mac build 90, iOS build 16 and
-tvOS build 6. No 2.0.5 or 2.0.6 package or acceptance record is present yet.
-The earlier 1.3 mobile work remains historical development evidence. See [release scope](ReleaseScope.md) for current
-release claims and the [2.0 roadmap](2.0Roadmap.md) for the delivery sequence.
+Current source candidates, published feed versions and retained package evidence
+are recorded in [release scope](ReleaseScope.md). Those records remain separate.
+The mobile 2.0 milestone covers iPad, iPhone and iPhone Duo with the three native
+games. The [2.1 delivery plan](2.1Roadmap.md#priorities-and-acceptance) now sets the
+product priority: free basic magnification, independent original presentation and
+modern conveniences, honest hints, newcomer teaching, quiet results, campaign
+closure, accessibility and device acceptance. Optional character/review expansion
+follows those foundations. The owner authorised the work on 19 October 2026.
 
 The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
 
@@ -22,8 +23,8 @@ The objective is an official-quality edition that preserves the original puzzles
 | Lemmings 3 | Three tribes, tools, reserves, original music, voices and movie gallery | Published Beta classification. The current fixture audit passes 399 of 416 cases; four standalone outcomes and thirteen carried schedules remain open. Source fidelity and original-media acceptance remain separate. |
 | Modern play | HD explosions, directional speed ghosts, smooth 2/3/5/10× speed, hold/release and rapid exits | Shared clocks preserve whole simulation ticks. Effects, keyboard routing and recorded presentation have separate checks. |
 | Mouse and controller | Multiscreen pointer capture, gamepad skill/focus controls, hints, settings, retry and supported rewind/step | Automated button input is covered. Physical device models, remapping and complete controller-only journeys remain to be tested. |
-| Novice help | Verified Classic hints, labelled coaching and optional solution ghosts | Exact level and condition matching hides stale hints. Complete novice journeys across input devices remain separate acceptance work. |
-| Preferences | Modern defaults, first-launch choice, OG reset and individual settings | Saves and explicit opt-outs persist. Independent added-motion and added-flash reductions preserve modern gameplay. Broader accessibility validation remains open. |
+| Novice help | Checked Classic hints, clearly separate general coaching and optional solution ghosts | Exact level and condition matching hides stale hints. Complete novice journeys across input devices remain separate acceptance work. |
+| Preferences | Independent presentation and convenience choices, restrained defaults and individual settings | Saves and explicit opt-outs persist. Independent added-motion and added-flash reductions preserve modern gameplay. Broader accessibility validation remains open. |
 | Progress and replay | Local profiles, records, achievements, replay review and movie export | Checkpoint recovery and merge scenarios have automated evidence. Live cross-device synchronisation, physical recovery journeys and provisioned Game Center remain separate acceptance checks. |
 
 Current route counts and their exact source limits are recorded in [release scope](ReleaseScope.md), [campaign evidence](CampaignCompletion/evidence.json) and the [original completion gate](ClassicCompletion/README.md). Earlier beta reports do not certify the current candidate.
@@ -33,7 +34,7 @@ Current route counts and their exact source limits are recorded in [release scop
 - Classic and L3 now pause when their window or app loses focus. L2 uses the same preference. Returning to the game requires an explicit resume.
 - Disconnecting a controller that has been used pauses play. An idle, unused controller does not interrupt a keyboard player. Speed holds are cleared.
 - Closing hints, controls help or a replay cannot undo a pause caused by an interruption while the page was open.
-- **Settings → Gameplay → Pause** controls this behaviour. It defaults on, persists, and follows modern/OG presets. Machine artwork and audio presets preserve it.
+- **Settings → Gameplay → Pause** controls this behaviour. It defaults on and persists independently of presentation. Original presentation, machine artwork and audio presets preserve the player's interruption preference.
 - Controller navigation skips disabled entries in settings lists in both directions.
 - The default app integration suite now includes the recent controller, variable-speed, hint and interruption checks.
 

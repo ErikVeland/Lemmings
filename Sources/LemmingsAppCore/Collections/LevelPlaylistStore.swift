@@ -50,6 +50,8 @@ import NxlvKit
         var activeRunL2Progress: [String: Data]?
         var savedRuns: [SavedRun]?
         var learningProgress: LearningJourneyProgress?
+        var hotSeatLearningProgress: [String: LearningJourneyProgress]?
+        var journeySessions: [String: JourneySessionSnapshot]?
         var favourites: [LevelPlaylistEntry]?
         var recentlyPlayed: [LevelPlaylistEntry]?
 
@@ -129,23 +131,90 @@ import NxlvKit
         return savedRuns.first { $0.run.id == id }
     }
 
-    /// Prefer this session's journey, then the active or most recently saved journey.
+    /// A map belongs only to the selected session; saved-session browsing is explicit.
     public func resumableLearningJourney(hotSeatID: String?) -> SavedRun? {
         func isJourney(_ run: LevelSequenceRun) -> Bool {
             run.source == .playlist(LearningJourney.playlistID) && run.pool.id == LearningJourney.version
         }
+        if let snapshot = document.journeySessions?[hotSeatID ?? "solo"], snapshot.run == nil { return nil }
         let active = document.activeRun.flatMap { isJourney($0) ? resumableRun(id: $0.id) : nil }
-        if let active, active.hotSeatID == hotSeatID { return active }
+        if document.activeRun != nil, document.activeRunHotSeatID == hotSeatID { return active }
         let saved = savedRuns.filter { isJourney($0.run) }
-        return saved.first { $0.hotSeatID == hotSeatID } ?? active ?? saved.first
+        return saved.first { $0.hotSeatID == hotSeatID }
     }
 
     public var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
-    public func mergeLearningProgress(_ incoming: LearningJourneyProgress) throws {
-        let merged = GameProgressValue.mergeLearning(learningProgress, incoming)
-        guard merged != learningProgress else { return }
+    public var onChange: (() -> Void)?
+    public var journeySessions: [String: JourneySessionSnapshot] { document.journeySessions ?? [:] }
+    public func ensureJourneySnapshots() throws {
         let previous = document
-        document.learningProgress = merged
+        refreshJourneySnapshots()
+        guard document.journeySessions != previous.journeySessions else { return }
+        do { try save(refreshJourneySnapshots: false) } catch { document = previous; throw error }
+    }
+    public func importJourneySession(_ incoming: JourneySessionSnapshot, hotSeatID: String?) throws {
+        let scope = hotSeatID ?? "solo"
+        guard incoming.updatedAt > (document.journeySessions?[scope]?.updatedAt ?? .distantPast) else { return }
+        let previous = document
+        var archived = savedRuns.filter { $0.run.id != incoming.run?.id }
+        let replacesActive = document.activeRunHotSeatID == hotSeatID
+            && document.activeRun?.source == .playlist(LearningJourney.playlistID)
+        if let run = incoming.run {
+            if playlist(id: LearningJourney.playlistID) == nil {
+                document.playlists.append(try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: run.entries))
+            }
+            if replacesActive || document.activeRun == nil {
+                if let active = document.activeRun, active.id != run.id {
+                    archived.insert(SavedRun(run: active, hotSeatID: document.activeRunHotSeatID, l2Progress: document.activeRunL2Progress), at: 0)
+                }
+                document.activeRun = run; document.activeRunHotSeatID = hotSeatID
+                document.activeRunL2Progress = incoming.l2Progress
+            } else { archived.insert(SavedRun(run: run, hotSeatID: hotSeatID, l2Progress: incoming.l2Progress), at: 0) }
+        } else if replacesActive {
+            document.activeRun = nil; document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil
+        }
+        document.savedRuns = archived
+        if document.journeySessions == nil { document.journeySessions = [:] }
+        document.journeySessions?[scope] = incoming
+        do { try save(refreshJourneySnapshots: false) } catch { document = previous; throw error }
+    }
+    private func refreshJourneySnapshots() {
+        let previous = document.journeySessions ?? [:]
+        let scopes = Set(previous.keys).union(savedRuns.map { $0.hotSeatID ?? "solo" })
+            .union(document.activeRun.map { _ in [document.activeRunHotSeatID ?? "solo"] } ?? [])
+        for scope in scopes {
+            let sessionID = scope == "solo" ? nil : scope
+            let selected: SavedRun?
+            if let active = document.activeRun, document.activeRunHotSeatID == sessionID {
+                selected = active.source == .playlist(LearningJourney.playlistID)
+                    ? SavedRun(run: active, hotSeatID: sessionID, l2Progress: document.activeRunL2Progress) : nil
+            } else if let snapshot = previous[scope], snapshot.run == nil {
+                selected = nil
+            } else {
+                selected = savedRuns.first { $0.hotSeatID == sessionID && $0.run.source == .playlist(LearningJourney.playlistID) }
+            }
+            let run = selected?.run, l2 = selected?.l2Progress ?? [:]
+            guard previous[scope]?.run != run || (previous[scope]?.l2Progress ?? [:]) != l2 else { continue }
+            if document.journeySessions == nil { document.journeySessions = [:] }
+            document.journeySessions?[scope] = .init(run: run, l2Progress: l2)
+        }
+    }
+    public var learningHotSeatIDs: [String] { Array((document.hotSeatLearningProgress ?? [:]).keys) }
+    public func learningProgress(hotSeatID: String?) -> LearningJourneyProgress {
+        hotSeatID.map { document.hotSeatLearningProgress?[$0] ?? .init() } ?? learningProgress
+    }
+    private func setLearningProgress(_ progress: LearningJourneyProgress, hotSeatID: String?) {
+        if let hotSeatID {
+            if document.hotSeatLearningProgress == nil { document.hotSeatLearningProgress = [:] }
+            document.hotSeatLearningProgress?[hotSeatID] = progress
+        } else { document.learningProgress = progress }
+    }
+    public func mergeLearningProgress(_ incoming: LearningJourneyProgress, hotSeatID: String? = nil) throws {
+        let current = learningProgress(hotSeatID: hotSeatID)
+        let merged = GameProgressValue.mergeLearning(current, incoming)
+        guard merged != current else { return }
+        let previous = document
+        setLearningProgress(merged, hotSeatID: hotSeatID)
         do { try save() } catch { document = previous; throw error }
     }
     public var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
@@ -207,11 +276,11 @@ import NxlvKit
         guard let run = document.activeRun, run.id == runID,
               run.source == .playlist(LearningJourney.playlistID),
               run.currentEntry.identity == level else { throw Failure.invalidDocument }
-        guard !learningProgress.completed.contains(level) else { return }
+        guard !learningProgress(hotSeatID: document.activeRunHotSeatID).completed.contains(level) else { return }
         let previous = document
-        var progress = learningProgress
+        var progress = learningProgress(hotSeatID: document.activeRunHotSeatID)
         progress.record(level, won: true)
-        document.learningProgress = progress
+        setLearningProgress(progress, hotSeatID: document.activeRunHotSeatID)
         do { try save() } catch { document = previous; throw error }
     }
 
@@ -220,9 +289,9 @@ import NxlvKit
         guard var run = document.activeRun, run.id == runID,
               run.source == .playlist(LearningJourney.playlistID) else { throw Failure.invalidDocument }
         let previous = document
-        var progress = learningProgress
+        var progress = learningProgress(hotSeatID: document.activeRunHotSeatID)
         progress.record(run.currentEntry.identity, won: won)
-        document.learningProgress = progress
+        setLearningProgress(progress, hotSeatID: document.activeRunHotSeatID)
         let advanced = run.advance()
         document.activeRun = run
         do { try save() } catch { document = previous; throw error }
@@ -325,24 +394,25 @@ import NxlvKit
     public func migrateLearningJourney(_ journey: LearningJourney,
                                        won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
         let previous = document
-        var progress = learningProgress
-        let completed = progress.completed
-        func migrated(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
-            let migration = try journey.migration(of: run) { completed.contains($0) || won($0) }
-            // Skipped earlier lessons stay available in "Come back to these". A deferral is never a win.
+        func migrated(_ run: LevelSequenceRun, hotSeatID: String?) throws -> LevelSequenceRun? {
+            var progress = learningProgress(hotSeatID: hotSeatID)
+            let completed = progress.completed
+            let migration = try journey.migration(of: run) { completed.contains($0) || (hotSeatID == nil && won($0)) }
             for identity in migration.deferred { progress.record(identity, won: false) }
+            setLearningProgress(progress, hotSeatID: hotSeatID)
             return migration.run
         }
-        let active = try document.activeRun.flatMap(migrated)
+        let active = try document.activeRun.flatMap { try migrated($0, hotSeatID: document.activeRunHotSeatID) }
         var changed = active != document.activeRun
         document.activeRun = active
         if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
         document.savedRuns = try savedRuns.compactMap { saved in
-            guard let run = try migrated(saved.run) else { changed = true; return nil }
+            guard let run = try migrated(saved.run, hotSeatID: saved.hotSeatID) else { changed = true; return nil }
             changed = changed || run != saved.run
             return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
         }
-        if progress != learningProgress { document.learningProgress = progress; changed = true }
+        changed = changed || document.learningProgress != previous.learningProgress
+            || document.hotSeatLearningProgress != previous.hotSeatLearningProgress
         guard changed else { document = previous; return }
         do { try save() } catch { document = previous; throw error }
     }
@@ -529,7 +599,8 @@ import NxlvKit
         }
     }
 
-    private func save() throws {
+    private func save(refreshJourneySnapshots: Bool = true) throws {
+        if refreshJourneySnapshots { self.refreshJourneySnapshots() }
         try withLock {
             document.version = Document.currentVersion
             let encoder = JSONEncoder()
@@ -543,5 +614,6 @@ import NxlvKit
             try data.write(to: file, options: .atomic)
             expectedData = data
         }
+        onChange?()
     }
 }

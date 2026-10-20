@@ -1,11 +1,10 @@
 # Cinematic nuclear explosions
 
-HD effects, including cinematic nuclear explosions, are on by default. On the
-first launch, choose **Play with modern defaults** or **Old school**. The choice is
-saved. **Settings > Video > Effects > Enable HD effects** changes it later.
-The separate **Explosions** control can disable cinematic blasts while retaining
-speed effects. Existing saved explosion choices remain intact until the player
-chooses the HD preset.
+New players start with light HD effects. Cinematic nuclear explosions start off.
+Use **Settings > Video > Effects > Enable HD effects** and the separate
+**Explosions** control to choose them. Original and Modern presentation remain
+available in Settings without changing controls or assistance. Launch adds no
+presentation-choice page. Existing saved explosion choices remain intact.
 
 When enabled, a detonation produces a white flash, a second exposure bloom,
 an expanding fireball, a pressure ring, scattered light, and a rising cloud
@@ -34,6 +33,20 @@ the rising cloud, pressure front, and lens glow. It composites premultiplied
 colour over the game and controls. Unchanged core masks are reused between
 animation frames. The overlay redraws at approximately 60 Hz while a blast is
 active and stops scheduling frames after expiry.
+
+All M-series Macs start with full effects, including 8 GiB models. Routine CPU
+and GPU frame timings do not lower their quality. Their surface budget uses
+Metal's working-set allowance, up to 33,554,432 pixels, so native 5K/6K overlays
+fit without inheriting a mobile pixel cap. Older Intel Macs and mobile devices
+retain measured dynamic scaling and their existing resource budgets.
+
+On M-series Macs, only explicit power-saving mode, memory warnings and serious
+thermal pressure reduce effects. Mild thermal warmth does not. Full effects
+return as soon as that pressure clears, including while paused. If resource
+pressure disables optional GPU work, cinematic blasts retain a fallback capped
+at 262,144 pixels and two samples. The same policy serves Classic, NeoLemmix, L2
+and L3. The player's HD effects, Explosions, Reduce Motion and Reduce Flashes
+settings still control blast activation.
 
 If Metal is unavailable, AppKit draws a simpler white flash, radial fireball,
 and expanding ring. With the cinematic option disabled, the original short

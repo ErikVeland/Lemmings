@@ -106,7 +106,7 @@ public enum HostedCategory: String, CaseIterable {
         return String(decoding: try encoder.encode(conditions), as: UTF8.self)
     }
     public static func payload(_ run: ArcadeRun) throws -> Data {
-        guard let conditions = run.level.conditions, conditions.isValid, run.seconds.isFinite,
+        guard !run.usedBonusSkill, let conditions = run.level.conditions, conditions.isValid, run.seconds.isFinite,
               run.seconds >= 0, run.seconds * 1000 <= Double(Int32.max) else { throw URLError(.cannotParseResponse) }
         return try JSONSerialization.data(withJSONObject: [
             "id": run.id.uuidString.lowercased(), "conditionsJSON": conditionsJSON(conditions),
@@ -115,7 +115,7 @@ public enum HostedCategory: String, CaseIterable {
         ])
     }
     public static func candidates(_ attempts: [TrolleyAttempt], profile: String) -> [ArcadeRun] {
-        let own = attempts.filter { $0.run.profileID == profile }
+        let own = attempts.filter { $0.run.profileID == profile && !$0.run.usedBonusSkill }
         var winners: [UUID: ArcadeRun] = [:]
         for group in Dictionary(grouping: own, by: \.comparisonID).values {
             for category: TrolleyBoard in [.mostSaved, .leastSkills, .fastestClear, .fastestAllSaved] {

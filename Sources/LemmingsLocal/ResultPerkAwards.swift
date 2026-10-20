@@ -5,7 +5,7 @@ import NxlvKit
 
 @MainActor extension ArcadeView {
     struct EarnedPerk {
-        enum Kind: Hashable { case zoom, superzoom, skip }
+        enum Kind: Hashable { case superzoom, skip, extraSkill }
         let kind: Kind
         let name: String
         let quantity: Int
@@ -17,17 +17,9 @@ import NxlvKit
     }
 
     var earnedPerks: [EarnedPerk] {
-        guard let report, let c = celebration, !report.run.assisted, report.run.qualifies,
+        guard let report, let c = celebration, report.run.earnsConsumableRewards,
               !savedEarnedRewards.isEmpty else { return [] }
         var perks: [EarnedPerk] = []
-        if c.precisionRewards.zoomUses > 0 {
-            let star = (1...max(1, c.goals.stars)).first {
-                (c.careerBefore.stars + max(0, $0 - c.previousStars)) / 3 > c.careerBefore.stars / 3
-            } ?? c.goals.stars
-            perks.append(.init(kind: .zoom, name: L10n.text("ZOOM"), quantity: c.precisionRewards.zoomUses,
-                milestone: L10n.text("Career stars \(c.careerBefore.stars) > \(c.career.stars)"),
-                criterion: L10n.text("Every 3 career stars"), star: star))
-        }
         let milestone = L10n.text("Three-star levels \(c.careerBefore.threeStarLevels) > \(c.career.threeStarLevels)")
         let criterion = L10n.text("Every 3 distinct levels")
         if c.precisionRewards.superzoomUses > 0 {
@@ -37,6 +29,10 @@ import NxlvKit
         if report.earnedLevelSkip {
             perks.append(.init(kind: .skip, name: L10n.text("LEVEL SKIP"), quantity: 1,
                 milestone: milestone, criterion: criterion, star: 3))
+        }
+        if report.earnedExtraSkill {
+            perks.append(.init(kind: .extraSkill, name: L10n.text("EXTRA SKILL"), quantity: 1,
+                milestone: milestone, criterion: L10n.text("Every 10 distinct levels · Rare"), star: 3))
         }
         return perks
     }
@@ -52,9 +48,9 @@ import NxlvKit
     var perkCounters: [PerkCounter] {
         let wallet = PrecisionZoomController.shared
         let balances: [(EarnedPerk.Kind, String, Int)] = [
-            (.zoom, L10n.text("Zoom"), wallet.remaining(.zoom, profileID: player.id)),
-            (.superzoom, L10n.text("Superzoom"), wallet.remaining(.superzoom, profileID: player.id)),
-            (.skip, L10n.text("Level Skips"), ArcadeStore.shared.records.levelSkips(profileID: player.id).available)
+            (.superzoom, L10n.text("Superzoom"), wallet.remainingSuperzoom(profileID: player.id)),
+            (.skip, L10n.text("Level Skips"), ArcadeStore.shared.records.levelSkips(profileID: player.id).available),
+            (.extraSkill, L10n.text("Extra skills"), ArcadeStore.shared.records.extraSkills(profileID: player.id).available)
         ]
         let earned = earnedPerks
         return balances.map { kind, name, balance in
@@ -82,7 +78,7 @@ import NxlvKit
 
     func drawPerkCounters(in rect: CGRect) {
         let counters = perkCounters
-        let width = (rect.width - 24) / 3
+        let width = (rect.width - 12 * CGFloat(max(0, counters.count - 1))) / CGFloat(max(1, counters.count))
         for (index, counter) in counters.enumerated() {
             let frame = CGRect(x: rect.minX + CGFloat(index) * (width + 12), y: rect.minY, width: width, height: rect.height)
             let digits = String(counter.value)

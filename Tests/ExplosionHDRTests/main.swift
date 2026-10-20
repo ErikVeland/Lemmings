@@ -11,6 +11,10 @@ func require(_ value: Bool, _ message: String) throws {
   guard let gpu = MTLCreateSystemDefaultDevice(), let queue = gpu.makeCommandQueue() else {
     throw Failure(message:"Metal is unavailable")
   }
+  let detected = FXDeviceProfile.detect(device: gpu, mobile: false)
+  try require(detected.desktop && !FXDeviceProfile.detect(device: gpu, mobile: true).desktop,
+    "Mac device detection did not select its desktop presentation policy")
+  print("Mac GPU: \(gpu.name), desktop overlay budget \(detected.maximumOverlayPixels) pixels")
   try require(ExplosionHDR.headroom(1) == 1 && ExplosionHDR.headroom(12) == 8 && ExplosionHDR.headroom(.nan) == 1,
     "display headroom is not bounded")
   var fade = SelectionFade<Int>()
@@ -40,6 +44,15 @@ func require(_ value: Bool, _ message: String) throws {
   try require(!idle.hasAllocatedFlashMask && idle.layer?.isHidden == true,
     "Clearing the last flash left an idle mask or visible frame")
   print("PASS idle HDR overlay skips masks and clears the last effect")
+  MacFXPerformance.shared.overrideQuality = .minimal
+  idle.pulse(cores: [CGRect(x: 300, y: 240, width: 6, height: 6)], fullScreen: true)
+  try require(!idle.isHidden && idle.explosionSamples(now: ProcessInfo.processInfo.systemUptime).count == 1,
+    "Minimum adaptive quality discarded an enabled cinematic blast")
+  try require(idle.layer?.isHidden == false, "Minimum quality hid the cinematic surface")
+  idle.clearExplosions()
+  try require(idle.isHidden, "Minimum quality retained a cleared cinematic blast")
+  MacFXPerformance.shared.overrideQuality = nil
+  print("PASS minimum quality keeps cinematic blasts and clears them on request")
   var camera = CGPoint(x: 100, y: 20)
   var zoom: CGFloat = 2
   let world = CGRect(x: 397, y: 97, width: 6, height: 6)
@@ -175,6 +188,14 @@ func require(_ value: Bool, _ message: String) throws {
       return (0..<3).contains(ix) && (0..<4).contains(iy) && silhouette[iy * 3 + ix] == 1
     }
     for y in 0..<size { for x in 0..<size {
+      // The overhead diamond is separate from the two-pixel silhouette border.
+      var point = CGPoint(x: (CGFloat(x) + 0.5) / CGFloat(backing), y: (CGFloat(y) + 0.5) / CGFloat(backing))
+      if curved {
+        let cx = point.x / 64 * 2 - 1, cy = point.y / 64 * 2 - 1
+        point = CGPoint(x: ((cx + cx * pow(abs(cy) / 3, 2)) * 0.5 + 0.5) * 64,
+          y: ((cy + cy * pow(abs(cx) / 4, 2)) * 0.5 + 0.5) * 64)
+      }
+      if LemmingSelectionRenderer.plumbobRect(for: effect).contains(point) { continue }
       let outlined = !occupied(x, y) && (-2...2).contains { dy in (-2...2).contains { dx in occupied(x + dx, y + dy) } }
       let index = (y * size + x) * 4
       try require((pixels[index + 3] > 0.5) == outlined,

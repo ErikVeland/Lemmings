@@ -17,6 +17,15 @@ private func require(
 
 private func testOptionsFollowInstalledData() throws {
     let upgraded = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+    try require(!upgraded.ridiculousSpeedEnabled && !ClassicSettings().ridiculousSpeedEnabled,
+        "Ridiculous speed must default off for new and existing players")
+    var ridiculous = upgraded
+    ridiculous.ridiculousSpeedEnabled = true
+    ridiculous.applyExperiencePreset(modern: false)
+    ridiculous.applyExperiencePreset(modern: true)
+    let savedRidiculous = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(ridiculous))
+    try require(savedRidiculous.ridiculousSpeedEnabled, "Ridiculous speed must survive persistence and presentation presets")
+
     try require(upgraded.showSongInfo && upgraded.fadeMenuButton,
         "Existing players must retain song notices and Menu fading by default")
     for songInfo in [false, true] {
@@ -161,17 +170,17 @@ private func testTargetingPresetsAndIconMigration() throws {
         && originalSave.skillCursorIconSize == .none && originalSave.lemmingSelectionStyle == .none,
         "Migration must respect Original choices")
     settings.applyExperiencePreset(modern: false)
-    try require(settings.experiencePreset == .original && !settings.favorApproachingLemmings
-        && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none
+    try require(settings.experiencePreset == .original && settings.favorApproachingLemmings
+        && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .none
         && settings.lemmingSelectionStyle == .none && !settings.showClassicSkillBackpacks
         && settings.gameplayCursorStyle == .original,
-        "Original must disable targeting aids and the icon")
+        "Original presentation must preserve targeting assistance and hide the added markers")
     settings.applyExperiencePreset(modern: true)
     try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
         && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one
         && settings.lemmingSelectionStyle == .modern && settings.showClassicSkillBackpacks
         && settings.gameplayCursorStyle == .modern,
-        "Modern must restore all targeting aids and the baseline icon")
+        "Modern presentation must retain targeting assistance and restore the baseline markers")
     settings.experiencePreset = .custom
     settings.favorBombBlockers = false
     settings.favorBuilders = false
@@ -364,12 +373,14 @@ private func testHDEffectsPreference() throws {
     let restoredControllerChoice = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(controllerChoice))
     try require(restoredControllerChoice == controllerChoice,
         "Controller settings did not round trip")
-    try require(defaults.hdEffectsEnabled && defaults.fullScreenHDRFlashes, "New players must start with HD explosions and speed effects")
+    try require(defaults.hdEffectsEnabled && !defaults.fullScreenHDRFlashes && !defaults.djIncludesOtherSoundtracks,
+        "New players must start with light effects and their selected soundtrack")
     let legacy = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"fullScreenHDRFlashes\":false,\"musicVolume\":0.25}".utf8))
     try require(legacy.hdEffectsEnabled && !legacy.fullScreenHDRFlashes && legacy.musicVolume == 0.25,
         "Migration must retain a saved explosion choice and unrelated settings")
     var oldSchool = defaults
     oldSchool.hdEffectsEnabled = false
+    oldSchool.fullScreenHDRFlashes = true
     let saved = try JSONEncoder().encode(oldSchool)
     let restored = try JSONDecoder().decode(ClassicSettings.self, from: saved)
     try require(!restored.hdEffectsEnabled && restored.fullScreenHDRFlashes,
@@ -381,9 +392,9 @@ private func testHDEffectsPreference() throws {
     var experience = ClassicSettings(graphics: .amiga, musicVolume: 0.25, soundVolume: 0.4)
     experience.unlockAllClassicLevels = true
     experience.applyExperiencePreset(modern: false)
-    try require(!experience.pauseOnInterruption && !experience.modernControlsEnabled && !experience.variableSpeedEnabled && !experience.controllerEnabled && !experience.hdEffectsEnabled
-      && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks && !experience.favorApproachingLemmings,
-      "OG did not disable the added conveniences together")
+    try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && !experience.hdEffectsEnabled
+      && experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks && experience.favorApproachingLemmings,
+      "Original presentation changed independent controls or assistance")
     try require(experience.musicStyle == .faithful, "OG did not restore faithful music")
     try require(experience.graphics == .amiga && experience.musicVolume == 0.25 && experience.soundVolume == 0.4,
       "OG discarded the chosen machine or volumes")
@@ -392,16 +403,59 @@ private func testHDEffectsPreference() throws {
     try require(savedExperience == experience, "The OG preset did not survive relaunch")
     experience.applyExperiencePreset(modern: true)
     try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && experience.hdEffectsEnabled
-      && experience.confinePointer && experience.favorApproachingLemmings, "Modern defaults failed to restore the conveniences")
+      && experience.confinePointer && experience.favorApproachingLemmings && !experience.fullScreenHDRFlashes,
+      "Modern presentation changed independent controls or enabled cinematic flashes")
     try require(experience.musicStyle == .modern, "Modern defaults did not enable the modern music mix")
     try require(experience.unlockAllClassicLevels, "Modern defaults changed the Classic level unlock choice")
-    print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
+    print("PASS restrained presentation defaults, independent controls and preserved machine/volumes")
+}
+
+private func testPresentationPreservesIndependentChoices() throws {
+    for enabled in [false, true] {
+        var value = ClassicSettings(graphics: .amiga, display: .monitor,
+            modernControlsEnabled: enabled, variableSpeedEnabled: !enabled,
+            pauseOnInterruption: enabled, favorApproachingLemmings: !enabled,
+            favorBombBlockers: enabled, favorBuilders: !enabled,
+            controllerEnabled: enabled, controllerTapSpeed: !enabled,
+            controllerSwapSticks: true, controllerMappings: ["a": "b", "b": "a"],
+            reduceMotion: true, reduceFlashes: true, confinePointer: !enabled,
+            music: .adaptiveDJ, musicVolume: 0.25, menuMusic: false,
+            sound: .amigaVoices, soundVolume: 0.4, shuffleGraphics: true, shuffleMusic: true)
+        let controls = PlayerControlSettings(value)
+        for modern in [false, true] {
+            value.applyExperiencePreset(modern: modern)
+            try require(PlayerControlSettings(value) == controls,
+                "Presentation changed personal input, bindings or accessibility choices")
+            try require(value.modernControlsEnabled == enabled && value.variableSpeedEnabled == !enabled
+                && value.pauseOnInterruption == enabled && value.favorApproachingLemmings == !enabled
+                && value.favorBombBlockers == enabled && value.favorBuilders == !enabled
+                && value.confinePointer == !enabled,
+                "Presentation changed independent control or assistance choices")
+            try require(value.graphics == .amiga && value.display == .monitor && value.music == .adaptiveDJ
+                && value.sound == .amigaVoices && value.musicVolume == 0.25 && value.soundVolume == 0.4
+                && value.shuffleGraphics && value.shuffleMusic && !value.menuMusic,
+                "Presentation replaced the selected machine, sources or volumes")
+            value.variableSpeedEnabled.toggle()
+            value.refreshExperiencePreset()
+            try require(value.experiencePreset == (modern ? .modern : .original),
+                "Independent assistance changed the presentation label")
+            value.variableSpeedEnabled.toggle()
+            let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(value))
+            try require(restored == value, "Presentation and independent choices did not survive restoration")
+        }
+    }
+    let explicit = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data(#"{"hdEffectsEnabled":false,"fullScreenHDRFlashes":true,"djIncludesOtherSoundtracks":true,"controllerEnabled":false,"pauseOnInterruption":false,"controllerMappings":{"a":"b","b":"a"}}"#.utf8))
+    try require(!explicit.hdEffectsEnabled && explicit.fullScreenHDRFlashes && explicit.djIncludesOtherSoundtracks
+        && !explicit.controllerEnabled && !explicit.pauseOnInterruption && explicit.controllerMappings == ["a": "b", "b": "a"],
+        "New defaults overwrote existing saved choices")
+    print("PASS independent presentation, saved opt-outs, bindings and style labels")
 }
 
 private func testStaticHomeScreen() throws {
     let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
     try require(!old.staticHomeScreen, "Older settings changed Home behaviour")
-    var value = ClassicSettings(staticHomeScreen: true)
+    var value = ClassicSettings(staticHomeScreen: true, fullScreenHDRFlashes: true)
     try require(!value.reduceMotion && value.speedEffectsEnabled && value.cinematicExplosionsEnabled,
       "Static Home changed gameplay effects")
     value.applyExperiencePreset(modern: false)
@@ -433,7 +487,7 @@ private func testReducedEffects() throws {
     try require(!old.reduceMotion && !old.reduceFlashes && old.musicVolume == 0.25, "Older settings lost their values")
     for motion in [false, true] {
         for flashes in [false, true] {
-            var value = ClassicSettings(reduceMotion: motion, reduceFlashes: flashes)
+            var value = ClassicSettings(reduceMotion: motion, reduceFlashes: flashes, fullScreenHDRFlashes: true)
             try require(value.speedEffectsEnabled == !motion, "Motion control changed flash policy")
             try require(value.explosionEffectsEnabled == !flashes, "Flash control changed motion policy")
             try require(value.cinematicExplosionsEnabled == (!motion && !flashes), "Cinematic effects bypass reductions")
@@ -449,6 +503,7 @@ private func testReducedEffects() throws {
 }
 
 do {
+    try testPresentationPreservesIndependentChoices()
     try testStaticHomeScreen()
     try testTargetingPresetsAndIconMigration()
     for size in ClassicInterfaceSize.allCases {

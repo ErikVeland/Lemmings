@@ -18,5 +18,7 @@
   "DeviceEffectResources.swift",
   "LevelPlaylist.swift",
   "SoundtrackCatalogue.swift",
-  "TouchpadJog.swift"
+  "TouchpadJog.swift",
+  "AssignmentPointerShape.swift",
+  "PrecisionZoomLedger.swift"
 ]

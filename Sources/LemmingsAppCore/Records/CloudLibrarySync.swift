@@ -22,11 +22,13 @@ import NxlvKit
     private var identities: [CloudLibraryIdentity]
     private var saved = LocalState()
     private var running = false
+    private var idleWaiters: [CheckedContinuation<Void, Never>] = []
     private var task: Task<Void, Never>?
     private var timer: Task<Void, Never>?
     private var requested = false
+    private var stopped = false
     private var stateReadFailed = false
-    private struct LocalState: Codable, Equatable {
+    private struct LocalState: Codable, Equatable, Sendable {
         var mapping: [String: String] = [:]
         var archive = CloudLibraryArchive()
         var seatRevisions: [String: String] = [:]
@@ -66,6 +68,9 @@ import NxlvKit
     }
     public func start() {
         guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }
+        stopped = false
+        // Sync is automatic in normal builds. Retire the old manual pause switch.
+        if defaultEnabled && !enabled { enabled = true }
         requestSync()
         timer = Task { [weak self] in
             while !Task.isCancelled {
@@ -75,8 +80,9 @@ import NxlvKit
             }
         }
     }
-    public func stop() { timer?.cancel(); timer = nil; task?.cancel(); task = nil }
+    public func stop() { stopped = true; requested = false; timer?.cancel(); timer = nil; task?.cancel(); task = nil }
     public func requestSync() {
+        guard !stopped else { return }
         requested = true
         guard task == nil, !running else { return }
         task = Task { [weak self] in
@@ -85,17 +91,22 @@ import NxlvKit
             // A save during import/upload gets another pass. An unchanged offline
             // provider waits for the periodic retry or next foreground activation.
             while self.requested && !Task.isCancelled {
+                await self.waitUntilIdle()
+                guard !Task.isCancelled else { break }
                 self.requested = false; await self.syncNow()
                 if self.state == .offline || { if case .failed = self.state { return true }; return false }() { break }
             }
             self.task = nil
         }
     }
-    private func persist(_ value: LocalState) throws {
+    private func persist(_ value: LocalState) async throws {
         // The periodic pass usually changes nothing. Skip the rewrite of the whole archive.
         guard value != saved || !FileManager.default.fileExists(atPath: stateFile.path) else { return }
-        try FileManager.default.createDirectory(at: stateFile.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try JSONEncoder().encode(value).write(to: stateFile, options: .atomic)
+        let file = stateFile
+        try await Task.detached(priority: .utility) {
+            try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try JSONEncoder().encode(value).write(to: file, options: .atomic)
+        }.value
         saved = value
     }
     private func capture(_ base: LocalState) throws -> LocalState {
@@ -160,19 +171,32 @@ import NxlvKit
         if let apple = transport as? AppleCloudLibraryTransport, !apple.available { setState(.offline); return }
         guard !running else { requested = true; return }
         guard !stateReadFailed else { return }
-        running = true; defer { running = false }
+        running = true; defer { finishOperation() }
+        setState(.syncing)
         do {
-            if identities.isEmpty, let apple = transport as? AppleCloudLibraryTransport { identities = try apple.credentials() }
-            identities = try await transport.discover(identities)
-            if let apple = transport as? AppleCloudLibraryTransport { try apple.storeCredentials(identities) }
-            setState(.syncing)
+            if identities.isEmpty, let apple = transport as? AppleCloudLibraryTransport {
+                let keys = try await apple.credentials()
+                identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
+            }
+            let discovered = try await transport.discover(identities)
+            identities = try AppleCloudLibraryTransport.mergeIdentities(identities, discovered)
+            if let apple = transport as? AppleCloudLibraryTransport {
+                let keys = try await apple.storeCredentials(identities)
+                identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
+            }
             let revision = store.progressRevision
+            let uploadIdentities = identities
             var remote = CloudLibraryArchive()
             var writable: [CloudLibraryIdentity] = []
             for identity in identities {
                 do {
                     let versions = try await transport.load(identity)
-                    for data in versions { try remote.merge(CloudLibraryArchive.decode(data)) }
+                    let previous = remote
+                    remote = try await Task.detached(priority: .utility) {
+                        var combined = previous
+                        for data in versions { try combined.merge(CloudLibraryArchive.decode(data)) }
+                        return combined
+                    }.value
                     writable.append(identity)
                 } catch {
                     // Corrupt, unknown or unauthorized saves remain untouched.
@@ -237,26 +261,33 @@ import NxlvKit
             guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             local.archive = merged
             let safe = canImport()
+            var uploadRevision = revision
             if safe {
                 let changed = try apply(&local)
-                try persist(local)
+                uploadRevision = store.progressRevision
+                // Notify while the import and its UI refresh are still one main-actor turn.
                 if changed { onImported?() }
+                try await persist(local)
             } else {
                 // Retain identity mappings and lineage, but keep unimported remote
                 // players out of the deletion detector until a safe-menu pass.
-                try persist(captured)
+                try await persist(captured)
             }
             let payload = try await Task.detached(priority: .utility) { try merged.encoded() }.value
-            var uploaded = false
+            var uploaded = 0
             for identity in writable {
                 guard enabled else { setState(.paused); return }
-                do { try await transport.save(payload, identity: identity, device: saved.device); uploaded = true }
+                do { try await transport.save(payload, identity: identity, device: saved.device); uploaded += 1 }
                 catch { /* Retry from local state on activation or the periodic pass. */ }
             }
-            guard uploaded else { setState(.offline); return }
-            lastSynced = Date()
+            guard uploaded > 0 else { setState(.offline); return }
+            guard enabled else { setState(.paused); return }
+            let changedDuringUpload = uploadRevision != store.progressRevision || uploadIdentities != identities
+            if changedDuringUpload { requested = true }
             let partial = (transport as? AppleCloudLibraryTransport)?.issues.isEmpty == false
-            setState(safe && !partial ? .synced : .pending)
+            let complete = safe && !partial && uploaded == identities.count && !changedDuringUpload
+            if complete { lastSynced = Date() }
+            setState(complete ? .synced : .pending)
         } catch {
             if error is SequelDataError || error is DecodingError { setState(.failed(error.localizedDescription)) }
             else { setState(.offline) }
@@ -310,44 +341,62 @@ import NxlvKit
     public func join(_ code: String) async throws {
         guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid(L10n.text("Return to the library before linking devices.")) }
         let linked = try await apple.redeemLink(code)
-        var combined = identities.isEmpty ? try apple.credentials() : identities
+        var combined = identities.isEmpty ? try await apple.credentials() : identities
         for identity in linked where !combined.contains(where: { $0.id == identity.id }) { combined.append(identity) }
-        try apple.storeCredentials(combined); identities = combined
+        let stored = try await apple.storeCredentials(combined)
+        identities = try AppleCloudLibraryTransport.mergeIdentities(identities, stored)
         requestSync()
     }
-    /// Joins the vault that the password opens, then syncs through it at once.
-    /// Unlike a device code, the password does not expire and needs no second device online.
+    public static let testerPassword = "test99"
+    public var testerSyncEnabled: Bool { defaults.bool(forKey: "CloudLibrary.testerSync.enabled") }
+    /// The test link covers the whole library, independent of the selected player or session.
+    public func enableTesterSync() async throws {
+        try await joinPassword(Self.testerPassword)
+        defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
+        onChange?()
+    }
+    /// Store the shared library identity once. Uploads and offline retries use the
+    /// normal background coordinator; password setup never waits for the network.
     public func joinPassword(_ password: String) async throws {
-        guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid(L10n.text("Return to the library before linking devices.")) }
-        let shared = try await Task.detached(priority: .userInitiated) { try CloudLibraryIdentity(password: password) }.value
-        var combined = identities.isEmpty ? try apple.credentials() : identities
-        if !combined.contains(where: { $0.id == shared.id }) { combined.append(shared) }
-        try apple.storeCredentials(combined); identities = combined
-        await syncNow()
-        guard apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else {
-            throw SequelDataError.invalid(L10n.text("Connect to the internet to link a device."))
+        guard let apple = transport as? AppleCloudLibraryTransport else {
+            throw SequelDataError.invalid(L10n.text("Cloud sync is unavailable in this build."))
         }
+        let shared = try await Task.detached(priority: .userInitiated) { try CloudLibraryIdentity(password: password) }.value
+        let keys = try await apple.storeCredentials(try AppleCloudLibraryTransport.mergeIdentities(identities, [shared]))
+        identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
+        enabled = true
+        requestSync()
+    }
+    private func waitUntilIdle() async {
+        while running { await withCheckedContinuation { idleWaiters.append($0) } }
+    }
+    private func finishOperation() {
+        running = false
+        let waiters = idleWaiters; idleWaiters.removeAll()
+        for waiter in waiters { waiter.resume() }
+        if requested && task == nil { requestSync() }
     }
     /// A portable private key restores an account-free library after losing a device.
-    public func recoveryData() throws -> Data {
-        let keys = identities.isEmpty ? try (transport as? AppleCloudLibraryTransport)?.credentials() ?? [] : identities
+    public func recoveryData() async throws -> Data {
+        let keys = identities.isEmpty ? try await (transport as? AppleCloudLibraryTransport)?.credentials() ?? [] : identities
         guard !keys.isEmpty else { throw SequelDataError.invalid(L10n.text("Sync this library before saving its recovery key.")) }
         return try JSONEncoder().encode(keys)
     }
-    public func restoreRecoveryData(_ data: Data) throws {
+    public func restoreRecoveryData(_ data: Data) async throws {
         guard canImport(), let apple = transport as? AppleCloudLibraryTransport, data.count <= 16384 else {
             throw SequelDataError.invalid(L10n.text("Return to the library to restore a recovery key."))
         }
         let keys = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
         guard !keys.isEmpty else { throw SequelDataError.invalid(L10n.text("The recovery key is empty.")) }
-        var combined = identities.isEmpty ? try apple.credentials() : identities
+        var combined = identities.isEmpty ? try await apple.credentials() : identities
         for key in keys {
             try key.validate()
             if let existing = combined.first(where: { $0.id == key.id }) {
                 guard existing == key else { throw SequelDataError.invalid(L10n.text("The recovery keys conflict.")) }
             } else { combined.append(key) }
         }
-        try apple.storeCredentials(combined); identities = combined
+        let stored = try await apple.storeCredentials(combined)
+        identities = try AppleCloudLibraryTransport.mergeIdentities(identities, stored)
         requestSync()
     }
     private func setState(_ value: State) { state = value; onChange?() }

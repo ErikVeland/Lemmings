@@ -37,6 +37,7 @@ import NxlvKit
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
   private var variableSpeedCheck: NSButton?
+  private var ridiculousSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
   private var cursorStylePopUp: NSPopUpButton?
   private var skillBackpacksCheck: NSButton?
@@ -216,7 +217,7 @@ import NxlvKit
     "favorBombBlockersChanged:": L10n.text("Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs."),
     "favorBuildersChanged:": L10n.text("Prefer the current builder when assigning Build again. Native skill rules still apply. L3 uses carried bricks."),
     "cursorStyleChanged:": L10n.text("Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games."),
-    "selectionStyleChanged:": L10n.text("None hides selection effects. Obvious adds a coloured marker. Modern adds a white outline and green glow in all three games."),
+    "selectionStyleChanged:": L10n.text("None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games."),
     "skillBackpacksChanged:": L10n.text("Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork."),
     "skillCursorSizeChanged:": L10n.text("Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses."),
     "reticleCountChanged:": L10n.text("Show the number of live lemmings inside the reticule. This also works when the skill icon is hidden."),
@@ -291,7 +292,7 @@ import NxlvKit
     languagePopUp = language
     let experience = popUp(#selector(experienceChanged))
     experience.addItems(withTitles: ClassicExperiencePreset.allCases.map(\.title))
-    experience.setAccessibilityLabel(L10n.text("Gameplay preset"))
+    experience.setAccessibilityLabel(L10n.text("Presentation preset"))
     experiencePopUp = experience
     let backpacks = GameCheckButton(title: L10n.text("Show skill backpacks"), target: self, action: #selector(skillBackpacksChanged))
     backpacks.state = settings.showClassicSkillBackpacks ? .on : .off
@@ -316,6 +317,10 @@ import NxlvKit
     modernControlsCheck = modern
     let variable = GameCheckButton(title: L10n.text("Variable speed: 2×, 3×, 5×, 10×"), target: self, action: #selector(variableSpeedChanged))
     variableSpeedCheck = variable
+    let ridiculous = GameCheckButton(title: L10n.text("Ridiculous speed (25×)"), target: self, action: #selector(ridiculousSpeedChanged))
+    ridiculous.state = settings.ridiculousSpeedEnabled ? .on : .off
+    ridiculous.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
+    ridiculousSpeedCheck = ridiculous
     let interruption = GameCheckButton(title: L10n.text("Pause on interruption"), target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
@@ -341,7 +346,8 @@ import NxlvKit
     pointer.state = settings.confinePointer ? .on : .off
     pointerCaptureCheck = pointer
     return groupedPane([
-      (L10n.text("Play"), [(L10n.text("Language"), language), (L10n.text("Preset"), experience), (L10n.text("Controls"), modern), (L10n.text("Speed"), variable), (L10n.text("Pause"), interruption), (L10n.text("Pointer"), pointer)]),
+      (L10n.text("Presentation"), [(L10n.text("Language"), language), (L10n.text("Style"), experience)]),
+      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern), (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))), (L10n.text("Pause"), interruption), (L10n.text("Pointer"), pointer)]),
       (L10n.text("Skill targeting"), [("", targeting)]),
       (L10n.text("Pointer and selection"), [(L10n.text("Cursor"), cursor), (L10n.text("Skill icon"), iconSize), (L10n.text("Reticule"), count), (L10n.text("Selection"), selection), (L10n.text("Classic"), backpacks)]),
       (L10n.text("Level access"), [(L10n.text("Level Select"), levelSelection)]),
@@ -373,11 +379,17 @@ import NxlvKit
   @objc private func modernControlsChanged(_ sender: NSButton) {
     settings.modernControlsEnabled = sender.state == .on
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
+    ridiculousSpeedCheck?.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     changed()
   }
   @objc private func interruptionChanged(_ sender: NSButton) { settings.pauseOnInterruption = sender.state == .on; changed() }
   @objc private func variableSpeedChanged(_ sender: NSButton) {
-    settings.variableSpeedEnabled = sender.state == .on; changed()
+    settings.variableSpeedEnabled = sender.state == .on
+    ridiculousSpeedCheck?.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
+    changed()
+  }
+  @objc private func ridiculousSpeedChanged(_ sender: NSButton) {
+    settings.ridiculousSpeedEnabled = sender.state == .on; changed()
   }
   @objc private func favorApproachingChanged(_ sender: NSButton) {
     settings.favorApproachingLemmings = sender.state == .on
@@ -399,7 +411,7 @@ import NxlvKit
     switch ClassicExperiencePreset.allCases[sender.indexOfSelectedItem] {
     case .original: applyExperiencePreset(modern: false)
     case .modern: applyExperiencePreset(modern: true)
-    case .custom: settings.experiencePreset = .custom; changed()
+    case .custom: settings.experiencePreset = .custom; changed(customizeExperience: false)
     }
   }
   private func controllerPane() -> NSView {
@@ -487,8 +499,7 @@ import NxlvKit
   @objc private func controllerSwapChanged(_ sender: NSButton) { settings.controllerSwapSticks = sender.state == .on; changed() }
   private func applyExperiencePreset(modern: Bool) {
     settings.applyExperiencePreset(modern: modern)
-    SequelArtworkPreference.setEnabled(modern)
-    rebuildSources(); markCustom(); changed(customizeExperience: false)
+    rebuildSources(); changed(customizeExperience: false)
   }
 
   private func graphicsPane() -> NSView {
@@ -759,7 +770,9 @@ import NxlvKit
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
+    ridiculousSpeedCheck?.state = settings.ridiculousSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
+    ridiculousSpeedCheck?.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
     cursorStylePopUp?.selectItem(at: GameplayCursorStyle.allCases.firstIndex(of: settings.gameplayCursorStyle) ?? 1)
     skillBackpacksCheck?.state = settings.showClassicSkillBackpacks ? .on : .off
@@ -877,7 +890,7 @@ import NxlvKit
 
   private func changed(customizeExperience: Bool = true) {
     help.dismiss()
-    if customizeExperience { settings.experiencePreset = .custom }
+    if customizeExperience { settings.refreshExperiencePreset() }
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
@@ -908,6 +921,7 @@ import NxlvKit
     applied.modernControlsEnabled = settings.modernControlsEnabled
     applied.counterStyle = settings.counterStyle
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
+    applied.ridiculousSpeedEnabled = settings.ridiculousSpeedEnabled
     applied.gameplayCursorStyle = settings.gameplayCursorStyle
     applied.showClassicSkillBackpacks = settings.showClassicSkillBackpacks
     applied.showReticleCount = settings.showReticleCount

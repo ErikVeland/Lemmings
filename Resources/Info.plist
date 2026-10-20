@@ -33,9 +33,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.7</string>
+	<string>2.1</string>
 	<key>CFBundleVersion</key>
-	<string>91</string>
+	<string>93</string>
 	<key>CloudLibraryCloudKitEnabled</key>
 	<false/>
 	<key>CloudLibraryURL</key>

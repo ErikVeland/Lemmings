@@ -10,7 +10,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
 }
 
 /**
- * Keeps earned precision uses with the player profile across game modes.
+ * Keeps free Zoom state and earned Superzoom uses with the player profile.
  */
 @MainActor final class PrecisionZoomController {
     static let shared = PrecisionZoomController()
@@ -29,11 +29,11 @@ enum PrecisionZoomScrollOutcome: Equatable {
     private static func key(_ profileID: String) -> String { L10n.text("PrecisionZoom.v1.\(profileID)") }
 
     private var earnings: PrecisionZoomEarnings {
-        guard let profileID else { return .init(careerStars: 0, threeStarLevels: 0) }
+        guard let profileID else { return .init(threeStarLevels: 0) }
         if let suppliedEarnings { return suppliedEarnings(profileID) }
         let score = TrolleyCareerScore(profileID: profileID,
             attempts: ArcadeStore.shared.records.trolley.attempts, assisted: false)
-        return .init(careerStars: score.stars, threeStarLevels: score.threeStarLevels)
+        return .init(threeStarLevels: score.threeStarLevels)
     }
 
     func start(attemptID: UUID, profileID: String) {
@@ -41,21 +41,20 @@ enum PrecisionZoomScrollOutcome: Equatable {
             self.profileID = profileID
             if let data = defaults.data(forKey: Self.key(profileID)) {
                 do { ledger = try JSONDecoder().decode(PrecisionZoomLedger.self, from: data); storageError = nil }
-                catch { ledger = PrecisionZoomLedger(); storageError = L10n.text("Could not read saved Zoom uses.") }
+                catch { ledger = PrecisionZoomLedger(); storageError = L10n.text("Could not read saved Superzoom uses.") }
             } else { ledger = PrecisionZoomLedger(); storageError = nil }
         }
-        guard storageError == nil else { return }
         ledger.start(attemptID: attemptID)
-        persist()
+        if storageError == nil { persist() }
     }
 
-    var active: PrecisionZoomKind? { storageError == nil ? ledger.active : nil }
-    func remaining(_ kind: PrecisionZoomKind) -> Int {
-        storageError == nil ? ledger.remaining(kind, earnings: earnings) : 0
+    var active: PrecisionZoomKind? { (ledger.active == .zoom || storageError == nil) ? ledger.active : nil }
+    func remainingSuperzoom() -> Int {
+        storageError == nil ? ledger.remainingSuperzoom(earnings: earnings) : 0
     }
     /// Read another result owner's balance without changing the active attempt.
-    func remaining(_ kind: PrecisionZoomKind, profileID: String) -> Int {
-        if self.profileID == profileID { return remaining(kind) }
+    func remainingSuperzoom(profileID: String) -> Int {
+        if self.profileID == profileID { return remainingSuperzoom() }
         let saved: PrecisionZoomLedger
         if let data = defaults.data(forKey: Self.key(profileID)) {
             guard let decoded = try? JSONDecoder().decode(PrecisionZoomLedger.self, from: data) else { return 0 }
@@ -63,13 +62,14 @@ enum PrecisionZoomScrollOutcome: Equatable {
         } else { saved = PrecisionZoomLedger() }
         let score = TrolleyCareerScore(profileID: profileID,
             attempts: ArcadeStore.shared.records.trolley.attempts, assisted: false)
-        let earned = suppliedEarnings?(profileID) ?? .init(careerStars: score.stars, threeStarLevels: score.threeStarLevels)
-        return saved.remaining(kind, earnings: earned)
+        let earned = suppliedEarnings?(profileID) ?? .init(threeStarLevels: score.threeStarLevels)
+        return saved.remainingSuperzoom(earnings: earned)
     }
     @discardableResult func toggle(_ kind: PrecisionZoomKind) -> Bool {
-        guard storageError == nil, ledger.toggle(kind, earnings: earnings) else { return false }
-        persist()
-        return storageError == nil
+        guard kind == .zoom || storageError == nil,
+              ledger.toggle(kind, earnings: kind == .superzoom ? earnings : .init(superzoomUses: 0)) else { return false }
+        if storageError == nil { persist() }
+        return kind == .zoom || storageError == nil
     }
     func applyScroll(_ action: PrecisionZoomScrollAction) -> PrecisionZoomScrollOutcome {
         switch action {
@@ -82,9 +82,9 @@ enum PrecisionZoomScrollOutcome: Equatable {
         }
     }
     func finish(attemptID: UUID, didWin: Bool) {
-        guard storageError == nil, ledger.attemptID == attemptID else { return }
+        guard ledger.attemptID == attemptID else { return }
         ledger.finish(didWin: didWin)
-        persist()
+        if storageError == nil { persist() }
     }
     func removeProfile(_ profileID: String) {
         defaults.removeObject(forKey: Self.key(profileID))
@@ -93,7 +93,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
     private func persist() {
         guard let profileID else { return }
         do { defaults.set(try JSONEncoder().encode(ledger), forKey: Self.key(profileID)) }
-        catch { storageError = L10n.text("Could not save Zoom uses.") }
+        catch { storageError = L10n.text("Could not save Superzoom uses.") }
     }
 }
 #endif

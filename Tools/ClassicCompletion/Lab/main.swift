@@ -458,6 +458,9 @@ case "transplant":
     // run gives the same skill to the lemming with the same hatch and release
     // position once it stands in the same place, trying small offsets.
     let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
+    guard !replay.events.contains(where: { if case .bonusSkill = $0.action { return true }; return false }) else {
+        throw Failure(description: "bonus skills cannot prove original level completion")
+    }
     let (oldBase, _, _) = try content.load(index, mechanics: .original)
     struct Target { var tick: Int; var action: ClassicDOSReplayAction; var lemming: ClassicDOSLemming? }
     // Legacy rate and nuke commands apply before their tick, so they move to
@@ -477,6 +480,7 @@ case "transplant":
                 targets.append(Target(tick: old.tickCount, action: event.action, lemming: before))
             case let .releaseRate(value): old.setReleaseRate(value); targets.append(Target(tick: old.tickCount, action: event.action))
             case .nuke: old.beginNuke(); targets.append(Target(tick: old.tickCount, action: event.action))
+            case .bonusSkill: break
             }
         }
     }
@@ -512,6 +516,7 @@ case "transplant":
                 case let .releaseRate(value):
                     guard sim.tickCount >= t.tick else { break }
                     sim.setReleaseRate(value); events.append(.init(tick: sim.tickCount, action: t.action, afterTick: true)); next += 1; continue
+                case .bonusSkill: break
                 case .nuke:
                     guard sim.tickCount >= t.tick else { break }
                     sim.beginNuke(); events.append(.init(tick: sim.tickCount, action: t.action, afterTick: true)); next += 1; continue
@@ -568,6 +573,7 @@ case "transplant":
             case let .assign(id, skill): steps.append(["skill": skill.rawValue, "id": id, "tick": e.tick, "exactTick": true, "async": true])
             case let .releaseRate(v): steps.append(["rate": v, "tick": e.tick, "async": true])
             case .nuke: steps.append(["nuke": true, "tick": e.tick])
+            case .bonusSkill: break
             }
         }
         try JSONSerialization.data(withJSONObject: steps).write(to: URL(fileURLWithPath: planFile))
@@ -607,6 +613,7 @@ case "climb":
                     _ = sim.assign(skill, to: id)
                 case let .releaseRate(v): moves.append(Move(tick: e.tick, rate: v)); sim.setReleaseRate(v)
                 case .nuke: moves.append(Move(tick: e.tick, nuke: true)); sim.beginNuke()
+                case .bonusSkill: break
                 }
             }
         }
@@ -668,6 +675,7 @@ case "climb":
             case let .assign(id, skill): out.append(["skill": skill.rawValue, "id": id, "tick": e.tick, "exactTick": true, "async": true])
             case let .releaseRate(v): out.append(["rate": v, "tick": e.tick, "async": true])
             case .nuke: out.append(["nuke": true, "tick": e.tick])
+            case .bonusSkill: break
             }
         }
         try JSONSerialization.data(withJSONObject: out).write(to: URL(fileURLWithPath: planFile))

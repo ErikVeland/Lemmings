@@ -6,6 +6,7 @@ public enum MobileCheckpointReason: String, Codable, Equatable, Sendable {
     case memoryPressure
     case sceneDisconnect
     case periodic
+    case rewardUse
 }
 
 public enum MobileLifecycleEvent: Equatable, Sendable {

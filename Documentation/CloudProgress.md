@@ -1,42 +1,40 @@
 # Cloud saves
 
 Ultimate Lemmings syncs a private player library across Mac, iPhone and iPad.
-The library includes each player's name, portrait, progress, result records,
-scores, times, achievements and saved Hot Seat campaigns. Classic, Lemmings 2
+The library includes each player's name, portrait, progress, fan-level completion
+identities, result records, scores, times, achievements and saved Hot Seat campaigns. Classic, Lemmings 2
 and Lemmings 3 use the same archive and merge coordinator.
 
 ## Player flow
 
-Cloud saves are on by default in normal builds. Local saves finish first. Play
-continues without connectivity, and saves retry when the app returns to the
-foreground, after local changes and every 30 seconds. Preview builds keep a
-separate local archive and restore the shared cloud library by default. An
-existing choice to pause preview sync stays paused. Automated integration
+Cloud saves run automatically in normal builds. Local saves finish first. Play
+continues without connectivity. Saves retry on foreground activation, local
+changes and every 30 seconds. Returning to a safe menu applies incoming progress.
+Normal startup retires the old manual pause preference. Automated integration
 builds keep sync off, and muted mechanical tests never start Apple transports.
 
 Devices on the same iCloud account discover the library automatically. No
-Game Center login is required for this library. Different Apple accounts use
-**Players → Cloud saves → Link another device** on the existing device, then
-**Enter device code** on the new device. The 12-character code works once and
-expires after ten minutes. It gives access to the whole library, including all
-players and shared campaigns. Linking combines existing libraries; it does not
-discard either device's records.
+Game Center login, code, recovery file or manual sync action is needed.
 
-**Sync password** links devices without a code. It is a temporary testing aid.
-Remove it before the final release. Type the same password, with at least 4
-characters, on each device. A short shared password such as `test99` is
-acceptable for internal and external testers. Each device then joins the same hosted
-library and syncs immediately. The password does not expire, and the other
-device does not have to be online. Testers on different Apple and Game Center
-accounts can use it to share progress and Hot Seat campaigns. The password
-merges libraries in the same way as a device code. Anyone who knows or
-guesses the password gets access to the whole library. Leading and trailing spaces are ignored. Letter case is significant.
+For the shared tester library, open **Settings → Privacy → Tester sync** on
+mobile/TV, or **Players → Tester sync** / **Ultimate Lemmings → Tester Sync…**
+on Mac. Select **Enable tester sync** once on each device. The button uses `test99` automatically. It links the whole
+library: every player, solo progress and every saved Hot Seat, regardless of which
+player or session is selected. No password entry or session-specific setup is
+needed. Existing libraries combine without replacing either device's records.
 
-**Save recovery key** exports a private `.lemmingssync` file. **Restore recovery
-key** restores access after a device is lost. The key grants access to the whole
-library and must be kept private. Without iCloud, a linked surviving device or
-a saved recovery key, an account-free library cannot be recovered. There is no
-email address or password reset.
+Keychain retains the derived credentials and the enabled state survives relaunch.
+Setup works offline and during play. Sync, provider selection and retries run in
+the background. Incoming progress waits for a safe menu; linking never changes
+the selected player, session, roster or turn. The tester button changes to a
+selected **Tester sync: On** state once the credentials are stored.
+
+The shared bitmap setup has Back and one tester button on Mac, iPhone, iPad and
+TV. Password fields, provider diagnostics, device codes, recovery files and manual
+sync controls are absent from the player flow. Legacy linking/recovery APIs and
+existing library identities remain readable for compatibility. The shared
+`test99` library is for testers who intentionally enable it, rather than an
+automatic global library for all players of the app.
 
 Players remain separate even if their names match. A fresh installation restores
 the existing primary player. Two installations that already have independent
@@ -48,6 +46,12 @@ progress defaults do not stop a fresh testing build from restoring the primary
 player. A participant can open a saved Hot
 Seat hosted by another player; opening it restores its host, roster, turn and
 turn rule. Sync never switches a device into Hot Seat by itself.
+
+Keychain and iCloud account access run on a background actor. Cloud snapshot
+decoding, encryption and file persistence run in background tasks. Credential
+writes merge existing keys so an older discovery cannot erase a newly saved
+password link. Profile and Hot Seat imports retain their safe-menu checks and
+paused handovers.
 
 ## Providers and credentials
 
@@ -116,6 +120,17 @@ When a copied save has no sync revision file, an identical Hot Seat state reuses
 the existing revision. It then receives later descendants without creating a
 duplicate campaign. Different states remain separate branches. iOS reads synced
 Hot Seat learning progress from the shared session rather than the solo profile.
+Journey queues, their current position and Mac L2 carry-over snapshots now travel
+with that same session. Completed/cleared queues carry a timestamped empty state
+so an older device cannot resurrect the map. Mac keeps solo and each Hot Seat's
+lesson progress separately. Previously mixed Mac lesson history cannot be
+reliably assigned back to old sessions and remains in the legacy solo history.
+
+Home and Journey actions resolve only the selected session. They never fall
+back to another solo run or saved Hot Seat. A current non-journey run hides the
+Journey Map; saved sessions remain reachable through explicit saved-session
+navigation. Opening a map never starts a new solo session. Context changes cancel
+pending journey preparation and invalidate callbacks from the previous session.
 
 Imports wait for a safe library menu. Live levels, Ready screens, result
 handovers and native sequel sessions keep their current state. Sync cannot
@@ -124,9 +139,14 @@ data changed while a cloud fetch or merge was running.
 
 ## Scope limits
 
-Mid-level checkpoints, active Learning Journey or playlist queues, replay movie
-files, custom campaign files, imported paths and device settings remain local.
-Learning wins and deferred lessons do sync. A new platform must implement the
+Mid-level checkpoints, non-journey playlist queues, replay movie files, custom
+campaign files, imported paths and device settings remain local. Journey lesson
+queues, positions, wins and deferred lessons sync in their owning solo or Hot Seat
+scope. Both devices need the updated archive reader for journey snapshots.
+The mobile journey adapter still plays Classic steps only. Sequel steps and
+Mac L2 carry-over data are retained, and an unavailable step never switches to a
+solo session. Native sequel playback and live device propagation need manual
+verification. A new platform must implement the
 same archive, encryption and HTTPS contract before it can join the library;
 Windows, Android and web clients are not included in this change. Sync does not
 add missing iOS L2/L3 gameplay presentation. The library supports eight players,
@@ -203,22 +223,23 @@ device testing; fake transports and compilation cannot establish those results.
 
 Validation completed locally:
 
-- 26 focused app-core checks cover the library, legacy Game Center bridge and
+- 26 focused app-core checks cover the library, CloudKit transport and
   profile identity. They include two devices, matching names, portraits, scores,
   achievements, offline results, deletion, safe-menu deferral, local mutation,
   all three campaign progress formats, shared turns, offline Hot Seat forks,
   encryption integrity and separated link keys.
-- Two native UI checks run offscreen with muted test audio. They render eight
-  states at four sizes and check 44-point targets, disabled actions, primary
-  actions, keyboard input and accessibility code entry. Evidence is generated
+- Four native UI checks run offscreen with muted test audio. They render eight
+  tester states at four sizes and check 44-point targets, disabled/enabled states,
+  primary actions, keyboard input and accessibility targets. Evidence is generated
   in `.build/cloud-ui-evidence`.
 - Eight service checks cover authenticated reads/deletion, conditional writes,
   independent device slots, retry safety, expiry, one-use links, bounds and
   backup restoration.
 - Fifteen existing-store and mobile Hot Seat checks cover saved-file round trips,
   participant access, imported turn rules and preservation of the selected mode.
-- Mac sources and the arm64 iOS `LemmingsMobileUI` target compile. No simulator,
-  foreground test window, audible test or public release build was used.
+- Mac sources compile. The edited iOS/tvOS controller sources parse for their
+  device targets. Full device SDK compilation and live propagation remain
+  unverified for this change. No foreground window or audible test was used.
 
 The privacy manifest declares library/device identifiers and gameplay content
 for app functionality, linked to the private library with no tracking. The Mac
@@ -226,3 +247,27 @@ packager includes the same manifest. Before App Store distribution, align App
 Store Connect disclosures and the published privacy notice with the hosted
 storage. These categories follow [Apple's collected-data definitions](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacycollecteddatatypes/nsprivacycollecteddatatype)
 and [privacy manifest structure](https://developer.apple.com/documentation/technotes/tn3184-adding-data-collection-details-to-your-privacy-manifest).
+
+## Tester library validation — 19 October 2026
+
+Muted offscreen checks verify one-button setup, persistence across relaunch,
+identical `test99` library identities, all-player capture while another profile is
+selected, and two saved Hot Seats with different hosts and turns. The fake-server
+round trip includes Classic completion, fan flags, L2 carry-over progress and L3
+progress without selecting either saved session. Existing Journey queue, offline
+branch and safe-menu tests remain in the focused check set. Live iCloud/hosted
+propagation and tester-device activation still require updated installed builds.
+
+## 2.0.8 delivery states
+
+Tester Sync displays the coordinator's delivery status separately from its
+stored On state. Back is the primary action after setup. A partial library read
+or upload stays pending. Saving progress or linking another library during an
+upload also stays pending and requests another pass. The last successful sync
+time advances only after a complete safe-menu pass.
+
+Focused fake-transport checks cover partial read/write recovery and progress
+saved during upload. Native and shared bitmap checks cover offline, pending,
+syncing and synced states. See the
+[2.0.8 source record](ReleaseReadiness/2.0.8-build92/README.md) for exact scope
+and the remaining live-service and device checks.

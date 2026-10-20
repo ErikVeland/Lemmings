@@ -310,7 +310,7 @@ import LemmingsGameArt
 }
 
 /// A full game page for settings, help and long lists.
-@MainActor final class GameMenuPage: NSView {
+@MainActor class GameMenuPage: NSView {
     func installLoadingIndicator(_ indicator: NSView) {
         indicator.frame = CGRect(x: 864, y: 110, width: 192, height: 32)
         canvas.addSubview(indicator)
@@ -488,6 +488,11 @@ import LemmingsGameArt
         setButtonType(.momentaryPushIn)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        performClick(nil)
+        return true
+    }
     override var acceptsFirstResponder: Bool { isEnabled }
     override func becomeFirstResponder() -> Bool { needsDisplay = true; return super.becomeFirstResponder() }
     override func resignFirstResponder() -> Bool { needsDisplay = true; return super.resignFirstResponder() }

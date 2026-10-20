@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 
@@ -188,15 +189,16 @@ public enum MobileCareerArt {
     }
 
     /// One hint card for a recorded level, opened from its record card.
-    public static func recordHintPage(level: String, title: String, body: String, stage: Int, count: Int,
+    public static func recordHintPage(level: String, deck: LevelHintDeck, stage: Int,
                                       solution: Bool, playable: Bool, preview: Bool) -> GameFrontEnd.Page {
+        let hint = deck.presentation(at: stage)
         var footer: [GameFrontEnd.Action] = [.init("recordHintBack", L10n.text("Back"))]
         if stage > 0 { footer.append(.init("recordHintPrevious", L10n.text("Previous"))) }
-        if stage + 1 < count { footer.append(.init("recordHintNext", L10n.text("NEXT HINT"))) }
+        if stage + 1 < deck.stages.count { footer.append(.init("recordHintNext", deck.checked ? L10n.text("NEXT HINT") : L10n.text("Next coaching"))) }
         if solution { footer.append(.init("recordSolution", L10n.text("Solution"))) }
         if playable { footer.append(.init("recordPlay", L10n.text("Play"), primary: true)) }
-        var page = GameFrontEnd.Page(title: level, subtitle: "\(stage + 1)/\(count)",
-            details: [title] + body.components(separatedBy: "\n").filter { !$0.isEmpty },
+        var page = GameFrontEnd.Page(title: hint.title, subtitle: level + "\n" + hint.progress,
+            details: [hint.section] + hint.body.components(separatedBy: "\n").filter { !$0.isEmpty },
             footer: footer, preview: preview, footerColumns: 2)
         page.detailHeadings = [0]
         return page

@@ -10,8 +10,15 @@ extension MobileLibraryViewController {
     var learning: MobileLearningState {
         get {
             var saved = learningStorage.load(MobileLearningState.self, name: "learning") ?? .init()
+            let original = saved
+            if let snapshot = GameProgressPreferences.journeySession(profileID: profiles.activeID, sessionID: hotSeat?.id) {
+                saved.importJourneySession(snapshot)
+            }
             saved.progress = GameProgressValue.mergeLearning(saved.progress,
                 GameProgressPreferences.learning(profileID: profiles.activeID, sessionID: hotSeat?.id))
+            if saved.journeySession == nil, saved.run?.source == .playlist(LearningJourney.playlistID) {
+                saved.refreshJourneySession()
+            }
             if let run = saved.run, let journey = bundledJourney {
                 do {
                     let completed = saved.progress.completed
@@ -22,33 +29,44 @@ extension MobileLibraryViewController {
                         var updated = saved; updated.run = migrated
                         // Skipped earlier lessons stay available in "Come back to these".
                         for identity in migration.deferred { updated.progress.record(identity, won: false) }
-                        try learningStorage.save(updated, name: "learning")
+                        updated.refreshJourneySession()
                         saved = updated
                     }
                 } catch { notice = error.localizedDescription }
             }
+            if saved != original {
+                do { try learningStorage.save(saved, name: "learning") }
+                catch { notice = error.localizedDescription }
+            }
             return saved
         }
         set {
-            do { try learningStorage.save(newValue, name: "learning"); arcadeStore.notifyProgressChanged() }
+            do { try saveLearningState(newValue) }
             catch { notice = error.localizedDescription }
         }
     }
+    func saveLearningState(_ value: MobileLearningState) throws {
+        var saved = value; saved.refreshJourneySession()
+        try learningStorage.save(saved, name: "learning")
+        try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id)
+        if let snapshot = saved.journeySession {
+            try GameProgressPreferences.saveJourneySession(snapshot, profileID: profiles.activeID, sessionID: hotSeat?.id)
+        }
+        arcadeStore.notifyProgressChanged()
+    }
     var bundledJourney: LearningJourney? { LearningJourneyLibrary.journey }
-    /// Resume can switch to another saved session. Count the wins of the session it restores,
-    /// so an empty current session does not show 0 solved beside a saved journey.
-    var shownJourneyProgress: LearningJourneyProgress {
-        guard let resume = resumableLearningJourney, resume.scope != (hotSeat?.scope ?? profiles.activeID)
-        else { return learning.progress }
-        return GameProgressValue.mergeLearning(resume.state.progress,
-            GameProgressPreferences.learning(profileID: profiles.activeID, sessionID: resume.seat?.id))
+    var shownJourneyProgress: LearningJourneyProgress { learning.progress }
+    var canStartJourney: Bool {
+        hotSeat == nil && learning.run == nil && activeRun == nil && pendingCheckpoint == nil
     }
     var resumableLearningJourney: MobileLearningResume? {
-        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
+        _ = learning
+        return MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
     }
 
     var resumableLearningRun: MobileLearningResume? {
-        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
+        _ = learning
+        return MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
                                   journeyOnly: false, currentSessionOnly: true)
     }
 
@@ -91,11 +109,14 @@ extension MobileLibraryViewController {
     }
     func handleLearning(_ id: String) -> Bool {
         switch id {
-        case "journey": navigate(.journey)
+        case "journey":
+            guard resumableLearningJourney != nil || canStartJourney else { return true }
+            navigate(.journey)
         case "learningResume": resumeLearningJourney()
         case "learningBrowse": resumeLearningJourney(browse: true)
         case "learningRunResume": resumeLearningJourney(journeyOnly: false)
         case "learningStart", "learningRevisit":
+            guard resumableLearningJourney != nil || canStartJourney else { return true }
             if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(browse: true); return true }
             guard let journey = bundledJourney else { return true }
             let entries = id == "learningStart"
@@ -104,7 +125,7 @@ extension MobileLibraryViewController {
             do {
                 var saved = learning
                 try saved.start(entries, name: LearningJourney.title, poolID: journey.version)
-                try learningStorage.save(saved, name: "learning"); openLearningRun()
+                try saveLearningState(saved); openLearningRun()
             } catch { notice = error.localizedDescription; rebuild() }
         case "progression":
             if route == .collections { progressionBackID = "collections" } else if route == .journey { progressionBackID = "journey" }
@@ -119,13 +140,13 @@ extension MobileLibraryViewController {
         return true
     }
     func resumeLearningJourney(journeyOnly: Bool = true, browse: Bool = false) {
-        guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun, saved.owner == profiles.activeID else { return }
+        guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun,
+              saved.owner == profiles.activeID, saved.seat?.id == hotSeat?.id else { return }
         if let seat = saved.seat {
             guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
                 notice = L10n.text("A saved player is unavailable"); rebuild(); return
             }
-            guard resumeSharedSeat(seat.id) else { rebuild(); return }
-        } else { hotSeats.endSession() }
+        }
         guard saveHotSeats() else { rebuild(); return }
         hotSeatRoster = nil; activeRun = nil
         reloadPlayerData()
@@ -144,7 +165,7 @@ extension MobileLibraryViewController {
                     var expanded = learning
                     expanded.run = try LevelSequenceRun(id: current.id, source: current.source, pool: current.pool,
                         entries: journey.lessons.map(\.entry), currentIndex: position, createdAt: current.createdAt)
-                    try learningStorage.save(expanded, name: "learning")
+                    try saveLearningState(expanded)
                 }
                 openLearningRun()
                 if !browse, let run = learning.run { startLevel(run.currentIndex, checkpoint: matching, restoringMatchingCheckpoint: true) }
@@ -166,13 +187,13 @@ extension MobileLibraryViewController {
     }
     func recordLearningResult(_ snapshot: MobileGameSnapshot) throws {
         guard library is MobileJourneyLibrary else { return }
-        var saved = learning; saved.record(won: snapshot.didWin); try learningStorage.save(saved, name: "learning")
+        var saved = learning; saved.record(won: snapshot.didWin); try saveLearningState(saved)
         arcadeStore.notifyProgressChanged()
     }
     func advanceLearningRun() throws -> Bool {
         var saved = learning
         let moved = saved.advance()
-        try learningStorage.save(saved, name: "learning")
+        try saveLearningState(saved)
         return moved
     }
 
@@ -183,6 +204,7 @@ extension MobileLibraryViewController {
         learningPreparing = true; notice = L10n.text("Loading..."); rebuild()
         guard let catalogue else { learningPreparing = false; return }
         let ports = catalogue.portsRoot, folders = catalogue.fanFolders
+        let owner = profiles.activeID, scope = hotSeat?.scope
         learningTask = Task {
             let result: Result<ProgressionResult, Error>
             do {
@@ -190,12 +212,13 @@ extension MobileLibraryViewController {
                     policy: policy, technique: technique, storage: .current(), progress: { _, _ in }))
             } catch { result = .failure(error) }
             guard !Task.isCancelled else { return }
+            guard profiles.activeID == owner, hotSeat?.scope == scope else { learningPreparing = false; return }
             learningPreparing = false
             do {
                 let result = try result.get()
                 var saved = learning
                 try saved.start(result.entries, name: result.policy.name, poolID: ProgressionModel.version, playlistID: UUID())
-                try learningStorage.save(saved, name: "learning"); openLearningRun()
+                try saveLearningState(saved); openLearningRun()
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }

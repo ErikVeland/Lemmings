@@ -12,11 +12,18 @@ extension MobileLibraryViewController {
         #endif
         libraryCloud.canImport = { [weak self] in
             guard let self else { return false }
-            return game == nil && !preparingCloudLevel && !renamingPlayer && nameDraft == nil
+            return game == nil && !preparingCloudLevel && !learningPreparing && !renamingPlayer && nameDraft == nil
         }
         libraryCloud.captureExtra = { profile, seat in
-            let saved = MobileStorage.standard(profile: seat.map { "hotseat." + $0 } ?? profile).load(MobileLearningState.self, name: "learning")
-            return saved.map { .init(values: ["LearningJourneyProgress": .learning($0.progress)]) } ?? .init()
+            let storage = MobileStorage.standard(profile: seat.map { "hotseat." + $0 } ?? profile)
+            guard var saved = storage.load(MobileLearningState.self, name: "learning") else { return .init() }
+            if saved.journeySession == nil, saved.run?.source == .playlist(LearningJourney.playlistID) {
+                saved.refreshJourneySession()
+                try storage.save(saved, name: "learning")
+            }
+            var values: [String: GameProgressValue] = ["LearningJourneyProgress": .learning(saved.progress)]
+            if let snapshot = saved.journeySession { values["LearningJourneySession"] = .journeySession(snapshot) }
+            return .init(values: values)
         }
         libraryCloud.captureSeats = { [weak self] in
             guard let self else { return [] }
@@ -66,92 +73,25 @@ extension MobileLibraryViewController {
         libraryCloud.start()
     }
     func handleCloudSync(_ id: String) -> Bool {
-        if id == "cloudSaves" { syncBackRoute = route; syncCode = nil; syncDraft = nil; endSyncPassword(); syncMessage = ""; navigate(.cloudSaves); return true }
+        if id == "cloudSaves" {
+            syncBackRoute = route; syncMessage = ""
+            navigate(.cloudSaves); return true
+        }
         guard route == .cloudSaves, id.hasPrefix("sync") else { return false }
         guard (canvas.page.rows + canvas.page.footer).contains(where: { $0.id == id && $0.enabled }) else { return true }
-        #if os(tvOS)
-        if handleTVSaveBackup(id) { return true }
-        #endif
-        syncMessage = ""
         switch id {
         case "syncBack": navigate(syncBackRoute)
-        case "syncToggle": libraryCloud.enabled.toggle()
-        case "syncCancel": syncCode = nil; syncDraft = nil; endSyncPassword(); searchField.resignFirstResponder()
-        case "syncEnterCode": syncDraft = ""; searchField.text = ""; searchField.becomeFirstResponder()
-        case "syncCodeField", "syncPasswordField": searchField.becomeFirstResponder()
-        case "syncEnterPassword":
-            syncPassword = ""; searchField.text = ""; searchField.isSecureTextEntry = true
-            searchField.becomeFirstResponder()
-        case "syncCopy":
-            #if os(iOS)
-            UIPasteboard.general.string = syncCode; syncMessage = L10n.text("Copied")
-            #else
-            syncMessage = syncCode ?? ""
-            #endif
-        case "syncExportKey":
-            do {
-                importingSyncKey = false
-                let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-                let url = folder.appendingPathComponent("Ultimate Lemmings Recovery.lemmingssync")
-                try libraryCloud.recoveryData().write(to: url, options: .atomic)
-                syncRecoveryExport = url
-                #if os(tvOS)
-                MobileTVFileTransfer.exportFile(url, from: self) { [weak self] in
-                    try? FileManager.default.removeItem(at: folder)
-                    self?.syncRecoveryExport = nil
-                }
-                #else
-                let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
-                picker.delegate = self
-                syncMessage = L10n.text("Keep the recovery key private.")
-                present(picker, animated: true)
-                #endif
-            } catch { syncMessage = error.localizedDescription }
-        case "syncImportKey":
-            importingSyncKey = true
-            #if os(tvOS)
-            MobileTVFileTransfer.importFiles(from: self, directory: false) { [weak self] in self?.importCloudRecoveryKey($0) }
-            #else
-            let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.data], asCopy: true)
-            picker.delegate = self; picker.allowsMultipleSelection = false
-            present(picker, animated: true)
-            #endif
-        case "syncNow", "syncMakeLink", "syncJoin", "syncJoinPassword":
-            syncBusy = true; searchField.resignFirstResponder()
+        case "syncTester":
+            syncBusy = true; syncMessage = ""
             Task { [weak self] in
                 guard let self else { return }
-                do {
-                    if id == "syncNow" { await libraryCloud.syncNow() }
-                    else if id == "syncMakeLink" { syncCode = try await libraryCloud.makeLink() }
-                    else if id == "syncJoinPassword" { try await libraryCloud.joinPassword(syncPassword ?? ""); endSyncPassword() }
-                    else { try await libraryCloud.join(syncDraft ?? ""); syncDraft = nil; await libraryCloud.syncNow() }
-                } catch { syncMessage = error.localizedDescription }
+                do { try await libraryCloud.enableTesterSync() }
+                catch { if route == .cloudSaves { syncMessage = error.localizedDescription } }
                 syncBusy = false; rebuild()
             }
         default: break
         }
         rebuild(); return true
-    }
-    /// The hidden field is shared with search and names, so it must not stay secure.
-    func endSyncPassword() {
-        guard syncPassword != nil || searchField.isSecureTextEntry else { return }
-        syncPassword = nil; searchField.isSecureTextEntry = false; searchField.text = ""
-    }
-    func importCloudRecoveryKey(_ source: URL) {
-        let accessed = source.startAccessingSecurityScopedResource()
-        defer {
-            if accessed { source.stopAccessingSecurityScopedResource() }
-            #if os(tvOS)
-            MobileTVFileTransfer.removeImportedFiles(source)
-            #endif
-        }
-        do {
-            let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 16385
-            guard size <= 16384 else { throw CocoaError(.fileReadCorruptFile) }
-            try libraryCloud.restoreRecoveryData(Data(contentsOf: source))
-            Task { [weak self] in await self?.libraryCloud.syncNow(); self?.rebuild() }
-        } catch { syncMessage = error.localizedDescription; rebuild() }
     }
 }
 #endif

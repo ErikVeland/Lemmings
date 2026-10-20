@@ -39,6 +39,8 @@ public struct ClassicDOSRewind: Codable, Sendable {
     private let maximumKeyframes: Int
     /// Captured before play changes the terrain. Older checkpoints decode without it.
     private var initialLevelFingerprint: String?
+    private var bonusSkillSpent: ClassicSkill?
+    public var bonusSkillWasSpent: Bool { bonusSkillSpent != nil || simulation.bonusSkillUsed }
 
     /// - Parameters:
     ///   - keyframeInterval: ticks between keyframes. Larger values use less
@@ -66,6 +68,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
         try values.encode(interval, forKey: .interval)
         try values.encode(maximumKeyframes, forKey: .maximumKeyframes)
         try values.encodeIfPresent(initialLevelFingerprint, forKey: .initialLevelFingerprint)
+        try values.encodeIfPresent(bonusSkillSpent, forKey: .bonusSkillSpent)
     }
 
     // MARK: - Running forward
@@ -91,6 +94,19 @@ public struct ClassicDOSRewind: Codable, Sendable {
             appliedCommandCount = commands.count
         }
         return result
+    }
+
+    public func canGrantBonusSkill(_ skill: ClassicSkill) -> Bool {
+        !bonusSkillWasSpent && simulation.canGrantBonusSkill(skill)
+    }
+
+    @discardableResult public mutating func grantBonusSkill(_ skill: ClassicSkill) -> Bool {
+        guard canGrantBonusSkill(skill), simulation.grantBonusSkill(skill) else { return false }
+        bonusSkillSpent = skill
+        discardFutureCommands()
+        commands.append(.init(tick: simulation.tickCount, action: .bonusSkill(skill)))
+        appliedCommandCount = commands.count
+        return true
     }
 
     public mutating func setReleaseRate(_ value: Int) {
@@ -210,6 +226,8 @@ public struct ClassicDOSRewind: Codable, Sendable {
             simulation.setReleaseRate(value)
         case .nuke:
             simulation.beginNuke()
+        case let .bonusSkill(skill):
+            if simulation.grantBonusSkill(skill) { bonusSkillSpent = skill }
         }
     }
 

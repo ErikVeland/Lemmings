@@ -18,6 +18,9 @@ extension LeaderboardActionReplay {
             case "rate":
                 guard let value = command.value else { throw RunRecoveryError.invalid }
                 action = .releaseRate(value)
+            case "bonusSkill":
+                guard let skill = command.skill, ClassicSkill.allCases.indices.contains(skill) else { throw RunRecoveryError.invalid }
+                action = .bonusSkill(ClassicSkill.allCases[skill])
             case "nuke": action = .nuke
             default: throw RunRecoveryError.invalid
             }

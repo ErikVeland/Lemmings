@@ -108,7 +108,7 @@ import NxlvKit
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
         if retainedRunID != runID || solutionSession == nil { clearSolution() }
-        let page = GameMenuPage(title: L10n.text("Level hints"), subtitle: deck.title)
+        let page = GameMenuPage(title: deck.evidenceTitle, subtitle: deck.title)
         page.backTitle = L10n.text("Back to game")
         let content = LevelHintContent(deck: deck, image: image)
         content.frame = page.body.bounds
@@ -128,7 +128,7 @@ import NxlvKit
             previous?.isEnabled = self.revealedTier > 0
             previous?.needsDisplay = true
             let final = self.revealedTier + 1 >= deck.stages.count
-            next.title = final ? (solution != nil ? L10n.text("Show solution replay") : checking ? L10n.text("Checking solution...") : L10n.text("All hints revealed"))
+            next.title = final ? (solution != nil ? L10n.text("Show solution replay") : checking ? L10n.text("Checking solution...") : deck.checked ? L10n.text("All hints revealed") : L10n.text("All coaching shown"))
                 : self.revealedTier == 1 ? (deck.checked ? L10n.text("Reveal opening moves") : L10n.text("Show practice tips"))
                 : (deck.checked ? L10n.text("Reveal the approach") : L10n.text("Make a small plan"))
             next.isEnabled = !final || solution != nil
@@ -250,16 +250,17 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     private func refresh() {
-        let stage = deck.stages[tier]
-        progress.stringValue = L10n.text("HINT \(tier + 1) OF \(deck.stages.count)")
-        heading.stringValue = stage.title
-        prose.stringValue = stage.body
+        let presentation = deck.presentation(at: tier)
+        progress.stringValue = presentation.progress
+        heading.stringValue = presentation.section
+        prose.stringValue = presentation.body
         note.stringValue = deck.checked
             ? (tier == 2 ? L10n.text("Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening.") : L10n.text("No moves are made for you. Reveal another hint only when you want more detail."))
-            : L10n.text("General coaching for this level.")
+            : ""
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(L10n.text("Hint text"))
+        setAccessibilityLabel(presentation.title)
+        setAccessibilityValue(presentation.accessibilityText)
         setAccessibilityHelp(L10n.text("Left and right arrows change hints. Up and down arrows scroll the text."))
         resetScroll = true
         needsLayout = true; needsDisplay = true

@@ -31,7 +31,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
     public init(level: MobileLevelSummary, snapshot: MobileGameSnapshot, activeCount: Int,
                 ticksPerSecond: Double, speed: Double, assignedSkills: Int,
                 supportsRewind: Bool, usedRewind: Bool, isReplay: Bool,
-                soundtrack: String, track: String?, audio: String) {
+                soundtrack: String, track: String?, audio: String, usedBonusSkill: Bool = false) {
         self.level = level
         self.isReplay = isReplay
         total = max(0, snapshot.total)
@@ -63,6 +63,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
         let rewind = isReplay ? "Replay" : supportsRewind ? (usedRewind ? "Rewind used" : "No rewind used") : "Rewind unavailable"
         supplies = snapshot.skills.filter { !$0.isUnlimited }.map { Field($0.name, "\(max(0, $0.count))") }
         playDetails = L10n.text("\(total) lemmings   /   \(max(0, assignedSkills)) skills used   /   \(rewind)")
+            + (usedBonusSkill ? "   /   " + L10n.text("Bonus skill used") : "")
         self.soundtrack = soundtrack
         self.track = track ?? "No track playing"
         self.audio = audio

@@ -171,6 +171,7 @@ public struct Lemmings2InputCursor: Sendable {
 /// One runtime call in a version 2 route. Events apply in list order on their tick, before the runtime steps.
 public enum Lemmings2RouteEvent: Codable, Sendable, Equatable {
     case assign(skill: Int, lemming: Int)
+    case bonusSkill(skill: Int)
     case aim(x: Int, y: Int, held: Bool)
     case fan(x: Int, y: Int, active: Bool)
     case releasePointer
@@ -203,6 +204,9 @@ public struct Lemmings2EventCursor: Sendable {
             guard let slot = game.configuration.skills.firstIndex(where: { $0.rawValue == skill }),
                   game.canAssign(slot: slot, to: lemming) else { return false }
             return game.assign(slot: slot, to: lemming)
+        case let .bonusSkill(skill):
+            guard let slot = game.configuration.skills.firstIndex(where: { $0.rawValue == skill }) else { return false }
+            return game.grantBonusSkill(slot: slot)
         case let .aim(x, y, held):
             game.setAim(x: x, y: y, held: held)
             return true
@@ -269,7 +273,7 @@ extension Lemmings2ReplayWitness {
                 case let .aim(x, y, _), let .machine(x, y), let .chain(x, y): point = (x, y)
                 // A released fan has no position, so only an active fan is checked.
                 case let .fan(x, y, active): point = active ? (x, y) : nil
-                case .assign, .releasePointer, .nuke: point = nil
+                case .assign, .bonusSkill, .releasePointer, .nuke: point = nil
                 }
                 if let point, !xRange.contains(point.x) || !yRange.contains(point.y) {
                     throw Lemmings2WitnessError.pointerOutOfViewport(index)
@@ -307,6 +311,9 @@ extension Lemmings2ReplayWitness {
     /// Replays the route and requires the expected win, saved count and ticks.
     public func run(level: Lemmings2Level, style: Lemmings2Style,
                     masks: Lemmings2TerrainMasks) throws -> Lemmings2WitnessOutcome {
+        if let index = events?.firstIndex(where: { if case .bonusSkill = $0.event { return true }; return false }) {
+            throw Lemmings2WitnessError.rejectedInput(index)
+        }
         let result = try outcome(level: level, style: style, masks: masks)
         guard result.saved > 0, result.saved == expectedSaved, result.ticks == expectedTicks else {
             throw Lemmings2WitnessError.outcomeChanged(levelSHA256)
@@ -329,6 +336,7 @@ extension Lemmings2Runtime {
             hasher.update(data: Data(lemming.state.rawValue.utf8))
         }
         add(tick)
+        if let slot = bonusSkillSlot { hasher.update(data: Data("bonus-skill-v1".utf8)); add(slot) }
         return hasher.finalize().map { String(format: "%02x", $0) }.joined()
     }
 }

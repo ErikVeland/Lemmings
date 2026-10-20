@@ -11,6 +11,7 @@ import Foundation
 public enum ClassicDOSReplayAction: Codable, Equatable, Sendable {
     case assign(lemmingID: Int, skill: ClassicSkill)
     case releaseRate(Int)
+    case bonusSkill(ClassicSkill)
     case nuke
 }
 
@@ -178,6 +179,8 @@ public enum ClassicDOSReplayRecorder {
             append(simulation.configuration.mechanics.rawValue)
         }
 
+        if let skill = simulation.bonusSkill { append("bonus-skill-v1"); append(skill.rawValue) }
+
         bytes.append(simulation.terrain.canonicalMaskBytes)
 
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
@@ -249,7 +252,7 @@ public enum ClassicDOSReplayPlayer {
                     throw ClassicDOSReplayError.commandRejected(
                         tick: event.tick, lemmingID: lemmingID, skill: skill)
                 }
-            case .releaseRate, .nuke:
+            case .releaseRate, .bonusSkill, .nuke:
                 immediate[event.tick, default: []].append(event.action)
             }
         }
@@ -266,6 +269,10 @@ public enum ClassicDOSReplayPlayer {
                     }
                 case let .releaseRate(value): simulation.setReleaseRate(value)
                 case .nuke: simulation.beginNuke()
+                case let .bonusSkill(skill):
+                    guard simulation.grantBonusSkill(skill) else {
+                        throw ClassicDOSReplayError.outcomeMismatch(field: "bonus skill", expected: "one available grant", actual: "refused")
+                    }
                 }
                 try observe?(simulation)
             }
@@ -279,6 +286,10 @@ public enum ClassicDOSReplayPlayer {
                 switch action {
                 case let .releaseRate(value): simulation.setReleaseRate(value)
                 case .nuke: simulation.beginNuke()
+                case let .bonusSkill(skill):
+                    guard simulation.grantBonusSkill(skill) else {
+                        throw ClassicDOSReplayError.outcomeMismatch(field: "bonus skill", expected: "one available grant", actual: "refused")
+                    }
                 case .assign: break
                 }
             }

@@ -709,7 +709,11 @@ import NxlvKit
             }
         }
         y += 54
-        if y + 30 <= 620 { text(store.turnPolicy.detail, 370, y, 686, alpha: 0.8); y += 36 }
+        button(store.hotSeatGhostsVisible ? L10n.text("Ghosts on") : L10n.text("Ghosts off"),
+               CGRect(x: 64, y: y, width: 280, height: 44), selected: store.hotSeatGhostsVisible) { [weak self] in
+            store.hotSeatGhostsVisible.toggle(); self?.needsDisplay = true
+        }
+        if y + 30 <= 620 { text(store.turnPolicy.detail, 370, y, 686, alpha: 0.8); y += 48 }
         if y + 30 <= 620 {
             if store.hotSeatIsActive {
                 let name = store.records.profile(store.playingProfileID)?.initials ?? L10n.text("LEM")
@@ -813,7 +817,7 @@ import NxlvKit
         }
         button(L10n.text("Back"), CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
         if onCloudSaves != nil {
-            button(L10n.text("Cloud saves"), CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
+            button(L10n.text("Tester sync"), CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
         }
         if let id = selectedProfileID {
             button(L10n.text("Delete"), CGRect(x: 280, y: 627, width: 200, height: 55),

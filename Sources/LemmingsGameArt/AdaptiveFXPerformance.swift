@@ -4,8 +4,10 @@ import Metal
 import NxlvKit
 #endif
 
-/// Capabilities choose a starting point. Sustained measurements choose quality.
+/// Capabilities select the platform budget. System pressure can constrain it.
 public struct FXDeviceProfile: Sendable {
+    public let desktop: Bool
+    public let prefersFullDesktopEffects: Bool
     public let initialQuality: FXQuality
     public let maximumQuality: FXQuality
     public let supportsEnhancedEffects: Bool
@@ -13,7 +15,9 @@ public struct FXDeviceProfile: Sendable {
 
     public init(hasMetal: Bool, modernGPU: Bool, enhancedEffectsSupported: Bool,
                 processorCount: Int, recommendedWorkingSet: UInt64, television: Bool = false,
-                physicalMemory: UInt64 = .max) {
+                physicalMemory: UInt64 = .max, desktop: Bool = false) {
+        self.desktop = desktop
+        prefersFullDesktopEffects = desktop && hasMetal && modernGPU
         let resources = DeviceEffectResources(physicalMemory: physicalMemory, processorCount: processorCount)
         maximumQuality = hasMetal ? FXQuality(rawValue: resources.qualityCeiling)! : .minimal
         // TV omits the extra full-screen speed and cinematic explosion surface.
@@ -21,8 +25,13 @@ public struct FXDeviceProfile: Sendable {
         let seed: FXQuality = !hasMetal || processorCount <= 2 ? .minimal : (modernGPU && !television ? .full : .balanced)
         initialQuality = FXQuality(rawValue: min(seed.rawValue, maximumQuality.rawValue))!
         // Reserve capacity for simultaneous surfaces, textures and the game itself.
-        let pixels = recommendedWorkingSet > 0 ? recommendedWorkingSet / 64 : 1_048_576
-        maximumOverlayPixels = min(resources.maximumOverlayPixels, Int(min(television ? 720_000 : 8_388_608, max(262_144, pixels))))
+        let pixels: UInt64 = recommendedWorkingSet > 0 ? recommendedWorkingSet / 64
+            : prefersFullDesktopEffects ? 33_554_432 : 1_048_576
+        // All M-series Macs retain native 5K/6K effects, including 8 GiB models.
+        let roomyDesktop = prefersFullDesktopEffects
+        let surfaceLimit = roomyDesktop ? 33_554_432 : resources.maximumOverlayPixels
+        let pixelBudget = Int(min(UInt64(surfaceLimit), max(262_144, pixels)))
+        maximumOverlayPixels = min(television ? 720_000 : surfaceLimit, pixelBudget)
     }
 
     public static func detect(device: MTLDevice?, mobile: Bool, television: Bool = false) -> Self {
@@ -36,7 +45,8 @@ public struct FXDeviceProfile: Sendable {
                     enhancedEffectsSupported: allowsEnhancedEffects(hasMetal: device != nil, mobile: mobile,
                         processorCount: cores, supportsApple4: device?.supportsFamily(.apple4) == true, simulator: simulator),
                     processorCount: cores, recommendedWorkingSet: device?.recommendedMaxWorkingSetSize ?? 0,
-                    television: television, physicalMemory: ProcessInfo.processInfo.physicalMemory)
+                    television: television, physicalMemory: ProcessInfo.processInfo.physicalMemory,
+                    desktop: !mobile && !television)
     }
 
     /// Simulator exposes an Apple 2-like translation layer, not the named phone's GPU.
@@ -53,12 +63,14 @@ public struct FXPresentationBudget: Sendable {
     public let framesPerSecond: Double
     public let maximumOverlayPixels: Int
     public let enhancedEffectsAllowed: Bool
-    public var bloomAllowed: Bool { quality != .minimal }
+    private let effectsFollowCPU: Bool
+    private var effectsQuality: FXQuality { effectsFollowCPU ? quality : gpuQuality }
+    public var bloomAllowed: Bool { effectsQuality != .minimal }
 
     public var quality: FXQuality { FXQuality(rawValue: min(cpuQuality.rawValue, gpuQuality.rawValue))! }
     public var bloomScale: Double { gpuQuality.bloomScale }
     public var overlayScale: Double { gpuQuality.overlayScale }
-    public var effectHz: Double { min(framesPerSecond, quality.effectHz) }
+    public var effectHz: Double { min(framesPerSecond, effectsQuality.effectHz) }
     public var trailLimit: Int { cpuQuality.trailLimit }
     public var trailEchoLimit: Int { cpuQuality.trailEchoLimit }
     public var explosionLimit: Int { gpuQuality.explosionLimit }
@@ -71,11 +83,13 @@ public struct FXPresentationBudget: Sendable {
     public var televisionBloomAllowed: Bool { quality != .minimal && framesPerSecond >= 60 }
 
     public init(cpuQuality: FXQuality, gpuQuality: FXQuality, framesPerSecond: Double = 60,
-                maximumOverlayPixels: Int = 8_388_608, enhancedEffectsAllowed: Bool = true) {
+                maximumOverlayPixels: Int = 8_388_608, enhancedEffectsAllowed: Bool = true, effectsFollowCPU: Bool = true) {
         self.cpuQuality = cpuQuality; self.gpuQuality = gpuQuality
+        self.effectsFollowCPU = effectsFollowCPU
         self.framesPerSecond = framesPerSecond.isFinite ? max(1, min(60, framesPerSecond)) : 60
         self.maximumOverlayPixels = max(1, maximumOverlayPixels)
-        self.enhancedEffectsAllowed = enhancedEffectsAllowed && min(cpuQuality.rawValue, gpuQuality.rawValue) > FXQuality.minimal.rawValue
+        // Desktop effects keep submitting smaller frames so GPU recovery remains measurable.
+        self.enhancedEffectsAllowed = enhancedEffectsAllowed && (!effectsFollowCPU || min(cpuQuality.rawValue, gpuQuality.rawValue) > FXQuality.minimal.rawValue)
     }
 
     public func overlayRenderScale(width: Double, height: Double, nativeScale: Double) -> Double {
@@ -85,7 +99,7 @@ public struct FXPresentationBudget: Sendable {
     }
 }
 
-/// One policy for Mac, iPhone, iPad and Apple TV.
+/// M-series Macs retain full effects. Other devices also adapt to measured cost.
 public struct AdaptiveFXPerformance: Sendable {
     public let profile: FXDeviceProfile
     public private(set) var cpu: AdaptiveFXQuality
@@ -108,21 +122,32 @@ public struct AdaptiveFXPerformance: Sendable {
     public var presentation: FXPresentationBudget {
         FXPresentationBudget(cpuQuality: cpu.quality, gpuQuality: gpu.quality,
                              framesPerSecond: framesPerSecond, maximumOverlayPixels: maximumOverlayPixels,
-                             enhancedEffectsAllowed: enhancedEffectsAllowed)
+                             enhancedEffectsAllowed: enhancedEffectsAllowed, effectsFollowCPU: !profile.desktop)
     }
 
     public mutating func setPressure(ceiling: FXQuality, framesPerSecond: Double, now: Double,
                                     resources: DeviceEffectResources? = nil) {
         guard now.isFinite, framesPerSecond.isFinite, framesPerSecond > 0 else { return }
         self.ceiling = FXQuality(rawValue: min(profile.maximumQuality.rawValue, ceiling.rawValue, resources?.qualityCeiling ?? 2))!
-        maximumOverlayPixels = min(profile.maximumOverlayPixels, resources?.maximumOverlayPixels ?? profile.maximumOverlayPixels)
+        let resourcePixels = resources?.maximumOverlayPixels ?? profile.maximumOverlayPixels
+        // Memory warnings use the small emergency surface on every platform.
+        maximumOverlayPixels = profile.desktop && resourcePixels > 262_144
+            ? profile.maximumOverlayPixels : min(profile.maximumOverlayPixels, resourcePixels)
         enhancedEffectsAllowed = profile.supportsEnhancedEffects && (resources?.enhancedEffectsAllowed ?? true)
         self.framesPerSecond = min(60, framesPerSecond)
-        cpu.restrict(to: self.ceiling, now: now); gpu.restrict(to: self.ceiling, now: now)
+        if profile.prefersFullDesktopEffects {
+            // M-series Macs use full effects unless explicit resource pressure limits them.
+            // Restore immediately when that pressure clears, including while paused.
+            cpu = AdaptiveFXQuality(initial: self.ceiling)
+            gpu = AdaptiveFXQuality(initial: self.ceiling)
+        } else {
+            cpu.restrict(to: self.ceiling, now: now); gpu.restrict(to: self.ceiling, now: now)
+        }
     }
 
     public mutating func recordCPU(_ seconds: Double, source: String = "frame", now: Double) {
         guard seconds.isFinite, seconds >= 0, now.isFinite else { return }
+        guard !profile.prefersFullDesktopEffects else { return }
         cpuCosts = cpuCosts.filter { now >= $0.value.at && now - $0.value.at < 0.5 }
         cpuCosts[source] = (seconds, now)
         cpu.observe(cpuSeconds: cpuCosts.values.reduce(0) { $0 + $1.seconds }, gpuSeconds: 0, now: now,
@@ -131,6 +156,7 @@ public struct AdaptiveFXPerformance: Sendable {
 
     public mutating func recordGPU(_ seconds: Double, source: String, now: Double) {
         guard seconds.isFinite, seconds >= 0, now.isFinite else { return }
+        guard !profile.prefersFullDesktopEffects else { return }
         // Completion samples are estimates of active surface cost, not end-to-end latency.
         gpuCosts = gpuCosts.filter { now >= $0.value.at && now - $0.value.at < 0.5 }
         gpuCosts[source] = (seconds, now)

@@ -115,6 +115,18 @@ playlist catalogue route. The offline corpus tool analyses those files, but does
 not silently convert them into Classic playlist entries in the app. Extending
 that route needs sequence, recovery and Hot Seat tests before it can ship.
 
+## Human calibration priority — 19 October 2026
+
+Follow the [newcomer playtest protocol](BetaTesting.md#newcomer-and-veteran-playtests)
+before another broad reorder or expansion. Keep hard original puzzles and free
+Try later. Observe the first assignment, direction, pause, free magnification,
+recovery, hint discovery and next-day resume. Teach through existing playable
+lessons instead of adding mandatory text or technology choices before play.
+Human-author exact-level hint reasoning at observed walls, and clearly separate
+general coaching when no checked hint exists. L2/L3 teaching sequences need
+native route and carry-over evidence; the Classic course is not sequel acceptance.
+No new human calibration is claimed by this plan.
+
 ## Components and evidence
 
 `DifficultyProfile` is Codable. It contains the precise score, confidence,

@@ -333,6 +333,27 @@ public struct Lemmings3Runtime: Sendable {
         x >= 0 && y >= 0 && x < configuration.width && y < configuration.height &&
         attributes[y * configuration.width + x] & 0x20 != 0
     }
+    public private(set) var bonusTool: Tool?
+    public private(set) var bonusToolLemmingID: Int?
+    public var bonusSkillUsed: Bool { bonusTool != nil }
+
+    /// Held tools came from this level's pickups or its original starting carriers.
+    public func canGrantBonusTool(to id: Int) -> Bool {
+        guard !isComplete, !bonusSkillUsed,
+              let lemming = lemmings.first(where: { $0.id == id }), lemming.active,
+              let tool = lemming.tool, tool != .clock,
+              lemming.quantity >= 0, lemming.quantity < Int.max else { return false }
+        return true
+    }
+
+    @discardableResult public mutating func grantBonusTool(to id: Int) -> Bool {
+        guard canGrantBonusTool(to: id), let index = lemmings.firstIndex(where: { $0.id == id }) else { return false }
+        lemmings[index].quantity += 1
+        bonusTool = lemmings[index].tool
+        bonusToolLemmingID = id
+        return true
+    }
+
     /// Read eligibility without copying the runtime or changing a lemming.
     public func canAssign(_ action: Action, to lemming: Lemming) -> Bool {
         guard !isComplete else { return false }

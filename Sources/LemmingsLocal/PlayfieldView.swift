@@ -445,6 +445,10 @@ struct ReticleFeedback {
   private var precisionScroll = PrecisionZoomScrollGesture()
   private let precisionZoomAnimation = PrecisionZoomAnimation()
   var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
+  var rewardBadgeRect: CGRect {
+    CGRect(origin: CGPoint(x: 12, y: 12), size: precisionStatus.size(scale: bounds.width >= 960 ? 2 : 1))
+  }
+    var precisionStatusOpacity: CGFloat = 1 { didSet { if oldValue != precisionStatusOpacity { needsDisplay = true } } }
   var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
   var deathCountdownAccessibilityText = ""
   var showsDeathCountdownOverlay = false { didSet { needsDisplay = true } }
@@ -558,6 +562,15 @@ struct ReticleFeedback {
   }
   private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
   var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: precisionLens.source($0)))?.id } }
+  var inspectionSelectionAvailable: () -> Bool = { false }
+  private var highlightedLemmingID: Int? {
+    inspectionSelectionAvailable() ? inspectionPointerID : assignmentHighlight.target ?? pointerLemmingID
+  }
+  var inspectionPointerID: Int? {
+    guard let cursorViewPoint, let session else { return nil }
+    return LemmingInspectionHover.nearestID(at: viewport.levelPoint(from: precisionLens.source(cursorViewPoint)),
+      actors: session.lemmings.map { ($0.id, $0.x, $0.y) })
+  }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
 
@@ -887,9 +900,9 @@ struct ReticleFeedback {
     defer {
       if phase == .playing { startCountdown.draw(in: bounds) }
       if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
-         let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
+         let id = highlightedLemmingID, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
         LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
-          scale: viewport.zoom, tint: .systemYellow, animated: !reduceMotion && !reduceFlashes)
+          scale: viewport.zoom, tint: assignmentHighlight.target == nil ? .systemGreen : .systemYellow, animated: !reduceMotion && !reduceFlashes)
       }
       if presentsHDR, let selectionEffect {
         LemmingSelectionRenderer.draw(selectionEffect)
@@ -953,7 +966,7 @@ struct ReticleFeedback {
       if phase == .playing {
         drawTurnBadge(); drawCursor()
         let zoomBadgeSize = precisionStatus.draw(at: CGPoint(x: 12, y: 12),
-          scale: bounds.width >= 960 ? 2 : 1)
+          scale: bounds.width >= 960 ? 2 : 1, opacity: precisionStatusOpacity)
         if showsDeathCountdownOverlay && !deathCountdownText.isEmpty {
           GameTypography.annotation(deathCountdownText,
             at: CGPoint(x: 12, y: 12 + zoomBadgeSize.height + 4), palette: .blue)
@@ -1571,7 +1584,7 @@ struct ReticleFeedback {
 
   private func drawHotSeatGhosts() {
     guard let session else { return }
-    for frame in hotSeatGhosts?.frames(at: session.currentTick) ?? [] {
+    for frame in visibleHotSeatFrames(at: session.currentTick) {
       switch frame.state {
       case .classic(let game):
         for lemming in game.lemmings where lemming.isActive {
@@ -1634,7 +1647,7 @@ struct ReticleFeedback {
     guard let session else { return }
     let lemmings = session.lemmings
     selectionTargetID = phase == .playing && !GameCursor.gameplaySuppressed
-      ? assignmentHighlight.target ?? pointerLemmingID : nil
+      ? highlightedLemmingID : nil
     if lemmingSelectionStyle == .modern, phase == .playing, !GameCursor.gameplaySuppressed {
       let now = ProcessInfo.processInfo.systemUptime
       selectionFade.set(selectionTargetID, at: now)
@@ -1915,16 +1928,12 @@ struct ReticleFeedback {
         strength: 0.45, expiresAt: expires, tint: .green))
     }
 
-    if lemmingSelectionStyle == .obvious, let target, Self.canHighlight(target), assignmentHighlight.target == nil {
-      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom,
-        tint: color, animated: !reduceMotion && !reduceFlashes)
-    }
-
     // The reticle stays at the input position. Selection effects follow the target.
     let occupied = hasLemming(at: point)
+    let eligible = target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true
     GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
-      tint: GameCursor.targetTint(eligible: target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true,
-        occupied: occupied), original: gameplayCursorStyle == .original, occupied: occupied)
+      tint: GameCursor.targetTint(eligible: eligible, occupied: occupied),
+      original: gameplayCursorStyle == .original, occupied: occupied, eligible: eligible)
 
     if showReticleCount {
       let centres = (session?.lemmings ?? []).map {

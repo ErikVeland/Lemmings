@@ -315,6 +315,7 @@ extension MobileGameViewController {
     func setSpeedInput(_ input: GameplaySpeed.Hold, held: Bool, allowTap: Bool = true) {
         let now = ProcessInfo.processInfo.systemUptime
         inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
+        inputSpeed.ridiculousEnabled = gameSettings.classic.ridiculousSpeedEnabled
         if held {
             guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
             if input == .key && !inputSpeed.variableEnabled { inputSpeed.tap(at: now) }
@@ -328,6 +329,7 @@ extension MobileGameViewController {
     }
     func updateInputSpeed(at now: Double) {
         inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
+        inputSpeed.ridiculousEnabled = gameSettings.classic.ridiculousSpeedEnabled
         if !overlay.isHidden || !lifecycle.isForeground || lifecycle.isInterrupted { inputSpeed.suspend(at: now) }
         inputSpeed.update(at: now)
         let changed = speed != inputSpeed.multiplier
@@ -370,6 +372,7 @@ extension MobileGameViewController {
                 else { libraries.download(pack) }
                 self.showInGameSettings(.audio, soundtrack: true)
             } else if library.handleSettings(id) {
+                self.inputSpeed.ridiculousEnabled = library.mobileSettings.classic.ridiculousSpeedEnabled
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
                 self.applyGameSettings(library.mobileSettings)
                 self.showInGameSettings(group, mappings: mappings, language: language)

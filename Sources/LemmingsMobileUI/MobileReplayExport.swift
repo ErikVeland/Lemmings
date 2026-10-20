@@ -8,7 +8,9 @@ import UIKit
 extension MobileGameViewController {
     /// Draws a separate replay at the current camera position for the share sheet.
     func shareReplayMovie(document: Data) {
-        let recorder = ReplayMovieRecorder(ticksPerSecond: session.ticksPerSecond)
+        // Export runs after gameplay and can wait for encoder capacity.
+        let recorder = ReplayMovieRecorder(ticksPerSecond: session.ticksPerSecond,
+            admissionTimeout: .milliseconds(500))
         let viewport = playfieldView.gameViewport
         let cancelled = MobileReplayExportCancellation()
         showCustomOverlay(title: L10n.text("Replay movie"), details: [], actions: [(L10n.text("CANCEL"), { [weak self] in

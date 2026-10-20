@@ -29,14 +29,17 @@ import Security
     private lazy var cloudKit = CloudKitLibraryStore(defaults: defaults)
     private var cloudKitReady = false
     private var cloudKitEnabled: Bool { Bundle.main.object(forInfoDictionaryKey: "CloudLibraryCloudKitEnabled") as? Bool == true }
-    private static let service = "academy.glasscode.lemmings.cloud-library-v2"
 #if os(tvOS)
     private static let containerIdentifier = "iCloud.academy.glasscode.lemmings"
 #else
     private static let containerIdentifier = AppleGameProgressTransport.containerIdentifier
 #endif
     public var available: Bool { enabled }
-    public init(defaults: UserDefaults = .standard, endpoint: URL? = nil) {
+    public convenience init(defaults: UserDefaults = .standard, endpoint: URL? = nil) {
+        self.init(defaults: defaults, endpoint: endpoint, deviceAccess: CloudLibraryDeviceAccess())
+    }
+    init(defaults: UserDefaults, endpoint: URL?, deviceAccess: CloudLibraryDeviceAccess) {
+        self.deviceAccess = deviceAccess
         self.defaults = defaults
         self.endpoint = endpoint ?? (Bundle.main.object(forInfoDictionaryKey: "CloudLibraryURL") as? String).flatMap(URL.init(string:))
         let configuration = URLSessionConfiguration.ephemeral
@@ -44,54 +47,36 @@ import Security
         network = URLSession(configuration: configuration)
         enabled = ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted"
     }
-    public func credentials() throws -> [CloudLibraryIdentity] {
-        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
-            kSecReturnData as String: true]
-#if !os(tvOS)
-        let context = LAContext(); context.interactionNotAllowed = true
-        query[kSecUseAuthenticationContext as String] = context
-#endif
-        var result: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-        if status == errSecItemNotFound { return [] }
-        guard status == errSecSuccess, let data = result as? Data else { throw SequelDataError.invalid(L10n.text("Unlock this device to access cloud saves.")) }
-        let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
-        try Self.validate(identities); return identities
+    private let deviceAccess: CloudLibraryDeviceAccess
+    public func credentials() async throws -> [CloudLibraryIdentity] { try await deviceAccess.credentials() }
+    @discardableResult public func storeCredentials(_ identities: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
+        try await deviceAccess.storeCredentials(identities)
     }
-    public func storeCredentials(_ identities: [CloudLibraryIdentity]) throws {
-        try Self.validate(identities)
-        let data = try JSONEncoder().encode(identities)
-        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library"]
-#if !os(tvOS)
-        let context = LAContext(); context.interactionNotAllowed = true
-        query[kSecUseAuthenticationContext as String] = context
-#endif
-        let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
-        if update == errSecItemNotFound {
-            var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
-            entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-            guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
-        } else if update != errSecSuccess { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
+    nonisolated static func mergeIdentities(_ first: [CloudLibraryIdentity], _ second: [CloudLibraryIdentity]) throws -> [CloudLibraryIdentity] {
+        var keys: [String: CloudLibraryIdentity] = [:]
+        for identity in first + second {
+            if let existing = keys[identity.id], existing != identity {
+                throw SequelDataError.invalid(L10n.text("The library keys conflict."))
+            }
+            keys[identity.id] = identity
+        }
+        let combined = keys.values.sorted { $0.id < $1.id }
+        try validate(combined)
+        return combined
     }
-    private static func validate(_ identities: [CloudLibraryIdentity]) throws {
+    nonisolated fileprivate static func validate(_ identities: [CloudLibraryIdentity]) throws {
         guard identities.count <= 16, Set(identities.map(\.id)).count == identities.count else { throw SequelDataError.invalid(L10n.text("Too many linked libraries.")) }
         for identity in identities { try identity.validate() }
     }
-    private func currentAccount() throws -> Data? {
-        guard let token = FileManager.default.ubiquityIdentityToken else { return nil }
-        return try NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
-    }
-    private func checkAccount() throws {
-        guard try currentAccount() == account else { throw SequelDataError.invalid(L10n.text("The iCloud account changed. Existing saves were kept.")) }
+    private func checkAccount() async throws {
+        guard try await deviceAccess.currentAccount() == account else { throw SequelDataError.invalid(L10n.text("The iCloud account changed. Existing saves were kept.")) }
     }
     public func discover(_ local: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
         guard enabled else { throw URLError(.notConnectedToInternet) }
         providers = []; issues = []; readable = [:]; root = nil; cloudKitReady = false
         var identities = local
         #if !os(tvOS)
-        account = try currentAccount()
+        account = try await deviceAccess.currentAccount()
         if let account {
             if let bound = defaults.data(forKey: "CloudLibrary.iCloudOwner"), bound != account {
                 issues.append("iCloud account changed")
@@ -101,14 +86,14 @@ import Security
                     FileManager.default.url(forUbiquityContainerIdentifier: containerIdentifier)
                 }.value
                 if let url {
-                    try checkAccount()
+                    try await checkAccount()
                     root = url.appendingPathComponent("Documents/PrivateLibrary-v2", isDirectory: true)
                     let cloudRoot = root!
                     do {
                         let found = try await Task.detached(priority: .utility) {
                             try Self.readIdentities(at: cloudRoot)
                         }.value
-                        try checkAccount()
+                        try await checkAccount()
                         for identity in found {
                             if let previous = identities.first(where: { $0.id == identity.id }) {
                                 guard previous == identity else { throw SequelDataError.invalid(L10n.text("The library keys conflict.")) }
@@ -124,7 +109,7 @@ import Security
                                 try Self.write(try JSONEncoder().encode(identity), at: cloudRoot.appendingPathComponent("identity-\(identity.id).json"))
                             }
                         }.value
-                        try checkAccount()
+                        try await checkAccount()
                         defaults.set(account, forKey: "CloudLibrary.iCloudOwner")
                         providers.insert("iCloud Drive")
                     } catch {
@@ -205,12 +190,12 @@ import Security
             do {
                 let cloud = try await cloudKit.load(identity)
                 data += cloud; success.insert("CloudKit"); providers.insert("iCloud")
-                hashes[identity.id + "CloudKit"] = Set(cloud.map { Data(SHA256.hash(data: $0)) })
+                hashes[identity.id + "CloudKit"] = await Task.detached(priority: .utility) { Set(cloud.map { Data(SHA256.hash(data: $0)) }) }.value
             } catch { issues.append("iCloud saves unavailable") }
         }
         if let root {
             do {
-                try checkAccount()
+                try await checkAccount()
                 let folder = root.appendingPathComponent(identity.id, isDirectory: true)
                 let cloud = try await Task.detached(priority: .utility) {
                     guard FileManager.default.fileExists(atPath: folder.path) else { return [Data]() }
@@ -219,9 +204,11 @@ import Security
                     return try files.map { try identity.open(Self.read(at: $0, limit: CloudLibraryArchive.maximumBytes + 28)) }
                 }.value
                 // Decode every version before marking this provider writable.
-                for value in cloud { _ = try CloudLibraryArchive.decode(value) }
-                try checkAccount(); data += cloud; success.insert("iCloud")
-                hashes[identity.id + "iCloud"] = Set(cloud.map { Data(SHA256.hash(data: $0)) })
+                try await Task.detached(priority: .utility) {
+                    for value in cloud { _ = try CloudLibraryArchive.decode(value) }
+                }.value
+                try await checkAccount(); data += cloud; success.insert("iCloud")
+                hashes[identity.id + "iCloud"] = await Task.detached(priority: .utility) { Set(cloud.map { Data(SHA256.hash(data: $0)) }) }.value
             } catch { issues.append("iCloud saves unavailable") }
         }
         if endpoint != nil {
@@ -234,9 +221,13 @@ import Security
                     guard manifest.devices.count <= 32, manifest.devices.allSatisfy({ UUID(uuidString: $0) != nil }) else { throw SequelDataError.invalid(L10n.text("Invalid cloud device list.")) }
                     for device in manifest.devices {
                         let (sealed, _) = try await request("/v1/vaults/\(identity.id)/devices/\(device)", token: identity.token)
-                        let opened = try identity.open(sealed)
-                        _ = try CloudLibraryArchive.decode(opened); data.append(opened)
-                        hashes[identity.id + "Cloud", default: []].insert(Data(SHA256.hash(data: opened)))
+                        let (opened, hash) = try await Task.detached(priority: .utility) {
+                            let opened = try identity.open(sealed)
+                            _ = try CloudLibraryArchive.decode(opened)
+                            return (opened, Data(SHA256.hash(data: opened)))
+                        }.value
+                        data.append(opened)
+                        hashes[identity.id + "Cloud", default: []].insert(hash)
                     }
                 }
                 success.insert("Cloud"); providers.insert("Cloud")
@@ -247,9 +238,10 @@ import Security
         return data
     }
     public func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
-        _ = try CloudLibraryArchive.decode(data)
-        let sealed = try identity.seal(data)
-        let contentHash = Data(SHA256.hash(data: data))
+        let (sealed, contentHash) = try await Task.detached(priority: .utility) {
+            _ = try CloudLibraryArchive.decode(data)
+            return (try identity.seal(data), Data(SHA256.hash(data: data)))
+        }.value
         var saved = false
         if readable[identity.id]?.contains("CloudKit") == true {
             if hashes[identity.id + "CloudKit"]?.contains(contentHash) == true { saved = true }
@@ -262,11 +254,11 @@ import Security
             if hashes[identity.id + "iCloud"]?.contains(contentHash) == true { saved = true }
             else {
             do {
-                try checkAccount()
+                try await checkAccount()
                 let folder = root.appendingPathComponent(identity.id, isDirectory: true)
                 // Content-addressed files cannot overwrite another device or an
                 // unresolved iCloud conflict. Keep the previous local generation.
-                let digest = SHA256.hash(data: data).prefix(12).map { String(format: "%02x", $0) }.joined()
+                let digest = contentHash.prefix(12).map { String(format: "%02x", $0) }.joined()
                 try await Task.detached(priority: .utility) {
                     let file = folder.appendingPathComponent("\(device)-\(digest).save")
                     if !FileManager.default.fileExists(atPath: file.path) { try Self.write(sealed, at: file) }
@@ -280,7 +272,7 @@ import Security
                     // Every old generation was decoded during load before this save.
                     for obsolete in old.dropFirst(2) where obsolete != file { try FileManager.default.removeItem(at: obsolete) }
                 }.value
-                try checkAccount(); saved = true
+                try await checkAccount(); saved = true
             } catch { issues.append("iCloud upload pending") }
             }
         }
@@ -339,5 +331,60 @@ import Security
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: opened)
         try Self.validate(identities); guard !identities.isEmpty else { throw SequelDataError.invalid(L10n.text("The library key is missing.")) }
         return identities
+    }
+}
+
+/// Keychain and iCloud identity calls can wait for system services. Keep them
+/// serial on a background executor, including when called from a menu action.
+actor CloudLibraryDeviceAccess {
+    private static let service = "academy.glasscode.lemmings.cloud-library-v2"
+    private let read: @Sendable () throws -> [CloudLibraryIdentity]
+    private let write: @Sendable ([CloudLibraryIdentity]) throws -> Void
+    init(read: @escaping @Sendable () throws -> [CloudLibraryIdentity] = CloudLibraryDeviceAccess.readCredentials,
+         write: @escaping @Sendable ([CloudLibraryIdentity]) throws -> Void = CloudLibraryDeviceAccess.writeCredentials) {
+        self.read = read; self.write = write
+    }
+    func credentials() throws -> [CloudLibraryIdentity] { try read() }
+    func storeCredentials(_ identities: [CloudLibraryIdentity]) throws -> [CloudLibraryIdentity] {
+        // Discovery and password setup may overlap. Never replace a newer link
+        // with the older set that a background pass started with.
+        let combined = try AppleCloudLibraryTransport.mergeIdentities(read(), identities)
+        try write(combined)
+        return combined
+    }
+    func currentAccount() throws -> Data? {
+        guard let token = FileManager.default.ubiquityIdentityToken else { return nil }
+        return try NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
+    }
+    nonisolated private static func readCredentials() throws -> [CloudLibraryIdentity] {
+        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
+            kSecReturnData as String: true]
+#if !os(tvOS)
+        let context = LAContext(); context.interactionNotAllowed = true
+        query[kSecUseAuthenticationContext as String] = context
+#endif
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        if status == errSecItemNotFound { return [] }
+        guard status == errSecSuccess, let data = result as? Data else { throw SequelDataError.invalid(L10n.text("Unlock this device to access cloud saves.")) }
+        let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
+        try AppleCloudLibraryTransport.validate(identities); return identities
+    }
+    nonisolated private static func writeCredentials(_ identities: [CloudLibraryIdentity]) throws {
+        try AppleCloudLibraryTransport.validate(identities)
+        let data = try JSONEncoder().encode(identities)
+        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library"]
+#if !os(tvOS)
+        let context = LAContext(); context.interactionNotAllowed = true
+        query[kSecUseAuthenticationContext as String] = context
+#endif
+        let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        if update == errSecItemNotFound {
+            var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
+            entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+            guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
+        } else if update != errSecSuccess { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
     }
 }

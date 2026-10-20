@@ -84,8 +84,9 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
   }
 
   public init(ticksPerSecond: Double, encodingQueue: DispatchQueue? = nil,
-       admissionTimeout: DispatchTimeInterval = .milliseconds(500)) {
-    // Capture serves the active game and has a bounded admission deadline.
+       admissionTimeout: DispatchTimeInterval = .nanoseconds(0)) {
+    // Live capture must not pace physics to the encoder, especially during fast-forward.
+    // Offline callers can allow a wait when every frame must be encoded.
     queue = encodingQueue ?? DispatchQueue(label: "academy.glasscode.lemmings.replay", qos: .userInitiated)
     self.admissionTimeout = admissionTimeout
     self.ticksPerSecond = Int32((max(1, min(1000, ticksPerSecond.isFinite ? ticksPerSecond : 17)) * 1000).rounded())

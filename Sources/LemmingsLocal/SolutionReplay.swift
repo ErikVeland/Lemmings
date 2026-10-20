@@ -69,6 +69,8 @@ import LemmingsGameArt
                 record(id: id, skill: skill)
             }
         case let .releaseRate(value): session.adjustRate(by: value - session.rate)
+        case let .bonusSkill(skill):
+            if let index = ClassicSkill.allCases.firstIndex(of: skill) { session.grantExtraSkill(at: index) }
         case .nuke: session.nuke()
         }
     }

@@ -9,24 +9,19 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.0.7"
-    static var subtitle: String { L10n.text("Safer resets and supporter credits") }
-    // A patch describes the whole 2.0 line, so players who skip patches see every change.
+    static let notesVersion = "2.1"
+    static var subtitle: String { L10n.text("Comfortable play, original character") }
     static var sections: [(String, String)] { [
-        (L10n.text("Safer count reset"), L10n.text("Clearing this Mac's play counts now asks for confirmation. Restore previous counts recovers the saved totals and retains rescues earned since the reset.")),
-        (L10n.text("About and supporters"), L10n.text("About now includes published version history and contributor credits. The contributor list refreshes from the server. Donate is available on Home and in About.")),
-        (L10n.text("Smoother play"), L10n.text("Results, records and the career leaderboard no longer pause the game. The playfield and minimap draw faster, and the menu music no longer crackles at startup. Chronicles Moles follow the original game more closely at steel.")),
-        (L10n.text("Shining arrows"), L10n.text("On an HDR display, one-way arrows in Macintosh colour artwork catch the light on their upper and left edges.")),
-        (L10n.text("Menu themes"), L10n.text("Most launches play the Amiga title theme. Sometimes the menu plays a title theme from another version, including Macintosh.")),
-        (L10n.text("Controller steps"), L10n.text("Hold LT and LB or RB to scrub one tick at a time. On a DualSense, slide a finger on the touchpad to step back or forward. Each step gives a light haptic tick.")),
-        (L10n.text("The art of one bit"), L10n.text("Original Macintosh black-and-white artwork brings its intricate dithering to modern Macs. Choose Macintosh (1-bit) in Graphics settings for Classic artwork and matching monochrome gameplay controls.")),
-        (L10n.text("Resume your journey"), L10n.text("Supported journeys and sequence playlists restore the saved attempt, selected action and camera. Classic, The Tribes and Chronicles resume paused. Hot Seat waits for Ready.")),
-        (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
-        (L10n.text("Hot Seat ghosts"), L10n.text("Earlier players' latest attempts appear as coloured ghosts during Hot Seat retries. Ghosts follow rewind and appear in replay movies.")),
-        (L10n.text("Leaderboards"), L10n.text("Worldwide leaderboard entries for Classic levels now identify the exact level, including traps and objects.")),
-        (L10n.text("Journey"), L10n.text("A revised journey no longer repeats its opening levels. It resumes after the furthest level you reached. Skipped levels appear in Come back to these.")),
-        (L10n.text("Language"), L10n.text("Choose a language in Settings > Gameplay > Language. Choose Apply to save the preview or Back to cancel.")),
-        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta, with known content and engine limits in the release notes."))
+        (L10n.text("Comfortable play"), L10n.text("Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review.")),
+        (L10n.text("Individual lemmings"), L10n.text("Pause to inspect names and recorded assignments. On Mac, hover over a lemming or choose Inspect for its longer history. Character details have no effect on gameplay.")),
+        (L10n.text("Extra skills"), L10n.text("Earn one Extra skill for every ten qualifying three-star clears. Use at most one per attempt. Bonus clears have separate records and cannot earn rewards or enter online rankings.")),
+        (L10n.text("Short games and heritage"), L10n.text("Browse optional five-level Classic and The Tribes openings. About includes original-team and port credits. Missing exact hints are labelled General coaching.")),
+        (L10n.text("Journey"), L10n.text("Journey Map and Resume keep your selected player, roster and turn. Solo and Hot Seat lesson progress stay separate. Shared handovers wait for Ready.")),
+        (L10n.text("Smoother sync"), L10n.text("Cloud saves work in the background. Journey queues, fan completion and supported campaign progress sync with their owning session. Tester Sync shows whether saves are synced, waiting or offline.")),
+        (L10n.text("Find your next level"), L10n.text("Start an official level from Play Insights. Normal level availability and campaign unlocks still apply.")),
+        (L10n.text("Clearer controls"), L10n.text("Browse individual releases in About. Zoom and skip counters fade with the gameplay menu in Classic, The Tribes and Chronicles. Amiga Versus shows its two-controller requirement before play.")),
+        (L10n.text("Earlier updates"), L10n.text("Original Macintosh 1-bit artwork, restored journeys and playlists, Classic solution ghosts, Hot Seat ghosts, controller stepping and safer count resets remain available. Find the full history in About > Version history.")),
+        (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Mobile Journey playback remains Classic-only. Existing engine and device validation limits still apply."))
     ] }
     private let defaults: UserDefaults
     private let build: Int
@@ -52,39 +47,13 @@ import NxlvKit
     func show(in window: NSWindow, completion: @escaping () -> Void = {}) {
         if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page, owner: window); return }
         let page = GameMenuPage(title: L10n.text("What's new in \(version)"), subtitle: Self.subtitle)
-        let scroll = NSScrollView(frame: page.body.bounds)
-        scroll.autoresizingMask = [.width, .height]
-        scroll.hasVerticalScroller = true
-        scroll.hasHorizontalScroller = false
-        scroll.drawsBackground = false
-        scroll.contentView.copiesOnScroll = false
-        scroll.scrollerStyle = .overlay
-        scroll.setAccessibilityLabel(L10n.text("Release notes"))
-        let document = NSView()
-        let width = page.body.bounds.width - 32
-        var rows: [(GameLabel, GameLabel, CGFloat)] = []
-        for section in Self.sections {
-            let heading = GameLabel(labelWithString: section.0)
-            heading.role = .heading
-            let body = GameLabel(labelWithString: section.1)
-            body.cell?.wraps = true
-            body.frame = CGRect(x: 0, y: 0, width: width, height: 58)
-            let height = max(58, body.intrinsicContentSize.height)
-            rows.append((heading, body, height))
-        }
-        let height = max(page.body.bounds.height, rows.reduce(CGFloat(16)) { $0 + $1.2 + 58 })
-        document.frame = CGRect(x: 0, y: 0, width: page.body.bounds.width, height: height)
-        var top = height - 8
-        for (heading, body, height) in rows {
-            heading.frame = CGRect(x: 16, y: top - 28, width: width, height: 28)
-            body.frame = CGRect(x: 16, y: top - 34 - height, width: width, height: height)
-            document.addSubview(heading); document.addSubview(body)
-            top -= height + 58
-        }
-        scroll.documentView = document
-        page.body.addSubview(scroll)
-        scroll.contentView.scroll(to: CGPoint(x: 0, y: max(0, height - scroll.contentSize.height)))
-        scroll.reflectScrolledClipView(scroll.contentView)
+        let notes = AboutMarkdownView(markdown: Self.sections.map {
+            "## " + $0.0 + "\n\n" + $0.1
+        }.joined(separator: "\n\n"))
+        notes.frame = page.body.bounds
+        notes.autoresizingMask = [.width, .height]
+        notes.scroll.setAccessibilityLabel(L10n.text("Release notes"))
+        page.body.addSubview(notes)
         let close = { [weak self, weak page] in
             guard let self, let page else { return }
             GameScreen.shared.dismiss(page); self.page = nil; completion()

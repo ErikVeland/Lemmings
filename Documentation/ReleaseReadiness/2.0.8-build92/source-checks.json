@@ -1,0 +1,128 @@
+{
+  "candidate": "2.0.8",
+  "build": "92",
+  "date": "2026-10-19",
+  "base": "v2.0.7",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "working_tree": true,
+  "published": false,
+  "window_mode": "offscreen",
+  "test_audio": "muted",
+  "runs": {
+    "focused": {
+      "result": "passed",
+      "log": ".build/2.0.8-focused-final.log",
+      "excerpts": [
+        "UI test windows: offscreen; audio: muted",
+        "Executed 24 tests, with 0 failures (0 unexpected) in 1.001 (1.003) seconds",
+        "Executed 12 tests, with 0 failures (0 unexpected) in 9.475 (9.476) seconds",
+        "Executed 7 tests, with 0 failures (0 unexpected) in 0.385 (0.386) seconds",
+        "Executed 6 tests, with 0 failures (0 unexpected) in 0.203 (0.203) seconds",
+        "Executed 49 tests, with 0 failures (0 unexpected) in 11.063 (11.068) seconds",
+        "Executed 49 tests, with 0 failures (0 unexpected) in 11.063 (11.070) seconds",
+        "􁁛  Test run with 40 tests in 4 suites passed after 1.628 seconds."
+      ]
+    },
+    "presentation": {
+      "result": "passed",
+      "log": ".build/2.0.8-presentation-final.log",
+      "excerpts": [
+        "UI test windows: offscreen; audio: muted",
+        "Executed 1 test, with 0 failures (0 unexpected) in 0.537 (0.537) seconds",
+        "Executed 1 test, with 0 failures (0 unexpected) in 3.643 (3.643) seconds",
+        "Executed 2 tests, with 0 failures (0 unexpected) in 4.180 (4.180) seconds",
+        "Executed 2 tests, with 0 failures (0 unexpected) in 4.180 (4.183) seconds",
+        "􁁛  Test run with 10 tests in 1 suite passed after 0.366 seconds."
+      ]
+    },
+    "native_integration": {
+      "result": "passed",
+      "log": ".build/2.0.8-about-runtime-final.log",
+      "excerpts": [
+        "UI test windows: offscreen; audio: muted",
+        "PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable",
+        "PASS Home Donate mouse, keyboard and accessibility actions at three sizes; Home and About share the coffee destination",
+        "PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues"
+      ]
+    },
+    "device_sdk_modules": {
+      "result": "passed",
+      "log": ".build/2.0.8-sdk.log",
+      "excerpts": [
+        "PASS iphonesimulator NxlvKit",
+        "PASS iphonesimulator LemmingsAppCore",
+        "PASS iphonesimulator LemmingsMobileCore",
+        "PASS iphonesimulator LemmingsTVCore",
+        "PASS iphonesimulator LemmingsGameArt",
+        "PASS iphonesimulator LemmingsMobileUI",
+        "PASS appletvsimulator NxlvKit",
+        "PASS appletvsimulator LemmingsAppCore",
+        "PASS appletvsimulator LemmingsMobileCore",
+        "PASS appletvsimulator LemmingsTVCore",
+        "PASS appletvsimulator LemmingsGameArt",
+        "PASS appletvsimulator LemmingsMobileUI"
+      ]
+    },
+    "python": {
+      "result": "passed",
+      "checks": 5,
+      "suites": [
+        "Tests/AboutTests/test_bundle.py",
+        "Tests/ReleaseReadinessTests/test_release_notes.py"
+      ]
+    }
+  },
+  "changed_source_sha256": {
+    "Resources/Info.plist": "abbac82eb726e7446683ecb17121f8fbedb99ec2d11cb5d474593687d9e7ae52",
+    "Scripts/bundle-about.py": "d40fdb84e5d18f8a0b6828ce56d233d5397fb66f6445faadc9d7e3a1631cfa7d",
+    "Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift": "95c147ab93e6470bf5a50b6e39ad43864c453a764e55a03374c349d338d2ec6f",
+    "Sources/LemmingsAppCore/Records/CloudKitLibraryStore.swift": "5193742094fe41e50fc29b4d4f38333f5971949118c46bcd1c526e22b4a19035",
+    "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift": "7e09bcb83c7ff87a8f2ee02ede7b9d1b5b16463ed80b39f387ee47be42c41324",
+    "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift": "7df657451c96dd0609b730d495b24f0dfb8b383373f760b5347eaf8b94165e9b",
+    "Sources/LemmingsAppCore/Records/GameProgressPreferences.swift": "a330a9fae75a2bcbf9f69f754d9cf50fe969b9af1c11842af3094980575c3d9c",
+    "Sources/LemmingsGameArt/CloudSyncArt.swift": "38221de3942240fb30c79a74bab4865647f31c56657c4b6ec8e04a37383a04db",
+    "Sources/LemmingsGameArt/MobileHomeArt.swift": "b683314c05d6c36d9b4628395e035d019afcf0dee5c3449fcfbbda59a5499bad",
+    "Sources/LemmingsGameArt/MobileSettingsArt.swift": "b1d59c8274b7c992825fa54fd53fb1206004076f723e047bacfb6070d560f0d0",
+    "Sources/LemmingsGameArt/TVSharedMenuArt.swift": "e8c4aa38a5adc0c6307bea3f0819a23678776fed6af2d8219ba8c544ef79d2e4",
+    "Sources/LemmingsLocal/AboutWindow.swift": "8cb6afd09cc84a97eb1e6cd4ff6af37ec165c5b46ed1aa694c6d60f8b769ecb3",
+    "Sources/LemmingsLocal/ArcadeWindow.swift": "9132750896368fb76935f13763ddbb3dfe66ad540a0eb9b11e002f07a2a5a812",
+    "Sources/LemmingsLocal/CloudLibraryView.swift": "70329974a0a1f0e407c764aeda1b7cabcab5f0c320c2808bbae0b2d320e9e5ac",
+    "Sources/LemmingsLocal/FanLevelLibrary.swift": "60a46a6a1e24f42fe431445be059f5cb9fae80174cb11f3c90d4ae658f142dba",
+    "Sources/LemmingsLocal/GameplayKeyboard.swift": "55aa92d027e1701fc40138e199b758eed816ff5ddedf664f968097a141328751",
+    "Sources/LemmingsLocal/GameplayPresentation.swift": "af8f67dc846087f535ea393c2347e3cabd932e65e601d08214e3e7c0cd825963",
+    "Sources/LemmingsLocal/Lemmings2PlayWindow.swift": "87556f4379314979834ee4c3c506eb755330f09900c5b72cffe5ce5094c23774",
+    "Sources/LemmingsLocal/Lemmings3PlayWindow.swift": "d4b4852581016d70b014875422f10194a2c164cc7b701f2b8d7940a494e59860",
+    "Sources/LemmingsLocal/PlayfieldView.swift": "41df3114c9a194802ad5df9235589d6ada3274e693548b0813269a8ed5b8b050",
+    "Sources/LemmingsLocal/ReleaseWelcome.swift": "6bb8e89ad14056b86bde2a852c1802e2ac49fa53522ca07f3d0964805c8dbf08",
+    "Sources/LemmingsLocal/TelemetryDashboard.swift": "6d57acfdd9b67dce39a5a2a3e33854c59ff5dfe997326c89418961cd7618b5ac",
+    "Sources/LemmingsLocal/main.swift": "b5b485906100fa3717d1386ddb0d722e5bb9c8efd9e435e675689a02cb942014",
+    "Sources/LemmingsMobileCore/MobileFavourites.swift": "7f4689f4bf28a7f4f4f36a187e841aebed1744bdd15b7ca63dc2e66589425c69",
+    "Sources/LemmingsMobileCore/MobileGameSession.swift": "336bb96bd8933877c46db9f572b2d6e106de0d75e2177303c15b942f37138116",
+    "Sources/LemmingsMobileCore/MobileLearning.swift": "f6c2b57aef51b5db08af3c622a5f1c23d82c2284860be6a52b71864cc59eb1b3",
+    "Sources/LemmingsMobileUI/MobileCloudLibrary.swift": "cbcfdd2063eec7fffa0f38a4d2f36b2ae4c11a6d727dc6f38ef3c06f111516b6",
+    "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift": "4d51bf51fe92c8ecd795a207c0efa472709884f8beb48c7bdb164bb9f0f28b1a",
+    "Sources/LemmingsMobileUI/MobileLibraryLearning.swift": "b19dcd341843efa583cc2b613ee45e0c70e81e6b018b2c42823a9638f25ac496",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "803102afbbf2d7f771c5870f07feb27241f2ab64aea3b8cef9cc0cbdae7d8db7",
+    "Sources/NxlvKit/AmigaVersusCampaign.swift": "c6c8aaa5e611575336b7fe1d10537774344ea04b3533c291f1d2155ebbc123af",
+    "Sources/NxlvKit/SequelBinary.swift": "85e3e9c0a9c98a91553d5a07ebea499fb08f93b2afad2d6bd06a8078e09644fc",
+    "Tests/AboutTests/test_bundle.py": "a53a7696cfc5e062bee8e31335cdcfbeb578bc6bb17c23987e76a03ff8a81b41",
+    "Tests/AppIntegrationTests/checks.swift": "3daed079b1174b6c3be95067eb739fca7f47f57d3e9b1dca00fb3950750af2a7",
+    "Tests/LemmingsAppCoreTests/CloudLibraryTests.swift": "cebc762f1c9eba819a1e6029fe82b01a14d328a7dea51a26b7bf79dd6f7cb7e1",
+    "Tests/LemmingsLocalTests/AboutHistoryTests.swift": "a7173fd7a114ce6cc723168561c5d5dba67c5d25d12739fdadb9b1790b686d05",
+    "Tests/LemmingsLocalTests/AnonymousTelemetryTests.swift": "4eb86e1a86110a82913f562180eaf6f311316f6fe78d90d5da1607f283bd1323",
+    "Tests/LemmingsLocalTests/CloudLibraryViewTests.swift": "05847d81ca7b6641486d2f544c508a5a0a385359e5fae8a68649cb842f21c7fc",
+    "Tests/LemmingsLocalTests/DeviceMenuLayoutTests.swift": "0167b859151bb19785f21e204572c9317c69554c7138f4281e48ca36641efe55",
+    "Tests/LemmingsLocalTests/LanguagePickerTests.swift": "af142cbc2b8e602705dcc6b7eeea107f268144bfa1db6a200d2ed9057bdeae69",
+    "Tests/LemmingsLocalTests/LearningJourneyTests.swift": "fd04b20b8d148be73992613ac08139b7cd733335d5a9d2338d207bccc6bd12e9",
+    "Tests/LemmingsLocalTests/MusicTitleCardTests.swift": "d520829698aa43fdeb0d878ff926ce0f469fe4bf9a5e97aba98c475ab2ebe6db",
+    "Tests/LemmingsMobileCoreTests/MobileLearningTests.swift": "4998f5135bcb75b9ba0970165c446e32909a5c909b42c3d8558e92870d1a6c1b",
+    "Tests/NxlvKitTests/AmigaVersusRequirementTests.swift": "eb4fd6a8b1f0e46ee6f703f06703cb101be88b42a4d77df2321150b5b9b6d1a6",
+    "Tools/IOSMenuAudit/navigation.swift": "702631d9e4caa72b4348d318c0f69eb680c6bc25abcd3d64eacf35c2d4674247",
+    "Tools/TVExperienceAudit/shared-frontend.swift": "cc4bc382b2a92a932b1b43b33c86db4b0eb1b194409a87e8ab1b888859524a32"
+  },
+  "limits": [
+    "No live cloud propagation or installed-device acceptance",
+    "Mobile Journey playback remains Classic-only",
+    "No full engine replay audit or distribution acceptance"
+  ]
+}

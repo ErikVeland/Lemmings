@@ -12,10 +12,12 @@ public struct GameplayMusicPitch: Sendable {
 
     public static func ratio(for speed: Double) -> Double {
         // Settled tiers transpose the whole track by musical intervals.
-        let ratios = [0.0, 1, 2, 3, 5].map { pow(2, $0 / 12) }
-        let speed = min(10, max(1, speed))
-        for index in 1..<GameplaySpeed.steps.count where speed <= GameplaySpeed.steps[index] {
-            let lower = GameplaySpeed.steps[index - 1], upper = GameplaySpeed.steps[index]
+        let normalRatios = [0.0, 1, 2, 3, 5].map { pow(2, $0 / 12) }
+        let ratios = normalRatios + [min(1.5, normalRatios.last! + 0.1)]
+        let steps = GameplaySpeed.ridiculousSteps
+        let speed = min(25, max(1, speed))
+        for index in 1..<steps.count where speed <= steps[index] {
+            let lower = steps[index - 1], upper = steps[index]
             let blend = (speed - lower) / (upper - lower)
             return ratios[index - 1] * pow(ratios[index] / ratios[index - 1], blend)
         }
@@ -34,11 +36,27 @@ public struct GameplayMusicPitch: Sendable {
 public struct GameplaySpeed: Sendable {
     public enum Hold: Hashable, Sendable { case key, shift, controller, mouse }
     public static let steps: [Double] = [1, 2, 3, 5, 10]
+    public static let ridiculousSteps: [Double] = steps + [25]
     public static let holdDelay = 0.25
     public static let holdStepDuration = 0.5
     public static let transitionDuration = 0.24
     public static let rapidInterval = 0.3
     public var variableEnabled = true
+    public var ridiculousEnabled = false {
+        didSet {
+            guard !ridiculousEnabled, oldValue else { return }
+            let wasHeld = !held.isEmpty
+            cancelHolds()
+            selected = min(10, selected); cruise = min(10, cruise)
+            if wasHeld {
+                target = selected; multiplier = selected; transitionFrom = selected
+            } else {
+                target = min(10, target); multiplier = min(10, multiplier)
+                transitionFrom = min(10, transitionFrom)
+            }
+        }
+    }
+    public var availableSteps: [Double] { ridiculousEnabled ? Self.ridiculousSteps : Self.steps }
     public let legacyMultiplier: Double
     public private(set) var selected: Double = 1
     public private(set) var target: Double = 1
@@ -55,26 +73,26 @@ public struct GameplaySpeed: Sendable {
     public init(legacyMultiplier: Double = 3) { self.legacyMultiplier = legacyMultiplier }
     /// A saved mobile fast tier sets the next tap without starting the clock.
     public mutating func setCruise(_ value: Double) {
-        if Self.steps.contains(value), value > 1 { cruise = value }
+        if availableSteps.contains(value), value > 1 { cruise = value }
     }
     public var isFast: Bool { target > 1 }
     public var isHeld: Bool { !held.isEmpty }
     /// The held pedal winds pitch up continuously while physics keeps its discrete tiers.
     public func musicPitchSpeed(at now: TimeInterval) -> Double {
         guard variableEnabled, !held.isEmpty, let start = holdStartedAt else { return target }
-        let base = Self.steps.firstIndex(of: selected) ?? 0
-        let position = min(Double(Self.steps.count - 1), Double(base)
+        let base = availableSteps.firstIndex(of: selected) ?? 0
+        let position = min(Double(availableSteps.count - 1), Double(base)
             + max(0, now - start - Self.holdDelay) / Self.holdStepDuration)
-        let lower = Int(position), upper = min(Self.steps.count - 1, lower + 1)
-        return Self.steps[lower] + (Self.steps[upper] - Self.steps[lower]) * (position - Double(lower))
+        let lower = Int(position), upper = min(availableSteps.count - 1, lower + 1)
+        return availableSteps[lower] + (availableSteps[upper] - availableSteps[lower]) * (position - Double(lower))
     }
     public var label: String { "\(Int(target))×" }
 
     public mutating func update(at now: TimeInterval) {
         if let start = holdStartedAt, !held.isEmpty, variableEnabled, now - start >= Self.holdDelay {
-            let base = Self.steps.firstIndex(of: selected) ?? 0
+            let base = availableSteps.firstIndex(of: selected) ?? 0
             let step = 1 + Int((now - start - Self.holdDelay) / Self.holdStepDuration)
-            changeTarget(Self.steps[min(Self.steps.count - 1, base + step)], at: now)
+            changeTarget(availableSteps[min(availableSteps.count - 1, base + step)], at: now)
         }
         multiplier = value(at: now)
     }
@@ -96,8 +114,8 @@ public struct GameplaySpeed: Sendable {
     public mutating func step(_ direction: Int, at now: TimeInterval) {
         guard variableEnabled else { return }
         cancelHolds()
-        let index = Self.steps.firstIndex(of: target) ?? 0
-        selected = Self.steps[min(Self.steps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))]
+        let index = availableSteps.firstIndex(of: target) ?? 0
+        selected = availableSteps[min(availableSteps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))]
         if selected > 1 { cruise = selected }
         changeTarget(selected, at: now)
     }

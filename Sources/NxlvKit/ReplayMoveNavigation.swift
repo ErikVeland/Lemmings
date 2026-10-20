@@ -25,6 +25,7 @@ public struct ReplayMoveNavigation: Equatable, Sendable {
                 if simulation.assign(skill, to: id) == .assigned { ticks.append(simulation.tickCount) }
             case let .releaseRate(value): simulation.setReleaseRate(value)
             case .nuke: simulation.beginNuke()
+            case let .bonusSkill(skill): _ = simulation.grantBonusSkill(skill)
             }
         }
         for event in events[simulation.tickCount] ?? [] where event.afterTick == true { apply(event) }

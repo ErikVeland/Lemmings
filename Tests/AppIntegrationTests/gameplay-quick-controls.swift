@@ -27,7 +27,9 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     keyboard.fadeMenuButton = { false }; keyboard.refreshNavigationControl(at: 100)
     let root = owner.contentView!
     let buttons = root.subviews.compactMap { $0 as? GameplayMenuButton }.filter { !$0.isHidden }
-    try check(buttons.count == 3, name + " omitted gameplay quick controls")
+    let expected = 3 + (keyboard.inspectionAvailable() && keyboard.inspectLemmings != nil ? 1 : 0)
+      + (keyboard.extraSkill != nil && keyboard.modern() ? 1 : 0) + (ArcadeStore.shared.hotSeatIsActive ? 1 : 0)
+    try check(buttons.count == expected, name + " omitted gameplay quick controls")
     let navigation = keyboard.navigationFrame(in: root)!
     for button in buttons {
       try check(root.bounds.contains(button.frame) && button.frame.width >= 44 && button.frame.height >= 44,
@@ -66,7 +68,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     keyboard.refreshNavigationControl(at: 100); keyboard.refreshNavigationControl(at: 104)
     try shot(root, "faded-\(width)")
     for button in buttons {
-      try check(button.artworkOpacity == 0, name + " quick control failed to fade")
+      try check(button.artworkOpacity == (button.title == L10n.text("Inspect") ? 1 : 0), name + " quick control failed to follow its fade policy")
       let point = CGPoint(x: button.frame.midX, y: button.frame.midY)
       try check(root.hitTest(root.convert(point, to: root.superview)) === button, name + " faded quick control lost input")
       let hover = NSEvent.enterExitEvent(with: .mouseEntered, location: point, modifierFlags: [], timestamp: 104,

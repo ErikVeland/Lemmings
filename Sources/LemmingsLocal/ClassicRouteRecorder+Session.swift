@@ -6,7 +6,7 @@ import NxlvKit
 extension ClassicRouteRecorder {
     @MainActor static func record(session: ClassicSession, level: ArcadeLevel, title: String, rank: String, number: Int,
                                   onError: @escaping @MainActor @Sendable (String) -> Void) {
-        guard session.isComplete, session.didWin else { return }
+        guard session.isComplete, session.didWin, level.conditions?.bonusSkillID == nil else { return }
         let final = session.simulation
         let replay = ClassicDOSReplay(rank: rank, number: number, title: title,
             initialStateHash: session.initialStateHash,

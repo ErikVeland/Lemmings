@@ -19,6 +19,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         case assign(tick: Int, control: Int, target: Int)
         case endRun(tick: Int)
         case fan(tick: Int, x: Int, y: Int, active: Bool)
+        case bonusSkill(tick: Int, control: Int)
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -30,6 +31,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         var usedRewind: Bool? = nil
         var nukeCount: Int? = nil
         var undoCount: Int? = nil
+        var bonusSkillID: String? = nil
     }
 
     public var goalPoint: MobilePoint {
@@ -70,6 +72,40 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public private(set) var usedRewind = false
     public private(set) var nukeCount = 0
     public private(set) var undoCount = 0
+    public private(set) var bonusSkillID: String?
+    public var initialRuntime: Lemmings2Runtime { initial }
+    public var existingLevelSkills: Set<String> {
+        Set(zip(initial.configuration.skills, initial.configuration.supplies)
+            .filter { $0.1 > 0 }.map { Self.skillKey($0.0.name) })
+    }
+    private static func skillKey(_ name: String) -> String {
+        name.lowercased().replacingOccurrences(of: " ", with: "_")
+    }
+    public var extraSkillChoices: [MobileExtraSkillChoice] {
+        guard bonusSkillID == nil else { return [] }
+        return runtime.configuration.skills.enumerated().compactMap { index, skill in
+            guard runtime.canGrantBonusSkill(slot: index) else { return nil }
+            return .init(skillID: Self.skillKey(skill.name), title: SkillVocabulary.title(skill.name), control: index)
+        }
+    }
+    @discardableResult public func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool {
+        guard extraSkillChoices.contains(choice), runtime.grantBonusSkill(slot: choice.control) else { return false }
+        inputs.append(.bonusSkill(tick: runtime.tick, control: choice.control))
+        bonusSkillID = choice.skillID
+        return true
+    }
+    @discardableResult public func retainExtraSkillUse(_ skillID: String) -> Bool {
+        guard existingLevelSkills.contains(skillID), bonusSkillID == nil || bonusSkillID == skillID else { return false }
+        bonusSkillID = skillID
+        return true
+    }
+    public var assignedSkills: [String: Int] {
+        inputs.reduce(into: [:]) { counts, input in
+            guard case let .assign(_, control, _) = input,
+                  runtime.configuration.skills.indices.contains(control) else { return }
+            counts[Self.skillKey(runtime.configuration.skills[control].name), default: 0] += 1
+        }
+    }
 
     public init(
         runtime: Lemmings2Runtime,
@@ -237,12 +273,18 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public var actionReplayInitial: ActionReplayState? { .lemmings2(initial) }
 
+    public var lemmingInspection: LemmingInspection? {
+        guard let capture = actionCapture() else { return nil }
+        return try? LemmingInspection(initial: capture.initial, current: capture.final, commands: capture.commands)
+    }
+
     public func actionCapture() -> MobileActionCapture? {
         let commands = inputs.map { input -> LeaderboardActionReplay.Command in
             switch input {
             case let .assign(tick, control, target): .init(tick: tick, action: "assign", lemming: target, skill: control)
             case let .endRun(tick): .init(tick: tick, action: "nuke")
             case let .fan(tick, x, y, active): .init(tick: tick, action: "fan", x: x, y: y, held: active)
+            case let .bonusSkill(tick, control): .init(tick: tick, action: "bonusSkill", skill: control)
             }
         }
         return .init(initial: .lemmings2(initial), final: .lemmings2(runtime), commands: commands)
@@ -260,7 +302,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
             rewindCount: rewindCount,
             usedRewind: usedRewind,
             nukeCount: nukeCount,
-            undoCount: undoCount
+            undoCount: undoCount,
+            bonusSkillID: bonusSkillID
         ))
     }
 
@@ -281,6 +324,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
             if case .endRun = input { count += 1 }
         }
         undoCount = checkpoint.undoCount ?? 0
+        bonusSkillID = checkpoint.bonusSkillID
     }
 
     @discardableResult
@@ -340,6 +384,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
                     restored.nuke()
                 case let .fan(_, x, y, active):
                     restored.setFan(x: x, y: y, active: active)
+                case let .bonusSkill(_, control):
+                    guard restored.grantBonusSkill(slot: control) else { throw MobileSessionError.invalidCheckpoint }
                 }
                 inputIndex += 1
             }
@@ -356,7 +402,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     private func inputTick(_ input: Input) -> Int {
         switch input {
-        case let .assign(tick, _, _), let .endRun(tick), let .fan(tick, _, _, _): tick
+        case let .assign(tick, _, _), let .endRun(tick), let .fan(tick, _, _, _), let .bonusSkill(tick, _): tick
         }
     }
 
@@ -384,6 +430,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let action: String
         let target: Int?
         var direction: String?
+        var tool: Int? = nil
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -393,6 +440,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let inputs: [Input]
         var rewindCount: Int? = nil
         var usedRewind: Bool? = nil
+        var bonusSkillID: String? = nil
     }
 
     public var goalPoint: MobilePoint {
@@ -437,6 +485,40 @@ public final class Lemmings3MobileSession: MobileGameSession {
     private var didNotifyCompletion = false
     public private(set) var rewindCount = 0
     public private(set) var usedRewind = false
+    public private(set) var bonusSkillID: String?
+    public var initialRuntime: Lemmings3Runtime { initial }
+    public var existingLevelSkills: Set<String> {
+        Set(initial.configuration.pickups.map(\.tool).filter { $0 != .clock }.map { String(describing: $0) })
+            .union(initial.lemmings.compactMap(\.tool).filter { $0 != .clock }.map { String(describing: $0) })
+    }
+    public var extraSkillChoices: [MobileExtraSkillChoice] {
+        guard bonusSkillID == nil else { return [] }
+        return runtime.lemmings.compactMap { lemming in
+            guard runtime.canGrantBonusTool(to: lemming.id), let tool = lemming.tool else { return nil }
+            let name = SkillVocabulary.title(String(describing: tool))
+            return .init(skillID: String(describing: tool), title: L10n.text("\(name) - Lemming \(lemming.id + 1)"),
+                control: Lemmings3Runtime.Action.allCases.firstIndex(of: .use) ?? 3, target: lemming.id)
+        }
+    }
+    @discardableResult public func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool {
+        guard extraSkillChoices.contains(choice), let target = choice.target,
+              let tool = runtime.lemmings.first(where: { $0.id == target })?.tool,
+              runtime.grantBonusTool(to: target) else { return false }
+        inputs.append(.init(tick: runtime.tick, action: "bonusTool", target: target, tool: tool.rawValue))
+        bonusSkillID = choice.skillID
+        return true
+    }
+    @discardableResult public func retainExtraSkillUse(_ skillID: String) -> Bool {
+        guard existingLevelSkills.contains(skillID), bonusSkillID == nil || bonusSkillID == skillID else { return false }
+        bonusSkillID = skillID
+        return true
+    }
+    public var assignedSkills: [String: Int] {
+        inputs.reduce(into: [:]) { counts, input in
+            guard Lemmings3Runtime.Action(rawValue: input.action) != nil else { return }
+            counts[input.action, default: 0] += 1
+        }
+    }
 
     public init(
         runtime: Lemmings3Runtime,
@@ -475,7 +557,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     }
 
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
-    public var assignedSkillCount: Int { inputs.filter { $0.action != "abort" }.count }
+    public var assignedSkillCount: Int { assignedSkills.values.reduce(0, +) }
     /// Extras start on the map and are not included in the entrance's released count.
     public var lostLemmingCount: Int { runtime.lost }
     public var supportsRewind: Bool { true }
@@ -550,7 +632,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
         // A tool use follows the facing direction. Recording it keeps the shared action format exact.
         let facing = action == .use ? lemming.map { ($0.direction > 0 ? Lemmings3Runtime.Direction.right : .left).rawValue } : nil
-        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: facing))
+        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: facing,
+            tool: action == .use ? lemming?.tool?.rawValue : nil))
         return true
     }
 
@@ -569,7 +652,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         }
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
         inputs.append(Input(tick: runtime.tick, action: Lemmings3Runtime.Action.use.rawValue,
-                            target: target, direction: direction.rawValue))
+                            target: target, direction: direction.rawValue, tool: lemming?.tool?.rawValue))
         return true
     }
 
@@ -606,11 +689,18 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public var actionReplayInitial: ActionReplayState? { .lemmings3(initial) }
 
+    public var lemmingInspection: LemmingInspection? {
+        let commands = inputs.map {
+            LeaderboardActionReplay.Command(tick: $0.tick, action: $0.action, lemming: $0.target, skill: $0.tool, direction: $0.direction)
+        }
+        return try? LemmingInspection(initial: .lemmings3(initial), current: .lemmings3(runtime), commands: commands)
+    }
+
     public func actionCapture() -> MobileActionCapture? {
         // Runs saved before tool directions were recorded cannot be expressed exactly.
         guard inputs.allSatisfy({ $0.action != Lemmings3Runtime.Action.use.rawValue || $0.direction != nil }) else { return nil }
         let commands = inputs.map {
-            LeaderboardActionReplay.Command(tick: $0.tick, action: $0.action, lemming: $0.target, direction: $0.direction)
+            LeaderboardActionReplay.Command(tick: $0.tick, action: $0.action, lemming: $0.target, skill: $0.tool, direction: $0.direction)
         }
         return .init(initial: .lemmings3(initial), final: .lemmings3(runtime), commands: commands)
     }
@@ -626,7 +716,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
             tick: runtime.tick,
             inputs: inputs,
             rewindCount: rewindCount,
-            usedRewind: usedRewind
+            usedRewind: usedRewind,
+            bonusSkillID: bonusSkillID
         ))
     }
 
@@ -642,6 +733,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         didNotifyCompletion = false
         rewindCount = checkpoint.rewindCount ?? 0
         usedRewind = checkpoint.usedRewind ?? false
+        bonusSkillID = checkpoint.bonusSkillID
     }
 
     @discardableResult
@@ -693,6 +785,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
                 let input = inputs[inputIndex]
                 if input.action == "abort" {
                     restored.abort()
+                } else if input.action == "bonusTool", let target = input.target,
+                          restored.lemmings.first(where: { $0.id == target })?.tool?.rawValue == input.tool,
+                          restored.grantBonusTool(to: target) {
+                    // The extra charge belongs to this point in the attempt.
                 } else if input.action == Lemmings3Runtime.Action.use.rawValue,
                           let target = input.target,
                           let rawDirection = input.direction,

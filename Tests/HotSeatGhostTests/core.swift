@@ -79,6 +79,11 @@ func validateHotSeatGhosts(initial: ActionReplayState) throws -> LeaderboardActi
     let storage = try AppStorage.temporary(named: "ghost-ownership")
     defer { storage.removeTemporaryFiles() }
     let store = ArcadeStore(storage: storage, bundledProofs: nil)
+    try checkGhost(store.hotSeatGhostsVisible, "Ghost visibility must default on")
+    store.hotSeatGhostsVisible = false
+    let visibilityReload = ArcadeStore(storage: storage, bundledProofs: nil)
+    try checkGhost(!visibilityReload.hotSeatGhostsVisible, "Ghost visibility did not survive reopening")
+    store.hotSeatGhostsVisible = true
     let first = store.records.activeProfileID
     let second = store.addProfile(initials: "TWO", portrait: 1, select: false)!.id
     let third = store.addProfile(initials: "THR", portrait: 2, select: false)!.id

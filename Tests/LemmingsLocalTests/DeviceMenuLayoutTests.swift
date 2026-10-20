@@ -1,11 +1,90 @@
 #if os(macOS)
 import AppKit
+import ImageIO
 import LemmingsGameArt
 import NxlvKit
 import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    @MainActor func testAmigaVersusWarningFitsBriefingAndLevelSelection() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
+        let typography = try XCTUnwrap(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        let warning = try XCTUnwrap(AmigaVersusCampaign.controllerRequirement(rank: "Lemmings Versus"))
+        let output = root.appendingPathComponent(".build/versus-warning-ui")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        for width in [640, 1120] {
+            let field = PlayfieldView(frame: .init(x: 0, y: 0, width: width, height: 720))
+            field.interfaceArtwork = art; field.macArtwork = art; field.phase = .briefing
+            field.overlayTitle = "The Rubbish Dump"
+            field.overlayLines = ["80 Lemmings", "Save 40 (50%)", "Release rate 50", "Time 5:00"] + AmigaVersusCampaign.controllerRequirementLines(rank: "Lemmings Versus")
+            field.overlayFooter = "Lemmings Versus 1  -  Click or space to begin"
+            let bitmap = try XCTUnwrap(field.bitmapImageRepForCachingDisplay(in: field.bounds))
+            field.displayIgnoringOpacity(field.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+            try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent("mac-\(width).png"))
+            let controls = field.accessibleControls(owner: field).compactMap { $0 as? GameAccessibleElement }
+            for line in AmigaVersusCampaign.controllerRequirementLines(rank: "Lemmings Versus") {
+                let target = try XCTUnwrap(controls.first { $0.accessibilityLabel() == line })
+                XCTAssertTrue(field.bounds.contains(target.localFrame))
+            }
+        }
+        for width in [390, 1120] {
+            let page = GameFrontEnd.Page(title: "The Rubbish Dump", subtitle: "Lemmings Versus 1",
+                details: ["80 Lemmings   Save 40", "Time 5:00", warning],
+                footer: [.init("back", "Back"), .init("play", "Play", primary: true)], preview: true, footerColumns: 2)
+            let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: 720)
+            for target in layout.targets {
+                XCTAssertEqual(layout.action(at: .init(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
+            let image = try XCTUnwrap(CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height),
+                bitsPerComponent: 8, bytesPerRow: Int(layout.size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            image.translateBy(x: 0, y: layout.size.height); image.scaleBy(x: 1, y: -1)
+            GameFrontEnd.draw(page, layout: layout, typography: typography, highlighted: "play", in: image)
+            let destination = try XCTUnwrap(CGImageDestinationCreateWithURL(output.appendingPathComponent("shared-\(width).png") as CFURL, "public.png" as CFString, 1, nil))
+            CGImageDestinationAddImage(destination, try XCTUnwrap(image.makeImage()), nil)
+            XCTAssertTrue(CGImageDestinationFinalize(destination))
+        }
+    }
+
+    @MainActor func testHomeWithoutJourneyHasOnlyCurrentSessionTargets() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let typography = try XCTUnwrap(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
+        let output = root.appendingPathComponent(".build/journey-session-ui")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        for width in [390, 1120] {
+            let page = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")], initials: "ALICE v BOB")
+            let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: 720)
+            XCTAssertFalse(layout.targets.contains { $0.action.id == "journey" })
+            for target in layout.targets where target.action.enabled {
+                XCTAssertEqual(layout.action(at: .init(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
+            let image = try XCTUnwrap(CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height), bitsPerComponent: 8, bytesPerRow: Int(layout.size.width) * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            image.translateBy(x: 0, y: layout.size.height); image.scaleBy(x: 1, y: -1)
+            GameFrontEnd.draw(page, layout: layout, typography: typography, highlighted: "classic", in: image)
+            let destination = try XCTUnwrap(CGImageDestinationCreateWithURL(output.appendingPathComponent("shared-\(width).png") as CFURL, "public.png" as CFString, 1, nil))
+            CGImageDestinationAddImage(destination, try XCTUnwrap(image.makeImage()), nil)
+            XCTAssertTrue(CGImageDestinationFinalize(destination))
+        }
+        let field = PlayfieldView(frame: .init(x: 0, y: 0, width: 1120, height: 720))
+        field.interfaceArtwork = art; field.macArtwork = art; field.phase = .briefing
+        field.overlayTitle = "LEMMINGS"; field.overlayShowsLemmings = true
+        field.overlayHomeLeadingCount = 0
+        field.overlayLines = ["CLASSIC LEMMINGS", "LEMMINGS 2", "LEMMINGS 3"]
+        field.overlayProfileInitials = "ALICE v BOB"
+        let bitmap = try XCTUnwrap(field.bitmapImageRepForCachingDisplay(in: field.bounds))
+        field.displayIgnoringOpacity(field.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+        try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent("native.png"))
+        let controls = field.accessibleControls(owner: field).compactMap { $0 as? GameAccessibleElement }
+        XCTAssertFalse(controls.contains { ($0.accessibilityLabel() ?? "").contains("JOURNEY") })
+        for label in field.overlayLines {
+            let target = try XCTUnwrap(controls.first { $0.accessibilityLabel() == label })
+            XCTAssertTrue(field.bounds.contains(target.localFrame))
+        }
+    }
+
     func testBookResultKeepsActionsLeftAndFullAchievementTextRight() {
         var page = GameFrontEnd.Page(title: "Level complete", subtitle: "Played: ALICE Fan-made / Ji Hoots Lemmings Remake Heaven Level 2",
             details: ["Cellbash", "Saved 10/10 Goal 1", "New time record 2:41.12"],
@@ -14,7 +93,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
         page.result = true
         let awards = MobileResultAchievementsArt.page([
             .init("First clear", detail: "First clear of this level. Rescued 10; target 1."),
-            .init("+1 ZOOM", detail: String(repeating: "Complete reward details. ", count: 10))])
+            .init("+1 SUPERZOOM", detail: String(repeating: "Complete reward details. ", count: 10))])
         for setting in ClassicInterfaceSize.allCases {
             let pane = CGSize(width: 589, height: 786)
             let scale = MobileResultAchievementsArt.resultScale(MobileSettingsArt.interfaceScale(setting, width: pane.width),

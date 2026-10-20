@@ -574,6 +574,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     public private(set) var releaseRate: Int
     public private(set) var remainingTimeTicks: Int?
     public private(set) var skills: [ClassicSkill: Int]
+    public private(set) var bonusSkill: ClassicSkill?
+    public var bonusSkillUsed: Bool { bonusSkill != nil }
     public private(set) var isNuking: Bool
     public private(set) var lastTickEvents: [ClassicDOSEvent]
     public let configuration: ClassicDOSConfiguration
@@ -832,6 +834,20 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             terrain: terrain, configuration: moved, destructionMasks: destructionMasks)
         simulation?.hatchSourceDeltaX = hatchSourceDeltaX
         return simulation
+    }
+
+    /// Adds one use from the level's original finite skill supply.
+    public func canGrantBonusSkill(_ skill: ClassicSkill) -> Bool {
+        !isComplete && !isNuking && !bonusSkillUsed
+            && (configuration.initialSkills[skill] ?? 0) > 0
+            && remainingSkillCount(skill) >= 0 && remainingSkillCount(skill) < Int.max
+    }
+
+    @discardableResult public mutating func grantBonusSkill(_ skill: ClassicSkill) -> Bool {
+        guard canGrantBonusSkill(skill) else { return false }
+        skills[skill, default: 0] += 1
+        bonusSkill = skill
+        return true
     }
 
     public func remainingSkillCount(_ skill: ClassicSkill) -> Int {

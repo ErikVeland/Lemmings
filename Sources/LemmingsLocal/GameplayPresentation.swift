@@ -356,17 +356,19 @@ import LemmingsGameArt
 }
 
 struct PrecisionZoomStatus: Equatable {
-  var zoom = 0
   var superzoom = 0
   var skips = 0
+  var extraSkills = 0
+  var bonusSkillUsed = false
   var active: PrecisionZoomKind?
   var isEmpty = true
 
-  init(zoom: Int = 0, superzoom: Int = 0, skips: Int = 0, active: PrecisionZoomKind? = nil,
+  init(superzoom: Int = 0, skips: Int = 0, extraSkills: Int = 0, bonusSkillUsed: Bool = false, active: PrecisionZoomKind? = nil,
        isEmpty: Bool = true) {
-    self.zoom = zoom
     self.superzoom = superzoom
     self.skips = skips
+    self.extraSkills = extraSkills
+    self.bonusSkillUsed = bonusSkillUsed
     self.active = active
     self.isEmpty = isEmpty
   }
@@ -374,13 +376,15 @@ struct PrecisionZoomStatus: Equatable {
   var accessibility: String {
     guard !isEmpty else { return "" }
     let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
-    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(state)")
+    return L10n.text("Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(extraSkills) Extra skills. \(state)")
+      + (bonusSkillUsed ? ". " + L10n.text("Bonus skill used") : "")
   }
 
   private var rows: [(String, PrecisionZoomKind?)] {
-    [(L10n.text("z - \(zoom)"), .zoom),
+    [(L10n.text("z"), .zoom),
      (L10n.text("Z - \(superzoom)"), .superzoom),
-     (L10n.text("Skips \(skips)"), nil)]
+     (L10n.text("Skips \(skips)"), nil),
+     (L10n.text("Extra skill \(extraSkills)"), nil)]
   }
 
   private var metrics: (width: Int, rowHeight: Int) {
@@ -401,13 +405,18 @@ struct PrecisionZoomStatus: Equatable {
   }
 
   @MainActor @discardableResult
-  func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
+  func draw(at origin: CGPoint, scale: CGFloat = 1, opacity: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
     let rows = self.rows
     let metrics = self.metrics
     let badgeSize = CGSize(width: CGFloat(metrics.width) * scale,
                            height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
+    guard opacity > 0, let context = NSGraphicsContext.current?.cgContext else { return badgeSize }
+    context.saveGState()
+    context.setAlpha(opacity)
+    context.beginTransparencyLayer(auxiliaryInfo: nil)
+    defer { context.endTransparencyLayer(); context.restoreGState() }
     let width = badgeSize.width
     let rowHeight = CGFloat(metrics.rowHeight) * scale
     for (index, row) in rows.enumerated() {
@@ -415,7 +424,8 @@ struct PrecisionZoomStatus: Equatable {
                         width: width, height: rowHeight)
       NSColor.black.withAlphaComponent(0.8).setFill()
       rect.fill()
-      if let kind = row.1, active == kind {
+      let selected = row.1.map { active == $0 } ?? (index == 3 && bonusSkillUsed)
+      if selected {
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
         NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
@@ -423,7 +433,7 @@ struct PrecisionZoomStatus: Equatable {
         NSGraphicsContext.restoreGraphicsState()
       }
       GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
-        maxScale: scale, palette: row.1 != nil && active == row.1 ? .green : .blue, preservesCase: row.1 != nil)
+        maxScale: scale, palette: selected ? .green : .blue, preservesCase: row.1 != nil)
     }
     return badgeSize
   }

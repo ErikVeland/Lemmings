@@ -92,6 +92,8 @@ protocol GameSession: AnyObject {
   var nukeCount: Int { get }
   var rewindCount: Int { get }
   var undoCount: Int { get }
+  func canGrantExtraSkill(at index: Int) -> Bool
+  @discardableResult func grantExtraSkill(at index: Int) -> Bool
 
   func tick()
   /// Sounds the last tick asked for. Empty when nothing happened.
@@ -147,6 +149,8 @@ extension GameSession {
   var nukeCount: Int { 0 }
   var rewindCount: Int { 0 }
   var undoCount: Int { 0 }
+  func canGrantExtraSkill(at index: Int) -> Bool { false }
+  func grantExtraSkill(at index: Int) -> Bool { false }
   func resumeFromRewind() {}
 }
 
@@ -167,12 +171,20 @@ final class ClassicSession: GameSession {
   var skillAssignments: [String: Int] {
     var result: [String: Int] = [:]
     for skill in ClassicSkill.allCases {
-      let used = (simulation.configuration.initialSkills[skill] ?? 0) - simulation.remainingSkillCount(skill)
+      let used = (simulation.configuration.initialSkills[skill] ?? 0)
+        + (simulation.bonusSkill == skill ? 1 : 0) - simulation.remainingSkillCount(skill)
       if used > 0 { result[skill.rawValue] = used }
     }
     return result
   }
   var simulation: ClassicDOSSimulation { history.simulation }
+  func canGrantExtraSkill(at index: Int) -> Bool {
+    ClassicSkill.allCases.indices.contains(index) && history.canGrantBonusSkill(ClassicSkill.allCases[index])
+  }
+  @discardableResult func grantExtraSkill(at index: Int) -> Bool {
+    guard canGrantExtraSkill(at: index) else { return false }
+    return history.grantBonusSkill(ClassicSkill.allCases[index])
+  }
   let levelWidth: Int
   let levelHeight: Int
 
@@ -232,6 +244,9 @@ final class ClassicSession: GameSession {
       case let .releaseRate(value):
         restored.history.setReleaseRate(value)
         guard restored.rate == value else { throw RunRecoveryError.invalid }
+      case let .bonusSkill(skill):
+        guard let index = ClassicSkill.allCases.firstIndex(of: skill),
+              restored.grantExtraSkill(at: index) else { throw RunRecoveryError.invalid }
       case .nuke:
         guard !restored.isNuking else { throw RunRecoveryError.invalid }
         restored.nuke()
@@ -497,6 +512,8 @@ final class NeoLemmixSession: GameSession {
       case let .rate(delta):
         guard (-10_000...10_000).contains(delta) else { throw RunRecoveryError.invalid }
         restored.adjustRate(by: delta)
+      case let .bonusSkill(skill):
+        guard restored.grantExtraSkill(at: skill) else { throw RunRecoveryError.invalid }
       case .nuke:
         guard !restored.isNuking, !restored.canUndoNuke else { throw RunRecoveryError.invalid }
         restored.nuke()
@@ -622,6 +639,15 @@ final class NeoLemmixSession: GameSession {
     recoveryInputs.append(.init(tick: currentTick, action: .assign(skill: skillIndex, lemming: lemmingID)))
     skillAssignments[skillOrder[skillIndex].rawValue, default: 0] += 1
     return nil
+  }
+
+  func canGrantExtraSkill(at index: Int) -> Bool {
+    skillOrder.indices.contains(index) && simulation.canGrantBonusSkill(skillOrder[index])
+  }
+  @discardableResult func grantExtraSkill(at index: Int) -> Bool {
+    guard canGrantExtraSkill(at: index), simulation.grantBonusSkill(skillOrder[index]) else { return false }
+    recoveryInputs.append(.init(tick: currentTick, action: .bonusSkill(skill: index)))
+    return true
   }
 
   // NeoLemmix routes rate and nuke through the replay command queue, so both

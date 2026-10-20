@@ -60,6 +60,33 @@ import UIKit
 
 extension MobileLibraryViewController {
     func mobileArcadeLevel(session: any MobileGameSession, summary: MobileLevelSummary, pack: String) -> ArcadeLevel {
+        if let tribes = session as? Lemmings2MobileSession {
+            let c = tribes.initialRuntime.configuration
+            let skills = Dictionary(zip(c.skills, c.supplies).map {
+                (TrolleyCapture.skillKey($0.0.name), $0.1)
+            }, uniquingKeysWith: +)
+            let levelID = "\(session.levelIndex / 10):\(session.levelIndex % 10)"
+            let conditions = TrolleyConditions(gameID: "lemmings2", packID: "tribes", levelID: levelID,
+                levelFingerprint: session.levelFingerprint, rulesetVersion: session.engineFingerprint,
+                physicsMode: session.engineFingerprint, population: c.total, rescueRequirement: 1,
+                startingSkills: skills, timeLimitSeconds: Double(c.timeLimit),
+                modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
+                    "firstReleaseTick": String(c.firstReleaseTick)])
+            return .init(id: session.levelFingerprint, title: summary.title, game: pack,
+                rules: session.engineFingerprint, total: c.total, required: 1, conditions: conditions)
+        }
+        if let chronicles = session as? Lemmings3MobileSession {
+            let c = chronicles.initialRuntime.configuration
+            let number = (session.levelIndex / 30) * 100 + 1 + session.levelIndex % 30
+            let conditions = TrolleyConditions(gameID: "lemmings3", packID: "chronicles", levelID: String(number),
+                levelFingerprint: session.levelFingerprint, rulesetVersion: session.engineFingerprint,
+                physicsMode: session.engineFingerprint, population: c.total + c.extras.count, rescueRequirement: 1,
+                startingSkills: [:], timeLimitSeconds: Double(c.timeLimit),
+                modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
+                    "reserves": String(c.total), "extras": String(c.extras.count)])
+            return .init(id: session.levelFingerprint, title: summary.title, game: pack,
+                rules: session.engineFingerprint, total: c.total + c.extras.count, required: 1, conditions: conditions)
+        }
         guard let classic = session as? ClassicMobileSession else {
             return .init(id: session.levelFingerprint, title: summary.title, game: pack,
                          rules: session.engineFingerprint, total: session.snapshot.total, required: session.snapshot.required)

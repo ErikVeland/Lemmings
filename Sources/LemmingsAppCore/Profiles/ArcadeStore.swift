@@ -66,6 +66,12 @@ import NxlvKit
             }
         }
     }
+    /// A local display choice. Recorded turns stay available when ghosts are hidden.
+    public var hotSeatGhostsVisible: Bool {
+        get { defaults.object(forKey: "HotSeat.showGhosts") as? Bool ?? true }
+        set { defaults.set(newValue, forKey: "HotSeat.showGhosts") }
+    }
+
     private static let turnPolicyKey = "HotSeat.turnPolicy"
     private let defaults: UserDefaults
     public var turnPolicy: TurnPolicy {
@@ -500,6 +506,27 @@ import NxlvKit
         guard canWrite, storageError == nil, records.hasSkipped(level, profileID: profileID) else { return false }
         let previous = records
         guard records.returnLevelSkip(on: level, profileID: profileID) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
+    }
+    /// Persist a reward charge before the simulation receives its extra use.
+    @discardableResult public func spendExtraSkill(attemptID: UUID, profileID: String, skill: String,
+        conditions: TrolleyConditions, existingLevelSkills: Set<String> = []) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        let previous = records
+        guard records.spendExtraSkill(attemptID: attemptID, profileID: profileID, skill: skill,
+            conditions: conditions, existingLevelSkills: existingLevelSkills) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
+    }
+    /// A validated checkpoint keeps its charge even before cloud records arrive.
+    @discardableResult public func recoverExtraSkillUse(_ use: ExtraSkillUse, profileID: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        let previous = records
+        guard records.recoverExtraSkillUse(use, profileID: profileID) else { return false }
+        if records == previous { return true }
         save()
         guard storageError == nil else { records = previous; return false }
         return true

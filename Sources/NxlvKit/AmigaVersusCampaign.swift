@@ -13,6 +13,18 @@ import Foundation
 /// Holiday Lemmings has no versus levels and no second panel, which is why it
 /// is absent here.
 public enum AmigaVersusCampaign {
+    public static func controllerRequirement(rank: String) -> String? {
+        let lines = controllerRequirementLines(rank: rank)
+        return lines.isEmpty ? nil : lines.joined(separator: " ")
+    }
+
+    public static func controllerRequirementLines(rank: String) -> [String] {
+        let ranks = ["Lemmings Versus", "Oh No! More Lemmings Versus"]
+            + sources.map { "\($0.title) Versus" }
+        guard ranks.contains(rank) else { return [] }
+        return [L10n.text("Two controllers required."), L10n.text("Keep both connected at the same time.")]
+    }
+
     /// A release that carries versus levels, and where they sit.
     public struct Source: Sendable, Equatable {
         /// Folder name under the extracted Amiga tree.

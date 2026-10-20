@@ -29,6 +29,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
     public var scope: String?
     /// The Hot Seat player who owns the attempt.
     public var owner: String?
+    /// Preserves an irreversible spend when its checkpoint arrives before cloud records.
+    public var extraSkillUse: ExtraSkillUse?
 
     public init(
         runID: UUID,
@@ -43,7 +45,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         payload: Data,
         savedAt: Date = Date(),
         scope: String? = nil,
-        owner: String? = nil
+        owner: String? = nil,
+        extraSkillUse: ExtraSkillUse? = nil
     ) {
         self.runID = runID
         self.engine = engine
@@ -58,6 +61,7 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         self.savedAt = savedAt
         self.scope = scope
         self.owner = owner
+        self.extraSkillUse = extraSkillUse
     }
 
     @discardableResult
@@ -73,7 +77,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
               camera.zoom.isFinite,
               camera.zoom > 0,
               savedAt.timeIntervalSinceReferenceDate.isFinite,
-              payload.count <= MobileCheckpointStore.maximumDocumentBytes else {
+              payload.count <= MobileCheckpointStore.maximumDocumentBytes,
+              extraSkillUse.map({ $0.attemptID == runID && $0.originalConditions.isValid && $0.conditions != nil }) ?? true else {
             throw MobileCheckpointError.invalid
         }
         return self

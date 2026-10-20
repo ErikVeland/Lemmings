@@ -76,7 +76,7 @@ private func mergeKey(_ candidate: Candidate) -> String {
     var fan: (x: Int, y: Int)?
     for control in candidate.events[..<next] {
         switch control.event {
-        case .aim, .releasePointer, .machine, .chain:
+        case .aim, .releasePointer, .machine, .chain, .bonusSkill:
             hash.add(control)
         case let .fan(x, y, active):
             if active {
@@ -115,6 +115,7 @@ struct StableHash {
         case let .machine(x, y): add(5); add(x); add(y)
         case let .chain(x, y): add(6); add(x); add(y)
         case .nuke: add(7)
+        case let .bonusSkill(skill): add(8); add(skill)
         }
     }
 }

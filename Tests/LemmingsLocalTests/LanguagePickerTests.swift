@@ -123,10 +123,10 @@ final class LanguagePickerTests: XCTestCase {
             for choice in L10n.languageOptions where choice != .system {
                 GameScreen.shared.dismissAll()
                 L10n.setLanguage(choice)
-                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Smoother play and shining arrows"))
-                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Smoother play"))
+                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Comfortable play, original character"))
+                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Comfortable play"))
                 if choice != .english {
-                    XCTAssertNotEqual(ReleaseWelcome.subtitle, "Smoother play and shining arrows")
+                    XCTAssertNotEqual(L10n.text("Continue"), "Continue")
                 }
                 let welcome = ReleaseWelcome(build: 88, version: ReleaseWelcome.notesVersion)
                 var continued = false
@@ -135,7 +135,8 @@ final class LanguagePickerTests: XCTestCase {
                 for size in [CGSize(width: 900, height: 620), CGSize(width: 1280, height: 800)] {
                     window.setContentSize(size)
                     host.layoutSubtreeIfNeeded()
-                    let scroll = try XCTUnwrap(page.body.subviews.first as? NSScrollView)
+                    let notes = try XCTUnwrap(page.body.subviews.first as? AboutMarkdownView)
+                    let scroll = notes.scroll
                     let document = try XCTUnwrap(scroll.documentView)
                     XCTAssertTrue(document.subviews.allSatisfy { document.bounds.contains($0.frame) })
                     let action = try XCTUnwrap(page.controllerInitialControl as? NSButton)

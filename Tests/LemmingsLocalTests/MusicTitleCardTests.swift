@@ -102,6 +102,62 @@ final class MusicTitleCardTests: XCTestCase {
         XCTAssertFalse(notice.isHidden)
     }
 
+    @MainActor func testPrecisionCountersFollowMenuFadeAndKeepLayout() throws {
+        _ = NSApplication.shared
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 600, height: 420),
+                              styleMask: [], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 600, height: 420))
+        let keyboard = GameplayKeyboard(window: window)
+        defer { keyboard.removeNavigationControl(); window.close() }
+        keyboard.active = { true }; keyboard.ownsController = { true }
+        keyboard.navigationAvailable = { true }; keyboard.mainMenu = {}
+        keyboard.navigationReduceMotion = { false }
+        var opacity: CGFloat = -1
+        keyboard.navigationArtworkOpacityChanged = { opacity = $0 }
+        let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent(".build/precision-fade-ui")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let status = PrecisionZoomStatus(superzoom: 8, skips: 7, isEmpty: false)
+        var brightness: [Double] = []
+        for (name, time, expected) in [("visible", 100.0, 1.0), ("fading", 103.3, 0.5), ("hidden", 104.0, 0.0)] {
+            keyboard.refreshNavigationControl(at: time)
+            XCTAssertEqual(opacity, expected, accuracy: 0.001)
+            let bitmap = try XCTUnwrap(NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 240, pixelsHigh: 180,
+                bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0))
+            NSGraphicsContext.saveGraphicsState()
+            let graphics = try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap))
+            graphics.cgContext.translateBy(x: 0, y: 180)
+            graphics.cgContext.scaleBy(x: 1, y: -1)
+            NSGraphicsContext.current = NSGraphicsContext(cgContext: graphics.cgContext, flipped: true)
+            NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 240, height: 180).fill()
+            XCTAssertEqual(status.draw(at: CGPoint(x: 12, y: 12), scale: 2, opacity: opacity), status.size(scale: 2))
+            NSGraphicsContext.restoreGraphicsState()
+            var total = 0.0
+            for y in 0..<180 { for x in 0..<240 {
+                let colour = try XCTUnwrap(bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB))
+                total += Double(colour.redComponent + colour.greenComponent + colour.blueComponent)
+            } }
+            brightness.append(total)
+            try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent(name + ".png"))
+            let menu = try XCTUnwrap(window.contentView?.subviews.compactMap { $0 as? GameplayMenuButton }.first)
+            XCTAssertTrue(window.contentView?.hitTest(CGPoint(x: menu.frame.midX, y: menu.frame.midY)) === menu)
+        }
+        XCTAssertGreaterThan(brightness[0], brightness[1])
+        XCTAssertGreaterThan(brightness[1], 0)
+        XCTAssertEqual(brightness[2], 0)
+        keyboard.fadeMenuButton = { false }
+        keyboard.refreshNavigationControl(at: 105)
+        XCTAssertEqual(opacity, 1)
+        keyboard.fadeMenuButton = { true }
+        keyboard.navigationReduceMotion = { true }
+        keyboard.refreshNavigationControl(at: 110)
+        XCTAssertEqual(opacity, 1)
+        keyboard.refreshNavigationControl(at: 113)
+        XCTAssertEqual(opacity, 0)
+    }
+
     @MainActor func testKeyboardPlacesCreditsInsidePlayfieldAndKeepsMenuClickable() throws {
         _ = NSApplication.shared
         for (width, flipped) in [CGFloat(600), 900].flatMap({ width in [false, true].map { (width, $0) } }) {

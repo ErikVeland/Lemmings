@@ -5,45 +5,75 @@ private func check(_ condition: @autoclosure () -> Bool, _ message: String) {
     precondition(condition(), message)
 }
 
-let none = PrecisionZoomEarnings(careerStars: 2, threeStarLevels: 2)
-check(none.zoomUses == 0 && none.superzoomUses == 0, "Uses unlocked before a third star or three-star level")
-let earned = PrecisionZoomEarnings(careerStars: 6, threeStarLevels: 3)
-check(earned.zoomUses == 2 && earned.superzoomUses == 1, "Career thresholds are wrong")
+let none = PrecisionZoomEarnings(threeStarLevels: 2)
+check(none.superzoomUses == 0, "Superzoom unlocked before a third three-star level")
+let earned = PrecisionZoomEarnings(threeStarLevels: 3)
+check(earned.superzoomUses == 1, "Superzoom threshold is wrong")
 
 var ledger = PrecisionZoomLedger()
 let first = UUID()
 ledger.start(attemptID: first)
-check(ledger.toggle(.zoom, earnings: earned), "The first Zoom use was unavailable")
-check(ledger.active == .zoom && ledger.remaining(.zoom, earnings: earned) == 1, "Zoom did not spend one use")
-check(ledger.toggle(.zoom, earnings: earned), "Zoom did not switch off")
-check(ledger.active == nil && ledger.remaining(.zoom, earnings: earned) == 1, "Switching off spent another use")
+for _ in 0..<100 {
+    check(ledger.toggle(.zoom, earnings: none) && ledger.active == .zoom,
+        "A new player could not start free Zoom")
+    check(PrecisionZoomLedger.effectiveSpeed(normal: 3, active: ledger.active) == 3,
+        "Ordinary Zoom changed simulation speed")
+    check(ledger.toggle(.zoom, earnings: none) && ledger.active == nil,
+        "Ordinary Zoom did not switch off")
+}
+check(ledger.toggle(.zoom, earnings: none), "Free Zoom was exhausted")
+ledger.finish(didWin: false)
+ledger.start(attemptID: UUID())
+check(ledger.toggle(.zoom, earnings: none), "Failure disabled free Zoom")
 check(ledger.toggle(.superzoom, earnings: earned), "Superzoom was unavailable")
+check(ledger.remainingSuperzoom(earnings: earned) == 0, "Superzoom did not spend one use")
 check(PrecisionZoomLedger.effectiveSpeed(normal: 10, active: ledger.active) == 0.5,
     "Bullet-time did not override fast-forward")
+let activeAttempt = ledger.attemptID!
 let saved = try JSONEncoder().encode(ledger)
 ledger = try JSONDecoder().decode(PrecisionZoomLedger.self, from: saved)
-ledger.start(attemptID: first)
-check(ledger.active == .superzoom && ledger.remaining(.superzoom, earnings: earned) == 0,
-    "A recovered run lost its active effect or spent use")
+ledger.start(attemptID: activeAttempt)
+check(ledger.active == .superzoom && ledger.remainingSuperzoom(earnings: earned) == 0,
+    "A recovered run lost its active Superzoom or spent use")
 
 ledger.start(attemptID: UUID())
-check(ledger.active == nil && ledger.remaining(.zoom, earnings: earned) == 2
-    && ledger.remaining(.superzoom, earnings: earned) == 1, "Manual retry did not replenish uses")
-check(ledger.toggle(.zoom, earnings: earned), "Zoom was unavailable after retry")
+check(ledger.active == nil && ledger.remainingSuperzoom(earnings: earned) == 1,
+    "Manual retry did not replenish Superzoom")
 check(ledger.toggle(.superzoom, earnings: earned), "Superzoom was unavailable after retry")
+check(ledger.toggle(.zoom, earnings: earned) && ledger.active == .zoom,
+    "Free Zoom could not replace Superzoom")
 ledger.finish(didWin: false)
 ledger.finish(didWin: false)
 ledger.start(attemptID: UUID())
-check(ledger.remaining(.zoom, earnings: earned) == 1 && ledger.remaining(.superzoom, earnings: earned) == 0,
-    "Failed-run uses were not burnt once")
+check(ledger.remainingSuperzoom(earnings: earned) == 0, "A failed Superzoom use was not burnt once")
 check(!ledger.toggle(.superzoom, earnings: earned), "A burnt Superzoom use was still available")
-check(ledger.toggle(.zoom, earnings: earned), "The remaining Zoom use was lost")
+check(ledger.toggle(.zoom, earnings: none), "Superzoom exhaustion disabled free Zoom")
 ledger.finish(didWin: true)
 ledger.start(attemptID: UUID())
-check(ledger.remaining(.zoom, earnings: earned) == 1, "A winning run burnt its Zoom use")
-let later = PrecisionZoomEarnings(careerStars: 9, threeStarLevels: 6)
-check(ledger.remaining(.zoom, earnings: later) == 2 && ledger.remaining(.superzoom, earnings: later) == 1,
-    "New stars did not add uses after a failed run")
+check(ledger.toggle(.zoom, earnings: none), "Winning disabled free Zoom")
+let later = PrecisionZoomEarnings(threeStarLevels: 6)
+check(ledger.remainingSuperzoom(earnings: later) == 1,
+    "New three-star levels did not add Superzoom after a failed run")
+
+let legacyAttempt = UUID()
+let legacy = try JSONSerialization.data(withJSONObject: [
+    "burnedZoom": 17, "burnedSuperzoom": 2,
+    "attemptID": legacyAttempt.uuidString, "usedZoom": 8, "usedSuperzoom": 1,
+    "active": "superzoom"
+])
+var migrated = try JSONDecoder().decode(PrecisionZoomLedger.self, from: legacy)
+let legacyEarnings = PrecisionZoomEarnings(threeStarLevels: 12)
+migrated.start(attemptID: legacyAttempt)
+check(migrated.active == .superzoom && migrated.remainingSuperzoom(earnings: legacyEarnings) == 1,
+    "Migration changed the active Superzoom or its balance")
+check(migrated.toggle(.zoom, earnings: legacyEarnings)
+    && migrated.remainingSuperzoom(earnings: legacyEarnings) == 1,
+    "Old Zoom costs affected free Zoom or changed the Superzoom balance")
+migrated.finish(didWin: false)
+check(migrated.burnedSuperzoom == 3, "Migration lost the pending failed-run Superzoom cost")
+let migratedJSON = try JSONSerialization.jsonObject(with: JSONEncoder().encode(migrated)) as! [String: Any]
+check(migratedJSON["burnedZoom"] == nil && migratedJSON["usedZoom"] == nil,
+    "Obsolete basic Zoom currency remained in the saved ledger")
 
 var lens = PrecisionZoomLens()
 let pointer = CGPoint(x: 80, y: 60)
@@ -96,4 +126,4 @@ check(scroll.handle(horizontal: 0, vertical: -8, precise: true, time: 6.2) == .c
     "Magic Mouse bounce switched Zoom off")
 check(scroll.handle(horizontal: 0, vertical: -8, precise: true, time: 6.8) == .zoom(.zoomOut),
     "A later phase-less gesture stayed latched")
-print("PASS career thresholds, toggles, retry, failure costs, bullet-time, cursor mapping and wheel/touch gestures")
+print("PASS free Zoom, Superzoom thresholds/retry/failure costs, legacy migration, cursor mapping and wheel/touch gestures")

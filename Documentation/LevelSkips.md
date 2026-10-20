@@ -11,13 +11,11 @@ playing well, and the same rules apply in Classic, Lemmings 2 and Lemmings 3.
 - The balance comes from recorded Trolley attempts. Only spent skips are stored,
   in `ArcadeRecords.skippedLevels`.
 
-The Mac gameplay badges show the Level Skip balance beside Zoom and Superzoom.
-Every result, including a loss or rewound run, shows all three balances together.
-A newly earned skip automatically opens Rewards earned with **+1 LEVEL SKIP**,
-the qualifying level-count change and the three-level rule. View result returns
-to the result without moving the level or changing the Hot Seat turn.
-The result also shows **+1 SKIP** beside newly earned Zooms and Superzooms, with
-a Rewards earned action to reopen the reasons.
+The Mac gameplay badges show the Level Skip and Superzoom balances beside Zoom's
+active state. Ordinary Zoom has no balance. The result's optional Rewards earned
+action opens **+1 LEVEL SKIP**, the qualifying level-count change and the
+three-level rule. View result returns without moving the level or changing the
+Hot Seat turn. A reward never replaces the result or delays Retry or Continue.
 The career page shows the balance and three pips. Filled pips count the
 three-star levels toward the next skip. Outlined pips show the levels still needed.
 
@@ -30,8 +28,8 @@ At zero, the button stays visible and disabled. Spending requires all these cond
 2. A campaign level is not the game's final Classic level or the last level of an L2 or L3 tribe.
    The last Learning lesson can be skipped back to the journey hub.
 3. The attempt owner has at least one skip.
-4. Modern controls are on. Old school hides Skip with the other modern controls.
-   Earned skips stay saved and return with Modern or Custom.
+4. Modern keyboard controls are on. Turning that setting off hides Skip.
+   Earned skips stay saved. The Original presentation preset does not change this setting.
 
 Other playlists, shuffle, fan packs outside Learning, and level-browser practice never offer Skip.
 They already let the player choose another level.

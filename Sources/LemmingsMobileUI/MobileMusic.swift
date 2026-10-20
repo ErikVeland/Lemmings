@@ -24,6 +24,7 @@ import UIKit
     private var resultTransitionTask: Task<Void, Never>?
     private var lastTrack: URL?
     private var lastPitchCents: Double?
+    private var appliedRespectMuteSetting: Bool?
     private var cachedSettings = MobileSettings.current(from: .standard)
     private var profileID = MobileProfiles.defaultID
     private var compositionID: String?
@@ -83,6 +84,10 @@ import UIKit
     func applySettings(profileID: String? = nil) {
         if let profileID { self.profileID = profileID }
         cachedSettings = MobileSettings.load(from: .standard, profileID: self.profileID)
+        if appliedRespectMuteSetting != settings.respectMuteSetting {
+            appliedRespectMuteSetting = settings.respectMuteSetting
+            MobileAudioSessionController.applySettings()
+        }
         let c = settings.classic
         if let playing, !playing.hasSuffix("|" + soundtrack) { stop() }
         module.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)

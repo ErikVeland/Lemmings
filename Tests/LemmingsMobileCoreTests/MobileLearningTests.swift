@@ -6,6 +6,26 @@ import Testing
 
 struct MobileLearningTests {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    @Test func syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() throws {
+        let temporary = try AppStorage.temporary(named: "synced-journey-state")
+        defer { temporary.removeTemporaryFiles() }
+        let journey = try #require(LearningJourneyLibrary.journey(storage: AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)))
+        var source = MobileLearningState()
+        try source.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        source.advance(); source.refreshJourneySession()
+        let snapshot = try #require(source.journeySession)
+        var target = MobileLearningState(); target.importJourneySession(snapshot)
+        #expect(target.run == source.run)
+        let old = JourneySessionSnapshot(run: nil, updatedAt: snapshot.updatedAt.addingTimeInterval(-1))
+        target.importJourneySession(old)
+        #expect(target.run == source.run)
+        var unrelated = MobileLearningState()
+        try unrelated.start(Array(journey.lessons.prefix(2).map(\.entry)), name: "Other", poolID: "progression-test", playlistID: UUID())
+        let original = unrelated.run
+        unrelated.importJourneySession(snapshot)
+        #expect(unrelated.run == original)
+    }
     @Test func oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() throws {
         let temporary = try AppStorage.temporary(named: "tv-journey-wall")
         defer { temporary.removeTemporaryFiles() }
@@ -146,18 +166,18 @@ struct MobileLearningTests {
         seats.endSession()
         _ = seats.start(roster: .init(host: "host", players: ["other"]))
         let original = seats
-        let found = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files))
+        let found = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files, currentSessionOnly: false))
         #expect(found.state == state)
         #expect(found.seat == archived)
         #expect(found.seat?.turn == "guest")
         #expect(found.scope == archived.scope)
         #expect(found.resumeTitle == "Resume journey")
         #expect(seats == original)
-        #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files)?.seat == archived)
+        #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files, currentSessionOnly: false)?.seat == archived)
         try files("host").save(state, name: "learning")
-        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == nil)
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files, currentSessionOnly: false)?.seat == nil)
         try files(try #require(seats.current).scope).save(state, name: "learning")
-        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == seats.current)
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files, currentSessionOnly: false)?.seat == seats.current)
     }
     @Test func progressionRecallUsesItsSavedScopeNameAndPosition() throws {
         let temporary = try AppStorage.temporary(named: "progression-resume")
@@ -177,7 +197,7 @@ struct MobileLearningTests {
         let seat = try #require(started)
         try files("eri").save(solo, name: "learning")
         try files(seat.scope).save(shared, name: "learning")
-        #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files)?.state == solo)
+        #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files) == nil)
         let restored = try #require(MobileLearningResume.find(owner: "eri", seats: seats, storage: files, journeyOnly: false))
         #expect(restored.seat == seat && restored.state == shared)
         #expect(restored.state.run?.pool.summary == "Easy to hard")
@@ -185,9 +205,9 @@ struct MobileLearningTests {
         #expect(restored.resumeTitle == "Resume Easy to hard  3/4")
         seats.endSession()
         #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files, journeyOnly: false)?.seat == nil)
-        #expect(MobileLearningResume.find(owner: "uva", seats: seats, storage: files, journeyOnly: false)?.seat == seat)
+        #expect(MobileLearningResume.find(owner: "uva", seats: seats, storage: files, journeyOnly: false) == nil)
     }
-    @Test func homeResumeStaysInTheSelectedSessionWhileJourneyCanFindOtherSaves() throws {
+    @Test func homeAndJourneyStayInTheSelectedSession() throws {
         let temporary = try AppStorage.temporary(named: "home-seat-resume")
         defer { temporary.removeTemporaryFiles() }
         func files(_ scope: String) -> MobileStorage {
@@ -204,7 +224,7 @@ struct MobileLearningTests {
         let selected = try #require(started)
         #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
             journeyOnly: false, currentSessionOnly: true) == nil)
-        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == nil)
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files) == nil)
         try files(selected.scope).save(state, name: "learning")
         let found = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
             journeyOnly: false, currentSessionOnly: true))

@@ -79,7 +79,7 @@ print("PASS toolbar 1× floor and rapid remembered-speed toggles")
 
 var pitch = GameplayMusicPitch()
 var previousPitch = 1.0
-for (index, tier) in GameplaySpeed.steps.dropFirst().enumerated() {
+for (index, tier) in GameplaySpeed.ridiculousSteps.dropFirst().enumerated() {
     let time = 200 + Double(index)
     let ratio = GameplayMusicPitch.ratio(for: tier)
     check(ratio > previousPitch && ratio <= 1.5, "Each tier must raise pitch within the 1.5× cap")
@@ -91,13 +91,13 @@ for (index, tier) in GameplaySpeed.steps.dropFirst().enumerated() {
     check(abs(pow(2, pitch.cents / 1200) - ratio) < 0.000001, "Pitch did not settle in 120 ms")
     previousPitch = ratio
 }
-pitch.update(speed: 1, at: 205)
-pitch.update(speed: 1, at: 205.04)
-let fallingPitch = pitch.cents
-pitch.update(speed: 5, at: 205.04)
-check(pitch.cents == fallingPitch, "A reversed glide jumped in pitch")
 pitch.update(speed: 1, at: 206)
-pitch.update(speed: 1, at: 206.13)
+pitch.update(speed: 1, at: 206.04)
+let fallingPitch = pitch.cents
+pitch.update(speed: 5, at: 206.04)
+check(pitch.cents == fallingPitch, "A reversed glide jumped in pitch")
+pitch.update(speed: 1, at: 207)
+pitch.update(speed: 1, at: 207.13)
 check(pitch.cents == 0, "Returning to normal retained raised pitch")
 check(GameplayMusicPitch.ratio(for: 100) <= 1.5 && GameplayMusicPitch.ratio(for: 0) == 1,
       "Out-of-range speed escaped the pitch limits")
@@ -127,3 +127,42 @@ for input in [GameplaySpeed.Hold.key, .shift, .controller, .mouse] {
     check(pedal.musicPitchSpeed(at: 304) == 1, "Cancelled pedal retained raised pitch")
 }
 print("PASS musical cruising intervals and continuous keyboard/controller/mouse pedal pitch")
+
+for legacy in [3.0, 8] {
+    var ridiculous = GameplaySpeed(legacyMultiplier: legacy)
+    check(!ridiculous.ridiculousEnabled && ridiculous.availableSteps.last == 10, "Ridiculous speed must default off")
+    ridiculous.setCruise(25)
+    check(ridiculous.cruise == 2, "Disabled 25× must not become a saved tier")
+    ridiculous.ridiculousEnabled = true
+    for index in 0..<8 { ridiculous.step(1, at: Double(index)) }
+    ridiculous.update(at: 9)
+    check(ridiculous.target == 25 && ridiculous.multiplier == 25 && ridiculous.label == "25×", "Enabled arrows must reach and stop at 25×")
+    ridiculous.step(-1, at: 10)
+    check(ridiculous.multiplier == 10, "Down from 25× must return to 10× immediately")
+    ridiculous.newLevel(at: 11)
+    ridiculous.press(.key, at: 12)
+    ridiculous.update(at: 16)
+    ridiculous.release(.key, at: 16.1)
+    check(ridiculous.cruise == 25 && ridiculous.multiplier == 25, "F hold must retain 25×")
+    ridiculous.ridiculousEnabled = false
+    ridiculous.update(at: 17)
+    check(ridiculous.target == 10 && ridiculous.multiplier == 10 && ridiculous.cruise == 10, "Disabling must clamp active and remembered speed")
+    ridiculous.ridiculousEnabled = true
+    ridiculous.newLevel(at: 18)
+    for input in [GameplaySpeed.Hold.shift, .mouse, .controller] {
+        ridiculous.press(input, at: 20)
+        ridiculous.update(at: 24)
+        check(ridiculous.target == 25, "Temporary holds must reach 25×")
+        ridiculous.release(input, at: 24.1)
+        check(ridiculous.multiplier == 1, "Temporary 25× must restore cruising speed")
+    }
+    ridiculous.press(.shift, at: 25); ridiculous.update(at: 29)
+    ridiculous.ridiculousEnabled = false
+    ridiculous.release(.shift, at: 30)
+    check(ridiculous.multiplier == 1 && !ridiculous.isHeld, "Disabling must cancel held 25× without restarting it")
+    ridiculous.ridiculousEnabled = true; ridiculous.variableEnabled = false
+    ridiculous.tap(at: 31)
+    check(ridiculous.multiplier == legacy, "Ridiculous speed must preserve original fixed speeds")
+}
+check(abs(GameplayMusicPitch.ratio(for: 25) - GameplayMusicPitch.ratio(for: 10) - 0.1) < 0.000001, "25× must add 0.1× pitch above 10×")
+print("PASS optional 25× arrows, all holds, disable clamp, legacy speeds and pitch cap")

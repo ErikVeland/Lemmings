@@ -1,9 +1,10 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 
 @MainActor enum LemmingSelectionGlow {
     static func draw(at point: CGPoint, scale: CGFloat, radius: CGFloat = 7,
-                     tint: NSColor, animated: Bool = true) {
+                     tint: NSColor, animated: Bool = true, marker: Bool = true) {
         let pixel = max(1, floor(scale))
         let haloRadius = max(8 * pixel, radius * scale * 1.3)
         let alpha = haloAlpha(at: ProcessInfo.processInfo.systemUptime, animated: animated)
@@ -23,25 +24,16 @@ import AppKit
             halo.draw(in: NSBezierPath(ovalIn: rect), relativeCenterPosition: .zero)
         }
         NSGraphicsContext.restoreGraphicsState()
-        drawTargetMarker(at: point, pixel: pixel, tint: tint)
+        if marker { drawTargetMarker(at: point, pixel: pixel) }
     }
 
     /// A solid pointer stays visible when the soft halo meets bright terrain.
-    private static func drawTargetMarker(at point: CGPoint, pixel: CGFloat, tint: NSColor) {
-        let x = floor(point.x / pixel) * pixel
-        let y = floor(point.y / pixel) * pixel - 15 * pixel
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current?.shouldAntialias = false
-        NSColor.black.setFill()
-        CGRect(x: x - 4 * pixel, y: y, width: 8 * pixel, height: 3 * pixel).fill()
-        CGRect(x: x - 3 * pixel, y: y + 3 * pixel, width: 6 * pixel, height: pixel).fill()
-        CGRect(x: x - 2 * pixel, y: y + 4 * pixel, width: 4 * pixel, height: pixel).fill()
-        CGRect(x: x - pixel, y: y + 5 * pixel, width: 2 * pixel, height: pixel).fill()
-        tint.setFill()
-        CGRect(x: x - 3 * pixel, y: y + pixel, width: 6 * pixel, height: 2 * pixel).fill()
-        CGRect(x: x - 2 * pixel, y: y + 3 * pixel, width: 4 * pixel, height: pixel).fill()
-        CGRect(x: x - pixel, y: y + 4 * pixel, width: 2 * pixel, height: pixel).fill()
-        NSGraphicsContext.restoreGraphicsState()
+    private static func drawTargetMarker(at point: CGPoint, pixel: CGFloat) {
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        LemmingSelectionRenderer.drawPlumbob(in: CGRect(
+            x: floor(point.x / pixel) * pixel - 4 * pixel,
+            y: floor(point.y / pixel) * pixel - 21 * pixel,
+            width: 9 * pixel, height: 13 * pixel), context: context)
     }
 
     /// The halo's centre opacity. The shimmer modulates brightness only; the

@@ -25,7 +25,8 @@ import NxlvKit
     func drawTrolleyRecords(_ conditions: TrolleyConditions) {
         header(level?.title ?? L10n.text("The Trolley")); tabs(); boardScopeLinks()
         let target = ArcadeStore.shared.records.trolley.maximum(conditions: conditions, assisted: assisted)
-        let boardTitle = target.status == .record && trolleyBoard == .zeroAvoidableLosses ? L10n.text("Record matched") : trolleyBoard.title
+        let baseTitle = target.status == .record && trolleyBoard == .zeroAvoidableLosses ? L10n.text("Record matched") : trolleyBoard.title
+        let boardTitle = conditions.bonusSkillID == nil ? baseTitle : L10n.text("BONUS: \(baseTitle)")
         let ordering = target.status == .record && [.rescuePotential, .zeroAvoidableLosses, .cleanRescue].contains(trolleyBoard)
             ? L10n.text("Best-known target: \(target.value ?? 0) saved. Fewest skills, then fastest time.")
             : trolleyBoard.ordering
@@ -76,7 +77,7 @@ import NxlvKit
         if entries.isEmpty {
             text(L10n.text("No records"), 64, 337, 992, alignment: .center)
         }
-        if let trophy = TrolleyAchievement.forBoard(trolleyBoard) {
+        if conditions.bonusSkillID == nil, let trophy = TrolleyAchievement.forBoard(trolleyBoard) {
             let progress = trophy.progress(attempts: ArcadeStore.shared.records.trolley.attempts, profileID: player.id)
             link(L10n.text("Award: \(trophy.title) - \(progress.label)  >"), CGRect(x: 64, y: 549, width: 992, height: 36)) { [weak self] in
                 self?.showAchievement(trophy)
@@ -146,7 +147,7 @@ import NxlvKit
     /// The collection row doubles as the keyboard legend, so each entry keeps its
     /// number and becomes its own target. Widths come from the bitmap font so the
     /// row stays centred whatever the collection names are.
-    func drawAwardGroupLinks(y: CGFloat = 598) {
+    func drawAwardGroupLinks(y: CGFloat = 590) {
         let groups = TrolleyAchievementGroup.allCases
         let labels = groups.enumerated().map { "\($0.offset + 1) \($0.element.rawValue)" }
         let gap: CGFloat = 44, padding: CGFloat = 16

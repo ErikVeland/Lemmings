@@ -50,6 +50,10 @@ Verified solutions currently cover Classic and matching Classic fan levels.
 Lemmings 2 and 3 retain their existing coaching and checkpoint flows. They do not
 offer this toggle because their verified-solution adapters and data are absent.
 Recorded movies cannot provide simulation sprites.
+Hint pages name their evidence as Checked example route or General coaching.
+General coaching begins No level-specific hints available. It cannot imply a
+verified solution. Replay and ghost actions still require a separate verified
+Classic solution and retain their existing spoiler confirmation.
 
 ## Touch and remote controls
 

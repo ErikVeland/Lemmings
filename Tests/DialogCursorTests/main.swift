@@ -68,7 +68,7 @@ private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
     check(navigation.controls(in: root).count == 2, "A hidden control remained in the focus order")
 }
 
-@MainActor private func cursorBitmap(original: Bool, occupied: Bool, zoom: CGFloat, backing: Int) -> NSBitmapImageRep {
+@MainActor private func cursorBitmap(original: Bool, occupied: Bool, zoom: CGFloat, backing: Int, eligible: Bool = false) -> NSBitmapImageRep {
     let side = 96 * backing
     let context = CGContext(data: nil, width: side, height: side, bitsPerComponent: 8,
         bytesPerRow: side * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
@@ -78,7 +78,7 @@ private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
     GameCursor.drawPlayfieldPointer(at: CGPoint(x: 48, y: 48), scale: zoom, tint: .white,
-        original: original, occupied: occupied)
+        original: original, occupied: occupied, eligible: eligible)
     NSGraphicsContext.restoreGraphicsState()
     return NSBitmapImageRep(cgImage: context.makeImage()!)
 }
@@ -136,8 +136,16 @@ private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
             }
             let modernEmpty = cursorBitmap(original: false, occupied: false, zoom: zoom, backing: backing)
             let modernTarget = cursorBitmap(original: false, occupied: true, zoom: zoom, backing: backing)
-            check(modernEmpty.representation(using: .png, properties: [:]) == modernTarget.representation(using: .png, properties: [:]),
-                "Hovering changed the Modern cursor's shape")
+            let modernEligible = cursorBitmap(original: false, occupied: true, zoom: zoom, backing: backing, eligible: true)
+            let emptyPixels = modernEmpty.representation(using: .png, properties: [:])
+            let blockedPixels = modernTarget.representation(using: .png, properties: [:])
+            let eligiblePixels = modernEligible.representation(using: .png, properties: [:])
+            check(emptyPixels != blockedPixels && blockedPixels != eligiblePixels && emptyPixels != eligiblePixels,
+                "Modern availability states need distinct shapes even with identical colour")
+            let middle = 48 * backing
+            check(modernTarget.colorAt(x: middle, y: middle)!.alphaComponent > 0.5
+                && modernEligible.colorAt(x: middle, y: middle)!.alphaComponent == 0,
+                "Unavailable target must have a cross; an eligible target must keep its centre clear")
         }
     }
     GameCursor.gameplaySuppressed = true
@@ -146,19 +154,19 @@ private final class SystemPointerGroup: NSView, GameSystemCursorRegion {}
             "A modal dialog retained a gameplay cursor")
     }
     GameCursor.gameplaySuppressed = false
-    let preview = NSImage(size: CGSize(width: 288, height: 96), flipped: true) { _ in
+    let preview = NSImage(size: CGSize(width: 480, height: 96), flipped: true) { _ in
         NSColor(calibratedRed: 0, green: 0, blue: 0.2, alpha: 1).setFill()
-        CGRect(x: 0, y: 0, width: 288, height: 96).fill()
-        for (i, state) in [(true, false), (true, true), (false, true)].enumerated() {
+        CGRect(x: 0, y: 0, width: 480, height: 96).fill()
+        for (i, state) in [(true, false, false), (true, true, false), (false, false, false), (false, true, true), (false, true, false)].enumerated() {
             GameCursor.drawPlayfieldPointer(at: CGPoint(x: 48 + i * 96, y: 48), scale: 3,
-                tint: .white, original: state.0, occupied: state.1)
+                tint: .white, original: state.0, occupied: state.1, eligible: state.2)
         }
         return true
     }
     let bitmap = NSBitmapImageRep(data: preview.tiffRepresentation!)!
     let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     try! bitmap.representation(using: .png, properties: [:])!.write(to: root.appendingPathComponent(".build/dialog-cursor-tests/cursor-styles.png"))
-    print("PASS Original cross/target pixels, colour, zoom/Retina scaling, Modern stability and dialog suppression")
+    print("PASS Original cross/target pixels, colour, zoom/Retina scaling, colour-independent Modern states and dialog suppression")
 }
 
 @MainActor private func run() {

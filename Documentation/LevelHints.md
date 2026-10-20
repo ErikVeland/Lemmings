@@ -13,18 +13,22 @@ The game pauses while the page is open. Closing it restores the previous pause s
 
 ## Coverage
 
-As of 17 September 2026, checked hints cover 281 official Classic levels through
-284 distinct level identities. This includes all 120 original levels, all 32
-Holiday 1993 levels, all 32 Holiday 1994 levels, both complete Xmas campaigns and
-89 Oh No! levels. All three tiers come from a verified winning route.
+The current catalogue contains 350 checked Classic level identities: 120 original
+levels, 100 Oh No! levels, 64 Holiday levels, six Xmas levels and 60 conversion
+levels. The page header says **Checked example route**. Its advice and opening
+markers come from a matching verified winning route, rather than a claim that
+every tier has a human-authored explanation of the puzzle.
 
-Levels without matching checked routes receive labelled general coaching.
-This includes the remaining official levels, L2, L3, conversions and fan packs,
-unless a fan level exactly matches a checked original identity. General coaching
-is advice about the available mechanics, not a solution for that level.
+Levels without matching checked routes use the header **General coaching**.
+Every page begins **No level-specific hints available.**, followed by generic
+Observe, Plan or Practise advice. The progress label says Coaching instead of
+Hint. Native accessibility text and mobile/TV reading order retain this distinction.
+This applies to stale or missing Classic data, unmatched fan levels and L2/L3.
+General coaching does not claim a solution or add route markers. L3 coaching
+discusses its tools instead of borrowing Classic skill instructions.
 
-Checked hints follow preserved winning routes. The official Classic gap is now
-11 Oh No! levels. Sequel and community completion have separate evidence limits.
+Checked hints follow preserved winning routes. Sequel and community completion
+have separate evidence limits.
 See the [current campaign closure evidence](ReleaseReadiness/CampaignClosure-2026-09-22.md).
 
 Each click reveals one tier:
@@ -48,6 +52,14 @@ Each new tier starts at the top. Assistive tools can read the complete hint text
 
 Missing or stale hint data falls back to labelled general coaching.
 
+The exact original Fun 1 and Fun 2 identities also have short obstacle explanations:
+the route between the upper platform and lower path in Just dig!, and individual
+fall protection in Only floaters can survive this. These notes are keyed to the
+full level fingerprint. A matching title or changed terrain cannot borrow them.
+The catalogue also requires its recorded engine fingerprint to match the packaged
+engine fingerprint. Other checked decks retain their route-derived advice. No
+sequel solutions or broader human review are implied.
+
 ## Source and validation
 
 `Resources/Hints/classic.json` contains opening locations extracted from the existing winning replay witnesses.
@@ -64,9 +76,12 @@ The output is deterministic. Normal app builds copy the saved catalogue without 
 
 Run `TEST_SCOPE=hints Scripts/run-app-integration-tests.sh` to check coverage, exact level matching,
 spoiler boundaries, native keys, pause restoration, flat/CRT presentation and missing-route coaching.
-The checks exercise all 744 hint tiers, verify complete text and accessible values,
+The checks exercise all 1,050 checked hint tiers, verify complete text and accessible values,
 and test keyboard scrolling and scroll reset with an oversized coaching page.
-They also render the three tiers under `.build/hints` for visual inspection.
+They also render checked tiers and generic Classic/L2/L3 pages under `.build/hints`.
+Shared phone, tablet and TV layouts check complete availability text and action targets.
 
-Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 284 decks,
-release-rate ordering and the first two tiers’ spoiler boundaries.
+Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 350 decks,
+release-rate ordering, the first two tiers' spoiler boundaries, explicit coaching
+availability and exact-identity obstacle explanations. New copy uses English
+fallback until its translations have been reviewed.

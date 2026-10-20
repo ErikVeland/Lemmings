@@ -7,7 +7,11 @@ public struct MobileFavourites: Equatable, Sendable {
         public let level: String
         /// The level's name, kept so a long list can show without opening every pack.
         public var title: String?
-        public init(pack: String, level: String, title: String? = nil) { self.pack = pack; self.level = level; self.title = title }
+        /// Curated copies retain the exact installed content across saved runs and shared storage.
+        public let sourceFingerprint: String?
+        public init(pack: String, level: String, title: String? = nil, sourceFingerprint: String? = nil) {
+            self.pack = pack; self.level = level; self.title = title; self.sourceFingerprint = sourceFingerprint
+        }
 
         public static func == (a: Entry, b: Entry) -> Bool { a.pack == b.pack && a.level == b.level }
         public func hash(into hasher: inout Hasher) { hasher.combine(pack); hasher.combine(level) }
@@ -105,6 +109,7 @@ public final class MobileListLibrary: MobileGameLibrary {
             if opened[entry.pack] == nil, let pack = pack(entry.pack),
                let library = try? catalogue.library(for: pack) { opened[entry.pack] = library }
             guard let library = opened[entry.pack],
+                  Self.matchesSource(entry, library: library),
                   let index = library.levels.indices.first(where: { library.levelKey(at: $0) == entry.level }),
                   let title = pack(entry.pack)?.title else { continue }
             found.append((entry.pack, index))
@@ -131,11 +136,23 @@ public final class MobileListLibrary: MobileGameLibrary {
             libraries[entry.pack] = opened
         }
         guard let library = libraries[entry.pack] else { return nil }
+        guard Self.matchesSource(entry, library: library) else { return nil }
         if resolved[index].index < 0 {
             guard let found = library.levels.indices.first(where: { library.levelKey(at: $0) == entry.level }) else { return nil }
             resolved[index] = (entry.pack, found)
         }
         return (entry.pack, resolved[index].index, library)
+    }
+
+    static func matchesSourceFingerprint(_ expected: String?, directory: URL) -> Bool {
+        guard let expected else { return true }
+        return (try? MobileContentFingerprint.digest(directory: directory)) == expected
+    }
+
+    private static func matchesSource(_ entry: MobileFavourites.Entry, library: any MobileGameLibrary) -> Bool {
+        guard entry.sourceFingerprint != nil else { return true }
+        guard let classic = library as? ClassicMobileLibrary else { return false }
+        return matchesSourceFingerprint(entry.sourceFingerprint, directory: classic.directory)
     }
 
     public func levelKey(at index: Int) -> String {
@@ -157,6 +174,11 @@ public final class MobileListLibrary: MobileGameLibrary {
     /// Where a level of this list really lives.
     public func origin(of index: Int) -> (pack: String, index: Int)? {
         resolve(index).map { ($0.pack, $0.index) }
+    }
+
+    /// Completion records use the same source instance that loaded the level.
+    public func resolvedOrigin(of index: Int) -> (pack: String, index: Int, library: any MobileGameLibrary)? {
+        resolve(index)
     }
 }
 

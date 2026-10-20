@@ -103,16 +103,6 @@ import NxlvKit
         if let resultStatus { text(resultStatus, 80, 253 + resultSummaryOffset, 960, alignment: .center, height: 26) }
         drawResultLevelCard(c)
         drawResultCareerCard(c)
-        let history = ArcadeStore.shared.records.trolley
-        let best = run.level.conditions.flatMap { conditions in
-            history.leaderboard(conditions: conditions, assisted: run.assisted, board: .fastestClear)
-                .first { $0.run.profileID == run.profileID }?.run.seconds
-        } ?? ArcadeStore.shared.records.leaderboard(level: run.level, board: .fastestClear, assisted: run.assisted)
-            .first { $0.profileID == run.profileID }?.seconds
-        link(L10n.text("Time \(Self.time(run.seconds))   Best \((best.map(Self.time) ?? "--"))  >"),
-             CGRect(x: 80, y: resultCardsY + 124, width: LevelCollections.entry(attemptID: run.id) == nil ? 960 : 720, height: 34), alignment: .left) { [weak self] in
-            self?.trolleyBoard = .fastestClear; self?.board = .fastestClear; self?.boardScope = .level; self?.page(.records)
-        }
         if let entry = LevelCollections.entry(attemptID: run.id) {
             let saved = LevelCollections.isFavourite(entry, profileID: run.profileID)
             button(saved ? L10n.text("Unfavourite") : L10n.text("Favourite"), CGRect(x: 808, y: resultCardsY + 124, width: 232, height: 34), selected: saved) { [weak self] in
@@ -123,8 +113,7 @@ import NxlvKit
         }
         resultActions(y: resultActionsY)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
-        let awardText = c.newAwards.map { L10n.text("New career award: \($0.award.title). \($0.award.detail)") }.joined(separator: " ")
-        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Time: \(Self.time(run.seconds)). Fastest clear: \(best.map(Self.time) ?? L10n.text("No record")). Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(resultBalanceText). \(precisionRewardText(c)) \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? L10n.text("No record")). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.\((report.earnedLevelSkip ? L10n.text(" Earned a level skip.") : ""))\((canSpendSkip ? L10n.text(" \(skipTitle). K skips this level.") : ""))"))
+        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Enter: \(primaryResultTitle). R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns."))
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: resultCardsY, width: 466, height: 116)
@@ -146,20 +135,22 @@ import NxlvKit
         GameStyle.fill(CGRect(x: 566, y: resultCardsY, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         link("\(report?.run.assisted == true ? L10n.text("REWIND CAREER") : L10n.text("CAREER"))  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
              CGRect(x: 582, y: resultCardsY + 7, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
-        drawPerkCounters(in: CGRect(x: 582, y: resultCardsY + 35, width: 442, height: 22))
-        let new = c.newAwards
+        if let awards = report?.trolley?.attempt.achievements, !awards.isEmpty {
+            link(L10n.text("\(awards.count) new awards >"), CGRect(x: 582, y: resultCardsY + 43, width: 442, height: 28), alignment: .left) { [weak self] in self?.showNewAwards() }
+        } else if let award = c.newAwards.first?.award {
+            resultCareerAwardLink(award, in: CGRect(x: 582, y: resultCardsY + 43, width: 442, height: 28))
+        } else {
+            link(L10n.text("Awards >"), CGRect(x: 582, y: resultCardsY + 43, width: 442, height: 28), alignment: .left) { [weak self] in self?.page(.awards) }
+        }
         if !savedEarnedRewards.isEmpty {
-            if let award = new.first?.award {
-                resultCareerAwardLink(award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 22))
-            } else if let next = c.nextCareerGoal {
-                resultCareerAwardLink(next.award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 22))
-            }
-            link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"), CGRect(x: 582, y: resultCardsY + 82, width: 442, height: 28), alignment: .left) { [weak self] in self?.showEarnedRewards() }
-        } else if let next = c.nextCareerGoal {
-            resultCareerAwardLink(next.award, in: CGRect(x: 582, y: resultCardsY + 58, width: 442, height: 24))
-            text(next.status, 582, resultCardsY + 85, 442, height: 20)
-            progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: resultCardsY + 106, width: 442, height: 4))
-        } else { text(L10n.text("All career milestones earned!"), 582, resultCardsY + 75, 442) }
+            let resources = savedEarnedRewards.filter(\.isConsumable)
+            let featured = resources.first(where: { $0.title.contains("EXTRA SKILL") }) ?? resources.first
+            let label = featured.map { reward in
+                reward.title + (resources.count > 1 ? " (+\(resources.count - 1))" : "") + " >"
+            } ?? L10n.text("Rewards earned (\(savedEarnedRewards.count)) >")
+            achievementLink(label, in: CGRect(x: 582, y: resultCardsY + 80, width: 442, height: 28),
+                title: L10n.text("Rewards earned"), detail: savedEarnedRewards.map { $0.title + ". " + $0.reason }.joined(separator: "\n")) { [weak self] in self?.showEarnedRewards() }
+        }
     }
     var resultBalanceText: String {
         perkCounters.map(\.label).joined(separator: "   ")
@@ -174,9 +165,9 @@ import NxlvKit
         guard let report, ArcadeStore.shared.storageError == nil,
               ArcadeStore.shared.records.trolley.attempts.contains(where: { $0.id == report.run.id }) else { return "" }
         var rewards: [String] = []
-        if c.precisionRewards.zoomUses > 0 { rewards.append("+\(c.precisionRewards.zoomUses) ZOOM") }
         if c.precisionRewards.superzoomUses > 0 { rewards.append("+\(c.precisionRewards.superzoomUses) SUPERZOOM") }
         if report.earnedLevelSkip { rewards.append("+1 SKIP") }
+        if report.earnedExtraSkill { rewards.append(L10n.text("RARE: +1 EXTRA SKILL")) }
         return rewards.joined(separator: "   ")
     }
     func drawLevelGoals() {
@@ -224,10 +215,17 @@ import NxlvKit
         }
         text(L10n.text("\(score.stars) stars   \(score.clearedLevels) cleared   \(score.threeStarLevels) three-star levels"), 80, 212, assisted ? 960 : 640)
         if !assisted { drawSkipBalance(ArcadeStore.shared.records.levelSkips(profileID: player.id)) }
+        text(L10n.text("Superzoom \(PrecisionZoomController.shared.remainingSuperzoom(profileID: player.id))"), 80, 238, 380, height: 22)
+        let extra = ArcadeStore.shared.records.extraSkills(profileID: player.id)
+        achievementLink(L10n.text("RARE: Extra skills \(extra.available) · \(10 - extra.threeStarLevelsToNext)/10 >"),
+            in: CGRect(x: 480, y: 234, width: 560, height: 30),
+            title: L10n.text("Extra skills"), detail: L10n.text("Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.")) { [weak self] in
+                self?.showResultAchievement([(L10n.text("Extra skills"), L10n.text("Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards."))])
+            }
         let milestones = deltas.filter { $0.after.goal > 1 }
         let pages = max(1, (milestones.count + 3) / 4)
         for (index, delta) in milestones.dropFirst((careerPage % pages) * 4).prefix(4).enumerated() {
-            let y = CGFloat(264 + index * 77)
+            let y = CGFloat(272 + index * 77)
             link(delta.award.title + " >", CGRect(x: 80, y: y, width: 650, height: 30), alignment: .left) { [weak self] in self?.showAchievement(delta.award) }
             text(delta.status, 766, y + 7, 274, alignment: .right, height: 24)
             text(delta.after.earned ? delta.award.detail : delta.next, 80, y + 33, 960, height: 24, alpha: 0.75)

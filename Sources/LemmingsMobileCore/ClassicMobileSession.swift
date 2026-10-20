@@ -81,6 +81,7 @@ public final class ClassicMobileSession: MobileGameSession {
         var history: ClassicDOSRewind? = nil
         var beforeEndRunHistory: ClassicDOSRewind? = nil
         var replayInitial: ClassicDOSSimulation? = nil
+        var bonusSkillID: String? = nil
     }
 
     public let engineIdentifier = "classic-dos"
@@ -158,6 +159,29 @@ public final class ClassicMobileSession: MobileGameSession {
     public private(set) var rewindCount = 0
     public private(set) var undoCount = 0
     public private(set) var usedRewind = false
+    public private(set) var bonusSkillID: String?
+    public var existingLevelSkills: Set<String> {
+        Set(levelInitial.configuration.initialSkills.filter { $0.value > 0 }.map { $0.key.rawValue })
+    }
+    public var extraSkillChoices: [MobileExtraSkillChoice] {
+        guard !isReadOnly, bonusSkillID == nil else { return [] }
+        return ClassicSkill.allCases.enumerated().compactMap { index, skill in
+            guard history.canGrantBonusSkill(skill) else { return nil }
+            return .init(skillID: skill.rawValue, title: SkillVocabulary.title(skill.rawValue), control: index)
+        }
+    }
+    @discardableResult public func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool {
+        guard extraSkillChoices.contains(choice), ClassicSkill.allCases.indices.contains(choice.control),
+              history.grantBonusSkill(ClassicSkill.allCases[choice.control]) else { return false }
+        bonusSkillID = choice.skillID
+        cachedRender = nil; cachedPanelFrame = nil
+        return true
+    }
+    @discardableResult public func retainExtraSkillUse(_ skillID: String) -> Bool {
+        guard !isReadOnly, existingLevelSkills.contains(skillID), bonusSkillID == nil || bonusSkillID == skillID else { return false }
+        bonusSkillID = skillID
+        return true
+    }
     private var settings: ClassicSettings?
     public private(set) var selectionSprite: MobileSpriteHighlight?
     public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
@@ -463,6 +487,14 @@ public final class ClassicMobileSession: MobileGameSession {
     }
     public var actionReplayInitial: ActionReplayState? { .classic(levelInitial) }
 
+    public var lemmingInspection: LemmingInspection? {
+        guard !isReadOnly else { return nil }
+        let commands = history.appliedCommands.compactMap {
+            try? LeaderboardActionReplay.Command.classic(.init(tick: $0.tick, action: $0.action, afterTick: true))
+        }
+        return try? LemmingInspection(initial: .classic(levelInitial), current: .classic(simulation), commands: commands)
+    }
+
     public func actionCapture() throws -> MobileActionCapture? {
         // Older checkpoints without history start part-way through. Their commands cannot replay from tick 0.
         guard !isReadOnly, replayInitial.tickCount == 0 else { return nil }
@@ -584,7 +616,8 @@ public final class ClassicMobileSession: MobileGameSession {
             usedRewind: usedRewind,
             history: history,
             beforeEndRunHistory: beforeEndRun,
-            replayInitial: replayInitial
+            replayInitial: replayInitial,
+            bonusSkillID: bonusSkillID
         ))
     }
 
@@ -615,6 +648,7 @@ public final class ClassicMobileSession: MobileGameSession {
         nukeCount = checkpoint.nukeCount ?? (restored.isNuking ? 1 : 0)
         rewindCount = checkpoint.rewindCount ?? 0
         undoCount = checkpoint.undoCount ?? 0
+        bonusSkillID = checkpoint.bonusSkillID
     }
 
     @discardableResult public func rewind(seconds: Double) -> Bool {
@@ -731,6 +765,7 @@ public final class ClassicMobileSession: MobileGameSession {
                     lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
             }
         case let .releaseRate(value): history.setReleaseRate(value)
+        case let .bonusSkill(skill): _ = history.grantBonusSkill(skill)
         case .nuke: history.beginNuke()
         }
     }

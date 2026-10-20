@@ -1516,9 +1516,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let natural = PrecisionZoomScrollGesture.normalizedDeltas(horizontal: 0, vertical: -8,
     directionInvertedFromDevice: true)
   try require(natural.vertical == 8, "Natural scrolling reversed the physical Zoom direction")
-  let status = PrecisionZoomStatus(zoom: 3, superzoom: 12, skips: 4, active: .zoom, isEmpty: false)
+  let status = PrecisionZoomStatus(superzoom: 12, skips: 4, active: .zoom, isEmpty: false)
   try require(status.accessibility ==
-    "Zoom, 3 remaining. Superzoom, 12 remaining. 4 Level Skips. Zoom active",
+    "Superzoom, 12 remaining. 4 Level Skips. Zoom active",
     "The compact Zoom badges lost their accessible description")
   let image = NSImage(size: CGSize(width: 180, height: 90))
   image.lockFocus()

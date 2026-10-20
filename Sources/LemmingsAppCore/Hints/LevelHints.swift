@@ -14,7 +14,8 @@ public struct LevelHintCatalogue: Decodable, Sendable {
 
         public var deck: LevelHintDeck {
             let first = opening.first?.skill ?? ""
-            let nudge = LevelHintDeck.nudges[first]
+            let reasoning = LevelHintDeck.obstacleReasoning[fingerprint]
+            let nudge = reasoning?.nudge ?? LevelHintDeck.nudges[first]
                 ?? L10n.text("Trace a path from the entrance to the exit. Check the landing places before changing the terrain.")
             let openingSkills = opening.map { SkillVocabulary.title($0.skill) }.joined(separator: " → ")
             let later = skillOrder.filter { skill in !opening.contains { $0.skill == skill } }
@@ -22,6 +23,7 @@ public struct LevelHintCatalogue: Decodable, Sendable {
                 ? L10n.text("This checked route does not need a skill assignment. Watch where the lemmings walk before intervening.")
                 : L10n.text("One working route opens with:\n\(openingSkills)\n\n\(LevelHintDeck.jobs[first] ?? L10n.text("Watch the worker's direction before assigning a skill."))")
             if !later.isEmpty { approach += L10n.text("\n\nKeep \(later.map { SkillVocabulary.title($0) }.joined(separator: ", ")) available for later.") }
+            if let reasoning { approach += "\n\n" + reasoning.approach }
             var instructions: [String] = []
             for (index, move) in opening.enumerated() {
                 let worker: String
@@ -84,6 +86,11 @@ public struct LevelHintCatalogue: Decodable, Sendable {
 }
 
 public struct LevelHintDeck: Sendable {
+    /// Presentation names the evidence before showing any advice, on every platform.
+    public struct Presentation: Sendable {
+        public let title: String, progress: String, section: String, body: String
+        public var accessibilityText: String { [title, progress, section, body].joined(separator: ". ") }
+    }
     public struct Stage: Sendable {
         public let title: String, body: String
         public var moves: [LevelHintCatalogue.Move] = []
@@ -96,6 +103,30 @@ public struct LevelHintDeck: Sendable {
     public init(title: String, checked: Bool, stages: [Stage]) {
         self.title = title; self.checked = checked; self.stages = stages
     }
+    public var evidenceTitle: String {
+        checked ? L10n.text("Checked example route") : L10n.text("General coaching")
+    }
+    public func presentation(at index: Int) -> Presentation {
+        let stage = stages[index]
+        return .init(title: evidenceTitle,
+            progress: checked ? L10n.text("HINT \(index + 1) OF \(stages.count)") : L10n.text("COACHING \(index + 1) OF \(stages.count)"),
+            section: stage.title,
+            body: checked ? stage.body : L10n.text("No level-specific hints available.") + "\n\n" + stage.body)
+    }
+
+    fileprivate struct ObstacleReasoning: Sendable {
+        let nudge: String, approach: String
+    }
+    // These notes apply only to the exact original Fun 1 and Fun 2 identities.
+    // The catalogue's engine check runs before a level can offer a checked deck.
+    fileprivate static var obstacleReasoning: [String: ObstacleReasoning] { [
+        "b603237c23a1b4149e60349ae55c487f41b4d7b956d3fe35c64962ff186f4d15": .init(
+            nudge: L10n.text("The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path."),
+            approach: L10n.text("A hole joins the upper platform to the lower path. Other lemmings can follow without needing their own skill.")),
+        "35373ea4a608102e97666e1d53ddc9f84b8058708b04fe5afde61856fef3b9bd": .init(
+            nudge: L10n.text("The danger is the fall after the entrance. Think about protecting the lemmings before they land."),
+            approach: L10n.text("Floaters protect individual lemmings. Giving this skill to one worker does not protect the next arrival."))
+    ] }
     public static var nudges: [String: String] { [
         "blocker": L10n.text("Think about giving one worker room to prepare the route. The whole crowd does not need to move together."),
         "builder": L10n.text("Look for the first gap or change in height. Work out where a staircase could reach firm ground."),
@@ -122,11 +153,11 @@ public struct LevelHintDeck: Sendable {
         let tips = available.prefix(3).compactMap { jobs[$0.lowercased()] }.joined(separator: "\n\n")
         let advice = tips.isEmpty ? L10n.text("Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns.") : tips
         return Self(title: title, checked: false, stages: [
-            .init(title: L10n.text("A gentle nudge"), body: L10n.text("Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely.")),
-            .init(title: L10n.text("Make a small plan"), body: chronicles
+            .init(title: L10n.text("Observe"), body: L10n.text("Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely.")),
+            .init(title: L10n.text("Plan"), body: chronicles
                 ? L10n.text("Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time.")
                 : L10n.text("Match the first obstacle to an available skill. Check what happens after that skill finishes. Keep some supplies for the next obstacle.")),
-            .init(title: L10n.text("Try one idea"), body: L10n.text("\(advice)\n\nChange one part of your plan at a time when you retry."))
+            .init(title: L10n.text("Practise"), body: L10n.text("\(advice)\n\nChange one part of your plan at a time when you retry."))
         ])
     }
 }

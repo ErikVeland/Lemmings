@@ -53,7 +53,9 @@ import NxlvKit
             let old = (store.activeRunHotSeatID == hotSeatID ? store.activeRun : nil)
                 ?? store.savedRuns.first { $0.hotSeatID == hotSeatID }?.run
             let source: LevelSequenceSource = value.playlist.map(LevelSequenceSource.playlist) ?? .shuffleAll
-            let same = old?.source == source && old?.pool.summary == value.name && old?.entries.map(Self.mobileEntry) == value.entries
+            let oldEntries = old?.entries.map(Self.mobileEntry)
+            let same = old?.source == source && old?.pool.summary == value.name && oldEntries == value.entries
+                && oldEntries?.map(\.sourceFingerprint) == value.entries.map(\.sourceFingerprint)
             return try LevelSequenceRun(id: same ? old!.id : UUID(), source: source,
                 pool: LevelPool(id: "mobile", summary: value.name), entries: Self.sharedEntries(value.entries),
                 currentIndex: value.position, seed: value.shuffled ? value.seed : nil,
@@ -71,12 +73,14 @@ import NxlvKit
     public static func sharedEntries(_ values: [MobileFavourites.Entry]) throws -> [LevelPlaylistEntry] {
         try values.enumerated().map { index, value in
             try LevelPlaylistEntry(identity: .init(engine: .classic, packID: value.pack, levelID: value.level),
-                catalogueRevision: "mobile-v1", sourceRevision: "mobile-v1", packNameSnapshot: value.pack,
+                catalogueRevision: "mobile-v1", sourceRevision: value.sourceFingerprint.map { "mobile-content-v1:" + $0 } ?? "mobile-v1", packNameSnapshot: value.pack,
                 levelNameSnapshot: value.title ?? value.level, levelNumberSnapshot: index + 1)
         }
     }
 
     public static func mobileEntry(_ value: LevelPlaylistEntry) -> MobileFavourites.Entry {
-        .init(pack: value.identity.packID, level: value.identity.levelID, title: value.levelNameSnapshot)
+        .init(pack: value.identity.packID, level: value.identity.levelID, title: value.levelNameSnapshot,
+            sourceFingerprint: value.sourceRevision.hasPrefix("mobile-content-v1:")
+                ? String(value.sourceRevision.dropFirst("mobile-content-v1:".count)) : nil)
     }
 }

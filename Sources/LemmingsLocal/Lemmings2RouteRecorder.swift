@@ -19,6 +19,9 @@ enum Lemmings2RouteRecorder {
             case let .assign(slot, lemming):
                 guard skills.indices.contains(slot) else { return nil }
                 event = .assign(skill: skills[slot].rawValue, lemming: lemming)
+            case let .bonusSkill(slot):
+                guard skills.indices.contains(slot) else { return nil }
+                event = .bonusSkill(skill: skills[slot].rawValue)
             case let .aim(x, y, held): event = .aim(x: x, y: y, held: held)
             case let .fan(x, y, active): event = .fan(x: x, y: y, active: active)
             case .releasePointer: event = .releasePointer

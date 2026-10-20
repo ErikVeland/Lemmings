@@ -1,6 +1,7 @@
 import Foundation
 import CoreGraphics
 import ImageIO
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -11,7 +12,9 @@ import NxlvKit
         return .invalidTargets
     }
     @MainActor static func main() async throws {
+        let muteSetting = CommandLine.arguments.last == "--mute-setting"
         let tableResult = ["--table-result", "--book-result"].contains(CommandLine.arguments.last ?? "")
+        let extraSkill = CommandLine.arguments.last == "--extra-skill"
         let roundedHUD = CommandLine.arguments.last == "--rounded-hud"
         let bookHome = CommandLine.arguments.last == "--book-home"
         let support = CommandLine.arguments.last == "--support"
@@ -31,7 +34,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -39,7 +42,9 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if muteSetting { try checkMuteSetting(typography: typography, output: output); return }
         if tableResult { try checkTableResult(typography: typography, content: content, output: output); return }
+        if extraSkill { try checkExtraSkill(typography: typography, output: output); return }
         if roundedHUD { try checkRoundedHUD(typography: typography, content: content, output: output); return }
         if bookHome { try checkBookHome(typography: typography, content: content, output: output); return }
         if support { try checkSupport(typography: typography, output: output); return }
@@ -250,21 +255,21 @@ import NxlvKit
         let level = ArcadeLevel(id: "fun-1", title: "Just Dig!", game: "Lemmings", rules: "DOS", total: 10, required: 5, conditions: conditions)
         let direct = records.record(.init(profileID: profiles.activeID, level: level, saved: 10, didWin: true, skills: [:], seconds: 12.34, telemetry: .init(released: 10)))
         let assisted = records.record(.init(profileID: profiles.activeID, level: level, saved: 8, didWin: true, skills: ["digger": 1], seconds: 18, assisted: true, telemetry: .init(released: 10, rewindCount: 1)))
-        guard direct != nil, assisted != nil else { throw Failure.invalidTargets }
+        guard direct != nil, assisted != nil else { throw invalidTargets(line: #line) }
         let campaign = MobileCareerArt.campaignProgress(records: records, profileID: profiles.activeID,
             levelCounts: [ClassicTitle.lemmings.rawValue: 120])
         guard campaign.isUnlocked(.firstRescue), !campaign.isUnlocked(.lemmingsComplete),
               MobileCareerArt.campaignProgress(records: records, profileID: "player-1",
-                levelCounts: [ClassicTitle.lemmings.rawValue: 120]).unlocked.isEmpty else { throw Failure.invalidTargets }
+                levelCounts: [ClassicTitle.lemmings.rawValue: 120]).unlocked.isEmpty else { throw invalidTargets(line: #line) }
         let fanConditions = TrolleyConditions(gameID: "fan", packID: "community", levelID: "fan-level-0",
             levelFingerprint: String(repeating: "b", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
             population: 10, rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
         let fanLevel = ArcadeLevel(id: "fan-level-0", title: "A long fan-made level title that wraps", game: "Community", rules: "DOS", total: 10, required: 5, conditions: fanConditions)
         var mixed = records
         _ = mixed.record(.init(profileID: profiles.activeID, level: fanLevel, saved: 8, didWin: true, skills: [:], seconds: 15))
-        let fanRecord = MobileCareerArt.recordLevelPage("direct|" + fanLevel.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")
-        let officialRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")
-        guard fanRecord.subtitle.contains("Fan-made"), officialRecord.subtitle.contains("Official") else { throw Failure.invalidTargets }
+        let fanRecord = MobileCareerArt.recordLevelPage("direct|" + fanLevel.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)
+        let officialRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)
+        guard fanRecord.subtitle.contains("Fan-made"), officialRecord.subtitle.contains("Official") else { throw invalidTargets(line: #line) }
         typealias Action = GameFrontEnd.Action
         let communityRows: [Action] = [.init("rankCategory", "Career stars"), .init("rankShare", "Share records", selected: true)]
         let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
@@ -276,8 +281,11 @@ import NxlvKit
                                                            profileName: "AB", subtitle: "", replayAvailable: true)
         let recordCard = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID,
             profileName: "AB", subtitle: "", replayAvailable: true, hintAvailable: true, playable: true, preview: true)
-        let hintCard = MobileCareerArt.recordHintPage(level: level.title, title: "Dig straight down",
-            body: "Give the first lemming the digger.\nThe crowd follows it into the tunnel.", stage: 1, count: 3,
+        let hintDeck = LevelHintDeck(title: level.title, checked: true, stages: [
+            .init(title: "A gentle nudge", body: "Check the floor."),
+            .init(title: "Dig straight down", body: "Give the first lemming the digger.\nThe crowd follows it into the tunnel."),
+            .init(title: "Opening moves", body: "Study the checked example.")])
+        let hintCard = MobileCareerArt.recordHintPage(level: level.title, deck: hintDeck, stage: 1,
             solution: true, playable: true, preview: true)
         let savedSeats = MobileCareerArt.players(profiles, subtitle: "", canDelete: true, hasSavedHotSeats: true)
         // Progress is the one hub for records, awards, rankings and counts. Each child page returns to it.
@@ -290,7 +298,22 @@ import NxlvKit
               recordCard.footer.filter(\.primary).map(\.id) == ["recordPlay"], recordCard.stars == 3,
               hintCard.orderedFooter.map(\.id) == ["recordHintBack", "recordHintPrevious", "recordHintNext", "recordSolution", "recordPlay"],
               officialRecord.footer.map(\.id) == ["recordList"],
-              savedSeats.rows.suffix(2).map(\.id) == ["hotSeat", "seatSaved"] else { throw Failure.invalidTargets }
+              savedSeats.rows.suffix(2).map(\.id) == ["hotSeat", "seatSaved"] else {
+            let actual: [String: String] = [
+                "progress rows": String(describing: progress.rows.map(\.id)),
+                "progress footer": String(describing: progress.footer.map(\.id)),
+                "records footer": String(describing: MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id)),
+                "achievements footer": String(describing: MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id)),
+                "replay footer": String(describing: replayRecord.orderedFooter.map(\.id)),
+                "record footer": String(describing: recordCard.orderedFooter.map(\.id)),
+                "record primary": String(describing: recordCard.footer.filter(\.primary).map(\.id)),
+                "record stars": String(describing: recordCard.stars),
+                "hint footer": String(describing: hintCard.orderedFooter.map(\.id)),
+                "official footer": String(describing: officialRecord.footer.map(\.id)),
+                "saved seats": String(describing: savedSeats.rows.suffix(2).map(\.id))]
+            for key in actual.keys.sorted() { FileHandle.standardError.write(Data("Career \(key): \(actual[key]!)\n".utf8)) }
+            throw invalidTargets(line: #line)
+        }
         return [
             ("progress-empty", MobileCareerArt.progressPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("progress-earned", progress),
@@ -307,8 +330,8 @@ import NxlvKit
             ("records-fan", fanRecord),
             ("records-mixed", MobileCareerArt.recordsPage(records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-levels", MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
-            ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
-            ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)),
+            ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)),
             ("achievements-empty", MobileCareerArt.achievementsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", campaign: campaign)),
             ("rankings-loading", MobileCareerArt.rankings(community: true, subtitle: "", busy: true, status: "", rows: communityRows, connected: false, available: true)),

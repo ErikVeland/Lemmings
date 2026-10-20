@@ -97,7 +97,8 @@ public struct TrolleyPersonalRecords: Codable, Equatable, Sendable {
     public let achievements: Set<TrolleyAchievement>
 
     public init(attempts all: [TrolleyAttempt], starts: [TrolleyStart], profileID: String, comparisonID: String? = nil) {
-        let attempts = all.filter { $0.run.profileID == profileID && (comparisonID == nil || $0.comparisonID == comparisonID) }
+        let attempts = all.filter { $0.run.profileID == profileID
+            && (comparisonID == nil ? !$0.run.usedBonusSkill : $0.comparisonID == comparisonID) }
         bestSaved = attempts.map { $0.run.saved }.max()
         bestRescuePotential = attempts.filter { $0.maximum.isRescueTarget }.compactMap { $0.metrics.rescuePotential }.max()
         lowestAvoidableLosses = attempts.compactMap { $0.metrics.avoidableLosses }.min()
@@ -114,6 +115,7 @@ public struct TrolleyPersonalRecords: Codable, Equatable, Sendable {
         attemptsWithKnownAvoidableLosses = attempts.filter { $0.metrics.avoidableLosses != nil }.count
         totalMoralSurplus = attempts.reduce(0) { $0 + $1.metrics.moralSurplus }; self.attempts = attempts.count
         retriesAfterSuccessfulClears = starts.filter { $0.profileID == profileID && $0.kind == .retryAfterSuccess
+            && (comparisonID != nil || $0.conditions.bonusSkillID == nil)
             && (comparisonID == nil || $0.conditions.comparisonID(assisted: false) == comparisonID
                 || $0.conditions.comparisonID(assisted: true) == comparisonID) }.count
         skillUsage = attempts.reduce(into: [:]) { result, attempt in

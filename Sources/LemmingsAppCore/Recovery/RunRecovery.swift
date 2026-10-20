@@ -10,6 +10,8 @@ public struct RunRecovery: Codable, Sendable {
     public var hotSeatID: String? = nil
     public var fullQuest: Bool? = nil
     public var sequence: SequenceRunRecovery? = nil
+    /// Retained when rewind removes the grant from the surviving input branch.
+    public var extraSkillUse: ExtraSkillUse? = nil
     public var fanPackGraphics: Bool? = nil
     public var fanTextSteel: Bool? = nil
     public var fanLocalStyles: Bool? = nil
@@ -53,7 +55,7 @@ public struct RunRecovery: Codable, Sendable {
                 l2: L2RunRecovery? = nil, l3: L3RunRecovery? = nil, neo: NeoRunRecovery? = nil,
                 neoPackID: String? = nil, neoLevelID: String? = nil, neoPackName: String? = nil,
                 fan: FanRunRecovery? = nil, classicState: ClassicDOSSimulation? = nil,
-                sourcePath: String? = nil, savedAt: Date = Date()) {
+                sourcePath: String? = nil, savedAt: Date = Date(), extraSkillUse: ExtraSkillUse? = nil) {
         self.version = version; self.engine = engine; self.profileID = profileID; self.hotSeatID = hotSeatID
         self.fullQuest = fullQuest; self.fanPackGraphics = fanPackGraphics; self.fanTextSteel = fanTextSteel
         self.fanLocalStyles = fanLocalStyles; self.fanHolidayStyles = fanHolidayStyles; self.runID = runID
@@ -64,6 +66,7 @@ public struct RunRecovery: Codable, Sendable {
         self.scrollX = scrollX; self.scrollY = scrollY; self.l2 = l2; self.l3 = l3; self.neo = neo
         self.neoPackID = neoPackID; self.neoLevelID = neoLevelID; self.neoPackName = neoPackName
         self.fan = fan; self.classicState = classicState; self.sourcePath = sourcePath; self.savedAt = savedAt
+        self.extraSkillUse = extraSkillUse
     }
 
     public static let bundledEngine: String = engineFingerprint(resources: AppStorage.current().resources)
@@ -104,6 +107,54 @@ public struct RunRecovery: Codable, Sendable {
                     .allSatisfy({ !$0.isEmpty && $0.utf8.count <= 4096 }),
                   neo.state.tickCount == tick else { throw RunRecoveryError.invalid }
             try neo.validate()
+        }
+        let hasGrant = classicState?.bonusSkillUsed == true || neo?.state.bonusSkillUsed == true
+            || events.contains(where: { if case .bonusSkill = $0.action { return true }; return false })
+            || l2?.inputs.contains(where: { if case .bonusSkill = $0.action { return true }; return false }) == true
+            || l3?.inputs.contains(where: { $0.action == "bonusTool" }) == true
+            || neo?.inputs.contains(where: { if case .bonusSkill = $0.action { return true }; return false }) == true
+        guard !hasGrant || extraSkillUse != nil else { throw RunRecoveryError.invalid }
+        if let use = extraSkillUse {
+            guard use.attemptID == runID, use.originalConditions.isValid,
+                  use.originalConditions.levelFingerprint == levelFingerprint,
+                  use.conditions?.isValid == true, use.skill.utf8.count <= 128,
+                  use.existingLevelSkills.count <= 64,
+                  use.existingLevelSkills.allSatisfy({ !$0.isEmpty && $0.utf8.count <= 128 }) else {
+                throw RunRecoveryError.invalid
+            }
+            let gameID = use.originalConditions.gameID
+            if let l2 {
+                guard gameID == "lemmings2" else { throw RunRecoveryError.invalid }
+                let grants = l2.inputs.filter { if case .bonusSkill = $0.action { return true }; return false }
+                guard grants.count <= 1 else { throw RunRecoveryError.invalid }
+            } else if let l3 {
+                let grants = l3.inputs.filter { $0.action == "bonusTool" }
+                guard gameID == "lemmings3", grants.count <= 1,
+                      grants.allSatisfy({ input in
+                          input.tool.flatMap(Lemmings3Runtime.Tool.init(rawValue:))
+                              .map { String(describing: $0) == use.skill } == true
+                      }) else { throw RunRecoveryError.invalid }
+            } else if let neo {
+                let order = NeoLemmixSkill.allCases.filter { neo.initialState.configuration.skills[$0] != nil }
+                let grants = neo.inputs.compactMap { input -> Int? in
+                    if case let .bonusSkill(skill) = input.action { return skill }
+                    return nil
+                }
+                guard gameID == "neolemmix", neo.state.bonusSkill.map({ $0.rawValue == use.skill }) ?? true,
+                      grants.count <= 1, grants.allSatisfy({ order.indices.contains($0) && order[$0].rawValue == use.skill }) else {
+                    throw RunRecoveryError.invalid
+                }
+            } else {
+                guard !["lemmings2", "lemmings3", "neolemmix"].contains(gameID),
+                      classicState?.bonusSkill.map({ $0.rawValue == use.skill }) ?? true else {
+                    throw RunRecoveryError.invalid
+                }
+                let grants = events.compactMap { event -> ClassicSkill? in
+                    if case let .bonusSkill(skill) = event.action { return skill }
+                    return nil
+                }
+                guard grants.count <= 1, grants.allSatisfy({ $0.rawValue == use.skill }) else { throw RunRecoveryError.invalid }
+            }
         }
         return self
     }
@@ -490,6 +541,7 @@ public struct NeoRunRecovery: Codable, Sendable {
     public struct Input: Codable, Sendable {
         public enum Action: Codable, Sendable {
             case assign(skill: Int, lemming: Int)
+            case bonusSkill(skill: Int)
             case rate(delta: Int)
             case nuke
         }
@@ -523,8 +575,10 @@ public struct L3RunRecovery: Codable, Sendable {
         public let action: String
         public let lemming: Int?
         public let direction: String?
-        public init(tick: Int, action: String, lemming: Int?, direction: String?) {
+        public let tool: Int?
+        public init(tick: Int, action: String, lemming: Int?, direction: String?, tool: Int? = nil) {
             self.tick = tick; self.action = action; self.lemming = lemming; self.direction = direction
+            self.tool = tool
         }
     }
     public let progress: Lemmings3ClassicCampaign.Progress
@@ -557,6 +611,9 @@ public struct L3RunRecovery: Codable, Sendable {
         let game = try Self.replay(initial: replayInitial, inputs: inputs, through: checkpoint.tick)
         guard game.tick == checkpoint.tick, !game.isComplete,
               Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
+        if let use = checkpoint.extraSkillUse, let tool = game.bonusTool {
+            guard String(describing: tool) == use.skill else { throw RunRecoveryError.invalid }
+        }
         return RestoredRun(initial: replayInitial, game: game)
     }
     /**
@@ -703,6 +760,9 @@ public struct L3RunRecovery: Codable, Sendable {
                           creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age] { number(value) }
         }
         for trap in c.traps.sorted(by: { $0.id < $1.id }) { number(trap.id); number(game.trapFrame(id: trap.id)) }
+        if let tool = game.bonusTool {
+            text("bonus-skill-v1"); number(tool.rawValue); number(game.bonusToolLemmingID ?? -1)
+        }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
     }
     @discardableResult public static func apply(_ input: Input, to game: inout Lemmings3Runtime) -> Bool {
@@ -712,6 +772,11 @@ public struct L3RunRecovery: Codable, Sendable {
             game.abort(); return true
         }
         guard let id = input.lemming else { return false }
+        if input.action == "bonusTool" {
+            guard input.direction == nil, let tool = input.tool,
+                  game.lemmings.first(where: { $0.id == id })?.tool?.rawValue == tool else { return false }
+            return game.grantBonusTool(to: id)
+        }
         if input.action == "use" {
             guard let raw = input.direction, let direction = Lemmings3Runtime.Direction(rawValue: raw) else { return false }
             return game.useTool(to: id, direction: direction)
@@ -739,7 +804,11 @@ public enum RecoveryValueEncoding {
         if let flag = value as? Bool { return Data([flag ? 1 : 0]) }
         let mirror = Mirror(reflecting: value)
         guard mirror.displayStyle != .class else { throw RunRecoveryError.invalid }
-        var parts = try mirror.children.map { child -> Data in
+        let children = mirror.children.filter { child in
+            !(value is NeoLemmixSimulation && child.label == "bonusSkill"
+                && Mirror(reflecting: child.value).children.isEmpty)
+        }
+        var parts = try children.map { child -> Data in
             var bytes = Data((child.label ?? "").utf8)
             bytes.append(0); bytes.append(try data(child.value)); return bytes
         }
@@ -773,6 +842,7 @@ public struct L2RunRecovery: Codable, Sendable {
     public struct Input: Codable, Sendable {
         public enum Action: Codable, Equatable, Sendable {
             case assign(slot: Int, lemming: Int)
+            case bonusSkill(slot: Int)
             case fan(x: Int, y: Int, active: Bool)
             case aim(x: Int, y: Int, held: Bool)
             case releasePointer
@@ -794,6 +864,7 @@ public struct L2RunRecovery: Codable, Sendable {
         var digest = SHA256()
         for child in Mirror(reflecting: game).children {
             guard child.label != "soundEvents", includeConfiguration || child.label != "configuration" else { continue }
+            if child.label == "bonusSkillSlot", game.bonusSkillSlot == nil { continue }
             digest.update(data: Data((child.label ?? "").utf8))
             digest.update(data: try RecoveryValueEncoding.data(child.value))
         }
@@ -810,6 +881,7 @@ public struct L2RunRecovery: Codable, Sendable {
         guard game.tick == input.tick, !game.isComplete else { throw RunRecoveryError.invalid }
         switch input.action {
         case let .assign(slot, id): guard game.assign(slot: slot, to: id) else { throw RunRecoveryError.invalid }
+        case let .bonusSkill(slot): guard game.grantBonusSkill(slot: slot) else { throw RunRecoveryError.invalid }
         case let .fan(x, y, active):
             guard absSafe(x), absSafe(y) else { throw RunRecoveryError.invalid }
             game.setFan(x: x, y: y, active: active)
@@ -826,6 +898,12 @@ public struct L2RunRecovery: Codable, Sendable {
         _ = try checkpoint.validated()
         guard try Self.stateHash(initial, includeConfiguration: true) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
         var game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        if let use = checkpoint.extraSkillUse, let slot = game.bonusSkillSlot {
+            guard game.configuration.skills.indices.contains(slot),
+                  game.configuration.skills[slot].name.lowercased().replacingOccurrences(of: " ", with: "_") == use.skill else {
+                throw RunRecoveryError.invalid
+            }
+        }
         var beforeNuke: Lemmings2Runtime?, beforeNukeCount = 0
         for (index, input) in inputs.enumerated() where input.tick <= checkpoint.tick {
             if case .nuke = input.action {

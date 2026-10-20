@@ -7,6 +7,13 @@ import NxlvKit
     var hotSeatGhosts: HotSeatGhostPlayback? { get set }
 }
 
+extension HotSeatGhostRendering {
+    func visibleHotSeatFrames(at tick: Int) -> [HotSeatGhostPlayback.Frame] {
+        guard ArcadeStore.shared.hotSeatGhostsVisible else { return [] }
+        return hotSeatGhosts?.frames(at: tick) ?? []
+    }
+}
+
 /// Reuses the shipped sprite silhouette without labels, effects or input targets.
 @MainActor final class ReplayGhostSprites {
     private var cache: [String: CGImage] = [:]

@@ -186,7 +186,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
   private var classicContent: NSView?
   private var sequelCompletion: [ClassicTitle: Int] = [:]
-  private let effectsWelcome = EffectsWelcome()
   private var settingsWindow: SettingsWindow?
   private var settings = ClassicSettings()
   private var settingsProfileID: String?
@@ -197,7 +196,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var progress = ModernCampaignProgress()
   private var achievements = ClassicAchievementProgress()
   private let achievementsWindow = AchievementsWindow()
-  private var arcadeLevel: ArcadeLevel?
+  private var arcadeBaseLevel: ArcadeLevel?
+  private var arcadeLevel: ArcadeLevel? {
+    get { arcadeBaseLevel.map { ExtraSkillMac.level($0, attemptID: arcadeRunID, profileID: arcadeProfileID) } }
+    set { arcadeBaseLevel = newValue }
+  }
   private var hintMap: CGImage?
   private var arcadeProfileID = ArcadeProfile.legacyID
   private var arcadeHotSeatID: String?
@@ -483,6 +486,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else { return }
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
+    checkpoint.extraSkillUse = ArcadeStore.shared.records.extraSkillUse(attemptID: arcadeRunID, profileID: arcadeProfileID)
     checkpoint.sequence = arcadeSequenceRecovery
     checkpoint.fullQuest = launchMode == .quest
     recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
@@ -615,6 +619,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       runMovie.discard()
       launchMode = checkpoint.fullQuest == true ? .quest : .singleTitle
       arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID; arcadeHotSeatID = checkpoint.hotSeatID
+      try ExtraSkillMac.restore(checkpoint, level: arcadeBaseLevel)
       PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
       syncPrecisionZoom()
       LevelCollections.record(currentCollectionEntry(), profileID: arcadeProfileID, attemptID: arcadeRunID)
@@ -877,27 +882,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func setExperiencePreset(_ enabled: Bool) {
     var updated = settings
     updated.applyExperiencePreset(modern: enabled)
-    SequelArtworkPreference.setEnabled(enabled)
     apply(updated)
   }
 
   private func presentLaunchPages() {
-    let needsPlayStyle = !UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
-    let next: @MainActor @Sendable () -> Void = { [weak self] in
+    EffectsWelcome.acknowledgeDefaults()
+    releaseWelcome.showIfNeeded(in: window, existingPlayer: wasExistingPlayer) { [weak self] in
       guard let self else { return }
-      self.releaseWelcome.showIfNeeded(in: self.window, existingPlayer: self.wasExistingPlayer) { [weak self] in
+      TelemetryConsentWindow.shared.showIfNeeded(in: self.window) { [weak self] in
         guard let self else { return }
-        TelemetryConsentWindow.shared.showIfNeeded(in: self.window) { [weak self] in
-          guard let self else { return }
-          MusicLibraryWindow.shared.showIfNeeded(in: self.window)
-        }
-      }
-    }
-    if !needsPlayStyle { next() }
-    else {
-      effectsWelcome.showIfNeeded(in: window) { [weak self] enabled in
-        self?.setExperiencePreset(enabled)
-        DispatchQueue.main.async(execute: next)
+        MusicLibraryWindow.shared.showIfNeeded(in: self.window)
       }
     }
   }
@@ -933,7 +927,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     appMenu.addItem(achievementsItem)
     let profiles = NSMenuItem(title: L10n.text("Player Profiles…"), action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
-    let cloudSaves = NSMenuItem(title: L10n.text("Cloud Saves…"), action: #selector(showCloudSaves), keyEquivalent: "")
+    let cloudSaves = NSMenuItem(title: L10n.text("Tester Sync…"), action: #selector(showCloudSaves), keyEquivalent: "")
     cloudSaves.target = self; appMenu.addItem(cloudSaves)
     let hotSeat = NSMenuItem(title: L10n.text("Hot Seat…"), action: #selector(showHotSeat), keyEquivalent: "")
     hotSeat.target = self; appMenu.addItem(hotSeat)
@@ -1312,6 +1306,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if reduceMotionChanged { updateLevelSelectionReducedMotion() }
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
+    speedControl.ridiculousEnabled = settings.ridiculousSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
     panel.counterStyle = settings.counterStyle
     playfield.reduceMotion = settings.reduceMotion
@@ -1396,6 +1391,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     GameAccessibility.interfaceSize = settings.interfaceSize
     previousDepth = settings.colorDepth
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
+    speedControl.ridiculousEnabled = settings.ridiculousSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
     playfield.reduceMotion = settings.reduceMotion
     playfield.staticHomeScreen = settings.staticHomeScreen
@@ -1938,6 +1934,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     window.isReleasedWhenClosed = false
     window.delegate = self
+    TelemetryDashboard.shared.onStartLevel = { [weak self] in self?.startInsightsLevel($0) }
     GameScreen.shared.gameWindow = window
     GameScreen.shared.onNavigate = { [weak self] in self?.cancelPendingLevelPreparation() }
     GameScreen.shared.onPresent = { [weak self] in
@@ -3140,7 +3137,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             levelName: level.title.isEmpty ? L10n.text("Level \(level.selection.level + 1)") : level.title,
             number: level.selection.level + 1,
             status: .complete,
-            isAvailable: level.isAvailable)
+            availability: level.isAvailable ? .available : .locked)
         }
         let pack = LevelCataloguePack(
           engine: .lemmings2,
@@ -3772,9 +3769,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
       store = try LevelPlaylistStore(profileID: profileID, won: learningWins(profileID: profileID))
       playlistStoreCache = (profileID, store)
     }
-    // Synced lessons belong to the profile's own store, as in saveCloudLearning.
+    store.onChange = nil
     if store.file == LevelPlaylistStore.fileURL(profileID: profileID) {
-      try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID))
+      let sessions: [String?] = [nil] + ArcadeStore.shared.libraryHotSeats.map { Optional($0.id) }
+      for sessionID in sessions {
+        try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID, sessionID: sessionID), hotSeatID: sessionID)
+        if let snapshot = GameProgressPreferences.journeySession(profileID: profileID, sessionID: sessionID) {
+          try store.importJourneySession(snapshot, hotSeatID: sessionID)
+        }
+      }
+    }
+    try store.ensureJourneySnapshots()
+    store.onChange = { [weak self, weak store] in
+      guard let self, let store else { return }
+      do { try self.saveCloudLearning(store) } catch { self.setStatus(error.localizedDescription) }
     }
     try saveCloudLearning(store)
     return store
@@ -3784,10 +3792,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let profileID = ArcadeStore.shared.records.profiles.first(where: {
       LevelPlaylistStore.fileURL(profileID: $0.id) == store.file
     })?.id else { return }
-    let before = GameProgressPreferences.learning(profileID: profileID)
-    guard GameProgressValue.mergeLearning(before, store.learningProgress) != before else { return }
-    try GameProgressPreferences.saveLearning(store.learningProgress, profileID: profileID)
-    ArcadeStore.shared.notifyProgressChanged()
+    var changed = false
+    for sessionID in [nil] + store.learningHotSeatIDs.map(Optional.some) {
+      let before = GameProgressPreferences.learning(profileID: profileID, sessionID: sessionID)
+      let progress = store.learningProgress(hotSeatID: sessionID)
+      guard GameProgressValue.mergeLearning(before, progress) != before else { continue }
+      try GameProgressPreferences.saveLearning(progress, profileID: profileID, sessionID: sessionID)
+      changed = true
+    }
+    for (scope, snapshot) in store.journeySessions {
+      let sessionID = scope == "solo" ? nil : scope
+      let before = GameProgressPreferences.journeySession(profileID: profileID, sessionID: sessionID)
+      try GameProgressPreferences.saveJourneySession(snapshot, profileID: profileID, sessionID: sessionID)
+      changed = changed || before != GameProgressPreferences.journeySession(profileID: profileID, sessionID: sessionID)
+    }
+    if changed { ArcadeStore.shared.notifyProgressChanged() }
   }
 
   private func playlistSourceRevision(
@@ -4014,6 +4033,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
         artworkKey: levelPreviewRequests[saved.run.currentEntry.identity]?.artworkKey)
     }
     items.append(LevelCoverFlowItem(
+      id: "playlist:short-games",
+      title: L10n.text("Short games"),
+      subtitle: L10n.text("Five-level openings"),
+      detail: L10n.text("Classic and The Tribes")))
+    items.append(LevelCoverFlowItem(
       id: "playlist:progression",
       title: L10n.text("Progression"),
       subtitle: L10n.text("Generate a learning sequence"),
@@ -4064,6 +4088,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func activatePlaylistLibraryItem(_ id: String) {
     switch id {
+    case "playlist:short-games":
+      presentShortGames()
     case "playlist:progression":
       presentProgressionPolicies()
     case "playlist:new":
@@ -4507,6 +4533,58 @@ let achievementProgressKey = "ClassicAchievementProgress"
     GameScreen.shared.present(page, owner: window, focus: field)
   }
 
+  private func shortGameEntries(_ sequence: ShortPlaySequence) -> [LevelPlaylistEntry]? {
+    sequence.entries { identity in
+      guard let current = levelCatalogue.resolve(identity),
+            liveLevelAvailability(current) != .unavailable,
+            let revision = playlistSourceRevision(for: identity) else { return nil }
+      return try? LevelPlaylistEntry(identity: identity, catalogueRevision: levelCatalogue.revision,
+        sourceRevision: revision, packNameSnapshot: current.packName,
+        levelNameSnapshot: current.levelName, levelNumberSnapshot: current.number)
+    }
+  }
+
+  private func presentShortGames() {
+    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("Five-level openings"))
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    let play = page.addPrimaryAction(L10n.text("Play")) { [weak self, weak carousel] in
+      guard let id = carousel?.selectedItem?.id else { return }
+      self?.startShortGame(id)
+    }
+    play.keyEquivalent = "\r"; play.keyEquivalentModifierMask = []
+    page.preferControllerControl(play)
+    carousel.onSelectionChanged = { [weak play] item in play?.isEnabled = item.isAvailable }
+    carousel.onStart = { [weak play] _ in play?.performClick(nil) }
+    let items = ShortPlayCatalogue.sequences.map { sequence in
+      let entries = shortGameEntries(sequence)
+      return LevelCoverFlowItem(id: sequence.id, title: sequence.title, subtitle: sequence.caption,
+        detail: !sequence.supportsCarriedSequence ? L10n.text("Reserve carry-over unavailable")
+          : entries == nil ? L10n.text("Matching game data unavailable") : L10n.text("5 levels"),
+        isAvailable: sequence.supportsCarriedSequence && entries != nil,
+        artworkKey: entries?.first.flatMap { levelPreviewRequests[$0.identity]?.artworkKey })
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(items: items, selectedID: nil,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    play.isEnabled = carousel.selectedItem?.isAvailable == true
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func startShortGame(_ id: String) {
+    guard let sequence = ShortPlayCatalogue.sequence(id: id), sequence.supportsCarriedSequence,
+          let entries = shortGameEntries(sequence) else { return }
+    do {
+      let store = try playlistStore()
+      let playlist = try LevelPlaylist(name: sequence.title, entries: entries)
+      let run = try sequence.run(playlist: playlist)
+      try store.add(playlist)
+      installActiveSequence(run, in: store)
+    } catch { GameScreen.shared.message(L10n.text("Sequence not started"), detail: error.localizedDescription) }
+  }
+
   private func startPlaylist(id: UUID, shuffled: Bool) {
     do {
       guard let playlist = try playlistStore().playlist(id: id),
@@ -4560,13 +4638,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var isLearningJourneyActive: Bool {
     sequencePlayingIdentity != nil
+      && sequencePlaylistStore?.activeRunHotSeatID == ArcadeStore.shared.hotSeatID
+      && playlistStoreCache?.profileID == ArcadeStore.shared.records.activeProfileID
+      && sequencePlaylistStore === playlistStoreCache?.store
       && sequencePlaylistStore?.activeRun?.source == .playlist(LearningJourney.playlistID)
   }
 
   private func sequenceEntryCanStart(_ entry: LevelPlaylistEntry, run: LevelSequenceRun) -> Bool {
     switch playlistResolution(for: entry) {
     case .available: return true
-    case .locked: return run.source == .playlist(LearningJourney.playlistID) && entry.identity.engine == .classic
+    case .locked:
+      return (run.source == .playlist(LearningJourney.playlistID) && entry.identity.engine == .classic)
+        || ShortPlayCatalogue.permitsLocked(entry, in: run)
     default: return false
     }
   }
@@ -4583,7 +4666,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         if existing.entries != playlist.entries { try store.update(playlist, select: false) }
       } else { try store.add(playlist, select: false) }
       let savedJourney = store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)
-      let progress = store.learningProgress
+      let sessionID = ArcadeStore.shared.hotSeatID
+      let owner = ArcadeStore.shared.records.activeProfileID
+      guard savedJourney != nil || (!ArcadeStore.shared.hotSeatIsActive && store.activeRun == nil && menuRecovery == nil) else { return }
+      let progress = store.learningProgress(hotSeatID: sessionID)
       let pending = journey.lessons.map(\.entry)
       let next = savedJourney?.run.currentEntry ?? pending.first
       let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
@@ -4593,16 +4679,25 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try? sequenceCheckpoint(for: $0.run, hotSeatID: $0.hotSeatID)
         } != nil,
         play: { [weak self] in
-          guard let self, self.playlistStoreCache?.store === store else { return }
+          guard let self, self.playlistStoreCache?.store === store,
+                ArcadeStore.shared.hotSeatID == sessionID,
+                ArcadeStore.shared.records.activeProfileID == owner else { return }
           if let savedJourney {
             if store.activeRun?.id == savedJourney.run.id,
                store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID {
               self.startActiveSequence()
             } else {
-              self.resumeSequenceSession(runID: savedJourney.run.id, hotSeatID: savedJourney.hotSeatID, store: store)
+              do {
+                try store.resumeRun(id: savedJourney.run.id)
+                self.sequencePlaylistStore = store
+                self.startActiveSequence()
+              } catch { self.setStatus(error.localizedDescription) }
             }
           } else { self.startLearningEntries(pending, in: store) }
-        }, revisit: { [weak self] in self?.presentLearningRevisit() })
+        }, revisit: { [weak self] in
+          guard ArcadeStore.shared.hotSeatID == sessionID, ArcadeStore.shared.records.activeProfileID == owner else { return }
+          self?.presentLearningRevisit()
+        })
       GameScreen.shared.present(page, owner: self.window)
     } catch { GameScreen.shared.message(L10n.text("Journey unavailable"), detail: error.localizedDescription) }
   }
@@ -4622,7 +4717,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func presentLearningRevisit(offset: Int = 0) {
     guard let journey = LearningJourneyLibrary.journey, let store = try? playlistStore() else { return }
-    let entries = store.learningProgress.revisit(in: journey)
+    let entries = store.learningProgress(hotSeatID: ArcadeStore.shared.hotSeatID).revisit(in: journey)
     let page = GameMenuPage(title: L10n.text("Come back to these"))
     for (index, entry) in entries.dropFirst(offset).prefix(5).enumerated() {
       page.addListAction(entry.levelNameSnapshot, at: index) { [weak self] in
@@ -4709,6 +4804,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let ownerProfileID = arcade.records.activeProfileID
     let originalHotSeatID = arcade.hotSeatID
     let originalRunID = store.activeRun?.id
+    let reusesJourneySession = run.source == .playlist(LearningJourney.playlistID)
+      && store.resumableLearningJourney(hotSeatID: originalHotSeatID) != nil
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
@@ -4748,10 +4845,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
               }
             }
           }
+          if reusesJourneySession {
+            l2Progress.merge(store.activeRunL2Progress, uniquingKeysWith: { _, current in current })
+          }
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
             resumeMusic: false)
-          if hotSeat {
+          if reusesJourneySession {
+            // Map and revisit actions retain this roster, turn and session identity.
+          } else if hotSeat {
             arcade.prepareHotSeat()
             guard arcade.startNewHotSeat() else {
               self.playMusicForCurrentLevel()
@@ -4773,6 +4875,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
       }
     }
+    if reusesJourneySession { begin(arcade.hotSeatIsActive, run); return }
     guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: L10n.text("Start a new session?"))
     page.setDetail(L10n.text("Your current session will stay saved."))
@@ -5417,6 +5520,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       else if let neo = session as? NeoLemmixSession { try neo.restore(checkpoint) }
       else { throw RunRecoveryError.invalid }
       arcadeRunID = checkpoint.runID
+      try ExtraSkillMac.restore(checkpoint, level: arcadeBaseLevel)
       runMovie.discard()
       PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
       syncPrecisionZoom()
@@ -5645,6 +5749,38 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let launchID = GameScreen.shared.beginLoading(owner: window)
     levelBrowserLaunchID = launchID
     return launchID
+  }
+
+  private func startInsightsLevel(_ target: TelemetryLevelTarget) {
+    guard allowNavigationAwayFromSequence() else { return }
+    cancelPendingLevelPreparation()
+    let discoveryTask = makeLevelBrowserDiscoveryTask()
+    levelBrowserDiscoveryTask = discoveryTask
+    let loading = GameScreen.shared.beginLoading(owner: window)
+    levelBrowserLoadTask = Task { [weak self] in
+      defer { GameScreen.shared.endLoading(loading) }
+      guard let discovery = await discoveryTask.value, !Task.isCancelled, let self else { return }
+      levelBrowserLoadTask = nil
+      levelBrowserDiscoveryTask = nil
+      rebuildLevelCatalogue(discovery)
+      let matches = levelBrowserRoutes.filter { _, route in
+        switch (target, route) {
+        case let (.classic(title, index), .classic(_, dataSet, levelIndex, fingerprint, _)):
+          return dataSet.title == title && levelIndex == index && fingerprint == nil
+        case let (.lemmings2(tribe, index), .lemmings2(_, selection, _, _)):
+          return selection.tribe == tribe && selection.level == index
+        case let (.lemmings3(tribe, index), .lemmings3(_, selection, _, _)):
+          return selection.tribe.rawValue - 1 == tribe && selection.level == index
+        default: return false
+        }
+      }
+      guard matches.count == 1, let identity = matches.first?.key else {
+        GameScreen.shared.message(L10n.text("Level unavailable"),
+          detail: L10n.text("Install the official game data for this level, then try again."))
+        return
+      }
+      startBrowserLevel(identity)
+    }
   }
 
   private func startBrowserLevel(
@@ -6098,15 +6234,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
         ? L10n.text("RESUME \(name) - \(players)") : L10n.text("CONTINUE \(name) - \(players)"),
         action: .resumeSequence))
     }
-    if menuRecovery != nil {
+    if let recovery = menuRecovery, recovery.hotSeatID == ArcadeStore.shared.hotSeatID,
+       recovery.profileID == ArcadeStore.shared.playingProfileID {
       let initials = menuRecovery.map {
         homeResumePlayers(hotSeatID: $0.hotSeatID, profileID: $0.profileID)
       } ?? L10n.text("LEM")
       items.append(HomeMenuItem(title: (savedSequence == nil ? L10n.text("RESUME - ") : L10n.text("RESUME LEVEL - ")) + initials, action: .resume))
     }
-    items.append(HomeMenuItem(
-      title: L10n.text("JOURNEY MAP  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED"),
-      action: .fullQuest))
+    if let store = try? playlistStore(),
+       let journey = store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) {
+      let progress = store.learningProgress(hotSeatID: journey.hotSeatID)
+      items.append(HomeMenuItem(title: L10n.text("JOURNEY MAP  \(LearningJourneyLibrary.journey.map { progress.solvedCount(in: $0) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED"), action: .fullQuest))
+    } else if !ArcadeStore.shared.hotSeatIsActive, savedSequence == nil, menuRecovery == nil,
+              (try? playlistStore().activeRun) == nil {
+      items.append(HomeMenuItem(title: L10n.text("START JOURNEY"), action: .fullQuest))
+    }
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : homeContentRow($0), action: .browse($0))
     }
@@ -7111,6 +7253,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let index = flow.currentLevelIndex, index < campaign.levels.count else { return nil }
       return campaign.levels[index].level.title.trimmingCharacters(in: .whitespaces)
     }
+    if let index = flow.currentLevelIndex, let campaign, campaign.levels.indices.contains(index) {
+      lines += AmigaVersusCampaign.controllerRequirementLines(rank: campaign.levels[index].rank)
+    }
     playfield.overlayTitle = title ?? L10n.text("Level")
     // A hot seat changes hands between levels, so the briefing has to say who is
     // holding the mouse before the level starts, not after the result. Solo play
@@ -7705,7 +7850,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let data = try? progress.encoded() {
       UserDefaults.standard.set(data, forKey: ArcadeStore.shared.progressKey(progressKey))
     }
-    guard session.didWin,
+    guard session.didWin, arcadeLevel?.conditions?.bonusSkillID == nil,
       dataSets.indices.contains(gamePicker.indexOfSelectedItem),
       let title = dataSets[gamePicker.indexOfSelectedItem].set.title,
       let campaign
@@ -8346,11 +8491,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func togglePrecisionZoom(_ kind: PrecisionZoomKind) {
     guard phase == .playing, session?.isComplete == false else { return }
+    gameplayKeyboard?.revealRewards()
     let wallet = PrecisionZoomController.shared
     guard wallet.toggle(kind) else {
-      setStatus(wallet.storageError ?? (kind == .zoom
-        ? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
-        : L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.")))
+      if kind == .superzoom {
+        setStatus(wallet.storageError ?? L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels."))
+      }
       return
     }
     syncPrecisionZoom()
@@ -8360,9 +8506,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard phase == .playing, session?.isComplete == false else { return }
     let wallet = PrecisionZoomController.shared
     switch wallet.applyScroll(action) {
-    case .changed: syncPrecisionZoom(at: point)
-    case .unavailable:
-      setStatus(wallet.storageError ?? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars."))
+    case .changed: gameplayKeyboard?.revealRewards(); syncPrecisionZoom(at: point)
+    case .unavailable: break
     case .unchanged: break
     }
   }
@@ -8371,10 +8516,54 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let wallet = PrecisionZoomController.shared
     playfield.setPrecisionZoom(wallet.active != nil, at: point)
     speedControl.bulletTimeActive = wallet.active == .superzoom
-    playfield.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
-      superzoom: wallet.remaining(.superzoom),
+    playfield.precisionStatus = PrecisionZoomStatus(superzoom: wallet.remainingSuperzoom(),
             skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
+            extraSkills: ArcadeStore.shared.records.extraSkills(profileID: arcadeProfileID).available,
+            bonusSkillUsed: ArcadeStore.shared.records.extraSkillSpent(attemptID: arcadeRunID, profileID: arcadeProfileID) != nil,
             active: wallet.active, isEmpty: false)
+  }
+
+  private var extraSkillAvailable: Bool {
+    phase == .playing && session?.isComplete == false && playfield.precisionStatus.extraSkills > 0
+      && ArcadeStore.shared.records.extraSkillSpent(attemptID: arcadeRunID, profileID: arcadeProfileID) == nil
+      && session.map { session in session.skills.indices.contains { session.canGrantExtraSkill(at: $0) } } == true
+  }
+
+  private var extraSkillTitle: String {
+    if playfield.precisionStatus.bonusSkillUsed { return L10n.text("Extra skill used") }
+    return L10n.text("Extra skill (\(playfield.precisionStatus.extraSkills))")
+  }
+
+  private var extraSkillHelp: String {
+    L10n.text("Choose one extra use of a level skill. Earn one per ten distinct three-star levels without rewind or bonus skills. (⌘E)")
+  }
+
+  private func useExtraSkill() {
+    guard extraSkillAvailable, let session else { return }
+    let attemptID = arcadeRunID
+    let choices = session.skills.indices.filter { session.canGrantExtraSkill(at: $0) }.map {
+      ExtraSkillMac.Choice(id: $0, title: SkillVocabulary.title(session.skills[$0].name))
+    }
+    let resume = gameplayKeyboard?.pauseForHelp() ?? {}
+    ExtraSkillMac.choose(choices, selected: panel.selectedSkillIndex, owner: window, onDismiss: resume) { [weak self] index in
+      guard let self, self.arcadeRunID == attemptID else { return }
+      self.grantExtraSkill(at: index)
+    }
+  }
+
+  private func grantExtraSkill(at index: Int) {
+    guard extraSkillAvailable, let session, session.canGrantExtraSkill(at: index),
+          let conditions = arcadeLevel?.conditions else { return }
+    let skill = TrolleyCapture.skillKey(session.skills[index].name)
+    guard ArcadeStore.shared.spendExtraSkill(attemptID: arcadeRunID, profileID: arcadeProfileID,
+        skill: skill, conditions: conditions) else {
+      setStatus(ArcadeStore.shared.storageError ?? L10n.text("Extra skill unavailable")); return
+    }
+    guard session.grantExtraSkill(at: index) else { return }
+    syncPrecisionZoom(); gameplayKeyboard?.revealRewards()
+    setStatus(L10n.text("+1 \(SkillVocabulary.title(session.skills[index].name))"))
+    updateStatus(); saveRunCheckpoint(immediately: true, waitForDisk: false)
+    playfield.needsDisplay = true; panel.needsDisplay = true
   }
 
   private func setZoom(_ value: Double) {
@@ -8767,6 +8956,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.speedControl = speedControl
     keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
+    keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
+    keyboard.extraSkillTitle = { [weak self] in self?.extraSkillTitle ?? L10n.text("Extra skill") }
+    keyboard.extraSkillHelp = { [weak self] in self?.extraSkillHelp ?? "" }
+    keyboard.extraSkillAvailable = { [weak self] in self?.extraSkillAvailable ?? false }
     speedControl.onMusicPitchChange = { [weak self] cents in
       self?.music.setSpeedPitch(cents)
       self?.soundtrack.setSpeedPitch(cents)
@@ -8835,6 +9028,30 @@ let achievementProgressKey = "ClassicAchievementProgress"
        KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results"))]
     }
     keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: false, nuke: true) }
+    keyboard.inspectionAvailable = { [weak self] in
+      guard let self else { return false }
+      return self.phase == .playing && self.isPaused && self.session is ClassicSession
+        && !self.playfield.startCountdown.isActive
+    }
+    playfield.inspectionSelectionAvailable = keyboard.inspectionAvailable
+    keyboard.inspectionHoverID = { [weak self] in self?.playfield.inspectionPointerID }
+    keyboard.inspectionHoverRevision = { [weak self] in
+      guard let self, let classic = self.session as? ClassicSession else { return "" }
+      return "\(self.arcadeRunID):\(classic.currentTick):\(classic.skills.map(\.count)):\(classic.undoCount)"
+    }
+    keyboard.inspectionHoverSnapshot = { [weak self] in
+      guard let classic = self?.session as? ClassicSession,
+            let commands = try? classic.recoveryEvents.map(LeaderboardActionReplay.Command.classic) else { return nil }
+      return try? LemmingInspection(initial: .classic(classic.initialSimulation), current: .classic(classic.simulation), commands: commands)
+    }
+    keyboard.inspectLemmings = { [weak self] in
+      guard let self, self.phase == .playing, self.isPaused,
+            !self.playfield.startCountdown.isActive, let classic = self.session as? ClassicSession,
+            let commands = try? classic.recoveryEvents.map(LeaderboardActionReplay.Command.classic),
+            let snapshot = try? LemmingInspection(initial: .classic(classic.initialSimulation),
+                current: .classic(classic.simulation), commands: commands) else { return }
+      GameScreen.shared.present(LemmingInspectionPage(snapshot: snapshot, selectedID: self.playfield.inspectionPointerID), owner: self.window)
+    }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
       let wasPaused = self.isPaused
@@ -8850,6 +9067,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self?.settings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
     }
     keyboard.showSongInfo = { [weak self] in self?.settings.showSongInfo ?? true }
+    keyboard.navigationArtworkOpacityChanged = { [weak self] in self?.playfield.precisionStatusOpacity = $0 }
+    keyboard.rewardDisplayArea = { [weak self] in
+      guard let self, let root = self.window.contentView else { return nil }
+      if self.tubeIsActive {
+        let badge = self.playfield.rewardBadgeRect
+        guard let first = self.crtView.viewPoint(fromSource: badge.origin),
+              let last = self.crtView.viewPoint(fromSource: CGPoint(x: badge.maxX, y: badge.maxY)) else { return nil }
+        return root.convert(CGRect(x: min(first.x, last.x), y: min(first.y, last.y),
+          width: abs(last.x - first.x), height: abs(last.y - first.y)), from: self.crtView)
+      }
+      return root.convert(self.playfield.rewardBadgeRect, from: self.playfield)
+    }
     keyboard.fadeMenuButton = { [weak self] in self?.settings.fadeMenuButton ?? true }
     keyboard.navigationAvailable = { [weak self] in
       guard let self else { return false }

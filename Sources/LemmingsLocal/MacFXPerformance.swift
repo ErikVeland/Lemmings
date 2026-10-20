@@ -34,13 +34,22 @@ import NxlvKit
         let pressure: FXQuality
         switch process.thermalState {
         case .serious, .critical: pressure = .minimal
-        case .fair: pressure = .balanced
+        case .fair: pressure = budget.profile.prefersFullDesktopEffects && !process.isLowPowerModeEnabled ? .full : .balanced
         case .nominal: pressure = process.isLowPowerModeEnabled ? .balanced : .full
         @unknown default: pressure = .minimal
         }
+        let sharedResources = DeviceEffectPressure.shared.snapshot()
+        let resources: DeviceEffectResources
+        if budget.profile.prefersFullDesktopEffects {
+            // Mild warmth and routine timing do not constrain M-series desktop effects.
+            let thermal = process.thermalState == .critical ? 3 : process.thermalState == .serious ? 2 : 0
+            resources = DeviceEffectResources(physicalMemory: process.physicalMemory, processorCount: process.processorCount)
+                .underPressure(thermalLevel: thermal, lowPower: process.isLowPowerModeEnabled,
+                    memoryPressure: sharedResources.maximumOverlayPixels <= 262_144)
+        } else { resources = sharedResources }
         budget.setPressure(ceiling: pressure,
                            framesPerSecond: min(displayFramesPerSecond, process.isLowPowerModeEnabled ? 30 : 60), now: now,
-                           resources: DeviceEffectPressure.shared.snapshot())
+                           resources: resources)
     }
     func configureDisplay(_ screen: NSScreen) {
         let rate = Double(max(1, min(60, screen.maximumFramesPerSecond)))

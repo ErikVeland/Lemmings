@@ -5,10 +5,8 @@ import LemmingsMobileCore
 /// The information pages share their bitmap layout with the headless capture tool.
 public enum MobileInformationArt {
     public static func effectsWelcome() -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Choose your play style"), details: [L10n.text("Modern"), L10n.text("Aiming aids"), L10n.text("Variable speed"),
-                                                        L10n.text("Old school"), L10n.text("Original inputs"), L10n.text("Classic effects")],
-              footer: [.init("welcomeOriginal", L10n.text("Old school")), .init("welcomeModern", L10n.text("Modern"), primary: true)])
-        page.detailHeadings = [0, 3]
+        var page = GameFrontEnd.Page(title: L10n.text("Choose presentation"),
+              footer: [.init("welcomeOriginal", L10n.text("Original")), .init("welcomeModern", L10n.text("Modern"), primary: true)])
         page.backActionID = "welcomeOriginal"
         return page
     }

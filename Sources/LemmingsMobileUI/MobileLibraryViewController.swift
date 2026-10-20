@@ -17,7 +17,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case home, support, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
-        case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
+        case collections, shortGames, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -91,22 +91,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #endif
     let libraryCloudTransport = AppleCloudLibraryTransport()
     lazy var libraryCloud = CloudLibrarySync(store: arcadeStore, transport: libraryCloudTransport)
-    var syncCode: String?
     var syncBackRoute: Route = .players
     /// Play Insights opens from Progress and from Settings > Privacy; Back returns to its source.
     var insightsBackID = "settingsGroup.privacy"
     /// Progression and Shuffle all open from Playlists as well as from Journey and the fan library.
     var progressionBackID = "journey"
     var shuffleBackID = "fanBack"
+    var shortGamesEntries: [MobileFavourites.Entry]?
+    var shortGamesSelection = "classic"
+    var shortGamesPreparing = false
     var savedSeatsBackID = "hotSeat"
     /// The open record card's artwork, hints and catalogue location.
     var recordDetail: MobileRecordDetail?
-    var syncDraft: String?
-    var syncPassword: String?
     var syncMessage = ""
     var syncBusy = false
-    var importingSyncKey = false
-    var syncRecoveryExport: URL?
     #if os(tvOS)
     var tvBackupDraft: TVSaveBackup?
     #endif
@@ -177,6 +175,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         if hotSeat == nil, let pack {
             all.formUnion(GameProgressPreferences.completed(pack: pack, profileID: profiles.activeID))
+        }
+        if let fan = library as? ClassicFanMobileLibrary, pack == fan.catalogueID {
+            let passed = GameProgressPreferences.fanLevels(profileID: profiles.activeID, sessionID: hotSeat?.id)
+            let previous = all
+            all.formUnion(fan.entries.indices.filter {
+                passed.contains(GameProgressPreferences.fanIdentifier(pack: fan.pack.url, label: fan.entries[$0].label))
+            })
+            if all != previous {
+                defaults.set(all.sorted(), forKey: progressKey(for: pack, fallback: fan.displayName))
+            }
         }
         return all
     }
@@ -250,10 +258,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         searchField.frame = CGRect(x: -100, y: -100, width: 10, height: 10)
         searchField.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            if self.route == .cloudSaves, self.syncPassword != nil {
-                self.syncPassword = String((self.searchField.text ?? "").filter { !$0.isNewline }.prefix(CloudSyncArt.passwordMaximum))
-            } else if self.route == .cloudSaves, self.syncDraft != nil { self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12)) }
-            else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
+            if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
             else { self.searchQuery = self.searchField.text ?? "" }
             self.rebuild()
         }, for: .editingChanged)
@@ -502,10 +507,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if catalogue != nil, let run = playlists.run {
                 resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
             }
-            if let saved = pendingCheckpoint, !checkpointResumesLearningRun(saved) {
-                resume.append(checkpointMatchesSession(saved)
-                    ? .init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))"))
-                    : .init("seatOther", otherSessionTitle(for: saved)))
+            if let saved = pendingCheckpoint, checkpointMatchesSession(saved), !checkpointResumesLearningRun(saved) {
+                resume.append(.init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))")))
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
                 let packs = catalogue?.packs(in: family) ?? []
@@ -528,7 +531,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let homeSubtitle = subtitle
             #endif
             canvas.page = MobileHomeArt.page(resume: resume,
-                journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
+                journey: resumableLearningJourney != nil ? .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil)
+                    : canStartJourney ? .init("journey", L10n.text("Start journey"), enabled: catalogue != nil && journey != nil) : nil,
                 families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
             canvas.preview = nil
         case .support:
@@ -562,11 +566,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let rank = library is MobileJourneyLibrary ? library.levels : library.levels.filter { $0.rank == level.rank }
             let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
             let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
-            let stats: [String] = selectedPreview.map {
+            var stats: [String] = selectedPreview.map {
                 let s = $0.snapshot
                 return [L10n.text("\(s.total) Lemmings   Save \(s.required)"),
                         s.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
             } ?? []
+            if let requirement = AmigaVersusCampaign.controllerRequirement(rank: level.rank) {
+                stats.append(requirement)
+            }
             canvas.page = .init(title: level.title,
                                 subtitle: level.selectionSubtitle(rankCount: rank.count, status: subtitle),
                                 details: stats,
@@ -586,6 +593,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
         case .journey:
             canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
+        case .shortGames:
+            canvas.page = shortGamesPage(subtitle: subtitle); canvas.preview = nil
         case .progression:
             canvas.page = progressionPage(subtitle: subtitle); canvas.preview = nil
         case .techniques:
@@ -617,13 +626,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .hotSeats:
             canvas.page = savedHotSeatsPage(subtitle: subtitle); canvas.preview = nil
         case .cloudSaves:
-            canvas.page = CloudSyncArt.page(status: libraryCloud.status, providers: libraryCloud.providerNames,
-                enabled: libraryCloud.enabled, busy: syncBusy || libraryCloud.state == .syncing,
-                code: syncCode, draft: syncDraft, password: syncPassword, message: syncMessage); canvas.preview = nil
-            #if os(tvOS)
-            canvas.page = TVSharedMenuArt.cloud(canvas.page, restoring: tvBackupDraft != nil,
-                hasCode: syncCode != nil, enteringCode: syncDraft != nil || syncPassword != nil, busy: syncBusy)
-            #endif
+            canvas.page = CloudSyncArt.page(testerEnabled: libraryCloud.testerSyncEnabled, busy: syncBusy, message: syncMessage, status: libraryCloud.status); canvas.preview = nil
         case .progress:
             canvas.page = progressPage(subtitle: subtitle); canvas.preview = nil
         case .records:
@@ -702,7 +705,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func navigate(_ next: Route) {
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
-        if route == .cloudSaves && next != .cloudSaves { endSyncPassword() }
         confirmingRecordsReset = false
         #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.
@@ -1104,11 +1106,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     #if os(iOS)
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if route == .cloudSaves {
-            if importingSyncKey, let source = urls.first { importingSyncKey = false; importCloudRecoveryKey(source) }
-            if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
-            return
-        }
         guard let source = urls.first else { return }
         receiveGameData(source)
     }
@@ -1135,12 +1132,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
         }
     }
-    #if os(iOS)
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        importingSyncKey = false
-        if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
-    }
-    #endif
     func loadCheckpoint() {
         pendingCheckpoint = nil
         guard let checkpointStore else { return }
@@ -1216,7 +1207,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 if library is MobileJourneyLibrary {
                     var saved = learning
                     try saved.select(index)
-                    try learningStorage.save(saved, name: "learning")
+                    try saveLearningState(saved)
                 }
                 presentPreparedLevel(index, checkpoint: matching, library: library,
                                      checkpointStore: checkpointStore, content: prepared.content)
@@ -1270,6 +1261,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let ownerID = checkpoint?.owner ?? hotSeat?.turn ?? profiles.activeID
             let recordLevel = mobileArcadeLevel(session: content.session, summary: content.summary,
                 pack: favouriteIdentity(index)?.pack ?? library.displayName)
+            if checkpoint != nil, let use = checkpoint?.extraSkillUse
+                ?? arcadeStore.records.extraSkillUse(attemptID: attemptID, profileID: ownerID) {
+                guard use.attemptID == attemptID, use.originalConditions == recordLevel.conditions,
+                      content.session.retainExtraSkillUse(use.skill),
+                      arcadeStore.recoverExtraSkillUse(use, profileID: ownerID) else {
+                    throw MobileSessionError.invalidCheckpoint
+                }
+            }
             if !inRun, library.levels.indices.contains(index + 1), arcadeStore.records.levelSkips(profileID: ownerID).available > 0 {
                 next.onSkipLevel = { [weak self] in self?.arcadeStore.spendLevelSkip(on: recordLevel, profileID: ownerID) ?? false }
             }
@@ -1280,6 +1279,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                         arcadeStore.storageError ?? L10n.text("The attempt was not saved.")])
                 }
             }
+            next.onExtraSkillBalance = { [weak self] in
+                guard let self, self.arcadeStore.records.extraSkillSpent(attemptID: attemptID, profileID: ownerID) == nil else { return 0 }
+                return self.arcadeStore.records.extraSkills(profileID: ownerID).available
+            }
+            next.onExtraSkillUse = { [weak self] in
+                self?.arcadeStore.records.extraSkillUse(attemptID: attemptID, profileID: ownerID)
+            }
+            next.onSpendExtraSkill = { [weak self, weak session = content.session] choice in
+                guard let self, let session, let conditions = recordLevel.conditions else { return false }
+                return self.arcadeStore.spendExtraSkill(attemptID: attemptID, profileID: ownerID,
+                    skill: choice.skillID, conditions: conditions, existingLevelSkills: session.existingLevelSkills)
+            }
             AnonymousTelemetry.shared.start(recordLevel, hotSeat: hotSeat != nil, attemptID: attemptID)
             let ghostSeat = hotSeat
             if let ghostSeat, let initial = content.session.actionReplayInitial {
@@ -1288,16 +1299,37 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in
                 guard let self, let session else { return ([], L10n.text("Records are not available.")) }
+                if snapshot.didWin {
+                    let origin: (ClassicFanMobileLibrary, Int)?
+                    if let fan = library as? ClassicFanMobileLibrary { origin = (fan, index) }
+                    else if let list = library as? MobileFavouritesLibrary, let source = list.resolvedOrigin(of: index),
+                            let fan = source.library as? ClassicFanMobileLibrary { origin = (fan, source.index) }
+                    else if let journey = library as? MobileJourneyLibrary, let source = try? journey.origin(of: index),
+                            let fan = source.library as? ClassicFanMobileLibrary { origin = (fan, source.index) }
+                    else { origin = nil }
+                    if let (fan, level) = origin, fan.entries.indices.contains(level) {
+                        GameProgressPreferences.saveFanLevel(pack: fan.pack.url, label: fan.entries[level].label,
+                            profileID: ownerID, sessionID: ghostSeat?.id)
+                    }
+                }
                 if inLearning {
                     do { try self.recordLearningResult(snapshot) }
                     catch { return ([], error.localizedDescription) }
                 }
+                let conditions = self.arcadeStore.records.extraSkillUse(attemptID: attemptID, profileID: ownerID)?.conditions
+                    ?? self.arcadeStore.records.trolley.starts.first {
+                    $0.id == attemptID && $0.profileID == ownerID
+                }?.conditions ?? recordLevel.conditions
+                let completedLevel = ArcadeLevel(id: recordLevel.id, title: recordLevel.title,
+                    game: recordLevel.game, rules: recordLevel.rules, total: recordLevel.total,
+                    required: recordLevel.required, conditions: conditions)
                 let run = MobileGameResult.capture(id: attemptID, profileID: ownerID,
-                    level: recordLevel, session: session)
+                    level: completedLevel, session: session)
                 return self.recordMobileCompletion(run, session: session, hotSeat: ghostSeat)
             }
             next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
+            next.onResultRewards = { [weak self] in self?.mobileResultRewards(runID: attemptID) ?? [] }
             next.onHandover = { [weak self] player in self?.handOver(to: player) ?? false }
             next.onCompleted = { [weak self] snapshot in
                 guard let self else { return }

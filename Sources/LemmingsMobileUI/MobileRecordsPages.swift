@@ -21,9 +21,13 @@ struct MobileRecordDetail {
 @MainActor private enum MobileResultAwardsCache {
     static var values: [UUID: (stars: Int, ornament: Bool)] = [:]
     static var achievements: [UUID: [MobileResultAchievementsArt.Item]] = [:]
+    static var rewards: [UUID: [ResultAwards.EarnedReward]] = [:]
 }
 
 extension MobileLibraryViewController {
+    func mobileResultRewards(runID: UUID) -> [ResultAwards.EarnedReward] {
+        MobileResultAwardsCache.rewards[runID] ?? []
+    }
     func mobileResultAwards(runID: UUID) -> (stars: Int, ornament: Bool) {
         if let saved = MobileResultAwardsCache.values[runID] { return saved }
         guard let run = arcadeStore.records.runs.first(where: { $0.id == runID }) else { return (0, false) }
@@ -70,8 +74,8 @@ extension MobileLibraryViewController {
         }
         let stage = min(max(0, detail.stage), deck.stages.count - 1)
         let level = arcadeStore.records.runs.last { recordKey($0) == key }?.level.title ?? deck.title
-        return MobileCareerArt.recordHintPage(level: level, title: deck.stages[stage].title, body: deck.stages[stage].body,
-            stage: stage, count: deck.stages.count, solution: detail.solution != nil && detail.initial != nil,
+        return MobileCareerArt.recordHintPage(level: level, deck: deck,
+            stage: stage, solution: detail.solution != nil && detail.initial != nil,
             playable: detail.pack != nil, preview: detail.preview != nil)
     }
     func showRecordPreview(_ key: String) {
@@ -96,7 +100,8 @@ extension MobileLibraryViewController {
         Task { [weak self] in
             let loader = MobileMenuPreviewLoader { try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }
             let preview = try? await loader.load(index, settings: settings)
-            let teaching = content == nil ? nil : await MobileTeachingLoader.shared.load(initial: initial, title: title, skills: skills)
+            let teaching = content == nil ? nil : await MobileTeachingLoader.shared.load(initial: initial, title: title, skills: skills,
+                chronicles: content?.session is Lemmings3MobileSession)
             guard let self, self.recordDetail?.key == key else { return }
             if let preview, let image = MobileBitmapRenderer.image(preview.frame) {
                 let source = preview.sourceRect
@@ -216,12 +221,15 @@ extension MobileLibraryViewController {
         let celebration = TrolleyCelebration(report: report, history: arcadeStore.records.trolley)
         if MobileResultAwardsCache.values.count > 128 {
             MobileResultAwardsCache.values.removeAll(); MobileResultAwardsCache.achievements.removeAll()
+            MobileResultAwardsCache.rewards.removeAll()
         }
         MobileResultAwardsCache.values[run.id] = (celebration.goals.stars,
             ResultAwards.ornament(report: report, celebration: celebration, history: arcadeStore.records.trolley))
         let campaignAfter = mobileCampaignProgress(profileID: run.profileID).unlocked
         var achievementInfo = MobileResultAchievementsArt.goals(celebration.goals)
-        achievementInfo += ResultAwards.earnedRewards(report: report, celebration: celebration).map { reward in
+        let rewards = ResultAwards.earnedRewards(report: report, celebration: celebration)
+        MobileResultAwardsCache.rewards[run.id] = rewards
+        achievementInfo += rewards.map { reward in
             let detail = TrolleyAchievement.allCases.first { $0.title == reward.title }
                 .map { ResultAwards.explanation(for: $0) } ?? reward.reason
             return .init(reward.title, detail: detail)
@@ -235,7 +243,8 @@ extension MobileLibraryViewController {
         if report.newRescueBest { details.insert(L10n.text("New rescue record"), at: 0) }
         if report.newSkillBest { details.append(L10n.text("New skill record")) }
         if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append(L10n.text("New time record  \(Int(run.seconds) / 60):\(String(format: "%05.2f", run.seconds.truncatingRemainder(dividingBy: 60)))")) }
-        if report.earnedLevelSkip { details.append(L10n.text("Level skip earned")) }
+        details += rewards.filter(\.isConsumable).map(\.title)
+        if run.usedBonusSkill { details.insert(L10n.text("Bonus skill used"), at: 0) }
         do {
             if let capture = try session?.actionCapture() {
                 arcadeStore.preserveActions(run: run, initial: capture.initial, final: capture.final, commands: capture.commands)

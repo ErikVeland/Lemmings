@@ -124,6 +124,13 @@ func save<T: Encodable>(_ value: T, name: String, saved: Int, released: Int, los
                    retainedReserves: reserves, ticks: ticks, completed: completed, didWin: won)
 }
 
+func runUnmodified(_ replay: ClassicDOSReplay, simulation: ClassicDOSSimulation) throws -> ClassicDOSReplayOutcome {
+    guard !replay.events.contains(where: { if case .bonusSkill = $0.action { return true }; return false }) else {
+        throw SequelDataError.invalid("Bonus skills cannot prove an original rescue maximum.")
+    }
+    return try ClassicDOSReplayPlayer.run(replay, simulation: simulation)
+}
+
 func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
     var bytes = Data(ClassicDOSReplayRecorder.stateHash(of: game).utf8)
     bytes.append(try compact(game.configuration.entrances))
@@ -181,6 +188,7 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                             guard trial.assign(skill, to: id) == .assigned else { return false }
                         case let .releaseRate(value): trial.setReleaseRate(value)
                         case .nuke: trial.beginNuke()
+                        case .bonusSkill: return false
                         }
                     }
                     return true
@@ -191,6 +199,7 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                         switch event.action {
                         case let .releaseRate(value): trial.setReleaseRate(value)
                         case .nuke: trial.beginNuke()
+                        case .bonusSkill: throw SequelDataError.invalid("Bonus skills cannot prove an original rescue maximum.")
                         case .assign: break
                         }
                     }
@@ -209,13 +218,13 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                 let candidate = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: level.title,
                     initialStateHash: initialHash,
                     initialLevelFingerprint: base.levelSourceFingerprint, events: events)
-                let outcome = try ClassicDOSReplayPlayer.run(candidate, simulation: base)
+                let outcome = try runUnmodified(candidate, simulation: base)
                 guard outcome.saved == trial.savedCount, outcome.stateHash == ClassicDOSReplayRecorder.stateHash(of: trial) else { throw SequelDataError.invalid("Replay is not deterministic") }
                 let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: level.title,
                     initialStateHash: initialHash,
                     initialLevelFingerprint: base.levelSourceFingerprint,
                     events: events, expected: outcome)
-                _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                _ = try runUnmodified(replay, simulation: base)
                 row.accept(try save(replay, name: "\(titleID)-\(index)", saved: outcome.saved,
                     released: outcome.released, lost: trial.lostCount, ticks: outcome.ticks, completed: true, won: outcome.didWin))
             }
@@ -231,19 +240,19 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                     throw SequelDataError.invalid("Published Classic witness hash changed.")
                 }
                 let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: url))
-                if !refreshOutcomes { _ = try ClassicDOSReplayPlayer.run(replay, simulation: base) }
+                if !refreshOutcomes { _ = try runUnmodified(replay, simulation: base) }
                 try attempt(replay.events)
             }
             if row.status != "VERIFIED", let bytes = cached,
                let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: bytes),
-               (try? ClassicDOSReplayPlayer.run(replay, simulation: base)) != nil {
+               (try? runUnmodified(replay, simulation: base)) != nil {
                 try attempt(replay.events)
             }
             if titleID == "lemmings", row.status != "VERIFIED" {
                 let name = String(format: "%@-%02d.json", entry.rank.lowercased(), entry.number)
                 let fixture = project.appendingPathComponent("Tests/ClassicDOSCompletionTests/Fixtures/\(name)")
                 let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: fixture))
-                _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                _ = try runUnmodified(replay, simulation: base)
                 try attempt(replay.events)
             }
             if titleID != "lemmings", row.status != "VERIFIED" {
@@ -251,7 +260,7 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                 let fixture = project.appendingPathComponent("Tests/ClassicFamilyCompletionTests/Fixtures/\(titleID)/\(name)")
                 if FileManager.default.fileExists(atPath: fixture.path) {
                     let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: fixture))
-                    _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                    _ = try runUnmodified(replay, simulation: base)
                     try attempt(replay.events)
                 }
             }
@@ -329,6 +338,9 @@ typealias L2Replay = Lemmings2ReplayWitness
                         }) else { throw SequelDataError.invalid("Legacy replay inputs or pointers are invalid") }
                     }
                     let events = replay?.timedEvents() ?? []
+                    guard !events.contains(where: { if case .bonusSkill = $0.event { return true }; return false }) else {
+                        throw SequelDataError.invalid("Bonus skills cannot prove an original rescue maximum.")
+                    }
                     guard zip(events, events.dropFirst()).allSatisfy({ $0.tick <= $1.tick }),
                           events.allSatisfy({ $0.tick >= 0 }) else {
                         throw SequelDataError.invalid("Replay events are not ordered")
@@ -338,7 +350,7 @@ typealias L2Replay = Lemmings2ReplayWitness
                         switch timed.event {
                         case let .aim(x, y, _), let .machine(x, y), let .chain(x, y): point = (x, y)
                         case let .fan(x, y, active): point = active ? (x, y) : nil
-                        case .assign, .releasePointer, .nuke: point = nil
+                        case .assign, .bonusSkill, .releasePointer, .nuke: point = nil
                         }
                         if let point {
                             guard (level.minimumScreenX...level.maximumScreenX + 319).contains(point.0),

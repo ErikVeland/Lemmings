@@ -98,7 +98,7 @@ extension TVExperienceAudit {
         for group in MobileSettingsGroup.allCases {
             pages.append(("settings-" + group.rawValue, MobileSettingsArt.page(group, settings: .init(), displayAvailable: true)))
         }
-        let cloud = CloudSyncArt.page(status: "Cloud saves", providers: "", enabled: false)
+        let cloud = CloudSyncArt.page()
         pages.append(("save-backup", TVSharedMenuArt.cloud(cloud, restoring: false, hasCode: false, enteringCode: false, busy: false)))
         pages.append(("save-restore", TVSharedMenuArt.cloud(cloud, restoring: true, hasCode: false, enteringCode: false, busy: false)))
         let content = try library.loadLevel(at: 0)

@@ -12,7 +12,7 @@ swiftc -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build_dir" \
   "$(uname -m)-apple-macos12.3" -module-cache-path "$module_cache"
-swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
+swiftc -swift-version 6 -D PERFORMANCE_TESTS -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$module_cache" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsAppCore -lLemmingsMobileCore -lLemmingsGameArt \
   -Xlinker -rpath -Xlinker "$build_dir" \

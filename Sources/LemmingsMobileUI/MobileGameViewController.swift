@@ -44,6 +44,10 @@ typealias MobileGameControllerBase = UIViewController
     var soloOwnerID: String?
     var canDefer = false
     var onSkipLevel: (() -> Bool)?
+    var onExtraSkillBalance: (() -> Int)?
+    var onSpendExtraSkill: ((MobileExtraSkillChoice) -> Bool)?
+    var onExtraSkillUse: (() -> ExtraSkillUse?)?
+    var onResultRewards: (() -> [ResultAwards.EarnedReward])?
     var onResultAchievements: (() -> [MobileResultAchievementsArt.Item])?
     private let achievementScroll = UIScrollView()
     private let achievementCanvas = MobileMenuCanvas()
@@ -57,16 +61,21 @@ typealias MobileGameControllerBase = UIViewController
     private var completionTitle = ""
     private var completionDetails: [String] = []
     private var recordSaveError: String?
+    private var resultReceiptTitles: [String] { onResultRewards?().filter(\.isConsumable).map(\.title) ?? [] }
     private var achievementTask: Task<Void, Never>?
     private var achievementIndex = 0
     private var resultAchievements: [(title: String, detail: String)] {
-        completionDetails.compactMap { title in
+        let rewards = onResultRewards?().map { (title: $0.title, detail: $0.reason) } ?? []
+        let rewardTitles = Set(rewards.map(\.title))
+        return rewards + completionDetails.compactMap { title in
+            if rewardTitles.contains(title) { return nil }
             if let award = ArcadeLevelAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
             if let award = TrolleyAchievement.allCases.first(where: { $0.title == title }) { return (title, ResultAwards.explanation(for: award)) }
             if let award = ClassicAchievement.catalog.first(where: { $0.title == title }) { return (title, award.detail) }
             if title == L10n.text("New rescue record") { return (title, L10n.text("Your best rescue count on this level.")) }
             if title == L10n.text("New skill record") { return (title, L10n.text("Your fewest skills used to complete this level.")) }
             if title == L10n.text("Level skip earned") { return (title, L10n.text("A level skip is now available for a later attempt.")) }
+            if title == L10n.text("Extra skill earned") { return (title, L10n.text("One extra use of an existing level skill is available for a later attempt.")) }
             return nil
         }
     }
@@ -87,31 +96,14 @@ typealias MobileGameControllerBase = UIViewController
         showCustomOverlay(title: award.title, details: [award.detail], actions: actions)
     }
 
-    private func rotateResultAchievements() {
-        achievementTask?.cancel()
+    private func updateResultAchievements() {
+        achievementTask?.cancel(); achievementTask = nil
         guard !showsSplitResult else { return }
         let awards = resultAchievements
         guard !awards.isEmpty else { return }
-        achievementIndex %= awards.count
-        func update() {
-            overlayCanvas.actionHelp = ["resultAward": awards[achievementIndex].detail]
-            overlayCanvas.page.rows = [.init("resultAward", awards[achievementIndex].title + "  (\(achievementIndex + 1)/\(awards.count))")]
-        }
-        update()
-        guard awards.count > 1, !gameSettings.classic.reduceMotion, !UIAccessibility.isReduceMotionEnabled,
-              !UIAccessibility.isVoiceOverRunning else { return }
-        achievementTask = Task { @MainActor [weak self] in
-            while !Task.isCancelled {
-                do { try await Task.sleep(for: .seconds(4)) } catch { return }
-                guard let self, !self.overlay.isHidden, self.overlayCanvas.page.result else { return }
-                guard self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { continue }
-                guard self.overlayCanvas.hoveredActionID != "resultAward" else { continue }
-                self.achievementIndex = (self.achievementIndex + 1) % awards.count
-                self.overlayCanvas.actionHelp = ["resultAward": awards[self.achievementIndex].detail]
-                self.overlayCanvas.page.rows = [.init("resultAward", awards[self.achievementIndex].title + "  (\(self.achievementIndex + 1)/\(awards.count))")]
-                self.layoutOverlay()
-            }
-        }
+        achievementIndex = 0
+        overlayCanvas.actionHelp = ["resultAward": L10n.text("View awards from this attempt.")]
+        overlayCanvas.page.rows = [.init("resultAward", L10n.text("Awards (\(awards.count))"))]
     }
     private var rewindHeld = false
     private var lastRewindTime = 0.0
@@ -248,7 +240,8 @@ typealias MobileGameControllerBase = UIViewController
         let settings = MobileSettings.load(from: .standard, profileID: settingsProfileID)
         gameSettings = settings
         fastSpeed = Double(settings.fastSpeed)
-        inputSpeed = GameplaySpeed(legacyMultiplier: fastSpeed)
+        inputSpeed = GameplaySpeed(legacyMultiplier: min(10, fastSpeed))
+        inputSpeed.ridiculousEnabled = settings.classic.ridiculousSpeedEnabled
         inputSpeed.setCruise(fastSpeed)
         session.applySettings(settings.classic)
         let camera = restoredCheckpoint?.camera
@@ -782,6 +775,7 @@ typealias MobileGameControllerBase = UIViewController
             renderCurrentFrame(force: true)
         case .speed:
             inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
+            inputSpeed.ridiculousEnabled = gameSettings.classic.ridiculousSpeedEnabled
             inputSpeed.tap(at: ProcessInfo.processInfo.systemUptime)
             updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         case let .speedStep(direction):
@@ -993,6 +987,8 @@ typealias MobileGameControllerBase = UIViewController
             updateTVPointer()
             #endif
             playfieldView.cursorPoint = previewPoint.map { playfieldView.gameViewport.levelPoint(fromView: $0) }
+            playfieldView.cursorOccupied = highlightedTarget != nil
+            playfieldView.cursorEligible = highlightedTarget?.state == .eligible
             playfieldView.cursorIcon = hudArtworkSource == gameSettings.classic.graphics && hud.skillIcons.indices.contains(selectedControl)
                 ? hud.skillIcons[selectedControl] : session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
             let cursorSkill = snapshot.skills.indices.contains(selectedControl) ? snapshot.skills[selectedControl] : nil
@@ -1109,6 +1105,7 @@ typealias MobileGameControllerBase = UIViewController
                 (session.isReadOnly ? L10n.text("PLAY") : turn == nil ? L10n.text("START") : L10n.text("READY"), { [weak self] in self?.resumePlay() }),
                 (L10n.text("BACK"), { [weak self] in self?.leaveToLibrary() }),
             ])
+            appendExtraSkillAction()
             return
         }
         #if os(tvOS)
@@ -1130,6 +1127,12 @@ typealias MobileGameControllerBase = UIViewController
             pauseOverview: true
         )
         #endif
+        appendExtraSkillAction()
+        if !session.isReadOnly, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
+            let inspectAction = overlayActions.count
+            overlayActions.append { [weak self] in self?.showLemmingInspection() }
+            overlayCanvas.page.footer.append(.init(String(inspectAction), L10n.text("INSPECT LEMMINGS")))
+        }
         let settingsAction = overlayActions.count
         overlayActions.append { [weak self] in self?.showInGameSettings() }
         overlayCanvas.page.footer.append(.init(String(settingsAction), L10n.text("SETTINGS")))
@@ -1142,6 +1145,63 @@ typealias MobileGameControllerBase = UIViewController
                 .init(String(previous + 1), L10n.text("NEXT MOVE"), enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: 1) != nil),
             ]
         }
+    }
+
+    private func appendExtraSkillAction() {
+        guard !session.isReadOnly, session.bonusSkillID == nil,
+              let available = onExtraSkillBalance?(), available > 0,
+              !session.extraSkillChoices.isEmpty else { return }
+        let index = overlayActions.count
+        overlayActions.append { [weak self] in self?.showExtraSkillChoices() }
+        overlayCanvas.page.footer.append(.init(String(index), L10n.text("EXTRA SKILL ×\(available)")))
+        layoutOverlay()
+    }
+
+    private func showExtraSkillChoices() {
+        guard paused, !session.isReadOnly, session.bonusSkillID == nil,
+              (onExtraSkillBalance?() ?? 0) > 0 else { return }
+        let choices = session.extraSkillChoices
+        guard !choices.isEmpty else { return }
+        showOverlay(title: L10n.text("EXTRA SKILL"),
+            actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
+        overlayCanvas.page = MobileExtraSkillArt.page(choices)
+        for choice in choices {
+            overlayActions.append { [weak self] in
+                guard let self, self.session.extraSkillChoices.contains(choice),
+                      self.onSpendExtraSkill?(choice) == true,
+                      self.session.grantExtraSkill(choice) else { return }
+                self.selectedControl = choice.control
+                self.lastRenderedTick = -1
+                self.renderCurrentFrame(force: true)
+                self.updateHUD()
+                self.saveCheckpoint(reason: .rewardUse)
+                self.pausePlay(showControls: true)
+                UIAccessibility.post(notification: .announcement,
+                    argument: L10n.text("+1 \(choice.title). Bonus skill used."))
+            }
+        }
+        layoutOverlay()
+    }
+
+    private func showLemmingInspection(_ retained: LemmingInspection? = nil, index requested: Int = 0, historyPage: Int = 0) {
+        guard paused, playState.phase != .ready, !session.isReadOnly,
+              let snapshot = retained ?? session.lemmingInspection else { return }
+        let index = min(max(0, requested), max(0, snapshot.individuals.count - 1))
+        let page = LemmingInspectionArt.page(snapshot, index: index, historyPage: historyPage)
+        let callbacks: [() -> Void] = [
+            { [weak self] in self?.pausePlay(showControls: true) },
+            { [weak self] in self?.showLemmingInspection(snapshot, index: index - 1) },
+            { [weak self] in self?.showLemmingInspection(snapshot, index: index + 1) },
+            { [weak self] in
+                self?.showLemmingInspection(snapshot, index: index, historyPage: historyPage - 1)
+            },
+            { [weak self] in
+                self?.showLemmingInspection(snapshot, index: index, historyPage: historyPage + 1)
+            }
+        ]
+        showOverlay(title: page.title, actions: page.footer.enumerated().map { ($0.element.title, callbacks[$0.offset]) })
+        overlayCanvas.page = page
+        layoutOverlay()
     }
 
     /// Pause tools sit on the pinned shelf beside Resume, one tap from gameplay.
@@ -1258,6 +1318,9 @@ typealias MobileGameControllerBase = UIViewController
         if let report = onRecordCompletion?(snapshot) {
             completionDetails = report.details
             recordSaveError = report.error
+        }
+        if session.bonusSkillID != nil, !completionDetails.contains(L10n.text("Bonus skill used")) {
+            completionDetails.insert(L10n.text("Bonus skill used"), at: 0)
         }
         nowPlaying.hide()
         effects.result(won: snapshot.didWin)
@@ -1478,14 +1541,16 @@ typealias MobileGameControllerBase = UIViewController
             camera: MobileCameraState(origin: viewport.origin, zoom: viewport.zoom),
             payload: Data(),
             scope: turn?.scope,
-            owner: turn?.owner ?? soloOwnerID
+            owner: turn?.owner ?? soloOwnerID,
+            extraSkillUse: onExtraSkillUse?()
         )
         return Task.detached(priority: .utility) {
             MobileCheckpointEnvelope(runID: metadata.runID, engine: metadata.engine,
                 engineFingerprint: metadata.engineFingerprint, levelIdentifier: metadata.levelIdentifier,
                 levelIndex: metadata.levelIndex, levelFingerprint: metadata.levelFingerprint,
                 tick: metadata.tick, selectedControl: metadata.selectedControl, camera: metadata.camera,
-                payload: try payload.encode(), savedAt: metadata.savedAt, scope: metadata.scope, owner: metadata.owner)
+                payload: try payload.encode(), savedAt: metadata.savedAt, scope: metadata.scope, owner: metadata.owner,
+                extraSkillUse: metadata.extraSkillUse)
         }
     }
 
@@ -1549,7 +1614,7 @@ typealias MobileGameControllerBase = UIViewController
             achievementTask?.cancel(); achievementTask = nil
             celebrationTask?.cancel(); celebrationTask = nil
         } else if viewIsVisible, !overlay.isHidden, overlayCanvas.page.result {
-            rotateResultAchievements()
+            updateResultAchievements()
         }
     }
 
@@ -2011,7 +2076,8 @@ typealias MobileGameControllerBase = UIViewController
             speed: speed, assignedSkills: session.assignedSkillCount, supportsRewind: session.supportsRewind,
             usedRewind: session.usedRewind, isReplay: session.isReadOnly,
             soundtrack: music.currentSoundtrackName ?? music.soundtrack,
-            track: music.currentTrackTitle, audio: musicState + "   /   " + soundState)
+            track: music.currentTrackTitle, audio: musicState + "   /   " + soundState,
+            usedBonusSkill: session.bonusSkillID != nil)
     }
 
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false, pauseOverview: Bool = false) {
@@ -2041,12 +2107,14 @@ typealias MobileGameControllerBase = UIViewController
         if ready {
             details = [L10n.text("\(snapshot.total) Lemmings   Save \(snapshot.required)"),
                        snapshot.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
+                + (session.bonusSkillID == nil ? [] : [L10n.text("Bonus skill used")])
         } else if completed {
             let awards = Set(resultAchievements.map(\.title))
             let elapsed = Double(snapshot.tick) / session.ticksPerSecond
             let time = "\(Int(elapsed) / 60):\(String(format: "%05.2f", elapsed.truncatingRemainder(dividingBy: 60)))"
             let recordTime = completionDetails.first { $0.hasPrefix(L10n.text("New time record")) }
             details = [L10n.text("Saved \(snapshot.saved)/\(snapshot.total)   Goal \(snapshot.required)"), recordTime ?? L10n.text("Time ") + time]
+                + resultReceiptTitles
                 + completionDetails.filter { !awards.contains($0) && !$0.hasPrefix(L10n.text("New time record")) }
         } else { details = [] }
         let heading = completed ? (snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")) : (ready ? (turn?.ownerName ?? title) : title)
@@ -2060,7 +2128,7 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.page.result = completed
         if completed {
             overlayCanvas.page.detailHeadings = [0]
-            rotateResultAchievements()
+            updateResultAchievements()
         }
         let isPause = pauseOverview && !ready && !completed
         if isPause {
@@ -2123,12 +2191,23 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func clearSplitResult() {
-        if showsSplitResult, overlayCanvas.page.result { overlayCanvas.resultStars = onResultAwards?().stars }
+        if showsSplitResult, overlayCanvas.page.result {
+            overlayCanvas.resultStars = onResultAwards?().stars
+            setResultReceiptsVisible(true)
+        }
         achievementScroll.isHidden = true
         showsSplitResult = false
         overlayCanvas.splitResult = false
         hud.isHidden = false
         view.accessibilityElements = nil
+    }
+
+    private func setResultReceiptsVisible(_ visible: Bool) {
+        let receipts = resultReceiptTitles
+        guard overlayCanvas.page.result, !receipts.isEmpty else { return }
+        let titles = Set(receipts)
+        overlayCanvas.page.details.removeAll { titles.contains($0) }
+        if visible { overlayCanvas.page.details.insert(contentsOf: receipts, at: min(3, overlayCanvas.page.details.count)) }
     }
 
     private func layoutSplitResult() -> CGRect? {
@@ -2139,11 +2218,12 @@ typealias MobileGameControllerBase = UIViewController
         guard panes.count == 2 else {
             let wasSplit = showsSplitResult
             clearSplitResult()
-            if wasSplit { rotateResultAchievements() }
+            if wasSplit { updateResultAchievements() }
             return nil
         }
         let firstPresentation = !showsSplitResult
         showsSplitResult = true
+        setResultReceiptsVisible(false)
         overlayCanvas.splitResult = true
         overlayCanvas.resultStars = nil
         achievementTask?.cancel(); achievementTask = nil

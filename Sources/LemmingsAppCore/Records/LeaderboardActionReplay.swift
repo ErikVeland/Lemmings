@@ -47,6 +47,8 @@ public struct LeaderboardActionReplay: Codable, Sendable {
         let expected = conditions.gameID == "lemmings2" ? "lemmings2"
             : conditions.gameID == "lemmings3" ? "lemmings3" : conditions.gameID == "neolemmix" ? "neolemmix" : "classic"
         guard engine == expected else { throw RunRecoveryError.invalid }
+        let grants = commands.filter { $0.action == "bonusSkill" || $0.action == "bonusTool" }
+        guard grants.count <= 1, grants.isEmpty || conditions.bonusSkillID != nil else { throw RunRecoveryError.invalid }
     }
 
     public static func capture(run: ArcadeRun, initial: ActionReplayState, final: ActionReplayState,
@@ -63,6 +65,9 @@ public struct LeaderboardActionReplay: Codable, Sendable {
         try validateStructure()
         guard engineFingerprint == RunRecovery.bundledEngine, engine == initial.engine,
               try initial.hash() == initialStateHash else { throw RunRecoveryError.differentGame }
+        for command in commands where command.action == "bonusSkill" || command.action == "bonusTool" {
+            guard initial.bonusSkillID(for: command) == conditions.bonusSkillID else { throw RunRecoveryError.invalid }
+        }
         var cursor = try ActionReplayCursor(replay: self, initial: initial)
         try cursor.seek(to: ticks)
         guard cursor.state.complete, cursor.state.saved == saved, cursor.state.population == population,
@@ -136,6 +141,24 @@ public enum ActionReplayState: Sendable {
             return name + (command.lemming.map { " L\($0)" } ?? "")
         }
     }
+    fileprivate func bonusSkillID(for command: LeaderboardActionReplay.Command) -> String? {
+        guard let raw = command.skill else { return nil }
+        switch self {
+        case .classic:
+            guard command.action == "bonusSkill", ClassicSkill.allCases.indices.contains(raw) else { return nil }
+            return ClassicSkill.allCases[raw].rawValue
+        case .neolemmix(let game):
+            let order = NeoLemmixSkill.allCases.filter { game.configuration.skills[$0] != nil }
+            guard command.action == "bonusSkill", order.indices.contains(raw) else { return nil }
+            return order[raw].rawValue
+        case .lemmings2(let game):
+            guard command.action == "bonusSkill", game.configuration.skills.indices.contains(raw) else { return nil }
+            return game.configuration.skills[raw].name.lowercased().replacingOccurrences(of: " ", with: "_")
+        case .lemmings3:
+            guard command.action == "bonusTool", let tool = Lemmings3Runtime.Tool(rawValue: raw), tool != .clock else { return nil }
+            return String(describing: tool)
+        }
+    }
     public mutating func apply(_ c: LeaderboardActionReplay.Command) throws {
         guard c.tick == tick, !complete else { throw RunRecoveryError.invalid }
         switch self {
@@ -144,6 +167,9 @@ public enum ActionReplayState: Sendable {
             case "assign":
                 guard let id = c.lemming, let raw = c.skill, ClassicSkill.allCases.indices.contains(raw),
                       g.assign(ClassicSkill.allCases[raw], to: id) == .assigned else { throw RunRecoveryError.invalid }
+            case "bonusSkill":
+                guard let raw = c.skill, ClassicSkill.allCases.indices.contains(raw),
+                      g.grantBonusSkill(ClassicSkill.allCases[raw]) else { throw RunRecoveryError.invalid }
             case "rate": guard let value = c.value, (0...99).contains(value) else { throw RunRecoveryError.invalid }; g.setReleaseRate(value)
             case "nuke": guard !g.isNuking else { throw RunRecoveryError.invalid }; g.beginNuke()
             default: throw RunRecoveryError.invalid
@@ -155,6 +181,9 @@ public enum ActionReplayState: Sendable {
                 let order = NeoLemmixSkill.allCases.filter { g.configuration.skills[$0] != nil }
                 guard let id = c.lemming, let raw = c.skill, order.indices.contains(raw) else { throw RunRecoveryError.invalid }
                 if case .rejected = g.assign(skill: order[raw], to: id) { throw RunRecoveryError.invalid }
+            case "bonusSkill":
+                let order = NeoLemmixSkill.allCases.filter { g.configuration.skills[$0] != nil }
+                guard let raw = c.skill, order.indices.contains(raw), g.grantBonusSkill(order[raw]) else { throw RunRecoveryError.invalid }
             case "rate": guard let value = c.value, (-10_000...10_000).contains(value) else { throw RunRecoveryError.invalid }; _ = g.enqueue(.setSpawnInterval(g.spawnInterval + value))
             case "nuke": guard !g.isNuking else { throw RunRecoveryError.invalid }; _ = g.enqueue(.nuke)
             default: throw RunRecoveryError.invalid
@@ -164,6 +193,7 @@ public enum ActionReplayState: Sendable {
             let action: L2RunRecovery.Input.Action
             switch c.action {
             case "assign": guard let skill = c.skill, let id = c.lemming else { throw RunRecoveryError.invalid }; action = .assign(slot: skill, lemming: id)
+            case "bonusSkill": guard let skill = c.skill else { throw RunRecoveryError.invalid }; action = .bonusSkill(slot: skill)
             case "fan", "aim":
                 guard let x = c.x, let y = c.y, let held = c.held else { throw RunRecoveryError.invalid }
                 action = c.action == "fan" ? .fan(x: x, y: y, active: held) : .aim(x: x, y: y, held: held)
@@ -175,7 +205,7 @@ public enum ActionReplayState: Sendable {
             try L2RunRecovery.apply(.init(tick: c.tick, action: action), to: &g)
             self = .lemmings2(g)
         case .lemmings3(var g):
-            guard L3RunRecovery.apply(.init(tick: c.tick, action: c.action, lemming: c.lemming, direction: c.direction), to: &g) else { throw RunRecoveryError.invalid }
+            guard L3RunRecovery.apply(.init(tick: c.tick, action: c.action, lemming: c.lemming, direction: c.direction, tool: c.skill), to: &g) else { throw RunRecoveryError.invalid }
             self = .lemmings3(g)
         }
     }
@@ -218,6 +248,7 @@ extension LeaderboardActionReplay.Command {
         guard e.afterTick == true else { throw RunRecoveryError.invalid }
         switch e.action {
         case let .assign(id, skill): return .init(tick: e.tick, action: "assign", lemming: id, skill: ClassicSkill.allCases.firstIndex(of: skill)!)
+        case .bonusSkill(let skill): return .init(tick: e.tick, action: "bonusSkill", skill: ClassicSkill.allCases.firstIndex(of: skill)!)
         case .releaseRate(let value): return .init(tick: e.tick, action: "rate", value: value)
         case .nuke: return .init(tick: e.tick, action: "nuke")
         }
@@ -225,6 +256,7 @@ extension LeaderboardActionReplay.Command {
     public static func neo(_ e: NeoRunRecovery.Input) -> Self {
         switch e.action {
         case let .assign(skill, id): .init(tick: e.tick, action: "assign", lemming: id, skill: skill)
+        case .bonusSkill(let skill): .init(tick: e.tick, action: "bonusSkill", skill: skill)
         case .rate(let value): .init(tick: e.tick, action: "rate", value: value)
         case .nuke: .init(tick: e.tick, action: "nuke")
         }
@@ -232,6 +264,7 @@ extension LeaderboardActionReplay.Command {
     public static func l2(_ e: L2RunRecovery.Input) -> Self {
         switch e.action {
         case let .assign(slot, id): .init(tick: e.tick, action: "assign", lemming: id, skill: slot)
+        case let .bonusSkill(slot): .init(tick: e.tick, action: "bonusSkill", skill: slot)
         case let .fan(x, y, active): .init(tick: e.tick, action: "fan", x: x, y: y, held: active)
         case let .aim(x, y, held): .init(tick: e.tick, action: "aim", x: x, y: y, held: held)
         case .releasePointer: .init(tick: e.tick, action: "releasePointer")
@@ -240,5 +273,7 @@ extension LeaderboardActionReplay.Command {
         case .nuke: .init(tick: e.tick, action: "nuke")
         }
     }
-    public static func l3(_ e: L3RunRecovery.Input) -> Self { .init(tick: e.tick, action: e.action, lemming: e.lemming, direction: e.direction) }
+    public static func l3(_ e: L3RunRecovery.Input) -> Self {
+        .init(tick: e.tick, action: e.action, lemming: e.lemming, skill: e.tool, direction: e.direction)
+    }
 }

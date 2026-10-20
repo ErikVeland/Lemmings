@@ -45,6 +45,7 @@ public struct TrolleyConditions: Codable, Hashable, Sendable {
         && population > 0 && population <= 1_000_000 && (0...population).contains(rescueRequirement)
         && startingSkills.values.allSatisfy { (-1...1_000_000).contains($0) }
         && (timeLimitSeconds.map { $0.isFinite && $0 >= 0 } ?? true)
+        && hasValidBonusSkill
     }
 }
 

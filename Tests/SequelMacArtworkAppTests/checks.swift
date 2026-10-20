@@ -306,23 +306,24 @@ extension SettingsWindow {
         try assertArtwork(experience.titleOfSelectedItem == "Modern", "Modern preset was not selected")
         experience.selectItem(withTitle: "Original")
         experienceChanged(experience)
-        try assertArtwork(!current.modernControlsEnabled && !current.variableSpeedEnabled && !current.hdEffectsEnabled
-            && !current.confinePointer && !SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == false
+        try assertArtwork(current.modernControlsEnabled && current.variableSpeedEnabled && !current.hdEffectsEnabled
+            && current.confinePointer && SequelArtworkPreference.enabled == artwork && variableSpeedCheck?.isEnabled == true
             && experience.titleOfSelectedItem == "Original",
-            "The Original preset did not switch off the new conveniences")
+            "Original presentation changed controls or the chosen sequel artwork")
         experience.selectItem(withTitle: "Modern")
         experienceChanged(experience)
         try assertArtwork(current.modernControlsEnabled && current.variableSpeedEnabled && current.hdEffectsEnabled
-            && current.confinePointer && SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == true
+            && current.confinePointer && SequelArtworkPreference.enabled == artwork && variableSpeedCheck?.isEnabled == true
+            && !current.fullScreenHDRFlashes && !current.djIncludesOtherSoundtracks
             && experience.titleOfSelectedItem == "Modern",
-            "The Modern preset did not restore the conveniences")
+            "Modern presentation changed controls or enabled dramatic effects")
         variableSpeedCheck!.performClick(nil)
         try assertArtwork(!current.variableSpeedEnabled && current.modernControlsEnabled
-            && experience.titleOfSelectedItem == "Custom",
-            "Variable speed did not select the Custom preset")
+            && experience.titleOfSelectedItem == "Modern",
+            "Variable speed changed the presentation preset")
         variableSpeedCheck!.performClick(nil)
-        try assertArtwork(experience.titleOfSelectedItem == "Custom",
-            "A manual choice reset the Custom preset")
+        try assertArtwork(experience.titleOfSelectedItem == "Modern",
+            "An independent control changed the presentation label")
         print("PASS Settings Original, Modern and Custom presets, variable speed and default controls")
     }
     fileprivate func checkHDEffectsSetting() throws {
@@ -1014,22 +1015,22 @@ try Lemmings2PlayWindow(root: l2root).checkRunRecovery()
     try assertArtwork(speed.multiplier == 3, "Sequel hold release did not restore cruise")
 }
 extension Lemmings2PlayWindow {
-    /// The first-launch Old school choice reaches this window through the
-    /// shared settings. Original controls must replace every modern aid.
+    /// Original presentation keeps input and assistance active in every native game.
     fileprivate func checkOriginalPreset() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
         var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
         setAudioSettings(original, muted: true)
-        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
-            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
-            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
-            "L2 Old school left modern controls active")
+        try assertArtwork(gameplayKeyboard?.modern() == true && gameplayKeyboard?.controllerEnabled() == true
+            && gameplayKeyboard?.pauseOnInterruption() == true && speedControl.variableEnabled
+            && canvas.favorApproachingLemmings && canvas.favorBombBlockers && canvas.favorBuilders
+            && canvas.gameplayCursorStyle == .original && canvas.lemmingSelectionStyle == .none,
+            "L2 Original presentation changed input or assistance")
         var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
         setAudioSettings(modern, muted: true)
         try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
             "L2 Modern did not restore modern controls")
-        print("PASS L2 Old school and Modern presets reach the play window's controls")
+        print("PASS L2 Original and Modern presentation preserve controls and assistance")
     }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }
@@ -1041,22 +1042,22 @@ extension Lemmings2PlayWindow {
     }
 }
 extension Lemmings3PlayWindow {
-    /// The first-launch Old school choice reaches this window through the
-    /// shared settings. Original controls must replace every modern aid.
+    /// Original presentation keeps input and assistance active in every native game.
     fileprivate func checkOriginalPreset() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
         var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
         setAudioSettings(original, muted: true)
-        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
-            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
-            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
-            "L3 Old school left modern controls active")
+        try assertArtwork(gameplayKeyboard?.modern() == true && gameplayKeyboard?.controllerEnabled() == true
+            && gameplayKeyboard?.pauseOnInterruption() == true && speedControl.variableEnabled
+            && canvas.favorApproachingLemmings && canvas.favorBombBlockers && canvas.favorBuilders
+            && canvas.gameplayCursorStyle == .original && canvas.lemmingSelectionStyle == .none,
+            "L3 Original presentation changed input or assistance")
         var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
         setAudioSettings(modern, muted: true)
         try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
             "L3 Modern did not restore modern controls")
-        print("PASS L3 Old school and Modern presets reach the play window's controls")
+        print("PASS L3 Original and Modern presentation preserve controls and assistance")
     }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }

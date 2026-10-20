@@ -36,7 +36,8 @@ public enum TrolleyAchievement: String, Codable, CaseIterable, Sendable {
     }
     static func earned(run: ArcadeRun, metrics: TrolleyMetrics, philosophy: TrolleyPhilosophy,
                        history: [TrolleyAttempt]) -> [Self] {
-        let personal = history.filter { $0.run.profileID == run.profileID }
+        guard !run.usedBonusSkill else { return [] }
+        let personal = history.filter { $0.run.profileID == run.profileID && !$0.run.usedBonusSkill }
         var result: Set<Self> = []
         if philosophy.titles.contains(.falsifier) { result.insert(.falsifier) }
         if philosophy.titles.contains(.absolutist) { result.insert(.noLemmingLeftBehind) }
@@ -85,8 +86,17 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
               !attempts.contains(where: { $0.id == start.id }) else { return }
         starts.append(start)
     }
+    mutating func upgradeStartForBonusSkill(id: UUID, profileID: String,
+        original: TrolleyConditions, bonus: TrolleyConditions) -> Bool {
+        guard !attempts.contains(where: { $0.id == id }), bonus.isBonusUpgrade(of: original),
+              let index = starts.firstIndex(where: { $0.id == id && $0.profileID == profileID && $0.conditions == original }) else { return false }
+        let start = starts[index]
+        starts[index] = .init(id: start.id, profileID: start.profileID, conditions: bonus,
+            date: start.date, parentAttemptID: start.parentAttemptID, kind: start.kind)
+        return true
+    }
     public mutating func acceptMaximum(_ evidence: TrolleyMaximum, conditions: TrolleyConditions, assisted: Bool) throws {
-        guard conditions.isValid else { throw SequelDataError.invalid("Invalid maximum conditions.") }
+        guard conditions.isValid, conditions.bonusSkillID == nil else { throw SequelDataError.invalid("Invalid maximum conditions.") }
         let key = conditions.comparisonID(assisted: assisted)
         var record = maxima[key] ?? TrolleyMaximumRecord()
         try record.acceptVerified(evidence, population: conditions.maximumPopulation ?? 1_000_000)
@@ -150,7 +160,7 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
         let metrics = TrolleyMetrics(run: run, telemetry: run.telemetry!, maximum: maximum)
         let philosophy = TrolleyAnalyser.analyse(run: run, metrics: metrics, maximum: maximum)
             .recognizingBreakthrough(saved: run.saved, previous: surpassedTarget)
-        let baseAwards = TrolleyAchievement.earned(run: run, metrics: metrics, philosophy: philosophy, history: attempts)
+        let baseAwards = run.usedBonusSkill ? [] : TrolleyAchievement.earned(run: run, metrics: metrics, philosophy: philosophy, history: attempts)
         let candidate = TrolleyAttempt(run: run, start: start, maximum: maximum, metrics: metrics,
                                        philosophy: philosophy, achievements: [], surpassedTarget: surpassedTarget)
         let awardSet = Set(baseAwards + TrolleyAchievement.collectionEarned(attempt: candidate, history: attempts))
@@ -188,6 +198,7 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
               }),
               attempts.allSatisfy({ a in
                   guard a.schemaVersion == 1, profileIDs.contains(a.run.profileID), Self.isLegitimate(a.run),
+                        !a.run.usedBonusSkill || a.achievements.isEmpty,
                         a.maximum.isValid(population: a.run.level.conditions!.maximumPopulation ?? 1_000_000), (a.maximum.value ?? a.run.saved) >= a.run.saved,
                         a.metrics == TrolleyMetrics(run: a.run, telemetry: a.run.telemetry!, maximum: a.maximum),
                         a.rescueGoals.map({ $0 == TrolleyRescueGoals(run: a.run, maximum: a.maximum) }) ?? true,
@@ -220,7 +231,13 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
         for start in incoming.starts where start.profileID == sourceID {
             let mapped = start.cloudOwned(by: destinationID)
             if let previous = knownStarts[mapped.id] {
-                guard previous == mapped else { throw SequelDataError.invalid(L10n.text("Saved attempt identities conflict.")) }
+                guard previous == mapped || previous.isBonusUpgrade(of: mapped) || mapped.isBonusUpgrade(of: previous) else {
+                    throw SequelDataError.invalid(L10n.text("Saved attempt identities conflict."))
+                }
+                if mapped.isBonusUpgrade(of: previous), let index = starts.firstIndex(where: { $0.id == mapped.id }) {
+                    starts[index] = mapped
+                    knownStarts[mapped.id] = mapped
+                }
             } else { starts.append(mapped); knownStarts[mapped.id] = mapped }
         }
         for attempt in incoming.attempts where attempt.run.profileID == sourceID {
@@ -238,6 +255,11 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
 }
 
 private extension TrolleyStart {
+    func isBonusUpgrade(of original: Self) -> Bool {
+        id == original.id && profileID == original.profileID && date == original.date
+            && parentAttemptID == original.parentAttemptID && kind == original.kind
+            && conditions.isBonusUpgrade(of: original.conditions)
+    }
     func cloudOwned(by profileID: String) -> Self {
         .init(id: id, profileID: profileID, conditions: conditions, date: date,
             parentAttemptID: parentAttemptID, kind: kind)

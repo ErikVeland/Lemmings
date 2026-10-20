@@ -35,12 +35,15 @@ struct LemmingSelectionUniforms {
     var style: SIMD4<Float>
     var glass = SIMD4<Float>.zero
     var fade = SIMD4<Float>(1, 0, 0, 0)
+    var marker = SIMD4<Float>.zero
 
     init(_ effect: LemmingSelectionEffect, sourceSize: CGSize, outputSize: CGSize) {
         rect = SIMD4(Float(effect.rect.minX), Float(effect.rect.minY), Float(effect.rect.width), Float(effect.rect.height))
         clip = SIMD4(Float(effect.clipRect.minX), Float(effect.clipRect.minY), Float(effect.clipRect.maxX), Float(effect.clipRect.maxY))
         dimensions = SIMD4(Float(sourceSize.width), Float(sourceSize.height), Float(outputSize.width), Float(outputSize.height))
         shape = SIMD4(Float(effect.sprite.width), Float(effect.sprite.height), Float(LemmingSelectionRenderer.padding), effect.mirrored ? 1 : 0)
+        let diamond = LemmingSelectionRenderer.plumbobRect(for: effect)
+        marker = SIMD4(Float(diamond.minX), Float(diamond.minY), Float(diamond.width), Float(diamond.height))
         fade.x = Float(min(1, max(0, effect.opacity)))
         style = effect.rescueAmount > 0
             ? SIMD4(Float(effect.rescueAmount) * 2.4, 1, 1, 0)
@@ -203,9 +206,10 @@ struct LemmingSelectionUniforms {
         uniforms.glass = glass
         do {
             let scaleX = outputSize.width / sourceSize.width, scaleY = outputSize.height / sourceSize.height
-            let field = effect.rect.insetBy(
+            let haloField = effect.rect.insetBy(
                 dx: -CGFloat(Self.padding) * effect.rect.width / CGFloat(effect.sprite.width) - CGFloat(Self.outlineWidth) / scaleX,
                 dy: -CGFloat(Self.padding) * effect.rect.height / CGFloat(effect.sprite.height) - CGFloat(Self.outlineWidth) / scaleY)
+            let field = (effect.rescueAmount == 0 ? haloField.union(Self.plumbobRect(for: effect)) : haloField)
                 .intersection(effect.clipRect).intersection(CGRect(origin: .zero, size: sourceSize))
             guard !field.isNull, !field.isEmpty else { return }
             // Curvature pulls source coordinates towards the display centre.
@@ -250,20 +254,53 @@ struct LemmingSelectionUniforms {
             }
         }
         context.setShouldAntialias(false)
-        let x = floor(point.x / pixel) * pixel, y = floor(point.y / pixel) * pixel - 15 * pixel
-        context.setFillColor(CGColor(gray: 0, alpha: 1))
-        for (dx, dy, width, height) in [(-4.0, 0.0, 8.0, 3.0), (-3, 3, 6, 1), (-2, 4, 4, 1), (-1, 5, 2, 1)] {
-            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
-        }
-        context.setFillColor(tint)
-        for (dx, dy, width, height) in [(-3.0, 1.0, 6.0, 2.0), (-2, 3, 4, 1), (-1, 4, 2, 1)] {
-            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
-        }
+        drawPlumbob(in: CGRect(x: floor(point.x / pixel) * pixel - 4 * pixel,
+            y: floor(point.y / pixel) * pixel - 21 * pixel, width: 9 * pixel, height: 13 * pixel), context: context)
+    }
+
+    /// The diamond follows the actor's rendered sprite, including precision zoom.
+    public nonisolated static func plumbobRect(for effect: LemmingSelectionEffect) -> CGRect {
+        let pixel = max(1, floor(min(effect.rect.width / CGFloat(effect.sprite.width),
+            effect.rect.height / CGFloat(effect.sprite.height))))
+        return CGRect(x: floor(effect.rect.midX / pixel) * pixel - 4 * pixel,
+            y: floor(effect.rect.minY / pixel) * pixel - 16 * pixel,
+            width: 9 * pixel, height: 13 * pixel)
+    }
+
+    /// Shared pixel facets for Obvious and Modern. No animation or input surface.
+    public static func drawPlumbob(in rect: CGRect, context: CGContext) {
+        let pixel = rect.width / 9
+        let widths = [0, 1, 1, 2, 3, 4, 4, 3, 2, 2, 1, 1, 0]
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(false)
+        for y in 0..<13 { for x in (4 - widths[y])...(4 + widths[y]) {
+            let edge = abs(x - 4) == widths[y] || y == 0 || y == 12
+            let colour: CGColor = edge ? CGColor(srgbRed: 0.04, green: 0.12, blue: 0.05, alpha: 1)
+                : x < 4 ? CGColor(srgbRed: 0.65, green: 1, blue: 0.36, alpha: 1)
+                : x == 4 ? CGColor(srgbRed: 0.3, green: 0.9, blue: 0.15, alpha: 1)
+                : CGColor(srgbRed: 0.08, green: 0.55, blue: 0.16, alpha: 1)
+            context.setFillColor(colour)
+            context.fill(CGRect(x: rect.minX + CGFloat(x) * pixel, y: rect.minY + CGFloat(y) * pixel,
+                width: pixel, height: pixel))
+        } }
     }
 
     public static func draw(_ effect: LemmingSelectionEffect, in context: CGContext) {
         guard let frame = frame(effect.sprite),
               effect.rect.width > 0, effect.rect.height > 0 else { return }
+        let opacity = min(1, max(0, effect.opacity))
+        context.saveGState()
+        context.clip(to: effect.clipRect)
+        context.setAlpha(opacity)
+        if opacity < 1 { context.beginTransparencyLayer(auxiliaryInfo: nil) }
+        defer {
+            if opacity < 1 { context.endTransparencyLayer() }
+            context.restoreGState()
+        }
+        defer { if effect.rescueAmount == 0 {
+            drawPlumbob(in: plumbobRect(for: effect), context: context)
+        } }
         let deviceScale = abs(context.convertToDeviceSpace(CGSize(width: 1, height: 0)).width)
         let stroke = CGFloat(outlineWidth) / max(1, deviceScale)
         let dx = effect.rect.width / CGFloat(effect.sprite.width)
@@ -285,12 +322,7 @@ struct LemmingSelectionUniforms {
         context.saveGState()
         defer { context.restoreGState() }
         // Keep the clip mask local to this sprite, even on a large display.
-        let opacity = min(1, max(0, effect.opacity))
-        context.setAlpha(opacity)
         context.clip(to: field.intersection(effect.clipRect))
-        // Fade the composited halo and border once, including overlapping cells.
-        if opacity < 1 { context.beginTransparencyLayer(auxiliaryInfo: nil) }
-        defer { if opacity < 1 { context.endTransparencyLayer() } }
         context.setShouldAntialias(false)
         context.addRect(field)
         context.addRects(cells)
@@ -316,7 +348,7 @@ struct LemmingSelectionUniforms {
     using namespace metal;
     struct SelectionVertex { float4 position [[position]]; };
     struct SelectionUniforms {
-        float4 rect, clip, dimensions, shape, style, glass, fade;
+        float4 rect, clip, dimensions, shape, style, glass, fade, marker;
     };
     vertex SelectionVertex selection_vertex(uint id [[vertex_id]]) {
         float2 p[4] = {float2(-1,-1),float2(1,-1),float2(-1,1),float2(1,1)};
@@ -344,14 +376,25 @@ struct LemmingSelectionUniforms {
         texture2d<float> mask [[texture(0)]], constant SelectionUniforms &u [[buffer(0)]]) {
         float2 source = selection_source(v.position.xy, u);
         if (any(source < u.clip.xy) || any(source >= u.clip.zw)) return float4(0);
-        float2 uv = selection_uv(source, u);
-        if (any(uv < 0) || any(uv > 1)) return float4(0);
+
         float glass = 1;
         if (u.glass.z > 0) {
             float2 norm = source / u.dimensions.xy;
             float2 outside = max(u.glass.z - min(norm, 1 - norm), 0.0f);
             glass = 1 - smoothstep(u.glass.z - max(u.glass.w, .0001f), u.glass.z, length(outside));
         }
+        if (u.style.y < .5 && all(source >= u.marker.xy) && all(source < u.marker.xy + u.marker.zw)) {
+            int2 cell = int2(floor((source - u.marker.xy) / (u.marker.z / 9)));
+            const int widths[13] = {0,1,1,2,3,4,4,3,2,2,1,1,0};
+            if (cell.y >= 0 && cell.y < 13 && abs(cell.x - 4) <= widths[cell.y]) {
+                bool edge = abs(cell.x - 4) == widths[cell.y] || cell.y == 0 || cell.y == 12;
+                float3 colour = edge ? float3(.04,.12,.05) : cell.x < 4 ? float3(.65,1,.36)
+                    : cell.x == 4 ? float3(.3,.9,.15) : float3(.08,.55,.16);
+                return float4(colour * glass, glass) * u.fade.x;
+            }
+        }
+        float2 uv = selection_uv(source, u);
+        if (any(uv < 0) || any(uv > 1)) return float4(0);
         // Do not bleach the sprite, including transparent holes and mirrored art.
         if (selection_alpha(v.position.xy, mask, u) > .5) return float4(0);
         float edge = 0;

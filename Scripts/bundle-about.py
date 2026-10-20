@@ -2,6 +2,8 @@
 """Bundle published version history and fallback credits for the Mac About page."""
 from html.parser import HTMLParser
 from pathlib import Path
+import plistlib
+import re
 import shutil
 import sys
 import xml.etree.ElementTree as ET
@@ -24,7 +26,7 @@ class NotesText(HTMLParser):
             if tag == "li":
                 self.parts.append("\n- ")
             if tag == "br":
-                self.parts.append("\n")
+                self.parts.append("\n\n")
 
     def handle_endtag(self, tag):
         if tag in {"style", "script", "head"}:
@@ -37,14 +39,28 @@ class NotesText(HTMLParser):
             self.parts.append(data)
 
 
-def bundle(destination):
-    root = Path(__file__).resolve().parent.parent
+def bundle(destination, root=None):
+    root = root or Path(__file__).resolve().parent.parent
     destination.mkdir(parents=True, exist_ok=True)
     namespace = {"sparkle": "http://www.andymatuschak.org/xml-namespaces/sparkle"}
     sections = []
+    included = set()
+    # Packaging precedes feed publication. Include the app's own notes directly.
+    with (root / "Resources/Info.plist").open("rb") as source:
+        info = plistlib.load(source)
+    current = (info["CFBundleShortVersionString"], info["CFBundleVersion"])
+    notes = root / f"Documentation/ReleaseNotes-{current[0]}-build{current[1]}.md"
+    if notes.exists():
+        body = re.sub(r"(?m)^# .+\n?", "", notes.read_text(encoding="utf-8"))
+        body = re.sub(r"(?m)^(?:Build|Release base|Release commit):[^\n]*\n?", "", body).strip()
+        sections.append(f"# {current[0]} · Build {current[1]}\n\n{body}")
+        included.add(current)
     for item in ET.parse(root / "appcast.xml").findall("./channel/item"):
         version = item.findtext("sparkle:shortVersionString", namespaces=namespace) or item.findtext("title", "")
         build = item.findtext("sparkle:version", namespaces=namespace) or ""
+        if (version, build) in included:
+            continue
+        included.add((version, build))
         parser = NotesText()
         parser.feed(item.findtext("description", ""))
         # Keep paragraphs while dropping blank runs and obsolete release metadata.
@@ -52,6 +68,7 @@ def bundle(destination):
         paragraphs = [p for p in paragraphs if not p.startswith("Build:")]
         sections.append(f"# {version} · Build {build}\n\n" + "\n\n".join(paragraphs))
     (destination / "VersionHistory.md").write_text("\n\n".join(sections) + "\n", encoding="utf-8")
+    shutil.copyfile(root / "Resources/About/Heritage.md", destination / "Heritage.md")
     shutil.copyfile(root / "Tools/Telemetry/contributors.md", destination / "Contributors.md")
 
 

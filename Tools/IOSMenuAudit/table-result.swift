@@ -40,7 +40,6 @@ extension MenuAudit {
                         var items = MobileResultAchievementsArt.goals(goals)
                         if won {
                             items += [.init("First clear", detail: "First clear of this level. Rescued \(saved); target 5."),
-                                .init("+1 ZOOM", detail: "Career stars: 2 to 3. One Zoom per 3 stars without rewind or undo."),
                                 .init("One skill type", detail: "Cleared the level using one skill type.")]
                         }
                         let achievements = MobileResultAchievementsArt.page(items)

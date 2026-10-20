@@ -64,6 +64,12 @@ player has a distinct translucent colour. The current player's own earlier
 attempt is excluded. Ghosts use the shipped sprites and stay behind live lemmings.
 They add no input targets, skill effects, labels or sound.
 
+On Mac, **Ghosts on/off** in Hot Seat setup sets visibility before play. The
+same control beside the gameplay menu and **⌘G** toggle ghosts before or during
+an attempt, including while paused. The local choice survives relaunching.
+Hiding ghosts preserves their turns. Showing them again seeks to the current
+game tick. This control leaves the separate Classic solution ghost unchanged.
+
 Ghosts follow simulation time through speed changes, paused steps and rewind.
 They disappear at the end of their recorded turn and return when rewound.
 Each ghost owns its engine and terrain, so its bridges and tunnels can differ
@@ -178,3 +184,8 @@ solution completed by two people does not become one person's individual record.
   saved action file. `.build/hot-seat-ghosts/screens/mobile-*.png` holds each
   ghost frame beside the plain frame for review. The iOS and tvOS view
   controllers have no automated UI test for this feature.
+
+Mac visibility checks also cover hiding and restoring sprites in Classic, L2
+and L3, movie-frame exclusion, retained turns, saved visibility, Command-G and
+its unmodified G counterpart. Offscreen captures cover both control states at
+640, 900 and 1120 points and Hot Seat setup with two and eight players.

@@ -61,7 +61,7 @@ enum FanLevelLibrary {
     /// A stable level identity. Catalogue numbers survive descriptive filename
     /// changes and keep packs with the same display name separate.
     static func identifier(pack: URL, label: String) -> String {
-      stablePrefix(pack) + label
+      GameProgressPreferences.fanIdentifier(pack: pack, label: label)
     }
 
     static func legacyIdentifier(pack: URL, label: String) -> String {

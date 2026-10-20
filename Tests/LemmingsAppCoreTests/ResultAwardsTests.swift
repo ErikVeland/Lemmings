@@ -4,6 +4,45 @@ import NxlvKit
 @testable import LemmingsAppCore
 
 struct ResultAwardsTests {
+    @Test @MainActor func bonusResultsCannotEnterHostedRankings() throws {
+        let conditions = TrolleyConditions(gameID: "lemmings", packID: "hosted-bonus", levelID: "1",
+            levelFingerprint: "fixture", rulesetVersion: "fixture", physicsMode: "fixture", population: 3,
+            rescueRequirement: 1, startingSkills: ["digger": 1], timeLimitSeconds: 60)
+        let level = ArcadeLevel(id: "1", title: "Fixture", game: "Classic", rules: "fixture", total: 3,
+            required: 1, conditions: conditions)
+        let bonus = try #require(level.addingBonusSkill("digger"))
+        let normalRun = ArcadeRun(profileID: ArcadeProfile.legacyID, level: level, saved: 3, didWin: true,
+            skills: ["digger": 1], seconds: 10, telemetry: .init(released: 3))
+        let bonusRun = ArcadeRun(profileID: ArcadeProfile.legacyID, level: bonus, saved: 3, didWin: true,
+            skills: ["digger": 2], seconds: 5, telemetry: .init(released: 3))
+        var history = TrolleyHistory()
+        _ = history.record(normalRun)
+        _ = history.record(bonusRun)
+        #expect(HostedRankingsService.candidates(history.attempts, profile: ArcadeProfile.legacyID).map(\.id) == [normalRun.id])
+        #expect(!(try HostedRankingsService.payload(normalRun)).isEmpty)
+        var rejected = false
+        do { _ = try HostedRankingsService.payload(bonusRun) } catch { rejected = true }
+        #expect(rejected)
+    }
+
+    @Test func rareExtraSkillReceiptAppearsOnlyOnTheTenthDistinctThreeStarLevel() throws {
+        var records = ArcadeRecords()
+        for index in 0..<10 {
+            let conditions = TrolleyConditions(gameID: "lemmings", packID: "rewards", levelID: String(index),
+                levelFingerprint: "fixture", rulesetVersion: "fixture", physicsMode: "fixture", population: 3,
+                rescueRequirement: 1, startingSkills: ["digger": 1], timeLimitSeconds: 60)
+            let run = ArcadeRun(profileID: records.activeProfileID,
+                level: .init(id: String(index), title: "Fixture", game: "Classic", rules: "fixture", total: 3,
+                    required: 1, conditions: conditions), saved: 3, didWin: true, skills: [:], seconds: 10,
+                telemetry: .init(released: 3))
+            let recorded = records.record(run)
+            let report = try #require(recorded)
+            let receipt = ResultAwards.earnedRewards(report: report,
+                celebration: .init(report: report, history: records.trolley))
+            #expect(receipt.contains { $0.title == "RARE: +1 EXTRA SKILL" } == (index == 9))
+        }
+    }
+
     @Test func sharedAwardsUseSavedResultsAndPersonalImprovements() throws {
         var records = ArcadeRecords()
         let conditions = TrolleyConditions(gameID: "lemmings", packID: "pack", levelID: "level-0",

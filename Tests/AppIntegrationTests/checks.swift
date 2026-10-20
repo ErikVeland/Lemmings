@@ -299,11 +299,26 @@ extension AppDelegate {
     try check(selection.bloom && (selection.time == nil) == reduced,
       name + " lost its halo with HD effects off or ignored reduced effects")
     try check(selection.rect.intersects(selection.clipRect), name + " selected an offscreen sprite")
+    let diamond = LemmingSelectionRenderer.plumbobRect(for: selection)
+    try check(diamond.maxY < selection.rect.minY && abs(diamond.midX - selection.rect.midX) <= diamond.width / 9,
+      name + " diamond did not follow the actual selected sprite")
+    let diamondBitmap = CGContext(data: nil, width: Int(diamond.width), height: Int(diamond.height),
+      bitsPerComponent: 8, bytesPerRow: Int(diamond.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    diamondBitmap.translateBy(x: -diamond.minX, y: -diamond.minY)
+    LemmingSelectionRenderer.draw(selection, in: diamondBitmap)
+    let diamondBytes = diamondBitmap.data!.assumingMemoryBound(to: UInt8.self)
+    let centre = (Int(diamond.height) / 2 * Int(diamond.width) + Int(diamond.width) / 2) * 4
+    try check(diamondBytes[centre + 1] > diamondBytes[centre] && diamondBytes[centre + 3] > 200,
+      name + " selected actor lost its solid green diamond")
+
     let overlay = canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first
     try check(overlay?.layer?.isHidden != false && overlay?.hasAllocatedFlashMask != true,
       name + " selection woke the full-window HDR surface")
     try check(overlay?.hitTest(CGPoint(x: selection.rect.midX, y: selection.rect.midY)) == nil,
       name + " selection intercepted input")
+    try check(overlay?.hitTest(CGPoint(x: diamond.midX, y: diamond.midY)) == nil,
+      name + " diamond intercepted input")
     try bitmap.representation(using: .png, properties: [:])!.write(to:
       folder.appendingPathComponent(name + (reduced ? "-reduced" : "-modern") + (hd ? "" : "-hd-off") + ".png"))
   }
@@ -504,6 +519,9 @@ extension AppDelegate {
       guard let control = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == label }) else {
         throw IntegrationFailure(message: "Missing setting: " + label)
       }
+      root.layoutSubtreeIfNeeded()
+      control.scrollToVisible(control.bounds)
+      root.layoutSubtreeIfNeeded()
       return control
     }
     func capture(_ name: String) throws {
@@ -513,10 +531,12 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to:
         URL(fileURLWithPath: ".build/selection-settings-" + name + ".png"))
     }
-    let selection = try popup("Selection effect"), preset = try popup("Gameplay preset")
+    let selection = try popup("Selection effect"), preset = try popup("Presentation preset")
     try check(selection.itemTitles == ["None", "Obvious", "Modern"] && selection.titleOfSelectedItem == "Modern",
       "Selection choices or default are wrong")
     for choice in LemmingSelectionStyle.allCases {
+      root.layoutSubtreeIfNeeded()
+      selection.scrollToVisible(selection.bounds)
       root.layoutSubtreeIfNeeded()
       let centre = CGPoint(x: selection.bounds.midX, y: selection.bounds.midY)
       try check(root.hitTest(selection.convert(centre, to: root)) === selection, "Selection control is obscured")
@@ -546,8 +566,9 @@ extension AppDelegate {
         }
       }
       try check(preferences.current.lemmingSelectionStyle == choice && applied.last == choice
-        && preferences.current.experiencePreset == .custom && selection.titleOfSelectedItem == choice.title,
-        "Selection choice did not apply immediately as Custom")
+        && preferences.current.experiencePreset == (choice == .modern ? .modern : .custom)
+        && selection.titleOfSelectedItem == choice.title,
+        "Selection choice did not apply immediately with its presentation label")
       try capture(choice.rawValue)
     }
     for (index, expected) in [(0, LemmingSelectionStyle.none), (1, .modern)] {
@@ -575,6 +596,9 @@ extension AppDelegate {
   }
 
   fileprivate func testSelectionRendering() async throws {
+    let inspectionSelection = playfield.inspectionSelectionAvailable
+    defer { playfield.inspectionSelectionAvailable = inspectionSelection }
+    playfield.inspectionSelectionAvailable = { false }
     if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
     settings.music = .silent; settings.confinePointer = false
@@ -1581,8 +1605,8 @@ extension AppDelegate {
       "Cursor choices or default are wrong")
     try check(iconSize.titleOfSelectedItem == "1×" && preferences.current.skillCursorIconSize.multiplier == 2,
       "Skill icon must default to actual 2× labelled 1×")
-    guard let experience = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Gameplay preset" }) else {
-      try check(false, "Gameplay preset control is missing"); return
+    guard let experience = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Presentation preset" }) else {
+      try check(false, "Presentation preset control is missing"); return
     }
     try check(experience.itemTitles == ["Original", "Modern", "Custom"] && experience.titleOfSelectedItem == "Modern",
       "Gameplay must offer Original, Modern and Custom, with Modern selected")
@@ -1671,10 +1695,10 @@ extension AppDelegate {
     }
     try capturePreset("modern")
     try selectPreset("Original")
-    try check(preferences.current.experiencePreset == .original && !preferences.current.favorApproachingLemmings
-      && !preferences.current.favorBombBlockers && !preferences.current.favorBuilders
+    try check(preferences.current.experiencePreset == .original && preferences.current.favorApproachingLemmings
+      && preferences.current.favorBombBlockers && preferences.current.favorBuilders
       && preferences.current.skillCursorIconSize == .none && iconSize.titleOfSelectedItem == "None",
-      "Original did not disable all targeting aids and the icon")
+      "Original presentation changed assistance or retained the added icon")
     try check(!preferences.current.showClassicSkillBackpacks && backpacks.state == .off && !playfield.showClassicSkillBackpacks,
       "Original did not disable backpacks in Settings and the playfield")
     try check(preferences.current.gameplayCursorStyle == .original && playfield.gameplayCursorStyle == .original
@@ -1683,7 +1707,7 @@ extension AppDelegate {
     try selectPreset("Modern", keyboard: true)
     try check(preferences.current.favorApproachingLemmings && preferences.current.favorBombBlockers
       && preferences.current.favorBuilders && preferences.current.skillCursorIconSize == .one,
-      "Modern did not restore targeting aids and the baseline icon")
+      "Modern presentation changed assistance or omitted the baseline icon")
     try check(preferences.current.showClassicSkillBackpacks && backpacks.state == .on && playfield.showClassicSkillBackpacks,
       "Modern did not restore backpacks in Settings and the playfield")
     try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
@@ -1695,15 +1719,18 @@ extension AppDelegate {
       try check(control.state == .on, "Modern left a targeting checkbox off")
       for x in [10.0, 40.0, control.bounds.width - 4] {
         click(CGPoint(x: x, y: control.bounds.midY), in: control)
-        try check(control.state == .off && experience.titleOfSelectedItem == "Custom"
-          && preferences.current.experiencePreset == .custom, "A targeting change must select Custom")
+        let visualChange = title == "Show skill backpacks"
+        try check(control.state == .off && experience.titleOfSelectedItem == (visualChange ? "Custom" : "Modern")
+          && preferences.current.experiencePreset == (visualChange ? .custom : .modern),
+          "An assistance change altered the presentation label, or a visual change did not")
         click(CGPoint(x: x, y: control.bounds.midY), in: control)
-        try check(control.state == .on && experience.titleOfSelectedItem == "Custom",
-          "Reversing an individual change must remain Custom")
+        try check(control.state == .on && experience.titleOfSelectedItem == "Modern",
+          "Restoring the presentation did not restore its label")
       }
     }
     try capturePreset("custom")
-    let custom = preferences.current
+    var custom = preferences.current
+    custom.experiencePreset = .custom
     try selectPreset("Custom")
     try check(preferences.current == custom, "Selecting Custom changed individual settings")
     try selectPreset("Modern", keyboard: true)
@@ -1766,7 +1793,7 @@ extension AppDelegate {
     let savedPreferences = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
     let reopened = SettingsWindow(settings: savedPreferences, options: settingsOptions())
     reopened.show()
-    let reopenedPreset = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Gameplay preset" }
+    let reopenedPreset = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Presentation preset" }
     try check(reopenedPreset?.titleOfSelectedItem == "Custom", "Custom preset did not survive save and reopen")
     let reopenedCursor = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Cursor style" }
     try check(reopened.current.gameplayCursorStyle == .original && reopenedCursor?.titleOfSelectedItem == "Original",
@@ -2927,6 +2954,8 @@ extension AppDelegate {
   }
 
   fileprivate func testLevelHints() async throws {
+    if window == nil { buildInterface() }
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
     settings.music = .silent
     loadContent()
@@ -2980,14 +3009,15 @@ extension AppDelegate {
     func hintText(in view: NSView) -> [HintBitmapText] {
       (view as? HintBitmapText).map { [$0] } ?? view.subviews.flatMap { hintText(in: $0) }
     }
-    func verifyText(_ page: NSView, stage: LevelHintDeck.Stage) throws {
+    func verifyText(_ page: NSView, stage: LevelHintDeck.Stage, expectedBody: String? = nil) throws {
       page.layoutSubtreeIfNeeded()
       let labels = hintText(in: page)
-      guard let body = labels.first(where: { $0.stringValue == stage.body }), let scroll = body.enclosingScrollView else {
+      let expected = expectedBody ?? stage.body
+      guard let body = labels.first(where: { $0.stringValue == expected }), let scroll = body.enclosingScrollView else {
         throw IntegrationFailure(message: "Hint prose does not use scrollable game text")
       }
       try check(body.frame.height >= body.requiredHeight(width: body.bounds.width), "Hint text is clipped")
-      try check(body.accessibilityValue() as? String == stage.body, "Bitmap hints lost their accessible text")
+      try check(body.accessibilityValue() as? String == expected, "Bitmap hints lost their accessible text")
       // AppKit rounds the clip origin to a backing pixel when the menu is scaled.
       let topOffset = scroll.contentView.convertToBacking(CGRect(x: 0, y: 0, width: 1,
         height: abs(scroll.contentView.bounds.minY))).height
@@ -3003,7 +3033,7 @@ extension AppDelegate {
       func redraw(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(redraw) }
       redraw(page)
       let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
-      page.cacheDisplay(in: page.bounds, to: bitmap)
+      page.displayIgnoringOpacity(page.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
       let directory = URL(fileURLWithPath: ".build/hints")
       try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
       try bitmap.representation(using: .png, properties: [:])!.write(to: directory.appendingPathComponent(name + ".png"))
@@ -3069,12 +3099,12 @@ extension AppDelegate {
           "Journey migration did not persist or invented progress")
         let shared = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
           pool: run.pool, entries: entries, currentIndex: 1)
-        try store.startRun(shared, hotSeatID: "test-shared-owner")
-        try store.removeExcludedLearningLessons([entries[0].identity, entries[1].identity])
-        try check(store.activeRun?.id == shared.id && store.activeRunHotSeatID == "test-shared-owner"
-          && store.activeRun?.currentEntry.identity == entries[2].identity
-          && store.savedRuns.first?.run.id == run.id && store.savedRuns.first?.hotSeatID == nil
-          && store.savedRuns.first?.run.currentEntry.identity == entries[2].identity,
+        try reloaded.startRun(shared, hotSeatID: "test-shared-owner")
+        try reloaded.removeExcludedLearningLessons([entries[0].identity, entries[1].identity])
+        try check(reloaded.activeRun?.id == shared.id && reloaded.activeRunHotSeatID == "test-shared-owner"
+          && reloaded.activeRun?.currentEntry.identity == entries[2].identity
+          && reloaded.savedRuns.first?.run.id == run.id && reloaded.savedRuns.first?.hotSeatID == nil
+          && reloaded.savedRuns.first?.run.currentEntry.identity == entries[2].identity,
           "Journey migration changed a saved or shared run owner or position")
       }
       let expected = ghost.playback.solution.replay.expected!
@@ -3278,9 +3308,11 @@ extension AppDelegate {
       LevelHintWindow.shared.show(deck, owner: window)
       let page = LevelHintWindow.shared.page!
       for tier in 0..<3 {
-        try verifyText(page, stage: deck.stages[tier])
+        try verifyText(page, stage: deck.stages[tier], expectedBody: deck.presentation(at: tier).body)
+        try check(page.accessibilityLabel() == deck.evidenceTitle, "Hint header hid its evidence")
         if deck.title == longDeck.title && tier == 0 {
-          let body = hintText(in: page).first { $0.stringValue == deck.stages[tier].body }!
+          try capture(page, name: "general-coaching")
+          let body = hintText(in: page).first { $0.stringValue == deck.presentation(at: tier).body }!
           let scroll = body.enclosingScrollView!
           try check(body.frame.height > scroll.contentSize.height, "Long hints did not enable scrolling")
           let end = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
@@ -3325,6 +3357,48 @@ extension AppDelegate {
 
     let fallback = LevelHintDeck.practice(title: "Fan level", skills: ["Builder"])
     try check(!fallback.checked && fallback.stages.allSatisfy { $0.moves.isEmpty }, "General coaching claimed a solved route")
+    let coachingDecks: [(String, LevelHintDeck)] = [
+      ("classic", fallback),
+      ("lemmings2", .practice(title: "Lemmings 2", skills: ["Hopper", "Fencer"])),
+      ("lemmings3", .practice(title: "Lemmings 3", skills: [], chronicles: true))]
+    let typography = GameMenuTypography(interface: renderer.interface)
+    let output = URL(fileURLWithPath: ".build/hints")
+    for (engine, deck) in coachingDecks {
+      LevelHintWindow.shared.show(deck, owner: window)
+      let native = LevelHintWindow.shared.page!
+      try check(native.accessibilityLabel() == "General coaching", "\(engine) coaching has a misleading header")
+      try verifyText(native, stage: deck.stages[0], expectedBody: deck.presentation(at: 0).body)
+      try capture(native, name: "general-\(engine)-native")
+      GameScreen.shared.dismissAll()
+      for width: CGFloat in [320, 390, 834, 1920] {
+        for tier in deck.stages.indices {
+          let page = MobileCareerArt.recordHintPage(level: deck.title, deck: deck, stage: tier,
+            solution: false, playable: false, preview: false)
+          try check(page.title == "General coaching" && page.details.contains("No level-specific hints available."),
+            "\(engine) shared coaching hid its availability")
+          try check(!page.footer.contains { $0.id == "recordSolution" }, "\(engine) coaching invented a solution")
+          let layout = GameFrontEnd.layout(page, width: width, minimumHeight: width == 1920 ? 1080 : 720)
+          for target in layout.targets {
+            try check(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id,
+              "Coaching input misses its visible target")
+          }
+          for (index, frame) in layout.details.enumerated() {
+            try check(layout.board.contains(frame) && frame.height >= GameTextLayout.height(page.details[index], width: frame.width),
+              "Coaching text is clipped")
+          }
+          guard let context = CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height),
+            bitsPerComponent: 8, bytesPerRow: Int(layout.size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw IntegrationFailure(message: "Missing shared hint renderer") }
+          context.translateBy(x: 0, y: layout.size.height); context.scaleBy(x: 1, y: -1)
+          GameFrontEnd.draw(page, layout: layout, typography: typography, highlighted: "recordHintBack", in: context)
+          let file = output.appendingPathComponent("general-\(engine)-\(Int(width))-\(tier).png")
+          guard let destination = CGImageDestinationCreateWithURL(file as CFURL, "public.png" as CFString, 1, nil),
+            let image = context.makeImage() else { throw IntegrationFailure(message: "Missing shared hint capture") }
+          CGImageDestinationAddImage(destination, image, nil)
+          try check(CGImageDestinationFinalize(destination), "Cannot save shared hint capture")
+        }
+      }
+    }
     print("PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching")
   }
 
@@ -3494,8 +3568,149 @@ extension AppDelegate {
     _ = keyboard.handle(key(.keyUp, 112.2))
     try check(controller.multiplier == 1, "F release restarted speed after Escape")
     try check(keyboard.commandRows.contains { $0.keys == "Hold F" }, "Keyboard help omitted the F hold")
+    controller.newLevel(); controller.ridiculousEnabled = true
+    for index in 0..<5 { controller.step(1, at: 120 + Double(index)) }
+    controller.update(at: 126, active: true)
+    speedPanel.speedLabel = controller.panelLabel
+    speedPanel.isFastForward = true
+    speedPanel.variableSpeedEnabled = true
+    speedPanel.needsDisplay = true
+    let speedBitmap = speedPanel.bitmapImageRepForCachingDisplay(in: speedPanel.bounds)!
+    speedPanel.cacheDisplay(in: speedPanel.bounds, to: speedBitmap)
+    try check(controller.multiplier == 25 && speedPanel.speedLabel == "25×", "Shared controls did not display 25×")
+    let output = URL(fileURLWithPath: ".build/ridiculous-speed-renders")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    try speedBitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("speed-25x.png"))
+    controller.ridiculousEnabled = false
+    try check(controller.multiplier == 10, "Disabling ridiculous speed did not limit the live controller")
+
+    if window == nil { buildInterface() }
+    GameScreen.shared.gameWindow = window
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    defer { GameScreen.shared.dismissAll() }
+    preferences.show()
+    let root = window.contentView!
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    guard let ridiculous = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Ridiculous speed (25×)" }),
+          let variable = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title.hasPrefix("Variable speed:") }) else {
+      throw IntegrationFailure(message: "Speed settings are missing")
+    }
+    try check(ridiculous.state == .off && ridiculous.isEnabled, "Ridiculous speed must default off")
+    for (name, enabled) in [("off", false), ("on", true), ("unavailable", true)] {
+      if name == "on" { ridiculous.performClick(nil) }
+      if name == "unavailable" { variable.performClick(nil) }
+      root.layoutSubtreeIfNeeded(); ridiculous.scrollToVisible(ridiculous.bounds); root.layoutSubtreeIfNeeded()
+      let point = ridiculous.convert(CGPoint(x: ridiculous.bounds.midX, y: ridiculous.bounds.midY), to: root)
+      try check(root.hitTest(point) === ridiculous, "Ridiculous speed target is obscured")
+      try check(ridiculous.bounds.width >= ridiculous.intrinsicContentSize.width && ridiculous.bounds.height >= 28,
+        "Ridiculous speed caption or input target is clipped")
+      try check(preferences.current.ridiculousSpeedEnabled == enabled && ridiculous.isEnabled == (name != "unavailable"),
+        "Ridiculous speed setting did not preserve its state")
+      let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+      root.cacheDisplay(in: root.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("settings-" + name + ".png"))
+    }
+    print("PASS optional 25× setting: off/on/unavailable renders, input target and live speed label")
     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
+  }
+
+  fileprivate func testShortGames() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "Short games catalogue did not load")
+    }
+    rebuildLevelCatalogue(discovery)
+    for level in discovery.lemmings2 where !level.isAvailable {
+      let identity = LevelCatalogueIdentity(engine: .lemmings2, packID: "tribes-\(level.selection.tribe)",
+        levelID: "\(level.selection.level):\(level.levelID)")
+      try check(levelCatalogue.resolve(identity)?.availability == .locked,
+        "Present Tribes campaign data was labelled unavailable instead of locked")
+    }
+    for level in discovery.lemmings3 where !level.isAvailable {
+      let identity = LevelCatalogueIdentity(engine: .lemmings3, packID: "chronicles-\(level.selection.tribe.rawValue)",
+        levelID: "\(level.selection.level):\(level.levelID)")
+      try check(levelCatalogue.resolve(identity)?.availability == .unavailable,
+        "Unsupported Chronicles data was labelled locked instead of unavailable")
+    }
+    for sequence in ShortPlayCatalogue.sequences where sequence.supportsCarriedSequence {
+      guard let entries = shortGameEntries(sequence) else {
+        throw IntegrationFailure(message: sequence.title + " did not resolve its exact opening data")
+      }
+      let playlist = try LevelPlaylist(name: sequence.title, entries: entries)
+      let run = try sequence.run(playlist: playlist)
+      try check(entries.allSatisfy { sequenceEntryCanStart($0, run: run) },
+        sequence.title + " did not pass exact opening preflight")
+    }
+    let store = try playlistStore(), arcade = ArcadeStore.shared
+    let records = arcade.records, owner = arcade.playingProfileID, seat = arcade.hotSeatID
+    let roster = arcade.sessionProfiles, run = store.activeRun, progress = store.learningProgress
+    let lists = store.playlists, carries = store.activeRunL2Progress
+    func campaignDefaults() -> NSDictionary {
+      UserDefaults.standard.dictionaryRepresentation().filter {
+        $0.key.contains("Campaign") || $0.key.contains("ClassicGameProgress") || $0.key.contains("nativeL3")
+      } as NSDictionary
+    }
+    let campaigns = campaignDefaults()
+    let previousSize = window.contentLayoutRect.size
+    defer { GameScreen.shared.dismissAll(); window.setContentSize(previousSize) }
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+    let output = URL(fileURLWithPath: ".build/short-games-renders")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    for width in [900, 1600] {
+      window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
+      presentShortGames()
+      guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+            let carousel = descendants(page).compactMap({ $0 as? LevelCoverFlowView }).first,
+            let play = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Play" }) else {
+        throw IntegrationFailure(message: "Short games page controls were missing")
+      }
+      for (index, sequence) in ShortPlayCatalogue.sequences.enumerated() {
+        carousel.selectItem(at: index)
+        page.layoutSubtreeIfNeeded()
+        try check(carousel.selectedItem?.id == sequence.id
+          && play.isEnabled == sequence.supportsCarriedSequence,
+          sequence.title + " selection did not match its launch availability")
+        if !sequence.supportsCarriedSequence {
+          try check(carousel.selectedItem?.accessibilityName.contains("Reserve carry-over unavailable") == true,
+            "Unavailable Chronicles opening hid the carry-over limit")
+          carousel.startSelectedItem()
+          play.performClick(nil)
+          try check(GameScreen.shared.controllerPage(in: window) === page,
+            "Unavailable opening activated a launch action")
+        }
+        let playFrame = play.convert(play.bounds, to: page)
+        let backFrame = page.controllerBackButton.convert(page.controllerBackButton.bounds, to: page)
+        try check(page.bounds.contains(playFrame) && page.bounds.contains(backFrame)
+          && playFrame.minX >= backFrame.maxX && play.bounds.width >= 44 && play.bounds.height >= 44,
+          "Short games primary or Back target was clipped or reordered")
+        if play.isEnabled {
+          try check(page.hitTest(CGPoint(x: playFrame.midX, y: playFrame.midY)) === play,
+            "Short games primary target was obscured")
+        }
+        let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+        page.cacheDisplay(in: page.bounds, to: bitmap)
+        var visibleSamples = 0
+        for y in stride(from: 0, to: bitmap.pixelsHigh, by: 8) {
+          for x in stride(from: 0, to: bitmap.pixelsWide, by: 8) {
+            guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+            if max(color.redComponent, color.greenComponent, color.blueComponent) > 0.12 { visibleSamples += 1 }
+          }
+        }
+        try check(visibleSamples > 32, "Short games capture omitted its child controls")
+        try bitmap.representation(using: .png, properties: [:])!.write(
+          to: output.appendingPathComponent(sequence.id + "-\(width).png"))
+      }
+      GameScreen.shared.dismissAll()
+    }
+    try check(arcade.records == records && arcade.playingProfileID == owner && arcade.hotSeatID == seat
+      && arcade.sessionProfiles == roster && store.activeRun == run && store.learningProgress == progress
+      && store.playlists == lists && store.activeRunL2Progress == carries
+      && campaigns.isEqual(campaignDefaults()),
+      "Browsing short games changed ownership, Journey progress, campaign saves or carry-over")
+    print("PASS exact Classic/L2 opening preflight, unavailable L3, six bitmap states and primary/Back targets; browsing preserves ownership and saves")
   }
 
   fileprivate func testPrecisionZoomWallet() throws {
@@ -3504,43 +3719,57 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Could not create isolated Zoom test storage")
     }
     defer { defaults.removePersistentDomain(forName: suite) }
-    var earned = PrecisionZoomEarnings(careerStars: 6, threeStarLevels: 3)
+    var earned = PrecisionZoomEarnings(threeStarLevels: 0)
     let first = UUID()
     let wallet = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
     wallet.start(attemptID: first, profileID: "one")
-    try check(wallet.remaining(.zoom) == 2 && wallet.remaining(.superzoom) == 1,
-      "No-Rewind career earnings were not available")
-    try check(wallet.applyScroll(.zoomIn) == .changed && wallet.remaining(.zoom) == 1,
-      "Scroll up did not spend exactly one Zoom use")
-    try check(wallet.applyScroll(.zoomIn) == .unchanged && wallet.remaining(.zoom) == 1,
-      "Repeated scroll up spent another Zoom use")
-    try check(wallet.applyScroll(.zoomOut) == .changed && wallet.remaining(.zoom) == 1,
-      "Scroll down did not switch off Zoom without a charge")
+    try check(wallet.remainingSuperzoom() == 0, "A new player started with earned Superzoom")
+    try check(wallet.applyScroll(.zoomIn) == .changed && wallet.active == .zoom,
+      "A new player could not use Zoom")
+    try check(wallet.applyScroll(.zoomIn) == .unchanged && wallet.active == .zoom,
+      "Repeated scroll up changed an active Zoom")
+    try check(wallet.applyScroll(.zoomOut) == .changed && wallet.active == nil,
+      "Scroll down did not switch off Zoom")
+    earned = PrecisionZoomEarnings(threeStarLevels: 3)
     try check(wallet.applyScroll(.zoomOut) == .unchanged && wallet.toggle(.superzoom),
       "Scroll down altered an inactive Zoom or Superzoom could not start")
     let restored = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
     restored.start(attemptID: first, profileID: "one")
-    try check(restored.active == .superzoom && restored.remaining(.zoom) == 1,
-      "Saved Zoom state did not survive recovery")
+    try check(restored.active == .superzoom && restored.remainingSuperzoom() == 0,
+      "Saved Superzoom state did not survive recovery")
     try check(restored.applyScroll(.zoomIn) == .unchanged && restored.active == .superzoom
-      && restored.remaining(.zoom) == 1, "Scroll up replaced an active Superzoom")
+      && restored.remainingSuperzoom() == 0, "Scroll up replaced an active Superzoom")
     try check(restored.applyScroll(.zoomOut) == .changed && restored.active == nil
-      && restored.remaining(.superzoom) == 0, "Scroll down did not switch off Superzoom")
+      && restored.remainingSuperzoom() == 0, "Scroll down did not switch off Superzoom")
     restored.finish(attemptID: first, didWin: false)
     restored.start(attemptID: UUID(), profileID: "one")
-    try check(restored.remaining(.zoom) == 1 && restored.remaining(.superzoom) == 0,
-      "A failed run did not keep its spent uses")
+    try check(restored.remainingSuperzoom() == 0 && restored.toggle(.zoom),
+      "A failed run changed its Superzoom cost or disabled free Zoom")
     restored.start(attemptID: UUID(), profileID: "two")
-    try check(restored.remaining(.zoom) == 2, "Another profile inherited spent uses")
-    earned = PrecisionZoomEarnings(careerStars: 9, threeStarLevels: 6)
+    try check(restored.remainingSuperzoom() == 1 && restored.toggle(.zoom),
+      "Another profile inherited Superzoom costs or could not use free Zoom")
+    earned = PrecisionZoomEarnings(threeStarLevels: 6)
     restored.start(attemptID: UUID(), profileID: "one")
-    try check(restored.remaining(.zoom) == 2 && restored.remaining(.superzoom) == 1,
-      "New stars did not add uses to a failed-run balance")
+    try check(restored.remainingSuperzoom() == 1, "New three-star levels did not add Superzoom to a failed-run balance")
     restored.removeProfile("one")
     restored.start(attemptID: UUID(), profileID: "one")
-    try check(restored.remaining(.zoom) == 3 && restored.remaining(.superzoom) == 2,
+    try check(restored.remainingSuperzoom() == 2,
       "Deleted profile costs were retained")
-    print("PASS profile Zoom storage, recovery, failure cost and new earnings")
+    let legacyID = UUID()
+    let legacy = try JSONSerialization.data(withJSONObject: ["burnedZoom": 99, "usedZoom": 12,
+      "burnedSuperzoom": 1, "usedSuperzoom": 0, "attemptID": legacyID.uuidString, "active": "zoom"])
+    defaults.set(legacy, forKey: "PrecisionZoom.v1.legacy")
+    restored.start(attemptID: legacyID, profileID: "legacy")
+    try check(restored.active == .zoom && restored.remainingSuperzoom() == 1,
+      "Legacy Zoom costs changed the restored state or Superzoom balance")
+    try check(restored.toggle(.zoom) && restored.toggle(.zoom), "Legacy Zoom costs blocked free Zoom")
+    defaults.set(Data("invalid".utf8), forKey: "PrecisionZoom.v1.damaged")
+    restored.start(attemptID: UUID(), profileID: "damaged")
+    try check(restored.storageError != nil && restored.remainingSuperzoom() == 0 && !restored.toggle(.superzoom),
+      "Damaged storage granted earned Superzoom")
+    try check(restored.toggle(.zoom) && restored.active == .zoom,
+      "Damaged earned-use storage disabled ordinary Zoom")
+    print("PASS free Zoom, profile Superzoom storage, recovery, legacy migration and damaged storage")
   }
 
   fileprivate func testHintsFromControlsHelp() async throws {
@@ -3653,9 +3882,11 @@ extension AppDelegate {
     playfield.startCountdown.cancel()
     session = game; phase = .playing; isPaused = false
     settings.modernControlsEnabled = true; settings.variableSpeedEnabled = true
+    speedControl.ridiculousEnabled = true
+    defer { speedControl.ridiculousEnabled = false }
     speedControl.variableEnabled = true; speedControl.reset(at: 100)
     lastStepTime = 100; accumulator = 0
-    for (index, rate) in [2, 3, 5, 10].enumerated() {
+    for (index, rate) in [2, 3, 5, 10, 25].enumerated() {
       let time = 101 + Double(index) * 2
       if index == 0 { speedControl.newLevel(); speedControl.tap(at: time) }
       else { speedControl.step(1, at: time) }
@@ -3664,11 +3895,11 @@ extension AppDelegate {
       for frame in 1...10 { step(at: time + 0.25 + Double(frame) / 10) }
       try check(abs(game.currentTick - before - rate * 17) <= 1, "The game clock did not run at \(rate)x: ticks \(game.currentTick-before), speed \(speedControl.multiplier), paused \(isPaused), pages \(GameScreen.shared.isPresented), sequel \(sequelIsActive), phase \(phase)")
     }
-    speedControl.reset(at: 110); lastStepTime = 110; accumulator = 0
+    speedControl.reset(at: 112); lastStepTime = 112; accumulator = 0
     let before = game.currentTick
-    for frame in 1...10 { step(at: 110 + Double(frame) / 10) }
+    for frame in 1...10 { step(at: 112 + Double(frame) / 10) }
     try check(abs(game.currentTick - before - 17) <= 1, "Quick exit failed to restore the 1x simulation clock")
-    print("PASS actual Classic simulation clock at 2x, 3x, 5x, 10x and quick return to 1x")
+    print("PASS actual Classic simulation clock at 2x, 3x, 5x, 10x, 25x and quick return to 1x")
   }
 }
 
@@ -3703,70 +3934,57 @@ private final class FinalTickSession: GameSession {
 
 extension AppDelegate {
   fileprivate func testFirstLaunchEffects() throws {
+    if window == nil { buildInterface() }
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
-    settings.music = .silent
-    let suite = "hd-effects-tests-\(UUID().uuidString)"
+    let suite = "presentation-defaults-tests-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suite)!
     defer { defaults.removePersistentDomain(forName: suite) }
-    var choices: [Bool] = []
-    func choose(_ enabled: Bool) { choices.append(enabled); setExperiencePreset(enabled) }
-    func button(_ title: String, in view: NSView) -> NSButton? {
-      if let button = view as? NSButton, button.title == title { return button }
-      return view.subviews.compactMap { button(title, in: $0) }.first
-    }
-    let welcome = EffectsWelcome(defaults: defaults)
-    welcome.showIfNeeded(in: window, onChoose: choose)
-    let root = window.contentView!
-    guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
-          let oldSchool = button("Old school", in: page), let hd = button("Play with modern defaults", in: page) else {
-      throw IntegrationFailure(message: "First launch did not offer both effects choices")
-    }
-    try check(hd.keyEquivalent == "\r", "HD effects are not the default keyboard choice")
-    page.layoutSubtreeIfNeeded()
-    let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
-    page.cacheDisplay(in: page.bounds, to: bitmap)
-    let output = URL(fileURLWithPath: ".build/hd-defaults-tests/welcome.png")
-    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
-    oldSchool.performClick(nil)
-    try check(choices == [false] && !settings.hdEffectsEnabled && !playfield.hdEffectsEnabled,
-      "Old school did not disable and apply HD effects")
-    // Old school means original controls everywhere, not only original effects.
-    func usesModernControls() -> [String] {
-      var active: [String] = []
-      if settings.modernControlsEnabled { active.append("modern controls") }
-      if settings.variableSpeedEnabled || speedControl.variableEnabled { active.append("variable speed") }
-      if panel.modernControlsEnabled { active.append("modern panel") }
-      if gameplayKeyboard?.modern() == true { active.append("modern keys") }
-      if settings.controllerEnabled { active.append("controller") }
-      if settings.confinePointer { active.append("pointer capture") }
-      if settings.pauseOnInterruption { active.append("interruption pause") }
-      if settings.favorApproachingLemmings || playfield.favorApproachingLemmings { active.append("approaching targeting") }
-      if settings.favorBombBlockers || playfield.favorBombBlockers { active.append("blocker targeting") }
-      if settings.favorBuilders || playfield.favorBuilders { active.append("builder targeting") }
-      if settings.skillCursorIconSize != .none { active.append("skill icon") }
-      return active
-    }
-    let stillModern = usesModernControls()
-    try check(stillModern.isEmpty && settings.experiencePreset == .original,
-      "Old school left modern behaviour active: \(stillModern.joined(separator: ", "))")
-    let saved = try JSONDecoder().decode(ClassicSettings.self, from: UserDefaults.standard.data(forKey: settingsKey)!)
-    try check(!saved.hdEffectsEnabled && !GameScreen.shared.isPresented, "The first-launch choice was not saved and dismissed")
+    let fresh = ClassicSettings()
+    try check(fresh.modernControlsEnabled && fresh.controllerEnabled && fresh.pauseOnInterruption
+      && !fresh.fullScreenHDRFlashes && !fresh.djIncludesOtherSoundtracks,
+      "Fresh settings must retain safe controls with restrained presentation")
+    var existing = ClassicSettings(graphics: .amiga, music: .silent, musicVolume: 0.25)
+    existing.controllerMappings = ["a": "b", "b": "a"]
+    existing.controllerSwapSticks = true
+    existing.hdEffectsEnabled = false
+    existing.fullScreenHDRFlashes = true
+    existing.djIncludesOtherSoundtracks = true
+    let saved = try JSONEncoder().encode(existing)
+    defaults.set(saved, forKey: settingsKey)
+    for _ in 0..<2 { EffectsWelcome.acknowledgeDefaults(in: defaults) }
+    try check(defaults.bool(forKey: EffectsWelcome.choiceKey)
+      && defaults.data(forKey: settingsKey) == saved && !GameScreen.shared.isPresented,
+      "Launch acknowledgement changed saved preferences or added a presentation screen")
+    apply(existing)
+    let artwork = SequelArtworkPreference.enabled
+    setExperiencePreset(false)
+    try check(settings.experiencePreset == .original && !settings.hdEffectsEnabled
+      && !playfield.hdEffectsEnabled && settings.gameplayCursorStyle == .original
+      && settings.lemmingSelectionStyle == .none,
+      "Original presentation did not apply original markers and effects")
+    let retainedControls: [(String, Bool)] = [
+      ("modern settings", settings.modernControlsEnabled), ("variable setting", settings.variableSpeedEnabled),
+      ("variable transport", speedControl.variableEnabled), ("modern panel", panel.modernControlsEnabled),
+      ("installed modern keyboard", gameplayKeyboard?.modern() == true), ("controller settings", settings.controllerEnabled),
+      ("installed controller", gameplayKeyboard?.controllerEnabled() == true), ("pointer capture", settings.confinePointer),
+      ("interruption setting", settings.pauseOnInterruption), ("installed interruption pause", gameplayKeyboard?.pauseOnInterruption() == true),
+      ("targeting", settings.favorApproachingLemmings), ("bindings", settings.controllerMappings == existing.controllerMappings),
+      ("stick swap", settings.controllerSwapSticks), ("artwork", SequelArtworkPreference.enabled == artwork)]
+    let changedControls = retainedControls.filter { !$0.1 }.map(\.0)
+    try check(changedControls.isEmpty,
+      "Original presentation changed independent choices: \(changedControls.joined(separator: ", "))")
+    let original = settings
     restoreSettings()
-    let afterRelaunch = usesModernControls()
-    try check(afterRelaunch.isEmpty, "Old school did not survive a relaunch: \(afterRelaunch.joined(separator: ", "))")
-    let restarted = EffectsWelcome(defaults: defaults)
-    restarted.showIfNeeded(in: window, onChoose: choose)
-    try check(!GameScreen.shared.isPresented && choices.count == 1, "The effects choice returned on a later launch")
-    defaults.removeObject(forKey: EffectsWelcome.choiceKey)
-    restarted.showIfNeeded(in: window, onChoose: choose)
-    button("Play with modern defaults", in: root)!.performClick(nil)
-    try check(choices == [false, true] && settings.hdEffectsEnabled && settings.fullScreenHDRFlashes,
-      "The default HD choice failed to enable the effects")
-    try check(settings.modernControlsEnabled && speedControl.variableEnabled && panel.modernControlsEnabled
-      && gameplayKeyboard?.modern() != false && settings.favorApproachingLemmings && settings.experiencePreset == .modern,
-      "Modern defaults did not restore modern controls")
-    print("PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation")
+    try check(settings == original, "Original presentation and independent controls did not survive restoration")
+    setExperiencePreset(true)
+    try check(settings.experiencePreset == .modern && settings.hdEffectsEnabled
+      && !settings.fullScreenHDRFlashes && !settings.djIncludesOtherSoundtracks
+      && settings.graphics == .amiga && settings.music == .silent && settings.musicVolume == 0.25
+      && settings.controllerMappings == existing.controllerMappings && settings.controllerSwapSticks
+      && SequelArtworkPreference.enabled == artwork,
+      "Modern presentation changed sources or controls, or enabled dramatic effects")
+    print("PASS restrained launch defaults, no presentation gate, saved choices and independent live controls")
   }
 
   fileprivate func testSuperSpeedPresentation() throws {
@@ -4026,11 +4244,12 @@ extension AppDelegate {
           arcade.toggleSessionProfile(guest!.id)
           arcade.turnPolicy = mode == 1 ? .everyLevel : .atFirstFail
         }
+        let runScope = arcade.hotSeatID
         let file = directory.appendingPathComponent("\(engine)-\(mode).json")
         let store = try LevelPlaylistStore(file: file); try store.add(journey.playlist())
         let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
           pool: .init(id: LearningJourney.version, summary: "Skip test"), entries: [entry, destination])
-        try store.startRun(run, hotSeatID: arcade.hotSeatID)
+        try store.startRun(run, hotSeatID: runScope)
         playlistStoreCache = (owner, store); sequencePlaylistStore = store
         if engine == .classic {
           gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
@@ -4053,7 +4272,7 @@ extension AppDelegate {
         for width in [900, 1600] {
           window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
           let label = try captureResult("journey-\(engine)-\(mode)-\(width)")
-          try check(label.contains("Level Skips 1") && label.contains("Superzoom"), "Journey loss hid its resource balances")
+          try check(!label.contains("Level Skips 1") && !label.contains("Superzoom"), "Journey loss repeated optional resource accounting")
           let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
           guard let skip = controls.first(where: { $0.accessibilityLabel() == view.skipTitle }) else { throw IntegrationFailure(message: "Journey Skip has no input target") }
           try check(skip.isAccessibilityEnabled() && view.bounds.contains(skip.localFrame), "Journey Skip target was disabled or clipped")
@@ -4087,8 +4306,10 @@ extension AppDelegate {
         let arrived = try await waitUntil(12) { self.sequencePlayingIdentity == destination.identity && self.levelBrowserLaunchTask == nil }
         try check(arrived, "\(engine) Skip did not load the next journey lesson")
         let restored = try LevelPlaylistStore(file: file)
-        try check(restored.activeRun?.currentIndex == 1 && !restored.learningProgress.completed.contains(entry.identity)
-          && restored.learningProgress.later.contains(entry.identity), "Skipped lesson was lost or marked solved")
+        let restoredProgress = restored.learningProgress(hotSeatID: runScope)
+        try check(restored.activeRun?.id == run.id && restored.activeRunHotSeatID == runScope
+          && restored.activeRun?.currentIndex == 1 && !restoredProgress.completed.contains(entry.identity)
+          && restoredProgress.later.contains(entry.identity), "Skipped lesson was lost or marked solved")
         try check(arcade.records.levelSkips(profileID: owner).available == 0 && arcade.records.hasSkipped(failedLevel, profileID: owner), "Journey Skip did not charge its attempt owner once")
         if let guest {
           try check(arcade.playingProfileID == guest.id && arcade.records.levelSkips(profileID: guest.id).spent == 0,
@@ -6080,10 +6301,11 @@ extension AppDelegate {
     var continued = false
     welcome.show(in: window) { continued = true }
     guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
-      let scroll = page.body.subviews.first as? NSScrollView,
-      let document = scroll.documentView else {
+      let notes = page.body.subviews.first as? AboutMarkdownView,
+      let document = notes.scroll.documentView else {
       throw IntegrationFailure(message: "Release notes have no scrollable body")
     }
+    let scroll = notes.scroll
     let oldSize = page.frame.size
     defer { page.frame.size = oldSize; GameScreen.shared.dismissAll() }
     let folder = URL(fileURLWithPath: ".build/release-notes-layout")
@@ -6092,6 +6314,9 @@ extension AppDelegate {
       page.frame.size = size; page.needsLayout = true; page.layoutSubtreeIfNeeded()
       try check(document.bounds.height > 0 && scroll.hasVerticalScroller,
         "Release notes lost their scrolling container")
+      try check(abs(document.bounds.width - scroll.contentSize.width) < 1
+        && document.subviews.allSatisfy { $0.frame.width <= 680 },
+        "Release notes did not reflow into the bounded reading column")
       try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) },
         "Release note text left its document bounds")
       let action = page.controllerInitialControl
@@ -6173,8 +6398,32 @@ extension AppDelegate {
     try check(telemetry.localSavedTotal == 4780, "Recovery duplicated counts")
     GameScreen.shared.dismissAll()
 
-    let about = AboutWindow(defaults: defaults, loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
+    let markdownFixture = AboutMarkdownView(markdown: "# Release\n\n## Changes\n\n- First item\n  continued\n- Second item\n\nSeparate paragraph.\nNext source line.")
+    markdownFixture.frame = CGRect(x: 0, y: 0, width: 240, height: 400)
+    markdownFixture.layoutSubtreeIfNeeded()
+    let fixtureLabels = descendants(markdownFixture).compactMap { $0 as? GameLabel }.map(\.stringValue)
+    try check(fixtureLabels.contains("First item continued") && fixtureLabels.contains("Second item")
+      && fixtureLabels.contains("Separate paragraph. Next source line.") && fixtureLabels.filter { $0 == "-" }.count == 2,
+      "Markdown lost its bullets, continuations or paragraph boundaries")
+    let fixtureRows = markdownFixture.scroll.documentView!.subviews.compactMap { $0 as? GameLabel }
+    let wrappedItem = fixtureRows.first { $0.stringValue == "First item continued" }!
+    let marker = fixtureRows.first { $0.stringValue == "-" }!
+    try check(wrappedItem.frame.height > 28 && wrappedItem.frame.maxY == marker.frame.maxY,
+      "Wrapped bullet marker did not align with its first line")
+    let installedVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    let installedBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
+    let heritageSource = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent("Resources/About/Heritage.md")
+    let aboutResources = folder.appendingPathComponent("resources")
+    let aboutFolder = aboutResources.appendingPathComponent("About")
+    try FileManager.default.createDirectory(at: aboutFolder, withIntermediateDirectories: true)
+    try Data(contentsOf: heritageSource).write(to: aboutFolder.appendingPathComponent("Heritage.md"))
+    try Data(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"))
+      .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"))
+    let about = AboutWindow(resources: aboutResources, defaults: defaults,
+      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
     let page = about.show(owner: window)
+    try check(window.firstResponder === page.controllerBackButton, "About did not retain safe Back focus")
     for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
       try await Task.sleep(nanoseconds: 10_000_000)
     }
@@ -6187,23 +6436,83 @@ extension AppDelegate {
         try button(name, in: page).performClick(nil)
         page.layoutSubtreeIfNeeded()
         try capture(page, "\(Int(size.width))-\(name.replacingOccurrences(of: " ", with: "-"))")
-        let visible = descendants(page).compactMap { $0 as? NSButton }.filter { !$0.isHiddenOrHasHiddenAncestor }
+        let visible = descendants(page).compactMap { $0 as? NSButton }.filter {
+          !$0.isHiddenOrHasHiddenAncestor && $0.visibleRect == $0.bounds
+        }
         for target in visible {
           let rect = target.convert(target.bounds, to: page)
           try check(page.bounds.contains(rect), "About action left the page")
           let hit = page.hitTest(CGPoint(x: rect.midX, y: rect.midY))
           try check(hit === target || hit?.isDescendant(of: target) == true, "About action is obscured: " + target.title)
         }
-        if name == "Version history", let document = descendants(page).compactMap({ $0 as? AboutMarkdownView })
-          .first(where: { !$0.isHiddenOrHasHiddenAncestor })?.scroll.documentView {
-          try check(document.bounds.height > 4000, "Version history is missing its published releases")
-          try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) }, "History text left document bounds")
+        if name == "About", let heritage = descendants(page).compactMap({ $0 as? AboutMarkdownView })
+          .first(where: { !$0.isHiddenOrHasHiddenAncestor }) {
+          try check(heritage.markdown.contains("Programming: Dave Jones")
+            && heritage.markdown.contains("Animation: Gary Timmons") && heritage.markdown.contains("Graphics: Scott Johnston")
+            && heritage.markdown.contains("Brian Johnston and Tim Wright") && heritage.markdown.contains("Presage, Inc.")
+            && heritage.markdown.contains("reconstruction made for Ultimate Lemmings"),
+            "Offline About lost the original credits or reconstruction provenance")
+          let document = heritage.scroll.documentView!
+          try check(document.bounds.height > heritage.scroll.contentSize.height,
+            "Heritage credits are not scrollable")
+          try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) && $0.frame.width <= 680 },
+            "Heritage credits left the bounded bitmap reading column")
+          heritage.scroll.contentView.scroll(to: .zero)
+          heritage.scroll.reflectScrolledClipView(heritage.scroll.contentView)
+          try capture(page, "\(Int(size.width))-heritage-provenance")
+          heritage.scroll.contentView.scroll(to: CGPoint(x: 0,
+            y: max(0, document.bounds.height - heritage.scroll.contentSize.height)))
+          heritage.scroll.reflectScrolledClipView(heritage.scroll.contentView)
+        }
+        if name == "Version history", let history = descendants(page).compactMap({ $0 as? AboutHistoryView }).first {
+          try check(history.releases.first?.title == "\(installedVersion) · Build \(installedBuild)", "Current release is missing or out of order")
+          try check(history.releases.count >= 20, "Published releases are missing from the index")
+          let document = history.detail.scroll.documentView!
+          try check(document.bounds.height > history.detail.scroll.contentSize.height, "Current notes cannot scroll")
+          try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) && $0.frame.width <= 680 },
+            "History text left its bounded reading column")
+          let previousVersion = history.releases[1].title.components(separatedBy: " · ").first!
+          let older = try button(previousVersion, in: history)
+          try check(older.bounds.height >= 44, "Release index target is too small")
+          try check(older.accessibilityPerformPress() && history.selectedIndex == 1 && older.state == .on,
+            "Release selection is unavailable to accessibility")
+          history.layoutSubtreeIfNeeded()
+          try capture(page, "\(Int(size.width))-history-older")
+          try check(abs(history.detail.scroll.contentView.bounds.maxY - history.detail.scroll.documentView!.bounds.maxY) <= 1,
+            "Selecting a release did not return its notes to the top")
+          if let heading = document.subviews.compactMap({ $0 as? GameLabel })
+            .first(where: { $0.stringValue == "Earlier 2.0.5 changes" }) {
+            history.detail.scroll.contentView.scroll(to: CGPoint(x: 0,
+              y: max(0, heading.frame.maxY + 8 - history.detail.scroll.contentSize.height)))
+            history.detail.scroll.reflectScrolledClipView(history.detail.scroll.contentView)
+            try capture(page, "\(Int(size.width))-history-bullets")
+          }
+          let index = history.indexScroll.documentView!
+          history.indexScroll.contentView.scroll(to: .zero)
+          history.indexScroll.reflectScrolledClipView(history.indexScroll.contentView)
+          let oldest = try button("1.7.9", in: history)
+          let rect = oldest.convert(oldest.bounds, to: page)
+          try check(page.hitTest(CGPoint(x: rect.midX, y: rect.midY)) === oldest,
+            "Oldest release is unreachable after scrolling")
+          oldest.performClick(nil)
+          try check(history.selectedIndex == history.releases.count - 1, "Oldest release cannot be selected")
+          try capture(page, "\(Int(size.width))-history-oldest")
+          history.indexScroll.contentView.scroll(to: CGPoint(x: 0, y: index.bounds.height - history.indexScroll.contentSize.height))
+          let current = try button(installedVersion, in: history)
+          window.makeFirstResponder(current)
+          let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+            windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
+            isARepeat: false, keyCode: 49)!
+          try check(GameScreen.shared.handleDialogKey(space) && history.selectedIndex == 0 && current.state == .on,
+            "Keyboard could not select the current release")
+          history.layoutSubtreeIfNeeded()
         }
       }
     }
     page.frame.size = originalSize
     GameScreen.shared.dismissAll()
-    let offline = AboutWindow(defaults: defaults, loadContributors: { throw URLError(.notConnectedToInternet) })
+    let offline = AboutWindow(resources: aboutResources, defaults: defaults,
+      loadContributors: { throw URLError(.notConnectedToInternet) })
     let offlinePage = offline.show(owner: window)
     try button("Contributors", in: offlinePage).performClick(nil)
     for _ in 0..<100 where !descendants(offlinePage).compactMap({ $0 as? GameLabel })
@@ -6213,6 +6522,12 @@ extension AppDelegate {
     try capture(offlinePage, "contributors-offline")
     try check(descendants(offlinePage).compactMap({ $0 as? GameLabel }).contains(where: { $0.stringValue == "First supporter" }),
       "Offline contributors lost the cached list")
+    try button("About", in: offlinePage).performClick(nil)
+    try check(descendants(offlinePage).compactMap({ $0 as? AboutMarkdownView })
+      .contains(where: { !$0.isHiddenOrHasHiddenAncestor && $0.markdown.contains("Programming: Dave Jones") }),
+      "Contributor refresh replaced the local heritage credits")
+    offlinePage.controllerBackButton.performClick(nil)
+    try check(!GameScreen.shared.contains(offlinePage), "Heritage credits blocked Back")
     try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
     try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
     GameScreen.shared.dismissAll()
@@ -7781,7 +8096,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS
+    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -7793,7 +8108,32 @@ Task { @MainActor in
     #endif
     #endif
     #endif
-    #if QUICK_CONTROLS_TESTS
+    #if FOUNDATION_TESTS
+    #if !FOUNDATION_REVIEW_TESTS
+    try subject.testSteppedCompletion()
+    try subject.testFirstLaunchEffects()
+    try subject.testHomeSettingsButton()
+    try subject.testPrecisionZoomWallet()
+    try testLevelSkipBadges()
+    try testPerkEarningStars()
+    try await testEarnedRewardPresentation()
+    try await subject.testLearningLevelSkips()
+    try await subject.testLevelHints()
+    #endif
+    try await subject.testShortGames()
+    try await subject.testAboutAndCountRecovery()
+    #if FOUNDATION_REVIEW_TESTS
+    print("Anniversary short-game and heritage review integration tests passed.")
+    #else
+    print("Anniversary foundation input, hints, results, sequences and heritage integration tests passed.")
+    #endif
+    #elseif EXTRA_SKILL_TESTS
+    try testExtraSkillChooserAndKeyboard()
+    try testExtraSkillNativeReceipts()
+    try subject.testNativeExtraSkillGrants()
+    try testLevelSkipBadges()
+    print("Extra-skill reward, chooser, receipt and fading control integration tests passed.")
+    #elseif QUICK_CONTROLS_TESTS
     try subject.testGameplayQuickControls()
     print("Gameplay quick controls integration tests passed.")
     #elseif HOME_BACKDROP_TESTS
@@ -7832,6 +8172,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     print("Collections integration tests passed.")
     #elseif ABOUT_TESTS
+    try subject.testScrollableReleaseNotes()
     try await subject.testAboutAndCountRecovery()
     #elseif RELEASE_NOTES_TESTS
     try await subject.testSequelReleaseStatus()
@@ -8048,6 +8389,16 @@ Task { @MainActor in
     print("Frame clocks and browser worker lifecycle integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
+    do {
+      let native = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+      defer { native.stop(); native.close() }
+      try native.testRidiculousSpeed()
+    }
+    do {
+      let native = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+      defer { native.stop(); native.close() }
+      try native.testRidiculousSpeed()
+    }
     try subject.testPrecisionZoomWallet()
     try subject.testVariableSimulationClock()
     try subject.testSuperSpeedPresentation()
@@ -8894,8 +9245,8 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
       telemetry: .init(released: 1))
     guard let report = store.record(run) else { throw IntegrationFailure(message: "Reward fixture could not save") }
     wallet.start(attemptID: UUID(), profileID: player)
-    try check(wallet.remaining(.zoom) == index + 1 && wallet.remaining(.superzoom) == (index == 2 ? 1 : 0),
-      engine + " saved career did not fund its precision uses")
+    try check(wallet.toggle(.zoom) && wallet.remainingSuperzoom() == (index == 2 ? 1 : 0),
+      engine + " could not use free Zoom or changed its earned Superzoom")
     for width in [900, 1600] {
       host.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
       ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in }, menu: {})
@@ -8906,13 +9257,15 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
       try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
         to: folder.appendingPathComponent(engine + "-\(width).png"))
       let label = result.accessibilityLabel() ?? ""
-      try check(label.contains("+1 ZOOM") && label.contains("+1 SUPERZOOM") == (index == 2),
-        engine + " result did not announce the actual new uses")
-      try check(label.contains("+1 SKIP") == (index == 2) && label.contains("Level Skips \(index == 2 ? 1 : 0)"), engine + " result hid its Level Skip reward or balance")
+      try check(result.mode == .result && !label.contains("+1 ZOOM"),
+        engine + " result was interrupted or announced obsolete Zoom currency")
+      let receipts = result.savedEarnedRewards
+      try check(receipts.contains { $0.title == "+1 SUPERZOOM" } == (index == 2)
+        && receipts.contains { $0.title == "+1 LEVEL SKIP" } == (index == 2),
+        engine + " result hid its earned Superzoom or Level Skip receipt")
       let rewardRows = result.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
-        .filter { element in ["Zoom ", "Superzoom ", "Level Skips "].contains { element.accessibilityLabel()?.hasPrefix($0) == true } }
-      try check(rewardRows.count == 3 && rewardRows.allSatisfy { result.bounds.contains($0.localFrame) },
-        engine + " passive perk count was missing or clipped")
+        .filter { $0.accessibilityLabel()?.hasPrefix("Zoom ") == true }
+      try check(rewardRows.isEmpty, engine + " result retained a basic Zoom balance")
       GameScreen.shared.dismissAll()
     }
   }
@@ -9595,15 +9948,15 @@ extension AppDelegate {
 }
 
 @MainActor private func testLevelSkipBadges() throws {
-  let size = CGSize(width: 660, height: 330)
+  let size = CGSize(width: 900, height: 360)
   let image = ReplayFrameCapture.image(size: size) {
     NSColor.darkGray.setFill(); CGRect(origin: .zero, size: size).fill()
     for (column, active) in [nil, PrecisionZoomKind.zoom, .superzoom].enumerated() {
       for (row, count) in [0, 4, 123].enumerated() {
-        let status = PrecisionZoomStatus(zoom: count, superzoom: count, skips: count, active: active, isEmpty: false)
+        let status = PrecisionZoomStatus(superzoom: count, skips: count, extraSkills: count, active: active, isEmpty: false)
         precondition(status.accessibility.contains("\(count) Level Skips"))
-        let drawn = status.draw(at: CGPoint(x: 12 + column * 220, y: 12 + row * 105), scale: 2)
-        precondition(drawn == status.size(scale: 2) && drawn.height == 74 && drawn.width < 210)
+        let drawn = status.draw(at: CGPoint(x: 12 + column * 300, y: 12 + row * 115), scale: 2)
+        precondition(drawn == status.size(scale: 2) && drawn.height == 100 && drawn.width < 290)
       }
     }
   }!
@@ -9648,13 +10001,13 @@ extension AppDelegate {
   let directory = FileManager.default.temporaryDirectory.appendingPathComponent("perk-stars-\(UUID())")
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
   defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
-  for (before, earningStar) in [(1, 2), (2, 1)] {
+  for before in [1, 2] {
     let store = ArcadeStore(file: directory.appendingPathComponent("\(before).json"), bundledProofs: nil)
     ArcadeStore.shared = store
     let owner = store.records.activeProfileID
     func level(_ number: Int) -> ArcadeLevel {
       let conditions = TrolleyConditions(gameID: "lemmings", packID: "perk-stars", levelID: "\(number)", levelFingerprint: "\(number)", rulesetVersion: "test", physicsMode: "test", population: 3, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
-      return .init(id: "\(number)", title: "Star-linked Zoom", game: "lemmings", rules: "test", total: 3, required: 1, conditions: conditions)
+      return .init(id: "\(number)", title: "Free Zoom", game: "lemmings", rules: "test", total: 3, required: 1, conditions: conditions)
     }
     for number in 0..<2 {
       try store.acceptMaximum(.init(value: 3, status: .verified, source: "Perk test", date: Date(), buildVersion: "test"), conditions: level(number).conditions!, assisted: false)
@@ -9664,26 +10017,25 @@ extension AppDelegate {
     ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in })
     let view = ArcadeWindow.shared.arcadeView
     view.finishCelebration()
-    try check(view.celebration?.careerBefore.stars == before && view.earnedPerks.count == 1, "Perk threshold fixture is invalid")
-    let zoom = view.earnedPerks[0]
-    try check(zoom.kind == .zoom && zoom.star == earningStar, "Zoom did not attach to the exact earning star")
+    try check(view.celebration?.careerBefore.stars == before && view.earnedPerks.isEmpty,
+      "Career stars still earned basic Zoom currency")
     for star in 0...3 {
       view.revealedStars = star
-      try check(view.perkIsRevealed(zoom) == (star >= earningStar), "Zoom appeared on the wrong star")
-      try check(view.perkCounters.first?.value == (star >= earningStar ? 1 : 0), "Passive Zoom count did not update on the earning star")
+      try check(view.earnedPerks.isEmpty && view.perkCounters.allSatisfy { $0.name != "Zoom" },
+        "A star stamp revealed obsolete Zoom currency")
     }
     view.finishCelebration(); host.contentView?.layoutSubtreeIfNeeded()
     let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
     let folder = URL(fileURLWithPath: ".build/earned-reward-renders")
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("single-perk-star-\(earningStar).png"))
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("free-zoom-career-\(before).png"))
     try checkCompactResultActions(view)
     let children = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
-    try check(children.contains { $0.accessibilityRole() == .staticText && $0.accessibilityLabel() == "Zoom 1" }, "Passive Zoom count has no accessible value")
-    try check(!children.contains { $0.accessibilityRole() == .button && $0.accessibilityLabel() == "+1 ZOOM" }, "Passive counter still has an award-card target")
+    try check(!children.contains { $0.accessibilityLabel()?.hasPrefix("Zoom ") == true
+      || $0.accessibilityLabel() == "+1 ZOOM" }, "Result retained basic Zoom currency")
 
   }
-  print("PASS Zoom reveals on the exact first or second earning star; passive counts and accessible values")
+  print("PASS career stars and result stamps do not advertise basic Zoom currency")
 }
 
 @MainActor private func testEarnedRewardPresentation() async throws {
@@ -9741,16 +10093,16 @@ extension AppDelegate {
       let celebration = TrolleyCelebration(report: report, history: store.records.trolley)
       let rewards = ResultAwards.earnedRewards(report: report, celebration: celebration)
       try check(celebration.newAwards.contains { $0.award == .targetApprentice }, "Reward fixture did not earn its named career milestone")
-      try check(rewards.contains { $0.title == "+1 ZOOM" && $0.reason.contains("6 to 9") && $0.reason.contains("per 3") }, "Zoom award lacks its actual milestone and criterion")
+      try check(!rewards.contains { $0.title == "+1 ZOOM" }, "Free Zoom still appeared as an earned currency")
       try check(rewards.contains { $0.title == "+1 SUPERZOOM" && $0.reason.contains("2 to 3") && $0.reason.contains("distinct") }, "Superzoom award lacks its reason")
-      try check(rewards.contains { $0.title == "+1 LEVEL SKIP" && $0.reason.contains("without rewind or undo") }, "Skip award lacks its reason")
+      try check(rewards.contains { $0.title == "+1 LEVEL SKIP" && $0.reason.contains("without rewind, undo or a bonus skill") }, "Skip award lacks its reason")
       try check(rewards.contains { $0.title == "EVERYONE HOME" && $0.reason.contains("all 1") }, "Level award lacks the achieved rescue")
       try check(celebration.newAwards.allSatisfy { award in rewards.contains { $0.title == award.award.title && $0.reason == award.award.detail } }, "A new named career award was hidden behind a count")
       var next = 0, retries = 0
       ArcadeWindow.shared.showResult(report, owner: host, retry: { retries += 1 }, next: { next += 1 }, replay: { _ in })
       let view = ArcadeWindow.shared.arcadeView
       try check(view.mode == .result && view.celebratesNewRewards, "Saved \(engine) result did not start its own reward celebration")
-      try check(view.earnedPerks.map { $0.title } == ["+1 ZOOM", "+1 SUPERZOOM", "+1 LEVEL SKIP"], "Result hid a new spendable perk")
+      try check(view.earnedPerks.map { $0.title } == ["+1 SUPERZOOM", "+1 LEVEL SKIP"], "Result hid a new spendable perk or retained Zoom currency")
       let balanceBefore = store.records.levelSkips(profileID: owner).available
       view.startCelebration(reduceMotion: false)
       _ = try capture("\(engine)-\(mode)-stars-0", settled: false)
@@ -9767,7 +10119,7 @@ extension AppDelegate {
           view.perkGlowAmount = view.glowingPerks.isEmpty ? 0 : 1
           _ = try capture("\(engine)-\(mode)-\(width)-stars-\(star)", settled: false)
           try check(view.earnedPerks.allSatisfy { view.perkIsRevealed($0) == (star >= $0.star) }, "Perk reveal does not match the earning star")
-          try check(view.perkCounters.map(\.value) == (star == 3 ? [3, 1, 1] : [2, 0, 0]), "Passive balances changed before or after the earning star")
+          try check(view.perkCounters.map(\.value) == (star == 3 ? [1, 1, 0] : [0, 0, 0]), "Superzoom and skip balances changed before or after the earning star")
         }
         view.finishCelebration()
       }
@@ -9810,7 +10162,8 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
-      let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel()?.hasPrefix("Rewards earned (") == true }
+      let receiptLabel = view.achievementHints.first { $0.title == "Rewards earned" }?.label
+      let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == receiptLabel }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
         windowNumber: host.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!)

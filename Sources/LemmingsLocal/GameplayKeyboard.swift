@@ -18,6 +18,13 @@ import NxlvKit
             state.variableEnabled = newValue; onChange()
         }
     }
+    var ridiculousEnabled: Bool {
+        get { state.ridiculousEnabled }
+        set {
+            guard newValue != state.ridiculousEnabled else { return }
+            state.ridiculousEnabled = newValue; onChange()
+        }
+    }
     var isFast: Bool { !bulletTimeActive && state.isFast }
     var multiplier: Double {
         PrecisionZoomLedger.effectiveSpeed(normal: state.multiplier,
@@ -49,7 +56,10 @@ import NxlvKit
     func cancelInput() { state.cancelInput(at: ProcessInfo.processInfo.systemUptime); onChange() }
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
-        variableEnabled
+        if variableEnabled && ridiculousEnabled {
+            return L10n.text("F / Speed: toggle fast-forward\nHold F: ramp up to 25×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5×, 10× or 25×\nF or controller B: immediately return to 1×")
+        }
+        return variableEnabled
             ? L10n.text("F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×")
             : L10n.text("F / Speed: toggle fast-forward")
     }
@@ -78,6 +88,14 @@ import NxlvKit
     var speedControl: GameSpeedControl?
     var assignSelected: () -> Void = {}
     var togglePause: () -> Void = {}
+    var inspectionAvailable: () -> Bool = { false }
+    var inspectLemmings: (() -> Void)?
+    var inspectionHoverID: () -> Int? = { nil }
+    var inspectionHoverRevision: () -> String = { "" }
+    var inspectionHoverSnapshot: () -> LemmingInspection? = { nil }
+    private let inspectionHover = LemmingInspectionHover(frame: .zero)
+    private var hoverRevision: String?
+    private var hoverSnapshot: LemmingInspection?
     var movePointer: (Double, Double) -> Void = { _, _ in }
     var panCamera: (Double, Double) -> Void = { _, _ in }
     var menuActive: () -> Bool = { false }
@@ -106,6 +124,13 @@ import NxlvKit
     var navigationReduceMotion: () -> Bool = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
     var showSongInfo: () -> Bool = { true }
     var fadeMenuButton: () -> Bool = { true }
+    var navigationArtworkOpacityChanged: (CGFloat) -> Void = { _ in }
+    /// Badge bounds use the content view's coordinates, including while faded.
+    var rewardDisplayArea: () -> CGRect? = { nil }
+    var extraSkill: (() -> Void)?
+    var extraSkillTitle: () -> String = { L10n.text("Extra skill") }
+    var extraSkillHelp: () -> String = { "" }
+    var extraSkillAvailable: () -> Bool = { false }
     private lazy var navigationButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
         button.title = L10n.text("Menu"); button.target = self; button.action = #selector(openMainMenu)
@@ -127,7 +152,57 @@ import NxlvKit
         button.setAccessibilityLabel(L10n.text("Next graphics"))
         return button
     }()
-    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton] }
+    private lazy var inspectionButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
+        button.title = L10n.text("Inspect")
+        button.target = self; button.action = #selector(openInspection)
+        button.setAccessibilityLabel(L10n.text("Inspect lemmings"))
+        button.toolTip = L10n.text("Inspect lemmings while paused (⌘I)")
+        return button
+    }()
+    private lazy var ghostsButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
+        button.target = self; button.action = #selector(toggleHotSeatGhosts)
+        button.toolTip = L10n.text("Show or hide Hot Seat ghosts (⌘G)")
+        return button
+    }()
+    private lazy var extraSkillButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
+        button.target = self; button.action = #selector(useExtraSkill)
+        return button
+    }()
+    @objc private func useExtraSkill() {
+        guard active(), modern(), extraSkillAvailable(), ArcadeStore.shared.profilesAreWritable,
+              ArcadeStore.shared.storageError == nil else { return }
+        extraSkill?()
+        revealRewards()
+    }
+    func revealRewards(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+        navigationButtons.forEach { $0.revealArtwork(at: now) }
+        navigationArtworkOpacityChanged(1)
+    }
+    @objc private func toggleHotSeatGhosts() {
+        guard ArcadeStore.shared.hotSeatIsActive else { return }
+        ArcadeStore.shared.hotSeatGhostsVisible.toggle()
+        func redraw(_ view: NSView) {
+            view.needsDisplay = true
+            view.subviews.forEach(redraw)
+        }
+        if let root = window?.contentView { redraw(root) }
+        refreshNavigationControl()
+    }
+    func handleGhostKey(_ event: NSEvent) -> Bool {
+        guard event.type == .keyDown, ownsController(), navigationAvailable(), ArcadeStore.shared.hotSeatIsActive,
+              event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
+              event.charactersIgnoringModifiers?.lowercased() == "g" else { return false }
+        if !event.isARepeat { toggleHotSeatGhosts() }
+        return true
+    }
+    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton, inspectionButton, ghostsButton, extraSkillButton] }
+    @objc private func openInspection() {
+        guard inspectionAvailable() else { return }
+        inspectLemmings?()
+    }
     @objc private func openMainMenu() { mainMenu?() }
     @objc private func openSettings() { settings?() }
     @objc private func cycleGraphics() {
@@ -136,6 +211,7 @@ import NxlvKit
         refreshNavigationControl()
     }
     func removeNavigationControl() {
+        inspectionHover.removeFromSuperview(); hoverSnapshot = nil; hoverRevision = nil
         navigationButtons.forEach { $0.resetAppearance(); $0.removeFromSuperview() }
         nowPlayingNotice.removeFromSuperview()
     }
@@ -154,7 +230,28 @@ import NxlvKit
         settingsButton.frame = CGRect(x: menuFrame.minX - 52, y: menuFrame.minY, width: 44, height: 44)
         graphicsButton.frame = CGRect(x: settingsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
         navigationButton.frame = menuFrame
+        inspectionButton.frame = CGRect(x: graphicsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
+        ghostsButton.frame = CGRect(x: menuFrame.maxX - 176,
+            y: menuFrame.minY + (root.isFlipped ? 52 : -52), width: 176, height: 44)
+        extraSkillButton.frame = CGRect(x: ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame.minX - 232 : menuFrame.maxX - 224,
+            y: ghostsButton.frame.minY, width: 224, height: 44)
+        extraSkillButton.title = extraSkillTitle()
+        extraSkillButton.toolTip = extraSkillHelp()
+        extraSkillButton.setAccessibilityLabel(extraSkillTitle())
+        extraSkillButton.setAccessibilityHelp(extraSkillHelp())
+        extraSkillButton.isEnabled = extraSkillAvailable() && ArcadeStore.shared.profilesAreWritable
+            && ArcadeStore.shared.storageError == nil
+        let showsGhosts = ArcadeStore.shared.hotSeatGhostsVisible
+        ghostsButton.title = showsGhosts ? L10n.text("Ghosts on") : L10n.text("Ghosts off")
+        ghostsButton.state = showsGhosts ? .on : .off
+        ghostsButton.setAccessibilityLabel(L10n.text("Show Hot Seat ghosts"))
+        ghostsButton.setAccessibilityValue(showsGhosts ? 1 : 0)
         let controlsFrame = menuFrame.union(settingsButton.frame).union(graphicsButton.frame)
+            .union(inspectionAvailable() ? inspectionButton.frame : .null)
+            .union(ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame : .null)
+            .union(extraSkill != nil && modern() ? extraSkillButton.frame : .null)
+        let pointer = root.convert(window!.mouseLocationOutsideOfEventStream, from: nil)
+        if visible, rewardDisplayArea()?.contains(pointer) == true { revealRewards(at: now) }
         var noticeArea = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
         if visible, noticeArea.intersects(controlsFrame) {
             noticeArea.size.width = max(0, min(noticeArea.maxX, controlsFrame.minX - 8) - noticeArea.minX)
@@ -165,14 +262,20 @@ import NxlvKit
             reduceMotion: navigationReduceMotion(), enabled: showSongInfo(),
             area: noticeArea, flipped: root.isFlipped)
         for button in navigationButtons {
-            let available = button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
+            let available = button === extraSkillButton ? extraSkill != nil && modern() && active()
+                : button === ghostsButton ? ArcadeStore.shared.hotSeatIsActive
+                : button === inspectionButton ? inspectionAvailable() && inspectLemmings != nil
+                : button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
             guard visible && available else { button.isHidden = true; button.resetAppearance(); continue }
             if button.superview !== root {
                 button.removeFromSuperview(); root.addSubview(button); button.resetAppearance()
             }
             button.isHidden = false
-            button.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
+            button.updateAppearance(at: now, autoHide: button !== inspectionButton && active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
         }
+        navigationArtworkOpacityChanged(navigationButtons.filter {
+            !$0.isHidden && ($0 !== inspectionButton || $0.isHovered || window?.firstResponder === $0)
+        }.map(\.artworkOpacity).max() ?? 0)
         let canCycle = graphicsAvailable()
         if graphicsButton.isEnabled != canCycle { graphicsButton.isEnabled = canCycle }
         let name = graphicsName()
@@ -181,6 +284,22 @@ import NxlvKit
             graphicsButton.setAccessibilityValue(name)
             graphicsButton.toolTip = tooltip
         }
+        updateInspectionHover(in: root, available: visible && active() && inspectionAvailable() && window?.isKeyWindow == true,
+            area: musicDisplayArea() ?? root.bounds, pointer: root.convert(window!.mouseLocationOutsideOfEventStream, from: nil))
+    }
+    func updateInspectionHover(in root: NSView, available: Bool, area: CGRect, pointer: CGPoint) {
+        guard available else {
+            inspectionHover.isHidden = true; hoverSnapshot = nil; hoverRevision = nil; return
+        }
+        guard area.contains(pointer), let id = inspectionHoverID() else { inspectionHover.isHidden = true; return }
+        let revision = inspectionHoverRevision()
+        if hoverRevision != revision {
+            hoverSnapshot = inspectionHoverSnapshot(); hoverRevision = revision
+        }
+        guard let individual = hoverSnapshot?.individuals.first(where: { $0.id == id }) else {
+            inspectionHover.isHidden = true; return
+        }
+        inspectionHover.show(individual, in: root, area: area, pointer: pointer)
     }
     var engineCommands: () -> [KeyboardCommand] = { [] }
     var skillNames: () -> [String] = { [] }
@@ -272,6 +391,19 @@ import NxlvKit
            event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
            event.charactersIgnoringModifiers?.lowercased() == "z", let step {
             if !event.isARepeat { step(-1) }
+            return nil
+        }
+        if event.type == .keyDown, active(), ownsController(), inspectionAvailable(), inspectLemmings != nil,
+           event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "i" {
+            if !event.isARepeat { openInspection() }
+            return nil
+        }
+        if handleGhostKey(event) { return nil }
+        if event.type == .keyDown, active(), ownsController(), modern(), extraSkill != nil,
+           event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "e" {
+            if !event.isARepeat { useExtraSkill() }
             return nil
         }
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
@@ -463,8 +595,9 @@ import NxlvKit
             KeyboardCommand(keys: "Z", action: L10n.text("2× Zoom at cursor"), group: camera),
             KeyboardCommand(keys: L10n.text("Scroll up / down"), action: L10n.text("Zoom on / off at cursor"), group: camera),
             KeyboardCommand(keys: "Shift-Z", action: L10n.text("2× Superzoom at cursor, 0.5× time"), group: camera),
-            KeyboardCommand(keys: "Z / Shift-Z", action: L10n.text("Press again to switch off; each start spends one use"), group: camera),
-            KeyboardCommand(keys: "", action: L10n.text("Earn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"), group: camera)
+            KeyboardCommand(keys: "Z / Shift-Z", action: L10n.text("Press again to switch off"), group: camera),
+            KeyboardCommand(keys: "Shift-Z", action: L10n.text("Each start spends one Superzoom use"), group: camera),
+            KeyboardCommand(keys: "", action: L10n.text("Earn Superzoom per 3 no-Rewind three-star levels"), group: camera)
         ]
         if retry { rows.append(.init(keys: "R", action: L10n.text("Retry"), group: gameplay)) }
         if nuke { rows.append(.init(keys: "X", action: L10n.text("Nuke"), group: gameplay)) }
@@ -487,6 +620,12 @@ import NxlvKit
             rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: L10n.text("Select \(SkillVocabulary.title(names[index]))\(detail)"), group: L10n.text("Skills"), skillTitle: SkillVocabulary.title(names[index])))
         }
         rows += engineCommands()
+        if inspectLemmings != nil {
+            rows.append(.init(keys: "⌘I", action: L10n.text("Inspect lemmings while paused"), group: L10n.text("Gameplay")))
+        }
+        if extraSkill != nil, modern() {
+            rows.append(.init(keys: "⌘E", action: L10n.text("Use Extra skill on the selected skill or tool carrier"), group: L10n.text("Skills")))
+        }
         let gameplay = L10n.text("Gameplay"), speed = L10n.text("Speed"), camera = L10n.text("Camera"), skills = L10n.text("Skills")
         if modern() {
             rows += [
@@ -506,7 +645,7 @@ import NxlvKit
         if let speedControl {
             rows.append(.init(keys: "F", action: L10n.text("Toggle fast-forward"), group: speed))
             if speedControl.variableEnabled {
-                rows += [.init(keys: "Hold F", action: L10n.text("Ramp up to 10×; release to keep speed"), group: speed),
+                rows += [.init(keys: "Hold F", action: (speedControl.ridiculousEnabled ? L10n.text("Ramp up to 25×; release to keep speed") : L10n.text("Ramp up to 10×; release to keep speed")), group: speed),
                          .init(keys: "Hold Shift", action: L10n.text("Temporary boost; release to restore speed"), group: speed),
                          .init(keys: "Shift+[ / Shift+]", action: L10n.text("Decrease / increase speed"), group: speed),
                          .init(keys: "Shift + \\ (|)", action: L10n.text("Immediately return to normal speed (1×)"), group: speed)]
@@ -525,6 +664,9 @@ import NxlvKit
         if controllerEnabled() {
             rows += ControllerDevicePresentation.commands(mapping: controllerMappings(), variableSpeed: speedControl?.variableEnabled == true,
                 tapSpeed: controllerTapSpeed(), rewind: rewind != nil, stepping: step != nil, hints: hints != nil)
+        }
+        if ArcadeStore.shared.hotSeatIsActive {
+            rows.append(.init(keys: "⌘G", action: L10n.text("Show / hide Hot Seat ghosts"), group: L10n.text("Hot Seat")))
         }
         rows += contextCommands()
         func menuRows(_ menu: NSMenu) {

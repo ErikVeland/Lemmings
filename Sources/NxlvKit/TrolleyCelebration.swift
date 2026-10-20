@@ -14,7 +14,7 @@ public struct TrolleyCareerScore: Equatable, Sendable {
     }
     public init(profileID: String, attempts: [TrolleyAttempt], assisted: Bool) {
         self.profileID = profileID
-        let personal = attempts.filter { $0.run.profileID == profileID && $0.run.assisted == assisted }
+        let personal = attempts.filter { $0.run.profileID == profileID && $0.run.assisted == assisted && !$0.run.usedBonusSkill }
         let best = Dictionary(grouping: personal, by: { Self.levelKey($0.run) }).values.map {
             $0.map { $0.goals.stars }.max() ?? 0
         }
@@ -23,7 +23,7 @@ public struct TrolleyCareerScore: Equatable, Sendable {
         threeStarLevels = best.filter { $0 == 3 }.count
     }
     public static func rank(attempts: [TrolleyAttempt], assisted: Bool) -> [Self] {
-        Set(attempts.filter { $0.run.assisted == assisted }.map { $0.run.profileID }).map {
+        Set(attempts.filter { $0.run.assisted == assisted && !$0.run.usedBonusSkill }.map { $0.run.profileID }).map {
             Self(profileID: $0, attempts: attempts, assisted: assisted)
         }.sorted {
             if $0.stars != $1.stars { return $0.stars > $1.stars }
@@ -122,12 +122,11 @@ public struct TrolleyCelebration: Sendable {
         bestStars = max(previousStars, goals.stars)
         careerBefore = .init(profileID: run.profileID, attempts: old, assisted: run.assisted)
         career = .init(profileID: run.profileID, attempts: current, assisted: run.assisted)
-        let earnedBefore = PrecisionZoomEarnings(careerStars: careerBefore.stars, threeStarLevels: careerBefore.threeStarLevels)
-        let earnedAfter = PrecisionZoomEarnings(careerStars: career.stars, threeStarLevels: career.threeStarLevels)
-        precisionRewards = .init(zoomUses: !run.assisted && run.qualifies ? earnedAfter.zoomUses - earnedBefore.zoomUses : 0,
-                                 superzoomUses: !run.assisted && run.qualifies ? earnedAfter.superzoomUses - earnedBefore.superzoomUses : 0)
+        let earnedBefore = PrecisionZoomEarnings(threeStarLevels: careerBefore.threeStarLevels)
+        let earnedAfter = PrecisionZoomEarnings(threeStarLevels: career.threeStarLevels)
+        precisionRewards = .init(superzoomUses: run.earnsConsumableRewards ? earnedAfter.superzoomUses - earnedBefore.superzoomUses : 0)
         let careerBoard = TrolleyCareerScore.rank(attempts: current, assisted: run.assisted)
-        careerRank = careerBoard.firstIndex { $0.profileID == run.profileID }.map { $0 + 1 }
+        careerRank = run.usedBonusSkill ? nil : careerBoard.firstIndex { $0.profileID == run.profileID }.map { $0 + 1 }
         careerPlayers = careerBoard.count
         let new = Set(report.trolley?.attempt.achievements ?? [])
         awards = TrolleyAchievement.allCases.filter { award in award.isOffered || new.contains(award)
@@ -145,7 +144,9 @@ public struct TrolleyCelebration: Sendable {
             }
         } else { ranks = [] }
         levelAwards = report.earned
-        if report.newRescueBest, let previous = report.previousBest {
+        if run.usedBonusSkill {
+            recordMessage = L10n.text("BONUS SKILL USED")
+        } else if report.newRescueBest, let previous = report.previousBest {
             recordMessage = L10n.text("NEW BEST! \(previous.saved) > \(run.saved) rescued")
         } else if report.newSkillBest {
             recordMessage = L10n.text("NEW SKILL RECORD! \(run.skillCount) skills")

@@ -1242,6 +1242,8 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
     public private(set) var terrain: NeoLemmixTerrain
     public private(set) var lemmings: [NeoLemmixLemming]
     public private(set) var skills: [NeoLemmixSkill: NeoLemmixSkillSupply]
+    public private(set) var bonusSkill: NeoLemmixSkill?
+    public var bonusSkillUsed: Bool { bonusSkill != nil }
     public private(set) var tickCount: Int
     public private(set) var releasedCount: Int
     public private(set) var savedCount: Int
@@ -1280,6 +1282,20 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
     /// Remaining capacity for finite entrances to exits. Optional so states
     /// written before exit limits were implemented still decode.
     private var remainingZoneLemmingCounts: [Int: Int]?
+
+    public func canGrantBonusSkill(_ skill: NeoLemmixSkill) -> Bool {
+        guard !isComplete, !isNuking, !bonusSkillUsed,
+              case let .finite(initial)? = configuration.skills[skill], initial > 0,
+              case let .finite(remaining)? = skills[skill], remaining >= 0, remaining < Int.max else { return false }
+        return true
+    }
+
+    @discardableResult public mutating func grantBonusSkill(_ skill: NeoLemmixSkill) -> Bool {
+        guard canGrantBonusSkill(skill), case let .finite(remaining)? = skills[skill] else { return false }
+        skills[skill] = .finite(remaining + 1)
+        bonusSkill = skill
+        return true
+    }
 
     public var activeLemmings: [NeoLemmixLemming] {
         lemmings.filter(\.isActive)

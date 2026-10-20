@@ -129,6 +129,7 @@ for (game, dataDirectory) in campaigns {
                     guard let actor = sim.lemmings.first(where: { $0.id == id }) else { throw HintError(message: "Missing live worker") }
                     recordMove(id: id, skill: skill, actor: actor, tick: tick)
                 case let .releaseRate(value): sim.setReleaseRate(value); rates.append(.init(tick: tick, value: value))
+                case .bonusSkill: throw HintError(message: "Bonus skill replays cannot supply standard hints")
                 case .nuke: sim.beginNuke()
                 }
             }
@@ -139,6 +140,7 @@ for (game, dataDirectory) in campaigns {
             for event in grouped[tick] ?? [] {
                 switch event.action {
                 case let .releaseRate(value): sim.setReleaseRate(value); rates.append(.init(tick: tick, value: value))
+                case .bonusSkill: throw HintError(message: "Bonus skill replays cannot supply standard hints")
                 case .nuke: sim.beginNuke()
                 case .assign: break
                 }

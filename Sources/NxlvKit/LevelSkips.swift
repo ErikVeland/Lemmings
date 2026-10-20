@@ -24,7 +24,7 @@ public struct LevelSkipBalance: Equatable, Sendable {
 }
 
 extension ArcadeRecords {
-    /// Rewound runs do not earn skips, so only unassisted stars count.
+    /// Rewound runs and bonus-skill runs do not earn skips.
     public func levelSkips(profileID: String) -> LevelSkipBalance {
         let score = TrolleyCareerScore(profileID: profileID, attempts: trolley.attempts, assisted: false)
         return LevelSkipBalance(threeStarLevels: score.threeStarLevels,

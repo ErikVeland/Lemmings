@@ -8,6 +8,13 @@ The home screen shows lemmings saved on this Mac and, when the player shares
 counts and the service responds, a shared total. A dash means the shared total
 is unavailable; it does not mean zero.
 
+Click an official level row to start that level through Level Select's launch
+flow. The whole row supports mouse, keyboard and accessibility activation.
+Classic, Lemmings 2 and Lemmings 3 retain their normal availability and campaign
+unlock rules. Fan levels and Lemmings 2 practice combine multiple levels in one
+count, so their rows cannot launch a specific level. Missing game data reports
+that the level is unavailable.
+
 ## What is counted
 
 - **Opted-in installs:** the lifetime number of installation registrations

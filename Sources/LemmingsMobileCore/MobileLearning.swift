@@ -6,14 +6,27 @@ import NxlvKit
 public struct MobileLearningState: Codable, Equatable, Sendable {
     public var progress = LearningJourneyProgress()
     public var run: LevelSequenceRun?
+    public var journeySession: JourneySessionSnapshot?
     public init() {}
-    private enum CodingKeys: String, CodingKey { case progress, run }
+    private enum CodingKeys: String, CodingKey { case progress, run, journeySession }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         progress = try values.decode(LearningJourneyProgress.self, forKey: .progress)
         run = try values.decodeIfPresent(LevelSequenceRun.self, forKey: .run)?.removingMultiplayerLevels()
+        journeySession = try values.decodeIfPresent(JourneySessionSnapshot.self, forKey: .journeySession)
     }
 
+    public mutating func refreshJourneySession() {
+        let current = run.flatMap { $0.source == .playlist(LearningJourney.playlistID) ? $0 : nil }
+        guard journeySession?.run != current else { return }
+        let l2 = current?.id == journeySession?.run?.id ? journeySession?.l2Progress ?? [:] : [:]
+        journeySession = .init(run: current, l2Progress: l2)
+    }
+    public mutating func importJourneySession(_ incoming: JourneySessionSnapshot) {
+        guard incoming.updatedAt > (journeySession?.updatedAt ?? .distantPast) else { return }
+        if run == nil || run?.source == .playlist(LearningJourney.playlistID) { run = incoming.run }
+        journeySession = incoming
+    }
     public mutating func start(_ entries: [LevelPlaylistEntry], name: String, poolID: String,
                                playlistID: UUID = LearningJourney.playlistID) throws {
         run = try LevelSequenceRun(source: .playlist(playlistID),
@@ -51,7 +64,8 @@ public struct MobileLearningResume: Sendable {
 
     public static func find(owner: String, seats: MobileHotSeatStore,
                             storage: (String) -> MobileStorage, journeyOnly: Bool = true,
-                            currentSessionOnly: Bool = false) -> Self? {
+                            currentSessionOnly: Bool = true) -> Self? {
+        if currentSessionOnly, let current = seats.current, !current.players.contains(owner) { return nil }
         let candidates = [seats.current].compactMap { $0 }.filter { $0.players.contains(owner) }
             + seats.sharedSessions(player: owner)
         let allScopes: [(String, MobileHotSeat?)] = seats.current?.players.contains(owner) == true
@@ -93,7 +107,7 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
     public func origin(of index: Int) throws -> (pack: String, index: Int, library: any MobileGameLibrary) {
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index], identity = entry.identity
-        guard identity.engine == .classic else { throw MobileSessionError.frameUnavailable }
+        guard identity.engine == .classic else { throw MobileSessionError.journeyEngineUnavailable }
         let pack: MobileContentPack?
         if identity.packID.hasPrefix("fan:") { pack = catalogue.pack(id: String(identity.packID.dropFirst(4))) }
         else {

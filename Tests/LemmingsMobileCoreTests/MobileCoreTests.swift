@@ -364,6 +364,38 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() throws {
+        let sessions: [any MobileGameSession] = [
+            ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),
+            Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2"),
+            Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3")
+        ]
+        for session in sessions {
+            #expect(session.lemmingInspection?.individuals.isEmpty == true)
+            for _ in 0..<300 where session.activeLemmingCount == 0 && !session.snapshot.isComplete { session.tick() }
+            for _ in 0..<3 { session.tick() }
+            let before = session.snapshot
+            let first = try #require(session.lemmingInspection)
+            let individual = try #require(first.individuals.first)
+            #expect(session.snapshot == before)
+            #expect(!session.assign(control: -1, to: individual.id))
+            #expect(session.lemmingInspection?.individuals == first.individuals)
+            let checkpoint = try session.checkpointPayload()
+            let assigned = session.assign(control: 0, to: individual.id)
+            let after = try #require(session.lemmingInspection)
+            #expect(after.individuals.flatMap(\.actions).count == (assigned ? 1 : 0))
+            #expect(after.individuals.first?.name == individual.name)
+            try session.restoreCheckpointPayload(checkpoint)
+            #expect(session.snapshot == before)
+            #expect(session.lemmingInspection?.individuals == first.individuals)
+            _ = session.assign(control: 0, to: individual.id)
+            #expect(session.stepBackward())
+            let rewound = try #require(session.lemmingInspection)
+            #expect(rewound.individuals.flatMap(\.actions).isEmpty)
+            #expect(rewound.individuals.first?.name == individual.name)
+        }
+    }
+
     @Test @MainActor func pausePopulationCountsExcludeActorsLostByAllThreeEngines() throws {
         let sessions: [any MobileGameSession] = [
             ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),
@@ -993,6 +1025,8 @@ struct MobileCoreTests {
         #expect(!upward.useTool(direction: .down, to: 0))
         #expect(upward.drainSoundCues().isEmpty)
         #expect(upward.useTool(direction: .up, to: 0))
+        #expect(upward.lemmingInspection?.individuals.first?.actions.last?.title == "Bricks")
+        #expect(upward.lemmingInspection?.individuals.first?.actions.last?.ticksSinceUse == 0)
         let toolCues = upward.drainSoundCues()
         #expect(toolCues.map(\.effect) == [.assignSkill])
         #expect(toolCues.first?.point != nil)
@@ -1003,6 +1037,8 @@ struct MobileCoreTests {
         let restored = makeSession()
         try restored.restoreCheckpointPayload(checkpoint)
         #expect(try restored.render(highlight: nil) == upwardFrame)
+        #expect(restored.lemmingInspection?.individuals.first?.actions.last?.title == "Bricks")
+        #expect(restored.lemmingInspection?.individuals.first?.actions.last?.ticksSinceUse == 40)
 
         let rightward = makeSession()
         rightward.tick()

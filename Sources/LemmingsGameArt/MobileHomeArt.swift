@@ -2,14 +2,14 @@ import NxlvKit
 
 /// The Mac home order and action groups, shared with the mobile render audit.
 public enum MobileHomeArt {
-    public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action,
+    public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
                             families: [GameFrontEnd.Action], initials: String,
                             subtitle: String = "", collectionsAvailable: Bool = true) -> GameFrontEnd.Page {
-        var rows = resume + [journey] + families
+        var rows = resume + [journey].compactMap { $0 } + families
         for index in rows.indices {
             rows[index].title = rows[index].title.replacingOccurrences(
                 of: #"[ \t]+(?=\d+/\d+(?:\s|$))"#, with: "\n", options: .regularExpression)
-            rows[index].titleRuns = index <= resume.count ? GameSemanticText.resume(rows[index].title)
+            rows[index].titleRuns = index < resume.count + (journey == nil ? 0 : 1) ? GameSemanticText.resume(rows[index].title)
                 : rows[index].gameLogo == nil ? GameSemanticText.title(rows[index].title) : [.init(rows[index].title, .blue)]
         }
         if let index = rows.firstIndex(where: { $0.enabled }) {

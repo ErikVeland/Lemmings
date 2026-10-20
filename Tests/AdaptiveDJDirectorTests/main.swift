@@ -29,9 +29,11 @@ require(!warning.update(seconds: 8), "Rewind played a warning")
 require(warning.update(seconds: 7), "Countdown did not resume after rewind")
 require(!warning.update(seconds: nil), "Untimed level played a warning")
 let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
-require(old.djIncludesOtherSoundtracks && old.hdEffectsEnabled && old.fullScreenHDRFlashes, "Upgrade defaults are wrong")
+require(!old.djIncludesOtherSoundtracks && old.hdEffectsEnabled && !old.fullScreenHDRFlashes, "Missing settings must use restrained presentation defaults")
+let explicit = try JSONDecoder().decode(ClassicSettings.self, from: Data(#"{"djIncludesOtherSoundtracks":true,"fullScreenHDRFlashes":true}"#.utf8))
+require(explicit.djIncludesOtherSoundtracks && explicit.fullScreenHDRFlashes, "Explicit saved music and flash choices must survive migration")
 require(!old.pauseMusicBeatOnly, "An upgrade unexpectedly enabled pause music")
-var changed = old; changed.djIncludesOtherSoundtracks = false; changed.fullScreenHDRFlashes = false; changed.pauseMusicBeatOnly = true
+var changed = old; changed.djIncludesOtherSoundtracks = true; changed.fullScreenHDRFlashes = true; changed.pauseMusicBeatOnly = true
 let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(changed))
 require(restored == changed, "New options did not persist")
 print("PASS rescue-target transitions, one transition per level, countdown beeps and settings migration")

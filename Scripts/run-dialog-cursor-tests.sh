@@ -5,6 +5,7 @@ build_dir="$project_dir/.build/dialog-cursor-tests"
 mkdir -p "$build_dir/ModuleCache"
 swiftc -swift-version 6 -warnings-as-errors -framework AppKit \
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
+  "$project_dir/Sources/NxlvKit/AssignmentPointerShape.swift" \
   -module-cache-path "$build_dir/ModuleCache" \
   -o "$build_dir/tests" \
   "$project_dir/Sources/LemmingsLocal/DialogKeyboardNavigation.swift" \

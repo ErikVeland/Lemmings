@@ -395,6 +395,78 @@ final class AnonymousTelemetryTests: XCTestCase {
         XCTAssertEqual(currentSummary.optedInInstalls, 42)
     }
 
+    func testInsightsTargetsUseTelemetryNumbering() {
+        XCTAssertEqual(TelemetryLevelTarget(key: "lemmings|level-52"), .classic(.lemmings, index: 51))
+        XCTAssertEqual(TelemetryLevelTarget(key: "lemmings2|t12-l10"), .lemmings2(tribe: 11, index: 9))
+        XCTAssertEqual(TelemetryLevelTarget(key: "lemmings3|level-30"), .lemmings3(tribe: 0, index: 29))
+        XCTAssertEqual(TelemetryLevelTarget(key: "lemmings3|level-31"), .lemmings3(tribe: 1, index: 0))
+        XCTAssertEqual(TelemetryLevelTarget(key: "lemmings3|level-90"), .lemmings3(tribe: 2, index: 29))
+        for key in ["fan|all", "lemmings2|practice", "lemmings|level-0", "lemmings3|level-91",
+                    "lemmings2|t13-l1", "lemmings2|t1-l11", "unknown|level-1", "lemmings|level-1|solo"] {
+            XCTAssertNil(TelemetryLevelTarget(key: key), key)
+        }
+    }
+
+    @MainActor func testInsightsLevelRowsLaunchAndRender() throws {
+        _ = NSApplication.shared
+        let suite = UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set([
+            "level_start|lemmings|level-52|solo": 10,
+            "level_start|lemmings2|t12-l10|hot_seat": 9,
+            "level_start|lemmings3|level-31|solo": 8,
+            "level_start|fan|all|solo": 7,
+            "level_start|lemmings2|practice|solo": 6,
+        ], forKey: "AnonymousTelemetryCountsV1")
+        let dashboard = TelemetryDashboard(telemetry: AnonymousTelemetry(defaults: defaults))
+        var launched: [TelemetryLevelTarget] = []
+        dashboard.onStartLevel = { launched.append($0) }
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
+        GameScreen.shared.gameWindow = window
+        defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil; window.close() }
+        dashboard.show(owner: window)
+        let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        page.layoutSubtreeIfNeeded()
+        let rows = page.body.subviews.compactMap { $0 as? NSButton }
+        XCTAssertEqual(rows.count, 5)
+        XCTAssertEqual(rows.filter(\.isEnabled).count, 3)
+        for row in rows {
+            let rect = row.convert(row.bounds, to: page)
+            XCTAssertTrue(page.bounds.contains(rect))
+            for fraction in [0.1, 0.7, 0.95] {
+                let hit = page.hitTest(CGPoint(x: rect.minX + rect.width * fraction, y: rect.midY))
+                XCTAssertTrue(hit === row || hit?.isDescendant(of: row) == true)
+            }
+            if row.isEnabled { row.performClick(nil) }
+        }
+        XCTAssertEqual(launched, [.classic(.lemmings, index: 51), .lemmings2(tribe: 11, index: 9),
+                                 .lemmings3(tribe: 1, index: 0)])
+        if let path = ProcessInfo.processInfo.environment["LEMMINGS_INSIGHTS_ROWS_SCREENSHOT"] {
+            func capture(_ suffix: String) throws {
+                let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+                page.displayIgnoringOpacity(page.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+                try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+                    .write(to: URL(fileURLWithPath: path + suffix + ".png"))
+            }
+            if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+               let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: directory))) {
+                try GameMenuArtwork.withRenderer(MacInterfaceRenderer(interface: interface)) {
+                    try capture("")
+                    let first = try XCTUnwrap(rows.first)
+                    XCTAssertTrue(window.makeFirstResponder(first))
+                    try capture("-focused")
+                    first.highlight(true)
+                    try capture("-pressed")
+                    first.highlight(false)
+                }
+            } else { try capture("") }
+        }
+    }
+
     @MainActor func testDashboardRendersAndButtonsHaveTargets() throws {
         _ = NSApplication.shared
         let suite = UUID().uuidString

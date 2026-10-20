@@ -48,6 +48,8 @@ import UIKit
     private var sprites: [String: CGImage] = [:]
     var selectionPoint: MobilePoint?
     var cursorPoint: MobilePoint?
+    var cursorOccupied = false
+    var cursorEligible = false
     var cursorIcon: CGImage?
     var cursorCount: Int?
     var cursorSkillName = ""
@@ -451,6 +453,20 @@ import UIKit
         guard let cursorPoint else { return }
         let point = viewport.viewPoint(fromLevel: cursorPoint)
         let sourceFactor = viewport.zoom / max(0.1, gameViewport.zoom)
+        #if os(iOS)
+        if displaySettings.gameplayCursorStyle == .modern {
+            let frame = CGRect(x: point.x - 7 * sourceFactor, y: point.y - 7 * sourceFactor,
+                               width: 14 * sourceFactor, height: 14 * sourceFactor)
+            let marks = AssignmentPointerShape.marks(in: frame, arm: 5 * sourceFactor,
+                stroke: sourceFactor, occupied: cursorOccupied, eligible: cursorEligible)
+            context.saveGState()
+            context.setShouldAntialias(false)
+            context.setFillColor(cursorEligible ? CGColor(srgbRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
+                : cursorOccupied ? CGColor(srgbRed: 1, green: 0.8, blue: 0.15, alpha: 1) : CGColor(gray: 0.6, alpha: 1))
+            marks.forEach { context.fill($0) }
+            context.restoreGState()
+        }
+        #endif
         let size = displaySettings.skillCursorIconSize
         let scale = (size == .two ? 2.0 : 1.0) * sourceFactor
         let height = 14 * scale
