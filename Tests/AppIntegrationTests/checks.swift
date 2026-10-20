@@ -3602,8 +3602,10 @@ extension AppDelegate {
       root.layoutSubtreeIfNeeded(); ridiculous.scrollToVisible(ridiculous.bounds); root.layoutSubtreeIfNeeded()
       let point = ridiculous.convert(CGPoint(x: ridiculous.bounds.midX, y: ridiculous.bounds.midY), to: root)
       try check(root.hitTest(point) === ridiculous, "Ridiculous speed target is obscured")
-      try check(ridiculous.bounds.width >= ridiculous.intrinsicContentSize.width && ridiculous.bounds.height >= 28,
-        "Ridiculous speed caption or input target is clipped")
+      let backingScale = max(1, window.backingScaleFactor)
+      try check(ceil(ridiculous.bounds.width * backingScale) >= ceil(ridiculous.intrinsicContentSize.width * backingScale)
+        && ceil(ridiculous.bounds.height * backingScale) >= ceil(28 * backingScale),
+        "Ridiculous speed caption or input target is clipped in rendered pixels")
       try check(preferences.current.ridiculousSpeedEnabled == enabled && ridiculous.isEnabled == (name != "unavailable"),
         "Ridiculous speed setting did not preserve its state")
       let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
@@ -4345,15 +4347,22 @@ extension AppDelegate {
     let modern = settings
     var oldSchool = settings; oldSchool.applyExperiencePreset(modern: false); apply(oldSchool)
     try await failFirstClassicLevel()
-    try check(view.availableSkips == 0, "Old school offered a level skip")
+    try check(view.availableSkips == 1, "Original presentation hid the player’s earned skip")
     apply(modern)
     try await failFirstClassicLevel()
     let owner = ArcadeStore.shared.records.activeProfileID
+    try captureResult("solo-one-skip")
+    let earnedSkip = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+      .first { $0.accessibilityLabel() == view.skipTitle }
     try check(view.availableSkips == 1 && view.skipTitle == "Skip level (1)"
-      && (try captureResult("solo-one-skip")).contains("K skips this level"), "An earned skip was not offered")
+      && earnedSkip?.isAccessibilityEnabled() == true, "The earned Skip action was missing or disabled")
     if var earning = view.report {
       earning.earnedLevelSkip = true; view.report = earning
-      try check((try captureResult("earned-skip-cue")).contains("Earned a level skip"), "The earned skip cue was not announced")
+      let receipt = ResultAwards.earnedRewards(report: earning,
+        celebration: .init(report: earning, history: ArcadeStore.shared.records.trolley))
+      try check(receipt.allSatisfy { !$0.isConsumable }
+        && !(try captureResult("unqualified-skip-cue")).contains("Earned a level skip"),
+        "An unqualified result announced an earned consumable")
     }
     view.page(.career)
     try check((try captureResult("career-one-skip")).contains("1 level skips. 3 more three-star levels"), "The career page hid the skip balance")
@@ -5032,8 +5041,9 @@ extension AppDelegate {
       for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
       try check(sequencePlayingIdentity == entries[1].identity && fanPlaying && artworkLevel?.title == entries[1].levelNameSnapshot,
         "Completion did not load the unopened next fan lesson (Hot Seat: \(hotSeat))")
-      try check(store.activeRun?.id == run.id && store.activeRunHotSeatID == arcade.hotSeatID && store.learningProgress.completed.contains(entries[0].identity),
+      try check(store.activeRun?.id == run.id && store.activeRunHotSeatID == arcade.hotSeatID && store.learningProgress(hotSeatID: arcade.hotSeatID).completed.contains(entries[0].identity),
         "Completion lost run ownership or the official lesson win")
+      if hotSeat { try check(store.learningProgress.completed.isEmpty, "Hot Seat completion changed Solo learning progress") }
       returnToLibrary(); GameScreen.shared.dismissAll()
     }
     print("PASS Snuggle completion loads the unopened next fan pack in Solo and Hot Seat")
@@ -5336,13 +5346,11 @@ extension AppDelegate {
     updateDJTelemetry(.init(savedCount: 1, requiredCount: 1, didWin: true, isComplete: true))
     try check(dj.currentURL == celebrated, "The journey repeated its celebration cue")
     returnToLibrary()
+    let subsetOwner = arcade.records.activeProfileID, subsetSession = arcade.hotSeatID
     startLearningEntries([entries[1]], in: store, allowsFullRestart: false)
-    guard let subsetChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
-          let subsetSolo = buttons(subsetChooser).first(where: { $0.title == "New solo" }) else {
-      throw IntegrationFailure(message: "The second-lesson session did not offer New solo")
-    }
-    subsetSolo.performClick(nil)
     try await waitForLaunch()
+    try check(arcade.records.activeProfileID == subsetOwner && arcade.hotSeatID == subsetSession,
+      "Revisiting a lesson changed the selected owner or session")
     try check(store.activeRun?.currentEntry.identity == entries[1].identity
       && sequencePlayingIdentity == entries[1].identity
       && dj.isPlaying && sameFile(dj.currentURL, nextTrack),
@@ -5354,46 +5362,35 @@ extension AppDelegate {
     arcade.prepareHotSeat()
     let profileRecords = arcade.records
     try check(arcade.startNewHotSeat(), "The fresh Hot Seat fixture did not start")
+    let freshHotSeat = arcade.hotSeatID, runBeforePrompt = store.activeRun
     presentLearningJourney()
     try await waitForLaunch()
-    guard let hub = GameScreen.shared.controllerPage(in: window) else {
-      throw IntegrationFailure(message: "The fresh Hot Seat journey hub did not open")
+    try check(GameScreen.shared.controllerPage(in: window) == nil
+      && store.resumableLearningJourney(hotSeatID: freshHotSeat) == nil
+      && arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
+      "A new Hot Seat map offered or activated an unrelated Solo journey")
+    guard let savedJourney = store.resumableLearningJourney(hotSeatID: nil) else {
+      throw IntegrationFailure(message: "Explicit saved-run browsing lost the Solo journey")
     }
-    func labels(_ view: NSView) -> [String] {
-      [view.accessibilityLabel() ?? ""]
-        + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
-        + view.subviews.flatMap(labels)
-    }
-    guard let savedJourney = store.resumableLearningJourney(hotSeatID: arcade.hotSeatID),
-          let continueJourney = buttons(hub).first(where: { ["Continue", "Resume"].contains($0.title) }) else {
-      throw IntegrationFailure(message: "The new Hot Seat could not find the saved Solo journey")
-    }
-    let freshHotSeat = arcade.hotSeatID, runBeforePrompt = store.activeRun
-    try check(labels(hub).contains(where: { $0.contains(savedJourney.run.currentEntry.levelNameSnapshot) })
-      && savedJourney.hotSeatID == nil,
-      "The hub did not show the saved Solo journey's current lesson")
-    let hasCheckpoint = try sequenceCheckpoint(for: savedJourney.run, hotSeatID: savedJourney.hotSeatID) != nil
-    try check(continueJourney.title == (hasCheckpoint ? "Resume" : "Continue"),
-      "The saved journey action did not describe its checkpoint destination")
-    continueJourney.performClick(nil)
+    resumeSequenceSession(runID: savedJourney.run.id, hotSeatID: nil, store: store)
     guard let resumePrompt = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
-      throw IntegrationFailure(message: "Continue did not open the saved-session prompt")
+      throw IntegrationFailure(message: "Explicit saved-run navigation did not open its session prompt")
     }
     try check(resumePrompt.accessibilityLabel() == "Resume session?"
       && buttons(resumePrompt).contains(where: { $0.title == "Resume solo" })
       && arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
-      "Continue started a new session or switched ownership before confirmation")
+      "Saved-run navigation switched ownership before confirmation")
     resumePrompt.controllerBackButton.performClick(nil)
     try check(arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
-      "Cancelling the saved journey prompt changed the current session")
-    print("PASS saved Solo journey is offered after a new Hot Seat; Continue confirms resumption and Back preserves the session")
+      "Cancelling saved-run navigation changed the selected session")
+    print("PASS Journey Map stays with its selected session; explicit saved-run navigation confirms owner changes and Back preserves ownership")
     try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
       "A new Hot Seat erased profile scores, achievements or saved learning history")
     GameScreen.shared.dismissAll()
-    startLearningEntries(pending, in: store)
+    startLearningEntries(journey.lessons.map(\.entry), in: store)
     guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let newSolo = buttons(soloChooser).first(where: { $0.title == "New solo" }) else {
-      throw IntegrationFailure(message: "The journey did not offer New solo")
+      throw IntegrationFailure(message: "The new owner did not offer an explicit Solo session")
     }
     newSolo.performClick(nil)
     try await waitForLaunch()
@@ -5406,10 +5403,12 @@ extension AppDelegate {
       "New solo did not replace and save the learning journey session: entry=\(store.activeRun?.currentEntry.identity == first), sequence=\(sequencePlayingIdentity == first), hotSeat=\(arcade.hotSeatIsActive), running=\(music.isOutputRunning), url=\(music.currentURL?.lastPathComponent ?? "none"), muted=\(music.muted), volume=\(music.volume), soundtrack=\(soundtrack.isPlaying ? soundtrack.currentURL?.lastPathComponent ?? "?" : "stopped"), dj=\(dj.isPlaying), newRun=\(store.activeRun?.id != firstSoloID), saved=\(store.savedRuns.contains(where: { $0.run.id == firstSoloID }))")
     let soloID = store.activeRun!.id
     returnToLibrary()
-    startLearningEntries(pending, in: store)
+    arcade.prepareHotSeat()
+    try check(arcade.startNewHotSeat(), "The explicit Hot Seat owner could not start")
+    startLearningEntries(journey.lessons.map(\.entry), in: store)
     guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let newHotSeat = buttons(chooser).first(where: { $0.title == "New Hot Seat" }) else {
-      throw IntegrationFailure(message: "The journey did not offer New Hot Seat")
+      throw IntegrationFailure(message: "The new owner did not offer an explicit Hot Seat session")
     }
     newHotSeat.performClick(nil)
     try await waitForLaunch()
@@ -5422,7 +5421,7 @@ extension AppDelegate {
       && store.savedRuns.contains(where: { $0.run.id == soloID })
       && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
       "New Hot Seat did not start the learning journey or show Ready")
-    print("PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused")
+    print("PASS explicit Solo and Hot Seat owners start the first curated lesson, retain earlier journeys and wait at Ready")
 
     // Follow the actual mixed-campaign route that previously drew snow as marble.
     GameScreen.shared.dismissAll()

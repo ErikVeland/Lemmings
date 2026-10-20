@@ -2,6 +2,14 @@
 // Appended to the two canvas source files by the runner to inspect real views.
 import CryptoKit
 
+// Keep live hover fading separate from exact artwork round-trip captures.
+@MainActor private extension Lemmings2Canvas {
+    func parkArtworkTestPointer() { controllerPointer = CGPoint(x: -1000, y: -1000) }
+}
+@MainActor private extension Lemmings3Canvas {
+    func parkArtworkTestPointer() { controllerPointer = CGPoint(x: -1000, y: -1000) }
+}
+
 let app = NSApplication.shared
 ArcadeStore.shared = ArcadeStore(file: FileManager.default.temporaryDirectory.appendingPathComponent("arcade-sequel-tests-\(UUID().uuidString).json"))
 let sourceRoot = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
@@ -160,6 +168,7 @@ for number in stride(from: 0, to: 120, by: 10) {
     var game = try Lemmings2Runtime(level:level,style:style,masks:l2masks)
     for _ in 0..<110 { game.step() }
     let view = Lemmings2Canvas(frame:NSRect(x:0,y:0,width:640,height:480))
+    view.parkArtworkTestPointer()
     let window = NSWindow(contentRect:view.frame,styleMask:[],backing:.buffered,defer:false)
     window.contentView = view
     SequelArtworkPreference.setEnabled(false)
@@ -210,6 +219,7 @@ for number in [1,101,201] {
     var game = try Lemmings3Runtime(level:level,style:style,permanent:perm,temporary:temp)
     for _ in 0..<110 { game.step() }
     let view = Lemmings3Canvas(frame:NSRect(x:0,y:0,width:640,height:320))
+    view.parkArtworkTestPointer()
     let window = NSWindow(contentRect:view.frame,styleMask:[],backing:.buffered,defer:false)
     window.contentView = view
     SequelArtworkPreference.setEnabled(false)
