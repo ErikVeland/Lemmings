@@ -14,6 +14,6 @@ Thank you to the players, testers, level authors and preservation projects that 
 
 ## Supporters
 
-tobiasampersand
+Mark Ampersand
 
-hays60
+Paul Douglas Hayward
