@@ -75,21 +75,23 @@ distribution gates remain open. See the
 The 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. L2 records 120/120 standalone routes, 70 carry-over variants
 and 12 chains. Its Gold Ark and original-engine parity remain open. The
-current-worktree L3 audit on `8c66ef3e` passes 399/416 exact double replays. It
-refreshed 220 fixture identities without changing their input streams. Replay hashes now include the Mole drop delay. Four bundled L3 level identities lack a verified route; 13 carried-schedule
-failures are continuity cases for those same levels. Source parity, route repair and L3 media
-remain open. See the [current-worktree MVP audit](Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+20 October current-source L3 audit passes 399/416 exact double replays. No
+stale-identity route wins, and 17 schedules fail across four level identities.
+The carried-campaign gate fails at `107-1`. The standalone route count remains
+86/90. Source parity, route repair and L3 media remain open. See the
+[bundled closure and velocity record](Documentation/ReleaseReadiness/BundledClosureVelocity.md).
 
 The latest strict audit covers all 6,020 bundled fan levels across 535 packs.
-It verifies 2,403 winning routes. Another 3,599 levels have no matching
-candidate, and 18 candidate replays fail. The audit reports no load, decode or
-render failures. The evidence records the level identity and verified replay
-for all 2,755 accepted Classic routes. This audit used the installed 1.9.1
-build 76 resources. Its 535
+It verifies 2,403 winning routes (39.9%). The other 3,617 levels remain open:
+3,599 have no matching candidate, and 18 candidate replays fail. The audit
+reports no load, decode or render failures. The evidence records the level
+identity and verified replay for all 2,755 accepted Classic routes. This audit
+used the installed 1.9.1 build 76 resources. Its 535
 `LevelPacks` archives match build 85, and build 86 records no non-localisation
 resource-index changes. It does not certify a 2.0.3 app binary. Imported levels
 remain outside the bundle and open-ended. See
 the [current-main audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-2026-10-16/audit.json),
+[exit-structure audit](Documentation/ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json),
 [build 85 content comparison](Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json)
 and [2.0.3 release record](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
 

@@ -1,0 +1,1297 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "engine": "Classic",
+    "content": "bundled fan packs",
+    "packs": 535,
+    "levels": 6020,
+    "routeAuditDate": "2026-10-16",
+    "verifiedRoutes": 2403,
+    "openRoutes": 3617
+  },
+  "method": {
+    "kind": "structural source scan",
+    "levelReplays": 0,
+    "solverSearches": 0,
+    "decoder": "ClassicFanPack.entries and ClassicFanPack.level",
+    "exitRule": "ClassicObjectSemantics.forFanLevel plus ClassicGroundSet object trigger metadata; count active slots with exit effect",
+    "currentWorktreeLibrarySHA256": "77bf4cba294553f576d4a8801cccf4fa4fdb849aad12f09be42fe2ac7abd1da6",
+    "scannerBinarySHA256": "173d69e1ab33979e8166548241efa1f1e46e90502b952731002a2c51521c293c",
+    "inputReportSHA256": "a169269fde1b573147348be49ff22c4b4ef2997617e037ce31a3a5632cbe166a",
+    "errors": {
+      "levelLoad": 0,
+      "pack": 0
+    }
+  },
+  "findings": {
+    "levelsWithoutActiveExit": 54,
+    "zeroSaveRequirement": 51,
+    "zeroSaveRequirementWithWinningReplay": 51,
+    "positiveSaveRequirement": 3,
+    "positiveSaveRequirementWithoutWinningReplay": 3,
+    "routeClosuresThisWorkWindow": 0
+  },
+  "records": [
+    {
+      "packID": "lldb-221",
+      "archive": "0221-ANTHPCK1.zip",
+      "packSHA256": "bc279d343623526a42bfcb359467cf3e65e8e52da06996a76f7c18e0fb7dfe0c",
+      "member": "ANTHPCK1.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-227",
+      "archive": "0227-ANTHPCK7.zip",
+      "packSHA256": "ffeb765b23fc223e55b15386350c0c49996f9cc93a9b1ce7f619886a225b568f",
+      "member": "ANTHPCK7.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-229",
+      "archive": "0229-CALEPCK3.zip",
+      "packSHA256": "5a06d9cb6a6ae0081cc77718ff6ccc894e41f920d45afd6e6753d18a1de44bd2",
+      "member": "CALEPCK3.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#4",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#5",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-230",
+      "archive": "0230-EMPACK.zip",
+      "packSHA256": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+      "member": "EMPACK.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-234",
+      "archive": "0234-JANNPCK4.zip",
+      "packSHA256": "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
+      "member": "JANNPCK4.DAT#5",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-234",
+      "archive": "0234-JANNPCK4.zip",
+      "packSHA256": "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
+      "member": "JANNPCK4.DAT#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-234",
+      "archive": "0234-JANNPCK4.zip",
+      "packSHA256": "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
+      "member": "JANNPCK4.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-234",
+      "archive": "0234-JANNPCK4.zip",
+      "packSHA256": "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
+      "member": "JANNPCK4.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-234",
+      "archive": "0234-JANNPCK4.zip",
+      "packSHA256": "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
+      "member": "JANNPCK4.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-235",
+      "archive": "0235-JEFFPCK1.zip",
+      "packSHA256": "eedc49b14c4c9dcf131121960ca3e20c764bc27630870f32c90da1ca108b3c66",
+      "member": "JEFFPCK1.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-235",
+      "archive": "0235-JEFFPCK1.zip",
+      "packSHA256": "eedc49b14c4c9dcf131121960ca3e20c764bc27630870f32c90da1ca108b3c66",
+      "member": "JEFFPCK1.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-235",
+      "archive": "0235-JEFFPCK1.zip",
+      "packSHA256": "eedc49b14c4c9dcf131121960ca3e20c764bc27630870f32c90da1ca108b3c66",
+      "member": "JEFFPCK1.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-239",
+      "archive": "0239-JEFFPCK5.zip",
+      "packSHA256": "2a8fe57c15aa75c93754c4943f4977cca0928183c80426c7219e75bdf1bf42fc",
+      "member": "JEFFPCK5.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-239",
+      "archive": "0239-JEFFPCK5.zip",
+      "packSHA256": "2a8fe57c15aa75c93754c4943f4977cca0928183c80426c7219e75bdf1bf42fc",
+      "member": "JEFFPCK5.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#2",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#3",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#4",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#5",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-242",
+      "archive": "0242-JOHNPACK.zip",
+      "packSHA256": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+      "member": "JOHNPACK.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-243",
+      "archive": "0243-LARSPACK.zip",
+      "packSHA256": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
+      "member": "LARSPACK.DAT#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-243",
+      "archive": "0243-LARSPACK.zip",
+      "packSHA256": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
+      "member": "LARSPACK.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-243",
+      "archive": "0243-LARSPACK.zip",
+      "packSHA256": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
+      "member": "LARSPACK.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-243",
+      "archive": "0243-LARSPACK.zip",
+      "packSHA256": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
+      "member": "LARSPACK.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-248",
+      "archive": "0248-MATTPCK1.zip",
+      "packSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+      "member": "MATTPCK1.DAT#9",
+      "title": "Award",
+      "lemmings": 80,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 632,
+          "y": -17
+        },
+        {
+          "slot": 1,
+          "id": 1,
+          "x": 704,
+          "y": -17
+        },
+        {
+          "slot": 2,
+          "id": 1,
+          "x": 760,
+          "y": -17
+        },
+        {
+          "slot": 3,
+          "id": 1,
+          "x": 824,
+          "y": -17
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "885e53167fab4dbb5a3751a09ab35e01b3e163ae93a2e0627cab559dee2dd8f3",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-249",
+      "archive": "0249-MATTPCK2.zip",
+      "packSHA256": "8fe2186125d5d8f1bc76fa615c2667722e91c1eabb0e3435b6915a910cba212e",
+      "member": "MATTPCK2.DAT#9",
+      "title": "Bonus",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 1560,
+          "y": 148
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "30c72a297983739c4a38ab049c02a61c4a6eafbbc8ee49311416f3954bca92ea",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-326",
+      "archive": "0326-CALEPCK1.zip",
+      "packSHA256": "b4708aa73bfb0cb6c8c087fcbf4ddc8f50e945a91c7cb14305ebb3333f99aea8",
+      "member": "CALEPCK1.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-326",
+      "archive": "0326-CALEPCK1.zip",
+      "packSHA256": "b4708aa73bfb0cb6c8c087fcbf4ddc8f50e945a91c7cb14305ebb3333f99aea8",
+      "member": "CALEPCK1.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-326",
+      "archive": "0326-CALEPCK1.zip",
+      "packSHA256": "b4708aa73bfb0cb6c8c087fcbf4ddc8f50e945a91c7cb14305ebb3333f99aea8",
+      "member": "CALEPCK1.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-359",
+      "archive": "0359-wade.zip",
+      "packSHA256": "937f94216f6d207b23ed5c69ecf49c73b5aa4156c55bfd51da31da704dfc8007",
+      "member": "wade.DAT#5",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-359",
+      "archive": "0359-wade.zip",
+      "packSHA256": "937f94216f6d207b23ed5c69ecf49c73b5aa4156c55bfd51da31da704dfc8007",
+      "member": "wade.DAT#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-359",
+      "archive": "0359-wade.zip",
+      "packSHA256": "937f94216f6d207b23ed5c69ecf49c73b5aa4156c55bfd51da31da704dfc8007",
+      "member": "wade.DAT#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-359",
+      "archive": "0359-wade.zip",
+      "packSHA256": "937f94216f6d207b23ed5c69ecf49c73b5aa4156c55bfd51da31da704dfc8007",
+      "member": "wade.DAT#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-359",
+      "archive": "0359-wade.zip",
+      "packSHA256": "937f94216f6d207b23ed5c69ecf49c73b5aa4156c55bfd51da31da704dfc8007",
+      "member": "wade.DAT#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-364",
+      "archive": "0364-Twigpak2.zip",
+      "packSHA256": "8a60b9129b29a14c773e394daf0a187de50aaed1f142735dc91834d821d6fe41",
+      "member": "twigpak2.dat#9",
+      "title": "Unused Generic Blank Leve;",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [
+        {
+          "skill": "basher",
+          "count": 10
+        },
+        {
+          "skill": "blocker",
+          "count": 10
+        },
+        {
+          "skill": "bomber",
+          "count": 10
+        },
+        {
+          "skill": "builder",
+          "count": 10
+        },
+        {
+          "skill": "climber",
+          "count": 10
+        },
+        {
+          "skill": "digger",
+          "count": 10
+        },
+        {
+          "skill": "floater",
+          "count": 10
+        },
+        {
+          "skill": "miner",
+          "count": 10
+        }
+      ],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 768,
+          "y": 68
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "4f9da8002ea51a0a0d354f4770a31d9792e224a8ce35f0f7887202be781869fe",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#1",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#2",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#3",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#4",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#5",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#6",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#7",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#8",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-424",
+      "archive": "0424-Andi2.zip",
+      "packSHA256": "b5277769837352fdc9ee5df521da27955f5f02e75c26fc14164d075db516d187",
+      "member": "andi2.dat#9",
+      "title": "Unused blank generic level",
+      "lemmings": 1,
+      "requiredToSave": 0,
+      "skills": [],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 760,
+          "y": 3
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "720a3fc98f8e3d61c81cdb72680dade4187d95808dbfb4eda283cda4234bfd51",
+      "retainedAuditStatus": "winning-replay"
+    },
+    {
+      "packID": "lldb-437",
+      "archive": "0437-Level-Design-Game-08.zip",
+      "packSHA256": "76c552fad59139decedda40d3b2adef946a42a2661cfc18f432263a290251949",
+      "member": "LDChallenge08.dat#1",
+      "title": "ldchallenge08.dat 2",
+      "lemmings": 2,
+      "requiredToSave": 2,
+      "skills": [
+        {
+          "skill": "blocker",
+          "count": 2
+        }
+      ],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 176,
+          "y": 39
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "f0c07d180cd8b3cbd2b7061bb8db178b8414a2e646d2ceb71f3afef79ac02127",
+      "retainedAuditStatus": "rendered-and-smoke-tested-only",
+      "decodedRecordSHA256": "008f31ac7b558096acd08e684ba67b6f5d160e064e440f7cfc727f64ce19fc2b"
+    },
+    {
+      "packID": "lldb-508",
+      "archive": "0508-KillerMasters-Lemmings-1-Wicked.zip",
+      "packSHA256": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
+      "member": "KillerMaster 1 Wicked 1.dat#3",
+      "title": "Type this Word!",
+      "lemmings": 40,
+      "requiredToSave": 20,
+      "skills": [
+        {
+          "skill": "basher",
+          "count": 10
+        },
+        {
+          "skill": "blocker",
+          "count": 10
+        },
+        {
+          "skill": "bomber",
+          "count": 10
+        },
+        {
+          "skill": "builder",
+          "count": 10
+        },
+        {
+          "skill": "climber",
+          "count": 10
+        },
+        {
+          "skill": "digger",
+          "count": 10
+        },
+        {
+          "skill": "floater",
+          "count": 10
+        },
+        {
+          "skill": "miner",
+          "count": 10
+        }
+      ],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 768,
+          "y": 99
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "5f4441453b1a153eee8e977be047dfa9dad59f79abb6c675cc8fa2f9d2bbb411",
+      "retainedAuditStatus": "rendered-and-smoke-tested-only",
+      "decodedRecordSHA256": "7a068994102c52fe91458479f18d5e886001174ea90d9ae039449d4e38eabb1d"
+    },
+    {
+      "packID": "lldb-509",
+      "archive": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "packSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+      "member": "KillerMaster 1 Havoc 2.dat#7",
+      "title": "Choose your lucky PASSWORD!",
+      "lemmings": 1,
+      "requiredToSave": 1,
+      "skills": [
+        {
+          "skill": "basher",
+          "count": 10
+        },
+        {
+          "skill": "blocker",
+          "count": 10
+        },
+        {
+          "skill": "bomber",
+          "count": 10
+        },
+        {
+          "skill": "builder",
+          "count": 10
+        },
+        {
+          "skill": "climber",
+          "count": 10
+        },
+        {
+          "skill": "digger",
+          "count": 10
+        },
+        {
+          "skill": "floater",
+          "count": 10
+        },
+        {
+          "skill": "miner",
+          "count": 10
+        }
+      ],
+      "objects": [
+        {
+          "slot": 0,
+          "id": 1,
+          "x": 40,
+          "y": 77
+        }
+      ],
+      "effectiveExitSlots": [],
+      "initialStateHash": "44a67475e6416d92f01221d7bcf0410fa33efdcc6a49eca0f4691a60dc680eed",
+      "retainedAuditStatus": "rendered-and-smoke-tested-only",
+      "decodedRecordSHA256": "2eeb6c80bc70e856259001bac08fadc1a166227c25f17bef7a9161f2b1df8bc8"
+    }
+  ]
+}

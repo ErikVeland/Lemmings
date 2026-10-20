@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-325",
+    "levelID": "t3tesla.dat#8",
+    "number": 9,
+    "title": "A TOWERING PROBLEM",
+    "initialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5"
+  },
+  "source": {
+    "archive": ".build/classic-fan-solver/rebase-builder-resources/LevelPacks/0325-t3tesla.zip",
+    "archiveSha256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+    "lemmings": 35,
+    "requiredToSave": 9
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "sha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134"
+  },
+  "baselinePrefix": [
+    { "tick": 275, "lemmingID": 3, "skill": "builder" },
+    { "tick": 805, "lemmingID": 14, "skill": "builder" },
+    { "tick": 806, "releaseRate": 75 },
+    { "tick": 849, "releaseRate": 99 }
+  ],
+  "probe": {
+    "variedCommand": "second Builder assignment to lemming 14",
+    "testedTicksInclusive": [795, 815],
+    "fixedCommands": [
+      { "tick": 275, "lemmingID": 3, "skill": "builder" },
+      { "tick": 806, "releaseRate": 75 },
+      { "tick": 849, "releaseRate": 99 }
+    ],
+    "profile": {
+      "clock": "golems",
+      "width": 128,
+      "seconds": 5
+    },
+    "results": [
+      { "tick": 795, "saved": "0/9", "expanded": 403 },
+      { "tick": 796, "saved": "0/9", "expanded": 403 },
+      { "tick": 797, "saved": "0/9", "expanded": 419 },
+      { "tick": 798, "saved": "0/9", "expanded": 420 },
+      { "tick": 799, "saved": "0/9", "expanded": 420 },
+      { "tick": 800, "saved": "0/9", "expanded": 420 },
+      { "tick": 801, "saved": "0/9", "expanded": 420 },
+      { "tick": 802, "saved": "0/9", "expanded": 420 },
+      { "tick": 803, "saved": "0/9", "expanded": 420 },
+      { "tick": 804, "saved": "0/9", "expanded": 420 },
+      { "tick": 805, "saved": "8/9", "expanded": 451, "terminalTick": 1005, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 806, "saved": "8/9", "expanded": 466, "terminalTick": 998, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 807, "saved": "8/9", "expanded": 466, "terminalTick": 1007, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 808, "saved": "8/9", "expanded": 466, "terminalTick": 1000, "released": 35, "lost": 26, "active": 1 },
+      { "tick": 809, "saved": "8/9", "expanded": 467, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 810, "saved": "8/9", "expanded": 468, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 811, "saved": "8/9", "expanded": 469, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 812, "saved": "8/9", "expanded": 468, "terminalTick": 1022, "released": 35, "lost": 26, "active": 1, "complete": true },
+      { "tick": 813, "saved": "8/9", "expanded": 469, "terminalTick": 1005, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 814, "saved": "8/9", "expanded": 469, "terminalTick": 1014, "released": 35, "lost": 25, "active": 2 },
+      { "tick": 815, "saved": "8/9", "expanded": 470, "terminalTick": 1007, "released": 35, "lost": 25, "active": 2 }
+    ]
+  },
+  "outcome": {
+    "variants": 21,
+    "winningRoutes": 0,
+    "acceptedRouteClosures": 0,
+    "bundledClassicFanCountAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "closureVelocityForThisProbe": "0 routes per 21 tested timings",
+    "completionEta": null,
+    "limitation": "This bounded timing probe does not establish that the level has no solution."
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "family": "bundled Classic fan levels",
+    "verifiedRoutesBefore": "2403/6020",
+    "verifiedRoutesAfter": "2403/6020",
+    "newAcceptedRoutes": 0
+  },
+  "method": {
+    "solver": "ClassicSolver",
+    "solverSha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "searchCount": 6,
+    "configuredSecondsEach": 8,
+    "width": 512,
+    "clock": "golems",
+    "rate": "native",
+    "ranking": [
+      "prefer-progress",
+      "rescue-quota-distance"
+    ],
+    "totalReportedSolverSeconds": 40.0,
+    "totalExpansions": 110505
+  },
+  "results": [
+    {
+      "identity": "fan:lldb-355/S370PAK1.DAT#1",
+      "title": "I Have A Trick Up My Sleeve",
+      "initialStateHash": "30d93aee6f4b78c07d81d1549f4dc102d84233b52ba271f744ae1081bbca45ec",
+      "archive": "0355-s370pak1.zip",
+      "archiveSha256": "380cb3e4d0f99405280e1462b7560b35672cdf6c5651caf53d21d2a303b34f55",
+      "requiredToSave": 53,
+      "saved": 0,
+      "expanded": 21736,
+      "solverSeconds": 8.0,
+      "elapsedSeconds": 8.44,
+      "tick": 617,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/61b89ec0d6b8/30d93aee6f4b78c07d81d1549f4dc102d84233b52ba271f744ae1081bbca45ec.partial.json",
+        "sha256": "7471d024e20859ec1487b331f05ec6294af8619bd189365b744bf6128a9833f8"
+      }
+    },
+    {
+      "identity": "fan:lldb-341/JM15.DAT#5",
+      "title": "Execution Style",
+      "initialStateHash": "f2121b6636a981c7b96191f730bb16442ca5c76e6f3cbe5aac2e0d1fd7f8b4a7",
+      "archive": "0341-JM15.zip",
+      "archiveSha256": "f97109511fe42c7b93b22f90e22e71027999935be50fea8471d86bb886295617",
+      "requiredToSave": 1,
+      "saved": 0,
+      "expanded": 101,
+      "solverSeconds": 0.0,
+      "elapsedSeconds": 0.44,
+      "tick": 81,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/e6603a8df304/f2121b6636a981c7b96191f730bb16442ca5c76e6f3cbe5aac2e0d1fd7f8b4a7.partial.json",
+        "sha256": "49de42a84274380979fa73c3376948b9bae7f37f00f0a2a94a22ab330339bcd4"
+      }
+    },
+    {
+      "identity": "fan:lldb-348/MARSHY04.DAT#2",
+      "title": "Watch it diggers",
+      "initialStateHash": "0445089e91912a2922055024cf8fe92350df081ea3f471acfbc7ed14fae8203f",
+      "archive": "0348-MARSHY04.zip",
+      "archiveSha256": "95e08406ced30caeae44467fe45a576590ee87623a6331b9c2afc730f4808adc",
+      "requiredToSave": 40,
+      "saved": 0,
+      "expanded": 21124,
+      "solverSeconds": 8.0,
+      "elapsedSeconds": 8.4,
+      "tick": 278,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/87c9e79ec570/0445089e91912a2922055024cf8fe92350df081ea3f471acfbc7ed14fae8203f.partial.json",
+        "sha256": "44194191a5a537212dd1f883fccc9ad1a5153f90f238522303f59a379e116b2d"
+      }
+    },
+    {
+      "identity": "fan:lldb-323/joem8.dat#5",
+      "title": "Kristallnaacht",
+      "initialStateHash": "cabc680c2ba22c1bf4998799a946f48b8de710634c8c9ccf337c7c0c5102cbe0",
+      "archive": "0323-joem8.zip",
+      "archiveSha256": "3f441387625a52e3232b7a6afd3db65d00a2405fc68909676327a9c1affefd43",
+      "requiredToSave": 10,
+      "saved": 0,
+      "expanded": 22710,
+      "solverSeconds": 8.0,
+      "elapsedSeconds": 8.41,
+      "tick": 513,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/b71f0faa79fb/cabc680c2ba22c1bf4998799a946f48b8de710634c8c9ccf337c7c0c5102cbe0.partial.json",
+        "sha256": "0a6a3fd81584f26d69f487442483710e1c53d3b82a0e6d70e248dd3ff6fda31b"
+      }
+    },
+    {
+      "identity": "fan:lldb-375/twigpak1.dat#0",
+      "title": "Blast Around",
+      "initialStateHash": "d427ac4b9133ffe01e13a03af1f0953f37edb445d91baab886c7e09d32d122d3",
+      "archive": "0375-twigpak1.zip",
+      "archiveSha256": "abe86551c0fa4b0998ba5901bb769a0992cdd0213e8047e461216f849c6052e4",
+      "requiredToSave": 20,
+      "saved": 0,
+      "expanded": 23005,
+      "solverSeconds": 8.0,
+      "elapsedSeconds": 8.42,
+      "tick": 194,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/16b51a01138d/d427ac4b9133ffe01e13a03af1f0953f37edb445d91baab886c7e09d32d122d3.partial.json",
+        "sha256": "8df55754541beb12bf4f2b314fcbfef7e264837fb2742ab9135d4fe85f527c2d"
+      }
+    },
+    {
+      "identity": "fan:lldb-68/Lemmy556 More levels.dat#13",
+      "title": "Now you use bombs and builders",
+      "initialStateHash": "e4b58c5cfc3290def1551c83934f5b84a6853a1eee0c40db28e1e1e5500c1b7b",
+      "archive": "0068-Lemmy556-More-levels.zip",
+      "archiveSha256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+      "requiredToSave": 5,
+      "saved": 0,
+      "expanded": 21829,
+      "solverSeconds": 8.0,
+      "elapsedSeconds": 8.44,
+      "tick": 218,
+      "solved": false,
+      "partial": {
+        "path": ".build/fan-velocity-20261020/continuation-batch/out/per-level/96a7754f63fb/e4b58c5cfc3290def1551c83934f5b84a6853a1eee0c40db28e1e1e5500c1b7b.partial.json",
+        "sha256": "91ea5adb196d8a01a40f5d9b37109388f2907cc372c6524707455127d4c8d040"
+      }
+    }
+  ],
+  "followUpSearches": [
+    {
+      "identity": "fan:lldb-341/JM15.DAT#5",
+      "title": "Execution Style",
+      "initialStateHash": "f2121b6636a981c7b96191f730bb16442ca5c76e6f3cbe5aac2e0d1fd7f8b4a7",
+      "archive": "0341-JM15.zip",
+      "archiveSha256": "f97109511fe42c7b93b22f90e22e71027999935be50fea8471d86bb886295617",
+      "requiredToSave": 1,
+      "saved": 0,
+      "strategy": "fixed-rate-single-skill-sweep",
+      "assignmentsStarted": 4272,
+      "assignmentsCompleted": 4272,
+      "deadlineExpired": false,
+      "reportedSolverSeconds": 0,
+      "solved": false
+    }
+  ],
+  "limits": [
+    "These are bounded searches, not proof that the levels are impossible.",
+    "A route count changes only after a strict winning replay is accepted."
+  ]
+}

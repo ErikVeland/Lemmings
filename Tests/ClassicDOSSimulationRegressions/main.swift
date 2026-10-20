@@ -698,6 +698,48 @@ private func testBlockerCenterSuppressesAndUncoversExit() throws {
     try require(uncovered.lemmings[1].action == .exiting, "a cleared blocker did not uncover the exit")
 }
 
+/**
+ * A basher turns around when its foot enters a blocker field's force-left edge.
+ */
+private func testBlockerTurnsBasher() throws {
+    var simulation = try ClassicDOSSimulation(
+        terrain: floorTerrain(floorY: 80),
+        configuration: configuration(
+            totalLemmings: 2,
+            releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 80)],
+            skills: [.blocker: 1, .basher: 1],
+            maximumX: 191,
+            maximumY: 95
+        ),
+        destructionMasks: destructionMaskSet()
+    )
+    while simulation.releasedCount < 2 { _ = simulation.tick() }
+    try require(simulation.assign(.blocker, to: 0) == .assigned, "blocker assignment failed")
+    try require(simulation.assign(.basher, to: 1) == .assigned, "basher assignment failed")
+
+    simulation = try modifiedSimulation(simulation) { root in
+        try modifyLemmings(in: &root) { lemmings in
+            lemmings[0]["foot"] = ["x": 80, "y": 80]
+            lemmings[0]["action"] = ClassicDOSAction.blocking.rawValue
+            lemmings[0]["ownsBlockerField"] = true
+            lemmings[0]["blockerAnchor"] = ["x": 80, "y": 80]
+            lemmings[1]["foot"] = ["x": 75, "y": 80]
+            lemmings[1]["direction"] = ClassicDOSDirection.right.rawValue
+            lemmings[1]["action"] = ClassicDOSAction.bashing.rawValue
+            lemmings[1]["animationFrame"] = 10
+        }
+    }
+
+    let events = simulation.tick()
+    try require(simulation.lemmings[1].direction == .left,
+        "a basher did not turn at the blocker field")
+    try require(simulation.lemmings[1].action == .bashing,
+        "a blocker field stopped the basher instead of turning it")
+    try require(events.contains(.directionChanged(lemmingID: 1, direction: .left)),
+        "a blocker field turn did not emit a direction event")
+}
+
 private func testFallingOhNoKeepsFixedBlockerAnchor() throws {
     var simulation = try ClassicDOSSimulation(
         terrain: floorTerrain(floorY: 40),
@@ -1382,6 +1424,7 @@ private func run() throws {
     try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()
     try testBlockerCenterSuppressesAndUncoversExit()
+    try testBlockerTurnsBasher()
     try testFallingOhNoKeepsFixedBlockerAnchor()
     try testBlockerClearingUsesLemmingOrder()
     try testActiveBombedBlockerCodableContinuation()
@@ -1397,7 +1440,7 @@ private func run() throws {
     let soak = try soakOfficialCampaign(dataDirectory: dataDirectory)
 
     print("Classic DOS rules: RR1=53, RR2=52, RR98=4, RR99=4; entrance tick=35; first hatch tick=54.")
-    print("Classic DOS edge cases: hatch tables, half-open triggers, fall 60/61, fixed blocker overlays, trap cooldown, RR0, zero-dx splats, immutable masks, Codable continuation, and replay ordering passed.")
+    print("Classic DOS edge cases: hatch tables, half-open triggers, fall 60/61, fixed blocker overlays, blocker-turning bashers, trap cooldown, RR0, zero-dx splats, immutable masks, Codable continuation, and replay ordering passed.")
     print("Official campaign soak: \(soak.levels) levels, \(soak.tickCalls) tick calls, \(soak.released) released, \(soak.active) active, \(soak.saved) saved, \(soak.lost) lost.")
     print("Classic DOS simulation regressions passed.")
 }
