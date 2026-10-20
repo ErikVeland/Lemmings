@@ -104,9 +104,9 @@ gate fails at Shadow 7 and carried fixture 107-1. Earlier Trolley evidence check
 the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.
 
 The feed and source versions are recorded at the start of this document. The
-latest retained Mac package acceptance record is build 91. See the
+latest Mac package acceptance record is build 93. See the
 [2.1 publication record](ReleaseReadiness/2.1-build93/README.md),
-[current candidate notes](ReleaseNotes-2.1-build93.md) and [current-main
+[current release notes](ReleaseNotes-2.1-build93.md) and [current-main
 reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 Build 86 records no non-localisation resource-index changes from build 85, but
 its complete app audit was not rerun. The last installed iOS beta, build 8,
