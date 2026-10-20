@@ -17,7 +17,7 @@ import NxlvKit
 
     func showIfNeeded(in window: NSWindow, completion: @escaping () -> Void) {
         guard telemetry.endpoint != nil, !telemetry.consentDecided else { completion(); return }
-        let page = GameMenuPage(title: L10n.text("Share play counts?"), subtitle: L10n.text("Your choice"))
+        let page = GameMenuPage(title: L10n.text("Share counts and records?"), subtitle: L10n.text("Your choice"))
         page.backTitle = L10n.text("Not now")
         let heading = GameLabel(labelWithString: L10n.text("Help us find levels that need work"))
         heading.role = .heading
@@ -26,7 +26,7 @@ import NxlvKit
         let details = [
             L10n.text("Send opted-in installs, daily use, results and lemmings saved."),
             L10n.text("Include solo or Hot Seat and all-soundtrack download choices."),
-            L10n.text("No names, IDs, pack names or replays are sent."),
+            L10n.text("Public: initials, scores and action replays."),
             L10n.text("The shared saved total stays until the service resets it."),
             L10n.text("The service sees your network address during delivery."),
             L10n.text("Change this in Settings > Privacy."),
@@ -44,7 +44,7 @@ import NxlvKit
             completion()
         }
         page.onBack = { choose(false) }
-        page.addPrimaryAction(L10n.text("Share counts")) { choose(true) }
+        page.addPrimaryAction(L10n.text("Share")) { choose(true) }
         page.preferControllerControl(page.controllerBackButton)
         self.page = page
         GameScreen.shared.present(page, owner: window)
@@ -142,9 +142,12 @@ enum TelemetryLevelTarget: Equatable {
 
     private func askForToken() {
         guard let owner = page?.window, telemetry.endpoint != nil else { return }
+        if let token = telemetry.savedDashboardToken {
+            loadShared(token: token)
+            return
+        }
         let alert = NSAlert()
         alert.messageText = L10n.text("Load shared play counts")
-        alert.informativeText = L10n.text("Enter the dashboard access token. The app does not save it.")
         let field = NSSecureTextField(frame: CGRect(x: 0, y: 0, width: 340, height: 26))
         field.placeholderString = L10n.text("Access token")
         field.setAccessibilityLabel(L10n.text("Dashboard access token"))

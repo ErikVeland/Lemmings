@@ -4,6 +4,10 @@ Play insights are in the macOS app menu and in **Settings > Privacy**. The page
 shows this Mac's counts without a service. Shared counts need an HTTPS service
 and an owner access token. The macOS, iOS and tvOS app configurations use
 `https://glasscode.academy/lemmings-api` by default.
+On Mac, a successful shared load saves the owner token in local app preferences
+for that service. **Load shared** and date-range changes reuse it after relaunch.
+An authentication rejection clears the saved token so the next load asks again.
+iOS and tvOS still require token entry for each shared load.
 The home screen shows lemmings saved on this Mac and, when the player shares
 counts and the service responds, a shared total. A dash means the shared total
 is unavailable; it does not mean zero.
@@ -47,10 +51,10 @@ that the level is unavailable.
   count is recorded at most once per installation. Earlier choices are not
   uploaded when a player opts in later.
 
-Official level identifiers are limited to the shipped title and level number.
+Count uploads limit official level identifiers to the shipped title and level number.
 Lemmings 2 practice has one `practice` bucket. All fan levels share one
 `fan/all` bucket. Pack names, custom level names, paths, profile names, run IDs,
-replay contents and device IDs are not sent. The telemetry code uses a run ID
+replay contents and device IDs are not sent with count uploads. The telemetry code uses a run ID
 in memory only to avoid counting one result twice. The app stores
 local aggregate counts in UserDefaults. **Clear this Mac's counts** clears that
 local display; it does not delete totals already sent to the service.
@@ -70,6 +74,13 @@ concurrent-player or completion-rate figures.
 
 Sharing starts off. A first-run page asks for consent only when the build has a
 service address. The player can change the choice in **Settings > Privacy**.
+Sharing counts also enables worldwide records for local players without an
+explicit records opt-out. Worldwide records publish initials, scores and action
+replays through the separate rankings service. They use a player credential and
+are not anonymous aggregate counts. Removing shared records keeps that player
+out of rankings until they enable record sharing again. Turning count sharing
+off stops automatic ranking submissions but leaves an explicit records opt-in
+in force.
 Turning sharing off cancels pending uploads and prevents new uploads. No earlier
 service totals can be removed for one person because the service has no
 identifier that could find them.

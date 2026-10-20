@@ -3,6 +3,25 @@ import Testing
 @testable import NxlvKit
 
 struct PlayerControlSettingsTests {
+    @Test func pausedInspectionDefaultsAndRetainsPlayerChoice() throws {
+        #expect(ClassicSettings().inspectWhilePaused)
+        #expect(try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8)).inspectWhilePaused)
+        var settings = ClassicSettings()
+        settings.inspectWhilePaused = false
+        settings.applyExperiencePreset(modern: false)
+        settings.applyExperiencePreset(modern: true)
+        #expect(!settings.inspectWhilePaused)
+        let stored = try JSONEncoder().encode(settings)
+        #expect(try !JSONDecoder().decode(ClassicSettings.self, from: stored).inspectWhilePaused)
+        let controls = PlayerControlSettings(settings)
+        let data = try JSONEncoder().encode(controls)
+        #expect(try !JSONDecoder().decode(PlayerControlSettings.self, from: data).applying(to: .init()).inspectWhilePaused)
+        var legacy = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        legacy.removeValue(forKey: "inspectWhilePaused")
+        #expect(try JSONDecoder().decode(PlayerControlSettings.self,
+            from: JSONSerialization.data(withJSONObject: legacy)).inspectWhilePaused)
+    }
+
     @Test func macShuffleScopeDefaultsAndSurvivesSavedSettingsAndPresets() throws {
         var value = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
         #expect(value.djShuffleScope == .sameTrack)

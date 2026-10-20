@@ -12,6 +12,7 @@ import NxlvKit
         return .invalidTargets
     }
     @MainActor static func main() async throws {
+        let sharing = CommandLine.arguments.last == "--sharing"
         let muteSetting = CommandLine.arguments.last == "--mute-setting"
         let tableResult = ["--table-result", "--book-result"].contains(CommandLine.arguments.last ?? "")
         let extraSkill = CommandLine.arguments.last == "--extra-skill"
@@ -34,7 +35,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -42,6 +43,7 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if sharing { try checkSharingPrivacy(typography: typography, output: output); return }
         if muteSetting { try checkMuteSetting(typography: typography, output: output); return }
         if tableResult { try checkTableResult(typography: typography, content: content, output: output); return }
         if extraSkill { try checkExtraSkill(typography: typography, output: output); return }
@@ -588,6 +590,48 @@ import NxlvKit
     }
 
     static func cg(_ rect: MobileRect) -> CGRect { CGRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height) }
+    @MainActor static func checkSharingPrivacy(typography: GameMenuTypography, output: URL) throws {
+        var captures = 0
+        let pages: [(String, GameFrontEnd.Page)] = [
+            ("consent", MobileInformationArt.telemetryConsent()),
+            ("on", MobileSettingsArt.page(.privacy, settings: .init(), sharing: true, sharingAvailable: true)),
+            ("off", MobileSettingsArt.page(.privacy, settings: .init(), sharing: false, sharingAvailable: true)),
+            ("unavailable", MobileSettingsArt.page(.privacy, settings: .init(), sharingAvailable: false))]
+        for (device, size) in [("phone", CGSize(width: 320, height: 568)), ("ipad", CGSize(width: 768, height: 1024)), ("tv", CGSize(width: 1920, height: 1080))] {
+            for interfaceSize in ClassicInterfaceSize.allCases {
+                let scale = MobileSettingsArt.interfaceScale(interfaceSize, width: size.width, television: device == "tv")
+                let logical = CGSize(width: floor(size.width / scale), height: floor(size.height / scale))
+                for (state, page) in pages {
+                    let layout = GameFrontEnd.layout(page, width: logical.width, minimumHeight: logical.height)
+                    guard let sharing = layout.targets.first(where: { ["telemetryYes", "setting.telemetry"].contains($0.action.id) }),
+                          sharing.action.title == (state == "consent" ? "Share" : "Share counts and records"),
+                          sharing.action.enabled == (state != "unavailable"),
+                          page.backAction != nil,
+                          state != "consent" || page.details.contains("Public: initials, scores and action replays.") else { throw invalidTargets(line: #line) }
+                    for target in layout.targets {
+                        if state == "consent" {
+                            guard typography.width(of: target.action.title.uppercased(), face: .large, scale: 1) <= target.frame.width - 24 else { throw invalidTargets(line: #line) }
+                        }
+                        guard target.frame.width >= 44, target.frame.height >= 44,
+                              CGRect(origin: .zero, size: layout.size).contains(target.frame),
+                              layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
+                        else { throw invalidTargets(line: #line) }
+                    }
+                    for (index, target) in layout.targets.enumerated() {
+                        guard layout.targets.dropFirst(index + 1).allSatisfy({ !target.frame.intersects($0.frame) }) else { throw invalidTargets(line: #line) }
+                    }
+                    let imageSize = CGSize(width: ceil(layout.size.width * scale), height: ceil(layout.size.height * scale))
+                    let context = try bitmapContext(size: imageSize)
+                    context.scaleBy(x: scale, y: scale)
+                    GameFrontEnd.draw(page, layout: layout, typography: typography, in: context)
+                    try save(context: context, to: output.appendingPathComponent("sharing-\(device)-\(interfaceSize.rawValue)-\(state).png"))
+                    captures += 1
+                }
+            }
+        }
+        print("PASS \(captures) phone, iPad and TV sharing consent/on/off/unavailable renders, captions and input targets")
+    }
+
     static func bitmapContext(size: CGSize) throws -> CGContext {
         guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
             bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),

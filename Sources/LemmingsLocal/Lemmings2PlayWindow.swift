@@ -430,7 +430,7 @@ import NxlvKit
         keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false) }
         keyboard.inspectionAvailable = { [weak self] in
             guard let self else { return false }
-            return self.screen == .playing && self.paused && !self.canvas.startCountdown.isActive
+            return self.audioSettings.inspectWhilePaused && self.screen == .playing && self.paused && !self.canvas.startCountdown.isActive
         }
         canvas.inspectionSelectionAvailable = keyboard.inspectionAvailable
         keyboard.inspectionHoverID = { [weak self] in self?.canvas.inspectionPointerID }
@@ -881,14 +881,17 @@ import NxlvKit
         }
         if userPausedMusic && paused { updateUserMusicPause() }
     }
-    static func savedCompletion(root: URL) -> Int {
+    static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         guard var campaign = try? Lemmings2Campaign(root: root) else { return 0 }
         let key = campaignProgressKey(root: root)
         if let data = UserDefaults.standard.data(forKey: key),
            let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
             try? campaign.restore(saved)
         }
-        return campaign.results.count
+        return campaign.levels.indices.filter { index in
+            campaign.results[index] != nil || journeyWins.contains(.init(engine: .lemmings2,
+                packID: "tribes-\(index / 10)", levelID: "\(index % 10):\(campaign.levels[index].fingerprint)"))
+        }.count
     }
 
     static func browserLevels(root: URL) throws -> [BrowserLevel] {

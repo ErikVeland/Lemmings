@@ -76,20 +76,24 @@ is added by this change.
 
 ## Arrow glints
 
-Classic one-way arrows with Macintosh colour art catch light on edges that face
+Classic and NeoLemmix one-way arrows with Macintosh colour art catch light on edges that face
 up and left. The SDR frame holds that glint up to white. On an EDR display the
 HD effects overlay adds the clipped light above SDR white. The peak is 1.5 above
 SDR white, or less when the screen has less headroom.
 
-`ClassicMacScene.rgbaWithArrowGlints` returns the unchanged frame and a sparse
+`ClassicMacScene.rgbaWithArrowGlints` and `NeoLemmixSceneFrame.frame` return the SDR frame and a sparse
 mask that covers only the arrows. The overlay redraws the mask when the camera
 moves or the arrows animate. It keeps its last frame when nothing changes.
 SDR screens get no glint pass, and their pixels stay byte-identical.
+NeoLemmix clips arrows to live terrain after every edit. Macintosh arrows use
+the drawn subpixel alpha and share Classic's terrain-edge shading. Switching HD
+effects while paused refreshes the glint mask.
 
 Limits:
 
 - Monochrome Mac art has no glints.
 - Apple TV has no app EDR path, so tvOS frames carry no glints.
+- NeoLemmix arrow glints currently use the Mac overlay. Mobile retains SDR edge shading.
 - CRT mode on Mac and iOS has no glints. The tube draws its own curved image.
 - Constrained iOS devices turn the glints off. So does the Amiga OCS colour
   depth on iOS, which reduces the drawn frame.
@@ -119,3 +123,23 @@ Limits:
 SDR PNG previews show shape, colour, and timing samples. They cannot establish
 physical HDR luminance. The test displays reported current headroom 1. GPU
 output above SDR white is verified separately with simulated headroom 8.
+
+NeoLemmix arrow validation (2026-10-20): four focused Classic/NeoLemmix
+regressions pass with muted, offscreen execution. NeoLemmix covers all four
+directions, live cuts, authored Mac subpixel edges, glint containment, unchanged
+SDR output when collecting glints and unchanged terrain state. Native brick
+artwork was rendered and inspected before cutting, after cutting and after
+restoring terrain. Metal validation reports `Metal is unavailable` in the
+headless environment. Physical display headroom and HDR brightness remain
+unverified. L2 and L3 keep their existing renderers; they do not use these
+Classic/NeoLemmix one-way object layers.
+
+Sunsoft correction (2026-10-20): converted Classic one-way objects can omit
+`onlyOverwrite`. Treat arrows as terrain decals regardless of placement flags.
+DOS frames clip to live terrain alpha. Macintosh colour and monochrome frames
+clip to the drawn terrain subpixels, even when no HDR glints are requested.
+The Everyone turn left (Part two) regression reproduced 365 off-terrain pixels
+before the fix and now reports zero. Five focused regressions pass. Inspected
+Sunsoft colour and monochrome captures cover the initial scene, a terrain cut
+and restoration. This corrects the Sunsoft screenshot independently of the
+separate NeoLemmix fixes above.

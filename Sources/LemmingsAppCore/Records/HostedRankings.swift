@@ -65,6 +65,7 @@ public enum HostedCategory: String, CaseIterable {
     public let endpoint: URL?
     public let transport: any HostedRankingsTransport
     private let credentials: ((String) throws -> String)?
+    private let countSharing: @MainActor () -> Bool
     public let defaults: UserDefaults
     public var onChange: (() -> Void)?
     public var onSyncComplete: (() -> Void)?
@@ -85,15 +86,29 @@ public enum HostedCategory: String, CaseIterable {
     }
     public var networkEnabled: Bool
     public init(endpoint: URL? = nil, transport: (any HostedRankingsTransport)? = nil, defaults: UserDefaults = .standard,
-         credentials: ((String) throws -> String)? = nil, recordsStoreProvider: @escaping @MainActor () -> ArcadeStore) {
+         credentials: ((String) throws -> String)? = nil, countSharing: (@MainActor () -> Bool)? = nil,
+         recordsStoreProvider: @escaping @MainActor () -> ArcadeStore) {
         self.recordsStoreProvider = recordsStoreProvider
+        let telemetry = AnonymousTelemetry(defaults: defaults)
+        self.countSharing = countSharing ?? { telemetry.sharesCounts }
         self.endpoint = endpoint ?? (Bundle.main.object(forInfoDictionaryKey: "HostedRankingsURL") as? String).flatMap(URL.init(string:))
         self.transport = transport ?? HostedURLTransport(session: URLSession(configuration: .ephemeral)); self.defaults = defaults
         self.credentials = credentials
         networkEnabled = ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted"
     }
     public func hasShared(_ profile: String) -> Bool { defaults.bool(forKey: "HostedRankings.hasShared." + profile) }
-    public func sharing(_ profile: String) -> Bool { defaults.bool(forKey: "HostedRankings.share." + profile) }
+    public func sharing(_ profile: String) -> Bool {
+        let key = "HostedRankings.share." + profile
+        return defaults.object(forKey: key) == nil ? countSharing() : defaults.bool(forKey: key)
+    }
+    /// Apply count sharing at launch and when its setting changes. Explicit player choices remain in force.
+    public func countSharingChanged() {
+        pending = pending.filter { sharing($0) }
+        for profile in recordsStoreProvider().records.profiles where sharing(profile.id) {
+            completed(profileID: profile.id)
+        }
+        onChange?()
+    }
     public func setSharing(_ enabled: Bool, profile: String) {
         guard !enabled || !removals.contains(profile) else { retryRemovals(); return }
         defaults.set(enabled, forKey: "HostedRankings.share." + profile)

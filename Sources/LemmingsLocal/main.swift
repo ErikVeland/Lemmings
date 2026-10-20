@@ -792,6 +792,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     buildInterface()
     startCloudProgress()
     AnonymousTelemetry.shared.onCountsChanged = { [weak self] in self?.homeSavedCountsChanged() }
+    AnonymousTelemetry.shared.onSharingChanged = { HostedRankings.shared.countSharingChanged() }
+    HostedRankings.shared.countSharingChanged()
     traceLaunch("interface")
     installKeyboardShortcuts()
     NotificationCenter.default.addObserver(self, selector: #selector(resumeAudioOutput),
@@ -1719,11 +1721,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func refreshSequelProgress() {
+    let wins = Set(homeLearningEntries().map(\.identity))
     if let root = try? BundledGameResources.lemmings2() {
-      sequelCompletion[.lemmings2TheTribes] = Lemmings2PlayWindow.savedCompletion(root: root)
+      sequelCompletion[.lemmings2TheTribes] = Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: wins)
     }
     if let root = try? BundledGameResources.lemmings3() {
-      sequelCompletion[.lemmings3TheChronicles] = Lemmings3PlayWindow.savedCompletion(root: root)
+      sequelCompletion[.lemmings3TheChronicles] = Lemmings3PlayWindow.savedCompletion(root: root, journeyWins: wins)
     }
     rebuildLibrary()
     measureFanPacks()
@@ -6153,6 +6156,32 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Unofficial levels
 
+  private func homeLearningEntries() -> [LevelPlaylistEntry] {
+    (try? playlistStore().completedLearningEntries(hotSeatID: ArcadeStore.shared.hotSeatID)) ?? []
+  }
+
+  /// Display the union without unlocking or writing the separate campaign run.
+  private func homeClassicPassedCount(for entry: (set: ClassicDataSet, directory: URL),
+    journeyWins: Set<LevelCatalogueIdentity>) -> Int {
+    var savedFlow = ClassicGameFlow(campaign: entry.set.campaign)
+    if let data = savedClassicProgressData(for: entry),
+       let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+      savedFlow.restore(entry.set.migrateProgress(saved))
+    }
+    let imported = dataSetID(entry).contains(":source-")
+    let revision = imported ? FanLevelLibrary.classicSourceRevision(for: entry.set.title, root: entry.directory) : nil
+    let packID = revision.map { "imported:" + $0 + ":" + ArcadeStore.fingerprint(Data(entry.directory.standardizedFileURL.path.utf8)) }
+      ?? entry.set.identifierKey
+    return savedFlow.ranks.reduce(0) { count, rank in
+      count + rank.levelIndices.enumerated().filter { position, index in
+        let level = entry.set.campaign.levels[index]
+        let identity = LevelCatalogueIdentity(engine: .classic, packID: packID,
+          levelID: "\(index):\(level.rank):\(level.number):\(level.archiveFile):\(level.archiveSection)")
+        return savedFlow.hasPassed(rank: rank.name, position: position) || journeyWins.contains(identity)
+      }.count
+    }
+  }
+
   /// The home screen's fan content row.
   ///
   /// The total counts only the packs measured so far, because measuring means
@@ -6160,26 +6189,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// than showing a total that keeps changing under the player.
   private func fanHomeRow() -> String {
     let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
+    let lessons = homeLearningEntries()
+    let wins = Set(lessons.map(\.identity))
     let imported = dataSets.filter {
       $0.set.kind == .scanned && $0.set.title != .ohYesMoreLemmings
     }.reduce(
       into: (passed: 0, total: 0)
     ) { result, entry in
-      var savedFlow = ClassicGameFlow(campaign: entry.set.campaign)
-      if let data = savedClassicProgressData(for: entry),
-         let saved = try? JSONDecoder().decode(
-          ClassicGameFlow.Progress.self, from: data) {
-        savedFlow.restore(entry.set.migrateProgress(saved))
-      }
       result.total += entry.set.campaign.levels.count
-      result.passed += savedFlow.ranks.reduce(0) {
-        $0 + savedFlow.passedCount(inRank: $1.name)
-      }
+      result.passed += homeClassicPassedCount(for: entry, journeyWins: wins)
     }
     guard !packs.isEmpty || imported.total > 0 else {
       return L10n.text("FAN LEMMINGS  — NO PACKS")
     }
-    let passed = FanLevelLibrary.Progress.passedCount(for: packs) + imported.passed
+    let passed = FanLevelLibrary.Progress.passedCount(for: packs, learningEntries: lessons) + imported.passed
     let total = FanLevelLibrary.Progress.total(for: packs) + imported.total
     if FanLevelLibrary.Progress.isComplete(for: packs) {
       return L10n.text("FAN LEMMINGS  \(passed)/\(total)")
@@ -6206,7 +6229,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard !installed.isEmpty else {
       return family.displayName.uppercased() + "  — NO DATA"
     }
-    let passed = installed.reduce(0) { $0 + $1.passed }
+    let wins = Set(homeLearningEntries().map(\.identity))
+    let passed = installed.reduce(0) { count, item in
+      guard let index = nonFanQuestDataSetIndex(for: item.title) else { return count + item.passed }
+      return count + homeClassicPassedCount(for: dataSets[index], journeyWins: wins)
+    }
     let total = installed.reduce(0) { $0 + $1.total }
     let status = family == .lemmings3 ? "  — BETA" : ""
     return "\(family.displayName.uppercased())  \(passed)/\(total)\(status)"
@@ -9030,7 +9057,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: false, nuke: true) }
     keyboard.inspectionAvailable = { [weak self] in
       guard let self else { return false }
-      return self.phase == .playing && self.isPaused && self.session is ClassicSession
+      return self.settings.inspectWhilePaused && self.phase == .playing && self.isPaused && self.session is ClassicSession
         && !self.playfield.startCountdown.isActive
     }
     playfield.inspectionSelectionAvailable = keyboard.inspectionAvailable

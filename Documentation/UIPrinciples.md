@@ -506,6 +506,9 @@ Retain the same explanation as accessibility help, including for disabled option
 Privacy details live in a hover popover and a clickable Privacy info popover.
 Keep every setting reachable by scrolling and keyboard/controller focus.
 The shared page retains all three games' settings and native engine limits.
+Mac dialog containers must not bounce beyond their content and expose the
+screen behind them. When a page fits, consume wheel input without moving it.
+Long settings panes and enlarged pages retain bounded scrolling.
 
 Offscreen, muted settings checks cover all seven tabs at 1120×720 and 900×620,
 checkbox text targets, scrolling, delayed hover and cancellation, keyboard
@@ -1184,3 +1187,20 @@ On/Off names. Command-G changes the same saved local choice before or during
 an attempt. Hide only the previous-player sprites. Retain their recorded turns
 and seek them to the current tick when shown again. Preserve Glider/goal keys,
 solution ghosts and the paused Ready handover across Classic, L2 and L3.
+
+Mac paused inspection is enabled by default in Gameplay settings. The shared
+Inspect lemmings while paused checkbox controls hover details and actor selection
+in Classic, L2 and L3. Keep the gameplay Inspect button removed. Command-I opens
+the full history while inspection is enabled. Preserve paused Ready handovers.
+
+NeoLemmix one-way arrows follow live terrain edits. Macintosh arrows clip to
+the drawn subpixels and share Classic terrain-edge shading and Mac HDR glints.
+Retain the original physics masks and clip glints to the same visible arrows.
+Display headroom still bounds HDR output. CRT and mobile NeoLemmix retain SDR
+arrows until their glint compositing paths are implemented.
+
+Classic one-way arrows always clip to the visible terrain, including converted
+Sunsoft objects that omit terrain-only placement flags. Apply the same mask
+with HDR off, and with DOS, Macintosh colour or monochrome artwork. Glints
+use that mask too. Five focused regressions pass, including the Sunsoft wall
+and inspected initial, cut and restored bitmap captures.

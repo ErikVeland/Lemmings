@@ -151,8 +151,17 @@ enum FanLevelLibrary {
     /**
      * Returns passes that belong to packs currently installed.
      */
-    @MainActor static func passedCount(for packs: [URL]) -> Int {
-      let all = passed
+    @MainActor static func passedCount(for packs: [URL], learningEntries: [LevelPlaylistEntry] = []) -> Int {
+      var all = passed
+      let installed = Dictionary(packs.map { ("fan:" + catalogueID($0), $0) }, uniquingKeysWith: { first, _ in first })
+      for entry in learningEntries where entry.identity.engine == .classic {
+        guard let pack = installed[entry.identity.packID],
+              let split = entry.identity.levelID.lastIndex(of: "#"),
+              let section = Int(entry.identity.levelID[entry.identity.levelID.index(after: split)...]) else { continue }
+        let file = String(entry.identity.levelID[..<split])
+        let label = section == -1 ? (file as NSString).lastPathComponent : entry.levelNameSnapshot
+        all.insert(identifier(pack: pack, label: label))
+      }
       let stablePrefixes = Set(packs.map(stablePrefix))
       let currentCount = all.count { saved in
         stablePrefixes.contains { saved.hasPrefix($0) }

@@ -213,6 +213,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var ridiculousSpeedEnabled: Bool
+    public var inspectWhilePaused: Bool
     public var pauseOnInterruption: Bool
     public var gameplayCursorStyle: GameplayCursorStyle
     public var showClassicSkillBackpacks: Bool
@@ -275,6 +276,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         ridiculousSpeedEnabled: Bool = false,
+        inspectWhilePaused: Bool = true,
         pauseOnInterruption: Bool = true,
         gameplayCursorStyle: GameplayCursorStyle = .modern,
         showClassicSkillBackpacks: Bool = true,
@@ -322,6 +324,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.ridiculousSpeedEnabled = ridiculousSpeedEnabled
+        self.inspectWhilePaused = inspectWhilePaused
         self.pauseOnInterruption = pauseOnInterruption
         self.gameplayCursorStyle = gameplayCursorStyle
         self.showClassicSkillBackpacks = showClassicSkillBackpacks
@@ -400,6 +403,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         ridiculousSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .ridiculousSpeedEnabled) ?? false
+        inspectWhilePaused = try values.decodeIfPresent(Bool.self, forKey: .inspectWhilePaused) ?? true
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
         let savedExperience = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset)
         let modernPresentation = savedExperience == .original ? false : savedExperience == .modern ? true : modernControlsEnabled

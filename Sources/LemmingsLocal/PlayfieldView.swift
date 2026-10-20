@@ -120,6 +120,7 @@ struct ReticleFeedback {
 
   var hdEffectsEnabled = true {
     didSet {
+      if oldValue != hdEffectsEnabled { sceneTick = nil }
       if !hdEffectsEnabled {
         speedTrails.reset(); hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear()
       }
@@ -185,6 +186,7 @@ struct ReticleFeedback {
   private var hdrLastTick = 0
   var presentsHDR = true {
     didSet {
+      if oldValue != presentsHDR { sceneTick = nil; needsDisplay = true }
       hdrOverlay?.isHidden = !presentsHDR
       hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
     }
@@ -399,7 +401,7 @@ struct ReticleFeedback {
     guard let neoScene, let session = session as? NeoLemmixSession,
           sceneTick != session.currentTick else { return }
     let stoner = neoSprites?.stonerTerrainPixels()
-    let rgba = NeoLemmixSceneFrame.rgba(
+    let frame = NeoLemmixSceneFrame.frame(
       neoScene,
       terrain: session.simulation.terrain,
       stonerRGBA: stoner?.rgba ?? [],
@@ -412,9 +414,11 @@ struct ReticleFeedback {
       tickCount: session.simulation.tickCount,
       entranceOpenTick: session.simulation.configuration.entranceOpenTick,
       splitterDirections: session.simulation.splitterDirections,
-      useMacArtwork: neoMacArtworkEnabled
+      useMacArtwork: neoMacArtworkEnabled,
+      includeArrowGlints: presentsHDR && hdEffectsEnabled
     )
-    guard let provider = CGDataProvider(data: Data(rgba) as CFData),
+    arrowGlints = frame.glints
+    guard let provider = CGDataProvider(data: Data(frame.rgba) as CFData),
           let image = CGImage(
             width: neoScene.width * (neoMacArtworkEnabled ? 2 : 1),
             height: neoScene.height * (neoMacArtworkEnabled ? 2 : 1),

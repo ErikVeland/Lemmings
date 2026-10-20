@@ -127,6 +127,21 @@ completed it before. Profile achievements, scores and learning history stay save
 Continue and Resume use the saved session position. A journey from another
 Hot Seat or a solo run cannot become the new session's current journey.
 
+Home completion counts include the selected session's Journey wins as well as
+its campaign wins. Matching level identities count once. Displaying those totals
+does not unlock campaign levels or change the saved campaign, roster or turn.
+Classic and fan rows use this union. L2 and L3 completion summaries use the same
+rule while Home retains their existing logos.
+
+Before 2.1, Mac Journey outcomes shared one history across solo and Hot Seat play.
+The upgrade restores recorded outcomes for past visits in each retained Hot Seat
+queue. It also checks a matching pre-upgrade backup when 2.1 has already written
+an empty session history. A resume position alone cannot establish a win.
+Unvisited solo wins stay outside the recovered session, and the original shared
+history stays intact. This older format cannot prove which turn earned a shared
+outcome. History absent from both the save and its retained backup cannot be
+reconstructed. New sessions keep separate histories.
+
 L2 playlists starting at level one have no inherited completions or skips.
 If a playlist explicitly starts later in a tribe, it retains only the preceding
 levels needed for that level's population. L3 playlists start without inherited

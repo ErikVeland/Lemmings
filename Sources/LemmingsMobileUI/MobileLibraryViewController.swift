@@ -273,6 +273,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         beginWelcomeIfNeeded()
         measureMobileFanPacks()
         AnonymousTelemetry.shared.recordActiveDay()
+        AnonymousTelemetry.shared.onSharingChanged = { [weak self] in self?.mobileRankings.community.countSharingChanged() }
+        mobileRankings.community.countSharingChanged()
         #if os(iOS)
         cloudProgress.canImport = { [weak self] in self?.game == nil && self?.preparingLevel == false }
         cloudProgress.captureExtra = { profileID in

@@ -28,7 +28,8 @@ cat "$project_dir/Sources/LemmingsLocal/main.swift" \
   "$project_dir/Tests/AppIntegrationTests/checks.swift" \
   "$project_dir/Tests/AppIntegrationTests/home-backdrop.swift" \
   "$project_dir/Tests/AppIntegrationTests/gameplay-quick-controls.swift" \
-  "$project_dir/Tests/AppIntegrationTests/extra-skills.swift" > "$build_dir/main.swift"
+  "$project_dir/Tests/AppIntegrationTests/extra-skills.swift" \
+  "$project_dir/Tests/AppIntegrationTests/journey-progress.swift" > "$build_dir/main.swift"
 sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
 test_app="$build_dir/AppIntegrationTests.app"
@@ -88,6 +89,7 @@ if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY
 if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == earned-rewards ]]; then test_flags+=(-D EARNED_REWARD_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == level-skips ]]; then test_flags+=(-D LEVEL_SKIP_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == journey-progress ]]; then test_flags+=(-D JOURNEY_PROGRESS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == learning ]]; then test_flags+=(-D LEARNING_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == celebration ]]; then test_flags+=(-D CELEBRATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == menu-records-track ]]; then test_flags+=(-D MENU_RECORDS_TRACK_TESTS); fi

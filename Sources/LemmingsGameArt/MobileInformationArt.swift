@@ -28,9 +28,9 @@ public enum MobileInformationArt {
         return page
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
-              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("No names or IDs"), L10n.text("No pack names"), L10n.text("No replays"), L10n.text("Service sees IP")],
-              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share counts"), primary: true)])
+        var page = GameFrontEnd.Page(title: L10n.text("Share counts and records?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
+              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("Public: initials, scores and action replays."), L10n.text("Service sees IP")],
+              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share"), primary: true)], footerColumns: 1)
         page.backActionID = "telemetryNo"
         return page
     }

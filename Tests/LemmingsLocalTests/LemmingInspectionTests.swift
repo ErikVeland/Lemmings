@@ -82,7 +82,7 @@ final class LemmingInspectionPageTests: XCTestCase {
         XCTAssertNil(LemmingInspectionHover.nearestID(at: .init(x: 20, y: 10), actors: [(0, 20, 40)]))
     }
 
-    @MainActor func testInspectTargetAppearsOnlyWhilePausedAndGuardsActivation() throws {
+    @MainActor func testPausedNavigationHasNoInspectButton() throws {
         _ = NSApplication.shared
         let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 480),
             styleMask: [.titled], backing: .buffered, defer: false)
@@ -92,21 +92,59 @@ final class LemmingInspectionPageTests: XCTestCase {
         window.contentView = root
         let keyboard = GameplayKeyboard(window: window)
         defer { keyboard.removeNavigationControl() }
-        var paused = false, inspections = 0
+        var paused = false
         keyboard.active = { true }; keyboard.mainMenu = {}
         keyboard.inspectionAvailable = { paused }
-        keyboard.inspectLemmings = { inspections += 1 }
-        keyboard.refreshNavigationControl()
-        XCTAssertFalse(root.subviews.contains { ($0 as? NSButton)?.title == "Inspect" && !$0.isHidden })
-        paused = true; keyboard.refreshNavigationControl()
-        let inspect = try XCTUnwrap(root.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Inspect" })
-        XCTAssertFalse(inspect.isHidden)
-        XCTAssertTrue(root.bounds.contains(inspect.frame))
-        XCTAssertTrue(root.hitTest(CGPoint(x: inspect.frame.midX, y: inspect.frame.midY)) === inspect)
-        inspect.performClick(nil); XCTAssertEqual(inspections, 1)
-        paused = false; keyboard.refreshNavigationControl()
-        XCTAssertTrue(inspect.isHidden)
-        inspect.performClick(nil); XCTAssertEqual(inspections, 1)
+        keyboard.inspectLemmings = {}
+        for value in [false, true] {
+            paused = value
+            keyboard.refreshNavigationControl()
+            XCTAssertFalse(root.subviews.contains { ($0 as? NSButton)?.title == "Inspect" })
+            for button in root.subviews.compactMap({ $0 as? NSButton }).filter({ !$0.isHidden }) {
+                XCTAssertTrue(root.bounds.contains(button.frame))
+                XCTAssertTrue(root.hitTest(CGPoint(x: button.frame.midX, y: button.frame.midY)) === button)
+            }
+        }
+    }
+
+    @MainActor func testInspectionSettingRendersAndTogglesFromCaptionAndBox() throws {
+        _ = NSApplication.shared
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let artwork = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
+        let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
+        try GameMenuArtwork.withRenderer(renderer) {
+            let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 720), styleMask: [], backing: .buffered, defer: false)
+            window.isReleasedWhenClosed = false
+            window.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 900, height: 720))
+            let previous = GameScreen.shared.gameWindow
+            GameScreen.shared.gameWindow = window
+            defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = previous; window.close() }
+            let settings = SettingsWindow(settings: .init(), options: .available(hasDOSData: true,
+                hasAmigaDisk: true, hasMacintoshDisk: true, moduleCount: 1))
+            settings.show()
+            let host = try XCTUnwrap(window.contentView)
+            @MainActor func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+            host.layoutSubtreeIfNeeded()
+            let inspect = try XCTUnwrap(descendants(host).compactMap { $0 as? GameCheckButton }
+                .first { $0.title == "Inspect lemmings while paused" })
+            inspect.scrollToVisible(inspect.bounds)
+            host.layoutSubtreeIfNeeded()
+            let output = root.appendingPathComponent(".build/inspection-hover-renders")
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            for enabled in [true, false, true] {
+                XCTAssertEqual(settings.current.inspectWhilePaused, enabled)
+                XCTAssertEqual(inspect.state, enabled ? .on : .off)
+                for x in [10.0, inspect.bounds.midX] {
+                    XCTAssertTrue(host.hitTest(inspect.convert(CGPoint(x: x, y: inspect.bounds.midY), to: host)) === inspect)
+                }
+                let bitmap = try XCTUnwrap(host.bitmapImageRepForCachingDisplay(in: host.bounds))
+                host.cacheDisplay(in: host.bounds, to: bitmap)
+                try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to:
+                    output.appendingPathComponent("settings-\(enabled ? "on" : "off").png"))
+                inspect.performClick(nil)
+                host.layoutSubtreeIfNeeded()
+            }
+        }
     }
 
     @MainActor func testRenderedPagesNavigationAndInputStayInsideInspection() throws {

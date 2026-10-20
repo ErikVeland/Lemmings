@@ -11,6 +11,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
     public var staticHomeScreen: Bool
     public var reduceFlashes: Bool
     public var showSongInfo: Bool
+    public var inspectWhilePaused: Bool
     public var fadeMenuButton: Bool
 
     public init(_ settings: ClassicSettings) {
@@ -23,12 +24,13 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         staticHomeScreen = settings.staticHomeScreen
         reduceFlashes = settings.reduceFlashes
         showSongInfo = settings.showSongInfo
+        inspectWhilePaused = settings.inspectWhilePaused
         fadeMenuButton = settings.fadeMenuButton
     }
 
     private enum CodingKeys: String, CodingKey {
         case controllerEnabled, controllerTapSpeed, controllerSwapSticks, controllerMappings
-        case interfaceSize, reduceMotion, staticHomeScreen, reduceFlashes, showSongInfo, fadeMenuButton
+        case inspectWhilePaused, interfaceSize, reduceMotion, staticHomeScreen, reduceFlashes, showSongInfo, fadeMenuButton
     }
 
     public init(from decoder: Decoder) throws {
@@ -42,6 +44,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         staticHomeScreen = try values.decodeIfPresent(Bool.self, forKey: .staticHomeScreen) ?? false
         reduceFlashes = try values.decode(Bool.self, forKey: .reduceFlashes)
         showSongInfo = try values.decode(Bool.self, forKey: .showSongInfo)
+        inspectWhilePaused = try values.decodeIfPresent(Bool.self, forKey: .inspectWhilePaused) ?? true
         fadeMenuButton = try values.decode(Bool.self, forKey: .fadeMenuButton)
     }
 
@@ -56,6 +59,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         value.staticHomeScreen = staticHomeScreen
         value.reduceFlashes = reduceFlashes
         value.showSongInfo = showSongInfo
+        value.inspectWhilePaused = inspectWhilePaused
         value.fadeMenuButton = fadeMenuButton
         return value
     }

@@ -13,7 +13,7 @@ import NxlvKit
     static var subtitle: String { L10n.text("Comfortable play, original character") }
     static var sections: [(String, String)] { [
         (L10n.text("Comfortable play"), L10n.text("Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review.")),
-        (L10n.text("Individual lemmings"), L10n.text("Pause to inspect names and recorded assignments. On Mac, hover over a lemming or choose Inspect for its longer history. Character details have no effect on gameplay.")),
+        (L10n.text("Individual lemmings"), L10n.text("Pause to inspect names and recorded assignments. On Mac, hover over a lemming or press Command-I for its longer history. Character details have no effect on gameplay.")),
         (L10n.text("Extra skills"), L10n.text("Earn one Extra skill for every ten qualifying three-star clears. Use at most one per attempt. Bonus clears have separate records and cannot earn rewards or enter online rankings.")),
         (L10n.text("Short games and heritage"), L10n.text("Browse optional five-level Classic and The Tribes openings. About includes original-team and port credits. Missing exact hints are labelled General coaching.")),
         (L10n.text("Journey"), L10n.text("Journey Map and Resume keep your selected player, roster and turn. Solo and Hot Seat lesson progress stay separate. Shared handovers wait for Ready.")),
