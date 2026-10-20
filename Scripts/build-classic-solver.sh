@@ -11,7 +11,7 @@ swiftc -O -swift-version 6 -parse-as-library \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 
-swiftc -O -swift-version 6 \
+swiftc -O -swift-version 6 -D CLASSIC_SOLVER_STANDALONE \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/ClassicSolver" \

@@ -28,9 +28,9 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-Macintosh 2.0.3 retained the published classifications and known limits. Its
-release record documents the language-picker fix and five verified update
-deltas. Existing engine closure evidence and open limits remain in force.
+Macintosh 2.1 build 93 retains the published classifications and known limits.
+Its publication record documents the signed update deltas. Existing engine
+closure evidence and open limits remain in force.
 
 ## Current bundled route counts
 
@@ -62,7 +62,14 @@ endings, media, saves and recovery must pass when the bundle exposes them.
 Build 83 later deferred full closure as a release prerequisite while retaining
 the recorded game classifications and limits. Imported content remains
 open-ended and uses per-engine, per-version support claims. See the
-[content roadmap](ContentUniverseRoadmap.md).
+[content roadmap](ContentUniverseRoadmap.md) and the
+[bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md).
+
+The 2.1 build 93 content comparison confirms unchanged `Ports`, `LevelPacks`
+and NeoLemmix trees. Its source commit also changes the Classic, L2, L3 and
+NeoLemmix simulations. The five delta checks do not replay all retained route
+witnesses against those current engines. Counts below are the last accepted
+route evidence; they are not a fresh full-family audit of the 2.1 source.
 
 On 16 October, I compared the build 85 input manifest with the locally
 installed 1.9.1 build 76 resource tree. All 1,307 `Ports`, 537 `LevelPacks`,
@@ -394,12 +401,15 @@ talismans, endings and better scores are better completions. They do not block
 the Complete classification. Source-fidelity work improves accuracy, but it
 does not decide Complete or Beta. Fan levels keep their separate route work.
 
-Lemmings 2 meets this rule and is Complete. Lemmings 3 had winning routes for
-all 90 levels on the 13 October engine state. On current main, 86 of 90 routes
-still win. The routes for levels 107 (Shadow 7), 206, 213 and 229 stopped
-winning after the 15 October Mole corrections. Lemmings 3 stays Beta until
-these four levels have verified routes on the current engine. See the
-[gate register](ReleaseReadiness/gates.json).
+Lemmings 2 passes this route and campaign rule on the current checkout. Its
+20 October replay verifies 120 standalone routes, 70 carry-over variants and
+12 tribe chains. This does not close the bundled engine-fidelity target.
+Lemmings 3 had 86 of 90 routes on the 18 October `8c66ef3e` engine snapshot.
+The 2.1 source changed `Lemmings3Runtime`, and this checkout has not replayed
+those witnesses. Levels 107 (Shadow 7), 206, 213 and 229 remain the known route
+gaps. Lemmings 3 stays Beta until the current-source route gate passes. See the
+[gate register](ReleaseReadiness/gates.json) and the [20 October L2 replay
+record](ReleaseReadiness/L2CurrentSourceReplay-2026-10-20.json).
 
 ## Wording
 
@@ -519,8 +529,11 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 | Release | Levels | Current route evidence | 1.9 claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 120/120 pass, 70 carry-over variants and 12 full chains pass | **Complete** |
-| Lemmings 3: The Chronicles | 90 | 86/90 routes win on current main; levels 107, 206, 213 and 229 need repaired routes | **Beta (route gate open)** |
+| Lemmings 2: The Tribes | 120 | 20 October current-checkout replay: 120/120 routes, 70 carry-over variants and 12 full chains pass | **Complete** |
+| Lemmings 3: The Chronicles | 90 | 18 October `8c66ef3e` snapshot: 86/90 routes; current-source replay remains open for levels 107, 206, 213 and 229 | **Beta (route gate open)** |
+
+These classifications track route and campaign completion. They do not close
+the bundled engine-fidelity target.
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with

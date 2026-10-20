@@ -2,7 +2,7 @@
 import Foundation
 import CryptoKit
 // Standalone test scripts compile the shared files into the same module.
-#if canImport(LemmingsAppCore)
+#if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
 import LemmingsAppCore
 #endif
 import NxlvKit
