@@ -1,20 +1,20 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-As of 19 October 2026, the recorded published Mac release is 2.0.7 build 91.
-Both universal archives passed signature verification, notarisation, stapling and
-Gatekeeper checks. The owner waived engine, gameplay, integration, launch and
-hardware reruns for that patch. See the
-[2.0.7 release record](ReleaseReadiness/2.0.7-build91/README.md).
+As of 20 October 2026, the published Mac release is 2.1 build 93. Both
+universal archives passed signing, notarisation, stapling and Gatekeeper.
+Five direct deltas passed exact tree and signature checks. The public assets
+and live signed feed match the recorded hashes. See the
+[2.1 release record](ReleaseReadiness/2.1-build93/README.md).
 
-The working source candidate is macOS 2.1 build 93. The
-[2.1 notes](ReleaseNotes-2.1-build93.md) cover free Zoom, independent presentation,
-individual inspection, Extra skills, Short games, session ownership and sync. Its signed distribution
-package and live cross-device propagation have not been accepted. Focused
-checks and device SDK compilation are recorded in the
-[2.0.8 source record](ReleaseReadiness/2.0.8-build92/README.md). iOS build 16
-and tvOS build 6 remain separate 2.0.6 source versions. This Mac version change
-does not certify a device build or close bundled-content and engine-fidelity gaps.
+The [2.1 notes](ReleaseNotes-2.1-build93.md) cover free Zoom, independent
+presentation, individual inspection, Extra skills, Short games, Journey ownership
+and background sync. Fresh native replay checks reproduce all 294 retained
+population certificates and 315 rescue records across 615 configurations.
+Six configurations remain unknown. Existing content and engine classifications
+stay unchanged. Human, foreground and device acceptance limits remain explicit.
+iOS build 16 and tvOS build 6 remain separate 2.0.6 source versions. This Mac
+publication does not certify either device build or close engine-fidelity gaps.
 
 Version 2.0.3 build 86 fixes the Mac language
 picker without changing engine rules or bundled levels. Source checks and
@@ -105,7 +105,7 @@ the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.
 
 The feed and source versions are recorded at the start of this document. The
 latest retained Mac package acceptance record is build 91. See the
-[2.0.7 publication record](ReleaseReadiness/2.0.7-build91/README.md),
+[2.1 publication record](ReleaseReadiness/2.1-build93/README.md),
 [current candidate notes](ReleaseNotes-2.1-build93.md) and [current-main
 reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 Build 86 records no non-localisation resource-index changes from build 85, but

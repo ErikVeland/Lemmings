@@ -1,0 +1,453 @@
+{
+  "release": "2.1",
+  "build": 93,
+  "sourceProvenance": {
+    "compiledSourceCommit": "90b3c4f2d835b6247db8f982e4497553ac2e4325",
+    "releaseSourceCommit": "4f4075880f03c1feb157fb4e1fe488dd938af31a",
+    "productInputsUnchanged": true,
+    "identicalGitObjects": {
+      "Sources": "5032b7879359b39bd002c991711c4e25fea28427",
+      "Resources": "1a59c94db62e13d9b743921f24a38dfa8f1a9476",
+      "Scripts": "1c9c1f8b5dbfe2f5477377d23ee1ac196731f407",
+      "Tools": "52ba432186991f540883bad10c8c5ef2567f99cf",
+      "Package.swift": "06189abe0c7da84981ff25201004d816d3ee2b7c",
+      "Package.resolved": "045bbf42861f8327d850ebf4a032d225fff3918f",
+      "Documentation/ReleaseNotes-2.1-build93.md": "1d9e3ce9514013bffb9627148f9c297348b26237",
+      "appcast.xml": "3790174de4f636afc7b05fcc563e76bd4ec1c9c0"
+    },
+    "postBuildChanges": [
+      "Tests/AppIntegrationTests/checks.swift",
+      "Tests/SequelMacArtworkAppTests/checks.swift"
+    ]
+  },
+  "nativeChecks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "evidence": "audit/logs/shared-library.log"
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicGameFlowTests.log"
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicSettingsTests.log"
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicSoundCueTests.log"
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "evidence": "audit/logs/AudioMatrixTests.log"
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "evidence": "audit/logs/NeoLemmixSimulationTests.log"
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "evidence": "audit/logs/NxlvRendererTests.log"
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "evidence": "audit/logs/NxlvStyleResolverTests.log"
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicDOSSimulationRegressions.log"
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicDOSRewindTests.log"
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicDOSReplayTests.log"
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "evidence": "audit/logs/ProTrackerTests.log"
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "evidence": "audit/logs/PercussionTests.log"
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "adaptive-dj-rerun.log"
+      ]
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "evidence": "audit/logs/FLICTests.log"
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "evidence": "audit/logs/Lemmings2RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "evidence": "audit/logs/Lemmings2IntroTests.log"
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "evidence": "audit/logs/Lemmings3RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "evidence": "audit/logs/Lemmings3SoundTests.log"
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "evidence": "audit/logs/UnifiedGameTests.log"
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "evidence": "audit/logs/ClassicSagaTests.log"
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "evidence": "audit/logs/PlatformProfileTests.log"
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "evidence": "audit/logs/AmigaSoundTests.log"
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "evidence": "audit/logs/AmigaVersusTests.log"
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "passed",
+      "evidence": "audit/logs/BundledGameResourcesTests.log"
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "evidence": "audit/logs/PlatformExclusiveTests.log"
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "evidence": "audit/logs/NeoLemmixEndToEnd.log"
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "evidence": "audit/logs/PortableTests.log"
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "evidence": "audit/logs/ModernEngineTests.log"
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "evidence": "audit/logs/SequelDataTests.log"
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "evidence": "audit/logs/save-recovery.log"
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "evidence": "audit/logs/run-recovery-files.log"
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "evidence": "audit/logs/cross-build-recovery.log"
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "evidence": "audit/logs/fan-library.log"
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "evidence": "audit/logs/preserved-solution-manifests.log"
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "evidence": "audit/logs/audit-integrity.log"
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "evidence": "audit/logs/package-closure.log"
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "evidence": "audit/logs/automatic-updates.log"
+    },
+    {
+      "name": "localisation",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "localisation-rerun.log"
+      ]
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "evidence": "audit/logs/classic-panel-art.log"
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "evidence": "audit/logs/fan-pruning.log"
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "evidence": "audit/logs/retained-rescue-targets.log"
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "evidence": "audit/logs/hint-catalogue.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "evidence": "audit/logs/controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "evidence": "audit/logs/variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "evidence": "audit/logs/pointer-capture.log"
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "evidence": "audit/logs/dialog-cursor.log"
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "hdr-rerun.log"
+      ]
+    },
+    {
+      "name": "rescue-certificates",
+      "status": "passed",
+      "evidence": "audit/logs/rescue-certificates.log"
+    },
+    {
+      "name": "replay-movies",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "replay-movies-rerun.log"
+      ]
+    },
+    {
+      "name": "mac-app-integration",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "full-final-verified.log",
+        "remainder-verified.log",
+        "remainder-current.log"
+      ]
+    },
+    {
+      "name": "mac-sequence-checkpoint-recovery",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "sequence-integration.log"
+      ]
+    },
+    {
+      "name": "local-performance-measurement",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "performance-rerun.log"
+      ]
+    },
+    {
+      "name": "sequel-views",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "sequel-views-isolated.log"
+      ]
+    },
+    {
+      "name": "arcade-records",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "arcade-rerun.log"
+      ]
+    },
+    {
+      "name": "hot-seat-ghosts",
+      "status": "passed in corrected rerun",
+      "initialStatus": "failed",
+      "evidence": [
+        "ghosts-rerun.log"
+      ]
+    }
+  ],
+  "originalAuditSourceDrift": [
+    "Documentation/ReleaseReadiness/2.1-build93/README.md",
+    "Documentation/ReleaseScope.md",
+    "Documentation/TrolleyVerification/README.md",
+    "Documentation/TrolleyVerification/audit.json",
+    "Resources/Hints/classic.json",
+    "Resources/Trolley/engine-fingerprint.txt",
+    "Resources/Trolley/verified-maxima.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/de.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/en.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/es-419.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/fr.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/it.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/nb.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/nl.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/pt-BR.lproj/Interface.strings",
+    "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.strings",
+    "Tests/AdaptiveDJDirectorTests/main.swift",
+    "Tests/LemmingsLocalTests/LanguagePickerTests.swift",
+    "Tests/ReleaseReadinessTests/test_automatic_updates.py",
+    "Tools/LevelHints/main.swift",
+    "Tools/Localisation/drafts/de.json",
+    "Tools/Localisation/drafts/es-419.json",
+    "Tools/Localisation/drafts/fr.json",
+    "Tools/Localisation/drafts/it.json",
+    "Tools/Localisation/drafts/nb.json",
+    "Tools/Localisation/drafts/nl.json",
+    "Tools/Localisation/drafts/pt-BR.json",
+    "Tools/Localisation/drafts/ta.json",
+    "Tools/Localisation/unchanged.json",
+    "Tools/ReleaseReadiness/automatic_updates.py"
+  ],
+  "engineSwiftSourceDrift": [],
+  "additionalChecks": {
+    "releaseTools": 92,
+    "languageUI": 10,
+    "focusedSwiftTesting": 64,
+    "inspectionXCTest": 3,
+    "extraSkillEngineGroups": 5,
+    "optimisedMobileExtraSkillCases": 5,
+    "aboutPackaging": 1,
+    "directDeltas": [
+      {
+        "fromBuild": 91,
+        "toBuild": 93,
+        "patch": "UltimateLemmings-build93-from91.delta",
+        "matchingFilesAndLinks": 18567,
+        "result": "passed"
+      },
+      {
+        "fromBuild": 90,
+        "toBuild": 93,
+        "patch": "UltimateLemmings-build93-from90.delta",
+        "matchingFilesAndLinks": 18567,
+        "result": "passed"
+      },
+      {
+        "fromBuild": 87,
+        "toBuild": 93,
+        "patch": "UltimateLemmings-build93-from87.delta",
+        "matchingFilesAndLinks": 18567,
+        "result": "passed"
+      },
+      {
+        "fromBuild": 86,
+        "toBuild": 93,
+        "patch": "UltimateLemmings-build93-from86.delta",
+        "matchingFilesAndLinks": 18567,
+        "result": "passed"
+      },
+      {
+        "fromBuild": 85,
+        "toBuild": 93,
+        "patch": "UltimateLemmings-build93-from85.delta",
+        "matchingFilesAndLinks": 18567,
+        "result": "passed"
+      }
+    ],
+    "archiveSignatures": [
+      {
+        "asset": "UltimateLemmings-2.1-build93.zip",
+        "valid": true
+      },
+      {
+        "asset": "UltimateLemmings-build93-from91.delta",
+        "valid": true
+      },
+      {
+        "asset": "UltimateLemmings-build93-from90.delta",
+        "valid": true
+      },
+      {
+        "asset": "UltimateLemmings-build93-from87.delta",
+        "valid": true
+      },
+      {
+        "asset": "UltimateLemmings-build93-from86.delta",
+        "valid": true
+      },
+      {
+        "asset": "UltimateLemmings-build93-from85.delta",
+        "valid": true
+      }
+    ],
+    "bundledReplayUnitCases": 2
+  },
+  "unverified": [
+    "signed foreground first launch and direct updater relaunch",
+    "physical touch/controller/remote and VoiceOver",
+    "live cloud propagation",
+    "human language/newcomer review and audible tone",
+    "sustained physical device loads and composited HDR appearance",
+    "completed asynchronous Short games preview artwork"
+  ],
+  "scope": "Recorded macOS source, bitmap/input, archive and delta checks. Existing content and engine closure gaps remain open.",
+  "evidenceRoot": "Local detailed logs under .build/release-2.1"
+}

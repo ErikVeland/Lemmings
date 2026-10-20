@@ -67,5 +67,6 @@ Native NSWindow mouse delivery could not run in offscreen mode; those checks
 verified target geometry and invoked the same control actions directly.
 Foreground/composited CRT output, physical touch, TV remote and VoiceOver
 interaction still need manual checks.
-The existing engine fingerprint policy changes proof fingerprints when engine
-sources change; a full commercial witness corpus rerun remains a release gate.
+The [2.1 release audit](ReleaseReadiness/2.1-build93/README.md) checks 615 native
+configurations and reproduces all 294 retained certificates and 315 rescue records.
+Existing campaign, source-fidelity and physical-device limits remain open.

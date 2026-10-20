@@ -1,0 +1,19 @@
+{
+  "compiledSourceCommit": "90b3c4f2d835b6247db8f982e4497553ac2e4325",
+  "releaseSourceCommit": "4f4075880f03c1feb157fb4e1fe488dd938af31a",
+  "productInputsUnchanged": true,
+  "identicalGitObjects": {
+    "Sources": "5032b7879359b39bd002c991711c4e25fea28427",
+    "Resources": "1a59c94db62e13d9b743921f24a38dfa8f1a9476",
+    "Scripts": "1c9c1f8b5dbfe2f5477377d23ee1ac196731f407",
+    "Tools": "52ba432186991f540883bad10c8c5ef2567f99cf",
+    "Package.swift": "06189abe0c7da84981ff25201004d816d3ee2b7c",
+    "Package.resolved": "045bbf42861f8327d850ebf4a032d225fff3918f",
+    "Documentation/ReleaseNotes-2.1-build93.md": "1d9e3ce9514013bffb9627148f9c297348b26237",
+    "appcast.xml": "3790174de4f636afc7b05fcc563e76bd4ec1c9c0"
+  },
+  "postBuildChanges": [
+    "Tests/AppIntegrationTests/checks.swift",
+    "Tests/SequelMacArtworkAppTests/checks.swift"
+  ]
+}

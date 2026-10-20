@@ -23,13 +23,13 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 2.0.7 build 91 is the current Mac release. Its
-[release record](ReleaseReadiness/2.0.7-build91/README.md) covers the notarised
-full and slim archives, signed live feed and five direct deltas from builds
-90, 87, 86, 85 and 84. The owner approved the gates for this quick patch and
-waived engine, gameplay and launch reruns. Package and public-asset checks passed.
-Rescue-target certificates remain unverified as recorded in the release notes.
-Publish an appcast only with its matching signed and notarised archive.
+Public 2.1 build 93 is the current Mac release. Its
+[release record](ReleaseReadiness/2.1-build93/README.md) covers notarised full and
+slim archives, the live signed feed and direct deltas from builds 91, 90, 87,
+86 and 85. Every delta matches the target app tree and signature. The installed
+public key verifies the update archive and each delta. Foreground launch and
+actual updater relaunch remain unrun under the offscreen-only instruction.
+Publish a feed only with its matching signed and notarised archive.
 
 Public releases require a slim fresh-install download. It includes the
 54 essential music versions and offers missing optional libraries on first

@@ -40,6 +40,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Localisation and translation handover](Documentation/Localisation.md#translation-handover) — eight translated languages, review workflow and remaining validation.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
+- [2.1 roadmap](Documentation/2.1Roadmap.md) — access, teaching, optional inspection and current acceptance limits.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
 - [1.9 sequel gate](Documentation/ContentUniverseRoadmap.md#19--the-tribes-complete-chronicles-beta) — winning routes, engine fidelity and campaign evidence.

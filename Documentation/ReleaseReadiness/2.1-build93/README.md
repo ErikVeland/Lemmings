@@ -1,54 +1,88 @@
-# 2.1 build 93 release candidate
+# 2.1 build 93 release record
 
-Prepared on 20 October 2026 from the working tree after v2.0.7.
-The [release notes](../../ReleaseNotes-2.1-build93.md) describe the Mac candidate.
-iOS and tvOS keep their separate version and device acceptance records.
+Published on 20 October 2026 at [GitHub](https://github.com/ErikVeland/Lemmings/releases/tag/v2.1).
+Release source: `4f4075880f03c1feb157fb4e1fe488dd938af31a`. Release base: `v2.0.7`.
+The [release notes](../../ReleaseNotes-2.1-build93.md) describe the Mac release.
+iOS and tvOS retain their separate versions and acceptance records.
 
-## Scope
+## Packages and updates
 
-This candidate includes free basic Zoom, independent presentation and controls,
-truthful hint availability, quiet results, optional individual inspection,
-rare Extra skills, optional Short games, heritage credits, 25× speed,
-Journey ownership and background cloud-save work. Existing engine and content
-classifications remain in [release scope](../../ReleaseScope.md).
+Both universal Mac apps contain Apple silicon and Intel code and target macOS
+12.3 or later. Both passed Developer ID signature verification, Apple
+notarisation, stapling and Gatekeeper after archive extraction. The full update
+retains the verified published soundtrack. The slim installer contains the 54
+main versions and offers optional libraries separately. Public credits exclude
+the private supporter ledger.
 
-## Fresh checks
+The five signed direct deltas, from builds 91, 90, 87, 86 and 85, each produced
+18,567 matching files and links, including file permissions, and passed signature
+verification. The installed public Ed25519 key verifies the full update and all
+five deltas. All seven uploaded assets passed GitHub size/digest and public HTTPS
+checks. The signed feed matches remote main and its public HTTPS response.
+[Publication receipts](publication.json) retain URLs, sizes, SHA-256 hashes and
+Apple submission IDs. [Delta checks](delta-verification.json) retain each base.
 
-The native rescue audit checks 562 bundled level identities and 615 exact
-configurations. It reproduces all 294 retained population certificates and
-315 retained rescue records. Six primary configurations remain unknown.
-No failed search is treated as an impossibility proof. The hint exporter
-replays the accepted Classic routes before writing the current engine stamp.
-It rejects bonus-skill replays as sources for standard hints.
+## Source and regression evidence
 
-The release-tool suite passes 92 tests. Extra skill engine checks pass for
-Classic, NeoLemmix, L2 and L3, including rewind, replay, provenance and terminal
-guards. A stale music-default assertion was corrected to check restrained
-defaults and preservation of explicit saved choices; its rerun passes.
+The app compiled from `90b3c4f2d835b6247db8f982e4497553ac2e4325`. The final source commit changes only two
+test fixtures. All source, resource, script, tool, package and bundled-note Git
+objects are identical between those commits. [Source provenance](source-provenance.json)
+records that comparison. No signed app input changed when the final notes and
+feed received the release revision.
 
-The broad engine and input audit runs from a frozen copy of the engine sources.
-Its initial pass records the music assertion above and sandbox failures for
-Metal, media services and native application registration. Dedicated reruns
-retain those failures and their replacements. The Metal and movie checks pass
-with macOS service access, still offscreen and muted. No automated check changes
-system volume, saved player audio settings, desktop focus or display placement.
+The broad native audit initially passed 46 checks. Its ten initial failures
+remain recorded locally. Fresh replacements pass after updating old presentation
+and session assertions and granting the required macOS service access. The broad
+app checks pass as the original prefix and corrected Journey/session remainder.
+The original audit also records generated resource, test and documentation drift.
+Every engine Swift file matches its frozen audit copy. The final source/resource
+snapshot and each replacement are recorded in the
+[verification summary](verification-summary.json).
 
-The localisation catalogue has 3,275 keys and no uncovered direct UI literals.
-Each translated locale retains its existing current translations and explicitly
-uses English fallback for 160 new strings. Draft packs use the same key set.
-These fallbacks do not claim completed translation or human language review.
+The native rescue audit checks 562 level identities and 615 configurations. It
+reproduces all 294 retained population certificates and 315 rescue records. Six
+primary configurations remain unknown. The hint exporter replays the accepted
+Classic routes before writing the current engine stamp and rejects bonus-skill
+replays as sources for standard hints. Existing campaign and fidelity limits
+remain in [release scope](../../ReleaseScope.md).
 
-Detailed logs and renders remain under `.build/release-2.1` and the normal test
-output folders. Final package, UI and publication results will be recorded here.
+Additional checks pass: 92 release-tool tests, ten localisation/picker tests,
+64 focused Swift tests, two replay checks with the bundled engine fingerprint,
+three inspection UI tests, five engine fixture groups,
+five mobile Extra skill regressions against optimised candidate libraries, and
+About packaging. The debug mobile L2 test exceeded its worker stack. The same
+five cases pass against the optimised shipping libraries.
 
-## Acceptance limits
+Native feature checks cover free Zoom, independent presentation, Extra skills
+and receipts in all three games, Short games, About, result navigation and the
+25× control. Records, movie export, solo/shared checkpoints and Hot Seat ghosts
+pass. The sequel artwork audit checks 59,542 frames and 214 levels. Its exact
+round-trip captures now park the test pointer so live hover fading cannot affect
+the comparison. Settings bounds compare rendered pixels after fractional menu
+scaling. The [compact welcome](welcome-900.png) and
+[settings capture](settings-1000.png) were inspected, with their input targets.
 
-The signed-app first-launch test requires foreground desktop access and cannot
-run under this task's offscreen-only instructions. Physical controls, VoiceOver,
-live cloud propagation, translated prose, newcomer playtests, audible tone and
-composited device output remain unverified. Direct update installation and
-relaunch also need a separately authorised desktop session.
+All native UI checks used `Tools/UITestRunner/run.py`, offscreen and muted.
+Metal, media, native registration and signature checks required macOS service
+access outside the sandbox. The sandbox also reports an invalid signature for
+the original accepted app, while the same checks pass with service access.
+No check changed system volume or saved player audio settings.
+
+The bundled Ports, fan and NeoLemmix files match 2.0.7 byte for byte. See the
+[content comparison](content-equivalence.json). Each translated locale retains
+current translations and uses explicit English fallback for 160 new strings.
+The catalogue has 3,275 keys and no uncovered direct interface literals.
+
+## Remaining acceptance
+
+Signed foreground first launch, direct updater installation/relaunch, physical
+mouse/touch/controller/remote input, real VoiceOver, live cloud propagation,
+human language and newcomer review, audible tone, sustained device loads and
+composited HDR appearance remain unverified. The signed-app launch test cannot
+run under the offscreen-only instruction. Completed asynchronous Short games
+preview artwork also remains visually unchecked.
 
 Mac Short games supports Classic and L2. L3 reserve snapshots and mobile sequel
-playlist playback remain unavailable. Existing L3 route and engine-fidelity
-gaps remain open. Inspection does not establish cross-level survivor identity.
+playlist playback remain unavailable. Existing L3 route and source-fidelity gaps
+stay open. Individual inspection does not establish cross-level survivor identity.
+Publication does not certify a separate iOS or tvOS build or close those gates.

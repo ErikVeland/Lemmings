@@ -1,11 +1,14 @@
 # Release notes
 
-The current candidate notes are [2.1 build 93](ReleaseNotes-2.1-build93.md).
-The latest published release is [2.0.7 build 91](ReleaseNotes-2.0.7-build91.md).
+The latest published release is [2.1 build 93](ReleaseNotes-2.1-build93.md).
+Its [release record](ReleaseReadiness/2.1-build93/README.md) covers the signed packages,
+direct deltas and validation limits.
 Source and feed versions, retained acceptance evidence and completion limits
 are recorded in [release scope](ReleaseScope.md).
 
 ## Earlier notes
+
+- [2.0.7 build 91](ReleaseNotes-2.0.7-build91.md)
 
 - [2.0.6 build 90](ReleaseNotes-2.0.6-build90.md)
 
