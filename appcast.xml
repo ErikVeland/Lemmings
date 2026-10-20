@@ -3,6 +3,42 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.1</title>
+            <pubDate>Tue, 20 Oct 2026 12:12:25 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>93</sparkle:version>
+            <sparkle:shortVersionString>2.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Comfortable play, original character</h3>
+<ul><li>Basic 2× Zoom is free in Classic, The Tribes and Chronicles. It has no balance or failure cost. Existing earned Superzoom balances remain separate.</li><li>Original and Modern now choose presentation. They preserve control, controller, interruption and assistance preferences. New profiles use restrained defaults and start without a required presentation-choice page.</li><li>Help says <b>General coaching</b> and <b>No level-specific hints available.</b> when an exact checked hint is absent. Checked routes remain deliberate examples.</li><li>Results keep career accounting and reward reasons in optional review. Phone and TV award rows stay still until selected.</li><li>Optional Ridiculous speed adds a 25× tier to the existing speed controls. It starts off and retains the usual effect limits.</li><li>Modern assignment pointers use distinct empty, eligible and unavailable shapes as well as colour. Original cursor artwork remains unchanged.</li><li>About includes offline original-team and port credits, with original and recreated artwork distinguished.</li><li>Short games offers optional five-level openings with exact source checks. Mac supports Classic and The Tribes with isolated survivor carry-over; mobile/TV supports Classic. Unavailable sequel choices explain their limits.</li></ul>
+<h3>Optional individual inspection</h3>
+<p>Pause to inspect a lemming in Classic, The Tribes or Chronicles. Names, small fictional preferences and recorded assignments stay outside simulation. On Mac, hover while paused or choose Inspect for the longer history. Rewind follows the current timeline. Hot Seat inspection keeps the current owner and Ready boundary. Names do not establish identity across levels.</p>
+<h3>Rare Extra skills</h3>
+<p>Earn one Extra skill for every ten distinct qualifying three-star clears. Spend at most one per attempt to top up an existing finite skill or active L3 tool carrier. Bonus clears can advance the campaign, with separate records. They cannot earn consumables, career stars or achievements, alter standard rescue maxima, or enter online rankings. Charges persist through retry, rewind, restore and cloud merge.</p>
+<h3>Your journey, safely saved</h3>
+<p>Journey Map and Resume stay with the selected session. Solo and Hot Seat lesson progress remain separate. Opening a map preserves the player, roster and turn. An unrelated saved run no longer takes over the current journey.</p>
+<p>Cloud saves now carry Journey queues, current positions, fan-level completion and Mac L2 carry-over snapshots with their owning session. Cleared Journey queues remain cleared when an older device reconnects. Incoming progress waits for a safe menu, and Hot Seat handovers stay paused until Ready.</p>
+<h3>Smoother sync</h3>
+<p>Credential access, encryption and cloud-state writes run in the background to keep menus responsive. Credential merges preserve newly linked libraries. Partial uploads and saves made during an upload remain pending until they reach the linked libraries.</p>
+<p>Tester Sync offers one-button setup for the shared tester library. Setup survives relaunch and works offline. The page shows Syncing, Synced, Saved on this device or Offline separately from the enabled state. The shared library includes all players, solo progress and saved Hot Seats, including inactive sessions.</p>
+<h3>Clearer navigation and controls</h3>
+<ul><li>Start an official level from its Play Insights row using mouse, keyboard or accessibility. Normal availability and campaign unlock rules still apply.</li><li>Browse individual releases in About with a separate notes pane, larger selection targets and clearer headings and lists. The installed release's notes are available offline before the update feed is published.</li><li>The Zoom action and Superzoom/skip counters fade with the gameplay menu in Classic, The Tribes and Chronicles.</li><li>Amiga Versus shows its requirement for two simultaneously connected controllers before play.</li></ul>
+<h3>Compatibility and scope</h3>
+<p>macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Existing engine, content and rescue-target verification limits remain in force.</p>
+<p>Both devices need the updated archive reader to exchange Journey snapshots. Mobile Journey playback remains Classic-only. Sequel steps and Mac L2 carry-over data are retained without switching into a solo session. iPhone, iPad and Apple TV builds are separate from this Mac release.</p>
+<p>New interface text uses English fallback where translation review is pending. Live cross-device propagation, physical input, VoiceOver, newcomer playtests, audible tone and composited device output remain unverified. L3 Short games and mobile sequel playlist playback remain unavailable. Existing L3 route gaps and engine-fidelity limits remain recorded in release scope.</p>
+<p class="meta">Build: 93<br>Release commit: 4f4075880f03c1feb157fb4e1fe488dd938af31a<br>Release base: v2.0.7</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-2.1-build93.zip" length="2055444407" type="application/octet-stream" sparkle:edSignature="L0DcoN+jHTTIJbDKQ8SRBTd36Xp+t+a2anfcX0iBIQEVDJVTt3KoW9PB7yfx9Ec53cW7gu1Ordk07KqtbISQBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from91.delta" sparkle:deltaFrom="91" length="50423578" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="+tFtHLB9VaF9g76m9cms81ekPAQQAKAJu3ixihP22/+vn/YrvAOylIWfelnOg40MGSCw+cynPeEhy1SCdYjdDg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from90.delta" sparkle:deltaFrom="90" length="50529610" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="wbKAWk0uI0U69pDcq+lBFLbE/IVxQhip4c9+q+XsJ+CRqis5/DTHsi/dztzBCsU3oQ8mTjyG0PQnSYCEcWrBBw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from87.delta" sparkle:deltaFrom="87" length="44986398" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="7OPuwyB8w8+IgGmEZDoHnfO4/mxjVF/GI5nJVcwPw6zIERB5TgVBIm1CLb3p7nuZIuBt55mseSQ38tiBTl4tAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from86.delta" sparkle:deltaFrom="86" length="45346222" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="MCqbO2VpJnin3m+LMqFALQjX/uhcdZ20UtSwwzxbuzvqfT3N5q24q5bkcdC09KCbEXg1LmlDT5dOAH5+AXvKBg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from85.delta" sparkle:deltaFrom="85" length="45343766" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="jcqUA8PIzshStF2r25O4SSrzMLRHnxXVSPuS/Jp0niwwMRmRLdm30SSQqEWh0wZeqMczOhoDnXZupHS5SwxeDQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0.7</title>
             <pubDate>Mon, 19 Oct 2026 19:28:00 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
