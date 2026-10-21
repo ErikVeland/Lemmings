@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 
 ROOT=Path(__file__).resolve().parents[2]
-MUSIC=ROOT/'Sources/Music'
+MUSIC=(ROOT/'Sources/Music').resolve()
 catalogue=json.loads((ROOT/'Resources/Music/catalogue.json').read_text())
 variants=[v for t in catalogue['tracks'] for v in t['variants']]
 known={v['path'] for v in variants}

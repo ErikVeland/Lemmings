@@ -1679,7 +1679,7 @@
   "B": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "BACK": {
@@ -1785,7 +1785,7 @@
   "BO": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "BOMB": {
@@ -2298,7 +2298,7 @@
   "C": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "CAMERA": {
@@ -2365,7 +2365,7 @@
   "CL": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "CLASSIC": {
@@ -3139,13 +3139,13 @@
   "Chronicles creature count does not match its placements.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:295"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:297"
     ]
   },
   "Chronicles extra-lemming count does not match its placements.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:294"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:296"
     ]
   },
   "Chronicles frame exceeds its dimensions.": {
@@ -4185,7 +4185,7 @@
   "D": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "D-pad down": {
@@ -5979,7 +5979,7 @@
   "G": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "G / End: Goal": {
@@ -6342,7 +6342,7 @@
   "H": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "H / Home: Entrance": {
@@ -7000,7 +7000,7 @@
   "Invalid Chronicles simulation configuration.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:220"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:222"
     ]
   },
   "Invalid Chronicles style palette.": {
@@ -7319,7 +7319,7 @@
   "Invalid archived level slot mapping.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:627"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:678"
     ]
   },
   "Invalid cloud device list.": {
@@ -9561,13 +9561,13 @@
   "Missing Chronicles entrance trigger.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:293"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:295"
     ]
   },
   "Missing Chronicles object definition.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:247"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:249"
     ]
   },
   "Missing Mac terrain piece {0}.": {
@@ -13928,7 +13928,7 @@
   "S": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "SAND POURER": {
@@ -14026,7 +14026,7 @@
   "SH": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "SHADOW": {
@@ -16957,13 +16957,13 @@
   "The fan level archive could not be listed.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:540"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:553"
     ]
   },
   "The fan level archive could not be verified.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:532"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:545"
     ]
   },
   "The fan level pack changed or could not be read.": {
@@ -18473,7 +18473,7 @@
   "U": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:39"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:40"
     ]
   },
   "UI TEST": {
@@ -18561,7 +18561,7 @@
   "Unambiguous {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:864"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:915"
     ]
   },
   "Unavailable": {
@@ -18768,13 +18768,13 @@
   "Unsupported Chronicles object {0} (flags {1}).": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:279"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:281"
     ]
   },
   "Unsupported Chronicles trap animation cycle.": {
     "kind": "text",
     "references": [
-      "Sources/NxlvKit/Lemmings3Runtime.swift:267"
+      "Sources/NxlvKit/Lemmings3Runtime.swift:269"
     ]
   },
   "Unsupported L2 animation callback.": {
@@ -18834,7 +18834,7 @@
   "Unsupported or missing fan graphics style: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:711",
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:762",
       "Sources/NxlvKit/ClassicFanPack.swift:401"
     ]
   },
@@ -20147,7 +20147,7 @@
   "slot {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:701"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:752"
     ]
   },
   "spawn interval {0} lacks spawned count": {
@@ -20165,7 +20165,7 @@
   "text canvas": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:611"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:662"
     ]
   },
   "the block chain for {0} does not hold together": {

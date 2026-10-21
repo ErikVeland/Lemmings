@@ -810,7 +810,7 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:143 */
 "Awards >" = "Awards >";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "B" = "B";
 
 /* Sources/LemmingsGameArt/GameFrontEnd.swift:29; Sources/LemmingsGameArt/GameRecoveryArt.swift:9; Sources/LemmingsGameArt/LemmingInspectionArt.swift:10; Sources/LemmingsGameArt/LemmingInspectionArt.swift:15; Sources/LemmingsGameArt/MobileExtraSkillArt.swift:9; Sources/LemmingsMobileUI/MobileGameHints.swift:29; Sources/LemmingsMobileUI/MobileGameHints.swift:62; Sources/LemmingsMobileUI/MobileGameInput.swift:391; Sources/LemmingsMobileUI/MobileGameViewController.swift:1106; Sources/LemmingsMobileUI/MobileGameViewController.swift:1115; Sources/LemmingsMobileUI/MobileGameViewController.swift:1125; Sources/LemmingsMobileUI/MobileGameViewController.swift:1166; Sources/LemmingsMobileUI/MobileGameViewController.swift:1340; Sources/LemmingsMobileUI/MobileGameViewController.swift:1345; Sources/LemmingsMobileUI/MobileGameViewController.swift:1350; Sources/LemmingsMobileUI/MobileGameViewController.swift:1381; Sources/LemmingsMobileUI/MobileGameViewController.swift:1894; Sources/LemmingsMobileUI/MobileGameViewController.swift:375; Sources/LemmingsMobileUI/MobileGameViewController.swift:88; Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:47; Sources/LemmingsMobileUI/MobileReplayExport.swift:66; Sources/LemmingsMobileUI/MobileReplayExport.swift:76; Sources/LemmingsMobileUI/MobileTVGameControls.swift:104; Sources/LemmingsMobileUI/MobileTVGameControls.swift:35; Sources/LemmingsMobileUI/MobileTVGameControls.swift:38; Sources/LemmingsMobileUI/MobileTVGameControls.swift:89 */
@@ -849,7 +849,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2584 */
 "BLOCKER" = "BLOCKER";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "BO" = "BO";
 
 /* Sources/LemmingsGameArt/MobileHUDRenderer.swift:132; Sources/LemmingsLocal/PanelView.swift:604 */
@@ -1062,7 +1062,7 @@
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/TALISMAN.IFF:1 */
 "By the power of the reunited Talisman" = "By the power of the reunited Talisman";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "C" = "C";
 
 /* Sources/LemmingsMobileUI/MobileTVGameControls.swift:44 */
@@ -1092,7 +1092,7 @@
 /* Sources/LemmingsLocal/main.swift:242 */
 "CHECKING FOR NEW PACKS" = "CHECKING FOR NEW PACKS";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "CL" = "CL";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1000 */
@@ -1455,10 +1455,10 @@
 /* Sources/NxlvKit/Lemmings3Style.swift:74 */
 "Chronicles attribute cell is outside its object." = "Chronicles attribute cell is outside its object.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:295 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:297 */
 "Chronicles creature count does not match its placements." = "Chronicles creature count does not match its placements.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:294 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:296 */
 "Chronicles extra-lemming count does not match its placements." = "Chronicles extra-lemming count does not match its placements.";
 
 /* Sources/NxlvKit/Lemmings3Style.swift:104 */
@@ -1950,7 +1950,7 @@
 /* Sources/LemmingsLocal/TextEditingMenu.swift:11 */
 "Cut" = "Cut";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "D" = "D";
 
 /* Sources/LemmingsLocal/ControllerDevicePresentation.swift:41 */
@@ -2781,7 +2781,7 @@
 /* Sources/LemmingsAppCore/Collections/ShortPlayCatalogue.swift:31 */
 "Fun 1–5" = "Fun 1–5";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "G" = "G";
 
 /* Sources/LemmingsAppCore/Input/GameplayCommands.swift:57 */
@@ -2949,7 +2949,7 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1 */
 "Guild of Chain-Smoking Playtesters" = "Guild of Chain-Smoking Playtesters";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "H" = "H";
 
 /* Sources/LemmingsAppCore/Input/GameplayCommands.swift:57 */
@@ -3261,7 +3261,7 @@
 /* Sources/NxlvKit/Lemmings3ClassicCampaign.swift:47 */
 "Invalid Chronicles preview progress." = "Invalid Chronicles preview progress.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:220 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:222 */
 "Invalid Chronicles simulation configuration." = "Invalid Chronicles simulation configuration.";
 
 /* Sources/NxlvKit/Lemmings3Style.swift:152 */
@@ -3420,7 +3420,7 @@
 /* Sources/NxlvKit/TrolleyHistory.swift:212 */
 "Invalid Trolley attempt history. The saved file must be preserved." = "Invalid Trolley attempt history. The saved file must be preserved.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:627 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:678 */
 "Invalid archived level slot mapping." = "Invalid archived level slot mapping.";
 
 /* Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:221 */
@@ -4452,10 +4452,10 @@
 /* Sources/LemmingsLocal/main.swift:4292 */
 "Missing - replace or remove  {0}" = "Missing - replace or remove  {0}";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:293 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:295 */
 "Missing Chronicles entrance trigger." = "Missing Chronicles entrance trigger.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:247 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:249 */
 "Missing Chronicles object definition." = "Missing Chronicles object definition.";
 
 /* Sources/NxlvKit/ClassicMacArtwork.swift:285 */
@@ -6459,7 +6459,7 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1485 */
 "Running." = "Running.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "S" = "S";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2559 */
@@ -6507,7 +6507,7 @@
 /* Sources/LemmingsMobileUI/MobileGameViewController.swift:2073 */
 "SFX {0}%" = "SFX {0}%";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "SH" = "SH";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1001 */
@@ -7884,10 +7884,10 @@
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:124 */
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:540 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:553 */
 "The fan level archive could not be listed." = "The fan level archive could not be listed.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:532 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:545 */
 "The fan level archive could not be verified." = "The fan level archive could not be verified.";
 
 /* Sources/LemmingsLocal/main.swift:3948; Sources/LemmingsLocal/main.swift:5087 */
@@ -8616,7 +8616,7 @@
 /* Sources/LemmingsMobileUI/MobileGameInput.swift:388 */
 "Two-finger tap on the playfield: DJ shuffle" = "Two-finger tap on the playfield: DJ shuffle";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:39 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:40 */
 "U" = "U";
 
 /* Sources/LemmingsMobileUI/MobileApplication.swift:85 */
@@ -8655,7 +8655,7 @@
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:265 */
 "Unable to continue" = "Unable to continue";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:864 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:915 */
 "Unambiguous {0}" = "Unambiguous {0}";
 
 /* Sources/LemmingsLocal/TrolleyResultView.swift:62; Sources/LemmingsLocal/main.swift:3270; Sources/LemmingsLocal/main.swift:363; Sources/NxlvKit/LevelCatalogue.swift:51 */
@@ -8754,10 +8754,10 @@
 /* Sources/NxlvKit/Lemmings2Explosion.swift:52 */
 "Unrecognised L2 explosion animation layout." = "Unrecognised L2 explosion animation layout.";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:279 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:281 */
 "Unsupported Chronicles object {0} (flags {1})." = "Unsupported Chronicles object {0} (flags {1}).";
 
-/* Sources/NxlvKit/Lemmings3Runtime.swift:267 */
+/* Sources/NxlvKit/Lemmings3Runtime.swift:269 */
 "Unsupported Chronicles trap animation cycle." = "Unsupported Chronicles trap animation cycle.";
 
 /* Sources/NxlvKit/Lemmings2GAL.swift:122 */
@@ -8787,7 +8787,7 @@
 /* Sources/LemmingsAppCore/Records/GameProgressPreferences.swift:204 */
 "Unsupported cloud progress key." = "Unsupported cloud progress key.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:711; Sources/NxlvKit/ClassicFanPack.swift:401 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:762; Sources/NxlvKit/ClassicFanPack.swift:401 */
 "Unsupported or missing fan graphics style: {0}" = "Unsupported or missing fan graphics style: {0}";
 
 /* Sources/NxlvKit/Lemmings2GAL.swift:114 */
@@ -9396,7 +9396,7 @@
 /* Sources/NxlvKit/PlatformProfile.swift:25; Sources/NxlvKit/PlatformProfile.swift:41 */
 "silent" = "silent";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:701 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:752 */
 "slot {0}" = "slot {0}";
 
 /* Sources/NxlvKit/NxrpReplay.swift:160 */
@@ -9405,7 +9405,7 @@
 /* Sources/NxlvKit/ClassicGraphics.swift:183 */
 "terrain piece {0}" = "terrain piece {0}";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:611 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:662 */
 "text canvas" = "text canvas";
 
 /* Sources/NxlvKit/ClassicADFVolume.swift:24 */
