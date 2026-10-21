@@ -13,6 +13,7 @@ def report(resources, output, require_fan_routes=False):
     rows = [json.loads(line) for line in (output / "levels.jsonl").read_text().splitlines()]
     packs = json.loads((output / "packs.json").read_text())
     index = json.loads((library / "level-counts.json").read_text())
+    exclusion_path = resources / "Progression" / "bundled-playable-exclusions.json"
     actual = {pack["pack"]: int(pack["decodedLevels"]) for pack in packs}
     failures = []
     if set(actual) != {path.name for path in library.glob("*.zip")}:
@@ -25,6 +26,35 @@ def report(resources, output, require_fan_routes=False):
     if len(sources) != len(set(sources)) or len(sources) != sum(actual.values()):
         failures.append("Fan rows are missing or duplicated")
     represented = {(source.split("/", 1)[0], source.split("/", 1)[1].rsplit("#", 1)[0]) for source in sources}
+    excluded_sources = set()
+    if exclusion_path.is_file():
+        try:
+            exclusions = json.loads(exclusion_path.read_text())
+            if exclusions.get("version") != 1 or not isinstance(exclusions.get("exclusions"), list):
+                raise ValueError("unsupported exclusion manifest")
+            for exclusion in exclusions["exclusions"]:
+                pack_name = exclusion["pack"]
+                member = exclusion["member"]
+                source = pack_name + "/" + member
+                matching = [row for row in rows if row["collection"] == "fan" and row["source"] == source]
+                if len(matching) != 1:
+                    failures.append("Playable exclusion does not match exactly one fan audit row: " + source)
+                    continue
+                row = matching[0]
+                pack_path = library / pack_name
+                archive_hash = hashlib.sha256(pack_path.read_bytes()).hexdigest() if pack_path.is_file() else None
+                identity = exclusion.get("identity", {})
+                if archive_hash != exclusion.get("archiveSHA256"):
+                    failures.append("Playable exclusion archive hash mismatch: " + source)
+                if (row.get("title") != exclusion.get("title")
+                        or row.get("initialHash") != exclusion.get("initialStateHash")
+                        or row.get("status") == "winning-replay"
+                        or identity.get("engine") != "classic"
+                        or identity.get("levelID") != member):
+                    failures.append("Playable exclusion identity or source evidence mismatch: " + source)
+                excluded_sources.add(source)
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+            failures.append("Invalid bundled playable-exclusion manifest: " + str(error))
     inventory = []
     for pack in packs:
         path = library / pack["pack"]
@@ -91,7 +121,7 @@ def report(resources, output, require_fan_routes=False):
     # became a bundled-closure requirement on 15 October 2026.
     required = [row for row in rows if row["collection"] != "fan"]
     if require_fan_routes:
-        required.extend(row for row in rows if row["collection"] == "fan")
+        required.extend(row for row in rows if row["collection"] == "fan" and row["source"] not in excluded_sources)
     unverified = sum(row["status"] != "winning-replay" for row in required)
     if unverified:
         failures.append(f"{unverified} required levels lack verified winning replays")
@@ -99,9 +129,11 @@ def report(resources, output, require_fan_routes=False):
     if broken:
         failures.append(f"{broken} fan levels fail to load or render")
     result = {"passed": not failures, "failures": failures, "counts": counts,
-              "packs": len(packs), "fanLevels": len(sources), "inventory": inventory}
+              "packs": len(packs), "fanLevels": len(sources),
+              "excludedFanLevels": len(excluded_sources),
+              "fanPlayableLevels": len(sources) - len(excluded_sources), "inventory": inventory}
     (output / "coverage.json").write_text(json.dumps(result, indent=2) + "\n")
-    (output / "blockers.json").write_text(json.dumps([row for row in rows if (row["status"] != "winning-replay" and (require_fan_routes or row["collection"] != "fan"))
+    (output / "blockers.json").write_text(json.dumps([row for row in rows if row["source"] not in excluded_sources and (row["status"] != "winning-replay" and (require_fan_routes or row["collection"] != "fan"))
                                                         or row["status"] == "load-or-render-failed"], indent=2) + "\n")
     print(json.dumps({key: value for key, value in result.items() if key != "inventory"}, indent=2))
     return not failures

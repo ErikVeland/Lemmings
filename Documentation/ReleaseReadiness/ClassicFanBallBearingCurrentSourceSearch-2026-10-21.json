@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-21",
+  "scope": "One bounded current-source MVP search on an unresolved bundled Classic fan level. No winning replay was found.",
+  "source": {
+    "head": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "originMain": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "fetchHead": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "liveMainRefreshed": true,
+    "worktreeWasDirty": true,
+    "solverSHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "archivePath": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0283-GARJEN03.zip",
+    "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46"
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-283",
+    "levelID": "GARJEN03.dat#2",
+    "archiveOrdinal": 3,
+    "title": "Ball Bearing",
+    "initialStateHash": "006bcccc04d87600f2358c03af5f787623f95bdc81e6c00ca9c06efca25b19d0",
+    "lemmings": 80,
+    "requiredToSave": 80
+  },
+  "solver": {
+    "command": "ClassicSolver fan:<archive> 1 <output> --member GARJEN03.dat#2 --resources <installed resources> --width 4096 --seconds 120 --adaptive-rate --prefer-progress --rescue-quota-distance --partial-out",
+    "profile": {
+      "width": 4096,
+      "budgetSeconds": 120,
+      "adaptiveRate": true,
+      "ranking": "prefer-progress with rescue-quota distance"
+    },
+    "result": {
+      "status": "unsolved",
+      "solverSeconds": 120,
+      "expandedStates": 304681,
+      "statesPerSecond": 2540.7,
+      "bestSaved": "8/80",
+      "winningCandidates": 0,
+      "acceptedRouteClosures": 0
+    }
+  },
+  "closureStatus": {
+    "acceptedFanRoutes": "2404/6020",
+    "openFanRoutes": 3616,
+    "snapshotVelocity": "1 route closure from 2026-10-16 to 2026-10-21, or 0.2 per day across sparse snapshots",
+    "searchThroughput": {
+      "currentSourceBuild": "319831 states over 125 solver seconds across the 5-second Propersision ZERO baseline sweep and 120-second Ball Bearing search (2558.6 states per second)",
+      "priorSolverBuild": "451740 states over 167 solver seconds across the two Propersision ZERO candidate-generation searches (2705.0 states per second)",
+      "combined": "771571 states over 292 solver seconds (2642.4 states per second), across mixed builds"
+    },
+    "limits": [
+      "Search throughput is not route-closure velocity.",
+      "The Propersision ZERO candidate-generation searches used a prior solver build. Its winning route passed twice on the current-source build.",
+      "This bounded Ball Bearing search does not prove that the level has no solution."
+    ]
+  }
+}

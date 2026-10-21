@@ -757,7 +757,8 @@ public struct L3RunRecovery: Codable, Sendable {
         for creature in game.creatures {
             text(creature.digDirection.rawValue)
             for value in [creature.id, creature.kind.rawValue, creature.x, creature.y, creature.direction,
-                          creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age] { number(value) }
+                          creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age,
+                          creature.moleDropDelay, creature.molePatrolTick] { number(value) }
         }
         for trap in c.traps.sorted(by: { $0.id < $1.id }) { number(trap.id); number(game.trapFrame(id: trap.id)) }
         if let tool = game.bonusTool {

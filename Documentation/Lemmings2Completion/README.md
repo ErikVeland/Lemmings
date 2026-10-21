@@ -11,6 +11,13 @@ The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
 variants and all twelve continuous tribe chains. Every witness passed two fresh
 replays with matching saved counts, ticks and state hashes.
 
+On 20 October 2026, the current checkout `4bf3bddc` passed the strict gate
+again: 120 standalone routes, 70 carry-over variants, twelve complete tribe
+chains and strict negative cases. `Lemmings2Runtime.swift` matches the recorded
+source hash. This recheck adds no route and does not prove original DOS tick,
+continuous-actor or full-render parity. The Gold Ark remains outside the MVP
+route target. See the [current-source replay record](../ReleaseReadiness/L2CurrentSourceReplay-2026-10-20.json).
+
 On 15 October 2026, the route replay at `main` revision `061e1b99` verified all
 120 routes, 70 carry-over variants and twelve ten-level chains. This route
 result does not prove ark completion. Each chain ended with one survivor and a

@@ -731,3 +731,26 @@ The route still fails after the Mole trigger. The actor enters a trap near
 x=135,y=52 and dies. Jump timing probes did not avoid it. This verifies one
 route segment, not an MVP win. No original-engine trace confirms the new step
 rule. The audit records the runtime and test hashes.
+
+
+### 20 October cycle-12 first-mismatch collision probe
+
+The cycle-12 phase sweep tested all twelve offsets. The production offset remains
+best at 225/344 positions and matches through tick 248. A native state probe
+shows the first remaining split aligns with ordinary terrain contact: the native
+Mole is at x=202 on tick 249, and its next four-pixel step predicts x=206. The
+patrol mask at that position contains 32 solid pixels. The runtime turns before
+entering x=206. The captured source sprite reaches x=206 at tick 254 and moves
+back to x=205 at tick 255. This points to collision timing or mask geometry,
+but rendered sprite positions do not reveal the original collision box or
+update order. No production change is justified from this probe alone. See the
+[collision probe record](current-cycle12-first-mismatch-collision-probe-4bf3bddc-2026-10-20.json)
+and [phase sweep](current-cycle12-phase-sweep-4bf3bddc-2026-10-20.json).
+
+A headless DOSBox Staging 0.83 retry on 20 October bound its local API at
+`127.0.0.1:18086` and reached the title animation. The API exposed CPU and
+memory access, but the raw VGA memory read produced tiled, unreadable pixels.
+It did not produce an actor trace. The emulator was stopped. This corrects the
+earlier bind-status note; no source rule or route gap changed. L3 remains at
+86/90 standalone routes, with 17 failed schedules across Levels 107, 206, 213
+and 229.

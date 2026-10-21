@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "scope": "Mole-probe resource variant only. The tested LEVEL101.DAT differs from bundled L3 data and does not count toward bundled route status or velocity.",
+  "level": {
+    "number": 101,
+    "source": ".build/l3-mole-verification/source-left-facing/LEVELS/LEVEL101.DAT",
+    "sourceSHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/101.json",
+    "fixtureSHA256": "7a77cfe3c8dec32974afb31e492bda76a5230afb4c32c2407e9ff0e39f6ae5e6",
+    "currentInitialStateHash": "cdfd1205106aac03158c4da33ca75c89d245f291d332275ec250c0c53c83d0dc"
+  },
+  "bundleResourceMatch": {
+    "probeLevelDAT_SHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+    "bundledLevelDAT_SHA256": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1",
+    "matchesInstalledBundle": false
+  },
+  "search": {
+    "command": ".build/l3-solver/solver 101 --budget 120 --beam 2048 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-source/level101-mvp-2026-10-20",
+    "solverSHA256": "106b59f2f0a43539059ebd72299f9c060fa390c2ae4f363885696fc418605c35",
+    "librarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+    "budgetSeconds": 120,
+    "beamWidth": 2048,
+    "toolSiteCellPixels": 2,
+    "pairedActors": true,
+    "fewerInputsFirst": true,
+    "decisionPoints": 2132,
+    "searchDepth": 2172,
+    "roundsToBeam": 1,
+    "expandedStates": 673752,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false
+  },
+  "outcome": "The probe variant search found no route. Bundled level 101 passes its retained route on the exact installed resource tree, so this result does not affect bundled closure."
+}

@@ -1,0 +1,123 @@
+{
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "date": "2026-10-20",
+  "method": {
+    "build": "One isolated runtime build read the offset from L3_MOLE_PHASE_OFFSET; the same source trace and resource root were used for all 12 runs.",
+    "offsetsTested": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "parameter": "Phase offset used to select the first cadence element after the initial 2-pixel landing step.",
+    "runtimeLibrarySHA256": "c1ff79a7f0075a94cef7becf4e54972c2ef11ad63066074e901ea8595f6c54be",
+    "runtimeVariantSHA256": "4042a88a2ea2f78eaf22e7f8161e04bee2d4933bcf3b7b33dc17ea313456a097",
+    "traceToolSHA256": "c74077e0acd2bd2f4f5a79bbe6d561e22775010f5bb4667775b5ba19b609e44e"
+  },
+  "outcome": "The current production offset 1 is the best of all 12 tested, matching 225/344 positions through tick 248 and first diverging at tick 249. The next-best offset matches 201/344 and diverges at tick 184. A simple cadence phase shift does not explain or close the remaining source-trace mismatch. This does not prove complete Mole parity or bundled-scene parity.",
+  "probeScene": {
+    "currentProductionTrace": "current-cycle12-air-gap-4bf3bddc-2026-10-20.json",
+    "currentProductionTraceSHA256": "fe6c3a5294d3ac3bd77e0e18186633abeb1c16cb0c9d16ffd238d5acf8c1d9e8",
+    "limitation": "The source trace uses a modified level 101 probe scene, not the bundled level 101 DAT.",
+    "name": "steel-air-gap",
+    "resourceRoot": ".build/l3-mole-verification/source-air-gap",
+    "sourceTrace": "original-followup-traces.json",
+    "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+  },
+  "results": [
+    {
+      "firstPostDropMismatch": 249,
+      "matches": 225,
+      "matchingThrough": 248,
+      "phaseOffset": 1,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 184,
+      "matches": 201,
+      "matchingThrough": 183,
+      "phaseOffset": 2,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 177,
+      "matchingThrough": 184,
+      "phaseOffset": 3,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 176,
+      "matchingThrough": 184,
+      "phaseOffset": 4,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 186,
+      "matches": 176,
+      "matchingThrough": 185,
+      "phaseOffset": 5,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 184,
+      "matches": 164,
+      "matchingThrough": 183,
+      "phaseOffset": 6,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 184,
+      "matches": 168,
+      "matchingThrough": 183,
+      "phaseOffset": 7,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 191,
+      "matchingThrough": 184,
+      "phaseOffset": 8,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 172,
+      "matchingThrough": 184,
+      "phaseOffset": 9,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 171,
+      "matchingThrough": 184,
+      "phaseOffset": 10,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 185,
+      "matches": 182,
+      "matchingThrough": 184,
+      "phaseOffset": 11,
+      "positions": 344
+    },
+    {
+      "firstPostDropMismatch": 184,
+      "matches": 165,
+      "matchingThrough": 183,
+      "phaseOffset": 12,
+      "positions": 344
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": "Isolated test of all 12 possible offsets for the recorded 12-tick Mole horizontal cadence after the vertical tunnel landing. No production source or fixture changed."
+}

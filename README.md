@@ -75,16 +75,22 @@ distribution gates remain open. See the
 The 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. L2 records 120/120 standalone routes, 70 carry-over variants
 and 12 chains. Its Gold Ark and original-engine parity remain open. The
-current-worktree L3 audit on `8c66ef3e` passes 399/416 exact double replays. It
-refreshed 220 fixture identities without changing their input streams. Replay hashes now include the Mole drop delay. Four bundled L3 level identities lack a verified route; 13 carried-schedule
-failures are continuity cases for those same levels. Source parity, route repair and L3 media
-remain open. See the [current-worktree MVP audit](Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json).
+20 October current-source L3 audit on `4bf3bddc` passes 399/416 exact double
+replays against installed build 76 resources. Four levels lack a verified
+route: 107, 206, 213 and 229. Coverage is 86/90 standalone levels and 313/326
+carried fixtures. Mole parity, other source rules, media and transitions remain
+open. The build 76 resources have not been directly hash-linked to the 2.1
+package. See the [current-source audit](Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-audit-4bf3bddc-2026-10-20.json).
 
-The latest strict audit covers all 6,020 bundled fan levels across 535 packs.
-It verifies 2,403 winning routes. Another 3,599 levels have no matching
-candidate, and 18 candidate replays fail. The audit reports no load, decode or
-render failures. The evidence records the level identity and verified replay
-for all 2,755 accepted Classic routes. This audit used the installed 1.9.1
+The latest full strict audit covers all 6,020 source rows across 535 bundled
+fan packs. One exact no-exit level is excluded from playable bundled scope by
+owner decision, leaving 6,019 playable levels. The accepted count is 2,404
+(39.9%), including one targeted route closure on 21 October. The full audit has
+not been rerun. Its historical rows include 3,599 levels without matching
+candidates and 18 failed candidate replays. The audit reports no load, decode
+or render failures. The audit evidence records identities and verified replays
+for 2,755 Classic routes. The new targeted replay is stored separately. This
+audit used the installed 1.9.1
 build 76 resources. Its 535
 `LevelPacks` archives match build 85, and build 86 records no non-localisation
 resource-index changes. It does not certify a 2.0.3 app binary. Imported levels
@@ -92,6 +98,10 @@ remain outside the bundle and open-ended. See
 the [current-main audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-2026-10-16/audit.json),
 [build 85 content comparison](Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json)
 and [2.0.3 release record](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
+See the [incremental route record](Documentation/ReleaseReadiness/ClassicFanPropersisionZeroClosure-2026-10-21.json)
+and [bundled closure velocity](Documentation/ReleaseReadiness/BundledClosureVelocity.md).
+The [playable-scope decision](Documentation/ReleaseReadiness/ClassicFanPlayableScopeExclusion-2026-10-21.json)
+retains the source row and excludes only the exact bundled archive member.
 
 The pinned NeoLemmix runnable gate passed 794 levels. Macintosh 2.0.2 build 85
 passes the bundled-resource check for all 794 indexed levels and resolves all

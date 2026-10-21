@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-21",
+  "decision": "Keep the source pack and exclude this level from playable bundled scope.",
+  "scopeEffect": {
+    "sourceRowsRetained": 1,
+    "playableFanLevelsRemoved": 1,
+    "winningRoutesAdded": 0
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-509",
+    "levelID": "KillerMaster 1 Havoc 2.dat#7",
+    "title": "Choose your lucky PASSWORD!"
+  },
+  "source": {
+    "pack": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+    "archiveSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+    "member": "KillerMaster 1 Havoc 2.dat#7",
+    "initialStateHash": "44a67475e6416d92f01221d7bcf0410fa33efdcc6a49eca0f4691a60dc680eed",
+    "lemmings": 1,
+    "requiredToSave": 1,
+    "exitObjectSlots": [],
+    "exitTriggerCount": 0
+  },
+  "reason": "A source-faithful winning route is impossible when the exact source level has no exit object or trigger.",
+  "evidence": [
+    "ClassicFanStructuralBlockers-2026-10-20.json",
+    "Resources/Progression/bundled-playable-exclusions.json",
+    "Documentation/ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/levels.jsonl"
+  ],
+  "importedContent": "Open-ended; this exclusion applies only to the exact bundled archive hash."
+}

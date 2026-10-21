@@ -40,6 +40,17 @@ enum FanLevelLibrary {
     let label: String
   }
 
+  private struct BundledPlayableExclusions: Decodable {
+    struct Exclusion: Decodable {
+      let pack: String
+      let archiveSHA256: String
+      let member: String
+    }
+
+    let version: Int
+    let exclusions: [Exclusion]
+  }
+
   // MARK: - Progress
 
   /// What the player has passed, and how big each pack is.
@@ -144,7 +155,9 @@ enum FanLevelLibrary {
       var all = counts
       for (filename, count) in index where count >= 0 {
         let pack = folder.appendingPathComponent(filename)
-        if FileManager.default.fileExists(atPath: pack.path) { all[countKey(pack)] = count }
+        if FileManager.default.fileExists(atPath: pack.path) {
+          all[countKey(pack)] = max(0, count - bundledPlayableExclusions(in: pack).count)
+        }
       }
       UserDefaults.standard.set(all, forKey: countsKey)
     }
@@ -189,7 +202,7 @@ enum FanLevelLibrary {
         let known = counts
         for pack in packs where known[countKey(pack)] == nil {
           guard !Task.isCancelled else { return }
-          let total = entries(in: pack).count
+          let total = playableEntries(in: pack).count
           guard !Task.isCancelled else { return }
           await MainActor.run {
             guard measurementGeneration == generation else { return }
@@ -532,6 +545,44 @@ enum FanLevelLibrary {
     }
     return entries(in: pack, names: listing.output
       .split(separator: "\n").map(String.init).sorted())
+  }
+
+  /**
+   * Returns levels promised as playable by the bundled library.
+   */
+  static func playableEntries(in pack: URL, bundleRoot: URL? = nil,
+                              exclusionsURL: URL? = nil) -> [Entry] {
+    let available = entries(in: pack)
+    let excluded = bundledPlayableExclusions(
+      in: pack, bundleRoot: bundleRoot, exclusionsURL: exclusionsURL)
+    return available.filter { !excluded.contains($0.file + "#\($0.section ?? -1)") }
+  }
+
+  /**
+   * Returns verified levels promised as playable by the bundled library.
+   */
+  static func validatedPlayableEntries(in pack: URL, bundleRoot: URL? = nil,
+                                       exclusionsURL: URL? = nil) throws -> [Entry] {
+    let available = try validatedEntries(in: pack)
+    let excluded = bundledPlayableExclusions(
+      in: pack, bundleRoot: bundleRoot, exclusionsURL: exclusionsURL)
+    return available.filter { !excluded.contains($0.file + "#\($0.section ?? -1)") }
+  }
+
+  private static func bundledPlayableExclusions(in pack: URL, bundleRoot overrideRoot: URL? = nil,
+                                                 exclusionsURL overrideURL: URL? = nil) -> Set<String> {
+    guard let root = overrideRoot ?? bundledFolder,
+          pack.deletingLastPathComponent().standardizedFileURL == root.standardizedFileURL,
+          let url = overrideURL ?? Bundle.main.resourceURL?.appendingPathComponent(
+            "Progression/bundled-playable-exclusions.json"),
+          let data = try? Data(contentsOf: url),
+          let manifest = try? JSONDecoder().decode(BundledPlayableExclusions.self, from: data),
+          manifest.version == 1,
+          let archiveHash = archiveFingerprint(pack) else { return [] }
+    return Set(manifest.exclusions.compactMap { exclusion in
+      exclusion.pack == pack.lastPathComponent && exclusion.archiveSHA256 == archiveHash
+        ? exclusion.member : nil
+    })
   }
 
   private static func entries(in pack: URL, names: [String]) -> [Entry] {

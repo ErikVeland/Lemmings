@@ -2970,7 +2970,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let catalogueRevision = Self.levelCatalogueRevision
         preferred = await Task.detached(priority: .utility) {
           guard let revision = FanLevelLibrary.archiveFingerprint(pack),
-                let entry = try? FanLevelLibrary.validatedEntries(in: pack).first(where: {
+                let entry = try? FanLevelLibrary.validatedPlayableEntries(in: pack).first(where: {
                   $0.file + "#\($0.section ?? -1)" == recent.identity.levelID
                 }) else { return nil as LevelPreviewRequest? }
           return LevelPreviewRequest(identity: recent.identity, catalogueRevision: catalogueRevision,
@@ -3363,7 +3363,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       () -> LevelBrowserFanDiscovery? in
       guard !Task.isCancelled,
             let before = FanLevelLibrary.archiveFingerprint(url) else { return nil }
-      guard let entries = try? FanLevelLibrary.validatedEntries(in: url) else {
+      guard let entries = try? FanLevelLibrary.validatedPlayableEntries(in: url) else {
         return nil
       }
       guard !Task.isCancelled,
@@ -5279,7 +5279,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
         let entries: [FanLevelLibrary.Entry]
         do {
-          entries = try FanLevelLibrary.validatedEntries(in: url)
+          entries = try FanLevelLibrary.validatedPlayableEntries(in: url)
         } catch {
           failures.insert(packID)
           continue
@@ -6415,7 +6415,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard fanPacks.indices.contains(fanChoice) else { return true }
       let pack = fanPacks[fanChoice]
       fanPack = pack
-      fanEntries = FanLevelLibrary.entries(in: pack)
+      fanEntries = FanLevelLibrary.playableEntries(in: pack)
       FanLevelLibrary.Progress.setCount(fanEntries.count, for: pack)
       fanChoice = 0
       fanScreen = .levels

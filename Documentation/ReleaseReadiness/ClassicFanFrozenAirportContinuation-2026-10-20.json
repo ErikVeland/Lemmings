@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-20",
+  "scope": "Bounded first-win searches for the exact bundled level Frozen in the airport. These searches do not optimise a winning route.",
+  "source": {
+    "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesCachedOriginMain": true,
+    "liveMainRefreshed": false,
+    "worktreeWasDirty": true,
+    "archive": "0171-Giga-pack-09.zip",
+    "archiveSHA256": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
+    "initialStateHash": "00afb6607b5845f8a866e9112b8b63d9479a7ff94e40ab19bf92d7ac65205931"
+  },
+  "solver": {
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "level": {
+    "identity": "fan:lldb-171/Giga pack 09.dat#2",
+    "title": "Frozen in the airport",
+    "lemmingsRequiredToSave": 1
+  },
+  "search": {
+    "beamWidth": 512,
+    "budgetSeconds": 60,
+    "solverSeconds": 60,
+    "statesPerSecond": 2977,
+    "expandedStates": 178644,
+    "bestSaved": "0/1",
+    "terminal": {
+      "tick": 681,
+      "released": 8,
+      "lost": 3,
+      "active": 5
+    },
+    "winningRoute": false,
+    "candidateReplayWritten": false
+  },
+  "searchVariants": [
+    {
+      "profile": {
+        "beamWidth": 4096,
+        "budgetSeconds": 120,
+        "clock": "golems",
+        "fallback": 30,
+        "refire": 20,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "solverSeconds": 120,
+      "statesPerSecond": 2951,
+      "expandedStates": 354172,
+      "bestSaved": "0/1",
+      "terminal": {
+        "tick": 157,
+        "released": 7,
+        "lost": 0,
+        "active": 7
+      },
+      "winningRoute": false,
+      "candidateReplayWritten": false
+    },
+    {
+      "profile": {
+        "beamWidth": 8192,
+        "budgetSeconds": 120,
+        "clock": "golems",
+        "fallback": 30,
+        "refire": 20,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true,
+        "focusWorkers": 1
+      },
+      "solverSeconds": 120,
+      "statesPerSecond": 3110,
+      "expandedStates": 373049,
+      "bestSaved": "0/1",
+      "terminal": {
+        "tick": 152,
+        "released": 8,
+        "lost": 0,
+        "active": 8
+      },
+      "winningRoute": false,
+      "candidateReplayWritten": false
+    }
+  ],
+  "timingSweeps": [
+    {
+      "profile": {
+        "kind": "single-skill assignment sweep",
+        "beamWidth": 512,
+        "budgetSeconds": 120,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120
+      },
+      "solverSeconds": 1,
+      "waitingRouteTick": 540,
+      "skillAssignmentsStarted": 8432,
+      "continuationsCompleted": 8432,
+      "deadlineExpired": false,
+      "winningRoute": false
+    },
+    {
+      "profile": {
+        "kind": "two-skill timing sweep",
+        "skillOrder": ["floater", "builder"],
+        "firstFrom": 0,
+        "firstThrough": 200,
+        "secondGapMin": 1,
+        "secondGapMax": 100,
+        "budgetSeconds": 120,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120
+      },
+      "solverSeconds": 12,
+      "waitingRouteTick": 200,
+      "firstSkillAssignments": 330,
+      "secondSkillAssignments": 95693,
+      "continuationsCompleted": 95693,
+      "deadlineExpired": false,
+      "winningRoute": false
+    },
+    {
+      "profile": {
+        "kind": "two-skill timing sweep",
+        "skillOrder": ["builder", "floater"],
+        "firstFrom": 0,
+        "firstThrough": 200,
+        "secondGapMin": 1,
+        "secondGapMax": 100,
+        "budgetSeconds": 120,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120
+      },
+      "solverSeconds": 15,
+      "waitingRouteTick": 200,
+      "firstSkillAssignments": 301,
+      "secondSkillAssignments": 110188,
+      "continuationsCompleted": 110188,
+      "deadlineExpired": false,
+      "winningRoute": false
+    }
+  ],
+  "aggregateSearchWork": {
+    "searches": 6,
+    "beamSearches": 3,
+    "beamSolverSeconds": 300,
+    "beamExpandedStates": 905865,
+    "beamStatesPerSecond": 3020,
+    "singleSkillAssignments": 8432,
+    "twoSkillAssignments": 205881,
+    "timingSweepSolverSeconds": 28,
+    "timingSweepContinuationsCompleted": 214313,
+    "acceptedRouteClosures": 0
+  },
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "limitation": "This bounded search found no route. It does not prove that the level has no solution."
+  }
+}

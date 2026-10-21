@@ -1,0 +1,2438 @@
+[
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 2,
+    "x" : 157,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 3,
+    "x" : 156,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 4,
+    "x" : 154,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 5,
+    "x" : 153,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 6,
+    "x" : 152,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 7,
+    "x" : 150,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 8,
+    "x" : 149,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 9,
+    "x" : 148,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 10,
+    "x" : 146,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 11,
+    "x" : 145,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 12,
+    "x" : 144,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 13,
+    "x" : 142,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 14,
+    "x" : 141,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 15,
+    "x" : 140,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 16,
+    "x" : 138,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 17,
+    "x" : 137,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 18,
+    "x" : 136,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 19,
+    "x" : 134,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 20,
+    "x" : 133,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 21,
+    "x" : 132,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 22,
+    "x" : 130,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 23,
+    "x" : 129,
+    "y" : 110
+  },
+  {
+    "digDirection" : "left",
+    "direction" : -1,
+    "tick" : 24,
+    "x" : 128,
+    "y" : 110
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 25,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 26,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 27,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 28,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 29,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 30,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 31,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 32,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 33,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 34,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 35,
+    "x" : 128,
+    "y" : 112
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 36,
+    "x" : 130,
+    "y" : 113
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 37,
+    "x" : 132,
+    "y" : 114
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 38,
+    "x" : 134,
+    "y" : 115
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 39,
+    "x" : 136,
+    "y" : 116
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 40,
+    "x" : 138,
+    "y" : 117
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 41,
+    "x" : 140,
+    "y" : 118
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 42,
+    "x" : 142,
+    "y" : 119
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 43,
+    "x" : 144,
+    "y" : 120
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 44,
+    "x" : 146,
+    "y" : 121
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 45,
+    "x" : 148,
+    "y" : 122
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 46,
+    "x" : 150,
+    "y" : 123
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 47,
+    "x" : 152,
+    "y" : 124
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 48,
+    "x" : 154,
+    "y" : 125
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 49,
+    "x" : 156,
+    "y" : 126
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 50,
+    "x" : 158,
+    "y" : 127
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 51,
+    "x" : 160,
+    "y" : 128
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 52,
+    "x" : 162,
+    "y" : 129
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 53,
+    "x" : 164,
+    "y" : 130
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 54,
+    "x" : 166,
+    "y" : 131
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 55,
+    "x" : 168,
+    "y" : 132
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 56,
+    "x" : 170,
+    "y" : 133
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 57,
+    "x" : 172,
+    "y" : 134
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 58,
+    "x" : 174,
+    "y" : 135
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 59,
+    "x" : 176,
+    "y" : 136
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 60,
+    "x" : 178,
+    "y" : 137
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 61,
+    "x" : 180,
+    "y" : 138
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 62,
+    "x" : 182,
+    "y" : 139
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 63,
+    "x" : 184,
+    "y" : 140
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 64,
+    "x" : 186,
+    "y" : 141
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 65,
+    "x" : 188,
+    "y" : 142
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 66,
+    "x" : 190,
+    "y" : 143
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 67,
+    "x" : 192,
+    "y" : 144
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 68,
+    "x" : 194,
+    "y" : 145
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 69,
+    "x" : 196,
+    "y" : 146
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 70,
+    "x" : 198,
+    "y" : 147
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 71,
+    "x" : 200,
+    "y" : 148
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 72,
+    "x" : 202,
+    "y" : 149
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 73,
+    "x" : 204,
+    "y" : 150
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 74,
+    "x" : 206,
+    "y" : 151
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 75,
+    "x" : 208,
+    "y" : 152
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 76,
+    "x" : 210,
+    "y" : 153
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 77,
+    "x" : 212,
+    "y" : 154
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 78,
+    "x" : 214,
+    "y" : 155
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 79,
+    "x" : 216,
+    "y" : 156
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 80,
+    "x" : 218,
+    "y" : 157
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 81,
+    "x" : 220,
+    "y" : 158
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 82,
+    "x" : 222,
+    "y" : 159
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 83,
+    "x" : 224,
+    "y" : 160
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 84,
+    "x" : 226,
+    "y" : 161
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 85,
+    "x" : 228,
+    "y" : 162
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 86,
+    "x" : 230,
+    "y" : 163
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 87,
+    "x" : 232,
+    "y" : 164
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 88,
+    "x" : 234,
+    "y" : 165
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 89,
+    "x" : 236,
+    "y" : 166
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 90,
+    "x" : 238,
+    "y" : 167
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 91,
+    "x" : 240,
+    "y" : 168
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 92,
+    "x" : 242,
+    "y" : 169
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 93,
+    "x" : 244,
+    "y" : 170
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 94,
+    "x" : 246,
+    "y" : 171
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 95,
+    "x" : 248,
+    "y" : 172
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 96,
+    "x" : 250,
+    "y" : 173
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 97,
+    "x" : 252,
+    "y" : 174
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 98,
+    "x" : 254,
+    "y" : 175
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 99,
+    "x" : 256,
+    "y" : 176
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 100,
+    "x" : 258,
+    "y" : 177
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 101,
+    "x" : 260,
+    "y" : 178
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 102,
+    "x" : 262,
+    "y" : 179
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 103,
+    "x" : 264,
+    "y" : 180
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 104,
+    "x" : 266,
+    "y" : 181
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 105,
+    "x" : 268,
+    "y" : 182
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 106,
+    "x" : 270,
+    "y" : 183
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 107,
+    "x" : 272,
+    "y" : 184
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 108,
+    "x" : 274,
+    "y" : 185
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 109,
+    "x" : 276,
+    "y" : 186
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 110,
+    "x" : 278,
+    "y" : 187
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 111,
+    "x" : 280,
+    "y" : 188
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 112,
+    "x" : 282,
+    "y" : 189
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 113,
+    "x" : 284,
+    "y" : 190
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 114,
+    "x" : 286,
+    "y" : 191
+  },
+  {
+    "digDirection" : "downRight",
+    "direction" : 1,
+    "tick" : 115,
+    "x" : 288,
+    "y" : 192
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 116,
+    "x" : 290,
+    "y" : 191
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 117,
+    "x" : 292,
+    "y" : 190
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 118,
+    "x" : 294,
+    "y" : 189
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 119,
+    "x" : 296,
+    "y" : 188
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 120,
+    "x" : 294,
+    "y" : 187
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 121,
+    "x" : 292,
+    "y" : 186
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 122,
+    "x" : 290,
+    "y" : 185
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 123,
+    "x" : 288,
+    "y" : 184
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 124,
+    "x" : 286,
+    "y" : 183
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 125,
+    "x" : 284,
+    "y" : 182
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 126,
+    "x" : 282,
+    "y" : 181
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 127,
+    "x" : 280,
+    "y" : 180
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 128,
+    "x" : 278,
+    "y" : 179
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 129,
+    "x" : 276,
+    "y" : 178
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 130,
+    "x" : 274,
+    "y" : 177
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 131,
+    "x" : 272,
+    "y" : 176
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 132,
+    "x" : 270,
+    "y" : 175
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 133,
+    "x" : 268,
+    "y" : 174
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 134,
+    "x" : 266,
+    "y" : 173
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 135,
+    "x" : 264,
+    "y" : 172
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 136,
+    "x" : 262,
+    "y" : 171
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 137,
+    "x" : 260,
+    "y" : 170
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 138,
+    "x" : 258,
+    "y" : 169
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 139,
+    "x" : 256,
+    "y" : 168
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 140,
+    "x" : 254,
+    "y" : 167
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 141,
+    "x" : 252,
+    "y" : 166
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 142,
+    "x" : 250,
+    "y" : 165
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 143,
+    "x" : 248,
+    "y" : 164
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 144,
+    "x" : 246,
+    "y" : 163
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 145,
+    "x" : 244,
+    "y" : 162
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 146,
+    "x" : 242,
+    "y" : 161
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 147,
+    "x" : 240,
+    "y" : 160
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 148,
+    "x" : 238,
+    "y" : 159
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 149,
+    "x" : 236,
+    "y" : 158
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 150,
+    "x" : 234,
+    "y" : 157
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 151,
+    "x" : 232,
+    "y" : 156
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 152,
+    "x" : 230,
+    "y" : 155
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 153,
+    "x" : 228,
+    "y" : 154
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 154,
+    "x" : 226,
+    "y" : 153
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 155,
+    "x" : 224,
+    "y" : 152
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 156,
+    "x" : 222,
+    "y" : 151
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 157,
+    "x" : 220,
+    "y" : 150
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 158,
+    "x" : 218,
+    "y" : 149
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 159,
+    "x" : 216,
+    "y" : 148
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 160,
+    "x" : 214,
+    "y" : 147
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 161,
+    "x" : 212,
+    "y" : 146
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 162,
+    "x" : 210,
+    "y" : 145
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 163,
+    "x" : 208,
+    "y" : 144
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 164,
+    "x" : 206,
+    "y" : 143
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 165,
+    "x" : 204,
+    "y" : 142
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 166,
+    "x" : 202,
+    "y" : 141
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 167,
+    "x" : 200,
+    "y" : 140
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 168,
+    "x" : 198,
+    "y" : 139
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 169,
+    "x" : 196,
+    "y" : 138
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 170,
+    "x" : 194,
+    "y" : 137
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 171,
+    "x" : 192,
+    "y" : 136
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 172,
+    "x" : 190,
+    "y" : 135
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 173,
+    "x" : 188,
+    "y" : 134
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 174,
+    "x" : 186,
+    "y" : 133
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 175,
+    "x" : 184,
+    "y" : 132
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 176,
+    "x" : 182,
+    "y" : 131
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 177,
+    "x" : 180,
+    "y" : 130
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 178,
+    "x" : 178,
+    "y" : 129
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 179,
+    "x" : 176,
+    "y" : 128
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 180,
+    "x" : 174,
+    "y" : 127
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 181,
+    "x" : 172,
+    "y" : 126
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 182,
+    "x" : 170,
+    "y" : 125
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 183,
+    "x" : 168,
+    "y" : 124
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 184,
+    "x" : 166,
+    "y" : 123
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 185,
+    "x" : 164,
+    "y" : 122
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 186,
+    "x" : 162,
+    "y" : 121
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 187,
+    "x" : 160,
+    "y" : 120
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 188,
+    "x" : 158,
+    "y" : 119
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 189,
+    "x" : 156,
+    "y" : 118
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 190,
+    "x" : 154,
+    "y" : 117
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 191,
+    "x" : 152,
+    "y" : 116
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 192,
+    "x" : 150,
+    "y" : 115
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 193,
+    "x" : 148,
+    "y" : 114
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 194,
+    "x" : 146,
+    "y" : 113
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 195,
+    "x" : 144,
+    "y" : 112
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 196,
+    "x" : 142,
+    "y" : 111
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 197,
+    "x" : 140,
+    "y" : 110
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 198,
+    "x" : 138,
+    "y" : 109
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 199,
+    "x" : 136,
+    "y" : 108
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 200,
+    "x" : 134,
+    "y" : 107
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 201,
+    "x" : 132,
+    "y" : 106
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 202,
+    "x" : 130,
+    "y" : 105
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 203,
+    "x" : 128,
+    "y" : 104
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 204,
+    "x" : 130,
+    "y" : 103
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 205,
+    "x" : 132,
+    "y" : 102
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 206,
+    "x" : 134,
+    "y" : 101
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 207,
+    "x" : 136,
+    "y" : 100
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 208,
+    "x" : 138,
+    "y" : 99
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 209,
+    "x" : 140,
+    "y" : 98
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 210,
+    "x" : 142,
+    "y" : 97
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 211,
+    "x" : 144,
+    "y" : 96
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 212,
+    "x" : 146,
+    "y" : 95
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 213,
+    "x" : 148,
+    "y" : 94
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 214,
+    "x" : 150,
+    "y" : 93
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 215,
+    "x" : 152,
+    "y" : 92
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 216,
+    "x" : 154,
+    "y" : 91
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 217,
+    "x" : 156,
+    "y" : 90
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 218,
+    "x" : 158,
+    "y" : 89
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 219,
+    "x" : 160,
+    "y" : 88
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 220,
+    "x" : 162,
+    "y" : 87
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 221,
+    "x" : 164,
+    "y" : 86
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 222,
+    "x" : 166,
+    "y" : 85
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 223,
+    "x" : 168,
+    "y" : 84
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 224,
+    "x" : 170,
+    "y" : 83
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 225,
+    "x" : 172,
+    "y" : 82
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 226,
+    "x" : 174,
+    "y" : 81
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 227,
+    "x" : 176,
+    "y" : 80
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 228,
+    "x" : 178,
+    "y" : 79
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 229,
+    "x" : 180,
+    "y" : 78
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 230,
+    "x" : 182,
+    "y" : 77
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 231,
+    "x" : 184,
+    "y" : 76
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 232,
+    "x" : 186,
+    "y" : 75
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 233,
+    "x" : 188,
+    "y" : 74
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 234,
+    "x" : 190,
+    "y" : 73
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 235,
+    "x" : 192,
+    "y" : 72
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 236,
+    "x" : 194,
+    "y" : 71
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 237,
+    "x" : 196,
+    "y" : 70
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 238,
+    "x" : 198,
+    "y" : 69
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 239,
+    "x" : 200,
+    "y" : 68
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 240,
+    "x" : 202,
+    "y" : 67
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 241,
+    "x" : 204,
+    "y" : 66
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 242,
+    "x" : 206,
+    "y" : 65
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 243,
+    "x" : 208,
+    "y" : 64
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 244,
+    "x" : 210,
+    "y" : 63
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 245,
+    "x" : 212,
+    "y" : 62
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 246,
+    "x" : 214,
+    "y" : 61
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 247,
+    "x" : 216,
+    "y" : 60
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 248,
+    "x" : 218,
+    "y" : 59
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 249,
+    "x" : 220,
+    "y" : 58
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 250,
+    "x" : 222,
+    "y" : 57
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 251,
+    "x" : 224,
+    "y" : 56
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 252,
+    "x" : 226,
+    "y" : 55
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 253,
+    "x" : 228,
+    "y" : 54
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 254,
+    "x" : 230,
+    "y" : 53
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 255,
+    "x" : 232,
+    "y" : 52
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 256,
+    "x" : 234,
+    "y" : 51
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 257,
+    "x" : 236,
+    "y" : 50
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 258,
+    "x" : 238,
+    "y" : 49
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 259,
+    "x" : 240,
+    "y" : 48
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 260,
+    "x" : 242,
+    "y" : 47
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 261,
+    "x" : 244,
+    "y" : 46
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 262,
+    "x" : 246,
+    "y" : 45
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 263,
+    "x" : 248,
+    "y" : 44
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 264,
+    "x" : 250,
+    "y" : 43
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 265,
+    "x" : 252,
+    "y" : 42
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 266,
+    "x" : 254,
+    "y" : 41
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 267,
+    "x" : 256,
+    "y" : 40
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 268,
+    "x" : 258,
+    "y" : 39
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 269,
+    "x" : 260,
+    "y" : 38
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 270,
+    "x" : 262,
+    "y" : 37
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 271,
+    "x" : 264,
+    "y" : 36
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 272,
+    "x" : 266,
+    "y" : 35
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 273,
+    "x" : 268,
+    "y" : 34
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 274,
+    "x" : 270,
+    "y" : 33
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 275,
+    "x" : 272,
+    "y" : 32
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 276,
+    "x" : 274,
+    "y" : 31
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 277,
+    "x" : 276,
+    "y" : 30
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 278,
+    "x" : 278,
+    "y" : 29
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 279,
+    "x" : 280,
+    "y" : 28
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 280,
+    "x" : 282,
+    "y" : 27
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 281,
+    "x" : 284,
+    "y" : 26
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 282,
+    "x" : 286,
+    "y" : 25
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 283,
+    "x" : 288,
+    "y" : 24
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 284,
+    "x" : 290,
+    "y" : 23
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 285,
+    "x" : 292,
+    "y" : 22
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 286,
+    "x" : 294,
+    "y" : 21
+  },
+  {
+    "digDirection" : "upRight",
+    "direction" : 1,
+    "tick" : 287,
+    "x" : 296,
+    "y" : 20
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 288,
+    "x" : 294,
+    "y" : 19
+  },
+  {
+    "digDirection" : "upLeft",
+    "direction" : -1,
+    "tick" : 289,
+    "x" : 292,
+    "y" : 18
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 290,
+    "x" : 290,
+    "y" : 19
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 291,
+    "x" : 288,
+    "y" : 20
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 292,
+    "x" : 286,
+    "y" : 21
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 293,
+    "x" : 284,
+    "y" : 22
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 294,
+    "x" : 282,
+    "y" : 23
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 295,
+    "x" : 280,
+    "y" : 24
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 296,
+    "x" : 278,
+    "y" : 25
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 297,
+    "x" : 276,
+    "y" : 26
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 298,
+    "x" : 274,
+    "y" : 27
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 299,
+    "x" : 272,
+    "y" : 28
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 300,
+    "x" : 270,
+    "y" : 29
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 301,
+    "x" : 268,
+    "y" : 30
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 302,
+    "x" : 266,
+    "y" : 31
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 303,
+    "x" : 264,
+    "y" : 32
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 304,
+    "x" : 262,
+    "y" : 33
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 305,
+    "x" : 260,
+    "y" : 34
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 306,
+    "x" : 258,
+    "y" : 35
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 307,
+    "x" : 256,
+    "y" : 36
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 308,
+    "x" : 254,
+    "y" : 37
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 309,
+    "x" : 252,
+    "y" : 38
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 310,
+    "x" : 250,
+    "y" : 39
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 311,
+    "x" : 248,
+    "y" : 40
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 312,
+    "x" : 246,
+    "y" : 41
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 313,
+    "x" : 244,
+    "y" : 42
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 314,
+    "x" : 242,
+    "y" : 43
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 315,
+    "x" : 240,
+    "y" : 44
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 316,
+    "x" : 238,
+    "y" : 45
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 317,
+    "x" : 236,
+    "y" : 46
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 318,
+    "x" : 234,
+    "y" : 47
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 319,
+    "x" : 232,
+    "y" : 48
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 320,
+    "x" : 230,
+    "y" : 49
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 321,
+    "x" : 228,
+    "y" : 50
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 322,
+    "x" : 226,
+    "y" : 51
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 323,
+    "x" : 224,
+    "y" : 52
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 324,
+    "x" : 222,
+    "y" : 53
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 325,
+    "x" : 220,
+    "y" : 54
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 326,
+    "x" : 218,
+    "y" : 55
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 327,
+    "x" : 216,
+    "y" : 56
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 328,
+    "x" : 214,
+    "y" : 57
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 329,
+    "x" : 212,
+    "y" : 58
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 330,
+    "x" : 210,
+    "y" : 59
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 331,
+    "x" : 208,
+    "y" : 60
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 332,
+    "x" : 206,
+    "y" : 61
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 333,
+    "x" : 204,
+    "y" : 62
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 334,
+    "x" : 202,
+    "y" : 63
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 335,
+    "x" : 200,
+    "y" : 64
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 336,
+    "x" : 198,
+    "y" : 65
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 337,
+    "x" : 196,
+    "y" : 66
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 338,
+    "x" : 194,
+    "y" : 67
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 339,
+    "x" : 192,
+    "y" : 68
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 340,
+    "x" : 190,
+    "y" : 69
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 341,
+    "x" : 188,
+    "y" : 70
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 342,
+    "x" : 186,
+    "y" : 71
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 343,
+    "x" : 184,
+    "y" : 72
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 344,
+    "x" : 182,
+    "y" : 73
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 345,
+    "x" : 180,
+    "y" : 74
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 346,
+    "x" : 178,
+    "y" : 75
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 347,
+    "x" : 176,
+    "y" : 76
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 348,
+    "x" : 174,
+    "y" : 77
+  },
+  {
+    "digDirection" : "downLeft",
+    "direction" : -1,
+    "tick" : 349,
+    "x" : 172,
+    "y" : 78
+  }
+]

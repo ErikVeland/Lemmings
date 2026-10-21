@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-20",
+  "scope": "Ten selected one-lemming bundled fan levels, each requiring one save. Nine searches ran. One level was excluded because the exact bundled level has no exit object.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "branch": "codex/bundled-engine-recreation-main",
+    "headMatchesOriginMain": true,
+    "freshFetch": "Succeeded on 2026-10-20. HEAD, origin/main and FETCH_HEAD match.",
+    "worktreeWasDirty": true,
+    "resources": "/Applications/Ultimate Lemmings.app/Contents/Resources"
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "library": ".build/classic-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "profile": {
+      "budgetSeconds": 10,
+      "beamWidth": 2048,
+      "adaptiveRate": true,
+      "preferProgress": true,
+      "rescueQuotaDistance": true,
+      "fallback": 10,
+      "refire": 5,
+      "clock": "golems"
+    }
+  },
+  "attempts": [
+    { "identity": "fan:lldb-137/weirdy05 (version 2).dat#6", "title": "Bless the Lem", "initialStateHash": "422477a326906b7e4f8967039c7c1e3b6df6e2ce06066c79e72e5ae3ed82d422", "archive": "0137-weirdy05-version-2.zip", "archiveSHA256": "06cce8c9cb1e34d7db43521d077d58e51377dc58d67345c7d764a9203fecdf41", "expandedStates": 30918, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 203; one released, zero lost, one active" },
+    { "identity": "fan:lldb-292/JUANJO3N.DAT#1", "title": "Bolas Y palos", "initialStateHash": "4379d28361b479dfbe89d41649def766cafedbc7055be1bf041e66df1828e47e", "archive": "0292-JUANJO3N.zip", "archiveSHA256": "a593e2dabff1706e6ae26b3b98d9c6cff7cade165c0616561f5bbf8acb3b09ea", "expandedStates": 31299, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 77; one released, zero lost, one active" },
+    { "identity": "fan:lldb-14/Mikepak09.dat#5", "title": "Alone in the jungle !", "initialStateHash": "4664b8414504562efc30b5af07dca9acecc613877de1dc7f826035d7e91a1faf", "archive": "0014-Mikepak09.zip", "archiveSHA256": "e2f7796fe41470257faf24d6519a0149be727942d334c681c29878ad2ae3562e", "expandedStates": 31241, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 100; one released, zero lost, one active" },
+    { "identity": "fan:lldb-258/Conway09.DAT#5", "title": "Completely reversed!", "initialStateHash": "ad7b01779a5080c8df350b32f0fd6815b0061f779882be4f79288b710db0bc88", "archive": "0258-Conway09.zip", "archiveSHA256": "5a414a218ab804fd6f1718e3bd79491a22756d3473d6cd2b1ad8a5fd479d9752", "expandedStates": 31506, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 174; one released, zero lost, one active" },
+    { "identity": "fan:lldb-282/GARJEN02.dat#3", "title": "Crazy Paving", "initialStateHash": "bb9be54ef302d7732ce4eebaf5474f76333805646266117d678e01c82b0754bb", "archive": "0282-GARJEN02.zip", "archiveSHA256": "2c6852a64160919f0afcbbcdf244877bd3bfd0fd134d745931faca723e2977a2", "expandedStates": 31048, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 117; one released, zero lost, one active" },
+    { "identity": "fan:lldb-254/Conway05.DAT#9", "title": "Alone with your lemming", "initialStateHash": "bdb7504801392dfa2865faef5045aafb9d9b4e3b4a1c2c37dfe0df67acceb07e", "archive": "0254-Conway05.zip", "archiveSHA256": "290bc688375b7edc79d2cfa873b9d6aa5bc7c686796052f6bb7e0d17bc486162", "expandedStates": 226, "solverSeconds": 0, "result": "UNSOLVED; best saved 0/1; tick 79; one released, zero lost, one active" },
+    { "identity": "fan:lldb-355/S370PAK1.DAT#6", "title": "E Tuh'd Keja Y Cred, Eteud", "initialStateHash": "d97969a5ce3e114cca030f1d2d5d661153c4ce6ec8214919000335783de44434", "archive": "0355-s370pak1.zip", "archiveSHA256": "380cb3e4d0f99405280e1462b7560b35672cdf6c5651caf53d21d2a303b34f55", "expandedStates": 31264, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 88; one released, zero lost, one active" },
+    { "identity": "fan:lldb-352/MARSHY08.DAT#7", "title": "Across the river", "initialStateHash": "e45e83997f07e300567cda591e17d2749665ab62f1d2bb1b195ccfd87f248db5", "archive": "0352-MARSHY08.zip", "archiveSHA256": "f104f08fbfa72116358d7c29ca3fe8d98f6f51d377ed24a3450c7ffcaee233ad", "expandedStates": 31219, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 474; one released, zero lost, one active" },
+    { "identity": "fan:lldb-449/comppak.dat#2", "title": "Down, Around and Up (Lemeri)", "initialStateHash": "f3090be3a003ab5789c8cc1c263f73ef50b6407c7bd04b2a5239f9f0cd63760c", "archive": "0449-comppak.zip", "archiveSHA256": "79f35140478b08a4f5d52e964fcb899886f1de4474c42559817962fe219020b1", "expandedStates": 31187, "solverSeconds": 10, "result": "UNSOLVED; best saved 0/1; tick 120; one released, zero lost, one active" }
+  ],
+  "structuralExclusion": {
+    "identity": "fan:lldb-509/KillerMaster 1 Havoc 2.dat#7",
+    "title": "Choose your lucky PASSWORD!",
+    "initialStateHash": "44a67475e6416d92f01221d7bcf0410fa33efdcc6a49eca0f4691a60dc680eed",
+    "archive": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+    "archiveSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+    "population": 1,
+    "requiredToSave": 1,
+    "exitObjectSlots": [],
+    "exitTriggerCount": 0,
+    "evidence": "Artifacts/DifficultyEvaluation/classic-structural-limits.json and exact-resource --describe-geometry output",
+    "structuralVerifierLimit": "The repository verifier could not run because .build/learning-evidence/fan-slot-scan/evaluated/bundled-port-descriptors.json is absent. The record entry and exact installed archive hash still match.",
+    "status": "Open bundled-content blocker. No source-faithful winning replay can be made until the bundled level is corrected or removed from the playable bundle."
+  },
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "fanRouteBaseline": "2403/6020 from the latest accepted 16 October snapshot",
+    "openFanRoutesAtBaseline": 3617,
+    "expandedStates": 249908,
+    "solverSeconds": 80,
+    "solverStatesPerSecond": 3123.9,
+    "solverWins": 0,
+    "limitation": "These bounded searches do not prove that the nine searched levels have no solution."
+  }
+}

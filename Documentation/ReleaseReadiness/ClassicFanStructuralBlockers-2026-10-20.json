@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-20",
+  "scope": "Current bundled-source records that cannot meet the one-winning-route MVP under their exact level data.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "branch": "codex/bundled-engine-recreation-main",
+    "headMatchesOriginMain": true,
+    "freshFetchSucceeded": true,
+    "resources": "/Applications/Ultimate Lemmings.app/Contents/Resources",
+    "structuralArtifact": "Artifacts/DifficultyEvaluation/classic-structural-limits.json",
+    "structuralArtifactSHA256": "ef807b8d5fe1bba1485e6b5709ff56bfc07c60232fc61e72c376b6f1ed9c5899",
+    "structuralDescriptorSHA256": "57d9ef27f1530073f06a28bd1cabcfd2c43a885679ec2ad56bb74e6923a3a548",
+    "structuralRecordCount": 4
+  },
+  "verification": {
+    "method": "Compared each checked-in and installed archive SHA-256 with its structural record, then described the exact DAT member with ClassicSolver --describe-geometry.",
+    "repositoryArchiveHashesMatched": 4,
+    "archiveHashesMatched": 4,
+    "geometryConfirmed": 4,
+    "repositoryVerifier": "Could not run because .build/learning-evidence/fan-slot-scan/evaluated/bundled-port-descriptors.json is absent. The checked structural artifact and current archive hashes are recorded above."
+  },
+  "blockers": [
+    {
+      "identity": "fan:lldb-386/Gronklems -1.dat#1",
+      "title": "gronklems -1.dat 2",
+      "archive": "0386-Gronklems-1.zip",
+      "archiveSHA256": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
+      "initialStateHash": "5abd5b53376cdfc5182681b9006b2a03c11eceb2402476e91cb14221d2b3cfc4",
+      "lemmings": 20,
+      "requiredToSave": 37,
+      "exitObjectSlots": [3],
+      "exitTriggerCount": 1,
+      "reason": "Required survivor count exceeds the level population."
+    },
+    {
+      "identity": "fan:lldb-437/LDChallenge08.dat#1",
+      "title": "ldchallenge08.dat 2",
+      "archive": "0437-Level-Design-Game-08.zip",
+      "archiveSHA256": "76c552fad59139decedda40d3b2adef946a42a2661cfc18f432263a290251949",
+      "initialStateHash": "f0c07d180cd8b3cbd2b7061bb8db178b8414a2e646d2ceb71f3afef79ac02127",
+      "lemmings": 2,
+      "requiredToSave": 2,
+      "exitObjectSlots": [],
+      "exitTriggerCount": 0,
+      "reason": "The exact level has no exit object or exit trigger."
+    },
+    {
+      "identity": "fan:lldb-508/KillerMaster 1 Wicked 1.dat#3",
+      "title": "Type this Word!",
+      "archive": "0508-KillerMasters-Lemmings-1-Wicked.zip",
+      "archiveSHA256": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
+      "initialStateHash": "5f4441453b1a153eee8e977be047dfa9dad59f79abb6c675cc8fa2f9d2bbb411",
+      "lemmings": 40,
+      "requiredToSave": 20,
+      "exitObjectSlots": [],
+      "exitTriggerCount": 0,
+      "reason": "The exact level has no exit object or exit trigger."
+    },
+    {
+      "identity": "fan:lldb-509/KillerMaster 1 Havoc 2.dat#7",
+      "title": "Choose your lucky PASSWORD!",
+      "archive": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "archiveSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+      "initialStateHash": "44a67475e6416d92f01221d7bcf0410fa33efdcc6a49eca0f4691a60dc680eed",
+      "lemmings": 1,
+      "requiredToSave": 1,
+      "exitObjectSlots": [],
+      "exitTriggerCount": 0,
+      "reason": "The exact level has no exit object or exit trigger."
+    }
+  ],
+  "closure": {
+    "closed": 0,
+    "routeCountImpact": 0,
+    "allFourRemainInBundledScope": true,
+    "requiredAction": "Correct the bundled level data or change which levels the playable bundle promises. Do not count these structural records as route closures."
+  }
+}

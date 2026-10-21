@@ -34,6 +34,8 @@ mkdir -p "$resources_dir/Progression"
 cp "$project_dir/Resources/Progression/exclusions.json" "$resources_dir/Progression/exclusions.json"
 cp "$project_dir/Resources/Progression/learning.json" "$resources_dir/Progression/learning.json"
 cp "$project_dir/Resources/Progression/solutions.json" "$resources_dir/Progression/solutions.json"
+cp "$project_dir/Resources/Progression/bundled-playable-exclusions.json" \
+  "$resources_dir/Progression/bundled-playable-exclusions.json"
 # Event sounds that no original bank supplies, named after the event.
 mkdir -p "$resources_dir/Sounds"
 rsync -a --exclude=.DS_Store "$project_dir/Resources/Sounds/" "$resources_dir/Sounds/"

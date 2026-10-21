@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "headCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSource": "Sources/NxlvKit/Lemmings3Runtime.swift",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "runtimeLibrarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+  "sourceExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+  "sourceBasis": {
+    "resourceRoot": ".build/l3-mole-verification/source-left-facing",
+    "resourceScope": "The Mole probe root contains 561 installed resource files plus 15 extra files. It changes LEVELS/LEVEL101.DAT, PERM101.OBS and TEMP101.OBS to create probe scenes. The bundled level 101 route audit uses the unmodified installed resource tree.",
+    "level001SHA256": "7f4e6fd9b04f6fbcfa4fe3fa6a563458d928ea3ce08f1664a2d633767b5e8c96",
+    "sourceTrace": "original-followup-traces.json",
+    "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "coordinateMapping": {
+      "centreX": "left + 8",
+      "feetY": "top + 18"
+    },
+    "postDropPatrol": {
+      "firstDivergence": {
+        "tick": 184,
+        "sourceCentreFeet": [115, 192],
+        "runtimeCentreFeet": [116, 192]
+      },
+      "sourceCentreXByTick182Through190": [112, 114, 115, 117, 118, 119, 120, 122, 126],
+      "runtimeCentreXByTick182Through190": [112, 114, 116, 116, 118, 120, 120, 122, 124]
+    }
+  },
+  "sourceTraces": {
+    "steel-left-facing": {
+      "trace": "current-main-steel-left-facing-trace-4bf3bddc-2026-10-20.json",
+      "traceSHA256": "d852c3dd2742331bb220c6c27358b88d36a6bb80dee6cbd18663ddbd49189f07",
+      "exactPositionMatches": 139,
+      "matchingTickRanges": [[25, 30], [36, 153], [173, 187]]
+    },
+    "steel-air-gap": {
+      "trace": "current-main-steel-air-gap-trace-4bf3bddc-2026-10-20.json",
+      "traceSHA256": "29f337b7b66cf8b878fe792a748c00eb6eff85d7eede8c6c7e636ff4fdcaedfb",
+      "exactPositionMatches": 179,
+      "matchingTickRanges": [
+        [4, 4], [6, 6], [25, 30], [36, 183], [186, 186], [188, 189],
+        [195, 195], [198, 198], [200, 201], [207, 207], [210, 210],
+        [212, 213], [219, 219], [222, 222], [224, 225], [231, 231],
+        [234, 234], [236, 237], [243, 243], [246, 246], [248, 248], [253, 253]
+      ]
+    }
+  },
+  "fixtureAudit": {
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "resourceRelease": "installed Mac build 76. The build 85 comparison matches its 561 L3 files. Build 93 records byte-identical content to build 2.0.7, but this audit does not directly hash that package against build 76.",
+    "level101DAT_SHA256": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1",
+    "rawReport": "current-bundled-fixture-audit-build76-4bf3bddc-2026-10-20.json",
+    "rawReportFileSHA256": "979987f77cd59aa4e61067e52a821c331f8dd3a388eb0d9064ab7c9564f26067",
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "routeFailures": 17,
+    "failedLevelIdentities": [107, 206, 213, 229]
+  },
+  "strictCompletionGate": {
+    "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "resourceRelease": "Installed Mac build 76",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULECACHE_PATH=/private/tmp/lemmings-clang-module-cache LEMMINGS_TEST_AUDIO=muted L3_TEST_LIBRARY_DIR=.build/l2-completion L3_PORTS_ROOT='/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD' zsh Scripts/verify-l3-completion.sh --require-all",
+    "exitCode": 1,
+    "expectedOpenGate": true,
+    "passedChecks": [
+      "Mole drop-delay replay state hash",
+      "322 campaign fixture hashes and coverage manifest",
+      "Same-level refresh, double replay, verifier integration and changed-source rejection",
+      "Strict negative cases"
+    ],
+    "firstStandaloneFailure": {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+      "result": "No win at tick 2300, 0 saved and 11 lost"
+    },
+    "firstCampaignFailure": {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-1.json",
+      "result": "No win at tick 9660, 0 saved and 2 lost"
+    }
+  },
+  "probeResourceComparison": {
+    "bundleTreeFileCount": 561,
+    "probeTreeFileCount": 576,
+    "addedProbeFiles": 15,
+    "missingBundleFiles": 0,
+    "changedFiles": [
+      {
+        "path": "LEVELS/LEVEL101.DAT",
+        "bundleSHA256": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1",
+        "probeSHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c"
+      },
+      {
+        "path": "LEVELS/PERM101.OBS",
+        "bundleSHA256": "a3e151b29fa7f8ec9cf37d68d87eae9f70c554b587f893b5b8e4f9045a1ae47e",
+        "probeSHA256": "ccae27cab491b0308394ec9a5bb5d8070ae06f5cfa075fae8ca8f2d9b627e09e"
+      },
+      {
+        "path": "LEVELS/TEMP101.OBS",
+        "bundleSHA256": "c434ad64d50f7b2be6581c4c5d295ef8bc2dbdd2909a83678aa48c88ae2c44fd",
+        "probeSHA256": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8"
+      }
+    ]
+  },
+  "probeResourceAudit": {
+    "resourceRoot": ".build/l3-mole-verification/source-left-facing",
+    "level101DAT_SHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+    "rawReport": "current-mole-probe-fixture-audit-7d83fce4-2026-10-20.json",
+    "rawReportFileSHA256": "98c88470318f6a98db5cfca073d140617234abd4344d74bee42696db41ebcabf",
+    "fixtures": 416,
+    "exactDoubleReplays": 398,
+    "routeFailures": 18,
+    "note": "This report used a Mole source-probe resource set and is not the bundled route audit. Its different level 101 data caused the route count to differ."
+  },
+  "interpretation": "The current-source runtime matches long sections of the isolated Mole source-probe traces. It diverges at tick 184 after the air-gap drop and does not establish the exact Mole excavation mask or complete source rules. The bundled-data fixture audit is a separate check.",
+  "validation": {
+    "command": "python3 Scripts/verify-l3-mole-trace.py",
+    "result": "PASS current source traces and 399/416 fixtures on the installed bundled L3 resource tree"
+  }
+}

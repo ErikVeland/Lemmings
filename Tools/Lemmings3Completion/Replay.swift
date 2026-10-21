@@ -67,7 +67,7 @@ struct L3Replay: Codable {
             text(creature.digDirection.rawValue)
             for value in [creature.id, creature.kind.rawValue, creature.x, creature.y, creature.direction,
                           creature.alive ? 1 : 0, creature.target ?? -1, creature.cooldown, creature.age,
-                          creature.moleDropDelay] { number(value) }
+                          creature.moleDropDelay, creature.molePatrolTick] { number(value) }
         }
         for trap in c.traps.sorted(by: { $0.id < $1.id }) { number(trap.id); number(game.trapFrame(id: trap.id)) }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()

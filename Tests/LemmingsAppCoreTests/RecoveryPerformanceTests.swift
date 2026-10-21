@@ -60,6 +60,19 @@ import Testing
         }
     }
 
+    @Test func lemmings3RecoveryHashIncludesMolePatrolPhase() throws {
+        let ground = [UInt16](repeating: 0x20, count: 64 * 48)
+        let ready = Lemmings3Runtime.Creature(id: 1, kind: .mole, x: 32, y: 40)
+        var patrolling = ready
+        patrolling.molePatrolTick = 3
+        func game(_ creature: Lemmings3Runtime.Creature) throws -> Lemmings3Runtime {
+            try Lemmings3Runtime(configuration: .init(width: 64, height: 48, attributes: ground,
+                entrance: .init(x: 4, y: 40), exits: [.init(x: 56, y: 40)], total: 1,
+                releaseInterval: 1, releaseDelay: 1000, creatures: [creature]))
+        }
+        #expect(L3RunRecovery.stateHash(try game(ready)) != L3RunRecovery.stateHash(try game(patrolling)))
+    }
+
     @Test func busyAutosavesCoalesceAndSessionSaveRemainsOrdered() throws {
         let storage = try AppStorage.temporary(named: "coalesced-recovery")
         defer { storage.removeTemporaryFiles() }

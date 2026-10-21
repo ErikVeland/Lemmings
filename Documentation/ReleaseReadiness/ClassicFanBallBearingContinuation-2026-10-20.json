@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-20",
+  "scope": "Bounded MVP first-win search for one unresolved bundled Classic fan level. No route candidate was produced.",
+  "source": {
+    "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesCachedOriginMain": true,
+    "liveMainRefreshed": false,
+    "worktreeWasDirty": true,
+    "archive": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0283-GARJEN03.zip",
+    "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46"
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-283",
+    "levelID": "GARJEN03.dat#2",
+    "archiveOrdinal": 3,
+    "title": "Ball Bearing",
+    "initialStateHash": "006bcccc04d87600f2358c03af5f787623f95bdc81e6c00ca9c06efca25b19d0",
+    "lemmings": 80,
+    "requiredToSave": 80,
+    "skills": {
+      "climber": 61,
+      "builder": 1,
+      "basher": 1,
+      "miner": 1,
+      "digger": 1
+    }
+  },
+  "solver": {
+    "binary": ".build/classic-fan-solver/ClassicSolver",
+    "binarySHA256": "abeb10b40e58257dcf3b91672d9a46701ca394046b140781f86dbcf519e3c4c5",
+    "library": ".build/classic-fan-solver/build/libNxlvKit.dylib",
+    "librarySHA256": "9e478bdf9552f7c16e774d640be52c251d7f7b7501b2b4ce7a82a6565382f514",
+    "command": "ClassicSolver fan:<archive> 1 <output> --member GARJEN03.dat#2 --width 4096 --seconds 120 --prefer-progress --rescue-quota-distance --partial-out",
+    "profile": {
+      "width": 4096,
+      "budgetSeconds": 120,
+      "ranking": "prefer-progress with rescue-quota distance",
+      "clock": "Golems default",
+      "fallback": 170,
+      "refire": 120
+    }
+  },
+  "result": {
+    "status": "unsolved",
+    "expandedStates": 304681,
+    "solverSeconds": 120,
+    "statesPerSecond": 2540.7,
+    "bestSaved": "8/80",
+    "winningCandidates": 0,
+    "acceptedRouteClosures": 0,
+    "partialCandidateEvents": 0
+  },
+  "closureStatus": {
+    "classicFanRoutes": "2403/6020",
+    "openClassicFanRoutes": 3617,
+    "routeVelocityDuringAttempt": "0 accepted routes per 120 solver seconds",
+    "observedSnapshotVelocity": "0 accepted routes per day across 2026-10-16 to 2026-10-20"
+  },
+  "limits": [
+    "This bounded search does not show that the level has no solution.",
+    "The search did not produce a route replay for strict validation.",
+    "Expanded states and solver time measure search throughput, not route closure velocity.",
+    "The accepted route count remains based on the 2026-10-16 full fan audit."
+  ]
+}

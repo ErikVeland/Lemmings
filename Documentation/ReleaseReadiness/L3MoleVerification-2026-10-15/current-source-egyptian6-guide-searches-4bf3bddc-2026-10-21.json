@@ -1,0 +1,97 @@
+{
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "date": "2026-10-21",
+  "engineSourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+  "level": {
+    "identity": "Egyptian 6",
+    "number": 206,
+    "levelDAT": "Sources/Ports/LEM3CD/LEVELS/LEVEL206.DAT",
+    "levelDATSHA256": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad",
+    "retainedFixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+    "retainedFixtureSHA256": "145b3789bfe8b22ed0c50aa814c1ee7ef09b2feae308b89213a70cca8c81bd2e",
+    "population": 20
+  },
+  "scope": "Two bounded first-win continuations from a secondary walkthrough-derived action prefix. MVP asks for any verified winning route; these searches do not optimise survivors or rank routes.",
+  "searches": [
+    {
+      "seedFile": ".build/l3-solver/egyptian6-guide-seed-20261021.json",
+      "seedSHA256": "21c3fe89710c3c41a68b1aaaae793ffcd53b5ea39c3140d25b06ae69871cf2ed",
+      "seedThroughTick": 925,
+      "seedInputs": [
+        {"tick": 527, "action": "use", "lemming": 1, "direction": "up"},
+        {"tick": 850, "action": "use", "lemming": 1, "direction": "right"}
+      ],
+      "budgetSeconds": 120,
+      "actualSeconds": 121,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "seedPolicy": "Refresh engine state, then continue the source-guided prefix.",
+      "expandedStates": 1023569,
+      "decisionPoints": 613,
+      "depth": 653,
+      "bestSaved": 0,
+      "lost": 0,
+      "winningRoute": false
+    },
+    {
+      "seedFile": ".build/l3-solver/egyptian6-guide-mole-seed-20261021.json",
+      "seedSHA256": "3f8557da0157ec623512246ed1707e60ff4ad9c005a0917aabdb02ca2667f589",
+      "seedThroughTick": 1110,
+      "seedInputs": [
+        {"tick": 527, "action": "use", "lemming": 1, "direction": "up"},
+        {"tick": 850, "action": "use", "lemming": 1, "direction": "right"},
+        {"tick": 1060, "action": "use", "lemming": 1, "direction": "up"},
+        {"tick": 1109, "action": "walker", "lemming": 1},
+        {"tick": 1110, "action": "jumper", "lemming": 1}
+      ],
+      "budgetSeconds": 120,
+      "actualSeconds": 121,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "seedPolicy": "Refresh engine state, then continue the source-guided stack, Shimmy and sacrificial Mole-trigger prefix.",
+      "expandedStates": 1042651,
+      "decisionPoints": 684,
+      "depth": 724,
+      "bestSaved": 0,
+      "lost": 0,
+      "winningRoute": false
+    }
+  ],
+  "aggregate": {
+    "searchCount": 2,
+    "expandedStates": 2066220,
+    "solverSeconds": 242,
+    "statesPerSecond": 8538,
+    "newWinningRoutes": 0,
+    "acceptedRoutesBefore": 86,
+    "acceptedRoutesAfter": 86,
+    "routeScope": 90,
+    "openStandaloneRoutes": [107, 206, 213, 229]
+  },
+  "runtimeLibrarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+  "solverSHA256": "c789f02f16f60d08b08846b6991c1058d01260789daed5823e440e3b9092ad97",
+  "observations": [
+    "The current runtime accepts the guide-derived vertical step, Shimmy traversal, four-brick stack, Walker and Jumper sequence.",
+    "The lead actor is sacrificed as the Mole trigger. In the native trace, the Mole tunnels down-left, contacts protected terrain and then loops around the same region instead of progressing to the lower area described by the walkthrough.",
+    "The walkthrough is secondary evidence and its coordinate-free instructions do not prove original-engine collision or update rules. The DOSBox headless attempt did not produce a valid actor trace. Do not change the production Mole rule from this evidence alone."
+  ],
+  "routeVelocity": {
+    "latestAcceptedClosureSnapshot": "2026-10-21",
+    "acceptedClosuresSincePriorSnapshot": 0,
+    "priorSnapshot": "2026-10-16",
+    "snapshotWindowCalendarDays": 5,
+    "observedSnapshotRateRoutesPerDay": 0.2,
+    "interpretation": "The rate is based on one Classic fan route accepted on 21 October and no closure in this L3 work. It is a sparse cross-family snapshot, not an L3 velocity estimate or completion forecast."
+  },
+  "limits": [
+    "Bounded UNSOLVED searches do not show that the level is impossible.",
+    "Search-state throughput is not winning-route velocity.",
+    "The original-engine Mole path after the built-brick trigger remains unverified.",
+    "No route, source-behaviour or engine-fidelity gate closed."
+  ],
+  "schemaVersion": 1
+}

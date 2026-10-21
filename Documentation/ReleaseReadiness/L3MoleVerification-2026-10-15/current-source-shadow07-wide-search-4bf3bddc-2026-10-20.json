@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "level": {
+    "number": 107,
+    "name": "Shadow 7",
+    "source": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD/LEVELS/LEVEL107.DAT",
+    "sourceSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+    "fixtureSHA256": "6d54cd6410096fd66e3a5cb48b81c6c9923f1da733334cc79dc5d0a3e3bffb69",
+    "currentInitialStateHash": "6e739e735968ffe1979a5079057c83b28c2f0e8a0a70014b6d37a085da984581"
+  },
+  "bundleResourceMatch": {
+    "resourceRelease": "Installed Mac build 76. Build 85 content comparison matches this level DAT hash.",
+    "levelDAT_SHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "matchesInstalledBundle": true
+  },
+  "search": {
+    "command": "L3_PORTS_ROOT='/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD' .build/l3-solver/solver 107 --budget 120 --beam 8192 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-source/shadow07-wide-current-2026-10-20",
+    "solverSHA256": "106b59f2f0a43539059ebd72299f9c060fa390c2ae4f363885696fc418605c35",
+    "librarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+    "budgetSeconds": 120,
+    "beamWidth": 8192,
+    "toolSiteCellPixels": 2,
+    "pairedActors": true,
+    "fewerInputsFirst": true,
+    "decisionPoints": 4827,
+    "searchDepth": 4867,
+    "roundsToBeam": 1,
+    "expandedStates": 942577,
+    "elapsedSeconds": 124,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false
+  },
+  "outcome": "The wider current-source search found no MVP winning route. The bounded result does not show that Shadow 7 is impossible. The route remains open."
+}

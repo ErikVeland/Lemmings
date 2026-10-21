@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "scope": "First-win MVP search for standalone Level 107 from the level entrance with a wider beam.",
+  "level": {
+    "number": 107,
+    "identity": "Shadow 7",
+    "data": "Sources/Ports/LEM3CD/LEVELS/LEVEL107.DAT",
+    "dataSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "population": 20,
+    "requiredToSave": 5
+  },
+  "runtime": {
+    "source": "Sources/NxlvKit/Lemmings3Runtime.swift",
+    "sourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "solverSHA256": "c789f02f16f60d08b08846b6991c1058d01260789daed5823e440e3b9092ad97"
+  },
+  "search": {
+    "command": ".build/l3-solver/solver 107 --budget 120 --beam 16384 --population 20 --tool-site-cell 2 --fewer-inputs-first --paired-actors --out .build/l3-solver/current-entrance-107-beam16384",
+    "budgetSeconds": 120,
+    "actualSeconds": 120,
+    "beamWidth": 16384,
+    "toolSiteCellPixels": 2,
+    "fewerInputsFirst": true,
+    "pairedActors": true,
+    "decisionPoints": 4827,
+    "depth": 4867,
+    "expandedStates": 810923,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false,
+    "replayCandidate": false
+  },
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "limitation": "This bounded entrance search does not prove that Level 107 has no solution. The standalone route remains open."
+  }
+}

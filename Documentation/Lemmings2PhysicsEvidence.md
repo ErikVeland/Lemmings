@@ -1,6 +1,15 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 17 October 2026 at `main` revision `368e7e72`. All twelve
+The source-engine evidence below was last compared on 17 October 2026 at
+`main` revision `368e7e72`. On 20 October, the current checkout `4bf3bddc`
+passed the strict route gate again: 120 standalone routes, 70 carry-over
+variants, twelve complete tribe chains and strict negative cases. The L2
+runtime source hash is unchanged. This route recheck does not close the
+original-engine gaps described below; DOS tick alignment, continuous actor
+parity and full rendering fidelity remain open. See the [current-source replay
+record](ReleaseReadiness/L2CurrentSourceReplay-2026-10-20.json).
+
+All twelve
 tribes, 51 skills, 15 object types and four practice maps are enabled. The strict
 completion gate verified all 120 winning routes and 70 carry-over variants
 twice, with continuous ten-level chains for all twelve tribes. The runtime suite

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-20",
+  "scope": "Bounded current-source first-win MVP search for one bundled Classic fan level.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesOriginMain": true,
+    "worktreeWasDirty": true,
+    "identity": "fan:lldb-303/TWPAK01.dat#7",
+    "title": "Lemmings Of Mass Destruction",
+    "archive": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0303-TWPAK01.zip",
+    "archiveSHA256": "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99",
+    "initialStateHash": "94c1a38f42b01470a00f65f973ed98cd22c32397ea0a5a22d592446ebe63e003",
+    "population": 80,
+    "requiredToSave": 8
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "command": ".build/classic-solver/ClassicSolver 'fan:/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0303-TWPAK01.zip' 8 <output> --resources '/Applications/Ultimate Lemmings.app/Contents/Resources' --member 'TWPAK01.dat#7' --width 2048 --seconds 10 --fallback 10 --refire 5 --golems-clock --rescue-quota-distance --prefer-progress --adaptive-rate --partial-out",
+    "budgetSeconds": 10,
+    "solverSeconds": 4,
+    "beamWidth": 2048,
+    "expandedStates": 15414
+  },
+  "outcome": {
+    "result": "UNSOLVED; best saved 0/8; tick 375; 80 released, zero lost, 80 active",
+    "winningRoute": false,
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesBefore": "2403/6020",
+    "classicFanRoutesAfter": "2403/6020",
+    "limitation": "This bounded search does not prove that the level has no solution. Its contribution is search throughput only."
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "branch": "codex/bundled-engine-recreation-main",
+  "date": "2026-10-20",
+  "fixtureRefresh": {
+    "audit": "current-cycle12-fixture-audit-4bf3bddc-2026-10-20.json",
+    "auditSHA256": "bac74787774faee4439c9e6e9c0b7cccca2c7763082da46fb637726b70e14778",
+    "exactAfterRefresh": 399,
+    "exactRetainedRoutes": 196,
+    "failuresByLevel": {
+      "107": 4,
+      "206": 5,
+      "213": 5,
+      "229": 3
+    },
+    "fixtures": 416,
+    "newlyAcceptedRoutes": 0,
+    "remainingFailedSchedules": 17,
+    "routeCoverage": {
+      "carried": {
+        "accepted": 313,
+        "total": 326
+      },
+      "standalone": {
+        "accepted": 86,
+        "total": 90
+      }
+    },
+    "staleWinningRoutesDoubleReplayedAndRefreshed": 203
+  },
+  "molePatrol": {
+    "change": "After a Mole lands from a downward tunnel, use the source-derived 12-tick horizontal cadence [1,1,1,1,0,1,2,1,1,1,2,4] after its initial 2-pixel step.",
+    "recoveryStateHashTest": "Not run: the SwiftPM target build fails in unrelated MacArrowWrapTests.swift type checking.",
+    "replayStateHash": "PASS: includes Mole patrol phase.",
+    "runtimeRegression": "PASS: grounded 2-1-1 control and post-landing 12-tick sequence.",
+    "traces": {
+      "steelAirGap": {
+        "cachedMainMatches": 179,
+        "firstPostDropMismatchTick": 249,
+        "matches": 225,
+        "positions": 344,
+        "postDropMatchesThroughTick": 248,
+        "sha256": "fe6c3a5294d3ac3bd77e0e18186633abeb1c16cb0c9d16ffd238d5acf8c1d9e8",
+        "trace": "current-cycle12-air-gap-4bf3bddc-2026-10-20.json"
+      },
+      "steelLeftFacing": {
+        "cachedMainMatches": 139,
+        "matches": 139,
+        "positions": 329,
+        "sha256": "a73ccb921d55c55e2cbef09d7de67c5c9888bed0efb2b9c74fecdb3a2cc55660",
+        "trace": "current-cycle12-left-facing-4bf3bddc-2026-10-20.json"
+      }
+    }
+  },
+  "resources": {
+    "level107SHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD"
+  },
+  "runtimeLibrarySHA256": "79bef013f333dc0d8ca4f6d8d9bd213bacacfd5e5d1cfd228b5fba14839bd21b",
+  "runtimeSource": "Sources/NxlvKit/Lemmings3Runtime.swift",
+  "runtimeSourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+  "schemaVersion": 1,
+  "validation": {
+    "allFixtureAudit": "PASS 399 exact double replays; 17 retained input schedules fail.",
+    "appCoreRecoveryHashTest": "Build blocked by unrelated MacArrowWrapTests.swift compiler type-check failure.",
+    "campaignManifest": "PASS 322 fixtures.",
+    "level113Completion": "PASS saved 10, lost 0, reserve 10.",
+    "runtimeSuite": "PASS with muted test audio.",
+    "strictCampaignGate": "Open at level 107 and carried fixture 107-1.",
+    "currentSourceGateRerun": {
+      "date": "2026-10-20",
+      "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+      "runtimeSourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+      "runtimeLibrarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+      "buildCommand": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULECACHE_PATH=/private/tmp/lemmings-swift-module-cache zsh Scripts/build-classic-solver.sh",
+      "gateCommand": "L3_TEST_LIBRARY_DIR=.build/classic-solver LEMMINGS_TEST_AUDIO=muted DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULECACHE_PATH=/private/tmp/lemmings-swift-module-cache zsh Scripts/verify-l3-completion.sh --require-all",
+      "manifestAndRefreshChecks": "PASS 322 campaign fixture hashes; replay state hash includes Mole movement state; same-level refresh, double replay and strict negative gates pass.",
+      "standaloneGate": "FAIL at 107.json: L3 replay identity, initial state or input order differs.",
+      "carriedGate": "FAIL at 107-1.json: L3 replay identity, initial state or input order differs.",
+      "routeRefreshProbes": [
+        "Derive 107 at population 20 from 107.json with --refresh-engine: source inputs do not win.",
+        "Derive 107 at population 1 from 107-1.json with --refresh-engine: source inputs do not win."
+      ],
+      "populationOneSearch": "120-second first-win search, beam 4096, 2-pixel tool-site sampling: 150061 states, best saved 0/1, no replay candidate.",
+      "populationOneSearchRecord": "current-source-level107-pop1-search-4bf3bddc-2026-10-20.json",
+      "populationTwentyEntranceSearch": "121-second first-win search from the entrance, beam 8192, 2-pixel tool-site sampling and paired actors: 862829 states, best saved 0/5, no replay candidate.",
+      "populationTwentyEntranceSearchRecord": "current-source-level107-entrance-search-4bf3bddc-2026-10-20.json",
+      "widerEntranceSearch": "120-second first-win search from the entrance, beam 16384, 2-pixel tool-site sampling and paired actors: 810923 states, best saved 0/5, no replay candidate.",
+      "widerEntranceSearchRecord": "current-source-level107-entrance-beam16384-search-4bf3bddc-2026-10-20.json",
+      "routeClosures": 0
+    }
+  },
+  "velocity": {
+    "newlyAcceptedRoutes": 0,
+    "routeRate": "No new route-closure interval. No ETA supported.",
+    "followUpSearches": {
+      "count": 3,
+      "expandedStates": 1823813,
+      "solverSeconds": 361,
+      "statesPerSecond": 5052.1,
+      "acceptedRoutes": 0,
+      "records": [
+        "current-source-level107-pop1-search-4bf3bddc-2026-10-20.json",
+        "current-source-level107-entrance-search-4bf3bddc-2026-10-20.json",
+        "current-source-level107-entrance-beam16384-search-4bf3bddc-2026-10-20.json"
+      ]
+    },
+    "combinedCycleSearches": {
+      "count": 10,
+      "expandedStates": 9517308,
+      "solverSeconds": 1208,
+      "statesPerSecond": 7878.6,
+      "acceptedRoutes": 0,
+      "meaning": "Search throughput only; this is not route-closure velocity."
+    }
+  }
+}

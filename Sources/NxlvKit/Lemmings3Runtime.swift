@@ -3,6 +3,8 @@ import Foundation
 /// Separate Chronicles simulation. Movement constants are experimental until
 /// compared with original-engine traces. No L1 or L2 physics are reused.
 public struct Lemmings3Runtime: Sendable {
+    private static let molePatrolCadence = [1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 2, 4]
+
     public enum Action: String, CaseIterable, Sendable { case walker, blocker, jumper, use, drop }
     public enum State: String, Sendable { case walking, falling, floating, swimming, jumping, climbing, shimmying, blocking, building, digging, drowning, trapped, exiting, saved, dead }
     public enum Tool: Int, Sendable, CaseIterable {
@@ -85,6 +87,7 @@ public struct Lemmings3Runtime: Sendable {
         public var cooldown = 0
         public var age = 0
         public var moleDropDelay = 0
+        public var molePatrolTick = -2
         public var digDirection: Direction
         public var width: Int { kind == .buzzard ? 48 : (kind == .potato ? 32 : 16) }
         public var height: Int { kind == .buzzard ? 48 : (kind == .mole ? 18 : 24) }
@@ -600,7 +603,7 @@ public struct Lemmings3Runtime: Sendable {
             var creature = creatures[index]
             creature.age += 1; creature.cooldown = max(0, creature.cooldown - 1)
             if creature.kind == .mole {
-                if creature.digDirection.dy != 0 || creature.age % 3 != 0 { moveMole(&creature) }
+                moveMole(&creature)
             } else if creature.age % 2 == 0 {
                 if creature.kind == .buzzard {
                     let target = lemmings.filter { $0.active && ![.exiting, .drowning, .trapped].contains($0.state) }
@@ -702,12 +705,23 @@ public struct Lemmings3Runtime: Sendable {
             if lands {
                 creature.direction = 1
                 creature.digDirection = .right
+                creature.molePatrolTick = -1
                 creature.age += 1
             }
             return
         }
         if creature.digDirection.dy == 0 {
-            let nextX = creature.x + creature.direction * 2
+            let horizontalStep: Int
+            if creature.molePatrolTick == -1 {
+                horizontalStep = 2
+                creature.molePatrolTick = (creature.age + 1) % 12
+            } else if creature.molePatrolTick >= 0 {
+                horizontalStep = Self.molePatrolCadence[creature.molePatrolTick % Self.molePatrolCadence.count]
+                creature.molePatrolTick += 1
+            } else {
+                horizontalStep = creature.age % 3 == 1 ? 2 : 1
+            }
+            let nextX = creature.x + creature.direction * horizontalStep
             let current = patrolCells(x: creature.x, y: creature.y)
             let next = patrolCells(x: nextX, y: creature.y)
             let currentBody = cells(x: creature.x, y: creature.y)

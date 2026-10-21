@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "branch": "codex/bundled-engine-recreation-main",
+  "candidateOnly": true,
+  "runtimeSource": "Sources/NxlvKit/Lemmings3Runtime.swift",
+  "runtimeSourceSHA256": "80ebe7f42d6955b3acfd6c0b016b04fe19b3bd468d5d9f48f9ce47f3e789f1aa",
+  "runtimeLibrarySHA256": "9dfd38f62c729e500a3657eac29f40d99fc5aec985d6d9ee2f8e4f3a44d47c11",
+  "resources": {
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "level107SHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3"
+  },
+  "candidateChange": {
+    "behaviour": "Grounded horizontal Mole patrol uses a 2-1-1 pixel cadence.",
+    "focusedRegression": "PASS: positions 42, 43 and 44 over three ticks.",
+    "moleTraceMatches": {
+      "steelAirGap": {
+        "candidate": 193,
+        "positions": 344,
+        "cachedMain": 179
+      },
+      "steelLeftFacing": {
+        "candidate": 139,
+        "positions": 329,
+        "cachedMain": 139
+      }
+    },
+    "airGapTrace": {
+      "sourceTrace": "original-followup-traces.json",
+      "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+      "candidateTrace": "current-mole-cadence-candidate-air-gap-trace-4bf3bddc-2026-10-20.json",
+      "candidateTraceSHA256": "d44ccda45eb8a762182d6b3c62142f040abd3e14538018c7d2a9b14c1666252d",
+      "postDropCandidateMatchesThroughTick": 184,
+      "firstDivergence": {
+        "tick": 185,
+        "sourcePosition": [
+          117,
+          192
+        ],
+        "candidatePosition": [
+          116,
+          192
+        ]
+      },
+      "sourceCentreXByTick182Through190": [
+        112,
+        114,
+        115,
+        117,
+        118,
+        119,
+        120,
+        122,
+        126
+      ],
+      "candidateCentreXByTick182Through190": [
+        112,
+        114,
+        115,
+        116,
+        118,
+        119,
+        120,
+        122,
+        123
+      ]
+    }
+  },
+  "fixtureAudit": {
+    "report": "current-mole-cadence-candidate-fixture-audit-4bf3bddc-2026-10-20.json",
+    "reportSHA256": "979987f77cd59aa4e61067e52a821c331f8dd3a388eb0d9064ab7c9564f26067",
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "staleIdentityWins": 0,
+    "failedSchedules": 17,
+    "failuresByLevel": {
+      "107": 4,
+      "206": 5,
+      "213": 5,
+      "229": 3
+    }
+  },
+  "refreshedExistingRoutes": [
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
+      "population": 20,
+      "saved": 10,
+      "ticks": 443,
+      "stateHash": "96f43b2ca253c6bb0cf272aac49eae18203d899e10c5b77af45d49658725b3d1"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-1.json",
+      "population": 1,
+      "saved": 1,
+      "ticks": 119,
+      "stateHash": "77771f2b03ebdf728f11049e527625eec2d13f826e8c46e55dee426678f63870"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-21.json",
+      "population": 21,
+      "saved": 10,
+      "ticks": 443,
+      "stateHash": "74650331b8dc7f085fbd684d1af25e83a82db8a2263d2ede9d2c49617ec4dd30"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-22.json",
+      "population": 22,
+      "saved": 10,
+      "ticks": 443,
+      "stateHash": "33704dfd34ac9f08c2c01d1f56571c2965e27e003aed6e7b89cf34bd496493c2"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-25.json",
+      "population": 25,
+      "saved": 10,
+      "ticks": 443,
+      "stateHash": "01203fce9a55dab545d80c8782878dc027add977679db6f15df670494370e7c9"
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/113-26.json",
+      "population": 26,
+      "saved": 10,
+      "ticks": 443,
+      "stateHash": "6c52999aaa985a17509248e726a1202b680ab0805ebf5db319ebca44fe585bac"
+    }
+  ],
+  "validation": {
+    "runtimeSuite": "PASS",
+    "campaignManifest": "PASS: 322 fixture hashes",
+    "strictCompletionAndCampaign": "FAIL as expected on open carried route 107-1",
+    "level107Searches": [
+      {
+        "profile": "standard",
+        "budgetSeconds": 60,
+        "beam": 1024,
+        "expandedStates": 389659,
+        "expandedStatesPerSecond": 6494,
+        "saved": 0,
+        "result": "UNSOLVED"
+      },
+      {
+        "profile": "paired actors with 16-pixel tool-site sampling",
+        "budgetSeconds": 60,
+        "beam": 1024,
+        "expandedStates": 592236,
+        "expandedStatesPerSecond": 9871,
+        "saved": 0,
+        "result": "UNSOLVED"
+      },
+      {
+        "profile": "paired actors with 2-pixel tool-site sampling",
+        "budgetSeconds": 180,
+        "elapsedSeconds": 181,
+        "beam": 8192,
+        "expandedStates": 1274957,
+        "expandedStatesPerSecond": 7044,
+        "decisionPoints": 4827,
+        "saved": 0,
+        "result": "UNSOLVED"
+      }
+    ],
+    "routeCoverage": {
+      "accepted": 86,
+      "total": 90,
+      "newClosures": 0,
+      "open": 4
+    }
+  },
+  "velocity": {
+    "newlyAcceptedRoutes": 0,
+    "l3Rate": "No new rate interval. This same-day refresh does not support a rate or ETA.",
+    "classicFanSnapshotRate": "0 routes per day across 16-20 October snapshots."
+  }
+}

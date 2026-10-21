@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-20",
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "source": {
+    "engine": "Lemmings 3",
+    "level": 206,
+    "identity": "Egyptian 6",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "installedBundleVersion": "1.9.1",
+    "installedBundleBuild": "76",
+    "levelDAT": "LEVELS/LEVEL206.DAT",
+    "levelDATSHA256": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad"
+  },
+  "solver": {
+    "binary": ".build/l3-solver/solver",
+    "binarySHA256": "c789f02f16f60d08b08846b6991c1058d01260789daed5823e440e3b9092ad97",
+    "library": ".build/l3-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "command": "L3_PORTS_ROOT='/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD' .build/l3-solver/solver 206 --budget 120 --beam 16384 --fewer-inputs-first --tool-site-cell 2 --out .build/l3-solver/level206-single-actor-mvp",
+    "profile": {
+      "population": 20,
+      "beamWidth": 16384,
+      "toolSiteCell": 2,
+      "pairedActors": false,
+      "ranking": "fewer inputs first",
+      "depthLimit": 5076,
+      "depthPolicy": "when --depth is omitted, the solver sets maxDepth to decisionPoints + 40",
+      "budgetSeconds": 120
+    }
+  },
+  "result": {
+    "status": "unsolved",
+    "elapsedSolverSeconds": 127,
+    "expandedStates": 1454392,
+    "statesPerSecond": 11451.9,
+    "decisionPoints": 5036,
+    "deepestCandidate": 5076,
+    "bestSaved": 0,
+    "bestLost": 0,
+    "winningCandidates": 0,
+    "replayPromotions": 0
+  },
+  "closure": {
+    "standaloneRoutes": "86/90",
+    "newRouteClosures": 0,
+    "openLevel206": true,
+    "routeVelocityDuringAttempt": "0 accepted routes in 127 solver seconds"
+  },
+  "limits": [
+    "This search changes the search profile only. It does not prove that Level 206 has no solution.",
+    "No candidate replay was produced for strict validation.",
+    "The installed build 76 resource tree is not the 2.1 build 93 app package."
+  ]
+}

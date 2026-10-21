@@ -494,6 +494,33 @@ do {
     try require(dropGame.creatures[0].x == 112 && dropGame.creatures[0].y == 192 &&
         dropGame.creatures[0].digDirection == .right,
         "L3 Mole falls to the floor and resumes patrol")
+    var patrolGround = Array(repeating: UInt16(0x1000), count: 128 * 64)
+    for y in 48..<64 { for x in 0..<128 { patrolGround[y * 128 + x] = 0x20 } }
+    var patrolMole = Lemmings3Runtime.Creature(id: 0, kind: .mole, x: 40, y: 48)
+    patrolMole.age = 183
+    var patrolGame = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+        attributes: patrolGround, entrance: .init(x: 16, y: 40), exits: [.init(x: 112, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000, creatures: [patrolMole]))
+    for expectedX in [42, 43, 44] {
+        patrolGame.step()
+        try require(patrolGame.creatures[0].x == expectedX,
+            "L3 Mole grounded patrol follows the source 2-1-1 pixel cadence")
+    }
+    var landingMole = Lemmings3Runtime.Creature(id: 0, kind: .mole, x: 40, y: 44)
+    landingMole.digDirection = .down
+    var landingGame = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+        attributes: patrolGround, entrance: .init(x: 16, y: 40), exits: [.init(x: 112, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000, creatures: [landingMole]))
+    landingGame.step()
+    landingGame.step()
+    try require(landingGame.creatures[0].x == 42, "L3 Mole starts its source cadence after landing")
+    var landingX = landingGame.creatures[0].x
+    for step in [0, 1, 2, 1, 1, 1, 2, 4, 1, 1, 1, 1] {
+        landingGame.step()
+        landingX += step
+        try require(landingGame.creatures[0].x == landingX,
+            "L3 Mole post-landing cadence follows the source 12-tick movement pattern")
+    }
     var towardWallTerrain = Array(repeating: UInt16(0x1000), count: 320 * 200)
     for y in 192..<200 { for x in 0..<320 { towardWallTerrain[y * 320 + x] = 0x20 } }
     for y in 134..<152 { for x in 104..<110 { towardWallTerrain[y * 320 + x] = 0x20 } }

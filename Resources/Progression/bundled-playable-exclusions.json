@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "exclusions": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-509",
+        "levelID": "KillerMaster 1 Havoc 2.dat#7"
+      },
+      "pack": "0509-KillerMasters-Lemmings-1-Havoc.zip",
+      "archiveSHA256": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+      "member": "KillerMaster 1 Havoc 2.dat#7",
+      "title": "Choose your lucky PASSWORD!",
+      "initialStateHash": "44a67475e6416d92f01221d7bcf0410fa33efdcc6a49eca0f4691a60dc680eed",
+      "reason": "The exact source level has no exit object or trigger.",
+      "decisionDate": "2026-10-21",
+      "decision": "Retain the source pack and exclude this level from playable bundled scope."
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-20",
+  "scope": "One bounded first-win follow-up on a low-quota bundled fan level. This search does not optimise a winning route.",
+  "source": {
+    "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesCachedOriginMain": true,
+    "liveMainRefreshed": false,
+    "worktreeWasDirty": true,
+    "archive": "0137-weirdy05-version-2.zip",
+    "archiveSHA256": "06cce8c9cb1e34d7db43521d077d58e51377dc58d67345c7d764a9203fecdf41",
+    "initialStateHash": "010ec93b5f5c44e2a1cde7812d269d90661f1bb97ad713ed3b4aafb306ef80b6"
+  },
+  "solver": {
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "level": {
+    "identity": "fan:lldb-137/weirdy05 (version 2).dat#8",
+    "title": "Lomax and Jimmy",
+    "lemmingsRequiredToSave": 2
+  },
+  "search": {
+    "beamWidth": 8192,
+    "budgetSeconds": 120,
+    "clock": "golems",
+    "fallback": 30,
+    "refire": 20,
+    "adaptiveRate": true,
+    "preferProgress": true,
+    "rescueQuotaDistance": true,
+    "focusWorkers": 2,
+    "solverSeconds": 120,
+    "statesPerSecond": 2906,
+    "expandedStates": 348775,
+    "bestSaved": "0/2",
+    "terminal": {
+      "tick": 313,
+      "released": 2,
+      "lost": 0,
+      "active": 2
+    },
+    "winningRoute": false,
+    "candidateReplayWritten": false
+  },
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "limitation": "This bounded search found no route. It does not prove that the level has no solution."
+  }
+}

@@ -144,6 +144,14 @@ Current source status:
   without a candidate, and no input drift. The 3,617 missing fan wins remain
   open. Imported levels remain open-ended. See the [fingerprinted audit](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/audit.json)
   and [winning replay witnesses](ReleaseReadiness/2.0-build83/classic-fan-fingerprinted-audit-2026-10-16/fingerprinted-winning-replays.jsonl).
+- The saved route for one fan level passed twice against the current-source
+  solver on 21 October. Owner decision excludes one exact no-exit source row
+  from playable bundled scope, while retaining its source pack and audit row.
+  The current count is 2,404 of 6,019 playable levels, with 3,615 routes open.
+  The full-catalogue audit remains dated 16 October. The scope decision closes
+  no route. See the [closure record](ReleaseReadiness/ClassicFanPropersisionZeroClosure-2026-10-21.json),
+  [scope decision](ReleaseReadiness/ClassicFanPlayableScopeExclusion-2026-10-21.json)
+  and [velocity record](ReleaseReadiness/BundledClosureVelocity.md).
 - The bundled `geooPk0` pack is a CustLem2 pack. Forum evidence says CustLem2
   uses the original Lemmings safe-fall rule. The current `.original` mechanics
   uses a 60-pixel counter with a 3-pixel initial count. No separate fall rule
@@ -268,13 +276,47 @@ remains intact; this alternate path stops at 5/10. These bounded searches
 do not prove the level impossible. See the [candidate chain
 reconciliation](Lemmings2Completion/cavelem-candidate-chain-reconciliation-2026-10-16.json).
 
+### Current L3 closure snapshot — 20 October 2026
+
+Current source `4bf3bddc` passes the L3 runtime suite. The verified bundled
+resource tree is installed Mac build 76; build 85's content comparison matches
+its 561 L3 files. A direct hash link from build 76 to build 93's package remains
+open. The latest audit verifies 399/416 exact double replays, no stale fixture
+identities and 17 failed schedules across Levels 107, 206, 213 and 229. The
+203 winning fixtures with stale runtime hashes were refreshed after double
+replay. Standalone route coverage is 86/90 and carried-fixture coverage is
+313/326. One MVP winning route per bundled level is the route target.
+Maximum-rescue and optimal-route searches are out of scope. See the
+[cycle-12 audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-audit-4bf3bddc-2026-10-20.json)
+and [release scope](ReleaseScope.md).
+
+Seven bounded searches across the four open bundled levels expanded 11,518,937
+states over 1,020 budgeted seconds. They found no route. These state expansions
+measure search throughput. The accepted route count did not change. The
+observed Classic fan route rate also remains zero across the 16–20 October
+snapshots. See the [closure velocity record](ReleaseReadiness/BundledClosureVelocity.md)
+and its linked per-search results.
+
+Seven cycle-12 first-win searches covered the open L3 route identities at Levels 107, 206, 213 and 229. They expanded 7,693,495 states over 847 seconds and found no route. The extra Level 213 search doubled beam width to 16,384. They saved no lemmings and closed no level. These results measure search throughput. See the [search record](ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-mvp-searches-4bf3bddc-2026-10-20.json).
+
+The current-source Mole trace matches 225/344 air-gap positions and 139/329
+left-facing positions. The post-drop air-gap trace matches through tick 248 and
+first differs at tick 249. The probe scenes change the level 101 DAT and two
+object files. Exclude these traces and the level 101 search from bundled route
+evidence. The [cycle-12 audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-audit-4bf3bddc-2026-10-20.json)
+records the traces, source hash, library hash and fixture audit. Mole parity,
+other source rules, media, transitions and recovery remain open.
+
+The following entries describe earlier worktree snapshots and remain historical
+diagnostics, not current-main closure evidence.
+
 The 15 October L3 Mole direction and patrol corrections match captured starting
 directions and no-input patrols. Main `e613a5e9` includes the source-based
-open-drop transition after a down-tunnel. Worktree commit `8c66ef3e` keeps the same L3 runtime source. The source-built
-runtime suite passed on this worktree commit with this source hash. Production traces match 139/329
-left-facing positions and 179/344 air-gap positions. The air-gap fall matches
-the captured position through tick 183; the first post-drop patrol mismatch is
-at tick 184. Later movement and two of four tunnel-edge checks remain unmatched.
+open-drop transition after a down-tunnel. Worktree commit `8c66ef3e` kept the
+same L3 runtime source. Production traces on that snapshot matched 139/329
+left-facing positions and 179/344 air-gap positions. The air-gap fall matched
+the captured position through tick 183; the first post-drop patrol mismatch was
+at tick 184. Later movement and two of four tunnel-edge checks remained unmatched.
 
 The current-worktree audit at `8c66ef3e` checks 416 fixtures. It verifies 399 exact
 double replays after 220 fixture identities were refreshed without changing

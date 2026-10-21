@@ -21,7 +21,7 @@ each.
 
 25 selected fan bridges have metadata-only estimates. These are provisional placements, not demonstrated measures of human puzzle difficulty or proof that the levels are solvable.
 
-The inserted levels reduce the largest estimated score step in 19 official transitions. A current native audit against the bundled packs verifies winning routes for 2,399 of 6,020 fan levels. It tried matching historical witnesses and current winning candidates against current decoded levels; each tested witness ran twice. The remaining 3,621 levels have no verified winning replay: 3,600 have no matching winning candidate, and 21 candidate or historical replays fail. This is an open closure gate, not a claim that those levels are unsolvable.
+The inserted levels reduce the largest estimated score step in 19 official transitions. The 15 October native audit verified routes for 2,399 of 6,020 fan levels. The 16 October full audit raised that count to 2,403. One targeted route closure on 21 October brings the accepted count to 2,404, with 3,616 still open. This route does not refresh the full-catalogue audit. See the [closure velocity record](../../Documentation/ReleaseReadiness/BundledClosureVelocity.md).
 
 The audit now accepts a no-input replay for `0447-ccexplores-test-levels.zip/ccxtestlevels.dat#2`. The exact level wins with one of four lemmings saved because its rescue requirement is zero. The replay is in `verified-fan-replays` and the audit checks it twice.
 

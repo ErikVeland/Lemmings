@@ -15,6 +15,7 @@ roots = [project / "Sources/NxlvKit", project / "Tools/ClassicValidation",
          project / "Artifacts/ClassicProgression/verified-fan-replays",
          project / "Artifacts/DifficultyEvaluation/golems-phase-shift-replays",
          project / "Artifacts/DifficultyEvaluation/golems-retimed-replays",
+         project / "Resources/Progression/bundled-playable-exclusions.json",
          project / "Scripts/run-classic-validation.sh", resources / "Ports",
          resources / "LevelPacks", fixtures / "Tests/ClassicDOSCompletionTests/Fixtures",
          fixtures / "Tests/ClassicFamilyCompletionTests/Fixtures"]

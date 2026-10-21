@@ -1,0 +1,233 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "branch": "codex/bundled-engine-recreation-main",
+  "liveMainRefreshed": false,
+  "mainRefreshLimit": "GitHub DNS resolution failed; sourceRevision is the cached origin/main commit.",
+  "worktreeAtBuild": "Dirty with pre-existing task changes; the solver and NxlvKit binary hashes below identify the built artefacts.",
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySha256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "library": ".build/classic-solver/libNxlvKit.dylib",
+    "librarySha256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "levelPacks": [
+    {
+      "identity": "fan:lldb-6/Mikepak01.dat#1",
+      "title": "All with 0 and 1",
+      "initialStateHash": "e63aef5b2c41ba7b576a68a1ce596bd58b93c8deacd4c3af59aad812fa90131a",
+      "initialLevelFingerprint": "c63683115e1d712c0d0d4671071e41fdc74745bac131d15fa6fe477ca3f61130",
+      "archive": "0006-Mikepak01.zip",
+      "archiveSha256": "1d2a630fa8d51525b18029eac99f7c4478dc415784b9f4ec53562c122597e085",
+      "requirements": {
+        "lemmings": 10,
+        "requiredToSave": 10,
+        "skills": "one each of the eight skills"
+      },
+      "attempts": [
+        {
+          "profile": {
+            "width": 2048,
+            "seconds": 60,
+            "fallback": 30,
+            "refire": 20,
+            "adaptiveRate": true,
+            "preferProgress": true,
+            "rescueQuotaDistance": true
+          },
+          "expandedStates": 166774,
+          "terminal": {
+            "tick": 236,
+            "released": 10,
+            "lost": 0,
+            "active": 10
+          },
+          "bestSaved": "0/10",
+          "winningRoute": false
+        },
+        {
+          "profile": {
+            "width": 4096,
+            "seconds": 60,
+            "fallback": 20,
+            "refire": 10,
+            "adaptiveRate": true,
+            "balancedRanking": true,
+            "rescueQuotaDistance": true
+          },
+          "seedPrefix": [
+            { "tick": 30, "rate": 99 },
+            { "tick": 168, "id": 0, "skill": "basher" },
+            { "tick": 176, "id": 1, "skill": "digger" },
+            { "tick": 182, "id": 2, "skill": "floater" },
+            { "tick": 185, "id": 2, "skill": "miner" },
+            { "tick": 186, "id": 2, "skill": "climber" },
+            { "tick": 205, "id": 9, "skill": "builder" },
+            { "tick": 206, "id": 9, "skill": "blocker" },
+            { "tick": 211, "id": 8, "skill": "bomber" }
+          ],
+          "expandedStates": 141428,
+          "bestSaved": "0/10",
+          "winningRoute": false
+        },
+        {
+          "profile": {
+            "width": 4096,
+            "seconds": 60,
+            "fallback": 20,
+            "refire": 10,
+            "adaptiveRate": true,
+            "preferProgress": true,
+            "rescueQuotaDistance": true,
+            "startingRate": 99
+          },
+          "expandedStates": 165334,
+          "terminal": {
+            "tick": 179,
+            "released": 10,
+            "lost": 0,
+            "active": 10
+          },
+          "bestSaved": "0/10",
+          "winningRoute": false
+        }
+      ]
+    },
+    {
+      "identity": "fan:lldb-6/Mikepak01.dat#9",
+      "title": "Let's climb!",
+      "initialStateHash": "1d2ec76af022ca0d339c1c29dadae3ac574e9aebf8335343038cd2f6b828d784",
+      "initialLevelFingerprint": "570fa2efa08b46443131742ebcb55298f2feaffd8d82b8950f0a2701bd8fb565",
+      "archive": "0006-Mikepak01.zip",
+      "archiveSha256": "1d2a630fa8d51525b18029eac99f7c4478dc415784b9f4ec53562c122597e085",
+      "requirements": {
+        "lemmings": 60,
+        "requiredToSave": 45,
+        "skills": "60 climbers and 15 bombers"
+      },
+      "attempts": [
+        {
+          "profile": {
+            "width": 2048,
+            "seconds": 60,
+            "fallback": 30,
+            "refire": 20,
+            "adaptiveRate": true,
+            "balancedRanking": true,
+            "startingRate": 30
+          },
+          "expandedStates": 161319,
+          "terminal": {
+            "tick": 297,
+            "released": 10,
+            "lost": 0,
+            "active": 10
+          },
+          "bestSaved": "0/45",
+          "winningRoute": false
+        },
+        {
+          "profile": {
+            "width": 4096,
+            "seconds": 60,
+            "fallback": 30,
+            "refire": 20,
+            "adaptiveRate": true,
+            "preferProgress": true,
+            "rescueQuotaDistance": true,
+            "startingRate": 99
+          },
+          "expandedStates": 139313,
+          "terminal": {
+            "tick": 142,
+            "released": 23,
+            "lost": 0,
+            "active": 23
+          },
+          "bestSaved": "0/45",
+          "winningRoute": false
+        }
+      ]
+    },
+    {
+      "identity": "fan:lldb-412/mobius06.dat#8",
+      "title": "General Tsao's Lemming",
+      "initialStateHash": "00030eb751ad85e1bc68c3eed79af05c023ad7dee6bde2e35016ef1b948d9ec4",
+      "archive": "0412-mobius06.zip",
+      "archiveSha256": "0da5ed80a69c56db00ca7644bf4974d11baee01761ef5e9f376e849b0ea155f4",
+      "requirements": {
+        "lemmings": 10,
+        "requiredToSave": 10,
+        "skills": "solver-derived; no winning assignment found"
+      },
+      "attempts": [
+        {
+          "profile": {
+            "width": 512,
+            "seconds": 60,
+            "fallback": 170,
+            "refire": 120,
+            "clock": "golems",
+            "rate": "solver default"
+          },
+          "wallSeconds": 50.19,
+          "solverSeconds": 48,
+          "expandedStates": 145327,
+          "statesPerSecond": 3028,
+          "terminal": {
+            "tick": 426,
+            "released": 10,
+            "lost": 0,
+            "active": 10
+          },
+          "bestSaved": "0/10",
+          "winningRoute": false
+        }
+      ]
+    },
+    {
+      "identity": "fan:lldb-412/mobius06.dat#3",
+      "title": "The First Will Be Last",
+      "initialStateHash": "1cdad0a6bc65fd278754e576460ed365c6ba0be4c4f63d5f15600039f777651",
+      "archive": "0412-mobius06.zip",
+      "archiveSha256": "0da5ed80a69c56db00ca7644bf4974d11baee01761ef5e9f376e849b0ea155f4",
+      "requirements": {
+        "lemmings": 10,
+        "requiredToSave": 9,
+        "skills": "solver-derived; no winning assignment found"
+      },
+      "attempts": [
+        {
+          "profile": {
+            "width": 512,
+            "seconds": 60,
+            "fallback": 170,
+            "refire": 120,
+            "clock": "golems",
+            "rate": "solver default"
+          },
+          "wallSeconds": 60.42,
+          "solverSeconds": 60,
+          "expandedStates": 175219,
+          "statesPerSecond": 2920,
+          "terminal": {
+            "tick": 1357,
+            "released": 10,
+            "lost": 0,
+            "active": 10
+          },
+          "bestSaved": "0/9",
+          "winningRoute": false
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "expandedStates": 1094714,
+    "searchAttempts": 7,
+    "limitation": "All results are bounded solver searches. They do not prove that any searched level has no solution."
+  }
+}

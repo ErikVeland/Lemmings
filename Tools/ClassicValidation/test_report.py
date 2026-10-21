@@ -33,8 +33,22 @@ class CoverageTests(unittest.TestCase):
                           "witness": "fixture.json", "initialHash": "fixture"})
 
     def run_report(self, require_fan_routes=False):
+        replays = []
+        for row in self.rows:
+            if row["status"] != "winning-replay":
+                continue
+            if row.get("witness"):
+                row["sourceWitness"] = "fixture-source.json"
+                row["witness"] = f"fingerprinted-winning-replays.jsonl#{len(replays) + 1}"
+            replays.append({
+                "expected": {"didWin": True},
+                "initialStateHash": row.get("initialHash"),
+                "initialLevelFingerprint": row.get("initialLevelFingerprint"),
+            })
         (self.output / "levels.jsonl").write_text("\n".join(map(json.dumps, self.rows)))
         (self.output / "packs.json").write_text(json.dumps(self.packs))
+        (self.output / "fingerprinted-winning-replays.jsonl").write_text(
+            "\n".join(map(json.dumps, replays)) + ("\n" if replays else ""))
         with contextlib.redirect_stdout(io.StringIO()):
             return report(self.root, self.output, require_fan_routes)
 
@@ -90,6 +104,44 @@ class CoverageTests(unittest.TestCase):
         with zipfile.ZipFile(self.library / "new.zip", "w") as archive:
             archive.writestr("new.lvl", b"new level")
         self.assertFalse(self.run_report())
+
+    def test_approved_exclusion_stays_in_source_inventory_but_not_playable_scope(self):
+        row = self.rows[-1]
+        row.update(title="Choose your lucky PASSWORD!", initialHash="state-hash",
+                   status="rendered-and-smoke-tested-only")
+        archive_hash = hashlib.sha256((self.library / "test.zip").read_bytes()).hexdigest()
+        progression = self.root / "Progression"
+        progression.mkdir()
+        (progression / "bundled-playable-exclusions.json").write_text(json.dumps({
+            "version": 1,
+            "exclusions": [{
+                "identity": {"engine": "classic", "packID": "fan:lldb-509", "levelID": "test.lvl#0"},
+                "pack": "test.zip", "archiveSHA256": archive_hash, "member": "test.lvl#0",
+                "title": "Choose your lucky PASSWORD!", "initialStateHash": "state-hash",
+            }],
+        }))
+        self.assertTrue(self.run_report(require_fan_routes=True))
+        coverage = json.loads((self.output / "coverage.json").read_text())
+        self.assertEqual(coverage["fanLevels"], 1)
+        self.assertEqual(coverage["excludedFanLevels"], 1)
+        self.assertEqual(coverage["fanPlayableLevels"], 0)
+        self.assertEqual(json.loads((self.output / "blockers.json").read_text()), [])
+
+    def test_exclusion_cannot_hide_changed_source(self):
+        row = self.rows[-1]
+        row.update(title="Choose your lucky PASSWORD!", initialHash="changed-state",
+                   status="rendered-and-smoke-tested-only")
+        progression = self.root / "Progression"
+        progression.mkdir()
+        (progression / "bundled-playable-exclusions.json").write_text(json.dumps({
+            "version": 1,
+            "exclusions": [{
+                "identity": {"engine": "classic", "packID": "fan:lldb-509", "levelID": "test.lvl#0"},
+                "pack": "test.zip", "archiveSHA256": self.packs[0]["sha256"], "member": "test.lvl#0",
+                "title": "Choose your lucky PASSWORD!", "initialStateHash": "expected-state",
+            }],
+        }))
+        self.assertFalse(self.run_report(require_fan_routes=True))
 
 
 if __name__ == "__main__":

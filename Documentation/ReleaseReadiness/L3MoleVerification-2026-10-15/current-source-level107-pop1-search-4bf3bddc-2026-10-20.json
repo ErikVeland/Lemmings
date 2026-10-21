@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "scope": "First-win MVP search for the carried Level 107 route at population one.",
+  "level": {
+    "number": 107,
+    "identity": "Shadow 7",
+    "data": "Sources/Ports/LEM3CD/LEVELS/LEVEL107.DAT",
+    "dataSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "population": 1,
+    "requiredToSave": 1
+  },
+  "runtime": {
+    "source": "Sources/NxlvKit/Lemmings3Runtime.swift",
+    "sourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "solverSHA256": "c789f02f16f60d08b08846b6991c1058d01260789daed5823e440e3b9092ad97"
+  },
+  "search": {
+    "command": ".build/l3-solver/solver 107 --budget 120 --beam 4096 --population 1 --tool-site-cell 2 --fewer-inputs-first --out .build/l3-solver/current-pop1-107",
+    "budgetSeconds": 120,
+    "actualSeconds": 120,
+    "beamWidth": 4096,
+    "toolSiteCellPixels": 2,
+    "fewerInputsFirst": true,
+    "decisionPoints": 4712,
+    "depth": 4752,
+    "expandedStates": 150061,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false,
+    "replayCandidate": false
+  },
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "carriedFixture": "Tests/Lemmings3CampaignTests/Fixtures/107-1.json",
+    "limitation": "This bounded search does not prove that Level 107 has no solution. The carried route remains open."
+  }
+}

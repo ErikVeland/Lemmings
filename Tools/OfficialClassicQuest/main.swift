@@ -137,6 +137,12 @@ do {
                     case let .assign(id, skill):
                         try check(session.assign(skillIndex: ClassicSkill.allCases.firstIndex(of: skill)!, to: id) == nil,
                                   "Rejected input \(input): \(label)")
+                    case let .bonusSkill(skill):
+                        guard let skillIndex = ClassicSkill.allCases.firstIndex(of: skill) else {
+                            throw Failure(description: "Unknown bonus skill in \(label)")
+                        }
+                        try check(session.grantExtraSkill(at: skillIndex),
+                                  "Rejected bonus skill input \(input): \(label)")
                     case let .releaseRate(rate): session.adjustRate(by: rate - session.rate)
                     case .nuke: session.nuke()
                     }

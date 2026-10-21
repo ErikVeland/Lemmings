@@ -56,7 +56,12 @@ with tempfile.TemporaryDirectory(prefix="conversion-gate-") as temporary:
         file.unlink()
         code, output = run("recorded", level, candidates)
         assert code == 0 and "RECORDED" in output, output
-        assert json.loads(file.read_bytes()) == json.loads(original), "Import changed the route"
+        imported = json.loads(file.read_bytes())
+        fingerprint = imported.pop("initialLevelFingerprint", None)
+        expected = json.loads(original)
+        expected.pop("initialLevelFingerprint", None)
+        assert isinstance(fingerprint, str) and len(fingerprint) == 64, "Import omitted the level fingerprint"
+        assert imported == expected, "Import changed the route"
 
     # Partial installed content must not shrink a 60-level release gate.
     partial = temporary / "ports"

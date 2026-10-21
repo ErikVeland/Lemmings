@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-21",
+  "scope": "Incremental MVP route closure for one bundled Classic fan level. One current-source winning replay was accepted after two identical replays.",
+  "source": {
+    "head": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "cachedOriginMain": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "cachedFetchHead": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "liveMainRefreshed": true,
+    "liveCheck": "git fetch origin main succeeded. HEAD, origin/main and FETCH_HEAD all match 4bf3bddcb2641751eafd51b44a9cf29f18732c90.",
+    "worktreeWasDirty": true,
+    "solverSHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-189",
+    "levelID": "Lemmings platinum Careful Part 2.dat#5",
+    "title": "Propersision ZERO",
+    "initialStateHash": "00bd81e8b1d5d1233a5b587e4eb0909f5276a348c201d683c2c6d72d0fd8b158",
+    "initialLevelFingerprint": "76ffca3ba1b5d27692ae6511a250705eff19ddf684058716ae98d990b49ae2c5",
+    "packPath": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0189-Lemmings-platinum-Careful-Part-2.zip",
+    "packSHA256": "f847c93ace1e8b99fd1ab2537b62c617c5f34c7e8d809775335ee4ffd18c91ac",
+    "archiveOrdinal": 6,
+    "population": 50,
+    "requiredToSave": 45
+  },
+  "search": {
+    "baselineSweep": {
+      "solverSeconds": 5,
+      "expandedStates": 15150,
+      "bestSaved": "1/45",
+      "winningCandidates": 0,
+      "solverSHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+      "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+    },
+    "adaptiveSearch": {
+      "width": 4096,
+      "budgetSeconds": 120,
+      "adaptiveRate": true,
+      "ranking": "prefer-progress with rescue-quota distance",
+      "solverSeconds": 120,
+      "expandedStates": 298897,
+      "bestSaved": "2/45",
+      "winningCandidates": 0,
+      "solverSHA256": "abeb10b40e58257dcf3b91672d9a46701ca394046b140781f86dbcf519e3c4c5",
+      "librarySHA256": "9e478bdf9552f7c16e774d640be52c251d7f7b7501b2b4ce7a82a6565382f514"
+    },
+    "prefixContinuation": {
+      "width": 4096,
+      "budgetSeconds": 120,
+      "forcedPrefixCommands": 11,
+      "solverSeconds": 47,
+      "expandedStates": 152843,
+      "result": "win",
+      "saved": 48,
+      "required": 45,
+      "inputs": 14,
+      "ticks": 659,
+      "finalStateHash": "3e4cc8f9a6a30ce720246e9f0f016c41f28ba38e1bc29750a9341cad5e8c32cc",
+      "solverSHA256": "abeb10b40e58257dcf3b91672d9a46701ca394046b140781f86dbcf519e3c4c5",
+      "librarySHA256": "9e478bdf9552f7c16e774d640be52c251d7f7b7501b2b4ce7a82a6565382f514"
+    },
+    "aggregate": {
+      "solverSeconds": 172,
+      "expandedStates": 466890,
+      "statesPerSecond": 2714.5,
+      "acceptedRouteClosures": 1,
+      "provenance": "Includes a 5-second current-build sweep and two longer searches on the prior solver build. The winning candidate passed two replays on the current build."
+    },
+    "limits": [
+      "The two long candidate-generation searches used the prior solver and library hashes recorded on each attempt.",
+      "The winning replay passed twice against the freshly built current-source solver and exact bundled archive.",
+      "Solver states per second measure search throughput, not closure velocity.",
+      "No other fan levels were searched in the Propersision ZERO continuation."
+    ]
+  },
+  "strictReplay": {
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "runs": 2,
+    "sameInputEvents": true,
+    "sameOutcome": true,
+    "eachRun": {
+      "result": "SOLVED",
+      "saved": 48,
+      "required": 45,
+      "released": 50,
+      "ticks": 659,
+      "finalStateHash": "3e4cc8f9a6a30ce720246e9f0f016c41f28ba38e1bc29750a9341cad5e8c32cc",
+      "inputs": 14,
+      "expandedStates": 90
+    },
+    "routeArtifact": "Artifacts/ClassicProgression/verified-fan-replays/fan-lldb-189-propersision-zero.json"
+  },
+  "closureStatus": {
+    "previousFullFanAudit": "2403/6020 on 2026-10-16",
+    "previousTargetedSnapshot": "2403/6020 on 2026-10-20",
+    "currentAcceptedFanRoutes": "2404/6020",
+    "openFanRoutes": 3616,
+    "observedSnapshotVelocity": "1 accepted route over 5 calendar days from 2026-10-16 through 2026-10-21 (0.2 routes/day)",
+    "forecast": "Not supported by two sparse intervals and one new closure."
+  }
+}

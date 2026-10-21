@@ -33,27 +33,28 @@ Both paths run the same simulation and produce the same win.
 ## Content status
 
 The official Classic and conversion routes pass at 352/352. L2 has routes for
-all 120 levels. Its 16 October worktree replay passes against the staged build 83 app
-payload, but the ark ending and original-engine comparisons remain open. Worktree
-commit `8c66ef3e` descends from the freshly fetched remote main. The current-worktree L3 runtime adds a Mole response to player-built bricks.
-The original trigger timing and excavation mask remain unverified. The current-worktree audit passes 399/416 exact double
-replays. It refreshed 220 fixture identities and kept every input stream
-unchanged. Replay hashes now include Mole drop delay.
-Seventeen population-specific schedules still fail across four underlying
-levels (four standalone, 13 carried). The strict gate stops at `107.json` and
-`107-1.json`. Traces match 139/329 left-facing positions and 179/344 air-gap
-positions. The air-gap fall matches
-through tick 183. Later movement and two of four tunnel-edge checks remain
-unmatched. L3 route and source fidelity remain open. See [the worktree
-replay audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-worktree-mvp-fixture-audit-8c66ef3e-2026-10-18.json)
+all 120 levels. Its 20 October current-checkout replay passes 120 standalone
+routes, 70 carry-over variants and 12 tribe chains. The Gold Ark and original
+engine comparisons remain open. The 20 October L3 audit on current source
+`4bf3bddc` passes 399/416 exact double replays against installed build 76
+resources. Four levels remain open: 107, 206, 213 and 229. Coverage is 86/90
+standalone levels and 313/326 carried fixtures. The latest Mole traces match
+225/344 air-gap positions and 139/329 left-facing positions. Post-drop movement
+first differs at tick 249. L3 source parity, route repair, media and transitions
+remain open. The build 76 resource tree has not been directly hash-linked to the
+2.1 package. See the [current-source audit](ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-audit-4bf3bddc-2026-10-20.json)
 and [release scope](ReleaseScope.md).
 
-The latest audit covers all 6,020 bundled fan levels. It verifies 2,403 winning
-routes, records 3,599 levels without matching candidates and 18 failed replay
-candidates, with no load, decode or render failures. The strict route gate has
-3,617 levels without verified wins. The two “It’s a Magical World” copies
-remain without winning routes. Imported packs remain open-ended. See
-[release scope](ReleaseScope.md) for the closure work.
+The latest full audit covers all 6,020 source rows in bundled fan packs. One
+exact no-exit level is excluded from playable scope, leaving 6,019 playable
+levels. One targeted closure on 21 October brings the accepted count to 2,404
+(39.9%), with 3,615 playable routes open. The full audit has not been rerun.
+Its historical rows record 3,599 levels without matching candidates and 18
+failed replay candidates. It found no load, decode or render failures. The two
+“It’s a Magical World” copies remain without winning routes. Imported packs
+remain open-ended. See [release scope](ReleaseScope.md), the [incremental route
+record](ReleaseReadiness/ClassicFanPropersisionZeroClosure-2026-10-21.json) and
+the [playable-scope decision](ReleaseReadiness/ClassicFanPlayableScopeExclusion-2026-10-21.json).
 NeoLemmix uses a separate engine and its own style dependencies.
 
 ## What "modern" means here

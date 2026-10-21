@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "runtimeLibrary": ".build/l2-completion/libNxlvKit.dylib",
+  "runtimeLibrarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+  "level": {
+    "number": 229,
+    "population": 20,
+    "resourceTree": ".build/classic-fan-solver/rebase-builder-resources/Ports/LEM3CD",
+    "levelDATSHA256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+    "fixtureSHA256": "1e15ac3247c01a3ac70f2ff16a502c45e148ab3f3b779af00c7360828745a036"
+  },
+  "probe": {
+    "method": "Native runtime replay with only input timing changed; no engine source or retained fixture was modified.",
+    "actor": 2,
+    "trace": "After the down-spade input at tick 1560, actor 2 falls from y=312 and lands walking at y=368 on tick 1579.",
+    "assignmentInputs": [6, 7, 8],
+    "assignmentStartTicksTried": [1577, 1578, 1579, 1580, 1581, 1582, 1583, 1584],
+    "assignmentTimingResults": {
+      "1577-1578": "Walker input refused while falling.",
+      "1579-1584": "All three assignments are accepted; the retained route later fails or completes without saving any lemmings."
+    },
+    "blockerTimingInputs": [15],
+    "blockerTicksTriedWithAssignmentStart1579": [1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000],
+    "blockerTimingResults": {
+      "1965-1975": "Blocker assignment is refused.",
+      "1980-2000": "Replay later refuses input 36, use at tick 2665."
+    },
+    "timingConfigurations": 16,
+    "acceptedWinningRoutes": 0
+  },
+  "outcome": "The first refusal was caused by assigning skills while the actor was falling. Moving those assignments to landing accepts them, but does not repair the route. Eight blocker timings at or after the prior input sequence all fail the MVP win condition. Earlier blocker timings were excluded because they would reorder the retained input sequence. Level 229 remains open; this bounded timing probe does not establish that the level is unsolvable."
+}

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-20",
+  "scope": "MVP first-win search for one bundled Classic fan level. No winning replay was produced.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "branch": "codex/bundled-engine-recreation-main",
+    "headMatchesOriginMain": true,
+    "freshFetch": "Succeeded on 2026-10-20. HEAD, origin/main and FETCH_HEAD match.",
+    "worktreeWasDirty": true,
+    "auditIdentity": "fan:lldb-241/JEFFPCK7.DAT#4",
+    "auditStatus": "rendered-and-smoke-tested-only",
+    "archive": "0241-JEFFPCK7.zip",
+    "archiveSHA256": "a595c77f074d5334f8b0eefa8ac5e1dbc7bf3ce97cade3b66ad631bad65c7350",
+    "initialStateHash": "7391806ba2fff035688d8e98220cbb9710cbbec5296db7699b11b2092ab58fb2",
+    "initialLevelFingerprint": "7c9765be98d7d5b25afaafda917e5b411f4babaa6bad2f51ac81ffed50e37427",
+    "requirements": {
+      "lemmings": 1,
+      "requiredToSave": 1,
+      "skills": "25 builders, 2 bashers and 1 digger"
+    }
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "library": ".build/classic-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "attempts": [
+    {
+      "method": "Adaptive progress-ranked first-win beam search from the start.",
+      "profile": {
+        "width": 8192,
+        "seconds": 120,
+        "fallback": 30,
+        "refire": 10,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "expandedStates": 365531,
+      "terminal": "tick 848; 1 released, 0 lost, 1 active",
+      "bestSaved": "0/1",
+      "winningRoute": false,
+      "partialEvents": 14
+    },
+    {
+      "method": "Continuation with all 14 events from the first partial forced as a prefix.",
+      "profile": {
+        "width": 8192,
+        "seconds": 120,
+        "fallback": 30,
+        "refire": 10,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "expandedStates": 417499,
+      "terminal": "tick 858; 1 released, 0 lost, 1 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    }
+  ],
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "fanRouteBaseline": "2403/6020 from the latest accepted 16 October snapshot",
+    "openFanRoutesAtBaseline": 3617,
+    "expandedStates": 783030,
+    "solverSeconds": 240,
+    "solverStatesPerSecond": 3262.6,
+    "completionVelocityContribution": "0 accepted routes",
+    "limitation": "The bounded searches do not prove that this level has no solution. Search throughput does not measure route-closure velocity."
+  },
+  "auditReconciliation": {
+    "cachedAuditSourceRevision": "fc2c59e6e91f28c7cac83b8d194ad082808f73e1",
+    "cachedAuditSourceDate": "2026-10-15",
+    "cachedFanCounts": {
+      "winningReplay": 2399,
+      "renderedAndSmokeTestedOnly": 3600,
+      "replayFailed": 21
+    },
+    "interpretation": "The cached audit predates current main. Its 2399 fan wins plus 352 official wins equal 2751 total Classic wins. Do not report 2751 as fan coverage or replace the 16 October accepted baseline without a current-source audit."
+  }
+}

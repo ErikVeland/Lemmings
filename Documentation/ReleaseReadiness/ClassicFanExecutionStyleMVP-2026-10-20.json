@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-20",
+  "scope": "Bounded first-win MVP search for one unresolved bundled Classic fan level. No verified route candidate was produced.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesOriginMain": true,
+    "worktreeWasDirty": true,
+    "archive": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0341-JM15.zip",
+    "archiveSHA256": "f97109511fe42c7b93b22f90e22e71027999935be50fea8471d86bb886295617",
+    "archiveManifestSHA256": "f97109511fe42c7b93b22f90e22e71027999935be50fea8471d86bb886295617",
+    "auditIdentity": "fan:lldb-341/JM15.DAT#5",
+    "auditStatus": "rendered-and-smoke-tested-only",
+    "initialStateHash": "f2121b6636a981c7b96191f730bb16442ca5c76e6f3cbe5aac2e0d1fd7f8b4a7",
+    "levelFingerprint": "bd5c15ead6e22043d5def939e050797d04ffca5c36f3f6253c5c79ce6cece40b",
+    "requirements": {
+      "lemmings": 20,
+      "requiredToSave": 1,
+      "timeLimitMinutes": 1,
+      "skills": "20 floaters, 50 bashers, 10 diggers"
+    }
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "library": ".build/classic-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "attempts": [
+    {
+      "method": "Adaptive progress-ranked beam search, focused on the first four workers.",
+      "budgetSeconds": 60,
+      "beamWidth": 4096,
+      "expandedStates": 101,
+      "bestSaved": "0/1",
+      "terminal": "tick 81; 7 released, 0 lost, 7 active",
+      "winningRoute": false
+    },
+    {
+      "method": "Adaptive progress-ranked continuation from the six accepted inputs in the first partial.",
+      "budgetSeconds": 90,
+      "expandedStates": 18,
+      "bestSaved": "0/1",
+      "terminal": "tick 86; 9 released, 0 lost, 9 active",
+      "winningRoute": false
+    },
+    {
+      "method": "Exhaustive single-skill timing sweep with the Golems clock.",
+      "budgetSeconds": 90,
+      "assignmentsTested": 4272,
+      "completedAssignments": 4272,
+      "waitingTick": 208,
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, floater then basher; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 90,
+      "solverSeconds": 48,
+      "firstSkillAssignments": 1227,
+      "secondSkillAssignments": 963847,
+      "expandedStates": 963847,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, basher then floater; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 90,
+      "solverSeconds": 39,
+      "firstSkillAssignments": 1107,
+      "secondSkillAssignments": 895670,
+      "expandedStates": 895670,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, digger then basher; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 60,
+      "solverSeconds": 20,
+      "firstSkillAssignments": 1107,
+      "secondSkillAssignments": 426500,
+      "expandedStates": 426500,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, basher then digger; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 60,
+      "solverSeconds": 41,
+      "firstSkillAssignments": 1107,
+      "secondSkillAssignments": 867875,
+      "expandedStates": 867875,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, floater then digger; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 60,
+      "solverSeconds": 47,
+      "firstSkillAssignments": 1227,
+      "secondSkillAssignments": 963847,
+      "expandedStates": 963847,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, digger then floater; first input ticks 40-160 and second-input gaps 1-80.",
+      "budgetSeconds": 60,
+      "solverSeconds": 29,
+      "firstSkillAssignments": 1107,
+      "secondSkillAssignments": 800609,
+      "expandedStates": 800609,
+      "waitingTick": 160,
+      "terminal": "20 released, 9 lost, 11 active",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    }
+  ],
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "expandedStates": 4922739,
+    "solverSeconds": 224,
+    "solverStatesPerSecond": 21976.5,
+    "limitation": "Bounded searches do not prove that the level has no solution. The beam search and its seed, single-skill sweep, and six ordered two-skill sweeps cover only the stated assignments and timing windows."
+  },
+  "excludedControl": {
+    "command": "Single-skill sweep with --rate 30",
+    "result": "Same 4,272 assignments and output as the rate-99 run.",
+    "reason": "ClassicDOSSimulation.setReleaseRate clamps the rate to the level's initial rate, which is 99 here. This did not test a slower release cadence and is excluded from search totals."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "level": {
+    "number": 229,
+    "source": ".build/l3-mole-verification/source-left-facing/LEVELS/LEVEL229.DAT",
+    "sourceSHA256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+    "fixtureSHA256": "1e15ac3247c01a3ac70f2ff16a502c45e148ab3f3b779af00c7360828745a036",
+    "currentInitialStateHash": "751e3729408b1bda71e6159def3cb7388d01185d42e98c9b646bb7270ec91e1e"
+  },
+  "bundleResourceMatch": {
+    "resourceRelease": "installed Mac build 76. This level DAT hash matches that tree; the current 2.1 package was not directly inspected in this audit.",
+    "levelDAT_SHA256": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505",
+    "matchesInstalledBundle": true
+  },
+  "search": {
+    "command": ".build/l3-solver/solver 229 --budget 120 --beam 2048 --tool-site-cell 2 --paired-actors --fewer-inputs-first --out .build/l3-current-source/level229-mvp-2026-10-20",
+    "solverSHA256": "106b59f2f0a43539059ebd72299f9c060fa390c2ae4f363885696fc418605c35",
+    "librarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+    "budgetSeconds": 120,
+    "beamWidth": 2048,
+    "toolSiteCellPixels": 2,
+    "pairedActors": true,
+    "fewerInputsFirst": true,
+    "decisionPoints": 2832,
+    "searchDepth": 2872,
+    "roundsToBeam": 1,
+    "expandedStates": 1404327,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false
+  },
+  "outcome": "The current-source search did not find an MVP winning route. Level 229 remains open."
+}

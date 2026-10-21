@@ -252,6 +252,30 @@ check(!readable.isEmpty, "embedded pack exposes decoded levels")
 _ = try FanLevelLibrary.level(readable[0], in: source)
 let verifiedReadable = try FanLevelLibrary.validatedEntries(in: source)
 check(verifiedReadable.count == readable.count, "verified archive exposes the complete decoded level list")
+let passwordPack = root.appendingPathComponent(
+  "Content/LevelPacks/0509-KillerMasters-Lemmings-1-Havoc.zip")
+let exclusionManifest = root.appendingPathComponent(
+  "Resources/Progression/bundled-playable-exclusions.json")
+let bundledPasswordEntries = try FanLevelLibrary.validatedEntries(in: passwordPack)
+let bundledPlayablePasswordEntries = try FanLevelLibrary.validatedPlayableEntries(
+  in: passwordPack, bundleRoot: passwordPack.deletingLastPathComponent(),
+  exclusionsURL: exclusionManifest)
+let passwordMember = "KillerMaster 1 Havoc 2.dat#7"
+check(bundledPasswordEntries.count == 10
+  && bundledPasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember }
+  && bundledPlayablePasswordEntries.count == 9
+  && !bundledPlayablePasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember },
+  "the exact no-exit level stays in its source pack but leaves bundled play lists")
+let importedPasswordPackDirectory = temporary.appendingPathComponent("imported-password-pack")
+try FileManager.default.createDirectory(at: importedPasswordPackDirectory, withIntermediateDirectories: true)
+let importedPasswordPack = importedPasswordPackDirectory.appendingPathComponent(passwordPack.lastPathComponent)
+try Data(contentsOf: passwordPack).write(to: importedPasswordPack)
+let importedPasswordEntries = try FanLevelLibrary.validatedPlayableEntries(
+  in: importedPasswordPack, bundleRoot: passwordPack.deletingLastPathComponent(),
+  exclusionsURL: exclusionManifest)
+check(importedPasswordEntries.count == 10
+  && importedPasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember },
+  "the bundled exception does not change imported archive handling")
 let corruptArchive = temporary.appendingPathComponent("corrupt.zip")
 try Data("not a zip archive".utf8).write(to: corruptArchive)
 do {

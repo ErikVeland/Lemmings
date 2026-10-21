@@ -1,0 +1,156 @@
+{
+  "events": [
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "digger"
+        }
+      },
+      "afterTick": true,
+      "tick": 57
+    },
+    {
+      "action": {
+        "releaseRate": {
+          "_0": 99
+        }
+      },
+      "afterTick": true,
+      "tick": 58
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 1,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 106
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 2,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 106
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 2,
+          "skill": "bomber"
+        }
+      },
+      "afterTick": true,
+      "tick": 111
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 3,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 134
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 3,
+          "skill": "floater"
+        }
+      },
+      "afterTick": true,
+      "tick": 135
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "miner"
+        }
+      },
+      "afterTick": true,
+      "tick": 142
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 150
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "miner"
+        }
+      },
+      "afterTick": true,
+      "tick": 151
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 152
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "basher"
+        }
+      },
+      "afterTick": true,
+      "tick": 168
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 169
+    },
+    {
+      "action": {
+        "assign": {
+          "lemmingID": 31,
+          "skill": "builder"
+        }
+      },
+      "afterTick": true,
+      "tick": 222
+    }
+  ],
+  "expected": {
+    "didWin": true,
+    "released": 50,
+    "required": 45,
+    "saved": 48,
+    "stateHash": "3e4cc8f9a6a30ce720246e9f0f016c41f28ba38e1bc29750a9341cad5e8c32cc",
+    "ticks": 659
+  },
+  "initialLevelFingerprint": "76ffca3ba1b5d27692ae6511a250705eff19ddf684058716ae98d990b49ae2c5",
+  "initialStateHash": "00bd81e8b1d5d1233a5b587e4eb0909f5276a348c201d683c2c6d72d0fd8b158",
+  "number": 6,
+  "rank": "fan:lldb-189",
+  "title": "Propersision ZERO"
+}

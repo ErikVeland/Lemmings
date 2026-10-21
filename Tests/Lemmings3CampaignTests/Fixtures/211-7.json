@@ -3,10 +3,10 @@
     "lost" : 0,
     "reserves" : 0,
     "saved" : 7,
-    "stateHash" : "5b9d1e4a5cac3ecd4ab1fbb6ac9d269f0d714545694c49e0f833e6cd86651634",
+    "stateHash" : "311dca6b124979dff797c434bb729f6a0ab9af75b8d80d7d0a50daa386989b88",
     "ticks" : 1705
   },
-  "initialStateHash" : "02d81adfd61eaa62ccb578faa181b5822e301cc00f4d55695be886b48f5f45ed",
+  "initialStateHash" : "c8461b1e9224fb24932ee4d13a688b5627ec06f338be28e5679705b25b513845",
   "inputs" : [
     {
       "action" : "blocker",

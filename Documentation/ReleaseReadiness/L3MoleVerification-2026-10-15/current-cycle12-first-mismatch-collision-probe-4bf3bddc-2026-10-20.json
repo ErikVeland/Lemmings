@@ -1,0 +1,101 @@
+{
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "captureReattempt": {
+    "audio": "muted",
+    "config": ".build/l3-mole-verification/dosbox-headless-readonly.conf",
+    "emulator": "DOSBox Staging 0.83.0",
+    "localAPI": "127.0.0.1:18086",
+    "repositoryOrFixtureChanges": false,
+    "result": "The later DOSBox Staging 0.83 retry bound the API at 127.0.0.1:18086 and reached the title animation. CPU and memory access worked, but planar and banked VGA memory reads produced tiled, unreadable frames. No actor trace was produced. The emulator was stopped.",
+    "supersedesEarlierBindFailure": true,
+    "validFrameCapture": false,
+    "validActorTrace": false,
+    "video": "SDL dummy"
+  },
+  "comparison": {
+    "firstMismatchTick": 249,
+    "nativeCollisionProbe": {
+      "materialsAtContact": "The native probe found ordinary solid pixels, with no steel, protected background or player-built-brick attribute in the counted body region.",
+      "tick248": {
+        "direction": 1,
+        "phase": 70,
+        "predictedBodySolidAtX202": 36,
+        "x": 200
+      },
+      "tick249": {
+        "direction": 1,
+        "patrolSolidCellsAtNextX": 32,
+        "phase": 71,
+        "predictedNextStep": 4,
+        "predictedNextX": 206,
+        "x": 202
+      },
+      "tick250": {
+        "direction": -1,
+        "outcome": "native turns before moving to predicted x206",
+        "phase": 72,
+        "x": 202
+      }
+    },
+    "nativeX": [
+      199,
+      200,
+      202,
+      202,
+      201,
+      200,
+      199,
+      198,
+      198
+    ],
+    "sourceX": [
+      199,
+      200,
+      200,
+      201,
+      201,
+      201,
+      202,
+      206,
+      205
+    ],
+    "ticks": [
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255
+    ]
+  },
+  "date": "2026-10-20",
+  "interpretation": "The source sprite trace continues toward x206 and reverses after reaching x206, while the native collision probe rejects the predicted x206 position at tick 250 and turns at x202. This points to collision timing or mask geometry as the next rule to resolve; cadence phase is not the cause established by the 12-offset sweep. The sprite trace cannot prove the source collision box or exact update order, so no production change is justified from this evidence alone.",
+  "limits": [
+    "Probe scene uses modified level 101 data.",
+    "Original raw video and collision-box data are unavailable.",
+    "This does not prove complete Mole fidelity or bundled level 101 parity.",
+    "No route or engine gate closed."
+  ],
+  "probeScene": {
+    "levelDAT": "LEVELS/LEVEL101.DAT",
+    "levelDATSHA256": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+    "name": "steel-air-gap",
+    "resourceRoot": ".build/l3-mole-verification/source-air-gap",
+    "sourcePositionsAre": "Rendered sprite centre positions inferred from repeated source captures; not collision-box records.",
+    "sourceTrace": "original-followup-traces.json",
+    "sourceTraceSHA256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4"
+  },
+  "routeEffect": {
+    "l3Coverage": {
+      "accepted": 86,
+      "total": 90
+    },
+    "newRoutes": 0
+  },
+  "runtimeLibrarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+  "runtimeSourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+  "schemaVersion": 1
+}

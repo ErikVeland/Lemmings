@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-21",
+  "scope": "Two bounded current-source first-win searches on one unresolved bundled Classic fan level. No winning route was found.",
+  "source": {
+    "head": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "originMain": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "fetchHead": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "liveMainRefreshed": true,
+    "solverSHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "archive": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks/0325-t3tesla.zip",
+    "archiveSHA256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64"
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-325",
+    "levelID": "t3tesla.dat#8",
+    "archiveOrdinal": 9,
+    "title": "A TOWERING PROBLEM",
+    "initialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5",
+    "population": 35,
+    "requiredToSave": 9
+  },
+  "searches": [
+    {
+      "kind": "retained-near-win-prefix",
+      "width": 8192,
+      "budgetSeconds": 120,
+      "forcedCommands": 4,
+      "expandedStates": 451,
+      "solverSeconds": 0,
+      "bestSaved": "8/9",
+      "terminal": {
+        "tick": 1005,
+        "released": 35,
+        "lost": 26,
+        "active": 1,
+        "complete": false
+      },
+      "winningRoute": false
+    },
+    {
+      "kind": "from-start",
+      "width": 8192,
+      "budgetSeconds": 120,
+      "expandedStates": 9619,
+      "solverSeconds": 3,
+      "bestSaved": "4/9",
+      "terminal": {
+        "tick": 1022,
+        "released": 19,
+        "lost": 12,
+        "active": 3,
+        "complete": true
+      },
+      "winningRoute": false
+    },
+    {
+      "kind": "adaptive-rate-from-start",
+      "width": 8192,
+      "budgetSeconds": 120,
+      "adaptiveRate": true,
+      "ranking": "prefer-progress with rescue-quota distance",
+      "expandedStates": 323310,
+      "solverSeconds": 120,
+      "bestSaved": "8/9",
+      "terminal": {
+        "tick": 739,
+        "released": 35,
+        "lost": 26,
+        "active": 1,
+        "complete": false
+      },
+      "winningRoute": false
+    }
+  ],
+  "closureStatus": {
+    "acceptedFanRoutes": "2404/6020",
+    "openFanRoutes": 3616,
+    "acceptedRouteClosures": 0,
+    "limits": [
+      "The prefix replay reproduced the retained 8/9 partial but did not save the ninth required lemming.",
+      "These bounded searches do not prove that the level has no solution."
+    ]
+  },
+  "aggregate": {
+    "solverSeconds": 123,
+    "expandedStates": 333380,
+    "statesPerSecond": 2710.4,
+    "acceptedRouteClosures": 0
+  }
+}

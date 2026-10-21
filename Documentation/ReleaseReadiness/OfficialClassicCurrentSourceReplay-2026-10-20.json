@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-20",
+  "source": {
+    "head": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "originMain": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "fetchHead": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "worktreeDirty": true,
+    "engineSourceFingerprint": "e27f10cc5c7460a28b7da9b83b00f7cf9f7d47c8d984d07203597f2d538f1256"
+  },
+  "resources": {
+    "bundle": "/Applications/Ultimate Lemmings.app",
+    "bundleVersion": "1.9.1",
+    "build": "76",
+    "portsFileCount": 1307,
+    "portsTreeManifestSHA256": "ddd49590304489ac34d9b0d0d37f88c4aa3b1eb5c328f870ae87b396ed620886",
+    "manifestMethod": "SHA-256 of sorted lines containing each file SHA-256 and relative POSIX path under Ports",
+    "note": "The verifier used the installed bundle. This is not an audit of the 2.1 build 93 app binary."
+  },
+  "verification": {
+    "command": "CAMPAIGN_TEST_LIBRARY_DIR='$PWD/.build/official-classic' CAMPAIGN_TEST_RESOURCES='/Applications/Ultimate Lemmings.app/Contents/Resources' zsh Scripts/verify-official-classic.sh --include-conversions",
+    "exitCode": 0,
+    "toolchain": "Xcode 26.6",
+    "routeResults": {
+      "originalClassic": 120,
+      "ohNoMoreLemmings": 100,
+      "holidayLemmings1993": 32,
+      "holidayLemmings1994": 32,
+      "xmasLemmings1991": 4,
+      "xmasLemmings1992": 4,
+      "ohYesConversions": 60,
+      "total": 352,
+      "failed": 0
+    },
+    "quest": {
+      "wins": 352,
+      "recoveries": 1056,
+      "progressResumes": 352,
+      "chapterTransitions": 6,
+      "finalResult": "passed"
+    },
+    "negativeChecks": "passed for changed outcomes, late inputs, missing routes and incomplete conversion content",
+    "reports": "passed for all 120 preserved Classic fixture hashes and all 322 campaign fixture hashes",
+    "harnessChange": "OfficialClassicQuest now applies bonus-skill replay events through ClassicSession.grantExtraSkill."
+  },
+  "closure": {
+    "officialClassicRoutes": "352/352",
+    "newRouteClosures": 0,
+    "routeVelocity": "0 new accepted routes in this recheck",
+    "engineParity": "not established by native replay verification",
+    "remaining": [
+      "variant-specific source-behaviour checks",
+      "current 2.1 build 93 app-binary acceptance"
+    ]
+  }
+}

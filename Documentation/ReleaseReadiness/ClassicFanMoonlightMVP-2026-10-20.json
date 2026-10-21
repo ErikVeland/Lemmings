@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-20",
+  "scope": "Bounded first-win MVP search for one bundled Classic fan level. No winning replay was produced.",
+  "source": {
+    "revision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "branch": "codex/bundled-engine-recreation-main",
+    "headMatchesOriginMain": true,
+    "freshFetch": "Succeeded on 2026-10-20. HEAD, origin/main and FETCH_HEAD match.",
+    "worktreeWasDirty": true,
+    "auditIdentity": "fan:lldb-449/comppak.dat#4",
+    "auditStatus": "rendered-and-smoke-tested-only",
+    "archive": "0449-comppak.zip",
+    "archiveSHA256": "79f35140478b08a4f5d52e964fcb899886f1de4474c42559817962fe219020b1",
+    "initialStateHash": "3277df40319046f7d9a8cc53a6a2069bdb4cc98c86d33bdf187f8508763e6151",
+    "initialLevelFingerprint": "986d88517a7ee63d93346b39cfcdac483dd5764f2b6ef60f4c735cfaf65a8233",
+    "requirements": {
+      "lemmings": 1,
+      "requiredToSave": 1,
+      "skills": "one of each skill"
+    }
+  },
+  "solver": {
+    "binary": ".build/classic-solver/ClassicSolver",
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "library": ".build/classic-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2"
+  },
+  "attempts": [
+    {
+      "method": "Adaptive progress-ranked first-win beam search.",
+      "profile": {
+        "width": 4096,
+        "budgetSeconds": 90,
+        "solverSeconds": 87,
+        "fallback": 30,
+        "refire": 10,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "expandedStates": 271848,
+      "terminal": "tick 321; 1 released, 0 lost, 1 active",
+      "bestSaved": "0/1",
+      "winningRoute": false,
+      "partialEvents": 8
+    },
+    {
+      "method": "Forced continuation from the eight-event partial, with active-state diagnostics.",
+      "profile": {
+        "width": 8192,
+        "budgetSeconds": 90,
+        "solverSeconds": 3,
+        "fallback": 30,
+        "refire": 10,
+        "adaptiveRate": true,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "expandedStates": 16782,
+      "terminal": "tick 350; 1 released, 0 lost, 1 active",
+      "activeState": "lemming 0 at x=769, y=137, direction left, action exploding",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Denser progress-ranked first-win beam search, with active-state diagnostics.",
+      "profile": {
+        "width": 8192,
+        "budgetSeconds": 90,
+        "solverSeconds": 90,
+        "fallback": 10,
+        "refire": 5,
+        "preferProgress": true,
+        "rescueQuotaDistance": true
+      },
+      "expandedStates": 278098,
+      "terminal": "tick 288; 1 released, 0 lost, 1 active",
+      "activeState": "lemming 0 at x=769, y=135, direction left, action exploding",
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Fixed-rate single-skill timing sweep across all active ticks.",
+      "profile": { "rate": 50, "budgetSeconds": 90 },
+      "expandedStates": 81,
+      "assignmentsTested": 81,
+      "waitingTick": 97,
+      "completedAssignments": 81,
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, floater then basher.",
+      "profile": { "firstTicks": "40-70", "secondGapTicks": "1-80", "budgetSeconds": 60 },
+      "expandedStates": 852,
+      "firstSkillAssignments": 17,
+      "secondSkillAssignments": 852,
+      "waitingTick": 70,
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, floater then builder.",
+      "profile": { "firstTicks": "40-70", "secondGapTicks": "1-80", "budgetSeconds": 60 },
+      "expandedStates": 852,
+      "firstSkillAssignments": 17,
+      "secondSkillAssignments": 852,
+      "waitingTick": 70,
+      "bestSaved": "0/1",
+      "winningRoute": false
+    },
+    {
+      "method": "Ordered two-skill timing sweep, floater then digger.",
+      "profile": { "firstTicks": "40-70", "secondGapTicks": "1-80", "budgetSeconds": 60 },
+      "expandedStates": 852,
+      "firstSkillAssignments": 17,
+      "secondSkillAssignments": 852,
+      "waitingTick": 70,
+      "bestSaved": "0/1",
+      "winningRoute": false
+    }
+  ],
+  "outcome": {
+    "acceptedRouteClosures": 0,
+    "fanRouteBaseline": "2403/6020 from the latest accepted 16 October snapshot",
+    "openFanRoutesAtBaseline": 3617,
+    "expandedStates": 569365,
+    "solverSeconds": 180,
+    "solverStatesPerSecond": 3163.1,
+    "singleSkillAssignments": 81,
+    "orderedPairAssignments": 2556,
+    "completionVelocityContribution": "0 accepted routes",
+    "limitation": "The bounded search does not prove that this level has no solution. Search throughput does not measure route-closure velocity."
+  }
+}

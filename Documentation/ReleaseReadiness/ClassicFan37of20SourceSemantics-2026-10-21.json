@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-21",
+  "scope": "Resolve whether the bundled 37-of-20 fan level is a Classic parser percentage case or a source-data blocker.",
+  "source": {
+    "head": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "sourceFilesClean": true,
+    "sources": {
+      "Sources/NxlvKit/ClassicLevel.swift": {
+        "lines": "152-158",
+        "behaviour": "Reads the WORD at offset 0x0004 directly into saveRequirement."
+      },
+      "Sources/NxlvKit/ClassicDOSSimulation.swift": {
+        "lines": "605,770",
+        "behaviour": "Passes saveRequirement as requiredToSave; didWin compares savedCount against that count."
+      },
+      "Sources/LemmingsLocal/FanLevelLibrary.swift": {
+        "lines": "381-408",
+        "behaviour": "Pack 386 has no rules override and uses original Classic mechanics."
+      }
+    },
+    "liveMainRefreshed": true,
+    "originMain": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "fetchHead": "4bf3bddcb2641751eafd51b44a9cf29f18732c90"
+  },
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-386",
+    "levelID": "Gronklems -1.dat#1",
+    "title": "gronklems -1.dat 2",
+    "archive": "0386-Gronklems-1.zip",
+    "archiveSHA256": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
+    "lemmings": 20,
+    "rawRequiredToSave": 37,
+    "initialStateHash": "5abd5b53376cdfc5182681b9006b2a03c11eceb2402476e91cb14221d2b3cfc4"
+  },
+  "finding": {
+    "nativeInterpretation": "Absolute rescue count; no percent conversion occurs in the Classic level decoder or simulation path.",
+    "nativeRouteFeasibility": "Impossible with these exact fields because 37 required rescues exceed the population of 20.",
+    "sourceIntent": "Unverified. The local code proves current native interpretation, not what the level author intended or what an alternate authoring engine may encode.",
+    "originalEngineProof": "The public LLDB level page also lists a goal to save 37 of 20 and marks the level not solved. This confirms the published source entry preserves the anomaly, but does not prove original-engine behaviour or author intent. Do not change the count without an authoritative correction or format specification.",
+    "externalCatalogueEvidence": {
+      "checked": "2026-10-21",
+      "levelURL": "https://lldb.camanis.net/level/386/2/Unnamed",
+      "packURL": "https://lldb.camanis.net/levelpack/386/Gronklems-1",
+      "packCreator": "Gronkling",
+      "packReleaseDate": "2014-09-01",
+      "listedGoal": "Save 37 of 20 within 6 minutes",
+      "listedStatus": "Not solved yet",
+      "downloadedArchiveSHA256": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
+      "matchesBundledSolverResourceArchive": true,
+      "levelFileSHA256": "d61e5dca0f4d0d25e5497b9cedd61c4d32f2c680191d3cdbf435a16138758dd0",
+      "matchesBundledSolverResourceLevel": true
+    }
+  },
+  "closure": {
+    "closed": false,
+    "routeCountImpact": 0,
+    "bundledScopeRetained": true,
+    "nextRequiredEvidence": "Find an authoritative corrected level file or authoring-engine specification. Keep the level open until its exact bundled data has a valid MVP route."
+  }
+}

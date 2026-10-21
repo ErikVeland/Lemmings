@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "branch": "codex/bundled-engine-recreation-main",
+  "runtimeSource": "Sources/NxlvKit/Lemmings3Runtime.swift",
+  "runtimeSourceSHA256": "0f3f5107af8ab712d676babe92565385cd99c2452fe8a35d597aec8c3e15bd45",
+  "resource": {
+    "root": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "version": "1.9.1",
+    "build": 76,
+    "level": 206,
+    "levelDAT": "LEVELS/LEVEL206.DAT",
+    "levelDATSHA256": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad"
+  },
+  "seed": {
+    "path": "Documentation/TrolleyVerification/witnesses/lemmings3-206.json",
+    "sha256": "ac4b394feea0ddf4feebffc053764f6a06e474dbc469c23132c2fffa8f62d7e3",
+    "population": 20,
+    "recordedOutcome": {
+      "saved": 11,
+      "lost": 0,
+      "ticks": 2949
+    },
+    "throughTick": 441,
+    "sourceLimit": "The retained witness was recorded before the current Mole cadence change."
+  },
+  "solver": {
+    "binary": ".build/l3-solver/solver",
+    "binarySHA256": "c789f02f16f60d08b08846b6991c1058d01260789daed5823e440e3b9092ad97",
+    "library": ".build/l3-solver/libNxlvKit.dylib",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "command": "L3_PORTS_ROOT='/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD' .build/l3-solver/solver 206 --budget 90 --beam 8192 --paired-actors --fewer-inputs-first --tool-site-cell 2 --seed Documentation/TrolleyVerification/witnesses/lemmings3-206.json --seed-through 441 --refresh-engine-seed --out .build/l3-solver/level206-trolley-seed-mvp-2026-10-20",
+    "profile": {
+      "budgetSeconds": 90,
+      "beamWidth": 8192,
+      "pairedActors": true,
+      "ranking": "fewer inputs first",
+      "toolSiteCellPixels": 2,
+      "refreshEngineSeed": true,
+      "decisionPoints": 4663,
+      "maxDepth": 4703
+    },
+    "result": {
+      "status": "UNSOLVED",
+      "elapsedSolverSeconds": 92,
+      "expandedStates": 965040,
+      "expandedStatesPerSecond": 10489.6,
+      "bestSaved": 0,
+      "bestLost": 0,
+      "replayCandidate": false
+    }
+  },
+  "closure": {
+    "acceptedRoutesBefore": 86,
+    "acceptedRoutesAfter": 86,
+    "openRoutesAfter": 4,
+    "newRouteClosures": 0,
+    "routeVelocityDuringAttempt": "0 accepted routes in 92 solver seconds"
+  },
+  "limits": [
+    "This bounded search does not prove that Level 206 has no solution.",
+    "The search used the installed build 76 resource tree. It did not verify the 2.1 build 93 package."
+  ]
+}

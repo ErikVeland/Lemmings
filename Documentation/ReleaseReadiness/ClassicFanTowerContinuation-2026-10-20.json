@@ -1,6 +1,8 @@
 {
   "date": "2026-10-20",
   "sourceRevision": "99f92797b6dd200933761019fbb744327c0f77ba",
+  "sourceTreeCommittedAs": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "sourceTreeNote": "The standalone ClassicSolver adapter changes were uncommitted at the initial build and were later committed as sourceTreeCommittedAs. The recorded binary and library hashes identify the exact build.",
   "worktreeBranch": "codex/bundled-engine-recreation-main",
   "liveMainRefreshed": false,
   "mainRefreshLimit": "github.com DNS resolution failed; results use the cached origin/main ref",
@@ -23,6 +25,7 @@
     "buildCommand": "zsh Scripts/build-classic-solver.sh",
     "binarySha256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
     "librarySha256": "6c2422a2d58212dc41dd1849323d2daad0fc7dadc7305b9c29702cad6088727b",
+    "sourceTreeCommittedAs": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
     "progressAdapter": "standalone only; route search does not read or write player progress"
   },
   "baselinePrefix": [
@@ -172,13 +175,35 @@
     },
     "winningRoute": false
   },
+  "directExitQuotaContinuation": {
+    "profile": {
+      "width": 2048,
+      "secondsLimit": 60,
+      "fallback": 30,
+      "refire": 20,
+      "adaptiveRate": true,
+      "preferProgress": true,
+      "directExitDistance": true,
+      "rescueQuotaDistance": true
+    },
+    "result": {
+      "bestSaved": "0/9",
+      "expandedStates": 91916,
+      "solverSeconds": 34,
+      "winningRoute": false
+    },
+    "prefix": "The four-command prefix recorded above",
+    "limitation": "This bounded ranking profile did not recover the retained 8/9 near-win or find a winning route."
+  },
   "outcome": {
     "classicFanRoutesAfter": "2403/6020",
     "openClassicFanRoutesAfter": 3617,
     "fixedSearchInvocations": 72,
+    "boundedBeamContinuations": 2,
     "distinctTimingWorkerConfigurations": 70,
     "fixedVariantExpandedStates": 35213,
-    "adaptiveContinuationExpandedStates": 92587,
+    "boundedBeamExpandedStates": 184503,
+    "totalExpandedStates": 219716,
     "acceptedRouteClosures": 0,
     "limitation": "Both searches are bounded. They do not prove that the level has no solution."
   }

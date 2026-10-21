@@ -1,0 +1,405 @@
+{
+  "date": "2026-10-20",
+  "scope": "First-win search on 12 unresolved bundled Classic fan levels. A solver result is not route closure; no route candidate was produced.",
+  "source": {
+    "baseCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesCachedOriginMain": true,
+    "liveMainRefreshed": false,
+    "worktreeWasDirty": true,
+    "auditInput": ".build/classic-fan-current/audit-output/levels.jsonl",
+    "resources": "/Applications/Ultimate Lemmings.app/Contents/Resources/LevelPacks"
+  },
+  "solver": {
+    "binarySHA256": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579",
+    "librarySHA256": "d5e0f537d813c73cff67ec253670e2f9d216bfee1ba6d796846497c1b0aa3db2",
+    "solverRevision": "ead9b5e324d7e140f321410dc53e23a7a54dc5e601ada5d5196f29778605c579"
+  },
+  "aggregate": {
+    "levelsSearched": 12,
+    "solverBudgetSeconds": 60,
+    "expandedStates": 180118,
+    "statesPerSecond": 3002,
+    "winningCandidates": 0,
+    "acceptedRouteClosures": 0,
+    "classicFanRoutesAfter": "2403/6020",
+    "openClassicFanRoutesAfter": 3617,
+    "partialLeads": [
+      {
+        "identity": "fan:lldb-283/GARJEN03.dat#2",
+        "bestSaved": "8/80"
+      },
+      {
+        "identity": "fan:lldb-189/Lemmings platinum Careful Part 2.dat#5",
+        "bestSaved": "1/45"
+      }
+    ]
+  },
+  "limits": [
+    "Every search was bounded to five seconds and beam width 512.",
+    "No candidate route was produced, so no replay promotion or closure occurred.",
+    "The current 2403/6020 count remains the 16 October full-audit baseline; targeted searches do not refresh the full-family count.",
+    "A failed bounded search does not prove that a level has no solution."
+  ],
+  "attempts": [
+    {
+      "identity": "fan:lldb-95/Timpack8.dat#4",
+      "title": "Thunder Bolts Of Lightning",
+      "source": "0095-Timpack8.zip/Timpack8.dat#4",
+      "initialStateHash": "00155877232818e3c4a09daaf7a8d09bf90ef93acb40a7b06aad261f009c25a3",
+      "archiveSHA256": "56337c940d0e924b0dca3be4278276a3dd471f87b783ecc40570000de25637a7",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.47,
+      "solverSeconds": 5,
+      "expandedStates": 14892,
+      "statesPerSecond": 2978,
+      "bestSaved": "0/79",
+      "terminal": {
+        "tick": 213,
+        "released": 4,
+        "lost": 0,
+        "active": 4
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-463/Group Levels.dat#2",
+      "title": "Collaboration",
+      "source": "0463-Group-Levels.zip/Group Levels.dat#2",
+      "initialStateHash": "0027c02191b990966cd375514dc6ab9f81dd6c859968e36f39a5d92034ab864e",
+      "archiveSHA256": "a92378d34c54b351685776fdc36911a033ad062d730ddfe7ce2f09eee8223cf7",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.41,
+      "solverSeconds": 5,
+      "expandedStates": 14988,
+      "statesPerSecond": 2998,
+      "bestSaved": "0/22",
+      "terminal": {
+        "tick": 201,
+        "released": 9,
+        "lost": 0,
+        "active": 9
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-316/twbestof.dat#9",
+      "title": "...And Out Come The Bashers",
+      "source": "0316-twbestof.zip/twbestof.dat#9",
+      "initialStateHash": "0033466d63fa48003ceea60849882b6042444b4fff30565d33cbe9c6c11f3c9c",
+      "archiveSHA256": "88913689cc5f8e1fa2c8dbb811f4c1fa22460be8f6eeedad50c515f031f50c6b",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.41,
+      "solverSeconds": 5,
+      "expandedStates": 14871,
+      "statesPerSecond": 2974,
+      "bestSaved": "0/19",
+      "terminal": {
+        "tick": 229,
+        "released": 4,
+        "lost": 0,
+        "active": 4
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-222/ANTHPCK2.DAT#9",
+      "title": "Speedy Gone-lemming",
+      "source": "0222-ANTHPCK2.zip/ANTHPCK2.DAT#9",
+      "initialStateHash": "00589f5713fcc9ab4cdda96669f303b7115bd04bef025a64b839e72df54fd024",
+      "archiveSHA256": "bc0f3a5a7ca4091b2d0ccaf59daa544a57ee3c62c1ec55ebf3d1432ac306c162",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.4,
+      "solverSeconds": 5,
+      "expandedStates": 15236,
+      "statesPerSecond": 3047,
+      "bestSaved": "0/73",
+      "terminal": {
+        "tick": 171,
+        "released": 3,
+        "lost": 0,
+        "active": 3
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-260/Conway11.DAT#4",
+      "title": "Let's split!",
+      "source": "0260-Conway11.zip/Conway11.DAT#4",
+      "initialStateHash": "006440674ff5e5504af7a36c9356416845227607e874f5d9502aafe076759679",
+      "archiveSHA256": "14812ba81ef7eccd22114ba39e3dbd9d3a01de6dff614c119de25006e8de1fc0",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.42,
+      "solverSeconds": 5,
+      "expandedStates": 14473,
+      "statesPerSecond": 2895,
+      "bestSaved": "0/49",
+      "terminal": {
+        "tick": 210,
+        "released": 13,
+        "lost": 0,
+        "active": 13
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-283/GARJEN03.dat#2",
+      "title": "Ball Bearing",
+      "source": "0283-GARJEN03.zip/GARJEN03.dat#2",
+      "initialStateHash": "006bcccc04d87600f2358c03af5f787623f95bdc81e6c00ca9c06efca25b19d0",
+      "archiveSHA256": "9259996daf45168b3bc53ef1f6e7285cad03804162ba984f0a103a6ad52cad46",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.43,
+      "solverSeconds": 5,
+      "expandedStates": 14789,
+      "statesPerSecond": 2958,
+      "bestSaved": "8/80",
+      "terminal": {
+        "tick": 347,
+        "released": 74,
+        "lost": 1,
+        "active": 65
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-298/LEMERINewlvls.dat#8",
+      "title": "LemEdit generated Level",
+      "source": "0298-LEMERINewlvls.zip/LEMERINewlvls.dat#8",
+      "initialStateHash": "0077fd7af807de9642eb82a108ad5c0f89253c0b584d0336d001ad83e171a4b4",
+      "archiveSHA256": "bb76d39675ecd16008ace25069363f71579861058e18b8437dbd384cab536ba9",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.4,
+      "solverSeconds": 5,
+      "expandedStates": 14786,
+      "statesPerSecond": 2957,
+      "bestSaved": "0/20",
+      "terminal": {
+        "tick": 285,
+        "released": 9,
+        "lost": 3,
+        "active": 6
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-190/Lemmings platinum Dangerous Part 1.dat#12",
+      "title": "GiVe Me SoMe LeMmInG PuNcH!",
+      "source": "0190-Lemmings-platinum-Dangerous-Part-1.zip/Lemmings platinum Dangerous Part 1.dat#12",
+      "initialStateHash": "007ba03ecac7a221c8b0c2bd6e09900b507c00badb59a27395b11210592a0a43",
+      "archiveSHA256": "87290fe9c81be8dc154ef458decc034125cd3ebffc3f97dd640125547bd1ca3e",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.41,
+      "solverSeconds": 5,
+      "expandedStates": 14943,
+      "statesPerSecond": 2989,
+      "bestSaved": "0/46",
+      "terminal": {
+        "tick": 190,
+        "released": 4,
+        "lost": 0,
+        "active": 4
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-250/Conway01.DAT#3",
+      "title": "Round the bend",
+      "source": "0250-Conway01.zip/Conway01.DAT#3",
+      "initialStateHash": "00881895fbf2a4a8c188e78bf377c9117443d1d4ea65851a91443f312c50007d",
+      "archiveSHA256": "9b10dc51932700f78b80f410ac7a2d26a39e20915f9c06564fa92762f6d056db",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.4,
+      "solverSeconds": 5,
+      "expandedStates": 15579,
+      "statesPerSecond": 3116,
+      "bestSaved": "0/63",
+      "terminal": {
+        "tick": 125,
+        "released": 2,
+        "lost": 0,
+        "active": 2
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-171/Giga pack 09.dat#2",
+      "title": "Frozen in the airport",
+      "source": "0171-Giga-pack-09.zip/Giga pack 09.dat#2",
+      "initialStateHash": "00afb6607b5845f8a866e9112b8b63d9479a7ff94e40ab19bf92d7ac65205931",
+      "archiveSHA256": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.4,
+      "solverSeconds": 5,
+      "expandedStates": 14895,
+      "statesPerSecond": 2979,
+      "bestSaved": "0/1",
+      "terminal": {
+        "tick": 183,
+        "released": 4,
+        "lost": 0,
+        "active": 4
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-189/Lemmings platinum Careful Part 2.dat#5",
+      "title": "Propersision ZERO",
+      "source": "0189-Lemmings-platinum-Careful-Part-2.zip/Lemmings platinum Careful Part 2.dat#5",
+      "initialStateHash": "00bd81e8b1d5d1233a5b587e4eb0909f5276a348c201d683c2c6d72d0fd8b158",
+      "archiveSHA256": "f847c93ace1e8b99fd1ab2537b62c617c5f34c7e8d809775335ee4ffd18c91ac",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.4,
+      "solverSeconds": 5,
+      "expandedStates": 15150,
+      "statesPerSecond": 3030,
+      "bestSaved": "1/45",
+      "terminal": {
+        "tick": 312,
+        "released": 7,
+        "lost": 3,
+        "active": 3
+      },
+      "winningRoute": false
+    },
+    {
+      "identity": "fan:lldb-137/weirdy05 (version 2).dat#8",
+      "title": "Lomax and Jimmy",
+      "source": "0137-weirdy05-version-2.zip/weirdy05 (version 2).dat#8",
+      "initialStateHash": "010ec93b5f5c44e2a1cde7812d269d90661f1bb97ad713ed3b4aafb306ef80b6",
+      "archiveSHA256": "06cce8c9cb1e34d7db43521d077d58e51377dc58d67345c7d764a9203fecdf41",
+      "profile": {
+        "beamWidth": 512,
+        "budgetSeconds": 5.0,
+        "clock": "golems",
+        "fallback": 170,
+        "refire": 120,
+        "rate": "solver default",
+        "adaptiveRate": false,
+        "preferProgress": false,
+        "rescueQuotaDistance": false
+      },
+      "elapsedWallSeconds": 5.41,
+      "solverSeconds": 5,
+      "expandedStates": 15516,
+      "statesPerSecond": 3103,
+      "bestSaved": "0/2",
+      "terminal": {
+        "tick": 570,
+        "released": 2,
+        "lost": 0,
+        "active": 2
+      },
+      "winningRoute": false
+    }
+  ]
+}

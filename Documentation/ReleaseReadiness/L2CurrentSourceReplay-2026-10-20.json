@@ -2,7 +2,7 @@
   "date": "2026-10-20",
   "sourceRevision": "99f92797b6dd200933761019fbb744327c0f77ba",
   "branch": "codex/bundled-engine-recreation-main",
-  "liveMainRefreshed": false,
+  "liveMainRefreshed": true,
   "scope": {
     "engine": "lemmings2",
     "bundledLevels": 120,
@@ -22,9 +22,36 @@
     "verifierSha256": "fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91",
     "librarySha256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562"
   },
+  "currentCheckoutRerun": {
+    "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "runtimeSourceSha256": "61de3583267111615cee88e0f10741284b171f89ff253aeebe09b70e9c1c00e1",
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULECACHE_PATH=/private/tmp/lemmings-clang-module-cache LEMMINGS_TEST_AUDIO=muted zsh Scripts/verify-lemmings2-completion.sh --require-all",
+    "exitCode": 0,
+    "result": "PASS 120 standalone routes, 70 carry-over variants, 12 complete tribe chains and strict negative cases",
+    "artifacts": {
+      "verifierSha256": "fd39550127699e48c68db51e8f3e1f40866de23f027d129705e7fcbef4906a91",
+      "eventsSha256": "e076feb6677862feb51a191bebccc4ec79ddbbd39904c719201a233adf7be798",
+      "librarySha256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562"
+    },
+    "acceptedRouteClosures": 0,
+    "limits": [
+      "This rerun confirms route and campaign completion. It does not prove original DOS tick, continuous-actor or full-render parity.",
+      "The Gold Ark remains outside the MVP route target."
+    ]
+  },
   "limits": [
     "This verifies native route and campaign completion, not original-engine tick or continuous-actor parity.",
-    "The Gold Ark is a stretch ending and remains outside the MVP route target.",
-    "The live GitHub main ref could not be refreshed because DNS resolution failed."
-  ]
+    "The Gold Ark is a stretch ending and remains outside the MVP route target."
+  ],
+  "liveMainRefresh": {
+    "fetchedAtUTC": "2026-10-20T11:44:51Z",
+    "command": "git fetch origin main",
+    "remoteMainCommit": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+    "headMatchesRemoteMain": true,
+    "originMainMatchesRemoteMain": true,
+    "aheadBehind": {
+      "headAhead": 0,
+      "headBehind": 0
+    }
+  }
 }

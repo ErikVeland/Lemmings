@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "runtimeLibrary": ".build/l2-completion/libNxlvKit.dylib",
+  "runtimeLibrarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+  "level": {
+    "number": 107,
+    "name": "Shadow 7",
+    "population": 20,
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "resourceRelease": "Installed Mac build 76; build 85 content comparison matches this level DAT.",
+    "levelDATSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+    "fixtureSHA256": "6d54cd6410096fd66e3a5cb48b81c6c9923f1da733334cc79dc5d0a3e3bffb69"
+  },
+  "retainedRoute": {
+    "input0": "At tick 1590, lemming 1 uses its upward tool direction. The current runtime applies its bricks tool and starts vertical building.",
+    "input1": "At tick 1666, lemming 1 jumps.",
+    "cutoff": "The fixture abort at tick 2300 marks the route-attempt boundary. The measurement records state immediately before that abort."
+  },
+  "trace": {
+    "tick1590": "Lemming 1 walks at (203,112) with 16 bricks.",
+    "tick1655": "Lemming 1 has built five vertical brick steps and stands at (203,92) with 11 bricks.",
+    "tick1666": "The Mole is at (170,123), digging down-left. The retained Jumper action is accepted.",
+    "tick1688": "Lemming 1 is walking again on the original floor at (169,112)."
+  },
+  "jumpTicksTried": [1620, 1630, 1640, 1650, 1660, 1666, 1670, 1680, 1690, 1700, 1720, 1740, 1760, 1780],
+  "builderStartTicksTried": [1580, 1582, 1584, 1586, 1588, 1590, 1592, 1594, 1596, 1598, 1600],
+  "builderRetimingRule": "For each builder start tick, the Jumper input was set 76 ticks later. The remaining retained input and tick-2300 cutoff were unchanged.",
+  "builderRetimingResults": {
+    "configurations": 11,
+    "savedAtTick2300": 0,
+    "winningRoutes": 0
+  },
+  "resultBeforeAbort": {
+    "saved": 0,
+    "lost": 0,
+    "reserve": 10,
+    "allInputsBeforeAbortAccepted": true,
+    "winningRoutes": 0
+  },
+  "outcome": "Fourteen timings for the retained Jumper input and eleven combined builder/Jumper timings produce no saved lemmings by the fixture's tick-2300 route boundary. Shadow 7 remains open. The probe used the library hash from the current-source completion audit and does not show that the level is unsolvable."
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-20",
+  "sourceRevision": "4bf3bddcb2641751eafd51b44a9cf29f18732c90",
+  "runtimeSourceSHA256": "8a941487760977efb16eec10da3b46fa358e93ef5c8def3365c2c017489788eb",
+  "level": {
+    "number": 107,
+    "name": "Shadow 7",
+    "source": ".build/l3-mole-verification/source-left-facing/LEVELS/LEVEL107.DAT",
+    "sourceSHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+    "fixtureSHA256": "6d54cd6410096fd66e3a5cb48b81c6c9923f1da733334cc79dc5d0a3e3bffb69"
+  },
+  "bundleResourceMatch": {
+    "resourceRelease": "installed Mac build 76. This level DAT hash matches that tree; the current 2.1 package was not directly inspected in this audit.",
+    "levelDAT_SHA256": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3",
+    "matchesInstalledBundle": true
+  },
+  "search": {
+    "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer CLANG_MODULE_CACHE_PATH=/private/tmp/lemmings-clang-module-cache SWIFT_MODULECACHE_PATH=/private/tmp/lemmings-clang-module-cache LEMMINGS_TEST_AUDIO=muted L3_TEST_LIBRARY_DIR=.build/l2-completion L3_PORTS_ROOT=.build/l3-mole-verification/source-left-facing zsh Scripts/solve-lemmings3-levels.sh 107 --budget 120 --beam 2048 --tool-site-cell 2 --paired-actors --fewer-inputs-first --seed Tests/Lemmings3CompletionTests/Fixtures/107.json --seed-through 1666 --refresh-engine-seed --out .build/l3-current-source/shadow-107-seeded",
+    "solverSHA256": "106b59f2f0a43539059ebd72299f9c060fa390c2ae4f363885696fc418605c35",
+    "librarySHA256": "bd019fc07040782156b02fa19088b51a4e030ea4bd5fa4e81616ff61a80a6562",
+    "budgetSeconds": 120,
+    "beamWidth": 2048,
+    "seedThroughTick": 1666,
+    "decisionPoints": 4272,
+    "searchDepth": 4312,
+    "expandedStates": 763437,
+    "roundsToBeam": 1,
+    "bestSaved": 0,
+    "lost": 0,
+    "winningRoute": false
+  },
+  "outcome": "The retained prefix did not produce a winning route under the current source runtime. The route gap remains open."
+}
