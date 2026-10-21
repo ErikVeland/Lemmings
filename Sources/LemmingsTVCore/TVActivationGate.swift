@@ -4,6 +4,8 @@ public struct TVActivationGate: Sendable {
     public init() {}
     public mutating func reset() { armed = false }
     public mutating func observeNeutral() { armed = true }
+    /// A new UIKit Select press proves the previous press ended, without reading controller profiles.
+    public mutating func observeSelectBegan() { armed = true }
     public mutating func consume() -> Bool {
         guard armed else { return false }
         armed = false

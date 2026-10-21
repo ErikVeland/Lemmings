@@ -25,7 +25,6 @@ import UIKit
     var controllerSpeed: () -> Double = { 1 }
     var triggerFeedbackEnabled: () -> Bool = { true }
     var onSpeedKey: ((Bool) -> Void)?
-    var onMenuNeutral: (() -> Void)?
     var settings: () -> ClassicSettings = { MobileSettings.current(from: .standard).classic }
     var isMenu: () -> Bool = { false }
     var isActive: () -> Bool = { true }

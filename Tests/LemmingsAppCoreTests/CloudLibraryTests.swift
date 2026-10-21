@@ -197,6 +197,15 @@ private final class LibraryCredentials: @unchecked Sendable {
         #expect(Set(restored.map(\.id)) == [original.id, shared.id])
         #expect(Set(memory.read().map(\.id)) == [original.id, shared.id])
     }
+    @Test func unreadableCredentialsNeverCreateReplacementKeys() async {
+        let access = CloudLibraryDeviceAccess(read: {
+            throw URLError(.userAuthenticationRequired)
+        }, write: { _ in
+            Issue.record("Unreadable credentials must not be overwritten")
+        })
+        await #expect(throws: URLError.self) { try await access.credentials() }
+        await #expect(throws: URLError.self) { try await access.storeCredentials([CloudLibraryIdentity()]) }
+    }
     private func run(_ owner: String, index: Int, saved: Int = 10) -> ArcadeRun {
         let conditions = TrolleyConditions(gameID: "lemmings", packID: "release/lemmings", levelID: "level-\(index)",
             levelFingerprint: String(repeating: "b", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",

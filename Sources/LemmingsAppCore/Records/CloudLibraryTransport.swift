@@ -365,7 +365,7 @@ actor CloudLibraryDeviceAccess {
         query[kSecUseAuthenticationContext as String] = context
 #endif
         var result: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        let status = BackgroundKeychain.perform { SecItemCopyMatching(query as CFDictionary, &result) }
         if status == errSecItemNotFound { return [] }
         guard status == errSecSuccess, let data = result as? Data else { throw SequelDataError.invalid(L10n.text("Unlock this device to access cloud saves.")) }
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
@@ -380,11 +380,13 @@ actor CloudLibraryDeviceAccess {
         let context = LAContext(); context.interactionNotAllowed = true
         query[kSecUseAuthenticationContext as String] = context
 #endif
-        let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
-        if update == errSecItemNotFound {
+        let status = BackgroundKeychain.perform {
+            let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+            guard update == errSecItemNotFound else { return update }
             var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
             entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-            guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
-        } else if update != errSecSuccess { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
+            return SecItemAdd(entry as CFDictionary, nil)
+        }
+        guard status == errSecSuccess else { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
     }
 }

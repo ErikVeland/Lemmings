@@ -78,7 +78,7 @@ import UIKit
             if menu && !menuPressed { adapter.onGameMenu?() }
             menuPressed = menu
             if let active = devices.first(where: { !pressed($0).isEmpty || moving($0) }) { lastMenuDevice = active }
-            if devices.allSatisfy({ pressed($0).isEmpty }) { adapter.onMenuNeutral?() }
+            // UIKit owns menu Select presses. Its native targets arm their own activation gates.
             reset()
             wasMenu = true
             return

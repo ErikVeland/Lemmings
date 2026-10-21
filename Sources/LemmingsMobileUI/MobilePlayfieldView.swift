@@ -6,6 +6,9 @@ import LemmingsMobileCore
 import UIKit
 
 @MainActor final class MobilePlayfieldView: UIView, UIGestureRecognizerDelegate {
+    #if os(tvOS)
+    override var canBecomeFirstResponder: Bool { true }
+    #endif
     var onHover: ((MobilePoint?) -> Void)?
     var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?

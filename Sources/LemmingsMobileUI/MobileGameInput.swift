@@ -91,10 +91,6 @@ extension MobileGameViewController {
         }
         #if os(tvOS)
         overlayCanvas.requiresNeutralActivation = true
-        adapter.onMenuNeutral = { [weak self] in
-            self?.overlayCanvas.armTVActivation()
-            self?.solutionSelector.observeNeutral()
-        }
         #endif
         adapter.isActive = { [weak self] in self?.lifecycle.isForeground == true && self?.lifecycle.isInterrupted == false }
         adapter.isMenu = { [weak self] in self?.overlay.isHidden == false || self?.isChoosingToolDirection == true }

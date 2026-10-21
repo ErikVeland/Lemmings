@@ -1,0 +1,93 @@
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:28:40: warning: 'SecKeychainOpen' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 26 | if CommandLine.arguments.count == 4, CommandLine.arguments[1] == "--changed-signer" {
+ 27 |     var fixture: SecKeychain?
+ 28 |     check(BackgroundKeychain.perform { SecKeychainOpen(CommandLine.arguments[2], &fixture) } == errSecSuccess, "Open fixture in rebuilt executable")
+    |                                        `- warning: 'SecKeychainOpen' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 29 |     let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+ 30 |         kSecAttrService as String: CommandLine.arguments[3], kSecAttrAccount as String: "library",
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:43:13: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 41 | 
+ 42 | let original = interactionAllowed()
+ 43 | defer { _ = SecKeychainSetUserInteractionAllowed(original) }
+    |             `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 44 | for allowed in [false, true] {
+ 45 |     check(SecKeychainSetUserInteractionAllowed(allowed) == errSecSuccess, "Set interaction flag")
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:45:11: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 43 | defer { _ = SecKeychainSetUserInteractionAllowed(original) }
+ 44 | for allowed in [false, true] {
+ 45 |     check(SecKeychainSetUserInteractionAllowed(allowed) == errSecSuccess, "Set interaction flag")
+    |           `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 46 |     for result in [errSecSuccess, errSecItemNotFound, errSecAuthFailed] {
+ 47 |         let status = BackgroundKeychain.perform {
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:65:9: warning: 'SecKeychainCreate' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 63 | let created = BackgroundKeychain.perform {
+ 64 |     password.withCString { bytes in
+ 65 |         SecKeychainCreate(directory.appendingPathComponent("fixture.keychain").path,
+    |         `- warning: 'SecKeychainCreate' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 66 |                           UInt32(password.utf8.count), bytes, false, nil, &fixture)
+ 67 |     }
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:71:42: warning: 'SecKeychainDelete' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 69 | check(created == errSecSuccess, "Create disposable Keychain: \(created)")
+ 70 | let keychain = fixture!
+ 71 | defer { _ = BackgroundKeychain.perform { SecKeychainDelete(keychain) } }
+    |                                          `- warning: 'SecKeychainDelete' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 72 | let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+ 73 |     kSecAttrService as String: "lemmings-keychain-regression-\(UUID())",
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:88:36: warning: 'SecKeychainLock' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 86 | // A locked legacy Keychain exercises the same system UI gate as a changed
+ 87 | // executable identity. Each operation must fail without opening a dialog.
+ 88 | check(BackgroundKeychain.perform { SecKeychainLock(keychain) } == errSecSuccess, "Lock fixture")
+    |                                    `- warning: 'SecKeychainLock' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 89 | for operation in [
+ 90 |     { SecItemCopyMatching(lookup as CFDictionary, &data) },
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:103:28: warning: 'SecKeychainUnlock' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+101 | }
+102 | check(BackgroundKeychain.perform {
+103 |     password.withCString { SecKeychainUnlock(keychain, UInt32(password.utf8.count), $0, true) }
+    |                            `- warning: 'SecKeychainUnlock' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+104 | } == errSecSuccess, "Unlock fixture with its temporary password")
+105 | check(BackgroundKeychain.perform { SecItemCopyMatching(lookup as CFDictionary, &data) } == errSecSuccess, "Read after unlock")
+
+/Users/veland/Lemmings/Tests/BackgroundKeychainTests/main.swift:13:11: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 11 | func interactionAllowed() -> Bool {
+ 12 |     var allowed: DarwinBoolean = false
+ 13 |     check(SecKeychainGetUserInteractionAllowed(&allowed) == errSecSuccess, "Read interaction flag")
+    |           `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+ 14 |     return allowed.boolValue
+ 15 | }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/var/folders/x4/552661tn5vzgxk5405585gg80000gq/T/lemmings-keychain-9097D079-5B51-45B2-929E-012457430E62/rebuilt-tests: replacing existing signature
+PASS changed ad hoc signer refuses Keychain access without a dialog
+PASS silent Keychain reads, updates, additions, denied access, key preservation and interaction restoration

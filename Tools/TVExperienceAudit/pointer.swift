@@ -32,8 +32,9 @@ extension TVExperienceAudit {
                         }
                     }
                 }
+                let unavailable = state.2 && !state.1
                 guard coloured(53 * scale, 53 * scale), coloured(74 * scale, 74 * scale),
-                      !coloured(64 * scale, 64 * scale), !coloured(52 * scale, 64 * scale) else {
+                      coloured(64 * scale, 64 * scale) == unavailable, !coloured(52 * scale, 64 * scale) else {
                     throw Failure.invalid("Pointer corners or clear centre differ: " + state.0)
                 }
                 try png(bitmap, at: output.appendingPathComponent(state.0 + "-\(scale)x.png"))

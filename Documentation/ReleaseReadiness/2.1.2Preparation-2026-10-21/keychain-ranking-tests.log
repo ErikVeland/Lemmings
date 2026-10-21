@@ -1,0 +1,19 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AutomaticRankingSharingTests started.
+􀟈  Test enablingCountsBackfillsEveryProfileAndEngineWithoutOpeningABoard() started.
+􀟈  Test explicitRecordsOptInWorksWithoutCountSharing() started.
+􀟈  Test alreadySharingCountsBackfillsAtLaunchAndRetriesOfflineRecords() started.
+􀟈  Test explicitOptOutAndRemovalSurviveCountsChangesAndRestart() started.
+􀟈  Test disablingCountsDuringRegistrationStopsScoreUploads() started.
+􁁛  Test explicitRecordsOptInWorksWithoutCountSharing() passed after 0.141 seconds.
+􁁛  Test disablingCountsDuringRegistrationStopsScoreUploads() passed after 0.144 seconds.
+􁁛  Test alreadySharingCountsBackfillsAtLaunchAndRetriesOfflineRecords() passed after 0.149 seconds.
+􁁛  Test explicitOptOutAndRemovalSurviveCountsChangesAndRestart() passed after 0.153 seconds.
+􁁛  Test enablingCountsBackfillsEveryProfileAndEngineWithoutOpeningABoard() passed after 0.154 seconds.
+􁁛  Suite AutomaticRankingSharingTests passed after 0.155 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.155 seconds.

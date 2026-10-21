@@ -14,12 +14,21 @@ extension UIControl.Event {
 #if os(tvOS)
 /// Focus decorates the exact bitmap target without stretching the shipped artwork.
 @MainActor final class MobileFocusButton: UIButton {
+    var onSelectBegan: (() -> Void)?
     var onHold: (() -> Void)?
     private var holdTask: Task<Void, Never>?
     private var trackingSelect = false
     private var heldSelect = false
 
+    override func accessibilityActivate() -> Bool {
+        guard isEnabled else { return false }
+        onSelectBegan?()
+        sendActions(for: .primaryActionTriggered)
+        return true
+    }
+
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if isEnabled, presses.contains(where: { $0.type == .select }) { onSelectBegan?() }
         guard onHold != nil, isEnabled, presses.contains(where: { $0.type == .select }) else {
             super.pressesBegan(presses, with: event); return
         }

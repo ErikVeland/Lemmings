@@ -924,7 +924,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:246",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:227"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:226"
     ]
   },
   "Ad-Lib FM": {
@@ -1693,7 +1693,7 @@
       "Sources/LemmingsGameArt/MobileExtraSkillArt.swift:9",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:29",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:62",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:391",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:387",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1113",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1122",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1132",
@@ -1708,10 +1708,10 @@
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:47",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:66",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:76",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:104",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:35",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:38",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:89"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:109",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:40",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:43",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:94"
     ]
   },
   "BACK TO LIBRARY": {
@@ -2359,7 +2359,7 @@
   "CAMERA": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:44"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:49"
     ]
   },
   "CAMERA, STEP AND SPEED: PAUSED CONTROLS": {
@@ -2375,9 +2375,9 @@
       "Sources/LemmingsMobileUI/MobileGameHints.swift:70",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1236",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1467",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:261",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:260",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:16",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:116"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:121"
     ]
   },
   "CANNON": {
@@ -2518,7 +2518,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1220",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:42"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:47"
     ]
   },
   "COUNTDOWN": {
@@ -2536,7 +2536,7 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:456",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:480",
       "Sources/LemmingsLocal/main.swift:9054",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:103",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:108",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:188",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:199"
     ]
@@ -3998,7 +3998,7 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:354",
       "Sources/LemmingsLocal/SettingsWindow.swift:443",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:29",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:390",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:386",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:188",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:238"
     ]
@@ -4382,7 +4382,7 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:697",
       "Sources/LemmingsLocal/SettingsWindow.swift:680",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:34",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:113"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:116"
     ]
   },
   "DJ uses other soundtracks": {
@@ -4764,15 +4764,15 @@
   "DualSense touchpad click: DJ shuffle": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:388"
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:384"
     ]
   },
   "DualSense touchpad swipe: step back / forward": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:84",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:386",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:388"
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:382",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:384"
     ]
   },
   "Duplicate Chronicles object ID {0}.": {
@@ -4814,8 +4814,8 @@
   "END RUN": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:117",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:81"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:122",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:86"
     ]
   },
   "ENTER": {
@@ -4857,7 +4857,7 @@
   "ENTRANCE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:107"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:112"
     ]
   },
   "ESC / ?  CLOSE": {
@@ -4875,7 +4875,7 @@
   "EXIT": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:108"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:113"
     ]
   },
   "EXPERIMENTAL GAMEPLAY": {
@@ -4959,7 +4959,7 @@
       "Sources/LemmingsLocal/AchievementsWindow.swift:115",
       "Sources/LemmingsLocal/ArcadeWindow.swift:889",
       "Sources/LemmingsLocal/TrolleyResultView.swift:124",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:219",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:218",
       "Sources/NxlvKit/TrolleyAchievementCollection.swift:12",
       "Sources/NxlvKit/TrolleyCelebration.swift:49"
     ]
@@ -5108,7 +5108,7 @@
   "End run?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:115"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:120"
     ]
   },
   "End this run?": {
@@ -5437,7 +5437,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1477",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1223",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:51"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:56"
     ]
   },
   "FAN LEMMINGS  {0}/{1}": {
@@ -5467,7 +5467,7 @@
   "FASTER": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:65"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:70"
     ]
   },
   "FASTEST 100%": {
@@ -6122,7 +6122,7 @@
   "Game controls": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:84"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:89"
     ]
   },
   "Game data unavailable": {
@@ -6154,7 +6154,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:212",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:154"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:157"
     ]
   },
   "Game resumed": {
@@ -6252,7 +6252,7 @@
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:58",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:12",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:23",
-      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:56"
+      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:59"
     ]
   },
   "Ghosts off": {
@@ -7684,7 +7684,7 @@
   "L2 / LT + L3: DJ shuffle": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:388"
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:384"
     ]
   },
   "L2 air velocity is outside the supported acceleration table.": {
@@ -7976,7 +7976,7 @@
   "LAST ASSIGNMENT": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:47"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:52"
     ]
   },
   "LATER": {
@@ -8785,7 +8785,7 @@
       "Sources/LemmingsLocal/main.swift:1011",
       "Sources/LemmingsLocal/main.swift:3272",
       "Sources/LemmingsLocal/main.swift:5171",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:234",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:233",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:384",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:166"
     ]
@@ -9040,7 +9040,7 @@
   "MIN / MAX RATE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:72"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:77"
     ]
   },
   "MINE": {
@@ -9077,7 +9077,7 @@
   "MOVE CAMERA": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:109"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:114"
     ]
   },
   "MOVIE SAVED": {
@@ -9934,7 +9934,7 @@
   "NEXT LEMMING": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:45"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:50"
     ]
   },
   "NEXT LEVEL": {
@@ -10625,7 +10625,7 @@
   "Not earned": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:219"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:218"
     ]
   },
   "Not met. ": {
@@ -10798,7 +10798,7 @@
   "OVERVIEW": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:36"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:41"
     ]
   },
   "Object '{0}:{1}' could not generate its CE pickup skill artwork.": {
@@ -10895,7 +10895,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:61",
-      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:80"
+      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:86"
     ]
   },
   "Official": {
@@ -10976,7 +10976,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:61",
-      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:80"
+      "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:86"
     ]
   },
   "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games.": {
@@ -11281,7 +11281,7 @@
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:721",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1120",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1129",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:37"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:42"
     ]
   },
   "PC Speaker / AdLib FM": {
@@ -11397,7 +11397,7 @@
   "PRECISION": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:106"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:111"
     ]
   },
   "PREVIEW UNAVAILABLE": {
@@ -11416,7 +11416,7 @@
   "PREVIOUS LEMMING": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:46"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:51"
     ]
   },
   "PREVIOUS LEVEL": {
@@ -12526,13 +12526,13 @@
   "RATE +": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:71"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:76"
     ]
   },
   "RATE -": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:70"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:75"
     ]
   },
   "RATE {0}": {
@@ -12616,7 +12616,7 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1125",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1219",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1237",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:80"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:85"
     ]
   },
   "RESULT": {
@@ -12635,8 +12635,8 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1121",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1131",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:501",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:129",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:67"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:134",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:72"
     ]
   },
   "RESUME JOURNEY - {0}": {
@@ -12675,7 +12675,7 @@
   "REWIND": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:60"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:65"
     ]
   },
   "REWIND CAREER": {
@@ -13975,7 +13975,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1145",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:41"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:46"
     ]
   },
   "SFX muted": {
@@ -14073,7 +14073,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1223",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:51"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:56"
     ]
   },
   "SKILLS": {
@@ -14081,7 +14081,7 @@
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:859",
       "Sources/LemmingsLocal/TrolleyResultView.swift:46",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:43"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:48"
     ]
   },
   "SKIP LEVEL": {
@@ -14118,7 +14118,7 @@
   "SLOWER": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:64"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:69"
     ]
   },
   "SMOKE": {
@@ -14254,13 +14254,13 @@
   "STEP BACK": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:59"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:64"
     ]
   },
   "STEP FORWARD": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:48"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:53"
     ]
   },
   "STEVE HAMMOND": {
@@ -14842,7 +14842,7 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:111",
       "Sources/LemmingsLocal/SettingsWindow.swift:206",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:30",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:343",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:339",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:150",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:216"
     ]
@@ -15260,7 +15260,7 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:665",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:667",
       "Sources/LemmingsLocal/KeyboardOverlayView.swift:44",
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:95",
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:100",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:188",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:193"
     ]
@@ -15418,7 +15418,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:85",
       "Sources/LemmingsLocal/SettingsWindow.swift:680",
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:363",
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:359",
       "Sources/LemmingsMobileUI/MobileSettingsPages.swift:80"
     ]
   },
@@ -16203,7 +16203,7 @@
   "Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:155"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:158"
     ]
   },
   "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost.": {
@@ -17117,8 +17117,7 @@
   "The library key could not be saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:387",
-      "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:388"
+      "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:390"
     ]
   },
   "The library key is invalid.": {
@@ -18436,7 +18435,7 @@
   "Two-finger tap on the playfield: DJ shuffle": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameInput.swift:388"
+      "Sources/LemmingsMobileUI/MobileGameInput.swift:384"
     ]
   },
   "U": {
@@ -18461,7 +18460,7 @@
   "UNDO END RUN": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:81"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:86"
     ]
   },
   "UP AND DOWN TO CHOOSE  *  ENTER TO START": {
@@ -18622,7 +18621,7 @@
       "Sources/LemmingsLocal/AboutWindow.swift:43",
       "Sources/LemmingsLocal/ArcadeWindow.swift:913",
       "Sources/LemmingsLocal/TrolleyResultView.swift:230",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:219"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:218"
     ]
   },
   "Unknown Chronicles frame encoding {0}.": {
@@ -19524,7 +19523,7 @@
   "ZOOM": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:105"
+      "Sources/LemmingsMobileUI/MobileTVGameControls.swift:110"
     ]
   },
   "Zero avoidable losses": {

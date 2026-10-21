@@ -84,7 +84,6 @@ import UIKit
     private var pageLayout: GameFrontEnd.Layout?
     var requiresNeutralActivation = false
     private var tvActivation = TVActivationGate()
-    func armTVActivation() { tvActivation.observeNeutral() }
     private static let portraits = Bundle.main.resourceURL.flatMap {
         GamePortraitArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
     }
@@ -278,6 +277,7 @@ import UIKit
             button.isEnabled = action.enabled
             #if os(tvOS)
             if let focusButton = button as? MobileFocusButton {
+                focusButton.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
                 focusButton.onHold = action.id.hasPrefix("player.") ? { [weak self] in
                     guard let self, !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
                     self.onHoldAction?(action.id)

@@ -4,6 +4,7 @@
     "Exact queue and position for new Journey and playlist checkpoints",
     "Separate Solo and Hot Seat sequel progress with safe recovery",
     "Refined Lemmings lettering and hand-drawn 4× countdown numerals",
-    "Shared Classic, Lemmings 2 and Lemmings 3 controls with paused Ready handovers"
+    "Shared Classic, Lemmings 2 and Lemmings 3 controls with paused Ready handovers",
+    "Fixed × menu selection and gameplay input handoff; Ready still requires a fresh press"
   ]
 }

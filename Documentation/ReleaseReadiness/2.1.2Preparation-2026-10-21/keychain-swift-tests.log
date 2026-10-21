@@ -1,0 +1,295 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 822]
+[Planning 1 / 822]
+[Planning deferred tasks]
+[Starting]
+[19 / 89] NxlvKit
+[25 / 98] NxlvKit
+[40 / 113] NxlvKit
+[47 / 122] LemmingsAppCore
+[48 / 128] NxlvKit
+[48 / 128] LemmingsDataTool-product
+[51 / 127] LemmingsAppCore
+[61 / 142] LemmingsAppCore
+[62 / 142] LemmingsAppCore
+[63 / 142] LemmingsAppCore
+[65 / 142] LemmingsAppCore
+[67 / 142] LemmingsAppCore
+[72 / 149] LemmingsAppCore
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[80 / 164] LemmingsMobileCore
+[82 / 164] LemmingsMobileCore
+[84 / 164] LemmingsMobileCore
+[86 / 164] LemmingsMobileCore
+[87 / 164] LemmingsMobileCore
+[97 / 168] LemmingsMobileCore
+[99 / 170] LemmingsMobileCore
+[108 / 180] LemmingsTVCore
+[109 / 180] LemmingsTVCore
+[115 / 188] LemmingsTVCore
+[116 / 188] LemmingsTVCore
+[118 / 188] NxlvKit
+[120 / 192] LemmingsLocalTests-product
+[130 / 192] LemmingsMobileCore
+[141 / 213] LemmingsDataTool-product
+[145 / 214] LemmingsGameArt
+[147 / 230] LemmingsAppCoreTests-product
+[149 / 230] LemmingsGameArt
+[154 / 230] LemmingsAppCoreTests-product
+[156 / 230] LemmingsGameArt
+[160 / 233] LemmingsGameArt
+[163 / 233] LemmingsGameArt
+[167 / 240] LemmingsGameArt
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[173 / 237] LemmingsAppCoreTests-product
+[176 / 238] LemmingsTVCoreTests-product
+[178 / 244] LemmingsGameArt
+[181 / 244] LemmingsGameArt
+[183 / 244] LemmingsMobileCore
+[189 / 257] LemmingsMobileBetaTool-product
+[193 / 272] LemmingsMobileMenuAudit-product
+[198 / 273] LemmingsMobileUI
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[199 / 273] LemmingsMobileUI
+[201 / 270] LemmingsMobileUI
+[204 / 271] LemmingsMobileBetaTool-product
+[210 / 271] LemmingsMobileMenuAudit-product
+[216 / 286] LemmingsMobileCoreTests-product
+[216 / 286] LemmingsMobileMenuAudit-product
+[220 / 286] LemmingsMobileMenuAudit-product
+[224 / 316] LemmingsMobileMenuAudit-product
+[229 / 316] LemmingsMobileCoreTests-product
+[232 / 316] LemmingsMobileCoreTests-product
+[233 / 316] LemmingsMobileCoreTests-product
+[235 / 316] LemmingsMobileCoreTests-product
+[239 / 316] LemmingsMobileCoreTests-product
+[240 / 316] LemmingsMobileCoreTests-product
+[241 / 316] LemmingsMobileCoreTests-product
+[243 / 316] LemmingsMobileCoreTests-product
+[244 / 316] LemmingsMobileCoreTests-product
+[248 / 316] LemmingsLocal-product
+[248 / 316] LemmingsMobileCoreTests-product
+[250 / 316] LemmingsLocal-product
+[253 / 318] LemmingsLocal
+[254 / 318] LemmingsLocal
+[260 / 321] LemmingsLocal-product
+[261 / 321] LemmingsLocal-product
+[262 / 321] LemmingsLocal-product
+[263 / 321] LemmingsLocal-product
+[264 / 321] LemmingsLocal
+[265 / 321] LemmingsLocal
+[266 / 321] LemmingsLocal
+[269 / 322] LemmingsLocal
+[269 / 322] LemmingsLocal-product
+[271 / 322] LemmingsLocal
+[274 / 322] LemmingsLocal
+[275 / 322] LemmingsLocal
+[276 / 322] LemmingsMobileCoreTests-product
+[277 / 328] LemmingsLocal
+[280 / 327] LemmingsMobileCoreTests-product
+[285 / 327] LemmingsAppCoreTests-product
+[289 / 333] LemmingsAppCoreTests-product
+[293 / 333] LemmingsTVCoreTests-product
+[294 / 333] LemmingsTVCore-product
+[296 / 333] LemmingsMobileCoreTests-product
+[298 / 332] LemmingsAppCoreTests-product
+[300 / 332] LemmingsLocal-product
+[303 / 331] LemmingsMobileUITests-product
+[306 / 332] LemmingsLocal
+[307 / 332] LemmingsTVCoreTests-product
+[313 / 338] LemmingsMobileMenuAudit-product
+[316 / 342] LemmingsMobileUITests-product
+[318 / 342] LemmingsMobileUITests-product
+[321 / 341] LemmingsTVCoreTests-product
+[324 / 344] LemmingsMobileUITests-product
+[326 / 344] LemmingsLocal-product
+[326 / 344] LemmingsTVCoreTests-product
+[328 / 344] LemmingsMobileUITests-product
+[328 / 344] LemmingsLocal
+[329 / 345] LemmingsLocal
+[331 / 345] LemmingsTVCoreTests-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[333 / 345] LemmingsLocal-product
+[335 / 347] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[337 / 347] LemmingsLocal
+[339 / 347] LemmingsLocal
+[342 / 348] LemmingsLocalTests-product
+[357 / 363] LemmingsLocalTests-product
+[358 / 363] LemmingsLocalTests-product
+[360 / 364] LemmingsLocalTests-product
+[362 / 364] LemmingsLocalTests-product
+[365 / 365] LemmingsDataTool-product
+Build complete! (33.55 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite CloudLibraryTests started.
+􀟈  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() started.
+􀟈  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() started.
+􀟈  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() started.
+􀟈  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() started.
+􀟈  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() started.
+􀟈  Test staleDiscoveryCannotReplaceThePasswordCredential() started.
+􀟈  Test unreadableCredentialsNeverCreateReplacementKeys() started.
+􀟈  Test malformedCloudArchiveNeverImportsOrOverwritesIt() started.
+􀟈  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() started.
+􀟈  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() started.
+􀟈  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() started.
+􀟈  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() started.
+􀟈  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() started.
+􀟈  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() started.
+􀟈  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() started.
+􀟈  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() started.
+􀟈  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() started.
+􀟈  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() started.
+􀟈  Test syncPasswordGivesEveryDeviceTheSameValidVault() started.
+􀟈  Test slowCredentialServicesLeaveTheMainActorResponsive() started.
+􀟈  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() started.
+􀟈  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() started.
+􀟈  Test syncingStateAppearsBeforeProviderDiscovery() started.
+􀟈  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() started.
+􀟈  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() started.
+􀟈  Test previewBuildRestoresLatestSharedLibraryByDefault() started.
+􁁛  Test malformedCloudArchiveNeverImportsOrOverwritesIt() passed after 0.277 seconds.
+􁁛  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() passed after 0.673 seconds.
+􁁛  Test syncPasswordGivesEveryDeviceTheSameValidVault() passed after 0.682 seconds.
+􁁛  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() passed after 0.685 seconds.
+􁁛  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() passed after 0.685 seconds.
+􁁛  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() passed after 0.686 seconds.
+􁁛  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() passed after 0.782 seconds.
+􁁛  Test staleDiscoveryCannotReplaceThePasswordCredential() passed after 0.785 seconds.
+􁁛  Test unreadableCredentialsNeverCreateReplacementKeys() passed after 0.787 seconds.
+􁁛  Test syncingStateAppearsBeforeProviderDiscovery() passed after 0.788 seconds.
+􁁛  Test slowCredentialServicesLeaveTheMainActorResponsive() passed after 0.799 seconds.
+􁁛  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() passed after 0.838 seconds.
+􁁛  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() passed after 0.891 seconds.
+􁁛  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() passed after 0.892 seconds.
+􁁛  Test previewBuildRestoresLatestSharedLibraryByDefault() passed after 0.895 seconds.
+􁁛  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() passed after 0.907 seconds.
+􁁛  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() passed after 0.931 seconds.
+􁁛  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() passed after 0.942 seconds.
+􁁛  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() passed after 0.956 seconds.
+􁁛  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() passed after 0.976 seconds.
+􁁛  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() passed after 0.986 seconds.
+􁁛  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() passed after 0.992 seconds.
+􁁛  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() passed after 1.000 seconds.
+􁁛  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() passed after 1.018 seconds.
+􁁛  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() passed after 1.026 seconds.
+􁁛  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() passed after 1.040 seconds.
+􁁛  Suite CloudLibraryTests passed after 1.040 seconds.
+􁁛  Test run with 26 tests in 1 suite passed after 1.040 seconds.

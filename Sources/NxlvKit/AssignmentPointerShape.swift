@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 
 /// Shape reinforces assignment availability without changing the target area.
 public enum AssignmentPointerShape {
@@ -17,8 +20,8 @@ public enum AssignmentPointerShape {
             }
         }
         if occupied && !eligible {
-            let x = floor(frame.midX / stroke) * stroke
-            let y = floor(frame.midY / stroke) * stroke
+            let x = floor(frame.midX - stroke / 2)
+            let y = floor(frame.midY - stroke / 2)
             for step in -2...2 {
                 let offset = CGFloat(step) * stroke
                 marks.append(CGRect(x: x + offset, y: y + offset, width: stroke, height: stroke))

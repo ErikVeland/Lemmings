@@ -30,6 +30,10 @@ rejects future-version files before they can be replaced. Older shared sequel
 history stored in a solo folder cannot reliably be reassigned to past sessions.
 Mid-level checkpoints and ordinary playlist queues remain local.
 
+Background cloud-save and community-record access fails silently when the Mac
+Keychain requires approval. It preserves stored keys instead of opening an
+authorisation dialog or creating replacement credentials.
+
 ## Controls and lettering
 
 - Mac wheel zoom moves continuously around the pointed terrain. The redundant
@@ -40,6 +44,9 @@ Mid-level checkpoints and ordinary playlist queues remain local.
 - Interface text uses refined 2× Lemmings lettering. Start countdowns use separately
   drawn 4× numerals on Mac, iOS and Apple TV.
 - Mobile replay skill panels fit inside the playfield and avoid input targets.
+- Apple TV accepts fresh × menu presses through UIKit and restores gameplay's
+  input handoff. Held-button protection remains on Ready pages. Unavailable
+  pointer marks stay centred and differ in shape from eligible targets.
 
 ## Distribution and retained limits
 

@@ -161,7 +161,7 @@ public enum HostedCategory: String, CaseIterable {
             kSecAttrService as String: "academy.glasscode.lemmings.rankings", kSecAttrAccount as String: profile]
         var lookup = query; lookup[kSecReturnData as String] = true
         var result: CFTypeRef?
-        let code = SecItemCopyMatching(lookup as CFDictionary, &result)
+        let code = BackgroundKeychain.perform { SecItemCopyMatching(lookup as CFDictionary, &result) }
         if code == errSecSuccess, let data = result as? Data, let token = String(data: data, encoding: .utf8) { return token }
         guard code == errSecItemNotFound else { throw URLError(.userAuthenticationRequired) }
         var bytes = [UInt8](repeating: 0, count: 32)
@@ -169,7 +169,7 @@ public enum HostedCategory: String, CaseIterable {
         let token = bytes.map { String(format: "%02x", $0) }.joined()
         var entry = query; entry[kSecValueData as String] = Data(token.utf8)
         entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw URLError(.cannotCreateFile) }
+        guard BackgroundKeychain.perform({ SecItemAdd(entry as CFDictionary, nil) }) == errSecSuccess else { throw URLError(.cannotCreateFile) }
         return token
     }
     public func request(_ path: String, method: String = "GET", token: String? = nil, data: Data? = nil) throws -> URLRequest {

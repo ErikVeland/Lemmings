@@ -92,8 +92,18 @@ decrypt the credentials. A sync password derives a library identity with
 PBKDF2-SHA256 (600,000 rounds) and then HKDF. The server receives the derived
 vault UUID and the bearer credential. It never receives the password or the
 encryption key. The device stores the derived identity in the Keychain next to
-its own library key. Background Keychain access cannot display an
-authentication dialog.
+its own library key. Background Keychain reads, updates and additions suppress
+authentication dialogs. On macOS, `BackgroundKeychain` also disables interaction
+with the file-based login Keychain. `LAContext.interactionNotAllowed` alone does
+not cover that Keychain. The process-wide flag is serialised across cloud saves
+and community records, then restored after each operation.
+
+Ad hoc Mac builds have a different code identity after each rebuild. A login
+Keychain item authorised for an earlier build can therefore refuse access.
+Developer ID releases retain a stable signing identity across updates, but
+background access must still handle locked or inaccessible credentials without
+prompting. Refused access preserves existing keys and local saves. It never
+creates replacement credentials for an unreadable item.
 
 ## Merge and safety
 

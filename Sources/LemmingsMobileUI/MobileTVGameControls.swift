@@ -19,7 +19,12 @@ extension MobileGameViewController {
     func updateTVInputRouting() {
         let usesUIKit = !overlay.isHidden || isChoosingToolDirection || !lifecycle.isForeground
             || lifecycle.isInterrupted || !gameSettings.classic.controllerEnabled || GCController.controllers().isEmpty
-        if controllerUserInteractionEnabled != usesUIKit { controllerUserInteractionEnabled = usesUIKit }
+        if controllerUserInteractionEnabled != usesUIKit {
+            if usesUIKit { inputAdapter.reset() }
+            controllerUserInteractionEnabled = usesUIKit
+        }
+        // Game Controller routing requires a first responder inside this controller's view hierarchy.
+        if !usesUIKit, view.window != nil, !playfieldView.isFirstResponder { playfieldView.becomeFirstResponder() }
     }
     func refreshTVTarget(control: Int) {
         if tvTargetLock.id != nil {

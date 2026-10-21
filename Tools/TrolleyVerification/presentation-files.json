@@ -20,5 +20,6 @@
   "SoundtrackCatalogue.swift",
   "TouchpadJog.swift",
   "AssignmentPointerShape.swift",
-  "PrecisionZoomLedger.swift"
+  "PrecisionZoomLedger.swift",
+  "PrecisionZoomScrollGesture.swift"
 ]

@@ -169,6 +169,22 @@ pause menu. Circle uses normal Back navigation on menu pages. The native tvOS
 Back event for a gameplay Circle press is consumed with its release so UIKit
 cannot also open a menu.
 
+TV menu targets arm their activation gate from a fresh native Select press
+or an explicit accessibility action.
+They do not require controller profiles to report neutral while UIKit owns
+input. Rebuilt pages still reject an activation carried over from a held press.
+Gameplay makes the playfield first responder when returning from native menus,
+so input returns to the Game Controller profiles. These shared paths cover
+Classic, L2 and L3, including Ready and solution-view switches.
+
+The selection follow-up passes 184 muted, offscreen native experience checks,
+99 shared menu renders with target checks and 18 three-engine HUD captures.
+The tvOS modules and entry point compile. Native UIKit selection, navigation
+and solution regressions typecheck but still need device execution, including
+DualSense delivery, VoiceOver and first-responder transitions. The broader
+render audit still fails its unavailable-pointer square/centred assertion in
+`Tools/TVExperienceAudit/pointer.swift`; its menu checks pass before that failure.
+
 R2 uses the shared fast-forward pedal: tap toggles fast speed; hold ramps speed;
 release restores the selected speed. A press during planning resumes play.
 A fast-speed press resets to 1× while play continues. R2 never parks or steps the

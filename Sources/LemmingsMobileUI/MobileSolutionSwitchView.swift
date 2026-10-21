@@ -50,11 +50,17 @@ import UIKit
             let button = MobileFocusButton(type: .custom)
             button.accessibilityLabel = value == .game ? L10n.text("Your game") : L10n.text("Solution")
             button.accessibilityIdentifier = "solutionSwitch." + value.rawValue
+            #if os(tvOS)
+            button.onSelectBegan = { [weak self] in self?.activation.observeSelectBegan() }
+            #endif
             button.addAction(UIAction { [weak self] _ in self?.activate(value) }, for: .gameActivation)
             addSubview(button); buttons.append(button)
         }
         ghostButton.accessibilityLabel = L10n.text("Ghost solution")
         ghostButton.accessibilityIdentifier = "solutionSwitch.ghost"
+        #if os(tvOS)
+        ghostButton.onSelectBegan = { [weak self] in self?.activation.observeSelectBegan() }
+        #endif
         ghostButton.addAction(UIAction { [weak self] _ in self?.activateGhost() }, for: .gameActivation)
         addSubview(ghostButton)
         ghostButton.isHidden = true

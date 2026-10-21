@@ -10,7 +10,6 @@ extension MobileLibraryViewController {
         adapter.settingsProfileID = { [weak self] in self?.settingsProfileID ?? MobileProfiles.defaultID }
         #if os(tvOS)
         canvas.requiresNeutralActivation = true
-        adapter.onMenuNeutral = { [weak self] in self?.canvas.armTVActivation() }
         #endif
         adapter.isMenu = { true }
         adapter.isActive = { [weak self] in

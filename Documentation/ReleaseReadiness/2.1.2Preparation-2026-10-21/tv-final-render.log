@@ -1,0 +1,5 @@
+UI test windows: offscreen; audio: muted
+PASS 76 TV menu renders and target layouts, 6 native gameplay renders
+PASS 99 shared frontend TV renders and input targets at Standard, Large and Extra Large
+PASS 8 TV square pointer renders: empty, eligible, unavailable and HUD at 1x/2x
+PASS 18 console HUD renders and input layouts across Classic, L2 and L3; no Menu target
