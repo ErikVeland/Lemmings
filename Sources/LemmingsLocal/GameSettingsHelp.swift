@@ -139,7 +139,7 @@ import NxlvKit
         close?.frame = CGRect(x: bounds.width - 116, y: bounds.height - 38, width: 104, height: 28)
     }
     override func hitTest(_ point: NSPoint) -> NSView? { pinned ? super.hitTest(point) : nil }
-    override func draw(_ dirtyRect: NSRect) { GameStoneButton.draw(bounds, selected: false, pixel: 1) }
+    override func draw(_ dirtyRect: NSRect) { GameDisplayPanel.draw(bounds) }
 }
 
 @MainActor final class GameSettingsDocument: NSView {

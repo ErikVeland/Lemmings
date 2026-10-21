@@ -1,10 +1,10 @@
 # UI clarity
 
-Extra skills use the shared bitmap chooser and stone controls in all three
+Bonus skills use the shared bitmap chooser and stone controls in all three
 games. Show the record and earning limits before spending, one selected skill
-or tool carrier, Back at bottom-left and Use extra skill at bottom-right.
+or tool carrier, Back at bottom-left and Use bonus skill at bottom-right.
 Keep Ready handovers paused. Name newly earned consumables on results, with
-the rare Extra skill first when several arrive. Show Bonus skill used on the
+the rare Bonus skill first when several arrive. Show Bonus skill used on the
 attempt and BONUS on its separate records. Preserve full receipt reasons.
 Gameplay reward badges share the menu fade and retain their hover area.
 Reveal them on hover or use, then resume fading. Paused Inspect must not hold
@@ -12,7 +12,7 @@ the badges at full opacity.
 
 The 2.1 welcome page uses the same bounded bitmap reading column as About.
 Reflow paragraphs when the window changes size. Keep Continue visible at
-bottom-right. Lead with this release's access, inspection and Extra skill changes,
+bottom-right. Lead with this release's access, inspection and Bonus skill changes,
 then give a short pointer to the full earlier history.
 
 Tester Sync separates configuration from delivery. The selected On control
@@ -354,7 +354,16 @@ Space and P toggle pause once per press during gameplay in all three engines,
 including imported fan levels. Key repeat and key release do not toggle pause.
 Text entry and menu/handover actions retain their own Space handling.
 
-Mac gameplay groups Graphics, the Settings cog and Menu at the upper-right.
+Mac gameplay uses one row of matching stone icon tiles at the upper-right:
+Bonus skill, Hot Seat ghosts and Graphics, then a larger gap before Settings and Menu.
+Unavailable features collapse out of the row. A spent Bonus skill stays disabled.
+Ghosts use a filled ghost with a selected underline when on, and a slashed ghost
+when off. Bonus skill uses a hammer in both the action row and reward counter.
+Explain every icon with the existing stone-and-bitmap Settings help popover.
+Show it after an 800 ms hover or immediately on keyboard focus. Include the
+action, current state and shortcut. Keep disabled explanations available.
+Help must not take focus or intercept input. Dismiss it on pointer exit, input,
+focus loss or leaving gameplay. Retain the explanation as accessibility help.
 Command-comma opens Settings and holds gameplay while its page is open. F2 or
 Graphics cycles installed Classic artwork without restarting the run. NeoLemmix
 cycles PC and Macintosh artwork. Lemmings 2 and 3 switch between Original PC and
@@ -362,16 +371,19 @@ Macintosh-style artwork. Cycling overrides the current shuffled artwork and
 keeps Shuffle enabled for future levels. The tooltip and accessible value name
 the current source. Shortcuts ignore repeats, text entry, menus and handovers.
 
-The gameplay buttons fade after three seconds, with a 0.6-second fade. Hover or
-keyboard focus reveals each button. Their input targets stay active: Menu is
-88 × 44, Settings is 44 × 44 and Graphics is 112 × 44. Reduced motion hides them
+The whole gameplay row and reward badges share one opacity and timer. They fade
+out over 0.6 seconds after three seconds, and fade in over 0.18 seconds on hover,
+keyboard focus or reward use. Hovering any tile or a gap keeps the whole row
+visible. Each input target stays active at 44 × 44 points. Tiles have 8-point gaps
+within each group, with 24 points between actions and menus. Reduced motion changes visibility
 without animation. Results and handovers keep their navigation actions visible.
 Accessibility offers Fade gameplay buttons. Turning it off keeps the controls
 visible in Classic, Lemmings 2 and Lemmings 3, including with reduced motion enabled.
 `TEST_SCOPE=quick-controls` passes muted, offscreen checks for the three engines
-at 640, 900 and 1600 points, with 72 bitmap captures. Checks cover input targets,
-status clearance, Settings access, graphics cycling, disabled controls, fading,
-hover, focus, shortcut guards, run preservation and Classic shuffle/wraparound.
+at 640, 900 and 1600 points. Checks cover the icon row, Hot Seat ghost states,
+input targets, status clearance, Settings access, graphics cycling, disabled
+controls, shared fading, hover, focus, reduced motion, shortcut guards, run
+preservation and Classic shuffle/wraparound.
 Representative renders were inspected. NeoLemmix-specific graphics cycling,
 CRT rendering and physical keyboard delivery remain separate manual checks.
 Q and Escape use the same
@@ -1168,11 +1180,23 @@ Goal text, state shapes and action geometry have focused tests. iOS and tvOS SDK
 compiles pass. Physical folding, touch scrolling and VoiceOver delivery remain
 device checks.
 
-Mac zoom, superzoom and skip counters share the gameplay menu fade in Classic,
-Lemmings 2 and Lemmings 3. Fade the full bitmap badge, including its background
-and active outline. Keep its layout and accessibility counts available. Muted
+Mac superzoom, skip and Bonus skill counters share the gameplay menu fade in Classic,
+Lemmings 2 and Lemmings 3. Use a compact horizontal row of recessed stone badges with a
+magnifier, skip arrow or hammer beside each count. Keep zero and large counts
+readable. Show names, balances, purpose and current state in hover popovers.
+Place song notices below the row. Show icon help ahead of paused inspection help.
+The counters remain passive. Fade the whole badge, including its background
+and active underline. Keep its layout and accessibility counts available. Muted
 offscreen checks cover visible, partial, hidden and reduced-motion states,
 disabled fading and menu input targets.
+
+Free Zoom has no HUD badge. The wheel changes magnification continuously around
+the pointer in all three engines. Keep horizontal and modified scrolling for
+panning, preserve Superzoom costs and honour reduced motion.
+
+Home offers one Resume journey action for the selected session's saved level or
+route. The Journey Map headline counts retained completed levels across the
+session. The curated route fraction has its own label inside the route hub.
 
 Both Amiga versus ranks warn before play that two controllers are required
 and must remain connected at the same time. Mac briefings use two short bitmap

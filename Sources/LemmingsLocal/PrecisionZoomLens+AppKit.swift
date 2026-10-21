@@ -66,9 +66,12 @@ struct AnimatedPrecisionZoomLens {
 @MainActor final class PrecisionZoomAnimation {
     private var task: Task<Void, Never>?
     private var generation = 0
+    private var target: CGFloat?
 
     func start(from: CGFloat, to: CGFloat, reduceMotion: Bool,
                update: @escaping @MainActor (CGFloat) -> Void) {
+        if task != nil, target == to { return }
+        target = to
         task?.cancel()
         generation &+= 1
         let currentGeneration = generation

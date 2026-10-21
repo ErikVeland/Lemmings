@@ -71,7 +71,7 @@ import NxlvKit
         for reward in pages[earnedRewardPage] {
             let height = rewardHeight(reward)
             let card = CGRect(x: 64, y: y, width: 992, height: height)
-            GameStoneButton.draw(card, selected: false, pixel: 1)
+            GameDisplayPanel.draw(card)
             GameStyle.fill(card.insetBy(dx: 4, dy: 4), .black)
             GameStar.draw(at: CGPoint(x: 82, y: y + 16), earned: true, size: 2)
             let heading = CGRect(x: 130, y: y + 12, width: 886,

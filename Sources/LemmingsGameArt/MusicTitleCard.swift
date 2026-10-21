@@ -76,7 +76,7 @@ public enum MusicTitleCard {
     public static func draw(_ layout: Layout, elapsed: TimeInterval, typography: GameMenuTypography?, in context: CGContext) {
         guard !layout.pages.isEmpty else { return }
         let bounds = CGRect(origin: .zero, size: layout.size)
-        GameStoneArt.draw(in: context, frame: bounds, selected: false, pixel: 1)
+        GameDisplayArt.draw(in: context, frame: bounds)
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)

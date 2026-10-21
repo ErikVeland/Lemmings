@@ -393,7 +393,7 @@ public struct GameFrontEnd {
         if page.pause != nil {
             MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
         } else if page.preview {
-            GameStoneArt.draw(in: context, frame: layout.preview, selected: true, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
             if let preview {
                 let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
                 drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)

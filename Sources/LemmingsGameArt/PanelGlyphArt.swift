@@ -10,6 +10,7 @@ public enum PanelGlyphArt: String, Sendable {
   case fastForward
   case rewind, stepBackward, stepForward
   case settings, download, hourglass, menu, mobileMenu, reveal, dismiss
+  case graphics, ghosts, ghostsHidden, bonusSkill, superzoom, levelSkip
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -81,6 +82,49 @@ public enum PanelGlyphArt: String, Sendable {
         "..##..###..##..",
         "......###......",
       ]
+    case .graphics:
+      return [
+        "###############", "###############", "##...........##",
+        "##.##........##", "##.##....#...##", "##......###..##",
+        "##..#..#####.##", "##.#########.##", "##...........##",
+        "###############", "###############", "......###......",
+        "....#######....",
+      ]
+    case .ghosts:
+      return [
+        ".....#####.....", "...#########...", "..###########..",
+        ".#############.", ".###..###..###.", ".###..###..###.",
+        ".#############.", ".#############.", ".######.######.",
+        ".#############.", ".#############.", ".#############.",
+        ".###.#####.###.", ".##...###...##.", ".#.....#.....#.",
+      ]
+    case .ghostsHidden:
+      // Leave a clear channel around the slash, even at a single pixel scale.
+      return PanelGlyphArt.ghosts.rows.enumerated().map { y, row in
+        String(row.enumerated().map { x, mark in
+          abs(x - (14 - y)) <= 1 ? (x == 14 - y ? Character("#") : Character(".")) : mark
+        })
+      }
+    case .bonusSkill:
+      return [
+        "....##.........", "...####........", "..######.......",
+        "...######......", "....######.....", ".....######....",
+        "......######...", ".....#######...", "....#####.##...",
+        "...#####.......", "..#####........", ".#####.........",
+        "#####..........", ".###...........", "..#............",
+      ]
+    case .superzoom:
+      return [
+        "...#####.......", "..##...##......", ".##.....##.....",
+        "##...#...##....", "##...#...##....", "##.#####.##....",
+        "##...#...##....", "##...#...##....", ".##.....##.....",
+        "..##...####....", "...#####.###...", "..........###..",
+        "...........###.", "............###", ".............##",
+      ]
+    case .levelSkip:
+      return [String(repeating: ".", count: 15), String(repeating: ".", count: 15)]
+        + PanelGlyphArt.stepForward.rows.map { ".." + $0 + "..." }
+        + [String(repeating: ".", count: 15), String(repeating: ".", count: 15)]
     case .hourglass:
       return [
         "#############", "#############", "..#.......#..", "..#.#####.#..",
@@ -169,7 +213,7 @@ public enum PanelGlyphArt: String, Sendable {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings, .download, .hourglass, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward:
+    case .play, .fastForward, .undo, .settings, .download, .hourglass, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward, .graphics, .ghosts, .ghostsHidden, .bonusSkill, .superzoom, .levelSkip:
       return ["#": (194, 224, 158)]
     }
   }

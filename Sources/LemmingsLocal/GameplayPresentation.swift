@@ -376,67 +376,114 @@ struct PrecisionZoomStatus: Equatable {
   var accessibility: String {
     guard !isEmpty else { return "" }
     let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
-    return L10n.text("Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(extraSkills) Extra skills. \(state)")
+    return L10n.text("Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(extraSkills) Bonus skills. \(state)")
       + (bonusSkillUsed ? ". " + L10n.text("Bonus skill used") : "")
   }
 
-  private var rows: [(String, PrecisionZoomKind?)] {
-    [(L10n.text("z"), .zoom),
-     (L10n.text("Z - \(superzoom)"), .superzoom),
-     (L10n.text("Skips \(skips)"), nil),
-     (L10n.text("Extra skill \(extraSkills)"), nil)]
+  enum Badge: String, CaseIterable {
+    case superzoom, skips, bonusSkill
+
+    var glyph: PanelGlyph {
+      switch self {
+      case .superzoom: return .superzoom
+      case .skips: return .levelSkip
+      case .bonusSkill: return .bonusSkill
+      }
+    }
+    var title: String {
+      switch self {
+      case .superzoom: return L10n.text("Superzoom")
+      case .skips: return L10n.text("Level Skips")
+      case .bonusSkill: return L10n.text("Bonus skill")
+      }
+    }
   }
 
-  private var metrics: (width: Int, rowHeight: Int) {
-    let widths = rows.map { GamePixelTypography.width(of: $0.0) }
-    let heights = rows.map { row in
-      let bounds = GamePixelTypography.verticalBounds(of: row.0)
-      return bounds.bottom - bounds.top
+  func count(for badge: Badge) -> Int {
+    switch badge {
+    case .superzoom: return superzoom
+    case .skips: return skips
+    case .bonusSkill: return extraSkills
     }
-    return ((widths.max() ?? 1) + 9, max(11, (heights.max() ?? 7) + 4))
+  }
+
+  func help(for badge: Badge, bonusSkillHelp: String) -> String {
+    var lines = [L10n.text("\(count(for: badge)) remaining")]
+    switch badge {
+    case .superzoom:
+      if active == .superzoom { lines.append(L10n.text("Superzoom active")) }
+      lines += [L10n.text("2× Superzoom at cursor, 0.5× time"),
+        L10n.text("Each start spends one Superzoom use") + " (Shift-Z)"]
+    case .skips:
+      lines.append(L10n.text("Spend one Level Skip in the journey menu to move past a level."))
+    case .bonusSkill:
+      if bonusSkillUsed { lines.append(L10n.text("Bonus skill used")) }
+      lines.append(bonusSkillHelp)
+    }
+    return lines.filter { !$0.isEmpty }.joined(separator: "\n")
+  }
+
+  /// Drawing and hover help use the same counter bounds.
+  func badgeFrames(scale: CGFloat = 1) -> [(badge: Badge, frame: CGRect)] {
+    guard !isEmpty else { return [] }
+    let scale = max(1, floor(scale))
+    var x: CGFloat = 0
+    return Badge.allCases.map { badge in
+      let width = CGFloat(max(56, 36 + GamePixelTypography.width(of: String(count(for: badge))) * 2)) * scale
+      let frame = CGRect(x: x, y: 0, width: width, height: 32 * scale)
+      x = frame.maxX + 4 * scale
+      return (badge, frame)
+    }
   }
 
   func size(scale: CGFloat = 1) -> CGSize {
-    guard !isEmpty else { return .zero }
-    let scale = max(1, floor(scale))
-    let metrics = self.metrics
-    return CGSize(width: CGFloat(metrics.width) * scale,
-                  height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
+    guard let last = badgeFrames(scale: scale).last else { return .zero }
+    return CGSize(width: last.frame.maxX, height: last.frame.height)
+  }
+
+  /// The owner converts the full badge row, including CRT projection, to its root view.
+  func badge(at point: CGPoint, in area: CGRect) -> (badge: Badge, frame: CGRect)? {
+    let size = size()
+    guard area.contains(point), size.width > 0 else { return nil }
+    return badgeFrames().compactMap { item in
+      let frame = CGRect(x: area.minX + item.frame.minX / size.width * area.width,
+        y: area.minY, width: item.frame.width / size.width * area.width, height: area.height)
+      return frame.contains(point) ? (item.badge, frame) : nil
+    }.first
   }
 
   @MainActor @discardableResult
   func draw(at origin: CGPoint, scale: CGFloat = 1, opacity: CGFloat = 1) -> CGSize {
-    guard !isEmpty else { return .zero }
-    let scale = max(1, floor(scale))
-    let rows = self.rows
-    let metrics = self.metrics
-    let badgeSize = CGSize(width: CGFloat(metrics.width) * scale,
-                           height: CGFloat(rows.count * (metrics.rowHeight + 2) - 2) * scale)
-    guard opacity > 0, let context = NSGraphicsContext.current?.cgContext else { return badgeSize }
+    let scale = max(1, floor(scale)), badgeSize = size(scale: scale)
+    guard !isEmpty, opacity > 0, let context = NSGraphicsContext.current?.cgContext else { return badgeSize }
     context.saveGState()
     context.setAlpha(opacity)
     context.beginTransparencyLayer(auxiliaryInfo: nil)
     defer { context.endTransparencyLayer(); context.restoreGState() }
-    let width = badgeSize.width
-    let rowHeight = CGFloat(metrics.rowHeight) * scale
-    for (index, row) in rows.enumerated() {
-      let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
-                        width: width, height: rowHeight)
-      NSColor.black.withAlphaComponent(0.8).setFill()
-      rect.fill()
-      let selected = row.1.map { active == $0 } ?? (index == 3 && bonusSkillUsed)
+    for item in badgeFrames(scale: scale) {
+      let rect = item.frame.offsetBy(dx: origin.x, dy: origin.y)
+      let selected = item.badge == .superzoom ? active == .superzoom : item.badge == .bonusSkill && bonusSkillUsed
+      context.setFillColor(CGColor(gray: 0, alpha: 0.75))
+      context.fill(rect)
       if selected {
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
-        NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
-        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
-        NSGraphicsContext.restoreGraphicsState()
+        context.setFillColor(CGColor(srgbRed: 0.6755, green: 0.8639, blue: 0.2804, alpha: 1))
+        context.fill(CGRect(x: rect.minX + 2 * scale, y: rect.midY - 4 * scale, width: 2 * scale, height: 8 * scale))
       }
-      GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
-        maxScale: scale, palette: selected ? .green : .blue, preservesCase: row.1 != nil)
+      let iconBox = CGRect(x: rect.minX + 6 * scale, y: rect.minY + 8 * scale, width: 16 * scale, height: 16 * scale)
+      if let image = item.badge.glyph.image(fitting: iconBox.size) {
+        image.draw(in: CGRect(x: floor(iconBox.midX - image.size.width / 2), y: floor(iconBox.midY - image.size.height / 2),
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: count(for: item.badge) > 0 || selected ? 1 : 0.45, respectFlipped: true,
+          hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      }
+      GamePixelText.draw(String(count(for: item.badge)),
+        in: CGRect(x: rect.minX + 28 * scale, y: rect.minY + 6 * scale,
+          width: rect.width - 34 * scale, height: 20 * scale), maxScale: 2 * scale,
+        palette: selected ? .green : .blue)
     }
     return badgeSize
   }
+
 }
 
 /// A non-interactive identity badge. The owner supplies the active attempt's player.

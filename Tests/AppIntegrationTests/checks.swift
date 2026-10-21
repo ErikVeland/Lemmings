@@ -3732,6 +3732,21 @@ extension AppDelegate {
       "Repeated scroll up changed an active Zoom")
     try check(wallet.applyScroll(.zoomOut) == .changed && wallet.active == nil,
       "Scroll down did not switch off Zoom")
+    try check(wallet.applyScroll(.magnify(1.12)) == .changed && abs(wallet.magnification - 1.12) < 0.0001,
+      "One wheel tick jumped to full Zoom")
+    try check(wallet.applyScroll(.magnify(1.12)) == .changed && wallet.magnification > 1.12 && wallet.magnification < 1.3,
+      "Continuous wheel input did not accumulate")
+    try check(wallet.applyScroll(.magnify(100)) == .changed && wallet.magnification == 2,
+      "Wheel Zoom exceeded its camera bounds")
+    try check(wallet.applyScroll(.magnify(0.01)) == .changed && wallet.active == nil && wallet.magnification == 1,
+      "Zooming fully out left Zoom active")
+    var lens = AnimatedPrecisionZoomLens()
+    _ = lens.transition(toMagnification: 1.12, at: CGPoint(x: 40, y: 60), scaleX: 3, scaleY: 3.6)
+    let target = CGPoint(x: 90, y: 100), previous = lens.source(target)
+    let delta = lens.transition(toMagnification: 1.4, at: target, scaleX: 3, scaleY: 3.6)
+    try check(abs(delta.x * 3 + target.x - previous.x) < 0.0001
+      && abs(delta.y * 3.6 + target.y - previous.y) < 0.0001
+      && lens.source(lens.display(target)) == target, "Fractional Zoom changed the pointer target")
     earned = PrecisionZoomEarnings(threeStarLevels: 3)
     try check(wallet.applyScroll(.zoomOut) == .unchanged && wallet.toggle(.superzoom),
       "Scroll down altered an inactive Zoom or Superzoom could not start")
@@ -8134,6 +8149,7 @@ Task { @MainActor in
     print("Extra-skill reward, chooser, receipt and fading control integration tests passed.")
     #elseif QUICK_CONTROLS_TESTS
     try subject.testGameplayQuickControls()
+    try testExtraSkillChooserAndKeyboard()
     print("Gameplay quick controls integration tests passed.")
     #elseif HOME_BACKDROP_TESTS
     try await subject.testHomeBackdrop()
@@ -8262,6 +8278,10 @@ Task { @MainActor in
     try await subject.testLearningLevelSkips()
     print("Level Skip result and Learning journey integration tests passed.")
     #elseif JOURNEY_PROGRESS_TESTS
+    try subject.testPrecisionZoomWallet()
+    try testExtraSkillChooserAndKeyboard()
+    try testExtraSkillNativeReceipts()
+    try subject.testNativeExtraSkillGrants()
     try subject.testHomeJourneyProgressCounts()
     #elseif LEARNING_TESTS
     try await subject.testJourneyCompletionLoadsUnopenedFanPack()
@@ -9949,22 +9969,22 @@ extension AppDelegate {
 }
 
 @MainActor private func testLevelSkipBadges() throws {
-  let size = CGSize(width: 900, height: 360)
+  let size = CGSize(width: 1440, height: 300)
   let image = ReplayFrameCapture.image(size: size) {
     NSColor.darkGray.setFill(); CGRect(origin: .zero, size: size).fill()
     for (column, active) in [nil, PrecisionZoomKind.zoom, .superzoom].enumerated() {
       for (row, count) in [0, 4, 123].enumerated() {
         let status = PrecisionZoomStatus(superzoom: count, skips: count, extraSkills: count, active: active, isEmpty: false)
         precondition(status.accessibility.contains("\(count) Level Skips"))
-        let drawn = status.draw(at: CGPoint(x: 12 + column * 300, y: 12 + row * 115), scale: 2)
-        precondition(drawn == status.size(scale: 2) && drawn.height == 100 && drawn.width < 290)
+        let drawn = status.draw(at: CGPoint(x: 12 + column * 480, y: 12 + row * 96), scale: 2)
+        precondition(drawn == status.size(scale: 2) && drawn.height == 64 && drawn.width < 460)
       }
     }
   }!
   let folder = URL(fileURLWithPath: ".build/skip-ui")
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
   try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("resource-badges.png"))
-  print("PASS nine native Zoom/Level Skip badge renders, active outlines, accessible balances and geometry")
+  print("PASS nine native reward icon/count renders, active states, accessible balances and geometry")
 }
 
 @MainActor private func checkCompactResultActions(_ view: ArcadeView) throws {

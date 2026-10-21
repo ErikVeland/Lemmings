@@ -13,9 +13,10 @@ endpoint = sys.argv[1].rstrip('/')
 vault, device = str(uuid.uuid4()), str(uuid.uuid4())
 token = secrets.token_hex(32)
 data = secrets.token_bytes(512)
+created = False
 
 def request(path, method='GET', body=None, auth=True, match=None):
-    headers = {'Content-Type': 'application/octet-stream'}
+    headers = {'Content-Type': 'application/octet-stream', 'User-Agent': 'UltimateLemmingsCloudSmoke/2'}
     if auth: headers['Authorization'] = 'Bearer ' + token
     if match: headers['If-Match'] = match
     req = urllib.request.Request(endpoint + path, body, headers=headers, method=method)
@@ -26,6 +27,7 @@ root = '/v1/vaults/' + vault
 try:
     request('/v1/health', auth=False)
     _, etag = request(root + '/devices/' + device, 'PUT', data, match='*')
+    created = True
     fetched, _ = request(root + '/devices/' + device)
     assert fetched == data
     assert json.loads(request(root)[0])['devices'] == [device]
@@ -41,5 +43,6 @@ try:
     try: request('/v1/links/' + code, 'POST', auth=False); raise AssertionError('Code reused')
     except urllib.error.HTTPError as error: assert error.code == 404; error.close()
 finally:
-    request(root, 'DELETE')
+    if created:
+        request(root, 'DELETE')
 print('Private cloud API: encrypted bytes round trip, ownership, stale writes and one-use links passed. Temporary vault removed.')

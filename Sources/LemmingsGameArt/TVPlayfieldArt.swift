@@ -36,7 +36,7 @@ import NxlvKit
         drawTarget(game, context: context)
         if let number = game.startNumber {
             let box = CGRect(x: playBounds.width / 2 - 60, y: playBounds.height / 2 - 60, width: 120, height: 120)
-            GameStoneArt.draw(in: context, frame: box, selected: false, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: box, pixel: 2)
             TVMenuArt.text(String(number), box: box.insetBy(dx: 8, dy: 8), title: true, green: true,
                            typography: typography, textScale: 1.25, context: context)
         }

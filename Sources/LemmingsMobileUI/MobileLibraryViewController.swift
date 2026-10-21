@@ -502,15 +502,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         switch route {
         case .home:
             var resume: [GameFrontEnd.Action] = []
-            if catalogue != nil, let saved = resumableLearningRun {
+            let savedLevel = pendingCheckpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
+            if let saved = savedLevel, !checkpointResumesLearningRun(saved) {
+                resume.append(.init("resume", L10n.text("Resume journey - \(playerName(saved.owner ?? profiles.activeID))")))
+            } else if catalogue != nil, let saved = resumableLearningRun {
                 let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
                 resume.append(.init("learningRunResume", saved.resumeTitle + session))
             }
-            if catalogue != nil, let run = playlists.run {
+            if resume.isEmpty, catalogue != nil, let run = playlists.run {
                 resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
-            }
-            if let saved = pendingCheckpoint, checkpointMatchesSession(saved), !checkpointResumesLearningRun(saved) {
-                resume.append(.init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))")))
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
                 let packs = catalogue?.packs(in: family) ?? []

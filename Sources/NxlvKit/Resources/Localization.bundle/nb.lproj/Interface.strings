@@ -379,7 +379,6 @@
 "COLLECTION UP TO DATE" = "SAMLING OPPDATERT";
 "COMPLETE" = "FULLFØR";
 "COMPLETE — press N" = "FULLFØRT — trykk N";
-"CONTINUE {0} - {1}" = "FORTSETT {0} – {1}";
 "CONTROLS HELP" = "KONTROLLHJELP";
 "COUNTDOWN" = "NEDTELLING";
 "Camera" = "Kamera";
@@ -749,8 +748,8 @@
 "EXIT" = "UTGANG";
 "EXPERIMENTAL GAMEPLAY" = "EKSPERIMENTELT SPILL";
 "EXPLOSION" = "EKSPLOSJON";
-"EXTRA SKILL" = "EXTRA SKILL";
-"EXTRA SKILL ×{0}" = "EXTRA SKILL ×{0}";
+"BONUS SKILL" = "BONUS SKILL";
+"BONUS SKILL ×{0}" = "BONUS SKILL ×{0}";
 "Each portal needs a paired portal." = "Hver portal trenger en tilhørende portal.";
 "Each skill pickup needs a known skill and a positive count." = "Hver ferdighetsgjenstand må ha en kjent ferdighet og et positivt antall.";
 "Each start spends one Superzoom use" = "Each start spends one Superzoom use";
@@ -760,7 +759,7 @@
 "Earlier actions" = "Earlier actions";
 "Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
-"Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
+"Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "Oppnå samme spillestil på 5 ulike fullførte brett.";
 "Earned" = "Opptjent";
 "Easy" = "Lett";
@@ -829,13 +828,11 @@
 "Extra actions" = "Ekstra handlinger";
 "Extra large (150%)" = "Ekstra stor (150%)";
 "Extra rescue" = "Ekstra redning";
-"Extra skill" = "Extra skill";
-"Extra skill ({0})" = "Extra skill ({0})";
-"Extra skill earned" = "Extra skill earned";
-"Extra skill unavailable" = "Extra skill unavailable";
-"Extra skill used" = "Extra skill used";
-"Extra skill {0}" = "Extra skill {0}";
-"Extra skills" = "Extra skills";
+"Bonus skill" = "Bonus skill";
+"Bonus skill ({0})" = "Bonus skill ({0})";
+"Bonus skill earned" = "Bonus skill earned";
+"Bonus skill unavailable" = "Bonus skill unavailable";
+"Bonus skills" = "Bonus skills";
 "Extreme" = "Ekstrem";
 "F / Speed: toggle fast-forward" = "F / Hastighet: slå hurtigspoling av/på";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / Hastighet: slå hurtigspoling av/på\nHold F: øk gradvis til 10×; slipp: behold farten\nHold Shift, Hastighet eller RT: midlertidig fartsøkning; slipp: forrige fart\nFartspiler eller Shift+[ / Shift+]: velg 1×, 2×, 3×, 5× eller 10×\nF eller B på kontrolleren: gå umiddelbart tilbake til 1×";
@@ -1165,8 +1162,6 @@
 "JET" = "JET";
 "JET PACK" = "JETPAKKE";
 "JOHN WHYTE" = "JOHN WHYTE";
-"JOURNEY" = "REISE";
-"JOURNEY MAP  {0}/{1} SOLVED" = "REISEKART  {0}/{1} LØST";
 "JOURNEY {0}/{1}" = "REISE {0}/{1}";
 "JUMP" = "HOPP";
 "JUMPER" = "HOPPER";
@@ -1940,8 +1935,8 @@
 "R: Rewind" = "R: Spol tilbake";
 "RANK" = "RANGERING";
 "RANK >" = "RANGERING >";
-"RARE: +1 EXTRA SKILL" = "RARE: +1 EXTRA SKILL";
-"RARE: Extra skills {0} · {1}/10 >" = "RARE: Extra skills {0} · {1}/10 >";
+"RARE: +1 BONUS SKILL" = "RARE: +1 BONUS SKILL";
+"RARE: Bonus skills {0} · {1}/10 >" = "RARE: Bonus skills {0} · {1}/10 >";
 "RATE +" = "ØK FART";
 "RATE -" = "SENK FART";
 "RATE {0}" = "TAKT {0}";
@@ -1958,9 +1953,6 @@
 "RESTART LEVEL" = "START BRETTET PÅ NYTT";
 "RESULT" = "RESULTAT";
 "RESUME" = "FORTSETT";
-"RESUME - " = "FORTSETT - ";
-"RESUME LEVEL - " = "FORTSETT BRETT – ";
-"RESUME {0} - {1}" = "FORTSETT {0} – {1}";
 "RETRY" = "PRØV IGJEN";
 "RETRY LEVEL" = "PRØV BRETTET IGJEN";
 "REVIEW" = "SE GJENNOM";
@@ -2082,7 +2074,6 @@
 "Resume Hot Seat run" = "Fortsett Hot Seat-forsøk";
 "Resume Saved Run…" = "Fortsett lagret spill…";
 "Resume journey" = "Fortsett reisen";
-"Resume level - {0}" = "Fortsett brett – {0}";
 "Resume run" = "Fortsett spill";
 "Resume saved run?" = "Fortsette lagret spill?";
 "Resume session" = "Fortsett økt";
@@ -2104,7 +2095,6 @@
 "Retry: {0}" = "Prøv igjen: {0}";
 "Return / Space" = "Enter / Mellomrom";
 "Return to library" = "Tilbake til biblioteket";
-"Return to library (Esc or Q)" = "Tilbake til biblioteket (Esc eller Q)";
 "Return to normal speed" = "Gå tilbake til normal hastighet";
 "Return to solo" = "Gå tilbake til solospill";
 "Return to the game library before choosing another game, level, saved run or Hot Seat session." = "Gå tilbake til spillbiblioteket før du velger et annet spill, brett, lagret forsøk eller Hot Seat-økt.";
@@ -2164,7 +2154,6 @@
 "SAVING..." = "LAGRER …";
 "SCOOPER" = "SKUFFEGRAVER";
 "SELECT A SKILL → CLICK A LEMMING" = "VELG EN FERDIGHET → KLIKK PÅ EN LEMMING";
-"SESSION" = "ØKT";
 "SETTINGS" = "INNSTILLINGER";
 "SFX muted" = "Lydeffekter dempet";
 "SFX off" = "Lydeffekter av";
@@ -2299,7 +2288,6 @@
 "Session not started" = "Økten ble ikke startet";
 "Set a first record, then improve its skill count." = "Sett en første rekord, og forbedre deretter antallet ferdigheter.";
 "Settings" = "Innstillinger";
-"Settings (⌘,)" = "Innstillinger (⌘,)";
 "Settings sections" = "Innstillingsdeler";
 "Settings…" = "Innstillinger…";
 "Shadow" = "Skygge";
@@ -2332,7 +2320,6 @@
 "Show full solution" = "Vis hele løsningen";
 "Show ghost solution?" = "Vise spøkelsesløsning?";
 "Show lemming count" = "Vis antall lemminger";
-"Show or hide Hot Seat ghosts (⌘G)" = "Show or hide Hot Seat ghosts (⌘G)";
 "Show practice tips" = "Vis øvingstips";
 "Show skill backpacks" = "Vis ferdighetsryggsekker";
 "Show solution replay" = "Vis løsningsreprise";
@@ -2369,7 +2356,6 @@
 "Skip as {0} ({1})" = "Hopp over som {0} ({1})";
 "Skip level ({0})" = "Hopp over brett ({0})";
 "Skips" = "Hopp";
-"Skips {0}" = "Brett å hoppe over {0}";
 "Slider" = "Glider";
 "Slot {0}" = "Spor {0}";
 "Slower" = "Saktere";
@@ -2380,7 +2366,6 @@
 "Solo starts" = "Solostart";
 "Solution" = "Løsning";
 "Solution replay: {0}" = "Løsningsreprise: {0}";
-"Solved {0}/{1}" = "Løst {0}/{1}";
 "Sony SPC700 16-Bit ADPCM Synth" = "Sony SPC700 16-bits ADPCM-synth";
 "Sound F/X" = "Lydeffekter";
 "Sound FX" = "Lydeffekter";
@@ -2472,7 +2457,7 @@
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom aktiv";
 "Superzoom {0}" = "Superzoom {0}";
-"Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}";
+"Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}";
 "Surfer" = "Surfer";
 "Swap sticks" = "Bytt styrespaker";
 "Swimmer" = "Svømmer";
@@ -2940,8 +2925,8 @@
 "Up-right" = "Opp til høyre";
 "Update" = "Oppdater";
 "Use" = "Bruk";
-"Use Extra skill on the selected skill or tool carrier" = "Use Extra skill on the selected skill or tool carrier";
-"Use extra skill" = "Use extra skill";
+"Use Bonus skill on the selected skill or tool carrier" = "Use Bonus skill on the selected skill or tool carrier";
+"Use bonus skill" = "Use bonus skill";
 "Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games." = "Bruk moderne hurtigtaster for ferdigheter, pause, fart, kamerabevegelse og hint i alle tre spillene.";
 "Use one play style on {0} more levels." = "Bruk én spillestil på {0} flere brett.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Bruk gjenskapt Macintosh-grafikk i Lemmings 2 og Lemmings 3.";
@@ -3044,7 +3029,6 @@
 "Your rank: #{0} of {1} - {2}" = "Rangeringen din: #{0} av {1} – {2}";
 "Your rescue story" = "Redningshistorien din";
 "Your shared campaign stays saved for later." = "Den delte kampanjen lagres til senere.";
-"Z - {0}" = "Z – {0}";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: Zoom";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Ingen tap som kunne vært unngått";
@@ -3159,7 +3143,6 @@
 "will do so once again." = "vil gjøre det igjen.";
 "with" = "med";
 "with no name" = "uten navn";
-"z" = "z";
 "{0}\n\nChange one part of your plan at a time when you retry." = "{0}\n\nEndre én del av planen om gangen når du prøver igjen.";
 "{0}\nEsc  Save run and return to main menu\n     (after closing this overlay)" = "{0}\nEsc  Lagre forsøket og gå tilbake til hovedmenyen\n     (etter at dette overlegget er lukket)";
 "{0}  Unavailable" = "{0}  Utilgjengelig";
@@ -3244,3 +3227,13 @@
 "{0}: replay analysis failed: {1}" = "{0}: repriseanalysering mislyktes: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
+"Completed levels {0}" = "Completed levels {0}";
+"Current route {0}/{1}" = "Current route {0}/{1}";
+"JOURNEY MAP  {0} SOLVED" = "JOURNEY MAP  {0} SOLVED";
+"RESUME JOURNEY - {0}" = "RESUME JOURNEY - {0}";
+"Resume journey - {0}" = "Resume journey - {0}";
+"Change game, sound and display settings. (⌘,)" = "Endre spill-, lyd- og skjerminnstillinger. (⌘,)";
+"Spend one Level Skip in the journey menu to move past a level." = "Bruk ett nivåhopp i reisemenyen for å gå videre fra et nivå.";
+"Save this run and return to the library. (Esc or Q)" = "Lagre denne runden og gå tilbake til biblioteket. (Esc eller Q)";
+"Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Vis eller skjul skygger fra tidligere Hot Seat-forsøk. (⌘G)";
+"Current graphics: {0}" = "Nåværende grafikk: {0}";

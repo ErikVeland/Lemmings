@@ -70,10 +70,9 @@ extension MobileLibraryViewController {
                                   journeyOnly: false, currentSessionOnly: true)
     }
 
-    /// Hide a level shortcut only when the journey action restores that same checkpoint.
-    /// Unknown or unsupported engine identities keep their independent Resume action.
+    /// All engines compare the saved level identity before resuming a route.
     func checkpointResumesLearningRun(_ checkpoint: MobileCheckpointEnvelope) -> Bool {
-        guard checkpointMatchesSession(checkpoint), checkpoint.engine == "classic-dos",
+        guard checkpointMatchesSession(checkpoint),
               let saved = resumableLearningRun, let run = saved.state.run,
               let catalogue else { return false }
         let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)

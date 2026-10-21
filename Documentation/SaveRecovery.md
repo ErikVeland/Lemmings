@@ -1,6 +1,6 @@
 # Save recovery and upgrade migration
 
-Updated 10 October 2026.
+Updated 21 October 2026.
 
 ## Arcade records
 
@@ -15,6 +15,37 @@ Every write validates the records first. A file lock prevents overlapping writes
 A temporary save failure offers **Retry save** on arcade pages. Failed profile edits and player creation roll back their in-memory changes. The profile editor stays open, and Retry save retries the pending edit. The app changes profiles and closes the editor only after a successful save. A conflict with another app requires closing and reopening the app to load the newer records.
 
 ## Journey completion
+
+Mac Home has one **Resume journey** action for the selected solo or Hot Seat
+session. It restores the latest matching level checkpoint, including play outside
+the curated route. When that checkpoint belongs to the active route, the shared
+sequence flow retains its queue and paused Ready handover. Other saved routes
+remain in Playlists.
+
+The Home Journey Map count includes recorded Classic, Lemmings 2 and Lemmings 3
+campaign wins and retained journey wins. Imported Classic sources keep separate
+identities. Campaign and route records for the same level count once. Visits,
+Try Later entries and skipped levels do not become wins. The route hub labels its
+current curriculum fraction separately from the full completed-level count.
+Opening a map without a saved curated route opens the level library.
+
+The completion summary reads saved progress without changing records, campaign
+positions or turn ownership. Earlier NeoLemmix records lack a Hot Seat session
+identity, so they cannot establish session-specific completion in this summary.
+Mobile and TV retain their existing curriculum counters. Their Home resume flow
+also offers one action and compares checkpoint identities for all three engines.
+
+An imported Classic source can retain completed rank keys as `passed:Rank#position`
+identities under its original hashed source namespace. The summary counts these
+once alongside the matching original campaign record. Changed assets are not
+treated as proof that an old completion belongs to a current catalogue level.
+
+`TEST_SCOPE=journey-progress Scripts/run-app-integration-tests.sh` covers historical
+and imported wins, route/campaign deduplication, all three native engines, isolated
+sessions, a single Resume action, bitmap captures and input targets. The muted,
+offscreen runner checks chooser, receipt and checkpoint behaviour for Bonus skills.
+Native NSWindow mouse delivery remains unavailable offscreen. Direct actions,
+keyboard and accessibility targets are checked instead.
 
 The bundled Journey currently contains Classic lessons. All three engines have
 the same completion callback. Journey wins are written at the result, before the

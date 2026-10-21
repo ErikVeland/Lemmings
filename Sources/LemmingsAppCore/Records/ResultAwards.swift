@@ -27,7 +27,7 @@ public enum ResultAwards {
                     reason: L10n.text("Three-star levels: \(celebration.careerBefore.threeStarLevels) to \(celebration.career.threeStarLevels). One Level Skip per 3 distinct levels without rewind, undo or a bonus skill."), isConsumable: true))
             }
             if report.earnedExtraSkill {
-                rewards.append(.init(title: L10n.text("RARE: +1 EXTRA SKILL"),
+                rewards.append(.init(title: L10n.text("RARE: +1 BONUS SKILL"),
                     reason: L10n.text("Ten distinct three-star levels without rewind, undo or a bonus skill."), isConsumable: true))
             }
         }

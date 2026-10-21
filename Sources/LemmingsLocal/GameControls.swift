@@ -162,7 +162,7 @@ import NxlvKit
     }
 }
 
-/// A stone frame groups related options without adding another input target.
+/// A flat frame groups related options without adding another input target.
 @MainActor final class GameControlGroup: NSStackView {
     init(controls: [NSView], label: String) {
         super.init(frame: .zero)
@@ -177,7 +177,7 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {
-        GameStoneButton.draw(bounds, selected: false, pixel: 1)
+        GameDisplayPanel.draw(bounds)
     }
 }
 

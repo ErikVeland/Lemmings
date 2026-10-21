@@ -285,7 +285,7 @@ enum TelemetryLevelTarget: Equatable {
 @MainActor private final class TelemetryCard: NSView {
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
-        GameStoneButton.draw(bounds, selected: false, pixel: 1)
+        GameDisplayPanel.draw(bounds)
     }
 }
 #endif

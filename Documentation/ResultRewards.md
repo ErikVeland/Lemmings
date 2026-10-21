@@ -1,6 +1,6 @@
 # Results and rewards
 
-[Extra skills](ExtraSkills.md) are rare consumable rewards: one per ten distinct
+[Bonus skills](ExtraSkills.md) are rare consumable rewards: one per ten distinct
 three-star levels without rewind, undo or bonus skills. Results name newly earned
 consumables and retain their reasons in Rewards earned. Bonus attempts have
 separate records, advance the campaign, and earn no consumables or career stars.

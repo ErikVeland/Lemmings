@@ -127,54 +127,66 @@ import NxlvKit
     var navigationArtworkOpacityChanged: (CGFloat) -> Void = { _ in }
     /// Badge bounds use the content view's coordinates, including while faded.
     var rewardDisplayArea: () -> CGRect? = { nil }
+    var rewardStatus: () -> PrecisionZoomStatus? = { nil }
     var extraSkill: (() -> Void)?
-    var extraSkillTitle: () -> String = { L10n.text("Extra skill") }
+    var extraSkillTitle: () -> String = { L10n.text("Bonus skill") }
     var extraSkillHelp: () -> String = { "" }
     var extraSkillAvailable: () -> Bool = { false }
+    private let navigationAppearance = GameplayMenuAppearance()
+    private let navigationHitArea = GameplayMenuHitArea(frame: .zero)
+    private let controlHelp = GameplayControlHelp()
     private lazy var navigationButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
+        button.fadeAppearance = navigationAppearance; button.glyph = .menu
         button.title = L10n.text("Menu"); button.target = self; button.action = #selector(openMainMenu)
         button.setAccessibilityLabel(L10n.text("Save run and return to library"))
-        button.toolTip = L10n.text("Return to library (Esc or Q)")
+        button.helpText = L10n.text("Save this run and return to the library. (Esc or Q)")
         return button
     }()
     private lazy var settingsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
+        button.fadeAppearance = navigationAppearance
         button.title = L10n.text("Settings"); button.glyph = .settings
         button.target = self; button.action = #selector(openSettings)
         button.setAccessibilityLabel(L10n.text("Settings"))
-        button.toolTip = L10n.text("Settings (⌘,)")
+        button.helpText = L10n.text("Change game, sound and display settings. (⌘,)")
         return button
     }()
     private lazy var graphicsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
+        button.fadeAppearance = navigationAppearance; button.glyph = .graphics
         button.title = L10n.text("Graphics"); button.target = self; button.action = #selector(cycleGraphics)
         button.setAccessibilityLabel(L10n.text("Next graphics"))
         return button
     }()
     private lazy var ghostsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
+        button.fadeAppearance = navigationAppearance; button.glyph = .ghosts
+        button.usesToggleState = true
         button.target = self; button.action = #selector(toggleHotSeatGhosts)
-        button.toolTip = L10n.text("Show or hide Hot Seat ghosts (⌘G)")
+        button.helpText = L10n.text("Show or hide ghosts of earlier Hot Seat attempts. (⌘G)")
         return button
     }()
     private lazy var extraSkillButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
+        button.fadeAppearance = navigationAppearance; button.glyph = .bonusSkill
         button.target = self; button.action = #selector(useExtraSkill)
         return button
     }()
     @objc private func useExtraSkill() {
         guard active(), modern(), extraSkillAvailable(), ArcadeStore.shared.profilesAreWritable,
               ArcadeStore.shared.storageError == nil else { return }
+        controlHelp.dismissForInput()
         extraSkill?()
         revealRewards()
     }
     func revealRewards(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
-        navigationButtons.forEach { $0.revealArtwork(at: now) }
-        navigationArtworkOpacityChanged(1)
+        navigationAppearance.reveal(at: now)
+        navigationArtworkOpacityChanged(navigationAppearance.opacity)
     }
     @objc private func toggleHotSeatGhosts() {
         guard ArcadeStore.shared.hotSeatIsActive else { return }
+        controlHelp.dismissForInput()
         ArcadeStore.shared.hotSeatGhostsVisible.toggle()
         func redraw(_ view: NSView) {
             view.needsDisplay = true
@@ -190,21 +202,24 @@ import NxlvKit
         if !event.isARepeat { toggleHotSeatGhosts() }
         return true
     }
-    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton, ghostsButton, extraSkillButton] }
+    private var navigationButtons: [GameplayMenuButton] { [extraSkillButton, ghostsButton, graphicsButton, settingsButton, navigationButton] }
     @objc private func openInspection() {
         guard inspectionAvailable() else { return }
         inspectLemmings?()
     }
-    @objc private func openMainMenu() { mainMenu?() }
-    @objc private func openSettings() { settings?() }
+    @objc private func openMainMenu() { controlHelp.dismissForInput(); mainMenu?() }
+    @objc private func openSettings() { controlHelp.dismissForInput(); settings?() }
     @objc private func cycleGraphics() {
         guard graphicsAvailable() else { return }
+        controlHelp.dismissForInput()
         nextGraphics?()
         refreshNavigationControl()
     }
     func removeNavigationControl() {
         inspectionHover.removeFromSuperview(); hoverSnapshot = nil; hoverRevision = nil
         navigationButtons.forEach { $0.resetAppearance(); $0.removeFromSuperview() }
+        navigationHitArea.removeFromSuperview()
+        controlHelp.reset()
         nowPlayingNotice.removeFromSuperview()
     }
     func navigationFrame(in view: NSView) -> CGRect? {
@@ -217,62 +232,98 @@ import NxlvKit
         guard let root = window?.contentView else { return }
         let visible = mainMenu != nil && ownsController() && navigationAvailable()
             && window?.attachedSheet == nil && !GameScreen.shared.isPresented
-        let menuFrame = CGRect(x: max(0, root.bounds.maxX - 100),
-            y: root.isFlipped ? 64 : max(0, root.bounds.maxY - 108), width: 88, height: 44)
-        settingsButton.frame = CGRect(x: menuFrame.minX - 52, y: menuFrame.minY, width: 44, height: 44)
-        graphicsButton.frame = CGRect(x: settingsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
-        navigationButton.frame = menuFrame
-        ghostsButton.frame = CGRect(x: menuFrame.maxX - 176,
-            y: menuFrame.minY + (root.isFlipped ? 52 : -52), width: 176, height: 44)
-        extraSkillButton.frame = CGRect(x: ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame.minX - 232 : menuFrame.maxX - 224,
-            y: ghostsButton.frame.minY, width: 224, height: 44)
+        func available(_ button: GameplayMenuButton) -> Bool {
+            button === extraSkillButton ? extraSkill != nil && modern() && active()
+                : button === ghostsButton ? ArcadeStore.shared.hotSeatIsActive
+                : button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
+        }
+        let buttons = navigationButtons
+        let wasVisible = buttons.contains { !$0.isHidden && $0.superview === root }
+        if !wasVisible { buttons.forEach { $0.resetAppearance() } }
+        navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 56),
+            y: root.isFlipped ? 64 : max(0, root.bounds.maxY - 108), width: 44, height: 44)
+        var right = navigationButton.frame.minX - (available(settingsButton) ? 8 : 24)
+        for button in buttons.reversed() where button !== navigationButton && available(button) {
+            button.frame = CGRect(x: right - 44, y: navigationButton.frame.minY, width: 44, height: 44)
+            right = button.frame.minX - (button === settingsButton ? 24 : 8)
+        }
         extraSkillButton.title = extraSkillTitle()
-        extraSkillButton.toolTip = extraSkillHelp()
+        extraSkillButton.helpText = extraSkillHelp()
         extraSkillButton.setAccessibilityLabel(extraSkillTitle())
         extraSkillButton.setAccessibilityHelp(extraSkillHelp())
         extraSkillButton.isEnabled = extraSkillAvailable() && ArcadeStore.shared.profilesAreWritable
             && ArcadeStore.shared.storageError == nil
         let showsGhosts = ArcadeStore.shared.hotSeatGhostsVisible
         ghostsButton.title = showsGhosts ? L10n.text("Ghosts on") : L10n.text("Ghosts off")
+        ghostsButton.glyph = showsGhosts ? .ghosts : .ghostsHidden
         ghostsButton.state = showsGhosts ? .on : .off
         ghostsButton.setAccessibilityLabel(L10n.text("Show Hot Seat ghosts"))
         ghostsButton.setAccessibilityValue(showsGhosts ? 1 : 0)
-        let controlsFrame = menuFrame.union(settingsButton.frame).union(graphicsButton.frame)
-            .union(ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame : .null)
-            .union(extraSkill != nil && modern() ? extraSkillButton.frame : .null)
+        let controlsFrame = buttons.filter(available).reduce(CGRect.null) { $0.union($1.frame) }
+        navigationHitArea.frame = controlsFrame
+        navigationHitArea.isHidden = !visible
+        if navigationHitArea.superview !== root {
+            navigationHitArea.removeFromSuperview(); root.addSubview(navigationHitArea)
+        }
         let pointer = root.convert(window!.mouseLocationOutsideOfEventStream, from: nil)
-        if visible, rewardDisplayArea()?.contains(pointer) == true { revealRewards(at: now) }
+        if visible, controlsFrame.contains(pointer) || rewardDisplayArea()?.contains(pointer) == true {
+            revealRewards(at: now)
+        }
         var noticeArea = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
         if visible, noticeArea.intersects(controlsFrame) {
             noticeArea.size.width = max(0, min(noticeArea.maxX, controlsFrame.minX - 8) - noticeArea.minX)
+        }
+        if visible, let rewards = rewardDisplayArea(), noticeArea.intersects(rewards) {
+            if root.isFlipped {
+                let top = min(noticeArea.maxY, max(noticeArea.minY, rewards.maxY + 8))
+                noticeArea = CGRect(x: noticeArea.minX, y: top, width: noticeArea.width, height: noticeArea.maxY - top)
+            } else {
+                noticeArea.size.height = max(0, min(noticeArea.maxY, rewards.minY - 8) - noticeArea.minY)
+            }
         }
         if nowPlayingNotice.superview !== root { nowPlayingNotice.removeFromSuperview(); root.addSubview(nowPlayingNotice) }
         nowPlayingNotice.update(track: playingTrack(), at: now,
             visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
             reduceMotion: navigationReduceMotion(), enabled: showSongInfo(),
             area: noticeArea, flipped: root.isFlipped)
-        for button in navigationButtons {
-            let available = button === extraSkillButton ? extraSkill != nil && modern() && active()
-                : button === ghostsButton ? ArcadeStore.shared.hotSeatIsActive
-                : button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
-            guard visible && available else { button.isHidden = true; button.resetAppearance(); continue }
+        for button in buttons {
+            guard visible && available(button) else { button.hideControl(); continue }
             if button.superview !== root {
-                button.removeFromSuperview(); root.addSubview(button); button.resetAppearance()
+                button.removeFromSuperview(); root.addSubview(button)
             }
             button.isHidden = false
-            button.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
         }
-        navigationArtworkOpacityChanged(navigationButtons.filter { !$0.isHidden }.map(\.artworkOpacity).max() ?? 0)
+        navigationAppearance.update(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
+        navigationArtworkOpacityChanged(visible ? navigationAppearance.opacity : 0)
         let canCycle = graphicsAvailable()
         if graphicsButton.isEnabled != canCycle { graphicsButton.isEnabled = canCycle }
         let name = graphicsName()
-        let tooltip = L10n.text("Next graphics (F2)") + ": " + name
-        if graphicsButton.toolTip != tooltip {
+        let tooltip = L10n.text("Next graphics (F2)") + "\n" + L10n.text("Current graphics: \(name)")
+        if graphicsButton.helpText != tooltip {
             graphicsButton.setAccessibilityValue(name)
-            graphicsButton.toolTip = tooltip
+            graphicsButton.helpText = tooltip
         }
-        updateInspectionHover(in: root, available: visible && active() && inspectionAvailable() && window?.isKeyWindow == true,
+        updateControlHelp(in: root, available: visible && window?.isKeyWindow == true, at: now, pointer: pointer)
+        updateInspectionHover(in: root, available: visible && active() && inspectionAvailable() && window?.isKeyWindow == true
+            && controlHelp.panel == nil && !controlsFrame.contains(pointer) && rewardDisplayArea()?.contains(pointer) != true,
             area: musicDisplayArea() ?? root.bounds, pointer: root.convert(window!.mouseLocationOutsideOfEventStream, from: nil))
+    }
+    private func updateControlHelp(in root: NSView, available: Bool, at now: TimeInterval, pointer: CGPoint) {
+        guard available else { controlHelp.reset(); return }
+        let buttons = navigationButtons.filter { !$0.isHidden }
+        let hovered = buttons.first { $0.frame.contains(pointer) || $0.isHovered }
+        let focused = buttons.first { $0.isEnabled && window?.firstResponder === $0 }
+        if let button = hovered {
+            controlHelp.update(.init(id: button.glyph?.rawValue ?? button.title, title: button.title,
+                text: button.helpText, anchor: button.frame), in: root, at: now)
+        } else if let status = rewardStatus(), let area = rewardDisplayArea(),
+                  let badge = status.badge(at: pointer, in: area) {
+            controlHelp.update(.init(id: "reward-" + badge.badge.rawValue, title: badge.badge.title,
+                text: status.help(for: badge.badge, bonusSkillHelp: extraSkillHelp()), anchor: badge.frame), in: root, at: now)
+        } else if let button = focused {
+            controlHelp.update(.init(id: button.glyph?.rawValue ?? button.title, title: button.title,
+                text: button.helpText, anchor: button.frame), in: root, at: now, focused: true)
+        } else { controlHelp.reset() }
     }
     func updateInspectionHover(in root: NSView, available: Bool, area: CGRect, pointer: CGPoint) {
         guard available else {
@@ -611,7 +662,7 @@ import NxlvKit
             rows.append(.init(keys: "⌘I", action: L10n.text("Inspect lemmings while paused"), group: L10n.text("Gameplay")))
         }
         if extraSkill != nil, modern() {
-            rows.append(.init(keys: "⌘E", action: L10n.text("Use Extra skill on the selected skill or tool carrier"), group: L10n.text("Skills")))
+            rows.append(.init(keys: "⌘E", action: L10n.text("Use Bonus skill on the selected skill or tool carrier"), group: L10n.text("Skills")))
         }
         let gameplay = L10n.text("Gameplay"), speed = L10n.text("Speed"), camera = L10n.text("Camera"), skills = L10n.text("Skills")
         if modern() {

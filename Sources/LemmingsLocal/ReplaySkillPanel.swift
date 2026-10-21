@@ -59,7 +59,7 @@ struct ReplaySkillUse {
         needsDisplay = true
     }
     override func draw(_ dirtyRect: NSRect) {
-        GameStoneButton.draw(bounds, selected: false, pixel: 1)
+        GameDisplayPanel.draw(bounds)
         let inner = bounds.insetBy(dx: 8, dy: 6)
         let height = rowHeight
         GameControlText.draw(stockTitle, in: CGRect(x: inner.minX, y: inner.minY, width: inner.width, height: height), role: .heading)

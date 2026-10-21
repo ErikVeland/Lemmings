@@ -1518,21 +1518,21 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   try require(natural.vertical == 8, "Natural scrolling reversed the physical Zoom direction")
   let status = PrecisionZoomStatus(superzoom: 12, skips: 4, active: .zoom, isEmpty: false)
   try require(status.accessibility ==
-    "Superzoom, 12 remaining. 4 Level Skips. Zoom active",
+    "Superzoom, 12 remaining. 4 Level Skips. 0 Bonus skills. Zoom active",
     "The compact Zoom badges lost their accessible description")
-  let image = NSImage(size: CGSize(width: 180, height: 90))
+  let image = NSImage(size: CGSize(width: 600, height: 100))
   image.lockFocus()
   NSColor.white.setFill()
-  CGRect(x: 0, y: 0, width: 180, height: 90).fill()
+  CGRect(x: 0, y: 0, width: 600, height: 100).fill()
   let size = status.draw(at: CGPoint(x: 8, y: 8), scale: 2)
   image.unlockFocus()
-  try require(size.height == 74 && size.width > 0, "The Zoom and Level Skip badge rows were not laid out")
+  try require(size.height == 64 && size.width > 0 && size.width < 584, "The reward icon/count row was not laid out")
   let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
     .deletingLastPathComponent().deletingLastPathComponent()
     .appendingPathComponent(".build/precision-zoom-badges.png")
   try image.tiffRepresentation.flatMap(NSBitmapImageRep.init)?.representation(using: .png, properties: [:])?
     .write(to: output)
-  print("PASS compact lowercase/uppercase Zoom badges, active state and accessibility")
+  print("PASS compact reward icons and counts, active state and accessibility")
 }
 
 @MainActor private func testFreshLevelCountdown() throws {

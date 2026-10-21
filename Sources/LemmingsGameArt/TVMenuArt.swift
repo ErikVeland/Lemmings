@@ -60,7 +60,7 @@ public enum TVMenuArt {
             GameSemanticText.draw(page.subtitleRuns, in: layout.subtitle, typography: typography, context: context)
         } else { text(page.subtitle, box: layout.subtitle, typography: typography, context: context) }
         if page.preview {
-            GameStoneArt.draw(in: context, frame: layout.preview, selected: false, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
             if let preview { fitted(preview, in: layout.preview.insetBy(dx: 10, dy: 10), context: context) }
         }
         for (value, box) in zip(page.details, layout.details) { text(value, box: box, typography: typography, context: context) }

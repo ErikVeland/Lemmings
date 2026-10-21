@@ -16,7 +16,7 @@ public enum MobileReplayTitleArt {
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
-        GameStoneArt.draw(in: context, frame: rect, selected: false, pixel: 1)
+        GameDisplayArt.draw(in: context, frame: rect)
         let height = GameTextLayout.height(level.locationLabel, width: rect.width - 24)
         GameTextLayout.draw(level.locationLabel,
             in: CGRect(x: rect.minX + 12, y: rect.minY + 10, width: rect.width - 24, height: height),

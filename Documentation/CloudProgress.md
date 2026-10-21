@@ -170,6 +170,30 @@ device testing. Existing provider deployment and signing limits below apply.
 
 ## Service operations
 
+### Live deployment — 21 October 2026
+
+The encrypted-save service is deployed at
+`https://glasscode.academy/lemmings-api/cloud`. Public health returns version 2
+with status `ok`. Eight server checks pass. The public smoke check verifies
+opaque-byte round trips, authentication, conditional writes and one-use links,
+then removes its temporary vault. The smoke client sends an application user
+agent and removes a vault only after creating it successfully.
+
+The installer retained nginx and service configuration under
+`/var/backups/lemmings-cloud-configuration/20261021T073143Z`, validated nginx
+syntax and enabled the isolated systemd service. Existing rankings and telemetry
+routes retain their configuration. The earlier hosted-service deployment gate
+below is superseded by this deployment. Physical-device propagation and iCloud
+entitlement gates remain separate.
+
+Canonical-save maintenance archives retired checkpoints outside the active save
+folder and clears only saved-run pointers. It preserves result records, replay
+files, completion histories and settings. Imported Classic completions whose
+assets changed can retain their original hashed source namespace and exact
+`passed:Rank#position` identity in learning history. These identities preserve
+completion evidence without granting a win on a different current asset revision.
+They contain no imported filesystem path.
+
 `Tools/CloudSaves/server.py` runs as an isolated, hardened systemd service on
 loopback port 8798. Its nginx route does not change the existing rankings or
 telemetry routes. The service does not log request bodies, credentials or IP
@@ -209,11 +233,11 @@ cloud page now reports unavailable providers alongside successful providers.
 
 ### Earlier deployment record
 
-The hosted endpoint is configured in both app plists. Its deployment package is
-prepared locally; the service has **not been uploaded or deployed**. Automatic
+At this earlier gate, the hosted endpoint was configured in both app plists and
+its deployment package was prepared locally. The service had not been deployed. Automatic
 approval review rejected upload to `glasscode.academy` pending explicit user
-authorization for that destination. Until deployment, that provider reports
-offline and the entitled iCloud provider remains available.
+authorization for that destination. The hosted provider remained offline until
+the authorised 21 October deployment above.
 
 The installed iOS development profile allows the shared iCloud container. The
 installed Mac development and iOS App Store profiles still need the container

@@ -127,7 +127,7 @@ public enum MobilePauseArt {
         let boxes = layout.details
         text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
         GameTextLayout.draw(summary.level.title, in: boxes[0], typography: typography, face: .large, palette: .green, context: context)
-        GameStoneArt.draw(in: context, frame: layout.preview, selected: false, pixel: 2)
+        GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
         if let preview {
             let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
             let well = GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 2, dy: 2)
@@ -143,7 +143,7 @@ public enum MobilePauseArt {
         text(summary.rescueText, box: CGRect(x: progress.minX, y: progress.minY, width: progress.width, height: progress.height - 18),
              typography: typography, context: context)
         let rail = CGRect(x: progress.minX, y: progress.maxY - 12, width: progress.width, height: 10)
-        GameStoneArt.draw(in: context, frame: rail, selected: false, pixel: 1)
+        GameDisplayArt.draw(in: context, frame: rail)
         let well = rail.insetBy(dx: 4, dy: 3)
         let fraction = summary.required > 0 ? min(1, CGFloat(summary.saved) / CGFloat(summary.required)) : 1
         context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
@@ -151,7 +151,7 @@ public enum MobilePauseArt {
         let labelHeight = max(18, summary.fields.map { textHeight($0.label, width: boxes[3].width - 12, lineHeight: 18) }.max() ?? 18)
         for (index, field) in summary.fields.enumerated() {
             let box = boxes[index + 3]
-            context.setFillColor(CGColor(srgbRed: 0.035, green: 0.065, blue: 0.045, alpha: 1))
+            context.setFillColor(CGColor(gray: 0.035, alpha: 1))
             context.fill(box)
             text(field.label, box: CGRect(x: box.minX + 6, y: box.minY + 3, width: box.width - 12, height: labelHeight),
                  typography: typography, context: context)
@@ -169,7 +169,7 @@ public enum MobilePauseArt {
         }
         let musicStart = 12 + summary.supplies.count
         let music = boxes[musicStart].union(boxes[musicStart + 2]).insetBy(dx: -12, dy: -8)
-        GameStoneArt.draw(in: context, frame: music, selected: false, pixel: 1)
+        GameDisplayArt.draw(in: context, frame: music)
         for index in musicStart..<(musicStart + 3) {
             text(page.details[index], box: boxes[index], palette: index == musicStart + 1 ? .green : .blue,
                  typography: typography, context: context)

@@ -32,9 +32,9 @@ On Mac, hover while paused or choose Inspect for the longer history. Rewind
 follows the current timeline. Hot Seat inspection keeps the current owner and
 Ready boundary. Names do not establish identity across levels.
 
-## Rare Extra skills
+## Rare Bonus skills
 
-Earn one Extra skill for every ten distinct qualifying three-star clears.
+Earn one Bonus skill for every ten distinct qualifying three-star clears.
 Spend at most one per attempt to top up an existing finite skill or active L3
 tool carrier. Bonus clears can advance the campaign, with separate records.
 They cannot earn consumables, career stars or achievements, alter standard

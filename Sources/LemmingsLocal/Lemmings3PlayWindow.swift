@@ -408,9 +408,9 @@ import NxlvKit
         keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
         keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
         keyboard.extraSkillTitle = { [weak self] in
-            guard let self else { return L10n.text("Extra skill") }
-            return self.canvas.precisionStatus.bonusSkillUsed ? L10n.text("Extra skill used")
-                : L10n.text("Extra skill (\(self.canvas.precisionStatus.extraSkills))")
+            guard let self else { return L10n.text("Bonus skill") }
+            return self.canvas.precisionStatus.bonusSkillUsed ? L10n.text("Bonus skill used")
+                : L10n.text("Bonus skill (\(self.canvas.precisionStatus.extraSkills))")
         }
         keyboard.extraSkillHelp = { L10n.text("Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)") }
         keyboard.extraSkillAvailable = { [weak self] in self?.extraSkillAvailable ?? false }
@@ -432,6 +432,7 @@ import NxlvKit
         }
         keyboard.showSongInfo = { [weak self] in self?.audioSettings.showSongInfo ?? true }
         keyboard.navigationArtworkOpacityChanged = { [weak self] in self?.canvas.precisionStatusOpacity = $0 }
+        keyboard.rewardStatus = { [weak self] in self?.canvas.precisionStatus }
         keyboard.rewardDisplayArea = { [weak self] in
             guard let self, let root = self.window?.contentView else { return nil }
             return root.convert(self.canvas.rewardBadgeRect, from: self.canvas)
@@ -586,11 +587,11 @@ import NxlvKit
         }
         let store = ArcadeStore.shared, attemptID = arcadeRunID, owner = arcadeProfileID
         let balance = store.records.extraSkills(profileID: owner).available
-        try require(balance > 0 && extraSkillAvailable, "L3 earned extra skill was unavailable")
+        try require(balance > 0 && extraSkillAvailable, "L3 earned bonus skill was unavailable")
         let originalQuantity = game.lemmings[0].quantity
         useExtraSkill()
         guard let page = GameScreen.shared.controllerPage(in: window),
-              let use = buttons(page).first(where: { $0.title == L10n.text("Use extra skill") }) else {
+              let use = buttons(page).first(where: { $0.title == L10n.text("Use bonus skill") }) else {
             throw SequelDataError.invalid("L3 did not open the extra-skill chooser")
         }
         try require(use.accessibilityPerformPress(), "L3 extra-skill action did not activate")
@@ -626,7 +627,7 @@ import NxlvKit
         useExtraSkill()
         try require(GameScreen.shared.controllerPage(in: window) == nil
             && store.records.extraSkills(profileID: owner).available == balance - 1,
-            "L3 offered or spent a second extra skill")
+            "L3 offered or spent a second bonus skill")
         try require(rewind(seconds: 1), "L3 bonus attempt could not rewind before its grant")
         syncPrecisionZoom()
         try require(!game.bonusSkillUsed && arcadeLevel.conditions?.bonusSkillID == "bricks"
@@ -1555,7 +1556,7 @@ import NxlvKit
 
     private func syncPrecisionZoom(at point: CGPoint? = nil) {
         let wallet = PrecisionZoomController.shared
-        canvas.setPrecisionZoom(wallet.active != nil, at: point)
+        canvas.setPrecisionZoom(wallet.active != nil, magnification: CGFloat(wallet.magnification), at: point)
         speedControl.bulletTimeActive = wallet.active == .superzoom
         canvas.precisionStatus = PrecisionZoomStatus(superzoom: wallet.remainingSuperzoom(),
             skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
@@ -1585,7 +1586,7 @@ import NxlvKit
             let skill = TrolleyCapture.skillKey(String(describing: tool))
             guard ArcadeStore.shared.spendExtraSkill(attemptID: attemptID, profileID: self.arcadeProfileID,
                 skill: skill, conditions: conditions, existingLevelSkills: [skill]) else {
-                self.canvas.assignmentHighlight.showNotice(ArcadeStore.shared.storageError ?? L10n.text("Extra skill unavailable")); return
+                self.canvas.assignmentHighlight.showNotice(ArcadeStore.shared.storageError ?? L10n.text("Bonus skill unavailable")); return
             }
             if self.rewindOriginState != nil { self.discardRewindOrigin() }
             guard self.game.grantBonusTool(to: id) else { return }
@@ -2141,12 +2142,12 @@ import NxlvKit
     var precisionStatusOpacity: CGFloat = 1 { didSet { if oldValue != precisionStatusOpacity { needsDisplay = true } } }
     var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
     var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
-    func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
+    func setPrecisionZoom(_ enabled: Bool, magnification: CGFloat? = nil, at cursor: CGPoint? = nil) {
         let centre = CGPoint(x: playfieldRect.midX, y: playfieldRect.midY)
         let pointer = cursor ?? pointerPosition ?? controllerPointer
             ?? window.map { convert($0.mouseLocationOutsideOfEventStream, from: nil) } ?? centre
         let anchor = playfieldRect.contains(pointer) ? pointer : centre
-        precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+        precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? (magnification ?? 2) : 1,
             reduceMotion: reduceMotion) { [weak self] magnification in
                 guard let self else { return }
                 let delta = self.precisionLens.transition(toMagnification: magnification, at: anchor,

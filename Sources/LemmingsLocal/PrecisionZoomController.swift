@@ -18,6 +18,8 @@ enum PrecisionZoomScrollOutcome: Equatable {
     private let suppliedEarnings: ((String) -> PrecisionZoomEarnings)?
     private var profileID: String?
     private var ledger = PrecisionZoomLedger()
+    private var zoomMagnification: Double = 1
+    var magnification: Double { active == nil ? 1 : zoomMagnification }
     private(set) var storageError: String?
 
     init(defaults: UserDefaults = .standard,
@@ -37,6 +39,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
     }
 
     func start(attemptID: UUID, profileID: String) {
+        let changesAttempt = self.profileID != profileID || ledger.attemptID != attemptID
         if self.profileID != profileID {
             self.profileID = profileID
             if let data = defaults.data(forKey: Self.key(profileID)) {
@@ -45,6 +48,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
             } else { ledger = PrecisionZoomLedger(); storageError = nil }
         }
         ledger.start(attemptID: attemptID)
+        if changesAttempt { zoomMagnification = ledger.active == nil ? 1 : 2 }
         if storageError == nil { persist() }
     }
 
@@ -68,11 +72,23 @@ enum PrecisionZoomScrollOutcome: Equatable {
     @discardableResult func toggle(_ kind: PrecisionZoomKind) -> Bool {
         guard kind == .zoom || storageError == nil,
               ledger.toggle(kind, earnings: kind == .superzoom ? earnings : .init(superzoomUses: 0)) else { return false }
+        zoomMagnification = ledger.active == nil ? 1 : 2
         if storageError == nil { persist() }
         return kind == .zoom || storageError == nil
     }
     func applyScroll(_ action: PrecisionZoomScrollAction) -> PrecisionZoomScrollOutcome {
         switch action {
+        case .magnify(let factor):
+            guard factor.isFinite, factor > 0 else { return .unchanged }
+            let target = min(2, max(1, magnification * factor))
+            guard abs(target - magnification) > 0.0001 else { return .unchanged }
+            if target > 1, active == nil {
+                guard toggle(.zoom) else { return .unavailable }
+            } else if target == 1, let active {
+                guard toggle(active) else { return .unavailable }
+            }
+            zoomMagnification = target
+            return .changed
         case .zoomIn:
             guard active == nil else { return .unchanged }
             return toggle(.zoom) ? .changed : .unavailable

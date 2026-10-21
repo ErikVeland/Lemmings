@@ -92,38 +92,30 @@ check(adjustment.x == (oldSource.x - movedPointer.x) / 3
 check(!lens.active && lens.source(movedPointer) == movedPointer, "Zoom did not switch off")
 
 var scroll = PrecisionZoomScrollGesture()
+@MainActor func factor(_ vertical: Double, precise: Bool, time: Double) -> Double {
+    guard case .zoom(.magnify(let value)) = scroll.handle(horizontal: 0, vertical: vertical,
+        precise: precise, phase: .changed, time: time) else { preconditionFailure("Missing continuous zoom") }
+    return value
+}
 check(scroll.handle(horizontal: 14, vertical: 2, precise: true, phase: .began, time: 1) == .pan,
     "Horizontal trackpad panning activated Zoom")
-check(scroll.handle(horizontal: 0, vertical: 3, precise: true, phase: .began, time: 2) == .consumed,
-    "A short trackpad movement was not held for a deliberate gesture")
-check(scroll.handle(horizontal: 0, vertical: 4, precise: true, phase: .changed, time: 2.1) == .consumed,
-    "A partial trackpad gesture activated Zoom")
-check(scroll.handle(horizontal: 0, vertical: 1, precise: true, phase: .changed, time: 2.2) == .zoom(.zoomIn),
-    "Trackpad scroll up did not activate Zoom")
-check(scroll.handle(horizontal: 0, vertical: 16, precise: true, phase: .changed, time: 2.3) == .consumed,
-    "A trackpad gesture started Zoom twice")
-check(scroll.handle(horizontal: 0, vertical: -12, precise: true, phase: .changed, time: 2.4) == .consumed,
-    "A trackpad bounce switched Zoom off")
+let small = factor(1, precise: true, time: 2)
+check(small > 1 && small < 1.02, "Precise input jumped to full Zoom")
+let continued = factor(4, precise: true, time: 2.1)
+check(continued > small && continued < 1.1, "Continued trackpad input did not scale proportionally")
+check(abs(factor(-4, precise: true, time: 2.2) * continued - 1) < 0.000001,
+    "Reversing the gesture did not reverse Zoom")
 check(scroll.handle(horizontal: 0, vertical: -20, precise: true, momentum: true, time: 2.5) == .consumed,
-    "Momentum started another Zoom action")
+    "Momentum changed Zoom")
 check(scroll.handle(horizontal: 0, vertical: 0, precise: true, phase: .ended, time: 2.6) == .consumed,
-    "Ending an active trackpad gesture panned the camera")
-check(scroll.handle(horizontal: 0, vertical: -8, precise: true, phase: .began, time: 3) == .zoom(.zoomOut),
-    "A new trackpad gesture did not switch Zoom off")
-check(scroll.handle(horizontal: 0, vertical: 0, precise: true, phase: .ended, time: 3.1) == .consumed,
     "Trackpad release panned the camera")
-check(scroll.handle(horizontal: 0, vertical: 1, precise: false, time: 4) == .zoom(.zoomIn),
-    "A scroll-wheel tick did not activate Zoom")
-check(scroll.handle(horizontal: 0, vertical: -1, precise: false, time: 4.01) == .zoom(.zoomOut),
-    "A second wheel tick could not switch Zoom off")
+let wheel = factor(1, precise: false, time: 4)
+check(wheel > 1.1 && wheel < 1.2, "A wheel tick jumped to full Zoom")
+check(abs(factor(-1, precise: false, time: 4.01) * wheel - 1) < 0.000001,
+    "Wheel reversal did not undo the magnification")
 check(scroll.handle(horizontal: 0, vertical: 9, precise: true, modified: true, time: 5) == .pan,
-    "Shift or system-modified scroll lost camera panning")
-check(scroll.handle(horizontal: 0, vertical: 4, precise: true, time: 6) == .consumed,
-    "A short Magic Mouse movement activated Zoom")
-check(scroll.handle(horizontal: 0, vertical: 4, precise: true, time: 6.1) == .zoom(.zoomIn),
-    "A phase-less Magic Mouse gesture did not activate Zoom")
-check(scroll.handle(horizontal: 0, vertical: -8, precise: true, time: 6.2) == .consumed,
-    "Magic Mouse bounce switched Zoom off")
-check(scroll.handle(horizontal: 0, vertical: -8, precise: true, time: 6.8) == .zoom(.zoomOut),
-    "A later phase-less gesture stayed latched")
-print("PASS free Zoom, Superzoom thresholds/retry/failure costs, legacy migration, cursor mapping and wheel/touch gestures")
+    "Modified scroll lost camera panning")
+check(scroll.handle(horizontal: 0, vertical: .infinity, precise: true, time: 6) == .consumed,
+    "Invalid input reached the camera")
+check(factor(10000, precise: false, time: 7) < 1.5, "Large input caused an unbounded zoom jump")
+print("PASS free Zoom, Superzoom costs, legacy migration, cursor mapping and continuous wheel/touch gestures")

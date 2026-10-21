@@ -108,7 +108,7 @@ import NxlvKit
             let badgeWidth = CGFloat(MacInterfaceRenderer.menuText(key).count * 8 + 16)
             let badge = NSRect(x: max(2, min(bounds.width - badgeWidth - 2, rect.midX - badgeWidth / 2)),
                 y: max(2, min(bounds.height - 26, rect.maxY + 4)), width: badgeWidth, height: 24)
-            GameStoneButton.draw(badge, selected: true, pixel: 1)
+            GameDisplayPanel.draw(badge)
             NSGraphicsContext.saveGraphicsState()
             let transform = NSAffineTransform()
             transform.translateX(by: 0, yBy: badge.midY * 2); transform.scaleX(by: 1, yBy: -1); transform.concat()

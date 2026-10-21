@@ -980,7 +980,11 @@ struct LevelCoverFlowItem: Equatable, Sendable {
 
     private func drawCard(in cardBounds: CGRect, drawsFocus: Bool) {
         let pressed = isHighlighted || selected
-        GameStoneButton.draw(cardBounds, selected: pressed, pixel: presentation == .focused ? 2 : 1)
+        GameDisplayPanel.draw(cardBounds, pixel: presentation == .focused ? 2 : 1)
+        if pressed, let context = NSGraphicsContext.current?.cgContext {
+            GameDisplayArt.outline(in: context, frame: cardBounds,
+                color: CGColor(srgbRed: 0.6755, green: 0.8639, blue: 0.2804, alpha: 1), pixel: 2)
+        }
         let content = GameStoneButton.well(cardBounds,
             pixel: presentation == .focused ? 2 : 1).insetBy(dx: 10, dy: 8)
         let alpha: CGFloat = item.isAvailable ? 1 : 0.45

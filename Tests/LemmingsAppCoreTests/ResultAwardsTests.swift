@@ -39,7 +39,7 @@ struct ResultAwardsTests {
             let report = try #require(recorded)
             let receipt = ResultAwards.earnedRewards(report: report,
                 celebration: .init(report: report, history: records.trolley))
-            #expect(receipt.contains { $0.title == "RARE: +1 EXTRA SKILL" } == (index == 9))
+            #expect(receipt.contains { $0.title == "RARE: +1 BONUS SKILL" } == (index == 9))
         }
     }
 

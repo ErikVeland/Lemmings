@@ -3,6 +3,7 @@
   fileprivate func testHomeJourneyProgressCounts() throws {
     if window == nil { buildInterface() }
     let oldArcade = ArcadeStore.shared, oldCache = playlistStoreCache
+    let oldRecovery = menuRecovery
     let storage = try AppStorage.temporary(named: "home-journey-counts")
     let arcade = ArcadeStore(storage: storage, bundledProofs: nil)
     ArcadeStore.shared = arcade
@@ -10,8 +11,36 @@
     playlistStoreCache = (arcade.records.activeProfileID, store)
     defer {
       ArcadeStore.shared = oldArcade; playlistStoreCache = oldCache
+      menuRecovery = oldRecovery
       storage.removeTemporaryFiles()
     }
+    // A revised curriculum must retain older campaign wins, imported sources and sequel records.
+    let encoder = JSONEncoder(), summarySeat = "summary-seat"
+    let summaryPrefix = "HotSeat.\(summarySeat)."
+    let passes = (0..<85).map { ["Fun", "Tricky", "Taxing"][$0 / 30] + "#\($0 % 30)" }
+    storage.defaults.set(try encoder.encode(ClassicGameFlow.Progress(furthestReached: [:], passed: passes)),
+      forKey: summaryPrefix + "ClassicGameProgress.lemmings-LEVEL-120")
+    storage.defaults.set(try encoder.encode(ClassicGameFlow.Progress(furthestReached: [:], passed: ["Fun#0"])),
+      forKey: summaryPrefix + "ClassicGameProgress.lemmings-LEVEL-120:source-test")
+    let medal = Lemmings2Campaign.Result(startingPopulation: 60, saved: 60, medal: .gold, levelFingerprint: "test")
+    storage.defaults.set(try encoder.encode(Lemmings2Campaign.Progress(tribe: 1, level: 2, results: [10: medal, 11: medal])),
+      forKey: summaryPrefix + "nativeL2Campaign.v1.bundled")
+    storage.defaults.set(try encoder.encode(Lemmings3ClassicCampaign.Progress(index: 3, population: 20,
+      completed: [0: 20, 1: 20, 2: 20], tribe: .classic)), forKey: summaryPrefix + "nativeL3ClassicPreview.v1.bundled")
+    var history = LearningJourneyProgress()
+    history.record(.init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "0:Fun:1:0:0"), won: true)
+    history.record(.init(engine: .classic, packID: "lemmings-LEVEL-120:source-test", levelID: "passed:Fun#0"), won: true)
+    history.record(.init(engine: .lemmings2, packID: "tribes-1", levelID: "0:test"), won: true)
+    history.record(.init(engine: .lemmings3, packID: "chronicles-1", levelID: "0:test"), won: true)
+    history.record(.init(engine: .classic, packID: "removed-fan", levelID: "old.dat#2"), won: true)
+    history.record(.init(engine: .classic, packID: "deferred", levelID: "later"), won: false)
+    let beforeSummary = storage.defaults.dictionaryRepresentation()
+    try check(JourneyCompletionSummary.count(profileID: "one", hotSeatID: summarySeat, learning: history,
+      defaults: storage.defaults) == 92, "Journey summary lost historical wins or duplicated campaign/route results")
+    try check(JourneyCompletionSummary.count(profileID: "one", hotSeatID: "new-seat", learning: .init(),
+      defaults: storage.defaults) == 0, "A new Hot Seat inherited an older session's wins")
+    try check(NSDictionary(dictionary: beforeSummary).isEqual(to: storage.defaults.dictionaryRepresentation()),
+      "Reading Journey progress rewrote the saved records")
     loadContent()
     guard let journey = LearningJourneyLibrary.journey,
           let classic = journey.lessons.first(where: { $0.entry.identity.packID == "lemmings-LEVEL-120" })?.entry,
@@ -30,6 +59,19 @@
     let run = try LevelSequenceRun.playlist(journey.playlist(), pool: .init(id: LearningJourney.version, summary: "Journey"))
     try store.startRun(run, hotSeatID: seat)
     let owner = arcade.playingProfileID
+    menuRecovery = RunRecovery(engine: "test", profileID: owner, runID: UUID(), dataSetID: "test",
+      levelIndex: 0, levelFingerprint: "test", initialStateHash: "test", tick: 0, events: [], stateHash: "test",
+      usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
+    menuRecovery?.hotSeatID = seat
+    var resumes = homeMenuItems().filter { [.resume, .resumeSequence].contains($0.action) }
+    try check(resumes.count == 1 && resumes[0].action == .resume,
+      "Home did not select the latest standalone level over the older queue")
+    menuRecovery?.sequence = .init(runID: run.id, entry: run.currentEntry)
+    resumes = homeMenuItems().filter { [.resume, .resumeSequence].contains($0.action) }
+    try check(resumes.count == 1 && resumes[0].action == .resumeSequence,
+      "A checkpoint in the current route produced duplicate Resume actions")
+    try check(homeMenuItems().contains { $0.title == L10n.text("JOURNEY MAP  \(4) SOLVED") },
+      "Home hid wins outside the current curriculum")
     let originalCampaign = UserDefaults.standard.dictionaryRepresentation().filter { $0.key.hasPrefix("HotSeat.\(seat).") }
     rebuildLibrary()
     let classicTitle = homeContentRow(.classic)
@@ -76,7 +118,7 @@
       "Displaying Journey counts wrote campaign progress")
     arcade.endHotSeat()
     try check(!homeContentRow(.classic).contains("1/120"), "Solo inherited the Hot Seat Home count")
-    print("PASS Home Journey counts, Solo/Hot Seat isolation, exact Classic/L2/L3 identities, two renders and input targets")
+    print("PASS historical Journey counts, unique Resume, Solo/Hot Seat isolation, Classic/L2/L3 records, two renders and input targets")
   }
 }
 #endif

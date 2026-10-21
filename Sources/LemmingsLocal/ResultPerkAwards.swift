@@ -31,7 +31,7 @@ import NxlvKit
                 milestone: milestone, criterion: criterion, star: 3))
         }
         if report.earnedExtraSkill {
-            perks.append(.init(kind: .extraSkill, name: L10n.text("EXTRA SKILL"), quantity: 1,
+            perks.append(.init(kind: .extraSkill, name: L10n.text("BONUS SKILL"), quantity: 1,
                 milestone: milestone, criterion: L10n.text("Every 10 distinct levels · Rare"), star: 3))
         }
         return perks
@@ -50,7 +50,7 @@ import NxlvKit
         let balances: [(EarnedPerk.Kind, String, Int)] = [
             (.superzoom, L10n.text("Superzoom"), wallet.remainingSuperzoom(profileID: player.id)),
             (.skip, L10n.text("Level Skips"), ArcadeStore.shared.records.levelSkips(profileID: player.id).available),
-            (.extraSkill, L10n.text("Extra skills"), ArcadeStore.shared.records.extraSkills(profileID: player.id).available)
+            (.extraSkill, L10n.text("Bonus skills"), ArcadeStore.shared.records.extraSkills(profileID: player.id).available)
         ]
         let earned = earnedPerks
         return balances.map { kind, name, balance in

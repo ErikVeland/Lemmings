@@ -75,7 +75,7 @@ typealias MobileGameControllerBase = UIViewController
             if title == L10n.text("New rescue record") { return (title, L10n.text("Your best rescue count on this level.")) }
             if title == L10n.text("New skill record") { return (title, L10n.text("Your fewest skills used to complete this level.")) }
             if title == L10n.text("Level skip earned") { return (title, L10n.text("A level skip is now available for a later attempt.")) }
-            if title == L10n.text("Extra skill earned") { return (title, L10n.text("One extra use of an existing level skill is available for a later attempt.")) }
+            if title == L10n.text("Bonus skill earned") { return (title, L10n.text("One extra use of an existing level skill is available for a later attempt.")) }
             return nil
         }
     }
@@ -1153,7 +1153,7 @@ typealias MobileGameControllerBase = UIViewController
               !session.extraSkillChoices.isEmpty else { return }
         let index = overlayActions.count
         overlayActions.append { [weak self] in self?.showExtraSkillChoices() }
-        overlayCanvas.page.footer.append(.init(String(index), L10n.text("EXTRA SKILL ×\(available)")))
+        overlayCanvas.page.footer.append(.init(String(index), L10n.text("BONUS SKILL ×\(available)")))
         layoutOverlay()
     }
 
@@ -1162,7 +1162,7 @@ typealias MobileGameControllerBase = UIViewController
               (onExtraSkillBalance?() ?? 0) > 0 else { return }
         let choices = session.extraSkillChoices
         guard !choices.isEmpty else { return }
-        showOverlay(title: L10n.text("EXTRA SKILL"),
+        showOverlay(title: L10n.text("BONUS SKILL"),
             actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
         overlayCanvas.page = MobileExtraSkillArt.page(choices)
         for choice in choices {

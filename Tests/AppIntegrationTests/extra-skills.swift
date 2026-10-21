@@ -59,7 +59,7 @@
     }
     host.contentView!.layoutSubtreeIfNeeded(); page.layoutSubtreeIfNeeded()
     let buttons = extraSkillButtons(page).filter {
-      $0.title.hasPrefix("+1 ") || $0 === page.controllerBackButton || $0.title == "Use extra skill"
+      $0.title.hasPrefix("+1 ") || $0 === page.controllerBackButton || $0.title == "Use bonus skill"
     }
     let rows = buttons.filter { $0.title.hasPrefix("+1 ") }
     try check(buttons.count == 5 && rows.count == 3 && rows.filter { $0.state == .on }.map(\.title) == ["+1 Miner"],
@@ -98,7 +98,7 @@
     let second = rows.first { $0.title == "+1 Digger" }!
     host.makeFirstResponder(second)
     try check(GameScreen.shared.handleDialogKey(extraSkillKey(" ", code: 49, window: host)) && second.state == .on,
-      "Keyboard selection did not select an extra skill")
+      "Keyboard selection did not select an bonus skill")
     try check((second.accessibilityValue() as? Int) == 1 && rows.filter { $0.state == .on }.count == 1,
       "Extra-skill selection state disagreed with accessibility")
     try extraSkillShot(host.contentView!, "chooser-\(width)")
@@ -108,7 +108,7 @@
   }
   try check(dismissed == 3, "Extra-skill cancellation lost its resume callback")
   let confirmed = ExtraSkillMac.choose(choices, selected: 1, owner: host, apply: { applied.append($0) })!
-  let use = extraSkillButtons(confirmed).first { $0.title == "Use extra skill" }!
+  let use = extraSkillButtons(confirmed).first { $0.title == "Use bonus skill" }!
   try check(use.accessibilityPerformPress() && applied == [1] && !GameScreen.shared.isPresented,
     "Extra-skill confirmation did not apply exactly the selected reward")
 
@@ -130,24 +130,26 @@
     keyboard.removeNavigationControl()
     keyboard.refreshNavigationControl(at: 100); keyboard.refreshNavigationControl(at: 104)
     let buttons = root.subviews.compactMap { $0 as? GameplayMenuButton }.filter { !$0.isHidden }
-    let inspect = buttons.first { $0.title == "Inspect" }!
-    let extra = buttons.first { $0.title == "Extra skill" }!
-    try check(inspect.artworkOpacity == 1 && badge.opacity == 0,
+    let extra = buttons.first { $0.title == "Bonus skill" }!
+    try check(!buttons.contains { $0.title == "Inspect" } && badge.opacity == 0,
       "Paused Inspect pinned reward badges on screen")
     try check(root.bounds.contains(extra.frame) && extra.frame.height >= 44 && extra.artworkOpacity == 0,
       "Extra-skill action did not fit or fade with the menu")
     try extraSkillShot(root, "faded-\(width)")
     host.pointer = CGPoint(x: badge.frame.midX, y: badge.frame.midY)
     keyboard.refreshNavigationControl(at: 105)
-    try check(badge.opacity == 1, "Hovering a faded reward badge did not reveal it")
+    keyboard.refreshNavigationControl(at: 105.2)
+    try check(badge.opacity == 1 && buttons.allSatisfy { $0.artworkOpacity == badge.opacity },
+      "Hovering a faded reward badge did not reveal the whole menu group")
     try extraSkillShot(root, "badge-hover-\(width)")
     host.pointer = CGPoint(x: root.bounds.midX, y: root.bounds.midY)
     keyboard.refreshNavigationControl(at: 109)
     try check(badge.opacity == 0, "Reward badges did not fade after hover")
     let hover = NSEvent.enterExitEvent(with: .mouseEntered, location: .zero, modifierFlags: [], timestamp: 109,
       windowNumber: host.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0, userData: nil)!
-    extra.mouseEntered(with: hover); keyboard.refreshNavigationControl(at: 109)
-    try check(extra.artworkOpacity == 1 && badge.opacity == 1, "Extra-skill hover did not reveal the reward balances")
+    extra.mouseEntered(with: hover); keyboard.refreshNavigationControl(at: 109.2)
+    try check(buttons.allSatisfy { $0.artworkOpacity == 1 } && badge.opacity == 1,
+      "Bonus-skill hover did not reveal the whole menu group and reward balances")
     try check(root.hitTest(CGPoint(x: extra.frame.midX, y: extra.frame.midY)) === extra,
       "Faded extra-skill button lost its input target")
     let before = uses
@@ -157,12 +159,12 @@
   }
   let before = uses
   try check(keyboard.handle(extraSkillKey("e", code: 14, window: host, flags: .command)) == nil && uses == before + 1,
-    "Command-E did not use an extra skill")
+    "Command-E did not use an bonus skill")
   _ = keyboard.handle(extraSkillKey("e", code: 14, window: host, flags: .command, repeated: true))
   try check(uses == before + 1 && badge.opacity == 1, "Command-E repeated or failed to reveal rewards")
   keyboard.extraSkillAvailable = { false }
   _ = keyboard.handle(extraSkillKey("e", code: 14, window: host, flags: .command))
-  try check(uses == before + 1, "An unavailable extra skill was used")
+  try check(uses == before + 1, "An unavailable bonus skill was used")
   host.makeFirstResponder(nil)
   keyboard.revealRewards(at: 200); keyboard.refreshNavigationControl(at: 200); keyboard.refreshNavigationControl(at: 204)
   try check(badge.opacity == 0, "Used rewards did not resume fading")
@@ -193,7 +195,7 @@
         skills: [:], seconds: 10, telemetry: .init(released: 1)))
       try check(report != nil && report.earnedExtraSkill == (index == 9), engine + " rare reward milestone was wrong")
     }
-    let rare = "RARE: +1 EXTRA SKILL"
+    let rare = "RARE: +1 BONUS SKILL"
     let receipts = ResultAwards.earnedRewards(report: report, celebration: .init(report: report, history: store.records.trolley))
     try check(receipts.contains { $0.isConsumable && $0.title == rare } && store.records.extraSkills(profileID: owner).available == 1,
       engine + " rare receipt or saved balance was missing")
@@ -275,7 +277,7 @@ extension AppDelegate {
     let before = classic.skills[slot].count, attemptID = arcadeRunID
     useExtraSkill()
     guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
-          let use = extraSkillButtons(chooser).first(where: { $0.title == "Use extra skill" }) else {
+          let use = extraSkillButtons(chooser).first(where: { $0.title == "Use bonus skill" }) else {
       throw IntegrationFailure(message: "Classic extra-skill command did not open its chooser")
     }
     try extraSkillShot(window.contentView!, "classic-live-chooser")

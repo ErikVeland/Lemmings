@@ -69,7 +69,11 @@ public enum LevelCoverArt {
     public static func draw(in context: CGContext, bounds: CGRect, title: String, artwork: CGImage?,
                             selected: Bool, typography: GameMenuTypography?) {
         let cover = coverBounds(for: bounds)
-        GameStoneArt.draw(in: context, frame: cover, selected: selected, pixel: selected ? 2 : 1)
+        GameDisplayArt.draw(in: context, frame: cover)
+        if selected {
+            GameDisplayArt.outline(in: context, frame: cover,
+                color: CGColor(srgbRed: 0.6755, green: 0.8639, blue: 0.2804, alpha: 1), pixel: 2)
+        }
         let content = content(of: cover, focused: selected)
         let frame = artworkFrame(in: content)
         drawArtwork(artwork, in: frame, context: context)

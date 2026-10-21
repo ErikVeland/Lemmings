@@ -144,7 +144,7 @@ import NxlvKit
         }
         if !savedEarnedRewards.isEmpty {
             let resources = savedEarnedRewards.filter(\.isConsumable)
-            let featured = resources.first(where: { $0.title.contains("EXTRA SKILL") }) ?? resources.first
+            let featured = resources.first(where: { $0.title.contains("BONUS SKILL") }) ?? resources.first
             let label = featured.map { reward in
                 reward.title + (resources.count > 1 ? " (+\(resources.count - 1))" : "") + " >"
             } ?? L10n.text("Rewards earned (\(savedEarnedRewards.count)) >")
@@ -167,7 +167,7 @@ import NxlvKit
         var rewards: [String] = []
         if c.precisionRewards.superzoomUses > 0 { rewards.append("+\(c.precisionRewards.superzoomUses) SUPERZOOM") }
         if report.earnedLevelSkip { rewards.append("+1 SKIP") }
-        if report.earnedExtraSkill { rewards.append(L10n.text("RARE: +1 EXTRA SKILL")) }
+        if report.earnedExtraSkill { rewards.append(L10n.text("RARE: +1 BONUS SKILL")) }
         return rewards.joined(separator: "   ")
     }
     func drawLevelGoals() {
@@ -217,10 +217,10 @@ import NxlvKit
         if !assisted { drawSkipBalance(ArcadeStore.shared.records.levelSkips(profileID: player.id)) }
         text(L10n.text("Superzoom \(PrecisionZoomController.shared.remainingSuperzoom(profileID: player.id))"), 80, 238, 380, height: 22)
         let extra = ArcadeStore.shared.records.extraSkills(profileID: player.id)
-        achievementLink(L10n.text("RARE: Extra skills \(extra.available) · \(10 - extra.threeStarLevelsToNext)/10 >"),
+        achievementLink(L10n.text("RARE: Bonus skills \(extra.available) · \(10 - extra.threeStarLevelsToNext)/10 >"),
             in: CGRect(x: 480, y: 234, width: 560, height: 30),
-            title: L10n.text("Extra skills"), detail: L10n.text("Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.")) { [weak self] in
-                self?.showResultAchievement([(L10n.text("Extra skills"), L10n.text("Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards."))])
+            title: L10n.text("Bonus skills"), detail: L10n.text("Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.")) { [weak self] in
+                self?.showResultAchievement([(L10n.text("Bonus skills"), L10n.text("Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards."))])
             }
         let milestones = deltas.filter { $0.after.goal > 1 }
         let pages = max(1, (milestones.count + 3) / 4)

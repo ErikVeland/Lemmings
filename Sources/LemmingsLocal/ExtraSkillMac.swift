@@ -13,7 +13,7 @@ import NxlvKit
     @discardableResult static func choose(_ choices: [Choice], selected: Int? = nil,
         owner: NSWindow?, onDismiss: @escaping () -> Void = {}, apply: @escaping (Int) -> Void) -> GameMenuPage? {
         guard !choices.isEmpty else { return nil }
-        let page = GameMenuPage(title: L10n.text("EXTRA SKILL"),
+        let page = GameMenuPage(title: L10n.text("BONUS SKILL"),
             subtitle: L10n.text("Bonus runs keep separate records and earn no rewards."))
         var selection = choices.first(where: { $0.id == selected })?.id ?? choices[0].id
         let scroll = NSScrollView(frame: page.body.bounds)
@@ -43,7 +43,7 @@ import NxlvKit
         }
         scroll.documentView = list; page.body.addSubview(scroll)
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-        let use = page.addPrimaryAction(L10n.text("Use extra skill")) { [weak page] in
+        let use = page.addPrimaryAction(L10n.text("Use bonus skill")) { [weak page] in
             if let page { GameScreen.shared.dismiss(page) }
             apply(selection)
         }

@@ -11,7 +11,8 @@ enum PanelGlyph: String {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings, download, hourglass
+  case settings, download, hourglass, menu, graphics, ghosts, ghostsHidden, bonusSkill
+  case superzoom, levelSkip
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -224,6 +225,14 @@ enum PanelGlyph: String {
             }
         }
     }
+}
+
+/// Flat information panels share the same pixel renderer on every platform.
+@MainActor enum GameDisplayPanel {
+  static func draw(_ frame: CGRect, pixel: CGFloat = 1) {
+    guard let context = NSGraphicsContext.current?.cgContext else { return }
+    GameDisplayArt.draw(in: context, frame: frame, pixel: pixel)
+  }
 }
 
 /// Shared stone sockets for controls added beside the original panel artwork.

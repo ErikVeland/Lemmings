@@ -474,9 +474,9 @@ struct ReticleFeedback {
     let point = cursorViewPoint ?? window.map { convert($0.mouseLocationOutsideOfEventStream, from: nil) } ?? centre
     return bounds.contains(point) ? point : centre
   }
-  func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
+  func setPrecisionZoom(_ enabled: Bool, magnification: CGFloat? = nil, at cursor: CGPoint? = nil) {
     let point = cursor.flatMap { bounds.contains($0) ? $0 : nil } ?? precisionAnchor
-    precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+    precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? (magnification ?? 2) : 1,
       reduceMotion: reduceMotion) { [weak self] magnification in
         guard let self else { return }
         let delta = self.precisionLens.transition(toMagnification: magnification, at: point,

@@ -4,10 +4,10 @@ Classic, Lemmings 2 and Lemmings 3 on Mac use the same free Zoom controls.
 They also work in supported fan levels. Earned Superzoom uses belong to the active player profile.
 
 - Press **Z** to switch 2× Zoom on or off at the cursor.
-- Scroll up over the playfield to switch 2× Zoom on. Scroll down to switch it
-  off. A scroll-wheel tick or one Magic Mouse or trackpad gesture can start it
-  once. Scrolling down also switches off Superzoom. Scrolling up while
-  Superzoom is active leaves it running.
+- Scroll over the playfield for continuous magnification between normal view and
+  2×. Wheel ticks make small changes. Trackpad and Magic Mouse movement adjusts
+  the scale continuously. The target beneath the pointer stays fixed. Scrolling
+  fully out also switches off Superzoom. Momentum does not change magnification.
 - Press **Shift-Z** to switch 2× Superzoom on or off at the cursor. Superzoom
   runs the simulation at 0.5× speed, even if fast-forward was selected.
 - Ordinary Zoom is available from the first attempt. Starting, stopping, retrying
@@ -54,8 +54,7 @@ retry, failure, legacy migration, cursor-mapping and scroll-gesture checks. Run 
 integration variable-speed checks for keyboard routing and bullet-time. On a
 data-ready Mac, verify that each game's terrain and lemmings enlarge while its
 panel stays the same size, pointer selection matches the displayed target,
-zoom-out holds the cursor target, wheel and touch scrolls start at most one
-action per gesture, and retry and failure preserve free Zoom and Superzoom costs.
+zoom-out holds the cursor target, wheel and touch scrolls change scale smoothly, and retry and failure preserve free Zoom and Superzoom costs.
 Check Classic in both flat and CRT modes.
 
 Cursor-camera regression checks cover anchored zoom bounds at Classic/L3 and

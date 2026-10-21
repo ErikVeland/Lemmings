@@ -418,7 +418,7 @@ import UIKit
             let above = target.frame.minY - height - 8
             let y = above >= visible.minY + 8 ? above : target.frame.maxY + 8
             let frame = CGRect(x: visible.midX - width / 2, y: y, width: width, height: height)
-            GameStoneArt.draw(in: context, frame: frame, selected: false, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: frame, pixel: 2)
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(frame.insetBy(dx: 8, dy: 8))
             GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, alignment: .left, context: context)

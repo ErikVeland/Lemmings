@@ -12,7 +12,7 @@ public enum GameMinimapArt {
 
     public static func draw(in context: CGContext, bounds: CGRect, image: CGImage?, visible: CGRect, levelSize: CGSize, overlay: Bool = false,
                             thumbnail: GameMinimapThumbnail? = nil) {
-        if overlay { GameStoneArt.drawSocket(in: context, frame: bounds, selected: false, pixel: 1) }
+        if overlay { GameDisplayArt.draw(in: context, frame: bounds) }
         let map = content(in: overlay ? bounds.insetBy(dx: 4, dy: 4) : bounds, levelSize: levelSize)
         guard !map.isEmpty else { return }
         context.saveGState()

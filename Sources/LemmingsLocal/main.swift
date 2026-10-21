@@ -167,7 +167,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
   }
-  private enum HomeMenuAction {
+  private enum HomeMenuAction: Equatable {
     case resume
     case resumeSequence
     case fullQuest
@@ -4681,6 +4681,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         restoresCheckpoint: savedJourney.flatMap {
           try? sequenceCheckpoint(for: $0.run, hotSeatID: $0.hotSeatID)
         } != nil,
+        allCompleted: JourneyCompletionSummary.count(profileID: owner, hotSeatID: sessionID,
+          learning: progress, entries: store.completedLearningEntries(hotSeatID: sessionID)),
         play: { [weak self] in
           guard let self, self.playlistStoreCache?.store === store,
                 ArcadeStore.shared.hotSeatID == sessionID,
@@ -6252,26 +6254,25 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let savedSequence = (try? playlistStore()).flatMap { store in
       store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? store.activeRun : nil
     }
-    if let savedSequence {
-      let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? L10n.text("JOURNEY") : L10n.text("SESSION")
+    let recovery = menuRecovery.flatMap {
+      $0.hotSeatID == ArcadeStore.shared.hotSeatID && $0.profileID == ArcadeStore.shared.playingProfileID ? $0 : nil
+    }
+    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
+      let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+      items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+    } else if let savedSequence {
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
-      let restoresCheckpoint = (try? sequenceCheckpoint(for: savedSequence, hotSeatID: ArcadeStore.shared.hotSeatID)) != nil
-      items.append(HomeMenuItem(title: restoresCheckpoint
-        ? L10n.text("RESUME \(name) - \(players)") : L10n.text("CONTINUE \(name) - \(players)"),
+      items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"),
         action: .resumeSequence))
     }
-    if let recovery = menuRecovery, recovery.hotSeatID == ArcadeStore.shared.hotSeatID,
-       recovery.profileID == ArcadeStore.shared.playingProfileID {
-      let initials = menuRecovery.map {
-        homeResumePlayers(hotSeatID: $0.hotSeatID, profileID: $0.profileID)
-      } ?? L10n.text("LEM")
-      items.append(HomeMenuItem(title: (savedSequence == nil ? L10n.text("RESUME - ") : L10n.text("RESUME LEVEL - ")) + initials, action: .resume))
-    }
     if let store = try? playlistStore(),
-       let journey = store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) {
-      let progress = store.learningProgress(hotSeatID: journey.hotSeatID)
-      items.append(HomeMenuItem(title: L10n.text("JOURNEY MAP  \(LearningJourneyLibrary.journey.map { progress.solvedCount(in: $0) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED"), action: .fullQuest))
+       store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) != nil || recovery != nil {
+      let progress = store.learningProgress(hotSeatID: ArcadeStore.shared.hotSeatID)
+      let solved = JourneyCompletionSummary.count(profileID: ArcadeStore.shared.records.activeProfileID,
+        hotSeatID: ArcadeStore.shared.hotSeatID, learning: progress,
+        entries: store.completedLearningEntries(hotSeatID: ArcadeStore.shared.hotSeatID))
+      items.append(HomeMenuItem(title: L10n.text("JOURNEY MAP  \(solved) SOLVED"), action: .fullQuest))
     } else if !ArcadeStore.shared.hotSeatIsActive, savedSequence == nil, menuRecovery == nil,
               (try? playlistStore().activeRun) == nil {
       items.append(HomeMenuItem(title: L10n.text("START JOURNEY"), action: .fullQuest))
@@ -7337,7 +7338,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .resume:
         if let checkpoint = menuRecovery { restoreRun(checkpoint) }
       case .fullQuest:
-        openLevelBrowser(family: nil, showsJourney: true)
+        let hasRoute = (try? playlistStore().resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)) != nil
+        openLevelBrowser(family: nil, showsJourney: hasRoute || (!ArcadeStore.shared.hotSeatIsActive && menuRecovery == nil))
       case .collections:
         presentLevelCollections()
       case let .browse(family):
@@ -8541,7 +8543,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func syncPrecisionZoom(at point: CGPoint? = nil) {
     let wallet = PrecisionZoomController.shared
-    playfield.setPrecisionZoom(wallet.active != nil, at: point)
+    playfield.setPrecisionZoom(wallet.active != nil, magnification: CGFloat(wallet.magnification), at: point)
     speedControl.bulletTimeActive = wallet.active == .superzoom
     playfield.precisionStatus = PrecisionZoomStatus(superzoom: wallet.remainingSuperzoom(),
             skips: ArcadeStore.shared.records.levelSkips(profileID: arcadeProfileID).available,
@@ -8557,8 +8559,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private var extraSkillTitle: String {
-    if playfield.precisionStatus.bonusSkillUsed { return L10n.text("Extra skill used") }
-    return L10n.text("Extra skill (\(playfield.precisionStatus.extraSkills))")
+    if playfield.precisionStatus.bonusSkillUsed { return L10n.text("Bonus skill used") }
+    return L10n.text("Bonus skill (\(playfield.precisionStatus.extraSkills))")
   }
 
   private var extraSkillHelp: String {
@@ -8584,7 +8586,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let skill = TrolleyCapture.skillKey(session.skills[index].name)
     guard ArcadeStore.shared.spendExtraSkill(attemptID: arcadeRunID, profileID: arcadeProfileID,
         skill: skill, conditions: conditions) else {
-      setStatus(ArcadeStore.shared.storageError ?? L10n.text("Extra skill unavailable")); return
+      setStatus(ArcadeStore.shared.storageError ?? L10n.text("Bonus skill unavailable")); return
     }
     guard session.grantExtraSkill(at: index) else { return }
     syncPrecisionZoom(); gameplayKeyboard?.revealRewards()
@@ -8984,7 +8986,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.speedControl = speedControl
     keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
     keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
-    keyboard.extraSkillTitle = { [weak self] in self?.extraSkillTitle ?? L10n.text("Extra skill") }
+    keyboard.extraSkillTitle = { [weak self] in self?.extraSkillTitle ?? L10n.text("Bonus skill") }
     keyboard.extraSkillHelp = { [weak self] in self?.extraSkillHelp ?? "" }
     keyboard.extraSkillAvailable = { [weak self] in self?.extraSkillAvailable ?? false }
     speedControl.onMusicPitchChange = { [weak self] cents in
@@ -9095,6 +9097,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.showSongInfo = { [weak self] in self?.settings.showSongInfo ?? true }
     keyboard.navigationArtworkOpacityChanged = { [weak self] in self?.playfield.precisionStatusOpacity = $0 }
+    keyboard.rewardStatus = { [weak self] in self?.playfield.precisionStatus }
     keyboard.rewardDisplayArea = { [weak self] in
       guard let self, let root = self.window.contentView else { return nil }
       if self.tubeIsActive {

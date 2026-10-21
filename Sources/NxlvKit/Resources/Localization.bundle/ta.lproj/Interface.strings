@@ -379,7 +379,6 @@
 "COLLECTION UP TO DATE" = "தொகுப்பு புதுப்பிக்கப்பட்டுள்ளது";
 "COMPLETE" = "நிறைவு";
 "COMPLETE — press N" = "முடிந்தது — N அழுத்தவும்";
-"CONTINUE {0} - {1}" = "தொடர் {0} - {1}";
 "CONTROLS HELP" = "கட்டுப்பாடுகள் உதவி";
 "COUNTDOWN" = "இறங்கு நேரக் கணிப்பு";
 "Camera" = "காட்சி";
@@ -749,8 +748,8 @@
 "EXIT" = "வெளியேறு";
 "EXPERIMENTAL GAMEPLAY" = "பரிசோதனை விளையாட்டு";
 "EXPLOSION" = "வெடிப்பு";
-"EXTRA SKILL" = "EXTRA SKILL";
-"EXTRA SKILL ×{0}" = "EXTRA SKILL ×{0}";
+"BONUS SKILL" = "BONUS SKILL";
+"BONUS SKILL ×{0}" = "BONUS SKILL ×{0}";
 "Each portal needs a paired portal." = "ஒவ்வொரு போர்ட்டலுக்கும் ஒரு ஜோடி போர்டல் தேவை.";
 "Each skill pickup needs a known skill and a positive count." = "ஒவ்வொரு திறன் தேர்வு ஒரு அறியப்பட்ட திறன் மற்றும் ஒரு நேர்மறையான எண்ணிக்கை தேவை.";
 "Each start spends one Superzoom use" = "Each start spends one Superzoom use";
@@ -760,7 +759,7 @@
 "Earlier actions" = "Earlier actions";
 "Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
-"Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
+"Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "5 வெவ்வேறு க்ளைர் நிலைகளில் அதே விளையாட்டு பாணியை சம்பாதிக்கவும்.";
 "Earned" = "பெறப்பட்டது";
 "Easy" = "எளிது";
@@ -829,13 +828,11 @@
 "Extra actions" = "கூடுதல் செயல்கள்";
 "Extra large (150%)" = "மிகப் பெரியது (150%)";
 "Extra rescue" = "கூடுதல் மீட்பு";
-"Extra skill" = "Extra skill";
-"Extra skill ({0})" = "Extra skill ({0})";
-"Extra skill earned" = "Extra skill earned";
-"Extra skill unavailable" = "Extra skill unavailable";
-"Extra skill used" = "Extra skill used";
-"Extra skill {0}" = "Extra skill {0}";
-"Extra skills" = "Extra skills";
+"Bonus skill" = "Bonus skill";
+"Bonus skill ({0})" = "Bonus skill ({0})";
+"Bonus skill earned" = "Bonus skill earned";
+"Bonus skill unavailable" = "Bonus skill unavailable";
+"Bonus skills" = "Bonus skills";
 "Extreme" = "தீவிரம்";
 "F / Speed: toggle fast-forward" = "F / வேகம்: வேகமான முன்னேற்றத்தை மாற்று";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / வேகம்: வேகமான முன்னேற்றத்தை மாற்று\nF அழுத்திப் பிடி: 10× வரை உயர்த்து; விட்டால்: வேகம் நீடிக்கும்\nShift, வேகம் அல்லது RT அழுத்திப் பிடி: தற்காலிக வேக உயர்வு; விட்டால்: முந்தைய வேகம்\nவேக அம்புகள் அல்லது Shift+[ / Shift+]: 1×, 2×, 3×, 5× அல்லது 10× வேகத்தை அமை\nF அல்லது கட்டுப்படுத்தியின் B: உடனே 1× வேகத்திற்குத் திரும்பு";
@@ -1165,8 +1162,6 @@
 "JET" = "ஜெட்";
 "JET PACK" = "முதுகு உந்துபொறி";
 "JOHN WHYTE" = "JOHN WHYTE";
-"JOURNEY" = "பயணம்";
-"JOURNEY MAP  {0}/{1} SOLVED" = "பயணம் வரைபடம் {0}/{1} தீர்க்கப்பட்டது";
 "JOURNEY {0}/{1}" = "பயணம் {0}/{1}";
 "JUMP" = "குதி";
 "JUMPER" = "குதிப்பவர்";
@@ -1940,8 +1935,8 @@
 "R: Rewind" = "R: மறுபயிற்சி";
 "RANK" = "தரவரிசை";
 "RANK >" = "தரவரிசை >";
-"RARE: +1 EXTRA SKILL" = "RARE: +1 EXTRA SKILL";
-"RARE: Extra skills {0} · {1}/10 >" = "RARE: Extra skills {0} · {1}/10 >";
+"RARE: +1 BONUS SKILL" = "RARE: +1 BONUS SKILL";
+"RARE: Bonus skills {0} · {1}/10 >" = "RARE: Bonus skills {0} · {1}/10 >";
 "RATE +" = "வீதம் +";
 "RATE -" = "வீதம் -";
 "RATE {0}" = "வேகம் {0}";
@@ -1958,9 +1953,6 @@
 "RESTART LEVEL" = "மறுதொடக்கம் நிலை";
 "RESULT" = "விளைவு";
 "RESUME" = "தொடர்";
-"RESUME - " = "சுருக்கம் - ";
-"RESUME LEVEL - " = "சுருக்கம் நிலை - ";
-"RESUME {0} - {1}" = "சுருக்கம் {0} - {1}";
 "RETRY" = "மீண்டும் முயல்";
 "RETRY LEVEL" = "நிலையை மீண்டும் முயல்";
 "REVIEW" = "விமர்சனம்";
@@ -2082,7 +2074,6 @@
 "Resume Hot Seat run" = "மாறிமுறை ஆட்டத்தைத் தொடர்";
 "Resume Saved Run…" = "சேமித்த ஆட்டத்தைத் தொடர்…";
 "Resume journey" = "பயணத்தைத் தொடர்";
-"Resume level - {0}" = "சுருக்கம் நிலை - {0}";
 "Resume run" = "ஆட்டத்தைத் தொடர்";
 "Resume saved run?" = "சேமித்த ஆட்டத்தைத் தொடரவா?";
 "Resume session" = "அமர்வைத் தொடர்";
@@ -2104,7 +2095,6 @@
 "Retry: {0}" = "மீண்டும் முயல்: {0}";
 "Return / Space" = "Return / Space";
 "Return to library" = "நூலகத்திற்குத் திரும்பு";
-"Return to library (Esc or Q)" = "நூலகத்திற்குத் திரும்பு (Esc அல்லது Q)";
 "Return to normal speed" = "இயல்பான வேகத்திற்குத் திரும்பு";
 "Return to solo" = "தனி ஆட்டத்திற்குத் திரும்பு";
 "Return to the game library before choosing another game, level, saved run or Hot Seat session." = "Return விளையாட்டு நூலகம் மற்றொரு விளையாட்டு, நிலை, சேமித்து ரன் அல்லது மாறிமுறை அமர்வு தேர்வு முன்.";
@@ -2164,7 +2154,6 @@
 "SAVING..." = "சேமிக்கப்படுகிறது...";
 "SCOOPER" = "அள்ளுபவர்";
 "SELECT A SKILL → CLICK A LEMMING" = "திறனைத் தேர்ந்தெடு → லெம்மிங்கைச் சொடுக்கு";
-"SESSION" = "அமர்வு";
 "SETTINGS" = "அமைப்புகள்";
 "SFX muted" = "ஒலி விளைவுகள் ஒலியடக்கப்பட்டன";
 "SFX off" = "ஒலி விளைவுகள் முடக்கம்";
@@ -2299,7 +2288,6 @@
 "Session not started" = "அமர்வு தொடங்கவில்லை";
 "Set a first record, then improve its skill count." = "முதலில் ஒரு சாதனையை அமைத்து, பின்னர் அதன் திறன் எண்ணிக்கையை மேம்படுத்தவும்.";
 "Settings" = "அமைப்புகள்";
-"Settings (⌘,)" = "அமைப்புகள் (⌘,)";
 "Settings sections" = "அமைப்புப் பிரிவுகள்";
 "Settings…" = "அமைப்புகள்…";
 "Shadow" = "நிழல்";
@@ -2332,7 +2320,6 @@
 "Show full solution" = "முழுத் தீர்வைக் காட்டு";
 "Show ghost solution?" = "நிழல் தீர்வைக் காட்டவா?";
 "Show lemming count" = "லெம்மிங் எண்ணிக்கை காட்டு";
-"Show or hide Hot Seat ghosts (⌘G)" = "Show or hide Hot Seat ghosts (⌘G)";
 "Show practice tips" = "பயிற்சிக் குறிப்புகளைக் காட்டு";
 "Show skill backpacks" = "திறமையான முதுகெலும்புகளை காட்டவும்";
 "Show solution replay" = "தீர்வுகளை மீண்டும் காண்பி";
@@ -2369,7 +2356,6 @@
 "Skip as {0} ({1})" = "{0} ({1})";
 "Skip level ({0})" = "ஸ்கிப் நிலை ({0})";
 "Skips" = "தவிர்ப்புகள்";
-"Skips {0}" = "தவிர்ப்புகள் {0}";
 "Slider" = "வழுக்குபவர்";
 "Slot {0}" = "இடம் {0}";
 "Slower" = "மெதுவாக";
@@ -2380,7 +2366,6 @@
 "Solo starts" = "தனி ஆட்டத் தொடக்கங்கள்";
 "Solution" = "தீர்வு";
 "Solution replay: {0}" = "தீர்வு மீண்டும்: {0}";
-"Solved {0}/{1}" = "தீர்க்கப்பட்டது {0}/{1}";
 "Sony SPC700 16-Bit ADPCM Synth" = "சோனி SPC700 16-பிட் ADPCM தொகுப்பு";
 "Sound F/X" = "ஒலி விளைவுகள்";
 "Sound FX" = "ஒலி விளைவுகள்";
@@ -2472,7 +2457,7 @@
 "Superzoom" = "மிகைப் பெரிதாக்கம்";
 "Superzoom active" = "மிகைப் பெரிதாக்கம் செயலில் உள்ளது";
 "Superzoom {0}" = "Superzoom {0}";
-"Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}";
+"Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}";
 "Surfer" = "அலைச்சறுக்கு வீரர்";
 "Swap sticks" = "குச்சிகளை மாற்று";
 "Swimmer" = "நீந்துபவர்";
@@ -2940,8 +2925,8 @@
 "Up-right" = "மேல் வலது";
 "Update" = "புதுப்பி";
 "Use" = "பயன்படுத்து";
-"Use Extra skill on the selected skill or tool carrier" = "Use Extra skill on the selected skill or tool carrier";
-"Use extra skill" = "Use extra skill";
+"Use Bonus skill on the selected skill or tool carrier" = "Use Bonus skill on the selected skill or tool carrier";
+"Use bonus skill" = "Use bonus skill";
 "Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games." = "மூன்று விளையாட்டுகளிலும் திறன், இடைவெளி, வேகம், கேமரா இயக்கம் மற்றும் குறிப்புகள் ஆகியவற்றிற்காக நவீன விசைப்பலகை குறுக்குவழிகளைப் பயன்படுத்தவும்.";
 "Use one play style on {0} more levels." = "{0} மேலும் நிலைகளில் ஒரு விளையாட்டு பாணியைப் பயன்படுத்தவும்.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Lemmings 2 மற்றும் Lemmings 3 இல் மீளுருவாக்கிய Macintosh பாணி ஓவியத்தைப் பயன்படுத்தவும்.";
@@ -3044,7 +3029,6 @@
 "Your rank: #{0} of {1} - {2}" = "உங்கள் தரவரிசை: {1} இல் #{0} - {2}";
 "Your rescue story" = "உங்கள் மீட்புக் கதை";
 "Your shared campaign stays saved for later." = "உங்கள் பகிரப்பட்ட பிரச்சாரம் பின்னர் சேமிக்கப்படும்.";
-"Z - {0}" = "Z - {0}";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: பெரிதாக்கம்";
 "ZOOM" = "பெரிதாக்கம்";
 "Zero avoidable losses" = "தவிர்க்கக்கூடிய இழப்புகள் இல்லை";
@@ -3159,7 +3143,6 @@
 "will do so once again." = "மீண்டும் செய்வேன்.";
 "with" = "உடன்";
 "with no name" = "பெயரின்றி";
-"z" = "z";
 "{0}\n\nChange one part of your plan at a time when you retry." = "{0}\n\nமீண்டும் முயலும்போது உங்கள் திட்டத்தின் ஒரு பகுதியை மட்டும் ஒவ்வொரு முறையும் மாற்றவும்.";
 "{0}\nEsc  Save run and return to main menu\n     (after closing this overlay)" = "{0}\nEsc  ஆட்டத்தைச் சேமித்து முதன்மைப் பட்டிக்குத் திரும்பு\n     (இந்த உதவித் திரையை மூடிய பிறகு)";
 "{0}  Unavailable" = "{0}  கிடைக்கவில்லை";
@@ -3244,3 +3227,13 @@
 "{0}: replay analysis failed: {1}" = "{0}: மறு இயக்கப் பகுப்பாய்வு தோல்வி: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
 "{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";
+"Completed levels {0}" = "Completed levels {0}";
+"Current route {0}/{1}" = "Current route {0}/{1}";
+"JOURNEY MAP  {0} SOLVED" = "JOURNEY MAP  {0} SOLVED";
+"RESUME JOURNEY - {0}" = "RESUME JOURNEY - {0}";
+"Resume journey - {0}" = "Resume journey - {0}";
+"Change game, sound and display settings. (⌘,)" = "விளையாட்டு, ஒலி மற்றும் காட்சி அமைப்புகளை மாற்றவும். (⌘,)";
+"Spend one Level Skip in the journey menu to move past a level." = "ஒரு நிலையைத் தாண்ட, பயணப் பட்டியில் ஒரு நிலைத் தவிர்ப்பைப் பயன்படுத்தவும்.";
+"Save this run and return to the library. (Esc or Q)" = "இந்த முயற்சியைச் சேமித்து நூலகத்திற்குத் திரும்பவும். (Esc அல்லது Q)";
+"Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "முந்தைய Hot Seat முயற்சிகளின் நிழல் உருவங்களைக் காட்டவும் அல்லது மறைக்கவும். (⌘G)";
+"Current graphics: {0}" = "தற்போதைய வரைகலை: {0}";

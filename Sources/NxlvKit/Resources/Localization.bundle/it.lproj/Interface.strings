@@ -379,7 +379,6 @@
 "COLLECTION UP TO DATE" = "RACCOLTA AGGIORNATA";
 "COMPLETE" = "COMPLETA";
 "COMPLETE — press N" = "COMPLETATO — premi N";
-"CONTINUE {0} - {1}" = "CONTINUA {0} - {1}";
 "CONTROLS HELP" = "GUIDA AI COMANDI";
 "COUNTDOWN" = "CONTO ALLA ROVESCIA";
 "Camera" = "Telecamera";
@@ -749,8 +748,8 @@
 "EXIT" = "ESCI";
 "EXPERIMENTAL GAMEPLAY" = "GIOCO SPERIMENTALE";
 "EXPLOSION" = "ESPLOSIONE";
-"EXTRA SKILL" = "EXTRA SKILL";
-"EXTRA SKILL ×{0}" = "EXTRA SKILL ×{0}";
+"BONUS SKILL" = "BONUS SKILL";
+"BONUS SKILL ×{0}" = "BONUS SKILL ×{0}";
 "Each portal needs a paired portal." = "Ogni portale deve avere un portale abbinato.";
 "Each skill pickup needs a known skill and a positive count." = "Ogni potenziamento di abilità deve avere un'abilità riconosciuta e un conteggio positivo.";
 "Each start spends one Superzoom use" = "Each start spends one Superzoom use";
@@ -760,7 +759,7 @@
 "Earlier actions" = "Earlier actions";
 "Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
-"Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
+"Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "Ottieni lo stesso stile di gioco in 5 livelli completati diversi.";
 "Earned" = "Ottenuti";
 "Easy" = "Facile";
@@ -829,13 +828,11 @@
 "Extra actions" = "Azioni extra";
 "Extra large (150%)" = "Extra grande (150%)";
 "Extra rescue" = "Salvataggio extra";
-"Extra skill" = "Extra skill";
-"Extra skill ({0})" = "Extra skill ({0})";
-"Extra skill earned" = "Extra skill earned";
-"Extra skill unavailable" = "Extra skill unavailable";
-"Extra skill used" = "Extra skill used";
-"Extra skill {0}" = "Extra skill {0}";
-"Extra skills" = "Extra skills";
+"Bonus skill" = "Bonus skill";
+"Bonus skill ({0})" = "Bonus skill ({0})";
+"Bonus skill earned" = "Bonus skill earned";
+"Bonus skill unavailable" = "Bonus skill unavailable";
+"Bonus skills" = "Bonus skills";
 "Extreme" = "Estremo";
 "F / Speed: toggle fast-forward" = "F / Velocità: attiva o disattiva l'avanzamento rapido";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / Velocità: attiva o disattiva l'avanzamento rapido\nTieni premuto F: accelera fino a 10×; rilascia: mantieni la velocità\nTieni premuto Maiusc, Velocità o RT: accelerazione temporanea; rilascia: torna alla velocità precedente\nFrecce della velocità o Maiusc+[ / Maiusc+]: imposta 1×, 2×, 3×, 5× o 10×\nF o B sul controller: torna subito a 1×";
@@ -1165,8 +1162,6 @@
 "JET" = "RAZZO";
 "JET PACK" = "JETPACK";
 "JOHN WHYTE" = "JOHN WHYTE";
-"JOURNEY" = "PERCORSO";
-"JOURNEY MAP  {0}/{1} SOLVED" = "MAPPA DEL PERCORSO  {0}/{1} RISOLTI";
 "JOURNEY {0}/{1}" = "PERCORSO {0}/{1}";
 "JUMP" = "SALTA";
 "JUMPER" = "SALTATORE";
@@ -1940,8 +1935,8 @@
 "R: Rewind" = "R: riavvolgi";
 "RANK" = "GRADO";
 "RANK >" = "GRADO >";
-"RARE: +1 EXTRA SKILL" = "RARE: +1 EXTRA SKILL";
-"RARE: Extra skills {0} · {1}/10 >" = "RARE: Extra skills {0} · {1}/10 >";
+"RARE: +1 BONUS SKILL" = "RARE: +1 BONUS SKILL";
+"RARE: Bonus skills {0} · {1}/10 >" = "RARE: Bonus skills {0} · {1}/10 >";
 "RATE +" = "FREQUENZA +";
 "RATE -" = "FREQUENZA -";
 "RATE {0}" = "RITMO {0}";
@@ -1958,9 +1953,6 @@
 "RESTART LEVEL" = "RIAVVIA LIVELLO";
 "RESULT" = "RISULTATO";
 "RESUME" = "RIPRENDI";
-"RESUME - " = "RIPRENDI - ";
-"RESUME LEVEL - " = "RIPRENDI LIVELLO - ";
-"RESUME {0} - {1}" = "RIPRENDI {0} - {1}";
 "RETRY" = "RIPROVA";
 "RETRY LEVEL" = "RIPROVA LIVELLO";
 "REVIEW" = "REVISIONE";
@@ -2082,7 +2074,6 @@
 "Resume Hot Seat run" = "Riprendi partita Hot Seat";
 "Resume Saved Run…" = "Riprendi partita salvata…";
 "Resume journey" = "Riprendi percorso";
-"Resume level - {0}" = "Riprendi livello - {0}";
 "Resume run" = "Riprendi partita";
 "Resume saved run?" = "Riprendere la partita salvata?";
 "Resume session" = "Riprendi sessione";
@@ -2104,7 +2095,6 @@
 "Retry: {0}" = "Riprova: {0}";
 "Return / Space" = "Invio / Spazio";
 "Return to library" = "Torna alla raccolta";
-"Return to library (Esc or Q)" = "Torna alla libreria (Esc o Q)";
 "Return to normal speed" = "Torna alla velocità normale";
 "Return to solo" = "Torna alla partita singola";
 "Return to the game library before choosing another game, level, saved run or Hot Seat session." = "Torna alla libreria dei giochi prima di scegliere un altro gioco, livello, partita salvata o sessione Hot Seat.";
@@ -2164,7 +2154,6 @@
 "SAVING..." = "SALVATAGGIO…";
 "SCOOPER" = "SCAVATORE INCLINATO";
 "SELECT A SKILL → CLICK A LEMMING" = "SCEGLI UN’ABILITÀ → CLICCA UN LEMMING";
-"SESSION" = "SESSIONE";
 "SETTINGS" = "IMPOSTAZIONI";
 "SFX muted" = "Effetti sonori disattivati";
 "SFX off" = "Effetti sonori disattivati";
@@ -2299,7 +2288,6 @@
 "Session not started" = "Sessione non avviata";
 "Set a first record, then improve its skill count." = "Stabilisci un primo record e poi migliora il numero di abilità usate.";
 "Settings" = "Impostazioni";
-"Settings (⌘,)" = "Impostazioni (⌘,)";
 "Settings sections" = "Sezioni delle impostazioni";
 "Settings…" = "Impostazioni…";
 "Shadow" = "Ombra";
@@ -2332,7 +2320,6 @@
 "Show full solution" = "Mostra la soluzione completa";
 "Show ghost solution?" = "Mostrare la soluzione fantasma?";
 "Show lemming count" = "Mostra il numero di lemming";
-"Show or hide Hot Seat ghosts (⌘G)" = "Show or hide Hot Seat ghosts (⌘G)";
 "Show practice tips" = "Mostra suggerimenti di allenamento";
 "Show skill backpacks" = "Mostra gli zaini delle abilità";
 "Show solution replay" = "Mostra replay della soluzione";
@@ -2369,7 +2356,6 @@
 "Skip as {0} ({1})" = "Salta come {0} ({1})";
 "Skip level ({0})" = "Salta livello ({0})";
 "Skips" = "Salti";
-"Skips {0}" = "Salti {0}";
 "Slider" = "Scivolatore";
 "Slot {0}" = "Slot {0}";
 "Slower" = "Più lento";
@@ -2380,7 +2366,6 @@
 "Solo starts" = "Partite in solitaria";
 "Solution" = "Soluzione";
 "Solution replay: {0}" = "Replay della soluzione: {0}";
-"Solved {0}/{1}" = "Risolti {0}/{1}";
 "Sony SPC700 16-Bit ADPCM Synth" = "Sintetizzatore ADPCM a 16 bit Sony SPC700";
 "Sound F/X" = "Effetti sonori";
 "Sound FX" = "Effetti sonori";
@@ -2472,7 +2457,7 @@
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom attivo";
 "Superzoom {0}" = "Superzoom {0}";
-"Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}";
+"Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}";
 "Surfer" = "Surfista";
 "Swap sticks" = "Inverti le levette";
 "Swimmer" = "Nuotatore";
@@ -2940,8 +2925,8 @@
 "Up-right" = "In alto a destra";
 "Update" = "Aggiorna";
 "Use" = "Usa";
-"Use Extra skill on the selected skill or tool carrier" = "Use Extra skill on the selected skill or tool carrier";
-"Use extra skill" = "Use extra skill";
+"Use Bonus skill on the selected skill or tool carrier" = "Use Bonus skill on the selected skill or tool carrier";
+"Use bonus skill" = "Use bonus skill";
 "Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games." = "Usa scorciatoie da tastiera moderne per abilità, pausa, velocità, movimento della telecamera e suggerimenti in tutti e tre i giochi.";
 "Use one play style on {0} more levels." = "Usa uno stile di gioco in altri {0} livelli.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Usa le grafiche ricreate in stile Macintosh in Lemmings 2 e Lemmings 3.";
@@ -3044,7 +3029,6 @@
 "Your rank: #{0} of {1} - {2}" = "La tua posizione: n. {0} di {1} - {2}";
 "Your rescue story" = "La tua storia di salvataggi";
 "Your shared campaign stays saved for later." = "La campagna condivisa resta salvata per dopo.";
-"Z - {0}" = "Z - {0}";
 "Z / Shift+Z: Zoom" = "Z / Maiusc+Z: zoom";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Zero perdite evitabili";
@@ -3159,7 +3143,6 @@
 "will do so once again." = "lo farà ancora una volta.";
 "with" = "con";
 "with no name" = "senza nome";
-"z" = "z";
 "{0}\n\nChange one part of your plan at a time when you retry." = "{0}\n\nQuando riprovi, modifica una parte del piano alla volta.";
 "{0}\nEsc  Save run and return to main menu\n     (after closing this overlay)" = "{0}\nEsc  Salva la partita e torna al menu principale\n     (dopo aver chiuso questa sovrapposizione)";
 "{0}  Unavailable" = "{0}  Non disponibile";
@@ -3244,3 +3227,13 @@
 "{0}: replay analysis failed: {1}" = "{0}: analisi del replay non riuscita: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
 "{0}{1} more to rescue for three stars." = "Salva altri {0}{1} per ottenere tre stelle.";
+"Completed levels {0}" = "Completed levels {0}";
+"Current route {0}/{1}" = "Current route {0}/{1}";
+"JOURNEY MAP  {0} SOLVED" = "JOURNEY MAP  {0} SOLVED";
+"RESUME JOURNEY - {0}" = "RESUME JOURNEY - {0}";
+"Resume journey - {0}" = "Resume journey - {0}";
+"Change game, sound and display settings. (⌘,)" = "Modifica le impostazioni di gioco, audio e schermo. (⌘,)";
+"Spend one Level Skip in the journey menu to move past a level." = "Usa un salto di livello nel menu del viaggio per saltare un livello.";
+"Save this run and return to the library. (Esc or Q)" = "Salva questo tentativo e torna alla libreria. (Esc o Q)";
+"Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Mostra o nascondi i fantasmi dei tentativi precedenti in Hot Seat. (⌘G)";
+"Current graphics: {0}" = "Grafica attuale: {0}";

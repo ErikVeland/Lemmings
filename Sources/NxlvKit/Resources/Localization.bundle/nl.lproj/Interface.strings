@@ -379,7 +379,6 @@
 "COLLECTION UP TO DATE" = "SAMLING OPPDATERT";
 "COMPLETE" = "VOLTOOID";
 "COMPLETE — press N" = "VOLTOOID — druk op N";
-"CONTINUE {0} - {1}" = "DOORGAAN {0} - {1}";
 "CONTROLS HELP" = "BEDIENINGSHULP";
 "COUNTDOWN" = "AFTELLEN";
 "Camera" = "Camera";
@@ -749,8 +748,8 @@
 "EXIT" = "UITGANG";
 "EXPERIMENTAL GAMEPLAY" = "EKSPERIMENTELT SPILL";
 "EXPLOSION" = "EXPLOSIE";
-"EXTRA SKILL" = "EXTRA SKILL";
-"EXTRA SKILL ×{0}" = "EXTRA SKILL ×{0}";
+"BONUS SKILL" = "BONUS SKILL";
+"BONUS SKILL ×{0}" = "BONUS SKILL ×{0}";
 "Each portal needs a paired portal." = "Elk portaal vereist een gekoppeld portaal.";
 "Each skill pickup needs a known skill and a positive count." = "Elk vaardigheidspakje vereist een bekende vaardigheid en een positief aantal.";
 "Each start spends one Superzoom use" = "Each start spends one Superzoom use";
@@ -760,7 +759,7 @@
 "Earlier actions" = "Earlier actions";
 "Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
-"Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Extra skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
+"Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "Verdien dezelfde speelstijl op 5 verschillende voltooide levels.";
 "Earned" = "Behaald";
 "Easy" = "Makkelijk";
@@ -829,13 +828,11 @@
 "Extra actions" = "Extra acties";
 "Extra large (150%)" = "Extra groot (150%)";
 "Extra rescue" = "Extra redding";
-"Extra skill" = "Extra skill";
-"Extra skill ({0})" = "Extra skill ({0})";
-"Extra skill earned" = "Extra skill earned";
-"Extra skill unavailable" = "Extra skill unavailable";
-"Extra skill used" = "Extra skill used";
-"Extra skill {0}" = "Extra skill {0}";
-"Extra skills" = "Extra skills";
+"Bonus skill" = "Bonus skill";
+"Bonus skill ({0})" = "Bonus skill ({0})";
+"Bonus skill earned" = "Bonus skill earned";
+"Bonus skill unavailable" = "Bonus skill unavailable";
+"Bonus skills" = "Bonus skills";
 "Extreme" = "Extreem";
 "F / Speed: toggle fast-forward" = "F / Snelheid: doorspoelen in-/uitschakelen";
 "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×" = "F / Snelheid: doorspoelen in-/uitschakelen\nHoud F ingedrukt: geleidelijk versnellen tot 10×; loslaten: snelheid vasthouden\nHoud Shift, Snelheid of RT ingedrukt: tijdelijke boost; loslaten: vorige snelheid\nSnelheidspijlen of Shift+[ / Shift+]: kies 1×, 2×, 3×, 5× of 10×\nF of controllerknop B: meteen terug naar 1×";
@@ -1165,8 +1162,6 @@
 "JET" = "JET";
 "JET PACK" = "JETPACK";
 "JOHN WHYTE" = "JOHN WHYTE";
-"JOURNEY" = "TRAJECT";
-"JOURNEY MAP  {0}/{1} SOLVED" = "TRAJECTKAART  {0}/{1} OPGELOST";
 "JOURNEY {0}/{1}" = "TRAJECT {0}/{1}";
 "JUMP" = "SPRINGEN";
 "JUMPER" = "SPRINGER";
@@ -1940,8 +1935,8 @@
 "R: Rewind" = "R: terugspoelen";
 "RANK" = "RANG";
 "RANK >" = "RANG >";
-"RARE: +1 EXTRA SKILL" = "RARE: +1 EXTRA SKILL";
-"RARE: Extra skills {0} · {1}/10 >" = "RARE: Extra skills {0} · {1}/10 >";
+"RARE: +1 BONUS SKILL" = "RARE: +1 BONUS SKILL";
+"RARE: Bonus skills {0} · {1}/10 >" = "RARE: Bonus skills {0} · {1}/10 >";
 "RATE +" = "SNELHEID +";
 "RATE -" = "SNELHEID -";
 "RATE {0}" = "TEMPO {0}";
@@ -1958,9 +1953,6 @@
 "RESTART LEVEL" = "LEVEL OPNIEUW STARTEN";
 "RESULT" = "RESULTAAT";
 "RESUME" = "HERVATTEN";
-"RESUME - " = "HERVATTEN - ";
-"RESUME LEVEL - " = "LEVEL HERVATTEN - ";
-"RESUME {0} - {1}" = "HERVATTEN {0} - {1}";
 "RETRY" = "OPNIEUW PROBEREN";
 "RETRY LEVEL" = "NIVEAU OPNIEUW";
 "REVIEW" = "BEOORDELEN";
@@ -2082,7 +2074,6 @@
 "Resume Hot Seat run" = "Hot Seat-poging hervatten";
 "Resume Saved Run…" = "Opgeslagen spel hervatten…";
 "Resume journey" = "Traject hervatten";
-"Resume level - {0}" = "Level hervatten - {0}";
 "Resume run" = "Spel hervatten";
 "Resume saved run?" = "Opgeslagen spel hervatten?";
 "Resume session" = "Sessie hervatten";
@@ -2104,7 +2095,6 @@
 "Retry: {0}" = "Opnieuw proberen: {0}";
 "Return / Space" = "Return / Spatie";
 "Return to library" = "Terug naar bibliotheek";
-"Return to library (Esc or Q)" = "Terug naar bibliotheek (Esc of Q)";
 "Return to normal speed" = "Terug naar normale snelheid";
 "Return to solo" = "Terug naar solospel";
 "Return to the game library before choosing another game, level, saved run or Hot Seat session." = "Ga terug naar de gamebibliotheek voordat je een ander spel, level, opgeslagen poging of Hot Seat-sessie kiest.";
@@ -2164,7 +2154,6 @@
 "SAVING..." = "OPSLAAN…";
 "SCOOPER" = "SCHEPPER";
 "SELECT A SKILL → CLICK A LEMMING" = "KIES EEN VAARDIGHEID → KLIK OP EEN LEMMING";
-"SESSION" = "SESSIE";
 "SETTINGS" = "INSTELLINGEN";
 "SFX muted" = "Geluidseffecten gedempt";
 "SFX off" = "Geluidseffecten uit";
@@ -2299,7 +2288,6 @@
 "Session not started" = "Sessie niet gestart";
 "Set a first record, then improve its skill count." = "Zet een eerste record neer en verbeter daarna het aantal gebruikte vaardigheden.";
 "Settings" = "Instellingen";
-"Settings (⌘,)" = "Instellingen (⌘,)";
 "Settings sections" = "Instellingensecties";
 "Settings…" = "Instellingen…";
 "Shadow" = "Schaduw";
@@ -2332,7 +2320,6 @@
 "Show full solution" = "Volledige oplossing tonen";
 "Show ghost solution?" = "Spookoplossing tonen?";
 "Show lemming count" = "Aantal lemmings tonen";
-"Show or hide Hot Seat ghosts (⌘G)" = "Show or hide Hot Seat ghosts (⌘G)";
 "Show practice tips" = "Oefentips tonen";
 "Show skill backpacks" = "Vaardigheidsrugzakken tonen";
 "Show solution replay" = "Oplossing afspelen";
@@ -2369,7 +2356,6 @@
 "Skip as {0} ({1})" = "Overslaan als {0} ({1})";
 "Skip level ({0})" = "Level overslaan ({0})";
 "Skips" = "Overslaan";
-"Skips {0}" = "Overslaan {0}";
 "Slider" = "Glijder";
 "Slot {0}" = "Opslag {0}";
 "Slower" = "Langzamer";
@@ -2380,7 +2366,6 @@
 "Solo starts" = "Solostarts";
 "Solution" = "Oplossing";
 "Solution replay: {0}" = "Oplossingsreplay: {0}";
-"Solved {0}/{1}" = "{0}/{1} opgelost";
 "Sony SPC700 16-Bit ADPCM Synth" = "Sony SPC700 16-bits ADPCM-synth";
 "Sound F/X" = "Geluidseffecten";
 "Sound FX" = "Geluidseffecten";
@@ -2472,7 +2457,7 @@
 "Superzoom" = "Superzoom";
 "Superzoom active" = "Superzoom actief";
 "Superzoom {0}" = "Superzoom {0}";
-"Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Extra skills. {3}";
+"Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}" = "Superzoom, {0} remaining. {1} Level Skips. {2} Bonus skills. {3}";
 "Surfer" = "Surfer";
 "Swap sticks" = "Sticks wisselen";
 "Swimmer" = "Zwemmer";
@@ -2940,8 +2925,8 @@
 "Up-right" = "Rechtsboven";
 "Update" = "Bijwerken";
 "Use" = "Gebruiken";
-"Use Extra skill on the selected skill or tool carrier" = "Use Extra skill on the selected skill or tool carrier";
-"Use extra skill" = "Use extra skill";
+"Use Bonus skill on the selected skill or tool carrier" = "Use Bonus skill on the selected skill or tool carrier";
+"Use bonus skill" = "Use bonus skill";
 "Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games." = "Gebruik moderne sneltoetsen voor vaardigheden, pauzeren, snelheid, camerabeweging en hints in alle drie de spellen.";
 "Use one play style on {0} more levels." = "Gebruik één speelstijl op nog {0} levels.";
 "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3." = "Gebruik nagebouwde Macintosh-illustraties in Lemmings 2 en Lemmings 3.";
@@ -3044,7 +3029,6 @@
 "Your rank: #{0} of {1} - {2}" = "Je rang: #{0} van {1} - {2}";
 "Your rescue story" = "Jouw reddingsverhaal";
 "Your shared campaign stays saved for later." = "Je gedeelde campagne blijft bewaard voor later.";
-"Z - {0}" = "Z - {0}";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: zoomen";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Geen vermijdbare verliezen";
@@ -3159,7 +3143,6 @@
 "will do so once again." = "zal dit opnieuw doen.";
 "with" = "met";
 "with no name" = "zonder naam";
-"z" = "z";
 "{0}\n\nChange one part of your plan at a time when you retry." = "{0}\n\nWijzig telkens één onderdeel van je plan wanneer je het opnieuw probeert.";
 "{0}\nEsc  Save run and return to main menu\n     (after closing this overlay)" = "{0}\nEsc  Poging opslaan en terug naar hoofdmenu\n     (na het sluiten van deze overlay)";
 "{0}  Unavailable" = "{0}  Niet beschikbaar";
@@ -3244,3 +3227,13 @@
 "{0}: replay analysis failed: {1}" = "{0}: replayanalyse mislukt: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
 "{0}{1} more to rescue for three stars." = "Nog {0}{1} redden voor drie sterren.";
+"Completed levels {0}" = "Completed levels {0}";
+"Current route {0}/{1}" = "Current route {0}/{1}";
+"JOURNEY MAP  {0} SOLVED" = "JOURNEY MAP  {0} SOLVED";
+"RESUME JOURNEY - {0}" = "RESUME JOURNEY - {0}";
+"Resume journey - {0}" = "Resume journey - {0}";
+"Change game, sound and display settings. (⌘,)" = "Wijzig de instellingen voor het spel, geluid en beeld. (⌘,)";
+"Spend one Level Skip in the journey menu to move past a level." = "Gebruik één niveauoverslag in het reismenu om een niveau over te slaan.";
+"Save this run and return to the library. (Esc or Q)" = "Sla deze poging op en keer terug naar de bibliotheek. (Esc of Q)";
+"Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Toon of verberg geesten van eerdere Hot Seat-pogingen. (⌘G)";
+"Current graphics: {0}" = "Huidige beelden: {0}";

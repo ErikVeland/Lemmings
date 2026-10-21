@@ -74,7 +74,7 @@ import LemmingsGameArt
         let x = min(1056 - width, max(64, hint.rect.midX - width / 2)).rounded()
         let y = hint.rect.minY - height - 12 >= 32 ? hint.rect.minY - height - 12 : hint.rect.maxY + 12
         let card = CGRect(x: x, y: y, width: width, height: height)
-        GameStoneButton.draw(card, selected: false, pixel: 2)
+        GameDisplayPanel.draw(card, pixel: 2)
         GameStyle.fill(card.insetBy(dx: 8, dy: 8), .black)
         let heading = CGRect(x: x + padding, y: y + padding, width: width - 2 * padding, height: headingHeight)
         let body = CGRect(x: heading.minX, y: heading.maxY + 12, width: heading.width, height: bodyHeight)
