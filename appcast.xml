@@ -1,6 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version='1.0' encoding='utf-8'?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
+        <item>
+            <title>2.1.2</title>
+            <pubDate>Thu, 22 Oct 2026 00:37:51 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>96</sparkle:version>
+            <sparkle:shortVersionString>2.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Pull up a chair. We've got a level to finish.&lt;/p&gt;
+&lt;p&gt;This update smooths the small things around the puzzles. Pick up your game, pass the controls and give that extremely promising bridge another go.&lt;/p&gt;
+&lt;h3&gt;Pick up where you left off&lt;/h3&gt;
+&lt;p&gt;Home has one Resume for your selected player or Hot Seat. Campaign and Journey wins count each level once, so your hard-won clears get their due. Journey Map still lets you browse without starting a game.&lt;/p&gt;
+&lt;p&gt;New mobile Journey and playlist saves keep their exact place. Starting the same playlist again gives you a fresh run. Solo and Hot Seat sequel progress stay separate, and Ready handovers wait until the next player is settled.&lt;/p&gt;
+&lt;h3&gt;Get a closer look&lt;/h3&gt;
+&lt;p&gt;Mac wheel zoom moves smoothly around the terrain beneath your pointer. Extra Skill is now called Bonus Skill. The stone controls sit together at the playfield's top-right corner, clear of the score.&lt;/p&gt;
+&lt;p&gt;Mobile replay panels leave the controls room to breathe. Apple TV gets a fix for controller selection, while Ready still waits for a fresh press. Mobile play also drops interrupted pinch and scroll gestures after a resize, and keeps Start or Ready waiting when the playfield returns.&lt;/p&gt;
+&lt;h3&gt;Small pixels, plenty of care&lt;/h3&gt;
+&lt;p&gt;The interface has refined 2× Lemmings lettering and separately drawn 4× countdown numerals. Even counting to three got some attention.&lt;/p&gt;
+&lt;p&gt;The welcome and optional help have a warmer voice too. There's room for another idea, and time to ask for a nudge. Retry, Continue and Ready stay easy to find.&lt;/p&gt;
+&lt;h3&gt;Meet the neighbours&lt;/h3&gt;
+&lt;p&gt;Individual lemmings have 128 little ten-word stories: a spare chair, an unanswered letter, a surprisingly important spoon. Their names and stories stay with them through retries, rewind and saved runs. No committee has explained why the spoon matters.&lt;/p&gt;
+&lt;h3&gt;Keep the evening going&lt;/h3&gt;
+&lt;p&gt;New mobile saves start with a backup. Recovery protects damaged saves and saves from a newer version. Sequel cloud progress keeps The Tribes' survivor chains together, and Chronicles remembers its tribes when you change the language.&lt;/p&gt;
+&lt;p&gt;Background cloud and community-record services stay quiet when they cannot access their stored credentials. Your game can carry on without an unexpected authorisation dialog.&lt;/p&gt;
+&lt;p&gt;Come back tomorrow. We can carry on arguing about the tunnel.&lt;/p&gt;
+&lt;h3&gt;Before you settle in&lt;/h3&gt;
+&lt;p&gt;Mac build 96 supports Apple silicon and Intel on macOS 12.3 or later. iOS build 19 and tvOS build 9 use the existing TestFlight channels; Apple processing and beta review remain separate from upload completion.&lt;/p&gt;
+&lt;p&gt;Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta, with their existing content and engine limits. The mobile Journey is Classic-only. Mid-level checkpoints and ordinary playlist queues stay local. Older saves without queue identities retain their existing matching rules; older shared sequel history cannot reliably be reassigned to past sessions.&lt;/p&gt;
+&lt;p&gt;The [release checklist](ReleaseReadiness/2.1.2Checklist.md) keeps the detailed scope, ongoing replay and level work, and remaining device, accessibility, translation and live-sync checks together.&lt;/p&gt;
+&lt;p class="meta"&gt;Build: 96&lt;br&gt;Release base: v2.1.1&lt;br&gt;Release commit: 48282886baf4c78217e62c90a935d8aecf74b843&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-2.1.2-build96.zip" length="2055710567" type="application/octet-stream" sparkle:edSignature="dHuy0R10ZJkJbY/N3dhCrlVXwXGAZh9HHK0K4DbRpEL/MzLtLl30LjjV9AIHp7ynJCrA1LIEsQhGBY66fkbUCA==" />
+            <sparkle:deltas><enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from95.delta" sparkle:deltaFrom="95" length="40382898" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="7D0yLCwcp19Xq455wG8ddjd+iGceJ3LakVcp2M1wAMO3knLA91jXR5+4lv/pPHUT4tXTwv9et+YCyh0yjCcnCQ==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from93.delta" sparkle:deltaFrom="93" length="2945034" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fpOfpewAEFvusBzmnhRPx9lcvu95IR8ZfJRcUMOy0Z4rx7DpEmO6K0xJZ5UWNxOtXmQ9t4FhCLbOY6wiyL5XDA==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from91.delta" sparkle:deltaFrom="91" length="50934830" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="jzt7JXzDzJgcDfAnTkqkP0wO2VLKhGzdkB9VWuAk71lmqcNN3YgmnatvTdDYa4JNEdpwiYj3H2N6F4pLwRi/Bw==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from90.delta" sparkle:deltaFrom="90" length="51024622" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="thG0Jioe7i4VqRYLQ519DD/EaHObo+nmjOw6+N29ZQWCmY+c5VtP2Iz7dJ4CdYaXqN0lMCG3qayssynpWc3hDw==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from87.delta" sparkle:deltaFrom="87" length="45422462" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="jvbZvuyGGfK/Fr3XdIgY8+Q15Zv8fyTxobY7kfl6HgZCEpNd3KPKR+hCTpKwbI1XOxKSnX+xzwW4t7y9+ibtCA==" />
+            </sparkle:deltas></item>
         <title>Ultimate Lemmings</title>
         <item>
             <title>2.1.1</title>
