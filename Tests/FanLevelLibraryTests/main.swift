@@ -261,9 +261,9 @@ let bundledPlayablePasswordEntries = try FanLevelLibrary.validatedPlayableEntrie
   in: passwordPack, bundleRoot: passwordPack.deletingLastPathComponent(),
   exclusionsURL: exclusionManifest)
 let passwordMember = "KillerMaster 1 Havoc 2.dat#7"
-check(bundledPasswordEntries.count == 10
+check(bundledPasswordEntries.count == 20
   && bundledPasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember }
-  && bundledPlayablePasswordEntries.count == 9
+  && bundledPlayablePasswordEntries.count == 19
   && !bundledPlayablePasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember },
   "the exact no-exit level stays in its source pack but leaves bundled play lists")
 let importedPasswordPackDirectory = temporary.appendingPathComponent("imported-password-pack")
@@ -273,7 +273,7 @@ try Data(contentsOf: passwordPack).write(to: importedPasswordPack)
 let importedPasswordEntries = try FanLevelLibrary.validatedPlayableEntries(
   in: importedPasswordPack, bundleRoot: passwordPack.deletingLastPathComponent(),
   exclusionsURL: exclusionManifest)
-check(importedPasswordEntries.count == 10
+check(importedPasswordEntries.count == 20
   && importedPasswordEntries.contains { $0.file + "#\($0.section ?? -1)" == passwordMember },
   "the bundled exception does not change imported archive handling")
 let corruptArchive = temporary.appendingPathComponent("corrupt.zip")
