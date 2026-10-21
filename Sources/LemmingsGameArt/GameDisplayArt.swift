@@ -5,6 +5,7 @@ public enum GameDisplayArt {
     public static func draw(in context: CGContext, frame: CGRect, pixel: CGFloat = 1) {
         context.saveGState()
         defer { context.restoreGState() }
+        context.setShouldAntialias(false)
         context.setFillColor(CGColor(gray: 0.015, alpha: 1))
         context.fill(frame)
         outline(in: context, frame: frame, color: CGColor(gray: 0.32, alpha: 1), pixel: pixel)

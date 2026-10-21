@@ -1,7 +1,7 @@
 #if os(macOS)
 import AppKit
 
-/// Gameplay uses the same stone popover as Settings, without another window or input target.
+/// Gameplay uses the same flat popover as Settings, without another window or input target.
 @MainActor final class GameplayControlHelp {
     struct Item: Equatable {
         var id: String

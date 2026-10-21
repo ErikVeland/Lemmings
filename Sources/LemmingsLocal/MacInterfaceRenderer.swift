@@ -124,7 +124,7 @@ import NxlvKit
     alpha: CGFloat = 1, palette: Palette = .blue
   ) {
     guard let font = interface.font(face) else { return }
-    if let (image, bounds, _) = lineImage(text, face: face, font: font, palette: palette) {
+    if scale != 2 && scale != 4, let (image, bounds, _) = lineImage(text, face: face, font: font, palette: palette) {
       image.draw(in: CGRect(x: origin.x + bounds.minX * CGFloat(scale),
         y: origin.y + bounds.minY * CGFloat(scale), width: bounds.width * CGFloat(scale),
         height: bounds.height * CGFloat(scale)), from: .zero, operation: .sourceOver,
@@ -132,12 +132,17 @@ import NxlvKit
       return
     }
     for item in font.layout(text) {
-      guard let glyph = item.glyph,
-        let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette)
-      else { continue }
+      guard let source = item.glyph else { continue }
+      let countdown = scale == 4 && font.cellWidth == 16 && font.cellHeight == 20
+        ? GameLemmingsCountdownFace.frame(source, sequence: item.sequence) : nil
+      let display = scale == 2
+      let glyph = countdown ?? (display ? GameLemmingsDisplayFace.frame(source, sequence: item.sequence,
+        cellWidth: font.cellWidth, cellHeight: font.cellHeight) : GameLemmingsDisplayFace.Glyph(source))
+      let pixels = display || countdown != nil ? 1 : scale
+      guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)", palette: palette) else { continue }
       let rect = CGRect(
-        x: origin.x + CGFloat((item.x + glyph.x) * scale), y: origin.y + CGFloat(glyph.y * scale),
-        width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
+        x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
+        width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
       image.draw(
         in: rect, from: .zero, operation: .sourceOver, fraction: alpha,
         respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -171,7 +176,7 @@ import NxlvKit
     NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
     for item in layout {
       guard let glyph = item.glyph,
-        let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette) else { continue }
+        let image = image(for: GameLemmingsDisplayFace.Glyph(glyph), key: "\(face.rawValue)-false-\(item.sequence)", palette: palette) else { continue }
       image.draw(in: CGRect(x: item.x + glyph.x, y: glyph.y,
         width: glyph.width, height: glyph.height), from: .zero, operation: .sourceOver,
         fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -264,7 +269,7 @@ import NxlvKit
 
   // MARK: - Images
 
-  private func image(for frame: ClassicMacArtwork.Frame, key: String, palette: Palette = .blue) -> NSImage? {
+  private func image(for frame: GameLemmingsDisplayFace.Glyph, key: String, palette: Palette = .blue) -> NSImage? {
     let key = palette.rawValue + ":" + key
     if let cached = cache[key] { return cached }
     var pixels = frame.rgba

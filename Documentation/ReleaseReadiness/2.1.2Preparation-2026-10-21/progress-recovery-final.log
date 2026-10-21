@@ -1,0 +1,1345 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+[0/1] Planning build
+Building for debugging...
+[0/18] Write sources
+[1/18] Copying Localization.bundle
+[2/18] Write sources
+[5/18] Write swift-version-39B54973F684ADAB.txt
+[7/43] Emitting module NxlvKit
+[8/67] Compiling NxlvKit AdaptiveDJDirector.swift
+[9/67] Compiling NxlvKit AdaptiveDJEngine.swift
+[10/67] Compiling NxlvKit AdlibSequencer.swift
+[11/67] Compiling NxlvKit AmigaSoundBank.swift
+[12/67] Compiling NxlvKit AmigaVersusCampaign.swift
+[13/67] Compiling NxlvKit ArcadeLevelDecoder.swift
+[14/67] Compiling NxlvKit ArcadeRecords.swift
+[15/67] Compiling NxlvKit ArchivalAudioRegistry.swift
+[16/67] Compiling NxlvKit ArchivalCatalog.swift
+[17/67] Compiling NxlvKit ArchivalGraphicsRegistry.swift
+[18/67] Compiling NxlvKit AssignmentFocus.swift
+[19/67] Compiling NxlvKit AssignmentPointerShape.swift
+[20/67] Compiling NxlvKit BitmapLatinGlyphs.swift
+[21/67] Compiling NxlvKit BitmapTamilGlyphs.swift
+[22/67] Compiling NxlvKit BundledGameResources.swift
+[23/67] Compiling NxlvKit ClassicADFVolume.swift
+[24/67] Compiling NxlvKit ClassicAchievements.swift
+[25/67] Compiling NxlvKit ClassicCampaign.swift
+[26/67] Compiling NxlvKit ClassicDATArchive.swift
+[27/67] Compiling NxlvKit ClassicDOSReplay.swift
+[28/67] Compiling NxlvKit ClassicDOSRewind.swift
+[29/67] Compiling NxlvKit ClassicDOSSimulation.swift
+[30/67] Compiling NxlvKit ClassicDataSet.swift
+[31/67] Compiling NxlvKit ClassicDifficultyAnalysis.swift
+[32/91] Compiling NxlvKit DifficultyCalibration.swift
+[33/91] Compiling NxlvKit DifficultyCorpus.swift
+[34/91] Compiling NxlvKit DifficultyDiagnostics.swift
+[35/91] Compiling NxlvKit DifficultyPerturbation.swift
+[36/91] Compiling NxlvKit DifficultyProfile.swift
+[37/91] Compiling NxlvKit DifficultyTechniques.swift
+[38/91] Compiling NxlvKit DoubleTap.swift
+[39/91] Compiling NxlvKit ExplosionPixelSpray.swift
+[40/91] Compiling NxlvKit ExtraSkillRewards.swift
+[41/91] Compiling NxlvKit FLICMovie.swift
+[42/91] Compiling NxlvKit FanLevelReader.swift
+[43/91] Compiling NxlvKit FanPackUpdater.swift
+[44/91] Compiling NxlvKit GameAssetCache.swift
+[45/91] Compiling NxlvKit GameplaySoundPosition.swift
+[46/91] Compiling NxlvKit GameplaySpeed.swift
+[47/91] Compiling NxlvKit GameplayStartCountdown.swift
+[48/91] Compiling NxlvKit GameplaySupplementSounds.swift
+[49/91] Compiling NxlvKit GenesisFMPlayer.swift
+[50/91] Compiling NxlvKit GenesisLevelDecoder.swift
+[51/91] Compiling NxlvKit InterfaceLocalisation.swift
+[52/91] Compiling NxlvKit LastSecondsWarning.swift
+[53/91] Compiling NxlvKit LearningJourney.swift
+[54/91] Compiling NxlvKit LearningRouteSafety.swift
+[55/91] Compiling NxlvKit LemmingApproachTargeting.swift
+[56/115] Compiling NxlvKit ClassicFanArtwork.swift
+[57/115] Compiling NxlvKit ClassicFanPack.swift
+[58/115] Compiling NxlvKit ClassicGameFlow.swift
+[59/115] Compiling NxlvKit ClassicGraphics.swift
+[60/115] Compiling NxlvKit ClassicHolidayCampaign.swift
+[61/115] Compiling NxlvKit ClassicLevel.swift
+[62/115] Compiling NxlvKit ClassicMacArtwork.swift
+[63/115] Compiling NxlvKit ClassicMacMusicLibrary.swift
+[64/115] Compiling NxlvKit ClassicMacReleaseRate.swift
+[65/115] Compiling NxlvKit ClassicMacResources.swift
+[66/115] Compiling NxlvKit ClassicMacUserInterface.swift
+[67/115] Compiling NxlvKit ClassicMainDAT.swift
+[68/115] Compiling NxlvKit ClassicMonochromeBackpack.swift
+[69/115] Compiling NxlvKit ClassicSaga.swift
+[70/115] Compiling NxlvKit ClassicSampleBank.swift
+[71/115] Compiling NxlvKit ClassicSceneFrame.swift
+[72/115] Compiling NxlvKit ClassicSettings.swift
+[73/115] Compiling NxlvKit ClassicSolutionGhost.swift
+[74/115] Compiling NxlvKit ClassicSoundCue.swift
+[75/115] Compiling NxlvKit ClassicStyleResolver.swift
+[76/115] Compiling NxlvKit ControllerBindings.swift
+[77/115] Compiling NxlvKit ControllerButtonEdge.swift
+[78/115] Compiling NxlvKit CursorCamera.swift
+[79/115] Compiling NxlvKit DeviceEffectResources.swift
+[80/139] Compiling NxlvKit Lemmings2AirCollision.swift
+[81/139] Compiling NxlvKit Lemmings2AirPhysics.swift
+[82/139] Compiling NxlvKit Lemmings2Ark.swift
+[83/139] Compiling NxlvKit Lemmings2Award.swift
+[84/139] Compiling NxlvKit Lemmings2Campaign.swift
+[85/139] Compiling NxlvKit Lemmings2Chain.swift
+[86/139] Compiling NxlvKit Lemmings2ClassicCampaign.swift
+[87/139] Compiling NxlvKit Lemmings2Climbing.swift
+[88/139] Compiling NxlvKit Lemmings2Controls.swift
+[89/139] Compiling NxlvKit Lemmings2Ending.swift
+[90/139] Compiling NxlvKit Lemmings2Explosion.swift
+[91/139] Compiling NxlvKit Lemmings2FanPhysics.swift
+[92/139] Compiling NxlvKit Lemmings2FillParticle.swift
+[93/139] Compiling NxlvKit Lemmings2FrontEnd.swift
+[94/139] Compiling NxlvKit Lemmings2GAL.swift
+[95/139] Compiling NxlvKit Lemmings2InteractiveObjects.swift
+[96/139] Compiling NxlvKit Lemmings2Introduction.swift
+[97/139] Compiling NxlvKit Lemmings2Level.swift
+[98/139] Compiling NxlvKit Lemmings2MacArtwork.swift
+[99/139] Compiling NxlvKit Lemmings2MacRuleTables.swift
+[100/139] Compiling NxlvKit Lemmings2MagnoBoots.swift
+[101/139] Compiling NxlvKit Lemmings2Objects.swift
+[102/139] Compiling NxlvKit Lemmings2PoleVault.swift
+[103/139] Compiling NxlvKit Lemmings2Practice.swift
+[104/162] Compiling NxlvKit Lemmings2Projectile.swift
+[105/162] Compiling NxlvKit Lemmings2RailMachine.swift
+[106/162] Compiling NxlvKit Lemmings2ReplayWitness.swift
+[107/162] Compiling NxlvKit Lemmings2Rope.swift
+[108/162] Compiling NxlvKit Lemmings2Runtime.swift
+[109/162] Compiling NxlvKit Lemmings2Shimmy.swift
+[110/162] Compiling NxlvKit Lemmings2SkiPhysics.swift
+[111/162] Compiling NxlvKit Lemmings2SkillRules.swift
+[112/162] Compiling NxlvKit Lemmings2SoundBank.swift
+[113/162] Compiling NxlvKit Lemmings2SpecialGraphics.swift
+[114/162] Compiling NxlvKit Lemmings2Sprites.swift
+[115/162] Compiling NxlvKit Lemmings2StoneCollision.swift
+[116/162] Compiling NxlvKit Lemmings2Style.swift
+[117/162] Compiling NxlvKit Lemmings2Superlem.swift
+[118/162] Compiling NxlvKit Lemmings2TerrainMasks.swift
+[119/162] Compiling NxlvKit Lemmings2TimedTrap.swift
+[120/162] Compiling NxlvKit Lemmings2Viewport.swift
+[121/162] Compiling NxlvKit Lemmings2Walker.swift
+[122/162] Compiling NxlvKit Lemmings3Brand.swift
+[123/162] Compiling NxlvKit Lemmings3ClassicCampaign.swift
+[124/162] Compiling NxlvKit Lemmings3Font.swift
+[125/162] Compiling NxlvKit Lemmings3Level.swift
+[126/162] Compiling NxlvKit Lemmings3Runtime.swift
+[127/162] Compiling NxlvKit Lemmings3Scene.swift
+[128/185] Compiling NxlvKit Lemmings3SoundBank.swift
+[129/185] Compiling NxlvKit Lemmings3Sprites.swift
+[130/185] Compiling NxlvKit Lemmings3Style.swift
+[131/185] Compiling NxlvKit LemmingsSimulation.swift
+[132/185] Compiling NxlvKit LevelCatalogue.swift
+[133/185] Compiling NxlvKit LevelPlaylist.swift
+[134/185] Compiling NxlvKit LevelSkips.swift
+[135/185] Compiling NxlvKit MenuThemeSelection.swift
+[136/185] Compiling NxlvKit ModernCampaignProgress.swift
+[137/185] Compiling NxlvKit ModernLemmingsEngine.swift
+[138/185] Compiling NxlvKit MusicLibraryCatalogue.swift
+[139/185] Compiling NxlvKit MusicLibraryInstaller.swift
+[140/185] Compiling NxlvKit MusicPlaybackCatalogue.swift
+[141/185] Compiling NxlvKit MusicRhythmCatalogue.swift
+[142/185] Compiling NxlvKit MusicTimingCatalogue.swift
+[143/185] Compiling NxlvKit NeoLemmixCompatibility.swift
+[144/185] Compiling NxlvKit NeoLemmixDifficultyAnalysis.swift
+[145/185] Compiling NxlvKit NeoLemmixFinalState.swift
+[146/185] Compiling NxlvKit NeoLemmixLibrary.swift
+[147/185] Compiling NxlvKit NeoLemmixMacArtwork.swift
+[148/185] Compiling NxlvKit NeoLemmixPack.swift
+[149/185] Compiling NxlvKit NeoLemmixPickupGraphics.swift
+[150/185] Compiling NxlvKit NeoLemmixRenderOrder.swift
+[151/208] Compiling NxlvKit SNESAudioPlayer.swift
+[152/208] Compiling NxlvKit SNESLevelDecoder.swift
+[153/208] Compiling NxlvKit SequelBinary.swift
+[154/208] Compiling NxlvKit SequelBitmapFont.swift
+[155/208] Compiling NxlvKit SkillShortcuts.swift
+[156/208] Compiling NxlvKit SkillVocabulary.swift
+[157/208] Compiling NxlvKit SoundtrackCatalogue.swift
+[158/208] Compiling NxlvKit TouchpadJog.swift
+[159/208] Compiling NxlvKit TrolleyAchievementCollection.swift
+[160/208] Compiling NxlvKit TrolleyAffinity.swift
+[161/208] Compiling NxlvKit TrolleyAttempt.swift
+[162/208] Compiling NxlvKit TrolleyCelebration.swift
+[163/208] Compiling NxlvKit TrolleyHistory.swift
+[164/208] Compiling NxlvKit TrolleyLeaderboards.swift
+[165/208] Compiling NxlvKit TrolleyMaximum.swift
+[166/208] Compiling NxlvKit TrolleyOnlineScores.swift
+[167/208] Compiling NxlvKit TrolleyPhilosophy.swift
+[168/208] Compiling NxlvKit TrolleyProofCatalogue.swift
+[169/208] Compiling NxlvKit TrolleyRescueGoals.swift
+[170/208] Compiling NxlvKit UnifiedGameLibrary.swift
+[171/208] Compiling NxlvKit VinylMotion.swift
+[172/208] Compiling NxlvKit ZipArchive.swift
+[173/208] Compiling NxlvKit resource_bundle_accessor.swift
+[174/208] Compiling NxlvKit NeoLemmixSceneFrame.swift
+[175/208] Compiling NxlvKit NeoLemmixSimulation.swift
+[176/208] Compiling NxlvKit NeoLemmixSoundCue.swift
+[177/208] Compiling NxlvKit NxlvDocument.swift
+[178/208] Compiling NxlvKit NxlvLevel.swift
+[179/208] Compiling NxlvKit NxlvRenderer.swift
+[180/208] Compiling NxlvKit NxlvStyleResolver.swift
+[181/208] Compiling NxlvKit NxlvTypes.swift
+[182/208] Compiling NxlvKit NxrpReplay.swift
+[183/208] Compiling NxlvKit NxrpReplayPlayback.swift
+[184/208] Compiling NxlvKit OPL2.swift
+[185/208] Compiling NxlvKit PlatformProfile.swift
+[186/208] Compiling NxlvKit PlayerControlSettings.swift
+[187/208] Compiling NxlvKit PortExclusivePack.swift
+[188/208] Compiling NxlvKit PrecisionZoomLedger.swift
+[189/208] Compiling NxlvKit PrecisionZoomLens.swift
+[190/208] Compiling NxlvKit PrecisionZoomScrollGesture.swift
+[191/208] Compiling NxlvKit ProTrackerEnhancements.swift
+[192/208] Compiling NxlvKit ProTrackerModule.swift
+[193/208] Compiling NxlvKit ProTrackerPercussion.swift
+[194/208] Compiling NxlvKit ProgressionPlaylist.swift
+[195/208] Compiling NxlvKit ReplayMoveNavigation.swift
+[196/208] Compiling NxlvKit RescueCelebration.swift
+[197/225] Emitting module LemmingsAppCore
+[198/225] Compiling LemmingsAppCore AppStorage.swift
+[199/225] Compiling LemmingsAppCore ClassicSourceRevision.swift
+[200/225] Compiling LemmingsAppCore JourneyCompletionSummary.swift
+[201/225] Compiling LemmingsAppCore LearningJourneyLibrary.swift
+[202/225] Compiling LemmingsAppCore LevelPlaylistStore.swift
+[203/225] Compiling LemmingsAppCore RecordLevelNavigation.swift
+[204/225] Compiling LemmingsAppCore ShortPlayCatalogue.swift
+[205/225] Compiling LemmingsAppCore ClassicRouteRecorder.swift
+[206/225] Compiling LemmingsAppCore DifficultyLibrary.swift
+[207/225] Compiling LemmingsAppCore LevelHints.swift
+[208/225] Compiling LemmingsAppCore ControllerStepFeedback.swift
+[209/225] Compiling LemmingsAppCore GameplayCommands.swift
+[210/225] Compiling LemmingsAppCore AnonymousTelemetry.swift
+[211/225] Compiling LemmingsAppCore ArcadeRecordFile.swift
+[212/225] Compiling LemmingsAppCore ArcadeStore.swift
+[213/225] Compiling LemmingsAppCore LegacySaveMigration.swift
+[214/225] Compiling LemmingsAppCore AppleGameProgressTransport.swift
+[215/225] Compiling LemmingsAppCore CloudKitLibraryStore.swift
+[216/242] Compiling LemmingsAppCore CloudLibraryArchive.swift
+[217/242] Compiling LemmingsAppCore CloudLibrarySync.swift
+[218/242] Compiling LemmingsAppCore CloudLibraryTransport.swift
+[219/242] Compiling LemmingsAppCore GameCenterProgressSync.swift
+[220/242] Compiling LemmingsAppCore GameCenterScores.swift
+[221/242] Compiling LemmingsAppCore GameProgressPreferences.swift
+[222/242] Compiling LemmingsAppCore HostedRankings.swift
+[223/242] Compiling LemmingsAppCore HotSeatGhost.swift
+[224/242] Compiling LemmingsAppCore LeaderboardActionReplay.swift
+[225/242] Compiling LemmingsAppCore LeaderboardClassicReplay.swift
+[226/242] Compiling LemmingsAppCore LemmingInspection.swift
+[227/242] Compiling LemmingsAppCore ReplayMovie.swift
+[228/242] Compiling LemmingsAppCore ResultAwards.swift
+[229/242] Compiling LemmingsAppCore TrolleyBundledProofs.swift
+[230/242] Compiling LemmingsAppCore TrolleyCapture.swift
+[231/242] Compiling LemmingsAppCore VerifiedSolution.swift
+[232/242] Compiling LemmingsAppCore RunRecovery.swift
+[233/267] Compiling LemmingsMobileCore ClassicFanMobileLibrary.swift
+[234/267] Compiling LemmingsMobileCore ClassicMobileArtworkCache.swift
+[235/267] Compiling LemmingsMobileCore ClassicMobileSession.swift
+[236/267] Compiling LemmingsMobileCore ClassicOhYesMobileLibrary.swift
+[237/267] Compiling LemmingsMobileCore Lemmings2MobileLibrary.swift
+[238/267] Compiling LemmingsMobileCore Lemmings2MobileSceneRenderer.swift
+[239/267] Compiling LemmingsMobileCore Lemmings3MobileLibrary.swift
+[240/267] Compiling LemmingsMobileCore Lemmings3MobileSceneRenderer.swift
+[241/267] Compiling LemmingsMobileCore MobileBitmapRenderer.swift
+[242/267] Compiling LemmingsMobileCore MobileBuildInfo.swift
+[243/267] Compiling LemmingsMobileCore MobileCampaignProgress.swift
+[244/267] Compiling LemmingsMobileCore MobileCatalogue.swift
+[245/267] Compiling LemmingsMobileCore MobileCheckpoint.swift
+[246/267] Compiling LemmingsMobileCore MobileCollectionsBridge.swift
+[247/267] Compiling LemmingsMobileCore MobileContentStore.swift
+[248/267] Compiling LemmingsMobileCore MobileControllerConnection.swift
+[249/267] Compiling LemmingsMobileCore MobileDirectionPickerLayout.swift
+[250/267] Compiling LemmingsMobileCore MobileDisplayRegions.swift
+[251/267] Compiling LemmingsMobileCore MobileFanCountStore.swift
+[252/267] Compiling LemmingsMobileCore MobileFavourites.swift
+[253/267] Compiling LemmingsMobileCore MobileGameResult.swift
+[254/267] Compiling LemmingsMobileCore MobileGameSession.swift
+[255/267] Compiling LemmingsMobileCore MobileGeometry.swift
+[256/267] Compiling LemmingsMobileCore MobileHUDLayout.swift
+[257/267] Emitting module LemmingsMobileCore
+[258/291] Compiling LemmingsMobileCore MobileHUDPress.swift
+[259/291] Compiling LemmingsMobileCore MobileHomeBackdrop.swift
+[260/291] Compiling LemmingsMobileCore MobileHotSeat.swift
+[261/291] Compiling LemmingsMobileCore MobileHotSeatGhosts.swift
+[262/291] Compiling LemmingsMobileCore MobileIndexedTerrain.swift
+[263/291] Compiling LemmingsMobileCore MobileLayout.swift
+[264/291] Compiling LemmingsMobileCore MobileLearning.swift
+[265/291] Compiling LemmingsMobileCore MobileLevelPreparation.swift
+[266/291] Compiling LemmingsMobileCore MobileLibrary.swift
+[267/291] Compiling LemmingsMobileCore MobileLifecycle.swift
+[268/291] Compiling LemmingsMobileCore MobileMusicAssignment.swift
+[269/291] Compiling LemmingsMobileCore MobilePauseSummary.swift
+[270/291] Compiling LemmingsMobileCore MobilePerformance.swift
+[271/291] Compiling LemmingsMobileCore MobilePlayState.swift
+[272/291] Compiling LemmingsMobileCore MobilePlaylists.swift
+[273/291] Compiling LemmingsMobileCore MobileProgressionBuilder.swift
+[274/291] Compiling LemmingsMobileCore MobileSettings.swift
+[275/291] Compiling LemmingsMobileCore MobileShortPlayCatalogue.swift
+[276/291] Compiling LemmingsMobileCore MobileStorage.swift
+[277/291] Compiling LemmingsMobileCore MobileTargeting.swift
+[278/291] Compiling LemmingsMobileCore MobileTouchRouter.swift
+[279/291] Compiling LemmingsMobileCore MobileViewport.swift
+[280/291] Compiling LemmingsMobileCore NeoLemmixMobileSupport.swift
+[281/291] Compiling LemmingsMobileCore SequelMobileSessions.swift
+[282/297] Compiling LemmingsTVCore TVActivationGate.swift
+[283/297] Compiling LemmingsTVCore TVControllerBindings.swift
+[284/297] Compiling LemmingsTVCore TVControllerButtonEvents.swift
+[285/297] Compiling LemmingsTVCore TVExperience.swift
+[286/297] Compiling LemmingsTVCore TVFrontendMigration.swift
+[287/297] Emitting module LemmingsTVCore
+[288/302] Compiling LemmingsTVCore TVLibrarySource.swift
+[289/302] Compiling LemmingsTVCore TVMobileMigration.swift
+[290/302] Compiling LemmingsTVCore TVSaveBackup.swift
+[291/302] Compiling LemmingsTVCore TVTargetLock.swift
+[292/302] Compiling LemmingsTVCore TVTimelineTransport.swift
+[293/324] Emitting module LemmingsMobileCoreTests
+[294/324] Compiling LemmingsMobileCoreTests MobileExtraSkillTests.swift
+[295/324] Emitting module LemmingsGameArt
+[296/324] Compiling LemmingsGameArt AdaptiveFXPerformance.swift
+[297/324] Compiling LemmingsGameArt AdaptiveFXQuality.swift
+[298/324] Compiling LemmingsGameArt BombCountdownRenderer.swift
+[299/324] Compiling LemmingsGameArt CRTSettings.swift
+[300/324] Compiling LemmingsGameArt CRTShaders.swift
+[301/324] Compiling LemmingsGameArt CloudSyncArt.swift
+[302/324] Compiling LemmingsGameArt ExplosionGlow.swift
+[303/324] Compiling LemmingsGameArt FailureMoodArt.swift
+[304/324] Compiling LemmingsGameArt GameDisplayArt.swift
+[305/324] Compiling LemmingsGameArt GameFooterGrid.swift
+[306/324] Compiling LemmingsGameArt GameFrontEnd.swift
+[307/324] Compiling LemmingsGameArt GameHomeBackdropArt.swift
+[308/324] Compiling LemmingsGameArt GameHomeLogoArt.swift
+[309/324] Compiling LemmingsGameArt GameLemmingsTypography.swift
+[310/324] Compiling LemmingsGameArt GameMenuFrameArt.swift
+[311/324] Compiling LemmingsGameArt GameMenuLogo.swift
+[312/324] Compiling LemmingsGameArt GameMenuTypography.swift
+[313/324] Compiling LemmingsGameArt GameMinimapArt.swift
+[314/324] Compiling LemmingsGameArt GamePixelTypography.swift
+[315/324] Compiling LemmingsGameArt GamePortraitArt.swift
+[316/324] Compiling LemmingsGameArt GameRecoveryArt.swift
+[317/364] Compiling LemmingsGameArt MobileReplayTitleArt.swift
+[318/364] Compiling LemmingsGameArt MobileRescueArt.swift
+[319/364] Compiling LemmingsGameArt MobileResultAchievementsArt.swift
+[320/364] Compiling LemmingsGameArt MobileSettingsArt.swift
+[321/364] Compiling LemmingsGameArt MobileSolutionSelectorArt.swift
+[322/364] Compiling LemmingsGameArt MobileTurnArt.swift
+[323/364] Compiling LemmingsGameArt MusicTitleCard.swift
+[324/364] Compiling LemmingsGameArt PanelGlyphArt.swift
+[325/364] Compiling LemmingsGameArt ReplayMoveArt.swift
+[326/364] Compiling LemmingsGameArt RescueBackgroundGlow.swift
+[327/364] Compiling LemmingsGameArt SelectionFade.swift
+[328/364] Compiling LemmingsGameArt ShortGamesArt.swift
+[329/364] Compiling LemmingsGameArt SkillPointerBadge.swift
+[330/364] Compiling LemmingsGameArt SolutionSwitchArt.swift
+[331/364] Compiling LemmingsGameArt SpeedPanelArt.swift
+[332/364] Compiling LemmingsGameArt SpriteAssignmentPulse.swift
+[333/364] Compiling LemmingsGameArt TVMenuArt.swift
+[334/364] Compiling LemmingsGameArt TVMenuPresentation.swift
+[335/364] Compiling LemmingsGameArt TVPlayfieldArt.swift
+[336/364] Compiling LemmingsGameArt TVSharedMenuArt.swift
+[337/364] Compiling LemmingsGameArt GameSemanticText.swift
+[338/364] Compiling LemmingsGameArt GameStarArt.swift
+[339/364] Compiling LemmingsGameArt GameStoneArt.swift
+[340/364] Compiling LemmingsGameArt GameSupport.swift
+[341/364] Compiling LemmingsGameArt GameTextLayout.swift
+[342/364] Compiling LemmingsGameArt GameUnfoldArt.swift
+[343/364] Compiling LemmingsGameArt GameplayHDR.swift
+[344/364] Compiling LemmingsGameArt GhostSolutionArt.swift
+[345/364] Compiling LemmingsGameArt LemmingInspectionArt.swift
+[346/364] Compiling LemmingsGameArt LemmingSelectionRenderer.swift
+[347/364] Compiling LemmingsGameArt LevelBrowserGeometry.swift
+[348/364] Compiling LemmingsGameArt LevelCoverArt.swift
+[349/364] Compiling LemmingsGameArt MobileBookHomeArt.swift
+[350/364] Compiling LemmingsGameArt MobileCareerArt.swift
+[351/364] Compiling LemmingsGameArt MobileExtraSkillArt.swift
+[352/364] Compiling LemmingsGameArt MobileHUDRenderer.swift
+[353/364] Compiling LemmingsGameArt MobileHomeArt.swift
+[354/364] Compiling LemmingsGameArt MobileInformationArt.swift
+[355/364] Compiling LemmingsGameArt MobilePauseArt.swift
+[356/364] Compiling LemmingsGameArt MobileReplaySkillArt.swift
+[357/380] Compiling LemmingsMobileUI MobileGameViewController.swift
+[358/380] Compiling LemmingsMobileUI MobileLibraryLearning.swift
+[359/380] Emitting module LemmingsMobileUI
+[360/381] Compiling LemmingsMobileUI MobilePixelText.swift
+[361/402] Compiling LemmingsLocal AboutWindow.swift
+[362/402] Compiling LemmingsLocal AchievementsWindow.swift
+[363/402] Compiling LemmingsLocal ArcadeWindow.swift
+[364/402] Compiling LemmingsLocal CRTView.swift
+[365/402] Compiling LemmingsLocal ClassicSkillBackpack.swift
+[366/402] Compiling LemmingsLocal CloudLibraryView.swift
+[367/402] Compiling LemmingsLocal ControllerDevicePresentation.swift
+[368/402] Compiling LemmingsLocal ControllerMenuNavigator.swift
+[369/402] Compiling LemmingsLocal DialogKeyboardNavigation.swift
+[370/402] Compiling LemmingsLocal ExplosionHDR.swift
+[371/402] Compiling LemmingsLocal ExtraSkillMac.swift
+[372/402] Compiling LemmingsLocal FanLevelLibrary.swift
+[373/402] Emitting module LemmingsMobileMenuAudit
+[374/413] Compiling LemmingsMobileMenuAudit mute-setting.swift
+[375/413] Compiling LemmingsMobileMenuAudit navigation.swift
+[376/413] Compiling LemmingsMobileMenuAudit pause.swift
+[377/413] Compiling LemmingsMobileMenuAudit portrait-hud.swift
+[378/413] Compiling LemmingsMobileMenuAudit regional-brand.swift
+[379/413] Compiling LemmingsMobileMenuAudit rounded-hud.swift
+[380/413] Compiling LemmingsMobileMenuAudit skill-pause.swift
+[381/413] Compiling LemmingsMobileMenuAudit solution-switch.swift
+[382/413] Compiling LemmingsMobileMenuAudit static-home.swift
+[383/413] Compiling LemmingsMobileMenuAudit support.swift
+[384/413] Compiling LemmingsMobileMenuAudit table-result.swift
+[384/413] Write Objects.LinkFileList
+[385/413] Linking LemmingsMobileMenuAudit
+[386/413] Applying LemmingsMobileMenuAudit
+[388/413] Emitting module LemmingsLocal
+[409/452] Compiling LemmingsLocal Lemmings3Targeting.swift
+[410/452] Compiling LemmingsLocal LevelCollections.swift
+[411/452] Compiling LemmingsLocal LevelCoverFlowView.swift
+[412/452] Compiling LemmingsLocal LevelHintWindow.swift
+[413/452] Compiling LemmingsLocal LevelPreviewStore.swift
+[414/452] Compiling LemmingsLocal MacFXPerformance.swift
+[415/452] Compiling LemmingsLocal MacInterfaceRenderer.swift
+[416/452] Compiling LemmingsLocal MusicLibraryWindow.swift
+[417/452] Compiling LemmingsLocal NeoLemmixSpriteSet.swift
+[418/452] Compiling LemmingsLocal NowPlayingNotice.swift
+[419/452] Compiling LemmingsLocal OriginalMoviePlayer.swift
+[420/452] Compiling LemmingsLocal PanelGlyphs.swift
+[421/452] Compiling LemmingsLocal PanelView.swift
+[422/452] Compiling LemmingsLocal PlayfieldView.swift
+[423/452] Compiling LemmingsLocal ProgressionMenu.swift
+[424/452] Compiling LemmingsLocal ReleaseWelcome.swift
+[425/452] Compiling LemmingsLocal ReplayGhostSprites.swift
+[426/452] Compiling LemmingsLocal ReplayMovie.swift
+[427/452] Compiling LemmingsLocal ReplaySkillPanel.swift
+[428/471] Compiling LemmingsLocal GameplayControlHelp.swift
+[429/471] Compiling LemmingsLocal GameplayController.swift
+[430/471] Compiling LemmingsLocal GameplayKeyboard.swift
+[431/471] Compiling LemmingsLocal GameplayMenuButton.swift
+[432/471] Compiling LemmingsLocal GameplayPresentation.swift
+[433/471] Compiling LemmingsLocal HostedRankingsView.swift
+[434/471] Compiling LemmingsLocal KeyboardCommandsView.swift
+[435/471] Compiling LemmingsLocal KeyboardOverlayView.swift
+[436/471] Compiling LemmingsLocal LeaderboardReplayWindow.swift
+[437/471] Compiling LemmingsLocal LearningJourneyMenu.swift
+[438/471] Compiling LemmingsLocal LemmingAssignmentPulse.swift
+[439/471] Compiling LemmingsLocal LemmingFocusHighlight.swift
+[440/471] Compiling LemmingsLocal LemmingInspectionHover.swift
+[441/471] Compiling LemmingsLocal LemmingInspectionPage.swift
+[442/471] Compiling LemmingsLocal LemmingSelectionHDR.swift
+[443/471] Compiling LemmingsLocal Lemmings2PlayWindow.swift
+[444/471] Compiling LemmingsLocal Lemmings2RouteRecorder.swift
+[445/471] Compiling LemmingsLocal Lemmings2SoundPlayer.swift
+[446/471] Compiling LemmingsLocal Lemmings3Panel.swift
+[447/471] Compiling LemmingsLocal Lemmings3PlayWindow.swift
+[448/471] Compiling LemmingsLocal ReplayWindow.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[449/471] Compiling LemmingsLocal RescueBackgroundGlow.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[450/471] Compiling LemmingsLocal ResultAchievementHelp.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[451/471] Compiling LemmingsLocal ResultCelebrationView.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[452/471] Compiling LemmingsLocal ResultChimes.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[453/471] Compiling LemmingsLocal ResultEarnedRewards.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[454/471] Compiling LemmingsLocal ResultLayout.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[455/471] Compiling LemmingsLocal ResultPerkAwards.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[456/471] Compiling LemmingsLocal SequelArtworkRenderer.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[457/471] Compiling LemmingsLocal SequelEffectArtwork.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[458/471] Compiling LemmingsLocal SettingsWindow.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[459/471] Compiling LemmingsLocal SkillCursorBadge.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[460/471] Compiling LemmingsLocal SolutionReplay.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[461/471] Compiling LemmingsLocal SolutionSwitchView.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[462/471] Compiling LemmingsLocal TelemetryDashboard.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[463/471] Compiling LemmingsLocal TimelinePanelControls.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[464/471] Compiling LemmingsLocal TrolleyCapture+Session.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[465/471] Compiling LemmingsLocal TrolleyResultView.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[466/471] Compiling LemmingsLocal main.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[466/471] Write Objects.LinkFileList
+[467/471] Linking LemmingsLocal
+[468/471] Applying LemmingsLocal
+[470/486] Compiling LemmingsLocalTests AboutHistoryTests.swift
+[471/486] Compiling LemmingsLocalTests AnonymousTelemetryTests.swift
+[472/486] Compiling LemmingsLocalTests AssignmentSoundTests.swift
+[473/486] Compiling LemmingsLocalTests BitmapLatinRenderTests.swift
+[474/486] Compiling LemmingsLocalTests CloudLibraryViewTests.swift
+[475/486] Compiling LemmingsLocalTests CursorCameraTests.swift
+[476/486] Compiling LemmingsLocalTests DJCrossfadeTests.swift
+[477/486] Compiling LemmingsLocalTests DJParityUITests.swift
+[478/486] Compiling LemmingsLocalTests DeviceMenuLayoutTests.swift
+[479/486] Compiling LemmingsLocalTests FailureMusicTests.swift
+[480/486] Compiling LemmingsLocalTests FanPackParityTests.swift
+[481/486] Compiling LemmingsLocalTests FooterNavigationTests.swift
+[482/486] Compiling LemmingsLocalTests HostedRankingsTests.swift
+[483/486] Compiling LemmingsLocalTests InterfaceHierarchyTests.swift
+[484/486] Emitting module LemmingsLocalTests
+[485/500] Compiling LemmingsLocalTests JourneySolutionTests.swift
+[486/500] Compiling LemmingsLocalTests LanguagePickerTests.swift
+[487/500] Compiling LemmingsLocalTests LearningJourneyTests.swift
+[488/500] Compiling LemmingsLocalTests LemmingInspectionTests.swift
+[489/500] Compiling LemmingsLocalTests LocalisationLayoutTests.swift
+[490/500] Compiling LemmingsLocalTests MacMonochromeUITests.swift
+[491/500] Compiling LemmingsLocalTests MobileStatusSlotTests.swift
+[492/500] Compiling LemmingsLocalTests MusicTitleCardTests.swift
+[493/500] Compiling LemmingsLocalTests NeoLemmixSoundTests.swift
+[494/500] Compiling LemmingsLocalTests ProgressionMenuTests.swift
+[495/500] Compiling LemmingsLocalTests SequelLatinRenderTests.swift
+[496/500] Compiling LemmingsLocalTests StatusStripRenderTests.swift
+[497/500] Compiling LemmingsLocalTests TamilBitmapRenderTests.swift
+[498/500] Compiling LemmingsLocalTests TamilSequelRenderTests.swift
+[498/500] Write Objects.LinkFileList
+[499/500] Linking LemmingsNativePortPackageTests
+Build complete! (54.91s)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite GameCenterProgressTests started.
+􀟈  Suite CloudLibraryTests started.
+􀟈  Suite MobileLearningTests started.
+􀟈  Suite MobileHotSeatTests started.
+􀟈  Suite CloudKitLibraryTests started.
+􀟈  Suite JourneyCompletionSummaryTests started.
+􀟈  Suite MobileCampaignProgressTests started.
+􀟈  Suite MobileCheckpointOwnershipTests started.
+􀟈  Suite MobileExtraSkillTests started.
+􀟈  Test sequelMergesKeepWholeTribeChainsAndBestChroniclesResults() started.
+􀟈  Test localChangesDuringMergeAreCapturedBeforeUpload() started.
+􀟈  Suite MobileStorageTests started.
+􀟈  Test unsupportedPreferencesCannotWriteDeviceSettings() started.
+􀟈  Test classicBridgePreservesGapsAndKeepsOrderedAchievementsSeparate() started.
+􀟈  Test failedLocalWriteDoesNotUploadOrReplaceRecords() started.
+􀟈  Test removingTheLinkedPlayerCannotRestoreThemIntoAGuest() started.
+􀟈  Test twoDevicesMergeProgressAndMapTheirDifferentPlayerIDs() started.
+􀟈  Test livePlayDefersImportAndKeepsTurnOwnership() started.
+􀟈  Test concurrentIdentityCreationRetainsBothLibraries() started.
+􀟈  Test resultChoicesFollowTheHouseRule() started.
+􀟈  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() started.
+􀟈  Test sessionsSurviveSavingAndKeepTheirRule() started.
+􀟈  Test oldCheckpointsDecodeWithoutAScope() started.
+􀟈  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() started.
+􀟈  Test simultaneousConflictsUnionResultsWithoutDoubleCounting() started.
+􀟈  Test accountSwitchAndLateSignOutCannotImportOrUploadAnotherPlayer() started.
+􀟈  Test oneProfileIsNotAHotSeat() started.
+􀟈  Test corruptFutureAndWrongOwnerSavesArePreserved() started.
+􀟈  Test theHostStaysInTheRoster() started.
+􀟈  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() started.
+􀟈  Test turnsRotateAndWrap() started.
+􀟈  Test aPlayerWhoLeavesLosesTheTurn() started.
+􀟈  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() started.
+􀟈  Test corruptKeysAndMissingSnapshotsPreventReplacement() started.
+􀟈  Test aFutureCampaignCannotBeReplacedByCloudProgress() started.
+􀟈  Test restartKeepsPlayersAndStartsWithTheHost() started.
+􀟈  Test learningWinsOverrideDeferredVisitsWithoutChangingTheSavedQueue() started.
+􀟈  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() started.
+􀟈  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() started.
+􀟈  Test deletingAPlayerEndsSessionsThatNeedThem() started.
+􀟈  Test newerCheckpointVersionCannotBeOverwritten() started.
+􀟈  Test nativeMobileCloudAndJourneyWinsCountOnceWithoutWriting() started.
+􀟈  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test offlineProgressUploadsOnRetryAndGuestHotSeatKeysStayLocal() started.
+􀟈  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() started.
+􀟈  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() started.
+􀟈  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() started.
+􀟈  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() started.
+􀟈  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() started.
+􀟈  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() started.
+􀟈  Test resultTagsBonusConditionsSeparatelyFromRewind() started.
+􀟈  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() started.
+􀟈  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() started.
+􀟈  Test storedQueueKeepsOwnerScopePositionAndDeferrals() started.
+􀟈  Test progressionRecallUsesItsSavedScopeNameAndPosition() started.
+􀟈  Test fallsBackToTheBackupAndKeepsTheDamagedFile() started.
+􀟈  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() started.
+􀟈  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test importsOlderDefaultsOnce() started.
+􀟈  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() started.
+􀟈  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() started.
+􀟈  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() started.
+􀟈  Test curatedJourneyStartsWithoutScanningFuturePacks() started.
+􀟈  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() started.
+􀟈  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() started.
+􀟈  Test aCopiedScopedFileCannotResumeAsAnotherOwner() started.
+􀟈  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() started.
+􀟈  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() started.
+􀟈  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() started.
+􀟈  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() started.
+􀟈  Test syncingStateAppearsBeforeProviderDiscovery() started.
+􀟈  Test slowCredentialServicesLeaveTheMainActorResponsive() started.
+􀟈  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() started.
+􀟈  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() started.
+􀟈  Test defaultMobilePlayerDoesNotInheritOtherProfilesOrHotSeats() started.
+􀟈  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() started.
+􀟈  Test pythonStagingUsesMacSourceRevision() started.
+􀟈  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() started.
+􀟈  Test malformedCloudArchiveNeverImportsOrOverwritesIt() started.
+􀟈  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() started.
+􀟈  Test homeAndJourneyStayInTheSelectedSession() started.
+􀟈  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() started.
+􀟈  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() started.
+􀟈  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() started.
+􀟈  Test staleDiscoveryCannotReplaceThePasswordCredential() started.
+􀟈  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() started.
+􀟈  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() started.
+􀟈  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() started.
+􀟈  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() started.
+􀟈  Test syncPasswordGivesEveryDeviceTheSameValidVault() started.
+􀟈  Test previewBuildRestoresLatestSharedLibraryByDefault() started.
+􀟈  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() started.
+􀟈  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􁁛  Test oneProfileIsNotAHotSeat() passed after 0.021 seconds.
+􁁛  Test resultChoicesFollowTheHouseRule() passed after 0.021 seconds.
+􁁛  Test theHostStaysInTheRoster() passed after 0.021 seconds.
+􁁛  Test aPlayerWhoLeavesLosesTheTurn() passed after 0.027 seconds.
+􀟈  Test case passing 1 argument engine → "classic-dos" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􁁛  Test turnsRotateAndWrap() passed after 0.028 seconds.
+􀟈  Test case passing 1 argument engine → "lemmings2" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􁁛  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() passed after 0.041 seconds.
+􁁛  Test restartKeepsPlayersAndStartsWithTheHost() passed after 0.051 seconds.
+􁁛  Test deletingAPlayerEndsSessionsThatNeedThem() passed after 0.051 seconds.
+􁁛  Test oldCheckpointsDecodeWithoutAScope() passed after 0.051 seconds.
+􁁛  Test sessionsSurviveSavingAndKeepTheirRule() passed after 0.051 seconds.
+􁁛  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() passed after 0.051 seconds.
+􁁛  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() passed after 0.051 seconds.
+􁁛  Test aFutureCampaignCannotBeReplacedByCloudProgress() passed after 0.051 seconds.
+􁁛  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() passed after 0.051 seconds.
+􁁛  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() passed after 0.051 seconds.
+􁁛  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() passed after 0.051 seconds.
+􁁛  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) with 3 test cases passed after 0.051 seconds.
+􁁛  Test newerCheckpointVersionCannotBeOverwritten() passed after 0.051 seconds.
+􁁛  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() passed after 0.052 seconds.
+􁁛  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() passed after 0.051 seconds.
+􁁛  Test importsOlderDefaultsOnce() passed after 0.051 seconds.
+􁁛  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() passed after 0.051 seconds.
+􁁛  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() passed after 0.051 seconds.
+􁁛  Test storedQueueKeepsOwnerScopePositionAndDeferrals() passed after 0.051 seconds.
+􁁛  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() passed after 0.052 seconds.
+􁁛  Test fallsBackToTheBackupAndKeepsTheDamagedFile() passed after 0.051 seconds.
+􁁛  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() passed after 0.051 seconds.
+􁁛  Test progressionRecallUsesItsSavedScopeNameAndPosition() passed after 0.051 seconds.
+􁁛  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() passed after 0.050 seconds.
+􁁛  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() passed after 0.052 seconds.
+􁁛  Suite MobileHotSeatTests passed after 0.053 seconds.
+􁁛  Suite MobileCampaignProgressTests passed after 0.052 seconds.
+􁁛  Suite MobileStorageTests passed after 0.053 seconds.
+􁁛  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() passed after 0.059 seconds.
+􁁛  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() passed after 0.059 seconds.
+􁁛  Test aCopiedScopedFileCannotResumeAsAnotherOwner() passed after 0.063 seconds.
+􁁛  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) with 3 test cases passed after 0.064 seconds.
+􁁛  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) with 3 test cases passed after 0.066 seconds.
+􁁛  Suite MobileCheckpointOwnershipTests passed after 0.067 seconds.
+􁁛  Test homeAndJourneyStayInTheSelectedSession() passed after 0.068 seconds.
+􁁛  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() passed after 0.081 seconds.
+􁁛  Test pythonStagingUsesMacSourceRevision() passed after 0.104 seconds.
+􁁛  Test concurrentIdentityCreationRetainsBothLibraries() passed after 0.138 seconds.
+􁁛  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() passed after 0.193 seconds.
+􁁛  Test resultTagsBonusConditionsSeparatelyFromRewind() passed after 0.194 seconds.
+􁁛  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() passed after 0.195 seconds.
+􁁛  Suite MobileExtraSkillTests passed after 0.196 seconds.
+􁁛  Test curatedJourneyStartsWithoutScanningFuturePacks() passed after 0.374 seconds.
+􁁛  Suite MobileLearningTests passed after 0.376 seconds.
+􁁛  Test failedLocalWriteDoesNotUploadOrReplaceRecords() passed after 0.449 seconds.
+􁁛  Test malformedCloudArchiveNeverImportsOrOverwritesIt() passed after 0.474 seconds.
+􁁛  Test sequelMergesKeepWholeTribeChainsAndBestChroniclesResults() passed after 0.924 seconds.
+􁁛  Test classicBridgePreservesGapsAndKeepsOrderedAchievementsSeparate() passed after 0.924 seconds.
+􁁛  Test removingTheLinkedPlayerCannotRestoreThemIntoAGuest() passed after 0.930 seconds.
+􁁛  Test accountSwitchAndLateSignOutCannotImportOrUploadAnotherPlayer() passed after 0.932 seconds.
+􁁛  Test corruptKeysAndMissingSnapshotsPreventReplacement() passed after 0.935 seconds.
+􁁛  Test unsupportedPreferencesCannotWriteDeviceSettings() passed after 0.935 seconds.
+􁁛  Test learningWinsOverrideDeferredVisitsWithoutChangingTheSavedQueue() passed after 0.935 seconds.
+􁁛  Test offlineProgressUploadsOnRetryAndGuestHotSeatKeysStayLocal() passed after 0.936 seconds.
+􁁛  Test nativeMobileCloudAndJourneyWinsCountOnceWithoutWriting() passed after 0.936 seconds.
+􁁛  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() passed after 0.941 seconds.
+􁁛  Test defaultMobilePlayerDoesNotInheritOtherProfilesOrHotSeats() passed after 0.942 seconds.
+􁁛  Suite JourneyCompletionSummaryTests passed after 0.943 seconds.
+􁁛  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() passed after 0.941 seconds.
+􁁛  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() passed after 0.943 seconds.
+􁁛  Test staleDiscoveryCannotReplaceThePasswordCredential() passed after 0.944 seconds.
+􁁛  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() passed after 0.948 seconds.
+􁁛  Test syncPasswordGivesEveryDeviceTheSameValidVault() passed after 0.949 seconds.
+􁁛  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() passed after 0.949 seconds.
+􁁛  Test localChangesDuringMergeAreCapturedBeforeUpload() passed after 0.953 seconds.
+􁁛  Test corruptFutureAndWrongOwnerSavesArePreserved() passed after 0.958 seconds.
+􁁛  Test livePlayDefersImportAndKeepsTurnOwnership() passed after 1.060 seconds.
+􁁛  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() passed after 1.060 seconds.
+􁁛  Suite CloudKitLibraryTests passed after 1.061 seconds.
+􁁛  Test simultaneousConflictsUnionResultsWithoutDoubleCounting() passed after 1.062 seconds.
+􁁛  Test syncingStateAppearsBeforeProviderDiscovery() passed after 1.061 seconds.
+􁁛  Test slowCredentialServicesLeaveTheMainActorResponsive() passed after 1.073 seconds.
+􁁛  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() passed after 1.108 seconds.
+􁁛  Test previewBuildRestoresLatestSharedLibraryByDefault() passed after 1.134 seconds.
+􁁛  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() passed after 1.163 seconds.
+􁁛  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() passed after 1.164 seconds.
+􁁛  Test twoDevicesMergeProgressAndMapTheirDifferentPlayerIDs() passed after 1.177 seconds.
+􁁛  Suite GameCenterProgressTests passed after 1.177 seconds.
+􁁛  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() passed after 1.178 seconds.
+􁁛  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() passed after 1.200 seconds.
+􁁛  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() passed after 1.203 seconds.
+􁁛  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() passed after 1.214 seconds.
+􁁛  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() passed after 1.224 seconds.
+􁁛  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() passed after 1.226 seconds.
+􁁛  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() passed after 1.233 seconds.
+􁁛  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() passed after 1.250 seconds.
+􁁛  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() passed after 1.262 seconds.
+􁁛  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() passed after 1.264 seconds.
+􁁛  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() passed after 1.275 seconds.
+􁁛  Suite CloudLibraryTests passed after 1.277 seconds.
+􁁛  Test run with 85 tests in 10 suites passed after 1.277 seconds.
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.

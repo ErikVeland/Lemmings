@@ -303,12 +303,19 @@ import LemmingsGameArt
   }
 }
 
-/// A compact pixel face for installations without the Macintosh menu artwork.
+/// Prefer Lemmings lettering. The compact face is reserved for tiny HUD text or missing artwork.
 @MainActor enum GamePixelText {
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
                    preservesCase: Bool = false, color: NSColor? = nil,
                    numberPalette: MacInterfaceRenderer.Palette? = nil) {
+    if let context = NSGraphicsContext.current?.cgContext,
+       GameLemmingsTypography.draw(text, in: rect, height: min(rect.height, 7 * maxScale),
+        interface: GameMenuArtwork.renderer()?.interface,
+        palette: palette == .green ? .green : palette == .monochrome ? .monochrome : .blue,
+        color: color?.cgColor, highlighted: highlighted,
+        numberPalette: numberPalette.map { $0 == .green ? .green : $0 == .monochrome ? .monochrome : .blue },
+        preservesCase: preservesCase, context: context) { return }
     let source = text.replacingOccurrences(of: "×", with: "X")
     let normalized = preservesCase ? source.precomposedStringWithCanonicalMapping : BitmapLatinGlyphs.uppercase(source, locale: L10n.interface.locale)
     let bounds = GamePixelTypography.verticalBounds(of: normalized)
@@ -637,10 +644,15 @@ struct PrecisionZoomStatus: Equatable {
     }
     func draw(in bounds: CGRect) {
         guard let number else { return }
-        let rect = CGRect(x: floor(bounds.midX - 24), y: floor(bounds.midY - 28), width: 48, height: 56)
+        let rect = CGRect(x: floor(bounds.midX - 32), y: floor(bounds.midY - 40), width: 64, height: 80)
         NSColor.black.withAlphaComponent(0.75).setFill()
         rect.insetBy(dx: -8, dy: -8).fill()
-        GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
+        if let context = NSGraphicsContext.current?.cgContext {
+            if !GameLemmingsTypography.draw(String(number), in: rect, height: rect.height,
+                interface: GameMenuArtwork.renderer()?.interface, face: .large, palette: .green, context: context) {
+                GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
+            }
+        }
     }
 }
 #endif

@@ -1,0 +1,11 @@
+UI test windows: offscreen; audio: muted
+PASS free Zoom, profile Superzoom storage, recovery, legacy migration and damaged storage
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+PASS extra-skill chooser selection, cancel/confirm, accessible targets and keyboard; paused Inspect, badge/button hover, use and fading at three sizes
+PASS Classic/L2/L3 saved rare rewards, receipt labels, result renders, spend limits and bonus-result marker
+PASS native L2 chooser grant, one spend, replay/checkpoint, rewind provenance and paused clean retry
+PASS native L3 chooser charge, one spend, replay/checkpoint, rewind provenance and paused clean retry
+PASS actual Classic/L2/L3 chooser grants, once-per-attempt limits, checkpoint/replay provenance, rewind and retry
+PASS historical Journey counts, unique Resume, Solo/Hot Seat isolation, Classic/L2/L3 records, two renders and input targets

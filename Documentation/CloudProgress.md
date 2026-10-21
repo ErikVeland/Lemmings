@@ -139,6 +139,12 @@ data changed while a cloud fetch or merge was running.
 
 ## Scope limits
 
+The 2.1.2 work captures mobile L2/L3 campaign files even when no learning file
+exists. Solo and Hot Seat campaigns use separate storage scopes. Opening a
+sequel merges imported shared progress through the existing whole-chain rules
+before loading the campaign. Source checks do not establish live device sync.
+See the [shared checklist](ReleaseReadiness/2.1.2Checklist.md).
+
 Mid-level checkpoints, non-journey playlist queues, replay movie files, custom
 campaign files, imported paths and device settings remain local. Journey lesson
 queues, positions, wins and deferred lessons sync in their owning solo or Hot Seat

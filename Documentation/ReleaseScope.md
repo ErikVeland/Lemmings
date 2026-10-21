@@ -1,5 +1,10 @@
 # Release scope
 
+The next coordinated Apple release is tracked in the
+[shared 2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md). It separates
+implemented changes, headless verification, physical acceptance and distribution.
+Version 2.1.2 is not yet a release candidate.
+
 The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
 scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
 for the combined runtime and replay identities.

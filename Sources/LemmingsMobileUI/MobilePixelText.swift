@@ -33,6 +33,7 @@ import UIKit
     var alignment = NSTextAlignment.center { didSet { setNeedsDisplay() } }
     var maximumScale: CGFloat = 4 { didSet { setNeedsDisplay() } }
     var face = GameMenuTypography.Face.small { didSet { setNeedsDisplay() } }
+    var displayHeight: CGFloat? { didSet { setNeedsDisplay() } }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,7 +46,13 @@ import UIKit
     required init?(coder: NSCoder) { nil }
 
     override func draw(_ rect: CGRect) {
-        if wraps, let context = UIGraphicsGetCurrentContext(), let typography = MobileGameArt.typography {
+        if let displayHeight, let context = UIGraphicsGetCurrentContext(),
+           GameLemmingsTypography.draw(text, in: bounds, height: displayHeight,
+            interface: MobileGameArt.typography?.interface, face: face,
+            palette: palette == .blue ? .blue : palette == .warning ? .warning : .green,
+            alignment: alignment == .left ? .left : alignment == .right ? .right : .center, context: context) {
+            // Display lettering uses the same size-specific face as the Mac and TV countdowns.
+        } else if wraps, let context = UIGraphicsGetCurrentContext(), let typography = MobileGameArt.typography {
             GameTextLayout.draw(text, in: bounds, typography: typography, face: face,
                                 palette: palette == .blue ? .blue : .green,
                                 alignment: alignment == .left ? .left : alignment == .right ? .right : .center, context: context)

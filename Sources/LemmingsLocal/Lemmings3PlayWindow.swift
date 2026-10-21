@@ -558,7 +558,11 @@ import NxlvKit
         canvas.startCountdown.cancel(); canvas.menuRows = nil; refresh()
         let before = L3RunRecovery.stateHash(game)
         let selectedBefore = selected
-        try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings3")
+        try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings3", statusFrames: {
+            [self.canvas.statusReadoutFrame, self.canvas.gameMenuFrame].map {
+                self.canvas.convert($0, to: self.window!.contentView!)
+            }
+        })
         try checkGameplayQuickControl(L3RunRecovery.stateHash(game) == before && selected == selectedBefore && paused,
             "Lemmings 3 quick controls changed the run")
     }
@@ -1993,7 +1997,7 @@ import NxlvKit
                     label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
-        children.append(accessibleElements.element(id: "menu", owner: self, label: L10n.text("Game menu"), frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
+        children.append(accessibleElements.element(id: "menu", owner: self, label: L10n.text("Game menu"), frame: gameMenuFrame) { [weak self] in self?.onMenu?() })
         layoutTimeline()
         return children + timeline.accessibleControls(owner: self)
     }
@@ -2161,6 +2165,22 @@ import NxlvKit
     private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - (readOnlyReplay ? 0 : 38) - 212 * zoom) / 2) }
     private var origin: NSPoint { NSPoint(x: screenOrigin.x, y: screenOrigin.y + 12 * zoom) }
     var playfieldRect: CGRect { CGRect(x: origin.x, y: origin.y, width: 320 * zoom, height: 160 * zoom) }
+    private var statusText: String {
+        guard let game else { return "" }
+        let saved = "\(game.saved) \(game.saved * 100 / max(1, game.configuration.total))%"
+        let status = L10n.text("OUT \(game.released) SAVE \(saved) LEFT \(game.reserve) LOST \(game.lost)")
+        return menuRows == nil ? status + " " + deathCountdownText : status
+    }
+    var statusReadoutFrame: CGRect {
+        let text = BitmapLatinGlyphs.uppercase(statusText, locale: L10n.interface.locale)
+        let width = panelArt.map { $0.font.bitmap.horizontalBounds(of: text) }.map { CGFloat($0.right - $0.left) } ?? 0
+        return GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 2 * zoom, y: screenOrigin.y + 3 * zoom,
+            width: width * 0.65 * zoom, height: 8 * 0.65 * zoom), in: self, avoiding: [rewardBadgeRect])
+    }
+    var gameMenuFrame: CGRect {
+        GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 280 * zoom, y: screenOrigin.y,
+            width: 40 * zoom, height: 12 * zoom), in: self, avoiding: [statusReadoutFrame])
+    }
     var panelRect: CGRect { CGRect(x: origin.x, y: origin.y + 160 * zoom, width: 320 * zoom, height: 40 * zoom) }
     private let artworkRenderer = SequelArtworkRenderer()
     private var terrainCategory: SequelMacCategory = .organic
@@ -2536,7 +2556,7 @@ import NxlvKit
             return
         }
         if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: sx) { onPanel?(slot, event.clickCount); return }
-        if sy >= 0 && sy < 12 && sx >= 280 && sx < 320 { onMenu?(); return }
+        if gameMenuFrame.contains(point) { onMenu?(); return }
         guard playfieldRect.contains(point) else { return }
         let source = precisionLens.source(point)
         onClick?(Int((source.x - screenOrigin.x) / zoom + cameraX),
@@ -2627,10 +2647,16 @@ import NxlvKit
         let transform = NSAffineTransform(); transform.translateX(by: screenOrigin.x, yBy: screenOrigin.y); transform.scale(by: zoom); transform.concat()
         NSGraphicsContext.current?.imageInterpolation = .none
         NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 320, height: 12).fill()
-        let saved = "\(game.saved) \(game.saved * 100 / max(1, game.configuration.total))%"
-        let status = L10n.text("OUT \(game.released) SAVE \(saved) LEFT \(game.reserve) LOST \(game.lost)")
-        art.text(menuRows == nil ? status + " " + deathCountdownText : status, x: 2, y: 3, scale: 0.65)
-        if !readOnlyReplay { art.text(L10n.text("MENU"), x: 286, y: 3, scale: 0.8) }
+        func local(_ frame: CGRect) -> CGRect {
+            CGRect(x: (frame.minX - screenOrigin.x) / zoom, y: (frame.minY - screenOrigin.y) / zoom,
+                width: frame.width / zoom, height: frame.height / zoom)
+        }
+        local(statusReadoutFrame).insetBy(dx: -1, dy: -1).fill()
+        if !readOnlyReplay { local(gameMenuFrame).fill() }
+        art.text(statusText, x: (statusReadoutFrame.minX - screenOrigin.x) / zoom,
+            y: (statusReadoutFrame.minY - screenOrigin.y) / zoom, scale: 0.65)
+        if !readOnlyReplay { art.text(L10n.text("MENU"), x: (gameMenuFrame.minX - screenOrigin.x) / zoom + 6,
+            y: (gameMenuFrame.minY - screenOrigin.y) / zoom + 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left

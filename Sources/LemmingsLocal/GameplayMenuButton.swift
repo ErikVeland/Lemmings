@@ -1,6 +1,22 @@
 #if os(macOS)
 import AppKit
 
+@MainActor enum GameplayMenuLayout {
+    /// Passive readouts follow the icon row when their preferred position would be covered.
+    static func readout(_ preferred: CGRect, in view: NSView, avoiding other: [CGRect] = []) -> CGRect {
+        guard let root = view.window?.contentView else { return preferred }
+        let controls = root.subviews.compactMap { $0 as? GameplayMenuButton }
+            .filter { !$0.isHidden }.map { view.convert($0.frame, from: root) }
+        let obstacles = controls + other
+        var frame = preferred
+        for _ in 0...obstacles.count {
+            guard let obstacle = obstacles.first(where: { $0.intersects(frame) }) else { break }
+            frame.origin.y = view.isFlipped ? obstacle.maxY + 8 : obstacle.minY - frame.height - 8
+        }
+        return frame
+    }
+}
+
 /// Gaps in the control row consume clicks before they reach the playfield.
 @MainActor final class GameplayMenuHitArea: NSView {
     override func resetCursorRects() { addCursorRect(bounds, cursor: .arrow) }

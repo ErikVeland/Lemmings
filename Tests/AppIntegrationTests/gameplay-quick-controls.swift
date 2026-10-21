@@ -47,6 +47,10 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     try check(buttons.count == 5 && buttons.allSatisfy { $0.artworkOpacity == 0 } && balance == 0,
       "Five-control row and reward badges did not fade together")
     let sorted = buttons.sorted { $0.frame.minX < $1.frame.minX }
+    let menu = sorted.last!
+    try check(root.bounds.maxX - menu.frame.maxX == 12
+      && (flipped ? menu.frame.minY - root.bounds.minY : root.bounds.maxY - menu.frame.maxY) == 12,
+      "Control row did not anchor to the top-right corner")
     for (left, right) in zip(sorted, sorted.dropFirst()) {
       let gap = CGPoint(x: (left.frame.maxX + right.frame.minX) / 2, y: left.frame.midY)
       try check(keyboard.navigationFrame(in: root)!.contains(gap), "Control gap escaped playfield input exclusion")
@@ -77,7 +81,8 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
   print("PASS five-icon group, every gap, shared badge fade, both coordinate systems and Bonus skill availability")
 }
 
-@MainActor func validateGameplayQuickControls(_ keyboard: GameplayKeyboard, owner: NSWindow, name: String) throws {
+@MainActor func validateGameplayQuickControls(_ keyboard: GameplayKeyboard, owner: NSWindow, name: String,
+  statusFrames: () -> [CGRect] = { [] }) throws {
   GameScreen.shared.dismissAll()
   let oldFade = keyboard.fadeMenuButton, oldAvailable = keyboard.graphicsAvailable
   let oldReduction = keyboard.navigationReduceMotion
@@ -90,6 +95,15 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
   func checkRow(_ buttons: [GameplayMenuButton], in root: NSView) throws {
     let sorted = buttons.sorted { $0.frame.minX < $1.frame.minX }
     try check(sorted.last?.title == L10n.text("Menu"), name + " Menu was not rightmost")
+    let menu = sorted.last!
+    try check(root.bounds.maxX - menu.frame.maxX == 12
+      && (root.isFlipped ? menu.frame.minY - root.bounds.minY : root.bounds.maxY - menu.frame.maxY) == 12,
+      name + " quick controls did not follow the top-right corner")
+    let navigation = sorted.reduce(CGRect.null) { $0.union($1.frame) }
+    for frame in statusFrames() {
+      try check(root.bounds.contains(frame) && !navigation.intersects(frame),
+        name + " status text or game-menu target was covered by the icon row")
+    }
     for button in sorted {
       try check(root.bounds.contains(button.frame) && button.frame.size == CGSize(width: 44, height: 44)
         && button.frame.minY == sorted[0].frame.minY && button.glyph != nil,
@@ -130,7 +144,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
       try check(root.bounds.contains(button.frame) && button.frame.width >= 44 && button.frame.height >= 44,
         name + " clipped a quick control")
       let top = root.isFlipped ? button.frame.minY : root.bounds.maxY - button.frame.maxY
-      try check(top >= 64, name + " quick controls covered the top status text")
+      try check(top == 12, name + " quick controls retained the old top offset")
       try check(navigation.contains(button.frame), name + " cursor exclusion omitted a quick control")
       for point in [CGPoint(x: button.frame.midX, y: button.frame.midY),
                     CGPoint(x: button.frame.minX + 1, y: button.frame.minY + 1)] {

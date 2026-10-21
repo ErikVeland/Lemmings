@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 import NxlvKit
 
-/// Bitmap lettering shared by mobile drawing and headless captures.
+/// Tiny HUD lettering and compatibility entry point for the Lemmings typeface.
 public enum GamePixelTypography {
     private static let columns: [Character: [UInt8]] = [
         "A":[126,9,9,9,126], "B":[127,73,73,73,54], "C":[62,65,65,65,34],
@@ -128,18 +128,24 @@ public enum GamePixelTypography {
                 && typography.height(of: plain, face: face, scale: 2) <= rect.height
             let scale = doubled ? 2 : 1
             let height = typography.height(of: plain, face: face, scale: scale)
-            typography.menuLine(
-                text,
-                in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
-                context: context,
-                face: face,
-                scale: scale,
-                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
-                alpha: alpha,
-                palette: palette.menu
-            )
-            return
+            if typography.width(of: plain, face: face, scale: scale) <= rect.width && height <= rect.height {
+                typography.menuLine(
+                    text,
+                    in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
+                    context: context,
+                    face: face,
+                    scale: scale,
+                    alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                    alpha: alpha,
+                    palette: palette.menu
+                )
+                return
+            }
         }
+        if GameLemmingsTypography.draw(text, in: rect, height: min(rect.height, 7 * maximumScale),
+            interface: typography?.interface, face: face,
+            palette: palette == .green ? .green : palette == .warning ? .warning : .blue,
+            alignment: alignment, alpha: alpha, color: color, context: context) { return }
         let plain = BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale).replacingOccurrences(of: "×", with: "X")
         var normalized = plain
         if CGFloat(width(of: plain)) > rect.width {

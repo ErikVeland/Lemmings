@@ -12,7 +12,14 @@ extension MenuAudit {
             .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         var pages: [(String, GameFrontEnd.Page)] = [
             ("home", MobileHomeArt.page(journey: .init("journey", "Journey map"), families: families, initials: "LEM")),
-            ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume level")], journey: .init("journey", "Resume journey"), families: families, initials: "LEM v PAL")),
+            ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume journey - LEM v PAL")],
+                journey: MobileHomeArt.journeyMap(completed: 812), families: families, initials: "LEM v PAL")),
+            ("journey-progress", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
+                solved: 12, total: 227, revisit: 2, resume: nil, canContinue: true)),
+            ("journey-resume", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
+                solved: 12, total: 227, revisit: 2, resume: (13, 227), canContinue: true)),
+            ("journey-complete", MobileHomeArt.journeyPage(title: "Journey", completed: 1234,
+                solved: 227, total: 227, revisit: 0, resume: nil, canContinue: false)),
             ("welcome", MobileInformationArt.effectsWelcome()),
             ("whats-new", MobileInformationArt.whatsNew(version: "2.0")),
             ("consent", MobileInformationArt.telemetryConsent()),
@@ -35,6 +42,10 @@ extension MenuAudit {
             ("short-games-loading", ShortGamesArt.page(classicAvailable: false, loading: true)),
         ]
         let shortGames = ShortGamesArt.page(classicAvailable: true)
+        let completedJourney = MobileHomeArt.journeyPage(title: "Journey", completed: 1234,
+            solved: 227, total: 227, revisit: 0, resume: nil, canContinue: false)
+        guard completedJourney.footer.filter({ $0.primary && $0.enabled }).map(\.id) == ["home"],
+              !completedJourney.footer.contains(where: { $0.id == "learningStart" }) else { throw invalidTargets(line: #line) }
         guard shortGames.rows.count == 3, shortGames.rows.filter(\.enabled).map(\.id) == ["shortSelect.classic"],
               shortGames.footer.first?.isBackNavigation == true,
               shortGames.footer.last?.id == "shortPlay", shortGames.footer.last?.primary == true,
@@ -76,6 +87,7 @@ extension MenuAudit {
         let devices: [(String, CGSize, Bool)] = [("phone-narrow", .init(width: 320, height: 548), false),
             ("phone", .init(width: 390, height: 763), false), ("phone-landscape", .init(width: 568, height: 300), false),
             ("tablet", .init(width: 1194, height: 834), false), ("mac", .init(width: 1120, height: 720), false),
+            ("duo-book", .init(width: 1096, height: 768), false), ("duo-stacked", .init(width: 768, height: 1096), false),
             ("tv", .init(width: 1920, height: 1080), true)]
         var evidence: [[String: Any]] = []
         var renders = 0

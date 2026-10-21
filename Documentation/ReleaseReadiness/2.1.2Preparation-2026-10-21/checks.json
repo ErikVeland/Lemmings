@@ -1,0 +1,119 @@
+{
+  "baseCommit": "005e53862b95223d69c4149fd0221e80a711f005",
+  "clientDate": "2026-10-21",
+  "currentChangedSourceHashes": {
+    "Scripts/check-apple-ui-sdk.sh": "d269d4f04e62c2a7cc725ac769e1e5aa411bd70305ca5246b320227e88f3c1d6",
+    "Sources/LemmingsAppCore/Collections/JourneyCompletionSummary.swift": "1b7bbebdd307e39a74a00976988f962d222d4f2a9e64e0615bd2037cf9c7ad2f",
+    "Sources/LemmingsGameArt/MobileHomeArt.swift": "a02daed8607841cd1ab26316904759f1cf5a62b9f54879bf3f6eddbfc4c82218",
+    "Sources/LemmingsLocal/main.swift": "d273c056318f3b753077d05cbe35ee1048eb04461285dd34497e12be6208b676",
+    "Sources/LemmingsMobileCore/Lemmings3MobileLibrary.swift": "e8f16286f19a0c26c55b1d30a00b625bf41e91141376452f7fb1ac47e1a2992d",
+    "Sources/LemmingsMobileCore/MobileCampaignProgress.swift": "5407533c084ad0b10fd1ee2594a07e4c3524aea1525019c965f3715b619bd3b2",
+    "Sources/LemmingsMobileCore/MobileCheckpoint.swift": "0f3428547b318ebf58a4b20e97da14c42d6c97c443edf1d21aa9a69b52e1dec4",
+    "Sources/LemmingsMobileCore/MobileStorage.swift": "edda67afb4dcf522358daff3fd58d5c4b7a667eb74a5bcbebfe069bc2cf79f5f",
+    "Sources/LemmingsMobileUI/MobileCloudLibrary.swift": "a5bc45897ddcf7ca5946b2fe96883a6cd506e6843a9986ec2fdc05f4be4cf0f6",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "e13a4f4efdc8ebb1b56697080ec7904497c4b083b60b241860773c733eac8fe2",
+    "Sources/LemmingsMobileUI/MobileLibraryLearning.swift": "56bff649254ded2fd402a9626a4cbf2d492cd69e1ccf75744e77c01c5bc0768f",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "35f29c068ca0683ceb129a8757b75c534ce0908de0708fc15ff809e462c694c0",
+    "Tests/LemmingsAppCoreTests/JourneyCompletionSummaryTests.swift": "b21d904770025d5c717a1e511163dbe387d0706e49547feb02e05aaa87d0cb27",
+    "Tests/LemmingsMobileCoreTests/MobileCampaignProgressTests.swift": "847beeb6111ecdd0e16d8b6386e299b294823037ce7bffec16a93abb469d4aa2",
+    "Tests/LemmingsMobileCoreTests/MobileCheckpointOwnershipTests.swift": "29e6aa519db7d7c0fa21208803caddfd0c4a428be0339b6239ebd529fb8b9c92",
+    "Tests/LemmingsMobileCoreTests/MobileExtraSkillTests.swift": "494928c557d8fa7a66a90f1053aea80ef4f63d273099203500773ad471237a75",
+    "Tools/IOSMenuAudit/navigation.swift": "27c22eabefb79fdd42331280b82dec127f3c7f14f445ec4f441ccbb783b0e4a7"
+  },
+  "foregroundOrSimulatorLaunch": false,
+  "installedResourceApp": {
+    "build": 95,
+    "path": "/Applications/Ultimate Lemmings.app",
+    "version": "2.1.1"
+  },
+  "localisation": {
+    "exitCode": 0,
+    "humanReview": "pending",
+    "log": "localisation.log"
+  },
+  "macControls": {
+    "engines": [
+      "Classic",
+      "Lemmings 2",
+      "Lemmings 3"
+    ],
+    "exitCode": 0,
+    "log": "mac-controls-runtime.log",
+    "nativeMouseDispatch": "skipped offscreen",
+    "sequelLayerCompositing": "not established by these captures"
+  },
+  "macJourney": {
+    "actualBonusGrantCheckpointReplayRewindRetry": "passed across Classic/L2/L3",
+    "exitCode": 0,
+    "log": "mac-journey-runtime.log"
+  },
+  "navigation": {
+    "bitmapRenders": 640,
+    "completedJourneyPrimary": "Back; unavailable Continue omitted",
+    "exitCode": 0,
+    "geometries": 8,
+    "interfaceSizes": 3,
+    "layouts": 1920,
+    "log": "navigation.log",
+    "nativeUIKitDispatch": false,
+    "states": 80,
+    "usesProductionJourneyPageBuilder": true
+  },
+  "openLimits": [
+    "ordinary mobile playlist queue binding",
+    "legacy checkpoint queue provenance",
+    "physical device/input/accessibility/live cloud acceptance",
+    "sequel control-row compositing",
+    "source freeze and final package/distribution checks",
+    "mobile/TV standalone-checkpoint Journey Map navigation parity"
+  ],
+  "recordedAtUTC": "2026-10-21T10:32:31.367658+00:00",
+  "remainingFailures": [
+    {
+      "check": "current-fixes replay overlay",
+      "exitCode": 133,
+      "location": "Tools/IOSMenuAudit/current-fixes.swift:79",
+      "log": "replay-overlay.log",
+      "status": "reproduced, not repaired"
+    }
+  ],
+  "schemaVersion": 1,
+  "sdk": {
+    "ios": {
+      "applicationEntryPoint": "passed",
+      "exitCode": 0,
+      "modules": 8,
+      "sdk": "27.2",
+      "sourceManifest": "ios-inputs.json",
+      "subsequentSourceDrift": [
+        "LemmingsGameArt/GameLemmingsTypography.swift",
+        "LemmingsGameArt/GameMenuTypography.swift"
+      ]
+    },
+    "tvos": {
+      "applicationEntryPoint": "passed",
+      "exitCode": 0,
+      "modules": 8,
+      "sdk": "27.2",
+      "sourceManifest": "tvos-inputs.json",
+      "subsequentSourceDrift": [
+        "LemmingsGameArt/GameLemmingsTypography.swift",
+        "LemmingsGameArt/GameMenuTypography.swift"
+      ]
+    }
+  },
+  "sharedTests": {
+    "exitCode": 0,
+    "initialL2DebugStackFailure": "Resolved by running the unchanged Bonus skill test on the main actor, matching gameplay.",
+    "log": "progress-recovery-final.log",
+    "suites": 10,
+    "tests": 85
+  },
+  "status": "headless preparation; not a release candidate",
+  "testAudio": "muted",
+  "testWindows": "offscreen",
+  "zoom": {
+    "exitCode": 0,
+    "log": "precision-zoom.log"
+  }
+}

@@ -1,0 +1,721 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+[0/1] Planning build
+Building for debugging...
+[0/12] Write sources
+[1/12] Write swift-version-39B54973F684ADAB.txt
+[3/37] Compiling NxlvKit AdaptiveDJDirector.swift
+[4/37] Compiling NxlvKit AdaptiveDJEngine.swift
+[5/37] Compiling NxlvKit AdlibSequencer.swift
+[6/37] Compiling NxlvKit AmigaSoundBank.swift
+[7/37] Compiling NxlvKit AmigaVersusCampaign.swift
+[8/37] Compiling NxlvKit ArcadeLevelDecoder.swift
+[9/37] Compiling NxlvKit ArcadeRecords.swift
+[10/37] Compiling NxlvKit ArchivalAudioRegistry.swift
+[11/37] Compiling NxlvKit ArchivalCatalog.swift
+[12/37] Compiling NxlvKit ArchivalGraphicsRegistry.swift
+[13/37] Compiling NxlvKit AssignmentFocus.swift
+[14/37] Compiling NxlvKit AssignmentPointerShape.swift
+[15/37] Compiling NxlvKit BitmapLatinGlyphs.swift
+[16/37] Compiling NxlvKit BitmapTamilGlyphs.swift
+[17/37] Compiling NxlvKit BundledGameResources.swift
+[18/37] Compiling NxlvKit ClassicADFVolume.swift
+[19/37] Compiling NxlvKit ClassicAchievements.swift
+[20/37] Compiling NxlvKit ClassicCampaign.swift
+[21/37] Compiling NxlvKit ClassicDATArchive.swift
+[22/37] Compiling NxlvKit ClassicDOSReplay.swift
+[23/37] Compiling NxlvKit ClassicDOSRewind.swift
+[24/37] Compiling NxlvKit ClassicDOSSimulation.swift
+[25/37] Compiling NxlvKit ClassicDataSet.swift
+[26/37] Compiling NxlvKit ClassicDifficultyAnalysis.swift
+[27/37] Emitting module NxlvKit
+[28/85] Compiling NxlvKit DifficultyCalibration.swift
+[29/85] Compiling NxlvKit DifficultyCorpus.swift
+[30/85] Compiling NxlvKit DifficultyDiagnostics.swift
+[31/85] Compiling NxlvKit DifficultyPerturbation.swift
+[32/85] Compiling NxlvKit DifficultyProfile.swift
+[33/85] Compiling NxlvKit DifficultyTechniques.swift
+[34/85] Compiling NxlvKit DoubleTap.swift
+[35/85] Compiling NxlvKit ExplosionPixelSpray.swift
+[36/85] Compiling NxlvKit ExtraSkillRewards.swift
+[37/85] Compiling NxlvKit FLICMovie.swift
+[38/85] Compiling NxlvKit FanLevelReader.swift
+[39/85] Compiling NxlvKit FanPackUpdater.swift
+[40/85] Compiling NxlvKit GameAssetCache.swift
+[41/85] Compiling NxlvKit GameplaySoundPosition.swift
+[42/85] Compiling NxlvKit GameplaySpeed.swift
+[43/85] Compiling NxlvKit GameplayStartCountdown.swift
+[44/85] Compiling NxlvKit GameplaySupplementSounds.swift
+[45/85] Compiling NxlvKit GenesisFMPlayer.swift
+[46/85] Compiling NxlvKit GenesisLevelDecoder.swift
+[47/85] Compiling NxlvKit InterfaceLocalisation.swift
+[48/85] Compiling NxlvKit LastSecondsWarning.swift
+[49/85] Compiling NxlvKit LearningJourney.swift
+[50/85] Compiling NxlvKit LearningRouteSafety.swift
+[51/85] Compiling NxlvKit LemmingApproachTargeting.swift
+[52/109] Compiling NxlvKit ClassicFanArtwork.swift
+[53/109] Compiling NxlvKit ClassicFanPack.swift
+[54/109] Compiling NxlvKit ClassicGameFlow.swift
+[55/109] Compiling NxlvKit ClassicGraphics.swift
+[56/109] Compiling NxlvKit ClassicHolidayCampaign.swift
+[57/109] Compiling NxlvKit ClassicLevel.swift
+[58/109] Compiling NxlvKit ClassicMacArtwork.swift
+[59/109] Compiling NxlvKit ClassicMacMusicLibrary.swift
+[60/109] Compiling NxlvKit ClassicMacReleaseRate.swift
+[61/109] Compiling NxlvKit ClassicMacResources.swift
+[62/109] Compiling NxlvKit ClassicMacUserInterface.swift
+[63/109] Compiling NxlvKit ClassicMainDAT.swift
+[64/109] Compiling NxlvKit ClassicMonochromeBackpack.swift
+[65/109] Compiling NxlvKit ClassicSaga.swift
+[66/109] Compiling NxlvKit ClassicSampleBank.swift
+[67/109] Compiling NxlvKit ClassicSceneFrame.swift
+[68/109] Compiling NxlvKit ClassicSettings.swift
+[69/109] Compiling NxlvKit ClassicSolutionGhost.swift
+[70/109] Compiling NxlvKit ClassicSoundCue.swift
+[71/109] Compiling NxlvKit ClassicStyleResolver.swift
+[72/109] Compiling NxlvKit ControllerBindings.swift
+[73/109] Compiling NxlvKit ControllerButtonEdge.swift
+[74/109] Compiling NxlvKit CursorCamera.swift
+[75/109] Compiling NxlvKit DeviceEffectResources.swift
+[76/133] Compiling NxlvKit Lemmings2AirCollision.swift
+[77/133] Compiling NxlvKit Lemmings2AirPhysics.swift
+[78/133] Compiling NxlvKit Lemmings2Ark.swift
+[79/133] Compiling NxlvKit Lemmings2Award.swift
+[80/133] Compiling NxlvKit Lemmings2Campaign.swift
+[81/133] Compiling NxlvKit Lemmings2Chain.swift
+[82/133] Compiling NxlvKit Lemmings2ClassicCampaign.swift
+[83/133] Compiling NxlvKit Lemmings2Climbing.swift
+[84/133] Compiling NxlvKit Lemmings2Controls.swift
+[85/133] Compiling NxlvKit Lemmings2Ending.swift
+[86/133] Compiling NxlvKit Lemmings2Explosion.swift
+[87/133] Compiling NxlvKit Lemmings2FanPhysics.swift
+[88/133] Compiling NxlvKit Lemmings2FillParticle.swift
+[89/133] Compiling NxlvKit Lemmings2FrontEnd.swift
+[90/133] Compiling NxlvKit Lemmings2GAL.swift
+[91/133] Compiling NxlvKit Lemmings2InteractiveObjects.swift
+[92/133] Compiling NxlvKit Lemmings2Introduction.swift
+[93/133] Compiling NxlvKit Lemmings2Level.swift
+[94/133] Compiling NxlvKit Lemmings2MacArtwork.swift
+[95/133] Compiling NxlvKit Lemmings2MacRuleTables.swift
+[96/133] Compiling NxlvKit Lemmings2MagnoBoots.swift
+[97/133] Compiling NxlvKit Lemmings2Objects.swift
+[98/133] Compiling NxlvKit Lemmings2PoleVault.swift
+[99/133] Compiling NxlvKit Lemmings2Practice.swift
+[100/156] Compiling NxlvKit Lemmings2Projectile.swift
+[101/156] Compiling NxlvKit Lemmings2RailMachine.swift
+[102/156] Compiling NxlvKit Lemmings2ReplayWitness.swift
+[103/156] Compiling NxlvKit Lemmings2Rope.swift
+[104/156] Compiling NxlvKit Lemmings2Runtime.swift
+[105/156] Compiling NxlvKit Lemmings2Shimmy.swift
+[106/156] Compiling NxlvKit Lemmings2SkiPhysics.swift
+[107/156] Compiling NxlvKit Lemmings2SkillRules.swift
+[108/156] Compiling NxlvKit Lemmings2SoundBank.swift
+[109/156] Compiling NxlvKit Lemmings2SpecialGraphics.swift
+[110/156] Compiling NxlvKit Lemmings2Sprites.swift
+[111/156] Compiling NxlvKit Lemmings2StoneCollision.swift
+[112/156] Compiling NxlvKit Lemmings2Style.swift
+[113/156] Compiling NxlvKit Lemmings2Superlem.swift
+[114/156] Compiling NxlvKit Lemmings2TerrainMasks.swift
+[115/156] Compiling NxlvKit Lemmings2TimedTrap.swift
+[116/156] Compiling NxlvKit Lemmings2Viewport.swift
+[117/156] Compiling NxlvKit Lemmings2Walker.swift
+[118/156] Compiling NxlvKit Lemmings3Brand.swift
+[119/156] Compiling NxlvKit Lemmings3ClassicCampaign.swift
+[120/156] Compiling NxlvKit Lemmings3Font.swift
+[121/156] Compiling NxlvKit Lemmings3Level.swift
+[122/156] Compiling NxlvKit Lemmings3Runtime.swift
+[123/156] Compiling NxlvKit Lemmings3Scene.swift
+[124/179] Compiling NxlvKit Lemmings3SoundBank.swift
+[125/179] Compiling NxlvKit Lemmings3Sprites.swift
+[126/179] Compiling NxlvKit Lemmings3Style.swift
+[127/179] Compiling NxlvKit LemmingsSimulation.swift
+[128/179] Compiling NxlvKit LevelCatalogue.swift
+[129/179] Compiling NxlvKit LevelPlaylist.swift
+[130/179] Compiling NxlvKit LevelSkips.swift
+[131/179] Compiling NxlvKit MenuThemeSelection.swift
+[132/179] Compiling NxlvKit ModernCampaignProgress.swift
+[133/179] Compiling NxlvKit ModernLemmingsEngine.swift
+[134/179] Compiling NxlvKit MusicLibraryCatalogue.swift
+[135/179] Compiling NxlvKit MusicLibraryInstaller.swift
+[136/179] Compiling NxlvKit MusicPlaybackCatalogue.swift
+[137/179] Compiling NxlvKit MusicRhythmCatalogue.swift
+[138/179] Compiling NxlvKit MusicTimingCatalogue.swift
+[139/179] Compiling NxlvKit NeoLemmixCompatibility.swift
+[140/179] Compiling NxlvKit NeoLemmixDifficultyAnalysis.swift
+[141/179] Compiling NxlvKit NeoLemmixFinalState.swift
+[142/179] Compiling NxlvKit NeoLemmixLibrary.swift
+[143/179] Compiling NxlvKit NeoLemmixMacArtwork.swift
+[144/179] Compiling NxlvKit NeoLemmixPack.swift
+[145/179] Compiling NxlvKit NeoLemmixPickupGraphics.swift
+[146/179] Compiling NxlvKit NeoLemmixRenderOrder.swift
+[147/202] Compiling NxlvKit SNESAudioPlayer.swift
+[148/202] Compiling NxlvKit SNESLevelDecoder.swift
+[149/202] Compiling NxlvKit SequelBinary.swift
+[150/202] Compiling NxlvKit SequelBitmapFont.swift
+[151/202] Compiling NxlvKit SkillShortcuts.swift
+[152/202] Compiling NxlvKit SkillVocabulary.swift
+[153/202] Compiling NxlvKit SoundtrackCatalogue.swift
+[154/202] Compiling NxlvKit TouchpadJog.swift
+[155/202] Compiling NxlvKit TrolleyAchievementCollection.swift
+[156/202] Compiling NxlvKit TrolleyAffinity.swift
+[157/202] Compiling NxlvKit TrolleyAttempt.swift
+[158/202] Compiling NxlvKit TrolleyCelebration.swift
+[159/202] Compiling NxlvKit TrolleyHistory.swift
+[160/202] Compiling NxlvKit TrolleyLeaderboards.swift
+[161/202] Compiling NxlvKit TrolleyMaximum.swift
+[162/202] Compiling NxlvKit TrolleyOnlineScores.swift
+[163/202] Compiling NxlvKit TrolleyPhilosophy.swift
+[164/202] Compiling NxlvKit TrolleyProofCatalogue.swift
+[165/202] Compiling NxlvKit TrolleyRescueGoals.swift
+[166/202] Compiling NxlvKit UnifiedGameLibrary.swift
+[167/202] Compiling NxlvKit VinylMotion.swift
+[168/202] Compiling NxlvKit ZipArchive.swift
+[169/202] Compiling NxlvKit resource_bundle_accessor.swift
+[170/202] Compiling NxlvKit NeoLemmixSceneFrame.swift
+[171/202] Compiling NxlvKit NeoLemmixSimulation.swift
+[172/202] Compiling NxlvKit NeoLemmixSoundCue.swift
+[173/202] Compiling NxlvKit NxlvDocument.swift
+[174/202] Compiling NxlvKit NxlvLevel.swift
+[175/202] Compiling NxlvKit NxlvRenderer.swift
+[176/202] Compiling NxlvKit NxlvStyleResolver.swift
+[177/202] Compiling NxlvKit NxlvTypes.swift
+[178/202] Compiling NxlvKit NxrpReplay.swift
+[179/202] Compiling NxlvKit NxrpReplayPlayback.swift
+[180/202] Compiling NxlvKit OPL2.swift
+[181/202] Compiling NxlvKit PlatformProfile.swift
+[182/202] Compiling NxlvKit PlayerControlSettings.swift
+[183/202] Compiling NxlvKit PortExclusivePack.swift
+[184/202] Compiling NxlvKit PrecisionZoomLedger.swift
+[185/202] Compiling NxlvKit PrecisionZoomLens.swift
+[186/202] Compiling NxlvKit PrecisionZoomScrollGesture.swift
+[187/202] Compiling NxlvKit ProTrackerEnhancements.swift
+[188/202] Compiling NxlvKit ProTrackerModule.swift
+[189/202] Compiling NxlvKit ProTrackerPercussion.swift
+[190/202] Compiling NxlvKit ProgressionPlaylist.swift
+[191/202] Compiling NxlvKit ReplayMoveNavigation.swift
+[192/202] Compiling NxlvKit RescueCelebration.swift
+[193/219] Emitting module LemmingsAppCore
+[194/219] Compiling LemmingsAppCore AppStorage.swift
+[195/219] Compiling LemmingsAppCore ClassicSourceRevision.swift
+[196/219] Compiling LemmingsAppCore JourneyCompletionSummary.swift
+[197/219] Compiling LemmingsAppCore LearningJourneyLibrary.swift
+[198/219] Compiling LemmingsAppCore LevelPlaylistStore.swift
+[199/219] Compiling LemmingsAppCore RecordLevelNavigation.swift
+[200/219] Compiling LemmingsAppCore ShortPlayCatalogue.swift
+[201/219] Compiling LemmingsAppCore ClassicRouteRecorder.swift
+[202/219] Compiling LemmingsAppCore DifficultyLibrary.swift
+[203/219] Compiling LemmingsAppCore LevelHints.swift
+[204/219] Compiling LemmingsAppCore ControllerStepFeedback.swift
+[205/219] Compiling LemmingsAppCore GameplayCommands.swift
+[206/219] Compiling LemmingsAppCore AnonymousTelemetry.swift
+[207/219] Compiling LemmingsAppCore ArcadeRecordFile.swift
+[208/219] Compiling LemmingsAppCore ArcadeStore.swift
+[209/219] Compiling LemmingsAppCore LegacySaveMigration.swift
+[210/219] Compiling LemmingsAppCore AppleGameProgressTransport.swift
+[211/219] Compiling LemmingsAppCore CloudKitLibraryStore.swift
+[212/236] Compiling LemmingsAppCore CloudLibraryArchive.swift
+[213/236] Compiling LemmingsAppCore CloudLibrarySync.swift
+[214/236] Compiling LemmingsAppCore CloudLibraryTransport.swift
+[215/236] Compiling LemmingsAppCore GameCenterProgressSync.swift
+[216/236] Compiling LemmingsAppCore GameCenterScores.swift
+[217/236] Compiling LemmingsAppCore GameProgressPreferences.swift
+[218/236] Compiling LemmingsAppCore HostedRankings.swift
+[219/236] Compiling LemmingsAppCore HotSeatGhost.swift
+[220/236] Compiling LemmingsAppCore LeaderboardActionReplay.swift
+[221/236] Compiling LemmingsAppCore LeaderboardClassicReplay.swift
+[222/236] Compiling LemmingsAppCore LemmingInspection.swift
+[223/236] Compiling LemmingsAppCore ReplayMovie.swift
+[224/236] Compiling LemmingsAppCore ResultAwards.swift
+[225/236] Compiling LemmingsAppCore TrolleyBundledProofs.swift
+[226/236] Compiling LemmingsAppCore TrolleyCapture.swift
+[227/236] Compiling LemmingsAppCore VerifiedSolution.swift
+[228/236] Compiling LemmingsAppCore RunRecovery.swift
+[229/261] Emitting module LemmingsMobileCore
+[230/261] Compiling LemmingsMobileCore ClassicFanMobileLibrary.swift
+[231/261] Compiling LemmingsMobileCore ClassicMobileArtworkCache.swift
+[232/261] Compiling LemmingsMobileCore ClassicMobileSession.swift
+[233/261] Compiling LemmingsMobileCore ClassicOhYesMobileLibrary.swift
+[234/261] Compiling LemmingsMobileCore Lemmings2MobileLibrary.swift
+[235/261] Compiling LemmingsMobileCore Lemmings2MobileSceneRenderer.swift
+[236/261] Compiling LemmingsMobileCore Lemmings3MobileLibrary.swift
+[237/261] Compiling LemmingsMobileCore Lemmings3MobileSceneRenderer.swift
+[238/261] Compiling LemmingsMobileCore MobileBitmapRenderer.swift
+[239/261] Compiling LemmingsMobileCore MobileBuildInfo.swift
+[240/261] Compiling LemmingsMobileCore MobileCampaignProgress.swift
+[241/261] Compiling LemmingsMobileCore MobileCatalogue.swift
+[242/261] Compiling LemmingsMobileCore MobileCheckpoint.swift
+[243/261] Compiling LemmingsMobileCore MobileCollectionsBridge.swift
+[244/261] Compiling LemmingsMobileCore MobileContentStore.swift
+[245/261] Compiling LemmingsMobileCore MobileControllerConnection.swift
+[246/261] Compiling LemmingsMobileCore MobileDirectionPickerLayout.swift
+[247/261] Compiling LemmingsMobileCore MobileDisplayRegions.swift
+[248/261] Compiling LemmingsMobileCore MobileFanCountStore.swift
+[249/261] Compiling LemmingsMobileCore MobileFavourites.swift
+[250/261] Compiling LemmingsMobileCore MobileGameResult.swift
+[251/261] Compiling LemmingsMobileCore MobileGameSession.swift
+[252/261] Compiling LemmingsMobileCore MobileGeometry.swift
+[253/261] Compiling LemmingsMobileCore MobileHUDLayout.swift
+[254/285] Compiling LemmingsMobileCore MobileHUDPress.swift
+[255/285] Compiling LemmingsMobileCore MobileHomeBackdrop.swift
+[256/285] Compiling LemmingsMobileCore MobileHotSeat.swift
+[257/285] Compiling LemmingsMobileCore MobileHotSeatGhosts.swift
+[258/285] Compiling LemmingsMobileCore MobileIndexedTerrain.swift
+[259/285] Compiling LemmingsMobileCore MobileLayout.swift
+[260/285] Compiling LemmingsMobileCore MobileLearning.swift
+[261/285] Compiling LemmingsMobileCore MobileLevelPreparation.swift
+[262/285] Compiling LemmingsMobileCore MobileLibrary.swift
+[263/285] Compiling LemmingsMobileCore MobileLifecycle.swift
+[264/285] Compiling LemmingsMobileCore MobileMusicAssignment.swift
+[265/285] Compiling LemmingsMobileCore MobilePauseSummary.swift
+[266/285] Compiling LemmingsMobileCore MobilePerformance.swift
+[267/285] Compiling LemmingsMobileCore MobilePlayState.swift
+[268/285] Compiling LemmingsMobileCore MobilePlaylists.swift
+[269/285] Compiling LemmingsMobileCore MobileProgressionBuilder.swift
+[270/285] Compiling LemmingsMobileCore MobileSettings.swift
+[271/285] Compiling LemmingsMobileCore MobileShortPlayCatalogue.swift
+[272/285] Compiling LemmingsMobileCore MobileStorage.swift
+[273/285] Compiling LemmingsMobileCore MobileTargeting.swift
+[274/285] Compiling LemmingsMobileCore MobileTouchRouter.swift
+[275/285] Compiling LemmingsMobileCore MobileViewport.swift
+[276/285] Compiling LemmingsMobileCore NeoLemmixMobileSupport.swift
+[277/285] Compiling LemmingsMobileCore SequelMobileSessions.swift
+[278/289] Emitting module LemmingsTVCore
+[279/289] Compiling LemmingsTVCore TVActivationGate.swift
+[280/289] Compiling LemmingsTVCore TVControllerBindings.swift
+[281/289] Compiling LemmingsTVCore TVControllerButtonEvents.swift
+[282/289] Compiling LemmingsTVCore TVExperience.swift
+[283/289] Compiling LemmingsTVCore TVFrontendMigration.swift
+[284/294] Compiling LemmingsTVCore TVLibrarySource.swift
+[285/294] Compiling LemmingsTVCore TVMobileMigration.swift
+[286/294] Compiling LemmingsTVCore TVSaveBackup.swift
+[287/294] Compiling LemmingsTVCore TVTargetLock.swift
+[288/294] Compiling LemmingsTVCore TVTimelineTransport.swift
+[289/316] Compiling LemmingsGameArt AdaptiveFXPerformance.swift
+[290/316] Compiling LemmingsGameArt AdaptiveFXQuality.swift
+[291/316] Compiling LemmingsGameArt BombCountdownRenderer.swift
+[292/316] Compiling LemmingsGameArt CRTSettings.swift
+[293/316] Compiling LemmingsGameArt CRTShaders.swift
+[294/316] Compiling LemmingsGameArt CloudSyncArt.swift
+[295/316] Compiling LemmingsGameArt ExplosionGlow.swift
+[296/316] Compiling LemmingsGameArt FailureMoodArt.swift
+[297/316] Compiling LemmingsGameArt GameDisplayArt.swift
+[298/316] Compiling LemmingsGameArt GameFooterGrid.swift
+[299/316] Compiling LemmingsGameArt GameFrontEnd.swift
+[300/316] Compiling LemmingsGameArt GameHomeBackdropArt.swift
+[301/316] Compiling LemmingsGameArt GameHomeLogoArt.swift
+[302/316] Compiling LemmingsGameArt GameLemmingsCountdownFace.swift
+[303/316] Compiling LemmingsGameArt GameLemmingsDisplayFace.swift
+[304/316] Compiling LemmingsGameArt GameLemmingsTypography.swift
+[305/316] Compiling LemmingsGameArt GameMenuFrameArt.swift
+[306/316] Compiling LemmingsGameArt GameMenuLogo.swift
+[307/316] Compiling LemmingsGameArt GameMenuTypography.swift
+[308/316] Compiling LemmingsGameArt GameMinimapArt.swift
+[309/316] Compiling LemmingsGameArt GamePixelTypography.swift
+[310/316] Emitting module LemmingsGameArt
+[311/358] Compiling LemmingsGameArt GamePortraitArt.swift
+[312/358] Compiling LemmingsGameArt GameRecoveryArt.swift
+[313/358] Compiling LemmingsGameArt GameSemanticText.swift
+[314/358] Compiling LemmingsGameArt GameStarArt.swift
+[315/358] Compiling LemmingsGameArt GameStoneArt.swift
+[316/358] Compiling LemmingsGameArt GameSupport.swift
+[317/358] Compiling LemmingsGameArt GameTextLayout.swift
+[318/358] Compiling LemmingsGameArt GameUnfoldArt.swift
+[319/358] Compiling LemmingsGameArt GameplayHDR.swift
+[320/358] Compiling LemmingsGameArt GhostSolutionArt.swift
+[321/358] Compiling LemmingsGameArt LemmingInspectionArt.swift
+[322/358] Compiling LemmingsGameArt LemmingSelectionRenderer.swift
+[323/358] Compiling LemmingsGameArt LevelBrowserGeometry.swift
+[324/358] Compiling LemmingsGameArt LevelCoverArt.swift
+[325/358] Compiling LemmingsGameArt MobileBookHomeArt.swift
+[326/358] Compiling LemmingsGameArt MobileCareerArt.swift
+[327/358] Compiling LemmingsGameArt MobileExtraSkillArt.swift
+[328/358] Compiling LemmingsGameArt MobileHUDRenderer.swift
+[329/358] Compiling LemmingsGameArt MobileHomeArt.swift
+[330/358] Compiling LemmingsGameArt MobileInformationArt.swift
+[331/358] Compiling LemmingsGameArt MobilePauseArt.swift
+[332/358] Compiling LemmingsGameArt MobileReplaySkillArt.swift
+[333/358] Compiling LemmingsGameArt MobileReplayTitleArt.swift
+[334/358] Compiling LemmingsGameArt MobileRescueArt.swift
+[335/358] Compiling LemmingsGameArt MobileResultAchievementsArt.swift
+[336/358] Compiling LemmingsGameArt MobileSettingsArt.swift
+[337/358] Compiling LemmingsGameArt MobileSolutionSelectorArt.swift
+[338/358] Compiling LemmingsGameArt MobileTurnArt.swift
+[339/358] Compiling LemmingsGameArt MusicTitleCard.swift
+[340/358] Compiling LemmingsGameArt PanelGlyphArt.swift
+[341/358] Compiling LemmingsGameArt ReplayMoveArt.swift
+[342/358] Compiling LemmingsGameArt RescueBackgroundGlow.swift
+[343/358] Compiling LemmingsGameArt SelectionFade.swift
+[344/358] Compiling LemmingsGameArt ShortGamesArt.swift
+[345/358] Compiling LemmingsGameArt SkillPointerBadge.swift
+[346/358] Compiling LemmingsGameArt SolutionSwitchArt.swift
+[347/358] Compiling LemmingsGameArt SpeedPanelArt.swift
+[348/358] Compiling LemmingsGameArt SpriteAssignmentPulse.swift
+[349/358] Compiling LemmingsGameArt TVMenuArt.swift
+[350/358] Compiling LemmingsGameArt TVMenuPresentation.swift
+[351/358] Compiling LemmingsGameArt TVPlayfieldArt.swift
+[352/358] Compiling LemmingsGameArt TVSharedMenuArt.swift
+[353/374] Compiling LemmingsLocal GameplayMenuButton.swift
+[354/374] Compiling LemmingsLocal Lemmings2PlayWindow.swift
+[355/374] Compiling LemmingsMobileMenuAudit book-home.swift
+[356/374] Compiling LemmingsMobileMenuAudit current-fixes.swift
+[357/374] Compiling LemmingsMobileMenuAudit duo.swift
+[358/374] Compiling LemmingsMobileMenuAudit extra-skill.swift
+[359/374] Compiling LemmingsMobileMenuAudit ghost-solution.swift
+[360/374] Compiling LemmingsMobileMenuAudit hierarchy.swift
+[361/374] Compiling LemmingsMobileMenuAudit home-scenery.swift
+[362/374] Compiling LemmingsMobileMenuAudit hot-seat-flow.swift
+[363/374] Compiling LemmingsMobileMenuAudit hot-seat-hud.swift
+[364/374] Compiling LemmingsMobileMenuAudit hot-seat.swift
+[365/374] Emitting module LemmingsMobileMenuAudit
+[366/385] Compiling LemmingsMobileMenuAudit mute-setting.swift
+[367/385] Compiling LemmingsMobileMenuAudit navigation.swift
+[368/385] Compiling LemmingsMobileMenuAudit pause.swift
+[369/385] Compiling LemmingsMobileMenuAudit portrait-hud.swift
+[370/385] Compiling LemmingsMobileMenuAudit regional-brand.swift
+[371/385] Compiling LemmingsMobileMenuAudit rounded-hud.swift
+[372/385] Compiling LemmingsMobileMenuAudit skill-pause.swift
+[373/385] Compiling LemmingsMobileMenuAudit solution-switch.swift
+[374/385] Compiling LemmingsMobileMenuAudit static-home.swift
+[375/385] Compiling LemmingsMobileMenuAudit support.swift
+[376/385] Compiling LemmingsMobileMenuAudit table-result.swift
+[376/385] Write Objects.LinkFileList
+[380/385] Emitting module LemmingsLocal
+[380/388] Linking LemmingsMobileMenuAudit
+[381/388] Applying LemmingsMobileMenuAudit
+[383/388] Compiling LemmingsLocal GameplayController.swift
+[384/388] Compiling LemmingsLocal GameplayKeyboard.swift
+[385/389] Compiling LemmingsLocal Lemmings3PlayWindow.swift
+[386/389] Compiling LemmingsLocal main.swift
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[386/391] Write Objects.LinkFileList
+[387/391] Linking LemmingsLocal
+[388/391] Applying LemmingsLocal
+[390/406] Compiling LemmingsLocalTests AboutHistoryTests.swift
+[391/406] Compiling LemmingsLocalTests AnonymousTelemetryTests.swift
+[392/406] Compiling LemmingsLocalTests AssignmentSoundTests.swift
+[393/406] Compiling LemmingsLocalTests BitmapLatinRenderTests.swift
+[394/406] Compiling LemmingsLocalTests CloudLibraryViewTests.swift
+[395/406] Compiling LemmingsLocalTests CursorCameraTests.swift
+[396/406] Compiling LemmingsLocalTests DJCrossfadeTests.swift
+[397/406] Compiling LemmingsLocalTests DJParityUITests.swift
+[398/406] Compiling LemmingsLocalTests DeviceMenuLayoutTests.swift
+[399/406] Compiling LemmingsLocalTests FailureMusicTests.swift
+[400/406] Compiling LemmingsLocalTests FanPackParityTests.swift
+[401/406] Compiling LemmingsLocalTests FooterNavigationTests.swift
+[402/406] Compiling LemmingsLocalTests HostedRankingsTests.swift
+[403/406] Compiling LemmingsLocalTests InterfaceHierarchyTests.swift
+[404/406] Emitting module LemmingsLocalTests
+[405/420] Compiling LemmingsLocalTests JourneySolutionTests.swift
+[406/420] Compiling LemmingsLocalTests LanguagePickerTests.swift
+[407/420] Compiling LemmingsLocalTests LearningJourneyTests.swift
+[408/420] Compiling LemmingsLocalTests LemmingInspectionTests.swift
+[409/420] Compiling LemmingsLocalTests LocalisationLayoutTests.swift
+[410/420] Compiling LemmingsLocalTests MacMonochromeUITests.swift
+[411/420] Compiling LemmingsLocalTests MobileStatusSlotTests.swift
+[412/420] Compiling LemmingsLocalTests MusicTitleCardTests.swift
+[413/420] Compiling LemmingsLocalTests NeoLemmixSoundTests.swift
+[414/420] Compiling LemmingsLocalTests ProgressionMenuTests.swift
+[415/420] Compiling LemmingsLocalTests SequelLatinRenderTests.swift
+[416/420] Compiling LemmingsLocalTests StatusStripRenderTests.swift
+[417/420] Compiling LemmingsLocalTests TamilBitmapRenderTests.swift
+[418/420] Compiling LemmingsLocalTests TamilSequelRenderTests.swift
+[418/420] Write Objects.LinkFileList
+[419/420] Linking LemmingsNativePortPackageTests
+Build complete! (57.20s)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileExtraSkillTests started.
+􀟈  Suite MobileLearningTests started.
+􀟈  Suite GameCenterProgressTests started.
+􀟈  Suite MobileCampaignProgressTests started.
+􀟈  Suite JourneyCompletionSummaryTests started.
+􀟈  Suite MobileShuffleAllTests started.
+􀟈  Suite CloudKitLibraryTests started.
+􀟈  Suite MobileCheckpointOwnershipTests started.
+􀟈  Suite MobileStorageTests started.
+􀟈  Suite MobileHotSeatTests started.
+􀟈  Suite CloudLibraryTests started.
+􀟈  Suite MobileCatalogueTests started.
+􀟈  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() started.
+􀟈  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() started.
+􀟈  Suite MobileMusicAssignmentTests started.
+􀟈  Test progressionRecallUsesItsSavedScopeNameAndPosition() started.
+􀟈  Suite MobileFavouritesTests started.
+􀟈  Test pythonStagingUsesMacSourceRevision() started.
+􀟈  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() started.
+􀟈  Suite MobilePlaylistTests started.
+􀟈  Suite MobileShortPlayCatalogueTests started.
+􀟈  Test homeAndJourneyStayInTheSelectedSession() started.
+􀟈  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() started.
+􀟈  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() started.
+􀟈  Suite MobileCollectionsMigrationTests started.
+􀟈  Test storedQueueKeepsOwnerScopePositionAndDeferrals() started.
+􀟈  Test curatedJourneyStartsWithoutScanningFuturePacks() started.
+􀟈  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() started.
+􀟈  Test defaultMobilePlayerDoesNotInheritOtherProfilesOrHotSeats() started.
+􀟈  Test theFanPoolListsEveryLevelOnceAndPlaysLazily() started.
+􀟈  Test nativeMobileCloudAndJourneyWinsCountOnceWithoutWriting() started.
+􀟈  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() started.
+􀟈  Test offlineProgressUploadsOnRetryAndGuestHotSeatKeysStayLocal() started.
+􀟈  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() started.
+􀟈  Test aFutureCampaignCannotBeReplacedByCloudProgress() started.
+􀟈  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() started.
+􀟈  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() started.
+􀟈  Test aCopiedScopedFileCannotResumeAsAnotherOwner() started.
+􀟈  Test classicBridgePreservesGapsAndKeepsOrderedAchievementsSeparate() started.
+􀟈  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() started.
+􀟈  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() started.
+􀟈  Test localChangesDuringMergeAreCapturedBeforeUpload() started.
+􀟈  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() started.
+􀟈  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() started.
+􀟈  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() started.
+􀟈  Test newerCheckpointVersionCannotBeOverwritten() started.
+􀟈  Test concurrentIdentityCreationRetainsBothLibraries() started.
+􀟈  Test resultTagsBonusConditionsSeparatelyFromRewind() started.
+􀟈  Test twoDevicesMergeProgressAndMapTheirDifferentPlayerIDs() started.
+􀟈  Test learningWinsOverrideDeferredVisitsWithoutChangingTheSavedQueue() started.
+􀟈  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() started.
+􀟈  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() started.
+􀟈  Test corruptKeysAndMissingSnapshotsPreventReplacement() started.
+􀟈  Test simultaneousConflictsUnionResultsWithoutDoubleCounting() started.
+􀟈  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() started.
+􀟈  Test importsOlderDefaultsOnce() started.
+􀟈  Test fallsBackToTheBackupAndKeepsTheDamagedFile() started.
+􀟈  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test failedLocalWriteDoesNotUploadOrReplaceRecords() started.
+􀟈  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() started.
+􀟈  Test unsupportedPreferencesCannotWriteDeviceSettings() started.
+􀟈  Test removingTheLinkedPlayerCannotRestoreThemIntoAGuest() started.
+􀟈  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test corruptFutureAndWrongOwnerSavesArePreserved() started.
+􀟈  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test oneProfileIsNotAHotSeat() started.
+􀟈  Test livePlayDefersImportAndKeepsTurnOwnership() started.
+􀟈  Test oldCheckpointsDecodeWithoutAScope() started.
+􀟈  Test syncingStateAppearsBeforeProviderDiscovery() started.
+􀟈  Test theHostStaysInTheRoster() started.
+􀟈  Test turnsRotateAndWrap() started.
+􀟈  Test sequelMergesKeepWholeTribeChainsAndBestChroniclesResults() started.
+􀟈  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() started.
+􀟈  Test accountSwitchAndLateSignOutCannotImportOrUploadAnotherPlayer() started.
+􀟈  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() started.
+􀟈  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() started.
+􀟈  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() started.
+􀟈  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() started.
+􀟈  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() started.
+􀟈  Test sessionsSurviveSavingAndKeepTheirRule() started.
+􀟈  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() started.
+􀟈  Test everyOfficialLevelLoadsRendersAndTicks() started.
+􀟈  Test listsEveryFamilyWithTheRightCounts() started.
+􀟈  Test syncPasswordGivesEveryDeviceTheSameValidVault() started.
+􀟈  Test staleDiscoveryCannotReplaceThePasswordCredential() started.
+􀟈  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() started.
+􀟈  Test restartKeepsPlayersAndStartsWithTheHost() started.
+􀟈  Test resultChoicesFollowTheHouseRule() started.
+􀟈  Test aPlayerWhoLeavesLosesTheTurn() started.
+􀟈  Test deletingAPlayerEndsSessionsThatNeedThem() started.
+􀟈  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() started.
+􀟈  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() started.
+􀟈  Test tunesFollowTheReleaseAndLevelTitle() started.
+􀟈  Test storesToggleAndRoundTrips() started.
+􀟈  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() started.
+􀟈  Test favouritesSpanPacksAndPlayInTheirOwnSession() started.
+􀟈  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() started.
+􀟈  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() started.
+􀟈  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() started.
+􀟈  Test slowCredentialServicesLeaveTheMainActorResponsive() started.
+􀟈  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() started.
+􀟈  Test malformedCloudArchiveNeverImportsOrOverwritesIt() started.
+􀟈  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() started.
+􀟈  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() started.
+􀟈  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() started.
+􀟈  Test previewBuildRestoresLatestSharedLibraryByDefault() started.
+􀟈  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() started.
+􀟈  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test runsPersistWithTheirFixedOrder() started.
+􀟈  Test editingKeepsOrderAndRejectsDuplicates() started.
+􀟈  Test missingEvidenceOrDataNeverCreatesAnOpening() started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test shuffleIsAPermutationThatRepeatsForASeed() started.
+􀟈  Test pinnedSourcesSurvivePlaylistResumeAndRejectReplacementBytes() started.
+􀟈  Test recentsKeepFiftyDistinctNewestFirst() started.
+􀟈  Test testMobileCollectionsMigrateToActiveProfile() started.
+􀟈  Test restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test legacyPlaylistRunGainsAPersistentIdentityWithoutChangingItsOrder() started.
+􀟈  Test soloAndSharedQueuesRecallTheirOwnOrderPositionAndSeed() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􁁛  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() passed after 0.103 seconds.
+􁁛  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() passed after 0.110 seconds.
+􁁛  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() passed after 0.111 seconds.
+􁁛  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() passed after 0.111 seconds.
+􁁛  Test aFutureCampaignCannotBeReplacedByCloudProgress() passed after 0.111 seconds.
+􁁛  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() passed after 0.111 seconds.
+􁁛  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() passed after 0.111 seconds.
+􁁛  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() passed after 0.127 seconds.
+􁁛  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() passed after 0.127 seconds.
+􁁛  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() passed after 0.127 seconds.
+􁁛  Test storedQueueKeepsOwnerScopePositionAndDeferrals() passed after 0.128 seconds.
+􁁛  Test homeAndJourneyStayInTheSelectedSession() passed after 0.128 seconds.
+􁁛  Test progressionRecallUsesItsSavedScopeNameAndPosition() passed after 0.128 seconds.
+􁁛  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() passed after 0.128 seconds.
+􁁛  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() passed after 0.128 seconds.
+􁁛  Test aCopiedScopedFileCannotResumeAsAnotherOwner() passed after 0.128 seconds.
+􁁛  Test importsOlderDefaultsOnce() passed after 0.140 seconds.
+􁁛  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() passed after 0.140 seconds.
+􁁛  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() passed after 0.140 seconds.
+􁁛  Test newerCheckpointVersionCannotBeOverwritten() passed after 0.140 seconds.
+􁁛  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) with 3 test cases passed after 0.140 seconds.
+􁁛  Test oneProfileIsNotAHotSeat() passed after 0.140 seconds.
+􁁛  Test oldCheckpointsDecodeWithoutAScope() passed after 0.140 seconds.
+􁁛  Test theHostStaysInTheRoster() passed after 0.140 seconds.
+􁁛  Test turnsRotateAndWrap() passed after 0.140 seconds.
+􁁛  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() passed after 0.140 seconds.
+􁁛  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() passed after 0.141 seconds.
+􁁛  Test fallsBackToTheBackupAndKeepsTheDamagedFile() passed after 0.141 seconds.
+􁁛  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() passed after 0.141 seconds.
+􁁛  Test restartKeepsPlayersAndStartsWithTheHost() passed after 0.100 seconds.
+􁁛  Test resultChoicesFollowTheHouseRule() passed after 0.100 seconds.
+􁁛  Test aPlayerWhoLeavesLosesTheTurn() passed after 0.100 seconds.
+􁁛  Test deletingAPlayerEndsSessionsThatNeedThem() passed after 0.100 seconds.
+􁁛  Test tunesFollowTheReleaseAndLevelTitle() passed after 0.087 seconds.
+􁁛  Test sessionsSurviveSavingAndKeepTheirRule() passed after 0.119 seconds.
+􁁛  Test storesToggleAndRoundTrips() passed after 0.085 seconds.
+􁁛  Test editingKeepsOrderAndRejectsDuplicates() passed after 0.063 seconds.
+􁁛  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() passed after 0.141 seconds.
+􁁛  Test pythonStagingUsesMacSourceRevision() passed after 0.141 seconds.
+􁁛  Test shuffleIsAPermutationThatRepeatsForASeed() passed after 0.061 seconds.
+􁁛  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() passed after 0.141 seconds.
+􁁛  Test recentsKeepFiftyDistinctNewestFirst() passed after 0.061 seconds.
+􁁛  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() passed after 0.141 seconds.
+􁁛  Test runsPersistWithTheirFixedOrder() passed after 0.063 seconds.
+􁁛  Suite MobileCampaignProgressTests passed after 0.142 seconds.
+􁁛  Suite MobileStorageTests passed after 0.142 seconds.
+􁁛  Suite MobileMusicAssignmentTests passed after 0.142 seconds.
+􁁛  Suite MobileHotSeatTests passed after 0.142 seconds.
+􁁛  Suite MobilePlaylistTests passed after 0.142 seconds.
+􁁛  Test missingEvidenceOrDataNeverCreatesAnOpening() passed after 0.073 seconds.
+􁁛  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) with 3 test cases passed after 0.152 seconds.
+􁁛  Test concurrentIdentityCreationRetainsBothLibraries() passed after 0.155 seconds.
+􁁛  Test resultTagsBonusConditionsSeparatelyFromRewind() passed after 0.158 seconds.
+􁁛  Suite MobileExtraSkillTests passed after 0.159 seconds.
+􁁛  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) with 3 test cases passed after 0.174 seconds.
+􁁛  Suite MobileCheckpointOwnershipTests passed after 0.174 seconds.
+􁁛  Test listsEveryFamilyWithTheRightCounts() passed after 0.226 seconds.
+􁁛  Test curatedJourneyStartsWithoutScanningFuturePacks() passed after 0.545 seconds.
+􁁛  Suite MobileLearningTests passed after 0.546 seconds.
+􁁛  Test pinnedSourcesSurvivePlaylistResumeAndRejectReplacementBytes() passed after 0.724 seconds.
+􁁛  Suite MobileShortPlayCatalogueTests passed after 0.805 seconds.
+􁁛  Test failedLocalWriteDoesNotUploadOrReplaceRecords() passed after 0.826 seconds.
+􁁛  Test defaultMobilePlayerDoesNotInheritOtherProfilesOrHotSeats() passed after 0.858 seconds.
+􁁛  Test nativeMobileCloudAndJourneyWinsCountOnceWithoutWriting() passed after 0.860 seconds.
+􁁛  Suite JourneyCompletionSummaryTests passed after 0.861 seconds.
+􁁛  Test favouritesSpanPacksAndPlayInTheirOwnSession() passed after 1.114 seconds.
+􁁛  Suite MobileFavouritesTests passed after 1.171 seconds.
+􁁛  Test malformedCloudArchiveNeverImportsOrOverwritesIt() passed after 1.390 seconds.
+􁁛  Test classicBridgePreservesGapsAndKeepsOrderedAchievementsSeparate() passed after 1.607 seconds.
+􁁛  Test offlineProgressUploadsOnRetryAndGuestHotSeatKeysStayLocal() passed after 1.609 seconds.
+􁁛  Test corruptKeysAndMissingSnapshotsPreventReplacement() passed after 1.610 seconds.
+􁁛  Test learningWinsOverrideDeferredVisitsWithoutChangingTheSavedQueue() passed after 1.610 seconds.
+􁁛  Test unsupportedPreferencesCannotWriteDeviceSettings() passed after 1.611 seconds.
+􁁛  Test removingTheLinkedPlayerCannotRestoreThemIntoAGuest() passed after 1.618 seconds.
+􁁛  Test sequelMergesKeepWholeTribeChainsAndBestChroniclesResults() passed after 1.622 seconds.
+􁁛  Test accountSwitchAndLateSignOutCannotImportOrUploadAnotherPlayer() passed after 1.623 seconds.
+􁁛  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() passed after 1.623 seconds.
+􁁛  Test syncPasswordGivesEveryDeviceTheSameValidVault() passed after 1.612 seconds.
+􁁛  Test staleDiscoveryCannotReplaceThePasswordCredential() passed after 1.612 seconds.
+􁁛  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() passed after 1.594 seconds.
+􁁛  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() passed after 1.594 seconds.
+􁁛  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() passed after 1.562 seconds.
+􁁛  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() passed after 1.569 seconds.
+􁁛  Test legacyPlaylistRunGainsAPersistentIdentityWithoutChangingItsOrder() passed after 1.708 seconds.
+􁁛  Test soloAndSharedQueuesRecallTheirOwnOrderPositionAndSeed() passed after 1.708 seconds.
+􁁛  Test testMobileCollectionsMigrateToActiveProfile() passed after 1.709 seconds.
+􁁛  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() passed after 1.703 seconds.
+􁁛  Test restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() passed after 1.709 seconds.
+􁁛  Suite MobileCollectionsMigrationTests passed after 1.789 seconds.
+􁁛  Test localChangesDuringMergeAreCapturedBeforeUpload() passed after 1.791 seconds.
+􁁛  Test corruptFutureAndWrongOwnerSavesArePreserved() passed after 1.798 seconds.
+􁁛  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() passed after 1.803 seconds.
+􁁛  Suite CloudKitLibraryTests passed after 1.804 seconds.
+􁁛  Test simultaneousConflictsUnionResultsWithoutDoubleCounting() passed after 1.805 seconds.
+􁁛  Test syncingStateAppearsBeforeProviderDiscovery() passed after 1.805 seconds.
+􁁛  Test livePlayDefersImportAndKeepsTurnOwnership() passed after 1.806 seconds.
+􁁛  Test slowCredentialServicesLeaveTheMainActorResponsive() passed after 1.756 seconds.
+􁁛  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() passed after 1.890 seconds.
+􁁛  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() passed after 1.832 seconds.
+􁁛  Test previewBuildRestoresLatestSharedLibraryByDefault() passed after 1.835 seconds.
+􁁛  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() passed after 1.970 seconds.
+􁁛  Test twoDevicesMergeProgressAndMapTheirDifferentPlayerIDs() passed after 1.983 seconds.
+􁁛  Suite GameCenterProgressTests passed after 1.984 seconds.
+􁁛  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() passed after 1.929 seconds.
+􁁛  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() passed after 2.017 seconds.
+􁁛  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() passed after 1.973 seconds.
+􁁛  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() passed after 1.976 seconds.
+􁁛  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() passed after 2.056 seconds.
+􁁛  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() passed after 2.061 seconds.
+􁁛  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() passed after 2.092 seconds.
+􁁛  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() passed after 2.042 seconds.
+􁁛  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() passed after 2.060 seconds.
+􁁛  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() passed after 2.061 seconds.
+􁁛  Test offlineHotSeatForksKeepProgressAfterRepeatedImports() passed after 2.079 seconds.
+􁁛  Suite CloudLibraryTests passed after 2.152 seconds.
+􁁛  Test theFanPoolListsEveryLevelOnceAndPlaysLazily() passed after 7.754 seconds.
+􁁛  Suite MobileShuffleAllTests passed after 7.754 seconds.
+􁁛  Test everyOfficialLevelLoadsRendersAndTicks() passed after 34.489 seconds.
+􁁛  Suite MobileCatalogueTests passed after 34.511 seconds.
+􁁛  Test run with 102 tests in 17 suites passed after 34.511 seconds.
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.

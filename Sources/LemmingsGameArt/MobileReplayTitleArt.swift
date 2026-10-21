@@ -1,7 +1,7 @@
 import CoreGraphics
 import LemmingsMobileCore
 
-/// A persistent replay identity in the same stone and lettering as the pause overview.
+/// A persistent replay identity with the pause overview's flat panel and bitmap lettering.
 public enum MobileReplayTitleArt {
     public static func size(level: MobileLevelSummary, width: CGFloat) -> CGSize {
         let width = max(44, width)

@@ -1,0 +1,98 @@
+{
+  "audio" : "muted",
+  "captures" : [
+    {
+      "canPlay" : true,
+      "device" : "iphone-portrait",
+      "file" : "iphone-portrait-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "iphone-landscape",
+      "file" : "iphone-landscape-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "narrow-portrait",
+      "file" : "narrow-portrait-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "narrow-landscape",
+      "file" : "narrow-landscape-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : false,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-portrait",
+      "file" : "ipad-portrait-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-landscape",
+      "file" : "ipad-landscape-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-pro-9-7-portrait",
+      "file" : "ipad-pro-9-7-portrait-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-pro-12-9-portrait",
+      "file" : "ipad-pro-12-9-portrait-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "portrait-safe-edge-region",
+      "file" : "portrait-safe-edge-region-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    },
+    {
+      "canPlay" : true,
+      "device" : "portrait-playfield-region",
+      "file" : "portrait-playfield-region-replay-rescue.png",
+      "portrait" : true,
+      "replaySkillPanelVisible" : true,
+      "rescueMasks" : 1,
+      "targets" : 17
+    }
+  ],
+  "physicalUIKitAcceptance" : "pending",
+  "replayPanelOverlapsControls" : false,
+  "windows" : "none"
+}

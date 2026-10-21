@@ -2,6 +2,30 @@ import NxlvKit
 
 /// The Mac home order and action groups, shared with the mobile render audit.
 public enum MobileHomeArt {
+    public static func journeyMap(completed: Int, enabled: Bool = true) -> GameFrontEnd.Action {
+        .init("journey", L10n.text("JOURNEY MAP  \(completed) SOLVED"), enabled: enabled)
+    }
+
+    public static func journeyPage(title: String, subtitle: String = "", completed: Int,
+        solved: Int, total: Int, revisit: Int, resume: (position: Int, count: Int)?,
+        canContinue: Bool) -> GameFrontEnd.Page {
+        var footer = [GameFrontEnd.Action("home", L10n.text("Back"))]
+        if let resume {
+            footer.append(.init("learningResume", L10n.text("Resume  \(resume.position)/\(resume.count)"), primary: true))
+        }
+        if canContinue {
+            footer.append(.init("learningStart", L10n.text("Continue journey"), primary: resume == nil))
+        } else if resume == nil {
+            footer[0].primary = true
+        }
+        return .init(title: title, subtitle: subtitle, rows: [
+            .init("learningBrowse", L10n.text("Choose level"), enabled: resume != nil),
+            .init("learningRevisit", L10n.text("Revisit  \(revisit)"), enabled: revisit > 0),
+            .init("progression", L10n.text("Progression playlists"))],
+            details: [L10n.text("Completed levels \(completed)"), L10n.text("Current route \(solved)/\(total)")],
+            footer: footer)
+    }
+
     public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
                             families: [GameFrontEnd.Action], initials: String,
                             subtitle: String = "", collectionsAvailable: Bool = true) -> GameFrontEnd.Page {

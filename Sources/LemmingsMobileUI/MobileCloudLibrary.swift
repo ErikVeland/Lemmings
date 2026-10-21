@@ -16,14 +16,16 @@ extension MobileLibraryViewController {
         }
         libraryCloud.captureExtra = { profile, seat in
             let storage = MobileStorage.standard(profile: seat.map { "hotseat." + $0 } ?? profile)
-            guard var saved = storage.load(MobileLearningState.self, name: "learning") else { return .init() }
+            var progress = try MobileCampaignProgress.capture(storage: storage)
+            guard var saved = storage.load(MobileLearningState.self, name: "learning") else { return progress }
             if saved.journeySession == nil, saved.run?.source == .playlist(LearningJourney.playlistID) {
                 saved.refreshJourneySession()
                 try storage.save(saved, name: "learning")
             }
             var values: [String: GameProgressValue] = ["LearningJourneyProgress": .learning(saved.progress)]
             if let snapshot = saved.journeySession { values["LearningJourneySession"] = .journeySession(snapshot) }
-            return .init(values: values)
+            try progress.merge(.init(values: values))
+            return progress
         }
         libraryCloud.captureSeats = { [weak self] in
             guard let self else { return [] }

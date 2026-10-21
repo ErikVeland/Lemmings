@@ -1,10 +1,11 @@
 # Release notes
 
-The latest published release is [2.1 build 93](ReleaseNotes-2.1-build93.md).
-Its [release record](ReleaseReadiness/2.1-build93/README.md) covers the signed packages,
+The latest published release is [2.1.1 build 95](ReleaseNotes-2.1.1-build95.md).
+Its [release record](ReleaseReadiness/2.1.1-build95/README.md) covers the signed packages,
 direct deltas and validation limits.
 Source and feed versions, retained acceptance evidence and completion limits
 are recorded in [release scope](ReleaseScope.md).
+The next coordinated Apple release uses the [2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md).
 
 ## Earlier notes
 

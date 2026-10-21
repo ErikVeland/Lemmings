@@ -42,6 +42,7 @@ typealias MobileGameControllerBase = UIViewController
     /// Called with the player who acts next, before the game leaves for a retry or the next level.
     var onHandover: ((String) -> Bool)?
     var soloOwnerID: String?
+    var journeyContext = MobileCheckpointEnvelope.JourneyContext()
     var canDefer = false
     var onSkipLevel: (() -> Bool)?
     var onExtraSkillBalance: (() -> Int)?
@@ -291,6 +292,8 @@ typealias MobileGameControllerBase = UIViewController
         replayTitle.level = session.isReadOnly ? summary : nil
         countdownLabel.palette = .green
         countdownLabel.maximumScale = 6
+        countdownLabel.face = .large
+        countdownLabel.displayHeight = 80
         countdownLabel.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         countdownLabel.isHidden = true
         countdownLabel.isUserInteractionEnabled = false
@@ -506,10 +509,14 @@ typealias MobileGameControllerBase = UIViewController
         replayTitle.position(in: playfieldView.frame)
         if !solutionSelector.isHidden { replayTitle.frame.origin.y = max(replayTitle.frame.minY, solutionSelector.frame.maxY + 8) }
         if session.isReadOnly, layout.portrait != nil { replayTitle.frame.origin.y += 48 }
-        countdownLabel.frame = CGRect(x: playfieldView.frame.midX - 44, y: playfieldView.frame.midY - 44, width: 88, height: 88)
-        let replayWidth = min(MobileReplaySkillArt.size.width, max(0, playfieldView.frame.width - 16))
-        replaySkillInfo.frame = CGRect(x: playfieldView.frame.maxX - replayWidth - 8, y: session.isReadOnly ? replayTitle.frame.maxY + 8 : playfieldView.frame.minY + (layout.portrait != nil ? 56 : 8),
-            width: replayWidth, height: replayWidth * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
+        countdownLabel.frame = CGRect(x: floor(playfieldView.frame.midX - 40), y: floor(playfieldView.frame.midY - 48), width: 80, height: 96)
+        let replayTargets = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot,
+            selectedSkill: selectedControl, paused: paused, speed: speed,
+            endRunArmed: endRunArmedUntil > ProcessInfo.processInfo.systemUptime)
+        replaySkillInfo.frame = MobileReplaySkillArt.frame(in: playfieldView.frame,
+            below: session.isReadOnly ? replayTitle.frame.maxY + 8 : playfieldView.frame.minY,
+            avoiding: replayTargets.map(\.inputFrame) + layout.reservedRegions.map { Self.cgRect($0.frame) }
+                + [layout.minimapFrame].compactMap { $0 }) ?? .zero
         var musicArea = playfieldView.frame
         if session.isReadOnly || hasSolutionPair {
             let top = min(musicArea.maxY, max(musicArea.minY, replayTitle.frame.maxY + 8))
@@ -1542,7 +1549,7 @@ typealias MobileGameControllerBase = UIViewController
             payload: Data(),
             scope: turn?.scope,
             owner: turn?.owner ?? soloOwnerID,
-            extraSkillUse: onExtraSkillUse?()
+            extraSkillUse: onExtraSkillUse?(), journeyContext: journeyContext
         )
         return Task.detached(priority: .utility) {
             MobileCheckpointEnvelope(runID: metadata.runID, engine: metadata.engine,
@@ -1550,7 +1557,7 @@ typealias MobileGameControllerBase = UIViewController
                 levelIndex: metadata.levelIndex, levelFingerprint: metadata.levelFingerprint,
                 tick: metadata.tick, selectedControl: metadata.selectedControl, camera: metadata.camera,
                 payload: try payload.encode(), savedAt: metadata.savedAt, scope: metadata.scope, owner: metadata.owner,
-                extraSkillUse: metadata.extraSkillUse)
+                extraSkillUse: metadata.extraSkillUse, journeyContext: metadata.journeyContext)
         }
     }
 

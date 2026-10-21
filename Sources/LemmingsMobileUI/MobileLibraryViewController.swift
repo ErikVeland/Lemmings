@@ -525,7 +525,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                  .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
                  .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
             let journey = bundledJourney
-            let journeyTitle = L10n.text("Journey map  \(journey.map { shownJourneyProgress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             #if os(tvOS)
             let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
@@ -533,7 +532,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let homeSubtitle = subtitle
             #endif
             canvas.page = MobileHomeArt.page(resume: resume,
-                journey: resumableLearningJourney != nil ? .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil)
+                journey: resumableLearningJourney != nil || savedLevel != nil || playlists.run != nil ? MobileHomeArt.journeyMap(completed: completedJourneyLevelCount, enabled: catalogue != nil)
                     : canStartJourney ? .init("journey", L10n.text("Start journey"), enabled: catalogue != nil && journey != nil) : nil,
                 families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
             canvas.preview = nil
@@ -888,12 +887,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     /// Makes a pack the current library and shows its levels.
-    func openPack(_ pack: MobileContentPack, back: Route, checkpoint: MobileCheckpointEnvelope? = nil, play index: Int? = nil) {
+    func openPack(_ pack: MobileContentPack, back: Route, checkpoint: MobileCheckpointEnvelope? = nil,
+                  play index: Int? = nil, browse browseIndex: Int = 0) {
         guard let catalogue else { return }
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders
         openLibrary({ try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }) { [self] loaded in
             guard let loaded else { navigate(.data); return }
             library = loaded
+            activeRun = nil
             currentPack = pack
             previewLoader = MobileMenuPreviewLoader { try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }
             selectedIndex = 0; selectedPreview = nil; browserShown = false
@@ -901,7 +902,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             navigate(.levels)
             if let checkpoint { startLevel(checkpoint.levelIndex, checkpoint: checkpoint) }
             else if let index, loaded.levels.indices.contains(index) { selectedIndex = index; startLevel(index, checkpoint: nil) }
-            else { selectLevel(0) }
+            else { selectLevel(loaded.levels.indices.contains(browseIndex) ? browseIndex : 0) }
         }
     }
 
@@ -1007,7 +1008,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private func openLemmings2(at requestedIndex: Int? = nil,
                                checkpoint: MobileCheckpointEnvelope? = nil) {
         guard let store else { navigate(.data); return }
-        let progressStorage = storage
+        let progressStorage = learningStorage
+        do { try MobileCampaignProgress.reconcile(sharedCampaignProgress, storage: progressStorage) }
+        catch { notice = error.localizedDescription; rebuild(); return }
         openLibrary({ try store.loadLemmings2Library(storage: progressStorage) }) { [self] opened in
             guard let loaded = opened as? Lemmings2MobileLibrary else { navigate(.data); return }
             library = loaded
@@ -1018,7 +1021,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             selectedPreview = nil
             browserShown = false
             let directory = loaded.directory
-            let progressStorage = storage
             previewLoader = MobileMenuPreviewLoader {
                 try Lemmings2MobileLibrary(directory: directory, storage: progressStorage)
             }
@@ -1033,7 +1035,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private func openLemmings3(at requestedIndex: Int? = nil,
                                checkpoint: MobileCheckpointEnvelope? = nil) {
         guard let store else { navigate(.data); return }
-        let progressStorage = storage
+        let progressStorage = learningStorage
+        do { try MobileCampaignProgress.reconcile(sharedCampaignProgress, storage: progressStorage) }
+        catch { notice = error.localizedDescription; rebuild(); return }
         openLibrary({ try store.loadLemmings3Library(storage: progressStorage) }) { [self] opened in
             guard let loaded = opened as? Lemmings3MobileLibrary else { navigate(.data); return }
             library = loaded
@@ -1044,7 +1048,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             selectedPreview = nil
             browserShown = false
             let directory = loaded.directory
-            let progressStorage = storage
             previewLoader = MobileMenuPreviewLoader {
                 try Lemmings3MobileLibrary(directory: directory, storage: progressStorage)
             }
@@ -1169,7 +1172,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         if let run = playlists.run, let catalogue {
             let queue = MobileListLibrary(entries: run.entries, name: run.name, catalogue: catalogue, lazy: true)
-            if (try? queue.checkpointLevelIdentifier(at: run.position)) == checkpoint.levelIdentifier {
+            if checkpoint.matchesJourney(runID: run.id, position: run.position,
+                levelIdentifier: try? queue.checkpointLevelIdentifier(at: run.position)) {
                 openList(run.entries, name: run.name, back: .collections, run: run, position: run.position,
                          checkpoint: checkpoint, startImmediately: true)
                 return
@@ -1181,6 +1185,34 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             return
         }
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
+    }
+
+    /// Browsing a saved attempt leaves its checkpoint, player and turn unchanged.
+    func browseSavedRun() {
+        guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else {
+            if let run = playlists.run {
+                openList(run.entries, name: run.name, back: .home, run: run, position: run.position)
+            }
+            return
+        }
+        if checkpointResumesLearningRun(checkpoint) { openLearningRun(); return }
+        switch checkpoint.engine {
+        case "lemmings2": openLemmings2(at: checkpoint.levelIndex)
+        case "lemmings3": openLemmings3(at: checkpoint.levelIndex)
+        case "neolemmix": openNeoLemmix(at: checkpoint.levelIndex)
+        default:
+            if let run = playlists.run, let catalogue {
+                let queue = MobileListLibrary(entries: run.entries, name: run.name, catalogue: catalogue, lazy: true)
+                if checkpoint.matchesJourney(runID: run.id, position: run.position,
+                    levelIdentifier: try? queue.checkpointLevelIdentifier(at: run.position)) {
+                    openList(run.entries, name: run.name, back: .home, run: run, position: run.position)
+                    return
+                }
+            }
+            if let pack = catalogue?.pack(forLevelIdentifier: checkpoint.levelIdentifier) {
+                openPack(pack, back: .home, browse: checkpoint.levelIndex)
+            }
+        }
     }
     func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
         guard !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
@@ -1246,6 +1278,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let next = MobileGameViewController(summary: content.summary, session: content.session,
                                                checkpointStore: checkpointStore, restoredCheckpoint: checkpoint,
                                                turn: currentTurn(), settingsProfileID: checkpoint?.owner ?? settingsProfileID)
+            if inLearning, let run = learning.run {
+                next.journeyContext = .init(runID: run.id, position: index)
+            } else if let run = activeRun {
+                next.journeyContext = .init(runID: run.id, position: index)
+            }
             let journeyMusic = inLearning && self.learning.run?.pool.id.hasPrefix("learning-") == true
             var sourceTitles = library.levels.map(\.title)
             if let queue = library as? MobileJourneyLibrary, let origin = try? queue.origin(of: index) { sourceTitles = origin.library.levels.map(\.title) }

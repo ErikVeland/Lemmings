@@ -38,7 +38,7 @@ import NxlvKit
         let run = saved.map { saved in
             let value = saved.run
             let source: UUID? = if case let .playlist(id) = value.source { id } else { nil }
-            return MobilePlaylistRun(playlist: source, name: value.pool.summary, entries: value.entries.map(Self.mobileEntry),
+            return MobilePlaylistRun(id: value.id, playlist: source, name: value.pool.summary, entries: value.entries.map(Self.mobileEntry),
                                      position: value.currentIndex, shuffled: value.algorithm != nil, seed: value.seed ?? 0)
         }
         return MobilePlaylistStore(playlists: lists, run: run)
@@ -54,9 +54,9 @@ import NxlvKit
                 ?? store.savedRuns.first { $0.hotSeatID == hotSeatID }?.run
             let source: LevelSequenceSource = value.playlist.map(LevelSequenceSource.playlist) ?? .shuffleAll
             let oldEntries = old?.entries.map(Self.mobileEntry)
-            let same = old?.source == source && old?.pool.summary == value.name && oldEntries == value.entries
+            let same = old?.id == value.id && old?.source == source && old?.pool.summary == value.name && oldEntries == value.entries
                 && oldEntries?.map(\.sourceFingerprint) == value.entries.map(\.sourceFingerprint)
-            return try LevelSequenceRun(id: same ? old!.id : UUID(), source: source,
+            return try LevelSequenceRun(id: value.id, source: source,
                 pool: LevelPool(id: "mobile", summary: value.name), entries: Self.sharedEntries(value.entries),
                 currentIndex: value.position, seed: value.shuffled ? value.seed : nil,
                 algorithm: value.shuffled ? .splitMix64FisherYatesV1 : nil,

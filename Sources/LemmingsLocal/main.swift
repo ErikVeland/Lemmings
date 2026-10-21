@@ -4682,7 +4682,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try? sequenceCheckpoint(for: $0.run, hotSeatID: $0.hotSeatID)
         } != nil,
         allCompleted: JourneyCompletionSummary.count(profileID: owner, hotSeatID: sessionID,
-          learning: progress, entries: store.completedLearningEntries(hotSeatID: sessionID)),
+          learning: progress, entries: store.completedLearningEntries(hotSeatID: sessionID),
+          profileIDs: ArcadeStore.shared.records.profiles.map(\.id)),
         play: { [weak self] in
           guard let self, self.playlistStoreCache?.store === store,
                 ArcadeStore.shared.hotSeatID == sessionID,
@@ -6271,7 +6272,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let progress = store.learningProgress(hotSeatID: ArcadeStore.shared.hotSeatID)
       let solved = JourneyCompletionSummary.count(profileID: ArcadeStore.shared.records.activeProfileID,
         hotSeatID: ArcadeStore.shared.hotSeatID, learning: progress,
-        entries: store.completedLearningEntries(hotSeatID: ArcadeStore.shared.hotSeatID))
+        entries: store.completedLearningEntries(hotSeatID: ArcadeStore.shared.hotSeatID),
+        profileIDs: ArcadeStore.shared.records.profiles.map(\.id))
       items.append(HomeMenuItem(title: L10n.text("JOURNEY MAP  \(solved) SOLVED"), action: .fullQuest))
     } else if !ArcadeStore.shared.hotSeatIsActive, savedSequence == nil, menuRecovery == nil,
               (try? playlistStore().activeRun) == nil {

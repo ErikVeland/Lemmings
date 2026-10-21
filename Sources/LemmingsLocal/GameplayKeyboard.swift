@@ -240,8 +240,8 @@ import NxlvKit
         let buttons = navigationButtons
         let wasVisible = buttons.contains { !$0.isHidden && $0.superview === root }
         if !wasVisible { buttons.forEach { $0.resetAppearance() } }
-        navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 56),
-            y: root.isFlipped ? 64 : max(0, root.bounds.maxY - 108), width: 44, height: 44)
+        navigationButton.frame = CGRect(x: max(root.bounds.minX, root.bounds.maxX - 56),
+            y: root.isFlipped ? root.bounds.minY + 12 : root.bounds.maxY - 56, width: 44, height: 44)
         var right = navigationButton.frame.minX - (available(settingsButton) ? 8 : 24)
         for button in buttons.reversed() where button !== navigationButton && available(button) {
             button.frame = CGRect(x: right - 44, y: navigationButton.frame.minY, width: 44, height: 44)

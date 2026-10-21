@@ -68,6 +68,8 @@ public struct MobileStorage: Sendable {
         // Keep the previous copy only when it is itself valid.
         if let previous = try? Data(contentsOf: main(name)), (try? JSONDecoder().decode(T.self, from: previous)) != nil {
             try previous.write(to: backup(name), options: .atomic)
+        } else if !fileManager.fileExists(atPath: backup(name).path) {
+            try data.write(to: backup(name), options: .atomic)
         }
         try data.write(to: main(name), options: .atomic)
         if let defaultsKey { UserDefaults.standard.set(data, forKey: defaultsKey + "." + name) }

@@ -1,9 +1,9 @@
 {
   "changes": [
-    "Home counts include Journey wins and recover older Hot Seat history where retained",
-    "Count sharing automatically enables worldwide records; explicit opt-outs remain respected",
-    "Paused lemming inspection retains its saved preference",
-    "Clearer pointer arrows and bounded HDR effects",
-    "Shared Classic, Lemmings 2 and Lemmings 3 controls and paused Ready handovers"
+    "Shared campaign and Journey completion counts with one Resume",
+    "Exact queue and position for new Journey and playlist checkpoints",
+    "Separate Solo and Hot Seat sequel progress with safe recovery",
+    "Refined Lemmings lettering and hand-drawn 4× countdown numerals",
+    "Shared Classic, Lemmings 2 and Lemmings 3 controls with paused Ready handovers"
   ]
 }

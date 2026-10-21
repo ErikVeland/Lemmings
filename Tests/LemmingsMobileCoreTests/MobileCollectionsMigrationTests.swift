@@ -5,6 +5,37 @@ import NxlvKit
 @testable import LemmingsMobileCore
 
 @MainActor struct MobileCollectionsMigrationTests {
+    @Test func restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() throws {
+        let storage = try AppStorage.temporary(named: "playlist-checkpoint-identity")
+        defer { storage.removeTemporaryFiles() }
+        let mobile = MobileStorage(directory: storage.applicationSupport.appendingPathComponent("Mobile/eri"))
+        let bridge = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        var lists = MobilePlaylistStore()
+        let created = lists.create(name: "Again", entries: [.init(pack: "release/lemmings", level: "0")])
+        let id = try #require(created)
+        let started = lists.startRun(id, shuffle: false, seed: 7)
+        let first = try #require(started)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: lists)
+        #expect(bridge.playlists.run?.id == first.id)
+        let checkpoint = MobileCheckpointEnvelope(runID: UUID(), engine: "classic-dos", engineFingerprint: "engine",
+            levelIdentifier: "level", levelIndex: 0, levelFingerprint: "fingerprint", tick: 20, selectedControl: 0,
+            camera: .init(origin: .init(x: 0, y: 0), zoom: 1), payload: Data(),
+            journeyContext: .init(runID: first.id, position: 0))
+        #expect(checkpoint.matchesJourney(runID: first.id, position: 0, levelIdentifier: "level"))
+        let restarted = lists.startRun(id, shuffle: false, seed: 7)
+        let second = try #require(restarted)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: lists)
+        let reopened = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        #expect(reopened.playlists.run?.id == second.id && second.id != first.id)
+        #expect(!checkpoint.matchesJourney(runID: second.id, position: 0, levelIdentifier: "level"))
+    }
+
+    @Test func legacyPlaylistRunGainsAPersistentIdentityWithoutChangingItsOrder() throws {
+        let data = Data(#"{"name":"Old","entries":[],"position":0,"shuffled":true,"seed":42}"#.utf8)
+        let decoded = try JSONDecoder().decode(MobilePlaylistRun.self, from: data)
+        let reopened = try JSONDecoder().decode(MobilePlaylistRun.self, from: JSONEncoder().encode(decoded))
+        #expect(reopened == decoded && reopened.seed == 42 && reopened.position == 0)
+    }
     @Test func testMobileCollectionsMigrateToActiveProfile() throws {
         let storage = try AppStorage.temporary(named: "mobile-migration")
         defer { storage.removeTemporaryFiles() }

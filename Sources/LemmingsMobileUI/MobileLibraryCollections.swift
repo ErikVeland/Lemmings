@@ -241,7 +241,7 @@ extension MobileLibraryViewController {
     }
 
     func resumeRun() {
-        guard let run = playlists.run else { return }
+        guard let run = playlists.run, let catalogue else { return }
         let owner = profiles.activeID, scope = hotSeat?.scope
         learningTask?.cancel()
         learningTask = Task { [weak self] in
@@ -249,7 +249,12 @@ extension MobileLibraryViewController {
             do {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
-                let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
+                let queue = MobileListLibrary(entries: run.entries, name: run.name, catalogue: catalogue, lazy: true)
+                let identifier = try queue.checkpointLevelIdentifier(at: run.position)
+                let matching = checkpoint.flatMap {
+                    checkpointMatchesSession($0) && $0.matchesJourney(runID: run.id, position: run.position,
+                        levelIdentifier: identifier) ? $0 : nil
+                }
                 openList(run.entries, name: run.name, back: .collections, run: run, position: run.position,
                          checkpoint: matching, startImmediately: true, restoringMatchingCheckpoint: true)
             } catch { notice = error.localizedDescription; rebuild() }

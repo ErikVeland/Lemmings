@@ -5,6 +5,7 @@ import NxlvKit
 public enum JourneyCompletionSummary {
     @MainActor public static func count(profileID: String, hotSeatID: String?,
         learning: LearningJourneyProgress, entries: [LevelPlaylistEntry] = [],
+        profileIDs: [String] = [], additionalProgress: GameProgressPreferences = .init(),
         defaults: UserDefaults = .standard) -> Int {
         let prefix = hotSeatID.map { "HotSeat.\($0)." }
             ?? (profileID == ArcadeProfile.legacyID ? "" : "ArcadeProfile.\(profileID).")
@@ -15,9 +16,9 @@ public enum JourneyCompletionSummary {
             if identity.engine == .classic, identity.levelID.hasPrefix("passed:") {
                 // An older imported source can retain its exact saved rank key
                 // when its assets no longer match a current catalogue revision.
-                wins.insert("classic|\(identity.packID)|\(identity.levelID.dropFirst(7))")
+                wins.insert(classicKey(pack: identity.packID, rankKey: String(identity.levelID.dropFirst(7))))
             } else if identity.engine == .classic, parts.count == 5, let number = Int(parts[2]) {
-                wins.insert("classic|\(identity.packID)|\(parts[1])#\(number - 1)")
+                wins.insert(classicKey(pack: identity.packID, rankKey: "\(parts[1])#\(number - 1)"))
             } else if identity.engine == .lemmings2, let level = parts.first {
                 wins.insert("l2|\(identity.packID)|\(level)")
             } else if identity.engine == .lemmings3, let level = parts.first {
@@ -37,7 +38,7 @@ public enum JourneyCompletionSummary {
             if base.hasPrefix("ClassicGameProgress."), let data = value as? Data,
                let progress = try? decoder.decode(ClassicGameFlow.Progress.self, from: data) {
                 let source = String(base.dropFirst("ClassicGameProgress.".count))
-                for level in progress.passed { wins.insert("classic|\(source)|\(level)") }
+                for level in progress.passed { wins.insert(classicKey(pack: source, rankKey: level)) }
             } else if base == "nativeL2Campaign.v1.bundled", let data = value as? Data,
                       let progress = try? decoder.decode(Lemmings2Campaign.Progress.self, from: data) {
                 for index in progress.results.keys { wins.insert("l2|tribes-\(index / 10)|\(index % 10)") }
@@ -49,6 +50,54 @@ public enum JourneyCompletionSummary {
                 for level in levels { wins.insert("fan|" + level) }
             }
         }
+        let portable = GameProgressPreferences.capture(defaults: defaults, profileID: profileID,
+            profileIDs: Array(Set(profileIDs + [profileID])), sessionID: hotSeatID)
+        for progress in [portable, additionalProgress] {
+            for (key, value) in progress.values {
+                switch value {
+                case .completed(let indices):
+                    let pack = String(key.dropFirst("cleared/".count))
+                    guard pack.hasPrefix("release/"),
+                          let title = ClassicTitle(rawValue: String(pack.dropFirst("release/".count))),
+                          let limit = title.expectedLevelCount,
+                          title != .lemmings2TheTribes, title != .lemmings3TheChronicles else { continue }
+                    for index in indices where (0..<limit).contains(index) { wins.insert("classic|\(pack)|\(index)") }
+                case .tribes(let saved):
+                    for index in saved.results.keys { wins.insert("l2|tribes-\(index / 10)|\(index % 10)") }
+                case .chronicles(let saved):
+                    for index in saved.completed.keys { wins.insert("l3|chronicles-\((saved.tribe ?? .classic).rawValue)|\(index)") }
+                default: break
+                }
+            }
+        }
         return wins.count
+    }
+
+    /// Only stock campaign namespaces can share mobile's linear level indices.
+    private static func classicKey(pack: String, rankKey: String) -> String {
+        let titleID = String(pack.split(separator: "-").first ?? "")
+        guard !pack.contains(":source-"), let title = ClassicTitle(rawValue: titleID),
+              let separator = rankKey.lastIndex(of: "#"),
+              let position = Int(rankKey[rankKey.index(after: separator)...]) else {
+            return "classic|\(pack)|\(rankKey)"
+        }
+        let ranks: [(String, Int)]
+        switch title {
+        case .lemmings: ranks = ClassicCampaignDefinition.originalDOSLemmings.ranks.map { ($0.name, $0.order.count) }
+        case .ohNoMoreLemmings: ranks = ClassicCampaignDefinition.ohNoMoreLemmings.ranks.map { ($0.name, $0.order.count) }
+        case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994:
+            ranks = ClassicCampaignDefinition.festive(title)!.ranks.map { ($0.name, $0.order.count) }
+        case .ohYesMoreLemmings:
+            ranks = AmigaVersusCampaign.sources.map { ($0.title + " Versus", $0.records.count) } + [("Mega Drive Sunsoft", 30)]
+        default: return "classic|\(pack)|\(rankKey)"
+        }
+        var offset = 0
+        for (rank, count) in ranks {
+            if rank == rankKey[..<separator], (0..<count).contains(position) {
+                return "classic|release/\(titleID)|\(offset + position)"
+            }
+            offset += count
+        }
+        return "classic|\(pack)|\(rankKey)"
     }
 }

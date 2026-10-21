@@ -573,7 +573,9 @@ import NxlvKit
         startLevel(); paused = true; canvas.startCountdown.cancel(); refreshGame()
         let before = try L2RunRecovery.stateHash(game!)
         let selectedBefore = selected
-        try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings2")
+        try validateGameplayQuickControls(gameplayKeyboard!, owner: window!, name: "lemmings2", statusFrames: {
+            [self.canvas.convert(self.canvas.statusReadoutFrame, to: self.window!.contentView!)]
+        })
         try checkGameplayQuickControl(try L2RunRecovery.stateHash(game!) == before && selected == selectedBefore && paused,
             "Lemmings 2 quick controls changed the run")
     }
@@ -2505,6 +2507,10 @@ import NxlvKit
     var gameplayRect: CGRect {
         CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)
     }
+    var statusReadoutFrame: CGRect {
+        GameplayMenuLayout.readout(CGRect(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 12,
+            width: 108, height: 36), in: self)
+    }
     func updateSelection(slot: Int, fan: Bool, palette: [UInt8], skillFrame: Lemmings2SpriteFrame? = nil) -> String? {
         selectedSkillSlot = slot
         pointerSelectionEnabled = !fan
@@ -3183,10 +3189,10 @@ import NxlvKit
             if let focusNotice { GameTypography.annotation(focusNotice,
                 at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 16 + badgeSize.height)) }
             if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
-                at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 12), palette: .blue) }
+                at: statusReadoutFrame.origin, palette: .blue) }
             if let game {
                 GameTypography.annotation(L10n.text("Saved \(game.saved * 100 / max(1, game.configuration.total))%"),
-                    at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 30), palette: .blue)
+                    at: CGPoint(x: statusReadoutFrame.minX, y: statusReadoutFrame.minY + 18), palette: .blue)
             }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 RewindTransportCue.draw(origin: CGPoint(x: gameplayRect.minX + 12,

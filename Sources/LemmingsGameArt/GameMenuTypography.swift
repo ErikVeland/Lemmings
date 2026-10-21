@@ -85,10 +85,16 @@ public final class GameMenuTypography {
         context.setShouldAntialias(false)
         context.setAlpha(alpha)
         for item in font.layout(text) {
-            guard let glyph = item.glyph,
-                  let image = image(for: glyph, key: "\(face.rawValue)-\(item.sequence)", palette: palette) else { continue }
-            let rect = CGRect(x: origin.x + CGFloat((item.x + glyph.x) * scale), y: origin.y + CGFloat(glyph.y * scale),
-                              width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
+            guard let source = item.glyph else { continue }
+            let countdown = scale == 4 && font.cellWidth == 16 && font.cellHeight == 20
+                ? GameLemmingsCountdownFace.frame(source, sequence: item.sequence) : nil
+            let display = scale == 2
+            let glyph = countdown ?? (display ? GameLemmingsDisplayFace.frame(source, sequence: item.sequence,
+                cellWidth: font.cellWidth, cellHeight: font.cellHeight) : GameLemmingsDisplayFace.Glyph(source))
+            let pixels = display || countdown != nil ? 1 : scale
+            guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)", palette: palette) else { continue }
+            let rect = CGRect(x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
+                              width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
             Self.draw(image, in: rect, context: context)
         }
     }
@@ -146,7 +152,7 @@ public final class GameMenuTypography {
         context.restoreGState()
     }
 
-    private func image(for frame: ClassicMacArtwork.Frame, key: String, palette: Palette) -> CGImage? {
+    private func image(for frame: GameLemmingsDisplayFace.Glyph, key: String, palette: Palette) -> CGImage? {
         let key = palette.rawValue + ":" + key
         if let cached = glyphs[key] { return cached }
         var pixels = frame.rgba

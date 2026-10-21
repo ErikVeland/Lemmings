@@ -15,7 +15,7 @@ import UIKit
     }
     required init?(coder: NSCoder) { nil }
     func update(_ uses: [MobileReplaySkillUse], tick: Int, visible: Bool) {
-        isHidden = !visible || uses.isEmpty
+        isHidden = !visible || uses.isEmpty || bounds.isEmpty
         guard self.uses != uses || self.tick != tick else { return }
         self.uses = uses; self.tick = tick
         accessibilityLabel = L10n.text("Skills used: \(uses.map { L10n.text("\(SkillVocabulary.title($0.name)) at tick \($0.tick)") }.joined(separator: ", "))")

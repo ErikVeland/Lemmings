@@ -307,7 +307,6 @@
 "Balanced preservation, resource use and intervention in this solution." = "Esta solución equilibra la protección, el uso de recursos y la intervención.";
 "Ballooner" = "Aeronauta";
 "Basher" = "Excavador horizontal";
-"Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review." = "Basic 2× Zoom is free in Classic, The Tribes and Chronicles. Original and Modern presentation preserve your control preferences. Results keep detailed rewards in optional review.";
 "Bazooka" = "Lanzacohetes";
 "Be the first to set a score." = "Sé el primero en conseguir una puntuación.";
 "Beach" = "Playa";
@@ -543,7 +542,6 @@
 "Cleared the level without assigning a skill." = "Completaste el nivel sin asignar habilidades.";
 "Cleared without assigning a skill." = "Completado sin asignar habilidades.";
 "Clearer controls" = "Clearer controls";
-"Clearer progress and automatic worldwide records" = "Clearer progress and automatic worldwide records";
 "Clears" = "Victorias";
 "Click or Return to practise" = "Haz clic o pulsa Intro para practicar";
 "Click or press Enter to try again" = "Haz clic o pulsa Intro para volver a intentarlo";
@@ -601,7 +599,7 @@
 "Connecting..." = "Conectando…";
 "Consequentialist optimisation with a strong rescue outcome." = "Optimización consecuencialista con un gran resultado de rescate.";
 "Continue" = "Continuar";
-"Continue journey  {0}/{1}" = "Continuar recorrido  {0}/{1}";
+"Continue journey" = "Continuar recorrido";
 "Continue or start level" = "Continuar o iniciar nivel";
 "Contributors" = "Contributors";
 "Control Method" = "Método de control";
@@ -757,7 +755,6 @@
 "Each zone must have a positive width and height." = "Cada zona debe tener un ancho y una altura mayores que cero.";
 "Earlier" = "Anterior";
 "Earlier actions" = "Earlier actions";
-"Earlier updates" = "Earlier updates";
 "Earn Superzoom per 3 no-Rewind three-star levels" = "Earn Superzoom per 3 no-Rewind three-star levels";
 "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards." = "Earn one Bonus skill per ten distinct three-star levels without rewind, undo or bonus skills. Spend one per attempt on an existing level skill. Bonus runs keep separate records and earn no rewards.";
 "Earn the same play style on 5 distinct cleared levels." = "Consigue el mismo estilo de juego en 5 niveles completados distintos.";
@@ -1020,7 +1017,6 @@
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
 "Home" = "Inicio";
-"Home counts include Journey wins. Older Hot Seat journeys recover their recorded history when a matching save or backup is available. Resume positions and turn ownership stay intact." = "Home counts include Journey wins. Older Hot Seat journeys recover their recorded history when a matching save or backup is available. Resume positions and turn ownership stay intact.";
 "Home {0}/{1}" = "A salvo {0}/{1}";
 "Hopper" = "Brincón";
 "Host" = "Anfitrión";
@@ -1172,7 +1168,6 @@
 "Journey" = "Recorrido";
 "Journey explored" = "Recorrido explorado";
 "Journey is unavailable" = "El recorrido no está disponible";
-"Journey map  {0}/{1} solved" = "Mapa del recorrido  {0}/{1} resueltos";
 "Journey not advanced" = "El recorrido no avanzó";
 "Journey unavailable" = "Recorrido no disponible";
 "Joystick" = "Joystick";
@@ -1492,7 +1487,6 @@
 "Modern Sound" = "Sonido moderno";
 "Modern keyboard controls" = "Controles de teclado modernos";
 "Modern open level format (.nxlv) and custom style pack support." = "Formato abierto y moderno de niveles (.nxlv) con compatibilidad para paquetes de estilos personalizados.";
-"Modern pointer arrows wrap cleanly at the playfield edges. Paused inspection has its own saved preference. HDR presentation retains the existing reduced-flash and performance limits." = "Modern pointer arrows wrap cleanly at the playfield edges. Paused inspection has its own saved preference. HDR presentation retains the existing reduced-flash and performance limits.";
 "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings." = "Los atajos modernos están desactivados. Usa las teclas numéricas para elegir habilidades o activa los controles modernos en Ajustes.";
 "Modifier for extra actions" = "Modificador para acciones adicionales";
 "Monitor" = "Monitor";
@@ -1805,7 +1799,6 @@
 "Pause on interruption" = "Pausar si se interrumpe";
 "Pause on skill change" = "Pausar al cambiar de habilidad";
 "Pause to assign" = "Pausar para asignar";
-"Pause to inspect names and recorded assignments. On Mac, hover over a lemming or press Command-I for its longer history. Character details have no effect on gameplay." = "Pause to inspect names and recorded assignments. On Mac, hover over a lemming or press Command-I for its longer history. Character details have no effect on gameplay.";
 "Pause when you switch apps or disconnect a controller. Resume when you are ready." = "Pausa cuando cambies de app o desconectes un control. Reanuda cuando estés listo.";
 "Pause: Keep the rhythm" = "Pausa: mantener el ritmo";
 "Paused" = "En pausa";
@@ -2305,7 +2298,6 @@
 "Shared: {0} days" = "Compartido: {0} días";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
 "Sharing" = "Compartiendo";
-"Sharing play counts also enables worldwide records and submits eligible saved scores. Explicit record-sharing opt-outs remain respected. Public records include initials, scores and action replays." = "Sharing play counts also enables worldwide records and submits eligible saved scores. Explicit record-sharing opt-outs remain respected. Public records include initials, scores and action replays.";
 "Sharing..." = "Compartiendo…";
 "Shift+R: Retry" = "Shift+R: reintentar";
 "Shift+Tab: Previous skill" = "Shift+Tab: habilidad anterior";
@@ -3237,3 +3229,9 @@
 "Save this run and return to the library. (Esc or Q)" = "Guarda este intento y vuelve a la biblioteca. (Esc o Q)";
 "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Muestra u oculta los fantasmas de intentos anteriores de Hot Seat. (⌘G)";
 "Current graphics: {0}" = "Gráficos actuales: {0}";
+"Interface lettering uses a refined 2× display face. Start countdowns use hand-drawn 4× numerals across Classic, The Tribes and Chronicles on Mac, iOS and Apple TV." = "Interface lettering uses a refined 2× display face. Start countdowns use hand-drawn 4× numerals across Classic, The Tribes and Chronicles on Mac, iOS and Apple TV.";
+"Lemmings lettering" = "Lemmings lettering";
+"Mac wheel zoom is continuous and keeps the pointed terrain in place. Bonus Skill has a clearer name. Stone controls sit at the playfield corner with shared help and fade states." = "Mac wheel zoom is continuous and keeps the pointed terrain in place. Bonus Skill has a clearer name. Stone controls sit at the playfield corner with shared help and fade states.";
+"Mac, iPhone, iPad and Apple TV share completed-level counts across campaign and Journey play. Home offers one Resume. Journey Map keeps browsing separate from starting an attempt." = "Mac, iPhone, iPad and Apple TV share completed-level counts across campaign and Journey play. Home offers one Resume. Journey Map keeps browsing separate from starting an attempt.";
+"New mobile Journey and playlist checkpoints retain their exact queue and position. Solo and Hot Seat sequel progress stay separate. First saves keep a backup, and future-version saves remain protected." = "New mobile Journey and playlist checkpoints retain their exact queue and position. Solo and Hot Seat sequel progress stay separate. First saves keep a backup, and future-version saves remain protected.";
+"Shared progress, safer Resume and clearer controls" = "Shared progress, safer Resume and clearer controls";

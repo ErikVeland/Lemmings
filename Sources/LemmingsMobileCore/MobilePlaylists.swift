@@ -42,6 +42,7 @@ public struct MobilePlaylist: Codable, Equatable, Identifiable, Sendable {
 /// A shuffled run keeps its seed and its fixed order, so a relaunch resumes the
 /// same sequence and no level repeats within the run.
 public struct MobilePlaylistRun: Codable, Equatable, Sendable {
+    public let id: UUID
     /// The playlist this run came from. A shuffle across all fan levels has none.
     public let playlist: UUID?
     public let name: String
@@ -49,6 +50,24 @@ public struct MobilePlaylistRun: Codable, Equatable, Sendable {
     public var position: Int
     public let shuffled: Bool
     public let seed: UInt64
+
+    public init(id: UUID = UUID(), playlist: UUID?, name: String, entries: [MobileFavourites.Entry],
+                position: Int, shuffled: Bool, seed: UInt64) {
+        self.id = id; self.playlist = playlist; self.name = name; self.entries = entries
+        self.position = position; self.shuffled = shuffled; self.seed = seed
+    }
+
+    private enum CodingKeys: String, CodingKey { case id, playlist, name, entries, position, shuffled, seed }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        playlist = try values.decodeIfPresent(UUID.self, forKey: .playlist)
+        name = try values.decode(String.self, forKey: .name)
+        entries = try values.decode([MobileFavourites.Entry].self, forKey: .entries)
+        position = try values.decode(Int.self, forKey: .position)
+        shuffled = try values.decode(Bool.self, forKey: .shuffled)
+        seed = try values.decode(UInt64.self, forKey: .seed)
+    }
 }
 
 /// Ordered playlists and the one active run.

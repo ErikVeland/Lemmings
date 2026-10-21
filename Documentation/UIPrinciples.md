@@ -82,6 +82,9 @@ environment and still needs device verification.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
   into game artwork. AppKit can supply input and accessibility beneath game rendering.
 - Show each outcome once. A filled star already communicates an earned goal.
+- Reserve bevels and green pressed fills for controls. Passive previews, counters,
+  help, receipts and information panels use flat, neutral backgrounds. Show a
+  selected level cover with an outline, without a filled button face.
 - Use familiar action symbols. Pause changes to Play. A reversible action changes
   to Undo. Do not leave a destructive symbol on a button that now undoes it.
 - Distinguish state through shape as well as colour. Earned stars are filled;
@@ -103,6 +106,8 @@ environment and still needs device verification.
   row. Do not leave an empty button slot beside it.
 - Put music notices at the playfield's upper-left corner. Reserve room for
   navigation and replay overlays, and keep the notice outside the HUD.
+- Anchor the gameplay icon row 12 points from the content area's top and right
+  edges. Keep Settings and Menu together, with a 24-point gap before that group.
 - Keep concise names for actions without a familiar symbol. Do not replace a clear
   action name with an invented icon or an initial.
 - Put criteria, records, award descriptions and instructions on their relevant
@@ -183,8 +188,19 @@ remain static until selected. No reward page may take over the result.
 
 ## Typography
 
-Use the shipped green and blue bitmap fonts for all interface text, including
-in-game notices. Classic lemming explosion countdowns use white, bold system
+Use the extended Lemmings lettering for interface text, including in-game notices.
+Keep the compact 5×7 face for tiny HUD text when a complete line cannot fit a
+12-pixel Lemmings face. Never enlarge that compact face for a title or countdown.
+Preserve the original 1× artwork. The dedicated 2× display cut refines colour-cluster
+contours, reduces doubled sparkle blocks and adds letter-specific highlight and
+shade facets. Keep the doubled advances and bearings. Larger text retains this
+painted texture, rather than replacing it with uniform bevel bands.
+Keep the original blue/green ramps, accents, Tamil forms and measured bearings.
+Start countdowns use the dedicated 4× green Lemmings numerals on Mac, iOS and TV
+in all three games. Draw the 64×80 cells at native size. Their contours, counters,
+facets and sparkles are authored on the final grid, with the original painted
+colour clusters and fourfold bearings and advances.
+Classic lemming explosion countdowns use white, bold system
 digits for crisp, readable numbers above each lemming on Mac and iOS. iOS draws
 these digits at the screen's native Retina resolution above the flat or curved
 playfield, with the Mac's font size relative to zoom. The touch magnifier uses
@@ -201,6 +217,12 @@ bitmap text renderer on Mac, iOS and TV, including player setup and replay pages
 Keep each row of peer controls at the same face and scale. Do not size individual
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
+
+Muted offscreen typography checks compare the original 1×, shared 2× and 4× numeral cuts, export
+transparent blue/green atlases with glyph metrics, and render twelve sizes,
+Latin and Tamil extensions, start countdowns, tiny HUD captions and shared fades.
+Three-engine control checks verify corner anchoring, targets and actions. Both mobile SDKs
+compile. Physical mouse, touch and remote delivery remain manual checks.
 
 Wrap level titles at word boundaries. Allocate the measured line height before
 placing metadata, previews or actions. Keep the title face and scale consistent
@@ -359,7 +381,7 @@ Bonus skill, Hot Seat ghosts and Graphics, then a larger gap before Settings and
 Unavailable features collapse out of the row. A spent Bonus skill stays disabled.
 Ghosts use a filled ghost with a selected underline when on, and a slashed ghost
 when off. Bonus skill uses a hammer in both the action row and reward counter.
-Explain every icon with the existing stone-and-bitmap Settings help popover.
+Explain every icon with the existing flat Settings help popover and bitmap lettering.
 Show it after an 800 ms hover or immediately on keyboard focus. Include the
 action, current state and shortcut. Keep disabled explanations available.
 Help must not take focus or intercept input. Dismiss it on pointer exit, input,
@@ -511,7 +533,7 @@ separates interface size from motion and flash reductions. Privacy separates
 sharing from local counts.
 
 Show setting explanations after an 800 ms hover over a control or its caption.
-Use the stone frame and bitmap fonts inside the existing game canvas. Help must
+Use a flat neutral frame and bitmap fonts inside the existing game canvas. Help must
 not take focus or intercept the setting's input. Cancel pending help on pointer
 exit, scrolling, tab changes or Back. Dismiss visible help on input or focus loss.
 Retain the same explanation as accessibility help, including for disabled options.
@@ -1181,12 +1203,12 @@ compiles pass. Physical folding, touch scrolling and VoiceOver delivery remain
 device checks.
 
 Mac superzoom, skip and Bonus skill counters share the gameplay menu fade in Classic,
-Lemmings 2 and Lemmings 3. Use a compact horizontal row of recessed stone badges with a
+Lemmings 2 and Lemmings 3. Use a compact horizontal row of flat readouts with a
 magnifier, skip arrow or hammer beside each count. Keep zero and large counts
 readable. Show names, balances, purpose and current state in hover popovers.
 Place song notices below the row. Show icon help ahead of paused inspection help.
 The counters remain passive. Fade the whole badge, including its background
-and active underline. Keep its layout and accessibility counts available. Muted
+and active marker. Keep its layout and accessibility counts available. Muted
 offscreen checks cover visible, partial, hidden and reduced-motion states,
 disabled fading and menu input targets.
 

@@ -13,6 +13,13 @@ public struct MobileCameraState: Codable, Equatable, Sendable {
 }
 
 public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
+    public struct JourneyContext: Codable, Equatable, Sendable {
+        public let runID: UUID?
+        public let position: Int?
+        public init(runID: UUID? = nil, position: Int? = nil) {
+            self.runID = runID; self.position = position
+        }
+    }
     public var schemaVersion = 1
     public let runID: UUID
     public let engine: String
@@ -31,6 +38,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
     public var owner: String?
     /// Preserves an irreversible spend when its checkpoint arrives before cloud records.
     public var extraSkillUse: ExtraSkillUse?
+    /// Nil only in older saves. An empty context identifies new standalone attempts.
+    public var journeyContext: JourneyContext?
 
     public init(
         runID: UUID,
@@ -46,7 +55,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         savedAt: Date = Date(),
         scope: String? = nil,
         owner: String? = nil,
-        extraSkillUse: ExtraSkillUse? = nil
+        extraSkillUse: ExtraSkillUse? = nil,
+        journeyContext: JourneyContext? = .init()
     ) {
         self.runID = runID
         self.engine = engine
@@ -62,6 +72,13 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         self.scope = scope
         self.owner = owner
         self.extraSkillUse = extraSkillUse
+        self.journeyContext = journeyContext
+    }
+
+    public func matchesJourney(runID: UUID, position: Int, levelIdentifier: String?) -> Bool {
+        guard levelIdentifier == self.levelIdentifier else { return false }
+        guard let journeyContext else { return true } // Legacy saves retain exact-level matching.
+        return journeyContext.runID == runID && journeyContext.position == position
     }
 
     @discardableResult
@@ -78,6 +95,10 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
               camera.zoom > 0,
               savedAt.timeIntervalSinceReferenceDate.isFinite,
               payload.count <= MobileCheckpointStore.maximumDocumentBytes,
+              journeyContext.map({ context in
+                  (context.runID == nil && context.position == nil)
+                      || (context.runID != nil && context.position.map { (0..<100_000).contains($0) } == true)
+              }) ?? true,
               extraSkillUse.map({ $0.attemptID == runID && $0.originalConditions.isValid && $0.conditions != nil }) ?? true else {
             throw MobileCheckpointError.invalid
         }
@@ -150,7 +171,12 @@ public actor MobileCheckpointStore {
         let scoped = scopedURL(owner: owner, scope: scope)
         if FileManager.default.fileExists(atPath: scoped.path)
             || FileManager.default.fileExists(atPath: scoped.appendingPathExtension("backup").path) {
-            return try await MobileCheckpointStore(url: scoped).load()
+            guard let saved = try await MobileCheckpointStore(url: scoped).load() else { return nil }
+            guard saved.scope == scope,
+                  scope != nil || (saved.owner ?? MobileProfiles.defaultID) == owner else {
+                throw MobileCheckpointError.invalid
+            }
+            return saved
         }
         guard let saved = try load(), saved.scope == scope else { return nil }
         if scope == nil, (saved.owner ?? MobileProfiles.defaultID) != owner { return nil }

@@ -1,0 +1,12 @@
+UI test windows: offscreen; audio: muted
+PASS original 1×, retouched 2×, hand-drawn 4× numerals and atlases, 12 sizes, extended Latin/Tamil, tiny HUD, countdowns and inherited fades
+PASS five-icon group, every gap, shared badge fade, both coordinate systems and Bonus skill availability
+PASS classic Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS lemmings2 Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS lemmings3 Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS all five control and three reward popovers, hover delay/exit, keyboard focus, disabled help, passive input, counts 0–9999 and three sizes
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+SKIP native NSWindow mouse delivery in offscreen mode; verify the target's action directly
+PASS extra-skill chooser selection, cancel/confirm, accessible targets and keyboard; paused Inspect, badge/button hover, use and fading at three sizes
+Lemmings typography and gameplay controls integration tests passed.

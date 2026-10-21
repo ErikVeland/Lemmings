@@ -1,0 +1,9 @@
+PASS NxlvKit tvos SDK module
+PASS LemmingsAppCore tvos SDK module
+PASS LemmingsMobileCore tvos SDK module
+PASS LemmingsAudio tvos SDK module
+PASS LemmingsTVCore tvos SDK module
+PASS LemmingsGameArt tvos SDK module
+PASS LemmingsMobileUI tvos SDK module
+PASS LemmingsTVUI tvos SDK module
+PASS UltimateLemmingsTV application entry point

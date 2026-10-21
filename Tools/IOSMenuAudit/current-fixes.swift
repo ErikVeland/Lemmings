@@ -73,11 +73,13 @@ extension MenuAudit {
                 captures.append(["device": name, "file": file, "crowd": 500, "glows": crowd.count, "images": crowdImages])
                 continue
             }
-            let width = min(240, max(0, field.width - 16))
-            let panel = CGRect(x: field.maxX - width - 8, y: field.minY + (layout.portrait != nil ? 56 : 8), width: width,
-                height: width * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
-            guard field.contains(panel), targets.allSatisfy({ !panel.intersects($0.inputFrame) }) else { throw invalidTargets(line: #line) }
-            if layout.canPlay { MobileReplaySkillArt.draw(uses: uses, tick: 146, in: panel, typography: typography, context: context) }
+            let obstacles = targets.map(\.inputFrame) + regions.map { cg($0.frame) }
+                + [layout.minimapFrame].compactMap { $0 }
+            let panel = MobileReplaySkillArt.frame(in: field, below: field.minY + (layout.portrait != nil ? 56 : 8), avoiding: obstacles)
+            if let panel {
+                guard field.contains(panel), obstacles.allSatisfy({ !panel.intersects($0) }) else { throw invalidTargets(line: #line) }
+                if layout.canPlay { MobileReplaySkillArt.draw(uses: uses, tick: 146, in: panel, typography: typography, context: context) }
+            }
             MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 1, endRunArmed: false,
                 panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography, readOnly: true)
                 .draw(in: context, bounds: .init(x: 0, y: 0, width: size.width, height: size.height))
@@ -94,7 +96,8 @@ extension MenuAudit {
             let file = name + "-replay-rescue.png"
             try save(context: context, to: output.appendingPathComponent(file))
             captures.append(["device": name, "file": file, "targets": targets.count, "rescueMasks": effects.count,
-                             "canPlay": layout.canPlay, "portrait": layout.portrait != nil])
+                             "canPlay": layout.canPlay, "portrait": layout.portrait != nil,
+                             "replaySkillPanelVisible": panel != nil && layout.canPlay])
         }
         try JSONSerialization.data(withJSONObject: ["captures": captures, "windows": "none", "audio": "muted",
             "replayPanelOverlapsControls": false, "physicalUIKitAcceptance": "pending"], options: [.prettyPrinted, .sortedKeys])

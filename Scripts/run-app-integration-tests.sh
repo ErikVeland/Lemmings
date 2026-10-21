@@ -29,7 +29,8 @@ cat "$project_dir/Sources/LemmingsLocal/main.swift" \
   "$project_dir/Tests/AppIntegrationTests/home-backdrop.swift" \
   "$project_dir/Tests/AppIntegrationTests/gameplay-quick-controls.swift" \
   "$project_dir/Tests/AppIntegrationTests/extra-skills.swift" \
-  "$project_dir/Tests/AppIntegrationTests/journey-progress.swift" > "$build_dir/main.swift"
+  "$project_dir/Tests/AppIntegrationTests/journey-progress.swift" \
+  "$project_dir/Tests/AppIntegrationTests/lemmings-typography.swift" > "$build_dir/main.swift"
 sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
 test_app="$build_dir/AppIntegrationTests.app"
@@ -47,6 +48,7 @@ test_flags=()
 if [[ "${TEST_SCOPE:-all}" == foundations ]]; then test_flags+=(-D FOUNDATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == foundations-review ]]; then test_flags+=(-D FOUNDATION_TESTS -D FOUNDATION_REVIEW_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == quick-controls ]]; then test_flags+=(-D QUICK_CONTROLS_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == typography ]]; then test_flags+=(-D TYPOGRAPHY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == extra-skills ]]; then test_flags+=(-D EXTRA_SKILL_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == home-backdrop ]]; then test_flags+=(-D HOME_BACKDROP_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == nuke ]]; then test_flags+=(-D NUKE_TESTS); fi

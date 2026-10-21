@@ -3,6 +3,41 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileCheckpointOwnershipTests {
+    @Test func aCopiedScopedFileCannotResumeAsAnotherOwner() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let url = root.appendingPathComponent("current.json")
+        let store = MobileCheckpointStore(url: url)
+        try await store.save(envelope(owner: "one"))
+        let scoped = try #require(FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+            .first { $0.lastPathComponent.hasPrefix("scoped-") && !$0.lastPathComponent.hasSuffix("backup") })
+        let other = root.appendingPathComponent("other/current.json")
+        try await MobileCheckpointStore(url: other).save(envelope(owner: "two"))
+        let bytes = try Data(contentsOf: other)
+        try bytes.write(to: scoped)
+        await #expect(throws: MobileCheckpointError.invalid) { try await store.load(owner: "one", scope: nil) }
+        #expect(try Data(contentsOf: scoped) == bytes)
+    }
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3"])
+    func journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine: String) async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let url = root.appendingPathComponent("current.json"), queue = UUID()
+        var saved = envelope(owner: "guest", scope: "hotseat.team", engine: engine)
+        saved.journeyContext = .init(runID: queue, position: 3)
+        try await MobileCheckpointStore(url: url).save(saved)
+        let loaded = try #require(await MobileCheckpointStore(url: url).load(owner: "host", scope: "hotseat.team"))
+        #expect(loaded.matchesJourney(runID: queue, position: 3, levelIdentifier: "level"))
+        #expect(!loaded.matchesJourney(runID: UUID(), position: 3, levelIdentifier: "level"))
+        #expect(!loaded.matchesJourney(runID: queue, position: 2, levelIdentifier: "level"))
+        #expect(!loaded.matchesJourney(runID: queue, position: 3, levelIdentifier: "changed"))
+        saved.journeyContext = .init()
+        #expect(!saved.matchesJourney(runID: queue, position: 3, levelIdentifier: "level"))
+        var legacy = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(saved)) as? [String: Any])
+        legacy.removeValue(forKey: "journeyContext")
+        let older = try JSONDecoder().decode(MobileCheckpointEnvelope.self, from: JSONSerialization.data(withJSONObject: legacy))
+        #expect(older.journeyContext == nil && older.matchesJourney(runID: queue, position: 3, levelIdentifier: "level"))
+    }
     private func envelope(owner: String?, scope: String? = nil, tick: Int = 10, date: Date = Date(), id: UUID = UUID(), engine: String = "classic-dos") -> MobileCheckpointEnvelope {
         .init(runID: id, engine: engine, engineFingerprint: "engine", levelIdentifier: "level", levelIndex: 0,
               levelFingerprint: "level-hash", tick: tick, selectedControl: 0,

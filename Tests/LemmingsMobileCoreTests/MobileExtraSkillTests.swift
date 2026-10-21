@@ -32,7 +32,8 @@ struct MobileExtraSkillTests {
         #expect(!beforeWallet.retainExtraSkillUse("digger"))
     }
 
-    @Test func tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() throws {
+    // Gameplay ticks on the main actor. Debug L2 stepping exceeds a Swift worker's stack.
+    @Test @MainActor func tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() throws {
         let initial = try tribes()
         func make() -> Lemmings2MobileSession {
             .init(runtime: initial, engineFingerprint: "l2-fixture", levelIdentifier: "bonus/l2",

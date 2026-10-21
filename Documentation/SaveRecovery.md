@@ -32,8 +32,30 @@ Opening a map without a saved curated route opens the level library.
 The completion summary reads saved progress without changing records, campaign
 positions or turn ownership. Earlier NeoLemmix records lack a Hot Seat session
 identity, so they cannot establish session-specific completion in this summary.
-Mobile and TV retain their existing curriculum counters. Their Home resume flow
-also offers one action and compares checkpoint identities for all three engines.
+Mac, mobile and TV use the same completed-level summary. Stock campaign wins
+use shared release/level identities, so native rank keys, mobile indices, cloud
+copies and Journey wins count once. Imported source namespaces remain separate.
+The mobile route hub labels its current curriculum fraction separately.
+When the route is complete and no saved attempt remains, Back is primary.
+The unavailable Continue action is omitted.
+The Home resume flow offers one action for the selected session.
+
+New mobile/TV Journey checkpoints retain the queue ID and position as well as
+the exact level identity. A standalone checkpoint cannot borrow a Journey that
+happens to contain the same level. Older checkpoints retain exact-level matching
+because they contain no queue binding. Their original queue cannot be proved.
+
+Mobile L2/L3 campaigns now use the current solo or Hot Seat storage scope.
+Earlier shared play could write campaign files in the solo folder. Those files
+stay intact; their history cannot be reliably reassigned to an earlier Hot Seat.
+Shared campaign imports merge at the library boundary before a sequel opens.
+L2 retains one coherent survivor chain per tribe. L3 retains its per-tribe
+progress through language changes, using stable stored tribe names.
+
+Mobile storage creates a validated backup on the first save. Campaign summary
+and cloud capture can read a valid backup without moving damaged primary bytes.
+Both invalid copies block campaign reconciliation. Future campaign versions
+cannot be replaced by an older backup or incoming cloud progress.
 
 An imported Classic source can retain completed rank keys as `passed:Rank#position`
 identities under its original hashed source namespace. The summary counts these
@@ -173,3 +195,9 @@ Deleting a player deletes that player's saved runs.
 
 Validation: `Scripts/run-arcade-records-tests.sh` covers discard, unreadable
 runs, deletion cleanup and the records way out.
+
+For 2.1.2, ordinary mobile playlists also keep a persistent run UUID. New
+checkpoints match that UUID, position and level. Restarting the same playlist
+creates a new run. Legacy checkpoints retain exact-level matching. Journey Map
+keeps standalone saved attempts available for browsing without starting play.
+A Journey with a matching checkpoint keeps its queue unchanged while browsing.

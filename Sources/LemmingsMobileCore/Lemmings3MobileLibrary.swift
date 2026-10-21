@@ -13,10 +13,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     public let levels: [MobileLevelSummary]
     private let contentFingerprint: String
 
-    private struct SavedProgress: Codable {
-        var currentTribe = 1
-        var tribes: [String: Lemmings3ClassicCampaign.Progress] = [:]
-    }
+    private typealias SavedProgress = MobileCampaignProgress.Chronicles
 
     private let storage: MobileStorage
     private let soundBank: Lemmings3SoundBank?
@@ -37,7 +34,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         progressLock.lock()
         defer { progressLock.unlock() }
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: savedProgress.currentTribe) ?? .classic
-        let index = savedProgress.tribes[tribe.title]?.index ?? 0
+        let index = savedProgress.progress(for: tribe)?.index ?? 0
         return (tribe.rawValue - 1) * 30 + index
     }
 
@@ -99,7 +96,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         do {
             if let progressFailure { throw Lemmings3MobileLibraryError.progressSave(progressFailure) }
             var campaign = try Lemmings3ClassicCampaign(root: directory, tribe: tribe)
-            if let progress = savedProgress.tribes[tribe.title] { try campaign.restore(progress) }
+            if let progress = savedProgress.progress(for: tribe) { try campaign.restore(progress) }
             if campaign.index != localIndex {
                 try campaign.select(localIndex)
                 try save(campaign.progress, tribe: tribe)
@@ -169,7 +166,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         guard progressFailure == nil else { return }
         do {
             var campaign = try Lemmings3ClassicCampaign(root: directory, tribe: tribe)
-            if let progress = savedProgress.tribes[tribe.title] { try campaign.restore(progress) }
+            if let progress = savedProgress.progress(for: tribe) { try campaign.restore(progress) }
             if campaign.index != index { try campaign.select(index) }
             guard campaign.record(runtime) else { return }
             _ = campaign.advance(after: runtime)
@@ -183,7 +180,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                       tribe: Lemmings3ClassicCampaign.Tribe) throws {
         var proposed = savedProgress
         proposed.currentTribe = tribe.rawValue
-        proposed.tribes[tribe.title] = progress
+        proposed.set(progress, tribe: tribe)
         try storage.save(proposed, name: "lemmings3-campaign")
         savedProgress = proposed
     }

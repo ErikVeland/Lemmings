@@ -56,6 +56,21 @@ extension MobileLibraryViewController {
     }
     var bundledJourney: LearningJourney? { LearningJourneyLibrary.journey }
     var shownJourneyProgress: LearningJourneyProgress { learning.progress }
+    var sharedCampaignProgress: GameProgressPreferences {
+        GameProgressPreferences.capture(defaults: .standard, profileID: profiles.activeID,
+            profileIDs: profiles.players.map(\.id), sessionID: hotSeat?.id)
+    }
+    var completedJourneyLevelCount: Int {
+        var extra = GameProgressPreferences()
+        do {
+            extra = try MobileCampaignProgress.capture(storage: learningStorage)
+        } catch { notice = error.localizedDescription }
+        let saved = learning
+        let entries = (saved.run?.entries ?? []) + (bundledJourney?.lessons.map(\.entry) ?? [])
+        return JourneyCompletionSummary.count(profileID: profiles.activeID, hotSeatID: hotSeat?.id,
+            learning: saved.progress, entries: entries, profileIDs: profiles.players.map(\.id),
+            additionalProgress: extra)
+    }
     var canStartJourney: Bool {
         hotSeat == nil && learning.run == nil && activeRun == nil && pendingCheckpoint == nil
     }
@@ -77,24 +92,19 @@ extension MobileLibraryViewController {
               let catalogue else { return false }
         let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
         guard let identifier = try? queue.checkpointLevelIdentifier(at: run.currentIndex) else { return false }
-        return identifier == checkpoint.levelIdentifier
+        return checkpoint.matchesJourney(runID: run.id, position: run.currentIndex, levelIdentifier: identifier)
     }
 
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
         guard let journey = bundledJourney else { return .init(title: L10n.text("Journey"), details: [L10n.text("Journey is unavailable")], footer: [.init("home", L10n.text("Back"))]) }
         let saved = learning
-        var footer = [GameFrontEnd.Action("home", L10n.text("Back"))]
-        if let run = resumableLearningJourney?.state.run {
-            footer.append(.init("learningResume", L10n.text("Resume  \(run.currentIndex + 1)/\(run.entries.count)"), primary: true))
-        }
+        let resume = resumableLearningJourney?.state.run
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
-        footer.append(.init("learningStart", L10n.text("Continue journey  \(shownJourneyProgress.solvedCount(in: journey))/\(journey.lessons.count)"),
-                            enabled: !unseen.isEmpty || MobileSettings.current(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
-        let rows: [GameFrontEnd.Action] = [
-            .init("learningBrowse", L10n.text("Choose level"), enabled: resumableLearningJourney != nil),
-            .init("learningRevisit", L10n.text("Revisit  \(revisit.count)"), enabled: !revisit.isEmpty),
-            .init("progression", L10n.text("Progression playlists"))]
-        return .init(title: LearningJourney.title, subtitle: subtitle, rows: rows, footer: footer)
+        return MobileHomeArt.journeyPage(title: LearningJourney.title, subtitle: subtitle,
+            completed: completedJourneyLevelCount, solved: saved.progress.solvedCount(in: journey),
+            total: journey.lessons.count, revisit: revisit.count,
+            resume: resume.map { ($0.currentIndex + 1, $0.entries.count) },
+            canContinue: !unseen.isEmpty || MobileSettings.current(from: .standard).classic.unlockAllClassicLevels)
     }
     func progressionPage(subtitle: String) -> GameFrontEnd.Page {
         .init(title: L10n.text("Progression"), subtitle: subtitle,
@@ -109,6 +119,9 @@ extension MobileLibraryViewController {
     func handleLearning(_ id: String) -> Bool {
         switch id {
         case "journey":
+            if let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint),
+               !checkpointResumesLearningRun(checkpoint) { browseSavedRun(); return true }
+            if resumableLearningJourney == nil, !canStartJourney { browseSavedRun(); return true }
             guard resumableLearningJourney != nil || canStartJourney else { return true }
             navigate(.journey)
         case "learningResume": resumeLearningJourney()
@@ -156,13 +169,13 @@ extension MobileLibraryViewController {
             do {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
-                let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
-                if browse, MobileSettings.current(from: .standard).classic.unlockAllClassicLevels,
+                let matching = checkpoint.flatMap { checkpointResumesLearningRun($0) ? $0 : nil }
+                if browse, matching == nil, MobileSettings.current(from: .standard).classic.unlockAllClassicLevels,
                    let journey = bundledJourney, let current = learning.run,
                    current.pool.id.hasPrefix("learning-"),
                    let position = journey.lessons.firstIndex(where: { $0.entry.identity == current.currentEntry.identity }) {
                     var expanded = learning
-                    expanded.run = try LevelSequenceRun(id: current.id, source: current.source, pool: current.pool,
+                    expanded.run = try LevelSequenceRun(source: current.source, pool: current.pool,
                         entries: journey.lessons.map(\.entry), currentIndex: position, createdAt: current.createdAt)
                     try saveLearningState(expanded)
                 }
