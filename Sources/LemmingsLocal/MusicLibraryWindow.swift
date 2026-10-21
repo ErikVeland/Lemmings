@@ -47,7 +47,7 @@ import NxlvKit
         let page = GameMenuPage(title: L10n.text("Download soundtracks"))
         page.backTitle = welcome ? L10n.text("Not now") : L10n.text("Back")
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-        let included = GameLabel(labelWithString: L10n.text("Original soundtracks included"))
+        let included = GameLabel(labelWithString: L10n.text("Originals included. Fancy a remix?"))
         included.role = .heading
         included.frame = CGRect(x: 0, y: 426, width: 992, height: 32)
         page.body.addSubview(included)

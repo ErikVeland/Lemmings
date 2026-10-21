@@ -28,6 +28,7 @@ import UIKit
     private var trackedTouchIDs = Set<ObjectIdentifier>()
     private var ignoresTouchSequenceUntilLift = false
     private var pinchGestureActive = false
+    private var scrollGestureActive = false
     var onDJShuffle: (() -> Bool)?
     private var rawHoverPoint: CGPoint?
     private(set) var touchInput: MobileTargetInput = .touch
@@ -201,13 +202,16 @@ import UIKit
     }
 
     @objc private func handleScroll(_ gesture: UIPanGestureRecognizer) {
-        guard gesture.state == .began || gesture.state == .changed else { return }
+        if gesture.state == .began { scrollGestureActive = true }
+        guard gesture.state == .began || gesture.state == .changed else {
+            scrollGestureActive = false
+            return
+        }
         let delta = gesture.translation(in: self)
         gesture.setTranslation(.zero, in: self)
+        guard scrollGestureActive, acceptsInput(at: gesture.location(in: self)) else { return }
         // The pointer stays at its screen position as the camera moves beneath it.
-        if acceptsInput(at: gesture.location(in: self)) {
-            rawHoverPoint = gesture.location(in: self)
-        }
+        rawHoverPoint = gesture.location(in: self)
         onTouchEffects?([.pan(MobilePoint(x: delta.x, y: delta.y))])
     }
     #if os(iOS)
@@ -317,8 +321,12 @@ import UIKit
         automaticallyFitsViewport = false
     }
 
-    func cancelInteraction() {
+    func cancelInteraction(clearHover: Bool = false) {
         activeTouchID = nil
+        // Changed events from an old pose must wait for a fresh gesture begin.
+        pinchGestureActive = false
+        scrollGestureActive = false
+        if clearHover { rawHoverPoint = nil }
         onTouchEffects?(router.cancel())
     }
 
@@ -642,6 +650,10 @@ import UIKit
             if !effects.isEmpty { onTouchEffects?(effects) }
         }
         if recognizer.state == .began || recognizer.state == .changed {
+            guard pinchGestureActive, acceptsInput(at: recognizer.location(in: self)) else {
+                recognizer.scale = 1
+                return
+            }
             let anchor = inputPoint(recognizer.location(in: self))
             gameViewport.magnify(
                 by: recognizer.scale,

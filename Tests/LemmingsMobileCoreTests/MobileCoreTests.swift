@@ -365,12 +365,13 @@ struct MobileCoreTests {
     }
 
     @Test @MainActor func lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() throws {
-        let sessions: [any MobileGameSession] = [
-            ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),
-            Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2"),
-            Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3")
+        let factories: [() throws -> any MobileGameSession] = [
+            { ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0) },
+            { Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2") },
+            { Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3") }
         ]
-        for session in sessions {
+        for makeSession in factories {
+            let session = try makeSession()
             #expect(session.lemmingInspection?.individuals.isEmpty == true)
             for _ in 0..<300 where session.activeLemmingCount == 0 && !session.snapshot.isComplete { session.tick() }
             for _ in 0..<3 { session.tick() }
@@ -381,6 +382,13 @@ struct MobileCoreTests {
             #expect(!session.assign(control: -1, to: individual.id))
             #expect(session.lemmingInspection?.individuals == first.individuals)
             let checkpoint = try session.checkpointPayload()
+            let restored = try makeSession()
+            try restored.restoreCheckpointPayload(checkpoint)
+            #expect(restored.lemmingInspection?.individuals == first.individuals)
+            let retry = try makeSession()
+            for _ in 0..<before.tick { retry.tick() }
+            #expect(retry.lemmingInspection?.individuals == first.individuals)
+            #expect((individual.preference + " " + individual.want).split(whereSeparator: \.isWhitespace).count == 10)
             let assigned = session.assign(control: 0, to: individual.id)
             let after = try #require(session.lemmingInspection)
             #expect(after.individuals.flatMap(\.actions).count == (assigned ? 1 : 0))
@@ -393,6 +401,8 @@ struct MobileCoreTests {
             let rewound = try #require(session.lemmingInspection)
             #expect(rewound.individuals.flatMap(\.actions).isEmpty)
             #expect(rewound.individuals.first?.name == individual.name)
+            #expect(rewound.individuals.first?.preference == individual.preference)
+            #expect(rewound.individuals.first?.want == individual.want)
         }
     }
 

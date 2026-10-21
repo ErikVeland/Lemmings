@@ -16,8 +16,8 @@ import LemmingsMobileCore
 #endif
 
 @MainActor struct MobileNavigationRecoveryTests {
-    private func withGame(rendered: @escaping () -> Void = {},
-                          _ body: (MobileGameViewController) async throws -> Void) async throws {
+    private func withGame(turn: MobileGameTurn? = nil, rendered: @escaping () -> Void = {},
+                          _ body: @MainActor (MobileGameViewController) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let previous = UserDefaults.standard.object(forKey: MobileSettings.activeProfileKey)
         let runtime = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
@@ -30,7 +30,7 @@ import LemmingsMobileCore
             })
         let controller = MobileGameViewController(summary: .init(index: 0, rank: "Classic", number: 1, title: "Fixture"),
             session: session, checkpointStore: .init(url: root.appendingPathComponent("current.json")),
-            restoredCheckpoint: nil, settingsProfileID: "navigation-test")
+            restoredCheckpoint: nil, turn: turn, settingsProfileID: "navigation-test")
         defer {
             controller.viewDidDisappear(false)
             UserDefaults.standard.set(previous, forKey: MobileSettings.activeProfileKey)
@@ -39,6 +39,8 @@ import LemmingsMobileCore
         controller.loadViewIfNeeded()
         _ = controller.inputAdapter
         controller.view.frame = CGRect(x: 0, y: 0, width: 834, height: 1194)
+        controller.view.setNeedsLayout()
+        controller.view.layoutIfNeeded()
         try await body(controller)
     }
 
@@ -129,6 +131,24 @@ import LemmingsMobileCore
             #expect(game.playState.phase == .ready)
             #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text("START") })
             #expect(game.session.snapshot.tick == 0)
+        }
+    }
+
+    @Test(arguments: [false, true])
+    func restoringPlayableSizeKeepsTheStartBoundary(shared: Bool) async throws {
+        let turn: MobileGameTurn? = shared ? .init(scope: "hotseat.pose", owner: "guest", ownerName: "GUEST",
+            ownerPortrait: 0, choices: { _ in [] }) : nil
+        try await withGame(turn: turn) { game in
+            game.viewDidLayoutSubviews()
+            let snapshot = game.session.snapshot
+            game.view.frame.size = CGSize(width: 100, height: 100)
+            game.viewDidLayoutSubviews()
+            game.view.frame.size = CGSize(width: 834, height: 1194)
+            game.viewDidLayoutSubviews()
+            #expect(game.playState.phase == .ready)
+            #expect(game.session.snapshot == snapshot)
+            #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text(shared ? "READY" : "START") })
+            #expect(!game.overlayCanvas.page.footer.contains { $0.title == L10n.text("RESUME") })
         }
     }
 

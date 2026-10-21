@@ -224,7 +224,7 @@ import NxlvKit
         guard let owner else { return }
         let page = GameMenuPage(title: L10n.text("\(next.initials)'s turn"), subtitle: L10n.text("PASS THE CONTROLS"))
         page.controllerBackButton.isHidden = true
-        page.setDetail(L10n.text("The game will wait. Give the controls to \(next.initials), then choose Ready."))
+        page.setDetail(L10n.text("Get settled. The game waits until you choose Ready."))
         page.addPrimaryAction(L10n.text("Ready, \(next.initials)")) { [weak self, weak page] in
             guard let page, GameScreen.shared.contains(page) else { return }
             GameScreen.shared.dismiss(page)

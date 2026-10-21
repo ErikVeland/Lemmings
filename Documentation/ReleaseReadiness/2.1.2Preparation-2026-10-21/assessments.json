@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-22",
+  "result": "passed",
+  "authoredStories": 128,
+  "wordsPerEnglishStory": 10,
+  "focusedTests": 14,
+  "windows": "offscreen",
+  "audio": "muted",
+  "runner": "Tools/UITestRunner/run.py",
+  "engines": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "checks": [
+    "Names preserved; stable stories through retry, rewind and checkpoint restore",
+    "All 128 stories render in narrow phone, Mac page and paused hover layouts",
+    "Action/input target checks; no simulation state changed by inspection"
+  ],
+  "sourceHashes": {
+    "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift": "8ccedf9d11d1e0740b3df16638a20a63366c0a6c0dbee25d8f8ee881cb95d0ec",
+    "Sources/LemmingsAppCore/Records/LemmingInspection.swift": "3779bd99d36087e1d1304aa9e1ccf488f33b1b53ba3cdcf67deeddf08cd04b9b",
+    "Tests/LemmingsAppCoreTests/LemmingAssessmentTests.swift": "143cf490e2174bb205c0ebab7b178f22cb27192b303d57c848d1adc48009a6a8",
+    "Tests/LemmingsLocalTests/LemmingInspectionTests.swift": "e6adc5f9435e74855d2b965a29664a3b8e94863898c3ae8e061174f9a7e837e3",
+    "Tests/LemmingsLocalTests/LemmingAssessmentRenderingTests.swift": "5203b3e3392d4ddbdc84509b34fe52c63163a583edfda18dcad4a4d15fd96df2",
+    "Tests/LemmingsMobileCoreTests/MobileCoreTests.swift": "8436a10280d39a2d3b295c79846012b711ccc63d70af181d94b6a55f81ab5108"
+  },
+  "limits": [
+    "Existing saves receive new assessments once; names remain stable",
+    "No physical-device or VoiceOver acceptance",
+    "Eight other languages use English fallback pending translation review"
+  ],
+  "log": "assessments.log"
+}

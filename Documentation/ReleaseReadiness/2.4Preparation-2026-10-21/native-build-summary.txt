@@ -1,0 +1,15 @@
+native-tests-build.log:
+/Users/veland/Lemmings/Tests/NxlvKitTests/ZipArchiveTests.swift:11:23: error: cannot find 'Process' in scope
+   |                       `- error: cannot find 'Process' in scope
+** TEST BUILD FAILED **
+
+native-isolated-build.log:
+/Users/veland/Lemmings/.build/duo-2.4/native-harness/Tests/MobileNavigationRecoveryTests.swift:42:19: error: sending 'controller' risks causing data races [#RegionIsolation::SendingRisksDataRace]
+    |                   |- error: sending 'controller' risks causing data races [#RegionIsolation::SendingRisksDataRace]
+** TEST BUILD FAILED **
+
+native-isolated-build-final.log:
+** TEST BUILD SUCCEEDED **
+
+native-layout-build.log:
+** TEST BUILD SUCCEEDED **

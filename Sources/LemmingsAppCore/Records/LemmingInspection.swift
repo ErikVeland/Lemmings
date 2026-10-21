@@ -5,7 +5,7 @@ import NxlvKit
 /// Optional character details derived from a frozen level state and its applied inputs.
 /// This model never steps an engine or writes to the attempt's history.
 public struct LemmingInspection: Sendable {
-    public static let catalogueVersion = 1
+    public static let catalogueVersion = LemmingAssessmentCatalogue.version
     public struct Action: Equatable, Sendable {
         public let tick: Int
         public let title: String
@@ -31,9 +31,9 @@ public struct LemmingInspection: Sendable {
     public init(initial: ActionReplayState, current: ActionReplayState,
                 commands: [LeaderboardActionReplay.Command]) throws {
         tick = current.tick
-        // The catalogue version is part of the mapping contract. It must remain
-        // available when a later catalogue is introduced.
-        let scope = initial.engine + ":" + (try initial.hash()) + ":" + String(Self.catalogueVersion)
+        // Preserve the original identity seed so the new assessments do not rename
+        // lemmings. Saved runs reconstruct this same initial state on every host.
+        let scope = initial.engine + ":" + (try initial.hash()) + ":1"
         let seed = SHA256.hash(data: Data(scope.utf8)).prefix(8).reduce(UInt64(0)) { ($0 << 8) | UInt64($1) }
         let actors: [(Int, String)]
         switch current {
@@ -58,9 +58,10 @@ public struct LemmingInspection: Sendable {
         }
         individuals = actors.filter { $0.0 >= 0 }.sorted { $0.0 < $1.0 }.map { id, status in
             let index = (Int(seed % UInt64(Self.names.count)) + id % Self.names.count) % Self.names.count
-            let character = Self.characters[Int((seed &+ UInt64(id) &* 17) % UInt64(Self.characters.count))]
-            return Individual(id: id, name: Self.names[index], preference: L10n.text(character.0),
-                want: L10n.text(character.1), status: status, actions: actions[id] ?? [])
+            let character = LemmingAssessmentCatalogue.story(at:
+                LemmingAssessmentCatalogue.index(seed: seed, actorID: id))
+            return Individual(id: id, name: Self.names[index], preference: character.0,
+                want: character.1, status: status, actions: actions[id] ?? [])
         }
     }
 
@@ -136,18 +137,4 @@ public struct LemmingInspection: Sendable {
         "Marsh", "Mica", "Mint", "Myrtle", "Nutmeg", "Olive", "Opal", "Peach",
         "Pearl", "Pollen", "Poppy", "Quill", "Rain", "Rook", "Rose", "Russet",
         "Sage", "Sedge", "Sorrel", "Sprig", "Sunny", "Teal", "Thistle", "Thyme"]
-    private static let characters: [(InterfaceMessage, InterfaceMessage)] = [
-        ("Collects smooth stones.", "Wants a striped one for the collection."),
-        ("Likes the sound of rain.", "Would like a dry place to listen."),
-        ("Enjoys a good view.", "Hopes to see the sea someday."),
-        ("Likes company.", "Would welcome a quiet place to sit together."),
-        ("Keeps bits of coloured string.", "Wants to make something with them."),
-        ("Enjoys small discoveries.", "Hopes to find a shell."),
-        ("Likes a familiar tune.", "Wants to remember how the next bit goes."),
-        ("Has a soft spot for moss.", "Would like a little patch of garden."),
-        ("Likes watching clouds.", "Hopes the next one looks like a duck."),
-        ("Enjoys the smell of toast.", "Would like a warm breakfast."),
-        ("Collects interesting leaves.", "Hopes to find a red one."),
-        ("Likes a tidy shelf.", "Needs somewhere for all these stones.")
-    ]
 }

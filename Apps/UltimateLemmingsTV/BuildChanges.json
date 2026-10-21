@@ -1,10 +1,9 @@
 {
   "changes": [
-    "Shared campaign and Journey completion counts with one Resume",
-    "Exact queue and position for new Journey and playlist checkpoints",
-    "Separate Solo and Hot Seat sequel progress with safe recovery",
-    "Refined Lemmings lettering and hand-drawn 4× countdown numerals",
-    "Shared Classic, Lemmings 2 and Lemmings 3 controls with paused Ready handovers",
-    "Fixed × menu selection and gameplay input handoff; Ready still requires a fresh press"
+    "One Resume gets you back to your game. Campaign and Journey wins count each level once.",
+    "Your journeys and playlists keep their place. Solo and Hot Seat progress stay separate. Ready waits for you.",
+    "Smoother Mac wheel zoom, clearer Bonus skill controls and a fix for Apple TV selection.",
+    "Refined bitmap lettering and new countdown numerals. Even counting to three got some attention.",
+    "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only."
   ]
 }

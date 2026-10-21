@@ -482,7 +482,7 @@ typealias MobileGameControllerBase = UIViewController
         if let previous = lastHUDLayout, previous != layout {
             cancelPendingL3ToolDirection()
             hud.cancelHeldControls()
-            playfieldView.cancelInteraction()
+            playfieldView.cancelInteraction(clearHover: true)
             previewPoint = nil
             highlightedTarget = nil
             touchLoupe.isHidden = true
@@ -497,10 +497,7 @@ typealias MobileGameControllerBase = UIViewController
             }
         } else if layoutSuspended {
             layoutSuspended = false
-            showOverlay(title: L10n.text("Paused"), actions: [
-                (L10n.text("RESUME"), { [weak self] in self?.resumePlay() }),
-                (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
-            ], pauseOverview: true)
+            pausePlay(showControls: true)
         }
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
         playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }

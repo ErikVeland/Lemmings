@@ -1,5 +1,10 @@
 # THE TROLLEY
 
+Follow the shared [narrative direction](NarrativeDirection.md) for authored
+interpretation and award names. The [copy audit](NarrativeCopyAudit.md) separates
+proposed rewrites from current presentation and stored history. Keep the evidence
+rules below intact; humour must not invent sacrifice, intent or a proven maximum.
+
 THE TROLLEY asks how many Lemmings a completed attempt saved compared with what
 is known to be saveable. It runs after the engine has ended an attempt, on both
 success and failure. It does not take part in physics, rescue rules, medals,

@@ -1,0 +1,789 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 4] NxlvKit
+[2 / 6] NxlvKit
+[3 / 7] NxlvKit
+[8 / 10] LemmingsAppCore
+[23 / 25] LemmingsAppCore
+[26 / 28] LemmingsNativePort_NxlvKit
+[28 / 30] NxlvKit
+[30 / 31] NxlvKit
+[32 / 36] LemmingsMobileCore
+[33 / 37] LemmingsMobileCore
+[36 / 38] LemmingsMobileBetaTool-product
+[38 / 40] LemmingsMobileBetaTool-product
+[53 / 56] LemmingsMobileCore
+[55 / 55] LemmingsMobileBetaTool-product
+[56 / 60] LemmingsAppCoreTests-product
+[56 / 116]
+[68 / 123] NxlvKit-product
+[69 / 123] LemmingsMobileCoreTests-product
+[71 / 129] LemmingsDataTool-product
+[73 / 131] LemmingsAudio
+[83 / 143] LemmingsAudio
+[87 / 143] LemmingsAudio
+[95 / 167] NxlvKitTests-product
+[98 / 182] NxlvKitTests-product
+[100 / 198] LemmingsDataTool-product
+[102 / 198] LemmingsAudio
+[105 / 198] LemmingsTVCore
+[107 / 198] NxlvKitTests-product
+[108 / 198] NxlvKitTests-product
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[108 / 198] LemmingsAppCoreTests-product
+[112 / 195] NxlvKitTests-product
+[115 / 195] LemmingsTVCore
+[116 / 195] LemmingsTVCore
+[118 / 196] LemmingsGameArt
+[120 / 200] LemmingsTVCore
+[121 / 200] LemmingsTVCore
+[122 / 200] LemmingsMobileCoreTests-product
+[124 / 200] LemmingsMobileCoreTests-product
+[125 / 200] LemmingsTVCore
+[128 / 200] LemmingsTVCore
+[131 / 215] LemmingsGameArt
+[132 / 215] LemmingsMobileCoreTests-product
+[133 / 215] LemmingsMobileCoreTests-product
+[134 / 215] LemmingsMobileCoreTests-product
+[135 / 215] LemmingsMobileCoreTests-product
+[136 / 215] LemmingsMobileCoreTests-product
+[136 / 215] NxlvKitTests-product
+[139 / 215] LemmingsGameArt
+[140 / 216] LemmingsMobileCoreTests-product
+[142 / 216] NxlvKitTests-product
+[144 / 216] LemmingsGameArt
+[145 / 216] LemmingsGameArt
+[146 / 216] LemmingsMobileCoreTests-product
+[148 / 216] LemmingsGameArt
+[149 / 216] LemmingsGameArt
+[153 / 223] LemmingsMobileMenuAudit-product
+[155 / 223] LemmingsLocal
+[156 / 223] LemmingsGameArt
+[157 / 223] LemmingsGameArt
+[161 / 242] LemmingsMobileUI
+[165 / 242] LemmingsMobileUI
+[169 / 242] LemmingsMobileUI
+[175 / 272] LemmingsLocal
+[178 / 271] NxlvKitTests-product
+[178 / 271] LemmingsMobileMenuAudit-product
+[184 / 271] LemmingsMobileMenuAudit-product
+[185 / 271] LemmingsMobileMenuAudit-product
+[189 / 271] LemmingsLocal-product
+[192 / 271] LemmingsLocal-product
+[193 / 271] LemmingsMobileMenuAudit-product
+[195 / 271] LemmingsLocal-product
+[197 / 271] LemmingsMobileCoreTests-product
+[200 / 271] LemmingsLocal-product
+[201 / 271] LemmingsLocal-product
+[203 / 271] LemmingsLocal-product
+[205 / 273] LemmingsLocal
+[207 / 273] LemmingsLocal-product
+[210 / 273] LemmingsLocal
+[213 / 273] LemmingsLocal
+[215 / 273] LemmingsLocal-product
+[217 / 273] LemmingsLocal
+[218 / 273] LemmingsLocal
+[218 / 273] LemmingsLocal-product
+[220 / 273] LemmingsMobileCoreTests-product
+[222 / 273] LemmingsMobileCoreTests-product
+[224 / 273] LemmingsMobileCoreTests-product
+[226 / 273] LemmingsAppCoreTests-product
+[227 / 273] LemmingsAppCoreTests-product
+[227 / 273] LemmingsLocal
+[231 / 276] LemmingsLocal
+[234 / 276] LemmingsAppCoreTests-product
+[236 / 276] LemmingsAppCoreTests-product
+[236 / 276]
+[239 / 275] NxlvKitTests-product
+[239 / 275]
+[241 / 274] LemmingsTVCoreTests-product
+[242 / 274] LemmingsTVCore-product
+[243 / 272] LemmingsGameArt
+[247 / 271] LemmingsMobileUI
+[252 / 276] LemmingsGameArt-product
+[252 / 276] LemmingsMobileUI
+[255 / 277] LemmingsMobileUITests-product
+[256 / 277] LemmingsMobileUITests-product
+[258 / 278] LemmingsAppCoreTests-product
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[261 / 281] LemmingsTVCoreTests-product
+[263 / 283] LemmingsAppCoreTests-product
+[265 / 285] LemmingsTVCoreTests-product
+[265 / 285] LemmingsMobileUITests-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[268 / 285] LemmingsLocal-product
+[269 / 287] LemmingsTVCoreTests-product
+[269 / 287] LemmingsMobileUITests-product
+[271 / 288] LemmingsLocal-product
+[273 / 288] LemmingsAppCoreTests-product
+[273 / 288] LemmingsTVCoreTests-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6264:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6262 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6263 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6264 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6265 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6266 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6690:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6688 |       openPanel.canChooseFiles = true
+6689 |       openPanel.canChooseDirectories = false
+6690 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6691 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6692 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8073 |       openPanel.canChooseFiles = true
+8074 |       openPanel.canChooseDirectories = false
+8075 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8076 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8918:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8916 |     keyboard.controllerRewindHeld = { [weak self] held in
+8917 |       guard let self else { return }
+8918 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8919 |       else if self.rewindHeld { self.endContinuousRewind() }
+8920 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[276 / 288] LemmingsLocal
+[279 / 288] LemmingsTVCoreTests-product
+[281 / 289] LemmingsAppCoreTests-product
+[297 / 304] LemmingsLocalTests-product
+[297 / 305] LemmingsLocalTests-product
+[302 / 307] LemmingsLocalTests-product
+[304 / 307] LemmingsLocalTests-product
+[306 / 307] LemmingsLocalTests-product
+[309 / 309] LemmingsDataTool-product
+[313 / 313] LemmingsMobileMenuAudit-product
+Build complete! (44.69 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileExplosionParityTests started.
+􀟈  Suite MobileArtworkTests started.
+􀟈  Suite MobileShortPlayCatalogueTests started.
+􀟈  Suite MobileStorageTests started.
+􀟈  Suite MobileBundledContentTests started.
+􀟈  Suite MobilePlayerContentImportTests started.
+􀟈  Suite MobileMusicAssignmentTests started.
+􀟈  Suite MobileContentImportLimitTests started.
+􀟈  Suite MobileMusicContextTests started.
+􀟈  Suite MobileCursorCameraTests started.
+􀟈  Suite MobileExtraSkillTests started.
+􀟈  Suite MobileControllerConnectionTests started.
+􀟈  Suite MobileCollectionsMigrationTests started.
+􀟈  Suite MobileFramePacingTests started.
+􀟈  Suite MobileBombCountdownTests started.
+􀟈  Suite MobileLevelSourceTests started.
+􀟈  Suite MobileShuffleAllTests started.
+􀟈  Suite MobileTerrainCacheTests started.
+􀟈  Suite MobilePlaylistTests started.
+􀟈  Suite MobilePortraitHUDTests started.
+􀟈  Suite MobileCheckpointOwnershipTests started.
+􀟈  Suite Lemmings3MobileRendererTests started.
+􀟈  Suite MobileBuildInfoTests started.
+􀟈  Suite MobileProgressionBuilderTests started.
+􀟈  Suite MobileAdaptiveLayoutTests started.
+􀟈  Suite MobileRewindTests started.
+􀟈  Suite Lemmings2MobileRendererTests started.
+􀟈  Suite FanPackCorpusTests started.
+􀟈  Suite MobilePauseSummaryTests started.
+􀟈  Suite MobileContentFingerprintTests started.
+􀟈  Suite MobileHotSeatTests started.
+􀟈  Suite MobileCoreTests started.
+􀟈  Suite MobileCatalogueTests started.
+􀟈  Suite MobileSettingsTests started.
+􀟈  Suite MobileCampaignProgressTests started.
+􀟈  Suite MobileLevelPreparationTests started.
+􀟈  Suite MobileLearningTests started.
+􀟈  Suite MobileBitmapTests started.
+􀟈  Suite MobilePrecisionSelectionTests started.
+􀟈  Suite MobileFanCountStoreTests started.
+􀟈  Suite MobileFavouritesTests started.
+􀟈  Test countdownHoldsWhenHiddenAndCancelsForPlanning() started.
+􀟈  Test bombAndNukeCutPopAndRemoveSelectionWithEveryArtwork() started.
+􀙟  Test opensBundledSequelCampaignsWithoutAnImport() skipped.
+􀙟  Test validatesAndInstallsPlayerOwnedNeoLemmixPacks() skipped.
+􀟈  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() started.
+􀟈  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() started.
+􀟈  Test tunesFollowTheReleaseAndLevelTitle() started.
+􀙟  Test importsAndRendersPlayerOwnedLemmings3Data() skipped.
+􀟈  Test fallsBackToTheBackupAndKeepsTheDamagedFile() started.
+􀙟  Test importsAndRendersPlayerOwnedLemmings2Data() skipped.
+􀟈  Test resultTagsBonusConditionsSeparatelyFromRewind() started.
+􀟈  Test resolvesBundledContentWithoutCopyingItAndPrefersImports() started.
+􀟈  Test pinnedSourcesSurvivePlaylistResumeAndRejectReplacementBytes() started.
+􀟈  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() started.
+􀟈  Test importsOlderDefaultsOnce() started.
+􀟈  Test missingEvidenceOrDataNeverCreatesAnOpening() started.
+􀟈  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() started.
+􀟈  Test lifecycleResetDoesNotRequestDisconnectPause() started.
+􀟈  Test fileCopyEnforcesTheActualByteLimit() started.
+􀟈  Test arrangementCyclesCountTheRealCampaignOccurrences() started.
+􀟈  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() started.
+􀟈  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() started.
+􀟈  Test importEntryCountStopsAtTheConfiguredLimit() started.
+􀟈  Test disconnectDuringPlayPausesOnce() started.
+􀟈  Test centreOutsideLetterboxAndInvalidTimeDoNotScroll() started.
+􀟈  Test pauseAndLifecycleGapsDoNotCreatePressureOrEarnRecovery() started.
+􀟈  Test restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() started.
+􀟈  Test sustainedCPUAndGPUPressureReduceCadence() started.
+􀟈  Test thermalCeilingsUseEvenCadenceAndDoNotRestoreImmediately() started.
+􀟈  Test disconnectOnMenuDoesNotRequestGameplayPause() started.
+􀟈  Test everyEngineRetainsItsClockAtEveryCadenceAndSpeed() started.
+􀟈  Test testMobileCollectionsMigrateToActiveProfile() started.
+􀟈  Test isolatedStallIsIgnoredAndRecoveryNeedsSustainedHeadroom() started.
+􀟈  Test soloAndSharedQueuesRecallTheirOwnOrderPositionAndSeed() started.
+􀟈  Test missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() started.
+􀟈  Test edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􀟈  Test journeyContextRetainsItsFullScorePosition() started.
+􀟈  Test savedSourceSurvivesACollectionChangingItsRankAndPosition() started.
+􀟈  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() started.
+􀟈  Test reportedFileSizeIsNotCountedAgainAfterCopy() started.
+􀟈  Test bombsAndNukesRenderEveryDigitWithAllClassicArtwork() started.
+􀟈  Test editingKeepsOrderAndRejectsDuplicates() started.
+􀟈  Test safeAreaAndPlayfieldOcclusionsKeepPortraitControls() started.
+􀟈  Test engineDoesNotMakeOfficialSequelsFanMade() started.
+􀟈  Test exhaustedFrameDefersWholeTicksWithoutLosingTime() started.
+􀟈  Test legacyPlaylistRunGainsAPersistentIdentityWithoutChangingItsOrder() started.
+􀟈  Test theFanPoolListsEveryLevelOnceAndPlaysLazily() started.
+􀟈  Test concurrentRendererCopiesKeepIndependentCompositedFrames() started.
+􀟈  Test terrainEditsRewindBranchesAndPaletteChangesInvalidateTheCache() started.
+􀟈  Test preparationFailureRemainsVisibleUntilTheNextRequest() started.
+􀟈  Test heldRewindStopsOnceAndCannotBecomeATap() started.
+􀟈  Test releaseRateHoldAndCancellationDoNotBecomeDoubleTaps() started.
+􀟈  Test oldSummariesRemainReadableWithoutInventingAnOrigin() started.
+􀟈  Test releaseRateDoubleTapReplacesSecondStepAndDoesNotRepeat() started.
+􀟈  Test pauseAndNukeHoldNeverAlsoTap() started.
+􀟈  Test unchangedTerrainReusesConversionAndCompositingCannotMutateIt() started.
+􀟈  Test rateRepeatsAndStopsOnCancel() started.
+􀟈  Test obstructedPortraitControlsUseAdaptiveFallback() started.
+􀟈  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test originalIPadProKeepsTouchDeckOnRotation() started.
+􀟈  Test recentsKeepFiftyDistinctNewestFirst() started.
+􀟈  Test chroniclesSparseEditsMatchFreshFullSceneConversionAfterRewind() started.
+􀟈  Test shortPortraitKeepsNavigationAndMenuApart() started.
+􀟈  Test twoRowsKeepHeightAndMapAcrossEngines() started.
+􀟈  Test newerCheckpointVersionCannotBeOverwritten() started.
+􀟈  Test welcomeTracksInstalledBuildIdentityInsteadOfReusedBuildNumber() started.
+􀟈  Test speedTouchHoldKeepsReachedTierAndNextTapResets() started.
+􀟈  Test aCopiedScopedFileCannotResumeAsAnotherOwner() started.
+􀟈  Test missingManifestRetainsVersionAndBuildWithoutInventingChanges() started.
+􀟈  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() started.
+􀟈  Test realCampaignSkillsAndPopulationReachTheSharedScorer() started.
+􀟈  Test moleUsesTraceMappedFramesForKnownStates() started.
+􀟈  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() started.
+􀟈  Test fireballUsesTheNativeSixByFourFootprint() started.
+􀟈  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() started.
+􀟈  Test animatedTrapFrameRejectsInvalidDimensionsAndPalette() started.
+􀟈  Test animatedTrapFrameUsesRuntimeFrameAndClampsToDecodedFrames() started.
+􀟈  Test backgroundCheckpointKeepsTheCapturedDiggerState() started.
+􀟈  Test runsPersistWithTheirFixedOrder() started.
+􀟈  Test tabletopResultsRequireTwoUsableClearScreens() started.
+􀟈  Test nativePanelDecoderRejectsInvalidSourceDimensions() started.
+􀟈  Test shuffleIsAPermutationThatRepeatsForASeed() started.
+􀟈  Test wideIPadUsesTouchDeckAndTinyViewsSuspend() started.
+􀟈  Test lemmings3KeepsItsNativePanelAndTouchTargetsOnWideScreens() started.
+􀟈  Test transparentSpritePixelsLeaveTerrainVisible() started.
+􀟈  Test replayHistoryIncludesLegacyScheduledAssignments() started.
+􀟈  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() started.
+􀟈  Test creatureSpriteUsesItsOwnPaletteAndHonoursTransparency() started.
+􀟈  Test dividedScreensKeepGameplayAcrossTheTopAndControlsFillingTheBottom() started.
+􀟈  Test animatedTrapFrameCompositesItsPaletteAndKeepsTransparentPixels() started.
+􀟈  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() started.
+􀟈  Test nativePanelDecoderUsesModeXPlanesAndSixBitPalette() started.
+􀟈  Test compactLandscapeShowsEveryNativeSkillWithoutScrolling() started.
+􀟈  Test indexedPixelsUseTheNativePalette() started.
+􀟈  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() started.
+􀟈  Test securedGoalAndRunEndingHaveDistinctStates() started.
+􀟈  Test moleFallsBackWhenStateHasNoCapturedSourceMapping() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test everyBundledFanLevelLoadsRendersAndTicks() started.
+􀟈  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() started.
+􀟈  Test zeroMarginDiffersFromAnImpossibleGoal() started.
+􀟈  Test mobileAndTVKeepStatusInOneRowAboveAllThreeGames() started.
+􀟈  Test lemmings3UsesAdaptiveControlsWhenTheNativePanelCannotFit() started.
+􀟈  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() started.
+􀟈  Test lossMarginSubtractsActualLossesAndIncludesUnreleasedLemmings() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test listsEveryFamilyWithTheRightCounts() started.
+􀟈  Test deletingAPlayerEndsSessionsThatNeedThem() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test restartKeepsPlayersAndStartsWithTheHost() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test oldCheckpointsDecodeWithoutAScope() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test phoneLandscapeKeepsTheSameControlsAndSafeEdges() started.
+􀟈  Test bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() started.
+􀟈  Test bookHomeKeepsBothScrollingListsClearOfTheHingeAndCamera() started.
+􀟈  Test replayAndUnlimitedTimeKeepTheirOwnLabels() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test testSharedClassicPreferencesSurviveRoundTrip() started.
+􀟈  Test oneProfileIsNotAHotSeat() started.
+􀟈  Test resultChoicesFollowTheHouseRule() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test fingerprintRejectsSymbolicLinks() started.
+􀟈  Test overlappingTouchDefensivelyRejectsBothAssignments() started.
+􀟈  Test testPlanningChangesAndReplaysDoNotSpendTutorialUses() started.
+􀟈  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() started.
+􀟈  Test everyOfficialLevelLoadsRendersAndTicks() started.
+􀟈  Test theHostStaysInTheRoster() started.
+􀟈  Test turnsRotateAndWrap() started.
+􀟈  Test touchRouterRejectsMultiTouchUntilAllContactsLift() started.
+􀟈  Test testManualPreferenceEndsReminderAndLegacyOffStaysOff() started.
+􀟈  Test lemmings2CompletionIsReportedOnceForCampaignPersistence() started.
+􀟈  Test checkpointFingerprintBindsTheLevelToItsImportedContent() started.
+􀟈  Test aPlayerWhoLeavesLosesTheTurn() started.
+􀟈  Test presentationPreservesTouchPlanningControllerAndSoundtrackChoices() started.
+􀟈  Test ridiculousSpeedIsOptionalAndPersists() started.
+􀟈  Test testLegacyKeysMigrate() started.
+􀟈  Test sessionsSurviveSavingAndKeepTheirRule() started.
+􀟈  Test spriteCompositingClipsAndMirrorsAtTheLevelEdge() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test testTutorialCountsTenAutomaticPausesAcrossLaunches() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test mutePreferenceDefaultsMigratesAndIsSharedAcrossProfiles() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test playerInputAndAccessibilityStaySeparateWhileDeviceSettingsRemainShared() started.
+􀟈  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() started.
+􀟈  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() started.
+􀟈  Test testUnknownFastSpeedFallsBackToTwo() started.
+􀟈  Test fingerprintIsStableAndChangesWhenAnImportedAssetChanges() started.
+􀟈  Test viewportResizeKeepsCameraCentreAndRestoredOrigin() started.
+􀟈  Test duoAspectRatiosKeepPlayfieldAndOneHandedControlsUsable() started.
+􀟈  Test testBothChoicesPersistAndNeverRepeatAfterPresets() started.
+􀟈  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test classicSolutionSeekingRetainsMovesAndLeavesTheLiveCheckpointUntouched() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test sequelSessionsDeliverSoundEventsWithoutReplayNoise() started.
+􀟈  Test lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() started.
+􀟈  Test aFutureCampaignCannotBeReplacedByCloudProgress() started.
+􀟈  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() started.
+􀟈  Test gameDataImportsUseIndependentDestinations() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test lemmings3DirectionPickerKeepsAllTouchTargetsInsidePlayfield() started.
+􀟈  Test previewTransfersPreparedSessionOnceAndRetryStartsFresh() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test pausePopulationCountsExcludeActorsLostByAllThreeEngines() started.
+􀟈  Test lemmings3MobileDirectionalToolUseReplaysFromCheckpoint() started.
+􀟈  Test cancelledPreviewDoesNotCacheItsSessionOrDelayQueuedPlay() started.
+􀟈  Test nativePreviewCropKeepsTheSameLevelCoordinates() started.
+􀟈  Test case passing 1 argument aspect → 1.2 to edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􀟈  Test case passing 1 argument aspect → 1.0 to edgesScrollBothAxesAndRespectLevelBounds(aspect:) started.
+􀟈  Test previewsRenderSelectedArtworkAndRefreshWithoutReplacingPreparedRun() started.
+􀟈  Test savedRunRestoresOnWorkerAndRejectsChangedData() started.
+􀟈  Test neoLemmixImportResolvesInstallAndPackLayouts() started.
+􀟈  Test curatedJourneyStartsWithoutScanningFuturePacks() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test libraryOpeningRunsOffUIThread() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test lemmings3CompletionIsReportedOnceForCampaignPersistence() started.
+􀟈  Test completedResultsSaveAndReopenAcrossAllEngines() started.
+􀟈  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() started.
+􀟈  Test neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() started.
+􀟈  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() started.
+􀟈  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() started.
+􀟈  Test cancelledLibraryOpeningDoesNotTransferStaleContent() started.
+􀟈  Test homeAndJourneyStayInTheSelectedSession() started.
+􀟈  Test pythonStagingUsesMacSourceRevision() started.
+􀟈  Test freshCameraFitsHeightAndCentresEntranceAcrossEngines() started.
+􀟈  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() started.
+􀟈  Test storedQueueKeepsOwnerScopePositionAndDeferrals() started.
+􀟈  Test progressionRecallUsesItsSavedScopeNameAndPosition() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() started.
+􀟈  Test neoLemmixMobileSessionDeliversAndClearsSoundCues() started.
+􀟈  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() started.
+􀟈  Test boundedPreviewCacheAndMemoryWarningReleasePreparedSessions() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test reusedCRTSourceMatchesLegacyConversionAndClearsCameraMargins() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test stationaryPointerChangesTargetWhenPausedCameraPans() started.
+􀟈  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test storesToggleAndRoundTrips() started.
+􀟈  Test favouritesSpanPacksAndPlayInTheirOwnSession() started.
+􀟈  Test ordinaryCrowdRetentionDoesNotSwitchWithEachCrossing() started.
+􀟈  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() started.
+􀟈  Test exactAimDoesNotInventAnApproachDirection() started.
+􀟈  Test wallPreferenceKeepsEligibilityToolsAndPickBounds() started.
+􀟈  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() started.
+􀟈  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() started.
+􀟈  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􀟈  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() started.
+􁁛  Suite MobilePlayerContentImportTests passed after 0.119 seconds.
+􁁛  Test countdownHoldsWhenHiddenAndCancelsForPlanning() passed after 0.150 seconds.
+􁁛  Test tunesFollowTheReleaseAndLevelTitle() passed after 0.150 seconds.
+􁁛  Test lifecycleResetDoesNotRequestDisconnectPause() passed after 0.156 seconds.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() passed after 0.156 seconds.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test arrangementCyclesCountTheRealCampaignOccurrences() passed after 0.177 seconds.
+􁁛  Test disconnectDuringPlayPausesOnce() passed after 0.177 seconds.
+􁁛  Test importEntryCountStopsAtTheConfiguredLimit() passed after 0.178 seconds.
+􁁛  Test thermalCeilingsUseEvenCadenceAndDoNotRestoreImmediately() passed after 0.178 seconds.
+􁁛  Test disconnectOnMenuDoesNotRequestGameplayPause() passed after 0.178 seconds.
+􁁛  Test pauseAndLifecycleGapsDoNotCreatePressureOrEarnRecovery() passed after 0.184 seconds.
+􁁛  Test sustainedCPUAndGPUPressureReduceCadence() passed after 0.184 seconds.
+􁁛  Test centreOutsideLetterboxAndInvalidTimeDoNotScroll() passed after 0.184 seconds.
+􁁛  Test missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() passed after 0.184 seconds.
+􁁛  Test isolatedStallIsIgnoredAndRecoveryNeedsSustainedHeadroom() passed after 0.184 seconds.
+􁁛  Test journeyContextRetainsItsFullScorePosition() passed after 0.184 seconds.
+􁁛  Test edgesScrollBothAxesAndRespectLevelBounds(aspect:) with 2 test cases passed after 0.185 seconds.
+􁁛  Test reportedFileSizeIsNotCountedAgainAfterCopy() passed after 0.190 seconds.
+􁁛  Test editingKeepsOrderAndRejectsDuplicates() passed after 0.191 seconds.
+􁁛  Test safeAreaAndPlayfieldOcclusionsKeepPortraitControls() passed after 0.191 seconds.
+􁁛  Test engineDoesNotMakeOfficialSequelsFanMade() passed after 0.191 seconds.
+􁁛  Test exhaustedFrameDefersWholeTicksWithoutLosingTime() passed after 0.191 seconds.
+􁁛  Test everyEngineRetainsItsClockAtEveryCadenceAndSpeed() passed after 0.191 seconds.
+􁁛  Test checkpointKeepsSpendingEvidenceAndReadsEarlierSaves() passed after 0.191 seconds.
+􁁛  Test terrainEditsRewindBranchesAndPaletteChangesInvalidateTheCache() passed after 0.196 seconds.
+􁁛  Test heldRewindStopsOnceAndCannotBecomeATap() passed after 0.195 seconds.
+􁁛  Test releaseRateHoldAndCancellationDoNotBecomeDoubleTaps() passed after 0.195 seconds.
+􁁛  Test oldSummariesRemainReadableWithoutInventingAnOrigin() passed after 0.215 seconds.
+􁁛  Test releaseRateDoubleTapReplacesSecondStepAndDoesNotRepeat() passed after 0.215 seconds.
+􁁛  Test pauseAndNukeHoldNeverAlsoTap() passed after 0.222 seconds.
+􁁛  Test unchangedTerrainReusesConversionAndCompositingCannotMutateIt() passed after 0.222 seconds.
+􁁛  Test rateRepeatsAndStopsOnCancel() passed after 0.239 seconds.
+􁁛  Test obstructedPortraitControlsUseAdaptiveFallback() passed after 0.252 seconds.
+􁁛  Test originalIPadProKeepsTouchDeckOnRotation() passed after 0.259 seconds.
+􁁛  Test recentsKeepFiftyDistinctNewestFirst() passed after 0.259 seconds.
+􁁛  Test chroniclesSparseEditsMatchFreshFullSceneConversionAfterRewind() passed after 0.260 seconds.
+􁁛  Test resolvesBundledContentWithoutCopyingItAndPrefersImports() passed after 0.260 seconds.
+􁁛  Test importsOlderDefaultsOnce() passed after 0.260 seconds.
+􁁛  Test shortPortraitKeepsNavigationAndMenuApart() passed after 0.259 seconds.
+􁁛  Test twoRowsKeepHeightAndMapAcrossEngines() passed after 0.259 seconds.
+􁁛  Test fileCopyEnforcesTheActualByteLimit() passed after 0.260 seconds.
+􁁛  Test savedSourceSurvivesACollectionChangingItsRankAndPosition() passed after 0.260 seconds.
+􁁛  Test preparationFailureRemainsVisibleUntilTheNextRequest() passed after 0.260 seconds.
+􁁛  Test missingEvidenceOrDataNeverCreatesAnOpening() passed after 0.260 seconds.
+􁁛  Test speedTouchHoldKeepsReachedTierAndNextTapResets() passed after 0.260 seconds.
+􁁛  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() passed after 0.260 seconds.
+􁁛  Test chroniclesChargeUsesExistingHeldToolAndRetainsAttemptLimit() passed after 0.260 seconds.
+􁁛  Test missingManifestRetainsVersionAndBuildWithoutInventingChanges() passed after 0.277 seconds.
+􁁛  Test moleUsesTraceMappedFramesForKnownStates() passed after 0.277 seconds.
+􁁛  Test welcomeTracksInstalledBuildIdentityInsteadOfReusedBuildNumber() passed after 0.277 seconds.
+􁁛  Test fireballUsesTheNativeSixByFourFootprint() passed after 0.281 seconds.
+􁁛  Test fallsBackToTheBackupAndKeepsTheDamagedFile() passed after 0.282 seconds.
+􁁛  Test animatedTrapFrameRejectsInvalidDimensionsAndPalette() passed after 0.281 seconds.
+􁁛  Test animatedTrapFrameUsesRuntimeFrameAndClampsToDecodedFrames() passed after 0.281 seconds.
+􁁛  Test newerCheckpointVersionCannotBeOverwritten() passed after 0.284 seconds.
+􁁛  Test tabletopResultsRequireTwoUsableClearScreens() passed after 0.284 seconds.
+􁁛  Test nativePanelDecoderRejectsInvalidSourceDimensions() passed after 0.284 seconds.
+􁁛  Test shuffleIsAPermutationThatRepeatsForASeed() passed after 0.284 seconds.
+􁁛  Test wideIPadUsesTouchDeckAndTinyViewsSuspend() passed after 0.284 seconds.
+􁁛  Test lemmings3KeepsItsNativePanelAndTouchTargetsOnWideScreens() passed after 0.284 seconds.
+􁁛  Test transparentSpritePixelsLeaveTerrainVisible() passed after 0.284 seconds.
+􁁛  Test replayHistoryIncludesLegacyScheduledAssignments() passed after 0.284 seconds.
+􁁛  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() passed after 0.284 seconds.
+􁁛  Test creatureSpriteUsesItsOwnPaletteAndHonoursTransparency() passed after 0.284 seconds.
+􁁛  Test runsPersistWithTheirFixedOrder() passed after 0.284 seconds.
+􁁛  Test dividedScreensKeepGameplayAcrossTheTopAndControlsFillingTheBottom() passed after 0.284 seconds.
+􁁛  Test animatedTrapFrameCompositesItsPaletteAndKeepsTransparentPixels() passed after 0.284 seconds.
+􁁛  Test nativePanelDecoderUsesModeXPlanesAndSixBitPalette() passed after 0.284 seconds.
+􁁛  Test compactLandscapeShowsEveryNativeSkillWithoutScrolling() passed after 0.284 seconds.
+􁁛  Test indexedPixelsUseTheNativePalette() passed after 0.284 seconds.
+􁁛  Test roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() passed after 0.284 seconds.
+􁁛  Test aCopiedScopedFileCannotResumeAsAnotherOwner() passed after 0.284 seconds.
+􁁛  Test classicChargeRetainsAttemptLimitAcrossCheckpointAndRewind() passed after 0.284 seconds.
+􁁛  Test securedGoalAndRunEndingHaveDistinctStates() passed after 0.284 seconds.
+􁁛  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() passed after 0.284 seconds.
+􁁛  Test moleFallsBackWhenStateHasNoCapturedSourceMapping() passed after 0.284 seconds.
+􁁛  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) with 3 test cases passed after 0.284 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.284 seconds.
+􁁛  Test mobileAndTVKeepStatusInOneRowAboveAllThreeGames() passed after 0.284 seconds.
+􁁛  Test lemmings3UsesAdaptiveControlsWhenTheNativePanelCannotFit() passed after 0.284 seconds.
+􁁛  Test zeroMarginDiffersFromAnImpossibleGoal() passed after 0.284 seconds.
+􁁛  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() passed after 0.284 seconds.
+􁁛  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() passed after 0.284 seconds.
+􁁛  Test lossMarginSubtractsActualLossesAndIncludesUnreleasedLemmings() passed after 0.284 seconds.
+􁁛  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() passed after 0.284 seconds.
+􁁛  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() passed after 0.284 seconds.
+􁁛  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) with 3 test cases passed after 0.284 seconds.
+􁁛  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() passed after 0.284 seconds.
+􁁛  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) with 3 test cases passed after 0.284 seconds.
+􁁛  Test deletingAPlayerEndsSessionsThatNeedThem() passed after 0.284 seconds.
+􁁛  Test restartKeepsPlayersAndStartsWithTheHost() passed after 0.284 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.284 seconds.
+􁁛  Test oldCheckpointsDecodeWithoutAScope() passed after 0.284 seconds.
+􁁛  Test phoneLandscapeKeepsTheSameControlsAndSafeEdges() passed after 0.284 seconds.
+􁁛  Test bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() passed after 0.284 seconds.
+􁁛  Test bookHomeKeepsBothScrollingListsClearOfTheHingeAndCamera() passed after 0.284 seconds.
+􁁛  Test replayAndUnlimitedTimeKeepTheirOwnLabels() passed after 0.284 seconds.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.284 seconds.
+􁁛  Test testSharedClassicPreferencesSurviveRoundTrip() passed after 0.287 seconds.
+􁁛  Test oneProfileIsNotAHotSeat() passed after 0.287 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.287 seconds.
+􁁛  Test resultChoicesFollowTheHouseRule() passed after 0.294 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.294 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.294 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.298 seconds.
+􁁛  Test overlappingTouchDefensivelyRejectsBothAssignments() passed after 0.298 seconds.
+􁁛  Test testPlanningChangesAndReplaysDoNotSpendTutorialUses() passed after 0.298 seconds.
+􁁛  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() passed after 0.298 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.298 seconds.
+􀟈  Test case passing 1 argument zoom → 0.75 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 1.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 2.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 4.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 12.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument side → -1 to wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􀟈  Test case passing 1 argument side → 1 to wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􁁛  Test theHostStaysInTheRoster() passed after 0.299 seconds.
+􁁛  Test turnsRotateAndWrap() passed after 0.299 seconds.
+􁁛  Test touchRouterRejectsMultiTouchUntilAllContactsLift() passed after 0.299 seconds.
+􁁛  Test testManualPreferenceEndsReminderAndLegacyOffStaysOff() passed after 0.299 seconds.
+􁁛  Test aPlayerWhoLeavesLosesTheTurn() passed after 0.299 seconds.
+􁁛  Test checkpointFingerprintBindsTheLevelToItsImportedContent() passed after 0.299 seconds.
+􁁛  Test ridiculousSpeedIsOptionalAndPersists() passed after 0.299 seconds.
+􁁛  Test presentationPreservesTouchPlanningControllerAndSoundtrackChoices() passed after 0.299 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.299 seconds.
+􁁛  Test spriteCompositingClipsAndMirrorsAtTheLevelEdge() passed after 0.299 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.299 seconds.
+􁁛  Test fingerprintRejectsSymbolicLinks() passed after 0.299 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.299 seconds.
+􁁛  Test sessionsSurviveSavingAndKeepTheirRule() passed after 0.299 seconds.
+􁁛  Test mutePreferenceDefaultsMigratesAndIsSharedAcrossProfiles() passed after 0.299 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.299 seconds.
+􁁛  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() passed after 0.299 seconds.
+􁁛  Test testLegacyKeysMigrate() passed after 0.299 seconds.
+􁁛  Test playerInputAndAccessibilityStaySeparateWhileDeviceSettingsRemainShared() passed after 0.299 seconds.
+􁁛  Test testUnknownFastSpeedFallsBackToTwo() passed after 0.299 seconds.
+􁁛  Test viewportResizeKeepsCameraCentreAndRestoredOrigin() passed after 0.299 seconds.
+􁁛  Test testTutorialCountsTenAutomaticPausesAcrossLaunches() passed after 0.299 seconds.
+􁁛  Test duoAspectRatiosKeepPlayfieldAndOneHandedControlsUsable() passed after 0.299 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.299 seconds.
+􁁛  Test testBothChoicesPersistAndNeverRepeatAfterPresets() passed after 0.299 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.299 seconds.
+􁁛  Test fingerprintIsStableAndChangesWhenAnImportedAssetChanges() passed after 0.299 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.299 seconds.
+􁁛  Test lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() passed after 0.299 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.298 seconds.
+􁁛  Test translatedLegacyTribeLabelsKeepTheirProgressAndStableCloudKeys() passed after 0.299 seconds.
+􁁛  Test futureChroniclesProgressCannotFallBackToAnOlderBackup() passed after 0.299 seconds.
+􁁛  Test aFutureCampaignCannotBeReplacedByCloudProgress() passed after 0.299 seconds.
+􁁛  Test sequelFilesJoinCloudWithoutLearningAndPreserveWholeTribeChains() passed after 0.299 seconds.
+􁁛  Test corruptCampaignReadsKeepBytesAndRejectDestructiveReconciliation() passed after 0.299 seconds.
+􁁛  Test lemmings3DirectionPickerKeepsAllTouchTargetsInsidePlayfield() passed after 0.298 seconds.
+􁁛  Test previewTransfersPreparedSessionOnceAndRetryStartsFresh() passed after 0.298 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.298 seconds.
+􁁛  Test gameDataImportsUseIndependentDestinations() passed after 0.299 seconds.
+􁁛  Test nativePreviewCropKeepsTheSameLevelCoordinates() passed after 0.358 seconds.
+􁁛  Test previewsRenderSelectedArtworkAndRefreshWithoutReplacingPreparedRun() passed after 0.358 seconds.
+􁁛  Test savedRunRestoresOnWorkerAndRejectsChangedData() passed after 0.358 seconds.
+􁁛  Test neoLemmixImportResolvesInstallAndPackLayouts() passed after 0.358 seconds.
+􁁛  Test lemmings3MobileDirectionalToolUseReplaysFromCheckpoint() passed after 0.358 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.357 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.357 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.359 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.359 seconds.
+􁁛  Test oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() passed after 0.363 seconds.
+􁁛  Test syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() passed after 0.363 seconds.
+􁁛  Test freshCameraFitsHeightAndCentresEntranceAcrossEngines() passed after 0.362 seconds.
+􁁛  Test neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() passed after 0.363 seconds.
+􁁛  Test listsEveryFamilyWithTheRightCounts() passed after 0.366 seconds.
+􁁛  Test homeAndJourneyStayInTheSelectedSession() passed after 0.363 seconds.
+􁁛  Test selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() passed after 0.363 seconds.
+􁁛  Test neoLemmixMobileSessionDeliversAndClearsSoundCues() passed after 0.362 seconds.
+􁁛  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() passed after 0.363 seconds.
+􁁛  Test boundedPreviewCacheAndMemoryWarningReleasePreparedSessions() passed after 0.362 seconds.
+􁁛  Test storedQueueKeepsOwnerScopePositionAndDeferrals() passed after 0.363 seconds.
+􁁛  Test resultTagsBonusConditionsSeparatelyFromRewind() passed after 0.367 seconds.
+􁁛  Test reusedCRTSourceMatchesLegacyConversionAndClearsCameraMargins() passed after 0.345 seconds.
+􁁛  Test pinnedSourcesSurvivePlaylistResumeAndRejectReplacementBytes() passed after 0.394 seconds.
+􁁛  Test tribesChargeReplaysAndRetainsAttemptLimitBeforeGrant() passed after 0.394 seconds.
+􁁛  Test stationaryPointerChangesTargetWhenPausedCameraPans() passed after 0.292 seconds.
+􁁛  Test progressionRecallUsesItsSavedScopeNameAndPosition() passed after 0.390 seconds.
+􁁛  Test storesToggleAndRoundTrips() passed after 0.283 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.390 seconds.
+􁁛  Test ordinaryCrowdRetentionDoesNotSwitchWithEachCrossing() passed after 0.280 seconds.
+􁁛  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() passed after 0.280 seconds.
+􁁛  Test exactAimDoesNotInventAnApproachDirection() passed after 0.280 seconds.
+􁁛  Test wallPreferenceKeepsEligibilityToolsAndPickBounds() passed after 0.280 seconds.
+􁁛  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() passed after 0.280 seconds.
+􁁛  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() passed after 0.279 seconds.
+􁁛  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) with 5 test cases passed after 0.279 seconds.
+􁁛  Test wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) with 2 test cases passed after 0.279 seconds.
+􁁛  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() passed after 0.279 seconds.
+􁁛  Suite MobileMusicAssignmentTests passed after 0.396 seconds.
+􁁛  Suite MobileControllerConnectionTests passed after 0.396 seconds.
+􁁛  Suite MobileStorageTests passed after 0.396 seconds.
+􁁛  Test lemmings2CompletionIsReportedOnceForCampaignPersistence() passed after 0.394 seconds.
+􁁛  Suite MobileMusicContextTests passed after 0.396 seconds.
+􁁛  Suite MobileContentImportLimitTests passed after 0.396 seconds.
+􁁛  Suite MobileFramePacingTests passed after 0.396 seconds.
+􁁛  Test classicSolutionSeekingRetainsMovesAndLeavesTheLiveCheckpointUntouched() passed after 0.394 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.375 seconds.
+􁁛  Suite MobileCursorCameraTests passed after 0.396 seconds.
+􁁛  Test sequelSessionsDeliverSoundEventsWithoutReplayNoise() passed after 0.394 seconds.
+􁁛  Suite MobilePlaylistTests passed after 0.396 seconds.
+􁁛  Suite MobilePortraitHUDTests passed after 0.396 seconds.
+􁁛  Test concurrentRendererCopiesKeepIndependentCompositedFrames() passed after 0.395 seconds.
+􁁛  Test oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() passed after 0.391 seconds.
+􁁛  Suite MobileLevelSourceTests passed after 0.396 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.393 seconds.
+􁁛  Test pausePopulationCountsExcludeActorsLostByAllThreeEngines() passed after 0.394 seconds.
+􁁛  Test lemmings3CompletionIsReportedOnceForCampaignPersistence() passed after 0.393 seconds.
+􁁛  Suite MobileBundledContentTests passed after 0.396 seconds.
+􁁛  Suite MobileBuildInfoTests passed after 0.396 seconds.
+􁁛  Suite Lemmings3MobileRendererTests passed after 0.396 seconds.
+􁁛  Test backgroundCheckpointKeepsTheCapturedDiggerState() passed after 0.395 seconds.
+􁁛  Suite MobileCheckpointOwnershipTests passed after 0.396 seconds.
+􁁛  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() passed after 0.293 seconds.
+􁁛  Suite Lemmings2MobileRendererTests passed after 0.396 seconds.
+􁁛  Suite MobilePauseSummaryTests passed after 0.396 seconds.
+􁁛  Suite MobileAdaptiveLayoutTests passed after 0.396 seconds.
+􁁛  Suite MobileSettingsTests passed after 0.396 seconds.
+􁁛  Suite MobileContentFingerprintTests passed after 0.396 seconds.
+􁁛  Suite MobileHotSeatTests passed after 0.396 seconds.
+􁁛  Suite MobileCampaignProgressTests passed after 0.396 seconds.
+􁁛  Test completedResultsSaveAndReopenAcrossAllEngines() passed after 0.393 seconds.
+􁁛  Suite MobileExtraSkillTests passed after 0.397 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.396 seconds.
+􁁛  Suite MobileShortPlayCatalogueTests passed after 0.397 seconds.
+􁁛  Suite MobilePrecisionSelectionTests passed after 0.396 seconds.
+􁁛  Suite MobileTerrainCacheTests passed after 0.397 seconds.
+􁁛  Suite MobileFanCountStoreTests passed after 0.397 seconds.
+􁁛  Suite MobileRewindTests passed after 0.397 seconds.
+􁁛  Test cancelledLibraryOpeningDoesNotTransferStaleContent() passed after 0.393 seconds.
+􁁛  Test cancelledPreviewDoesNotCacheItsSessionOrDelayQueuedPlay() passed after 0.395 seconds.
+􁁛  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() passed after 0.411 seconds.
+􁁛  Test pythonStagingUsesMacSourceRevision() passed after 0.424 seconds.
+􁁛  Test libraryOpeningRunsOffUIThread() passed after 0.587 seconds.
+􁁛  Suite MobileLevelPreparationTests passed after 0.590 seconds.
+􁁛  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() passed after 0.603 seconds.
+􁁛  Test restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() passed after 0.603 seconds.
+􁁛  Test soloAndSharedQueuesRecallTheirOwnOrderPositionAndSeed() passed after 0.603 seconds.
+􁁛  Test testMobileCollectionsMigrateToActiveProfile() passed after 0.603 seconds.
+􁁛  Test legacyPlaylistRunGainsAPersistentIdentityWithoutChangingItsOrder() passed after 0.603 seconds.
+􁁛  Suite MobileCollectionsMigrationTests passed after 0.604 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.605 seconds.
+􁁛  Suite MobileCoreTests passed after 0.607 seconds.
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() recorded an issue at MobileArtworkTests.swift:42:13: Expectation failed: frame.width == rendered.width * (source == .dosVGA ? 1 : 2)
+􀄵  frame.width == rendered.width * (source == .dosVGA ? 1 : 2) → false
+􀄵    frame.width → 1600
+􀄵    rendered.width * (source == .dosVGA ? 1 : 2) → 3200
+􁁛  Test curatedJourneyStartsWithoutScanningFuturePacks() passed after 0.841 seconds.
+􁁛  Suite MobileLearningTests passed after 0.844 seconds.
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() recorded an issue at MobileArtworkTests.swift:42:13: Expectation failed: frame.width == rendered.width * (source == .dosVGA ? 1 : 2)
+􀄵  frame.width == rendered.width * (source == .dosVGA ? 1 : 2) → false
+􀄵    frame.width → 1600
+􀄵    rendered.width * (source == .dosVGA ? 1 : 2) → 3200
+􁁛  Test realCampaignSkillsAndPopulationReachTheSharedScorer() passed after 1.246 seconds.
+􁁛  Suite MobileProgressionBuilderTests passed after 1.247 seconds.
+􁁛  Test favouritesSpanPacksAndPlayInTheirOwnSession() passed after 1.289 seconds.
+􁁛  Suite MobileFavouritesTests passed after 1.402 seconds.
+􁁛  Test bombAndNukeCutPopAndRemoveSelectionWithEveryArtwork() passed after 2.206 seconds.
+􁁛  Suite MobileExplosionParityTests passed after 2.207 seconds.
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() recorded an issue at MobileArtworkTests.swift:42:13: Expectation failed: frame.width == rendered.width * (source == .dosVGA ? 1 : 2)
+􀄵  frame.width == rendered.width * (source == .dosVGA ? 1 : 2) → false
+􀄵    frame.width → 1600
+􀄵    rendered.width * (source == .dosVGA ? 1 : 2) → 3200
+􀢄  Test bombsAndNukesRenderEveryDigitWithAllClassicArtwork() recorded an issue at MobileBombCountdownTests.swift:46:17: Expectation failed: game.renderScale == (graphics == .dosVGA ? 1 : 2)
+􀄵  game.renderScale == (graphics == .dosVGA ? 1 : 2) → false
+􀄵    game.renderScale → 1.0
+􀄵    (graphics == .dosVGA ? 1 : 2) → 2.0
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() recorded an issue at MobileArtworkTests.swift:46:9: Expectation failed: switchedFrames.count == 4
+􀄵  switchedFrames.count == 4 → false
+􀄵    switchedFrames.count → 2
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() recorded an issue at MobileArtworkTests.swift:9:6: Caught error: Error Domain=NSCocoaErrorDomain Code=260 "The file “manifest.json” couldn’t be opened because there is no such file." UserInfo={NSFilePath=/var/folders/x4/552661tn5vzgxk5405585gg80000gq/T/6C4815F4-C93B-4550-B5A8-5CA04A3C955A/MacArtwork/lemmings/manifest.json, NSURL=file:///var/folders/x4/552661tn5vzgxk5405585gg80000gq/T/6C4815F4-C93B-4550-B5A8-5CA04A3C955A/MacArtwork/lemmings/manifest.json, NSUnderlyingError=0x78557659e0 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+􀢄  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() failed after 2.479 seconds with 5 issues.
+􀢄  Suite MobileArtworkTests failed after 2.480 seconds with 5 issues.
+􀢄  Test bombsAndNukesRenderEveryDigitWithAllClassicArtwork() recorded an issue at MobileBombCountdownTests.swift:46:17: Expectation failed: game.renderScale == (graphics == .dosVGA ? 1 : 2)
+􀄵  game.renderScale == (graphics == .dosVGA ? 1 : 2) → false
+􀄵    game.renderScale → 1.0
+􀄵    (graphics == .dosVGA ? 1 : 2) → 2.0
+􀢄  Test bombsAndNukesRenderEveryDigitWithAllClassicArtwork() recorded an issue at MobileBombCountdownTests.swift:46:17: Expectation failed: game.renderScale == (graphics == .dosVGA ? 1 : 2)
+􀄵  game.renderScale == (graphics == .dosVGA ? 1 : 2) → false
+􀄵    game.renderScale → 1.0
+􀄵    (graphics == .dosVGA ? 1 : 2) → 2.0
+􀢄  Test bombsAndNukesRenderEveryDigitWithAllClassicArtwork() recorded an issue at MobileBombCountdownTests.swift:46:17: Expectation 

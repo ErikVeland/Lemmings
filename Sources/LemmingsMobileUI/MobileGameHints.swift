@@ -66,7 +66,8 @@ extension MobileGameViewController {
 
     /// Both reveals keep the spoiler confirmation, with Cancel returning to the same hint.
     private func confirmSolution(_ solution: VerifiedSolution, stage: Int, title: String, confirm: String, ghostOnly: Bool) {
-        showCustomOverlay(title: title, details: [], actions: [
+        showCustomOverlay(title: title,
+            details: [L10n.text("Want to see one way through? This reveals a full winning route. Your game stays paused.")], actions: [
             (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: stage) }),
             (confirm, { [weak self] in
                 guard let data = try? JSONEncoder().encode(solution.replay) else { return }

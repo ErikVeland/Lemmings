@@ -110,7 +110,8 @@ final class LemmingInspectionPageTests: XCTestCase {
     @MainActor func testInspectionSettingRendersAndTogglesFromCaptionAndBox() throws {
         _ = NSApplication.shared
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let artwork = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
+        let artworkPath = try XCTUnwrap(ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"])
+        let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: artworkPath))
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
         try GameMenuArtwork.withRenderer(renderer) {
             let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 720), styleMask: [], backing: .buffered, defer: false)
@@ -186,7 +187,22 @@ final class LemmingInspectionPageTests: XCTestCase {
         let adventurer = try LemmingInspection(initial: .classic(classicStart), current: .classic(adventurerGame),
             commands: [.init(tick: adventurerGame.tickCount, action: "assign", lemming: adventurerID, skill: 0),
                        .init(tick: adventurerGame.tickCount, action: "assign", lemming: adventurerID, skill: 1)])
-        for (state, snapshot) in [("empty", empty), ("active", populated), ("saved", saved), ("lost", lost), ("adventurer", adventurer)] {
+        let mask = Lemmings2SpriteFrame(x: 0, y: 0, width: 1, height: 1, pixels: [7], opaque: [true])
+        let masks = try Lemmings2TerrainMasks(digger: mask, basher: Array(repeating: mask, count: 8),
+            miner: Array(repeating: mask, count: 4), exploder: mask, brick: mask,
+            stacker: Array(repeating: mask, count: 2), platformer: mask)
+        var floor = [Bool](repeating: false, count: 120 * 80)
+        for x in 0..<120 { floor[60 * 120 + x] = true }
+        let l2Start = try Lemmings2Runtime(configuration: .init(width: 120, height: 80,
+            pixels: [UInt8](repeating: 0, count: 120 * 80), solid: floor,
+            palette: [UInt8](repeating: 255, count: 1024), entrance: .init(x: 20, y: 45, width: 1, height: 1),
+            exits: [.init(x: 100, y: 50, width: 16, height: 16)], skills: [.jumper], supplies: [10],
+            total: 2, timeLimit: 120, releaseInterval: 20, terrainMasks: masks, firstReleaseTick: 1))
+        var l2Game = l2Start
+        for _ in 0..<40 { l2Game.step() }
+        let tribes = try LemmingInspection(initial: .lemmings2(l2Start), current: .lemmings2(l2Game), commands: [])
+        for (state, snapshot) in [("empty", empty), ("active", populated), ("saved", saved), ("lost", lost),
+                                  ("adventurer", adventurer), ("tribes", tribes)] {
             for size in [CGSize(width: 640, height: 480), CGSize(width: 900, height: 620), CGSize(width: 1120, height: 720)] {
                 let window = NSWindow(contentRect: CGRect(origin: .zero, size: size), styleMask: [.titled], backing: .buffered, defer: false)
                 window.isReleasedWhenClosed = false
@@ -217,7 +233,7 @@ final class LemmingInspectionPageTests: XCTestCase {
                 }
                 if let renderer { try GameMenuArtwork.withRenderer(renderer) { try capture("first") } }
                 else { try capture("first") }
-                if state != "empty" && state != "adventurer" {
+                if ["active", "saved", "lost"].contains(state) {
                     try XCTUnwrap(buttons.first { $0.title == "Later actions" }).performClick(nil)
                     let labels = page.body.subviews.flatMap(\.subviews).compactMap { $0 as? NSTextField }
                     XCTAssertTrue(labels.contains { $0.stringValue.contains("Walker") })

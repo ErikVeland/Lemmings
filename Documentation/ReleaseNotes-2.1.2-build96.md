@@ -3,63 +3,70 @@
 Build: 96
 Release base: v2.1.1
 
-## Progress and Resume
+Pull up a chair. We've got a level to finish.
 
-Mac, iPhone, iPad, Duo and Apple TV use the same completed-level identities.
-Campaign and Journey wins count once. The current route fraction stays separate
-from the full completion count, including in Hot Seat.
+This update smooths the small things around the puzzles. Pick up your game,
+pass the controls and give that extremely promising bridge another go.
 
-Home offers one Resume for the selected player or Hot Seat. Journey Map remains
-available beside standalone saves and opens browsing without starting an attempt.
-Completed mobile Journeys keep a usable Back action.
+## Pick up where you left off
 
-New mobile Journey and playlist checkpoints retain their exact queue, position
-and level. Restarting the same playlist creates a separate run. Older checkpoints
-retain exact-level matching because their format contains no queue identity.
-Ready handovers remain paused.
+Home has one Resume for your selected player or Hot Seat. Campaign and Journey
+wins count each level once, so your hard-won clears get their due. Journey Map
+still lets you browse without starting a game.
 
-## Recovery and cloud progress
+New mobile Journey and playlist saves keep their exact place. Starting the same
+playlist again gives you a fresh run. Solo and Hot Seat sequel progress stay
+separate, and Ready handovers wait until the next player is settled.
 
-Mobile sequel campaign files follow the selected Solo or Hot Seat scope. Cloud
-capture includes those files even without a saved learning route. Imports retain
-coherent Lemmings 2 tribe chains. Chronicles tribe records keep stable identities
-when the interface language changes.
+## Get a closer look
 
-First mobile saves keep a backup. Recovery preserves damaged campaign files and
-rejects future-version files before they can be replaced. Older shared sequel
-history stored in a solo folder cannot reliably be reassigned to past sessions.
-Mid-level checkpoints and ordinary playlist queues remain local.
+Mac wheel zoom moves smoothly around the terrain beneath your pointer.
+Extra Skill is now called Bonus Skill. The stone controls sit together at the
+playfield's top-right corner, clear of the score.
 
-Background cloud-save and community-record access fails silently when the Mac
-Keychain requires approval. It preserves stored keys instead of opening an
-authorisation dialog or creating replacement credentials.
+Mobile replay panels leave the controls room to breathe. Apple TV gets a fix for controller selection, while Ready still waits for a
+fresh press. Mobile play also drops interrupted pinch and scroll gestures
+after a resize, and keeps Start or Ready waiting when the playfield returns.
 
-## Controls and lettering
+## Small pixels, plenty of care
 
-- Mac wheel zoom moves continuously around the pointed terrain. The redundant
-  zoom badge is removed.
-- Extra Skill is now called Bonus Skill. Shared stone controls keep their help,
-  focus, availability and fade states across Classic, The Tribes and Chronicles.
-- The Mac control group sits at the playfield's top-right corner, clear of status text.
-- Interface text uses refined 2× Lemmings lettering. Start countdowns use separately
-  drawn 4× numerals on Mac, iOS and Apple TV.
-- Mobile replay skill panels fit inside the playfield and avoid input targets.
-- Apple TV accepts fresh × menu presses through UIKit and restores gameplay's
-  input handoff. Held-button protection remains on Ready pages. Unavailable
-  pointer marks stay centred and differ in shape from eligible targets.
+The interface has refined 2× Lemmings lettering and separately drawn 4×
+countdown numerals. Even counting to three got some attention.
 
-## Distribution and retained limits
+The welcome and optional help have a warmer voice too. There's room for another
+idea, and time to ask for a nudge. Retry, Continue and Ready stay easy to find.
 
-Mac build 96 requires macOS 12.3 or later and includes Apple silicon and Intel.
-iOS build 19 and tvOS build 9 use the existing TestFlight channels.
-Apple processing and beta review remain separate from upload completion.
+## Meet the neighbours
 
-Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta.
-Replay and level proofing continue separately from 2.1.2. Existing engine-fidelity,
-L2 Gold Ark, L3 route, NeoLemmix style and unverified fan-level limits remain open.
-Mobile Journey playback remains Classic-only. Physical input, VoiceOver, live
-cloud propagation, sustained performance and human translation review retain
-their recorded acceptance limits.
+Individual lemmings have 128 little ten-word stories: a spare chair, an
+unanswered letter, a surprisingly important spoon. Their names and stories stay
+with them through retries, rewind and saved runs. No committee has explained
+why the spoon matters.
 
-The [shared release checklist](ReleaseReadiness/2.1.2Checklist.md) records current
-checks and distribution evidence.
+## Keep the evening going
+
+New mobile saves start with a backup. Recovery protects damaged saves and saves
+from a newer version. Sequel cloud progress keeps The Tribes' survivor chains
+together, and Chronicles remembers its tribes when you change the language.
+
+Background cloud and community-record services stay quiet when they cannot
+access their stored credentials. Your game can carry on without an unexpected
+authorisation dialog.
+
+Come back tomorrow. We can carry on arguing about the tunnel.
+
+## Before you settle in
+
+Mac build 96 supports Apple silicon and Intel on macOS 12.3 or later. iOS build
+19 and tvOS build 9 use the existing TestFlight channels; Apple processing and
+beta review remain separate from upload completion.
+
+Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta,
+with their existing content and engine limits. The mobile Journey is
+Classic-only. Mid-level checkpoints and ordinary playlist queues stay local.
+Older saves without queue identities retain their existing matching rules;
+older shared sequel history cannot reliably be reassigned to past sessions.
+
+The [release checklist](ReleaseReadiness/2.1.2Checklist.md) keeps the detailed
+scope, ongoing replay and level work, and remaining device, accessibility,
+translation and live-sync checks together.

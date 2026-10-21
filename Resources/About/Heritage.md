@@ -1,6 +1,12 @@
 # Lemmings, since 1991
 
-A rescue worth another try.
+Pull up a chair. There's a level to finish.
+
+One player has the controls. Everyone has a plan. Ultimate Lemmings brings
+that shared, slightly chaotic joy to a new roomful of players.
+
+Pause, try a route and pass the controls. The old puzzles still have plenty
+to teach us.
 
 ## The original creators
 

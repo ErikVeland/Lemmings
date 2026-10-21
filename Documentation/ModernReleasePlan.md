@@ -1,5 +1,8 @@
 # Modern Lemmings release plan
 
+See the [roadmap through 3.0](Roadmap.md) for historical milestones and the
+proposed product sequence. This plan retains the detailed platform and release gates.
+
 Updated 19 October 2026. This plan records package evidence and the remaining platform and fidelity work.
 
 Current source candidates, published feed versions and retained package evidence

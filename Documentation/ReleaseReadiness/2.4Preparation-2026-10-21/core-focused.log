@@ -1,0 +1,252 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 822]
+[Planning 1 / 822]
+[Planning deferred tasks]
+[Starting]
+[1 / 1]
+[1 / 71] LemmingsTVUI
+[6 / 43] NxlvKitTests-product
+[16 / 43] NxlvKitTests-product
+[16 / 40] LemmingsMobileUI
+[19 / 43] LemmingsMobileUI
+[25 / 36] LemmingsMobileUITests-product
+[28 / 39] LemmingsMobileUITests-product
+[34 / 38] LemmingsMobileUITests-product
+[36 / 38] LemmingsMobileUITests-product
+Build complete! (4.68 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCheckpointOwnershipTests started.
+􀟈  Suite MobileHotSeatTests started.
+􀟈  Suite MobileRewindTests started.
+􀟈  Suite MobileAdaptiveLayoutTests started.
+􀟈  Suite MobileCoreTests started.
+􀟈  Suite MobileControllerConnectionTests started.
+􀟈  Suite MobilePrecisionSelectionTests started.
+􀟈  Test theHostStaysInTheRoster() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() started.
+􀟈  Test backgroundCheckpointKeepsTheCapturedDiggerState() started.
+􀟈  Test disconnectOnMenuDoesNotRequestGameplayPause() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test lifecycleResetDoesNotRequestDisconnectPause() started.
+􀟈  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() started.
+􀟈  Test mobileAndTVKeepStatusInOneRowAboveAllThreeGames() started.
+􀟈  Test replayHistoryIncludesLegacyScheduledAssignments() started.
+􀟈  Test turnsRotateAndWrap() started.
+􀟈  Test aPlayerWhoLeavesLosesTheTurn() started.
+􀟈  Test oneProfileIsNotAHotSeat() started.
+􀟈  Test deletingAPlayerEndsSessionsThatNeedThem() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test neoLemmixImportResolvesInstallAndPackLayouts() started.
+􀟈  Test bookHomeKeepsBothScrollingListsClearOfTheHingeAndCamera() started.
+􀟈  Test disconnectDuringPlayPausesOnce() started.
+􀟈  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() started.
+􀟈  Test restartKeepsPlayersAndStartsWithTheHost() started.
+􀟈  Test lemmings3CompletionIsReportedOnceForCampaignPersistence() started.
+􀟈  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() started.
+􀟈  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test dividedScreensKeepGameplayAcrossTheTopAndControlsFillingTheBottom() started.
+􀟈  Test lemmings3DirectionPickerKeepsAllTouchTargetsInsidePlayfield() started.
+􀟈  Test wideIPadUsesTouchDeckAndTinyViewsSuspend() started.
+􀟈  Test aCopiedScopedFileCannotResumeAsAnotherOwner() started.
+􀟈  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() started.
+􀟈  Test lemmings3UsesAdaptiveControlsWhenTheNativePanelCannotFit() started.
+􀟈  Test lemmings3KeepsItsNativePanelAndTouchTargetsOnWideScreens() started.
+􀟈  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() started.
+􀟈  Test roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() started.
+􀟈  Test resultChoicesFollowTheHouseRule() started.
+􀟈  Test sessionsSurviveSavingAndKeepTheirRule() started.
+􀟈  Test compactLandscapeShowsEveryNativeSkillWithoutScrolling() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test oldCheckpointsDecodeWithoutAScope() started.
+􀟈  Test bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() started.
+􀟈  Test newerCheckpointVersionCannotBeOverwritten() started.
+􀟈  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() started.
+􀟈  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() started.
+􀟈  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() started.
+􀟈  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test ordinaryCrowdRetentionDoesNotSwitchWithEachCrossing() started.
+􀟈  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test viewportResizeKeepsCameraCentreAndRestoredOrigin() started.
+􀟈  Test exactAimDoesNotInventAnApproachDirection() started.
+􀟈  Test freshCameraFitsHeightAndCentresEntranceAcrossEngines() started.
+􀟈  Test neoLemmixMobileSessionDeliversAndClearsSoundCues() started.
+􀟈  Test tabletopResultsRequireTwoUsableClearScreens() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test pausePopulationCountsExcludeActorsLostByAllThreeEngines() started.
+􀟈  Test wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􀟈  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() started.
+􀟈  Test stationaryPointerChangesTargetWhenPausedCameraPans() started.
+􀟈  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test wallPreferenceKeepsEligibilityToolsAndPickBounds() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test duoAspectRatiosKeepPlayfieldAndOneHandedControlsUsable() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test lemmings2CompletionIsReportedOnceForCampaignPersistence() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test sequelSessionsDeliverSoundEventsWithoutReplayNoise() started.
+􀟈  Test completedResultsSaveAndReopenAcrossAllEngines() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test gameDataImportsUseIndependentDestinations() started.
+􀟈  Test lemmings3MobileDirectionalToolUseReplaysFromCheckpoint() started.
+􀟈  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() started.
+􀟈  Test overlappingTouchDefensivelyRejectsBothAssignments() started.
+􀟈  Test touchRouterRejectsMultiTouchUntilAllContactsLift() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test classicSolutionSeekingRetainsMovesAndLeavesTheLiveCheckpointUntouched() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) started.
+􁁛  Test disconnectOnMenuDoesNotRequestGameplayPause() passed after 0.031 seconds.
+􁁛  Test theHostStaysInTheRoster() passed after 0.031 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.032 seconds.
+􀟈  Test case passing 1 argument side → -1 to wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􀟈  Test case passing 1 argument side → 1 to wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) started.
+􁁛  Test lifecycleResetDoesNotRequestDisconnectPause() passed after 0.033 seconds.
+􁁛  Test aPlayerWhoLeavesLosesTheTurn() passed after 0.033 seconds.
+􀟈  Test case passing 1 argument zoom → 0.75 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 1.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 2.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 4.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 12.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􁁛  Test oneProfileIsNotAHotSeat() passed after 0.033 seconds.
+􁁛  Test turnsRotateAndWrap() passed after 0.033 seconds.
+􁁛  Test deletingAPlayerEndsSessionsThatNeedThem() passed after 0.033 seconds.
+􁁛  Test disconnectDuringPlayPausesOnce() passed after 0.033 seconds.
+􁁛  Test bookHomeKeepsBothScrollingListsClearOfTheHingeAndCamera() passed after 0.033 seconds.
+􁁛  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() passed after 0.033 seconds.
+􁁛  Test restartKeepsPlayersAndStartsWithTheHost() passed after 0.033 seconds.
+􁁛  Test cloudImportKeepsSoloModeAndLetsEitherParticipantResume() passed after 0.033 seconds.
+􁁛  Test mobileAndTVKeepStatusInOneRowAboveAllThreeGames() passed after 0.033 seconds.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.034 seconds.
+􁁛  Test lemmings3DirectionPickerKeepsAllTouchTargetsInsidePlayfield() passed after 0.033 seconds.
+􁁛  Test replayHistoryIncludesLegacyScheduledAssignments() passed after 0.034 seconds.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􁁛  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() passed after 0.058 seconds.
+􁁛  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() passed after 0.058 seconds.
+􁁛  Test wideIPadUsesTouchDeckAndTinyViewsSuspend() passed after 0.058 seconds.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test lemmings3UsesAdaptiveControlsWhenTheNativePanelCannotFit() passed after 0.075 seconds.
+􁁛  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() passed after 0.080 seconds.
+􁁛  Test lemmings3KeepsItsNativePanelAndTouchTargetsOnWideScreens() passed after 0.080 seconds.
+􁁛  Test resultChoicesFollowTheHouseRule() passed after 0.080 seconds.
+􁁛  Test compactLandscapeShowsEveryNativeSkillWithoutScrolling() passed after 0.082 seconds.
+􁁛  Test neoLemmixImportResolvesInstallAndPackLayouts() passed after 0.082 seconds.
+􁁛  Test dividedScreensKeepGameplayAcrossTheTopAndControlsFillingTheBottom() passed after 0.082 seconds.
+􁁛  Test roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() passed after 0.082 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.088 seconds.
+􁁛  Test bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() passed after 0.088 seconds.
+􁁛  Test oldCheckpointsDecodeWithoutAScope() passed after 0.088 seconds.
+􁁛  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() passed after 0.089 seconds.
+􁁛  Test sessionsSurviveSavingAndKeepTheirRule() passed after 0.089 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.089 seconds.
+􁁛  Test journeyBindingSurvivesDiskAndRejectsAnotherQueueOrPosition(engine:) with 3 test cases passed after 0.089 seconds.
+􁁛  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() passed after 0.089 seconds.
+􁁛  Test ordinaryCrowdRetentionDoesNotSwitchWithEachCrossing() passed after 0.089 seconds.
+􁁛  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() passed after 0.089 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.089 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.089 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.089 seconds.
+􁁛  Test viewportResizeKeepsCameraCentreAndRestoredOrigin() passed after 0.089 seconds.
+􁁛  Test exactAimDoesNotInventAnApproachDirection() passed after 0.089 seconds.
+􁁛  Test freshCameraFitsHeightAndCentresEntranceAcrossEngines() passed after 0.089 seconds.
+􁁛  Test neoLemmixMobileSessionDeliversAndClearsSoundCues() passed after 0.089 seconds.
+􁁛  Test tabletopResultsRequireTwoUsableClearScreens() passed after 0.089 seconds.
+􁁛  Test wallFacingActorReplacesARetainedActorThatHasTurnedAway(side:) with 2 test cases passed after 0.089 seconds.
+􁁛  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() passed after 0.089 seconds.
+􁁛  Test stationaryPointerChangesTargetWhenPausedCameraPans() passed after 0.089 seconds.
+􁁛  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) with 5 test cases passed after 0.088 seconds.
+􁁛  Test wallPreferenceKeepsEligibilityToolsAndPickBounds() passed after 0.088 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.088 seconds.
+􁁛  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() passed after 0.088 seconds.
+􁁛  Test lemmings3CompletionIsReportedOnceForCampaignPersistence() passed after 0.090 seconds.
+􁁛  Test newerCheckpointVersionCannotBeOverwritten() passed after 0.090 seconds.
+􁁛  Test aCopiedScopedFileCannotResumeAsAnotherOwner() passed after 0.090 seconds.
+􁁛  Test deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() passed after 0.090 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.090 seconds.
+􁁛  Test duoAspectRatiosKeepPlayfieldAndOneHandedControlsUsable() passed after 0.085 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.090 seconds.
+􁁛  Test neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() passed after 0.092 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.098 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.090 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.089 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.089 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.089 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.093 seconds.
+􁁛  Test lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() passed after 0.090 seconds.
+􁁛  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() passed after 0.098 seconds.
+􁁛  Test overlappingTouchDefensivelyRejectsBothAssignments() passed after 0.088 seconds.
+􁁛  Test touchRouterRejectsMultiTouchUntilAllContactsLift() passed after 0.088 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.088 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.088 seconds.
+􁁛  Suite MobileControllerConnectionTests passed after 0.099 seconds.
+􁁛  Suite MobileHotSeatTests passed after 0.099 seconds.
+􁁛  Suite MobileAdaptiveLayoutTests passed after 0.099 seconds.
+􁁛  Test lemmings3MobileDirectionalToolUseReplaysFromCheckpoint() passed after 0.088 seconds.
+􁁛  Test pausePopulationCountsExcludeActorsLostByAllThreeEngines() passed after 0.098 seconds.
+􁁛  Suite MobilePrecisionSelectionTests passed after 0.099 seconds.
+􁁛  Test matchingLegacyGlobalSaveStillResumesInItsOwnSession() passed after 0.101 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.098 seconds.
+􁁛  Test selectedHotSeatNeverFallsBackToSoloOrAnotherHotSeat(engine:) with 3 test cases passed after 0.103 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.103 seconds.
+􁁛  Test backgroundCheckpointKeepsTheCapturedDiggerState() passed after 0.116 seconds.
+􁁛  Suite MobileRewindTests passed after 0.117 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.110 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.117 seconds.
+􁁛  Test gameDataImportsUseIndependentDestinations() passed after 0.122 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.125 seconds.
+􁁛  Test lemmings2CompletionIsReportedOnceForCampaignPersistence() passed after 0.128 seconds.
+􁁛  Test deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine:) with 3 test cases passed after 0.137 seconds.
+􁁛  Suite MobileCheckpointOwnershipTests passed after 0.137 seconds.
+􁁛  Test sequelSessionsDeliverSoundEventsWithoutReplayNoise() passed after 0.129 seconds.
+􁁛  Test completedResultsSaveAndReopenAcrossAllEngines() passed after 0.152 seconds.
+􁁛  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() passed after 0.194 seconds.
+􁁛  Test classicSolutionSeekingRetainsMovesAndLeavesTheLiveCheckpointUntouched() passed after 0.207 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.226 seconds.
+􁁛  Suite MobileCoreTests passed after 0.227 seconds.
+􁁛  Test run with 91 tests in 7 suites passed after 0.227 seconds.

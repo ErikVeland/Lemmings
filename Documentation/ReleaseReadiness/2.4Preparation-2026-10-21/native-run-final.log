@@ -1,0 +1,87 @@
+UI test windows: offscreen; audio: muted
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild test-without-building -xctestrun .build/duo-2.4/native-isolated/Build/Products/DuoMuted.xctestrun -destination "platform=iOS Simulator,id=EAC7FAA6-0681-4DCB-BB3B-E6DD8998B302" -parallel-testing-enabled NO -test-timeouts-enabled YES -default-test-execution-time-allowance 60 -maximum-test-execution-time-allowance 90 -resultBundlePath .build/duo-2.4/native-results-final
+
+Writing result bundle at path:
+	/Users/veland/Lemmings/.build/duo-2.4/native-results-final
+
+Testing started
+2026-10-21 23:37:32.973 xcodebuild[30574:2901465] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.1 (24A94232), error = invalidDigitCount(94232).
+Test Suite 'All tests' started at 2026-10-21 23:37:58.204.
+Test Suite 'All tests' passed at 2026-10-21 23:37:58.217.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.013) seconds
+◇ Test run started.
+↳ Testing Library Version: 2401
+↳ Target Platform: arm64-apple-ios17.0-simulator
+◇ Suite MobileNavigationRecoveryTests started.
+◇ Test releasedContactClearsAimWithoutHover(input:) started.
+◇ Test case passing 1 argument input → .touch to releasedContactClearsAimWithoutHover(input:) started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+​◇ Test case passing 1 argument input → .precision to releasedContactClearsAimWithoutHover(input:) started.
+2026-10-21 23:37:59.978128+1000 xctest[30655:2902372] [XPCErrors] non-launching port is incompatible with service identifier "com.apple.PointerUI.pointeruid.default-service"
+2026-10-21 23:37:59.983932+1000 xctest[30655:2902372] [RuntimeIssues] This process does not have a UIApplication object and will not receive events!
+2026-10-21 23:38:00.288587+1000 xctest[30655:2904441] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x109769aa0> F8BB1C28-BAE8-11D6-9C31-00039315CD46
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+​✔ Test releasedContactClearsAimWithoutHover(input:) with 2 test cases passed after 2.204 seconds.
+◇ Test releasedClickReturnsToHoverAndHoverExitClearsAim() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test releasedClickReturnsToHoverAndHoverExitClearsAim() passed after 0.041 seconds.
+◇ Test helpReturnsToReadyWithoutStartingTheAttempt() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test helpReturnsToReadyWithoutStartingTheAttempt() passed after 0.095 seconds.
+◇ Test restoringPlayableSizeKeepsTheStartBoundary(shared:) started.
+◇ Test case passing 1 argument shared → false to restoringPlayableSizeKeepsTheStartBoundary(shared:) started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+[MobileHUD] mode=compact-grid bounds=(0.0, 0.0, 100.0, 100.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 100.0, width: 0.0, height: 0.0) reserved=[]
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+​◇ Test case passing 1 argument shared → true to restoringPlayableSizeKeepsTheStartBoundary(shared:) started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+[MobileHUD] mode=compact-grid bounds=(0.0, 0.0, 100.0, 100.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 100.0, width: 0.0, height: 0.0) reserved=[]
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+​✔ Test restoringPlayableSizeKeepsTheStartBoundary(shared:) with 2 test cases passed after 0.192 seconds.
+◇ Test suspensionStopsFramesUntilThePlayerResumes() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+2026-10-21 23:38:00.824001+1000 xctest[30655:2902372] [ViewController] Calling -viewWillAppear: directly on a view controller is not supported, and may result in out-of-order callbacks and other inconsistent behavior. Use the -beginAppearanceTransition:animated: and -endAppearanceTransition APIs on UIViewController to manually drive appearance callbacks instead. Make a symbolic breakpoint at UIViewControllerAlertForAppearanceCallbackMisuse to catch this in the debugger. View controller: <LemmingsMobileUI.MobileGameViewController: 0x1099bc000>
+2026-10-21 23:38:00.864653+1000 xctest[30655:2902372] [ViewController] Calling -viewDidDisappear: directly on a view controller is not supported, and may result in out-of-order callbacks and other inconsistent behavior. Use the -beginAppearanceTransition:animated: and -endAppearanceTransition APIs on UIViewController to manually drive appearance callbacks instead. Make a symbolic breakpoint at UIViewControllerAlertForAppearanceCallbackMisuse to catch this in the debugger. View controller: <LemmingsMobileUI.MobileGameViewController: 0x1099bc000>
+✔ Test suspensionStopsFramesUntilThePlayerResumes() passed after 0.084 seconds.
+◇ Test hiddenGameCannotRenderOrRestartItsFrameLoop() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+2026-10-21 23:38:00.891754+1000 xctest[30655:2902372] [ViewController] Calling -viewWillAppear: directly on a view controller is not supported, and may result in out-of-order callbacks and other inconsistent behavior. Use the -beginAppearanceTransition:animated: and -endAppearanceTransition APIs on UIViewController to manually drive appearance callbacks instead. Make a symbolic breakpoint at UIViewControllerAlertForAppearanceCallbackMisuse to catch this in the debugger. View controller: <LemmingsMobileUI.MobileGameViewController: 0x1099bce00>
+2026-10-21 23:38:00.893471+1000 xctest[30655:2902372] [ViewController] Calling -viewWillDisappear: directly on a view controller is not supported, and may result in out-of-order callbacks and other inconsistent behavior. Use the -beginAppearanceTransition:animated: and -endAppearanceTransition APIs on UIViewController to manually drive appearance callbacks instead. Make a symbolic breakpoint at UIViewControllerAlertForAppearanceCallbackMisuse to catch this in the debugger. View controller: <LemmingsMobileUI.MobileGameViewController: 0x1099bce00>
+2026-10-21 23:38:00.920553+1000 xctest[30655:2902372] [ViewController] Calling -viewDidDisappear: directly on a view controller is not supported, and may result in out-of-order callbacks and other inconsistent behavior. Use the -beginAppearanceTransition:animated: and -endAppearanceTransition APIs on UIViewController to manually drive appearance callbacks instead. Make a symbolic breakpoint at UIViewControllerAlertForAppearanceCallbackMisuse to catch this in the debugger. View controller: <LemmingsMobileUI.MobileGameViewController: 0x1099bce00>
+✔ Test hiddenGameCannotRenderOrRestartItsFrameLoop() passed after 0.057 seconds.
+◇ Test settingsRefreshThePausedPlayfieldImmediately() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test settingsRefreshThePausedPlayfieldImmediately() passed after 0.099 seconds.
+◇ Test anImmediateEndShowsResultsAndSubpageBackRestoresThem() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test anImmediateEndShowsResultsAndSubpageBackRestoresThem() passed after 0.076 seconds.
+◇ Test recordSaveErrorsCanLeaveWithoutRetiringTheCheckpoint() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test recordSaveErrorsCanLeaveWithoutRetiringTheCheckpoint() passed after 0.048 seconds.
+◇ Test cancellingASaveDoesNotExitAfterTheWriterFinishes() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test cancellingASaveDoesNotExitAfterTheWriterFinishes() passed after 0.049 seconds.
+◇ Test leavingHintsInvalidatesThePendingResponse() started.
+[MobileHUD] mode=portrait-two-rows bounds=(0.0, 0.0, 834.0, 1194.0) safeInsets=UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0) controls=MobileRect(x: 0.0, y: 1018.0, width: 834.0, height: 176.0) reserved=[]
+✔ Test leavingHintsInvalidatesThePendingResponse() passed after 0.053 seconds.
+✔ Suite MobileNavigationRecoveryTests passed after 3.010 seconds.
+◇ Suite MobilePoseTransitionTests started.
+◇ Test cancelledPinchCannotMoveTheCameraAfterUnfolding() started.
+✔ Test cancelledPinchCannotMoveTheCameraAfterUnfolding() passed after 0.004 seconds.
+◇ Test cancelledScrollRequiresAFreshGestureAndAvoidsReservedRegions() started.
+✔ Test cancelledScrollRequiresAFreshGestureAndAvoidsReservedRegions() passed after 0.018 seconds.
+✔ Suite MobilePoseTransitionTests passed after 0.022 seconds.
+✔ Test run with 13 tests in 2 suites passed after 3.033 seconds.
+2026-10-21 23:38:01.428 xcodebuild[30574:2901465] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.1 (24A94232), error = invalidDigitCount(94232).
+2026-10-21 23:38:01.432 xcodebuild[30574:2901465] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.1 (24A94232), error = invalidDigitCount(94232).
+2026-10-21 23:38:01.452 xcodebuild[30574:2901465] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.1 (24A94232), error = invalidDigitCount(94232).
+2026-10-21 23:38:01.774 xcodebuild[30574:2901465] [MT] IDETestOperationsObserverDebug: 32.568 elapsed -- Testing started completed.
+2026-10-21 23:38:01.774 xcodebuild[30574:2901465] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-21 23:38:01.774 xcodebuild[30574:2901465] [MT] IDETestOperationsObserverDebug: 32.568 sec, +32.568 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/veland/Lemmings/.build/duo-2.4/native-results-final
+
+** TEST EXECUTE SUCCEEDED **
+

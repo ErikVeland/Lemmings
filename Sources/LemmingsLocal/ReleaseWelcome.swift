@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 #if canImport(NxlvKit)
 import NxlvKit
 #endif
@@ -10,14 +11,11 @@ import NxlvKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "2.1.2"
-    static var subtitle: String { L10n.text("Shared progress, safer Resume and clearer controls") }
-    static var sections: [(String, String)] { [
-        (L10n.text("Journey"), L10n.text("Mac, iPhone, iPad and Apple TV share completed-level counts across campaign and Journey play. Home offers one Resume. Journey Map keeps browsing separate from starting an attempt.")),
-        (L10n.text("Recovery"), L10n.text("New mobile Journey and playlist checkpoints retain their exact queue and position. Solo and Hot Seat sequel progress stay separate. First saves keep a backup, and future-version saves remain protected.")),
-        (L10n.text("Clearer controls"), L10n.text("Mac wheel zoom is continuous and keeps the pointed terrain in place. Bonus Skill has a clearer name. Stone controls sit at the playfield corner with shared help and fade states.")),
-        (L10n.text("Lemmings lettering"), L10n.text("Interface lettering uses a refined 2× display face. Start countdowns use hand-drawn 4× numerals across Classic, The Tribes and Chronicles on Mac, iOS and Apple TV.")),
-        (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Mobile Journey playback remains Classic-only. Existing engine and device validation limits still apply."))
-    ] }
+    static var subtitle: String { GameReleaseCopy.invitation }
+    static var sections: [(String, String)] {
+        GameReleaseCopy.sections + [(L10n.text("Compatibility"),
+            L10n.text("macOS 12.3 or later, on Apple silicon and Intel.") + " " + GameReleaseCopy.compatibility)]
+    }
     private let defaults: UserDefaults
     private let build: Int
     private let version: String

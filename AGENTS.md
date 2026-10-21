@@ -1,3 +1,12 @@
+# Repository ownership
+
+`ErikVeland/Lemmings` is the canonical repository for this project.
+Keep source, issues, app releases and artwork handoffs here. Do not create
+separate repositories for downloads or exported assets. Publish supplemental
+downloads as releases here, without replacing the latest app release.
+Keep `main` as the default branch. See `Documentation/RepositoryLayout.md`
+for the archived repositories and migration record.
+
 # Interface changes
 
 For work that changes visible UI, read `Documentation/UIPrinciples.md`.
@@ -9,6 +18,31 @@ Verify the rendered states and their input targets before calling a UI change do
 
 Game UI must match the shipped pixel artwork. Read and reuse `GameControls.swift`,
 `GameStoneButton` and the bitmap renderers before adding a control.
+
+# Narrative and textual direction
+
+Read `Documentation/NarrativeDirection.md` for the shared writing direction
+across Classic, Lemmings 2 and Lemmings 3. `Documentation/NarrativeCopyAudit.md`
+distinguishes implemented copy from proposed rewrites and records source coverage.
+`Documentation/LemmingAssessments.md` records the frozen ten-word catalogue and
+the identity rules that preserve personalities across retries and saved runs.
+
+Consider these references for every narrative choice and textual direction
+across the game:
+
+- Widows Bay
+- David Lynch
+- Monty Python
+- Sierra Adventure Games
+- LucasArts Adventure Games, especially Monkey Island and Day of the Tentacle
+- Are You Afraid of the Dark
+- The Good Place
+- Riget
+- Eerie, Indiana
+- Roald Dahl
+
+Use these references to guide tone, humour, atmosphere, dialogue and flavour text.
+Keep action names, instructions and accessibility text clear and usable.
 
 # Cross-game parity
 

@@ -23,6 +23,11 @@ start with the [developer handover](DeveloperHandover.md).
 
 ## The proposition
 
+The [narrative direction](NarrativeDirection.md) sets the edition's shared voice:
+an indifferent universe, absurd systems and small lives worth caring about.
+Its humour is dry, affectionate and alert to horror. The [copy audit](NarrativeCopyAudit.md)
+records proposed rewrites across Classic, The Tribes and Chronicles.
+
 The original Lemmings puzzles still work. The friction around them does not.
 Imprecise clicks, no rewind, fixed speed, and no in-game help made some
 levels harder to reach than to solve. This project keeps the original rules,

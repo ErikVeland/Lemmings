@@ -143,7 +143,7 @@ import NxlvKit
             } else if let solution, let solutionSource, let solutionSession {
                 if self.solutionWindow != nil { self.selectSolutionMode(.solution); return }
                 let warning = GameMenuPage(title: L10n.text("Reveal full solution?"))
-                warning.setDetail(L10n.text("This shows the winning moves from start to finish. Your attempt stays paused."))
+                warning.setDetail(L10n.text("Want to see one way through? This reveals a full winning route. Your game stays paused."))
                 warning.backTitle = L10n.text("Keep trying")
                 warning.onBack = { [weak warning] in if let warning { GameScreen.shared.dismiss(warning) } }
                 let confirm = warning.addPrimaryAction(L10n.text("Show full solution")) { [weak self, weak warning] in
@@ -255,7 +255,7 @@ import NxlvKit
         heading.stringValue = presentation.section
         prose.stringValue = presentation.body
         note.stringValue = deck.checked
-            ? (tier == 2 ? L10n.text("Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening.") : L10n.text("No moves are made for you. Reveal another hint only when you want more detail."))
+            ? (tier == 2 ? L10n.text("Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result.") : L10n.text("Take your time. Reveal more when you want another nudge. The moves are still yours."))
             : ""
         setAccessibilityElement(true)
         setAccessibilityRole(.group)

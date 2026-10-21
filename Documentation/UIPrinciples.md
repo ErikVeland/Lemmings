@@ -1,5 +1,13 @@
 # UI clarity
 
+Write invitations and optional help as if welcoming friends round to play.
+Keep the humour in the shared puzzle, the questionable bridge and the next idea.
+Use it sparingly so repeated visits still feel comfortable. Action names,
+save errors, destructive confirmations, privacy choices and accessibility
+instructions stay clear and direct. Never tease the player for needing help
+or add a joke where it delays Retry, Continue or Ready. Preserve the original
+games' level titles, authored messages and credits.
+
 Bonus skills use the shared bitmap chooser and stone controls in all three
 games. Show the record and earning limits before spending, one selected skill
 or tool carrier, Back at bottom-left and Use bonus skill at bottom-right.

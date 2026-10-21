@@ -12,16 +12,16 @@ public enum MobileInformationArt {
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
-              details: [L10n.text("Journey"), L10n.text("Share counts and records"), L10n.text("Individual lemmings"),
-                        L10n.text("Bonus skills"), L10n.text("Hot Seat player HUD"), L10n.text("Shared saves/replays")],
+              subtitle: GameReleaseCopy.invitation,
+              details: GameReleaseCopy.sections.map { $0.1 } + [GameReleaseCopy.compatibility],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
         return page
     }
     public static func whatsNew(build: MobileBuildInfo) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Latest build"),
-            subtitle: [build.label, build.dateLabel].filter { !$0.isEmpty }.joined(separator: "\n"),
-            details: (build.changes.isEmpty ? [L10n.text("No build changes supplied.")]
+        var page = GameFrontEnd.Page(title: L10n.text("What's new in \(build.version)"),
+            subtitle: [GameReleaseCopy.invitation, build.label, build.dateLabel].filter { !$0.isEmpty }.joined(separator: "\n"),
+            details: (build.changes.isEmpty ? GameReleaseCopy.sections.map { $0.1 }
                    : build.changes.map { L10n.text(InterfaceMessage(stringLiteral: $0)) }),
             footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"

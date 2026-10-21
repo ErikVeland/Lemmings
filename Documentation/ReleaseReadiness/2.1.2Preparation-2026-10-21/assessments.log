@@ -1,0 +1,110 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 2]
+[2 / 5] LemmingsLocalTests-product
+[4 / 7] LemmingsLocalTests-product
+[9 / 11] LemmingsLocalTests-product
+[11 / 11] LemmingsLocalTests-product
+Build complete! (2.29 sec.)
+Test Suite 'Selected tests' started at 2026-10-21 23:58:30.248.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-21 23:58:30.249.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-21 23:58:30.249.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:30.249.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-21 23:58:30.387.
+Test Suite 'LemmingsTVCoreTests.xctest' started at 2026-10-21 23:58:30.388.
+Test Suite 'LemmingsTVCoreTests.xctest' passed at 2026-10-21 23:58:30.388.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:30.388.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-21 23:58:30.516.
+Test Suite 'LemmingsMobileUITests.xctest' started at 2026-10-21 23:58:30.517.
+Test Suite 'LemmingsMobileUITests.xctest' passed at 2026-10-21 23:58:30.517.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:30.517.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-21 23:58:30.651.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-21 23:58:30.652.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-21 23:58:30.652.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:30.652.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-21 23:58:30.739.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-21 23:58:30.740.
+Test Suite 'LemmingAssessmentRenderingTests' started at 2026-10-21 23:58:30.740.
+Test Case '-[LemmingsLocalTests.LemmingAssessmentRenderingTests testEntireCatalogueInNarrowInspectionPages]' started.
+Test Case '-[LemmingsLocalTests.LemmingAssessmentRenderingTests testEntireCatalogueInNarrowInspectionPages]' passed (5.126 seconds).
+Test Suite 'LemmingAssessmentRenderingTests' passed at 2026-10-21 23:58:35.867.
+	 Executed 1 test, with 0 failures (0 unexpected) in 5.126 (5.127) seconds
+Test Suite 'LemmingInspectionPageTests' started at 2026-10-21 23:58:35.867.
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testInspectionSettingRendersAndTogglesFromCaptionAndBox]' started.
+/Users/veland/Lemmings/Sources/LemmingsLocal/GameScreen.swift:181: warning: -[LemmingsLocalTests.LemmingInspectionPageTests testInspectionSettingRendersAndTogglesFromCaptionAndBox] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testInspectionSettingRendersAndTogglesFromCaptionAndBox]' passed (1.423 seconds).
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testPausedHoverIsImmediateCachedAndPassesInputThrough]' started.
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testPausedHoverIsImmediateCachedAndPassesInputThrough]' passed (0.246 seconds).
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testPausedNavigationHasNoInspectButton]' started.
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testPausedNavigationHasNoInspectButton]' passed (0.181 seconds).
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testRenderedPagesNavigationAndInputStayInsideInspection]' started.
+Test Case '-[LemmingsLocalTests.LemmingInspectionPageTests testRenderedPagesNavigationAndInputStayInsideInspection]' passed (2.271 seconds).
+Test Suite 'LemmingInspectionPageTests' passed at 2026-10-21 23:58:39.989.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 4.121 (4.122) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-21 23:58:39.989.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 9.248 (9.249) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:39.989.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 9.248 (9.250) seconds
+Test Suite 'Selected tests' started at 2026-10-21 23:58:40.113.
+Test Suite 'LemmingsAppCoreTests.xctest' started at 2026-10-21 23:58:40.114.
+Test Suite 'LemmingsAppCoreTests.xctest' passed at 2026-10-21 23:58:40.114.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-21 23:58:40.114.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() started.
+􁁛  Test lemmingInspectionPreservesStateAndRestoresHistoryAcrossAllThreeEngines() passed after 0.098 seconds.
+􁁛  Suite MobileCoreTests passed after 0.098 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.098 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LemmingAssessmentTests started.
+􀟈  Suite LemmingInspectionTests started.
+􀟈  Test authoredStoriesAreTenWordsUniqueAndFrozen() started.
+􀟈  Test cohortsDoNotRepeatStoriesAndActorOrderCannotChangeThem() started.
+􀟈  Test l3ToolNamesComeFromRecordedEquipmentAndLegacyInputsRemainReadable() started.
+􀟈  Test currentBranchExcludesFutureAndGlobalActions() started.
+􀟈  Test permanentSkillsRemainMilestonesAfterReturningToWalking() started.
+􀟈  Test stableIdentityAndReadOnlyInspectionAcrossThreeEngines() started.
+􀟈  Test skillAgesUseExactSimulationTicksAndFollowRewindAcrossAllThreeEngines() started.
+􀟈  Test actionPagesReachEntireHistoryAndEmptyHatchesRemainEmpty() started.
+􁁛  Test authoredStoriesAreTenWordsUniqueAndFrozen() passed after 0.018 seconds.
+􁁛  Test currentBranchExcludesFutureAndGlobalActions() passed after 0.103 seconds.
+􁁛  Test permanentSkillsRemainMilestonesAfterReturningToWalking() passed after 0.103 seconds.
+􁁛  Test actionPagesReachEntireHistoryAndEmptyHatchesRemainEmpty() passed after 0.103 seconds.
+􁁛  Test stableIdentityAndReadOnlyInspectionAcrossThreeEngines() passed after 0.103 seconds.
+􁁛  Test l3ToolNamesComeFromRecordedEquipmentAndLegacyInputsRemainReadable() passed after 0.103 seconds.
+􁁛  Test cohortsDoNotRepeatStoriesAndActorOrderCannotChangeThem() passed after 0.103 seconds.
+􁁛  Test skillAgesUseExactSimulationTicksAndFollowRewindAcrossAllThreeEngines() passed after 0.103 seconds.
+􁁛  Suite LemmingAssessmentTests passed after 0.103 seconds.
+􁁛  Suite LemmingInspectionTests passed after 0.103 seconds.
+􁁛  Test run with 8 tests in 2 suites passed after 0.103 seconds.

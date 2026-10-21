@@ -123,7 +123,7 @@ final class LanguagePickerTests: XCTestCase {
             for choice in L10n.languageOptions where choice != .system {
                 GameScreen.shared.dismissAll()
                 L10n.setLanguage(choice)
-                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Shared progress, safer Resume and clearer controls"))
+                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Pull up a chair. We've got a level to finish."))
                 XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Journey"))
                 if choice != .english {
                     XCTAssertNotEqual(L10n.text("Continue"), "Continue")

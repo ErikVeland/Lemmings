@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS: 156 Duo bitmap captures, all three native engines, gameplay across both upper panes, lower-area fill, complete skills, status, minimap, target sizes, hit testing and preview actions. Windowless and muted.

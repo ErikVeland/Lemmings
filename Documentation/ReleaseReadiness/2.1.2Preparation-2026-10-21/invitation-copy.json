@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-21",
+  "baseSource": "2c632f6428ee52e3f7bd0fcab42927bad1b8a08c",
+  "scope": "2.1.2 invitations, release notes, About, soundtrack introduction, optional help and Ready prose",
+  "copyFiles": [
+    "Apps/UltimateLemmingsTV/BuildChanges.json",
+    "Documentation/ReleaseNotes-2.1.2-build96.md",
+    "Documentation/UIPrinciples.md",
+    "Resources/About/Heritage.md",
+    "Sources/LemmingsGameArt/GameReleaseCopy.swift",
+    "Sources/LemmingsGameArt/MobileInformationArt.swift",
+    "Sources/LemmingsLocal/ReleaseWelcome.swift",
+    "Sources/LemmingsLocal/ArcadeWindow.swift",
+    "Sources/LemmingsLocal/LevelHintWindow.swift",
+    "Sources/LemmingsLocal/MusicLibraryWindow.swift",
+    "Sources/LemmingsMobileUI/MobileGameHints.swift",
+    "Tests/LemmingsLocalTests/LanguagePickerTests.swift",
+    "Sources/NxlvKit/Resources/Localization.bundle/en.lproj/Interface.strings",
+    "Documentation/LocalisationCatalogue.json",
+    "Tools/Localisation/drafts/es-419.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/es-419.lproj/Interface.strings",
+    "Tools/Localisation/drafts/de.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/de.lproj/Interface.strings",
+    "Tools/Localisation/drafts/fr.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/fr.lproj/Interface.strings",
+    "Tools/Localisation/drafts/pt-BR.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/pt-BR.lproj/Interface.strings",
+    "Tools/Localisation/drafts/it.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/it.lproj/Interface.strings",
+    "Tools/Localisation/drafts/nl.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/nl.lproj/Interface.strings",
+    "Tools/Localisation/drafts/nb.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/nb.lproj/Interface.strings",
+    "Tools/Localisation/drafts/ta.json",
+    "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.strings",
+    "Tools/Localisation/unchanged.json"
+  ],
+  "sourceHashes": {
+    "Apps/UltimateLemmingsTV/BuildChanges.json": "c4ad8c03e8492211e6539e6ef4342c3e321ac49a239d39859cfbef899f3ca4b2",
+    "Documentation/ReleaseNotes-2.1.2-build96.md": "7a2d0cd04170f7a96dabb0a9e2593acc51506ff4ab20794ba52d1b626a7d43c9",
+    "Documentation/UIPrinciples.md": "acf97c5e2b79d709b6b9d3514945d7cdfac448aa0875e01849f1dae78dd6903f",
+    "Resources/About/Heritage.md": "b5db36094d6c2be220e4e9a8a5da8fce40b4bcc7a0d24090e3e2edc8d1d50d32",
+    "Sources/LemmingsGameArt/GameReleaseCopy.swift": "c3e545187e7a87c7c86239e1a5c2f292549d156c13ce25ad0268967aad73a628",
+    "Sources/LemmingsGameArt/MobileInformationArt.swift": "7613c2b7daecc93b6444e124cc61b22af53fe6e07b3dbb1565a8d005f64a1193",
+    "Sources/LemmingsLocal/ReleaseWelcome.swift": "2e29e9286bb68408d6e317187ff2f71ca76ec96bd1e1f99df87a36ca0673eec3",
+    "Sources/LemmingsLocal/ArcadeWindow.swift": "7194f93d68a1ade5d02156607df1a32f883db59a577c2d3813125c541ba58ffe",
+    "Sources/LemmingsLocal/LevelHintWindow.swift": "87f8d9a84d0fee18af256c6b38b25b06682e7d7b3ccf237655607a1c38d9a1f5",
+    "Sources/LemmingsLocal/MusicLibraryWindow.swift": "589e45719c6893fb6c9abae75ab75c7ce3af652afd190100f51f41b3e9e4bdb3",
+    "Sources/LemmingsMobileUI/MobileGameHints.swift": "712cf211792b9313f229567a92ae443373163f8bc46d9ee8fbccbd99bd812f82",
+    "Tests/LemmingsLocalTests/LanguagePickerTests.swift": "2d827929f2f6738e7a95d097bb63add438ca89b9775a0854c442ca3afde5c588"
+  },
+  "rendering": {
+    "result": "pass",
+    "captures": 75,
+    "audio": "muted",
+    "windows": "offscreen",
+    "runner": "Tools/UITestRunner/run.py",
+    "log": ".build/copy-2.1.2/render.log",
+    "capturesFolder": ".build/copy-2.1.2/screens",
+    "nativeSizes": [
+      "900x620",
+      "1120x720",
+      "1600x1000"
+    ],
+    "sharedSizes": [
+      "390x844 phone",
+      "844x390 landscape",
+      "1024x768 iPad",
+      "1920x1080 TV"
+    ],
+    "interfaceSizes": "Shared pages: standard, large, extraLarge. Native pages: standard.",
+    "checks": [
+      "Native welcome Continue activation",
+      "Primary-action bounds and hit targets",
+      "Bounded, scrollable About and welcome paragraphs",
+      "Shared mobile/TV detail and action separation"
+    ],
+    "inspected": [
+      "mac-welcome-900-top.png",
+      "mac-welcome-900-bottom.png",
+      "mac-about-900-top.png",
+      "mac-ready-shared-900-top.png",
+      "mac-music-900-top.png",
+      "mac-hint-2-900-top.png",
+      "phone-welcome-standard.png",
+      "phone-solution-warning-standard.png",
+      "tv-tv-welcome-standard.png"
+    ],
+    "fixtures": "Welcome and music use production pages. About uses its production reading pane; Ready, hints and solution warnings use text fixtures with production bitmap controls. An unused recorded-replay page type is a preview marker. No gameplay simulation or complete navigation journey was run."
+  },
+  "localisation": {
+    "result": "pass on isolated base plus copy snapshot",
+    "keys": 3240,
+    "directUnlocalisedUIStrings": 0,
+    "newKeys": [
+      "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.",
+      "Get settled. The game waits until you choose Ready.",
+      "One Resume gets you back to your game. Campaign and Journey wins count each level once.",
+      "Originals included. Fancy a remix?",
+      "Pull up a chair. We've got a level to finish.",
+      "Refined bitmap lettering and new countdown numerals. Even counting to three got some attention.",
+      "Smoother Mac wheel zoom, clearer Bonus skill controls and a fix for Apple TV selection.",
+      "Take your time. Reveal more when you want another nudge. The moves are still yours.",
+      "Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result.",
+      "Want to see one way through? This reveals a full winning route. Your game stays paused.",
+      "Your journeys and playlists keep their place. Solo and Hot Seat progress stay separate. Ready waits for you.",
+      "Your turn",
+      "macOS 12.3 or later, on Apple silicon and Intel."
+    ],
+    "retiredKeys": [
+      "Hot Seat player HUD",
+      "Individual lemmings",
+      "Interface lettering uses a refined 2× display face. Start countdowns use hand-drawn 4× numerals across Classic, The Tribes and Chronicles on Mac, iOS and Apple TV.",
+      "Latest build",
+      "Mac wheel zoom is continuous and keeps the pointed terrain in place. Bonus Skill has a clearer name. Stone controls sit at the playfield corner with shared help and fade states.",
+      "Mac, iPhone, iPad and Apple TV share completed-level counts across campaign and Journey play. Home offers one Resume. Journey Map keeps browsing separate from starting an attempt.",
+      "Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening.",
+      "New mobile Journey and playlist checkpoints retain their exact queue and position. Solo and Hot Seat sequel progress stay separate. First saves keep a backup, and future-version saves remain protected.",
+      "No build changes supplied.",
+      "No moves are made for you. Reveal another hint only when you want more detail.",
+      "Original soundtracks included",
+      "Shared progress, safer Resume and clearer controls",
+      "Shared saves/replays",
+      "The game will wait. Give the controls to {0}, then choose Ready.",
+      "This shows the winning moves from start to finish. Your attempt stays paused.",
+      "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Mobile Journey playback remains Classic-only. Existing engine and device validation limits still apply."
+    ],
+    "locales": [
+      "es-419",
+      "de",
+      "fr",
+      "pt-BR",
+      "it",
+      "nl",
+      "nb",
+      "ta"
+    ],
+    "newTranslations": "Explicit English fallbacks; human translation and tone review remain pending."
+  },
+  "preserved": [
+    "All native engine Swift files unchanged",
+    "Original heritage credits and provenance unchanged",
+    "Action labels and ownership retained",
+    "Existing source-checked hints and general coaching distinction retained"
+  ],
+  "parity": "Welcome and About cover all three native games; Mac Ready uses their shared handover. Checked hint notes and solution confirmation apply to existing supported Classic solution routes; L2/L3 keep general coaching.",
+  "limits": [
+    "No broad fresh test suites or release audit",
+    "No new route or source-fidelity claim",
+    "No physical touch, controller, remote, VoiceOver or CRT/HDR acceptance",
+    "Regenerate catalogue references from the consolidated release snapshot before freezing; unrelated completed Duo source was excluded from this copy snapshot."
+  ]
+}

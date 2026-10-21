@@ -120,7 +120,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/ResultAwards.swift:26",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2242"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2239"
     ]
   },
   "+1 {0}": {
@@ -133,7 +133,7 @@
   "+1 {0}. Bonus skill used.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1187"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1184"
     ]
   },
   "+{0} SUPERZOOM": {
@@ -494,6 +494,12 @@
       "Sources/NxlvKit/NxlvStyleResolver.swift:2031"
     ]
   },
+  "A neighbour remembers their favourite biscuit.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:33"
+    ]
+  },
   "A neutral play style for a run that does not strongly match another style. It is not a score or an achievement requirement.": {
     "kind": "text",
     "references": [
@@ -540,6 +546,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/NeoLemmixSimulation.swift:1326"
+    ]
+  },
+  "A promising beginning.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:104"
     ]
   },
   "A recorded attempt, with room for a different solution.": {
@@ -606,6 +618,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Hints/LevelHints.swift:138"
+    ]
+  },
+  "A stranger once waved at them.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:79"
     ]
   },
   "A strong result with little disturbance.": {
@@ -819,6 +837,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/TrolleyHistory.swift:19"
+    ]
+  },
+  "Accepts the shopkeeper's account without reservation.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:24"
     ]
   },
   "Access token": {
@@ -1061,6 +1085,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SolutionReplay.swift:142"
+    ]
+  },
+  "Affection remains unchanged.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:112"
     ]
   },
   "After a result: retry / records": {
@@ -1555,7 +1585,7 @@
   "Assign {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1789"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1786"
     ]
   },
   "Assigned music unavailable: {0}": {
@@ -1624,7 +1654,7 @@
   "Audio suspended": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2078"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2075"
     ]
   },
   "Audio unavailable: {0}": {
@@ -1694,15 +1724,15 @@
       "Sources/LemmingsMobileUI/MobileGameHints.swift:29",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:62",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:387",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1113",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1122",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1132",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1173",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1347",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1352",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1357",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1388",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1901",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1110",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1119",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1129",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1170",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1344",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1349",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1354",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1385",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1898",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:378",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:89",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:47",
@@ -1809,7 +1839,7 @@
       "Sources/LemmingsGameArt/MobileExtraSkillArt.swift:7",
       "Sources/LemmingsLocal/ExtraSkillMac.swift:16",
       "Sources/LemmingsLocal/ResultPerkAwards.swift:34",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1172"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1169"
     ]
   },
   "BONUS SKILL USED": {
@@ -1821,7 +1851,7 @@
   "BONUS SKILL ×{0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1163"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1160"
     ]
   },
   "BONUS: {0}": {
@@ -2041,25 +2071,25 @@
   "Became a Climber": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:104"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:105"
     ]
   },
   "Became a Floater": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:106"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:107"
     ]
   },
   "Became a Parachuter": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:107"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:108"
     ]
   },
   "Became a Rock Climber": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:105"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:106"
     ]
   },
   "Before move {0}: {1}.": {
@@ -2162,7 +2192,7 @@
   "Blocker": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:115",
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:116",
       "Sources/LemmingsLocal/Lemmings3Panel.swift:9",
       "Sources/NxlvKit/SkillVocabulary.swift:12",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1"
@@ -2241,25 +2271,60 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:412",
       "Sources/LemmingsLocal/main.swift:8564",
       "Sources/LemmingsMobileCore/MobilePauseSummary.swift:66",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1329",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1330",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2117",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1326",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1327",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2114",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:247"
     ]
   },
   "Bonus skills": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:16",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:222",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:223",
       "Sources/LemmingsLocal/ResultPerkAwards.swift:53"
+    ]
+  },
+  "Both appreciate the beans.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:86"
+    ]
+  },
+  "Both parties felt prepared.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:38"
     ]
   },
   "Bottom Falls": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:682"
+    ]
+  },
+  "Bought a notebook for important thoughts.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:85"
+    ]
+  },
+  "Bought flowers without an occasion.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:141"
+    ]
+  },
+  "Bought two cups after meeting someone.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:31"
+    ]
+  },
+  "Breakfast resumed almost normally.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:126"
     ]
   },
   "Brian blew up a hard disk - twice.": {
@@ -2372,9 +2437,9 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameFrontEnd.swift:29",
-      "Sources/LemmingsMobileUI/MobileGameHints.swift:70",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1236",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1467",
+      "Sources/LemmingsMobileUI/MobileGameHints.swift:71",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1233",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1464",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:260",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:16",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:121"
@@ -2517,7 +2582,7 @@
   "CONTROLS HELP": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1220",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1217",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:47"
     ]
   },
@@ -2525,6 +2590,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2755"
+    ]
+  },
+  "Calls this shared ambition.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:89"
     ]
   },
   "Camera": {
@@ -2545,6 +2616,30 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/AchievementsWindow.swift:19"
+    ]
+  },
+  "Can distinguish three kinds of silence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:60"
+    ]
+  },
+  "Can explain the difference if asked.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:69"
+    ]
+  },
+  "Can identify their own slippers reliably.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:82"
+    ]
+  },
+  "Can still recall the exact wording.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:47"
     ]
   },
   "Cancel": {
@@ -3299,6 +3394,12 @@
       "Sources/LemmingsLocal/main.swift:4042"
     ]
   },
+  "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:13"
+    ]
+  },
   "Classic artwork": {
     "kind": "text",
     "references": [
@@ -3549,7 +3650,7 @@
   "Clearer controls": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
     ]
   },
   "Clears": {
@@ -3789,7 +3890,7 @@
   "Compatibility": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
     ]
   },
   "Complete": {
@@ -3929,7 +4030,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1697",
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:133",
       "Sources/LemmingsLocal/PlayfieldView.swift:255",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:58",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:56",
       "Sources/LemmingsLocal/main.swift:8699",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:236"
     ]
@@ -3944,6 +4045,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:9058"
+    ]
+  },
+  "Continues making the smaller portion.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:35"
     ]
   },
   "Contributors": {
@@ -4382,7 +4489,7 @@
       "Sources/LemmingsLocal/GameplayKeyboard.swift:697",
       "Sources/LemmingsLocal/SettingsWindow.swift:680",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:34",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:116"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:117"
     ]
   },
   "DJ uses other soundtracks": {
@@ -4644,6 +4751,18 @@
       "Sources/LemmingsMobileCore/MobileSettings.swift:129"
     ]
   },
+  "Displayed it facing outward.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:135"
+    ]
+  },
+  "Displays it anyway.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:110"
+    ]
+  },
   "Diver": {
     "kind": "text",
     "references": [
@@ -4752,7 +4871,7 @@
   "Dropped a tool": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:122"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:123"
     ]
   },
   "DualSense touchpad click": {
@@ -5030,7 +5149,7 @@
   "Eligible lemming {0} of {1}. Skill: {2}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1766"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1763"
     ]
   },
   "Enable HD effects": {
@@ -5125,6 +5244,30 @@
       "Sources/LemmingsLocal/OriginalMoviePlayer.swift:25"
     ]
   },
+  "Enjoys being asked about the weather.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:52"
+    ]
+  },
+  "Enjoys its present condition.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:85"
+    ]
+  },
+  "Enjoys the rain.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:20"
+    ]
+  },
+  "Enjoys waiting for bread to rise.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:89"
+    ]
+  },
   "Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window.": {
     "kind": "text",
     "references": [
@@ -5217,6 +5360,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1"
     ]
   },
+  "Even when positions change.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:82"
+    ]
+  },
   "Every 10 distinct levels · Rare": {
     "kind": "text",
     "references": [
@@ -5248,6 +5397,12 @@
       "Sources/LemmingsLocal/main.swift:7222"
     ]
   },
+  "Everyone fitted underneath.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:120"
+    ]
+  },
   "Everyone home": {
     "kind": "text",
     "references": [
@@ -5277,6 +5432,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ProgressionPlaylist.swift:10"
+    ]
+  },
+  "Exercises this power sparingly.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:64"
     ]
   },
   "Exit": {
@@ -5436,7 +5597,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1477",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1223",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1220",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:56"
     ]
   },
@@ -5592,7 +5753,7 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2379",
       "Sources/LemmingsLocal/main.swift:7786",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1003"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1000"
     ]
   },
   "Fan Lemmings": {
@@ -5751,6 +5912,24 @@
       "Sources/NxlvKit/ArchivalCatalog.swift:108"
     ]
   },
+  "Feels less temporary.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:133"
+    ]
+  },
+  "Feels suitably equipped.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:122"
+    ]
+  },
+  "Felt briefly famous.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:132"
+    ]
+  },
   "Fencer": {
     "kind": "text",
     "references": [
@@ -5795,6 +5974,18 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/KeyboardCommandsView.swift:27"
+    ]
+  },
+  "Finds the view reliable.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:74"
+    ]
+  },
+  "Finds this knowledge quietly sustaining.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:113"
     ]
   },
   "Finish a level to see each goal and your progress.": {
@@ -5911,6 +6102,12 @@
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/MIDDLE.IFF:1"
     ]
   },
+  "Found in its favour.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:117"
+    ]
+  },
   "Frame {0} at byte {1} declares a size of zero.": {
     "kind": "text",
     "references": [
@@ -5933,6 +6130,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SolutionReplay.swift:393"
+    ]
+  },
+  "Friends remain broadly supportive.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:119"
     ]
   },
   "From L2 menu: practice / tribe map / introduction": {
@@ -5986,7 +6189,7 @@
   "GAME CONTROLS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1126"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1123"
     ]
   },
   "GARY TIMMONS": {
@@ -6154,13 +6357,13 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:212",
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:157"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:158"
     ]
   },
   "Game resumed": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1302"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1299"
     ]
   },
   "Game speed {0}, tap to toggle, hold to accelerate": {
@@ -6245,6 +6448,12 @@
       "Sources/NxlvKit/GenesisFMPlayer.swift:23"
     ]
   },
+  "Get settled. The game waits until you choose Ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ArcadeWindow.swift:227"
+    ]
+  },
   "Ghost solution": {
     "kind": "text",
     "references": [
@@ -6322,6 +6531,12 @@
       "Sources/NxlvKit/SkillVocabulary.swift:32"
     ]
   },
+  "Grew a tomato successfully.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:41"
+    ]
+  },
   "Guardians of the Kingdom of Animation": {
     "kind": "text",
     "references": [
@@ -6380,8 +6595,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TimelinePanelControls.swift:55",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1124",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1218"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1121",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1215"
     ]
   },
   "HINT {0} OF {1}": {
@@ -6424,7 +6639,7 @@
   "HOT SEAT WAS NOT SAVED": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1442"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1439"
     ]
   },
   "Hadoken": {
@@ -6452,6 +6667,216 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/DifficultyProfile.swift:6"
+    ]
+  },
+  "Has a coat for special occasions.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:45"
+    ]
+  },
+  "Has a drawer for useful things.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:93"
+    ]
+  },
+  "Has a favourite corner of Tuesday.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:83"
+    ]
+  },
+  "Has a favourite sound at home.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:145"
+    ]
+  },
+  "Has a photograph of an empty chair.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:34"
+    ]
+  },
+  "Has a place in somebody's address book.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:125"
+    ]
+  },
+  "Has a tiny balcony.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:99"
+    ]
+  },
+  "Has acquired a second opinion about turnips.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:123"
+    ]
+  },
+  "Has an excellent memory for porridge.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:75"
+    ]
+  },
+  "Has become accustomed to a distant train.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:127"
+    ]
+  },
+  "Has been consulted about moss.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:26"
+    ]
+  },
+  "Has been described as dependable.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:59"
+    ]
+  },
+  "Has been invited to inspect some beans.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:139"
+    ]
+  },
+  "Has been selected to hold something.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:80"
+    ]
+  },
+  "Has cautiously repeated it.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:129"
+    ]
+  },
+  "Has described indoor rain as largely unnecessary.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:20"
+    ]
+  },
+  "Has drawn another one.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:142"
+    ]
+  },
+  "Has finally received an invitation.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:36"
+    ]
+  },
+  "Has forgiven the broken teapot.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:57"
+    ]
+  },
+  "Has found a reason to celebrate.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:103"
+    ]
+  },
+  "Has kept one promise to themselves.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:111"
+    ]
+  },
+  "Has learned the name of a bird.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:107"
+    ]
+  },
+  "Has made peace with the uneven table.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:137"
+    ]
+  },
+  "Has named the draught under the door.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:95"
+    ]
+  },
+  "Has never disappointed a borrowed ladder.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:67"
+    ]
+  },
+  "Has nothing planned for tomorrow.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:143"
+    ]
+  },
+  "Has permission to rearrange the biscuits.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:64"
+    ]
+  },
+  "Has prepared a recommendation.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:131"
+    ]
+  },
+  "Has received favourable comments about sitting.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:70"
+    ]
+  },
+  "Has remembered where the spare key is.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:133"
+    ]
+  },
+  "Has seen the sea twice.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:21"
+    ]
+  },
+  "Has stopped expecting a reply.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:50"
+    ]
+  },
+  "Has strong views about napkin storage.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:119"
+    ]
+  },
+  "Has successfully declined a second pudding.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:87"
+    ]
+  },
+  "Has two favourite mugs.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:115"
     ]
   },
   "He who does Lemming Voices by the light of the Moon": {
@@ -6618,12 +7043,6 @@
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:234"
     ]
   },
-  "Hot Seat player HUD": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:16"
-    ]
-  },
   "Hot Seat starts": {
     "kind": "text",
     "references": [
@@ -6687,7 +7106,7 @@
   "INSPECT LEMMINGS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1141"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1138"
     ]
   },
   "INTRO SEQUENCE": {
@@ -6850,12 +7269,6 @@
       "Sources/LemmingsMobileUI/MobileGameInput.swift:45"
     ]
   },
-  "Individual lemmings": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:15"
-    ]
-  },
   "Initials: {0}_": {
     "kind": "text",
     "references": [
@@ -6915,12 +7328,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:636"
-    ]
-  },
-  "Interface lettering uses a refined 2× display face. Start countdowns use hand-drawn 4× numerals across Classic, The Tribes and Chronicles on Mac, iOS and Apple TV.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Intermediate": {
@@ -7420,6 +7827,60 @@
       "Sources/NxlvKit/NxlvLevel.swift:598"
     ]
   },
+  "Invited three people to witness lunch.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:41"
+    ]
+  },
+  "Is considered good company during peeling.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:66"
+    ]
+  },
+  "Is known to hum at home.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:25"
+    ]
+  },
+  "Is known to return borrowed containers.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:76"
+    ]
+  },
+  "Is trusted with the larger scissors.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:72"
+    ]
+  },
+  "Is welcome in three kitchens.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:22"
+    ]
+  },
+  "It concerned fresh sheets.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:111"
+    ]
+  },
+  "It has become company.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:58"
+    ]
+  },
+  "It helped with something.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:106"
+    ]
+  },
   "It is a tale of": {
     "kind": "text",
     "references": [
@@ -7430,6 +7891,42 @@
     "kind": "text",
     "references": [
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/WAKING.IFF:1"
+    ]
+  },
+  "It reached them eventually.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:53"
+    ]
+  },
+  "It was welcome anyway.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:42"
+    ]
+  },
+  "Its absence has been noticed.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:63"
+    ]
+  },
+  "Its owner agrees broadly.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:67"
+    ]
+  },
+  "Its silence has been satisfactory.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:78"
+    ]
+  },
+  "Its width was approved.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:30"
     ]
   },
   "J: DJ shuffle": {
@@ -7517,8 +8014,7 @@
   "Journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:15",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15",
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:99"
     ]
   },
@@ -7556,7 +8052,7 @@
   "Jumper": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:116",
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:117",
       "Sources/LemmingsLocal/Lemmings3Panel.swift:9",
       "Sources/NxlvKit/SkillVocabulary.swift:38",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1",
@@ -7611,7 +8107,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:10",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1269"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1266"
     ]
   },
   "Keep pausing?": {
@@ -7644,6 +8140,78 @@
       "Sources/LemmingsLocal/LevelHintWindow.swift:147"
     ]
   },
+  "Keeps a birthday candle ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:32"
+    ]
+  },
+  "Keeps a shopping list from happier times.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:101"
+    ]
+  },
+  "Keeps a spare chair ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:48"
+    ]
+  },
+  "Keeps checking the correct year.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:36"
+    ]
+  },
+  "Keeps it mostly free.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:83"
+    ]
+  },
+  "Keeps string in a designated drawer.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:23"
+    ]
+  },
+  "Keeps the coaster.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:137"
+    ]
+  },
+  "Keeps the handle somewhere safe.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:57"
+    ]
+  },
+  "Keeps the ugly vase.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:39"
+    ]
+  },
+  "Keeps the written confirmation.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:73"
+    ]
+  },
+  "Keeps tickets from an uneventful journey.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:91"
+    ]
+  },
+  "Kept the sympathetic envelope.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:118"
+    ]
+  },
   "Keyboard commands": {
     "kind": "text",
     "references": [
@@ -7667,6 +8235,24 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/KeyboardCommandsView.swift:36"
+    ]
+  },
+  "Knitted a scarf for someone taller.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:53"
+    ]
+  },
+  "Knows when the bakery opens.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:113"
+    ]
+  },
+  "Knows whose it was.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:136"
     ]
   },
   "L1 / LB": {
@@ -7982,7 +8568,7 @@
   "LATER": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1361"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1358"
     ]
   },
   "LATER ACTIONS": {
@@ -8083,7 +8669,7 @@
   "LEVEL COMPLETE\n{0} SAVED": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1336"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1333"
     ]
   },
   "LEVEL CONTROLS": {
@@ -8101,7 +8687,7 @@
   "LEVEL ENDED\n{0} SAVED": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1337"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1334"
     ]
   },
   "LEVEL NOT AVAILABLE": {
@@ -8146,14 +8732,13 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameFrontEnd.swift:29",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1051",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1122",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1132",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1958",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2071",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1048",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1119",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1129",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1955",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2068",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:378",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:496",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:502",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:67"
     ]
   },
@@ -8267,16 +8852,22 @@
       "Sources/LemmingsLocal/LemmingInspectionPage.swift:32"
     ]
   },
-  "Latest build": {
+  "Later was unexpectedly pleasant.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:22"
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:56"
     ]
   },
   "Leaderboards": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:538"
+    ]
+  },
+  "Learned to cook for someone.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:35"
     ]
   },
   "Least skills": {
@@ -8477,7 +9068,7 @@
   "Lemmings lettering": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
     ]
   },
   "Lemmings saved": {
@@ -8581,7 +9172,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:7189",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2127",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2124",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:243"
     ]
   },
@@ -8718,7 +9309,7 @@
   "Level skip earned": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2242",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2239",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:78"
     ]
   },
@@ -8975,7 +9566,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/LemmingInspection.swift:43",
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:83",
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:84",
       "Sources/LemmingsLocal/TrolleyResultView.swift:210"
     ]
   },
@@ -9021,8 +9612,8 @@
       "Sources/LemmingsGameArt/GameRecoveryArt.swift:10",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:511",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:2658",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1377",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1389"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1374",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1386"
     ]
   },
   "MIDI with sampled instruments": {
@@ -9098,18 +9689,6 @@
       "Sources/NxlvKit/ArchivalCatalog.swift:76"
     ]
   },
-  "Mac wheel zoom is continuous and keeps the pointed terrain in place. Bonus Skill has a clearer name. Stone controls sit at the playfield corner with shared help and fade states.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
-    ]
-  },
-  "Mac, iPhone, iPad and Apple TV share completed-level counts across campaign and Journey play. Home offers one Resume. Journey Map keeps browsing separate from starting an attempt.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:15"
-    ]
-  },
   "Machine": {
     "kind": "text",
     "references": [
@@ -9177,6 +9756,18 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:531"
     ]
   },
+  "Made a friend during a queue.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:54"
+    ]
+  },
+  "Made enough jam for the winter.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:97"
+    ]
+  },
   "Magic Carpet": {
     "kind": "text",
     "references": [
@@ -9223,6 +9814,12 @@
     "references": [
       "Sources/LemmingsLocal/LevelHintWindow.swift:121",
       "Sources/LemmingsLocal/LevelHintWindow.swift:133"
+    ]
+  },
+  "Makes excellent soup for one.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:43"
     ]
   },
   "Malformed VGASPEC data: {0}": {
@@ -9327,12 +9924,6 @@
       "Sources/NxlvKit/TrolleyCelebration.swift:58"
     ]
   },
-  "Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/LevelHintWindow.swift:258"
-    ]
-  },
   "Match the first obstacle to an available skill. Check what happens after that skill finishes. Keep some supplies for the next obstacle.": {
     "kind": "text",
     "references": [
@@ -9435,6 +10026,12 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:131",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:168"
+    ]
+  },
+  "May sit down in two.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:22"
     ]
   },
   "Measurable rescue benefit per scarce resource.": {
@@ -9736,6 +10333,12 @@
       "Sources/NxlvKit/TrolleyLeaderboards.swift:13"
     ]
   },
+  "Mostly ordinary groceries.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:101"
+    ]
+  },
   "Motion": {
     "kind": "text",
     "references": [
@@ -9806,13 +10409,13 @@
   "Music muted": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2077"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2074"
     ]
   },
   "Music off": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2077"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2074"
     ]
   },
   "Music output interrupted. Previous track continues.": {
@@ -9824,7 +10427,7 @@
   "Music paused": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2079"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2076"
     ]
   },
   "Music style": {
@@ -9843,7 +10446,7 @@
   "Music: beat only": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2079"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2076"
     ]
   },
   "Mute": {
@@ -9941,13 +10544,13 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1363",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1350"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1347"
     ]
   },
   "NEXT MOVE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1152"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1149"
     ]
   },
   "NO DATA": {
@@ -10122,12 +10725,6 @@
       "Sources/LemmingsLocal/TrolleyResultView.swift:144"
     ]
   },
-  "New mobile Journey and playlist checkpoints retain their exact queue and position. Solo and Hot Seat sequel progress stay separate. First saves keep a backup, and future-version saves remain protected.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16"
-    ]
-  },
   "New player": {
     "kind": "text",
     "references": [
@@ -10147,7 +10744,7 @@
   "New rescue record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2243",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2240",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:76",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:243"
     ]
@@ -10155,7 +10752,7 @@
   "New skill record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2244",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2241",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:77",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:244"
     ]
@@ -10169,8 +10766,8 @@
   "New time record": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2122",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2125"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2119",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2122"
     ]
   },
   "New time record  {0}:{1}": {
@@ -10228,7 +10825,7 @@
   "Next eligible lemming": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1784",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1781",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:206",
       "Sources/LemmingsTVUI/TVPlayfieldView.swift:33"
     ]
@@ -10394,10 +10991,22 @@
       "Sources/LemmingsLocal/main.swift:8529"
     ]
   },
-  "No build changes supplied.": {
+  "No announcement was necessary.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:24"
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:55"
+    ]
+  },
+  "No appointment is required.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:77"
+    ]
+  },
+  "No complaints were received.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:23"
     ]
   },
   "No completed attempts in this category yet.": {
@@ -10446,7 +11055,7 @@
   "No lemmings released yet": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:69",
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:70",
       "Sources/LemmingsLocal/LemmingInspectionPage.swift:55"
     ]
   },
@@ -10492,16 +11101,10 @@
       "Sources/LemmingsLocal/KeyboardCommandsView.swift:70"
     ]
   },
-  "No moves are made for you. Reveal another hint only when you want more detail.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/LevelHintWindow.swift:258"
-    ]
-  },
   "No recorded assignments": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:75"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:76"
     ]
   },
   "No records": {
@@ -10569,7 +11172,7 @@
   "No time limit": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2116",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2113",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:573"
     ]
   },
@@ -10598,6 +11201,24 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:2840"
+    ]
+  },
+  "Nobody asked it to stand.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:92"
+    ]
+  },
+  "Nobody has formally requested this.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:62"
+    ]
+  },
+  "Nobody needs to know why.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:32"
     ]
   },
   "None": {
@@ -10665,6 +11286,18 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/AchievementsWindow.swift:115"
+    ]
+  },
+  "Nothing especially scenic was required.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:49"
+    ]
+  },
+  "Notices its absence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:127"
     ]
   },
   "Now Choose a tribe.": {
@@ -10873,10 +11506,22 @@
       "Sources/LemmingsAppCore/Hints/LevelHints.swift:156"
     ]
   },
+  "Observes it faithfully.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:108"
+    ]
+  },
   "Obvious": {
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ClassicSettings.swift:189"
+    ]
+  },
+  "Occasionally both lamps stay on.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:40"
     ]
   },
   "Of a great darkness soon to engulf us": {
@@ -10985,6 +11630,24 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:257"
     ]
   },
+  "Once mistook a meeting for lunch.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:121"
+    ]
+  },
+  "Once received unexpected praise.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:47"
+    ]
+  },
+  "Once won a small raffle.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:37"
+    ]
+  },
   "One Lemming left behind": {
     "kind": "text",
     "references": [
@@ -10997,16 +11660,34 @@
       "Sources/NxlvKit/TrolleyLeaderboards.swift:136"
     ]
   },
+  "One Resume gets you back to your game. Campaign and Journey wins count each level once.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7"
+    ]
+  },
   "One below the maximum rescue.": {
     "kind": "text",
     "references": [
       "Sources/NxlvKit/TrolleyPhilosophy.swift:176"
     ]
   },
+  "One enjoys a slightly greater confidence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:115"
+    ]
+  },
   "One extra use of an existing level skill is available for a later attempt.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:79"
+    ]
+  },
+  "One is reserved for overnight visitors.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:19"
     ]
   },
   "One lemming may need to take a route the crowd cannot follow yet. Check the vertical faces.": {
@@ -11094,6 +11775,12 @@
       "Sources/LemmingsAppCore/Hints/LevelHints.swift:62"
     ]
   },
+  "Opens it for reassurance.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:93"
+    ]
+  },
   "Opted-in installs": {
     "kind": "text",
     "references": [
@@ -11176,12 +11863,6 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:212"
     ]
   },
-  "Original soundtracks included": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/MusicLibraryWindow.swift:50"
-    ]
-  },
   "Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games.": {
     "kind": "text",
     "references": [
@@ -11192,6 +11873,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ProgressionPlaylist.swift:8"
+    ]
+  },
+  "Originals included. Fancy a remix?": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/MusicLibraryWindow.swift:50"
     ]
   },
   "Our finest shipwrights have worked": {
@@ -11228,6 +11915,60 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:201"
+    ]
+  },
+  "Owns a book nobody has borrowed.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:131"
+    ]
+  },
+  "Owns a modest collection of keys.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:109"
+    ]
+  },
+  "Owns a reassuringly large ladle.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:43"
+    ]
+  },
+  "Owns a remarkably ordinary hat.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:63"
+    ]
+  },
+  "Owns a shelf of adequate depth.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:30"
+    ]
+  },
+  "Owns a small decorative bell.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:78"
+    ]
+  },
+  "Owns an inland shell.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:24"
+    ]
+  },
+  "Owns seven smooth stones.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:19"
+    ]
+  },
+  "Owns six identical buttons.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:69"
     ]
   },
   "P / M / I": {
@@ -11279,8 +12020,8 @@
     "references": [
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:628",
       "Sources/LemmingsGameArt/MobileHUDRenderer.swift:721",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1120",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1129",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1117",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1126",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:42"
     ]
   },
@@ -11330,9 +12071,9 @@
   "PLAY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1112",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1121",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1131",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1109",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1118",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1128",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:377",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:52"
     ]
@@ -11428,7 +12169,7 @@
   "PREVIOUS MOVE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1151"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1148"
     ]
   },
   "PRIMARY BUTTON: ASSIGN  /  MENU: PAUSE": {
@@ -11675,9 +12416,14 @@
       "Sources/LemmingsLocal/OriginalMoviePlayer.swift:105",
       "Sources/LemmingsLocal/main.swift:9125",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:496",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:500",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:187",
       "Sources/LemmingsTVUI/TVPlayfieldView.swift:66"
+    ]
+  },
+  "Paused before correcting it.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:102"
     ]
   },
   "Paused.": {
@@ -12224,6 +12970,24 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1971"
     ]
   },
+  "Prefers the first.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:123"
+    ]
+  },
+  "Prefers the one from Tuesday.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:27"
+    ]
+  },
+  "Prepares several possible answers.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:52"
+    ]
+  },
   "Presage Software / Psygnosis": {
     "kind": "text",
     "references": [
@@ -12281,7 +13045,7 @@
   "Previous eligible lemming": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1781",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1778",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:206",
       "Sources/LemmingsTVUI/TVPlayfieldView.swift:34"
     ]
@@ -12431,6 +13195,12 @@
       "Sources/LemmingsLocal/TelemetryDashboard.swift:29"
     ]
   },
+  "Pull up a chair. We've got a level to finish.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:5"
+    ]
+  },
   "Q / Escape": {
     "kind": "text",
     "references": [
@@ -12557,8 +13327,8 @@
   "READY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1112",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1957",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1109",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1954",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:377"
     ]
   },
@@ -12587,8 +13357,8 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1888",
       "Sources/LemmingsLocal/ReplayWindow.swift:317",
       "Sources/LemmingsLocal/TrolleyResultView.swift:44",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1121",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1131"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1118",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1128"
     ]
   },
   "REPLAY  ": {
@@ -12613,9 +13383,9 @@
   "RESTART LEVEL": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1125",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1219",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1237",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1122",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1216",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1234",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:85"
     ]
   },
@@ -12632,9 +13402,8 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1355",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1362",
       "Sources/LemmingsLocal/PlayfieldView.swift:1198",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1121",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1131",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:501",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1118",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1128",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:134",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:72"
     ]
@@ -12649,8 +13418,8 @@
   "RETRY": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1351",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1356"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1348",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1353"
     ]
   },
   "RETRY LEVEL": {
@@ -12663,7 +13432,7 @@
   "REVIEW": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1373"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1370"
     ]
   },
   "REWARDS EARNED": {
@@ -12724,7 +13493,7 @@
   "RUN WAS NOT CLOSED": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1448"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1445"
     ]
   },
   "RUNNER": {
@@ -12737,6 +13506,12 @@
     "kind": "text",
     "references": [
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INTRO.IFF:1"
+    ]
+  },
+  "Rain now seems friendlier.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:65"
     ]
   },
   "Ramp up to 10×; release to keep speed": {
@@ -12836,7 +13611,13 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/LemmingInspection.swift:42",
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:83"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:84"
+    ]
+  },
+  "Read it twice.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:138"
     ]
   },
   "Ready": {
@@ -12855,6 +13636,18 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:228"
+    ]
+  },
+  "Received a leaf by post.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:29"
+    ]
+  },
+  "Received a postcard from quite nearby.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:135"
     ]
   },
   "Recent actions": {
@@ -12877,6 +13670,24 @@
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:15"
     ]
   },
+  "Recognised it the second time.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:21"
+    ]
+  },
+  "Recognises four kinds of cloud.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:27"
+    ]
+  },
+  "Recommends the one upstairs.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:60"
+    ]
+  },
   "Record matched": {
     "kind": "text",
     "references": [
@@ -12886,7 +13697,7 @@
   "Recorded actions": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:74"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:75"
     ]
   },
   "Records": {
@@ -12961,7 +13772,6 @@
   "Recovery": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:16",
       "Sources/LemmingsLocal/SettingsWindow.swift:702"
     ]
   },
@@ -13007,6 +13817,12 @@
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:96"
     ]
   },
+  "Refined bitmap lettering and new countdown numerals. Even counting to three got some attention.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
+    ]
+  },
   "Refresh": {
     "kind": "text",
     "references": [
@@ -13017,7 +13833,7 @@
   "Release notes": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:50"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:48"
     ]
   },
   "Release rate": {
@@ -13032,6 +13848,12 @@
       "Sources/LemmingsLocal/main.swift:7277"
     ]
   },
+  "Remains prepared without complaint.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:96"
+    ]
+  },
   "Remap buttons": {
     "kind": "text",
     "references": [
@@ -13043,6 +13865,30 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:440"
+    ]
+  },
+  "Remembers it as lunch.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:121"
+    ]
+  },
+  "Remembers the afternoon.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:34"
+    ]
+  },
+  "Remembers the laughter anyway.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:90"
+    ]
+  },
+  "Remembers where everything was.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:100"
     ]
   },
   "Removal queued. Retry when connected.": {
@@ -13361,7 +14207,7 @@
   "Restart level?": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1235"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1232"
     ]
   },
   "Restore": {
@@ -13476,6 +14322,12 @@
       "Sources/LemmingsMobileCore/MobileLearning.swift:62",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:23",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:513"
+    ]
+  },
+  "Retains no supporting evidence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:87"
     ]
   },
   "Reticule": {
@@ -13649,6 +14501,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Input/GameplayCommands.swift:58"
+    ]
+  },
+  "Returned with a cake.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:124"
     ]
   },
   "Reveal full solution?": {
@@ -13926,7 +14784,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ReplayWindow.swift:253",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1839"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1836"
     ]
   },
   "SAVE {0}  ({1}%)": {
@@ -13956,7 +14814,7 @@
   "SAVING...": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1467"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1464"
     ]
   },
   "SCOOPER": {
@@ -13974,26 +14832,26 @@
   "SETTINGS": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1145",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1142",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:46"
     ]
   },
   "SFX muted": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2080"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2077"
     ]
   },
   "SFX off": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2080"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2077"
     ]
   },
   "SFX {0}%": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2080"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2077"
     ]
   },
   "SH": {
@@ -14011,7 +14869,7 @@
   "SHARE MOVIE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1374"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1371"
     ]
   },
   "SHIM": {
@@ -14072,7 +14930,7 @@
   "SKILL MODE": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1223",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1220",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:56"
     ]
   },
@@ -14087,7 +14945,7 @@
   "SKIP LEVEL": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1367"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1364"
     ]
   },
   "SKIPS {0}": {
@@ -14234,8 +15092,8 @@
   "START": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1112",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1957",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1109",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1954",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:377"
     ]
   },
@@ -14378,7 +15236,7 @@
   "Save Lemmings run": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1511"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1508"
     ]
   },
   "Save and return to library": {
@@ -14552,6 +15410,12 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:539"
     ]
   },
+  "Saved the last biscuit for later.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:56"
+    ]
+  },
   "Saved {0} / {1} required": {
     "kind": "text",
     "references": [
@@ -14567,7 +15431,7 @@
   "Saved {0}/{1}   Goal {2}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2123"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2120"
     ]
   },
   "Saved: {0}": {
@@ -14859,6 +15723,18 @@
       "Sources/LemmingsLocal/main.swift:959"
     ]
   },
+  "Several breakfasts remain vivid.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:75"
+    ]
+  },
+  "Several doors remain hypothetical.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:109"
+    ]
+  },
   "Shadow": {
     "kind": "text",
     "references": [
@@ -14888,7 +15764,6 @@
   "Share counts and records": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:15",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:99",
       "Sources/LemmingsLocal/SettingsWindow.swift:688",
       "Sources/LemmingsLocal/SettingsWindow.swift:692"
@@ -14923,18 +15798,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:55"
-    ]
-  },
-  "Shared progress, safer Resume and clearer controls": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:13"
-    ]
-  },
-  "Shared saves/replays": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/MobileInformationArt.swift:16"
     ]
   },
   "Shared tester library: test99": {
@@ -15232,7 +16095,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:9",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1267"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1264"
     ]
   },
   "Skill targeting": {
@@ -15341,6 +16204,12 @@
       "Sources/NxlvKit/ProgressionPlaylist.swift:7"
     ]
   },
+  "Smoother Mac wheel zoom, clearer Bonus skill controls and a fix for Apple TV selection.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
+    ]
+  },
   "Solo / Hot Seat": {
     "kind": "text",
     "references": [
@@ -15367,6 +16236,42 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SolutionReplay.swift:124"
+    ]
+  },
+  "Someone chose it with great care.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:39"
+    ]
+  },
+  "Someone has offered to visit.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:143"
+    ]
+  },
+  "Someone putting water on.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:145"
+    ]
+  },
+  "Someone remembered their name today.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:44"
+    ]
+  },
+  "Sometimes containing different things.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:76"
+    ]
+  },
+  "Sometimes misses the queue.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:54"
     ]
   },
   "Sony SPC700 16-Bit ADPCM Synth": {
@@ -15596,6 +16501,12 @@
       "Sources/NxlvKit/ClassicSettings.swift:143"
     ]
   },
+  "Standing remains under consideration.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:70"
+    ]
+  },
   "Start": {
     "kind": "text",
     "references": [
@@ -15781,6 +16692,48 @@
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:85"
     ]
   },
+  "Still awaits further particulars.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:80"
+    ]
+  },
+  "Still brings it out first.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:140"
+    ]
+  },
+  "Still recognises the postman's footsteps.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:50"
+    ]
+  },
+  "Still takes visitors there.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:114"
+    ]
+  },
+  "Still thinks about the gesture.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:29"
+    ]
+  },
+  "Still uses them alternately.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:31"
+    ]
+  },
+  "Still visits the winning towel.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:37"
+    ]
+  },
   "Stomper": {
     "kind": "text",
     "references": [
@@ -15878,6 +16831,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/SkillVocabulary.swift:66"
+    ]
+  },
+  "Summer visitors proved enthusiastic.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:97"
     ]
   },
   "Sunsoft / DMA Design": {
@@ -16141,7 +17100,7 @@
     "references": [
       "Sources/LemmingsGameArt/GameRecoveryArt.swift:8",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:74",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1383",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1380",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:65",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:75"
     ]
@@ -16188,6 +17147,24 @@
       "Sources/LemmingsLocal/LearningJourneyMenu.swift:35"
     ]
   },
+  "Take your time. Reveal more when you want another nudge. The moves are still yours.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/LevelHintWindow.swift:258"
+    ]
+  },
+  "Takes this seriously.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:139"
+    ]
+  },
+  "Talks about it fondly.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:88"
+    ]
+  },
   "Tap RT for fast-forward": {
     "kind": "text",
     "references": [
@@ -16203,7 +17180,7 @@
   "Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:158"
+      "Sources/LemmingsMobileUI/MobilePlayfieldView.swift:159"
     ]
   },
   "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost.": {
@@ -16803,6 +17780,12 @@
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:145"
     ]
   },
+  "The actual place disagrees.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:94"
+    ]
+  },
   "The app is missing embedded game data ({0}). Rebuild the app with its game data.": {
     "kind": "text",
     "references": [
@@ -16845,6 +17828,12 @@
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1318"
     ]
   },
+  "The cat understands the arrangement.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:48"
+    ]
+  },
   "The cloud player is invalid.": {
     "kind": "text",
     "references": [
@@ -16881,10 +17870,22 @@
       "Sources/LemmingsAppCore/Records/GameCenterProgressSync.swift:41"
     ]
   },
+  "The company suits.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:134"
+    ]
+  },
   "The danger is the fall after the entrance. Think about protecting the lemmings before they land.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Hints/LevelHints.swift:127"
+    ]
+  },
+  "The decision remains respected.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:61"
     ]
   },
   "The decompression limit must not be negative.": {
@@ -16948,16 +17949,16 @@
       "Sources/NxlvKit/ZipArchive.swift:14"
     ]
   },
+  "The food remains unchanged.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:28"
+    ]
+  },
   "The game produced an invalid image.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileCore/MobileGameSession.swift:173"
-    ]
-  },
-  "The game will wait. Give the controls to {0}, then choose Ready.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ArcadeWindow.swift:227"
     ]
   },
   "The graphic cannot be read.": {
@@ -17207,6 +18208,12 @@
       "Sources/LemmingsLocal/OriginalMoviePlayer.swift:53"
     ]
   },
+  "The outside world makes regular appearances.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:99"
+    ]
+  },
   "The player has reached the playlist limit.": {
     "kind": "text",
     "references": [
@@ -17315,6 +18322,12 @@
       "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:395"
     ]
   },
+  "The reference concerned a kettle.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:59"
+    ]
+  },
   "The replay could not be assembled.": {
     "kind": "text",
     "references": [
@@ -17374,6 +18387,18 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/NxlvRenderer.swift:2170"
+    ]
+  },
+  "The responsibility feels manageable.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:72"
+    ]
+  },
+  "The room accepted them readily.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:141"
     ]
   },
   "The sample {0} holds no BODY chunk.": {
@@ -17652,6 +18677,12 @@
       "Sources/NxlvKit/MusicLibraryInstaller.swift:63"
     ]
   },
+  "The spare blanket remains folded.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:51"
+    ]
+  },
   "The steel mask needs {0} bytes; found {1}.": {
     "kind": "text",
     "references": [
@@ -17682,6 +18713,12 @@
       "Sources/NxlvKit/NeoLemmixSimulation.swift:706"
     ]
   },
+  "The toast seems unconcerned.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:81"
+    ]
+  },
   "The total lemming count cannot be negative.": {
     "kind": "text",
     "references": [
@@ -17694,16 +18731,34 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:578"
     ]
   },
+  "The tune remains unidentified.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:25"
+    ]
+  },
   "The turn passes when a level ends, won or lost.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:64"
     ]
   },
+  "The vegetable was unspecified.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:66"
+    ]
+  },
   "The vessel will carry us far away": {
     "kind": "text",
     "references": [
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/TALISMAN.IFF:1"
+    ]
+  },
+  "The walk home felt shorter.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:105"
     ]
   },
   "The {0} INITIAL_FRAME is outside its animation strip and was clamped.": {
@@ -17810,10 +18865,322 @@
       "Sources/NxlvKit/ClassicDOSSimulation.swift:550"
     ]
   },
+  "Their annual holiday includes a familiar bench.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:116"
+    ]
+  },
+  "Their apology arrived before the argument.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:38"
+    ]
+  },
+  "Their attendance at breakfast is consistent.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:68"
+    ]
+  },
+  "Their clock runs slightly ahead.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:84"
+    ]
+  },
+  "Their coat pocket contains a shopping token.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:122"
+    ]
+  },
+  "Their collection contains one missing item.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:88"
+    ]
+  },
+  "Their contribution to the picnic was shade.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:120"
+    ]
+  },
+  "Their curtains are regarded as adequate.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:71"
+    ]
+  },
+  "Their family recipe includes an unexplained pause.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:108"
+    ]
+  },
+  "Their favourite bowl survived the move.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:126"
+    ]
+  },
+  "Their favourite joke was told badly.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:90"
+    ]
+  },
+  "Their favourite jumper has become a cushion.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:112"
+    ]
+  },
+  "Their favourite photograph includes a thumb.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:136"
+    ]
+  },
+  "Their favourite shop closed last spring.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:100"
+    ]
+  },
+  "Their first cake leaned considerably.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:92"
+    ]
+  },
+  "Their friend kept the dreadful drawing.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:142"
+    ]
+  },
+  "Their friend moved somewhere warmer.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:51"
+    ]
+  },
+  "Their garden contains one flower.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:46"
+    ]
+  },
+  "Their guest towel has hosted nobody.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:96"
+    ]
+  },
+  "Their handkerchief bears unfamiliar initials.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:128"
+    ]
+  },
+  "Their handwriting improves on envelopes.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:62"
+    ]
+  },
+  "Their house smells pleasantly of oranges.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:130"
+    ]
+  },
+  "Their houseplant has grown another leaf.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:55"
+    ]
+  },
+  "Their last letter contains no news.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:42"
+    ]
+  },
+  "Their letter of complaint received sympathy.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:118"
+    ]
+  },
+  "Their lost glove returned after winter.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:144"
+    ]
+  },
+  "Their map shows a vanished pond.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:114"
+    ]
+  },
+  "Their name was included in the thanks.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:138"
+    ]
+  },
+  "Their neighbour borrowed a little sugar.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:124"
+    ]
+  },
+  "Their neighbour left a light on.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:106"
+    ]
+  },
+  "Their neighbour plays the same song.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:58"
+    ]
+  },
+  "Their neighbours disagree about the fence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:86"
+    ]
+  },
+  "Their new friend dislikes the same chair.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:104"
+    ]
+  },
+  "Their nicest plate is chipped.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:140"
+    ]
+  },
+  "Their old address appears on something.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:102"
+    ]
+  },
+  "Their opinion of pears is available.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:77"
+    ]
+  },
+  "Their ordinary day went mostly as expected.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:146"
+    ]
+  },
+  "Their painting resembles somewhere they miss.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:94"
+    ]
+  },
+  "Their preferred bench faces a wall.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:74"
+    ]
+  },
+  "Their scarf was recognised from a distance.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:132"
+    ]
+  },
+  "Their shoes squeak in different keys.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:98"
+    ]
+  },
+  "Their spare room is no longer spare.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:134"
+    ]
+  },
+  "Their surname was misspelled on an award.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:110"
+    ]
+  },
+  "Their toast preference is well documented.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:81"
+    ]
+  },
+  "Their umbrella was returned by someone.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:65"
+    ]
+  },
+  "Their window faces another window.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:40"
+    ]
+  },
+  "There is an explanation.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:130"
+    ]
+  },
   "These counts combine multiple levels.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TelemetryDashboard.swift:226"
+    ]
+  },
+  "They appreciate the extra warning.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:84"
+    ]
+  },
+  "They found this comforting.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:71"
+    ]
+  },
+  "They had brought identification anyway.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:44"
+    ]
+  },
+  "They waved back correctly.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:79"
+    ]
+  },
+  "They welcomed it nonetheless.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:144"
     ]
   },
   "Think about giving one worker room to prepare the route. The whole crowd does not need to move together.": {
@@ -17904,6 +19271,12 @@
       "Sources/LemmingsMobileCore/MobileGameSession.swift:175"
     ]
   },
+  "This has helped considerably.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:33"
+    ]
+  },
   "This journey level is unavailable on this device. The saved session has been kept.": {
     "kind": "text",
     "references": [
@@ -17962,6 +19335,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/FLICMovie.swift:20"
+    ]
+  },
+  "This reflects favourably overall.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:68"
     ]
   },
   "This removes {0}'s progress, saved runs, scores and achievements. You cannot undo this.": {
@@ -18027,12 +19406,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:89"
-    ]
-  },
-  "This shows the winning moves from start to finish. Your attempt stays paused.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/LevelHintWindow.swift:146"
     ]
   },
   "This soundtrack library is already downloading.": {
@@ -18116,7 +19489,7 @@
   "Time ": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2123"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2120"
     ]
   },
   "Time and actions": {
@@ -18137,7 +19510,7 @@
     "references": [
       "Sources/LemmingsLocal/main.swift:7280",
       "Sources/LemmingsLocal/main.swift:7917",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2116",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2113",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:573"
     ]
   },
@@ -18224,6 +19597,12 @@
     "references": [
       "Sources/LemmingsAppCore/Records/CloudKitLibraryStore.swift:82",
       "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:68"
+    ]
+  },
+  "Took the scenic route home.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:49"
     ]
   },
   "Trace a path from the entrance to the exit. Check the landing places before changing the terrain.": {
@@ -18344,7 +19723,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:221",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2127",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2124",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:243"
     ]
   },
@@ -18368,6 +19747,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1"
     ]
   },
+  "Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/LevelHintWindow.swift:258"
+    ]
+  },
   "Tube Strength": {
     "kind": "text",
     "references": [
@@ -18385,7 +19770,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:10",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1268"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1265"
     ]
   },
   "Turn: {0}": {
@@ -18557,6 +19942,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/SequelBinary.swift:50"
+    ]
+  },
+  "Under their name.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:125"
     ]
   },
   "Undo end run": {
@@ -18920,13 +20311,37 @@
   "Used a tool": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:121"
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:122"
     ]
   },
   "Used {0} skills instead of {1}, with at least as many rescued.": {
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/ResultAwards.swift:42"
+    ]
+  },
+  "Uses a different spoon on Sundays.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:28"
+    ]
+  },
+  "Uses it privately.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:107"
+    ]
+  },
+  "Uses the everyday plates.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:103"
+    ]
+  },
+  "Usually sits down.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:116"
     ]
   },
   "V / S": {
@@ -19113,6 +20528,12 @@
       "Sources/LemmingsAppCore/Records/GameCenterScores.swift:100"
     ]
   },
+  "Visitors are shown it individually.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:46"
+    ]
+  },
   "Volume": {
     "kind": "text",
     "references": [
@@ -19167,9 +20588,58 @@
   "Walker": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:114",
+      "Sources/LemmingsAppCore/Records/LemmingInspection.swift:115",
       "Sources/LemmingsLocal/Lemmings3Panel.swift:9",
       "Sources/NxlvKit/SkillVocabulary.swift:76"
+    ]
+  },
+  "Walks home with accompaniment.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:98"
+    ]
+  },
+  "Want to see one way through? This reveals a full winning route. Your game stays paused.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/LevelHintWindow.swift:146",
+      "Sources/LemmingsMobileUI/MobileGameHints.swift:70"
+    ]
+  },
+  "Was asked to judge a cucumber.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:117"
+    ]
+  },
+  "Was authorised to choose a cushion.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:61"
+    ]
+  },
+  "Was complimented on an ordinary sandwich.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:129"
+    ]
+  },
+  "Was given time to finish.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:26"
+    ]
+  },
+  "Was invited back without asking.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:105"
+    ]
+  },
+  "Was thanked for noticing a draught.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:73"
     ]
   },
   "Watch and listen": {
@@ -19250,6 +20720,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1"
     ]
   },
+  "Welcomes it politely.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:95"
+    ]
+  },
   "Well, that seems to be all.  Hope you enjoyed it.  See you soon.": {
     "kind": "text",
     "references": [
@@ -19272,7 +20748,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:14",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:44"
+      "Sources/LemmingsGameArt/MobileInformationArt.swift:22",
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:42"
     ]
   },
   "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.": {
@@ -19335,10 +20812,22 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:40"
     ]
   },
+  "Wishes those people reasonably well.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:128"
+    ]
+  },
   "Won: {0}": {
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileSettingsPages.swift:98"
+    ]
+  },
+  "Wore it buying bread.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:45"
     ]
   },
   "Worldwide": {
@@ -19374,6 +20863,18 @@
     "references": [
       "Sources/LemmingsAppCore/Records/GameCenterScores.swift:64",
       "Sources/LemmingsAppCore/Records/GameCenterScores.swift:93"
+    ]
+  },
+  "Would happily go again.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:91"
+    ]
+  },
+  "Would recommend another.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:146"
     ]
   },
   "Xmas Lemmings 1991": {
@@ -19494,6 +20995,12 @@
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:51"
     ]
   },
+  "Your journeys and playlists keep their place. Solo and Hot Seat progress stay separate. Ready waits for you.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
+    ]
+  },
   "Your rank: #{0} of {1} - {2}": {
     "kind": "text",
     "references": [
@@ -19512,6 +21019,12 @@
     "references": [
       "Sources/LemmingsLocal/ArcadeWindow.swift:758",
       "Sources/LemmingsLocal/main.swift:8838"
+    ]
+  },
+  "Your turn": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
     ]
   },
   "Z / Shift+Z: Zoom": {
@@ -19908,10 +21421,10 @@
       "Sources/NxlvKit/ZipArchive.swift:154"
     ]
   },
-  "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Mobile Journey playback remains Classic-only. Existing engine and device validation limits still apply.": {
+  "macOS 12.3 or later, on Apple silicon and Intel.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
     ]
   },
   "missing completion frame": {
@@ -20095,7 +21608,7 @@
   "selected skill": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1761"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1758"
     ]
   },
   "silent": {
@@ -20354,7 +21867,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:146",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:184",
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2115",
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:2112",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:572"
     ]
   },
@@ -20419,7 +21932,7 @@
   "{0} eligible lemmings. Skill: {1}.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1768"
+      "Sources/LemmingsMobileUI/MobileGameViewController.swift:1765"
     ]
   },
   "{0} has invalid size {1}x{2}.": {
