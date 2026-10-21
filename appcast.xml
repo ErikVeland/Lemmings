@@ -3,6 +3,38 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.1.1</title>
+            <pubDate>Wed, 21 Oct 2026 15:21:47 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>95</sparkle:version>
+            <sparkle:shortVersionString>2.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Journey progress</h3>
+<p>Home completion counts now include Journey wins alongside the selected session's campaign wins. A level solved through both routes counts once. Displaying the counts does not unlock campaign levels or alter the saved campaign.</p>
+<p>Older Mac Hot Seat journeys recover recorded outcomes for past visits from the retained save or its matching pre-upgrade backup. A resume position alone does not establish a win. The older format shared outcomes with solo play and cannot prove which turn earned each outcome. Missing history cannot be reconstructed. The original history, resume position and current turn remain intact.</p>
+<h3>Automatic worldwide records</h3>
+<p>Players sharing counts participate in worldwide rankings automatically, without opening Worldwide or taking a second opt-in step. Eligible saved records queue at launch; new results and retained action replays use the existing upload flow. Public records include player initials, scores and action replays. Explicit record-sharing opt-outs and removed records stay off. Privacy and consent pages now describe the combined choice. Game Center remains optional and separate.</p>
+<h3>Inspection and presentation</h3>
+<ul><li>Paused lemming inspection has its own saved preference. Mac hover and Command-I open the individual's recorded history. Fictional character details do not affect simulation or establish an identity across levels.</li><li>Modern pointer arrows wrap cleanly at the playfield edges, including NeoLemmix.</li><li>HDR presentation keeps reduced-flash and performance limits. Rendering changes do not establish physical display acceptance.</li><li>Fan browsing recognises the retained pack identities and current route evidence. Additional checked routes do not certify the unfinished fan corpus.</li></ul>
+<h3>Latest merged changes</h3>
+<ul><li>Chronicles combines the current source-derived Mole patrol cadence with its initial settle and steel-contact timing. Recovery hashes include the retained Mole state. Existing route gaps remain explicit.</li><li>Fan browsing uses the current bundled-playable exclusion manifest. The exact no-exit level stays in its source archive and is omitted from playable bundled scope. Imported copies retain their existing handling.</li><li>The menu normally plays the Macintosh theme when available. Amiga is the fallback and remains in the alternative theme pool.</li></ul>
+<h3>iOS and Apple TV TestFlight</h3>
+<p>The companion TestFlight version is 2.1.1: iOS build 18 and tvOS build 8. Both use the shared mobile frontend. Mobile Journey playback remains Classic-only. Physical touch, remote/controller focus, VoiceOver, live cloud propagation and sustained device performance retain their documented acceptance limits. TestFlight processing and beta review are separate from successful upload.</p>
+<h3>Compatibility and validation boundaries</h3>
+<p>Mac requires macOS 12.3 or later and includes Apple silicon and Intel code. Classic and The Tribes retain their Complete classifications. Chronicles and NeoLemmix remain Beta. Existing original-engine fidelity, L2 Gold Ark, L3 route, NeoLemmix style and unverified fan-level limits remain open. New translated captions use explicit English fallbacks pending human language review.</p>
+<p>Release checks, remaining acceptance limits and distribution receipts are recorded separately.</p>
+<p class="meta">Build: 95<br>Release commit: 9af6210022a51f4df086c88803d992839b782828<br>Release base: v2.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-2.1.1-build95.zip" length="2055507830" type="application/octet-stream" sparkle:edSignature="VKJYGxuMDxMbw481VnQSTpKZ1fPm09gukmGinwr6blzK9JMMpkXpiyvbSurlooXXAFRTJQDMD2Imw8DHnZbrCQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from93.delta" sparkle:deltaFrom="93" length="39954346" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="XVD3utc4nyyNfo1XGAWY6JFUujzhA6osLBFEixHV5IL/aeU+3fL5ZC1ZdBEIbdHRV7i09rq8TGLelgyf1HkRAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from91.delta" sparkle:deltaFrom="91" length="49182062" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="URdeoQ1ZmfcGY4nz7FBOIEL4VU/fPLYdxNlUzMby/6qPYogJ2+H/U/YNw45xZMj5dOeKY0vJDse9l5HXQ4dXCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from90.delta" sparkle:deltaFrom="90" length="49282818" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="3prhZOXtKuJftA23ZPVLZ80i/sQKQlbfc5fqnneIkMConPpxZprkbnfBg9NoarCtISTbv4qVYdRqCHgrkkbJAg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from87.delta" sparkle:deltaFrom="87" length="44083966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="y/MMBxAYtcrbwq9CZom2PDCAyLuqh8Yu9TJBJOfQ71UxBDdOddlV6+l3bhPBWNoqLzWBtB9p8t+XpOpcVObQBQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from86.delta" sparkle:deltaFrom="86" length="44443478" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="M4M/TfLGWq7M+KEA3Ia/8PZPjSk3qTAxIDkRvsch3wMVvQvtjm0ByqJ2MRNWrv1G2Ak1x4TvmqyVZJ1svlNoDQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.1</title>
             <pubDate>Tue, 20 Oct 2026 12:12:25 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
