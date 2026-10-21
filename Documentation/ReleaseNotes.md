@@ -1,11 +1,16 @@
 # Release notes
 
-The latest published release is [2.1.1 build 95](ReleaseNotes-2.1.1-build95.md).
-Its [release record](ReleaseReadiness/2.1.1-build95/README.md) covers the signed packages,
-direct deltas and validation limits.
+The latest Mac release is [2.1.2 build 96](ReleaseNotes-2.1.2-build96.md).
+Its [release record](ReleaseReadiness/2.1.2-build96/README.md) covers the signed
+packages, five direct updates, source identity and validation limits.
+iOS 2.1.2 build 19 is Testing in the existing group. TV build 9 is signed and
+verified; upload awaits an Xcode account sign-in refresh.
 Source and feed versions, retained acceptance evidence and completion limits
-are recorded in [release scope](ReleaseScope.md).
-The next coordinated Apple release uses the [2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md).
+are recorded in [release scope](ReleaseScope.md) and the
+[shared 2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md).
+
+The [2.1.1 notes](ReleaseNotes-2.1.1-build95.md) and
+[release record](ReleaseReadiness/2.1.1-build95/README.md) retain the earlier evidence.
 
 ## Earlier notes
 
