@@ -1,0 +1,37 @@
+[
+  {
+    "fromBuild": 93,
+    "toBuild": 95,
+    "patch": "UltimateLemmings-build95-from93.delta",
+    "matchingFilesAndLinks": 18568,
+    "result": "passed"
+  },
+  {
+    "fromBuild": 91,
+    "toBuild": 95,
+    "patch": "UltimateLemmings-build95-from91.delta",
+    "matchingFilesAndLinks": 18568,
+    "result": "passed"
+  },
+  {
+    "fromBuild": 90,
+    "toBuild": 95,
+    "patch": "UltimateLemmings-build95-from90.delta",
+    "matchingFilesAndLinks": 18568,
+    "result": "passed"
+  },
+  {
+    "fromBuild": 87,
+    "toBuild": 95,
+    "patch": "UltimateLemmings-build95-from87.delta",
+    "matchingFilesAndLinks": 18568,
+    "result": "passed"
+  },
+  {
+    "fromBuild": 86,
+    "toBuild": 95,
+    "patch": "UltimateLemmings-build95-from86.delta",
+    "matchingFilesAndLinks": 18568,
+    "result": "passed"
+  }
+]

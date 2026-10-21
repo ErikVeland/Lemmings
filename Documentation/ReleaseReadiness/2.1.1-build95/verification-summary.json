@@ -1,0 +1,129 @@
+{
+  "version": "2.1.1",
+  "builds": {
+    "mac": 95,
+    "ios": 18,
+    "tvos": 8
+  },
+  "sourceCommit": "ec1815441e055cc054e7457fc06efccd0ccba632",
+  "cutBase": "a22454304e43bcc5eb16de44c2821f66dde8e7c6",
+  "audit": {
+    "total": 56,
+    "passedAfterDiskRecovery": 55,
+    "originalAuditFailed": [
+      "fan-library",
+      "local-performance-measurement",
+      "sequel-views",
+      "arcade-records"
+    ],
+    "diskRecovery": [
+      {
+        "name": "sequel-views",
+        "status": "passed",
+        "log": "logs/sequel-views-after-disk-cleanup.log",
+        "seconds": 226.1
+      },
+      {
+        "name": "arcade-records",
+        "status": "passed",
+        "log": "logs/arcade-records-after-disk-cleanup.log",
+        "seconds": 183.9
+      },
+      {
+        "name": "hot-seat-ghosts",
+        "status": "passed",
+        "log": "logs/hot-seat-ghosts-after-disk-cleanup.log",
+        "seconds": 23.5
+      },
+      {
+        "name": "local-performance-measurement",
+        "status": "passed",
+        "log": "logs/local-performance-measurement-after-disk-cleanup.log",
+        "seconds": 75.0
+      }
+    ],
+    "remainingFailed": [
+      "fan-library"
+    ],
+    "sourceDrift": [],
+    "reruns": [
+      {
+        "name": "fan-library",
+        "passed": true,
+        "reason": "Test expected 10/9 source/playable entries; the exact verified archive has two ten-level DAT files, hence 20/19. Only those three count assertions changed in the rerun copy; product source and candidate unchanged."
+      }
+    ],
+    "effectivePassed": 56,
+    "scope": "minor"
+  },
+  "featureTests": {
+    "passed": 21,
+    "suites": 3
+  },
+  "l3": {
+    "fixtures": 416,
+    "exactDoubleReplays": 399,
+    "knownFailures": 17,
+    "openLevels": [
+      107,
+      206,
+      213,
+      229
+    ]
+  },
+  "testWindows": "offscreen",
+  "testAudio": "muted",
+  "physicalDeviceAcceptance": "pending",
+  "directDeltas": [
+    {
+      "fromBuild": 93,
+      "toBuild": 95,
+      "patch": "UltimateLemmings-build95-from93.delta",
+      "matchingFilesAndLinks": 18568,
+      "result": "passed"
+    },
+    {
+      "fromBuild": 91,
+      "toBuild": 95,
+      "patch": "UltimateLemmings-build95-from91.delta",
+      "matchingFilesAndLinks": 18568,
+      "result": "passed"
+    },
+    {
+      "fromBuild": 90,
+      "toBuild": 95,
+      "patch": "UltimateLemmings-build95-from90.delta",
+      "matchingFilesAndLinks": 18568,
+      "result": "passed"
+    },
+    {
+      "fromBuild": 87,
+      "toBuild": 95,
+      "patch": "UltimateLemmings-build95-from87.delta",
+      "matchingFilesAndLinks": 18568,
+      "result": "passed"
+    },
+    {
+      "fromBuild": 86,
+      "toBuild": 95,
+      "patch": "UltimateLemmings-build95-from86.delta",
+      "matchingFilesAndLinks": 18568,
+      "result": "passed"
+    }
+  ],
+  "source": {
+    "compiledCommit": "ec1815441e055cc054e7457fc06efccd0ccba632",
+    "releaseCommit": "9af6210022a51f4df086c88803d992839b782828",
+    "changedFiles": [
+      "Tests/FanLevelLibraryTests/main.swift"
+    ],
+    "productInputsIdentical": true,
+    "reason": "Three test assertions now reflect the verified archive: 20 source entries, 19 bundled-playable entries and 20 imported entries. This exact corrected test copy passed against the compiled release library."
+  },
+  "releaseCommit": "9af6210022a51f4df086c88803d992839b782828",
+  "recoveryContext": [
+    "The original audit ran out of disk during its final stages. Completed checks were retained; interrupted checks were rerun after obsolete output and caches were removed.",
+    "The recorder benchmark also failed while Sparkle was using the disk. It passed at 1x and 10x in flat, monitor and television modes after that work finished. These short local timings do not certify sustained or physical-device performance.",
+    "The mobile ghost test rejected the linked asset path in the managed checkout. The same compiled tests passed from the real asset root. Product source and the candidate bundle were unchanged."
+  ]
+}

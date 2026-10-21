@@ -1,0 +1,9 @@
+{
+  "compiledCommit": "ec1815441e055cc054e7457fc06efccd0ccba632",
+  "releaseCommit": "9af6210022a51f4df086c88803d992839b782828",
+  "changedFiles": [
+    "Tests/FanLevelLibraryTests/main.swift"
+  ],
+  "productInputsIdentical": true,
+  "reason": "Three test assertions now reflect the verified archive: 20 source entries, 19 bundled-playable entries and 20 imported entries. This exact corrected test copy passed against the compiled release library."
+}

@@ -5,20 +5,25 @@ scores describe their recorded source snapshots. See the [merge validation](Rele
 for the combined runtime and replay identities.
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-As of 20 October 2026, the published Mac release is 2.1 build 93. Both
+As of 21 October 2026, the published Mac release is 2.1.1 build 95. Both
 universal archives passed signing, notarisation, stapling and Gatekeeper.
-Five direct deltas passed exact tree and signature checks. The public assets
-and live signed feed match the recorded hashes. See the
-[2.1 release record](ReleaseReadiness/2.1-build93/README.md).
+Five direct updates passed exact tree and signature checks. Public assets and
+the live signed feed match the recorded hashes. See the
+[2.1.1 release record](ReleaseReadiness/2.1.1-build95/README.md).
 
-The [2.1 notes](ReleaseNotes-2.1-build93.md) cover free Zoom, independent
-presentation, individual inspection, Extra skills, Short games, Journey ownership
-and background sync. Fresh native replay checks reproduce all 294 retained
-population certificates and 315 rescue records across 615 configurations.
-Six configurations remain unknown. Existing content and engine classifications
-stay unchanged. Human, foreground and device acceptance limits remain explicit.
-iOS build 16 and tvOS build 6 remain separate 2.0.6 source versions. This Mac
-publication does not certify either device build or close engine-fidelity gaps.
+The [2.1.1 notes](ReleaseNotes-2.1.1-build95.md) cover Journey progress recovery,
+automatic worldwide rankings and the latest merged runtime and menu changes.
+The current Classic and The Tribes Complete classifications and Chronicles
+and NeoLemmix Beta classifications remain unchanged. Fresh rescue checks retain
+294 certificates and 315 records across 615 configurations; six remain unknown.
+Human, foreground and device acceptance limits remain explicit.
+iOS 2.1.1 build 18 is Testing. tvOS 2.1.1 build 8 is
+Waiting for Review. Both were uploaded to their existing TestFlight
+groups with automatic notifications enabled. These uploads do not establish
+physical-device acceptance or close engine-fidelity gaps.
+
+The previous [2.1 release record](ReleaseReadiness/2.1-build93/README.md)
+retains its publication and validation evidence.
 
 Version 2.0.3 build 86 fixes the Mac language
 picker without changing engine rules or bundled levels. Source checks and
@@ -32,16 +37,16 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-Macintosh 2.1 build 93 retains the published classifications and known limits.
+Macintosh 2.1.1 build 95 retains the published classifications and known limits.
 Its publication record documents the signed update deltas. Existing engine
 closure evidence and open limits remain in force.
 
 ## Current bundled route counts
 
 The latest retained evidence records 352/352 official Classic routes,
-2,403/6,020 Classic fan routes, 120 L2 standalone routes with 70 carry-over
+2,404/6,019 playable Classic fan routes, 120 L2 standalone routes with 70 carry-over
 variants and 12 chains, 86/90 L3 routes, and 158/794 NeoLemmix routes. The
-evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,617
+evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,615
 Classic fan routes and 636 NeoLemmix routes remain open. See the
 [bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md)
 for dates, search outcomes and measurement limits.
@@ -55,6 +60,9 @@ positive-rescue records remain open: `fan:lldb-437` `LDChallenge08.dat#1`,
 object. These three levels cannot meet their rescue requirements as bundled.
 The scan found no level-load or pack errors and replayed no levels. See the
 [exit-structure audit](ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json).
+The 21 October decision excludes the exact `fan:lldb-509` no-exit record from
+playable bundled scope while retaining its source archive. The other two rows
+retain their recorded limits. See the [merge record](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md).
 
 ## Bundled content closure
 

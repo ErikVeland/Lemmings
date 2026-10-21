@@ -1,0 +1,63 @@
+{
+  "ios": {
+    "version": "2.1.1",
+    "build": 18,
+    "gitCommit": "ec1815441e055cc054e7457fc06efccd0ccba632",
+    "bundleID": "academy.glasscode.lemmings.ios",
+    "ipaSHA256": "fec1ba0ec27ea5d8280a6835ff4af87244c4a83b16721baf163486022d936209",
+    "symbolUUIDs": [
+      [
+        "E7697AAA-50BD-39F3-A7F3-6906B1E75552",
+        "arm64"
+      ]
+    ],
+    "archiveSigned": true,
+    "exportSignatureVerified": true,
+    "uploaded": true,
+    "uploadFinishedUTC": "2026-10-21T05:05:25.107394+00:00",
+    "TestFlightStatus": "Testing",
+    "externalGroup": "iOS Private Beta",
+    "externalGroupID": "7cc0d55f-1757-4799-ba5a-4757a1267ad0",
+    "automaticallyNotifyTesters": true,
+    "appStoreConnectBuildID": "c7ce15e0-02d7-4cc8-887a-c1a0df6c2d35",
+    "TestFlightVerifiedUTC": "2026-10-21T05:13:14.166158+00:00",
+    "physicalDeviceAcceptance": "pending"
+  },
+  "tvos": {
+    "version": "2.1.1",
+    "build": 8,
+    "sourceCommit": "ec1815441e055cc054e7457fc06efccd0ccba632",
+    "ipaSHA256": "7f0d65bca29886e79c1ca8c544272bce7c5722eabdbdb4252cee4116c52f202a",
+    "symbols": [
+      {
+        "bundle": "UltimateLemmingsTV.app",
+        "uuids": [
+          [
+            "13DEFB3B-B1DC-3695-A056-DA8BC0FC95B4",
+            "arm64"
+          ]
+        ]
+      },
+      {
+        "bundle": "TopShelf.appex",
+        "uuids": [
+          [
+            "2F1CD9FF-4770-3D91-9552-BCE7831B3A84",
+            "arm64"
+          ]
+        ]
+      }
+    ],
+    "archiveVerified": true,
+    "exportVerified": true,
+    "uploaded": true,
+    "uploadFinishedUTC": "2026-10-21T05:10:59.611063+00:00",
+    "TestFlightStatus": "Waiting for Review",
+    "externalGroup": "TV Private Beta",
+    "externalGroupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
+    "automaticallyNotifyTesters": true,
+    "appStoreConnectBuildID": "5d177ed5-f77f-4bd9-b8b6-160485069a21",
+    "TestFlightVerifiedUTC": "2026-10-21T06:02:54.497830+00:00",
+    "physicalDeviceAcceptance": "pending"
+  }
+}

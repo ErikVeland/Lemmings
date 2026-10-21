@@ -62,5 +62,5 @@ NeoLemmix remain Beta. Existing original-engine fidelity, L2 Gold Ark, L3 route,
 NeoLemmix style and unverified fan-level limits remain open. New translated
 captions use explicit English fallbacks pending human language review.
 
-Release checks and distribution receipts are recorded separately. This draft
-does not claim that the candidate is already published or accepted by Apple.
+Release checks, acceptance limits and distribution receipts are recorded in the
+[2.1.1 release record](ReleaseReadiness/2.1.1-build95/README.md).
