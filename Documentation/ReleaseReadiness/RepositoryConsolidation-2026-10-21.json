@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-21",
+  "status": "awaiting_private_artwork_publication_approval",
+  "canonical_repository": "https://github.com/ErikVeland/Lemmings",
+  "public_consolidation": {
+    "status": "passed",
+    "default_branch": "main",
+    "latest_app_release": "v2.1.1",
+    "appcast_blob_unchanged": "75a6b09c6bfe5a5cc53efc7610a7f0a0f652b2b2",
+    "existing_releases_preserved": 36,
+    "migrated": {
+      "releases": [
+        {
+          "source": "ErikVeland/UltimateLemmings-releases",
+          "source_release_id": 394753174,
+          "tag": "v1.0-rc1",
+          "target_release_id": 419560386,
+          "target_url": "https://github.com/ErikVeland/Lemmings/releases/tag/untagged-a1133e586ef5bb8bf007",
+          "draft": true,
+          "assets": []
+        },
+        {
+          "source": "ErikVeland/UltimateLemmings-releases",
+          "source_release_id": 394761888,
+          "tag": "v1.1-rc1",
+          "target_release_id": 419561303,
+          "target_url": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.1-rc1",
+          "draft": false,
+          "assets": [
+            {
+              "name": "UltimateLemmings-0.1-build37-20260924-002519-standard.zip",
+              "size": 426929840,
+              "digest": "sha256:8982befe0a806ce33be6636dfa441e00bdc2a16ba20f361aa34b80a5bb232fc0"
+            }
+          ]
+        }
+      ],
+      "history": [
+        {
+          "source": "ErikVeland/UltimateLemmings-releases",
+          "source_ref": "refs/heads/main",
+          "target_ref": "refs/tags/archive/UltimateLemmings-releases/main",
+          "sha": "eaa70809e7cb9c673d01a7b5c5e48a94cd935891"
+        },
+        {
+          "source": "ErikVeland/UltimateLemmings-releases",
+          "source_ref": "refs/tags/v1.1-rc1",
+          "target_ref": "refs/tags/v1.1-rc1",
+          "sha": "eaa70809e7cb9c673d01a7b5c5e48a94cd935891"
+        }
+      ]
+    },
+    "retired": {
+      "issues": [
+        {
+          "source_id": 5681011810,
+          "source_url": "https://github.com/ErikVeland/UltimateLemmings-releases/issues/1",
+          "target_id": 5961030222,
+          "target_url": "https://github.com/ErikVeland/Lemmings/issues/23",
+          "comments_preserved": 12
+        }
+      ],
+      "repositories": [
+        "ErikVeland/UltimateLemmings-releases"
+      ]
+    },
+    "legacy_downloads_preserved": true,
+    "draft_creation_and_asset_readback_verified_by_github_cli": true,
+    "published_release_and_history_readback_verified_by_github_connector": true
+  },
+  "repository_checks": {
+    "status": "passed",
+    "files": 6972,
+    "local_links": 3028,
+    "errors": []
+  },
+  "pending_private_artwork": {
+    "source": "ErikVeland/Lemmings-Macintosh-Graphics",
+    "status": "awaiting_explicit_publication_approval",
+    "asset": "Macintosh-Graphics-NeoLemmix-2026-10-09.zip",
+    "size": 8809286,
+    "digest": "sha256:1f4b404b57da0a2167a058cc5a707ab3d7ff2edf6688f6feddc238472fd25653",
+    "source_unchanged": true
+  }
+}

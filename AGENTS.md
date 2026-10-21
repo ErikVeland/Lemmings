@@ -1,3 +1,12 @@
+# Repository ownership
+
+`ErikVeland/Lemmings` is the canonical repository for this project.
+Keep source, issues, app releases and artwork handoffs here. Do not create
+separate repositories for downloads or exported assets. Publish supplemental
+downloads as releases here, without replacing the latest app release.
+Keep `main` as the default branch. See `Documentation/RepositoryLayout.md`
+for the archived repositories and migration record.
+
 # Interface changes
 
 For work that changes visible UI, read `Documentation/UIPrinciples.md`.

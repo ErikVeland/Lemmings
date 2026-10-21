@@ -32,6 +32,11 @@ notes. Read [release scope](Documentation/ReleaseScope.md) for the distinction
 between advertised versions and retained acceptance evidence, and the
 [tester guide](Documentation/BetaTesting.md) for manual testing.
 
+Use this repository for project source, bug reports and release downloads,
+including supplemental artwork handoffs. See the
+[repository layout](Documentation/RepositoryLayout.md) for the archived download
+repository and the pending private artwork migration.
+
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite
 levels and the last 50 distinct levels played. Bookmark levels from Level Select
 or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
