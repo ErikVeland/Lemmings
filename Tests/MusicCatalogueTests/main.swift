@@ -93,7 +93,7 @@ require(catalogue.sourceOnlyPaths.contains("Lemmings (MP3)/13 As Long As You Try
 require(catalogue.entry(path: "Lemmings (MP3)/13 As Long As You Try Your Best.m4a")?.track.id == "classic.tim6",
     "Decoder-safe copy lost its composition identity")
 
-// The main menu usually plays Amiga, with Macintosh sharing the rare pool equally.
+// The main menu usually plays Macintosh, with Amiga sharing the rare pool equally.
 let menuOthers = MenuThemeSelection.otherVersions(in: catalogue) { paths.contains($0) }
 require(!menuOthers.contains("lemmings_music_mod/intro.mod"), "The Amiga intro counted as a rare version")
 require(menuOthers.contains("Lemmings_(Arcade)/02 March of the Mods (The Finnjenka Dance).m4a")
@@ -115,22 +115,26 @@ for _ in 0..<8000 {
     }
     menuCounts[key, default: 0] += 1
 }
-let rareCount = (menuCounts["other"] ?? 0) + (menuCounts["mac"] ?? 0)
+let rareCount = (menuCounts["other"] ?? 0) + (menuCounts["amiga"] ?? 0)
 require((800...1200).contains(rareCount), "Other versions are not rare: \(menuCounts)")
-let expectedMacCount = Double(rareCount) / Double(menuOthers.count + 1)
-require(abs(Double(menuCounts["mac"] ?? 0) - expectedMacCount) < 60,
-    "Macintosh does not share the rare pool equally: \(menuCounts)")
-var macOnlyCount = 0
+let expectedAmigaCount = Double(rareCount) / Double(menuOthers.count + 1)
+require(abs(Double(menuCounts["amiga"] ?? 0) - expectedAmigaCount) < 60,
+    "Amiga does not share the rare pool equally: \(menuCounts)")
+var amigaOnlyCount = 0
 for _ in 0..<8000 {
-    if MenuThemeSelection.choose(macintoshAvailable: true, otherVersions: [], using: &dice) == .macintoshLemming1 {
-        macOnlyCount += 1
+    if MenuThemeSelection.choose(macintoshAvailable: true, otherVersions: [], using: &dice) == .amigaIntro {
+        amigaOnlyCount += 1
     }
 }
-require((800...1200).contains(macOnlyCount), "Macintosh must stay rare without other recordings: \(macOnlyCount)")
+require((800...1200).contains(amigaOnlyCount), "Amiga must stay rare when only the Macintosh bank is available: \(amigaOnlyCount)")
+var fallbackAmigaCount = 0
 for _ in 0..<2000 {
-    require(MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: menuOthers, using: &dice) != .macintoshLemming1,
+    let choice = MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: menuOthers, using: &dice)
+    require(choice != .macintoshLemming1,
         "An unavailable Macintosh bank entered the rare pool")
+    if choice == .amigaIntro { fallbackAmigaCount += 1 }
 }
+require((1650...1850).contains(fallbackAmigaCount), "Amiga must remain the usual fallback without Macintosh: \(fallbackAmigaCount)")
 for _ in 0..<200 {
     require(MenuThemeSelection.choose(macintoshAvailable: false, otherVersions: [], using: &dice) == .amigaIntro,
         "Without the Macintosh bank or other versions, the Amiga intro must play")

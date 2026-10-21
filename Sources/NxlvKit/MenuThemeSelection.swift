@@ -2,8 +2,8 @@ import Foundation
 
 /// Chooses the main menu theme once for each launch.
 ///
-/// Most launches play the Amiga intro. A small share plays a title theme from
-/// another port, including Macintosh, so the menu sometimes sounds like a different machine.
+/// Most launches play the Macintosh theme when available, otherwise the Amiga intro.
+/// A small share plays an alternative title theme, including Amiga on Macintosh installs.
 public enum MenuThemeSelection {
     public enum Choice: Equatable, Sendable {
         /// `lemmings_music_mod/intro.mod`.
@@ -35,14 +35,15 @@ public enum MenuThemeSelection {
 
     public static func choose<G: RandomNumberGenerator>(macintoshAvailable: Bool, otherVersions: [String],
                                                         using generator: inout G) -> Choice {
+        let preferred: Choice = macintoshAvailable ? .macintoshLemming1 : .amigaIntro
         let alternatives = otherVersions.map(Choice.recording)
-            + (macintoshAvailable ? [.macintoshLemming1] : [])
+            + (macintoshAvailable ? [.amigaIntro] : [])
         if !alternatives.isEmpty,
            Double.random(in: 0..<1, using: &generator) < otherVersionChance,
            let other = alternatives.randomElement(using: &generator) {
             return other
         }
-        return .amigaIntro
+        return preferred
     }
 
     public static func choose(macintoshAvailable: Bool, otherVersions: [String]) -> Choice {
