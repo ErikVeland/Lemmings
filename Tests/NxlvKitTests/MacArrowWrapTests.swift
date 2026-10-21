@@ -1,10 +1,98 @@
 import Foundation
+import CoreGraphics
+import ImageIO
 import Testing
 @testable import NxlvKit
 
 struct MacArrowWrapTests {
     private let root = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+
+    @Test func sunsoftArrowsAreMaskedWithoutTerrainFlagsOrHDR() throws {
+        let ports = root.appendingPathComponent("Sources/Ports")
+        let fallback = ports.appendingPathComponent("lemmings_dos_1991-07-30")
+        let levels = try PortExclusivePack.sunsoftLevels(portsRoot: ports)
+        let level = try #require(levels.first { $0.title == "Everyone turn left (Part two)" })
+        let ground = try ClassicGroundSet.load(style: level.groundStyle,
+            from: ports.appendingPathComponent(PortExclusivePack.sunsoftFolder), fallbackDirectory: fallback)
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground)
+        let arrows = rendered.objects.filter { [7, 8].contains(Int($0.graphic.triggerEffect)) }
+        #expect(arrows.count == 5)
+        #expect(arrows.allSatisfy { !$0.placement.draw.onlyOverwrite })
+        let assets = try ClassicMainDATAssets.load(from: fallback)
+        let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let before = simulation.terrain
+        for family in ["lemmings", "monochrome/lemmings"] {
+            let artwork = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/" + family))
+            let scene = try ClassicMacScene(level: level, rendered: rendered, artwork: artwork, groundSet: ground)
+            let initial = [UInt8](scene.terrainFrame(terrain: simulation.terrain))
+            var cut = initial
+            for arrow in arrows {
+                for y in arrow.placement.y * 2..<min(scene.height, arrow.placement.y * 2 + 24) {
+                    for x in arrow.placement.x * 2..<min(scene.width, (arrow.placement.x + arrow.graphic.width) * 2) {
+                        cut[(y * scene.width + x) * 4 + 3] = 0
+                    }
+                }
+            }
+            for (name, terrain) in [("initial", initial), ("cut", cut), ("restored", initial)] {
+                let data = Data(terrain)
+                let frame = [UInt8](scene.rgba(simulation: simulation, terrain: data))
+                let hdr = scene.rgbaWithArrowGlints(simulation: simulation, terrain: data)
+                #expect(hdr.rgba == Data(frame))
+                var offMask = 0, visible = 0
+                for arrow in arrows {
+                    for y in max(0, arrow.placement.y * 2)..<min(scene.height, (arrow.placement.y + arrow.graphic.height) * 2) {
+                        for x in max(0, arrow.placement.x * 2)..<min(scene.width, (arrow.placement.x + arrow.graphic.width) * 2) {
+                            let p = (y * scene.width + x) * 4
+                            if terrain[p + 3] == 0 && frame[p + 3] != 0 { offMask += 1 }
+                            if terrain[p + 3] != 0 && frame[p..<p + 3] != terrain[p..<p + 3] { visible += 1 }
+                        }
+                    }
+                }
+                #expect(offMask == 0, "\(family) \(name): \(offMask) arrow pixels outside terrain")
+                #expect(visible > 0)
+                if artwork.monochrome { #expect(hdr.glints == nil) }
+                else {
+                    let glints = try #require(hdr.glints)
+                    var offGlintMask = 0
+                    for y in 0..<glints.height { for x in 0..<glints.width where glints.strength[y * glints.width + x] > 0 {
+                        if terrain[((glints.y + y) * scene.width + glints.x + x) * 4 + 3] == 0 { offGlintMask += 1 }
+                    } }
+                    #expect(offGlintMask == 0)
+                }
+                try captureSunsoft(frame, width: scene.width, height: scene.height,
+                    name: "sunsoft-\(artwork.monochrome ? "mono" : "colour")-\(name)")
+            }
+        }
+        let terrain = [UInt8](ClassicSceneFrame.terrainRGBA(rendered, terrain: simulation.terrain))
+        let frame = [UInt8](ClassicSceneFrame.rgba(rendered, simulation: simulation))
+        var offMask = 0
+        for arrow in arrows {
+            for y in max(0, arrow.placement.y)..<min(rendered.height, arrow.placement.y + arrow.graphic.height) {
+                for x in max(0, arrow.placement.x)..<min(rendered.width, arrow.placement.x + arrow.graphic.width) {
+                    let p = (y * rendered.width + x) * 4
+                    if terrain[p + 3] == 0 && frame[p + 3] != 0 { offMask += 1 }
+                }
+            }
+        }
+        #expect(offMask == 0, "DOS: \(offMask) arrow pixels outside terrain")
+        #expect(simulation.terrain == before)
+    }
+
+    private func captureSunsoft(_ rgba: [UInt8], width: Int, height: Int, name: String) throws {
+        let output = root.appendingPathComponent(".build/arrow-renders")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let provider = try #require(CGDataProvider(data: Data(rgba) as CFData))
+        let image = try #require(CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+            bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+            decode: nil, shouldInterpolate: false, intent: .defaultIntent))
+        let crop = try #require(image.cropping(to: CGRect(x: 1424, y: 64, width: 352, height: 112)))
+        let target = try #require(CGImageDestinationCreateWithURL(output.appendingPathComponent(name + ".png") as CFURL,
+            "public.png" as CFString, 1, nil))
+        CGImageDestinationAddImage(target, crop, nil)
+        #expect(CGImageDestinationFinalize(target))
+    }
 
     /// One-way arrows follow the drawn Mac terrain, not the DOS collision
     /// cells, and keep a bare rim of terrain at each edge.

@@ -27,10 +27,13 @@ public enum ClassicSceneFrame {
         let solid = [UInt8](simulation.terrain.solidMask)
         var pixels = terrain.map { [UInt8]($0) } ?? terrainPixels(level, solid: solid)
         guard solid.count == level.solidMask.count, pixels.count == solid.count * 4 else { return level.rgba }
+        let visualTerrain = pixels
         var triggerIndex = 0
         for object in level.objects {
             let graphic = object.graphic
             let placement = object.placement
+            let isArrow = graphic.triggerEffect == ClassicDOSObjectEffect.oneWayLeft.rawValue
+                || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue
             let interactive = placement.slot < level.interactiveObjectSlotLimit
                 && graphic.triggerEffect != 0
             let cooldown = interactive ? simulation.objectCooldown(at: triggerIndex) : 0
@@ -55,8 +58,13 @@ public enum ClassicSceneFrame {
                     let src = (sourceY * graphic.width + x) * 4
                     guard source[src + 3] != 0 else { continue }
                     let index = targetY * level.width + targetX
-                    if placement.draw.noOverwrite && solid[index] != 0 { continue }
-                    if placement.draw.onlyOverwrite && solid[index] == 0 { continue }
+                    if isArrow {
+                        // Converted port levels can omit the terrain-only placement flag.
+                        if visualTerrain[index * 4 + 3] == 0 { continue }
+                    } else {
+                        if placement.draw.noOverwrite && solid[index] != 0 { continue }
+                        if placement.draw.onlyOverwrite && solid[index] == 0 { continue }
+                    }
                     let dst = index * 4
                     pixels[dst] = source[src]; pixels[dst + 1] = source[src + 1]
                     pixels[dst + 2] = source[src + 2]; pixels[dst + 3] = source[src + 3]

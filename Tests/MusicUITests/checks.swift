@@ -191,6 +191,17 @@ extension SettingsWindow {
             for button in buttons {
                 button.performClick(nil)
                 page!.layoutSubtreeIfNeeded()
+                let container = page!.enclosingScrollView!
+                try checkUI(container.verticalScrollElasticity == .none && container.horizontalScrollElasticity == .none,
+                    "Settings can bounce away from the underlying menu")
+                let origin = container.contentView.bounds.origin
+                for delta: Int32 in [-120, 120] {
+                    let event = NSEvent(cgEvent: CGEvent(scrollWheelEvent2Source: nil, units: .pixel,
+                        wheelCount: 2, wheel1: delta, wheel2: delta, wheel3: 0)!)!
+                    container.scrollWheel(with: event)
+                    try checkUI(container.contentView.bounds.origin == origin,
+                        "Scrolling moved the Settings page at a fitting window size")
+                }
                 try checkTarget(button, in: page!)
                 let selected = descendants(tabs).compactMap { $0 as? NSTabView }.first!.selectedTabViewItem!.view!
                 let controls = descendants(selected).compactMap { $0 as? NSControl }.filter { $0 is NSButton || $0 is NSSlider }
@@ -533,6 +544,57 @@ extension Lemmings3PlayWindow {
         print("PASS L3 frame-step, rhythm pause, interruption, resume and paused retry")
     }
 }
+@MainActor private final class SharingPrivacyTransport: AnonymousTelemetryTransport {
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) { throw URLError(.cancelled) }
+}
+
+@MainActor extension SettingsWindow {
+    fileprivate func checkAutomaticSharingPrivacy() throws {
+        show()
+        let tabs = page!.body.subviews.first { $0 is GameTabs } as! GameTabs
+        tabs.subviews.compactMap { $0 as? GameTabButton }.first { $0.title == "Privacy" }!.performClick(nil)
+        for size in [NSSize(width: 900, height: 620), NSSize(width: 1120, height: 720)] {
+            window.setContentSize(size); page!.layoutSubtreeIfNeeded()
+            let control = telemetryCheck!
+            try checkUI(control.title == "Share counts and records", "Privacy still promises counts alone")
+            try checkUI(privacyHelp.contains("player initials, scores and action replays"), "Privacy omitted public ranking data")
+            for state in [false, true] {
+                if (control.state == .on) != state { control.performClick(nil) }
+                try checkUI(telemetry.sharesCounts == state, "Privacy sharing input did not update its state")
+                try checkTarget(control, in: page!)
+                try checkUI(control.bounds.width >= control.intrinsicContentSize.width, "Sharing caption is clipped")
+                try shot(page!, "sharing-privacy-\(Int(size.width))-\(state ? "on" : "off")")
+            }
+        }
+        GameScreen.shared.dismissAll()
+    }
+}
+
+@MainActor private func checkSharingConsent() throws {
+    let suite = "sharing-consent-" + UUID().uuidString
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: URL(string: "https://example.invalid/counts"), transport: SharingPrivacyTransport())
+    let consent = TelemetryConsentWindow(telemetry: telemetry)
+    for width in [900, 1120] {
+        window.setContentSize(NSSize(width: width, height: 720))
+        defaults.removeObject(forKey: AnonymousTelemetry.decidedKey)
+        consent.showIfNeeded(in: window) {}
+        let page = GameScreen.shared.controllerPage(in: window) as! GameMenuPage
+        page.layoutSubtreeIfNeeded()
+        func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+        let children = descendants(page)
+        try checkUI(children.compactMap { $0 as? GameLabel }.contains { $0.stringValue == "Public: initials, scores and action replays." }, "Consent omitted public records")
+        let share = children.compactMap { $0 as? NSButton }.first { $0.title == "Share" }!
+        try checkTarget(share, in: page)
+        try checkTarget(page.controllerBackButton, in: page)
+        try shot(page, "sharing-consent-\(width)")
+        page.controllerBackButton.performClick(nil)
+        try checkUI(!telemetry.sharesCounts, "Not now enabled sharing")
+    }
+    print("PASS sharing Privacy on/off, two consent renders, captions, public-data disclosure and input targets")
+}
+
 let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
@@ -545,7 +607,15 @@ ArcadeStore.shared = ArcadeStore(file: temporary.appendingPathComponent("arcade.
 let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [.titled], backing: .buffered, defer: false)
 window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
 GameScreen.shared.gameWindow = window
-if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "distraction" {
+if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "sharing" {
+    let suite = "sharing-ui-" + UUID().uuidString
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: URL(string: "https://example.invalid/counts"), transport: SharingPrivacyTransport())
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [.macintosh], music: [.silent], sound: [.silent]), telemetry: telemetry)
+    try preferences.checkAutomaticSharingPrivacy()
+    try checkSharingConsent()
+} else if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "distraction" {
     let preferences = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [.macintosh], music: [.silent], sound: [.silent]))
     try preferences.checkDistractionOptions()
     try checkDistractionFeedback()

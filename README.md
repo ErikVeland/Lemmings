@@ -1,5 +1,9 @@
 # Ultimate Lemmings
 
+The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
+scores describe their recorded source snapshots. See the [merge validation](Documentation/ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
+for the combined runtime and replay identities.
+
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
 Start with the [developer handover](Documentation/DeveloperHandover.md) to build
 and test the source without private game data. Current feed versions, package
@@ -96,6 +100,7 @@ build 76 resources. Its 535
 resource-index changes. It does not certify a 2.0.3 app binary. Imported levels
 remain outside the bundle and open-ended. See
 the [current-main audit](Documentation/ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-2026-10-16/audit.json),
+[exit-structure audit](Documentation/ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json),
 [build 85 content comparison](Documentation/ReleaseReadiness/2.0.2-build85/bundled-content-equivalence-recheck-2026-10-16.json)
 and [2.0.3 release record](Documentation/ReleaseReadiness/2.0.3-build86/README.md).
 See the [incremental route record](Documentation/ReleaseReadiness/ClassicFanPropersisionZeroClosure-2026-10-21.json)

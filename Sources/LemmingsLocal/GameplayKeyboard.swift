@@ -152,14 +152,6 @@ import NxlvKit
         button.setAccessibilityLabel(L10n.text("Next graphics"))
         return button
     }()
-    private lazy var inspectionButton: GameplayMenuButton = {
-        let button = GameplayMenuButton(frame: .zero)
-        button.title = L10n.text("Inspect")
-        button.target = self; button.action = #selector(openInspection)
-        button.setAccessibilityLabel(L10n.text("Inspect lemmings"))
-        button.toolTip = L10n.text("Inspect lemmings while paused (⌘I)")
-        return button
-    }()
     private lazy var ghostsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
         button.target = self; button.action = #selector(toggleHotSeatGhosts)
@@ -198,7 +190,7 @@ import NxlvKit
         if !event.isARepeat { toggleHotSeatGhosts() }
         return true
     }
-    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton, inspectionButton, ghostsButton, extraSkillButton] }
+    private var navigationButtons: [GameplayMenuButton] { [navigationButton, settingsButton, graphicsButton, ghostsButton, extraSkillButton] }
     @objc private func openInspection() {
         guard inspectionAvailable() else { return }
         inspectLemmings?()
@@ -230,7 +222,6 @@ import NxlvKit
         settingsButton.frame = CGRect(x: menuFrame.minX - 52, y: menuFrame.minY, width: 44, height: 44)
         graphicsButton.frame = CGRect(x: settingsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
         navigationButton.frame = menuFrame
-        inspectionButton.frame = CGRect(x: graphicsButton.frame.minX - 120, y: menuFrame.minY, width: 112, height: 44)
         ghostsButton.frame = CGRect(x: menuFrame.maxX - 176,
             y: menuFrame.minY + (root.isFlipped ? 52 : -52), width: 176, height: 44)
         extraSkillButton.frame = CGRect(x: ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame.minX - 232 : menuFrame.maxX - 224,
@@ -247,7 +238,6 @@ import NxlvKit
         ghostsButton.setAccessibilityLabel(L10n.text("Show Hot Seat ghosts"))
         ghostsButton.setAccessibilityValue(showsGhosts ? 1 : 0)
         let controlsFrame = menuFrame.union(settingsButton.frame).union(graphicsButton.frame)
-            .union(inspectionAvailable() ? inspectionButton.frame : .null)
             .union(ArcadeStore.shared.hotSeatIsActive ? ghostsButton.frame : .null)
             .union(extraSkill != nil && modern() ? extraSkillButton.frame : .null)
         let pointer = root.convert(window!.mouseLocationOutsideOfEventStream, from: nil)
@@ -264,18 +254,15 @@ import NxlvKit
         for button in navigationButtons {
             let available = button === extraSkillButton ? extraSkill != nil && modern() && active()
                 : button === ghostsButton ? ArcadeStore.shared.hotSeatIsActive
-                : button === inspectionButton ? inspectionAvailable() && inspectLemmings != nil
                 : button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
             guard visible && available else { button.isHidden = true; button.resetAppearance(); continue }
             if button.superview !== root {
                 button.removeFromSuperview(); root.addSubview(button); button.resetAppearance()
             }
             button.isHidden = false
-            button.updateAppearance(at: now, autoHide: button !== inspectionButton && active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
+            button.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
         }
-        navigationArtworkOpacityChanged(navigationButtons.filter {
-            !$0.isHidden && ($0 !== inspectionButton || $0.isHovered || window?.firstResponder === $0)
-        }.map(\.artworkOpacity).max() ?? 0)
+        navigationArtworkOpacityChanged(navigationButtons.filter { !$0.isHidden }.map(\.artworkOpacity).max() ?? 0)
         let canCycle = graphicsAvailable()
         if graphicsButton.isEnabled != canCycle { graphicsButton.isEnabled = canCycle }
         let name = graphicsName()

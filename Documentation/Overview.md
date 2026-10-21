@@ -1,5 +1,9 @@
 # Ultimate Lemmings — status and roadmap
 
+The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
+scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
+for the combined runtime and replay identities.
+
 This is a plain-language summary of the project for someone who has not read
 the engineering documents. For gate-by-gate detail, see
 [release scope](ReleaseScope.md), [the modern release plan](ModernReleasePlan.md)

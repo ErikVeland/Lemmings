@@ -1,10 +1,9 @@
 {
   "changes": [
-    "Hot Seat shows earlier players' turns as ghosts",
-    "Home groups Players, Progress and Playlists",
-    "Records replay your best Classic run",
-    "Macintosh soundtrack on Apple TV",
-    "Top Shelf shows its still at once",
-    "Faster playfield and minimap drawing"
+    "Home counts include Journey wins and recover older Hot Seat history where retained",
+    "Count sharing automatically enables worldwide records; explicit opt-outs remain respected",
+    "Paused lemming inspection retains its saved preference",
+    "Clearer pointer arrows and bounded HDR effects",
+    "Shared Classic, Lemmings 2 and Lemmings 3 controls and paused Ready handovers"
   ]
 }

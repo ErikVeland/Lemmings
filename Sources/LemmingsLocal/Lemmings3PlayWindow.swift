@@ -455,7 +455,7 @@ import NxlvKit
         keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space", retry: true, nuke: false) }
         keyboard.inspectionAvailable = { [weak self] in
             guard let self else { return false }
-            return self.paused && !self.canvas.startCountdown.isActive && self.canvas.menuRows == nil
+            return self.audioSettings.inspectWhilePaused && self.paused && !self.canvas.startCountdown.isActive && self.canvas.menuRows == nil
         }
         canvas.inspectionSelectionAvailable = keyboard.inspectionAvailable
         keyboard.inspectionHoverID = { [weak self] in self?.canvas.inspectionPointerID }
@@ -1023,7 +1023,7 @@ import NxlvKit
         catch { message = L10n.text("Artwork could not be loaded: \(error)") }
         refresh()
     }
-    static func savedCompletion(root: URL) -> Int {
+    static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         Lemmings3ClassicCampaign.Tribe.allCases.reduce(0) { count, tribe in
             guard var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return count }
             let key = ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
@@ -1031,7 +1031,12 @@ import NxlvKit
                let saved = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data) {
                 try? campaign.restore(saved)
             }
-            return count + campaign.completed.count
+            return count + campaign.levels.indices.filter { index in
+                let fingerprint = SHA256.hash(data: campaign.levels[index].rawData)
+                    .map { String(format: "%02x", $0) }.joined()
+                return campaign.completed[index] != nil || journeyWins.contains(.init(engine: .lemmings3,
+                    packID: "chronicles-\(tribe.rawValue)", levelID: "\(index):\(fingerprint)"))
+            }.count
         }
     }
 

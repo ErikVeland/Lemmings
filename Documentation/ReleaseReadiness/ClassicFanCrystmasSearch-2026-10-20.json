@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "identity": "fan:lldb-3/Anatol00.dat#8",
+    "title": "Crystmas",
+    "lemmings": 40,
+    "requiredToSave": 38,
+    "initialStateHash": "c945bd17937f74073be74db57e9131c341fbe3819e29e52d6c8d52d748e82f21",
+    "levelFingerprint": "e49abcc359253185da9d1056dc6f4cae1bd4a6dc3e15884139a4380673cfb85a",
+    "archive": {
+      "path": "0003-Anatol00.zip",
+      "sha256": "69b7e2e0e7acd0be7f709333e5bdf05749719d47796966d6f461661ee429861f"
+    }
+  },
+  "method": {
+    "solver": "ClassicSolver",
+    "solverSha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "librarySha256": "6e43c53fbdb84b4709e528dd3ebbf49090349d0d8854cfcfa51c596f2ea12f21",
+    "clock": "golems",
+    "width": 2048,
+    "secondsPerSearch": 60,
+    "fallback": 30,
+    "refire": 30,
+    "ranking": ["rescue-quota-distance", "prefer-progress"],
+    "partialOutput": true
+  },
+  "results": [
+    {
+      "strategy": "native-rate-1",
+      "rate": 1,
+      "expanded": 173858,
+      "tick": 184,
+      "released": 3,
+      "lost": 0,
+      "active": 3,
+      "saved": 0,
+      "requiredToSave": 38,
+      "complete": false,
+      "solved": false,
+      "partialPath": ".build/fan-velocity-20261020/crystmas/candidate.json.partial.json",
+      "partialSha256": "e9f0064800bd6dc7046a5107d9180a798d33e55a370a34c6f4c8061250bd3f99"
+    },
+    {
+      "strategy": "adaptive-rate",
+      "expanded": 162139,
+      "tick": 119,
+      "released": 17,
+      "lost": 0,
+      "active": 17,
+      "saved": 0,
+      "requiredToSave": 38,
+      "complete": false,
+      "solved": false,
+      "partialPath": ".build/fan-velocity-20261020/crystmas-adaptive/candidate.json.partial.json",
+      "partialSha256": "74faa75fcea971e9f012c8ae1aa614665c3a150b7d4029851d5871fb5fdeee71"
+    },
+    {
+      "strategy": "fixed-rate-99",
+      "rate": 99,
+      "expanded": 158511,
+      "tick": 119,
+      "released": 17,
+      "lost": 0,
+      "active": 17,
+      "saved": 0,
+      "requiredToSave": 38,
+      "complete": false,
+      "solved": false,
+      "partialPath": ".build/fan-velocity-20261020/crystmas-rate99/candidate.json.partial.json",
+      "partialSha256": "3f5df078746396896693a2af98d78a75bafe8238f0521e7b980e08027938008b"
+    },
+    {
+      "strategy": "adaptive-partial-forced-prefix",
+      "prefixEvents": 9,
+      "prefixSha256": "24c3b1291f3be2dc72cd46a4e2c766ae3be2f5571ebee7d78000c27afa1618a7",
+      "expanded": 162228,
+      "tick": 194,
+      "released": 36,
+      "lost": 0,
+      "active": 36,
+      "saved": 0,
+      "requiredToSave": 38,
+      "complete": false,
+      "solved": false,
+      "partialPath": ".build/fan-velocity-20261020/crystmas-continuation/candidate.json.partial.json",
+      "partialSha256": "b638d2f832862b05cf8ac3ca70c466de857374438951fd6a193fc3d7d14115a7"
+    }
+  ],
+  "totals": {
+    "solverSeconds": 240,
+    "expanded": 656736,
+    "acceptedRoutes": 0,
+    "fanRouteCount": "2403/6020"
+  },
+  "limitations": [
+    "Bounded search failure does not prove that the level is impossible.",
+    "No candidate won, so no strict replay verification was possible.",
+    "The accepted bundled route count remains unchanged."
+  ]
+}

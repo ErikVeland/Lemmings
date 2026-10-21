@@ -49,7 +49,7 @@ import UIKit
     let community: HostedRankingsService
     let gameCenter: GameCenterService
     init(presenter: UIViewController, store: ArcadeStore) {
-        community = HostedRankingsService(recordsStoreProvider: { store })
+        community = HostedRankingsService(countSharing: { AnonymousTelemetry.shared.sharesCounts }, recordsStoreProvider: { store })
         gameCenter = GameCenterService(transport: MobileGameCenterTransport(presenter: presenter), recordsStoreProvider: { store })
     }
     func completed(_ profileID: String, history: TrolleyHistory) {

@@ -25,17 +25,25 @@ record order. The service shows one best record per player, with five rows per p
 
 ## Sharing and playback
 
-Browsing requires no account. **Share as XXX** explicitly enables sharing for that
-local player. The consent line identifies the public data: initials, scores and
-action replays. A random credential is stored in the macOS Keychain for each
-local player. The server stores only its SHA-256 digest. No Apple account, email
+Browsing requires no account. Players who share play counts participate in
+worldwide rankings automatically, unless they explicitly turned off record
+sharing for that local player or removed its shared records. Launching the app
+queues eligible saved records for all participating profiles. New results and
+new action replays use the same queue across Classic, NeoLemmix, Lemmings 2 and
+Lemmings 3. Turning count sharing off stops automatic submissions. An explicit
+record-sharing choice remains independent. Removing shared records stays off
+across count-sharing changes and restarts. **Share as XXX** can enable records
+separately. The consent and Privacy pages identify the public data: initials,
+scores and action replays. A random credential is stored in the Keychain for
+each local player. The server stores only its SHA-256 digest. No Apple account, email
 address or installation-wide player identity is required.
 
 The app uploads the best candidates for each board and each successful rescue.
 Completed campaign runs stay local first. Version 1.9.2 retains verified action
 replays for Classic, NeoLemmix, Lemmings 2 and Lemmings 3. Sharing uploads the
-command file after its score. Playlist and journey results still use preview
-reports. They do not persist profile scores or submit those attempts.
+command file after its score. Playlist and Journey results also retain profile
+scores and can enter the worldwide queue. They keep their separate campaign
+progress and turn ownership.
 
 Each level category exposes action replays for its top ten entries, across the
 first two five-row pages. Assisted and unassisted rankings remain separate.
@@ -171,3 +179,15 @@ for action upload/download and removal. Python syntax and native smoke compilati
 passed. The live smoke scripts were not run. Local evidence is in
 `.build/action-replay-ui-tests.log`, `.build/action-replay-server-tests.log` and
 `.build/action-replay/screens/`.
+
+Automatic sharing checks cover count-sharing activation, saved-record backfill,
+all profiles and all four engines, offline retry, disabling sharing during
+registration, explicit opt-outs, removal and restart. The five new checks pass
+alongside the existing Journey and cloud-progress checks (21 tests in total).
+Muted offscreen Mac checks cover Privacy on/off and consent at two widths.
+The windowless mobile audit covers 36 phone, iPad and TV consent/on/off/unavailable
+renders, complete captions and input targets. Mac source typechecking and both
+mobile SDK module builds pass. These checks use injected transports and do not
+upload real player records. Live delivery, device input and Keychain prompts
+remain manual checks. New translated captions use explicit English fallbacks
+pending human language review.

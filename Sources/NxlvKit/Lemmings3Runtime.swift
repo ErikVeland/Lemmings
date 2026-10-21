@@ -4,6 +4,10 @@ import Foundation
 /// compared with original-engine traces. No L1 or L2 physics are reused.
 public struct Lemmings3Runtime: Sendable {
     private static let molePatrolCadence = [1, 1, 1, 1, 0, 1, 2, 1, 1, 1, 2, 4]
+    /**
+     * Original Mole traces show its initial two-pixel settle on logic tick seven.
+     */
+    private static let moleInitialSettleTick = 7
 
     public enum Action: String, CaseIterable, Sendable { case walker, blocker, jumper, use, drop }
     public enum State: String, Sendable { case walking, falling, floating, swimming, jumping, climbing, shimmying, blocking, building, digging, drowning, trapped, exiting, saved, dead }
@@ -688,6 +692,12 @@ public struct Lemmings3Runtime: Sendable {
         func diagonal(_ dx: Int, _ dy: Int) -> Direction {
             dy > 0 ? (dx > 0 ? .downRight : .downLeft) : (dx > 0 ? .upRight : .upLeft)
         }
+        if creature.digDirection.dy == 0, creature.molePatrolTick == -2,
+           creature.age == Self.moleInitialSettleTick,
+           isSolid(creature.x, creature.y + 2) {
+            creature.y += 2
+            return
+        }
         if creature.moleDropDelay > 0 {
             creature.moleDropDelay -= 1
             if creature.moleDropDelay == 4 || creature.moleDropDelay == 1 { creature.x -= 1 }
@@ -731,9 +741,9 @@ public struct Lemmings3Runtime: Sendable {
                 let meetsNewSteel = containsSteel(nextBody) && !containsSteel(currentBody)
                 let meetsNewPlayerBrick = containsPlayerBuiltBrick(nextBody) && !containsPlayerBuiltBrick(currentBody)
                 if meetsNewSteel || meetsNewPlayerBrick {
-                    creature.y += 2
+                    if !isSolid(creature.x, creature.y) { creature.y += 2 }
                     creature.digDirection = diagonal(creature.direction, 1)
-                    creature.cooldown = 11
+                    creature.cooldown = 10
                 } else {
                     creature.digDirection = creature.direction > 0 ? .right : .left
                 }

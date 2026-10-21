@@ -1,5 +1,9 @@
 # Release scope
 
+The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
+scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
+for the combined runtime and replay identities.
+
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
 As of 20 October 2026, the published Mac release is 2.1 build 93. Both
 universal archives passed signing, notarisation, stapling and Gatekeeper.
@@ -31,6 +35,26 @@ limits. See the [gate register](ReleaseReadiness/gates.json).
 Macintosh 2.1 build 93 retains the published classifications and known limits.
 Its publication record documents the signed update deltas. Existing engine
 closure evidence and open limits remain in force.
+
+## Current bundled route counts
+
+The latest retained evidence records 352/352 official Classic routes,
+2,403/6,020 Classic fan routes, 120 L2 standalone routes with 70 carry-over
+variants and 12 chains, 86/90 L3 routes, and 158/794 NeoLemmix routes. The
+evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,617
+Classic fan routes and 636 NeoLemmix routes remain open. See the
+[bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md)
+for dates, search outcomes and measurement limits.
+
+A 20 October structural scan decoded all 6,020 bundled fan levels across 535
+packs. It found 54 records without an active exit trigger. Fifty-one have a
+zero rescue requirement and already have winning replay evidence. Three
+positive-rescue records remain open: `fan:lldb-437` `LDChallenge08.dat#1`,
+`fan:lldb-508` `KillerMaster 1 Wicked 1.dat#3`, and `fan:lldb-509`
+`KillerMaster 1 Havoc 2.dat#7`. Each decoded record contains only a hatch
+object. These three levels cannot meet their rescue requirements as bundled.
+The scan found no level-load or pack errors and replayed no levels. See the
+[exit-structure audit](ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json).
 
 ## Bundled content closure
 
@@ -204,6 +228,8 @@ summaries and the failed-replay investigation below: two Amiga routes and one
 Genesis Taxing route now replay as wins. The old search records remain historical
 and do not describe the latest route status. See the [current-worktree audit](ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/audit.json)
 and its per-level [results](ReleaseReadiness/2.0-build83/classic-fan-current-main-audit-reconciled-2026-10-16/levels.jsonl).
+The dated baseline and route-closure measurement method are in the
+[bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md).
 
 On 17 October, the source-derived L2 walking-step boundary gained a native
 regression. The repository runtime suite passed against the installed bundle;

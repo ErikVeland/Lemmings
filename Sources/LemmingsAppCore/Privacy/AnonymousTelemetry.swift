@@ -180,6 +180,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     private var uploads: [UUID: Task<Void, Never>] = [:]
     private var installationUploadID: UUID?
     public var onCountsChanged: (() -> Void)?
+    public var onSharingChanged: (() -> Void)?
 
     /// A nil `defaults` uses `storage.defaults`. A nil `endpoint` uses the Info.plist value of `storage.bundle`.
     public init(storage: AppStorage = .current(), defaults: UserDefaults? = nil, endpoint: URL? = nil,
@@ -209,7 +210,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
             installationUploadID = nil
         }
         if enabled { recordActiveDay() }
-        if sharesCounts != wasSharing { onCountsChanged?() }
+        if sharesCounts != wasSharing { onSharingChanged?(); onCountsChanged?() }
     }
 
     public func clearLocalCounts() {
@@ -331,6 +332,16 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
 
     private struct PublicSavedTotal: Decodable { let saved: Int }
 
+    #if os(macOS)
+    /// Owner credentials stay in this Mac's preferences, scoped to the service.
+    public var savedDashboardToken: String? {
+        guard let endpoint,
+              let saved = defaults.dictionary(forKey: "AnonymousTelemetryDashboardTokenV1") as? [String: String],
+              saved["endpoint"] == endpoint.absoluteString else { return nil }
+        return saved["token"]
+    }
+    #endif
+
     public func sharedSummary(token: String, days: Int = 30) async throws -> AnonymousTelemetrySummary {
         guard let endpoint, [7, 30].contains(days), !token.isEmpty else {
             throw URLError(.badURL)
@@ -342,9 +353,20 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.cachePolicy = .reloadIgnoringLocalCacheData
         let (data, response) = try await transport.data(for: request)
+        #if os(macOS)
+        if let http = response as? HTTPURLResponse, [401, 403].contains(http.statusCode),
+           savedDashboardToken == token {
+            defaults.removeObject(forKey: "AnonymousTelemetryDashboardTokenV1")
+        }
+        #endif
         guard let http = response as? HTTPURLResponse, http.statusCode == 200,
               data.count <= 2_000_000 else { throw URLError(.badServerResponse) }
-        return try JSONDecoder().decode(AnonymousTelemetrySummary.self, from: data)
+        let summary = try JSONDecoder().decode(AnonymousTelemetrySummary.self, from: data)
+        #if os(macOS)
+        defaults.set(["endpoint": endpoint.absoluteString, "token": token],
+                     forKey: "AnonymousTelemetryDashboardTokenV1")
+        #endif
+        return summary
     }
 
     private func record(_ event: AnonymousTelemetryEvent) {

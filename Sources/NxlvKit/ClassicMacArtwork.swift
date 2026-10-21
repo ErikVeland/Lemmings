@@ -404,7 +404,7 @@ public struct ClassicMacScene: Sendable {
             }
             let isArrow = graphic.triggerEffect == ClassicDOSObjectEffect.oneWayLeft.rawValue
                 || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue
-            if isArrow, placement.draw.onlyOverwrite, !placement.draw.noOverwrite {
+            if isArrow {
                 // Clip arrows to the drawn Mac terrain, not the DOS collision cells.
                 Self.wrapArrows(frame, into: &pixels, width: width, height: height,
                     x: placement.x * 2 + frame.x, y: placement.y * 2 + frame.y,
@@ -423,7 +423,7 @@ public struct ClassicMacScene: Sendable {
     }
 
     /// The glint buffer, sized to the drawn arrows rather than the scene.
-    private struct GlintCanvas {
+    struct GlintCanvas {
         let x: Int, y: Int, width: Int, height: Int
         var strength: [UInt8]
         var lit = false
@@ -443,8 +443,7 @@ public struct ClassicMacScene: Sendable {
         for (position, object) in level.objects.enumerated() {
             let placement = object.placement, graphic = object.graphic
             guard graphic.triggerEffect == ClassicDOSObjectEffect.oneWayLeft.rawValue
-                || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue,
-                placement.draw.onlyOverwrite, !placement.draw.noOverwrite else { continue }
+                || graphic.triggerEffect == ClassicDOSObjectEffect.oneWayRight.rawValue else { continue }
             let frames: [ClassicMacArtwork.Frame]
             if let own = reconstructed[position] { frames = own }
             else if let definitions = artwork.objects[style], definitions.indices.contains(placement.id) {
@@ -604,9 +603,10 @@ public struct ClassicMacScene: Sendable {
      * and left. `shaded` is false for monochrome art, which keeps plain clipping.
      * `glints` collects the edge light for HDR displays, without changing `pixels`.
      */
-    private static func wrapArrows(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],
+    static func wrapArrows(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],
         width: Int, height: Int, x: Int, y: Int, flipped: Bool,
-        visualTerrain: [UInt8], shaded: Bool, glints: inout GlintCanvas?) {
+        visualTerrain: [UInt8], shaded: Bool, glints: inout GlintCanvas?,
+        underlay: [UInt8]? = nil) {
         let source = [UInt8](frame.rgba)
         let x0 = max(0, -x), y0 = max(0, -y)
         let x1 = min(frame.width, width - x), y1 = min(frame.height, height - y)
@@ -668,6 +668,7 @@ public struct ClassicMacScene: Sendable {
                 let p = ((y + row) * width + x + col) * 4
                 guard shaded else {
                     pixels[p] = source[s]; pixels[p + 1] = source[s + 1]; pixels[p + 2] = source[s + 2]
+                    if underlay != nil { pixels[p + 3] = visualTerrain[p + 3] }
                     continue
                 }
                 var light = 1.0, glint = 0.0
@@ -693,9 +694,10 @@ public struct ClassicMacScene: Sendable {
                 }
                 for c in 0..<3 {
                     let arrow = min(255, Double(source[s + c]) * light + glint)
-                    let ground = Double(pixels[p + c])
+                    let ground = Double(pixels[p + 3] == 0 ? (underlay?[p + c] ?? pixels[p + c]) : pixels[p + c])
                     pixels[p + c] = UInt8(ground + (arrow - ground) * arrowOpacity)
                 }
+                if underlay != nil { pixels[p + 3] = visualTerrain[p + 3] }
             }
         }
     }

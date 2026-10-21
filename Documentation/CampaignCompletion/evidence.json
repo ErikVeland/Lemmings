@@ -2752,7 +2752,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
-      "sha256": "266aefb70230013f421cfc532e97b632e56bcd4d887e699a4aefe3a1b68048a7",
+      "sha256": "2a243ad4f007b01d12309221dfcff612700eb15f6766eca7b717f459791bec6e",
       "game": "lemmings3",
       "level": 113,
       "saved": 10,

@@ -272,6 +272,9 @@ import LemmingsGameArt
         self.page = page
         super.init(frame: .zero)
         drawsBackground = false
+        // Dialog edges stay fixed instead of bouncing away from the underlying game.
+        horizontalScrollElasticity = .none
+        verticalScrollElasticity = .none
         documentView = page
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
@@ -283,6 +286,10 @@ import LemmingsGameArt
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func resetCursorRects() { addCursorRect(bounds, cursor: .arrow) }
     override func cursorUpdate(with event: NSEvent) { NSCursor.arrow.set() }
+    override func scrollWheel(with event: NSEvent) {
+        guard hasHorizontalScroller || hasVerticalScroller else { return }
+        super.scrollWheel(with: event)
+    }
     override func layout() {
         super.layout()
         scrollerStyle = .overlay

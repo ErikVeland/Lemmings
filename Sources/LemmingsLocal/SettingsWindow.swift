@@ -64,6 +64,7 @@ import NxlvKit
   private var staticHomeScreenCheck: NSButton?
   private var reduceFlashesCheck: NSButton?
   private var showSongInfoCheck: NSButton?
+  private var inspectWhilePausedCheck: NSButton?
   private var fadeMenuButtonCheck: NSButton?
   private var hdEffectsCheck: NSButton?
   private var hdrFlashCheck: NSButton?
@@ -265,7 +266,7 @@ import NxlvKit
   private var privacyHelp: String {
     telemetry.endpoint == nil
       ? L10n.text("This build has no shared counts service. Play insights show this Mac only.")
-      : L10n.text("Shares daily use, results, lemmings saved, solo or Hot Seat play, and music use. No names, IDs, pack names or replays are sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.")
+      : L10n.text("Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.")
   }
 
   private func popUp(_ action: Selector) -> NSPopUpButton {
@@ -321,6 +322,9 @@ import NxlvKit
     ridiculous.state = settings.ridiculousSpeedEnabled ? .on : .off
     ridiculous.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     ridiculousSpeedCheck = ridiculous
+    let inspect = GameCheckButton(title: L10n.text("Inspect lemmings while paused"), target: self, action: #selector(inspectWhilePausedChanged))
+    inspect.state = settings.inspectWhilePaused ? .on : .off
+    inspectWhilePausedCheck = inspect
     let interruption = GameCheckButton(title: L10n.text("Pause on interruption"), target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
@@ -347,7 +351,7 @@ import NxlvKit
     pointerCaptureCheck = pointer
     return groupedPane([
       (L10n.text("Presentation"), [(L10n.text("Language"), language), (L10n.text("Style"), experience)]),
-      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern), (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))), (L10n.text("Pause"), interruption), (L10n.text("Pointer"), pointer)]),
+      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern), (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))), (L10n.text("Pause"), GameControlGroup(controls: [interruption, inspect], label: L10n.text("Pause"))), (L10n.text("Pointer"), pointer)]),
       (L10n.text("Skill targeting"), [("", targeting)]),
       (L10n.text("Pointer and selection"), [(L10n.text("Cursor"), cursor), (L10n.text("Skill icon"), iconSize), (L10n.text("Reticule"), count), (L10n.text("Selection"), selection), (L10n.text("Classic"), backpacks)]),
       (L10n.text("Level access"), [(L10n.text("Level Select"), levelSelection)]),
@@ -681,11 +685,11 @@ import NxlvKit
   }
 
   private func privacyPane() -> NSView {
-    let share = GameCheckButton(title: L10n.text("Share play counts"), target: self,
+    let share = GameCheckButton(title: L10n.text("Share counts and records"), target: self,
                                 action: #selector(telemetryChanged(_:)))
     share.state = telemetry.sharesCounts ? .on : .off
     share.isEnabled = telemetry.endpoint != nil
-    share.setAccessibilityLabel(L10n.text("Share play counts"))
+    share.setAccessibilityLabel(L10n.text("Share counts and records"))
     telemetryCheck = share
     let info = GameButton(title: L10n.text("Privacy info"), target: self, action: #selector(showPrivacyInfo(_:)))
     let insights = GameButton(title: L10n.text("View play insights"), target: self, action: #selector(openPlayInsights))
@@ -795,6 +799,7 @@ import NxlvKit
     staticHomeScreenCheck?.state = settings.staticHomeScreen ? .on : .off
     reduceFlashesCheck?.state = settings.reduceFlashes ? .on : .off
     showSongInfoCheck?.state = settings.showSongInfo ? .on : .off
+    inspectWhilePausedCheck?.state = settings.inspectWhilePaused ? .on : .off
     fadeMenuButtonCheck?.state = settings.fadeMenuButton ? .on : .off
     hdEffectsCheck?.state = settings.hdEffectsEnabled ? .on : .off
     hdrFlashCheck?.isEnabled = settings.hdEffectsEnabled
@@ -934,6 +939,7 @@ import NxlvKit
     applied.musicStyle = settings.musicStyle
     applied.pauseMusicBeatOnly = settings.pauseMusicBeatOnly
     applied.menuMusic = settings.menuMusic
+    applied.inspectWhilePaused = settings.inspectWhilePaused
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
@@ -1062,6 +1068,11 @@ import NxlvKit
   @objc private func showSongInfoChanged(_ sender: NSButton) {
     settings.showSongInfo = sender.state == .on
     changed()
+  }
+
+  @objc private func inspectWhilePausedChanged(_ sender: NSButton) {
+    settings.inspectWhilePaused = sender.state == .on
+    changed(customizeExperience: false)
   }
 
   @objc private func fadeMenuButtonChanged(_ sender: NSButton) {

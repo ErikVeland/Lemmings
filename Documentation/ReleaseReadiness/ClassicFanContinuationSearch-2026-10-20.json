@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "head": "440caebd886ec35d512137e2aa82c6b610d13141",
+  "scope": {
+    "family": "bundled Classic fan levels",
+    "verifiedRoutesBefore": "2403/6020",
+    "verifiedRoutesAfter": "2403/6020",
+    "newAcceptedRoutes": 0
+  },
+  "method": {
+    "solver": "ClassicSolver",
+    "solverSha256": "3a66736309167422c33eda25298050abd135f3d733958900fffca59777d1f134",
+    "searchCount": 1,
+    "configuredSeconds": 10,
+    "solverSeconds": 10,
+    "expanded": 27629,
+    "width": 512,
+    "clock": "golems",
+    "rate": "native",
+    "ranking": [
+      "prefer-progress",
+      "rescue-quota-distance"
+    ]
+  },
+  "result": {
+    "identity": "fan:lldb-305/TWPAK03.dat#0",
+    "title": "Revenge Of The Evil Gardener",
+    "initialStateHash": "a106d9ca66bd7a2afd88e75b7e158bcbb1f97bc56f296971f4bc2b94ba31af86",
+    "archive": "0305-TWPAK03.zip",
+    "archiveSha256": "b89068f77ddf464b14bf20a0de0876d27d007c888ad557dc69ea50cfd408806a",
+    "requiredToSave": 20,
+    "saved": 0,
+    "released": 8,
+    "lost": 3,
+    "active": 5,
+    "tick": 460,
+    "solved": false,
+    "partial": {
+      "path": ".build/fan-velocity-20261020/continuation/per-level/3019102c0494/a106d9ca66bd7a2afd88e75b7e158bcbb1f97bc56f296971f4bc2b94ba31af86.partial.json",
+      "sha256": "42f521f0187f2e9656062d10bc5bd6db43231bd0f1bce8faff90cccbc8079b23",
+      "initialLevelFingerprint": "67f802f3fb2604320a47ca0fbeafe0346e702e068160dbf582fd640c6ec71438"
+    }
+  },
+  "limits": [
+    "This bounded search is not proof that the level is impossible.",
+    "A route count changes only after a strict winning replay is accepted."
+  ]
+}

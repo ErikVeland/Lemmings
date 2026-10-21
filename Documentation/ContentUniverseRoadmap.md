@@ -1,5 +1,9 @@
 # Ultimate Lemmings content roadmap
 
+The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
+scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
+for the combined runtime and replay identities.
+
 This document defines how Ultimate Lemmings expands beyond the current macOS
 release without showing unfinished work as completed content.
 

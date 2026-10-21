@@ -1,5 +1,9 @@
 # L3 Mole behaviour and route repair
 
+The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
+scores describe their recorded source snapshots. See the [merge validation](../Release211ProgressionMerge-2026-10-21.md)
+for the combined runtime and replay identities.
+
 The macOS 2.0 L3 campaign gate remains open. This record tracks original-engine
 Mole checks and the repair of routes invalidated by the 15 October patrol change.
 
@@ -754,3 +758,99 @@ It did not produce an actor trace. The emulator was stopped. This corrects the
 earlier bind-status note; no source rule or route gap changed. L3 remains at
 86/90 standalone routes, with 17 failed schedules across Levels 107, 206, 213
 and 229.
+
+## Historical feature-branch observations — 20 October 2026
+
+These observations describe the feature-branch runtime before the merge.
+Their trace scores do not certify the combined runtime.
+
+### 20 October current-source Mole trace refresh
+
+I rebuilt the trace tool from the runtime at `440caebd` and compared both
+retained level-101 scenes. The left-facing steel-contact trace matches 139 of
+329 positions. The air-gap trace matches 179 of 344 positions and follows the
+source through tick 183 before diverging. Both first differ at tick 2. The
+runtime source hash is `cdf4e0f0625f36b7e1be8d7059514d6679270b270c5b2627ed8aa3c1e313cdf0`.
+The results confirm the current trace counts; they do not close Mole fidelity
+or change the four open L3 level identities. See the [current-source trace
+record](current-main-mole-trace-2026-10-20.json).
+
+### 20 October source-driven Mole timing correction
+
+The retained original actor samples show the Mole settle from feet y=110 to
+y=112 on tick 7. They show a steel-contact reaction on ticks 26–35 and the
+first diagonal movement on tick 36. The runtime now applies the two-pixel
+settle only when solid ground is below the Mole, avoids a second height change
+when its feet are already on solid terrain, and uses a ten-tick contact
+cooldown.
+
+The two production comparisons improved from 139/329 to 146/329 positions for
+left-facing steel contact and from 179/344 to 186/344 for the air-gap fall.
+The shared tunnel samples still match at ticks 36–153 and 173–187 in the
+left-facing case, and through tick 183 in the air-gap case. Both traces still
+first differ at tick 2. The full Mole rule set remains open. See the
+[updated source trace record](current-main-mole-trace-2026-10-20.json).
+
+The headless L3 runtime suite passes with these changes. A fresh 416-fixture
+audit found 393 exact double replays, six level-113 routes that still won
+twice with refreshed state hashes, and the same 17 failing schedules. The six
+retained input streams did not change. The strict completion gate still stops
+at Shadow 7 (`107.json`); no level route closed.
+
+### 20 October source-coordinate follow-up
+
+I rechecked the retained source actor-memory samples against the decoded
+positions. At tick 15, the source Mole moves from x=178 to x=182 while its
+animation ID remains 27. The current runtime stays at x=178 on that tick. This
+confirms that this early mismatch exists in the source actor position; a
+rendered-sprite anchor alone does not explain it. The two current runtime
+comparisons reproduce 146/329 exact positions for left-facing steel contact
+and 186/344 for the air-gap case. Both still first differ at tick 2, while the
+long shared tunnel segments remain exact. This identifies an early patrol
+cadence gap, but does not establish a general source rule. I made no physics
+change from this inspection.
+
+This follow-up accepted zero routes and changed no route counts. It adds no
+route-search sample to the velocity series. Source parity remains separate
+from the 86/90 standalone L3 route count.
+
+### 20 October one-pixel patrol candidate
+
+I tested one horizontal patrol candidate against the captured left-facing
+scene. It moved the Mole one pixel on every logic tick. The retained runtime
+moves two pixels on two of every three ticks. The candidate matched 1 of 329
+source positions, down from 146. Its first sample was `(158,110)` at tick 2;
+the source sample was `(154,110)`. I rejected the candidate and restored the
+runtime. It does not establish the original patrol rule or change route
+coverage.
+
+I also scored constant coordinate offsets from -8 to +8 pixels horizontally
+and -4 to +4 vertically against both source traces. The unshifted runtime was
+best in each case: 146/329 matches for left-facing steel contact and 186/344
+for the air-gap fall. A single spawn-origin correction cannot explain the
+remaining mismatch. The open gap is in movement or state timing.
+
+### 20 October Mole animation-bank mapping check
+
+The source capture records Mole animation values 26, 27, 53, 55–62 and 65.
+The bundled `CREAT002.IND` file has 31 animation records and 174 decoded
+frames. If those source values are flattened frame indices, they map to
+animation/frame pairs 4/2, 4/3, 9/3, 9/5, 10/0–5 and 11/0, 11/3. The source
+record does not yet establish that interpretation. Values 26–65 cannot index
+the bank's 31 animation records. They may identify flattened frames or another
+sprite state. On the aligned air-gap trace, values 26 and 27 occur during the
+rightward patrol; value 53 occurs at the steel reaction; values 55–62 cycle
+during diagonal movement. Before this change, the mobile renderer picked
+animation 0 or 1 from direction and advanced its frames by creature age. It
+did not consume the source animation value. I checked the full frame table.
+Every mapped frame is 16×18, but every animation in this bank has those
+dimensions, so size does not prove the mapping. The copied source bank and the
+installed bundled bank have matching SHA-256 values for `CREAT002.IND` and
+`CREAT002.CMP`.
+
+The mobile renderer now uses the flattened-frame interpretation for the
+captured Mole ages and dig directions. It maps only the recorded state ranges
+and keeps the existing animation path for other states. Focused tests check
+the selected animation/frame pairs and the fallback. This is a provisional
+rendering change. A source-format proof or visual comparison against a source
+capture must confirm the flattened-frame interpretation before this gap closes.

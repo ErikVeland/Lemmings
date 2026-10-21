@@ -12,8 +12,8 @@ public enum MobileInformationArt {
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
-              details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
-                        L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
+              details: [L10n.text("Journey"), L10n.text("Share counts and records"), L10n.text("Individual lemmings"),
+                        L10n.text("Extra skills"), L10n.text("Hot Seat player HUD"), L10n.text("Shared saves/replays")],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
         return page
@@ -28,9 +28,9 @@ public enum MobileInformationArt {
         return page
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
-              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("No names or IDs"), L10n.text("No pack names"), L10n.text("No replays"), L10n.text("Service sees IP")],
-              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share counts"), primary: true)])
+        var page = GameFrontEnd.Page(title: L10n.text("Share counts and records?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
+              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("Public: initials, scores and action replays."), L10n.text("Service sees IP")],
+              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share"), primary: true)], footerColumns: 1)
         page.backActionID = "telemetryNo"
         return page
     }

@@ -395,6 +395,33 @@ final class AnonymousTelemetryTests: XCTestCase {
         XCTAssertEqual(currentSummary.optedInInstalls, 42)
     }
 
+    @MainActor func testDashboardTokenPersistsForItsServiceAndClearsOnlyWhenRejected() async throws {
+        let suite = UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let endpoint = URL(string: "https://counts.example.org")!
+        let transport = FakeTelemetryTransport()
+        transport.responseStatus = 200
+        transport.responseData = Data("{\"days\":30,\"counts\":[]}".utf8)
+        let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: endpoint, transport: transport)
+        XCTAssertNil(telemetry.savedDashboardToken)
+        _ = try await telemetry.sharedSummary(token: "test-owner-token")
+        let relaunchedDefaults = UserDefaults(suiteName: suite)!
+        let relaunched = AnonymousTelemetry(defaults: relaunchedDefaults, endpoint: endpoint, transport: transport)
+        XCTAssertEqual(relaunched.savedDashboardToken, "test-owner-token")
+        XCTAssertNil(AnonymousTelemetry(defaults: relaunchedDefaults,
+            endpoint: URL(string: "https://other.example.org")!).savedDashboardToken)
+        for status in [503, 401] {
+            transport.responseStatus = status
+            do {
+                _ = try await relaunched.sharedSummary(token: "test-owner-token")
+                XCTFail("Expected request failure")
+            } catch {}
+            XCTAssertEqual(relaunched.savedDashboardToken, status == 503 ? "test-owner-token" : nil)
+        }
+        XCTAssertNil(telemetry.savedDashboardToken)
+    }
+
     func testInsightsTargetsUseTelemetryNumbering() {
         XCTAssertEqual(TelemetryLevelTarget(key: "lemmings|level-52"), .classic(.lemmings, index: 51))
         XCTAssertEqual(TelemetryLevelTarget(key: "lemmings2|t12-l10"), .lemmings2(tribe: 11, index: 9))
@@ -542,6 +569,21 @@ final class AnonymousTelemetryTests: XCTestCase {
         XCTAssertTrue(labels.contains { $0.stringValue == "OPTED-IN INSTALLS" })
         XCTAssertTrue(labels.contains { $0.stringValue == "12345" })
         XCTAssertTrue(labels.contains { $0.stringValue.contains("ACTIVE TODAY  23") })
+        for title in ["Load shared", "Last 30 days"] {
+            let control = try XCTUnwrap(views(in: page).compactMap { $0 as? NSButton }
+                .first { $0.title == title })
+            let previousCount = transport.requests.count
+            control.performClick(nil)
+            for _ in 0..<20 {
+                if transport.requests.count > previousCount { break }
+                try await Task.sleep(nanoseconds: 10_000_000)
+            }
+            XCTAssertEqual(transport.requests.count, previousCount + 1)
+            XCTAssertNil(window.attachedSheet)
+            XCTAssertEqual(transport.requests.last?.value(forHTTPHeaderField: "Authorization"), "Bearer test-owner-token")
+        }
+        XCTAssertEqual(URLComponents(url: try XCTUnwrap(transport.requests.last?.url),
+            resolvingAgainstBaseURL: false)?.queryItems?.first?.value, "7")
         for control in views(in: page).compactMap({ $0 as? NSButton }) where control.isEnabled {
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect))
@@ -707,7 +749,7 @@ final class AnonymousTelemetryTests: XCTestCase {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
         let controls = buttons(in: page)
-        for title in ["Share play counts", "View play insights", "Clear this Mac's counts"] {
+        for title in ["Share counts and records", "View play insights", "Clear this Mac's counts"] {
             let control = try XCTUnwrap(controls.first { $0.title == title })
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect), "Clipped control: \(title)")
@@ -715,7 +757,7 @@ final class AnonymousTelemetryTests: XCTestCase {
             XCTAssertTrue(hit === control || hit?.isDescendant(of: control) == true,
                           "Missing input target: \(title)")
         }
-        let sharing = try XCTUnwrap(controls.first { $0.title == "Share play counts" })
+        let sharing = try XCTUnwrap(controls.first { $0.title == "Share counts and records" })
         XCTAssertTrue(sharing.isEnabled)
         if let path = ProcessInfo.processInfo.environment["LEMMINGS_TELEMETRY_SETTINGS_SCREENSHOT"] {
             let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))

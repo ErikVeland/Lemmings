@@ -51,6 +51,7 @@ import NxlvKit
         var savedRuns: [SavedRun]?
         var learningProgress: LearningJourneyProgress?
         var hotSeatLearningProgress: [String: LearningJourneyProgress]?
+        var recoveredLegacyHotSeatLearning: Bool?
         var journeySessions: [String: JourneySessionSnapshot]?
         var favourites: [LevelPlaylistEntry]?
         var recentlyPlayed: [LevelPlaylistEntry]?
@@ -61,6 +62,7 @@ import NxlvKit
             activeRun: LevelSequenceRun? = nil
         ) {
             version = Self.currentVersion
+            recoveredLegacyHotSeatLearning = true
             self.playlists = playlists
             self.selectedPlaylistID = selectedPlaylistID
             self.activeRun = activeRun
@@ -346,8 +348,56 @@ import NxlvKit
     public init(file: URL, won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
         self.file = file
         try load()
+        try recoverLegacyHotSeatLearning()
         try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
         if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey, won: won) }
+    }
+
+    /// Older Mac builds shared lesson outcomes across solo and Hot Seat play.
+    /// Restore only recorded outcomes for the saved session's past visits.
+    private func recoverLegacyHotSeatLearning() throws {
+        guard document.recoveredLegacyHotSeatLearning != true else { return }
+        let previous = document
+        var legacy: Document?
+        if document.hotSeatLearningProgress == nil, document.journeySessions == nil {
+            legacy = document
+        } else if let data = try? Data(contentsOf: backupFile),
+                  let backup = try? decode(data),
+                  backup.hotSeatLearningProgress == nil, backup.journeySessions == nil,
+                  backup.recoveredLegacyHotSeatLearning != true {
+            // 2.1 may already have saved an empty scoped history. Its retained
+            // pre-upgrade backup can still identify the older shared outcomes.
+            legacy = backup
+        }
+        if let legacy {
+            let runs = (legacy.savedRuns ?? []) + (legacy.activeRun.map {
+                [SavedRun(run: $0, hotSeatID: legacy.activeRunHotSeatID)]
+            } ?? [])
+            let history = legacy.learningProgress ?? .init()
+            for saved in runs {
+                guard let seat = saved.hotSeatID,
+                      saved.run.source == .playlist(LearningJourney.playlistID),
+                      let current = resumableRun(id: saved.run.id), current.hotSeatID == seat else { continue }
+                var progress = learningProgress(hotSeatID: seat)
+                for entry in saved.run.entries.prefix(saved.run.currentIndex) {
+                    if history.completed.contains(entry.identity) { progress.record(entry.identity, won: true) }
+                    else if history.later.contains(entry.identity) { progress.record(entry.identity, won: false) }
+                }
+                setLearningProgress(progress, hotSeatID: seat)
+            }
+        }
+        document.recoveredLegacyHotSeatLearning = true
+        do { try save(refreshJourneySnapshots: false) } catch { document = previous; throw error }
+    }
+
+    /// Snapshots supply labels for display counts without changing campaign saves.
+    public func completedLearningEntries(hotSeatID: String?) -> [LevelPlaylistEntry] {
+        let completed = learningProgress(hotSeatID: hotSeatID).completed
+        let entries = document.playlists.flatMap(\.entries)
+            + (document.activeRun?.entries ?? []) + savedRuns.flatMap { $0.run.entries }
+            + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+        var seen: Set<LevelCatalogueIdentity> = []
+        return entries.filter { completed.contains($0.identity) && seen.insert($0.identity).inserted }
     }
 
     /// Classic campaign wins as journey identities. `cleared` returns the won campaign

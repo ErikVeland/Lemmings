@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "parents": {
+    "main": "5d3b818fd6fdbce06458e1d8384a9d55a35100c6",
+    "feature/release-2.1": "51115adbfb9810daaedbf235c98d6f05dcae179b"
+  },
+  "runtimeSHA256": "f7e17fe79074410ef664095491c0e53872b2f30f2435fc0f22d3a57a4725ab74",
+  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+  "fixtures": 416,
+  "exactDoubleReplays": 399,
+  "staleIdentityWins": 0,
+  "routeFailures": 17,
+  "standalone": {
+    "accepted": 86,
+    "total": 90
+  },
+  "carried": {
+    "accepted": 313,
+    "total": 326
+  },
+  "refreshedLevel113Fixtures": 6,
+  "inputChanges": 0,
+  "newRouteClosures": 0,
+  "openLevels": [
+    107,
+    206,
+    213,
+    229
+  ],
+  "failures": [
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/213.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/229.json",
+      "failure": "Input 6 was refused at tick 1561."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-1.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-22.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/107-23.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-1.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-11.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-22.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/206-23.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-1.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-21.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-22.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/213-8.json",
+      "failure": "Inputs did not complete the level with a rescue."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-15.json",
+      "failure": "Input 6 was refused at tick 1561."
+    },
+    {
+      "fixture": "Tests/Lemmings3CampaignTests/Fixtures/229-43.json",
+      "failure": "Input 6 was refused at tick 1561."
+    }
+  ]
+}
