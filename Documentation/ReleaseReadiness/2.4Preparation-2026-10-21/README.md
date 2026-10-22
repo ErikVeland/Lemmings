@@ -1,7 +1,9 @@
-# 2.4 Duo launch preparation
+# Duo launch preparation
 
 Target: existing iOS/tvOS TestFlight groups by Friday, 23 October 2026.
-See the [delivery plan](../../2.4Roadmap.md).
+See the [delivery plan](../../2.2Roadmap.md). This record was made under the
+earlier 2.4 number. The owner moved the Duo launch to 2.2 on 22 October 2026.
+The folder and build paths keep the 2.4 name so that existing citations stay valid.
 
 ## Changes
 

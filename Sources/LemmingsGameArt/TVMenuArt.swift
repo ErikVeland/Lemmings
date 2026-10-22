@@ -63,7 +63,9 @@ public enum TVMenuArt {
             GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
             if let preview { fitted(preview, in: layout.preview.insetBy(dx: 10, dy: 10), context: context) }
         }
-        for (value, box) in zip(page.details, layout.details) { text(value, box: box, typography: typography, context: context) }
+        for (index, pair) in zip(page.details, layout.details).enumerated() {
+            text(pair.0, box: pair.1, reading: page.readsDetail(index), typography: typography, context: context)
+        }
         for target in layout.targets {
             let action = target.action
             GameStoneArt.draw(in: context, frame: target.frame, selected: action.selected, pixel: 1)
@@ -106,7 +108,7 @@ public enum TVMenuArt {
     }
 
     public static func text(_ value: String, box: CGRect, title: Bool = false, green: Bool = false,
-                            enabled: Bool = true, typography: GameMenuTypography? = nil,
+                            enabled: Bool = true, reading: Bool = false, typography: GameMenuTypography? = nil,
                             textScale: CGFloat = 1, context: CGContext) {
         // Scale the original bitmap face uniformly; labels never expand individually to fill sockets.
         context.saveGState(); defer { context.restoreGState() }
@@ -116,7 +118,8 @@ public enum TVMenuArt {
             let scale = textScale > 1 ? 2 : 1
             let height = typography.height(of: value, face: face, scale: scale)
             typography.menuLine(value, in: CGRect(x: box.minX, y: floor(box.midY - height / 2), width: box.width, height: height),
-                context: context, face: face, scale: scale, alpha: enabled ? 1 : 0.4, palette: green ? .green : .blue)
+                context: context, face: face, scale: scale, alignment: reading ? .left : .center,
+                alpha: enabled ? 1 : 0.4, palette: green ? .green : .blue, preservesCase: reading)
         } else {
             GamePixelTypography.draw(value, in: box, context: context, typography: nil,
                 palette: green ? .green : .blue, maximumScale: title ? 4 : 2,

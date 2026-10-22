@@ -92,6 +92,8 @@ import NxlvKit
         didSet { invalidateIntrinsicContentSize(); needsDisplay = true }
     }
     private var measuredWidth: CGFloat = 0
+    /// Wrapped body text reads in its authored case. Titles, headings and actions stay in capitals.
+    private var reading: Bool { cell?.wraps == true && role == .body }
     override var isFlipped: Bool { true }
     override var intrinsicContentSize: NSSize {
         let width = preferredMaxLayoutWidth > 0 ? preferredMaxLayoutWidth : bounds.width > 0 ? bounds.width : 600
@@ -103,7 +105,8 @@ import NxlvKit
                 height: CGFloat(max(1, lines) * max(13, glyphs.bottom - glyphs.top + 6)))
         }
         let natural = renderer.width(of: plain, face: role.face, scale: 1)
-        let lines = cell?.wraps == true ? GameTextLayout.lines(stringValue, width: width, face: role.face, font: face).count : 1
+        let lines = cell?.wraps == true ? GameTextLayout.lines(stringValue, width: width, face: role.face, font: face,
+            preservesCase: reading).count : 1
         let spacing = max(face.cellHeight + 6, face.height(of: MacInterfaceRenderer.menuText(stringValue)) + 2)
         return NSSize(width: natural, height: CGFloat(max(1, lines) * spacing))
     }
@@ -113,7 +116,8 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         if cell?.wraps == true, let renderer = GameMenuArtwork.renderer(), bounds.height >= 32 {
-            renderer.menuParagraph(stringValue, in: bounds, alignment: alignment, face: role.face, palette: role.palette, alpha: isEnabled ? 1 : 0.45)
+            renderer.menuParagraph(stringValue, in: bounds, alignment: reading ? .left : alignment, face: role.face,
+                palette: role.palette, alpha: isEnabled ? 1 : 0.45, preservesCase: reading)
         } else if cell?.wraps == true, GameMenuArtwork.renderer() == nil {
             let lines = GamePixelTypography.lines(stringValue, width: bounds.width)
             let glyphs = GamePixelTypography.verticalBounds(of: MacInterfaceRenderer.menuText(stringValue))
@@ -157,7 +161,7 @@ import NxlvKit
 @MainActor final class GameReadOnlyText: NSTextView {
     override func draw(_ dirtyRect: NSRect) {
         if let renderer = GameMenuArtwork.renderer() {
-            renderer.menuParagraph(string, in: bounds.insetBy(dx: 5, dy: 5), alignment: .left)
+            renderer.menuParagraph(string, in: bounds.insetBy(dx: 5, dy: 5), alignment: .left, preservesCase: true)
         } else { GamePixelText.draw(string, in: bounds) }
     }
 }

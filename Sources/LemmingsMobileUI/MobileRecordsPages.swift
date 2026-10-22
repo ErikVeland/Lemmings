@@ -25,6 +25,11 @@ struct MobileRecordDetail {
 }
 
 extension MobileLibraryViewController {
+    static func awardPage(_ title: String, detail: String) -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: title, details: [detail], footer: [.init("achievements", L10n.text("Back"))])
+        page.reading = true
+        return page
+    }
     func mobileResultRewards(runID: UUID) -> [ResultAwards.EarnedReward] {
         MobileResultAwardsCache.rewards[runID] ?? []
     }
@@ -195,11 +200,11 @@ extension MobileLibraryViewController {
                 navigate(.recordLevel(key)); loadRecordDetail(key)
             }
             else if id.hasPrefix("award."), let award = ArcadeLevelAchievement(rawValue: String(id.dropFirst(6))) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
+                canvas.page = Self.awardPage(award.title, detail: award.detail)
             } else if id.hasPrefix("careerAward."), let award = TrolleyAchievement(rawValue: String(id.dropFirst(12))) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
+                canvas.page = Self.awardPage(award.title, detail: award.detail)
             } else if id.hasPrefix("campaignAward."), let award = ClassicAchievement.catalog.first(where: { $0.id.rawValue == String(id.dropFirst(14)) }) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
+                canvas.page = Self.awardPage(award.title, detail: award.detail)
             } else { return false }
         }
         return true

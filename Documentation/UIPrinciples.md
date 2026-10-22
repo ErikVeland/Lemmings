@@ -89,6 +89,11 @@ environment and still needs device verification.
   Menu lettering must not depend on the selected level graphics.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
   into game artwork. AppKit can supply input and accessibility beneath game rendering.
+- Set reading text flush left in sentence case. The Macintosh character sets
+  include lowercase letters. This applies to About, Version history, Contributors,
+  What's new, hints, award and reward explanations, and controller help.
+  Titles, headings, action names and HUD text stay in capitals. The compact HUD
+  face has no lowercase, so text that falls back to it stays in capitals.
 - Show each outcome once. A filled star already communicates an earned goal.
 - Reserve bevels and green pressed fills for controls. Passive previews, counters,
   help, receipts and information panels use flat, neutral backgrounds. Show a

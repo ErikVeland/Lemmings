@@ -400,7 +400,7 @@ extension MobileGameViewController {
         #else
         let help = GameplayCommands.help + [L10n.text("Three-finger tap on the playfield: change graphics"), L10n.text("Two-finger swipe on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"), L10n.text("DualSense touchpad swipe: step back / forward")]
         #endif
-        showCustomOverlay(title: L10n.text("Controls"), details: help,
+        showCustomOverlay(title: L10n.text("Controls"), details: help, reading: true,
                           actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
     }
 }

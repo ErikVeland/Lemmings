@@ -347,7 +347,9 @@ import NxlvKit
         return max(20, bounds.bottom - bounds.top + 6)
     }
     func lines(width: CGFloat) -> [String] {
-        if let font = renderer?.font(face) { return GameTextLayout.lines(stringValue, width: width, face: face, font: font) }
+        if let font = renderer?.font(face) {
+            return GameTextLayout.lines(stringValue, width: width, face: face, font: font, preservesCase: face == .small)
+        }
         return GamePixelTypography.lines(stringValue, width: width)
     }
     func requiredHeight(width: CGFloat) -> CGFloat { CGFloat(lines(width: width).count * lineHeight) }
@@ -355,7 +357,8 @@ import NxlvKit
         for (index, line) in lines(width: bounds.width).enumerated() {
             let rect = CGRect(x: 0, y: CGFloat(index * lineHeight), width: bounds.width, height: CGFloat(lineHeight))
             if let renderer, renderer.font(face) != nil {
-                renderer.menuLine(line, in: rect, face: face, alignment: .left, palette: face == .large ? .green : .blue)
+                renderer.menuLine(line, in: rect, face: face, alignment: .left, palette: face == .large ? .green : .blue,
+                    preservesCase: face == .small)
             } else {
                 if let context = NSGraphicsContext.current?.cgContext {
                     GamePixelTypography.draw(line, in: rect, context: context, typography: nil,

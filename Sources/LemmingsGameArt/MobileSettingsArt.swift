@@ -23,6 +23,7 @@ public enum MobileSettingsArt {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
+        page.pairsRows = true
         return page
     }
 
@@ -102,25 +103,31 @@ public enum MobileSettingsArt {
                     .init("playInsights", L10n.text("Play Insights"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
-        return .init(title: group.title, rows: rows,
-                     footer: [.init("settings", L10n.text("Back"))])
+        var page = GameFrontEnd.Page(title: group.title, rows: rows,
+                                     footer: [.init("settings", L10n.text("Back"))])
+        page.pairsRows = true
+        return page
     }
 
     /**
      * Each installed language remains selectable independently of system language support.
      */
     public static func languages(selection: InterfaceLanguage) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Language"),
-              rows: L10n.languageOptions.map { .init("language." + $0.rawValue, $0.title, selected: $0 == selection) },
-              footer: [.init("language.cancel", L10n.text("Back"), backNavigation: true),
-                       .init("language.apply", L10n.text("Apply"), primary: true)])
+        var page = GameFrontEnd.Page(title: L10n.text("Language"),
+            rows: L10n.languageOptions.map { .init("language." + $0.rawValue, $0.title, selected: $0 == selection) },
+            footer: [.init("language.cancel", L10n.text("Back"), backNavigation: true),
+                     .init("language.apply", L10n.text("Apply"), primary: true)])
+        page.pairsRows = true
+        return page
     }
 
     public static func controllerMappings(_ settings: MobileSettings, television: Bool = false) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Remap buttons"), rows: ControllerBindings.Button.allCases.map { button in
+        var page = GameFrontEnd.Page(title: L10n.text("Remap buttons"), rows: ControllerBindings.Button.allCases.map { button in
             let role = settings.classic.controllerMappings[button.rawValue].flatMap(ControllerBindings.Button.init(rawValue:)) ?? button
             return .init("mapping." + button.rawValue, buttonTitle(button, television: television) + ": " + roleTitle(role, television: television))
         }, footer: [.init("mappingReset", L10n.text("Reset")), .init("settingsGroup.controller", L10n.text("Back"))])
+        page.pairsRows = true
+        return page
     }
 
     private static func buttonTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {

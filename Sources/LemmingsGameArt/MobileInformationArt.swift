@@ -16,6 +16,7 @@ public enum MobileInformationArt {
               details: GameReleaseCopy.sections.map { $0.1 } + [GameReleaseCopy.compatibility],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
+        page.reading = true
         return page
     }
     public static func whatsNew(build: MobileBuildInfo) -> GameFrontEnd.Page {
@@ -25,6 +26,7 @@ public enum MobileInformationArt {
                    : build.changes.map { L10n.text(InterfaceMessage(stringLiteral: $0)) }),
             footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
+        page.reading = true
         return page
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {

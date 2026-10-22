@@ -57,6 +57,11 @@ public struct GameFrontEnd {
         }
         public var detailHeadings: Set<Int> = []
         public var detailTitles: Set<Int> = []
+        /// Paragraph pages set body details flush left in their authored case.
+        public var reading = false
+        public func readsDetail(_ index: Int) -> Bool {
+            reading && !detailHeadings.contains(index) && !detailTitles.contains(index)
+        }
         /// Forward actions finish the footer, including when the grid wraps.
         /// A confirmation's safe default stays in its leading position.
         public var orderedFooter: [Action] {
@@ -77,6 +82,8 @@ public struct GameFrontEnd {
         /// Earned rescue stars, 0 to 3, drawn as filled or outlined stars below the subtitle.
         public var stars: Int?
         public var footerColumns: Int?
+        /// Settings-style lists pair their rows when the board has room. A lone last row spans both columns.
+        public var pairsRows = false
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
                     footerColumns: Int? = nil, homeInitials: String = "") {
@@ -139,9 +146,16 @@ public struct GameFrontEnd {
             y = stars.maxY + 12
         }
         var targets: [Target] = []
-        let rowHeight = max(52, page.rows.map { GameTextLayout.height($0.title, width: boardWidth - 88) + 12 }.max() ?? 52)
-        for row in page.rows {
-            targets.append(Target(action: row, frame: CGRect(x: x + 20, y: y, width: boardWidth - 40, height: rowHeight)))
+        let rowColumns = page.pairsRows && boardWidth >= 620 ? 2 : 1
+        let rowCell = (boardWidth - 40 - CGFloat(rowColumns - 1) * 12) / CGFloat(rowColumns)
+        let rowHeight = max(52, page.rows.map { GameTextLayout.height($0.title, width: rowCell - 48) + 12 }.max() ?? 52)
+        for start in stride(from: 0, to: page.rows.count, by: rowColumns) {
+            let group = page.rows[start..<min(start + rowColumns, page.rows.count)]
+            for (column, row) in group.enumerated() {
+                let width = group.count == 1 ? boardWidth - 40 : rowCell
+                targets.append(Target(action: row, frame: CGRect(x: x + 20 + CGFloat(column) * (rowCell + 12), y: y,
+                                                                  width: width, height: rowHeight)))
+            }
             y += rowHeight + 8
         }
         var preview = CGRect.zero
@@ -417,7 +431,8 @@ public struct GameFrontEnd {
             for (index, pair) in zip(page.details, layout.details).enumerated() {
                 GameTextLayout.draw(pair.0, in: pair.1, typography: typography,
                     face: page.detailTitles.contains(index) ? .large : .small,
-                    palette: page.detailHeadings.contains(index) || page.detailTitles.contains(index) ? .green : .blue, context: context)
+                    palette: page.detailHeadings.contains(index) || page.detailTitles.contains(index) ? .green : .blue,
+                    alignment: page.readsDetail(index) ? .left : .center, preservesCase: page.readsDetail(index), context: context)
             }
         }
         if page.pause != nil, let first = layout.targets.first, let last = layout.targets.last {

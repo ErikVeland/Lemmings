@@ -60,7 +60,7 @@ import NxlvKit
     }
 
     func paragraph(_ value: String, _ rect: CGRect) {
-        if let font { font.menuParagraph(value, in: rect, alignment: .left) }
+        if let font { font.menuParagraph(value, in: rect, alignment: .left, preservesCase: true) }
         else { GamePixelText.draw(value, in: rect) }
     }
     func progressBar(value: Int, goal: Int, in rect: CGRect, earned: Bool = false) {

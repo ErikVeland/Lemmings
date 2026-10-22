@@ -101,9 +101,11 @@ public final class GameMenuTypography {
 
     /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.
     public func menuLine(_ value: String, in rect: CGRect, context: CGContext, face: Face = .small, scale: Int = 1,
-                         alignment: Alignment = .center, alpha: CGFloat = 1, palette: Palette = .blue) {
+                         alignment: Alignment = .center, alpha: CGFloat = 1, palette: Palette = .blue,
+                         preservesCase: Bool = false) {
         guard let font = font(face) else { return }
-        let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font)
+        let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font,
+                                            preservesCase: preservesCase)
         guard !line.isEmpty else { return }
         let width = width(of: line, face: face, scale: scale)
         let x: CGFloat
@@ -124,8 +126,11 @@ public final class GameMenuTypography {
         return max(1, Int(height / CGFloat(font.cellHeight)))
     }
 
-    public static func menuText(_ value: String) -> String {
-        let plain = BitmapLatinGlyphs.uppercase(value.folding(options: [.widthInsensitive], locale: L10n.interface.locale), locale: L10n.interface.locale)
+    /// Reading text keeps its authored case. The Macintosh character sets carry lowercase letters.
+    public static func menuText(_ value: String, preservesCase: Bool = false) -> String {
+        let folded = value.folding(options: [.widthInsensitive], locale: L10n.interface.locale)
+        let plain = (preservesCase ? folded.precomposedStringWithCanonicalMapping
+                     : BitmapLatinGlyphs.uppercase(folded, locale: L10n.interface.locale))
             .replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
             .replacingOccurrences(of: "−", with: "-").replacingOccurrences(of: "’", with: "'")
             .replacingOccurrences(of: "‘", with: "'").replacingOccurrences(of: "ʼ", with: "'")

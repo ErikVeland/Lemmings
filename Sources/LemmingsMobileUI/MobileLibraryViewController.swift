@@ -37,7 +37,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #if os(tvOS)
         true
         #else
-        UIDevice.current.userInterfaceIdiom == .pad
+        // iPad and an unfolded iPhone Duo share the tablet menu box. A folded phone keeps the full-width menu.
+        UIDevice.current.userInterfaceIdiom == .pad || min(view.bounds.width, view.bounds.height) >= 700
         #endif
     }
     private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }
@@ -1348,7 +1349,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if let ghostSeat, let initial = content.session.actionReplayInitial {
                 content.session.hotSeatGhosts = arcadeStore.hotSeatGhosts(initial: initial, level: recordLevel,
                     playerID: ownerID, sessionID: ghostSeat.id, players: ghostSeat.players)
+                content.session.hotSeatGhosts?.hidden = !arcadeStore.hotSeatGhostsVisible
             }
+            next.onHotSeatGhostsVisible = { [weak self] in self?.arcadeStore.hotSeatGhostsVisible = $0 }
             next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in
                 guard let self, let session else { return ([], L10n.text("Records are not available.")) }
                 if snapshot.didWin {

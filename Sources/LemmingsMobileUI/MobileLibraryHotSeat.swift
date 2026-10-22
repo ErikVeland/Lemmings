@@ -60,7 +60,7 @@ extension MobileLibraryViewController {
         let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         return MobileCareerArt.hotSeat(profiles, subtitle: subtitle, roster: roster, policy: hotSeats.policy,
             active: hotSeat != nil, hasSaved: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty,
-            confirmingRestart: confirmingRestart)
+            confirmingRestart: confirmingRestart, ghostsVisible: arcadeStore.hotSeatGhostsVisible)
     }
 
     func savedHotSeatsPage(subtitle: String) -> GameFrontEnd.Page {
@@ -93,6 +93,9 @@ extension MobileLibraryViewController {
             hotSeats.policy = hotSeats.policy.other
             if var seat = hotSeat { seat.policy = hotSeats.policy; hotSeats.update(seat) }
             saveHotSeats()
+            rebuild()
+        case "seatGhosts":
+            arcadeStore.hotSeatGhostsVisible.toggle()
             rebuild()
         case "seatSaved":
             if route == .players { savedSeatsBackID = "players" } else if route == .hotSeat { savedSeatsBackID = "hotSeat" }
