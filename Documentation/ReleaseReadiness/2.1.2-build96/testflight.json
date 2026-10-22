@@ -58,21 +58,35 @@
     ],
     "archiveVerified": true,
     "exportVerified": true,
-    "uploaded": false,
+    "uploaded": true,
     "musicScope": "full",
     "appID": "6810873426",
-    "status": "upload finalisation rejected: expired Xcode upload session",
+    "status": "Processing",
     "group": "TV Private Beta",
     "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
     "fontBanksVerified": true,
     "localFontRepairInstalled": true,
     "physicalFontVisibility": "owner confirmed restored in main menu and gameplay",
-    "TestFlightStatus": "not uploaded",
-    "lastUploadFailure": {
-      "message": "Account credentials have expired.",
-      "observedUTC": "2026-10-22T00:59:08.828362+00:00",
-      "stage": "finalisation after 100 percent transfer"
-    }
+    "TestFlightStatus": "Processing",
+    "uploadFinishedUTC": "2026-10-22T01:35:48.408086+00:00",
+    "resolvedUploadFailures": [
+      {
+        "message": "Account credentials have expired.",
+        "observedUTC": "2026-10-22T00:59:08.828362+00:00",
+        "stage": "finalisation after 100 percent transfer"
+      }
+    ],
+    "uploadAuthentication": "fresh Xcode sign-in completed by owner",
+    "uploadedIPABytes": 1976801468,
+    "uploadedIPASHA256": "4abda8793333ab23c27feb8535469e2fefeb08484652901fce9d34fd09f5df4f",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "archiveManifestMatches": true
   },
   "exportRetention": "Local export hashes identify validated IPAs. Redundant TV IPA and iOS archive product were retired for temporary storage; signed TV archive, all dSYMs and verification receipts remain. Upload re-exports the same signed archive."
 }

@@ -12,7 +12,7 @@ stories and Duo input/layout recovery.
 | --- | --- | --- |
 | macOS | 96 | Published; full and slim universal downloads and signed update feed verified. |
 | iPhone/iPad/Duo | 19 | Testing in the existing iOS Private Beta group. Notes saved; automatic notifications enabled. |
-| Apple TV | 9 | Archive/fonts verified; local repair confirmed. Upload finalisation rejected an expired Xcode session; fresh sign-in pending. |
+| Apple TV | 9 | Upload accepted and Processing. Archive/uploaded font banks verified; local repair confirmed. TV Private Beta assignment pending processing. |
 
 Both Mac archives support Apple silicon and Intel on macOS 12.3 or later.
 Developer ID signatures, Apple notarisation, stapling and Gatekeeper passed after
@@ -35,9 +35,9 @@ owner confirmed restored fonts in the main menu and gameplay. Missing fonts now
 stop packaging and archive/export checks; nine focused tests pass. See the
 [font repair](tv-font-repair.json).
 
-The TV upload transferred fully, but Apple rejected finalisation because Xcode's
-upload session expired. App Store Connect has no accepted 2.1.2 TV build. A fresh
-sign-in is prepared in Xcode. TV delivery is still pending.
+The TV upload succeeded after a fresh Xcode sign-in. App Store Connect lists
+2.1.2 (9) as Processing. The exact uploaded IPA contains both complete font banks,
+matching the retained archive. TV Private Beta assignment awaits processing.
 
 ## Source and verification
 
