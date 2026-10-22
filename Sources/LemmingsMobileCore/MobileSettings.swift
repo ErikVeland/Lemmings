@@ -13,6 +13,7 @@ public struct MobileSettings: Codable, Equatable, Sendable {
     public var musicEnabled: Bool
     public var soundtrack: String
     public var djShuffleScope: SoundtrackCatalogue.ShuffleScope
+    public var deskClock: DeskClockSettings
     public static let defaultsKey = "mobile.settings.v1"
     public static let activeProfileKey = "mobile.settings.player.v1"
     public static let fastSpeeds = [2, 3, 5, 10]
@@ -22,7 +23,8 @@ public struct MobileSettings: Codable, Equatable, Sendable {
                 fastSpeed: Int = 2, musicEnabled: Bool = true, soundtrack: String = "Original",
                 skillSelectionPauseCount: Int = 0, skillSelectionPauseChoiceMade: Bool = false,
                 djShuffleScope: SoundtrackCatalogue.ShuffleScope = .sameTrack,
-                respectMuteSetting: Bool = true) {
+                respectMuteSetting: Bool = true,
+                deskClock: DeskClockSettings = DeskClockSettings()) {
         self.classic = classic
         self.pauseToAssign = pauseToAssign
         self.skillSelectionPauseCount = min(Self.skillSelectionTutorialUses, max(0, skillSelectionPauseCount))
@@ -32,12 +34,13 @@ public struct MobileSettings: Codable, Equatable, Sendable {
         self.musicEnabled = musicEnabled
         self.soundtrack = soundtrack
         self.djShuffleScope = djShuffleScope
+        self.deskClock = deskClock
     }
 
     private enum CodingKeys: String, CodingKey {
         case classic, pauseToAssign, fastSpeed, musicEnabled, soundtrack
         case skillSelectionPauseCount, skillSelectionPauseChoiceMade
-        case djShuffleScope, respectMuteSetting
+        case djShuffleScope, respectMuteSetting, deskClock
     }
     public init(from decoder: Decoder) throws {
         let fields = try decoder.container(keyedBy: CodingKeys.self)
@@ -49,7 +52,8 @@ public struct MobileSettings: Codable, Equatable, Sendable {
                   skillSelectionPauseCount: try fields.decodeIfPresent(Int.self, forKey: .skillSelectionPauseCount) ?? 0,
                   skillSelectionPauseChoiceMade: try fields.decodeIfPresent(Bool.self, forKey: .skillSelectionPauseChoiceMade) ?? false,
                   djShuffleScope: try fields.decodeIfPresent(SoundtrackCatalogue.ShuffleScope.self, forKey: .djShuffleScope) ?? .sameTrack,
-                  respectMuteSetting: try fields.decodeIfPresent(Bool.self, forKey: .respectMuteSetting) ?? true)
+                  respectMuteSetting: try fields.decodeIfPresent(Bool.self, forKey: .respectMuteSetting) ?? true,
+                  deskClock: try fields.decodeIfPresent(DeskClockSettings.self, forKey: .deskClock) ?? DeskClockSettings())
     }
 
     /// Migrate once. Keep legacy keys so a downgrade can still read its saved preferences.
