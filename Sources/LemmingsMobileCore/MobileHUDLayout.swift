@@ -223,6 +223,13 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
+        // Landscape screens with room for the 3× panel keep the Mac layout before the phone grids.
+        // Only Classic ships the panel artwork. A hinge across the screen keeps the panel below it;
+        // a hinge down the middle would split the panel, so the divided deck stays.
+        let splitsPanel = reservedRegions.contains { $0.kind == .division && $0.frame.height > $0.frame.width }
+        if ["classic", "classic-dos"].contains(engineIdentifier), base.orientation == .landscape, !splitsPanel,
+           let panel = macPanelLayout(base: base, hasRate: hasRate, skillCount: skillCount,
+                                      supportsRewind: supportsRewind, reservedRegions: reservedRegions) { return panel }
         if let divided = dividedLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
             supportsRewind: supportsRewind, regions: reservedRegions) { return divided }
         if engineIdentifier == "lemmings3", base.orientation == .landscape,
@@ -243,6 +250,15 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                           reservedRegions: reservedRegions)
             if portraitControlsFit(portrait, avoiding: reservedRegions) { return portrait }
         }
+        return macPanelLayout(base: base, hasRate: hasRate, skillCount: skillCount,
+                              supportsRewind: supportsRewind, reservedRegions: reservedRegions)
+            ?? compact(base: base, controlCount: controlCount, regions: reservedRegions, supportsRewind: supportsRewind, hasPlayer: hasPlayer)
+    }
+
+    /// The original panel at a whole 3× or 4× scale, as on the Mac. Wide tablets and an unfolded Duo use it.
+    private static func macPanelLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
+                                       supportsRewind: Bool, reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout? {
+        let safe = base.safeFrame
         let horizontal = horizontalDivision(in: safe, regions: reservedRegions)
         let deck = horizontal.map {
             MobileRect(x: safe.x, y: $0.frame.maxY, width: safe.width, height: safe.maxY - $0.frame.maxY)
@@ -253,9 +269,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let scale: CGFloat = min(4, floor((bank?.width ?? 0) / panelWidth))
         // At 3×, the original sockets also meet the 44-point touch minimum.
         guard hasRate, skillCount == 8, let bank, scale >= 3,
-              bank.height >= panelHeight * scale + rowHeight + 120 else {
-            return compact(base: base, controlCount: controlCount, regions: reservedRegions, supportsRewind: supportsRewind, hasPlayer: hasPlayer)
-        }
+              bank.height >= panelHeight * scale + rowHeight + 120 else { return nil }
         let row = MobileRect(x: bank.minX, y: bank.maxY - rowHeight, width: bank.width, height: rowHeight)
         let panelFrame = CGRect(
             x: bank.minX + floor((bank.width - panelWidth * scale) / 2),

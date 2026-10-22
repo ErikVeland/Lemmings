@@ -217,12 +217,32 @@ struct MobileAdaptiveLayoutTests {
         }
     }
 
-    @Test func wideIPadUsesTouchDeckAndTinyViewsSuspend() {
+    /// An unfolded Duo matches the iPad: the panel sits below a hinge across the screen and never spans a hinge down it.
+    @Test func unfoldedDuoUsesMacPanelClearOfTheHinge() {
+        let across = MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 409, width: 1194, height: 16))
+        let stacked = MobileHUDLayout.make(container: .init(width: 1194, height: 834), safeArea: .init(top: 20),
+                                           hasRate: true, skillCount: 8, reservedRegions: [across], supportsRewind: true)
+        #expect(stacked.panel?.scale == 3)
+        #expect((stacked.panel?.frame.minY ?? 0) >= 425)
+        #expect(stacked.isDiorama)
+        let down = MobileReservedRegion(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))
+        let book = MobileHUDLayout.make(container: .init(width: 1194, height: 834), safeArea: .init(top: 20),
+                                        hasRate: true, skillCount: 8, reservedRegions: [down], supportsRewind: true)
+        #expect(book.panel == nil)
+        #expect(book.canPlay)
+    }
+
+    @Test func wideIPadUsesMacPanelAndTinyViewsSuspend() {
         let wide = MobileHUDLayout.make(container: .init(width: 1112, height: 834),
                                         safeArea: .init(top: 20, bottom: 20), hasRate: true, skillCount: 8)
-        #expect(wide.portrait != nil)
-        #expect(wide.interface.controlsFrame.width == 1112)
-        #expect(wide.interface.controlFrames[13].height == 44)
+        #expect(wide.portrait == nil)
+        #expect(wide.panel?.scale == 3)
+        #expect(wide.interface.controlsFrame.width == 960)
+        #expect(wide.interface.controlFrames.allSatisfy { $0.width >= 44 && $0.height >= 44 })
+        // Lemmings 2 and NeoLemmix have no Classic panel artwork, so they keep the touch deck.
+        let neo = MobileHUDLayout.make(container: .init(width: 1112, height: 834), safeArea: .init(top: 20, bottom: 20),
+                                       hasRate: true, skillCount: 8, engineIdentifier: "neolemmix")
+        #expect(neo.portrait != nil)
         let tiny = MobileHUDLayout.make(container: .init(width: 280, height: 160), safeArea: .init(), hasRate: true, skillCount: 8)
         #expect(!tiny.canPlay)
         #expect(tiny.interface.controlFrames.isEmpty)
