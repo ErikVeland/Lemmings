@@ -18,14 +18,19 @@ import UIKit
         }
     }
 
-    /// A foldable reports its division even while closed, when the region is inactive.
-    static func isFoldable(in view: UIView) -> Bool {
-        #if os(iOS) && compiler(>=6.3)
-        if #available(iOS 27.1, *) {
-            return !view.reservedRegions(kind: .division, options: .includeInactive).isEmpty
-        }
-        #endif
-        return false
+    /**
+     * The live safe area identifies the physical side of a public vertical-bar trait, including RTL layouts.
+     */
+    static func navigationRail(in view: UIView) -> MobileRect? {
+        guard let edge = MobileReservedRegionRuntime.integer("verticalBarEdge", in: view.traitCollection), edge != 0 else { return nil }
+        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let left = safe.minX - view.bounds.minX, right = view.bounds.maxX - safe.maxX
+        let onRight = right > left
+        let width = max(left, right)
+        guard width >= 52 else { return nil }
+        return MobileRect(x: onRight ? safe.maxX + 4 : view.bounds.minX + 4,
+            y: view.bounds.minY + view.safeAreaInsets.top + 4, width: width - 8,
+            height: max(0, view.bounds.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom - 8))
     }
 
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.

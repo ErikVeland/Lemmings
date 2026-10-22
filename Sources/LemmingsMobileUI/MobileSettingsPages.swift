@@ -38,7 +38,7 @@ extension MobileLibraryViewController {
         #if os(tvOS)
         MobileSettingsArt.groups(inGame: inGame, television: true)
         #else
-        MobileSettingsArt.groups(inGame: inGame, deskClockAvailable: true)
+        MobileSettingsArt.groups(inGame: inGame)
         #endif
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
@@ -142,16 +142,6 @@ extension MobileLibraryViewController {
             game?.session.hotSeatGhosts?.hidden = !arcadeStore.hotSeatGhostsVisible
             rebuild(); return true
         }
-        #if os(iOS)
-        if id == "deskClockCalendar" {
-            if EventKitDeskClockSource().authorization() == .notDetermined {
-                presentDeskClock(reason: .menu)
-                return true
-            }
-            if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
-            return true
-        }
-        #endif
         var settings = mobileSettings
         if id == "mappingReset" { settings.classic.controllerMappings = [:] }
         else if id.hasPrefix("mapping."), let physical = ControllerBindings.Button(rawValue: String(id.dropFirst(8))) {
@@ -166,9 +156,6 @@ extension MobileLibraryViewController {
             case "preset": settings.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
             case "cursor": settings.classic.gameplayCursorStyle = cycle(settings.classic.gameplayCursorStyle, GameplayCursorStyle.allCases)
             case "inspect": settings.classic.inspectWhilePaused.toggle()
-            case "deskClockEvents": settings.deskClock.showNextEvent.toggle()
-            case "deskClockStacked": settings.deskClock.openWhenStacked.toggle()
-            case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
             case "planning": settings.chooseSkillSelectionPause(!settings.pauseToAssign)
             case "speed": settings.fastSpeed = cycle(settings.fastSpeed, settings.availableFastSpeeds)
             case "ridiculousSpeed":
