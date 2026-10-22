@@ -455,7 +455,7 @@ struct PrecisionZoomStatus: Equatable {
     return badgeFrames().compactMap { item in
       let frame = CGRect(x: area.minX + item.frame.minX / size.width * area.width,
         y: area.minY, width: item.frame.width / size.width * area.width, height: area.height)
-      return frame.contains(point) ? (item.badge, frame) : nil
+      return frame.contains(point) ? (badge: item.badge, frame: frame) : nil
     }.first
   }
 

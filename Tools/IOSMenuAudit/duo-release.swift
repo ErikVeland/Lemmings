@@ -83,7 +83,8 @@ extension MenuAudit {
                 let context = try bitmapContext(size: size)
                 let simulation = DeskClockSimulation.still(at: now, event: event, uses24Hour: true)
                 if family == "app" {
-                    art.draw(simulation, event: event, now: now, in: context, rect: CGRect(origin: .zero, size: size), nightDim: false)
+                    art.draw(simulation, event: event, now: now, time: 0,
+                             in: context, rect: CGRect(origin: .zero, size: size), nightDim: false)
                 } else {
                     art.drawWidget(simulation, event: event, now: now, in: context,
                         rect: CGRect(origin: .zero, size: size), compact: family == "small")
