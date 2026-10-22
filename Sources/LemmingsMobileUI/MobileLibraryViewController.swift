@@ -1018,7 +1018,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             selectedIndex = 0; selectedPreview = nil; browserShown = false
             levelsBackRoute = back
             navigate(.levels)
-            if let checkpoint { startLevel(checkpoint.levelIndex, checkpoint: checkpoint) }
+            if let checkpoint {
+                do { startLevel(try loaded.checkpointLevelIndex(for: checkpoint), checkpoint: checkpoint) }
+                catch { notice = error.localizedDescription; rebuild() }
+            }
             else if let index, loaded.levels.indices.contains(index) { selectedIndex = index; startLevel(index, checkpoint: nil) }
             else { selectLevel(loaded.levels.indices.contains(browseIndex) ? browseIndex : 0) }
         }

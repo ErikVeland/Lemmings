@@ -166,9 +166,6 @@ extension MobileLibraryViewController {
             case "preset": settings.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
             case "cursor": settings.classic.gameplayCursorStyle = cycle(settings.classic.gameplayCursorStyle, GameplayCursorStyle.allCases)
             case "inspect": settings.classic.inspectWhilePaused.toggle()
-            case "deskClockEvents": settings.deskClock.showNextEvent.toggle()
-            case "deskClockStacked": settings.deskClock.openWhenStacked.toggle()
-            case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
             case "planning": settings.chooseSkillSelectionPause(!settings.pauseToAssign)
             case "speed": settings.fastSpeed = cycle(settings.fastSpeed, settings.availableFastSpeeds)
             case "ridiculousSpeed":
@@ -226,7 +223,7 @@ extension MobileLibraryViewController {
             case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
             case "deskClockEvents":
                 #if os(iOS)
-                if EventKitDeskClockSource.authorization() == .denied {
+                if !settings.deskClock.showNextEvent, EventKitDeskClockSource.authorization() == .denied {
                     if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                     return true
                 }

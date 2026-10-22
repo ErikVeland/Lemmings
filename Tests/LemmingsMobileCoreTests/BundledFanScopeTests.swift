@@ -39,6 +39,12 @@ struct BundledFanScopeTests {
             #expect(library.entries.allSatisfy { !excluded.contains($0.key) })
             for index in library.entries.indices {
                 #expect(try library.checkpointLevelIdentifier(at: index)?.hasSuffix(library.entries[index].key) == true)
+                let originalIndex = try #require(pack.entries().firstIndex { $0.key == library.entries[index].key })
+                let checkpoint = MobileCheckpointEnvelope(runID: UUID(), engine: "classic", engineFingerprint: "fixture",
+                    levelIdentifier: try #require(try library.checkpointLevelIdentifier(at: index)), levelIndex: originalIndex,
+                    levelFingerprint: "fixture", tick: 0, selectedControl: 0,
+                    camera: .init(origin: .init(x: 0, y: 0), zoom: 1), payload: Data())
+                #expect(try library.checkpointLevelIndex(for: checkpoint) == index)
             }
             expected += library.entries.count
             let copy = imported.appendingPathComponent(file.lastPathComponent)

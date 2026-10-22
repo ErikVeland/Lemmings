@@ -69,6 +69,22 @@ public protocol MobileGameLibrary: AnyObject {
 
 public extension MobileGameLibrary {
     func checkpointLevelIdentifier(at index: Int) throws -> String? { nil }
+
+    /**
+     * Finds a saved level after catalogue entries move, while preserving index-only libraries.
+     */
+    func checkpointLevelIndex(for checkpoint: MobileCheckpointEnvelope) throws -> Int {
+        let preferred = checkpoint.levelIndex
+        if levels.indices.contains(preferred) {
+            let identifier = try checkpointLevelIdentifier(at: preferred)
+            if identifier == nil || identifier == checkpoint.levelIdentifier { return preferred }
+        }
+        if let index = try levels.indices.first(where: {
+            try checkpointLevelIdentifier(at: $0) == checkpoint.levelIdentifier
+        }) { return index }
+        throw MobileSessionError.changedLevel
+    }
+
     func levelKey(at index: Int) -> String {
         guard levels.indices.contains(index) else { return "" }
         return "\(levels[index].rank)/\(levels[index].number)"
