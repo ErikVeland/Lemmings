@@ -25,6 +25,7 @@ clock therefore opens from triggers the app can detect, and from a widget.
 - Show the next calendar event and a countdown to it.
 - Open the clock four ways: Stacked pose when idle, closed and charging, a menu entry, and a widget.
 - Work on every iPhone and iPad. The Duo poses add the automatic triggers.
+- Give the Mac a desktop widget (owner decision, 22 October 2026).
 - Use the shipped Macintosh artwork for all sprites, terrain, objects and text.
 
 ## Non-goals
@@ -32,7 +33,7 @@ clock therefore opens from triggers the app can detect, and from a widget.
 - Gameplay. Lemmings in the clock take no player input.
 - A tent pose or a back face. No API can detect them.
 - Lemmings 2 and Lemmings 3 art. Version 1 uses Classic Macintosh art only. Record this as a known limit.
-- Apple TV and Mac. Record these as not supported in version 1.
+- Apple TV, and a clock screen in the Mac app. Record these as not supported in version 1. The Mac gets the widget only.
 - Calendar editing. The clock only reads events.
 
 ## Anti-goals
@@ -146,6 +147,8 @@ phone starts to charge. StandBy covers that case through the widget.
 
 - A WidgetKit extension in the iOS app. Families: small, medium and large on the
   Home Screen, small in StandBy, and rectangular on the Lock Screen.
+- A WidgetKit extension in the Mac app, from the same source. Families: small,
+  medium and large on the desktop and in Notification Center. A tap opens the Mac app.
 - WidgetKit cannot animate. Each timeline entry is one still frame for one minute:
   the digits, the trapdoor, the exit, and one lemming in a pose chosen from the minute.
   In the start minute of a nuke event, that lemming is in the "Oh no!" pose.
@@ -194,6 +197,7 @@ Follow the existing split. Keep simulation logic free of UIKit so tests run head
 | `MobileDeskClockView` | LemmingsMobileUI | Display-link view. Reuses the HUD and stone controls for the close control. |
 | EventKit adapter | LemmingsMobileUI | Implements `DeskClockEventSource` |
 | Widget extension | `Apps/UltimateLemmingsIOS` | New target, uses `GameDeskClockArt` to render still frames |
+| Mac widget extension | `Apps/DeskClockWidget/Mac` | Same widget source, built with Xcode, copied into the Mac app's `Contents/PlugIns` and signed before the app |
 
 The app and the widget draw with the same `GameDeskClockArt` code, so the art stays the same in both.
 
@@ -213,6 +217,7 @@ The app and the widget draw with the same `GameDeskClockArt` code, so the art st
 - No physical Duo test. Pose triggers have Simulator evidence only.
 - Lemmings 2 and Lemmings 3 art is not in version 1.
 - The widget shows still frames. Only the app animates.
+- On Mac, a widget cannot ask for calendar access. The Mac app asks from one menu item. Whether macOS shares that access with the extension needs a device check.
 - Calendar access in the widget extension needs a check on a device.
 
 ## Release decision

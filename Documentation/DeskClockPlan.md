@@ -166,7 +166,7 @@
 ### Task 5: Next event from the calendar
 
 **Files:**
-- Create: `Sources/LemmingsMobileCore/DeskClockEvents.swift` (protocol, filter, EventKit adapter under `#if os(iOS) && canImport(EventKit)`)
+- Create: `Sources/LemmingsMobileCore/DeskClockEvents.swift` (protocol, filter, EventKit adapter under `#if canImport(EventKit) && (os(iOS) || os(macOS))`)
 - Modify: `Apps/UltimateLemmingsIOS/Info.plist` (add `NSCalendarsFullAccessUsageDescription` and `NSCalendarsUsageDescription`)
 - Modify: `Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy` (add calendar data, used for app functionality, not linked or tracked)
 - Test: `Tests/LemmingsMobileCoreTests/DeskClockEventsTests.swift`
@@ -177,7 +177,7 @@
   - `public enum DeskClockEvents { static func next(from: [DeskClockCandidate], now: Date) -> DeskClockEvent? }`: skip all-day, declined, and events that started more than 120 s ago or start more than 24 h ahead. Choose the earliest start. Set `nuke` with `DeskClockFace.isNuke(identifier:start:)`.
   - `public protocol DeskClockEventSource: Sendable { func authorization() -> DeskClockCalendarAccess; func requestAccess() async -> Bool; func nextEvent(now: Date) async -> DeskClockEvent? }`
   - `public enum DeskClockCalendarAccess: Sendable { case notDetermined, granted, denied }`
-  - `public final class EventKitDeskClockSource: DeskClockEventSource` (iOS only). Use `requestFullAccessToEvents` on iOS 17 and later, `requestAccess(to: .event)` on iOS 16. When the store sends `.EKEventStoreChanged`, the next call reads the store again.
+  - `public final class EventKitDeskClockSource: DeskClockEventSource` (iOS and macOS, not tvOS). Use `requestFullAccessToEvents` on iOS 17 and macOS 14 and later, `requestAccess(to: .event)` before them. When the store sends `.EKEventStoreChanged`, the next call reads the store again.
 - Usage string (exact): `The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.`
 
 - [ ] **Step 1: Write the failing tests** for `next(from:now:)`: `skipsAllDay`, `skipsDeclined`, `skipsBeyond24Hours`, `keepsJustStarted` (−60 s is kept, −121 s is dropped), `choosesEarliest`, `emptyGivesNil`.
@@ -265,7 +265,7 @@
 ### Task 9: Widget
 
 **Files:**
-- Create: `Apps/UltimateLemmingsIOS/DeskClockWidget/DeskClockWidget.swift` (widget bundle, provider, view)
+- Create: `Apps/DeskClockWidget/DeskClockWidget.swift` (widget bundle, provider, view; shared with the Mac widget in Task 9b, so platform-specific families stay behind `#if os(iOS)`)
 - Create: `Apps/UltimateLemmingsIOS/DeskClockWidget/Info.plist`
 - Create: `Tools/DeskClock/add_widget_target.rb` (adds the extension target with `xcodeproj`, embeds it, links `LemmingsGameArt` and `LemmingsMobileCore`, and adds a build phase that runs `prune_artwork.py` into the extension's resources)
 - Modify: `Apps/UltimateLemmingsIOS/Info.plist` (URL scheme `ultimatelemmings`)
@@ -285,6 +285,32 @@
 - [ ] **Step 4:** Run the tests. Expected: PASS. Run `xcodebuild -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj -scheme UltimateLemmingsIOS -destination 'generic/platform=iOS Simulator' build`. Expected: BUILD SUCCEEDED, with `DeskClockWidget.appex` in the app's `PlugIns`. The pruned artwork in the appex is under 2 MB.
 - [ ] **Step 5:** Commit: `feat(desk-clock): add the Desk Clock widget`.
 
+### Task 9b: Mac widget
+
+**Files:**
+- Create: `Apps/DeskClockWidget/Mac/project.yml` (xcodegen spec: one macOS app-extension target `DeskClockMacWidget`, sources `Apps/DeskClockWidget/DeskClockWidget.swift`, local package products `LemmingsGameArt` and `LemmingsMobileCore`, `MACOSX_DEPLOYMENT_TARGET` 12.3, `ARCHS` arm64 x86_64)
+- Create: `Apps/DeskClockWidget/Mac/Info.plist` (`NSExtensionPointIdentifier` `com.apple.widgetkit-extension`, `NSCalendarsUsageDescription`, `NSCalendarsFullAccessUsageDescription` with the Task 5 string)
+- Create: `Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements` (`com.apple.security.app-sandbox`, `com.apple.security.personal-information.calendars`)
+- Create: `Scripts/build-desk-clock-mac-widget.sh` (runs xcodegen into `.build/desk-clock-mac-widget`, runs `xcodebuild` for the universal Release appex, and copies it to a path given as the first argument)
+- Modify: `Scripts/build-local-app.sh` (after the app bundle is assembled, run the script into `Contents/PlugIns`, then sign the appex ad hoc with its entitlements before the app's `codesign`)
+- Modify: `Scripts/build-and-notarise.sh:309` (sign `Contents/PlugIns/DeskClockMacWidget.appex` first, with its entitlements, `--options runtime --timestamp`, then sign the app without `--deep`, then `codesign --verify --deep --strict`)
+- Modify: `Scripts/build-game-center-snapshot.sh` (the same appex step, so local Game Center builds carry the widget)
+- Modify: `Resources/Info.plist` (`NSCalendarsUsageDescription` and `NSCalendarsFullAccessUsageDescription` for the menu request)
+- Modify: `Sources/LemmingsLocal/main.swift` (one menu item, `Show Next Event in Desk Clock Widget…`, in the application menu, that calls `EventKitDeskClockSource.requestAccess()` and shows the result with a check mark when granted)
+- Test: `Tests/LemmingsMobileCoreTests/DeskClockWidgetTimelineTests.swift` (already covers the shared timeline)
+
+**Interfaces:**
+- Consumes: `DeskClockTimeline`, `DeskClockSimulation.still`, `GameDeskClockArt.draw`, `EventKitDeskClockSource` (Tasks 3, 5, 6, 9).
+- Produces: `DeskClockMacWidget.appex` with bundle ID `<Mac app bundle id>.DeskClockWidget`.
+- Families on macOS: `.systemSmall`, `.systemMedium`, `.systemLarge`. Use `containerBackground(for: .widget)` on macOS 14 and later. A tap opens the Mac app at its normal start.
+- The appex bundles the pruned artwork from `Tools/DeskClock/prune_artwork.py` in its `Resources`.
+
+- [ ] **Step 1:** Write `Scripts/build-desk-clock-mac-widget.sh` and the xcodegen files. Run it into a temporary folder. Expected: `DeskClockMacWidget.appex` exists, `lipo -archs` on its binary prints `x86_64 arm64`, and the pruned artwork is under 2 MB.
+- [ ] **Step 2:** Add the appex step to `build-local-app.sh` and `build-game-center-snapshot.sh`. Run `LEMMINGS_ARCHITECTURES=$(uname -m) zsh Scripts/build-local-app.sh`. Expected: `codesign -d --entitlements :- "<app>/Contents/PlugIns/DeskClockMacWidget.appex"` shows `app-sandbox` and `personal-information.calendars`, and `pluginkit -m -i <bundle id>.DeskClockWidget` lists the extension after the app is opened once (a background `open -g`).
+- [ ] **Step 3:** Change the signing order in `build-and-notarise.sh`. Do not run a notarisation here. Check the script with `zsh -n Scripts/build-and-notarise.sh`. Expected: no output.
+- [ ] **Step 4:** Add the menu item and the Info.plist strings. Run `swift build` and `LEMMINGS_TEST_AUDIO=muted swift test --filter LemmingsLocalTests`. Expected: PASS.
+- [ ] **Step 5:** Commit: `feat(desk-clock): add the Desk Clock widget on Mac`.
+
 ### Task 10: Release record
 
 **Files:**
@@ -294,6 +320,6 @@
 
 - [ ] **Step 1:** Run `LEMMINGS_TEST_AUDIO=muted swift test`. Expected: no new failures against `main`. Record any existing failures by name.
 - [ ] **Step 2:** Update the documents. Lint them with `python3 ~/.claude/skills/ste-writing/ste-lint.py Documentation/DeskClock.md`.
-- [ ] **Step 3:** List the open device checks in `DeskClock.md`: real fold events, calendar access in the widget extension, StandBy on a device, OLED shift on a device, and widget renders in the system gallery (a foreground check that needs a separate request from the owner).
+- [ ] **Step 3:** List the open device checks in `DeskClock.md`: Mac widget calendar access after the menu request, the Mac widget gallery and a notarised Mac build with the widget, real fold events, calendar access in the widget extension, StandBy on a device, OLED shift on a device, and widget renders in the system gallery (a foreground check that needs a separate request from the owner).
 - [ ] **Step 3a:** Add Desk Clock rows to the Duo coverage matrix for the release, one for each pose in Task 7, with their audit evidence.
 - [ ] **Step 4:** Commit: `docs(desk-clock): record verification and open device checks`.
