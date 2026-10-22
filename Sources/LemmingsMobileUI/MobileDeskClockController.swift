@@ -1,4 +1,5 @@
 #if os(iOS)
+import GameController
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -42,6 +43,9 @@ enum DeskClockReason: Sendable {
     private var batteryMonitoring: Bool?
     private var observers = MobileNotificationObserverBag()
     private(set) var isShown = false
+    /// The library pauses its own input under the clock, so the clock reads the controller itself.
+    private(set) lazy var input = makeInput()
+    private var inputLink: CADisplayLink?
 
     init(reason: DeskClockReason,
          events: any DeskClockEventSource = EventKitDeskClockSource(),
@@ -106,6 +110,40 @@ enum DeskClockReason: Sendable {
         return true
     }
 
+    // MARK: - Keyboard and controller
+
+    override var canBecomeFirstResponder: Bool { isShown }
+
+    /// A hardware Escape closes the clock, as Close does.
+    override var keyCommands: [UIKeyCommand]? {
+        [UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(escapePressed))]
+    }
+
+    @objc func escapePressed() { close() }
+
+    /// B and Menu close the clock, as Close does. A acts as a touch.
+    private func makeInput() -> MobileInputAdapter {
+        let adapter = MobileInputAdapter()
+        let defaults = defaults
+        adapter.settings = { MobileSettings.current(from: defaults).classic }
+        adapter.isMenu = { true }
+        adapter.isActive = { [weak self] in
+            self?.isShown == true && self?.view.window?.windowScene?.activationState == .foregroundActive
+        }
+        adapter.onMenuBack = { [weak self] in self?.close() }
+        adapter.onMenuActivate = { [weak self] in
+            guard let self else { return }
+            if self.reason.isAutomatic { self.close() } else if !self.closeAlwaysShown { self.revealCloseControl() }
+        }
+        return adapter
+    }
+
+    /// The link runs only while a controller is connected.
+    private func updateInputLink() {
+        inputLink?.isPaused = !isShown || GCController.controllers().isEmpty
+        if inputLink?.isPaused == true { input.reset() }
+    }
+
     // MARK: - Show and close
 
     /// Adds the clock full screen over `parent`, which stays underneath.
@@ -124,6 +162,9 @@ enum DeskClockReason: Sendable {
         guard isShown else { return }
         isShown = false
         ticker?.invalidate(); ticker = nil
+        inputLink?.invalidate(); inputLink = nil
+        input.reset()
+        resignFirstResponder()
         hideTask?.cancel(); hideTask = nil
         accessTask?.cancel(); accessTask = nil
         eventReader.cancel()
@@ -181,6 +222,22 @@ enum DeskClockReason: Sendable {
         RunLoop.main.add(ticker, forMode: .common)
         self.ticker = ticker
         clockView.isRunning = true
+        for name in [Notification.Name.GCControllerDidConnect, .GCControllerDidDisconnect] {
+            observers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.updateInputLink() }
+            })
+        }
+        let target = MobileDisplayLinkTarget { [weak self] link in
+            guard let self else { return }
+            self.input.poll(context: ObjectIdentifier(self), at: link.timestamp)
+        }
+        let link = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+        link.preferredFramesPerSecond = 30
+        link.add(to: .main, forMode: .common)
+        inputLink = link
+        input.reset()
+        updateInputLink()
+        becomeFirstResponder()
         requestCalendarIfAllowed()
         refreshEvent()
     }

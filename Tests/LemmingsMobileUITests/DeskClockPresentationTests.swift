@@ -4,6 +4,7 @@ import Testing
 import UIKit
 import LemmingsGameArt
 import LemmingsMobileCore
+import NxlvKit
 @testable import LemmingsMobileUI
 
 /// Records every access request so a test can prove that automatic openings never ask.
@@ -166,6 +167,42 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         #expect(clock.accessibilityPerformEscape())
         #expect(clock.parent == nil && fixture.resumes == 1 && fixture.idleTimer.last == false)
         #expect(!clock.accessibilityPerformEscape())
+    }
+
+    @Test func backAndEscapeCloseTheClock() async {
+        // Controller B and Menu close a menu, widget or automatic clock, as Close does.
+        for (reason, action) in [(DeskClockReason.menu, ControllerBindings.Action.cancel), (.widget, .pause),
+                                 (.stacked, .cancel), (.closedCharging, .pause)] {
+            let fixture = DeskClockFixture()
+            fixture.battery = .charging
+            let clock = await fixture.open(reason)
+            #expect(fixture.idleTimer.last == true, "\(reason)")
+            clock.input.perform(action)
+            #expect(clock.parent == nil && !clock.isShown, "\(reason)")
+            #expect(fixture.idleTimer.last == false && fixture.resumes == 1, "\(reason)")
+        }
+
+        // A hardware Escape does the same.
+        let fixture = DeskClockFixture()
+        fixture.battery = .full
+        let clock = await fixture.open(.menu)
+        #expect(clock.canBecomeFirstResponder)
+        let escape = clock.keyCommands?.first { $0.input == UIKeyCommand.inputEscape && $0.modifierFlags.isEmpty }
+        #expect(escape != nil)
+        if let action = escape?.action { clock.perform(action) }
+        #expect(clock.parent == nil && fixture.idleTimer.last == false && fixture.resumes == 1)
+        #expect(!clock.canBecomeFirstResponder)
+
+        // A acts as a touch: it shows Close on a menu clock and closes an automatic one.
+        let menuFixture = DeskClockFixture()
+        let menu = await menuFixture.open(.menu)
+        menu.input.perform(.assign)
+        #expect(menu.isShown && !menu.closeButton.isHidden)
+        menu.close()
+        let automaticFixture = DeskClockFixture()
+        let automatic = await automaticFixture.open(.closedCharging)
+        automatic.input.perform(.assign)
+        #expect(!automatic.isShown && automaticFixture.resumes == 1)
     }
 
     @Test func voiceOverKeepsCloseInEveryPose() async {
