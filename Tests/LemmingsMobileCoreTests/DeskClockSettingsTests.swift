@@ -41,3 +41,11 @@ import Testing
         #expect(!decoded.deskClock.openWhenCharging)
     }
 }
+
+@Suite struct DeskClockEventsRowTests {
+    @Test func deniedAccessOpensSettings() {
+        #expect(DeskClockEventsRowAction(access: .denied) == .openSettings)
+        #expect(DeskClockEventsRowAction(access: .granted) == .toggle)
+        #expect(DeskClockEventsRowAction(access: .notDetermined) == .toggle)
+    }
+}

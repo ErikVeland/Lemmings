@@ -142,16 +142,6 @@ extension MobileLibraryViewController {
             game?.session.hotSeatGhosts?.hidden = !arcadeStore.hotSeatGhostsVisible
             rebuild(); return true
         }
-        #if os(iOS)
-        if id == "deskClockCalendar" {
-            if EventKitDeskClockSource().authorization() == .notDetermined {
-                presentDeskClock(reason: .menu)
-                return true
-            }
-            if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
-            return true
-        }
-        #endif
         var settings = mobileSettings
         if id == "mappingReset" { settings.classic.controllerMappings = [:] }
         else if id.hasPrefix("mapping."), let physical = ControllerBindings.Button(rawValue: String(id.dropFirst(8))) {
@@ -223,7 +213,7 @@ extension MobileLibraryViewController {
             case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
             case "deskClockEvents":
                 #if os(iOS)
-                if !settings.deskClock.showNextEvent, EventKitDeskClockSource.authorization() == .denied {
+                if DeskClockEventsRowAction(access: EventKitDeskClockSource.authorization()) == .openSettings {
                     if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                     return true
                 }

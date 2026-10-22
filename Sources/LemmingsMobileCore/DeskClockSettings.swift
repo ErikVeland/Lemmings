@@ -27,3 +27,13 @@ public struct DeskClockSettings: Codable, Equatable, Sendable {
                   calendarRequested: try fields.decodeIfPresent(Bool.self, forKey: .calendarRequested) ?? false)
     }
 }
+
+/// What a tap on the "Show next event" row does. Without calendar access the row shows off and opens
+/// iOS Settings. The saved choice stays, so the events return when the player grants access again.
+public enum DeskClockEventsRowAction: Equatable, Sendable {
+    case toggle, openSettings
+
+    public init(access: DeskClockCalendarAccess) {
+        self = access == .denied ? .openSettings : .toggle
+    }
+}
