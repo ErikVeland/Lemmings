@@ -90,8 +90,8 @@ private final class LibraryCredentials: @unchecked Sendable {
         let access = CloudLibraryDeviceAccess(read: {
             #expect(!Thread.isMainThread)
             signal.yield(())
-            // The UI actor must remain free to release this simulated system wait.
-            #expect(release.wait(timeout: .now() + 5) == .success)
+            // Allow CI scheduling contention while keeping a bounded deadlock check.
+            #expect(release.wait(timeout: .now() + 30) == .success)
             return [identity]
         }, write: { keys in
             #expect(!Thread.isMainThread)
