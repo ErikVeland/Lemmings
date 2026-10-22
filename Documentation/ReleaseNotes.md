@@ -3,9 +3,9 @@
 The latest Mac release is [2.1.2 build 96](ReleaseNotes-2.1.2-build96.md).
 Its [release record](ReleaseReadiness/2.1.2-build96/README.md) covers the signed
 packages, five direct updates, source identity and validation limits.
-iOS 2.1.2 build 19 is Testing in the existing group. TV build 9 was accepted
-and is Processing. Its uploaded font banks are verified, and the local font
-repair is confirmed. TV Private Beta assignment awaits processing.
+iOS 2.1.2 build 19 is Testing in the existing group. TV build 9 is Waiting
+for Review in TV Private Beta with saved notes and automatic notifications.
+Its uploaded font banks are verified, and the local font repair is confirmed.
 Source and feed versions, retained acceptance evidence and completion limits
 are recorded in [release scope](ReleaseScope.md) and the
 [shared 2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md).
