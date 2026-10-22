@@ -24,9 +24,11 @@ private final class SilentDeskClockEvents: DeskClockEventSource, @unchecked Send
     var clockTime: TimeInterval = 1_000
     var idleTimer: [Bool] = []
     var presented: [DeskClockReason] = []
+    var voiceOver = false
     lazy var entry = DeskClockAutomaticEntry(foldable: { _ in true }, regions: { [unowned self] _ in self.regions },
                                              charging: { [unowned self] in self.charging },
-                                             uptime: { [unowned self] in self.clockTime })
+                                             uptime: { [unowned self] in self.clockTime },
+                                             voiceOverRunning: { [unowned self] in self.voiceOver })
 
     static let stacked = [MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 318, width: 465, height: 14))]
     static let book = [MobileReservedRegion(kind: .division, frame: .init(x: 226, y: 0, width: 14, height: 650))]
@@ -125,6 +127,46 @@ private final class SilentDeskClockEvents: DeskClockEventSource, @unchecked Send
         host.presentDeskClock(reason: .menu)
         host.check()
         #expect(host.deskClock?.reason == .menu)
+        host.dismissDeskClock()
+    }
+
+    @Test func onlyHomeOpensAutomatically() {
+        #expect(DeskClockAutomaticEntry.screen(game: nil, home: true, textEditing: false, blocked: false) == .menu)
+        #expect(DeskClockAutomaticEntry.screen(game: nil, home: false, textEditing: false, blocked: false) == .modal)
+        #expect(DeskClockAutomaticEntry.screen(game: .pause, home: true, textEditing: false, blocked: false) == .pause)
+        #expect(DeskClockAutomaticEntry.screen(game: nil, home: true, textEditing: false, blocked: true) == .modal)
+        let host = host()
+        host.regions = WiringHost.stacked
+        host.clockTime += 600
+        host.deskClockScreen = DeskClockAutomaticEntry.screen(game: nil, home: false, textEditing: false, blocked: false)
+        host.check()
+        #expect(host.presented.isEmpty)
+    }
+
+    @Test func activeTextFieldNeverOpens() {
+        #expect(DeskClockAutomaticEntry.screen(game: nil, home: true, textEditing: true, blocked: false) == .modal)
+        let host = host()
+        host.regions = WiringHost.stacked
+        host.clockTime += 600
+        host.deskClockScreen = DeskClockAutomaticEntry.screen(game: nil, home: true, textEditing: true, blocked: false)
+        host.check()
+        #expect(host.presented.isEmpty)
+    }
+
+    @Test func voiceOverNeverOpensButKeepsAShownClock() {
+        let host = host()
+        host.regions = WiringHost.stacked
+        host.clockTime += 600
+        host.voiceOver = true
+        host.check()
+        #expect(host.presented.isEmpty)
+        // A clock that opened before VoiceOver started stays while its pose holds.
+        host.voiceOver = false
+        host.check()
+        #expect(host.presented == [.stacked])
+        host.voiceOver = true
+        host.check()
+        #expect(host.deskClock?.isShown == true)
         host.dismissDeskClock()
     }
 }

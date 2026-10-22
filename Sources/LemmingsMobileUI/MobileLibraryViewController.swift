@@ -1541,12 +1541,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
 #if os(iOS)
 extension MobileLibraryViewController: DeskClockHost {
-    /// Home and every menu page count as the menu. A level, a sheet or a loading level blocks the clock.
+    /// Only Home counts as the menu. A level, a sheet, a loading level or an active text field blocks the clock.
     var deskClockScreen: DeskClockScreen {
-        if let game { return game.deskClockScreen }
-        if presentedViewController != nil || preparingLevel || learningPreparing || shortGamesPreparing
-            || searchField.isFirstResponder { return .modal }
-        return .menu
+        DeskClockAutomaticEntry.screen(game: game?.deskClockScreen, home: route == .home,
+            textEditing: searchField.isFirstResponder || mobileInsights.field?.isFirstResponder == true
+                || familiarNames.field?.isFirstResponder == true,
+            blocked: presentedViewController != nil || preparingLevel || learningPreparing || shortGamesPreparing)
     }
     var deskClockSettings: DeskClockSettings { mobileSettings.deskClock }
     var deskClockRegionView: UIView { view }
