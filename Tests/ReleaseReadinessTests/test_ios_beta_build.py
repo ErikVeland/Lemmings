@@ -78,7 +78,8 @@ class IOSBetaBuildTests(unittest.TestCase):
 
     def validate(self, package, root, profile, record, device):
         with patch.object(BUILD, "run"), patch.object(BUILD, "uuids", return_value=record["symbolUUIDs"]), \
-                patch.object(BUILD, "verify"), patch.object(BUILD, "signing_capabilities", return_value=profile):
+                patch.object(BUILD, "verify"), patch.object(BUILD, "verify_menu_fonts", return_value={"manifestSHA256": "font"}), \
+                patch.object(BUILD, "signing_capabilities", return_value=profile):
             return BUILD.validate_export(package, root, record, device, "debugging")
 
     def test_export_preserves_executable_permissions_and_checks_device(self):
@@ -105,3 +106,12 @@ class IOSBetaBuildTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "unsafe file path"):
                 BUILD.validate_export(package, root, {}, None, "debugging")
             self.assertFalse((root.parent / "outside").exists())
+
+    def test_export_rejects_missing_menu_fonts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            package, profile, record = self.make_package(root, ["ipad"])
+            with patch.object(BUILD, "run"), patch.object(BUILD, "uuids", return_value=record["symbolUUIDs"]), \
+                    patch.object(BUILD, "verify"), patch.object(BUILD, "signing_capabilities", return_value=profile):
+                with self.assertRaisesRegex(ValueError, "Missing or invalid menu fonts"):
+                    BUILD.validate_export(package, root, record, "ipad", "debugging")

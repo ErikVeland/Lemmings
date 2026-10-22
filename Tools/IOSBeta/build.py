@@ -12,6 +12,7 @@ import sys
 import zipfile
 
 from content import digest, stage, verify
+from artwork import verify_menu_fonts
 
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = ROOT / "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj"
@@ -111,6 +112,9 @@ def validate_export(package, output, archive_record, device_id, export_method):
     if uuids(app / info["CFBundleExecutable"]) != archive_record["symbolUUIDs"]:
         raise ValueError("The exported executable no longer matches its crash symbols.")
     verify(app / "BetaGameData")
+    menu_fonts = verify_menu_fonts(app / "MacArtwork/lemmings")
+    if archive_record.get("menuFonts") is not None and menu_fonts != archive_record["menuFonts"]:
+        raise ValueError("The exported menu fonts differ from the archive.")
     if digest(app / "BetaGameData/manifest.json") != archive_record["contentManifestSHA256"]:
         raise ValueError("The exported game content differs from the archive.")
     profile = signing_capabilities(app, archive_record["bundleID"])
@@ -123,7 +127,7 @@ def validate_export(package, output, archive_record, device_id, export_method):
             "exportExecutableSHA256": digest(app / info["CFBundleExecutable"]),
             "requestedDeviceIncluded": included,
             "profileExpiresUTC": profile["ExpirationDate"].isoformat() + "Z",
-            "exportSignatureVerified": True}
+            "exportSignatureVerified": True, "exportMenuFonts": menu_fonts}
 
 
 def validate_privacy(privacy):
@@ -168,6 +172,7 @@ def validate_archive(archive, build, bundle_id, signed):
         raise ValueError("The local settings and progress privacy reason is missing.")
     validate_privacy(privacy)
     content = verify(app / "BetaGameData")
+    menu_fonts = verify_menu_fonts(app / "MacArtwork/lemmings")
     binary = app / info["CFBundleExecutable"]
     symbols = archive / "dSYMs/UltimateLemmingsIOS.app.dSYM"
     binary_uuids = uuids(binary)
@@ -182,7 +187,7 @@ def validate_archive(archive, build, bundle_id, signed):
         "app": str(app), "bundleID": bundle_id, "version": marketing_version(), "build": build,
         "executableSHA256": digest(binary), "symbolUUIDs": binary_uuids,
         "contentManifestSHA256": digest(app / "BetaGameData/manifest.json"),
-        "contentFiles": len(content["files"]), "archiveSigned": signed,
+        "contentFiles": len(content["files"]), "archiveSigned": signed, "menuFonts": menu_fonts,
     }
 
 

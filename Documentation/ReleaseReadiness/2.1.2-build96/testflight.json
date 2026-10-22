@@ -61,10 +61,11 @@
     "uploaded": false,
     "musicScope": "full",
     "appID": "6810873426",
-    "status": "upload blocked by Xcode account credentials",
+    "status": "upload held during local TV font repair",
     "group": "TV Private Beta",
     "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
-    "blocker": "Xcode reports missing Xcode-Username for its stored account and requires App Store Connect access for team 54WU29TRTY. Existing approved account: wigwammultimedia@mac.com; sign-in refresh requested."
+    "fontBanksVerified": true,
+    "deliveryHold": "Local developer-installed build 9 omitted artwork through a dangling input. The separate signed release archive contains complete fonts. Upload stopped before completion pending local repair and visibility confirmation."
   },
   "exportRetention": "Local export hashes identify validated IPAs. Redundant TV IPA and iOS archive product were retired for temporary storage; signed TV archive, all dSYMs and verification receipts remain. Upload re-exports the same signed archive."
 }

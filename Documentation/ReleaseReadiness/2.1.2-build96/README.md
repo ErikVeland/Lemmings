@@ -12,7 +12,7 @@ stories and Duo input/layout recovery.
 | --- | --- | --- |
 | macOS | 96 | Published; full and slim universal downloads and signed update feed verified. |
 | iPhone/iPad/Duo | 19 | Testing in the existing iOS Private Beta group. Notes saved; automatic notifications enabled. |
-| Apple TV | 9 | Signed archive verified; upload blocked by Xcode account credentials. Account sign-in refresh requested. |
+| Apple TV | 9 | Archive fonts verified; upload held while a locally installed build 9 with missing artwork is repaired. |
 
 Both Mac archives support Apple silicon and Intel on macOS 12.3 or later.
 Developer ID signatures, Apple notarisation, stapling and Gatekeeper passed after
@@ -28,8 +28,10 @@ HTTPS. The public signed appcast matches remote main. See the
 [signature](signature-verification.json) receipts.
 
 [Mobile delivery receipts](testflight.json) record the build IDs, symbol UUIDs,
-export hashes and current delivery boundaries. Safari sign-in and Xcode upload
-credentials are separate; the TV archive is ready, but its upload has not succeeded.
+export hashes and current delivery boundaries. Xcode credentials were restored.
+TV upload was stopped before completion after a font report. The affected local
+Xcode product omitted its artwork through a dangling build input. The separate
+release archive has complete font banks. See the [font repair](tv-font-repair.json).
 
 ## Source and verification
 
