@@ -12,7 +12,7 @@ stories and Duo input/layout recovery.
 | --- | --- | --- |
 | macOS | 96 | Published; full and slim universal downloads and signed update feed verified. |
 | iPhone/iPad/Duo | 19 | Testing in the existing iOS Private Beta group. Notes saved; automatic notifications enabled. |
-| Apple TV | 9 | Waiting for Review in TV Private Beta. Notes saved; automatic notifications enabled. Uploaded fonts verified; local repair confirmed. |
+| Apple TV | 9 | Testing in TV Private Beta, confirmed 23 October 2026. Notes saved; automatic notifications enabled. Uploaded fonts verified; local repair confirmed. |
 
 Both Mac archives support Apple silicon and Intel on macOS 12.3 or later.
 Developer ID signatures, Apple notarisation, stapling and Gatekeeper passed after
@@ -35,11 +35,12 @@ owner confirmed restored fonts in the main menu and gameplay. Missing fonts now
 stop packaging and archive/export checks; nine focused tests pass. See the
 [font repair](tv-font-repair.json).
 
-The TV upload succeeded after a fresh Xcode sign-in. App Store Connect lists
-2.1.2 (9) as Waiting for Review in TV Private Beta. The test notes are saved and
-automatic tester notifications are enabled. The exact uploaded IPA contains both
-complete font banks, matching the retained archive. All submission actions are
-complete; Apple Beta Review remains the delivery gate.
+The TV upload succeeded after a fresh Xcode sign-in. On 23 October 2026,
+App Store Connect confirmed 2.1.2 (9) is Testing in TV Private Beta, with 26
+testers assigned. The saved test notes match the prepared copy and automatic
+tester notifications are enabled. The exact uploaded IPA contains both complete
+font banks, matching the retained archive. Apple Beta Review and coordinated
+2.1.2 delivery are complete. The acceptance limits below remain open.
 
 ## Source and verification
 

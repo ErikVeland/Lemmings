@@ -2,10 +2,11 @@
 
 Mac 2.1.2 build 96 is published, with verified universal full/slim downloads,
 five signed direct updates and the live update feed. iOS 2.1.2 build 19 is
-Testing in the existing group. TV build 9 is Waiting for Review in TV Private
-Beta with saved notes and automatic notifications. Its uploaded font banks are
-verified, and the local font repair is confirmed. Apple Beta Review remains the
-delivery gate. All release archives use source `48282886`.
+Testing in the existing group. TV build 9 is Testing in TV Private Beta,
+confirmed 23 October 2026, with saved notes and automatic notifications.
+Its uploaded font banks are verified, and the local font repair is confirmed.
+Apple Beta Review and coordinated delivery are complete. All release archives
+use source `48282886`.
 See the [release record](ReleaseReadiness/2.1.2-build96/README.md) and
 [shared checklist](ReleaseReadiness/2.1.2Checklist.md).
 
