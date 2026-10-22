@@ -65,7 +65,8 @@ extension MobileLibraryViewController {
                                sharing: AnonymousTelemetry.shared.sharesCounts,
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
                                language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable,
-                               foldable: foldable, calendarDenied: calendarDenied)
+                               foldable: foldable, calendarDenied: calendarDenied,
+                               ghostsVisible: arcadeStore.hotSeatGhostsVisible)
         #if os(tvOS)
         page.televisionGrid = true
         if group == .controller {

@@ -33,7 +33,8 @@ public enum MobileSettingsArt {
                             sharing: Bool = false, sharingAvailable: Bool = false,
                             displayAvailable: Bool = false, inGame: Bool = false,
                             language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true,
-                            foldable: Bool = false, calendarDenied: Bool = false) -> GameFrontEnd.Page {
+                            foldable: Bool = false, calendarDenied: Bool = false,
+                            ghostsVisible: Bool = true) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
