@@ -25,6 +25,7 @@ public enum MobileSettingsArt {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
+        page.pairsRows = true
         return page
     }
 
@@ -36,7 +37,9 @@ public enum MobileSettingsArt {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
-            .init("setting." + id, title, enabled: enabled, selected: selected)
+            var action = Action("setting." + id, title, enabled: enabled, selected: selected)
+            action.toggleValue = selected
+            return action
         }
         func choice(_ id: String, _ title: String, _ value: String, enabled: Bool = true) -> Action {
             .init("setting." + id, title + ": " + value, enabled: enabled)
@@ -46,6 +49,8 @@ public enum MobileSettingsArt {
         case .gameplay:
             rows = [choice("language", L10n.text("Language"), language.title),
                     choice("preset", L10n.text("Presentation"), c.experiencePreset.title),
+                    toggle("inspect", L10n.text("Inspect lemmings while paused"), c.inspectWhilePaused),
+                    toggle("hotSeatGhosts", L10n.text("Hot Seat ghosts"), ghostsVisible),
                     toggle("planning", L10n.text("Pause to assign"), settings.pauseToAssign),
                     choice("speed", L10n.text("Fast speed"), "\(settings.fastSpeed)X"),
                     toggle("variableSpeed", L10n.text("Variable speed"), c.variableSpeedEnabled),
@@ -54,6 +59,7 @@ public enum MobileSettingsArt {
                     toggle("approaching", L10n.text("Target approaching lemmings"), c.favorApproachingLemmings),
                     toggle("bombBlockers", L10n.text("Target blockers for bombs"), c.favorBombBlockers),
                     toggle("builders", L10n.text("Target current builders"), c.favorBuilders),
+                    choice("cursor", L10n.text("Cursor style"), c.gameplayCursorStyle.title),
                     choice("skillIcon", L10n.text("Skill icon size"), c.skillCursorIconSize.title),
                     toggle("reticule", L10n.text("Reticule count"), c.showReticleCount),
                     choice("selection", L10n.text("Selection effect"), c.lemmingSelectionStyle.title),
@@ -111,25 +117,45 @@ public enum MobileSettingsArt {
                     .init("playInsights", L10n.text("Play Insights"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
-        return .init(title: group.title, rows: rows,
-                     footer: [.init("settings", L10n.text("Back"))])
+        var page = GameFrontEnd.Page(title: group.title, rows: rows,
+                                     footer: [.init("settings", L10n.text("Back"))])
+        page.pairsRows = true
+        switch group {
+        case .gameplay:
+            page.rowHeadings = ["setting.language": L10n.text("Presentation"),
+                "setting.cursor": L10n.text("Pointer and selection"),
+                "setting.inspect": L10n.text("Controls and assistance"),
+                "setting.approaching": L10n.text("Skill targeting"),
+                "setting.levelAccess": L10n.text("Level access")]
+        case .graphics:
+            page.rowHeadings = ["setting.machine": L10n.text("Machine preset"), "setting.artwork": L10n.text("Classic artwork")]
+        case .audio:
+            page.rowHeadings = ["setting.music": L10n.text("Music"), "setting.soundSource": L10n.text("Sound effects"),
+                "setting.menuMusic": L10n.text("Playback"), "setting.soundtrackChoice": L10n.text("Soundtrack")]
+        default: break
+        }
+        return page
     }
 
     /**
      * Each installed language remains selectable independently of system language support.
      */
     public static func languages(selection: InterfaceLanguage) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Language"),
-              rows: L10n.languageOptions.map { .init("language." + $0.rawValue, $0.title, selected: $0 == selection) },
-              footer: [.init("language.cancel", L10n.text("Back"), backNavigation: true),
-                       .init("language.apply", L10n.text("Apply"), primary: true)])
+        var page = GameFrontEnd.Page(title: L10n.text("Language"),
+            rows: L10n.languageOptions.map { .init("language." + $0.rawValue, $0.title, selected: $0 == selection) },
+            footer: [.init("language.cancel", L10n.text("Back"), backNavigation: true),
+                     .init("language.apply", L10n.text("Apply"), primary: true)])
+        page.pairsRows = true
+        return page
     }
 
     public static func controllerMappings(_ settings: MobileSettings, television: Bool = false) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Remap buttons"), rows: ControllerBindings.Button.allCases.map { button in
+        var page = GameFrontEnd.Page(title: L10n.text("Remap buttons"), rows: ControllerBindings.Button.allCases.map { button in
             let role = settings.classic.controllerMappings[button.rawValue].flatMap(ControllerBindings.Button.init(rawValue:)) ?? button
             return .init("mapping." + button.rawValue, buttonTitle(button, television: television) + ": " + roleTitle(role, television: television))
         }, footer: [.init("mappingReset", L10n.text("Reset")), .init("settingsGroup.controller", L10n.text("Back"))])
+        page.pairsRows = true
+        return page
     }
 
     private static func buttonTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {

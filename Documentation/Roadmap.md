@@ -1,10 +1,11 @@
 # Ultimate Lemmings roadmap through 3.0
 
-Updated 21 October 2026.
+Updated 22 October 2026.
 
-The owner has prioritised the [2.4 Duo launch plan](2.4Roadmap.md) for existing
-TestFlight groups by Friday, 23 October. Device work now proceeds ahead of full
-2.2/2.3 closure. Duo acceptance uses the Simulator until hardware is available.
+The owner has prioritised the [2.2 Duo launch plan](2.2Roadmap.md) for existing
+TestFlight groups by Friday, 23 October. On 22 October the owner moved the Duo
+launch from 2.4 to 2.2. Device work now proceeds ahead of the first-play (2.3)
+and campaign (2.4) milestones. Duo acceptance uses the Simulator until hardware is available.
 
 Ultimate Lemmings has become an edition with its own character, judgement and
 generosity. The next stage is to make that experience dependable from a player's
@@ -94,9 +95,9 @@ not prove impossibility.
 | Version | Player outcome | Main dependency |
 | --- | --- | --- |
 | 2.1.2 | Progress, Resume and recovery behave consistently across Apple frontends. | Current shared checklist and final package acceptance. |
-| 2.2 | Newcomers find their footing and returning players resume confidently. | Human observations on a stable candidate. |
-| 2.3 | Native campaigns lead reliably through their transitions and endings. | Chronicles routes and source-behaviour repairs. |
-| 2.4 | Each supported Apple device feels deliberately made for its controls. | Stable shared flows and physical acceptance. |
+| 2.2 | Each supported Apple device feels deliberately made for its controls. | Stable shared flows and physical acceptance. |
+| 2.3 | Newcomers find their footing and returning players resume confidently. | Human observations on a stable candidate. |
+| 2.4 | Native campaigns lead reliably through their transitions and endings. | Chronicles routes and source-behaviour repairs. |
 | 2.5 | Players can revisit selected attempts and discover more of their stories. | Reliable identity, retention and recovery. |
 | 2.6 | The edition has a maintainable, credited and clearly bounded content library. | Continuing content closure, rights work and reproducible handover. |
 | 2.9 | One complete candidate meets the proposed 3.0 acceptance criteria. | All required player, content and platform gates. |
@@ -118,7 +119,23 @@ restored checkpoints across Classic, L2 and L3. Verify installed upgrades,
 package signatures and platform delivery. Keep physical input, live cloud and
 other unresolved checks explicit. Do not treat source preparation as publication.
 
-### 2.2 First play and the next day
+### 2.2 Comfort on every supported Apple device
+
+Carry the same control, help, turn ownership and recovery rules onto Mac, iPhone,
+iPad, Duo and Apple TV. Adapt input and layout to each device through shared controls.
+
+Verify complete physical journeys: start, select, assign, pause, retry, continue,
+hand over, interrupt, restore and finish. Cover touch crowds, controllers, remotes,
+VoiceOver, text scaling, translated layouts, reduced effects and silent use.
+Check live sync, account changes, TV cache eviction and sustained performance.
+
+**Complete when:** every advertised platform and input has a recorded end-to-end
+acceptance result on the actual package. Check Classic/L2/L3 parity explicitly and
+record engine-specific limits. TestFlight uploads, Simulator runs and SDK builds
+remain distinct from physical acceptance. Public store delivery requires its own
+package, rights, privacy and review gates.
+
+### 2.3 First play and the next day
 
 Observe newcomers, returning players and veterans through the first half-hour
 and a next-day return, using the [existing playtest protocol](BetaTesting.md#newcomer-and-veteran-playtests).
@@ -135,7 +152,7 @@ Record confusion, voluntary retry and unwanted spoilers. Repair recurring barrie
 and repeat affected tasks. Review important translated instructions with humans.
 Observe equivalent basic actions in L2/L3 without claiming a sequel learning journey.
 
-### 2.3 Native campaigns from entrance to ending
+### 2.4 Native campaigns from entrance to ending
 
 Preserve accepted Classic and Tribes routes. Resolve the four Chronicles level
 gaps and failed carried schedules with behaviour supported by source evidence.
@@ -150,22 +167,6 @@ required carried campaigns pass, and advertised native rules and campaign media
 have evidence for the candidate. Preserve Classic's 352 routes and L2's 120 routes,
 70 carry-over variants and 12 chains. Change Beta classifications only when their
 actual completion criteria pass. Replayed routes alone do not establish source fidelity.
-
-### 2.4 Comfort on every supported Apple device
-
-Carry the same control, help, turn ownership and recovery rules onto Mac, iPhone,
-iPad, Duo and Apple TV. Adapt input and layout to each device through shared controls.
-
-Verify complete physical journeys: start, select, assign, pause, retry, continue,
-hand over, interrupt, restore and finish. Cover touch crowds, controllers, remotes,
-VoiceOver, text scaling, translated layouts, reduced effects and silent use.
-Check live sync, account changes, TV cache eviction and sustained performance.
-
-**Complete when:** every advertised platform and input has a recorded end-to-end
-acceptance result on the actual package. Check Classic/L2/L3 parity explicitly and
-record engine-specific limits. TestFlight uploads, Simulator runs and SDK builds
-remain distinct from physical acceptance. Public store delivery requires its own
-package, rights, privacy and review gates.
 
 ### 2.5 Attempts worth revisiting
 

@@ -135,6 +135,7 @@ public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {
         case .accessibility: L10n.text("Accessibility")
         case .deskClock: L10n.text("Desk Clock")
         case .privacy: L10n.text("Privacy")
+        case .deskClock: L10n.text("Desk Clock")
         }
     }
 }

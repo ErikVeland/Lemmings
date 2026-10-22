@@ -28,6 +28,8 @@ public struct HotSeatGhostPlayback: Sendable {
     }
     private var tracks: [Track] = []
     public var count: Int { tracks.count }
+    /// A local display choice. Hidden ghosts keep their tracks and reappear at the current tick.
+    public var hidden = false
 
     public init(attempts: [HotSeatGhostAttempt], initial: ActionReplayState) {
         guard let hash = try? initial.hash() else { return }
@@ -42,6 +44,7 @@ public struct HotSeatGhostPlayback: Sendable {
     }
 
     public mutating func frames(at tick: Int) -> [Frame] {
+        guard !hidden else { return [] }
         var result: [Frame] = []
         for index in tracks.indices {
             guard !tracks[index].failed else { continue }

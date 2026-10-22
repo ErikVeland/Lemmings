@@ -89,6 +89,13 @@ environment and still needs device verification.
   Menu lettering must not depend on the selected level graphics.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
   into game artwork. AppKit can supply input and accessibility beneath game rendering.
+- Set reading text flush left in sentence case. The Macintosh character sets
+  include lowercase letters. This applies to About, Version history, Contributors,
+  What's new, hints, award and reward explanations, and controller help.
+  Separate paragraphs with a blank-line gap. Keep list items, such as control
+  help, close together. Pass whole paragraphs and let the page wrap them.
+  Titles, headings, action names and HUD text stay in capitals. The compact HUD
+  face has no lowercase, so text that falls back to it stays in capitals.
 - Show each outcome once. A filled star already communicates an earned goal.
 - Reserve bevels and green pressed fills for controls. Passive previews, counters,
   help, receipts and information panels use flat, neutral backgrounds. Show a
@@ -850,6 +857,24 @@ The shared artwork module compiles for iOS. Physical UIKit touch and VoiceOver
 still need device validation. The wider menu
 audit stops at a stale result inset assertion: it expects 16 points while the
 current result layout uses 20.
+
+## Tablet gameplay panel and settings grid
+
+Landscape iPad and an unfolded iPhone Duo use the Mac layout for Classic
+gameplay: the original panel at a whole 3× or 4× scale, with the status row
+above the playfield. A hinge across the screen keeps the panel below the hinge.
+A hinge down the screen keeps the divided touch deck, because the panel must
+not cross the hinge. Portrait and phones keep the touch deck. Lemmings 3 keeps
+its own panel. Lemmings 2 and NeoLemmix have no panel artwork on mobile and
+keep the touch deck.
+
+Wide settings, language and button-remap pages pair their rows. A lone last row
+spans both columns. Portrait phones keep one column. Apple TV keeps its paged grid.
+An unfolded Duo uses the tablet Home box.
+
+Hot Seat ghosts have one local switch on Mac, iPhone, iPad and Duo. The Hot Seat
+page and the pause menu show Ghosts on or Ghosts off. Hidden ghosts keep their
+recorded turns. Classic, Lemmings 2 and Lemmings 3 share the switch.
 
 ## Device menu layouts
 

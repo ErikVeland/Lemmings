@@ -5,8 +5,8 @@ import NxlvKit
 /// Bitmap layout preserves complete Tamil syllables and fixed Latin sizes.
 public enum GameTextLayout {
     public static func width(of text: String, face: GameMenuTypography.Face = .small, scale: Int = 1,
-                             font: ClassicMacUserInterface.Font? = nil) -> CGFloat {
-        let plain = GameMenuTypography.menuText(text)
+                             font: ClassicMacUserInterface.Font? = nil, preservesCase: Bool = false) -> CGFloat {
+        let plain = GameMenuTypography.menuText(text, preservesCase: preservesCase)
         if let font { return CGFloat(font.width(of: plain, scale: scale)) }
         let cellWidth = face == .large ? 16 : 12
         let cellHeight = face == .large ? 20 : 18
@@ -29,10 +29,13 @@ public enum GameTextLayout {
 
     /// Adds an ellipsis without cutting a syllable or ligature.
     public static func truncated(_ text: String, width: CGFloat, face: GameMenuTypography.Face = .small,
-                                 scale: Int = 1, font: ClassicMacUserInterface.Font? = nil) -> String {
+                                 scale: Int = 1, font: ClassicMacUserInterface.Font? = nil,
+                                 preservesCase: Bool = false) -> String {
         guard width > 0 else { return "" }
-        let plain = GameMenuTypography.menuText(text)
-        let measure: (String) -> CGFloat = { self.width(of: $0, face: face, scale: scale, font: font) }
+        let plain = GameMenuTypography.menuText(text, preservesCase: preservesCase)
+        let measure: (String) -> CGFloat = {
+            self.width(of: $0, face: face, scale: scale, font: font, preservesCase: preservesCase)
+        }
         guard measure(plain) > width else { return plain }
         var suffix = "..."
         while !suffix.isEmpty, measure(suffix) > width { suffix.removeLast() }
@@ -45,10 +48,11 @@ public enum GameTextLayout {
     }
 
     public static func lines(_ text: String, width: CGFloat, face: GameMenuTypography.Face = .small, scale: Int = 1,
-                             font: ClassicMacUserInterface.Font? = nil) -> [String] {
+                             font: ClassicMacUserInterface.Font? = nil, preservesCase: Bool = false) -> [String] {
         guard !text.isEmpty else { return [] }
-        return wrapped(BitmapTamilGlyphs.sequences(in: GameMenuTypography.menuText(text)), width: width,
-                       space: " ", text: { $0 }, measure: { self.width(of: $0, face: face, scale: scale, font: font) })
+        return wrapped(BitmapTamilGlyphs.sequences(in: GameMenuTypography.menuText(text, preservesCase: preservesCase)),
+                       width: width, space: " ", text: { $0 },
+                       measure: { self.width(of: $0, face: face, scale: scale, font: font, preservesCase: preservesCase) })
             .map { $0.joined() }
     }
 
@@ -119,15 +123,17 @@ public enum GameTextLayout {
     }
     public static func draw(_ text: String, in box: CGRect, typography: GameMenuTypography, face: GameMenuTypography.Face = .small,
                             scale: Int = 1, palette: GameMenuTypography.Palette = .blue,
-                            alignment: GameMenuTypography.Alignment = .center, alpha: CGFloat = 1, context: CGContext) {
+                            alignment: GameMenuTypography.Alignment = .center, alpha: CGFloat = 1,
+                            preservesCase: Bool = false, context: CGContext) {
         let font = typography.font(face)
-        let lines = lines(text, width: box.width, face: face, scale: scale, font: font)
+        let lines = lines(text, width: box.width, face: face, scale: scale, font: font, preservesCase: preservesCase)
         let pitch = linePitch(text, face: face, scale: scale, font: font)
         let top = box.midY - CGFloat(lines.count) * pitch / 2
         for (index, line) in lines.enumerated() {
             let height = typography.height(of: line, face: face, scale: scale)
             typography.menuLine(line, in: CGRect(x: box.minX, y: top + CGFloat(index) * pitch + (pitch - height) / 2, width: box.width, height: height),
-                                context: context, face: face, scale: scale, alignment: alignment, alpha: alpha, palette: palette)
+                                context: context, face: face, scale: scale, alignment: alignment, alpha: alpha, palette: palette,
+                                preservesCase: preservesCase)
         }
     }
 }

@@ -34,8 +34,9 @@ struct MobilePortraitHUDTests {
         #expect(afterCancel == [.activate])
     }
 
-    @Test func originalIPadProKeepsTouchDeckOnRotation() throws {
-        for size in [MobileSize(width: 768, height: 1024), .init(width: 1024, height: 1366)] {
+    /// Portrait keeps the touch deck. Landscape restores the Mac panel at a whole scale.
+    @Test func originalIPadProUsesMacPanelInLandscape() throws {
+        for (size, panelScale) in [(MobileSize(width: 768, height: 1024), 3.0), (.init(width: 1024, height: 1366), 4.0)] {
             let portrait = MobileHUDLayout.make(container: size, safeArea: .init(top: 20),
                 hasRate: true, skillCount: 8, supportsRewind: true)
             #expect(portrait.portrait != nil)
@@ -43,7 +44,8 @@ struct MobilePortraitHUDTests {
             #expect(portrait.interface.playfieldFrame.height == size.height - 240)
             let landscape = MobileHUDLayout.make(container: .init(width: size.height, height: size.width),
                 safeArea: .init(top: 20), hasRate: true, skillCount: 8, supportsRewind: true)
-            #expect(landscape.portrait != nil)
+            #expect(landscape.portrait == nil)
+            #expect(landscape.panel.map { Double($0.scale) } == panelScale)
             #expect(landscape.canPlay)
         }
     }

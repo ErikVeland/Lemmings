@@ -57,6 +57,7 @@ typealias MobileGameControllerBase = UIViewController
     private var celebrationTask: Task<Void, Never>?
     var onRecordCompletion: ((MobileGameSnapshot) -> (details: [String], error: String?))?
     var onHints: (() -> Void)?
+    var onHotSeatGhostsVisible: ((Bool) -> Void)?
     var onControlsHelp: (() -> Void)?
     private var completionActions: [(String, () -> Void)] = []
     private var completionTitle = ""
@@ -94,7 +95,7 @@ typealias MobileGameControllerBase = UIViewController
                 self.showResultAchievement()
             }))
         }
-        showCustomOverlay(title: award.title, details: [award.detail], actions: actions)
+        showCustomOverlay(title: award.title, details: [award.detail], reading: true, actions: actions)
     }
 
     private func updateResultAchievements() {
@@ -1132,10 +1133,16 @@ typealias MobileGameControllerBase = UIViewController
         )
         #endif
         appendExtraSkillAction()
-        if !session.isReadOnly, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
+        if !session.isReadOnly, gameSettings.classic.inspectWhilePaused, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
             let inspectAction = overlayActions.count
             overlayActions.append { [weak self] in self?.showLemmingInspection() }
             overlayCanvas.page.footer.append(.init(String(inspectAction), L10n.text("INSPECT LEMMINGS")))
+        }
+        if !session.isReadOnly, let ghosts = session.hotSeatGhosts, ghosts.count > 0 {
+            let ghostsAction = overlayActions.count
+            overlayActions.append { [weak self] in self?.toggleHotSeatGhosts() }
+            overlayCanvas.page.footer.append(.init(String(ghostsAction),
+                ghosts.hidden ? L10n.text("GHOSTS OFF") : L10n.text("GHOSTS ON"), selected: !ghosts.hidden))
         }
         let settingsAction = overlayActions.count
         overlayActions.append { [weak self] in self?.showInGameSettings() }
@@ -1969,6 +1976,15 @@ typealias MobileGameControllerBase = UIViewController
         renderCurrentFrame(force: true)
     }
 
+    /// Shows or hides earlier Hot Seat turns. The choice is shared with the Hot Seat page and the Mac.
+    func toggleHotSeatGhosts() {
+        guard session.hotSeatGhosts != nil else { return }
+        session.hotSeatGhosts?.hidden.toggle()
+        onHotSeatGhostsVisible?(session.hotSeatGhosts?.hidden == false)
+        renderCurrentFrame(force: true)
+        if overlayCanvas.page.pause != nil { pausePlay(showControls: true) }
+    }
+
     func toggleGhostSolution() {
         guard !solutionSelector.isHidden, solutionGame == nil,
               let classic = session as? ClassicMobileSession, classic.hasGhostSolution else { return }
@@ -2193,10 +2209,13 @@ typealias MobileGameControllerBase = UIViewController
                       width: visible.width * session.renderScale, height: visible.height * session.renderScale)
     }
 
-    func showCustomOverlay(title: String, details: [String], actions: [(String, () -> Void)]) {
+    func showCustomOverlay(title: String, details: [String], reading: Bool = false, list: Bool = false,
+                           headings: Set<Int> = [], actions: [(String, () -> Void)]) {
         showOverlay(title: title, actions: actions)
-        overlayCanvas.page = .init(title: title, details: details,
+        var page = GameFrontEnd.Page(title: title, details: details,
             footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) })
+        page.reading = reading; page.listDetails = list; page.detailHeadings = headings
+        overlayCanvas.page = page
         layoutOverlay()
     }
 

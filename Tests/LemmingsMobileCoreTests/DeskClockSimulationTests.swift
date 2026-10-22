@@ -329,6 +329,29 @@ struct DeskClockSimulationTests {
         #expect(workers(simulation).isEmpty)
     }
 
+    @Test func backwardClockChangeKeepsTheHatchRunning() {
+        var simulation = simulation(at: date(12, 34))
+        simulation.advance(to: date(11, 34), event: nil)
+        #expect(digitsMatch(simulation, "1134"))
+        run(&simulation, from: date(11, 34), to: date(11, 34, second: 2))
+        #expect(simulation.spawned == 1)
+        #expect(!simulation.lemmings.isEmpty)
+        let before = simulation.lemmings
+        run(&simulation, from: date(11, 34, second: 2), to: date(11, 34, second: 3))
+        #expect(simulation.lemmings != before)
+    }
+
+    @Test func backwardClockChangeCancelsWorkersAndKeepsMinuteUpdates() {
+        var simulation = simulation(at: date(12, 34, second: 30))
+        run(&simulation, from: date(12, 34, second: 30), to: date(12, 34, second: 58))
+        #expect(!workers(simulation).isEmpty)
+        simulation.advance(to: date(11, 34, second: 58), event: nil)
+        #expect(digitsMatch(simulation, "1134"))
+        #expect(workers(simulation).isEmpty)
+        run(&simulation, from: date(11, 34, second: 58), to: date(11, 35))
+        #expect(digitsMatch(simulation, "1135"))
+    }
+
     @Test func blockerLeavesWhenEventDisappears() {
         var simulation = simulation(at: date(12, 34))
         let event = DeskClockEvent(start: date(12, 43), title: "Review", nuke: false)

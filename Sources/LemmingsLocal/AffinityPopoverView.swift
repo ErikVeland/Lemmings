@@ -24,9 +24,9 @@ import NxlvKit
         if let font {
             let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(affinity.name), face: .large, scale: 1) <= heading.width ? .large : .small
             font.menuLine(affinity.name, in: heading, face: face, alignment: .left, palette: .green)
-            font.menuParagraph(affinity.philosophySummary, in: summary, alignment: .left)
+            font.menuParagraph(affinity.philosophySummary, in: summary, alignment: .left, preservesCase: true)
             font.menuLine(forRun ? L10n.text("This run") : L10n.text("Play style"), in: label, alignment: .left, alpha: 0.7)
-            font.menuParagraph(affinity.affinityDescription, in: reason, alignment: .left)
+            font.menuParagraph(affinity.affinityDescription, in: reason, alignment: .left, preservesCase: true)
         } else {
             GamePixelText.draw(affinity.name, in: heading)
             GamePixelText.draw(affinity.philosophySummary, in: summary)

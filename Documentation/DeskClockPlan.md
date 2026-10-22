@@ -10,9 +10,14 @@
 
 **Spec:** [DeskClock.md](DeskClock.md). Prototype reference: [Tent Clock](https://claude.ai/artifact/XvvA8foJYF5WLBMR3kLArH), version 3.
 
+The owner moved the full clock and both widgets into tonight's 2.2 scope on
+22 October 2026. This replaces the earlier 2.2.x constraint. The checkboxes below
+retain the original implementation sequence. Use the
+[current check record](ReleaseReadiness/2.2DuoPolish-2026-10-22.md) for verified status.
+
 ## Global Constraints
 
-- Branch: `feature/desk-clock` from `main`, in its own worktree. Ships in a 2.2.x update. Do not touch the 2.2 Duo launch candidate.
+- Branch: `feature/desk-clock` from `main`, in its own worktree. The clock and both widgets now belong to the 2.2 Duo candidate.
 - Minimum iOS stays 16.0. Gate iOS 17 APIs with `#available`.
 - Scene size 208 × 149 classic pixels. Ground row 128. Digit top 32. Block 5. Digit x 41, 71, 113, 143. Colon x 101. Spawn (63, 15). Exit trigger x 185.
 - Mac art draws two pixels per classic pixel. Frames come only through `ClassicMacArtwork`.

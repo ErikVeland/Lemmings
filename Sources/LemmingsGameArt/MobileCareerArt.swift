@@ -49,7 +49,7 @@ public enum MobileCareerArt {
 
     public static func hotSeat(_ profiles: MobileProfiles, subtitle: String, roster: MobileHotSeatRoster,
                                policy: MobileHotSeat.TurnPolicy, active: Bool, hasSaved: Bool,
-                               confirmingRestart: Bool = false) -> GameFrontEnd.Page {
+                               confirmingRestart: Bool = false, ghostsVisible: Bool = true) -> GameFrontEnd.Page {
         var rows = profiles.players.map { player in
             GameFrontEnd.Action("seat." + player.id, player.name + (player.id == roster.host ? "  Host" : ""),
                                 enabled: player.id != roster.host, selected: roster.contains(player.id), portrait: player.portrait)
@@ -57,6 +57,7 @@ public enum MobileCareerArt {
         rows.append(.init("seatNew", L10n.text("New player"), enabled: profiles.players.count < MobileProfiles.maximum,
                           primary: profiles.players.count < MobileHotSeat.minimumPlayers))
         rows.append(.init("seatRule", L10n.text("Turns: \(policy.title)")))
+        rows.append(.init("seatGhosts", ghostsVisible ? L10n.text("Ghosts on") : L10n.text("Ghosts off"), selected: ghostsVisible))
         if hasSaved { rows.append(.init("seatSaved", L10n.text("Saved Hot Seats"))) }
         if active {
             rows.append(.init("seatRestart", confirmingRestart ? L10n.text("Confirm new Hot Seat") : L10n.text("New Hot Seat"), selected: confirmingRestart))
@@ -201,6 +202,7 @@ public enum MobileCareerArt {
             details: [hint.section] + hint.body.components(separatedBy: "\n").filter { !$0.isEmpty },
             footer: footer, preview: preview, footerColumns: 2)
         page.detailHeadings = [0]
+        page.reading = true
         return page
     }
 

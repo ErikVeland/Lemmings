@@ -230,9 +230,10 @@ import NxlvKit
   /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.
   func menuLine(_ value: String, in rect: CGRect, face: ClassicMacUserInterface.Face = .small,
                 scale: Int = 1, alignment: NSTextAlignment = .center, alpha: CGFloat = 1, palette: Palette = .blue,
-                numberPalette: Palette? = nil) {
+                numberPalette: Palette? = nil, preservesCase: Bool = false) {
     guard let font = font(face) else { return }
-    let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font)
+    let line = GameTextLayout.truncated(value, width: rect.width, face: face, scale: scale, font: font,
+      preservesCase: preservesCase)
     guard !line.isEmpty else { return }
     let width = width(of: line, face: face, scale: scale)
     let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - width : rect.midX - width / 2
@@ -255,15 +256,16 @@ import NxlvKit
   }
 
   func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,
-    face: ClassicMacUserInterface.Face = .small, palette: Palette = .blue, alpha: CGFloat = 1) {
+    face: ClassicMacUserInterface.Face = .small, palette: Palette = .blue, alpha: CGFloat = 1,
+    preservesCase: Bool = false) {
     guard let font = font(face) else { return }
     let spacing = max(font.cellHeight + 6, font.height(of: Self.menuText(value)) + 2)
     let rows = max(0, Int(rect.height) / spacing)
-    let lines = GameTextLayout.lines(value, width: rect.width, face: face, font: font)
+    let lines = GameTextLayout.lines(value, width: rect.width, face: face, font: font, preservesCase: preservesCase)
     for (index, value) in lines.prefix(rows).enumerated() {
       let text = index == rows - 1 && lines.count > rows
-        ? GameTextLayout.truncated(value + "...", width: rect.width, face: face, font: font) : value
-      menuLine(text, in: CGRect(x: rect.minX, y: rect.minY + CGFloat(index * spacing), width: rect.width, height: CGFloat(spacing)), face: face, alignment: alignment, alpha: alpha, palette: palette)
+        ? GameTextLayout.truncated(value + "...", width: rect.width, face: face, font: font, preservesCase: preservesCase) : value
+      menuLine(text, in: CGRect(x: rect.minX, y: rect.minY + CGFloat(index * spacing), width: rect.width, height: CGFloat(spacing)), face: face, alignment: alignment, alpha: alpha, palette: palette, preservesCase: preservesCase)
     }
   }
 

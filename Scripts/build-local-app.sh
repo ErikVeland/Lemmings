@@ -105,6 +105,8 @@ zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.ic
 zsh "$project_dir/Scripts/index-fan-levels.sh" "$build_dir/$(uname -m)"
 zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all
 
+zsh "$project_dir/Scripts/build-desk-clock-mac-widget.sh" "$app_dir" "$build_dir" "${architectures[@]}"
+
 # Seal the finished bundle after resources are copied. Capability builds use
 # an Apple identity and matching provisioning profile.
 capabilities_mode="${ENABLE_APPLE_CAPABILITIES:-auto}"
@@ -135,7 +137,7 @@ config['enabled'] = False
 path.write_text(json.dumps(config, indent=2, sort_keys=True) + '\n')
 PYCONFIG
   rm -f "$contents_dir/embedded.provisionprofile"
-  codesign --force --deep --sign - "$app_dir"
+  codesign --force --deep --preserve-metadata=entitlements --sign - "$app_dir"
 fi
 
 # Refresh the bundle timestamp so Finder can detect rebuilt app icons.

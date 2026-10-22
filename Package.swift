@@ -73,6 +73,7 @@ let package = Package(
         .executableTarget(
             name: "LemmingsLocal",
             dependencies: [
+                "LemmingsMobileCore",
                 "LemmingsAppCore",
                 "LemmingsAudio",
                 "LemmingsGameArt",
