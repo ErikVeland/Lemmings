@@ -34,7 +34,7 @@ extension MenuAudit {
                             .init("family.holiday", "Holiday Lemmings 0/72"),
                             .init("family.fan", "Fan Lemmings 0/6020"),
                             .init("l2", "Lemmings 2"), .init("l3", "All New World of Lemmings")],
-                        initials: "PLA", collectionsAvailable: available)
+                        initials: "PLA", collectionsAvailable: available, deskClock: !tv)
                     if tv { page = TVMenuPresentation.homePage(page) }
                     var scale = MobileSettingsArt.interfaceScale(interface, width: size.width, television: tv)
                     if tv { scale = TVMenuPresentation.homeScale(scale, page: page, width: size.width, height: size.height) }

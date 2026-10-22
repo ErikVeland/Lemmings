@@ -28,7 +28,8 @@ public enum MobileHomeArt {
 
     public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
                             families: [GameFrontEnd.Action], initials: String,
-                            subtitle: String = "", collectionsAvailable: Bool = true) -> GameFrontEnd.Page {
+                            subtitle: String = "", collectionsAvailable: Bool = true,
+                            deskClock: Bool = false) -> GameFrontEnd.Page {
         var rows = resume + [journey].compactMap { $0 } + families
         for index in rows.indices {
             rows[index].title = rows[index].title.replacingOccurrences(
@@ -41,7 +42,8 @@ public enum MobileHomeArt {
         }
         return .init(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
             footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
-                     .init("collections", L10n.text("Playlists"), enabled: collectionsAvailable), GameSupport.menuAction,
-                     .init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
+                     .init("collections", L10n.text("Playlists"), enabled: collectionsAvailable), GameSupport.menuAction]
+                + (deskClock ? [GameFrontEnd.Action("deskClock", L10n.text("Desk Clock"))] : [])
+                + [.init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
     }
 }

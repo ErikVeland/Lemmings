@@ -5,7 +5,7 @@ import LemmingsMobileCore
 import NxlvKit
 
 extension MenuAudit {
-    @MainActor static func checkDuo(typography: GameMenuTypography, content: URL, output: URL) throws {
+    @MainActor static func checkDuo(typography: GameMenuTypography, artwork: URL, content: URL, output: URL) throws {
         let ports = content.deletingLastPathComponent()
         let storage = MobileStorage(directory: output.appendingPathComponent("isolated-storage"))
         let libraries: [any MobileGameLibrary] = [try ClassicMobileLibrary(directory: content),
@@ -158,6 +158,59 @@ extension MenuAudit {
                 captures += 1
             }
         }
-        print("PASS: \(captures) Duo bitmap captures, all three native engines, gameplay across both upper panes, lower-area fill, complete skills, status, minimap, target sizes, hit testing and preview actions. Windowless and muted.")
+        captures += try checkDuoDeskClock(typography: typography, artwork: artwork,
+            poses: poses.filter { ["book", "stacked", "compact-stacked", "closed-landscape", "closed-portrait"].contains($0.0) },
+            output: output)
+        print("PASS: \(captures) Duo bitmap captures, all three native engines, gameplay across both upper panes, lower-area fill, complete skills, status, minimap, target sizes, hit testing, preview actions and the Desk Clock. Windowless and muted.")
+    }
+
+    /// The Desk Clock in each pose: the scene clear of the hinge, and the close control's target. Stacked pose
+    /// shows the event lines and Close in the lower pane; other poses show Close as it appears after a touch.
+    @MainActor static func checkDuoDeskClock(typography: GameMenuTypography, artwork: URL,
+                                             poses: [(String, MobileSize, MobileInsets, [MobileReservedRegion])],
+                                             output: URL) throws -> Int {
+        guard poses.count == 5, let art = GameDeskClockArt(directory: artwork) else { throw Failure.missingArtwork }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.locale = Locale(identifier: "en_GB")
+        let now = Date(timeIntervalSince1970: 1_792_143_000)
+        let event = DeskClockEvent(start: now.addingTimeInterval(5 * 60), title: "Standup", nuke: false)
+        let sim = DeskClockSimulation.still(at: now, event: event, uses24Hour: true, calendar: calendar)
+        var captures = 0
+        for (pose, size, insets, regions) in poses {
+            let safe = MobileRect(x: insets.left, y: insets.top, width: size.width - insets.left - insets.right,
+                                  height: size.height - insets.top - insets.bottom)
+            let layout = DeskClockLayout.make(safe: safe, regions: regions)
+            let scene = cg(layout.scene), close = cg(layout.close), safeFrame = cg(safe)
+            guard layout.stacked == pose.hasSuffix("stacked"), safeFrame.contains(scene), safeFrame.contains(close),
+                  close.width >= 44, close.height >= 44, scene.width >= 280,
+                  regions.allSatisfy({ !cg($0.frame).intersects(scene) && !cg($0.frame).intersects(close) })
+            else { throw invalidTargets(line: #line) }
+            if let pane = layout.pane.map(cg) {
+                guard pane.contains(close), !pane.intersects(scene), layout.lines.count == 2,
+                      layout.lines.allSatisfy({ pane.contains(cg($0)) && cg($0).maxY <= close.minY && cg($0).height >= 20 })
+                else { throw invalidTargets(line: #line) }
+            } else {
+                guard scene.contains(close) else { throw invalidTargets(line: #line) }
+            }
+            let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
+            context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            art.draw(sim, event: event, now: now, time: 0.25, in: context, rect: scene, nightDim: false)
+            let lines = [L10n.text("NEXT") + "  09:35  Standup", DeskClockFace.countdown(to: event.start, now: now)]
+            for (line, frame) in zip(lines, layout.lines) {
+                GamePixelTypography.draw(line, in: cg(frame), context: context, typography: typography, palette: .green,
+                                         maximumScale: 3, face: .large)
+            }
+            // The same drawing as MobilePixelButton, the primary stone control.
+            GameStoneArt.draw(in: context, frame: close, selected: true, pixel: 1)
+            GamePixelTypography.draw(L10n.text("Close"), in: CGRect(x: close.minX + 12, y: close.midY - 10,
+                width: close.width - 24, height: 20), context: context, typography: typography, palette: .green)
+            for region in regions {
+                context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame))
+            }
+            try save(context: context, to: output.appendingPathComponent("desk-clock-\(pose).png"))
+            captures += 1
+        }
+        return captures
     }
 }

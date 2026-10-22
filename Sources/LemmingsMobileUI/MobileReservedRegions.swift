@@ -39,6 +39,16 @@ import UIKit
         return []
     }
 
+    /// A foldable reports its division even while closed, when the region is inactive.
+    static func isFoldable(in view: UIView) -> Bool {
+        #if os(iOS) && compiler(>=6.3)
+        if #available(iOS 27.1, *) {
+            return !view.reservedRegions(kind: .division, options: .includeInactive).isEmpty
+        }
+        #endif
+        return false
+    }
+
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.
     static func topBarInsets(in view: UIView) -> MobileInsets {
         #if os(iOS)

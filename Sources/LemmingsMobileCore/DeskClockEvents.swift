@@ -61,7 +61,10 @@ public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sen
 
     public init() {}
 
-    public func authorization() -> DeskClockCalendarAccess {
+    public func authorization() -> DeskClockCalendarAccess { Self.authorization() }
+
+    /// The current access without creating an event store, for Settings.
+    public static func authorization() -> DeskClockCalendarAccess {
         let status = EKEventStore.authorizationStatus(for: .event)
         if status == .notDetermined { return .notDetermined }
         if #available(iOS 17, macOS 14, *) {

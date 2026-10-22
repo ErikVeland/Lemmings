@@ -55,13 +55,17 @@ extension MobileLibraryViewController {
     func settingsPage(_ group: MobileSettingsGroup, inGame: Bool = false) -> GameFrontEnd.Page {
         #if os(iOS)
         let respectMuteAvailable = true
+        let foldable = MobileSystemRegions.isFoldable(in: view)
+        let calendarDenied = group == .deskClock && EventKitDeskClockSource.authorization() == .denied
         #else
         let respectMuteAvailable = false
+        let foldable = false, calendarDenied = false
         #endif
         var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
-                               language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable)
+                               language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable,
+                               foldable: foldable, calendarDenied: calendarDenied)
         #if os(tvOS)
         page.televisionGrid = true
         if group == .controller {
@@ -197,6 +201,16 @@ extension MobileLibraryViewController {
             case "motion": settings.classic.reduceMotion.toggle()
             case "flashes": settings.classic.reduceFlashes.toggle()
             case "telemetry": AnonymousTelemetry.shared.setSharing(!AnonymousTelemetry.shared.sharesCounts)
+            case "deskClockStacked": settings.deskClock.openWhenStacked.toggle()
+            case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
+            case "deskClockEvents":
+                #if os(iOS)
+                if EventKitDeskClockSource.authorization() == .denied {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                    return true
+                }
+                #endif
+                settings.deskClock.showNextEvent.toggle()
             default: return false
             }
             if key != "preset" { settings.classic.refreshExperiencePreset() }

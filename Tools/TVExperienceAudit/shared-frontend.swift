@@ -95,7 +95,7 @@ extension TVExperienceAudit {
               nativeBudget.televisionBloomAllowed, !pressuredBudget.televisionBloomAllowed else {
             throw Failure.invalid("TV must bound CRT pixel cost and drop bloom under pressure")
         }
-        for group in MobileSettingsGroup.allCases {
+        for group in MobileSettingsGroup.allCases where group != .deskClock {
             pages.append(("settings-" + group.rawValue, MobileSettingsArt.page(group, settings: .init(), displayAvailable: true)))
         }
         let cloud = CloudSyncArt.page()

@@ -19,7 +19,9 @@ public enum MobileSettingsArt {
         return min(CGFloat(size.scale), max(1, width / 280))
     }
     public static func groups(inGame: Bool = false, television: Bool = false) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.map {
+        // The Desk Clock is an iPhone and iPad feature.
+        let groups = MobileSettingsGroup.allCases.filter { !television || $0 != .deskClock }
+        var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: groups.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
@@ -29,7 +31,8 @@ public enum MobileSettingsArt {
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
                             sharing: Bool = false, sharingAvailable: Bool = false,
                             displayAvailable: Bool = false, inGame: Bool = false,
-                            language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true) -> GameFrontEnd.Page {
+                            language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true,
+                            foldable: Bool = false, calendarDenied: Bool = false) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
@@ -95,6 +98,12 @@ public enum MobileSettingsArt {
                     toggle("staticHome", L10n.text("Static home screen"), c.staticHomeScreen),
                     toggle("motion", L10n.text("Reduce motion"), c.reduceMotion),
                     toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
+        case .deskClock:
+            let clock = settings.deskClock
+            rows = foldable ? [toggle("deskClockStacked", L10n.text("Open in Stacked pose when idle"), clock.openWhenStacked),
+                               toggle("deskClockCharging", L10n.text("Open when closed and charging"), clock.openWhenCharging)] : []
+            // Without calendar access the row stays off and opens iOS Settings.
+            rows.append(toggle("deskClockEvents", L10n.text("Show next event"), clock.showNextEvent && !calendarDenied))
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),
