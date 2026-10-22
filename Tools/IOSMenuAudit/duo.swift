@@ -165,7 +165,7 @@ extension MenuAudit {
     }
 
     /// The Desk Clock in each pose: the scene clear of the hinge, and the close control's target. Stacked pose
-    /// shows the event lines and Close in the lower pane; other poses show Close as it appears after a touch.
+    /// shows only Close in the lower pane; other poses show Close as it appears after a touch.
     @MainActor static func checkDuoDeskClock(typography: GameMenuTypography, artwork: URL,
                                              poses: [(String, MobileSize, MobileInsets, [MobileReservedRegion])],
                                              output: URL) throws -> Int {
@@ -187,20 +187,14 @@ extension MenuAudit {
                   regions.allSatisfy({ !cg($0.frame).intersects(scene) && !cg($0.frame).intersects(close) })
             else { throw invalidTargets(line: #line) }
             if let pane = layout.pane.map(cg) {
-                guard pane.contains(close), !pane.intersects(scene), layout.lines.count == 2,
-                      layout.lines.allSatisfy({ pane.contains(cg($0)) && cg($0).maxY <= close.minY && cg($0).height >= 20 })
-                else { throw invalidTargets(line: #line) }
+                // The scene above already shows the event, so the lower pane holds only Close.
+                guard pane.contains(close), !pane.intersects(scene) else { throw invalidTargets(line: #line) }
             } else {
                 guard scene.contains(close) else { throw invalidTargets(line: #line) }
             }
             let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
             context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
             art.draw(sim, event: event, now: now, time: 0.25, in: context, rect: scene, nightDim: false)
-            let lines = [L10n.text("NEXT") + "  09:35  Standup", DeskClockFace.countdown(to: event.start, now: now)]
-            for (line, frame) in zip(lines, layout.lines) {
-                GamePixelTypography.draw(line, in: cg(frame), context: context, typography: typography, palette: .green,
-                                         maximumScale: 3, face: .large)
-            }
             // The same drawing as MobilePixelButton, the primary stone control.
             GameStoneArt.draw(in: context, frame: close, selected: true, pixel: 1)
             GamePixelTypography.draw(L10n.text("Close"), in: CGRect(x: close.minX + 12, y: close.midY - 10,

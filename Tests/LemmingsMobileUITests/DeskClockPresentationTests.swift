@@ -34,6 +34,7 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
     let host = UIViewController()
     var battery = UIDevice.BatteryState.unplugged
     var regions: [MobileReservedRegion] = []
+    var voiceOver = false
     var idleTimer: [Bool] = []
     var suspends = 0
     var resumes = 0
@@ -52,7 +53,8 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
             suspendMusic: { [unowned self] in self.suspends += 1 },
             resumeMusic: { [unowned self] in self.resumes += 1 },
             setIdleTimerDisabled: { [unowned self] in self.idleTimer.append($0) },
-            regions: { [unowned self] _ in self.regions })
+            regions: { [unowned self] _ in self.regions },
+            voiceOverRunning: { [unowned self] in self.voiceOver })
     }
 
     func open(_ reason: DeskClockReason) async -> MobileDeskClockController {
@@ -122,6 +124,10 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         #expect(bottom.contains(clock.closeButton.frame))
         #expect(clock.closeButton.frame.width >= 44 && clock.closeButton.frame.height >= 44)
         #expect(clock.closeButton.accessibilityLabel?.isEmpty == false)
+        // The scene above shows the event. The lower pane holds Close and nothing else.
+        let lower = clock.view.subviews.filter { !$0.isHidden && $0.frame.intersects(bottom) }
+        #expect(lower.count == 1 && lower.first === clock.closeButton)
+        #expect(!clock.clockView.frame.intersects(bottom))
         clock.close()
 
         // Closed poses hide the control until a touch.
@@ -133,6 +139,40 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         closed.revealCloseControl()
         #expect(!closed.closeButton.isHidden)
         closed.close()
+    }
+
+    @Test func clockIsModalAndEscapeCloses() async {
+        let fixture = DeskClockFixture()
+        fixture.battery = .full
+        fixture.voiceOver = true
+        let clock = await fixture.open(.closedCharging)
+        clock.view.layoutIfNeeded()
+        #expect(clock.view.accessibilityViewIsModal)
+        // VoiceOver keeps Close on screen and in the accessibility tree in every pose.
+        #expect(!clock.closeButton.isHidden && clock.closeButton.isAccessibilityElement)
+        #expect(clock.accessibilityPerformEscape())
+        #expect(clock.parent == nil && fixture.resumes == 1 && fixture.idleTimer.last == false)
+        #expect(!clock.accessibilityPerformEscape())
+    }
+
+    @Test func startingGameClosesClock() async {
+        let fixture = DeskClockFixture()
+        fixture.battery = .charging
+        let clock = await fixture.open(.menu)
+        #expect(fixture.idleTimer.last == true)
+        let game = UIViewController()
+        MobileDeskClockController.attach(game, to: fixture.host, closing: clock)
+        #expect(clock.parent == nil && clock.view.superview == nil)
+        #expect(fixture.resumes == 1 && fixture.idleTimer.last == false)
+        #expect(game.parent === fixture.host && fixture.host.view.subviews.last === game.view)
+        #expect(game.view.frame == fixture.host.view.bounds)
+    }
+
+    @Test func settingsListsDeskClockOnlyInTheMenu() {
+        let id = "settingsGroup." + MobileSettingsGroup.deskClock.rawValue
+        #expect(MobileSettingsArt.groups().rows.contains { $0.id == id })
+        #expect(!MobileSettingsArt.groups(inGame: true).rows.contains { $0.id == id })
+        #expect(!MobileSettingsArt.groups(television: true).rows.contains { $0.id == id })
     }
 
     @Test func accessibilityLabelReadsTimeAndEvent() {

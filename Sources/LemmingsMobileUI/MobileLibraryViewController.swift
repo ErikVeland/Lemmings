@@ -321,7 +321,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     #if os(iOS)
     func presentDeskClock(reason: DeskClockReason) {
-        guard deskClock == nil, game == nil, presentedViewController == nil else { return }
+        // A level that is loading or showing owns the screen.
+        guard deskClock == nil, game == nil, presentedViewController == nil,
+              !preparingLevel, !learningPreparing, !shortGamesPreparing else { return }
         let clock = MobileDeskClockController(reason: reason)
         clock.onClose = { [weak self, weak clock] in
             guard let self, self.deskClock === clock else { return }
@@ -1280,6 +1282,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         stopMenuPreviews()
         let cancelledPreviews = previewDrain
         let generation = UUID(); previewGeneration = generation
+        #if os(iOS)
+        dismissDeskClock()
+        #endif
         notice = ""; preparingLevel = true; loading = true; rebuild()
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
@@ -1474,9 +1479,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             let previous = game
             if let previous { next.inheritSolution(from: previous) }
+            #if os(iOS)
+            MobileDeskClockController.attach(next, to: self, closing: deskClock)
+            #else
             addChild(next); next.view.frame = view.bounds
             next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.addSubview(next.view); next.didMove(toParent: self)
+            #endif
             game = next
             rememberHomeBackdrop(content.session, at: index)
             syncPages()

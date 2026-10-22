@@ -21,7 +21,6 @@ enum DeskClockReason: Sendable {
     let reason: DeskClockReason
     let clockView: MobileDeskClockView
     let closeButton = MobilePixelButton()
-    private let eventLines = [MobilePixelLabel(), MobilePixelLabel()]
     private let events: any DeskClockEventSource
     private let batteryState: @MainActor () -> UIDevice.BatteryState
     private let defaults: UserDefaults
@@ -29,6 +28,7 @@ enum DeskClockReason: Sendable {
     private let resumeMusic: @MainActor () -> Void
     private let setIdleTimerDisabled: @MainActor (Bool) -> Void
     private let regions: @MainActor (UIView) -> [MobileReservedRegion]
+    private let voiceOverRunning: @MainActor () -> Bool
     var onClose: (() -> Void)?
     private(set) var accessTask: Task<Void, Never>?
     private(set) var eventTask: Task<Void, Never>?
@@ -38,7 +38,7 @@ enum DeskClockReason: Sendable {
     private var layout: DeskClockLayout?
     private var batteryMonitoring: Bool?
     private var observers = MobileNotificationObserverBag()
-    private var shown = false
+    private(set) var isShown = false
 
     init(reason: DeskClockReason,
          events: any DeskClockEventSource = EventKitDeskClockSource(),
@@ -47,7 +47,8 @@ enum DeskClockReason: Sendable {
          suspendMusic: @escaping @MainActor () -> Void = { MobileMusic.shared.suspend() },
          resumeMusic: @escaping @MainActor () -> Void = { MobileMusic.shared.resume() },
          setIdleTimerDisabled: @escaping @MainActor (Bool) -> Void = { UIApplication.shared.isIdleTimerDisabled = $0 },
-         regions: @escaping @MainActor (UIView) -> [MobileReservedRegion] = { MobileSystemRegions.read(in: $0) }) {
+         regions: @escaping @MainActor (UIView) -> [MobileReservedRegion] = { MobileSystemRegions.read(in: $0) },
+         voiceOverRunning: @escaping @MainActor () -> Bool = { UIAccessibility.isVoiceOverRunning }) {
         self.reason = reason
         self.events = events
         self.batteryState = batteryState
@@ -56,6 +57,7 @@ enum DeskClockReason: Sendable {
         self.resumeMusic = resumeMusic
         self.setIdleTimerDisabled = setIdleTimerDisabled
         self.regions = regions
+        self.voiceOverRunning = voiceOverRunning
         clockView = MobileDeskClockView(settings: .current(from: defaults))
         super.init(nibName: nil, bundle: nil)
     }
@@ -67,14 +69,9 @@ enum DeskClockReason: Sendable {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        // VoiceOver stays inside the clock and the menu beneath it is hidden.
+        view.accessibilityViewIsModal = true
         view.addSubview(clockView)
-        for line in eventLines {
-            line.palette = .green
-            line.maximumScale = 3
-            line.face = .large
-            line.isHidden = true
-            view.addSubview(line)
-        }
         closeButton.title = L10n.text("Close")
         closeButton.isPrimary = true
         closeButton.isHidden = true
@@ -88,28 +85,27 @@ enum DeskClockReason: Sendable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let safe = view.safeAreaLayoutGuide.layoutFrame
-        let next = DeskClockLayout.make(safe: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
-                                        regions: regions(view))
-        let wasStacked = layout?.stacked
-        layout = next
-        clockView.frame = cg(next.scene)
-        closeButton.frame = cg(next.close)
-        for (line, frame) in zip(eventLines, next.lines) { line.frame = cg(frame) }
-        if next.stacked {
-            hideTask?.cancel()
-            closeButton.isHidden = false
-        } else if wasStacked == true {
-            closeButton.isHidden = true
-        }
-        updateLines(now: Date())
+        layout = DeskClockLayout.make(safe: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
+                                      regions: regions(view))
+        guard let layout else { return }
+        clockView.frame = cg(layout.scene)
+        closeButton.frame = cg(layout.close)
+        updateCloseVisibility()
+    }
+
+    /// The scrub gesture closes the clock, as Close does.
+    override func accessibilityPerformEscape() -> Bool {
+        guard isShown else { return false }
+        close()
+        return true
     }
 
     // MARK: - Show and close
 
     /// Adds the clock full screen over `parent`, which stays underneath.
     func present(in parent: UIViewController) {
-        guard !shown else { return }
-        shown = true
+        guard !isShown else { return }
+        isShown = true
         parent.addChild(self)
         view.frame = parent.view.bounds
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -119,8 +115,8 @@ enum DeskClockReason: Sendable {
     }
 
     func close() {
-        guard shown else { return }
-        shown = false
+        guard isShown else { return }
+        isShown = false
         ticker?.invalidate(); ticker = nil
         hideTask?.cancel(); hideTask = nil
         accessTask?.cancel(); eventTask?.cancel()
@@ -136,6 +132,16 @@ enum DeskClockReason: Sendable {
         onClose?()
     }
 
+    /// Closes `clock` before `game` joins `parent` full screen, so a level never starts beneath the clock.
+    static func attach(_ game: UIViewController, to parent: UIViewController, closing clock: MobileDeskClockController?) {
+        clock?.close()
+        parent.addChild(game)
+        game.view.frame = parent.view.bounds
+        game.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        parent.view.addSubview(game.view)
+        game.didMove(toParent: parent)
+    }
+
     private func start() {
         suspendMusic()
         batteryMonitoring = UIDevice.current.isBatteryMonitoringEnabled
@@ -144,6 +150,9 @@ enum DeskClockReason: Sendable {
         let centre = NotificationCenter.default
         observers.append(centre.addObserver(forName: UIDevice.batteryStateDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.updateIdleTimer() }
+        })
+        observers.append(centre.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.updateCloseVisibility() }
         })
         observers.append(centre.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.clockView.isRunning = false }
@@ -166,7 +175,7 @@ enum DeskClockReason: Sendable {
 
     /// The screen stays on only on mains power. On battery the system can lock as usual.
     private func updateIdleTimer() {
-        guard shown else { return }
+        guard isShown else { return }
         let state = batteryState()
         setIdleTimerDisabled(state == .charging || state == .full)
     }
@@ -191,7 +200,6 @@ enum DeskClockReason: Sendable {
         lastRefresh = Date()
         guard settings.showNextEvent else {
             clockView.event = nil
-            updateLines(now: lastRefresh)
             return
         }
         let source = events, now = lastRefresh
@@ -200,52 +208,46 @@ enum DeskClockReason: Sendable {
             let next = await Task.detached { await source.nextEvent(now: now) }.value
             guard !Task.isCancelled, let self else { return }
             self.clockView.event = next
-            self.updateLines(now: Date())
         }
     }
 
     private func tick() {
-        let now = Date()
-        if now.timeIntervalSince(lastRefresh) >= Self.eventRefreshInterval { refreshEvent() }
-        updateLines(now: now)
+        if Date().timeIntervalSince(lastRefresh) >= Self.eventRefreshInterval { refreshEvent() }
     }
 
-    /// Stacked pose repeats the next event below the hinge in menu lettering.
-    private func updateLines(now: Date) {
-        guard let layout, layout.stacked, let event = clockView.event else {
-            for line in eventLines { line.isHidden = true }
-            return
-        }
-        let digits = Array(DeskClockFace.digits(for: event.start, uses24Hour: DeskClockFace.uses24Hour(locale: .current),
-                                                calendar: .current))
-        let start = String(digits[0..<2]).trimmingCharacters(in: .whitespaces) + ":" + String(digits[2..<4])
-        let texts = [L10n.text("NEXT") + "  " + start + "  " + event.title,
-                     DeskClockFace.countdown(to: event.start, now: now)]
-        for (line, text) in zip(eventLines, texts) {
-            if line.text != text { line.text = text }
-            line.isHidden = false
+    // MARK: - Close control
+
+    /// Stacked pose and VoiceOver keep Close on screen. Otherwise a touch shows it for four seconds.
+    private var closeAlwaysShown: Bool { layout?.stacked == true || voiceOverRunning() }
+
+    private func updateCloseVisibility() {
+        if closeAlwaysShown {
+            hideTask?.cancel(); hideTask = nil
+            closeButton.isHidden = false
+        } else if hideTask == nil {
+            closeButton.isHidden = true
         }
     }
-
-    // MARK: - Touch
 
     @objc private func tapped(_ gesture: UITapGestureRecognizer) {
-        guard shown else { return }
+        guard isShown else { return }
         let point = gesture.location(in: view)
         if !closeButton.isHidden, closeButton.frame.contains(point) { return }
         if reason.isAutomatic { close(); return }
-        if layout?.stacked != true { revealCloseControl() }
+        if !closeAlwaysShown { revealCloseControl() }
     }
 
-    /// Shows the close control for four seconds. Stacked pose always shows it.
+    /// Shows the close control for four seconds and moves VoiceOver to it.
     func revealCloseControl() {
         closeButton.isHidden = false
-        hideTask?.cancel()
-        guard layout?.stacked != true else { return }
+        UIAccessibility.post(notification: .layoutChanged, argument: closeButton)
+        hideTask?.cancel(); hideTask = nil
+        guard !closeAlwaysShown else { return }
         hideTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: Self.closeControlDuration)
-            guard !Task.isCancelled, let self, self.layout?.stacked != true else { return }
-            self.closeButton.isHidden = true
+            guard !Task.isCancelled, let self else { return }
+            self.hideTask = nil
+            self.updateCloseVisibility()
         }
     }
 
