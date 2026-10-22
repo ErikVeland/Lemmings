@@ -1743,7 +1743,7 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:19 */
 "Cloner" = "Cloner";
 
-/* Sources/LemmingsGameArt/GameFrontEnd.swift:30; Sources/LemmingsLocal/ArcadeWindow.swift:407; Sources/LemmingsLocal/ControllerMenuNavigator.swift:22; Sources/LemmingsLocal/ControllerMenuNavigator.swift:41; Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111; Sources/LemmingsLocal/GameScreen.swift:93; Sources/LemmingsLocal/GameSettingsHelp.swift:126; Sources/LemmingsLocal/GameplayKeyboard.swift:766; Sources/LemmingsMobileUI/MobileDeskClockController.swift:77 */
+/* Sources/LemmingsGameArt/GameFrontEnd.swift:30; Sources/LemmingsLocal/ArcadeWindow.swift:407; Sources/LemmingsLocal/ControllerMenuNavigator.swift:22; Sources/LemmingsLocal/ControllerMenuNavigator.swift:41; Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111; Sources/LemmingsLocal/GameScreen.swift:93; Sources/LemmingsLocal/GameSettingsHelp.swift:126; Sources/LemmingsLocal/GameplayKeyboard.swift:766; Sources/LemmingsMobileUI/MobileDeskClockController.swift:85 */
 "Close" = "Close";
 
 /* Sources/LemmingsLocal/DialogKeyboardNavigation.swift:111; Sources/LemmingsLocal/KeyboardOverlayView.swift:51 */

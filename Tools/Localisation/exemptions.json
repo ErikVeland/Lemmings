@@ -68,5 +68,10 @@
     "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
     "source": "Sunsoft Special 5",
     "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift",
+    "source": "academy.glasscode.lemmings.cloud-library-credentials",
+    "reason": "Stable Keychain service identifier, never displayed as interface text"
   }
 ]
