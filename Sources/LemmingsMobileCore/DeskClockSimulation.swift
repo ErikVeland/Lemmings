@@ -72,10 +72,10 @@ public struct DeskClockSimulation: Equatable, Sendable {
     public private(set) var shownDigits = "    "
     public private(set) var hatchOpenedAt: Date
 
-    let uses24Hour: Bool
+    public let uses24Hour: Bool
     let reduceMotion: Bool
     let reduceFlashes: Bool
-    let calendar: Calendar
+    public let calendar: Calendar
     private var random: SplitMix64
     private var mask: [UInt8]
     private var jobs: [Job?] = [nil, nil, nil, nil]

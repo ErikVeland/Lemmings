@@ -108,7 +108,7 @@ let package = Package(
         ),
         .testTarget(
             name: "LemmingsMobileUITests",
-            dependencies: ["LemmingsMobileCore", "LemmingsMobileUI"],
+            dependencies: ["LemmingsGameArt", "LemmingsMobileCore", "LemmingsMobileUI"],
             path: "Tests/LemmingsMobileUITests"
         ),
         .testTarget(
