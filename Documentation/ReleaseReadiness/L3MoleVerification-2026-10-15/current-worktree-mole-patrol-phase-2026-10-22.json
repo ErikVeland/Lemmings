@@ -1,0 +1,139 @@
+{
+  "baseCommit": "874e232b532676a6108d323bd06fc22ea40c1c1d",
+  "cases": [
+    {
+      "exactPositionMatches": 150,
+      "firstMismatch": {
+        "runtime": [
+          157,
+          110
+        ],
+        "source": [
+          154,
+          110
+        ],
+        "tick": 2
+      },
+      "matchingTickRanges": [
+        {
+          "firstTick": 7,
+          "lastTick": 9
+        },
+        {
+          "firstTick": 11,
+          "lastTick": 14
+        },
+        {
+          "firstTick": 20,
+          "lastTick": 21
+        },
+        {
+          "firstTick": 23,
+          "lastTick": 30
+        },
+        {
+          "firstTick": 36,
+          "lastTick": 153
+        },
+        {
+          "firstTick": 173,
+          "lastTick": 187
+        }
+      ],
+      "name": "steel-left-facing",
+      "productionTraceSHA256": "d696f76d09f8097f3acb165d6e09ee849c40b442b6f54a426f1c9890cc94d0dc",
+      "sourceCaptureSHA256": "1d29d8193a99fa6a3baef056d0def346bf826ff5f977238e3df36a6f3494be53",
+      "sourceFixtureSHA256": {
+        "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+        "PERM101.OBS": "ccae27cab491b0308394ec9a5bb5d8070ae06f5cfa075fae8ca8f2d9b627e09e",
+        "TEMP101.OBS": "09e6deff38a9ee9c235060112be35db3ea3e8732a229f4683fb2431e27d2f8f8"
+      },
+      "sourceSamples": 329
+    },
+    {
+      "exactPositionMatches": 236,
+      "firstMismatch": {
+        "runtime": [
+          164,
+          110
+        ],
+        "source": [
+          165,
+          110
+        ],
+        "tick": 3
+      },
+      "matchingTickRanges": [
+        {
+          "firstTick": 2,
+          "lastTick": 2
+        },
+        {
+          "firstTick": 4,
+          "lastTick": 9
+        },
+        {
+          "firstTick": 11,
+          "lastTick": 14
+        },
+        {
+          "firstTick": 20,
+          "lastTick": 21
+        },
+        {
+          "firstTick": 23,
+          "lastTick": 30
+        },
+        {
+          "firstTick": 36,
+          "lastTick": 248
+        },
+        {
+          "firstTick": 251,
+          "lastTick": 251
+        },
+        {
+          "firstTick": 320,
+          "lastTick": 320
+        }
+      ],
+      "name": "steel-air-gap",
+      "productionTraceSHA256": "286e5d382ea34e1d2af5493dd26fa63fa8357ddb2183adb21838460e36ff7e8a",
+      "sourceCaptureSHA256": "d45ab6851d0300a8189218f6f490896086bc27002f8733e184eca4c02e3e053e",
+      "sourceFixtureSHA256": {
+        "LEVEL101.DAT": "7d83fce49ca7d27563eebe0df197311dd1d18dde2967b50676b662b08a42ee0c",
+        "PERM101.OBS": "789ff30f151bb922d0f34d3f95804a6e9e2ebd70bd5abedb80e514e309e73dcb",
+        "TEMP101.OBS": "ed355ef13f4cc776d3b21ea7d7c9b1e4a13f6d1ba2fece425dbc1db209ee640f"
+      },
+      "sourceSamples": 344
+    }
+  ],
+  "change": "The tick-seven initial settle now shifts the legacy patrol phase by one age step.",
+  "date": "2026-10-22",
+  "limits": [
+    "Two controlled scenes do not prove complete Mole source parity.",
+    "The four standalone route gaps and 17 failing schedules remain open.",
+    "The three continuous campaign chains and final results have not passed current strict verification."
+  ],
+  "routeAudit": {
+    "exactDoubleReplays": 399,
+    "failingSchedules": 17,
+    "openStandaloneLevels": [
+      107,
+      206,
+      213,
+      229
+    ],
+    "reportSHA256": "ba537f3ca96884c1838b5cb55032c8ca7dfe611094677e648f6ecd7f9984cdad",
+    "results": 416
+  },
+  "runtimeLibrarySHA256": "681f2df47c0f8cf2b5389a75068d711c5021715286d972b0d555afc5ff14098d",
+  "runtimeSourceSHA256": "1f15708408c8618ef809526ff523d02f446e845d32167ec03ff9e953a80502c4",
+  "runtimeSuite": "passed",
+  "schemaVersion": 1,
+  "sourceTrace": {
+    "path": "Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/original-followup-traces.json",
+    "sha256": "43c750b3caa16bf74b0187af583bcd8624838bf25841d1aedb64ce9cf3e7b6f4",
+    "sourceExecutableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018"
+  }
+}

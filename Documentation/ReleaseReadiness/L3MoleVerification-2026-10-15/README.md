@@ -814,6 +814,19 @@ This follow-up accepted zero routes and changed no route counts. It adds no
 route-search sample to the velocity series. Source parity remains separate
 from the 86/90 standalone L3 route count.
 
+### 22 October initial-settle patrol phase
+
+The source trace shows an initial two-pixel settle at tick 7, followed by a
+patrol phase that differs from the older three-tick fallback. The current
+runtime now keeps that phase after the settle. Against the retained source
+captures, exact positions increased from 146 to 150 of 329 on left-facing steel
+contact, and from 186 to 236 of 344 on the air-gap fall. The first mismatch
+remains at tick 2 in both scenes. The runtime suite passes, and the refreshed
+416-scenario audit still verifies 399 routes; 17 schedules remain open across
+Levels 107, 206, 213 and 229. This is a source-fidelity improvement, not full
+Mole parity or campaign closure. See the [22 October trace and audit record]
+(current-worktree-mole-patrol-phase-2026-10-22.json).
+
 ### 20 October one-pixel patrol candidate
 
 I tested one horizontal patrol candidate against the captured left-facing
@@ -854,3 +867,97 @@ and keeps the existing animation path for other states. Focused tests check
 the selected animation/frame pairs and the fallback. This is a provisional
 rendering change. A source-format proof or visual comparison against a source
 capture must confirm the flattened-frame interpretation before this gap closes.
+
+
+### 22 October current-worktree route rechecks
+
+After the Mole patrol-phase correction, a 300-second, 8,192-wide search did not
+find a Shadow 7 route. Four 120-second, 8,192-wide continuations of the Egyptian
+6 walkthrough prefix and one population-one search found no route. The runtime
+at commit `4bf3bddc`, before the 21 October change, also fails the retained
+routes: Levels 107, 206 and 213 end with no survivors, and Level 229 rejects
+input 6 at tick 1,561. In contrast, the 13 October runtime passes all four
+retained routes. The Mole rewrite on 15 October separates those baselines, but
+this does not prove that the older model has better source fidelity. The current
+fixture audit remains 399/416 exact double-replays, with 17 failed schedules
+across standalone Levels 107, 206, 213 and 229. These searches do not prove that
+the levels are impossible. Egyptian 6 probes show that a left-directed brick
+trigger leaves the Mole at (140,40), while an up-directed trigger at tick 1,210
+sends it down-right to y=400 by tick 1,600. Searches from that trigger expanded
+3.2 million states across 120 and 300 seconds without a win. The walkthrough
+describes a Mole route through the metal cubes, but no source trace confirms
+this path. Four more 180-second searches tested the earliest trigger, two
+leader escape timings, and the down-left trigger. None found a win. A timing
+sweep found that the up trigger starts the down-right tunnel only on sampled
+ticks 1,208–1,214. We still need to verify Mole source parity, win each open
+level, test carried campaign paths, and validate the finale and media. See the
+[22 October route recheck record](current-worktree-route-rechecks-2026-10-22.json).
+
+### 22 October player-built brick trigger recheck
+
+The Egyptian 6 walkthrough says the Mole digs forward after it hits a placed
+brick. The runtime now keeps its heading at this trigger. Steel contact still
+reverses the Mole. The focused check and full L3 runtime suite pass.
+
+The new rule did not close a route. A 120-second Egyptian 6 search expanded
+79,859 states and found no win. The full audit remains at 399 of 416 exact
+double-replays, with 17 route failures. No route fixture changed. The walkthrough
+is secondary evidence. A source gameplay capture must confirm the trigger rule.
+
+An Egyptian 29 search resumed after its falling lemming landed at tick 1,849.
+It expanded 33,241 states in 124 seconds and found no win.
+
+I also replayed the current 416 schedules with the 13 October runtime. It
+double-replayed 196 fixtures exactly. It replayed 219 more schedules as wins
+after identity rebase. One schedule, standalone Shadow 7, still did not win.
+This comparison does not pass current replay identity or source-parity gates.
+The 13 October source tree contained 294 fixtures, not the 416 now under audit.
+See the [updated route recheck record](current-worktree-route-rechecks-2026-10-22.json).
+
+
+### 22 October Shadow 7 route checkpoint
+
+The October 13 Shadow 7 route does not win with the current runtime. A search
+started from that route at tick 2,372. It used a 16,384-state beam for 188
+seconds and expanded 87,718 states. It found no winning route. The October 13
+routes for levels 206, 213 and 229 also fail with the current runtime. These
+checks confirm that the Mole runtime change broke compatibility with the older
+route set. They do not prove which Mole rule causes each failure.
+
+The strict route gate now passes levels 1–30 and 101–106, then stops at
+`107.json` because its replay identity or initial-state hash is stale. The
+separate route audit reports 399 of 416 exact double-replays and 17 failed
+schedules across levels 107, 206, 213 and 229. L3 is not green. See the
+[22 October route recheck record](current-worktree-route-rechecks-2026-10-22.json).
+
+
+The route regression starts with the 15 October Mole direction change. I built
+the runtime at commit `07e55632` and replayed the four October 13 winning
+schedules at population 20. All four schedules failed. The October 13 runtime
+passes them. The 15 October code changed Mole starting direction by object
+identifier parity. This identifies the first confirmed compatibility change.
+It does not show which direction rule matches the original game. See the
+[route recheck record](current-worktree-route-rechecks-2026-10-22.json).
+
+
+A temporary current-worktree build with only the Mole starting-direction parity
+reversed still fails all four October 13 routes. This change alone cannot restore
+the routes. Keep the current source rule until source gameplay evidence supports
+a different rule.
+
+
+### 22 October source asset and route checks
+
+I found the original DOS executable in the retained source capture workspace. Its
+SHA-256 matches the executable hash in the earlier source trace. The DOSBox
+Staging 0.83.0 workspace also has the original level files. Levels 107, 206,
+213 and 229 match the installed resource files byte for byte. This does not add
+a new original-game trace.
+
+A 600-second Shadow 7 search started from the October 13 brick placement. It
+expanded 466,595 states and found no route. A temporary collision candidate
+matched 150 of 329 positions in the left-facing source trace and 234 of 344
+positions in the air-gap trace. The current runtime matches 236 in the air-gap
+trace. The candidate did not restore any of the four old routes. I discarded it.
+A saved Egyptian 29 candidate also fails against the current runtime. See the
+[route recheck record](current-worktree-route-rechecks-2026-10-22.json).
