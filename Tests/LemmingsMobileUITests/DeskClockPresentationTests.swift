@@ -38,6 +38,7 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
     var idleTimer: [Bool] = []
     var suspends = 0
     var resumes = 0
+    var widgetReloads = 0
 
     init(access: DeskClockCalendarAccess = .notDetermined, size: CGSize = CGSize(width: 465, height: 650)) {
         defaults = UserDefaults(suiteName: suite)!
@@ -54,7 +55,8 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
             resumeMusic: { [unowned self] in self.resumes += 1 },
             setIdleTimerDisabled: { [unowned self] in self.idleTimer.append($0) },
             regions: { [unowned self] _ in self.regions },
-            voiceOverRunning: { [unowned self] in self.voiceOver })
+            voiceOverRunning: { [unowned self] in self.voiceOver },
+            reloadWidgets: { [unowned self] in self.widgetReloads += 1 })
     }
 
     func open(_ reason: DeskClockReason) async -> MobileDeskClockController {
@@ -81,13 +83,24 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         #expect(clock.view.frame == fixture.host.view.bounds)
         #expect(fixture.suspends == 1)
         #expect(fixture.events.requests == 1)
-        #expect(MobileSettings.load(from: fixture.defaults).deskClock.calendarRequested)
+        // Widgets reload after the answer, so they show the event without waiting for their timeline.
+        #expect(fixture.widgetReloads == 1)
         clock.close()
 
-        // The request happens once. A later menu opening never asks again.
-        let again = await fixture.open(.menu)
-        #expect(fixture.events.requests == 1)
-        again.close()
+        // The system decides. While access is still undetermined, a menu or widget opening asks again.
+        let widget = await fixture.open(.widget)
+        #expect(fixture.events.requests == 2 && fixture.widgetReloads == 2)
+        widget.close()
+
+        // Once the player answered, no opening asks.
+        for access in [DeskClockCalendarAccess.granted, .denied] {
+            let answered = DeskClockFixture(access: access)
+            for reason in [DeskClockReason.menu, .widget] {
+                let clock = await answered.open(reason)
+                #expect(answered.events.requests == 0 && answered.widgetReloads == 0, "\(access) \(reason)")
+                clock.close()
+            }
+        }
     }
 
     @Test func closeRestoresMusicAndIdleTimer() async {
@@ -213,8 +226,7 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         for reason in [DeskClockReason.stacked, .closedCharging] {
             let fixture = DeskClockFixture()
             let clock = await fixture.open(reason)
-            #expect(fixture.events.requests == 0)
-            #expect(!MobileSettings.load(from: fixture.defaults).deskClock.calendarRequested)
+            #expect(fixture.events.requests == 0 && fixture.widgetReloads == 0)
             clock.close()
         }
         // Show next event off: the menu does not ask either.

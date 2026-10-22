@@ -3,6 +3,7 @@ import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import WidgetKit
 
 /// Why the clock opened. Only the player's own choices may ask for calendar access.
 enum DeskClockReason: Sendable {
@@ -30,6 +31,7 @@ enum DeskClockReason: Sendable {
     private let setIdleTimerDisabled: @MainActor (Bool) -> Void
     private let regions: @MainActor (UIView) -> [MobileReservedRegion]
     private let voiceOverRunning: @MainActor () -> Bool
+    private let reloadWidgets: @MainActor () -> Void
     var onClose: (() -> Void)?
     private(set) var accessTask: Task<Void, Never>?
     var eventTask: Task<Void, Never>? { eventReader.task }
@@ -49,7 +51,8 @@ enum DeskClockReason: Sendable {
          resumeMusic: @escaping @MainActor () -> Void = { MobileMusic.shared.resume() },
          setIdleTimerDisabled: @escaping @MainActor (Bool) -> Void = { UIApplication.shared.isIdleTimerDisabled = $0 },
          regions: @escaping @MainActor (UIView) -> [MobileReservedRegion] = { MobileSystemRegions.read(in: $0) },
-         voiceOverRunning: @escaping @MainActor () -> Bool = { UIAccessibility.isVoiceOverRunning }) {
+         voiceOverRunning: @escaping @MainActor () -> Bool = { UIAccessibility.isVoiceOverRunning },
+         reloadWidgets: @escaping @MainActor () -> Void = { WidgetCenter.shared.reloadAllTimelines() }) {
         self.reason = reason
         self.events = events
         eventReader = DeskClockEventReader(source: events)
@@ -60,6 +63,7 @@ enum DeskClockReason: Sendable {
         self.setIdleTimerDisabled = setIdleTimerDisabled
         self.regions = regions
         self.voiceOverRunning = voiceOverRunning
+        self.reloadWidgets = reloadWidgets
         clockView = MobileDeskClockView(settings: .current(from: defaults))
         super.init(nibName: nil, bundle: nil)
     }
@@ -190,15 +194,15 @@ enum DeskClockReason: Sendable {
 
     // MARK: - Calendar
 
+    /// iOS shows the access prompt only once, so `.notDetermined` alone decides whether to ask.
     private func requestCalendarIfAllowed() {
-        var stored = MobileSettings.load(from: defaults)
-        guard reason.asksForCalendar, stored.deskClock.showNextEvent, !stored.deskClock.calendarRequested,
-              events.authorization() == .notDetermined else { return }
-        stored.deskClock.calendarRequested = true
-        stored.save(to: defaults)
+        guard reason.asksForCalendar, settings.showNextEvent, events.authorization() == .notDetermined else { return }
         let source = events
+        let reloadWidgets = self.reloadWidgets
         accessTask = Task { [weak self] in
             _ = await source.requestAccess()
+            // The widget reads the calendar on its own timeline. Reload it so the event shows now.
+            reloadWidgets()
             guard !Task.isCancelled else { return }
             self?.refreshEvent()
         }

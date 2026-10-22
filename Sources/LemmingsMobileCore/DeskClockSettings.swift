@@ -5,6 +5,8 @@ public struct DeskClockSettings: Codable, Equatable, Sendable {
     public var openWhenStacked: Bool
     public var openWhenCharging: Bool
     public var showNextEvent: Bool
+    /// Kept so older saves decode and encode unchanged. The clock no longer reads it:
+    /// the system's calendar authorization decides whether to ask.
     public var calendarRequested: Bool
 
     public init(openWhenStacked: Bool = true, openWhenCharging: Bool = true,
