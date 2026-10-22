@@ -338,23 +338,40 @@ import Security
 /// serial on a background executor, including when called from a menu action.
 actor CloudLibraryDeviceAccess {
     private static let service = "academy.glasscode.lemmings.cloud-library-v2"
+    private let queue = DispatchQueue(label: "academy.glasscode.lemmings.cloud-library-credentials", qos: .userInitiated)
     private let read: @Sendable () throws -> [CloudLibraryIdentity]
     private let write: @Sendable ([CloudLibraryIdentity]) throws -> Void
     init(read: @escaping @Sendable () throws -> [CloudLibraryIdentity] = CloudLibraryDeviceAccess.readCredentials,
          write: @escaping @Sendable ([CloudLibraryIdentity]) throws -> Void = CloudLibraryDeviceAccess.writeCredentials) {
         self.read = read; self.write = write
     }
-    func credentials() throws -> [CloudLibraryIdentity] { try read() }
-    func storeCredentials(_ identities: [CloudLibraryIdentity]) throws -> [CloudLibraryIdentity] {
-        // Discovery and password setup may overlap. Never replace a newer link
-        // with the older set that a background pass started with.
-        let combined = try AppleCloudLibraryTransport.mergeIdentities(read(), identities)
-        try write(combined)
-        return combined
+    func credentials() async throws -> [CloudLibraryIdentity] {
+        let read = self.read
+        return try await perform { try read() }
     }
-    func currentAccount() throws -> Data? {
-        guard let token = FileManager.default.ubiquityIdentityToken else { return nil }
-        return try NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
+    func storeCredentials(_ identities: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
+        let read = self.read, write = self.write
+        return try await perform {
+            // Discovery and password setup may overlap. Keep the merge and
+            // write together on the same serial queue.
+            let combined = try AppleCloudLibraryTransport.mergeIdentities(read(), identities)
+            try write(combined)
+            return combined
+        }
+    }
+    func currentAccount() async throws -> Data? {
+        try await perform {
+            guard let token = FileManager.default.ubiquityIdentityToken else { return nil }
+            return try NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
+        }
+    }
+    private func perform<Value: Sendable>(_ work: @escaping @Sendable () throws -> Value) async throws -> Value {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                do { continuation.resume(returning: try work()) }
+                catch { continuation.resume(throwing: error) }
+            }
+        }
     }
     nonisolated private static func readCredentials() throws -> [CloudLibraryIdentity] {
         var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
