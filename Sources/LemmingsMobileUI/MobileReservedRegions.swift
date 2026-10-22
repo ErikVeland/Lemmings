@@ -4,9 +4,14 @@ import UIKit
 
 @MainActor enum MobileSystemRegions {
     /**
-     * Public runtime selectors preserve Duo support when building with the Tahoe-compatible SDK.
+     * Detects inactive division regions through the SDK or runtime selectors.
      */
     static func isFoldable(in view: UIView) -> Bool {
+        #if os(iOS) && compiler(>=6.3)
+        if #available(iOS 27.1, *) {
+            return !view.reservedRegions(kind: .division, options: .includeInactive).isEmpty
+        }
+        #endif
         guard let kind = MobileReservedRegionRuntime.kind("divisionRegionKind") else { return false }
         return MobileReservedRegionRuntime.hasRegions(in: view, kind: kind, includeInactive: true)
     }
@@ -16,16 +21,6 @@ import UIKit
             guard let runtimeKind = MobileReservedRegionRuntime.kind(name) else { return [MobileReservedRegion]() }
             return MobileReservedRegionRuntime.regions(in: view, kind: runtimeKind).map { .init(kind: kind, frame: $0.frame) }
         }
-    }
-
-    /// A foldable reports its division even while closed, when the region is inactive.
-    static func isFoldable(in view: UIView) -> Bool {
-        #if os(iOS) && compiler(>=6.3)
-        if #available(iOS 27.1, *) {
-            return !view.reservedRegions(kind: .division, options: .includeInactive).isEmpty
-        }
-        #endif
-        return false
     }
 
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.
