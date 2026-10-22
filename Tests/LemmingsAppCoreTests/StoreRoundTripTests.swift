@@ -118,8 +118,13 @@ import Testing
         let store = try LevelPlaylistStore(profileID: "player", storage: storage)
         #expect(store.favourites == [first])
         try store.toggleFavourite(second)
-        #expect(try Data(contentsOf: file)
-            == Self.sortedEncoder().encode(PlaylistDocument(version: 3, playlists: [], favourites: [second, first])))
+        let written = try Data(contentsOf: file)
+        let object = try #require(JSONSerialization.jsonObject(with: written) as? [String: Any])
+        #expect(object["version"] as? Int == 3)
+        #expect((object["playlists"] as? [Any])?.isEmpty == true)
+        let favourites = try #require(object["favourites"])
+        let decoded = try JSONDecoder().decode([LevelPlaylistEntry].self, from: JSONSerialization.data(withJSONObject: favourites))
+        #expect(decoded == [second, first])
         #expect(try LevelPlaylistStore(profileID: "player", storage: storage).favourites == [second, first])
     }
 

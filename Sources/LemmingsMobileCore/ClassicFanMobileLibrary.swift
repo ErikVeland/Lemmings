@@ -20,7 +20,7 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
     private let assets: ClassicMainDATAssets
     private let usesNativeArtwork: Bool
 
-    public init(packURL: URL, portsRoot: URL) throws {
+    public init(packURL: URL, portsRoot: URL, bundledScope: BundledPlayableScope? = nil) throws {
         pack = try ClassicFanPack(url: packURL)
         self.portsRoot = portsRoot
         usesNativeArtwork = Bundle.main.resourceURL.map { root in
@@ -29,7 +29,8 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
             }
         } ?? false
         assets = try ClassicMainDATAssets.load(from: portsRoot.appendingPathComponent(Self.engineFolder))
-        let found = pack.entries()
+        let scope = bundledScope ?? Bundle.main.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
+        let found = scope?.entries(in: pack) ?? pack.entries()
         guard !found.isEmpty else { throw MobileSessionError.changedLevel }
         entries = found
         let name = pack.displayName

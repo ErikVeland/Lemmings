@@ -191,11 +191,18 @@ final class FooterNavigationTests: XCTestCase {
         XCTAssertEqual(Set(footer.map { $0.action.id }), Set(page.footer.map(\.id)))
         let back = try XCTUnwrap(footer.first { $0.action.isBackNavigation })
         XCTAssertEqual(back.frame.minX, footer.map { $0.frame.minX }.min())
-        XCTAssertEqual(back.frame.maxY, footer.map { $0.frame.maxY }.max())
         if let forward = footer.first(where: { $0.action.primary && !$0.action.isBackNavigation }) {
-            XCTAssertEqual(forward.frame.maxY, back.frame.maxY)
-            XCTAssertGreaterThan(forward.frame.minX, back.frame.maxX)
+            if forward.frame.minX == back.frame.minX {
+                XCTAssertGreaterThan(forward.frame.minY, back.frame.maxY)
+                XCTAssertEqual(footer.dropLast().last?.action.id, back.action.id)
+            } else {
+                XCTAssertEqual(forward.frame.maxY, back.frame.maxY)
+                XCTAssertGreaterThan(forward.frame.minX, back.frame.maxX)
+            }
+            XCTAssertEqual(forward.frame.maxY, footer.map { $0.frame.maxY }.max())
             XCTAssertEqual(forward.frame.maxX, footer.map { $0.frame.maxX }.max())
+        } else {
+            XCTAssertEqual(back.frame.maxY, footer.map { $0.frame.maxY }.max())
         }
         let ordered = footer.sorted { $0.frame.minY == $1.frame.minY ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY }
         XCTAssertEqual(footer.map(\.action), ordered.map(\.action))

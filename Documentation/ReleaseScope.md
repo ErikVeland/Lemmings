@@ -58,9 +58,9 @@ closure evidence and open limits remain in force.
 ## Current bundled route counts
 
 The latest retained evidence records 352/352 official Classic routes,
-2,404/6,019 playable Classic fan routes, 120 L2 standalone routes with 70 carry-over
+2,404/6,016 playable Classic fan routes, 120 L2 standalone routes with 70 carry-over
 variants and 12 chains, 86/90 L3 routes, and 158/794 NeoLemmix routes. The
-evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,615
+evidence dates differ by engine. L2 Gold Ark, four L3 level identities, 3,612
 Classic fan routes and 636 NeoLemmix routes remain open. See the
 [bundled closure velocity record](ReleaseReadiness/BundledClosureVelocity.md)
 for dates, search outcomes and measurement limits.
@@ -75,8 +75,15 @@ object. These three levels cannot meet their rescue requirements as bundled.
 The scan found no level-load or pack errors and replayed no levels. See the
 [exit-structure audit](ReleaseReadiness/ClassicFanExitStructure-2026-10-20.json).
 The 21 October decision excludes the exact `fan:lldb-509` no-exit record from
-playable bundled scope while retaining its source archive. The other two rows
-retain their recorded limits. See the [merge record](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md).
+playable bundled scope while retaining its source archive. See the
+[merge record](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md).
+The 2.2 polish also excludes the other two positive-rescue no-exit records and
+`fan:lldb-386` `Gronklems -1.dat#1`, which requires 37 rescues from 20 lemmings.
+All four exclusions require the exact bundled folder, archive hash and member.
+Mac, iOS and TV apply the same policy. Imports remain available, and the source
+archives and remaining saved level identities stay unchanged. No winning route
+is added. See the [structural evidence](ReleaseReadiness/ClassicFanStructuralBlockers-2026-10-20.json)
+and [2.2 preparation record](ReleaseReadiness/2.2ReleasePreparation-2026-10-22.md#launch-polish).
 
 ## Bundled content closure
 

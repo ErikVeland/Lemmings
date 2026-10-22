@@ -6,27 +6,29 @@ Snapshot: 25 September 2026. Counts exclude the `By Track` symlink view. Package
 
 The folder contains **304 VGZ, 22 files named VGM, 32 OGG, 73 MOD, 12 WAV, 51 MP3 and 360 M4A files**. Converted counterparts are not additional compositions. There are **495 directly playable files**. The current [track catalogue](MusicTrackCatalogue.md) now groups all 495 files into 210 identities. Identity counts depend on classification and are not a verified count of unique compositions.
 
+The table cites local package notes stored with ignored soundtrack inputs. These files are not in Git.
+
 The conversion report records 359 conversions and 0 failures. See [conversion details](MusicConversion.md) for decoder validation and the finite-loop limitation.
 
 | Source folder | Original formats | M4A counterparts/source | Package provenance |
 | --- | --- | ---: | --- |
-| All_New_World_of_Lemmings_(IBM_PC_AT) | 9 VGZ | 9 | MrKsoft; v1.10; [notes](../Sources/Music/All_New_World_of_Lemmings_%28IBM_PC_AT%29/All%20New%20World%20of%20Lemmings.txt) |
+| All_New_World_of_Lemmings_(IBM_PC_AT) | 9 VGZ | 9 | MrKsoft; v1.10; local package notes |
 | CoLD SToRAGE - Lemmings - the original AMIGA game audio | 12 WAV | 0 | No package readme |
-| Lemmings (Mega Drive, Genesis) | 25 VGZ | 25 | 2ch-N; v1.06; [notes](../Sources/Music/Lemmings%20%28Mega%20Drive%2C%20Genesis%29/Lemmings.txt) |
-| Lemmings 2 - The Tribes (Mega Drive, Genesis) | 16 VGZ | 16 | 2ch-N; v1.00; [notes](../Sources/Music/Lemmings%202%20-%20The%20Tribes%20%28Mega%20Drive%2C%20Genesis%29/Lemmings%202%20-%20The%20Tribes.txt) |
-| Lemmings_(Arcade) | 18 VGZ | 18 | Paul999; v1.01; [notes](../Sources/Music/Lemmings_%28Arcade%29/Lemmings.txt) |
-| Lemmings_(Atari_Lynx) | 19 VGZ | 19 | GTheGuardian; v1.00; [notes](../Sources/Music/Lemmings_%28Atari_Lynx%29/Lemmings.txt) |
-| Lemmings_(FM_Towns) | 22 VGZ | 22 | GTheGuardian; v1.00; [notes](../Sources/Music/Lemmings_%28FM_Towns%29/Lemmings.txt) |
-| Lemmings_(NEC_PC-9801) | 21 VGZ | 21 | GTheGuardian; v1.00; [notes](../Sources/Music/Lemmings_%28NEC_PC-9801%29/Lemmings.txt) |
-| Lemmings_(NES) | 10 VGZ | 10 | Sonic of 8!; v1.00; [notes](../Sources/Music/Lemmings_%28NES%29/Lemmings.txt) |
-| Lemmings_(Nintendo_Game_Boy) | 9 VGZ | 9 | The789Guy; v1.00; [notes](../Sources/Music/Lemmings_%28Nintendo_Game_Boy%29/Lemmings.txt) |
-| Lemmings_(Sharp_X68000) | 22 VGZ | 22 | GTheGuardian; v1.01; [notes](../Sources/Music/Lemmings_%28Sharp_X68000%29/Lemmings.txt) |
-| Lemmings_(ZX_Spectrum_128) | 1 VGZ | 1 | Sonic of 8!; v1.00; [notes](../Sources/Music/Lemmings_%28ZX_Spectrum_128%29/Lemmings.txt) |
-| Lemmings_2_-_The_Tribes_(IBM_PC_AT) | 19 VGZ | 19 | MrKsoft; v1.00; [notes](../Sources/Music/Lemmings_2_-_The_Tribes_%28IBM_PC_AT%29/Lemmings%202%20-%20The%20Tribes.txt) |
-| Lemmings_2_-_The_Tribes_(Nintendo_Game_Boy) | 15 VGZ | 15 | The789Guy; v1.00; [notes](../Sources/Music/Lemmings_2_-_The_Tribes_%28Nintendo_Game_Boy%29/Lemmings%202%20-%20The%20Tribes.txt) |
-| Lemmings_3D_(PC) | 38 VGZ | 38 | Valley Bell; v1.00; [notes](../Sources/Music/Lemmings_3D_%28PC%29/Lemmings%203D.txt) |
-| Lemmings_Series_(IBM_PC_AT) | 31 VGZ | 31 | Valley Bell; v1.10; [notes](../Sources/Music/Lemmings_Series_%28IBM_PC_AT%29/Lemmings%20Series.txt) |
-| Lemmings_Series_(Tandy_1000) | 29 VGZ | 29 | NewRisingSun; v1.02; [notes](../Sources/Music/Lemmings_Series_%28Tandy_1000%29/Lemmings%20Series.txt) |
+| Lemmings (Mega Drive, Genesis) | 25 VGZ | 25 | 2ch-N; v1.06; local package notes |
+| Lemmings 2 - The Tribes (Mega Drive, Genesis) | 16 VGZ | 16 | 2ch-N; v1.00; local package notes |
+| Lemmings_(Arcade) | 18 VGZ | 18 | Paul999; v1.01; local package notes |
+| Lemmings_(Atari_Lynx) | 19 VGZ | 19 | GTheGuardian; v1.00; local package notes |
+| Lemmings_(FM_Towns) | 22 VGZ | 22 | GTheGuardian; v1.00; local package notes |
+| Lemmings_(NEC_PC-9801) | 21 VGZ | 21 | GTheGuardian; v1.00; local package notes |
+| Lemmings_(NES) | 10 VGZ | 10 | Sonic of 8!; v1.00; local package notes |
+| Lemmings_(Nintendo_Game_Boy) | 9 VGZ | 9 | The789Guy; v1.00; local package notes |
+| Lemmings_(Sharp_X68000) | 22 VGZ | 22 | GTheGuardian; v1.01; local package notes |
+| Lemmings_(ZX_Spectrum_128) | 1 VGZ | 1 | Sonic of 8!; v1.00; local package notes |
+| Lemmings_2_-_The_Tribes_(IBM_PC_AT) | 19 VGZ | 19 | MrKsoft; v1.00; local package notes |
+| Lemmings_2_-_The_Tribes_(Nintendo_Game_Boy) | 15 VGZ | 15 | The789Guy; v1.00; local package notes |
+| Lemmings_3D_(PC) | 38 VGZ | 38 | Valley Bell; v1.00; local package notes |
+| Lemmings_Series_(IBM_PC_AT) | 31 VGZ | 31 | Valley Bell; v1.10; local package notes |
+| Lemmings_Series_(Tandy_1000) | 29 VGZ | 29 | NewRisingSun; v1.02; local package notes |
 | Remixes | 32 OGG, 1 MP3 | 24 | No package readme |
 | holiday_lemmings_music_mod | 3 MOD | 0 | No package readme |
 | lemmings_2_music_mod_tsyu | 14 MOD | 0 | No package readme |

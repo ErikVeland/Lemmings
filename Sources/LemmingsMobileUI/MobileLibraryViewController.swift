@@ -26,7 +26,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     #endif
     #if os(iOS)
-    var deskClock: MobileDeskClockController?
     var deskClockBlocksInput: Bool { deskClock != nil }
     let deskClockActivity = DeskClockActivity()
     nonisolated(unsafe) private var deskClockTimer: Timer?
@@ -347,6 +346,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         clock.onClose = { [weak self, weak clock] in
             guard let self, self.deskClock === clock else { return }
             self.deskClock = nil
+            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
             self.libraryInput.reset()
             self.becomeFirstResponder()
             self.syncPages()
@@ -430,44 +430,27 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #if os(iOS)
     private func checkDeskClock() {
         let regions = MobileSystemRegions.read(in: view)
-        let stacked = regions.contains { $0.kind == .division && $0.frame.width > $0.frame.height }
         let charging = UIDevice.current.batteryState == .charging || UIDevice.current.batteryState == .full
         let idle = ProcessInfo.processInfo.systemUptime - deskClockActivity.lastInput
         let menu = viewIsVisible && sceneIsActive && game == nil && presentedViewController == nil
             && !preparingLevel && !scrollView.isTracking && !scrollView.isDecelerating
             && route == .home && !searchField.isFirstResponder
-        if let reason = DeskClockTrigger.evaluate(foldable: MobileSystemRegions.isFoldable(in: view),
-            stacked: stacked, closed: !regions.contains { $0.kind == .division }, charging: charging,
-            idle: idle, menuAvailable: menu, settings: mobileSettings.deskClock) {
-            presentDeskClock(reason: reason)
+        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let trigger = DeskClockTrigger.evaluate(.init(foldable: MobileSystemRegions.isFoldable(in: view),
+            regions: regions, safe: .init(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
+            idle: idle, charging: charging, screen: menu ? .menu : .modal, settings: mobileSettings.deskClock))
+        if let deskClock, deskClock.reason.isAutomatic {
+            if (deskClock.reason == .stacked && trigger != .stacked)
+                || (deskClock.reason == .closedCharging && trigger != .closedCharging) {
+                deskClock.close()
+            }
+            return
         }
-    }
-
-    func presentDeskClock(reason: DeskClockReason) {
-        guard game == nil, !preparingLevel, deskClock == nil, presentedViewController == nil else { return }
-        let clock = MobileDeskClockController(reason: reason, settings: mobileSettings)
-        deskClock = clock
-        clock.onClose = { [weak self, weak clock] in
-            guard let self, let clock, self.deskClock === clock else { return }
-            clock.stop()
-            clock.willMove(toParent: nil)
-            clock.view.removeFromSuperview()
-            clock.removeFromParent()
-            self.deskClock = nil
-            self.updateLibraryDisplayLink()
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
-            self.syncMenuMusic()
-            self.becomeFirstResponder()
+        switch trigger {
+        case .stacked: presentDeskClock(reason: .stacked)
+        case .closedCharging: presentDeskClock(reason: .closedCharging)
+        case .none: break
         }
-        resignFirstResponder()
-        addChild(clock)
-        clock.view.frame = view.bounds
-        clock.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(clock.view)
-        clock.didMove(toParent: self)
-        clock.start()
-        updateLibraryDisplayLink()
-        MobileMusic.shared.suspend()
     }
     #endif
 
@@ -1035,7 +1018,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             selectedIndex = 0; selectedPreview = nil; browserShown = false
             levelsBackRoute = back
             navigate(.levels)
-            if let checkpoint { startLevel(checkpoint.levelIndex, checkpoint: checkpoint) }
+            if let checkpoint {
+                do { startLevel(try loaded.checkpointLevelIndex(for: checkpoint), checkpoint: checkpoint) }
+                catch { notice = error.localizedDescription; rebuild() }
+            }
             else if let index, loaded.levels.indices.contains(index) { selectedIndex = index; startLevel(index, checkpoint: nil) }
             else { selectLevel(loaded.levels.indices.contains(browseIndex) ? browseIndex : 0) }
         }

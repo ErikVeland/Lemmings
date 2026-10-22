@@ -103,7 +103,7 @@ public enum ShortPlayCatalogue {
                   witnessSHA256: "e8af8b7fdeaa501438240f46a7a6477768fff9a9a59a3bd39eaf096b68a6a26a", levelSHA256: "ab8f2a2df7b601243cf044f2601cb599c12c973635daedbba1c6cbb915500697"),
             .init(identity: .init(engine: .lemmings3, packID: "chronicles-1", levelID: "4:2248e31f97d606cb06a4fb80cccbd798dc6a4218188e83838f37a05f60959910"),
                   sourceRevision: nil, fixture: "Tests/Lemmings3CompletionTests/Fixtures/005.json",
-                  witnessSHA256: "d96ffaaf29219e463908e4fee690fa0693540c21076bcc75baa09d6f8fb54160", levelSHA256: "2248e31f97d606cb06a4fb80cccbd798dc6a4218188e83838f37a05f60959910"),
+                  witnessSHA256: "85c49cef9535c9e61e59f99bfd640fc3e3898b0125e823999f37edc85d636c02", levelSHA256: "2248e31f97d606cb06a4fb80cccbd798dc6a4218188e83838f37a05f60959910"),
         ]),
     ]
 

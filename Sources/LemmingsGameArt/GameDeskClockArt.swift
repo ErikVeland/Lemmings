@@ -115,6 +115,48 @@ public final class GameDeskClockArt: @unchecked Sendable {
         }
     }
 
+    /**
+     * Draws compact widget labels at their native bitmap size.
+     */
+    public func drawWidget(_ simulation: DeskClockSimulation, event: DeskClockEvent?, now: Date,
+                           in context: CGContext, rect: CGRect, compact: Bool) {
+        guard compact else {
+            draw(simulation, event: event, now: now, time: 0, in: context, rect: rect, nightDim: false)
+            return
+        }
+        guard let source = CGContext(data: nil, width: 208, height: 149, bitsPerComponent: 8,
+                                     bytesPerRow: 208 * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
+        source.translateBy(x: 0, y: 149)
+        source.scaleBy(x: 1, y: -1)
+        draw(simulation, event: nil, now: now, time: 0, in: source, rect: CGRect(x: 0, y: 0, width: 208, height: 149),
+             nightDim: false)
+
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: rect)
+        context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 1))
+        context.fill(rect)
+        let width = max(1, rect.width - 16)
+        if let digits = source.makeImage()?.cropping(to: CGRect(x: 40, y: 31, width: 128, height: 38)) {
+            GameStoneArt.drawImage(digits, in: CGRect(x: rect.minX + 8, y: rect.minY + 12,
+                                                      width: width, height: width * 38 / 128), context: context)
+        }
+        let cell = CGFloat(small.cellWidth) / 2
+        let maximum = max(1, Int(width / cell))
+        lock.lock()
+        defer { lock.unlock() }
+        let title = event?.title ?? dateLine(now, calendar: simulation.calendar)
+        let label = String(title.prefix(maximum))
+        text(label, x: rect.minX + 8, y: rect.midY - 10, font: .small, align: .left,
+             tint: Self.white, in: context)
+        if let event {
+            let countdown = DeskClockFace.countdown(to: event.start, now: now, compact: true)
+            text(String(countdown.prefix(maximum)), x: rect.minX + 8, y: rect.midY + 12,
+                 font: .small, align: .left, tint: Self.green, in: context)
+        }
+    }
+
     // MARK: - Scene parts
 
     /// Trapdoor frames 1-9 at 10 fps from the moment it opens, then frame 0 resting open.

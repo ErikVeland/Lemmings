@@ -59,7 +59,7 @@ final class FamiliarNamesPageTests: XCTestCase {
                 XCTAssertTrue(page.hitTest(fieldPoint) === page.field)
                 let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
                 GameMenuArtwork.withRenderer(renderer) {
-                    func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+                    @MainActor func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
                     invalidate(page)
                     if let context = NSGraphicsContext(bitmapImageRep: bitmap) {
                         page.displayIgnoringOpacity(page.bounds, in: context)

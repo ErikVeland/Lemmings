@@ -55,15 +55,18 @@ public final class MobileCatalogue {
     public let portsRoot: URL
     public let fanFolders: [URL]
     private var measuredCounts: [String: Int]
+    private let bundledScope: BundledPlayableScope?
+    private var excludedCounts: [String: Int] = [:]
     private var opened: [(id: String, library: any MobileGameLibrary)] = []
 
     /// - Parameters:
     ///   - portsRoot: Holds the stock release folders.
     ///   - fanFolders: Folders of fan pack ZIPs, most preferred first. A folder may hold a
     ///     `level-counts.json` that maps file names to level counts.
-    public init(portsRoot: URL, fanFolders: [URL] = []) {
+    public init(portsRoot: URL, fanFolders: [URL] = [], bundledScope: BundledPlayableScope? = nil) {
         self.portsRoot = portsRoot
         self.fanFolders = fanFolders
+        self.bundledScope = bundledScope ?? Bundle.main.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
         var counts: [String: Int] = [:]
         for folder in fanFolders {
             guard let data = try? Data(contentsOf: folder.appendingPathComponent("level-counts.json")),
@@ -71,6 +74,12 @@ public final class MobileCatalogue {
             for (name, count) in index where count >= 0 && counts[name] == nil { counts[name] = count }
         }
         measuredCounts = counts
+        if let scope = self.bundledScope {
+            for file in fanFiles() where scope.applies(to: file) {
+                guard let pack = try? ClassicFanPack(url: file) else { continue }
+                excludedCounts[file.standardizedFileURL.path] = scope.members(in: file, archiveSHA256: pack.fingerprint).count
+            }
+        }
     }
 
     public func updateMeasuredCounts(_ counts: [String: Int]) { measuredCounts.merge(counts) { _, measured in measured } }
@@ -99,7 +108,9 @@ public final class MobileCatalogue {
             return fanFiles().map { file in
                 MobileContentPack(id: ClassicFanPack.catalogueID(file), family: .fan,
                                   title: ClassicFanPack.displayName(of: file), source: .fan(file: file),
-                                  levelCount: measuredCounts[file.lastPathComponent])
+                                  levelCount: measuredCounts[file.lastPathComponent].map {
+                                      max(0, $0 - (excludedCounts[file.standardizedFileURL.path] ?? 0))
+                                  })
             }
         }
     }
@@ -145,7 +156,7 @@ public final class MobileCatalogue {
         for pack in self.packs(in: .fan) {
             guard !Task.isCancelled else { break }
             guard case let .fan(file) = pack.source, let reader = try? ClassicFanPack(url: file) else { continue }
-            let found = reader.entries()
+            let found = bundledScope?.entries(in: reader) ?? reader.entries()
             guard !found.isEmpty else { continue }
             packs += 1
             pool += found.map { MobileFavourites.Entry(pack: pack.id, level: $0.key, title: $0.label) }
@@ -165,7 +176,7 @@ public final class MobileCatalogue {
         case let .release(folder, _):
             library = try ClassicMobileLibrary(directory: portsRoot.appendingPathComponent(folder))
         case let .fan(file):
-            library = try ClassicFanMobileLibrary(packURL: file, portsRoot: portsRoot)
+            library = try ClassicFanMobileLibrary(packURL: file, portsRoot: portsRoot, bundledScope: bundledScope)
         }
         opened.append((pack.id, library))
         if opened.count > 3 { opened.removeFirst() }

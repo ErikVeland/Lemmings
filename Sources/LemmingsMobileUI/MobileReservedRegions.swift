@@ -4,7 +4,29 @@ import UIKit
 
 @MainActor enum MobileSystemRegions {
     /**
-     * Public runtime selectors preserve Duo support when building with the Tahoe-compatible SDK.
+     * Keeps controls clear of a foldable's vertical bar outside the safe area.
+     */
+    static func navigationRail(in view: UIView) -> MobileRect? {
+        #if os(iOS)
+        guard isFoldable(in: view) else { return nil }
+        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let left = safe.minX - view.bounds.minX
+        let right = view.bounds.maxX - safe.maxX
+        guard max(left, right) >= 52, abs(left - right) >= 20 else { return nil }
+        let onRight = right > left
+        let width = onRight ? right : left
+        let top = view.safeAreaInsets.top + 4
+        let bottom = view.safeAreaInsets.bottom + 4
+        return MobileRect(x: onRight ? safe.maxX + 4 : view.bounds.minX + 4,
+            y: view.bounds.minY + top, width: width - 8,
+            height: max(0, view.bounds.height - top - bottom))
+        #else
+        return nil
+        #endif
+    }
+
+    /**
+     * Detects inactive division regions through runtime selectors.
      */
     static func isFoldable(in view: UIView) -> Bool {
         guard let kind = MobileReservedRegionRuntime.kind("divisionRegionKind") else { return false }
@@ -16,16 +38,6 @@ import UIKit
             guard let runtimeKind = MobileReservedRegionRuntime.kind(name) else { return [MobileReservedRegion]() }
             return MobileReservedRegionRuntime.regions(in: view, kind: runtimeKind).map { .init(kind: kind, frame: $0.frame) }
         }
-    }
-
-    /// A foldable reports its division even while closed, when the region is inactive.
-    static func isFoldable(in view: UIView) -> Bool {
-        #if os(iOS) && compiler(>=6.3)
-        if #available(iOS 27.1, *) {
-            return !view.reservedRegions(kind: .division, options: .includeInactive).isEmpty
-        }
-        #endif
-        return false
     }
 
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.

@@ -118,9 +118,11 @@ struct MacArrowWrapTests {
             for y in arrow.placement.y * 2..<min(scene.height, (arrow.placement.y + arrow.graphic.height) * 2) {
                 for x in arrow.placement.x * 2..<min(scene.width, (arrow.placement.x + arrow.graphic.width) * 2) {
                     let p = (y * scene.width + x) * 4
-                    let edge = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)].contains { nx, ny in
-                        (0..<scene.width).contains(nx) && (0..<scene.height).contains(ny)
-                            && terrain[(ny * scene.width + nx) * 4 + 3] == 0
+                    let neighbours = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+                    let edge = neighbours.contains { nx, ny in
+                        guard nx >= 0, nx < scene.width, ny >= 0, ny < scene.height else { return false }
+                        let alpha = (ny * scene.width + nx) * 4 + 3
+                        return terrain[alpha] == 0
                     }
                     if terrain[p + 3] == 0 || edge {
                         #expect(frame[p..<p + 4] == terrain[p..<p + 4], "style \(level.groundStyle) at \(x),\(y)")

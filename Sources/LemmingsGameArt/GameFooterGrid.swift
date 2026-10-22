@@ -1,6 +1,8 @@
 import Foundation
 
-/// Return navigation owns the bottom-left slot. Forward navigation owns the bottom-right slot.
+/**
+ * Places return and forward navigation in the bottom corners, or stacks them on narrow screens.
+ */
 public struct GameFooterGrid {
     public struct Slot {
         public let action: GameFrontEnd.Action
@@ -16,10 +18,16 @@ public struct GameFooterGrid {
                 spanSingleAction: Bool = false, alignTrailing: Bool = true) {
         let back = actions.firstIndex(where: \.isBackNavigation)
         let forward = actions.lastIndex { $0.primary && !$0.isBackNavigation }
-        let paired = back != nil && forward != nil && actions.count > 1
-        let columns = min(max(1, actions.count), max(paired ? 2 : 1, requested))
+        let columns = min(max(1, actions.count), max(1, requested))
         let rows = Int(ceil(Double(actions.count) / Double(columns)))
         self.columns = columns; self.rows = rows
+        if columns == 1 {
+            let ordered = actions.enumerated().filter { $0.offset != back && $0.offset != forward }.map(\.element)
+                + (back.map { [actions[$0]] } ?? [])
+                + (forward.map { [actions[$0]] } ?? [])
+            slots = ordered.enumerated().map { Slot(action: $0.element, row: $0.offset, column: 0, span: 1) }
+            return
+        }
         guard let back else {
             let remainder = actions.count % columns
             slots = actions.enumerated().map { index, action in

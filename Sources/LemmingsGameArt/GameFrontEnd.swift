@@ -138,8 +138,15 @@ public struct GameFrontEnd {
         let inset: CGFloat = width < 600 ? 14 : 32
         let boardWidth = min(1032, width - inset * 2)
         let x = (width - boardWidth) / 2
+        let requestedColumns = page.footerColumns ?? (boardWidth >= 620 ? 3 : 2)
+        let minimumCaptionWidth = page.footer.map { action in
+            (action.title.split(whereSeparator: \.isWhitespace).map {
+                GameTextLayout.width(of: String($0))
+            }.max() ?? 0) + (action.primary ? 48 : 24)
+        }.max() ?? 44
+        let fittingColumns = max(1, Int((boardWidth - 40 + 12) / (minimumCaptionWidth + 12)))
         let footerGrid = GameFooterGrid(actions: page.orderedFooter,
-            columns: page.footerColumns ?? (boardWidth >= 620 ? 3 : 2), spanSingleAction: true)
+            columns: min(requestedColumns, fittingColumns), spanSingleAction: true)
         // A short, wide screen puts the preview beside its details so the actions stay in view.
         let compact = page.preview && minimumHeight < 520 && width > minimumHeight * 1.3
         let titleScale = boardWidth >= 620 ? 2 : 1

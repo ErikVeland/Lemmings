@@ -15,6 +15,51 @@
       "reason": "The exact source level has no exit object or trigger.",
       "decisionDate": "2026-10-21",
       "decision": "Retain the source pack and exclude this level from playable bundled scope."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-386",
+        "levelID": "Gronklems -1.dat#1"
+      },
+      "pack": "0386-Gronklems-1.zip",
+      "archiveSHA256": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
+      "member": "Gronklems -1.dat#1",
+      "title": "gronklems -1.dat 2",
+      "initialStateHash": "5abd5b53376cdfc5182681b9006b2a03c11eceb2402476e91cb14221d2b3cfc4",
+      "reason": "Required survivor count exceeds the level population.",
+      "decisionDate": "2026-10-23",
+      "decision": "Exclude a verified structural dead end from bundled play during the authorised 2.2 polish pass. Retain its source archive."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-437",
+        "levelID": "LDChallenge08.dat#1"
+      },
+      "pack": "0437-Level-Design-Game-08.zip",
+      "archiveSHA256": "76c552fad59139decedda40d3b2adef946a42a2661cfc18f432263a290251949",
+      "member": "LDChallenge08.dat#1",
+      "title": "ldchallenge08.dat 2",
+      "initialStateHash": "f0c07d180cd8b3cbd2b7061bb8db178b8414a2e646d2ceb71f3afef79ac02127",
+      "reason": "The exact level has no exit object or exit trigger.",
+      "decisionDate": "2026-10-23",
+      "decision": "Exclude a verified structural dead end from bundled play during the authorised 2.2 polish pass. Retain its source archive."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-508",
+        "levelID": "KillerMaster 1 Wicked 1.dat#3"
+      },
+      "pack": "0508-KillerMasters-Lemmings-1-Wicked.zip",
+      "archiveSHA256": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
+      "member": "KillerMaster 1 Wicked 1.dat#3",
+      "title": "Type this Word!",
+      "initialStateHash": "5f4441453b1a153eee8e977be047dfa9dad59f79abb6c675cc8fa2f9d2bbb411",
+      "reason": "The exact level has no exit object or exit trigger.",
+      "decisionDate": "2026-10-23",
+      "decision": "Exclude a verified structural dead end from bundled play during the authorised 2.2 polish pass. Retain its source archive."
     }
   ]
 }

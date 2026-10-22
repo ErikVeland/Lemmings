@@ -53,7 +53,7 @@ def outputs(rows):
         catalogue[key] = {'kind': group[0]['kind'], 'references': references}
         if group[0]['kind'] == 'text':
             lines += ['/* ' + '; '.join(references).replace('*/', '* /') + ' */', f'{quote(key)} = {quote(key)};', '']
-    return '\n'.join(lines) + '\n', plistlib.dumps(plurals, sort_keys=True), json.dumps(catalogue, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
+    return '\n'.join(lines).rstrip('\n') + '\n', plistlib.dumps(plurals, sort_keys=True), json.dumps(catalogue, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
 
 
 def validate_translations(english_keys, plural_keys):
