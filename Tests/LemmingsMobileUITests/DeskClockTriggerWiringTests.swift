@@ -102,9 +102,11 @@ private final class SilentDeskClockEvents: DeskClockEventSource, @unchecked Send
         let clock = try #require(host.deskClock)
         #expect(clock.reason == .stacked)
         #expect(host.idleTimer.last == true)
-        // The idle time does not matter while the clock shows: only the pose does.
+        // The idle time does not matter while the clock shows: only the pose does. A touch on the clock keeps it.
+        host.entry.noteInput()
         host.check()
         #expect(host.deskClock === clock)
+        #expect(clock.isShown)
         host.regions = WiringHost.book
         host.check()
         #expect(host.deskClock == nil)
