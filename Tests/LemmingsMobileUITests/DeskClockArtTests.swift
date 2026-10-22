@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import Testing
-import LemmingsGameArt
+@testable import LemmingsGameArt
 import LemmingsMobileCore
 
 struct DeskClockArtTests {
@@ -73,6 +73,16 @@ struct DeskClockArtTests {
         let start = DeskClockSimulation.still(at: now, event: nuke, uses24Hour: true, calendar: Self.calendar)
         _ = try Self.render(art, start, event: nuke, now: now, name: "start-nuke", nightDim: false)
         _ = try Self.render(art, sim, event: nil, now: now, name: "night", nightDim: true)
+    }
+
+    @Test func hatchOpensThroughEveryFrame() {
+        #expect(GameDeskClockArt.hatchFrame(age: -1) == 1)
+        #expect(GameDeskClockArt.hatchFrame(age: 0.05) == 1)
+        #expect((0..<9).map { GameDeskClockArt.hatchFrame(age: Double($0) / 10 + 0.05) } == Array(1...9))
+        #expect(GameDeskClockArt.hatchFrame(age: 0.85) == 9)
+        #expect(GameDeskClockArt.hatchFrame(age: 0.95) == 0)
+        #expect(GameDeskClockArt.hatchFrame(age: 1.0) == 0)
+        #expect(GameDeskClockArt.hatchFrame(age: 60) == 0)
     }
 
     // MARK: - Helpers

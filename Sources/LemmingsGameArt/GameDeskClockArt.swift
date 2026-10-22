@@ -76,8 +76,8 @@ public final class GameDeskClockArt: @unchecked Sendable {
 
         drawSky(time: time, in: context)
         // Trapdoor: frames 1-9 open the doors, then frame 0 rests open.
-        let opening = min(9, 1 + Int((now.timeIntervalSince(sim.hatchOpenedAt) * 10).rounded(.down)))
-        drawSprite(bank: Self.objectsBank, index: opening >= 9 ? 0 : max(1, opening), at: Self.hatch, in: context)
+        drawSprite(bank: Self.objectsBank, index: Self.hatchFrame(age: now.timeIntervalSince(sim.hatchOpenedAt)),
+                   at: Self.hatch, in: context)
         if let event { drawEvent(event, sim: sim, now: now, time: time, in: context) }
         // Exit: the arch, with its animated top resting 6 px above on the arch's brackets.
         drawSprite(bank: Self.objectsBank, index: 16, at: Self.exit, in: context)
@@ -116,6 +116,12 @@ public final class GameDeskClockArt: @unchecked Sendable {
     }
 
     // MARK: - Scene parts
+
+    /// Trapdoor frames 1-9 at 10 fps from the moment it opens, then frame 0 resting open.
+    static func hatchFrame(age: TimeInterval) -> Int {
+        let opening = 1 + Int((max(0, age) * 10).rounded(.down))
+        return opening > 9 ? 0 : opening
+    }
 
     private static let stars: [(x: Int, y: Int, phase: Double)] = {
         var random = PrototypeRandom()
