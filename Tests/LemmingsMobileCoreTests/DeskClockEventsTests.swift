@@ -53,3 +53,19 @@ struct DeskClockEventsTests {
         #expect(DeskClockEvents.next(from: [], now: now) == nil)
     }
 }
+
+#if canImport(EventKit) && (os(iOS) || os(macOS))
+import EventKit
+
+@Suite struct DeskClockCalendarAccessTests {
+    @Test func onlyFullAccessReadsEvents() {
+        #expect(EventKitDeskClockSource.access(for: .notDetermined) == .notDetermined)
+        #expect(EventKitDeskClockSource.access(for: .denied) == .denied)
+        #expect(EventKitDeskClockSource.access(for: .restricted) == .denied)
+        if #available(iOS 17, macOS 14, *) {
+            #expect(EventKitDeskClockSource.access(for: .fullAccess) == .granted)
+            #expect(EventKitDeskClockSource.access(for: .writeOnly) == .denied)
+        }
+    }
+}
+#endif

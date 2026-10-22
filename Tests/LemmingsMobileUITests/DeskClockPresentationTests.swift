@@ -155,6 +155,27 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         #expect(!clock.accessibilityPerformEscape())
     }
 
+    @Test func voiceOverKeepsCloseInEveryPose() async {
+        let poses: [(DeskClockReason, [MobileReservedRegion])] = [
+            (.stacked, [.init(kind: .division, frame: .init(x: 0, y: 318, width: 465, height: 14))]),
+            (.menu, [.init(kind: .division, frame: .init(x: 226, y: 0, width: 14, height: 650))]),
+            (.closedCharging, []),
+            (.widget, [])]
+        for (reason, regions) in poses {
+            let fixture = DeskClockFixture()
+            fixture.battery = .charging
+            fixture.voiceOver = true
+            fixture.regions = regions
+            let clock = await fixture.open(reason)
+            clock.view.layoutIfNeeded()
+            #expect(clock.view.accessibilityViewIsModal, "\(reason)")
+            #expect(!clock.closeButton.isHidden && clock.closeButton.isAccessibilityElement, "\(reason)")
+            #expect(fixture.host.view.bounds.contains(clock.closeButton.frame), "\(reason)")
+            #expect(clock.closeButton.accessibilityLabel?.isEmpty == false, "\(reason)")
+            clock.close()
+        }
+    }
+
     @Test func startingGameClosesClock() async {
         let fixture = DeskClockFixture()
         fixture.battery = .charging

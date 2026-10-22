@@ -65,7 +65,11 @@ public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sen
 
     /// The current access without creating an event store, for Settings.
     public static func authorization() -> DeskClockCalendarAccess {
-        let status = EKEventStore.authorizationStatus(for: .event)
+        access(for: EKEventStore.authorizationStatus(for: .event))
+    }
+
+    /// Only full access, or the older `authorized`, may read events. Write-only access counts as denied.
+    static func access(for status: EKAuthorizationStatus) -> DeskClockCalendarAccess {
         if status == .notDetermined { return .notDetermined }
         if #available(iOS 17, macOS 14, *) {
             return status == .fullAccess ? .granted : .denied
