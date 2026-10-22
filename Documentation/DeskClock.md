@@ -109,8 +109,9 @@ for "every third event or so".
   The fuses are 80 ms apart, as in the game's own nuke.
 - In the last second, each lemming plays "Oh no!" (bank 1400 frames 337–352).
 - At the start, each lemming explodes: frame 75 for 0.2 seconds, debris, and a
-  hole in the digits the size of the game's explosion mask (16 × 22 classic pixels).
-  The blocker explodes too. The ground stays.
+  hole in the digits. The blast removes each digit block whose center is inside an
+  ellipse 3 classic pixels above the feet. The ellipse has a horizontal radius of
+  10 and a vertical radius of 13 classic pixels. The blocker explodes too. The ground stays.
 - Builders repair the holes at once. The parade waits 1.6 seconds for the smoke to clear.
 - The trapdoor releases no lemmings from the fuse until 1.5 seconds after the blast.
 - The nuke is silent, like the rest of the clock.
@@ -120,14 +121,15 @@ for "every third event or so".
 
 | Trigger | Condition | Exit |
 | --- | --- | --- |
-| Stacked, idle | A horizontal division is present (`MobileDisplayRegions.tablePanes` returns two panes). The app shows Home or a menu. No input for 60 seconds. | Any touch on either pane, or a pose change |
-| Closed, charging | Duo only. The device is closed (no division), the battery state is charging or full, and the app is idle on Home or a menu for 60 seconds | Any touch, or the charger is removed |
-| Menu entry | The player picks Desk Clock from Home | Any touch shows a close control |
+| Stacked, idle | A horizontal division is present (`MobileDisplayRegions.tablePanes` returns two panes). The app shows Home. No input for 60 seconds. | Any touch on either pane, controller B or Menu, Escape, or a pose change |
+| Closed, charging | Duo only. The device is closed (no division), the battery state is charging or full, and the app is idle on Home for 60 seconds | Any touch, controller B or Menu, Escape, or the charger is removed |
+| Menu entry | The player picks Desk Clock from Home | Close, controller B or Menu, or Escape. A touch or controller A shows the close control. |
 | Widget | The player adds the widget to the Home Screen, Lock Screen or StandBy | Tap opens the app on the Desk Clock |
 
-In Stacked pose, the clock fills the top pane. The bottom pane shows the next
-event and one close control. The idle triggers never fire during a level, a
-replay, a pause menu, a Hot Seat handover, or any modal sheet.
+In Stacked pose, the clock fills the top pane and shows the next event. The
+bottom pane shows only the close control. The idle triggers fire only on Home.
+They never fire on another menu page, during a level, a replay, a pause menu,
+a Hot Seat handover, or any modal sheet.
 
 The automatic triggers apply to the Duo only. `DeskClockTrigger` takes a
 "foldable" input from the presence of inactive division regions
@@ -162,8 +164,10 @@ phone starts to charge. StandBy covers that case through the widget.
 
 ### Calendar permission
 
-- The app asks for full calendar access the first time the player opens the Desk
-  Clock from the menu entry or from a widget tap.
+- The app asks for full calendar access when the player opens the Desk Clock from
+  the menu entry or from a widget tap. It asks only while Show next event is on and
+  iOS has no answer from the player. iOS shows the prompt only once.
+- After the player answers, the app reloads the widget timelines, so the widgets show the event at once.
 - An automatic trigger never asks. Until the player grants access, a clock that
   opened by itself and the widget show no event text.
 - The minimum iOS version stays 16.0. On iOS 17 and later, use
@@ -199,7 +203,7 @@ Follow the existing split. Keep simulation logic free of UIKit so tests run head
 | `MobileDeskClockView` | LemmingsMobileUI | Display-link view. Reuses the HUD and stone controls for the close control. |
 | EventKit adapter | LemmingsMobileUI | Implements `DeskClockEventSource` |
 | Widget extension | `Apps/UltimateLemmingsIOS` | New target, uses `GameDeskClockArt` to render still frames |
-| Mac widget extension | `Apps/DeskClockWidget/Mac` | Same widget source, built with Xcode, copied into the Mac app's `Contents/PlugIns` and signed before the app |
+| Mac widget extension | `Apps/DeskClockWidget/Mac` | Same widget source. `Scripts/build-desk-clock-mac-widget.sh` compiles it with `swiftc` against the Mac app's modules, copies it into the Mac app's `Contents/PlugIns` and signs it before the app. |
 
 The app and the widget draw with the same `GameDeskClockArt` code, so the art stays the same in both.
 
@@ -219,7 +223,7 @@ The app and the widget draw with the same `GameDeskClockArt` code, so the art st
 - No physical Duo test. Pose triggers have Simulator evidence only.
 - Lemmings 2 and Lemmings 3 art is not in version 1.
 - The widget shows still frames. Only the app animates.
-- On Mac, a widget cannot ask for calendar access. The Mac app asks from one menu item. Whether macOS shares that access with the extension needs a device check.
+- On Mac, a widget cannot ask for calendar access. The Mac app asks from one menu item. The hardened runtime blocks EventKit without the `com.apple.security.personal-information.calendars` entitlement, so every Mac release signature includes it (`Resources/UltimateLemmings.entitlements`). Whether macOS shares that access with the extension needs a device check.
 - Calendar access in the widget extension needs a check on a device.
 
 ## Release decision
