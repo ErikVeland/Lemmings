@@ -306,7 +306,22 @@ build_app() {
 
 sign_developer_id() {
   local app="$1"
-  codesign --force --deep --options runtime --timestamp --sign "$signing_identity" "$app"
+  local widget="$app/Contents/PlugIns/DeskClockMacWidget.appex"
+  if [[ -d "$widget" ]]; then
+    codesign --force --options runtime --timestamp --sign "$signing_identity" \
+      --entitlements "$project_dir/Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements" "$widget"
+  fi
+  # Preserve Sparkle's helper entitlements while signing nested code inside out.
+  python3 - "$project_dir/Scripts/sign-capabilities.py" "$app" "$signing_identity" <<'PYSIGN'
+import pathlib, runpy, sys
+signing = runpy.run_path(sys.argv[1])
+contents = pathlib.Path(sys.argv[2]) / 'Contents'
+for library in sorted((contents / 'Frameworks').glob('*.dylib')):
+    signing['sign'](sys.argv[3], library)
+for framework in sorted((contents / 'Frameworks').glob('*.framework')):
+    signing['sign_framework'](sys.argv[3], framework)
+PYSIGN
+  codesign --force --options runtime --timestamp --sign "$signing_identity" "$app"
   codesign --verify --deep --strict --verbose=1 "$app"
 }
 

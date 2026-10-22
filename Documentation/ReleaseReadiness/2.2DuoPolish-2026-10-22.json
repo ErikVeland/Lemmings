@@ -1,0 +1,107 @@
+{
+  "checks": {
+    "duoGameplay": {
+      "engines": [
+        "Classic",
+        "Lemmings 2",
+        "Lemmings 3"
+      ],
+      "renders": 192
+    },
+    "focusedTests": {
+      "passed": 51,
+      "suites": 6
+    },
+    "iosModules": "passed, including final MobileCore and MobileUI rechecks",
+    "iosWidget": "unsigned arm64 Simulator extension build",
+    "macWidget": "arm64 extension for macOS 12.3 in isolated host fixture, ad hoc sandbox and calendar entitlements",
+    "navigation": {
+      "layouts": 1968,
+      "renders": 656,
+      "states": 82
+    },
+    "releaseRenders": 66,
+    "tvosModules": "passed, including final MobileCore and MobileUI rechecks",
+    "widgetArtwork": {
+      "allClockPosesAndFontsChecked": true,
+      "bytes": 1127244,
+      "frames": 404
+    }
+  },
+  "compatibility": {
+    "host": "macOS 26.5.2",
+    "iosSDK": "26.5",
+    "method": "public Objective-C runtime region adapter with checked signatures",
+    "newerXcodeRequired": false
+  },
+  "date": "2026-10-22",
+  "openGates": [
+    "Duo system event delivery and corner geometry",
+    "signed app candidates and Intel widget build",
+    "calendar permissions and revocation in host and extensions",
+    "actual widget gallery, Lock Screen and StandBy renders",
+    "physical input, VoiceOver and lifecycle journeys",
+    "candidate versions, build numbers, processing and TestFlight availability"
+  ],
+  "sourceBase": "e2d8538b",
+  "sourceSHA256": {
+    "Apps/DeskClockWidget/DeskClockWidget.swift": "cde08e60c55e7e72c2ea5d3f8ab8cc04ec6fb872ee0d483bc7afb90adb3abff2",
+    "Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements": "c0b05cd83d3caf1f02b8a7c376ad9726b94f4b6394f5e75301181922de7e5491",
+    "Apps/DeskClockWidget/Mac/Info.plist": "03267fc0fa88c8ece1d5bd9f0772adbfbf857c2afa2ad7b3064cfd8939618ddc",
+    "Apps/UltimateLemmingsIOS/AppDelegate.swift": "9a2c3fabbf0e55cfdc1162487f30f05e2005fd6bcab6eec18caf493d5158c0be",
+    "Apps/UltimateLemmingsIOS/DeskClockWidget/Info.plist": "03267fc0fa88c8ece1d5bd9f0772adbfbf857c2afa2ad7b3064cfd8939618ddc",
+    "Apps/UltimateLemmingsIOS/Info.plist": "6c48ef756ac0854d1b54fd6a8189307d4d6e75395738beae9414f7f2b2a6af30",
+    "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj": "2da2804962a9bcdb77b0760667b03b532b327fb9d5d5ae0f48070e61c2a81183",
+    "Package.swift": "f6cf619981aa9b96f060b00d50d10aec6c755c6c70d36875807d5c2ed9177069",
+    "Resources/Info.plist": "e335e0ee1a38224b5116ca3d608dd6b70102595eefb7588917d673cee9de9383",
+    "Scripts/build-and-notarise.sh": "540149af85dfebebd5237c895a9233819fe9a06b5a96d75ba43a6cd234a1c3a4",
+    "Scripts/build-desk-clock-mac-widget.sh": "2214ea73c61c6cebd540407cf05a026770d993d49956d9a4ee4937e4e7775748",
+    "Scripts/build-local-app.sh": "8b5ed9eceaf138e649394f5ddb35168489dfe44cabc0f43694a8ab0544ca0af7",
+    "Scripts/sign-capabilities.py": "5e422b495712fcb22bc3a3bd68e0115553b342e81c008ab33d069e8ba6d1f9ed",
+    "Sources/LemmingsGameArt/GameDeskClockArt.swift": "5f420412a16ff1863e5d12f1fca71e183e7dcd14ce0bfb7c1dcf9e25f64a88b1",
+    "Sources/LemmingsGameArt/GameFrontEnd.swift": "95c61a153feed638cc419f3da6a6658c5b993b45e9db9d19bd8c9ca0adac28d8",
+    "Sources/LemmingsGameArt/MobileSettingsArt.swift": "3c06731d713521ca607a4ae9900b718f026136bb3a4c9399d0aa837883ad65ef",
+    "Sources/LemmingsLocal/main.swift": "fb04937c64826e1042639379727e1ede7e76ca76ee1e4dc727a62a42e173b547",
+    "Sources/LemmingsMobileCore/DeskClockEvents.swift": "69b2f8db6ed0e99bcd37d0c9112e5b8919cb69a970e140f6d1d8c4fa4de202d5",
+    "Sources/LemmingsMobileCore/DeskClockFace.swift": "da0ab6d258cc6bc45b6dabb5d79c650b1cfda275f6f524ec6682990156159178",
+    "Sources/LemmingsMobileCore/DeskClockSimulation.swift": "204848f0e082b6fa7c5c58a94a0355154aac55d811a696f0bc28d3556ac3b06a",
+    "Sources/LemmingsMobileCore/DeskClockTrigger.swift": "2bb113b262fdd2984cc3562e172ef51dd13e8abdc2fa96997e07faeaff0f409c",
+    "Sources/LemmingsMobileCore/MobileReservedRegionRuntime.swift": "6e7f511950c857b8473df58aefbab48ada94362dbb901d001bb765cffafe0e4a",
+    "Sources/LemmingsMobileCore/MobileSettings.swift": "f08309c686222585a25a87c2feda4a1d2f5ff44d815de7c05df5f3de9097f52c",
+    "Sources/LemmingsMobileUI/MobileApplication.swift": "e6bb718119afdb39289005d56779d139d9e2e21cc0434663616d173ac730e4dc",
+    "Sources/LemmingsMobileUI/MobileDeskClock.swift": "b8606fcfa5c62a5519a15970837eb70318453e48726f37ae38c8e1e90bb64e84",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "4aff9930e2486cf7670534ba6a2d59fe8ab2cff8e1d1d7ccedafd63f39663459",
+    "Sources/LemmingsMobileUI/MobileLibraryInput.swift": "6d4cc2858d9e7d71a67c467c9d332d969219087cc456b57de067fa0656b85fc8",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "30b3e1dd0a242877ee15245703acd23787b374821ac88a0a187551204f9452bf",
+    "Sources/LemmingsMobileUI/MobileMenuCanvas.swift": "0e527510e395d0f44c768940832926e29f2bf6ecdfa8b097b6a3056e2fb594f5",
+    "Sources/LemmingsMobileUI/MobilePixelText.swift": "965b22f5e4ac9ee155face7a5c60e88d4e0979bc406fbc782989d9f436d2b266",
+    "Sources/LemmingsMobileUI/MobileReservedRegions.swift": "b559a93eb31aabf8fe82f3d33e2b3573d3c5cf9ad199bb9ba19ed3e2eec0e5a8",
+    "Sources/LemmingsMobileUI/MobileSettingsPages.swift": "ed166e7a31c1cfd37bd5a182ab2a7f9d2eb483904b69f358c85923317239365f",
+    "Tests/LemmingsMobileCoreTests/DeskClockEventsTests.swift": "03c45af5a9f005e85696f3cc8cf224f7b018eb3c4742372a6b7faac5aa2f0bfe",
+    "Tests/LemmingsMobileCoreTests/DeskClockSimulationTests.swift": "621e8a74363a2d38a5eb1c05edd7b501a150fb63dce514db1457f6636a1ff046",
+    "Tests/LemmingsMobileCoreTests/MobileReservedRegionRuntimeTests.swift": "bd7f6363583443184ec8f248c9bb842bc9df34fcc71271502c929e6b60f91654",
+    "Tools/DeskClock/prune_artwork.py": "742c411670ad34f91406cf8417ebbecef448335b321c1bf59f0ed4194a36975a",
+    "Tools/IOSMenuAudit/MobileMenuAudit.swift": "10d0532e46c55bcfe628f441b1a6f1607c4321f2931cd12d244a8a61b2ba4d5f",
+    "Tools/IOSMenuAudit/duo-release.swift": "cbce9e30a847f3b21fd06e50278638687f8a1d7c5913d5240eebad7cea224955"
+  },
+  "sourceState": "local changes, not committed or published",
+  "timezone": "Australia/Brisbane",
+  "widgetBuilds": {
+    "ios": {
+      "architecture": "arm64",
+      "artworkManifestSHA256": "81bfa1bef290f7049c02e92cc7c861c03478b836b61177bde45b77252920e848",
+      "binarySHA256": "83d3de0d5f9cb15f49d495572c7e25c9d461b28e8a6011ce38b7e55e22ad6aa6",
+      "bundleIdentifier": "academy.glasscode.lemmings.ios.DeskClockWidget",
+      "distributionCandidate": false,
+      "minimumOS": "16.0"
+    },
+    "mac": {
+      "architecture": "arm64",
+      "artworkManifestSHA256": "81bfa1bef290f7049c02e92cc7c861c03478b836b61177bde45b77252920e848",
+      "binarySHA256": "d44d54f7cb92f582f591b902eb8cb5624a2b31e8da24fd6abd0af82aea4d4877",
+      "bundleIdentifier": "academy.glasscode.lemmings.DeskClockWidget",
+      "distributionCandidate": false,
+      "minimumOS": "12.3"
+    }
+  }
+}

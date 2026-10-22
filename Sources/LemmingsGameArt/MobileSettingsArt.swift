@@ -18,8 +18,8 @@ public enum MobileSettingsArt {
         }
         return min(CGFloat(size.scale), max(1, width / 280))
     }
-    public static func groups(inGame: Bool = false, television: Bool = false) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.map {
+    public static func groups(inGame: Bool = false, television: Bool = false, deskClockAvailable: Bool = false) -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: MobileSettingsGroup.allCases.filter { $0 != .deskClock || (deskClockAvailable && !inGame) }.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
@@ -30,11 +30,13 @@ public enum MobileSettingsArt {
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,
                             sharing: Bool = false, sharingAvailable: Bool = false,
                             displayAvailable: Bool = false, inGame: Bool = false,
-                            language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true) -> GameFrontEnd.Page {
+                            language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true, foldable: Bool = false, ghostsVisible: Bool = true) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
-            .init("setting." + id, title, enabled: enabled, selected: selected)
+            var action = Action("setting." + id, title, enabled: enabled, selected: selected)
+            action.toggleValue = selected
+            return action
         }
         func choice(_ id: String, _ title: String, _ value: String, enabled: Bool = true) -> Action {
             .init("setting." + id, title + ": " + value, enabled: enabled)
@@ -44,6 +46,8 @@ public enum MobileSettingsArt {
         case .gameplay:
             rows = [choice("language", L10n.text("Language"), language.title),
                     choice("preset", L10n.text("Presentation"), c.experiencePreset.title),
+                    toggle("inspect", L10n.text("Inspect lemmings while paused"), c.inspectWhilePaused),
+                    toggle("hotSeatGhosts", L10n.text("Hot Seat ghosts"), ghostsVisible),
                     toggle("planning", L10n.text("Pause to assign"), settings.pauseToAssign),
                     choice("speed", L10n.text("Fast speed"), "\(settings.fastSpeed)X"),
                     toggle("variableSpeed", L10n.text("Variable speed"), c.variableSpeedEnabled),
@@ -52,6 +56,7 @@ public enum MobileSettingsArt {
                     toggle("approaching", L10n.text("Target approaching lemmings"), c.favorApproachingLemmings),
                     toggle("bombBlockers", L10n.text("Target blockers for bombs"), c.favorBombBlockers),
                     toggle("builders", L10n.text("Target current builders"), c.favorBuilders),
+                    choice("cursor", L10n.text("Cursor style"), c.gameplayCursorStyle.title),
                     choice("skillIcon", L10n.text("Skill icon size"), c.skillCursorIconSize.title),
                     toggle("reticule", L10n.text("Reticule count"), c.showReticleCount),
                     choice("selection", L10n.text("Selection effect"), c.lemmingSelectionStyle.title),
@@ -96,6 +101,13 @@ public enum MobileSettingsArt {
                     toggle("staticHome", L10n.text("Static home screen"), c.staticHomeScreen),
                     toggle("motion", L10n.text("Reduce motion"), c.reduceMotion),
                     toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
+        case .deskClock:
+            rows = [toggle("deskClockEvents", L10n.text("Show next event"), settings.deskClock.showNextEvent)]
+            if foldable {
+                rows = [toggle("deskClockStacked", L10n.text("Open in Stacked pose when idle"), settings.deskClock.openWhenStacked),
+                        toggle("deskClockCharging", L10n.text("Open when closed and charging"), settings.deskClock.openWhenCharging)] + rows
+            }
+            rows.append(.init("deskClockCalendar", L10n.text("Calendar access")))
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),
@@ -106,6 +118,20 @@ public enum MobileSettingsArt {
         var page = GameFrontEnd.Page(title: group.title, rows: rows,
                                      footer: [.init("settings", L10n.text("Back"))])
         page.pairsRows = true
+        switch group {
+        case .gameplay:
+            page.rowHeadings = ["setting.language": L10n.text("Presentation"),
+                "setting.cursor": L10n.text("Pointer and selection"),
+                "setting.inspect": L10n.text("Controls and assistance"),
+                "setting.approaching": L10n.text("Skill targeting"),
+                "setting.levelAccess": L10n.text("Level access")]
+        case .graphics:
+            page.rowHeadings = ["setting.machine": L10n.text("Machine preset"), "setting.artwork": L10n.text("Classic artwork")]
+        case .audio:
+            page.rowHeadings = ["setting.music": L10n.text("Music"), "setting.soundSource": L10n.text("Sound effects"),
+                "setting.menuMusic": L10n.text("Playback"), "setting.soundtrackChoice": L10n.text("Soundtrack")]
+        default: break
+        }
         return page
     }
 

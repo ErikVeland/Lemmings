@@ -5,6 +5,13 @@ import NxlvKit
 import UIKit
 
 public enum LemmingsMobileApplication {
+    #if os(iOS)
+    @MainActor public static func openDeskClock(in root: UIViewController?) {
+        guard let library = root as? MobileLibraryViewController else { return }
+        library.loadViewIfNeeded()
+        library.presentDeskClock(reason: .widget)
+    }
+    #endif
     @MainActor public static func makeRootViewController() -> UIViewController {
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker")

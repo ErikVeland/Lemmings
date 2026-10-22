@@ -4,6 +4,8 @@ import AVFoundation
 import LemmingsAppCore
 import LemmingsAudio
 import LemmingsGameArt
+import LemmingsMobileCore
+import WidgetKit
 import NxlvKit
 import Sparkle
 
@@ -914,6 +916,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       action: #selector(showAbout), keyEquivalent: "")
     aboutItem.target = self
     appMenu.addItem(aboutItem)
+    let clockCalendar = NSMenuItem(title: L10n.text("Show next event in Desk Clock widget…"),
+      action: #selector(requestDeskClockCalendar), keyEquivalent: "")
+    clockCalendar.state = EventKitDeskClockSource().authorization() == .granted ? .on : .off
+    clockCalendar.target = self
+    appMenu.addItem(clockCalendar)
     appMenu.addItem(.separator())
     let updatesItem = NSMenuItem(
       title: L10n.text("Check for Updates…"),
@@ -1440,6 +1447,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
       else { self.effects.play(.ready) }
     }
     if userPausedMusic && isPaused { applyUserMusicPause() }
+  }
+
+  @objc private func requestDeskClockCalendar(_ sender: NSMenuItem) {
+    Task { @MainActor in
+      let source = EventKitDeskClockSource()
+      let granted = await source.requestAccess()
+      sender.state = granted ? .on : .off
+      WidgetCenter.shared.reloadTimelines(ofKind: "DeskClock")
+      if !granted, let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
+        NSWorkspace.shared.open(url)
+      }
+    }
   }
 
   @objc private func showAbout() {

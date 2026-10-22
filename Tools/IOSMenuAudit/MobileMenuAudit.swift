@@ -12,6 +12,7 @@ import NxlvKit
         return .invalidTargets
     }
     @MainActor static func main() async throws {
+        let duoRelease = CommandLine.arguments.last == "--duo-release"
         let sharing = CommandLine.arguments.last == "--sharing"
         let previewFill = CommandLine.arguments.last == "--preview-fill"
         let muteSetting = CommandLine.arguments.last == "--mute-setting"
@@ -36,7 +37,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -44,6 +45,7 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if duoRelease { try checkDuoRelease(typography: typography, artwork: artwork, output: output); return }
         if sharing { try checkSharingPrivacy(typography: typography, output: output); return }
         if previewFill { try checkPreviewFill(typography: typography, content: content, output: output); return }
         if muteSetting { try checkMuteSetting(typography: typography, output: output); return }
