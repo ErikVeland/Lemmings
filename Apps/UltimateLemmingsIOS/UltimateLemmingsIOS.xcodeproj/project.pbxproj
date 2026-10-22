@@ -260,7 +260,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/artwork.py\" --source \"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\n";
+			shellScript = "artwork_dir=\"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\"\nif [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -f \"$artwork_dir/manifest.json\" ]; then\n  echo \"SKIP Mac artwork in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/artwork.py\" --source \"$artwork_dir\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\nfi\n";
 		};
 		100000000000000000000046 /* Level catalogue */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -292,7 +292,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -d \"$SRCROOT/../../Sources/Music\" ]; then\n  echo \"SKIP soundtrack assets in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nfi\n";
 		};
-		DC2200000000000000000016 = { isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Clock artwork"; outputPaths = (); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "python3 \"$SRCROOT/../../Tools/DeskClock/prune_artwork.py\" --source \"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\n"; };
+		DC2200000000000000000016 = { isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Clock artwork"; outputPaths = (); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "artwork_dir=\"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\"\nif [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -f \"$artwork_dir/manifest.json\" ]; then\n  echo \"SKIP clock artwork in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/DeskClock/prune_artwork.py\" --source \"$artwork_dir\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\nfi\n"; };
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
