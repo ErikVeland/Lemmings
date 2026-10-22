@@ -1,0 +1,29 @@
+import Foundation
+
+/// Preferences for the idle Desk Clock. Older saves lack these keys, so every field decodes with its default.
+public struct DeskClockSettings: Codable, Equatable, Sendable {
+    public var openWhenStacked: Bool
+    public var openWhenCharging: Bool
+    public var showNextEvent: Bool
+    public var calendarRequested: Bool
+
+    public init(openWhenStacked: Bool = true, openWhenCharging: Bool = true,
+                showNextEvent: Bool = true, calendarRequested: Bool = false) {
+        self.openWhenStacked = openWhenStacked
+        self.openWhenCharging = openWhenCharging
+        self.showNextEvent = showNextEvent
+        self.calendarRequested = calendarRequested
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case openWhenStacked, openWhenCharging, showNextEvent, calendarRequested
+    }
+
+    public init(from decoder: Decoder) throws {
+        let fields = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(openWhenStacked: try fields.decodeIfPresent(Bool.self, forKey: .openWhenStacked) ?? true,
+                  openWhenCharging: try fields.decodeIfPresent(Bool.self, forKey: .openWhenCharging) ?? true,
+                  showNextEvent: try fields.decodeIfPresent(Bool.self, forKey: .showNextEvent) ?? true,
+                  calendarRequested: try fields.decodeIfPresent(Bool.self, forKey: .calendarRequested) ?? false)
+    }
+}
