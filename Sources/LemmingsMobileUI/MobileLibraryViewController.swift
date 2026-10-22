@@ -26,7 +26,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     #endif
     #if os(iOS)
-    var deskClock: MobileDeskClockController?
     var deskClockBlocksInput: Bool { deskClock != nil }
     let deskClockActivity = DeskClockActivity()
     nonisolated(unsafe) private var deskClockTimer: Timer?

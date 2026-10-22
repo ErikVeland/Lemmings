@@ -57,7 +57,7 @@
   " - No data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:631"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:630"
     ]
   },
   " - Rewinds used": {
@@ -202,7 +202,7 @@
   "< Level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:692"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:691"
     ]
   },
   "< Previous level": {
@@ -220,7 +220,7 @@
   "< Rank": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:691"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:690"
     ]
   },
   "<Invalid saved game>": {
@@ -1941,9 +1941,9 @@
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:112",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:117",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:99",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:672",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:697",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:777",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:671",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:696",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:776",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:29",
       "Sources/LemmingsMobileUI/MobileSettingsPages.swift:104",
       "Sources/LemmingsMobileUI/MobileSettingsPages.swift:93",
@@ -2932,7 +2932,7 @@
   "Check for new packs": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:667"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:666"
     ]
   },
   "Check the access token and service.": {
@@ -2956,7 +2956,7 @@
   "Checking for new packs...": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:667"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:666"
     ]
   },
   "Checking solution...": {
@@ -3400,7 +3400,7 @@
   "Classic Lemmings  {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:627"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:626"
     ]
   },
   "Classic and The Tribes": {
@@ -5941,7 +5941,7 @@
       "Sources/LemmingsLocal/GameControls.swift:140",
       "Sources/LemmingsLocal/GameControls.swift:142",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:108",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:694"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:693"
     ]
   },
   "Favourite not saved": {
@@ -6426,7 +6426,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:26",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:769"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:768"
     ]
   },
   "Game Library": {
@@ -7302,20 +7302,20 @@
   "Import": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:772",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:771",
       "Sources/LemmingsMobileUI/MobileTVFileTransfer.swift:325"
     ]
   },
   "Import Lemmings 2 data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:634"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:633"
     ]
   },
   "Import NeoLemmix data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:633"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:632"
     ]
   },
   "Import files": {
@@ -7333,7 +7333,7 @@
   "Import {0} data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:635"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:634"
     ]
   },
   "Imported": {
@@ -9133,7 +9133,7 @@
       "Sources/LemmingsLocal/main.swift:134",
       "Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift:11",
       "Sources/LemmingsMobileCore/MobileContentStore.swift:27",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:634",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:633",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:160",
       "Sources/NxlvKit/LevelCatalogue.swift:14"
     ]
@@ -9267,7 +9267,7 @@
   "Level >": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:693"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:692"
     ]
   },
   "Level Records…": {
@@ -9628,8 +9628,8 @@
       "Sources/LemmingsLocal/GameScreen.swift:19",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:29",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:216",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:610",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:790",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:609",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:789",
       "Sources/LemmingsMobileUI/MobileTVBootstrap.swift:40"
     ]
   },
@@ -10799,7 +10799,7 @@
   "NeoLemmix Preview": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:633"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:632"
     ]
   },
   "NeoLemmix difficulty analysis is not yet available.": {
@@ -11345,7 +11345,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2129",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:683"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:682"
     ]
   },
   "No unassigned lemmings": {
@@ -12699,7 +12699,7 @@
       "Sources/LemmingsLocal/main.swift:4403",
       "Sources/LemmingsLocal/main.swift:4574",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:57",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:698",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:697",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:152",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:155",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:201"
@@ -12748,7 +12748,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:145",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:698"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:697"
     ]
   },
   "Play as {0}": {
@@ -12940,7 +12940,7 @@
     "references": [
       "Sources/LemmingsLocal/main.swift:3980",
       "Sources/LemmingsLocal/main.swift:4121",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:695"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:694"
     ]
   },
   "Playlist name": {
@@ -13728,7 +13728,7 @@
       "Sources/LemmingsLocal/main.swift:4074",
       "Sources/LemmingsLocal/main.swift:5151",
       "Sources/LemmingsLocal/main.swift:5214",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:696"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:695"
     ]
   },
   "Random 10 {0}": {
@@ -13746,7 +13746,7 @@
   "Rank >": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:691"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:690"
     ]
   },
   "Rank {0}, {1}, {2} stars.": {
@@ -13917,7 +13917,7 @@
   "Records are not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1464"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1463"
     ]
   },
   "Records cannot be read": {
@@ -14168,7 +14168,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:4390",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:772"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:771"
     ]
   },
   "Replace or remove each locked, missing or changed level before starting.": {
@@ -14483,7 +14483,7 @@
   "Resume journey - {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:616",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:615",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:153"
     ]
   },
@@ -14523,7 +14523,7 @@
     "references": [
       "Sources/LemmingsMobileCore/MobileLearning.swift:62",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:23",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:622"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:621"
     ]
   },
   "Retains no supporting evidence.": {
@@ -16203,7 +16203,7 @@
       "Sources/LemmingsLocal/main.swift:5423",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:19",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:292",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:661"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:660"
     ]
   },
   "Shuffle artwork": {
@@ -16767,7 +16767,7 @@
   "Start journey": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:645"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:644"
     ]
   },
   "Start new Hot Seat": {
@@ -18042,7 +18042,7 @@
   "The attempt was not saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1440"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1439"
     ]
   },
   "The cat understands the arrangement.": {
@@ -18639,7 +18639,7 @@
   "The saved NeoLemmix level is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1198"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1197"
     ]
   },
   "The saved collections could not be read.": {
@@ -19734,7 +19734,7 @@
       "Sources/LemmingsLocal/main.swift:7299",
       "Sources/LemmingsLocal/main.swift:7936",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2129",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:683"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:682"
     ]
   },
   "Timing probes: {0}. Untested alternatives remain unknown.": {
@@ -21438,7 +21438,7 @@
       "Sources/LemmingsLocal/main.swift:5659",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:290",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:55",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:776"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:775"
     ]
   },
   "count.packs": {
@@ -21446,7 +21446,7 @@
     "references": [
       "Sources/LemmingsLocal/main.swift:5411",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:290",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:669"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:668"
     ]
   },
   "count.rescueGoal": {
@@ -22086,7 +22086,7 @@
       "Sources/LemmingsGameArt/MobileCareerArt.swift:147",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:185",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2128",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:682"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:681"
     ]
   },
   "{0} MIN": {
@@ -22509,7 +22509,7 @@
   "{0}/{1} packs": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:669"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:668"
     ]
   },
   "{0}: 1 tick ago": {
