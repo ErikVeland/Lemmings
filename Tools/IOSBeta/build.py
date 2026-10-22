@@ -26,6 +26,16 @@ def marketing_version():
     return values.pop()
 
 
+def project_bundle_id():
+    """The app target's PRODUCT_BUNDLE_IDENTIFIER. Extensions and tests use their own suffixed IDs."""
+    text = (PROJECT / "project.pbxproj").read_text()
+    values = set(re.findall(r"PRODUCT_BUNDLE_IDENTIFIER = ([^;]+);", text))
+    apps = {value for value in values if not any(value.startswith(other + ".") for other in values if other != value)}
+    if len(apps) != 1:
+        raise ValueError(f"Expected one app bundle ID in the iOS project, found {sorted(apps)}.")
+    return apps.pop()
+
+
 def run(arguments, log=None, env=None):
     print("Running:", arguments[0], flush=True)
     result = subprocess.run(arguments, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT if log else None)
@@ -35,9 +45,9 @@ def run(arguments, log=None, env=None):
 
 def source_manifest():
     files = [ROOT / "Package.swift", ROOT / "Package.resolved", ROOT / "Scripts/run-swift-tests.sh"]
-    for relative in ("Sources/NxlvKit", "Sources/LemmingsAppCore", "Sources/LemmingsAudio", "Sources/LemmingsGameArt", "Sources/LemmingsMobileCore", "Sources/LemmingsMobileUI", "Tools/IOSBeta", "Tools/IOSMenuAudit"):
+    for relative in ("Sources/NxlvKit", "Sources/LemmingsAppCore", "Sources/LemmingsAudio", "Sources/LemmingsGameArt", "Sources/LemmingsMobileCore", "Sources/LemmingsMobileUI", "Tools/IOSBeta", "Tools/IOSMenuAudit", "Tools/DeskClock"):
         files += [p for p in (ROOT / relative).rglob("*") if p.suffix in (".swift", ".py")]
-    files += [p for p in (ROOT / "Apps/UltimateLemmingsIOS").rglob("*")
+    files += [p for app in ("Apps/UltimateLemmingsIOS", "Apps/DeskClockWidget") for p in (ROOT / app).rglob("*")
               if p.is_file() and p.suffix in (".swift", ".plist", ".xcprivacy", ".pbxproj", ".xcscheme", ".png", ".json", ".resolved", ".entitlements")
               and "xcuserdata" not in p.parts]
     from content import PARITY_RESOURCES
@@ -157,6 +167,13 @@ def validate_archive(archive, build, bundle_id, signed):
     }.items():
         if info.get(key) != expected:
             raise ValueError(f"Unexpected archived {key}: {info.get(key)!r}")
+    widget = plistlib.loads((app / "PlugIns/DeskClockWidget.appex/Info.plist").read_bytes())
+    for key, expected in {
+        "CFBundleIdentifier": bundle_id + ".DeskClockWidget",
+        "CFBundleShortVersionString": marketing_version(), "CFBundleVersion": str(build),
+    }.items():
+        if widget.get(key) != expected:
+            raise ValueError(f"Unexpected archived Desk Clock widget {key}: {widget.get(key)!r}")
     if not info.get("CFBundleIcons", {}).get("CFBundlePrimaryIcon"):
         raise ValueError("The archive has no compiled app icon.")
     if not (app / "Assets.car").is_file():
@@ -209,6 +226,10 @@ def main():
     device.add_argument("--registered-device-id", help="Already registered device UDID to verify after a generic device archive")
     args = parser.parse_args()
     requested_device = args.device_id or args.registered_device_id
+    # A command-line PRODUCT_BUNDLE_IDENTIFIER reaches every target, so it would also rename the widget extension.
+    if args.bundle_id != project_bundle_id():
+        parser.error(f"--bundle-id {args.bundle_id} differs from the project's app ID {project_bundle_id()}. "
+                     "Change PRODUCT_BUNDLE_IDENTIFIER in the Xcode project for every target instead.")
     if args.build < 1 or not re.fullmatch(r"[A-Z0-9]{10}", args.team):
         parser.error("Use a positive build number and a ten-character team ID.")
     if requested_device and (not re.fullmatch(r"[A-Fa-f0-9-]{20,40}", requested_device)
@@ -259,7 +280,7 @@ def main():
                    "-archivePath", str(archive), "-derivedDataPath", str(output / "DerivedData"),
                    "-clonedSourcePackagesDirPath", str(ROOT / ".build/ios-packages"),
                    f"CURRENT_PROJECT_VERSION={args.build}", f"MARKETING_VERSION={marketing_version()}",
-                   f"PRODUCT_BUNDLE_IDENTIFIER={args.bundle_id}", f"DEVELOPMENT_TEAM={args.team}",
+                   f"DEVELOPMENT_TEAM={args.team}",
                    f"IOS_BETA_CONTENT_DIR={output / 'BetaGameData'}", f"IOS_MUSIC_SCOPE={music_scope}", "COMPILER_INDEX_STORE_ENABLE=NO"]
         if args.unsigned:
             command.append("CODE_SIGNING_ALLOWED=NO")
