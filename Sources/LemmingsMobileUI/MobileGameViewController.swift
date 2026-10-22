@@ -149,6 +149,14 @@ typealias MobileGameControllerBase = UIViewController
     private var leaveRequestID = UUID()
     var playState = MobilePlayState()
     var paused: Bool { playState.isPaused }
+    #if os(iOS)
+    /// What the Desk Clock trigger sees. A paused Hot Seat turn counts as a handover.
+    var deskClockScreen: DeskClockScreen {
+        if session.isReadOnly { return .replay }
+        guard paused else { return .level }
+        return turn == nil ? .pause : .handover
+    }
+    #endif
     var speed = 1.0
     var fastSpeed = 2.0
     var controllerSpeedResetConsumed = false
