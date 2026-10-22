@@ -94,9 +94,9 @@ open. The build 76 resources have not been directly hash-linked to the 2.1
 package. See the [current-source audit](Documentation/ReleaseReadiness/L3MoleVerification-2026-10-15/current-cycle12-audit-4bf3bddc-2026-10-20.json).
 
 The latest full strict audit covers all 6,020 source rows across 535 bundled
-fan packs. One exact no-exit level is excluded from playable bundled scope by
-owner decision, leaving 6,019 playable levels. The accepted count is 2,404
-(39.9%), including one targeted route closure on 21 October. The full audit has
+fan packs. The 2.2 polish excludes four exact records with impossible rescue
+conditions from playable bundled scope, leaving 6,016 playable levels. The accepted count is 2,404
+(40.0%), including one targeted route closure on 21 October. The full audit has
 not been rerun. Its historical rows include 3,599 levels without matching
 candidates and 18 failed candidate replays. The audit reports no load, decode
 or render failures. The audit evidence records identities and verified replays
@@ -114,6 +114,9 @@ See the [incremental route record](Documentation/ReleaseReadiness/ClassicFanProp
 and [bundled closure velocity](Documentation/ReleaseReadiness/BundledClosureVelocity.md).
 The [playable-scope decision](Documentation/ReleaseReadiness/ClassicFanPlayableScopeExclusion-2026-10-21.json)
 retains the source row and excludes only the exact bundled archive member.
+The [2.2 preparation record](Documentation/ReleaseReadiness/2.2ReleasePreparation-2026-10-22.md#launch-polish)
+extends this policy across Mac, iOS and TV browsing and shuffle. Imports and
+source archives remain unchanged. These exclusions add no winning routes.
 
 The pinned NeoLemmix runnable gate passed 794 levels. Macintosh 2.0.2 build 85
 passes the bundled-resource check for all 794 indexed levels and resolves all

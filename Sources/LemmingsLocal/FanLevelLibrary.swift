@@ -40,17 +40,6 @@ enum FanLevelLibrary {
     let label: String
   }
 
-  private struct BundledPlayableExclusions: Decodable {
-    struct Exclusion: Decodable {
-      let pack: String
-      let archiveSHA256: String
-      let member: String
-    }
-
-    let version: Int
-    let exclusions: [Exclusion]
-  }
-
   // MARK: - Progress
 
   /// What the player has passed, and how big each pack is.
@@ -585,13 +574,9 @@ enum FanLevelLibrary {
           let url = overrideURL ?? Bundle.main.resourceURL?.appendingPathComponent(
             "Progression/bundled-playable-exclusions.json"),
           let data = try? Data(contentsOf: url),
-          let manifest = try? JSONDecoder().decode(BundledPlayableExclusions.self, from: data),
-          manifest.version == 1,
+          let scope = try? BundledPlayableScope(directory: root, manifest: data),
           let archiveHash = archiveFingerprint(pack) else { return [] }
-    return Set(manifest.exclusions.compactMap { exclusion in
-      exclusion.pack == pack.lastPathComponent && exclusion.archiveSHA256 == archiveHash
-        ? exclusion.member : nil
-    })
+    return scope.members(in: pack, archiveSHA256: archiveHash)
   }
 
   private static func entries(in pack: URL, names: [String]) -> [Entry] {

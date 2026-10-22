@@ -94,7 +94,9 @@ public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sen
             end: now.addingTimeInterval(DeskClockEvents.lookAhead),
             calendars: nil
         )
-        return store.events(matching: predicate).map { event in
+        let events = store.events(matching: predicate)
+        guard authorization() == .granted else { return [] }
+        return events.map { event in
             DeskClockCandidate(
                 identifier: event.eventIdentifier ?? event.title ?? "",
                 start: event.startDate,

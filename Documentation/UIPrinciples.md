@@ -112,6 +112,8 @@ environment and still needs device verification.
   Back, Cancel, Library or Close navigation and keep the primary forward action
   at bottom-right. Secondary actions fill the rows above and remaining slots.
   Back must not become centred or move right when actions are added or removed.
+  If captions cannot fit without splitting words, use one column. Place Back
+  immediately above the primary forward action at the bottom of that column.
   Keep drawing, input and accessibility
   order consistent. Use Apple's Human Interface Guidelines for platform controls.
   System alerts retain Apple's platform-specific ordering and safe default focus.

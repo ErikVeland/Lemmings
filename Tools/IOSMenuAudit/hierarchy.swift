@@ -11,8 +11,11 @@ extension MenuAudit {
         let ordered = footer.sorted { $0.frame.minY == $1.frame.minY ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY }
         guard footer.map(\.action) == ordered.map(\.action) else { return false }
         if let back = footer.first(where: { $0.action.isBackNavigation }) {
+            let forward = footer.last { $0.action.primary && !$0.action.isBackNavigation }
+            let stacked = forward.map { $0.frame.minX == back.frame.minX && $0.frame.minY > back.frame.maxY } ?? false
             guard back.frame.minX == footer.map({ $0.frame.minX }).min(),
-                  back.frame.maxY == footer.map({ $0.frame.maxY }).max() else { return false }
+                  stacked ? footer.dropLast().last?.action.id == back.action.id
+                    : back.frame.maxY == footer.map({ $0.frame.maxY }).max() else { return false }
         }
         if let forward = footer.last(where: { $0.action.primary && !$0.action.isBackNavigation }) {
             guard forward.frame.maxX == footer.map({ $0.frame.maxX }).max(),

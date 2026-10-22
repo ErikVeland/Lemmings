@@ -100,7 +100,10 @@ extension MenuAudit {
         try JSONSerialization.data(withJSONObject: ["captures": captures, "audio": "muted", "windows": "none",
             "targetsValidated": true, "pinnedResume": true, "wordBreaks": wordBreaks.sorted()], options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("pause-report.json"))
-        for item in wordBreaks.sorted() { print("WARN: word broken inside button: \(item)") }
+        guard wordBreaks.isEmpty else {
+            for item in wordBreaks.sorted() { print("FAIL: word broken inside button: \(item)") }
+            throw invalidTargets(line: #line)
+        }
         print("PASS: \(captures.count) pause renders, scrolling and pinned targets; six rescue states, phone and iPad.")
         for width: CGFloat in [280, 390, 600, 960] {
             var confirmation = GameFrontEnd.Page(title: "Restart level?", details: ["Journey 34", "The Crankshaft"],

@@ -22,6 +22,7 @@ enum DeskClockReason: Sendable {
     let clockView: MobileDeskClockView
     let closeButton = MobilePixelButton()
     private let events: any DeskClockEventSource
+    private let eventReader: DeskClockEventReader
     private let batteryState: @MainActor () -> UIDevice.BatteryState
     private let defaults: UserDefaults
     private let suspendMusic: @MainActor () -> Void
@@ -31,7 +32,7 @@ enum DeskClockReason: Sendable {
     private let voiceOverRunning: @MainActor () -> Bool
     var onClose: (() -> Void)?
     private(set) var accessTask: Task<Void, Never>?
-    private(set) var eventTask: Task<Void, Never>?
+    var eventTask: Task<Void, Never>? { eventReader.task }
     private var hideTask: Task<Void, Never>?
     private var ticker: Timer?
     private var lastRefresh = Date.distantPast
@@ -51,6 +52,7 @@ enum DeskClockReason: Sendable {
          voiceOverRunning: @escaping @MainActor () -> Bool = { UIAccessibility.isVoiceOverRunning }) {
         self.reason = reason
         self.events = events
+        eventReader = DeskClockEventReader(source: events)
         self.batteryState = batteryState
         self.defaults = defaults
         self.suspendMusic = suspendMusic
@@ -119,7 +121,9 @@ enum DeskClockReason: Sendable {
         isShown = false
         ticker?.invalidate(); ticker = nil
         hideTask?.cancel(); hideTask = nil
-        accessTask?.cancel(); eventTask?.cancel()
+        accessTask?.cancel(); accessTask = nil
+        eventReader.cancel()
+        clockView.event = nil
         observers = MobileNotificationObserverBag()
         clockView.stop()
         setIdleTimerDisabled(false)
@@ -155,7 +159,11 @@ enum DeskClockReason: Sendable {
             MainActor.assumeIsolated { self?.updateCloseVisibility() }
         })
         observers.append(centre.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.clockView.isRunning = false }
+            MainActor.assumeIsolated {
+                self?.clockView.isRunning = false
+                self?.eventReader.cancel()
+                self?.clockView.event = nil
+            }
         })
         observers.append(centre.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated {
@@ -191,22 +199,17 @@ enum DeskClockReason: Sendable {
         let source = events
         accessTask = Task { [weak self] in
             _ = await source.requestAccess()
+            guard !Task.isCancelled else { return }
             self?.refreshEvent()
         }
     }
 
     /// EventKit queries block, so the read runs detached and only the result returns to the main actor.
     private func refreshEvent() {
+        guard isShown, clockView.isRunning else { return }
         lastRefresh = Date()
-        guard settings.showNextEvent else {
-            clockView.event = nil
-            return
-        }
-        let source = events, now = lastRefresh
-        eventTask?.cancel()
-        eventTask = Task { [weak self] in
-            let next = await Task.detached { await source.nextEvent(now: now) }.value
-            guard !Task.isCancelled, let self else { return }
+        eventReader.refresh(now: lastRefresh, enabled: settings.showNextEvent) { [weak self] next in
+            guard let self, self.isShown else { return }
             self.clockView.event = next
         }
     }

@@ -22,6 +22,14 @@ Mobile settings group related choices and show checked states. Cursor style,
 paused inspection and Hot Seat ghost visibility now have explicit controls.
 Mac Desk Clock widgets join the existing desktop app.
 
+Narrow menus keep button words intact at large text sizes. Return and forward
+actions stack when the screen needs more room. Calendar details clear when the
+clock closes or the app becomes inactive. Cancelled reads cannot restore them.
+
+Bundled browsing and shuffle omit four exact fan levels with impossible rescue
+conditions on Mac, iPhone, iPad and Apple TV. Original archives and imported
+copies remain available.
+
 ## What carries forward
 
 Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta

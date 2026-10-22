@@ -16,7 +16,7 @@ import UIKit
         didSet {
             guard event != oldValue else { return }
             labelMinute = -1
-            refreshAccessibility(now: Date())
+            tick(now: Date())
         }
     }
     private let scene = CALayer()
