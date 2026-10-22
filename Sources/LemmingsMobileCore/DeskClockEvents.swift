@@ -84,14 +84,17 @@ public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sen
         }
     }
 
-    public func nextEvent(now: Date) async -> DeskClockEvent? {
-        guard authorization() == .granted else { return nil }
+    /**
+     * Reads one candidate set for a widget timeline without requesting access.
+     */
+    public func candidates(now: Date) async -> [DeskClockCandidate] {
+        guard authorization() == .granted else { return [] }
         let predicate = store.predicateForEvents(
             withStart: now.addingTimeInterval(-DeskClockEvents.lookBack),
             end: now.addingTimeInterval(DeskClockEvents.lookAhead),
             calendars: nil
         )
-        let candidates = store.events(matching: predicate).map { event in
+        return store.events(matching: predicate).map { event in
             DeskClockCandidate(
                 identifier: event.eventIdentifier ?? event.title ?? "",
                 start: event.startDate,
@@ -100,7 +103,10 @@ public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sen
                 declined: event.attendees?.contains { $0.isCurrentUser && $0.participantStatus == .declined } ?? false
             )
         }
-        return DeskClockEvents.next(from: candidates, now: now)
+    }
+
+    public func nextEvent(now: Date) async -> DeskClockEvent? {
+        DeskClockEvents.next(from: await candidates(now: now), now: now)
     }
 }
 #endif

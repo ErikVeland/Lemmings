@@ -14,18 +14,26 @@ struct ClockProvider: @preconcurrency TimelineProvider {
 
     @MainActor func getSnapshot(in context: Context, completion: @escaping (ClockEntry) -> Void) {
         let now = Date()
-        completion(ClockEntry(date: now, event: context.isPreview ? nil : EventKitDeskClockSource().nextEvent(now: now)))
+        guard !context.isPreview else {
+            completion(ClockEntry(date: now, event: nil))
+            return
+        }
+        Task {
+            let event = await EventKitDeskClockSource().nextEvent(now: now)
+            completion(ClockEntry(date: now, event: event))
+        }
     }
 
     @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<ClockEntry>) -> Void) {
         let now = Date()
-        let source = EventKitDeskClockSource()
-        let candidates = source.candidates(now: now)
-        let dates = DeskClockTimeline.entryDates(from: now)
-        let entries = dates.map { date in
-            ClockEntry(date: date, event: DeskClockEvents.next(from: candidates, now: date))
+        Task {
+            let candidates = await EventKitDeskClockSource().candidates(now: now)
+            let dates = DeskClockTimeline.entryDates(from: now)
+            let entries = dates.map { date in
+                ClockEntry(date: date, event: DeskClockEvents.next(from: candidates, now: date))
+            }
+            completion(Timeline(entries: entries, policy: .after((dates.last ?? now).addingTimeInterval(60))))
         }
-        completion(Timeline(entries: entries, policy: .after(dates.last!.addingTimeInterval(60))))
     }
 }
 

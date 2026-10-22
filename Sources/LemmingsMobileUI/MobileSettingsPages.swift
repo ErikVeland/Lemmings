@@ -38,7 +38,7 @@ extension MobileLibraryViewController {
         #if os(tvOS)
         MobileSettingsArt.groups(inGame: inGame, television: true)
         #else
-        MobileSettingsArt.groups(inGame: inGame, deskClockAvailable: true)
+        MobileSettingsArt.groups(inGame: inGame)
         #endif
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
