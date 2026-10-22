@@ -15,6 +15,14 @@
     "iosModules": "passed, including final MobileCore and MobileUI rechecks",
     "iosWidget": "unsigned arm64 Simulator extension build",
     "macWidget": "arm64 extension for macOS 12.3 in isolated host fixture, ad hoc sandbox and calendar entitlements",
+    "mergeIntegration": {
+      "auditUpdate": "Validate both touch decks and the Classic Mac panel introduced on main.",
+      "base": "d84d69896a8b71c88e2f1c200ba593d47935e935",
+      "duoGameplayRenders": 192,
+      "githubMacCheck": "Fails on the same 16 pre-existing MusicSourceAudit.md links, before compilation.",
+      "passedTests": 79,
+      "suites": 8
+    },
     "navigation": {
       "layouts": 1968,
       "renders": 656,
@@ -66,6 +74,7 @@
     "Sources/LemmingsMobileCore/DeskClockFace.swift": "da0ab6d258cc6bc45b6dabb5d79c650b1cfda275f6f524ec6682990156159178",
     "Sources/LemmingsMobileCore/DeskClockSimulation.swift": "204848f0e082b6fa7c5c58a94a0355154aac55d811a696f0bc28d3556ac3b06a",
     "Sources/LemmingsMobileCore/DeskClockTrigger.swift": "2bb113b262fdd2984cc3562e172ef51dd13e8abdc2fa96997e07faeaff0f409c",
+    "Sources/LemmingsMobileCore/MobileHUDLayout.swift": "d916939170009315e5d2c40294c64f795e500eeb71a2e1baba665d59d40278b7",
     "Sources/LemmingsMobileCore/MobileReservedRegionRuntime.swift": "6e7f511950c857b8473df58aefbab48ada94362dbb901d001bb765cffafe0e4a",
     "Sources/LemmingsMobileCore/MobileSettings.swift": "f08309c686222585a25a87c2feda4a1d2f5ff44d815de7c05df5f3de9097f52c",
     "Sources/LemmingsMobileUI/MobileApplication.swift": "e6bb718119afdb39289005d56779d139d9e2e21cc0434663616d173ac730e4dc",
@@ -82,7 +91,8 @@
     "Tests/LemmingsMobileCoreTests/MobileReservedRegionRuntimeTests.swift": "bd7f6363583443184ec8f248c9bb842bc9df34fcc71271502c929e6b60f91654",
     "Tools/DeskClock/prune_artwork.py": "742c411670ad34f91406cf8417ebbecef448335b321c1bf59f0ed4194a36975a",
     "Tools/IOSMenuAudit/MobileMenuAudit.swift": "10d0532e46c55bcfe628f441b1a6f1607c4321f2931cd12d244a8a61b2ba4d5f",
-    "Tools/IOSMenuAudit/duo-release.swift": "cbce9e30a847f3b21fd06e50278638687f8a1d7c5913d5240eebad7cea224955"
+    "Tools/IOSMenuAudit/duo-release.swift": "cbce9e30a847f3b21fd06e50278638687f8a1d7c5913d5240eebad7cea224955",
+    "Tools/IOSMenuAudit/duo.swift": "972099417acfac8660a6ba70dfe0a8a22c43a4c01f267be874fa5df7ba401aa0"
   },
   "sourceState": "local changes, not committed or published",
   "timezone": "Australia/Brisbane",
