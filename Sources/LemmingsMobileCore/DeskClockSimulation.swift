@@ -179,9 +179,12 @@ public struct DeskClockSimulation: Equatable, Sendable {
     // MARK: - Steps
 
     private mutating func jump(to now: Date, event: DeskClockEvent?) {
+        hatchOpenedAt = hatchOpenedAt.addingTimeInterval(now.timeIntervalSince(lastAdvance))
         lastAdvance = now
         origin = now
         stepCount = 0
+        paradeLeft = 0
+        paradeTimer = 0
         let workerIDs = Set(jobs.compactMap { $0?.lemmingID })
         jobs = [nil, nil, nil, nil]
         lemmings.removeAll { workerIDs.contains($0.id) }
@@ -195,7 +198,7 @@ public struct DeskClockSimulation: Equatable, Sendable {
         for digit in 0..<4 {
             retarget(digit, to: digits[digit], instant: true, deadline: nil)
         }
-        blasts.removeAll { $0.until <= now }
+        blasts.removeAll()
         updatePhase(event: event, at: now)
     }
 
@@ -551,6 +554,9 @@ extension DeskClockSimulation {
         let current = Array(DeskClockFace.digits(for: Date(timeIntervalSince1970: minuteStart), uses24Hour: uses24Hour, calendar: calendar))
         let upcoming = Array(DeskClockFace.digits(for: next, uses24Hour: uses24Hour, calendar: calendar))
         for digit in 0..<4 {
+            if let deadline = jobs[digit]?.deadline, time.timeIntervalSince(deadline) >= -Self.timeTolerance {
+                finishWorker(digit)
+            }
             let shown = Array(shownDigits)[digit]
             var want = current[digit]
             var deadline: Date?

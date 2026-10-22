@@ -244,6 +244,24 @@ Tests may use local commercial assets when a test explicitly needs them. They
 must report missing local inputs clearly and must not silently substitute a
 different engine or fixture.
 
+## Desk Clock and runtime display regions
+
+`LemmingsMobileCore` owns the clock simulation, event filter, timeline and idle
+trigger. The EventKit adapter supplies calendar data at the platform boundary.
+`GameDeskClockArt` draws the shared Macintosh artwork for the iOS clock and both
+widgets. The iOS controller owns presentation, input isolation, power and music.
+
+`MobileReservedRegionRuntime` resolves public UIKit region selectors and checks
+their Objective-C signatures before calling them. This keeps the installed,
+Tahoe-compatible SDK usable. Missing APIs return no regions. Empty inactive
+folds still identify a foldable device. UIKit maps the returned frames into
+`MobileDisplayRegions`; screen size alone must not identify a Duo.
+
+The iOS project embeds the shared WidgetKit source as an extension. Mac builds
+compile that source against their existing modules before signing the app.
+Each extension receives a pruned original-art manifest and its privacy manifest.
+See [Desk Clock](Documentation/DeskClock.md) for behaviour and release checks.
+
 ## Runtime flow
 
 1. The app discovers bundled resources and optional imported content.

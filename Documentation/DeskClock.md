@@ -1,8 +1,9 @@
 # Desk Clock
 
-Status: design approved by the owner, 22 October 2026. Not built.
-Target release: a 2.2.x update, on its own branch, with the full scope.
-The 2.2 Duo launch candidate stays as it is.
+Status: source implementation added on 22 October 2026. Signed builds and device checks remain open.
+Target release: tonight's 2.2 Duo update, including the iOS and Mac widgets.
+The owner's latest instruction replaces the earlier 2.2.x scope decision.
+See the [current check record](ReleaseReadiness/2.2DuoPolish-2026-10-22.md).
 
 Prototype: [Tent Clock artifact](https://claude.ai/artifact/XvvA8foJYF5WLBMR3kLArH), version 3.
 The prototype is a web sketch. It is the reference for look and behavior, not for code.
@@ -154,6 +155,7 @@ phone starts to charge. StandBy covers that case through the widget.
   In the start minute of a nuke event, that lemming is in the "Oh no!" pose.
 - The timeline holds 60 entries and asks for a new timeline after them.
 - The Lock Screen family shows the time and the next event in Charset1 only.
+- The small family enlarges the terrain digits and uses compact countdowns to keep labels legible.
 - The extension bundles a pruned copy of `MacArtwork/lemmings` with only the frames
   the clock uses. The copy keeps the manifest format, so `ClassicMacArtwork` loads
   it in the same way as the app. Calendar reads use EventKit in the extension.
@@ -222,10 +224,11 @@ The app and the widget draw with the same `GameDeskClockArt` code, so the art st
 
 ## Release decision
 
-The owner chose a 2.2.x update on 22 October 2026. `2.2Roadmap.md` freezes the
-candidate on 22 October and avoids new optional features. The Desk Clock adds
-a new extension target, a new permission and signing work, so it stays out of
-the 2.2 candidate. The Duo launch was numbered 2.4 when the owner made this choice.
+The owner included the clock and both widgets in tonight's 2.2 release on
+22 October 2026. The new extension targets, calendar permission and signing
+checks are therefore part of this candidate's acceptance gates. The
+[current check record](ReleaseReadiness/2.2DuoPolish-2026-10-22.md) separates
+source verification from signed builds and device acceptance.
 
 ## Calls made for the owner to check
 

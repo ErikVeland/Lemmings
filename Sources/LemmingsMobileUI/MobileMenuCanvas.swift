@@ -273,6 +273,7 @@ import UIKit
             button.accessibilityLabel = action.title
             button.accessibilityHint = actionHelp[action.id]
             button.accessibilityIdentifier = identifier
+            button.accessibilityValue = action.toggleValue.map { $0 ? L10n.text("On") : L10n.text("Off") }
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
             #if os(tvOS)

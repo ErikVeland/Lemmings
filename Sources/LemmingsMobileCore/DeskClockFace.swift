@@ -72,10 +72,14 @@ public enum DeskClockFace {
 
     /// Whole clock minutes between the two minutes. Seconds never round. UTC flooring is exact
     /// for time zones whose offset is a whole number of minutes.
-    public static func countdown(to start: Date, now: Date) -> String {
+    public static func countdown(to start: Date, now: Date, compact: Bool = false) -> String {
         let minutes = Int((start.timeIntervalSince1970 / 60).rounded(.down))
             - Int((now.timeIntervalSince1970 / 60).rounded(.down))
         if minutes <= 0 { return L10n.text("LET'S GO!") }
+        if compact {
+            if minutes >= 60 { return L10n.text("\(minutes / 60)H \(String(format: "%02d", minutes % 60))M") }
+            return L10n.text("\(minutes) MIN")
+        }
         if minutes >= 60 {
             let hours = minutes / 60
             let rest = String(format: "%02d", minutes % 60)

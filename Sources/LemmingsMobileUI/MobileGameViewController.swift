@@ -1133,7 +1133,7 @@ typealias MobileGameControllerBase = UIViewController
         )
         #endif
         appendExtraSkillAction()
-        if !session.isReadOnly, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
+        if !session.isReadOnly, gameSettings.classic.inspectWhilePaused, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
             let inspectAction = overlayActions.count
             overlayActions.append { [weak self] in self?.showLemmingInspection() }
             overlayCanvas.page.footer.append(.init(String(inspectAction), L10n.text("INSPECT LEMMINGS")))

@@ -89,5 +89,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCalendarsUsageDescription</key><string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key><string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<key>CFBundleURLTypes</key><array><dict><key>CFBundleURLSchemes</key><array><string>ultimatelemmings</string></array></dict></array>
 </dict>
 </plist>

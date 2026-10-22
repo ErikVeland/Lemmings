@@ -83,7 +83,7 @@ def require_one_team(app):
     # Hardened runtime refuses to load code from a different team at launch.
     # codesign --verify --deep does not detect this.
     frameworks = app / 'Contents/Frameworks'
-    code = [app] + sorted(frameworks.glob('*.dylib'))
+    code = [app] + sorted(frameworks.glob('*.dylib')) + sorted((app / 'Contents/PlugIns').glob('*.appex'))
     for framework in sorted(frameworks.glob('*.framework')):
         version = framework / 'Versions/Current'
         code += [framework] + sorted((version / 'XPCServices').glob('*.xpc'))
@@ -150,6 +150,8 @@ def main():
             sign(identity, library)
         for framework in sorted((contents / 'Frameworks').glob('*.framework')):
             sign_framework(identity, framework)
+        for extension in sorted((contents / 'PlugIns').glob('*.appex')):
+            sign(identity, extension, '--entitlements', str(pathlib.Path(__file__).resolve().parents[1] / 'Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements'))
         sign(identity, args.app, '--entitlements', str(entitlements_path))
     subprocess.run(['codesign', '--verify', '--deep', '--strict', str(args.app)], check=True)
     require_one_team(args.app)

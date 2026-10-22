@@ -58,8 +58,14 @@ extension MenuAudit {
                         hasRate: snapshot.releaseRate != nil, skillCount: snapshot.skills.count,
                         reservedRegions: regions, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier,
                         navigationRail: rail)
-                    guard layout.canPlay, let deck = layout.portrait,
-                          deck.skillContentWidth <= deck.skills.width + 0.001 else { throw invalidTargets(line: #line) }
+                    guard layout.canPlay, let minimap = layout.minimapFrame else { throw invalidTargets(line: #line) }
+                    if let deck = layout.portrait {
+                        guard deck.skillContentWidth <= deck.skills.width + 0.001 else { throw invalidTargets(line: #line) }
+                    } else {
+                        guard ["classic", "classic-dos"].contains(session.engineIdentifier),
+                              let panel = layout.panel, panel.scale >= 3,
+                              panel.frame.width == 320 * panel.scale else { throw invalidTargets(line: #line) }
+                    }
                     let paused = state == "paused"
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let speed = state == "fast" ? 4.0 : 1
@@ -69,7 +75,8 @@ extension MenuAudit {
                     if let rail {
                         let pause = targets.first { $0.action == .pause }?.frame
                         let end = targets.first { $0.action == .endRun }?.frame
-                        guard layout.interface.controlsPlacement == .trailingRail,
+                        guard let deck = layout.portrait,
+                              layout.interface.controlsPlacement == .trailingRail,
                               layout.interface.controlsFrame == rail,
                               pause?.minY == deck.skills.minY, pause?.maxY == deck.skills.maxY,
                               end?.minY == deck.minimap.minY, end?.height == deck.minimap.height
@@ -78,7 +85,7 @@ extension MenuAudit {
                     for (index, item) in targets.enumerated() {
                         let frame = item.inputFrame
                         guard frame.width >= 44 - 0.001, frame.height >= 44, hudTargetFits(item, layout: layout),
-                              !frame.intersects(field), !frame.intersects(deck.minimap),
+                              !frame.intersects(field), !frame.intersects(minimap),
                               !frame.intersects(cg(layout.interface.statusFrame)),
                               regions.allSatisfy({ !frame.intersects(cg($0.frame)) }),
                               targets.first(where: { $0.inputFrame.contains(CGPoint(x: frame.midX, y: frame.midY)) })?.action == item.action,
@@ -91,13 +98,18 @@ extension MenuAudit {
                     if let division = regions.first(where: { $0.kind == .division }) {
                         guard field.minX == layout.interface.safeFrame.minX,
                               field.maxX == layout.interface.safeFrame.maxX,
-                              layout.interface.controlsFrame.maxY == layout.interface.safeFrame.maxY,
-                              deck.skills.width == layout.interface.safeFrame.width else { throw invalidTargets(line: #line) }
+                              layout.interface.controlsFrame.maxY == layout.interface.safeFrame.maxY else { throw invalidTargets(line: #line) }
+                        if let deck = layout.portrait {
+                            guard deck.skills.width == layout.interface.safeFrame.width else { throw invalidTargets(line: #line) }
+                        } else {
+                            guard let panel = layout.panel, division.frame.width > division.frame.height,
+                                  panel.frame.minY >= division.frame.maxY else { throw invalidTargets(line: #line) }
+                        }
                         if division.frame.height > division.frame.width {
-                            guard field.intersects(cg(division.frame)), field.maxY == deck.minimap.minY else { throw invalidTargets(line: #line) }
+                            guard field.intersects(cg(division.frame)), field.maxY == minimap.minY else { throw invalidTargets(line: #line) }
                         } else {
                             guard field.maxY == division.frame.minY,
-                                  layout.interface.controlsFrame.minY == division.frame.maxY else { throw invalidTargets(line: #line) }
+                                  layout.interface.controlsFrame.minY >= division.frame.maxY else { throw invalidTargets(line: #line) }
                         }
                         let status = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
                         for frame in [status.player, status.counters].compactMap({ $0 }) {
@@ -126,7 +138,7 @@ extension MenuAudit {
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: speed,
                         endRunArmed: state == "armed", panelImage: panel, typography: typography,
                         skillIcons: icons, playerName: "ALICE").draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-                    GameMinimapArt.draw(in: context, bounds: deck.minimap, image: image,
+                    GameMinimapArt.draw(in: context, bounds: minimap, image: image,
                         visible: cg(viewport.visibleLevelRect), levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: true)
                     for region in regions {
                         context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame))

@@ -25,6 +25,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return browserShown ? [browser] : [canvas]
     }
     #endif
+    #if os(iOS)
+    var deskClock: MobileDeskClockController?
+    var deskClockBlocksInput: Bool { deskClock != nil }
+    let deskClockActivity = DeskClockActivity()
+    nonisolated(unsafe) private var deskClockTimer: Timer?
+    #else
+    var deskClockBlocksInput: Bool { false }
+    #endif
     private let scrollView = MobileMenuScrollView()
     private let homeBackdropView = MobileHomeBackdropView()
     private let homeBackdropLoader = MobileHomeBackdropLoader()
@@ -66,7 +74,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var viewIsVisible = false
     private var sceneIsActive = false
     private let activityObservers = MobileNotificationObserverBag()
-    override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
+    override var canBecomeFirstResponder: Bool { !deskClockBlocksInput && game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings2) != nil
@@ -203,6 +211,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        #if os(iOS)
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        let activity = UITapGestureRecognizer()
+        activity.delegate = deskClockActivity
+        activity.cancelsTouchesInView = false
+        view.addGestureRecognizer(activity)
+        deskClockTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.checkDeskClock() }
+        }
+        #endif
         view.backgroundColor = .black
         view.addSubview(homeBackdropView)
         scrollView.backgroundColor = .black
@@ -333,7 +351,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         syncPages()
     }
 
-    deinit { inputLink?.invalidate() }
+    deinit {
+        inputLink?.invalidate()
+        #if os(iOS)
+        deskClockTimer?.invalidate()
+        #endif
+    }
 
     private func observeFrameActivity() {
         let centre = NotificationCenter.default
@@ -344,6 +367,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 MainActor.assumeIsolated {
                     guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
                     self.sceneIsActive = name == UIScene.didActivateNotification
+                    #if os(iOS)
+                    self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+                    #endif
                     self.libraryInput.reset()
                     self.syncPages()
                 }
@@ -357,13 +383,57 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
 
+    #if os(iOS)
+    private func checkDeskClock() {
+        let regions = MobileSystemRegions.read(in: view)
+        let stacked = regions.contains { $0.kind == .division && $0.frame.width > $0.frame.height }
+        let charging = UIDevice.current.batteryState == .charging || UIDevice.current.batteryState == .full
+        let idle = ProcessInfo.processInfo.systemUptime - deskClockActivity.lastInput
+        let menu = viewIsVisible && sceneIsActive && game == nil && presentedViewController == nil
+            && !preparingLevel && !scrollView.isTracking && !scrollView.isDecelerating
+            && route == .home && !searchField.isFirstResponder
+        if let reason = DeskClockTrigger.evaluate(foldable: MobileSystemRegions.isFoldable(in: view),
+            stacked: stacked, closed: !regions.contains { $0.kind == .division }, charging: charging,
+            idle: idle, menuAvailable: menu, settings: mobileSettings.deskClock) {
+            presentDeskClock(reason: reason)
+        }
+    }
+
+    func presentDeskClock(reason: DeskClockReason) {
+        guard game == nil, !preparingLevel, deskClock == nil, presentedViewController == nil else { return }
+        let clock = MobileDeskClockController(reason: reason, settings: mobileSettings)
+        deskClock = clock
+        clock.onClose = { [weak self, weak clock] in
+            guard let self, let clock, self.deskClock === clock else { return }
+            clock.stop()
+            clock.willMove(toParent: nil)
+            clock.view.removeFromSuperview()
+            clock.removeFromParent()
+            self.deskClock = nil
+            self.updateLibraryDisplayLink()
+            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.syncMenuMusic()
+            self.becomeFirstResponder()
+        }
+        resignFirstResponder()
+        addChild(clock)
+        clock.view.frame = view.bounds
+        clock.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(clock.view)
+        clock.didMove(toParent: self)
+        clock.start()
+        updateLibraryDisplayLink()
+        MobileMusic.shared.suspend()
+    }
+    #endif
+
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil
         if !active { unfold.stop() }
         let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
             && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
             && !UIAccessibility.isReduceMotionEnabled
-        inputLink?.isPaused = !active || (!animatedBackdrop && GCController.controllers().isEmpty)
+        inputLink?.isPaused = deskClockBlocksInput || !active || (!animatedBackdrop && GCController.controllers().isEmpty)
         if inputLink?.isPaused == true {
             libraryInput.reset()
             homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
@@ -546,6 +616,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 journey: resumableLearningJourney != nil || savedLevel != nil || playlists.run != nil ? MobileHomeArt.journeyMap(completed: completedJourneyLevelCount, enabled: catalogue != nil)
                     : canStartJourney ? .init("journey", L10n.text("Start journey"), enabled: catalogue != nil && journey != nil) : nil,
                 families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
+            #if os(iOS)
+            canvas.page.footer.insert(.init("deskClock", L10n.text("Desk Clock")), at: 4)
+            #endif
             canvas.preview = nil
         case .support:
             canvas.page = GameSupport.page
@@ -705,6 +778,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func syncMenuMusic() {
+        #if os(iOS)
+        if deskClock != nil { MobileMusic.shared.suspend(); return }
+        #endif
         MobileMusic.shared.selectProfile(settingsProfileID)
         MobileMusic.shared.setMenu(visible: game == nil && viewIsVisible, active: sceneIsActive)
     }
@@ -779,6 +855,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if searchField.isFirstResponder { searchField.resignFirstResponder() } else { searchField.becomeFirstResponder() }
             rebuild()
         case "settings": navigate(.settings)
+        #if os(iOS)
+        case "deskClock": presentDeskClock(reason: .menu)
+        #endif
         case "donate":
             #if os(tvOS)
             navigate(.support)

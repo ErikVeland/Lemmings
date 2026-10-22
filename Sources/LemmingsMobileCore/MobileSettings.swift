@@ -124,7 +124,7 @@ public struct MobileSettings: Codable, Equatable, Sendable {
 }
 
 public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {
-    case gameplay, controller, graphics, display, audio, accessibility, privacy
+    case gameplay, controller, graphics, display, audio, accessibility, privacy, deskClock
     public var title: String {
         switch self {
         case .gameplay: L10n.text("Gameplay")
@@ -134,6 +134,7 @@ public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {
         case .audio: L10n.text("Audio")
         case .accessibility: L10n.text("Accessibility")
         case .privacy: L10n.text("Privacy")
+        case .deskClock: L10n.text("Desk Clock")
         }
     }
 }
