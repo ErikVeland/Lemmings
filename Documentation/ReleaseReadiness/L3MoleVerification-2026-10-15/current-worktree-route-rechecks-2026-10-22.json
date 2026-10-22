@@ -1,0 +1,685 @@
+{
+  "date": "2026-10-22",
+  "baseCommit": "874e232b532676a6108d323bd06fc22ea40c1c1d",
+  "runtimeSourceSHA256": "ac590d6fc426af90303e3acd43b238669da4d0eb1b1c8cca60dc1b49d68c5a7a",
+  "solverSHA256": "6aadfa4e20e615d5243edd799065581f6fdbe17c495aa0c41d67fae798e1f826",
+  "runtimeLibrarySHA256": "bfa0a54d3a15d0417bed990ca3ad451681a3b22e63681895a8a5116ee5e88b52",
+  "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+  "resourceRelease": "Installed Mac build 76",
+  "searches": [
+    {
+      "level": 107,
+      "identity": "Shadow 7",
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 2228771,
+      "decisionPoints": 4827,
+      "depth": 4867,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1110,
+      "seedInputTicks": [
+        527,
+        850,
+        1060,
+        1109,
+        1110
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up",
+        "walker",
+        "jumper"
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1039907,
+      "decisionPoints": 582,
+      "depth": 622,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1070,
+      "seedInputTicks": [
+        527,
+        850,
+        1060
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use right"
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1027691,
+      "decisionPoints": 600,
+      "depth": 640,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1070,
+      "seedInputTicks": [
+        527,
+        850,
+        1060
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use right"
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1027691,
+      "decisionPoints": 600,
+      "depth": 640,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1109,
+      "seedInputTicks": [
+        527,
+        850,
+        1060,
+        1109
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up",
+        "use downRight"
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1130272,
+      "decisionPoints": 596,
+      "depth": 636,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "population": 1,
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 93801,
+      "decisionPoints": 4862,
+      "depth": 4902,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "scopeNote": "Diagnostic only. A population-one result is not a population-20 MVP route."
+    },
+    {
+      "level": 213,
+      "identity": "Egyptian 13",
+      "budgetSeconds": 300,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 2021587,
+      "decisionPoints": 236,
+      "depth": 276,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1210,
+      "seedInputTicks": [
+        527,
+        850,
+        1210
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up"
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 985832,
+      "decisionPoints": 590,
+      "depth": 630,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Refresh the walkthrough-derived prefix under the current runtime. The final up-directed brick action triggers a down-right Mole tunnel."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1210,
+      "seedInputTicks": [
+        527,
+        850,
+        1210
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up"
+      ],
+      "budgetSeconds": 300,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 2239969,
+      "decisionPoints": 590,
+      "depth": 630,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Wider search from the current-runtime down-right Mole tunnel."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1208,
+      "seedInputTicks": [
+        527,
+        850,
+        1208
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up"
+      ],
+      "budgetSeconds": 180,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1441929,
+      "decisionPoints": 591,
+      "depth": 631,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Earliest tested up-directed brick trigger for the down-right Mole tunnel."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1210,
+      "seedInputTicks": [
+        527,
+        850,
+        1208,
+        1209,
+        1210
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up",
+        "walker",
+        "walker"
+      ],
+      "budgetSeconds": 180,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1415822,
+      "decisionPoints": 722,
+      "depth": 762,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Stop the brick layer after the trigger, turn it right and search from the attempted exit path."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1450,
+      "seedInputTicks": [
+        527,
+        850,
+        1208,
+        1209,
+        1210,
+        1450
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use up",
+        "walker",
+        "walker",
+        "walker"
+      ],
+      "budgetSeconds": 180,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1048989,
+      "decisionPoints": 684,
+      "depth": 724,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Turn right during the leader's return to avoid the false exit and search for a lower route."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1210,
+      "seedInputTicks": [
+        527,
+        850,
+        1210
+      ],
+      "seedActions": [
+        "use up",
+        "use right",
+        "use left"
+      ],
+      "budgetSeconds": 180,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 1514240,
+      "decisionPoints": 4509,
+      "depth": 4549,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "seedPolicy": "Search the walkthrough's down-left Mole trigger without a forced builder turn."
+    },
+    {
+      "level": 206,
+      "identity": "Egyptian 6",
+      "seedThroughTick": 1210,
+      "seedInputTicks": [
+        527,
+        850,
+        1210
+      ],
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 79859,
+      "decisionPoints": 4512,
+      "depth": 4552,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 229,
+      "identity": "Egyptian 29",
+      "seedThroughTick": 1849,
+      "budgetSeconds": 120,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "refreshEngineSeed": true,
+      "expandedStates": 33241,
+      "decisionPoints": 737,
+      "depth": 777,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED"
+    },
+    {
+      "level": 107,
+      "identity": "Shadow 7",
+      "seedSource": "October 13 verified-route fixture at commit 2cf2adb5",
+      "seedThroughTick": 2372,
+      "budgetSeconds": 180,
+      "beamWidth": 16384,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 87718,
+      "decisionPoints": 3489,
+      "depth": 3529,
+      "roundsToBeam": 1,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "elapsedSeconds": 188,
+      "candidateWritten": false
+    },
+    {
+      "level": 107,
+      "identity": "Shadow 7",
+      "seedSource": "October 13 verified-route fixture at commit 2cf2adb5",
+      "seedThroughTick": 1590,
+      "budgetSeconds": 600,
+      "beamWidth": 8192,
+      "toolSiteCellPixels": 2,
+      "pairedActors": true,
+      "fewerInputsFirst": true,
+      "expandedStates": 466595,
+      "decisionPoints": 1652,
+      "depth": 1692,
+      "roundsToBeam": 1,
+      "bestSaved": 0,
+      "winningRoute": false,
+      "result": "UNSOLVED",
+      "elapsedSeconds": 617,
+      "candidateWritten": false
+    }
+  ],
+  "retainedRouteDiagnosis": {
+    "level": 206,
+    "fixture": "Tests/Lemmings3CompletionTests/Fixtures/206.json",
+    "resourceLevelHashMatchesFixture": true,
+    "preMoleChangeOutcome": "The isolated pre-5d3b818f runtime also ends the retained route at tick 9660 with 0 saved and 11 lost.",
+    "conclusion": "The retained 206 fixture was already non-winning before the latest Mole patrol change. Its input sequence does not produce the guide's Mole trigger or a lower-exit path."
+  },
+  "currentRouteCoverage": {
+    "retainedFixturesAudited": 416,
+    "exactDoubleReplays": 399,
+    "failingSchedules": 17,
+    "openStandaloneLevels": [
+      107,
+      206,
+      213,
+      229
+    ]
+  },
+  "limitations": [
+    "Bounded route searches do not prove that a level is impossible.",
+    "Mole source parity remains incomplete; two retained original-engine traces are not full behavioural validation.",
+    "No complete carried campaign path, source-engine acceptance, media review or finale validation was established."
+  ],
+  "egyptian6MoleTriggerProbe": {
+    "prefix": [
+      {
+        "tick": 527,
+        "action": "use up"
+      },
+      {
+        "tick": 850,
+        "action": "use right"
+      }
+    ],
+    "actorAtTick1200": {
+      "x": 166,
+      "y": 36,
+      "direction": "left",
+      "tool": "bricks",
+      "quantity": 8
+    },
+    "moleAtTick1200": {
+      "x": 121,
+      "y": 38,
+      "direction": "right"
+    },
+    "probeAction": {
+      "tick": 1210,
+      "action": "use left",
+      "lemming": 1
+    },
+    "observed": "The Mole began moving down-left and reached x=140,y=40 by tick 1300. It remained at x=140,y=40 through tick 1700.",
+    "limit": "This records current-runtime behaviour. No original-engine trace for Egyptian 6 confirms the same path."
+  },
+  "egyptian6AlternativeTriggerProbe": {
+    "librarySHA256": "681f2df47c0f8cf2b5389a75068d711c5021715286d972b0d555afc5ff14098d",
+    "prefix": [
+      {
+        "tick": 527,
+        "action": "use up"
+      },
+      {
+        "tick": 850,
+        "action": "use right"
+      }
+    ],
+    "triggerTick": 1210,
+    "triggerAction": "use up",
+    "observed": "The Mole turned down-right. It reached x=66,y=113 at tick 1300, x=58,y=213 at tick 1400, x=258,y=313 at tick 1500 and x=192,y=400 at tick 1600.",
+    "comparison": "The same prefix with use left at tick 1210 turns the Mole down-left. It remains at x=140,y=40 through tick 1700.",
+    "timingSweep": {
+      "sampledUpTriggerTicks": [
+        1200,
+        1202,
+        1204,
+        1206,
+        1208,
+        1210,
+        1212,
+        1214,
+        1216,
+        1218,
+        1220,
+        1222,
+        1224,
+        1226,
+        1228,
+        1230,
+        1232,
+        1234,
+        1236,
+        1238,
+        1240
+      ],
+      "downRightTunnelTicks": [
+        1208,
+        1210,
+        1212,
+        1214
+      ],
+      "refusedTicks": [
+        1216,
+        1218,
+        1220,
+        1222,
+        1240
+      ],
+      "otherTestedTicksDidNotStartTunnel": true,
+      "followupWalkerAfterDownLeftRejectedAtTick": 1212
+    },
+    "walkthroughSource": "https://www.deinonych.com/lemmings/lemmchronegyptian_walk.shtml",
+    "limit": "The down-right route search expanded 985832 states in 120 seconds and found no win. These positions are current-runtime observations, not source-engine parity evidence."
+  },
+  "preMoleChangeReplayChecks": {
+    "librarySource": "Isolated runtime at 4bf3bddc, before commit 5d3b818f",
+    "observed": {
+      "107": "Retained route ends at tick 2300 with 0 saved and 11 lost.",
+      "206": "Retained route ends at tick 9660 with 0 saved and 11 lost.",
+      "213": "Retained route ends at tick 4140 with 0 saved and 11 lost.",
+      "229": "Retained route rejects input 6 at tick 1561."
+    },
+    "conclusion": "All four retained route failures predate the latest Mole patrol change. The latest change did not create these route gaps."
+  },
+  "playerBuiltBrickTriggerProbe": {
+    "change": "A Mole now keeps its heading when a player-built brick starts a down tunnel. Steel contact still reverses its heading.",
+    "evidence": "A walkthrough says the Mole digs right after it hits the placed brick, then reacts to the metal cubes.",
+    "inputPrefix": [
+      "use up at tick 527",
+      "use right at tick 850",
+      "use up at tick 1210",
+      "walker at tick 1230"
+    ],
+    "observed": "The Mole moved down-right at tick 1218, then turned down-left at tick 1228 at the level blocks. The leader later entered the false exit and died at tick 1591.",
+    "walkthroughSource": "https://www.deinonych.com/lemmings/lemmchronegyptian_walk.shtml",
+    "runtimeTest": "The focused test and full L3 runtime suite pass.",
+    "routeResult": "The Egyptian 6 route search found no win. The full current-runtime audit remains 399/416 exact double-replays, with 17 route failures.",
+    "limit": "The walkthrough is secondary evidence. A source gameplay capture has not verified the trigger direction."
+  },
+  "oct13BaselineReplayChecks": {
+    "commit": "2cf2adb5",
+    "runtimeSource": "Lemmings3Runtime.swift from the 13 October L3 Verified Routes commit",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "results": {
+      "107": {
+        "result": "PASS",
+        "saved": 10,
+        "lost": 1,
+        "reserve": 10
+      },
+      "206": {
+        "result": "PASS",
+        "saved": 11,
+        "lost": 0,
+        "reserve": 10
+      },
+      "213": {
+        "result": "PASS",
+        "saved": 1,
+        "lost": 20,
+        "reserve": 0
+      },
+      "229": {
+        "result": "PASS",
+        "saved": 2,
+        "lost": 10,
+        "reserve": 10
+      }
+    },
+    "conclusion": "The four retained routes passed with the 13 October Mole model. The 15 October model change precedes their current failures. This baseline does not prove that the older Mole model has better source fidelity."
+  },
+  "oct13BaselineCurrentFixtureAudit": {
+    "runtimeCommit": "2cf2adb5",
+    "fixtures": "Current worktree set, 416 standalone and carried schedules",
+    "results": {
+      "exactDoubleReplays": 196,
+      "rebasedWinningRoutes": 219,
+      "routeFailures": 1,
+      "failedFixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json"
+    },
+    "conclusion": "The 13 October runtime wins 415 current schedules after identity rebase. This is a comparison only. It does not pass current replay identity or source-parity gates."
+  },
+  "oct13RouteSchedulesUnderCurrentRuntime": {
+    "sourceCommit": "2cf2adb5",
+    "resourceRoot": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "population": 20,
+    "levels": [
+      107,
+      206,
+      213,
+      229
+    ],
+    "results": {
+      "107": "FAIL: source inputs do not win at population 20",
+      "206": "FAIL: source inputs do not win at population 20",
+      "213": "FAIL: source inputs do not win at population 20",
+      "229": "FAIL: source inputs do not win at population 20"
+    },
+    "conclusion": "The October 13 routes pass with the October 13 Mole model but do not win with the current runtime. This confirms a runtime compatibility regression. It does not show which Mole rule causes each route failure or establish which model matches the original game."
+  },
+  "strictGateRun": {
+    "command": "/private/tmp/l3-current/Verify verify --require-all",
+    "result": "FAIL",
+    "passesBeforeFailure": "Levels 1\u201330 and 101\u2013106",
+    "firstFailure": "Standalone fixture 107.json rejects its replay identity or initial-state hash before route simulation.",
+    "separateRouteAudit": "399 of 416 fixtures exact-double-replay; 17 schedules fail across standalone levels 107, 206, 213 and 229."
+  },
+  "firstPostRouteRegressionSnapshot": {
+    "commit": "07e55632",
+    "runtimeSourceSHA256": "54dde1651c736c03e1a638838fd16cc10b488b39c30224801ab0cc49283cefb1",
+    "runtimeLibrarySHA256": "a1752a69ec42cb46519bcd21fa7669d471f511100f36e5fa3ac7339e78a43e3a",
+    "change": "Mole starting direction changed to the opposite object-identifier parity.",
+    "test": "Replayed all four 13 October winning route schedules at population 20 with refreshed engine identity.",
+    "results": {
+      "107": "FAIL: source inputs do not win at the carried population",
+      "206": "FAIL: source inputs do not win at the carried population",
+      "213": "FAIL: source inputs do not win at the carried population",
+      "229": "FAIL: source inputs do not win at the carried population"
+    },
+    "baseline": "The 13 October runtime replays all four schedules as wins.",
+    "conclusion": "The 15 October Mole direction change is the first confirmed compatibility regression in the checked snapshots. The route evidence does not establish which direction rule matches the original game."
+  },
+  "parityReversalCandidate": {
+    "scope": "Temporary build from the current worktree. Reversed only the Mole starting-direction parity expression.",
+    "productionFilesChanged": false,
+    "results": {
+      "107": "FAIL: source inputs do not win at the carried population",
+      "206": "FAIL: source inputs do not win at the carried population",
+      "213": "FAIL: source inputs do not win at the carried population",
+      "229": "FAIL: source inputs do not win at the carried population"
+    },
+    "conclusion": "Reversing the starting-direction rule alone does not restore the October 13 routes. Do not use this as a route repair."
+  },
+  "sourceAssetsRevalidated": {
+    "executablePath": "/Users/erikveland/.codex/worktrees/8cea/Lemmings/.build/l3-mole-verification/source-left-facing/L3CD.EXE",
+    "executableSHA256": "5eef913b578fb642eef183d80404d91c4cbcb1f4c998e184962ce1f37f64f018",
+    "emulator": "DOSBox Staging 0.83.0",
+    "levelDataRoot": "/Users/erikveland/.codex/worktrees/8cea/Lemmings/.build/l3-mole-verification/source-left-facing",
+    "comparedAgainst": "/Applications/Ultimate Lemmings.app/Contents/Resources/Ports/LEM3CD",
+    "matchingLevels": [
+      107,
+      206,
+      213,
+      229
+    ],
+    "comparison": "LEVELnnn.DAT, PERMnnn.OBS and TEMPnnn.OBS SHA-256 values match the installed resources for each listed level.",
+    "limit": "The original executable is recovered. No new source gameplay trace or winning route was produced in this check."
+  },
+  "temporaryCollisionCandidate": {
+    "change": "Remove the ordinary-solid overlap increase reversal during horizontal Mole patrol.",
+    "productionFilesChanged": false,
+    "sourceTraceMatches": {
+      "steel-left-facing": "150/329",
+      "steel-air-gap": "234/344"
+    },
+    "currentRuntimeTraceMatches": {
+      "steel-left-facing": "150/329",
+      "steel-air-gap": "236/344"
+    },
+    "oct13RoutesRestored": false,
+    "conclusion": "The candidate did not improve both retained source traces and did not restore any of the four October 13 routes. Discard it."
+  },
+  "retainedEgyptian29Candidate": {
+    "path": "/private/tmp/l3-current/route229/229.json",
+    "check": "Refreshed against current runtime and installed level data at population 20.",
+    "result": "FAIL: source inputs do not win at the carried population.",
+    "candidateWritten": false
+  }
+}
