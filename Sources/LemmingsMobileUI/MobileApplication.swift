@@ -159,6 +159,7 @@ public enum LemmingsMobileApplication {
     private let checksAccessibleTargeting: Bool
     private let assignsAccessibly: Bool
     private var presentedPicker = false
+    private var activationObserver: NSObjectProtocol?
 
     init(game: MobileGameViewController, selection: MobileTargetSelection, control: Int,
          opensDirectionPicker: Bool, checksAccessibleTargeting: Bool, assignsAccessibly: Bool) {
@@ -190,7 +191,32 @@ public enum LemmingsMobileApplication {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard !presentedPicker else { return }
+        guard game.view.window?.windowScene?.activationState == .foregroundActive else {
+            guard activationObserver == nil else { return }
+            activationObserver = NotificationCenter.default.addObserver(
+                forName: UIScene.didActivateNotification,
+                object: game.view.window?.windowScene,
+                queue: .main
+            ) { [weak self] _ in
+                MainActor.assumeIsolated { self?.startHarness() }
+            }
+            return
+        }
+        startHarness()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let activationObserver { NotificationCenter.default.removeObserver(activationObserver) }
+        activationObserver = nil
+    }
+
+    private func startHarness() {
+        guard !presentedPicker else { return }
         presentedPicker = true
+        if let activationObserver { NotificationCenter.default.removeObserver(activationObserver) }
+        activationObserver = nil
+        game.applyLifecycle(.becameActive)
         game.resumePlay()
         if opensDirectionPicker {
             _ = game.beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection)
