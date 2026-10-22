@@ -92,6 +92,8 @@ environment and still needs device verification.
 - Set reading text flush left in sentence case. The Macintosh character sets
   include lowercase letters. This applies to About, Version history, Contributors,
   What's new, hints, award and reward explanations, and controller help.
+  Separate paragraphs with a blank-line gap. Keep list items, such as control
+  help, close together. Pass whole paragraphs and let the page wrap them.
   Titles, headings, action names and HUD text stay in capitals. The compact HUD
   face has no lowercase, so text that falls back to it stays in capitals.
 - Show each outcome once. A filled star already communicates an earned goal.

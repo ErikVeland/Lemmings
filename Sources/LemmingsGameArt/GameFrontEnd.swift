@@ -59,6 +59,10 @@ public struct GameFrontEnd {
         public var detailTitles: Set<Int> = []
         /// Paragraph pages set body details flush left in their authored case.
         public var reading = false
+        /// Reading lists, such as control help, keep their items close together.
+        public var listDetails = false
+        /// Space after each detail. Reading paragraphs take a blank-line gap.
+        public var detailGap: CGFloat { reading && !listDetails ? 18 : 6 }
         public func readsDetail(_ index: Int) -> Bool {
             reading && !detailHeadings.contains(index) && !detailTitles.contains(index)
         }
@@ -171,7 +175,7 @@ public struct GameFrontEnd {
                 let height = GameTextLayout.height(value, width: side, face: page.detailTitles.contains(index) ? .large : .small)
                 if page.detailHeadings.contains(index) || page.detailTitles.contains(index) { detailY += 8 }
                 details.append(CGRect(x: preview.maxX + 16, y: detailY, width: side, height: height))
-                detailY += height + 6
+                detailY += height + page.detailGap
             }
             y = max(preview.maxY, detailY) + 12
         } else {
@@ -179,7 +183,7 @@ public struct GameFrontEnd {
                 let previewWidth = boardWidth - 40
                 let detailHeight = page.details.enumerated().reduce(CGFloat.zero) { total, entry in
                     total + GameTextLayout.height(entry.element, width: previewWidth,
-                        face: page.detailTitles.contains(entry.offset) ? .large : .small) + 6
+                        face: page.detailTitles.contains(entry.offset) ? .large : .small) + page.detailGap
                         + (page.detailHeadings.contains(entry.offset) || page.detailTitles.contains(entry.offset) ? 12 : 0)
                 }
                 let footerCell = (boardWidth - 40 - CGFloat(footerGrid.columns - 1) * 12) / CGFloat(footerGrid.columns)
@@ -195,7 +199,7 @@ public struct GameFrontEnd {
                 let height = GameTextLayout.height(value, width: boardWidth - 40, face: page.detailTitles.contains(index) ? .large : .small)
                 if page.detailHeadings.contains(index) || page.detailTitles.contains(index) { y += 12 }
                 details.append(CGRect(x: x + 20, y: y, width: boardWidth - 40, height: height))
-                y += height + 6
+                y += height + page.detailGap
             }
         }
         let columns = footerGrid.columns
@@ -340,7 +344,7 @@ public struct GameFrontEnd {
             let height = GameTextLayout.height(value, width: detailWidth)
             details.append(CGRect(x: sideBySide ? x + inset + inner - detailWidth : x + inset,
                                   y: y, width: detailWidth, height: height))
-            y += height + 6
+            y += height + page.detailGap
         }
         var targets: [Target] = []
         for action in page.rows {

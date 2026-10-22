@@ -2209,12 +2209,12 @@ typealias MobileGameControllerBase = UIViewController
                       width: visible.width * session.renderScale, height: visible.height * session.renderScale)
     }
 
-    func showCustomOverlay(title: String, details: [String], reading: Bool = false, headings: Set<Int> = [],
-                           actions: [(String, () -> Void)]) {
+    func showCustomOverlay(title: String, details: [String], reading: Bool = false, list: Bool = false,
+                           headings: Set<Int> = [], actions: [(String, () -> Void)]) {
         showOverlay(title: title, actions: actions)
         var page = GameFrontEnd.Page(title: title, details: details,
             footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) })
-        page.reading = reading; page.detailHeadings = headings
+        page.reading = reading; page.listDetails = list; page.detailHeadings = headings
         overlayCanvas.page = page
         layoutOverlay()
     }

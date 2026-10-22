@@ -60,8 +60,8 @@ extension MobileGameViewController {
             }
         }
         actions.append((L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }))
-        let width = max(24, min(68, Int(view.bounds.width / 8) - 10))
-        showCustomOverlay(title: hint.title, details: [hint.section] + Self.wrapHint(hint.body, columns: width),
+        showCustomOverlay(title: hint.title,
+                          details: [hint.section] + hint.body.components(separatedBy: "\n").filter { !$0.isEmpty },
                           reading: true, headings: [0], actions: actions)
     }
 
@@ -75,19 +75,6 @@ extension MobileGameViewController {
                 guard let data = try? JSONEncoder().encode(solution.replay) else { return }
                 self?.showReplay(document: data, solution: true, ghostOnly: ghostOnly)
             })])
-    }
-
-    static func wrapHint(_ text: String, columns: Int) -> [String] {
-        var result: [String] = []
-        for paragraph in text.components(separatedBy: "\n") {
-            var line = ""
-            for word in paragraph.split(separator: " ") {
-                if !line.isEmpty, line.count + word.count + 1 > columns { result.append(line); line = "" }
-                line += (line.isEmpty ? "" : " ") + word
-            }
-            result.append(line)
-        }
-        return result
     }
 }
 #endif
