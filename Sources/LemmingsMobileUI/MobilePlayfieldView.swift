@@ -165,6 +165,7 @@ import UIKit
         #endif
 
         isAccessibilityElement = true
+        accessibilityIdentifier = "game.playfield"
         accessibilityLabel = L10n.text("Game playfield")
         accessibilityHint = L10n.text("Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.")
         accessibilityTraits = .allowsDirectInteraction
