@@ -281,13 +281,43 @@ struct DeskClockSimulationTests {
 
     @Test func busyWorkerFinishesBeforeNextJob() {
         var simulation = simulation(at: date(12, 34, second: 30))
-        run(&simulation, from: date(12, 34, second: 30), to: date(12, 35))
-        simulation.advance(to: date(12, 35, second: 0.5), event: nil)
-        simulation.advance(to: date(12, 36), event: nil)
-        run(&simulation, from: date(12, 36), to: date(12, 36, second: 30))
-        #expect(simulation.blocks[3] == glyph("6"))
+        run(&simulation, from: date(12, 34, second: 30), to: date(12, 34, second: 58))
+        let busy = workers(simulation).first { $0.workerDigit == 3 }
+        #expect(busy != nil)
+        #expect(simulation.blocks[3] != glyph("5"))
+
+        simulation.retarget(3, to: "6", instant: false, deadline: date(12, 36))
+        #expect(simulation.blocks[3] == glyph("5"), "The old job finishes before the replacement starts")
+        #expect(simulation.lemmings.contains { $0.id == busy?.id && $0.workerDigit == nil })
+        #expect(workers(simulation).filter { $0.workerDigit == 3 }.count == 1)
+        #expect(workers(simulation).allSatisfy { $0.id != busy?.id })
+
+        simulation.retarget(3, to: "6", instant: true, deadline: nil)
         #expect(digitsMatch(simulation, "1236"))
         #expect(workers(simulation).isEmpty)
+    }
+
+    @Test func backwardClockChangeKeepsTheHatchRunning() {
+        var simulation = simulation(at: date(12, 34))
+        simulation.advance(to: date(11, 34), event: nil)
+        #expect(digitsMatch(simulation, "1134"))
+        run(&simulation, from: date(11, 34), to: date(11, 34, second: 2))
+        #expect(simulation.spawned == 1)
+        #expect(!simulation.lemmings.isEmpty)
+        let before = simulation.lemmings
+        run(&simulation, from: date(11, 34, second: 2), to: date(11, 34, second: 3))
+        #expect(simulation.lemmings != before)
+    }
+
+    @Test func backwardClockChangeCancelsWorkersAndKeepsMinuteUpdates() {
+        var simulation = simulation(at: date(12, 34, second: 30))
+        run(&simulation, from: date(12, 34, second: 30), to: date(12, 34, second: 58))
+        #expect(!workers(simulation).isEmpty)
+        simulation.advance(to: date(11, 34, second: 58), event: nil)
+        #expect(digitsMatch(simulation, "1134"))
+        #expect(workers(simulation).isEmpty)
+        run(&simulation, from: date(11, 34, second: 58), to: date(11, 35))
+        #expect(digitsMatch(simulation, "1135"))
     }
 
     @Test func blockerLeavesWhenEventDisappears() {

@@ -28,6 +28,7 @@ import UIKit
 
 @MainActor final class MobilePixelLabel: UIView {
     var text = "" { didSet { accessibilityLabel = text; setNeedsDisplay() } }
+    var preservesCase = false { didSet { setNeedsDisplay() } }
     var wraps = false { didSet { setNeedsDisplay() } }
     var palette = MobilePixelText.Palette.blue { didSet { setNeedsDisplay() } }
     var alignment = NSTextAlignment.center { didSet { setNeedsDisplay() } }
@@ -55,7 +56,8 @@ import UIKit
         } else if wraps, let context = UIGraphicsGetCurrentContext(), let typography = MobileGameArt.typography {
             GameTextLayout.draw(text, in: bounds, typography: typography, face: face,
                                 palette: palette == .blue ? .blue : .green,
-                                alignment: alignment == .left ? .left : alignment == .right ? .right : .center, context: context)
+                                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                                preservesCase: preservesCase, context: context)
         } else {
             MobilePixelText.draw(text, in: bounds, palette: palette,
                                  maximumScale: maximumScale, alignment: alignment, face: face)
