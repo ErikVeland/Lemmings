@@ -21,7 +21,7 @@
       "passed": 58,
       "suites": 7
     },
-    "iosModules": "LemmingsMobileUI and dependencies compile for the iOS Simulator with Xcode 27.2",
+    "iosModules": "LemmingsMobileUI and dependencies compile for the iOS Simulator with Xcode 27.2; the iOS SDK 26.5 compile was not rerun for the repair",
     "iosWidget": "Debug arm64 Simulator app build, unsigned, with the embedded extension, pruned artwork and privacy manifest",
     "localMacApp": "arm64 local app build, ad hoc signature, widget in Contents/PlugIns with sandbox and calendar entitlements",
     "macWidget": "arm64 and x86_64 extension for macOS 12.3 in isolated host fixture, ad hoc sandbox and calendar entitlements",
@@ -40,10 +40,10 @@
     },
     "nativeIOSTests": {
       "audio": "muted",
-      "deskClock": 12,
+      "deskClock": 15,
       "device": "iPhone Duo Simulator",
       "duo": 13,
-      "passed": 25,
+      "passed": 28,
       "suites": 4,
       "windows": "offscreen"
     },
@@ -57,7 +57,7 @@
     "support": {
       "renders": 54
     },
-    "tvosModules": "LemmingsMobileUI and dependencies compile for the tvOS Simulator with Xcode 27.2",
+    "tvosModules": "LemmingsMobileUI and dependencies compile for the tvOS Simulator with Xcode 27.2; the SDK 26.5 compile was not rerun for the repair",
     "widgetArtwork": {
       "allClockPosesAndFontsChecked": true,
       "bytes": 1078495,
@@ -84,8 +84,8 @@
     "base": "333afcd3",
     "branch": "feature/desk-clock",
     "date": "2026-10-23",
-    "sourceCommit": "7d4a6a9c",
-    "summary": "One clock screen, trigger wiring, widget timeline and compact widget, prune tool callers"
+    "sourceCommit": "da6b8ee3",
+    "summary": "One clock screen, trigger wiring, widget timeline and compact widget, prune tool callers, automatic entry on idle Home only (not with VoiceOver or an active text field)"
   },
   "sourceBase": "e2d8538b",
   "sourceSHA256": {
@@ -115,13 +115,13 @@
     "Sources/LemmingsMobileCore/MobileHUDLayout.swift": "d916939170009315e5d2c40294c64f795e500eeb71a2e1baba665d59d40278b7",
     "Sources/LemmingsMobileCore/MobileReservedRegionRuntime.swift": "6e7f511950c857b8473df58aefbab48ada94362dbb901d001bb765cffafe0e4a",
     "Sources/LemmingsMobileCore/MobileSettings.swift": "2885fc650b571efe73831757703e93cf515b7aab0a222cacb974753ee3ff1722",
-    "Sources/LemmingsMobileUI/DeskClockAutomaticEntry.swift": "f290ab50a4275ad7ccc861aee2984236a36cf7be139d20497c8c6868df2dd6b7",
+    "Sources/LemmingsMobileUI/DeskClockAutomaticEntry.swift": "f9659e296d6efe89b7585f714c0676fffbcd82ecb1ac20eb778c684d473bacff",
     "Sources/LemmingsMobileUI/MobileApplication.swift": "e6bb718119afdb39289005d56779d139d9e2e21cc0434663616d173ac730e4dc",
     "Sources/LemmingsMobileUI/MobileDeskClockController.swift": "1fe9ade5b23d9a499b3a51fa6122de9d7d9ccf11f4c9997f42e4663b93239c56",
     "Sources/LemmingsMobileUI/MobileDeskClockView.swift": "f1f557e13d7f8f8872061cee788ef7e9637284e5b7672bec156d38f0487b8dfd",
     "Sources/LemmingsMobileUI/MobileGameViewController.swift": "12bd5d22ef689c12c5f19d6a77478600c0c6e3ca57193abb3de5d9392c7c9c8e",
     "Sources/LemmingsMobileUI/MobileLibraryInput.swift": "bfa6c38ee3c0429c48db7253f0679f0805cb0d1a43bf9056c05ffc477da7e667",
-    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "287e9981494df8459e09b3ceba72aada0b572c211b78b1905109c1b79ffd2aa2",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "e62003fc7545a45d02c4d5babf2b70e1cf1741280c1f756db275b6b754037133",
     "Sources/LemmingsMobileUI/MobileMenuCanvas.swift": "0e527510e395d0f44c768940832926e29f2bf6ecdfa8b097b6a3056e2fb594f5",
     "Sources/LemmingsMobileUI/MobilePixelText.swift": "965b22f5e4ac9ee155face7a5c60e88d4e0979bc406fbc782989d9f436d2b266",
     "Sources/LemmingsMobileUI/MobileReservedRegions.swift": "11c9247a4b5549db25c350a384f9f80ea4f5e03d81bba39fcf472f3004e987d2",
@@ -133,7 +133,7 @@
     "Tests/LemmingsMobileCoreTests/MobileReservedRegionRuntimeTests.swift": "bd7f6363583443184ec8f248c9bb842bc9df34fcc71271502c929e6b60f91654",
     "Tests/LemmingsMobileUITests/DeskClockArtTests.swift": "780e490c0403068bda049400a19ad013e56a49dbaeb86ba0d7de35074f0eec9d",
     "Tests/LemmingsMobileUITests/DeskClockPresentationTests.swift": "4be1b2a4bbacb3b98d57cc83f1a986ae97436ac18de8b39d68c5b352fdfc2ace",
-    "Tests/LemmingsMobileUITests/DeskClockTriggerWiringTests.swift": "f6505c770c84feaee825f64d3aa1f980d8f2c224107441e0267d7b168aa37178",
+    "Tests/LemmingsMobileUITests/DeskClockTriggerWiringTests.swift": "da1f49c9541a6242e5366c78037740f7d3ec78df8f61334df12df048cf49aede",
     "Tools/DeskClock/prune_artwork.py": "ff70fe2ba2ccd9fea317fd1371374358edabb669dd40672aa16833f5efa0d27a",
     "Tools/IOSMenuAudit/MobileMenuAudit.swift": "f3356adf03e523dba3de10d3d593a98ba6aef6dce6482e42ec3a4d7fe4cb7809",
     "Tools/IOSMenuAudit/duo-release.swift": "d53e2397641f6b48dee391c9e9f88605d0d3863d2e61ffa5cbcf06410491e5ac",
