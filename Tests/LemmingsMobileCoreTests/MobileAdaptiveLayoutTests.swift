@@ -3,6 +3,60 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileAdaptiveLayoutTests {
+    @Test func verticalNavigationSpaceReclaimsGameplayHeightAcrossEngines() throws {
+        for leading in [false, true] {
+            let size = MobileSize(width: 495, height: 720)
+            let insets = MobileInsets(top: 10, left: leading ? 95 : 10, bottom: 44, right: leading ? 10 : 95)
+            let rail = MobileRect(x: leading ? 4 : 404, y: 60, width: 87, height: 600)
+            for (engine, rate, count) in [("classic", true, 8), ("lemmings2", false, 8), ("lemmings3", false, 5)] {
+                for rewind in [false, true] {
+                    let baseline = MobileHUDLayout.make(container: size, safeArea: insets,
+                        hasRate: rate, skillCount: count, supportsRewind: rewind, engineIdentifier: engine)
+                    let layout = MobileHUDLayout.make(container: size, safeArea: insets,
+                        hasRate: rate, skillCount: count, supportsRewind: rewind, engineIdentifier: engine,
+                        topBarInsets: .init(left: 12, right: 12), navigationRail: rail)
+                    #expect(layout.interface.controlsPlacement == .trailingRail)
+                    #expect(layout.interface.playfieldFrame.width == baseline.interface.playfieldFrame.width)
+                    #expect(layout.interface.playfieldFrame.height > baseline.interface.playfieldFrame.height)
+                    let deck = try #require(layout.portrait)
+                    #expect(deck.skillContentWidth <= deck.skills.width + 0.001)
+                    let skillStart = rate ? 2 : 0
+                    let frames = layout.interface.controlFrames
+                    #expect(frames.count == skillStart + count + (rewind ? 7 : 5))
+                    for (index, frame) in frames.enumerated() {
+                        #expect(frame.width >= 44 && frame.height >= 44)
+                        #expect(!frame.intersects(layout.interface.playfieldFrame))
+                        if !(skillStart..<(skillStart + count)).contains(index) {
+                            #expect(frame.minX >= rail.minX && frame.maxX <= rail.maxX)
+                            #expect(frame.minY >= rail.minY && frame.maxY <= rail.maxY)
+                        }
+                        for other in frames.dropFirst(index + 1) { #expect(!frame.intersects(other)) }
+                    }
+                    let pause = frames[skillStart + count]
+                    let end = frames[skillStart + count + 1]
+                    #expect(pause.minY == deck.skills.minY && pause.maxY == deck.skills.maxY)
+                    #expect(pause.height == 80)
+                    #expect(pause.maxY == min(rail.maxY, layout.interface.safeFrame.maxY))
+                    #expect(end.minY == deck.minimap.minY && end.height == deck.minimap.height)
+                }
+            }
+        }
+    }
+
+    @Test func unusableNavigationSpaceKeepsExistingLayout() {
+        let size = MobileSize(width: 495, height: 720)
+        let insets = MobileInsets(top: 10, left: 10, bottom: 44, right: 95)
+        for rail in [MobileRect(x: 404, y: 60, width: 87, height: 200),
+                     .init(x: 380, y: 60, width: 87, height: 600),
+                     .init(x: 404, y: 60, width: 100, height: 600)] {
+            let baseline = MobileHUDLayout.make(container: size, safeArea: insets, hasRate: true,
+                skillCount: 8, supportsRewind: true)
+            let layout = MobileHUDLayout.make(container: size, safeArea: insets, hasRate: true,
+                skillCount: 8, supportsRewind: true, navigationRail: rail)
+            #expect(layout == baseline)
+        }
+    }
+
     @Test func bookResultsKeepTheResultLeftAndAchievementsRightAcrossPoseChanges() throws {
         let safe = MobileRect(x: 0, y: 24, width: 1194, height: 786)
         let hinge = MobileReservedRegion(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))

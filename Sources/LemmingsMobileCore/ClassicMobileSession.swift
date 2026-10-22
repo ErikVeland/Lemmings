@@ -69,6 +69,7 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
 }
 
 public final class ClassicMobileSession: MobileGameSession {
+    public var familiarNamesStore: FamiliarNamesStore? = .shared
     private struct Checkpoint: Codable, Sendable {
         var version = 2
         let initialStateHash: String
@@ -492,7 +493,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let commands = history.appliedCommands.compactMap {
             try? LeaderboardActionReplay.Command.classic(.init(tick: $0.tick, action: $0.action, afterTick: true))
         }
-        return try? LemmingInspection(initial: .classic(levelInitial), current: .classic(simulation), commands: commands)
+        return try? LemmingInspection(initial: .classic(levelInitial), current: .classic(simulation), commands: commands, familiarNames: familiarNamesStore)
     }
 
     public func actionCapture() throws -> MobileActionCapture? {
@@ -780,6 +781,22 @@ public final class ClassicMobileSession: MobileGameSession {
         guard let animation = assets.animation(for: pose, direction: .right) ?? assets.animation(for: pose, direction: .none),
             let frame = animation.frames.first, let rgba = try? frame.rgba(using: palette) else { return nil }
         return try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: rgba)
+    }
+
+    public var availableGraphics: [ClassicGraphicsSource] {
+        guard authoredLevel != nil, renderedLevel != nil, let artworkFamily, let artworkRoot else { return [.dosVGA] }
+        let optionalSources: [ClassicGraphicsSource] = [.amiga, .macintosh, .macintoshMonochrome]
+        let installed = optionalSources.filter { source in
+            if source == .amiga, let artworkMatch, let authoredLevel {
+                guard (artworkMatch.share(of: authoredLevel) ?? 1) >= 0.5,
+                      authoredLevel.specialStyle == 0 || artworkMatch.special else { return false }
+            }
+            let folder = source == .amiga ? "AmigaArtwork"
+                : source == .macintoshMonochrome ? "MacArtwork/monochrome" : "MacArtwork"
+            let directory = artworkRoot.appendingPathComponent(folder).appendingPathComponent(artworkFamily)
+            return (try? ClassicMobileArtworkCache.shared.load(directory)) != nil
+        }
+        return [.dosVGA] + installed
     }
 
     public func applySettings(_ settings: ClassicSettings) {

@@ -67,6 +67,8 @@ public struct GameFrontEnd {
                 + footer.filter { !$0.isBackNavigation && !forward($0) } + footer.filter(forward)
         }
         public var preview: Bool
+        /// Codes and other complete images fit inside the pane; level scenery fills it.
+        public var previewFitsImage = false
         public var pause: MobilePauseSummary? = nil
         public var televisionGrid = false
         public var televisionPageIndex = 0
@@ -393,10 +395,14 @@ public struct GameFrontEnd {
         if page.pause != nil {
             MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
         } else if page.preview {
-            GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
-            if let preview {
-                let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
-                drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
+            let image = preview.flatMap { preview in previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview }
+            if page.previewFitsImage {
+                GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
+                if let image {
+                    drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
+                }
+            } else {
+                GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image)
             }
         }
         if let earned = page.stars, layout.stars != .zero {

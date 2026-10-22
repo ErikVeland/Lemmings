@@ -10,7 +10,9 @@ extension MenuAudit {
                                  width: portrait.skillContentWidth, height: portrait.skills.height)
             return content.insetBy(dx: -0.001, dy: 0).contains(target.inputFrame)
         }
-        return cg(layout.interface.safeFrame).insetBy(dx: -0.001, dy: 0).contains(target.inputFrame)
+        let bank = layout.interface.controlsPlacement == .trailingRail
+            ? layout.interface.controlsFrame : layout.interface.safeFrame
+        return cg(bank).insetBy(dx: -0.001, dy: 0).contains(target.inputFrame)
     }
 
     static func hudVisibleInputFrame(_ target: MobileHUDRenderer.Item, layout: MobileHUDLayout) -> CGRect {

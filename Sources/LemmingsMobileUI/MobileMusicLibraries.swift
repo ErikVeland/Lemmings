@@ -58,7 +58,7 @@ import NxlvKit
             guard let self else { return }
             do {
                 try await self.installer.download(pack, to: Self.directory) { [weak self] value in
-                    Task { @MainActor in self?.progress[pack.id] = value; self?.onChange?() }
+                    Task { @MainActor in self?.report(value, for: pack.id) }
                 }
                 try Task.checkCancellation()
                 if self.allRequestedPacks?.remove(pack.id) != nil,
@@ -78,6 +78,14 @@ import NxlvKit
             self.tasks[pack.id] = nil
             self.onChange?()
         }
+        onChange?()
+    }
+
+    /// The network reports many times a second. The page changes only when the whole percent does,
+    /// and a late report never revives a download that has finished or been cancelled.
+    private func report(_ value: Double, for id: String) {
+        guard tasks[id] != nil, Int(value * 100) > Int((progress[id] ?? 0) * 100) else { return }
+        progress[id] = value
         onChange?()
     }
 

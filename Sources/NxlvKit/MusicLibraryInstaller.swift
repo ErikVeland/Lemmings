@@ -77,7 +77,8 @@ public actor MusicLibraryInstaller {
         let delegate = DownloadProgress(limit: pack.bytes, update: progress)
         let session = URLSession(configuration: .ephemeral, delegate: delegate, delegateQueue: nil)
         defer { session.invalidateAndCancel() }
-        let (temporary, response) = try await session.download(from: pack.url)
+        // The task delegate is the one the async download API always calls.
+        let (temporary, response) = try await session.download(from: pack.url, delegate: delegate)
         defer { try? FileManager.default.removeItem(at: temporary) }
         guard (response as? HTTPURLResponse)?.statusCode == 200, response.url?.scheme == "https" else { throw Failure.download }
         try install(pack, archive: temporary, to: directory)

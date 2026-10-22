@@ -69,8 +69,12 @@ public struct MobileHUDLayout: Equatable, Sendable {
                             reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
                             hasPlayer: Bool = false, engineIdentifier: String = "classic",
                             showsMenuButton: Bool = true, television: Bool = false,
-                            topBarInsets: MobileInsets = .init()) -> MobileHUDLayout {
-        var layout = makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
+                            topBarInsets: MobileInsets = .init(), navigationRail: MobileRect? = nil) -> MobileHUDLayout {
+        var layout = navigationRail.flatMap {
+            navigationRailLayout(container: container, safeArea: safeArea, rail: $0,
+                hasRate: hasRate, skillCount: max(0, skillCount), supportsRewind: supportsRewind,
+                reservedRegions: reservedRegions)
+        } ?? makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
             skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
             hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
         layout = topStatusLayout(layout, television: television)
@@ -83,7 +87,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
             : original.statusFrame
         let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
             playfieldFrame: original.playfieldFrame, statusFrame: status,
-            controlsFrame: original.controlsFrame, controlFrames: Array(original.controlFrames.dropLast()))
+            controlsFrame: original.controlsFrame, controlFrames: Array(original.controlFrames.dropLast()),
+            controlsPlacement: original.controlsPlacement)
         let console = MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
             compactScale: layout.compactScale, speedArrows: layout.speedArrows,
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
@@ -101,7 +106,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let right = safe.maxX - max(0, insets.right.mobileFiniteOrZero)
         var frames = original.controlFrames
         var statusRight = min(right, original.statusFrame.maxX)
-        if layout.showsMenuButton, let menu = frames.last, menu.minY == safe.minY {
+        if layout.showsMenuButton, original.controlsPlacement != .trailingRail,
+           let menu = frames.last, menu.minY == safe.minY {
             frames[frames.count - 1].x = right - menu.width
             statusRight = right - menu.width - 4
         }
@@ -120,6 +126,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
     private static func topStatusLayout(_ layout: MobileHUDLayout, television: Bool) -> MobileHUDLayout {
         let original = layout.interface
         guard !original.controlFrames.isEmpty else { return layout }
+        if original.controlsPlacement == .trailingRail { return layout }
         if layout.isDiorama, layout.portrait != nil { return layout }
         let safe = original.safeFrame
         let oldStatus = original.statusFrame
@@ -141,6 +148,73 @@ public struct MobileHUDLayout: Equatable, Sendable {
             compactScale: layout.compactScale, speedArrows: layout.speedArrows,
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
             isDiorama: layout.isDiorama, television: television)
+    }
+
+    /// Use the system's vertical navigation space without narrowing the gameplay safe area.
+    private static func navigationRailLayout(container: MobileSize, safeArea: MobileInsets, rail: MobileRect,
+                                             hasRate: Bool, skillCount: Int, supportsRewind: Bool,
+                                             reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout? {
+        let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
+        let safe = base.safeFrame
+        let bounds = MobileRect(x: 0, y: 0, width: container.width, height: container.height)
+        guard rail.x.isFinite, rail.y.isFinite, rail.width.isFinite, rail.height.isFinite,
+              rail.width >= 44, rail.height > 0, safe.width >= 308, safe.height >= 308,
+              !rail.intersects(safe), bounds.contains(.init(x: rail.minX, y: rail.minY)),
+              bounds.contains(.init(x: rail.maxX, y: rail.maxY)),
+              reservedRegions.allSatisfy({ !$0.frame.intersects(rail) && !$0.frame.intersects(safe) })
+        else { return nil }
+
+        let gap = 2.0
+        let height = 44.0
+        let skillHeight = 80.0
+        // Share the lower baseline while respecting the rail's corner clearance.
+        let bottom = min(safe.maxY, rail.maxY)
+        let skillY = bottom - skillHeight
+        let map = CGRect(x: safe.minX, y: skillY - gap - height, width: safe.width, height: height)
+        let groupGap = 12.0
+        func button(_ y: Double) -> MobileRect {
+            .init(x: rail.minX, y: y, width: rail.width, height: height)
+        }
+        let menu = button(rail.minY)
+        var nextY = menu.maxY + groupGap
+        var navigation: [MobileRect] = []
+        for _ in 0..<(supportsRewind ? 3 : 1) {
+            navigation.append(button(nextY)); nextY += height + gap
+        }
+        let pause = MobileRect(x: rail.minX, y: skillY, width: rail.width, height: skillHeight)
+        let end = button(map.minY)
+        let speed = button(end.minY - gap - height)
+        var rate: [MobileRect] = []
+        var rateValue: CGRect?
+        var transportTop = speed.minY
+        if hasRate {
+            let valueHeight = 28.0
+            let faster = button(speed.minY - groupGap - height)
+            let slower = button(faster.minY - valueHeight - height)
+            rateValue = CGRect(x: rail.minX, y: slower.maxY, width: rail.width, height: valueHeight)
+            rate = [slower, faster]
+            transportTop = slower.minY
+        }
+        guard nextY + groupGap - gap <= transportTop,
+              map.minY - safe.minY - height >= 88 else { return nil }
+
+        let skillWidth = max(44, (safe.width - 2 * Double(max(0, skillCount - 1))) / Double(max(1, skillCount)))
+        let skills = (0..<skillCount).map {
+            MobileRect(x: safe.minX + Double($0) * (skillWidth + 2), y: skillY, width: skillWidth, height: skillHeight)
+        }
+        let interface = MobileInterfaceLayout(orientation: base.orientation, safeFrame: safe,
+            playfieldFrame: .init(x: safe.minX, y: safe.minY + 44, width: safe.width,
+                                 height: map.minY - safe.minY - 44),
+            statusFrame: .init(x: safe.minX, y: safe.minY, width: safe.width, height: 44),
+            controlsFrame: rail,
+            controlFrames: rate + skills + [pause, end, speed] + navigation + [menu],
+            controlsPlacement: .trailingRail)
+        return MobileHUDLayout(portrait: Portrait(
+            skills: CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight),
+            skillContentWidth: Double(skillCount) * (skillWidth + 2) - (skillCount > 0 ? 2 : 0),
+            rateValue: rateValue, minimap: map), interface: interface, panel: nil,
+            compactScale: 2, speedArrows: [], reservedRegions: reservedRegions,
+            supportsRewind: supportsRewind, isDiorama: false)
     }
 
     private static func makeTouchLayout(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,

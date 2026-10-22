@@ -127,17 +127,8 @@ public enum MobilePauseArt {
         let boxes = layout.details
         text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
         GameTextLayout.draw(summary.level.title, in: boxes[0], typography: typography, face: .large, palette: .green, context: context)
-        GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
-        if let preview {
-            let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
-            let well = GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 2, dy: 2)
-            let fit = min(well.width / CGFloat(image.width), well.height / CGFloat(image.height))
-            let frame = CGRect(x: floor(well.midX - CGFloat(image.width) * fit / 2),
-                y: floor(well.midY - CGFloat(image.height) * fit / 2),
-                width: floor(CGFloat(image.width) * fit), height: floor(CGFloat(image.height) * fit))
-            context.interpolationQuality = .none
-            GameStoneArt.drawImage(image, in: frame, context: context)
-        }
+        let image = preview.flatMap { preview in previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview }
+        GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image)
         text(summary.status, box: boxes[1], palette: .blue, typography: typography, context: context)
         let progress = boxes[2]
         text(summary.rescueText, box: CGRect(x: progress.minX, y: progress.minY, width: progress.width, height: progress.height - 18),

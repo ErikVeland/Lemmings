@@ -3,6 +3,27 @@ import LemmingsMobileCore
 import UIKit
 
 @MainActor enum MobileSystemRegions {
+    /// The vertical bar is outside the content safe area. Keep its controls clear of curved corners.
+    static func navigationRail(in view: UIView) -> MobileRect? {
+        #if os(iOS) && compiler(>=6.3)
+        if #available(iOS 27.1, *), view.traitCollection.verticalBarEdge != .unspecified {
+            let safe = view.safeAreaLayoutGuide.layoutFrame
+            let trailing = view.traitCollection.verticalBarEdge == .trailing
+            let right = trailing == (view.effectiveUserInterfaceLayoutDirection == .leftToRight)
+            let width = right ? view.bounds.maxX - safe.maxX : safe.minX - view.bounds.minX
+            guard width >= 52 else { return nil }
+            let edge: UIRectEdge = right ? .right : .left
+            let bar = view.edgeInsets(for: .bar(onEdge: edge, extent: width))
+            let top = max(view.safeAreaInsets.top, bar.top) + 4
+            let bottom = max(view.safeAreaInsets.bottom, bar.bottom) + 4
+            return MobileRect(x: right ? safe.maxX + 4 : view.bounds.minX + 4,
+                y: view.bounds.minY + top, width: width - 8,
+                height: max(0, view.bounds.height - top - bottom))
+        }
+        #endif
+        return nil
+    }
+
     static func read(in view: UIView) -> [MobileReservedRegion] {
         #if os(iOS) && compiler(>=6.3)
         if #available(iOS 27.1, *) {

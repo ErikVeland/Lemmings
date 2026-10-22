@@ -19,7 +19,7 @@ continues unchanged when it has no confirmed same-track alternate.
 | Platform/input | Shortcut |
 | --- | --- |
 | Mac or iOS keyboard | J |
-| iOS touch | Two-finger tap within the playfield |
+| iOS touch | Two-finger swipe within the playfield |
 | iOS VoiceOver | DJ shuffle custom action on the playfield |
 | Mac/iOS gamepad | L2/LT + L3 |
 | DualSense on Mac/iOS/TV | Touchpad click |
@@ -27,7 +27,7 @@ continues unchanged when it has no confirmed same-track alternate.
 
 The shortcuts appear in Controls help and add no persistent HUD button. The iOS
 gesture excludes HUD targets and yields to VoiceOver. Existing multi-touch
-cancellation prevents a shuffle tap from committing a skill assignment. Pinch
+cancellation prevents a shuffle swipe from committing a skill assignment. Pinch
 and pan retain their existing recognition paths.
 
 Ordinary Mac music fades into the shared DJ player through an equal-power

@@ -24,6 +24,8 @@ extension MenuAudit {
                 [.init(kind: .division, frame: .init(x: 0, y: 318, width: 465, height: 14))]),
             ("closed-landscape", .init(width: 650, height: 465), .init(top: 20, left: 20, bottom: 20, right: 20), []),
             ("closed-portrait", .init(width: 465, height: 650), .init(top: 20, bottom: 20), []),
+            ("navigation-right", .init(width: 495, height: 720), .init(top: 10, left: 10, bottom: 44, right: 95), []),
+            ("navigation-left", .init(width: 495, height: 720), .init(top: 10, left: 95, bottom: 44, right: 10), []),
             ("camera-book", .init(width: 1194, height: 834), .init(top: 20, bottom: 20),
                 [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834)),
                  .init(kind: .occlusion, frame: .init(x: 1120, y: 740, width: 74, height: 94))])
@@ -50,9 +52,12 @@ extension MenuAudit {
                         saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
                         releaseRate: original.releaseRate, isComplete: false, didWin: false,
                         isEndingRun: state == "undo", skills: original.skills)
+                    let rail: MobileRect? = pose.hasPrefix("navigation-")
+                        ? .init(x: pose == "navigation-right" ? 404 : 4, y: 60, width: 87, height: 600) : nil
                     let layout = MobileHUDLayout.make(container: size, safeArea: insets,
                         hasRate: snapshot.releaseRate != nil, skillCount: snapshot.skills.count,
-                        reservedRegions: regions, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier)
+                        reservedRegions: regions, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier,
+                        navigationRail: rail)
                     guard layout.canPlay, let deck = layout.portrait,
                           deck.skillContentWidth <= deck.skills.width + 0.001 else { throw invalidTargets(line: #line) }
                     let paused = state == "paused"
@@ -61,6 +66,15 @@ extension MenuAudit {
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
                         selectedSkill: selected, paused: paused, speed: speed, endRunArmed: state == "armed")
                     let field = cg(layout.interface.playfieldFrame)
+                    if let rail {
+                        let pause = targets.first { $0.action == .pause }?.frame
+                        let end = targets.first { $0.action == .endRun }?.frame
+                        guard layout.interface.controlsPlacement == .trailingRail,
+                              layout.interface.controlsFrame == rail,
+                              pause?.minY == deck.skills.minY, pause?.maxY == deck.skills.maxY,
+                              end?.minY == deck.minimap.minY, end?.height == deck.minimap.height
+                        else { throw invalidTargets(line: #line) }
+                    }
                     for (index, item) in targets.enumerated() {
                         let frame = item.inputFrame
                         guard frame.width >= 44 - 0.001, frame.height >= 44, hudTargetFits(item, layout: layout),
@@ -89,6 +103,16 @@ extension MenuAudit {
                         for frame in [status.player, status.counters].compactMap({ $0 }) {
                             guard regions.allSatisfy({ !frame.intersects(cg($0.frame)) }) else { throw invalidTargets(line: #line) }
                         }
+                    }
+                    if rail != nil {
+                        let status = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
+                        let fields = MobileHUDRenderer.statusFields(in: status.counters, snapshot: snapshot,
+                            details: nil, engineIdentifier: session.engineIdentifier, paused: paused,
+                            speed: speed, typography: typography)
+                        guard fields.contains(where: { $0.id == "score" }),
+                              fields.contains(where: { $0.id == "time" }),
+                              fields.allSatisfy({ !$0.bitmapOnly && status.counters.contains($0.frame) })
+                        else { throw invalidTargets(line: #line) }
                     }
                     let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
                     context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))

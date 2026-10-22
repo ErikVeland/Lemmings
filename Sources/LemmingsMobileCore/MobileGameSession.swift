@@ -310,6 +310,11 @@ public extension MobileGameSession {
     func drainSoundCues() -> [PositionedSoundCue] { [] }
     func drainLemmings2SoundRequests() -> [Lemmings2SoundRequest] { [] }
     var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }
+    /// Keep menu scenery at the opening view, independent of the live camera.
+    var menuPreviewOrigin: MobilePoint {
+        if engineIdentifier.hasPrefix("classic") { return initialCameraOrigin }
+        return .init(x: entrancePoint.x - 160, y: entrancePoint.y - 80)
+    }
     var panelFrame: MobilePixelFrame? { nil }
     var selectionSprite: MobileSpriteHighlight? { nil }
     var rescueSprites: [MobileSpriteHighlight] { [] }

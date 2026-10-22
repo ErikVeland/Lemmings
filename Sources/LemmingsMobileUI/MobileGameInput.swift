@@ -69,6 +69,7 @@ extension MobileGameViewController {
         adapter.settingsProfileID = { [weak self] in self?.settingsProfileID ?? MobileProfiles.defaultID }
         adapter.onDJShuffle = { [weak self] in self?.shuffleMusic() }
         playfieldView.onDJShuffle = { [weak self] in self?.shuffleMusic() ?? false }
+        playfieldView.onCycleGraphics = { [weak self] in self?.cycleGraphics() ?? false }
         adapter.controllerSpeed = { [weak self] in self?.inputSpeed.target ?? 1 }
         adapter.triggerFeedbackEnabled = { [weak self] in self?.playState.phase == .running && self?.gameSettings.classic.reduceMotion != true }
         adapter.onForcedPause = { [weak self] in self?.pauseForPlanning() }
@@ -92,7 +93,10 @@ extension MobileGameViewController {
         #if os(tvOS)
         overlayCanvas.requiresNeutralActivation = true
         #endif
-        adapter.isActive = { [weak self] in self?.lifecycle.isForeground == true && self?.lifecycle.isInterrupted == false }
+        adapter.isActive = { [weak self] in
+            guard let self else { return false }
+            return self.lifecycle.acceptsInput(menuVisible: !self.overlay.isHidden)
+        }
         adapter.isMenu = { [weak self] in self?.overlay.isHidden == false || self?.isChoosingToolDirection == true }
         adapter.onCommand = { [weak self] in self?.performCommand($0) }
         adapter.onMenuMove = { [weak self] in self?.moveSolutionMenuFocus($0) }
@@ -303,6 +307,19 @@ extension MobileGameViewController {
         setSpeedInput(.controller, held: held)
     }
 
+    @discardableResult func cycleGraphics() -> Bool {
+        guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted,
+              let classic = session as? ClassicMobileSession else { return false }
+        let choices = classic.availableGraphics
+        guard choices.count > 1 else { return false }
+        var settings = gameSettings
+        let index = choices.firstIndex(of: settings.classic.graphics) ?? -1
+        settings.classic.graphics = choices[(index + 1) % choices.count]
+        settings.save(to: .standard, profileID: settingsProfileID)
+        applyGameSettings(settings)
+        return true
+    }
+
     @discardableResult func shuffleMusic() -> Bool {
         guard overlay.isHidden, playState.phase == .running, lifecycle.isForeground, !lifecycle.isInterrupted else { return false }
         return MobileMusic.shared.shuffle(scope: gameSettings.djShuffleScope)
@@ -381,7 +398,7 @@ extension MobileGameViewController {
         #if os(tvOS)
         let help = TVControllerBindings.help.components(separatedBy: "\n") + [L10n.text("DualSense touchpad swipe: step back / forward")]
         #else
-        let help = GameplayCommands.help + [L10n.text("Two-finger tap on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"), L10n.text("DualSense touchpad swipe: step back / forward")]
+        let help = GameplayCommands.help + [L10n.text("Three-finger tap on the playfield: change graphics"), L10n.text("Two-finger swipe on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"), L10n.text("DualSense touchpad swipe: step back / forward")]
         #endif
         showCustomOverlay(title: L10n.text("Controls"), details: help,
                           actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])

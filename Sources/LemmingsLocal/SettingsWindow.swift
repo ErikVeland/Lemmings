@@ -685,6 +685,7 @@ import NxlvKit
   }
 
   private func privacyPane() -> NSView {
+    let names = GameButton(title: L10n.text("Familiar names"), target: self, action: #selector(openFamiliarNames))
     let share = GameCheckButton(title: L10n.text("Share counts and records"), target: self,
                                 action: #selector(telemetryChanged(_:)))
     share.state = telemetry.sharesCounts ? .on : .off
@@ -699,8 +700,13 @@ import NxlvKit
     restoreCountsButton = restore
     return groupedPane([
       (L10n.text("Sharing"), [(L10n.text("Counts"), share), (L10n.text("Details"), info)]),
-      (L10n.text("This Mac"), [(L10n.text("Insights"), insights), (L10n.text("Reset"), clear), (L10n.text("Recovery"), restore)]),
+      (L10n.text("This Mac"), [(L10n.text("Lemmings"), names), (L10n.text("Insights"), insights), (L10n.text("Reset"), clear), (L10n.text("Recovery"), restore)]),
     ])
+  }
+
+  @objc private func openFamiliarNames() {
+    help.dismiss()
+    GameScreen.shared.present(FamiliarNamesPage(), owner: page?.window)
   }
 
   @objc private func showPrivacyInfo(_ sender: NSButton) {

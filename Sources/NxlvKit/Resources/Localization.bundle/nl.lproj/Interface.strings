@@ -479,8 +479,10 @@
 "Choose another level or open Playlists to change the order." = "Kies een ander level of open Afspeellijsten om de volgorde te wijzigen.";
 "Choose at least two players for Hot Seat." = "Kies minstens twee spelers voor Hot Seat.";
 "Choose at least two players, then try again." = "Kies minstens twee spelers en probeer het opnieuw.";
+"Choose contacts" = "Contacten kiezen";
 "Choose eight different skills" = "Kies acht verschillende vaardigheden";
 "Choose files first." = "Kies eerst bestanden.";
+"Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "Kies voornamen voor je lemmingen. De namen blijven op dit apparaat. Hun verhalen zijn verzonnen.";
 "Choose its gameplay action. If another button uses that action, their bindings swap." = "Kies de bijbehorende actie. Als een andere knop die actie gebruikt, wisselen de knoptoewijzingen.";
 "Choose level" = "Kies een niveau";
 "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)" = "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)";
@@ -642,6 +644,8 @@
 "Could not animate the talisman: {0}" = "De talisman kon niet worden geanimeerd: {0}";
 "Could not build the Lemmings 3 direction-picker test level: {0}" = "Het testlevel voor de richtingskiezer van Lemmings 3 kon niet worden gemaakt: {0}";
 "Could not clear completed checkpoint: {0}" = "Voltooid checkpoint wissen mislukt: {0}";
+"Could not forget familiar names. Try again." = "De bekende namen konden niet worden gewist. Probeer het opnieuw.";
+"Could not load familiar names. You can forget them and start again." = "De bekende namen konden niet worden geladen. Je kunt ze wissen en opnieuw beginnen.";
 "Could not load shared counts. Check the token and service." = "De gedeelde aantallen konden niet worden geladen. Controleer het token en de dienst.";
 "Could not load the ending: {0}" = "Het einde kon niet worden geladen: {0}";
 "Could not load the introduction: {0}" = "De introductie kon niet worden geladen: {0}";
@@ -656,6 +660,7 @@
 "Could not rewind this run: {0}" = "Deze poging kon niet worden teruggespoeld: {0}";
 "Could not save Superzoom uses." = "Could not save Superzoom uses.";
 "Could not save completed lesson: {0}" = "De voltooide les kon niet worden opgeslagen: {0}";
+"Could not save familiar names. Try again." = "De bekende namen konden niet worden opgeslagen. Probeer het opnieuw.";
 "Could not save the input route: {0}" = "Invoerroutine opslaan mislukt: {0}";
 "Could not show the talisman: {0}" = "De talisman kon niet worden weergegeven: {0}";
 "Could not sync journey: {0}" = "Traject kon niet worden gesynchroniseerd: {0}";
@@ -845,6 +850,7 @@
 "Excellent! A gold standard successful rescue attempt." = "Uitstekend! Een voorbeeldige geslaagde reddingspoging.";
 "Execution Challenge" = "Uitvoeringsuitdaging";
 "Exercises this power sparingly." = "Exercises this power sparingly.";
+"Existing lemmings keep their names until you choose Forget names." = "Bestaande lemmingen houden hun naam totdat je Namen wissen kiest.";
 "Exit" = "Afsluiten";
 "Expected L2VG sprite bank." = "L2VG-spritebank verwacht.";
 "Expected L2VL sprite data, found {0}." = "L2VL-spritegegevens verwacht; {0} gevonden.";
@@ -894,6 +900,7 @@
 "Faithful" = "Getrouw";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Getrouw behoudt het oorspronkelijke geluid. Modern past de verbeterde muziekbewerking toe.";
 "Fall sounds" = "Valgeluiden";
+"Familiar names" = "Bekende namen";
 "Fan" = "Fan";
 "Fan Lemmings" = "Fan Lemmings";
 "Fan Levels…" = "Fanlevels…";
@@ -935,6 +942,7 @@
 "Finish run" = "Poging afronden";
 "Finished {0} from {1}." = "{0} van {1} voltooid.";
 "First clear of this level. Rescued {0}; target {1}." = "Eerste voltooiing van dit level. Gered: {0}; doel: {1}.";
+"First names, separated by commas" = "Voornamen, gescheiden door komma’s";
 "Five-level openings" = "Five-level openings";
 "Fix records" = "Records herstellen";
 "Flame Thrower" = "Vlammenwerper";
@@ -947,6 +955,8 @@
 "Follow: on" = "Volgen: aan";
 "For many generations" = "Vele generaties lang";
 "For the plan is" = "Want het plan is";
+"Forget familiar names?" = "Bekende namen wissen?";
+"Forget names" = "Namen wissen";
 "Found in its favour." = "Found in its favour.";
 "Frame {0} at byte {1} declares a size of zero." = "Frame {0} op byte {1} geeft een grootte van nul op.";
 "Frame {0} at byte {1} declares {2} bytes, but only {3} remain." = "Frame {0} op byte {1} geeft {2} bytes op, maar er zijn er nog maar {3}.";
@@ -1729,6 +1739,7 @@
 "No levels played yet" = "Nog geen levels gespeeld";
 "No levels yet" = "Nog geen levels";
 "No matching commands. Try another word or choose All commands." = "Geen opdrachten gevonden. Probeer een ander woord of kies Alle opdrachten.";
+"No names for new levels" = "Geen namen voor nieuwe levels";
 "No recorded assignments" = "No recorded assignments";
 "No records" = "Geen records";
 "No repeats" = "Geen herhalingen";
@@ -2164,6 +2175,7 @@
 "Remembers where everything was." = "Remembers where everything was.";
 "Removal queued. Retry when connected." = "Verwijdering in wachtrij. Probeer het opnieuw zodra er verbinding is.";
 "Remove" = "Verwijderen";
+"Remove all familiar names, including saved-run assignments. Lemmings will use fictional names again." = "Wis alle bekende namen, ook de toewijzingen in opgeslagen spellen. Lemmingen krijgen weer verzonnen namen.";
 "Remove favourite" = "Uit favorieten verwijderen";
 "Remove level" = "Level verwijderen";
 "Remove shared records" = "Gedeelde records verwijderen";
@@ -3097,6 +3109,7 @@
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "Twee werkers";
 "Two-finger tap on the playfield: DJ shuffle" = "Tik met twee vingers op het speelveld: dj-shuffle";
+"Type first names" = "Voornamen invoeren";
 "U" = "U";
 "UI TEST" = "UI-TEST";
 "UI size" = "Grootte van de interface";

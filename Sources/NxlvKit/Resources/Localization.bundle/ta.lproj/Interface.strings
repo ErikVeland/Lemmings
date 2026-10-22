@@ -479,8 +479,10 @@
 "Choose another level or open Playlists to change the order." = "மற்றொரு நிலை தேர்ந்தெடுக்கவும் அல்லது வரிசையை மாற்ற பிளேலிஸ்ட்களைத் திறக்கவும்.";
 "Choose at least two players for Hot Seat." = "மாறிமுறைக்கு குறைந்தது இரண்டு வீரர்களை தேர்வு செய்யுங்கள்.";
 "Choose at least two players, then try again." = "குறைந்தது இரண்டு வீரர்களைத் தேர்ந்தெடுத்து, மீண்டும் முயற்சிக்கவும்.";
+"Choose contacts" = "தொடர்புகளைத் தேர்ந்தெடு";
 "Choose eight different skills" = "எட்டு வேறுபட்ட திறன்களைத் தேர்ந்தெடுக்கவும்";
 "Choose files first." = "முதலில் கோப்புகளைத் தேர்ந்தெடுக்கவும்.";
+"Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "உங்கள் லெம்மிங்களுக்குப் பெயர்களைத் தேர்ந்தெடுக்கவும். பெயர்கள் இந்தச் சாதனத்திலேயே இருக்கும். அவற்றின் கதைகள் கற்பனையானவை.";
 "Choose its gameplay action. If another button uses that action, their bindings swap." = "இதற்கான விளையாட்டுச் செயலைத் தேர்ந்தெடுக்கவும். வேறு பொத்தானுக்கு இதே செயல் இருந்தால் இரண்டின் ஒதுக்கீடுகளும் இடம் மாறும்.";
 "Choose level" = "நிலையைத் தேர்ந்தெடு";
 "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)" = "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)";
@@ -642,6 +644,8 @@
 "Could not animate the talisman: {0}" = "தாயத்தை அசைவூட்ட முடியவில்லை: {0}";
 "Could not build the Lemmings 3 direction-picker test level: {0}" = "Lemmings 3 திசைத் தேர்விச் சோதனை நிலையை உருவாக்க முடியவில்லை: {0}";
 "Could not clear completed checkpoint: {0}" = "முடிந்த நிலையின் சோதனைச் சேமிப்பை அழிக்க முடியவில்லை: {0}";
+"Could not forget familiar names. Try again." = "பழக்கமான பெயர்களை நீக்க முடியவில்லை. மீண்டும் முயலவும்.";
+"Could not load familiar names. You can forget them and start again." = "பழக்கமான பெயர்களை ஏற்ற முடியவில்லை. அவற்றை நீக்கிவிட்டு மீண்டும் தொடங்கலாம்.";
 "Could not load shared counts. Check the token and service." = "பகிர்ந்த எண்ணிக்கைகளை ஏற்ற முடியவில்லை. டோக்கனையும் சேவையையும் சரிபார்க்கவும்.";
 "Could not load the ending: {0}" = "முடிவை ஏற்ற முடியவில்லை: {0}";
 "Could not load the introduction: {0}" = "அறிமுகத்தை ஏற்ற முடியவில்லை: {0}";
@@ -656,6 +660,7 @@
 "Could not rewind this run: {0}" = "இந்த ஆட்டத்தைப் பின்னோக்க முடியவில்லை: {0}";
 "Could not save Superzoom uses." = "Could not save Superzoom uses.";
 "Could not save completed lesson: {0}" = "முடிந்த பாடத்தை சேமிக்க முடியவில்லை: {0}";
+"Could not save familiar names. Try again." = "பழக்கமான பெயர்களைச் சேமிக்க முடியவில்லை. மீண்டும் முயலவும்.";
 "Could not save the input route: {0}" = "உள்ளீட்டு பாதையை சேமிக்க முடியவில்லை: {0}";
 "Could not show the talisman: {0}" = "தாலிமன் காட்ட முடியவில்லை: {0}";
 "Could not sync journey: {0}" = "பயணத்தை ஒத்திசைக்க முடியவில்லை: {0}";
@@ -845,6 +850,7 @@
 "Excellent! A gold standard successful rescue attempt." = "மிகச்சிறந்தது! ஒரு வெற்றிகரமான மீட்பு முயற்சி.";
 "Execution Challenge" = "மரணதண்டனை சவால்";
 "Exercises this power sparingly." = "Exercises this power sparingly.";
+"Existing lemmings keep their names until you choose Forget names." = "பெயர்களை நீக்கு என்பதைத் தேர்ந்தெடுக்கும் வரை ஏற்கெனவே உள்ள லெம்மிங்கள் தங்கள் பெயர்களை வைத்திருக்கும்.";
 "Exit" = "வெளியேறு";
 "Expected L2VG sprite bank." = "எதிர்பார்க்கப்பட்ட L2VG ஸ்ப்ரைட் வங்கி.";
 "Expected L2VL sprite data, found {0}." = "எதிர்பார்க்கப்பட்ட L2VL ஸ்ப்ரைட் தரவு, {0} காணப்பட்டது.";
@@ -894,6 +900,7 @@
 "Faithful" = "விசுவாசமுள்ளவர்கள்";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "விசுவாசமானது மூலத்தின் அசல் ஒலியை வைத்திருக்கிறது. நவீனமானது மேம்படுத்தப்பட்ட இசை சிகிச்சையை பயன்படுத்துகிறது.";
 "Fall sounds" = "விழும் ஒலிகள்";
+"Familiar names" = "பழக்கமான பெயர்கள்";
 "Fan" = "ரசிகர்";
 "Fan Lemmings" = "ரசிகர் Lemmings";
 "Fan Levels…" = "ரசிகர் நிலைகள்…";
@@ -935,6 +942,7 @@
 "Finish run" = "ஆட்டத்தை முடி";
 "Finished {0} from {1}." = "{0} {1} இலிருந்து முடிந்தது.";
 "First clear of this level. Rescued {0}; target {1}." = "இந்த நிலையில் முதல் வெற்றி. மீட்பு {0}. இலக்கு {1}.";
+"First names, separated by commas" = "முதற்பெயர்களைக் காற்புள்ளிகளால் பிரிக்கவும்";
 "Five-level openings" = "Five-level openings";
 "Fix records" = "பதிவுகளை சரிசெய்யவும்";
 "Flame Thrower" = "தீ வீசுபவர்";
@@ -947,6 +955,8 @@
 "Follow: on" = "பின்தொடர்வு: இயக்கம்";
 "For many generations" = "பல தலைமுறைகளாக";
 "For the plan is" = "திட்டம் தான்";
+"Forget familiar names?" = "பழக்கமான பெயர்களை நீக்கவா?";
+"Forget names" = "பெயர்களை நீக்கு";
 "Found in its favour." = "Found in its favour.";
 "Frame {0} at byte {1} declares a size of zero." = "{0} பைட்டில் {1} ஒரு அளவு பூஜ்ஜியத்தை அறிவிக்கிறது.";
 "Frame {0} at byte {1} declares {2} bytes, but only {3} remain." = "பைட் {1} இல் உள்ள {0} படம் {2} பைட்டுகளைக் குறிப்பிடுகிறது. ஆனால் {3} மட்டுமே மீதமுள்ளன.";
@@ -1729,6 +1739,7 @@
 "No levels played yet" = "எந்த நிலைகள் இன்னும் விளையாடப்படவில்லை";
 "No levels yet" = "இன்னும் நிலைகள் இல்லை";
 "No matching commands. Try another word or choose All commands." = "பொருந்தும் கட்டளைகள் இல்லை. வேறு சொல்லை முயலவும் அல்லது அனைத்துக் கட்டளைகளையும் தேர்ந்தெடுக்கவும்.";
+"No names for new levels" = "புதிய நிலைகளுக்குப் பெயர்கள் இல்லை";
 "No recorded assignments" = "No recorded assignments";
 "No records" = "பதிவுகள் இல்லை";
 "No repeats" = "மறுபடியும் வேண்டாம்";
@@ -2164,6 +2175,7 @@
 "Remembers where everything was." = "Remembers where everything was.";
 "Removal queued. Retry when connected." = "நீக்க வரிசை. மீண்டும் இணைக்கப்படும் போது முயற்சிக்கவும்.";
 "Remove" = "அகற்று";
+"Remove all familiar names, including saved-run assignments. Lemmings will use fictional names again." = "சேமித்த ஆட்டங்களில் ஒதுக்கிய பெயர்கள் உட்பட எல்லாப் பழக்கமான பெயர்களையும் நீக்கவும். லெம்மிங்கள் மீண்டும் கற்பனைப் பெயர்களைப் பயன்படுத்தும்.";
 "Remove favourite" = "விருப்பமானவற்றிலிருந்து அகற்று";
 "Remove level" = "நிலையை அகற்று";
 "Remove shared records" = "பகிரப்பட்ட பதிவுகளை நீக்கு";
@@ -3097,6 +3109,7 @@
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "இரு பணியாளர்கள்";
 "Two-finger tap on the playfield: DJ shuffle" = "விளையாட்டுக் களத்தில் இரு விரல்களால் தட்டு: DJ கலைத்து இயக்கம்";
+"Type first names" = "முதற்பெயர்களை உள்ளிடு";
 "U" = "U";
 "UI TEST" = "இடைமுகச் சோதனை";
 "UI size" = "இடைமுக அளவு";

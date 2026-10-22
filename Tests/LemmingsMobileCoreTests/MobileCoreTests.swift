@@ -406,6 +406,52 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func familiarNamesSurviveSavedRunsAndNeverEnterCheckpointPayloads() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let factories: [(FamiliarNamesStore) throws -> any MobileGameSession] = [
+            { store in
+                let session = ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0)
+                session.familiarNamesStore = store; return session
+            },
+            { store in
+                let session = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2")
+                session.familiarNamesStore = store; return session
+            },
+            { store in
+                let session = Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3")
+                session.familiarNamesStore = store; return session
+            }
+        ]
+        for (index, make) in factories.enumerated() {
+            let directory = root.appendingPathComponent(String(index))
+            let store = FamiliarNamesStore(directory: directory)
+            try store.replace(with: ["ZebedeeLocalOnly", "AmaryllisLocalOnly"])
+            let session = try make(store)
+            for _ in 0..<300 where session.activeLemmingCount == 0 && !session.snapshot.isComplete { session.tick() }
+            let before = session.snapshot
+            let first = try #require(session.lemmingInspection)
+            #expect(!first.individuals.isEmpty)
+            #expect(first.individuals.allSatisfy { ["ZebedeeLocalOnly", "AmaryllisLocalOnly"].contains($0.name) })
+            let checkpoint = try session.checkpointPayload()
+            #expect(!String(decoding: checkpoint, as: UTF8.self).contains("LocalOnly"))
+            try store.replace(with: ["DifferentLocalOnly"])
+            #expect(session.lemmingInspection?.individuals == first.individuals)
+            let restartedStore = FamiliarNamesStore(directory: directory)
+            let restored = try make(restartedStore)
+            try restored.restoreCheckpointPayload(checkpoint)
+            #expect(restored.lemmingInspection?.individuals == first.individuals)
+            let retry = try make(restartedStore)
+            for _ in 0..<before.tick { retry.tick() }
+            #expect(retry.lemmingInspection?.individuals == first.individuals)
+            try restartedStore.forget()
+            let forgotten = try #require(restored.lemmingInspection)
+            #expect(forgotten.individuals.allSatisfy { !$0.name.contains("LocalOnly") })
+            #expect(forgotten.individuals.map(\.preference) == first.individuals.map(\.preference))
+            #expect(restored.snapshot == before)
+        }
+    }
+
     @Test @MainActor func pausePopulationCountsExcludeActorsLostByAllThreeEngines() throws {
         let sessions: [any MobileGameSession] = [
             ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),

@@ -100,6 +100,19 @@ import Testing
         #expect(edge.sourceRect == .init(x: 2560, y: 0, width: 640, height: 320))
     }
 
+    @Test func tallPreviewUsesOpeningViewAndClampsBothEdges() throws {
+        let frame = try MobilePixelFrame(width: 1000, height: 800, rgba: Data(repeating: 0, count: 1000 * 800 * 4))
+        #expect(MobileMenuPreview.sourceRect(frame: frame, origin: .init(x: 100, y: 150), renderScale: 2)
+            == .init(x: 200, y: 300, width: 640, height: 320))
+        #expect(MobileMenuPreview.sourceRect(frame: frame, origin: .init(x: -100, y: -150), renderScale: 2)
+            == .init(x: 0, y: 0, width: 640, height: 320))
+        #expect(MobileMenuPreview.sourceRect(frame: frame, origin: .init(x: 1000, y: 800), renderScale: 2)
+            == .init(x: 360, y: 480, width: 640, height: 320))
+        let small = try MobilePixelFrame(width: 100, height: 80, rgba: Data(repeating: 0, count: 100 * 80 * 4))
+        #expect(MobileMenuPreview.sourceRect(frame: small, origin: .init(x: 50, y: 50), renderScale: 1)
+            == .init(x: 0, y: 0, width: 100, height: 80))
+    }
+
     @Test func savedRunRestoresOnWorkerAndRejectsChangedData() async throws {
         let loader = MobileMenuPreviewLoader { PreparationLibrary() }
         let checkpoint = MobileCheckpointEnvelope(runID: UUID(), engine: "fixture", engineFingerprint: "engine",

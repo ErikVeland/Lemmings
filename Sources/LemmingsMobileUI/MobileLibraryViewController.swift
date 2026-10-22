@@ -15,7 +15,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 @MainActor final class MobileLibraryViewController: UIViewController {
     enum Route: Equatable {
         case home, support, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
-        case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
+        case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
         case journey, progression, techniques, rankings
         case collections, shortGames, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
     }
@@ -25,7 +25,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return browserShown ? [browser] : [canvas]
     }
     #endif
-    private let scrollView = UIScrollView()
+    private let scrollView = MobileMenuScrollView()
     private let homeBackdropView = MobileHomeBackdropView()
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
@@ -53,6 +53,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let tvBuildInfo = MobileBuildInfo.current()
     #endif
     var mobileInsights = MobileInsightsState()
+    var familiarNames = MobileFamiliarNamesState()
     var fanCountsTask: Task<Void, Never>?
     var fanCountGeneration = UUID()
     var shuffleTask: Task<Void, Never>?
@@ -64,7 +65,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var viewIsVisible = false
     private var sceneIsActive = false
     private let activityObservers = MobileNotificationObserverBag()
-    override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
+    override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings2) != nil
@@ -492,6 +493,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func rebuild() {
+        let keptOffset = scrollView.contentOffset
+        defer {
+            // A download tick or a tap rebuilds the list in place, so the player keeps their place in it.
+            if route == .soundtrack, keptOffset.y > 0 {
+                scrollView.layoutIfNeeded()
+                let maximum = max(0, scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom)
+                scrollView.setContentOffset(CGPoint(x: keptOffset.x, y: min(keptOffset.y, maximum)), animated: false)
+            }
+        }
         canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
@@ -608,6 +618,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = effectsWelcomePage(); canvas.preview = nil
         case .telemetryConsent:
             canvas.page = telemetryConsentPage(); canvas.preview = nil
+        case .familiarNames:
+            canvas.page = familiarNamesPage(); canvas.preview = nil
         case .insightsToken:
             canvas.page = insightsTokenPage(); canvas.preview = nil
         case .insightsClear:
@@ -705,6 +717,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return image.cropping(to: CGRect(x: source.x, y: source.y, width: source.width, height: source.height))
     }
     func navigate(_ next: Route) {
+        if next != .familiarNames { familiarNames.clear() }
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
         confirmingRecordsReset = false
         #if os(tvOS)

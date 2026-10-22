@@ -44,9 +44,14 @@ public struct MobileMenuPreview: Sendable {
     public let renderScale: Double
 
     public var sourceRect: MobileRect {
+        Self.sourceRect(frame: frame, origin: origin, renderScale: renderScale)
+    }
+
+    public static func sourceRect(frame: MobilePixelFrame, origin: MobilePoint, renderScale: Double) -> MobileRect {
         let width = min(320 * renderScale, Double(frame.width))
+        let height = min(160 * renderScale, Double(frame.height))
         return .init(x: max(0, min(Double(frame.width) - width, origin.x * renderScale)),
-                     y: 0, width: width, height: Double(frame.height))
+                     y: max(0, min(Double(frame.height) - height, origin.y * renderScale)), width: width, height: height)
     }
 }
 
@@ -122,7 +127,7 @@ public actor MobileMenuPreviewLoader {
         session.applySettings(settings)
         try cancellation.check()
         let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
-                                        origin: session.initialCameraOrigin, snapshot: session.snapshot,
+                                        origin: session.menuPreviewOrigin, snapshot: session.snapshot,
                                         renderScale: session.renderScale)
         try cancellation.check()
         recent.removeAll { $0 == index }; recent.append(index)

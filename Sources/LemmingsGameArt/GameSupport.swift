@@ -8,8 +8,10 @@ public enum GameSupport {
     public static let coffeeURL = URL(string: "https://coff.ee/generik")!
     public static var menuAction: GameFrontEnd.Action { .init("donate", L10n.text("Donate")) }
     public static var page: GameFrontEnd.Page {
-        .init(title: L10n.text("Buy me a coffee"), details: ["coff.ee/generik"],
+        var page = GameFrontEnd.Page(title: L10n.text("Buy me a coffee"), details: ["coff.ee/generik"],
               footer: [.init("home", L10n.text("Back"))], preview: true)
+        page.previewFitsImage = true
+        return page
     }
 
     /// Keep the code and Back visible together on short screens.

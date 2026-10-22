@@ -137,6 +137,25 @@ and Lemmings 3 use the shared controller. Headless, muted checks cover 99 Classi
 HUD renders and 135 menu states with input-target geometry. Both mobile SDKs
 compile. Physical touch, remote focus and sequel gameplay remain device checks.
 
+On iOS and tvOS, waking the scene or ending an audio interruption keeps the game
+paused until Resume. Foreground menus remain usable during an interruption.
+Explicit Resume clears the interruption block and retries audio activation;
+audio failure must not prevent gameplay. A delayed interruption-end event must
+not reopen Pause after Resume. Ready and Hot Seat handovers still wait for the
+player. Classic, Lemmings 2 and Lemmings 3 share this controller and lifecycle.
+[Apple does not guarantee a matching interruption-end notification](https://developer.apple.com/library/archive/documentation/Audio/Conceptual/AudioSessionProgrammingGuide/HandlingAudioInterruptions/HandlingAudioInterruptions.html).
+
+Muted, isolated lifecycle checks cover interruption ordering around sleep,
+missing and delayed end events, route loss, inactive input, duplicate Resume and
+Ready handovers. Audio queue checks cover failure and stale callbacks. iOS and
+tvOS SDK modules compile. The existing pause audit passes 252 bitmap and target
+checks, then fails its separate
+restart-confirmation caption-width assertion at `Tools/IOSMenuAudit/pause.swift`.
+Narrow layouts also report existing caption word-wrap warnings. The main package
+test command cannot fetch Sparkle with network access unavailable; focused tests
+use unchanged copies of the lifecycle sources. Physical sleep/wake, touch and
+remote event delivery across the three engines remain device checks.
+
 The shared result panel and Classic HUD now apply these rules. The changes cover
 star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
@@ -198,7 +217,10 @@ remain static until selected. No reward page may take over the result.
 
 Use the extended Lemmings lettering for interface text, including in-game notices.
 Keep the compact 5×7 face for tiny HUD text when a complete line cannot fit a
-12-pixel Lemmings face. Never enlarge that compact face for a title or countdown.
+12-pixel Lemmings face. Duo and narrow mobile status bars keep the regular
+lettering, abbreviating labels and omitting secondary statistics as needed;
+a narrow counter area alone must not select the tiny face. Never enlarge that
+compact face for a title or countdown.
 Preserve the original 1× artwork. The dedicated 2× display cut refines colour-cluster
 contours, reduces doubled sparkle blocks and adds letter-specific highlight and
 shade facets. Keep the doubled advances and bearings. Larger text retains this
@@ -1099,6 +1121,28 @@ CRT output remain device checks.
 
 ## Divided mobile screens
 
+Duo's vertical navigation area holds Menu, rewind, tick steps, release rate,
+speed, End run and Pause/Resume. Use the system's preferred bar edge and
+corner clearance. Keep the skills together below the minimap and return the
+former bottom transport row to gameplay. Play/Resume stays at the bottom of
+the side column, with the same height and baseline as the skills. Inset Play
+and Pause artwork inside the stone well while retaining the full button target.
+Align End run with the minimap row. Secondary side buttons share a 44-point height and the
+skill row's two-point gaps, with larger gaps between action groups.
+Drawing, touch and accessibility share these rectangles.
+Mobile stone backgrounds use a cached 2× reconstruction of the original rock
+tile, with its red-brown palette. Tile the finer grain at a fixed size in both
+directions so speed and release-rate controls do not stretch it. Preserve the
+original panel tiles, bevels, glyphs and selected-state accents.
+Classic, L2 and L3 use the same layout. A strip that cannot fit 44-point targets,
+or a divided/occluded content region, retains its existing deck.
+
+The muted, windowless Duo audit covers 192 bitmap captures, including left and
+right navigation strips, all three engines, paused/running, selected skills,
+speed, armed End run and Undo states. It checks target containment, separation,
+activation centres and accessible names. UIKit's device-supplied bar geometry,
+physical touch and VoiceOver still need device validation.
+
 Simulator exposes an Apple-family-2-like Metal device, including for iPhone Duo.
 Do not use that family to disable explosion and fast-forward previews. Allow
 the existing bounded overlay budget, shader creation and measured pressure
@@ -1132,6 +1176,23 @@ Menu measurement, input targets and drawing use the same viewport height.
 Reserve space for details and footer actions before sizing a level preview.
 Keep the selected interface size and scroll when the remaining content cannot fit.
 Changing the layout retains the existing session and paused Ready boundary.
+
+Mobile and TV level previews fill the interior of their flat frame, with crisp
+pixels and no stretching or added padding. Ready and Library use a stable
+320 by 160 opening view: the authored Classic camera or the entrance in the
+other engines, clamped to the map. Apply this on first presentation and frame
+refresh, independent of gameplay zoom and orientation. Pause and results retain
+their gameplay camera snapshot and fill the same frame. QR codes fit completely
+inside their pane.
+The muted, windowless `LemmingsMobileMenuAudit --preview-fill` check covers 48
+renders across Classic, Lemmings 2, Lemmings 3 and Cellbash, phone portrait and
+landscape, tablet, TV and all interface sizes. It checks opening crops, complete
+interior coverage, border containment and Library/Start input targets.
+Representative renders, including Cellbash, were inspected. iOS and tvOS SDK
+modules compile, and all nine level-preparation regressions pass. The separate
+support audit could not decode its unchanged source QR image in the headless
+environment, before preview drawing. Physical touch, rotation and TV remote
+delivery remain device checks.
 
 The muted, windowless `LemmingsMobileMenuAudit --duo` check passes 156 bitmap
 captures across eight poses, all three native engines and all menu interface
@@ -1258,3 +1319,17 @@ Sunsoft objects that omit terrain-only placement flags. Apply the same mask
 with HDR off, and with DOS, Macintosh colour or monochrome artwork. Glints
 use that mask too. Five focused regressions pass, including the Sunsoft wall
 and inspected initial, cut and restored bitmap captures.
+
+Familiar names live in Settings > Privacy. Keep the bitmap name editor, preview,
+Apply and Back distinct. Contact selection is a deliberate system-picker action
+on Mac and iOS; TV offers manual entry. Preview before Apply, and explain that
+Forget removes retained names from saved runs too. Keep privacy wording literal.
+
+On iOS, three-finger tap cycles the installed artwork available to the current
+Classic level. Two-finger swipe in any direction requests DJ shuffle in all
+three games. Both gestures stay within the playfield and yield to VoiceOver,
+which exposes Graphics and DJ shuffle as custom actions. Multi-touch cancels
+pending skill assignment; pinch retains zoom. Graphics changes preserve the
+run, pause state and future-level Shuffle setting. Mobile Lemmings 2, Lemmings 3
+and NeoLemmix do not yet implement artwork switching, so Graphics returns
+unavailable for those sessions. Physical gesture delivery requires a device check.

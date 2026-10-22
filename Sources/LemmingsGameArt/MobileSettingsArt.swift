@@ -97,10 +97,11 @@ public enum MobileSettingsArt {
                     toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
+                    .init("familiarNames", L10n.text("Familiar names")),
                     .init("cloudSaves", L10n.text("Tester sync")),
                     .init("playInsights", L10n.text("Play Insights"))]
         }
-        if inGame { rows.removeAll { $0.id == "cloudSaves" } }
+        if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
         return .init(title: group.title, rows: rows,
                      footer: [.init("settings", L10n.text("Back"))])
     }

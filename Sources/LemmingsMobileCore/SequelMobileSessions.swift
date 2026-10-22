@@ -15,6 +15,7 @@ public typealias Lemmings2MobileGhostRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings2MobileSession: MobileGameSession {
+    public var familiarNamesStore: FamiliarNamesStore? = .shared
     private enum Input: Codable, Sendable {
         case assign(tick: Int, control: Int, target: Int)
         case endRun(tick: Int)
@@ -275,7 +276,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public var lemmingInspection: LemmingInspection? {
         guard let capture = actionCapture() else { return nil }
-        return try? LemmingInspection(initial: capture.initial, current: capture.final, commands: capture.commands)
+        return try? LemmingInspection(initial: capture.initial, current: capture.final, commands: capture.commands, familiarNames: familiarNamesStore)
     }
 
     public func actionCapture() -> MobileActionCapture? {
@@ -422,6 +423,7 @@ public typealias Lemmings3MobileGhostRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings3MobileSession: MobileGameSession {
+    public var familiarNamesStore: FamiliarNamesStore? = .shared
     private let skillStates = Lemmings3Runtime.Action.allCases.map {
         MobileSkillState(name: $0.rawValue.capitalized, count: 0, isUnlimited: true)
     }
@@ -693,7 +695,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let commands = inputs.map {
             LeaderboardActionReplay.Command(tick: $0.tick, action: $0.action, lemming: $0.target, skill: $0.tool, direction: $0.direction)
         }
-        return try? LemmingInspection(initial: .lemmings3(initial), current: .lemmings3(runtime), commands: commands)
+        return try? LemmingInspection(initial: .lemmings3(initial), current: .lemmings3(runtime), commands: commands, familiarNames: familiarNamesStore)
     }
 
     public func actionCapture() -> MobileActionCapture? {

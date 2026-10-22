@@ -29,12 +29,14 @@ public struct LemmingInspection: Sendable {
     public static let actionsPerPage = 5
 
     public init(initial: ActionReplayState, current: ActionReplayState,
-                commands: [LeaderboardActionReplay.Command]) throws {
+                commands: [LeaderboardActionReplay.Command], familiarNames: FamiliarNamesStore? = nil) throws {
         tick = current.tick
         // Preserve the original identity seed so the new assessments do not rename
         // lemmings. Saved runs reconstruct this same initial state on every host.
         let scope = initial.engine + ":" + (try initial.hash()) + ":1"
         let seed = SHA256.hash(data: Data(scope.utf8)).prefix(8).reduce(UInt64(0)) { ($0 << 8) | UInt64($1) }
+        let familiar = try familiarNames?.names(for: scope) ?? []
+        let names = familiar.isEmpty ? Self.names : familiar
         let actors: [(Int, String)]
         switch current {
         case .classic(let game):
@@ -57,10 +59,10 @@ public struct LemmingInspection: Sendable {
                 seconds: Int(Double(command.tick) / current.ticksPerSecond), ticksSinceUse: current.tick - command.tick))
         }
         individuals = actors.filter { $0.0 >= 0 }.sorted { $0.0 < $1.0 }.map { id, status in
-            let index = (Int(seed % UInt64(Self.names.count)) + id % Self.names.count) % Self.names.count
+            let index = (Int(seed % UInt64(names.count)) + id % names.count) % names.count
             let character = LemmingAssessmentCatalogue.story(at:
                 LemmingAssessmentCatalogue.index(seed: seed, actorID: id))
-            return Individual(id: id, name: Self.names[index], preference: character.0,
+            return Individual(id: id, name: names[index], preference: character.0,
                 want: character.1, status: status, actions: actions[id] ?? [])
         }
     }

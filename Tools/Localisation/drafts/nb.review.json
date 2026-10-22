@@ -321,5 +321,24 @@
       "Language selection fixed"
     ],
     "scope": "Updated Macintosh release notes and one mobile achievement status. Existing language and device validation gaps remain open."
+  },
+  "familiar_names_2026_10_22": {
+    "status": "AI draft; human language review pending",
+    "added_keys": [
+      "Choose contacts",
+      "Choose first names for your lemmings. Names stay on this device. Their stories are fictional.",
+      "Could not forget familiar names. Try again.",
+      "Could not load familiar names. You can forget them and start again.",
+      "Could not save familiar names. Try again.",
+      "Existing lemmings keep their names until you choose Forget names.",
+      "Familiar names",
+      "First names, separated by commas",
+      "Forget familiar names?",
+      "Forget names",
+      "No names for new levels",
+      "Remove all familiar names, including saved-run assignments. Lemmings will use fictional names again.",
+      "Type first names"
+    ],
+    "scope": "Optional familiar-name settings only"
   }
 }

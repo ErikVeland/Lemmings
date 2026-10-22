@@ -1,4 +1,6 @@
 import CoreGraphics
+import Foundation
+import NxlvKit
 
 /// The stone socket every game control shares, drawn the same way on every platform.
 ///
@@ -7,6 +9,48 @@ import CoreGraphics
 /// Rectangles use a top-left origin, so a context must already be flipped to that
 /// orientation. AppKit views that return `isFlipped` and UIKit views both are.
 public enum GameStoneArt {
+    /// Reconstruct the panel rock once, retaining the original palette and half-width source pixels.
+    private static let detailedRock: CGImage? = {
+        let rows = PanelGlyphArt.rock.rows
+        let palette = PanelGlyphArt.rock.palette
+        guard let width = rows.first?.count else { return nil }
+        var pixels = [UInt8](repeating: 0, count: width * rows.count * 4)
+        for (y, row) in rows.enumerated() {
+            for (x, mark) in row.enumerated() {
+                guard let colour = palette[mark] else { continue }
+                let offset = (y * width + x) * 4
+                pixels[offset..<offset + 4] = [colour.0, colour.1, colour.2, 255]
+            }
+        }
+        guard let source = try? SequelMacFrame(width: width, height: rows.count, rgba: pixels),
+              let detailed = try? SequelMacArtwork.reconstruct(source, category: .architectural),
+              let provider = CGDataProvider(data: Data(detailed.rgba) as CFData) else { return nil }
+        return CGImage(width: detailed.width, height: detailed.height, bitsPerComponent: 8,
+            bitsPerPixel: 32, bytesPerRow: detailed.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+    }()
+
+    /// Fine rock grain stays the same size in short, wide and tall controls.
+    public static func drawDetailedRock(in context: CGContext, frame: CGRect, pixel: CGFloat) {
+        guard let image = detailedRock else { return }
+        let size = PanelGlyphArt.rock.pixelSize
+        let width = CGFloat(size.width * 2), height = CGFloat(size.height * 2)
+        let inner = well(frame, pixel: pixel)
+        guard inner.width > 0, inner.height > 0 else { return }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: inner)
+        context.interpolationQuality = .none
+        let columns = Int(ceil(inner.width / width)), rows = Int(ceil(inner.height / height))
+        for y in 0..<rows {
+            for x in 0..<columns {
+                drawImage(image, in: CGRect(x: inner.minX + CGFloat(x) * width,
+                    y: inner.minY + CGFloat(y) * height, width: width, height: height), context: context)
+            }
+        }
+    }
+
     private static let light = CGColor(srgbRed: 0.7084, green: 0.7154, blue: 0.6550, alpha: 1)
     private static let stone = CGColor(srgbRed: 0.4245, green: 0.4435, blue: 0.3937, alpha: 1)
     private static let shadow = CGColor(srgbRed: 0.1457, green: 0.1718, blue: 0.1325, alpha: 1)

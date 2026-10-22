@@ -261,6 +261,11 @@ public enum PanelGlyphArt: String, Sendable {
   /// Renders the glyph at a whole-number scale. The image is `rows × scale` pixels, so an
   /// original tile (stored at half horizontal resolution) is twice as wide as its logical size.
   public func cgImage(scale: Int) -> CGImage? {
+    cgImage(scale: scale, transparentRock: false)
+  }
+
+  /// Custom sockets supply their own rock. Keep only the original control silhouette above it.
+  func cgImage(scale: Int, transparentRock: Bool) -> CGImage? {
     let steps = max(1, scale)
     let rows = self.rows
     let palette = self.palette
@@ -270,6 +275,7 @@ public enum PanelGlyphArt: String, Sendable {
     var pixels = [UInt8](repeating: 0, count: width * height * 4)
     for (row, line) in rows.enumerated() {
       for (column, mark) in line.enumerated() {
+        if transparentRock, self == .pause || self == .nuke, "9abcde".contains(mark) { continue }
         guard let colour = palette[mark] else { continue }
         for dy in 0..<steps {
           for dx in 0..<steps {

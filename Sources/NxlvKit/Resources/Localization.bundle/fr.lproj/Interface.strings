@@ -479,8 +479,10 @@
 "Choose another level or open Playlists to change the order." = "Choisis un autre niveau ou ouvre Listes de lecture pour modifier l’ordre.";
 "Choose at least two players for Hot Seat." = "Choisis au moins deux joueurs pour le Hot Seat.";
 "Choose at least two players, then try again." = "Choisissez au moins deux joueurs, puis réessayez.";
+"Choose contacts" = "Choisir des contacts";
 "Choose eight different skills" = "Choisissez huit compétences différentes";
 "Choose files first." = "Choisis d’abord des fichiers.";
+"Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "Choisissez des prénoms pour vos lemmings. Ils restent sur cet appareil. Leurs histoires sont fictives.";
 "Choose its gameplay action. If another button uses that action, their bindings swap." = "Choisis l’action de jeu associée. Si un autre bouton utilise déjà cette action, leurs attributions sont échangées.";
 "Choose level" = "Choisir un niveau";
 "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)" = "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)";
@@ -642,6 +644,8 @@
 "Could not animate the talisman: {0}" = "Impossible d’animer le talisman : {0}";
 "Could not build the Lemmings 3 direction-picker test level: {0}" = "Impossible de créer le niveau de test du sélecteur de direction de Lemmings 3 : {0}";
 "Could not clear completed checkpoint: {0}" = "Impossible d’effacer le point de contrôle terminé : {0}";
+"Could not forget familiar names. Try again." = "Impossible de supprimer les prénoms familiers. Réessayez.";
+"Could not load familiar names. You can forget them and start again." = "Impossible de charger les prénoms familiers. Vous pouvez les supprimer et recommencer.";
 "Could not load shared counts. Check the token and service." = "Impossible de charger les compteurs partagés. Vérifie le jeton et le service.";
 "Could not load the ending: {0}" = "Impossible de charger la fin : {0}";
 "Could not load the introduction: {0}" = "Impossible de charger l’introduction : {0}";
@@ -656,6 +660,7 @@
 "Could not rewind this run: {0}" = "Impossible de revenir en arrière dans cette partie : {0}";
 "Could not save Superzoom uses." = "Could not save Superzoom uses.";
 "Could not save completed lesson: {0}" = "Impossible d’enregistrer la leçon terminée : {0}";
+"Could not save familiar names. Try again." = "Impossible d’enregistrer les prénoms familiers. Réessayez.";
 "Could not save the input route: {0}" = "Impossible d’enregistrer le parcours de saisie : {0}";
 "Could not show the talisman: {0}" = "Impossible d’afficher le talisman : {0}";
 "Could not sync journey: {0}" = "Impossible de synchroniser le parcours : {0}";
@@ -845,6 +850,7 @@
 "Excellent! A gold standard successful rescue attempt." = "Excellent ! Une tentative de sauvetage exemplaire, digne d’une médaille d’or.";
 "Execution Challenge" = "Défi d’exécution";
 "Exercises this power sparingly." = "Exercises this power sparingly.";
+"Existing lemmings keep their names until you choose Forget names." = "Les lemmings existants gardent leurs prénoms jusqu’à ce que vous choisissiez Supprimer les prénoms.";
 "Exit" = "Sortie";
 "Expected L2VG sprite bank." = "Banque de sprites L2VG attendue.";
 "Expected L2VL sprite data, found {0}." = "Données de sprites L2VL attendues, mais {0} trouvées.";
@@ -894,6 +900,7 @@
 "Faithful" = "Fidèle";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Fidèle conserve le son d’origine de la source. Moderne applique un traitement musical amélioré.";
 "Fall sounds" = "Sons de chute";
+"Familiar names" = "Prénoms familiers";
 "Fan" = "Fan";
 "Fan Lemmings" = "Lemmings communautaires";
 "Fan Levels…" = "Niveaux de fans…";
@@ -935,6 +942,7 @@
 "Finish run" = "Terminer la partie";
 "Finished {0} from {1}." = "{0} terminés sur {1}.";
 "First clear of this level. Rescued {0}; target {1}." = "Première réussite de ce niveau. Sauvés : {0} ; objectif : {1}.";
+"First names, separated by commas" = "Prénoms séparés par des virgules";
 "Five-level openings" = "Five-level openings";
 "Fix records" = "Réparer les records";
 "Flame Thrower" = "Lance-flammes";
@@ -947,6 +955,8 @@
 "Follow: on" = "Suivi : activé";
 "For many generations" = "Pendant de nombreuses générations";
 "For the plan is" = "Car le plan est";
+"Forget familiar names?" = "Supprimer les prénoms familiers ?";
+"Forget names" = "Supprimer les prénoms";
 "Found in its favour." = "Found in its favour.";
 "Frame {0} at byte {1} declares a size of zero." = "L’image {0} à l’octet {1} indique une taille nulle.";
 "Frame {0} at byte {1} declares {2} bytes, but only {3} remain." = "L’image {0} à l’octet {1} indique {2} octets, mais il n’en reste que {3}.";
@@ -1729,6 +1739,7 @@
 "No levels played yet" = "Aucun niveau joué pour le moment";
 "No levels yet" = "Aucun niveau pour le moment";
 "No matching commands. Try another word or choose All commands." = "Aucune commande correspondante. Essayez un autre mot ou choisissez Toutes les commandes.";
+"No names for new levels" = "Aucun prénom pour les nouveaux niveaux";
 "No recorded assignments" = "No recorded assignments";
 "No records" = "Aucun record";
 "No repeats" = "Aucune répétition";
@@ -2164,6 +2175,7 @@
 "Remembers where everything was." = "Remembers where everything was.";
 "Removal queued. Retry when connected." = "Suppression mise en attente. Réessaie lorsque tu seras connecté.";
 "Remove" = "Supprimer";
+"Remove all familiar names, including saved-run assignments. Lemmings will use fictional names again." = "Supprimer tous les prénoms familiers, y compris ceux des parties sauvegardées. Les lemmings reprendront des noms fictifs.";
 "Remove favourite" = "Retirer des favoris";
 "Remove level" = "Retirer le niveau";
 "Remove shared records" = "Supprimer les records partagés";
@@ -3097,6 +3109,7 @@
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "Deux ouvriers";
 "Two-finger tap on the playfield: DJ shuffle" = "Toucher le terrain avec deux doigts : lecture aléatoire du DJ";
+"Type first names" = "Saisir des prénoms";
 "U" = "U";
 "UI TEST" = "TEST D’INTERFACE";
 "UI size" = "Taille de l’interface";

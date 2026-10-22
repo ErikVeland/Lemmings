@@ -101,6 +101,7 @@ extension MobileLibraryViewController {
 
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
     func handleSettings(_ id: String) -> Bool {
+        if handleFamiliarNames(id) { return true }
         #if os(tvOS)
         if id == "setting.tvAim" || id == "setting.tvDeadZone" || id == "setting.tvTriggerFeedback" {
             var input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)

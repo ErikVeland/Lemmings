@@ -30,6 +30,7 @@ import UIKit
     private var pinchGestureActive = false
     private var scrollGestureActive = false
     var onDJShuffle: (() -> Bool)?
+    var onCycleGraphics: (() -> Bool)?
     private var rawHoverPoint: CGPoint?
     private(set) var touchInput: MobileTargetInput = .touch
     var hasActiveTouch: Bool { activeTouchID != nil }
@@ -110,12 +111,21 @@ import UIKit
         addSubview(overlay)
         #if os(iOS)
         isMultipleTouchEnabled = true
-        let shuffle = UITapGestureRecognizer(target: self, action: #selector(shuffleTapped(_:)))
-        shuffle.numberOfTouchesRequired = 2
-        shuffle.delegate = self
-        addGestureRecognizer(shuffle)
+        for direction: UISwipeGestureRecognizer.Direction in [.left, .right, .up, .down] {
+            let shuffle = UISwipeGestureRecognizer(target: self, action: #selector(shuffleSwiped(_:)))
+            shuffle.numberOfTouchesRequired = 2
+            shuffle.direction = direction
+            shuffle.delegate = self
+            addGestureRecognizer(shuffle)
+        }
+        let graphics = UITapGestureRecognizer(target: self, action: #selector(graphicsTapped(_:)))
+        graphics.numberOfTouchesRequired = 3
+        graphics.delegate = self
+        addGestureRecognizer(graphics)
         accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("DJ shuffle")) { [weak self] _ in
             self?.onDJShuffle?() ?? false
+        }, UIAccessibilityCustomAction(name: L10n.text("Graphics")) { [weak self] _ in
+            self?.onCycleGraphics?() ?? false
         }]
         #endif
         if let tube { addSubview(tube) }
@@ -163,10 +173,16 @@ import UIKit
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
     #if os(iOS)
-    @objc private func shuffleTapped(_ gesture: UITapGestureRecognizer) {
+    @objc private func shuffleSwiped(_ gesture: UISwipeGestureRecognizer) {
         guard gesture.state == .ended, !UIAccessibility.isVoiceOverRunning else { return }
         cancelInteraction()
         _ = onDJShuffle?()
+    }
+
+    @objc private func graphicsTapped(_ gesture: UITapGestureRecognizer) {
+        guard gesture.state == .ended, !UIAccessibility.isVoiceOverRunning else { return }
+        cancelInteraction()
+        _ = onCycleGraphics?()
     }
     #endif
 
@@ -195,8 +211,10 @@ import UIKit
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         #if os(iOS)
-        if let tap = gestureRecognizer as? UITapGestureRecognizer, tap.numberOfTouchesRequired == 2,
-           UIAccessibility.isVoiceOverRunning { return false }
+        if UIAccessibility.isVoiceOverRunning,
+           gestureRecognizer is UITapGestureRecognizer || gestureRecognizer is UISwipeGestureRecognizer {
+            return false
+        }
         #endif
         return acceptsInput(at: gestureRecognizer.location(in: self))
     }

@@ -437,18 +437,18 @@ import NxlvKit
         keyboard.inspectionHoverID = { [weak self] in self?.canvas.inspectionPointerID }
         keyboard.inspectionHoverRevision = { [weak self] in
             guard let self else { return "" }
-            return "\(self.arcadeRunID):\(self.game?.tick ?? 0):\(self.recoveryInputs.count)"
+            return "\(FamiliarNamesStore.shared.revision):\(self.arcadeRunID):\(self.game?.tick ?? 0):\(self.recoveryInputs.count)"
         }
         keyboard.inspectionHoverSnapshot = { [weak self] in
             guard let self, let initial = self.initial, let game = self.game else { return nil }
             return try? LemmingInspection(initial: .lemmings2(initial), current: .lemmings2(game),
-                commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2))
+                commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2), familiarNames: .shared)
         }
         keyboard.inspectLemmings = { [weak self] in
             guard let self, self.screen == .playing, self.paused, !self.canvas.startCountdown.isActive,
                   let initial = self.initial, let game = self.game,
                   let snapshot = try? LemmingInspection(initial: .lemmings2(initial), current: .lemmings2(game),
-                    commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2)) else { return }
+                    commands: self.recoveryInputs.map(LeaderboardActionReplay.Command.l2), familiarNames: .shared) else { return }
             GameScreen.shared.present(LemmingInspectionPage(snapshot: snapshot,
                 selectedID: self.canvas.inspectionPointerID ?? self.assignmentFocus.lastID), owner: self.window)
         }

@@ -41,6 +41,11 @@ public struct MobileLifecycleState: Equatable, Sendable {
 
     public init() {}
 
+    /// Menus remain usable while audio is interrupted, including their Resume action.
+    public func acceptsInput(menuVisible: Bool) -> Bool {
+        isForeground && (!isInterrupted || menuVisible)
+    }
+
     /// Returns work for adapters. The reducer never resumes play by itself.
     public mutating func handle(_ event: MobileLifecycleEvent) -> [MobileLifecycleEffect] {
         switch event {
@@ -82,11 +87,12 @@ public struct MobileLifecycleState: Equatable, Sendable {
             if firstPause { effects.append(.pauseSimulation) }
             if firstInterruption { effects.append(.saveCheckpoint(.audioInterruption)) }
             effects.append(.suspendAudio)
+            if isForeground { effects.append(.showResumeControl) }
             return effects
 
         case .audioInterruptionEnded:
             isInterrupted = false
-            guard isForeground else { return [] }
+            guard isForeground, requiresPlayerResume else { return [] }
             return [.prepareAudio, .showResumeControl]
 
         case .memoryWarning:
@@ -99,7 +105,10 @@ public struct MobileLifecycleState: Equatable, Sendable {
             return [.cancelInput, .pauseSimulation, .saveCheckpoint(.sceneDisconnect), .suspendAudio]
 
         case .playerRequestedResume:
-            guard isForeground, !isInterrupted, requiresPlayerResume else { return [] }
+            guard isForeground, requiresPlayerResume else { return [] }
+            // Suspension and route loss may have no matching interruption-ended event.
+            // Explicit Resume retries audio activation; failure must not block gameplay.
+            isInterrupted = false
             requiresPlayerResume = false
             isPaused = false
             return [.resumeSimulation, .resumeAudio]

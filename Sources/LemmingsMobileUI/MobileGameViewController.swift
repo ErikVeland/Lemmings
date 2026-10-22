@@ -30,7 +30,7 @@ typealias MobileGameControllerBase = GCEventViewController
 #else
 typealias MobileGameControllerBase = UIViewController
 #endif
-@MainActor final class MobileGameOverlay: UIScrollView {
+@MainActor final class MobileGameOverlay: MobileMenuScrollView {
     var onVisibilityChanged: (() -> Void)?
     override var isHidden: Bool { didSet { if oldValue != isHidden { onVisibilityChanged?() } } }
 }
@@ -50,7 +50,7 @@ typealias MobileGameControllerBase = UIViewController
     var onExtraSkillUse: (() -> ExtraSkillUse?)?
     var onResultRewards: (() -> [ResultAwards.EarnedReward])?
     var onResultAchievements: (() -> [MobileResultAchievementsArt.Item])?
-    private let achievementScroll = UIScrollView()
+    private let achievementScroll = MobileMenuScrollView()
     private let achievementCanvas = MobileMenuCanvas()
     private var showsSplitResult = false
     var onResultAwards: (() -> (stars: Int, ornament: Bool))?
@@ -553,7 +553,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func updateDisplayLinkState() {
-        let active = viewIsVisible && lifecycle.isForeground && !lifecycle.isInterrupted && !displayUpdatesSuspended
+        let active = viewIsVisible && lifecycle.acceptsInput(menuVisible: !overlay.isHidden) && !displayUpdatesSuspended
         displayLink?.isPaused = !active || (!overlay.isHidden && GCController.controllers().isEmpty)
         if isDisplayLinkPaused {
             clock.suspend()
@@ -572,7 +572,7 @@ typealias MobileGameControllerBase = UIViewController
 
     @objc func displayFrame(_ link: CADisplayLink) {
         synchronizeSceneActivity()
-        guard viewIsVisible, lifecycle.isForeground, !lifecycle.isInterrupted, !displayUpdatesSuspended else {
+        guard viewIsVisible, lifecycle.acceptsInput(menuVisible: !overlay.isHidden), !displayUpdatesSuspended else {
             updateDisplayLinkState()
             return
         }
@@ -595,11 +595,11 @@ typealias MobileGameControllerBase = UIViewController
         pollingController = true
         playfieldView.deferFrameUpdates = true
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
-        guard !isDisplayLinkPaused else { return }
         #if !os(tvOS)
         pollingController = false
         playfieldView.deferFrameUpdates = false
         #endif
+        guard !isDisplayLinkPaused, !lifecycle.isInterrupted else { return }
         updateInputSpeed(at: link.timestamp)
         MobileMusic.shared.advance()
         playfieldView.setSpeedEffects(multiplier: speed, active: !paused && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
@@ -691,7 +691,8 @@ typealias MobileGameControllerBase = UIViewController
             hasPlayer: true,
             engineIdentifier: session.engineIdentifier,
             showsMenuButton: showsMenuButton, television: television,
-            topBarInsets: MobileSystemRegions.topBarInsets(in: view)
+            topBarInsets: MobileSystemRegions.topBarInsets(in: view),
+            navigationRail: MobileSystemRegions.navigationRail(in: view)
         )
     }
 
@@ -1018,8 +1019,7 @@ typealias MobileGameControllerBase = UIViewController
             try playfieldView.update(frame: frame)
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = playfieldView.bitmap
-                let visible = playfieldView.gameViewport.visibleLevelRect
-                overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
+                overlayCanvas.previewSource = menuPreviewSource(frame: frame)
             }
             hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
                               levelSize: session.levelSize, image: playfieldView.bitmap)
@@ -1258,7 +1258,7 @@ typealias MobileGameControllerBase = UIViewController
         cancelPendingL3ToolDirection()
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
-              lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+              playState.phase != .completed, lifecycle.isForeground else { return }
         // Let the tenth planning pause finish before asking on the player's next Play action.
         if !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
             showOverlay(title: L10n.text("Skill selection"), actions: [
@@ -1269,15 +1269,15 @@ typealias MobileGameControllerBase = UIViewController
             layoutOverlay()
             return
         }
-        guard
-              playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
+        let needsLifecycleResume = lifecycle.requiresPlayerResume
+        let resumeEffects = lifecycle.handle(.playerRequestedResume)
+        guard playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
         if wasReady {
             readyCuePending = true
             if freshStart { countdown.arm(); countdownLabel.text = "3"; countdownLabel.isHidden = false }
         }
-        let needsLifecycleResume = lifecycle.requiresPlayerResume
         if needsLifecycleResume {
-            applyEffects(lifecycle.handle(.playerRequestedResume))
+            applyEffects(resumeEffects)
         }
         guard lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         overlay.isHidden = true
@@ -2148,8 +2148,7 @@ typealias MobileGameControllerBase = UIViewController
         overlay.setContentOffset(.zero, animated: false)
         if let frame = latestFrame {
             overlayCanvas.preview = MobileBitmapRenderer.image(frame)
-            let visible = playfieldView.gameViewport.visibleLevelRect
-            overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
+            overlayCanvas.previewSource = menuPreviewSource(frame: frame)
         }
         overlay.isHidden = false
         if wasHidden {
@@ -2181,6 +2180,17 @@ typealias MobileGameControllerBase = UIViewController
         updateTVPointer()
         #endif
         UIAccessibility.post(notification: .screenChanged, argument: overlayCanvas)
+    }
+
+    private func menuPreviewSource(frame: MobilePixelFrame) -> CGRect {
+        if playState.phase == .ready {
+            let source = MobileMenuPreview.sourceRect(frame: frame, origin: session.menuPreviewOrigin,
+                                                     renderScale: session.renderScale)
+            return CGRect(x: source.x, y: source.y, width: source.width, height: source.height)
+        }
+        let visible = playfieldView.gameViewport.visibleLevelRect
+        return CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale,
+                      width: visible.width * session.renderScale, height: visible.height * session.renderScale)
     }
 
     func showCustomOverlay(title: String, details: [String], actions: [(String, () -> Void)]) {

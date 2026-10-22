@@ -9068,19 +9068,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.inspectionHoverID = { [weak self] in self?.playfield.inspectionPointerID }
     keyboard.inspectionHoverRevision = { [weak self] in
       guard let self, let classic = self.session as? ClassicSession else { return "" }
-      return "\(self.arcadeRunID):\(classic.currentTick):\(classic.skills.map(\.count)):\(classic.undoCount)"
+      return "\(FamiliarNamesStore.shared.revision):\(self.arcadeRunID):\(classic.currentTick):\(classic.skills.map(\.count)):\(classic.undoCount)"
     }
     keyboard.inspectionHoverSnapshot = { [weak self] in
       guard let classic = self?.session as? ClassicSession,
             let commands = try? classic.recoveryEvents.map(LeaderboardActionReplay.Command.classic) else { return nil }
-      return try? LemmingInspection(initial: .classic(classic.initialSimulation), current: .classic(classic.simulation), commands: commands)
+      return try? LemmingInspection(initial: .classic(classic.initialSimulation), current: .classic(classic.simulation), commands: commands, familiarNames: .shared)
     }
     keyboard.inspectLemmings = { [weak self] in
       guard let self, self.phase == .playing, self.isPaused,
             !self.playfield.startCountdown.isActive, let classic = self.session as? ClassicSession,
             let commands = try? classic.recoveryEvents.map(LeaderboardActionReplay.Command.classic),
             let snapshot = try? LemmingInspection(initial: .classic(classic.initialSimulation),
-                current: .classic(classic.simulation), commands: commands) else { return }
+                current: .classic(classic.simulation), commands: commands, familiarNames: .shared) else { return }
       GameScreen.shared.present(LemmingInspectionPage(snapshot: snapshot, selectedID: self.playfield.inspectionPointerID), owner: self.window)
     }
     keyboard.pauseForHelp = { [weak self] in

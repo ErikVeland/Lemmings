@@ -176,13 +176,12 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         let frames = Self.statusFrames(layout: layout, hasPlayer: playerName != nil)
         if let playerName, let player = frames.player {
-            let compact = frames.counters.width < 440
-            let identity = Self.playerFrames(in: player, name: playerName, portrait: playerPortrait, typography: compact ? nil : typography)
+            let identity = Self.playerFrames(in: player, name: playerName, portrait: playerPortrait, typography: typography)
             if let playerPortrait, let icon = identity.portrait {
                 GameStoneArt.drawImage(playerPortrait, in: icon, context: context)
             }
             GamePixelTypography.draw(playerName, in: identity.name, context: context,
-                typography: compact ? nil : typography, palette: .green, maximumScale: 1, alignment: .left)
+                typography: typography, palette: .green, maximumScale: 1, alignment: .left)
         }
         drawStatus(in: frames.counters, context: context)
     }
@@ -476,9 +475,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat, context: CGContext) {
         GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel)
-        if let rock = Self.glyphImage(.rock, fitting: frame.size) {
-            GameStoneArt.drawTile(in: context, image: rock.image, logicalSize: rock.size, frame: frame, pixel: pixel)
-        }
+        GameStoneArt.drawDetailedRock(in: context, frame: frame, pixel: pixel)
         GameStoneArt.drawAccent(in: context, frame: frame, selected: selected, pixel: pixel)
     }
 
@@ -497,7 +494,10 @@ public enum MobileHUDAction: Equatable, Sendable {
                 GameStoneArt.drawTile(in: context, image: image.image, logicalSize: image.size,
                                       frame: item.frame, pixel: pixel)
             }
-        } else if let image = Self.glyphImage(glyph, fitting: glyph.isOriginalTile ? item.frame.insetBy(dx: 2, dy: 2).size : well.size) {
+        } else if let image = Self.glyphImage(glyph,
+            fitting: item.action == .pause ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
+                : glyph.isOriginalTile ? item.frame.insetBy(dx: 2, dy: 2).size : well.size,
+            transparentRock: glyph.isOriginalTile) {
             GameStoneArt.drawImage(image.image, in: CGRect(
                 x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
                 width: image.size.width, height: image.size.height), context: context)
@@ -593,10 +593,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         let percent = snapshot.saved * 100 / max(1, snapshot.total)
         let minutes = max(0, snapshot.remainingSeconds ?? 0) / 60
         let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
-        let bitmap = compact || typography == nil
+        // Narrow bars abbreviate labels, but retain the regular game lettering.
+        let bitmap = typography == nil || row.height < 12
         func width(_ text: String, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGFloat {
             if bitmap { return CGFloat(GamePixelTypography.width(of: text)) * scale }
-            return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: 1) ?? 0
+            return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: Int(scale)) ?? 0
         }
         // Slot templates use the widest digit at the largest digit count a value can reach.
         let digit = (0...9).map(String.init).max { width($0) < width($1) } ?? "8"
@@ -733,12 +734,12 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private static var glyphCache: [String: (image: CGImage, size: CGSize)] = [:]
 
-    private static func glyphImage(_ glyph: PanelGlyphArt, fitting box: CGSize) -> (image: CGImage, size: CGSize)? {
+    private static func glyphImage(_ glyph: PanelGlyphArt, fitting box: CGSize, transparentRock: Bool = false) -> (image: CGImage, size: CGSize)? {
         let steps = glyph.scale(fitting: box)
         guard steps >= 1 else { return nil }
-        let key = "\(glyph.rawValue)-\(steps)"
+        let key = "\(glyph.rawValue)-\(steps)-\(transparentRock)"
         if let hit = glyphCache[key] { return hit }
-        guard let image = glyph.cgImage(scale: steps) else { return nil }
+        guard let image = glyph.cgImage(scale: steps, transparentRock: transparentRock) else { return nil }
         let size = CGSize(width: CGFloat(image.width) / (glyph.isOriginalTile ? 2 : 1), height: CGFloat(image.height))
         glyphCache[key] = (image, size)
         return (image, size)

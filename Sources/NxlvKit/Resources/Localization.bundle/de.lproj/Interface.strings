@@ -479,8 +479,10 @@
 "Choose another level or open Playlists to change the order." = "Wähle ein anderes Level oder öffne Playlists, um die Reihenfolge zu ändern.";
 "Choose at least two players for Hot Seat." = "Wähle für Hot Seat mindestens zwei Spieler.";
 "Choose at least two players, then try again." = "Wähle mindestens zwei Spieler und versuche es erneut.";
+"Choose contacts" = "Kontakte auswählen";
 "Choose eight different skills" = "Acht verschiedene Fähigkeiten auswählen";
 "Choose files first." = "Wähle zuerst Dateien aus.";
+"Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "Wähle Vornamen für deine Lemminge. Die Namen bleiben auf diesem Gerät. Ihre Geschichten sind erfunden.";
 "Choose its gameplay action. If another button uses that action, their bindings swap." = "Wähle die Spielaktion dieser Taste. Wenn eine andere Taste dieselbe Aktion ausführt, werden die Belegungen getauscht.";
 "Choose level" = "Level auswählen";
 "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)" = "Choose one extra tool charge for a level's tool carrier. One per attempt. (⌘E)";
@@ -642,6 +644,8 @@
 "Could not animate the talisman: {0}" = "Der Talisman konnte nicht animiert werden: {0}";
 "Could not build the Lemmings 3 direction-picker test level: {0}" = "Das Testlevel für die Richtungswahl in Lemmings 3 konnte nicht erstellt werden: {0}";
 "Could not clear completed checkpoint: {0}" = "Abgeschlossener Checkpoint konnte nicht gelöscht werden: {0}";
+"Could not forget familiar names. Try again." = "Die vertrauten Namen konnten nicht gelöscht werden. Versuche es erneut.";
+"Could not load familiar names. You can forget them and start again." = "Die vertrauten Namen konnten nicht geladen werden. Du kannst sie löschen und neu beginnen.";
 "Could not load shared counts. Check the token and service." = "Gemeinsame Zahlen konnten nicht geladen werden. Prüfe das Token und den Dienst.";
 "Could not load the ending: {0}" = "Das Ende konnte nicht geladen werden: {0}";
 "Could not load the introduction: {0}" = "Die Einleitung konnte nicht geladen werden: {0}";
@@ -656,6 +660,7 @@
 "Could not rewind this run: {0}" = "Dieser Lauf konnte nicht zurückgespult werden: {0}";
 "Could not save Superzoom uses." = "Could not save Superzoom uses.";
 "Could not save completed lesson: {0}" = "Abgeschlossene Lektion konnte nicht gespeichert werden: {0}";
+"Could not save familiar names. Try again." = "Die vertrauten Namen konnten nicht gespeichert werden. Versuche es erneut.";
 "Could not save the input route: {0}" = "Eingaberoute konnte nicht gespeichert werden: {0}";
 "Could not show the talisman: {0}" = "Der Talisman konnte nicht angezeigt werden: {0}";
 "Could not sync journey: {0}" = "Reise konnte nicht synchronisiert werden: {0}";
@@ -845,6 +850,7 @@
 "Excellent! A gold standard successful rescue attempt." = "Ausgezeichnet! Eine Rettung nach Goldstandard.";
 "Execution Challenge" = "Ausführungsherausforderung";
 "Exercises this power sparingly." = "Exercises this power sparingly.";
+"Existing lemmings keep their names until you choose Forget names." = "Vorhandene Lemminge behalten ihre Namen, bis du Namen löschen wählst.";
 "Exit" = "Ausgang";
 "Expected L2VG sprite bank." = "L2VG-Spritebank erwartet.";
 "Expected L2VL sprite data, found {0}." = "L2VL-Sprite-Daten erwartet, gefunden: {0}.";
@@ -894,6 +900,7 @@
 "Faithful" = "Originalgetreu";
 "Faithful keeps the source's original sound. Modern applies the enhanced music treatment." = "Originalgetreu behält den Originalklang bei. Modern verwendet die erweiterte Musikbearbeitung.";
 "Fall sounds" = "Fallgeräusche";
+"Familiar names" = "Vertraute Namen";
 "Fan" = "Fan-Level";
 "Fan Lemmings" = "Fan-Level";
 "Fan Levels…" = "Fan-Level…";
@@ -935,6 +942,7 @@
 "Finish run" = "Lauf abschließen";
 "Finished {0} from {1}." = "{0} von {1} abgeschlossen.";
 "First clear of this level. Rescued {0}; target {1}." = "Erster Abschluss dieses Levels. Gerettet: {0}; Ziel: {1}.";
+"First names, separated by commas" = "Vornamen, durch Kommas getrennt";
 "Five-level openings" = "Five-level openings";
 "Fix records" = "Rekorde reparieren";
 "Flame Thrower" = "Flammenwerfer";
@@ -947,6 +955,8 @@
 "Follow: on" = "Folgen: ein";
 "For many generations" = "Viele Generationen lang";
 "For the plan is" = "Denn der Plan ist";
+"Forget familiar names?" = "Vertraute Namen löschen?";
+"Forget names" = "Namen löschen";
 "Found in its favour." = "Found in its favour.";
 "Frame {0} at byte {1} declares a size of zero." = "Frame {0} bei Byte {1} gibt die Grösse 0 an.";
 "Frame {0} at byte {1} declares {2} bytes, but only {3} remain." = "Frame {0} bei Byte {1} gibt {2} Byte an, aber nur {3} sind übrig.";
@@ -1729,6 +1739,7 @@
 "No levels played yet" = "Noch keine Level gespielt";
 "No levels yet" = "Noch keine Level";
 "No matching commands. Try another word or choose All commands." = "Keine passenden Befehle. Suche nach einem anderen Begriff oder wähle Alle Befehle.";
+"No names for new levels" = "Keine Namen für neue Level";
 "No recorded assignments" = "No recorded assignments";
 "No records" = "Keine Rekorde";
 "No repeats" = "Keine Wiederholungen";
@@ -2164,6 +2175,7 @@
 "Remembers where everything was." = "Remembers where everything was.";
 "Removal queued. Retry when connected." = "Entfernen vorgemerkt. Versuche es erneut, sobald eine Verbindung besteht.";
 "Remove" = "Entfernen";
+"Remove all familiar names, including saved-run assignments. Lemmings will use fictional names again." = "Alle vertrauten Namen und ihre Zuordnungen in gespeicherten Spielen entfernen. Die Lemminge erhalten wieder erfundene Namen.";
 "Remove favourite" = "Aus Favoriten entfernen";
 "Remove level" = "Level entfernen";
 "Remove shared records" = "Gemeinsame Rekorde entfernen";
@@ -3097,6 +3109,7 @@
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "Zwei Arbeiter";
 "Two-finger tap on the playfield: DJ shuffle" = "Im Spielfeld mit zwei Fingern tippen: DJ-Zufallswiedergabe";
+"Type first names" = "Vornamen eingeben";
 "U" = "U";
 "UI TEST" = "UI-TEST";
 "UI size" = "Größe der Benutzeroberfläche";

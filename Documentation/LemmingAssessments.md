@@ -11,6 +11,9 @@ pair is written together. No fragments, emotional states or punchlines are mixed
 at runtime. Some reports are reassuringly precise; others simply let affection
 or disappointment remain. Nothing selects a sad story because an actor died.
 
+Optional [familiar names](FamiliarNames.md) replace only the displayed name.
+Their separate local store retains assignments and supports forgetting them.
+
 ## Stable assignment
 
 The existing engine, initial-state hash and actor ID determine the personality.
@@ -36,8 +39,8 @@ persisted version selector and a migration that retains this mapping.
 The English ten-word limit counts contractions and possessives as one word.
 Translations should preserve the meaning, restraint and layout, rather than
 forcing unnatural phrasing to reach an English word count. All 256 lines are
-extracted through `L10n.text`. Translations in the other eight bundled languages
-are pending; those lines currently use the normal English fallback.
+extracted through `L10n.text`. The other eight bundled languages now contain AI translation drafts.
+Human language review and complete translated-screen validation remain open.
 
 ## Validation
 
@@ -57,10 +60,10 @@ Native host restore paths use the shared model; cross-build engine migrations
 and changing the canonical starting state are outside this validation.
 
 The English catalogue contains all 256 source lines, and this document matches
-all 128 source pairs. The full localisation check remains incomplete because
-the other eight languages lack these translations. The extractor reports the
-first failure as `de.lproj: 256 missing texts`. Their English fallback remains
-available. No public release build or translation-fit verification is claimed.
+all 128 source pairs. The initial implementation reported 256 missing translations per language.
+The current bundled AI drafts pass the catalogue coverage check. Human language
+review remains open. No public release build or complete translated-assessment
+fit verification is claimed.
 
 ## Catalogue
 
