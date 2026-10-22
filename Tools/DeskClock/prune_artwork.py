@@ -31,6 +31,8 @@ GROUNDS = ranges(3, 9, 10, (36, 39))
 # Objects1: the trapdoor, the exit top and the exit arch.
 OBJECTS = ranges((0, 16))
 CHARSETS = ("Charset1", "Charset2")
+# The app and both widgets embed this copy, so it must stay small.
+SIZE_LIMIT = 2_000_000
 
 
 def main():
@@ -39,6 +41,10 @@ def main():
     parser.add_argument("--destination", required=True, help="Directory for the pruned artwork")
     arguments = parser.parse_args()
 
+    source = os.path.realpath(arguments.source)
+    destination = os.path.realpath(arguments.destination)
+    if os.path.islink(arguments.destination) or destination == source or destination.startswith(source + os.sep):
+        sys.exit("Use a destination outside the source artwork.")
     with open(os.path.join(arguments.source, "manifest.json")) as handle:
         manifest = json.load(handle)
     names = manifest.get("names", {})
@@ -52,7 +58,10 @@ def main():
         if bank not in manifest["banks"]:
             sys.exit(f"The source artwork has no bank {bank}.")
 
-    os.makedirs(arguments.destination, exist_ok=True)
+    # Start empty, so no frame from an earlier list survives in the copy.
+    if os.path.isdir(destination):
+        shutil.rmtree(destination)
+    os.makedirs(destination)
     banks = {}
     for bank, indices in keep.items():
         records = []
@@ -60,8 +69,11 @@ def main():
             if record is None or (indices is not None and index not in indices):
                 records.append(None)
                 continue
-            shutil.copyfile(os.path.join(arguments.source, record["file"]),
-                            os.path.join(arguments.destination, record["file"]))
+            name = record["file"]
+            path = os.path.join(source, name)
+            if os.path.basename(name) != name or name in (".", "..") or os.path.islink(path):
+                sys.exit(f"The source artwork has an invalid frame path: {name}")
+            shutil.copyfile(path, os.path.join(destination, name))
             records.append(record)
         banks[bank] = records
 
@@ -75,8 +87,13 @@ def main():
         "names": {key: value for key, value in names.items() if key in keep},
         "objects": objects,
     }
-    with open(os.path.join(arguments.destination, "manifest.json"), "w") as handle:
+    with open(os.path.join(destination, "manifest.json"), "w") as handle:
         json.dump(pruned, handle, separators=(",", ":"))
+    frames = sum(record is not None for records in banks.values() for record in records)
+    size = sum(entry.stat().st_size for entry in os.scandir(destination))
+    if size >= SIZE_LIMIT:
+        sys.exit(f"The clock artwork is {size} bytes. The limit is {SIZE_LIMIT} bytes.")
+    print(f"PASS clock artwork: {frames} frames, {size} bytes")
 
 
 if __name__ == "__main__":

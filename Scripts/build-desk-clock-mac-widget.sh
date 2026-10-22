@@ -42,7 +42,7 @@ info.update(CFBundleIdentifier=app['CFBundleIdentifier'] + '.DeskClockWidget',
 (widget / 'Contents/Info.plist').write_bytes(plistlib.dumps(info))
 PY
 artwork="${MAC_ARTWORK_DIR:-$app_dir/Contents/Resources/MacArtwork/lemmings}"
-python3 "$project_dir/Tools/DeskClock/prune_artwork.py" "$artwork" "$widget/Contents/Resources/MacArtwork/lemmings"
+python3 "$project_dir/Tools/DeskClock/prune_artwork.py" --source "$artwork" --destination "$widget/Contents/Resources/MacArtwork/lemmings"
 cp "$project_dir/Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy" "$widget/Contents/Resources/PrivacyInfo.xcprivacy"
 codesign --force --sign - --entitlements "$project_dir/Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements" "$widget"
 print "PASS Desk Clock Mac extension: $widget"
