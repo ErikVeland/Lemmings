@@ -115,6 +115,60 @@ public final class GameDeskClockArt: @unchecked Sendable {
         }
     }
 
+    /// Draws one widget entry. Medium and large widgets show the whole scene. The small widget enlarges the
+    /// terrain digits and keeps its labels at the font's own size: one Mac pixel per point. `rect` is in points.
+    public func drawWidget(_ sim: DeskClockSimulation, event: DeskClockEvent?, now: Date,
+                           in context: CGContext, rect: CGRect, compact: Bool) {
+        // A whole-second time keeps the soon countdown in its visible half of the blink.
+        let time = now.timeIntervalSince1970.rounded(.down)
+        guard compact else {
+            draw(sim, event: event, now: now, time: time, in: context, rect: rect, nightDim: false)
+            return
+        }
+        lock.lock()
+        defer { lock.unlock() }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: rect)
+        context.interpolationQuality = .none
+        context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 1))
+        context.fill(rect)
+        let width = max(1, rect.width - 16)
+
+        // The four digits and the colon, cut from the scene's terrain: classic x 40...167, y 31...68.
+        if terrain?.blocks != sim.blocks, let image = terrainImage(sim) { terrain = (sim.blocks, image) }
+        if let digits = terrain?.image.cropping(to: CGRect(x: 80, y: 62, width: 256, height: 76)) {
+            GameStoneArt.drawImage(digits, in: CGRect(x: rect.minX + 8, y: rect.minY + 12,
+                                                      width: width, height: (width * 76 / 256).rounded()), context: context)
+        }
+
+        // The event title, or the date without an event, then the compact countdown.
+        let cell = CGFloat(small.cellWidth)
+        let columns = max(1, Int(width / cell))
+        func fitted(_ line: String) -> String { line.count > columns ? String(line.prefix(columns - 1)) + "." : line }
+        func label(_ line: String, y: CGFloat, tint: UInt32?) {
+            context.saveGState()
+            context.translateBy(x: rect.midX, y: y)
+            context.scaleBy(x: 2, y: 2)
+            text(fitted(line), x: 0, y: 0, font: .small, align: .center, tint: tint, in: context)
+            context.restoreGState()
+        }
+        label(event?.title ?? dateLine(now, calendar: sim.calendar), y: rect.midY - 12, tint: nil)
+        if let event {
+            let tint: UInt32? = sim.phase == .start ? Self.green : sim.phase == .soon ? Self.amber : nil
+            label(DeskClockFace.countdown(to: event.start, now: now, compact: true), y: rect.midY + 8, tint: tint)
+        }
+
+        // A strip of level at classic size: the trapdoor, one lemming and the exit on the slab.
+        context.translateBy(x: rect.minX + 8, y: rect.maxY - 42)
+        drawSlabs(Int((width / 70).rounded(.up)) + 1, y: 27, in: context)
+        drawSprite(bank: Self.objectsBank, index: 0, at: .zero, in: context)
+        let ohNo = sim.lemmings.first?.state == .ohNo
+        let index = ClassicMacArtwork.lemmingFrameIndex(pose: ohNo ? .ohNo : .walking, left: false, tick: 0)
+        drawSprite(bank: Self.lemmingsBank, index: index, at: CGPoint(x: (width / 2).rounded() - 8, y: 18), in: context)
+        drawSprite(bank: Self.objectsBank, index: 16, at: CGPoint(x: width - 40, y: 11), in: context)
+    }
+
     // MARK: - Scene parts
 
     /// Trapdoor frames 1-9 at 10 fps from the moment it opens, then frame 0 resting open.
@@ -172,10 +226,14 @@ public final class GameDeskClockArt: @unchecked Sendable {
         if let image = terrain?.image {
             GameStoneArt.drawImage(image, in: CGRect(origin: .zero, size: Self.sceneSize), context: context)
         }
-        // The ground is the flat slab laid three times, the middle one mirrored, as a level designer would.
+        drawSlabs(3, y: CGFloat(DeskClockSimulation.groundY - 1), in: context)
+    }
+
+    /// The flat slab laid `count` times, every second one mirrored, as a level designer would.
+    private func drawSlabs(_ count: Int, y: CGFloat, in context: CGContext) {
         guard let slab = sprite(bank: Self.groundsBank, index: 3) else { return }
-        for index in 0..<3 {
-            let x = CGFloat(-2 + index * 70), y = CGFloat(DeskClockSimulation.groundY - 1)
+        for index in 0..<count {
+            let x = CGFloat(-2 + index * 70)
             context.saveGState()
             if index % 2 == 1 {
                 let centre = x + CGFloat(slab.frame.x) / 2 + CGFloat(slab.frame.width) / 4

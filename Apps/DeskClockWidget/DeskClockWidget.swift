@@ -9,23 +9,33 @@ struct ClockEntry: TimelineEntry {
     let event: DeskClockEvent?
 }
 
-struct ClockProvider: @preconcurrency TimelineProvider {
+/// Carries a WidgetKit completion into the task that reads the calendar. WidgetKit accepts it on any thread.
+private struct Reply<Value>: @unchecked Sendable {
+    let send: (Value) -> Void
+}
+
+struct ClockProvider: TimelineProvider {
     func placeholder(in context: Context) -> ClockEntry { ClockEntry(date: .now, event: nil) }
 
-    @MainActor func getSnapshot(in context: Context, completion: @escaping (ClockEntry) -> Void) {
-        let now = Date()
-        completion(ClockEntry(date: now, event: context.isPreview ? nil : EventKitDeskClockSource().nextEvent(now: now)))
+    func getSnapshot(in context: Context, completion: @escaping (ClockEntry) -> Void) {
+        let reply = Reply(send: completion), preview = context.isPreview
+        Task.detached {
+            let now = Date()
+            let event = preview ? nil : await EventKitDeskClockSource().nextEvent(now: now)
+            reply.send(ClockEntry(date: now, event: event))
+        }
     }
 
-    @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<ClockEntry>) -> Void) {
-        let now = Date()
-        let source = EventKitDeskClockSource()
-        let candidates = source.candidates(now: now)
-        let dates = DeskClockTimeline.entryDates(from: now)
-        let entries = dates.map { date in
-            ClockEntry(date: date, event: DeskClockEvents.next(from: candidates, now: date))
+    /// One entry per whole minute for an hour. The blocking EventKit reads run in a detached task.
+    func getTimeline(in context: Context, completion: @escaping (Timeline<ClockEntry>) -> Void) {
+        let reply = Reply(send: completion)
+        Task.detached {
+            let source = EventKitDeskClockSource()
+            let dates = DeskClockTimeline.entryDates(from: Date())
+            let events = await DeskClockTimeline.events(for: dates) { await source.nextEvent(now: $0) }
+            let entries = zip(dates, events).map { ClockEntry(date: $0, event: $1) }
+            reply.send(Timeline(entries: entries, policy: .after(DeskClockTimeline.reloadDate(after: dates))))
         }
-        completion(Timeline(entries: entries, policy: .after(dates.last!.addingTimeInterval(60))))
     }
 }
 

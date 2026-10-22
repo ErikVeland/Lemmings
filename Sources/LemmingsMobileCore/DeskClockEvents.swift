@@ -52,6 +52,38 @@ public enum DeskClockEvents {
     }
 }
 
+/// The shared widget timeline for iOS and macOS: one entry per whole minute for an hour.
+public enum DeskClockTimeline {
+    public static let entryCount = 60
+
+    /// Whole minutes from the current minute. UTC flooring is exact for whole-minute time zone offsets.
+    public static func entryDates(from now: Date) -> [Date] {
+        let minute = (now.timeIntervalSince1970 / 60).rounded(.down) * 60
+        return (0..<entryCount).map { Date(timeIntervalSince1970: minute + Double($0 * 60)) }
+    }
+
+    /// WidgetKit reloads when the last entry's minute ends, one hour after the first entry.
+    public static func reloadDate(after dates: [Date]) -> Date {
+        (dates.last ?? Date()).addingTimeInterval(60)
+    }
+
+    /// The next event for each date. The source is asked again only when the current event leaves the
+    /// two-minute start window, so an hour costs one read for each event that ends in it.
+    public static func events(for dates: [Date], next: (Date) async -> DeskClockEvent?) async -> [DeskClockEvent?] {
+        var events: [DeskClockEvent?] = []
+        var current: DeskClockEvent?
+        var read = false
+        for date in dates {
+            if !read || current.map({ $0.start < date.addingTimeInterval(-DeskClockEvents.lookBack) }) == true {
+                current = await next(date)
+                read = true
+            }
+            events.append(current)
+        }
+        return events
+    }
+}
+
 #if canImport(EventKit) && (os(iOS) || os(macOS))
 /// Reads the calendar with EventKit. Every `nextEvent(now:)` runs a fresh predicate query, so a
 /// `.EKEventStoreChanged` notification needs no observer: the next call already sees the change.
