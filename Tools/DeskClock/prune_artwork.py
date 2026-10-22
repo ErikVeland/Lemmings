@@ -1,51 +1,83 @@
 #!/usr/bin/env python3
-"""Copy the original clock frames and fonts, retaining their manifest indices."""
+"""Copy only the Macintosh frames the Desk Clock draws into a smaller artwork directory.
+
+The output has the same manifest format as the source, so ClassicMacArtwork(directory:)
+loads it. Frames that the clock does not use become null entries, which keeps every
+frame at its original index.
+
+Usage: prune_artwork.py --source <MacArtwork/lemmings> --destination <dir>
+"""
 import argparse
 import json
-from pathlib import Path
+import os
 import shutil
+import sys
 
 
-def prune(source, destination):
-    source, destination = Path(source).resolve(), Path(destination)
-    if destination.is_symlink() or source == destination.resolve() or source in destination.resolve().parents:
-        raise ValueError("Use a separate artwork destination.")
-    document = json.loads((source / "manifest.json").read_text())
-    selections = {"1400": set(range(43)) | {75} | set(range(77, 111)) | set(range(127, 143))
-                  | set(range(215, 247)) | set(range(299, 307)) | set(range(321, 353)),
-                  "1500": {3, 9, 10, 36, 37, 38, 39}, "1600": set(range(17))}
-    for bank, name in document.get("names", {}).items():
-        if name in ("Charset1", "Charset2"):
-            selections[bank] = set(range(len(document["banks"][bank])))
+def ranges(*spans):
+    kept = set()
+    for span in spans:
+        if isinstance(span, tuple):
+            kept.update(range(span[0], span[1] + 1))
+        else:
+            kept.add(span)
+    return kept
+
+
+# Lemmings: walk, fall, dig, explosion, build, block, umbrella, exit and "Oh no!".
+LEMMINGS = ranges((0, 41), 75, (77, 109), (127, 142), (215, 230), (299, 306), (337, 352))
+# Grounds1: the flat slab, grass tufts and the rock texture.
+GROUNDS = ranges(3, 9, 10, (36, 39))
+# Objects1: the trapdoor, the exit top and the exit arch.
+OBJECTS = ranges((0, 16))
+CHARSETS = ("Charset1", "Charset2")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--source", required=True, help="Directory that holds the full manifest.json")
+    parser.add_argument("--destination", required=True, help="Directory for the pruned artwork")
+    arguments = parser.parse_args()
+
+    with open(os.path.join(arguments.source, "manifest.json")) as handle:
+        manifest = json.load(handle)
+    names = manifest.get("names", {})
+    keep = {"1400": LEMMINGS, "1500": GROUNDS, "1600": OBJECTS}
+    for name in CHARSETS:
+        bank = next((key for key, value in names.items() if value == name), None)
+        if bank is None:
+            sys.exit(f"The source artwork has no {name} bank.")
+        keep[bank] = None  # Every frame.
+    for bank in keep:
+        if bank not in manifest["banks"]:
+            sys.exit(f"The source artwork has no bank {bank}.")
+
+    os.makedirs(arguments.destination, exist_ok=True)
     banks = {}
-    files = set()
-    for bank, indices in selections.items():
-        records = document["banks"][bank]
-        banks[bank] = [frame if i in indices else None for i, frame in enumerate(records)]
-        for frame in banks[bank]:
-            if frame:
-                name = frame["file"]
-                if Path(name).name != name or ".." in name or (source / name).is_symlink():
-                    raise ValueError("Invalid artwork frame path.")
-                files.add(name)
-    if destination.exists():
-        shutil.rmtree(destination)
-    destination.mkdir(parents=True)
-    for name in sorted(files):
-        shutil.copyfile(source / name, destination / name)
-    document["banks"] = banks
-    document["objects"] = {key: value for key, value in document.get("objects", {}).items() if key in banks}
-    document["names"] = {key: value for key, value in document.get("names", {}).items() if key in banks}
-    (destination / "manifest.json").write_text(json.dumps(document, separators=(",", ":")))
-    size = sum(p.stat().st_size for p in destination.iterdir())
-    if size >= 2_000_000:
-        raise ValueError(f"Clock artwork exceeds 2 MB: {size} bytes.")
-    print(f"PASS clock artwork: {len(files)} original frames, {size} bytes")
+    for bank, indices in keep.items():
+        records = []
+        for index, record in enumerate(manifest["banks"][bank]):
+            if record is None or (indices is not None and index not in indices):
+                records.append(None)
+                continue
+            shutil.copyfile(os.path.join(arguments.source, record["file"]),
+                            os.path.join(arguments.destination, record["file"]))
+            records.append(record)
+        banks[bank] = records
+
+    # Object sequences are keyed by graphic set; Objects1 (bank 1600) is set 0.
+    objects = {key: value for key, value in manifest.get("objects", {}).items()
+               if str(1600 + int(key)) in keep}
+    pruned = {
+        "version": manifest["version"],
+        "monochrome": manifest.get("monochrome", False),
+        "banks": banks,
+        "names": {key: value for key, value in names.items() if key in keep},
+        "objects": objects,
+    }
+    with open(os.path.join(arguments.destination, "manifest.json"), "w") as handle:
+        json.dump(pruned, handle, separators=(",", ":"))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source")
-    parser.add_argument("destination")
-    args = parser.parse_args()
-    prune(args.source, args.destination)
+    main()

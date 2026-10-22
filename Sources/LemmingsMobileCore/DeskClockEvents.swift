@@ -1,8 +1,9 @@
 import Foundation
+#if canImport(EventKit) && (os(iOS) || os(macOS))
+import EventKit
+#endif
 
-/**
- * Calendar data needed to choose an event without exposing EventKit to the simulation.
- */
+/// One calendar entry before the Desk Clock filters it.
 public struct DeskClockCandidate: Sendable {
     public var identifier: String
     public var start: Date
@@ -10,7 +11,7 @@ public struct DeskClockCandidate: Sendable {
     public var allDay: Bool
     public var declined: Bool
 
-    public init(identifier: String, start: Date, title: String, allDay: Bool = false, declined: Bool = false) {
+    public init(identifier: String, start: Date, title: String, allDay: Bool, declined: Bool) {
         self.identifier = identifier
         self.start = start
         self.title = title
@@ -19,71 +20,87 @@ public struct DeskClockCandidate: Sendable {
     }
 }
 
-public enum DeskClockCalendarAccess: Sendable { case notDetermined, granted, denied }
+public enum DeskClockCalendarAccess: Sendable {
+    case notDetermined, granted, denied
+}
 
-@MainActor public protocol DeskClockEventSource {
+/// Supplies the next event. Reading never asks for access; only `requestAccess()` does.
+public protocol DeskClockEventSource: Sendable {
     func authorization() -> DeskClockCalendarAccess
     func requestAccess() async -> Bool
-    func nextEvent(now: Date) -> DeskClockEvent?
+    func nextEvent(now: Date) async -> DeskClockEvent?
 }
 
 public enum DeskClockEvents {
-    public static func next(from candidates: [DeskClockCandidate], now: Date) -> DeskClockEvent? {
-        guard let event = candidates.filter({
-            !$0.allDay && !$0.declined && $0.start > now.addingTimeInterval(-120)
-                && $0.start <= now.addingTimeInterval(86_400)
-        }).sorted(by: { $0.start == $1.start ? $0.identifier < $1.identifier : $0.start < $1.start }).first else { return nil }
-        return DeskClockEvent(start: event.start, title: event.title,
-            nuke: DeskClockFace.isNuke(identifier: event.identifier, start: event.start))
-    }
-}
+    /// Events that started this long ago still count as the current event.
+    static let lookBack: TimeInterval = 120
+    static let lookAhead: TimeInterval = 24 * 60 * 60
 
-/**
- * Whole-minute entries share one timeline on iOS and macOS.
- */
-public enum DeskClockTimeline {
-    public static func entryDates(from now: Date) -> [Date] {
-        let minute = floor(now.timeIntervalSince1970 / 60) * 60
-        return (0..<60).map { Date(timeIntervalSince1970: minute + Double($0 * 60)) }
+    /// The earliest timed, accepted event from two minutes ago to 24 hours ahead.
+    public static func next(from candidates: [DeskClockCandidate], now: Date) -> DeskClockEvent? {
+        let earliest = now.addingTimeInterval(-lookBack)
+        let latest = now.addingTimeInterval(lookAhead)
+        let pick = candidates
+            .filter { !$0.allDay && !$0.declined && $0.start >= earliest && $0.start <= latest }
+            .min { $0.start < $1.start }
+        guard let pick else { return nil }
+        return DeskClockEvent(
+            start: pick.start,
+            title: pick.title,
+            nuke: DeskClockFace.isNuke(identifier: pick.identifier, start: pick.start)
+        )
     }
 }
 
 #if canImport(EventKit) && (os(iOS) || os(macOS))
-import EventKit
-
-@MainActor public final class EventKitDeskClockSource: DeskClockEventSource {
+/// Reads the calendar with EventKit. Every `nextEvent(now:)` runs a fresh predicate query, so a
+/// `.EKEventStoreChanged` notification needs no observer: the next call already sees the change.
+/// `EKEventStore` is not `Sendable`, but the store is a `let` and EventKit documents it as thread safe.
+public final class EventKitDeskClockSource: DeskClockEventSource, @unchecked Sendable {
     private let store = EKEventStore()
+
     public init() {}
 
-    public func authorization() -> DeskClockCalendarAccess {
-        switch EKEventStore.authorizationStatus(for: .event) {
-        case .notDetermined: .notDetermined
-        case .authorized: .granted
-        default: .denied
+    public func authorization() -> DeskClockCalendarAccess { Self.authorization() }
+
+    /// The current access without creating an event store, for Settings.
+    public static func authorization() -> DeskClockCalendarAccess {
+        let status = EKEventStore.authorizationStatus(for: .event)
+        if status == .notDetermined { return .notDetermined }
+        if #available(iOS 17, macOS 14, *) {
+            return status == .fullAccess ? .granted : .denied
         }
+        return status == .authorized ? .granted : .denied
     }
 
     public func requestAccess() async -> Bool {
-        guard authorization() == .notDetermined else { return authorization() == .granted }
         if #available(iOS 17, macOS 14, *) {
-            return (try? await store.requestFullAccessToEvents()) == true
+            return (try? await store.requestFullAccessToEvents()) ?? false
         }
-        return (try? await store.requestAccess(to: .event)) == true
+        return await withCheckedContinuation { continuation in
+            store.requestAccess(to: .event) { granted, _ in
+                continuation.resume(returning: granted)
+            }
+        }
     }
 
-    public func nextEvent(now: Date) -> DeskClockEvent? {
-        DeskClockEvents.next(from: candidates(now: now), now: now)
-    }
-
-    public func candidates(now: Date) -> [DeskClockCandidate] {
-        guard authorization() == .granted else { return [] }
-        let predicate = store.predicateForEvents(withStart: now.addingTimeInterval(-120),
-            end: now.addingTimeInterval(86_400), calendars: nil)
-        return store.events(matching: predicate).map { event in
-            DeskClockCandidate(identifier: event.eventIdentifier ?? "", start: event.startDate,
-                title: event.title ?? "", allDay: event.isAllDay,
-                declined: event.attendees?.contains { $0.isCurrentUser && $0.participantStatus == .declined } == true)
+    public func nextEvent(now: Date) async -> DeskClockEvent? {
+        guard authorization() == .granted else { return nil }
+        let predicate = store.predicateForEvents(
+            withStart: now.addingTimeInterval(-DeskClockEvents.lookBack),
+            end: now.addingTimeInterval(DeskClockEvents.lookAhead),
+            calendars: nil
+        )
+        let candidates = store.events(matching: predicate).map { event in
+            DeskClockCandidate(
+                identifier: event.eventIdentifier ?? event.title ?? "",
+                start: event.startDate,
+                title: event.title ?? "",
+                allDay: event.isAllDay,
+                declined: event.attendees?.contains { $0.isCurrentUser && $0.participantStatus == .declined } ?? false
+            )
         }
+        return DeskClockEvents.next(from: candidates, now: now)
     }
 }
 #endif

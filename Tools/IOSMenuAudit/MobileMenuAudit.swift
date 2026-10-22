@@ -54,7 +54,7 @@ import NxlvKit
         if roundedHUD { try checkRoundedHUD(typography: typography, content: content, output: output); return }
         if bookHome { try checkBookHome(typography: typography, content: content, output: output); return }
         if support { try checkSupport(typography: typography, output: output); return }
-        if duo { try checkDuo(typography: typography, content: content, output: output); return }
+        if duo { try checkDuo(typography: typography, artwork: artwork, content: content, output: output); return }
         if staticHome { try checkStaticHome(typography: typography, output: output); return }
         if regionalBrand { try checkRegionalBrand(typography: typography, resources: content, output: output); return }
         if homeScenery { try await checkHomeScenery(typography: typography, content: content, output: output); return }

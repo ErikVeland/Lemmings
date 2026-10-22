@@ -48,7 +48,7 @@ import NxlvKit
                 var settings = MobileSettings()
                 settings.classic.interfaceSize = size
                 var sources = [MobileSettingsArt.groups(television: true)]
-                for group in MobileSettingsGroup.allCases {
+                for group in MobileSettingsGroup.allCases where group != .deskClock {
                     var page = MobileSettingsArt.page(group, settings: settings, displayAvailable: true)
                     page.televisionGrid = true
                     if group == .controller {

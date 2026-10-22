@@ -3,189 +3,382 @@ import Foundation
 import LemmingsMobileCore
 import NxlvKit
 
-/**
- * The app and widgets draw the same terrain clock from the shipped Macintosh frames.
- */
-public final class GameDeskClockArt {
+/// Draws one Desk Clock state with the shipped Macintosh artwork.
+///
+/// Scene positions are classic pixels on a 208 x 149 scene. Mac frames have two pixels per classic
+/// pixel and draw at half size from their own origins. The context must have a top-left origin, as
+/// UIKit and flipped bitmap contexts do. Decoded images are cached, so one instance serves every frame.
+public final class GameDeskClockArt: @unchecked Sendable {
     public static let sceneSize = CGSize(width: 208, height: 149)
+
+    private static let hatch = CGPoint(x: 40, y: 1)
+    private static let exit = CGPoint(x: 160, y: 111)
+    private static let lightEdge = rgba(0xe08048)
+    private static let darkEdge = rgba(0x5a1a0c)
+    private static let green: UInt32 = 0x5ad04a
+    private static let amber: UInt32 = 0xffb02e
+    private static let white: UInt32 = 0xffffff
+    private static let lemmingsBank = 1400, groundsBank = 1500, objectsBank = 1600
+
+    private struct Sprite {
+        let image: CGImage
+        let frame: ClassicMacArtwork.Frame
+    }
+    private struct Key: Hashable {
+        let source: String
+        let tint: UInt32?
+    }
+    private enum Align { case left, center, right }
+
     private let artwork: ClassicMacArtwork
-    private let typography: GameMenuTypography
-    private var images: [String: CGImage] = [:]
-    private var digitTile: CGImage?
+    private let small: ClassicMacUserInterface.Font
+    private let large: ClassicMacUserInterface.Font
+    /// An opaque 80 x 80 Mac-pixel tile cut from the rock piece, mirrored so that it repeats without seams.
+    private let texture: [UInt8]
+    private static let textureSize = 80
+
+    private let lock = NSLock()
+    private var sprites: [Key: Sprite?] = [:]
+    private var terrain: (blocks: [[[Bool]]], image: CGImage)?
+    private var dates: (calendar: Calendar, formatter: DateFormatter)?
 
     public init?(directory: URL) {
         guard let artwork = try? ClassicMacArtwork(directory: directory),
               let interface = ClassicMacUserInterface(artwork: artwork),
-              artwork.frame(1500, 10) != nil, artwork.frame(1600, 16) != nil else { return nil }
+              let small = interface.font(.small), let large = interface.font(.large),
+              let rock = artwork.frame(Self.groundsBank, 10),
+              let texture = Self.tile(from: rock) else { return nil }
         self.artwork = artwork
-        typography = GameMenuTypography(interface: interface)
+        self.small = small
+        self.large = large
+        self.texture = texture
+        let required = [(Self.lemmingsBank, 75), (Self.groundsBank, 3), (Self.objectsBank, 0), (Self.objectsBank, 16)]
+        guard required.allSatisfy({ artwork.frame($0.0, $0.1) != nil }) else { return nil }
     }
 
-    public func draw(_ simulation: DeskClockSimulation, event: DeskClockEvent?, now: Date,
-                     in context: CGContext, rect: CGRect, nightDim: Bool = true) {
+    public func draw(_ sim: DeskClockSimulation, event: DeskClockEvent?, now: Date, time: TimeInterval,
+                     in context: CGContext, rect: CGRect, nightDim: Bool) {
+        lock.lock()
+        defer { lock.unlock() }
+        let size = Self.sceneSize
+        let fit = min(rect.width / size.width, rect.height / size.height)
+        guard fit > 0 else { return }
+        let scale = fit >= 1 ? fit.rounded(.down) : fit
+        let scene = CGRect(x: rect.minX + ((rect.width - size.width * scale) / 2).rounded(.down),
+                           y: rect.minY + ((rect.height - size.height * scale) / 2).rounded(.down),
+                           width: size.width * scale, height: size.height * scale)
         context.saveGState()
         defer { context.restoreGState() }
-        context.clip(to: rect)
-        context.setFillColor(CGColor(gray: 0, alpha: 1))
-        context.fill(rect)
-        let fit = min(rect.width / 416, rect.height / 298)
-        let scale = fit >= 1 ? floor(fit * 2) / 2 : fit
-        context.translateBy(x: floor(rect.midX - 208 * scale), y: floor(rect.midY - 149 * scale))
+        context.clip(to: scene)
+        context.translateBy(x: scene.minX, y: scene.minY)
         context.scaleBy(x: scale, y: scale)
         context.interpolationQuality = .none
-        context.setShouldAntialias(false)
 
-        for x in stride(from: 0, to: 416, by: 144) {
-            draw(1500, 3, at: CGPoint(x: x, y: 256), context: context)
-        }
-        for (index, x) in [6, 58, 238, 302, 340].enumerated() {
-            draw(1500, index == 0 ? 9 : 35 + index, at: CGPoint(x: x, y: 242), context: context)
-        }
-        if let tile = terrainTile() {
-            for digit in 0..<4 {
-                for row in 0..<7 { for column in 0..<5 where simulation.blocks[digit][row][column] {
-                    GameStoneArt.drawImage(tile, in: CGRect(x: (DeskClockSimulation.digitX[digit] + column * 5) * 2,
-                        y: (32 + row * 5) * 2, width: 10, height: 10), context: context)
-                } }
+        drawSky(time: time, in: context)
+        // Trapdoor: frames 1-9 open the doors, then frame 0 rests open.
+        drawSprite(bank: Self.objectsBank, index: Self.hatchFrame(age: now.timeIntervalSince(sim.hatchOpenedAt)),
+                   at: Self.hatch, in: context)
+        if let event { drawEvent(event, sim: sim, now: now, time: time, in: context) }
+        // Exit: the arch, with its animated top resting 6 px above on the arch's brackets.
+        drawSprite(bank: Self.objectsBank, index: 16, at: Self.exit, in: context)
+        let flame = 10 + Int((time * 10).rounded(.down)) % 6
+        drawSprite(bank: Self.objectsBank, index: flame, at: CGPoint(x: Self.exit.x, y: Self.exit.y - 6), in: context)
+        drawTerrain(sim, in: context)
+        drawGrass(in: context)
+        if Int(now.timeIntervalSince1970.rounded(.down)) % 2 != 0 {
+            context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.55))
+            for y in [10, 20] {
+                context.fill(CGRect(x: DeskClockSimulation.colonX, y: DeskClockSimulation.digitTop + y,
+                                    width: DeskClockSimulation.blockSize, height: DeskClockSimulation.blockSize))
             }
-            for y in [84, 104] {
-                GameStoneArt.drawImage(tile, in: CGRect(x: 202, y: y, width: 10, height: 10), context: context)
+        }
+        for lemming in sim.lemmings { drawLemming(lemming, in: context) }
+        for lemming in sim.lemmings {
+            guard let fuse = lemming.fuse, lemming.state != .ohNo else { continue }
+            let count = Int(ceil(fuse.timeIntervalSince(now) - 1))
+            if (1...5).contains(count) {
+                text(String(count), x: CGFloat(lemming.x), y: CGFloat(lemming.y - 20), font: .small,
+                     align: .center, tint: Self.white, in: context)
             }
         }
-        let hatchAge = max(0, now.timeIntervalSince(simulation.hatchOpenedAt))
-        let hatchFrame = hatchAge < 0.9 ? min(9, 1 + Int(hatchAge * 10)) : 0
-        draw(1600, hatchFrame, at: CGPoint(x: 82, y: 0), context: context)
-        draw(1600, 16, at: CGPoint(x: 346, y: 222), context: context)
-        draw(1600, 10 + Int(now.timeIntervalSince1970 * 8) % 6, at: CGPoint(x: 341, y: 210), context: context)
-        for lemming in simulation.lemmings {
-            let pose: ClassicLemmingPose
-            let offset: Int
-            var tick = lemming.tick
+        for blast in sim.blasts where blast.until > now {
+            drawSprite(bank: Self.lemmingsBank, index: 75, at: CGPoint(x: blast.x - 16, y: blast.y - 26), in: context)
+        }
+        // The panel line on the ground, in the game's own counter wording.
+        let out = sim.lemmings.filter { ![.descend, .dig, .build].contains($0.state) }.count
+        text(L10n.text("OUT \(out)"), x: 6, y: 136, font: .small, align: .left, tint: Self.green, in: context)
+        text(L10n.text("IN \(sim.saved)"), x: 60, y: 136, font: .small, align: .left, tint: Self.green, in: context)
+        text(dateLine(now, calendar: sim.calendar), x: 202, y: 136, font: .small, align: .right, tint: Self.green, in: context)
+        if nightDim {
+            context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.6))
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+
+    // MARK: - Scene parts
+
+    /// Trapdoor frames 1-9 at 10 fps from the moment it opens, then frame 0 resting open.
+    static func hatchFrame(age: TimeInterval) -> Int {
+        let opening = 1 + Int((max(0, age) * 10).rounded(.down))
+        return opening > 9 ? 0 : opening
+    }
+
+    private static let stars: [(x: Int, y: Int, phase: Double)] = {
+        var random = PrototypeRandom()
+        return (0..<40).map { _ in
+            let x = Int(random.next() * 208), y = Int(random.next() * 110)
+            return (x, y, random.next() * 6)
+        }
+    }()
+    private static let tufts: [(piece: Int, x: Int)] = {
+        var random = PrototypeRandom()
+        for _ in 0..<(40 * 3) { _ = random.next() }
+        return [9, 37, 36, 39, 9, 38, 36, 9].enumerated().map { index, piece in
+            (piece, 2 + index * 26 + Int(random.next() * 10))
+        }
+    }()
+
+    private func drawSky(time: TimeInterval, in context: CGContext) {
+        context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 1))
+        context.fill(CGRect(origin: .zero, size: Self.sceneSize))
+        for star in Self.stars where sin(time * 1.3 + star.phase) > -0.2 {
+            let bright = sin(time * 2 + star.phase) > 0.6
+            context.setFillColor(bright ? CGColor(red: 1, green: 1, blue: 1, alpha: 1)
+                : CGColor(red: 0x50 / 255, green: 0x60 / 255, blue: 0xa0 / 255, alpha: 1))
+            context.fill(CGRect(x: CGFloat(star.x), y: CGFloat(star.y), width: 0.5, height: 0.5))
+        }
+    }
+
+    private func drawEvent(_ event: DeskClockEvent, sim: DeskClockSimulation, now: Date, time: TimeInterval,
+                           in context: CGContext) {
+        let middle = Self.sceneSize.width / 2
+        let digits = Array(DeskClockFace.digits(for: event.start, uses24Hour: sim.uses24Hour, calendar: sim.calendar))
+        let clock = String(digits[0..<2]).trimmingCharacters(in: .whitespaces) + ":" + String(digits[2..<4])
+        text(L10n.text("NEXT") + "  " + clock, x: middle, y: 74, font: .small, align: .center, tint: nil, in: context)
+        let title = event.title.count > 24 ? String(event.title.prefix(23)) + "." : event.title
+        text(title, x: middle, y: 84, font: .large, align: .center, tint: nil, in: context)
+        let soon = sim.phase == .soon
+        guard !soon || Int((time * 2).rounded(.down)) % 2 == 0 else { return }
+        let tint: UInt32? = sim.phase == .start ? Self.green : soon ? Self.amber : nil
+        text(DeskClockFace.countdown(to: event.start, now: now), x: middle, y: 97, font: .small,
+             align: .center, tint: tint, in: context)
+    }
+
+    /// The solid mask filled with rock, rimmed like the prototype, then the ground slabs over it.
+    private func drawTerrain(_ sim: DeskClockSimulation, in context: CGContext) {
+        if terrain?.blocks != sim.blocks, let image = terrainImage(sim) {
+            terrain = (sim.blocks, image)
+        }
+        if let image = terrain?.image {
+            GameStoneArt.drawImage(image, in: CGRect(origin: .zero, size: Self.sceneSize), context: context)
+        }
+        // The ground is the flat slab laid three times, the middle one mirrored, as a level designer would.
+        guard let slab = sprite(bank: Self.groundsBank, index: 3) else { return }
+        for index in 0..<3 {
+            let x = CGFloat(-2 + index * 70), y = CGFloat(DeskClockSimulation.groundY - 1)
+            context.saveGState()
+            if index % 2 == 1 {
+                let centre = x + CGFloat(slab.frame.x) / 2 + CGFloat(slab.frame.width) / 4
+                context.translateBy(x: 2 * centre, y: 0)
+                context.scaleBy(x: -1, y: 1)
+            }
+            draw(slab, at: CGPoint(x: x, y: y), in: context)
+            context.restoreGState()
+        }
+    }
+
+    private func terrainImage(_ sim: DeskClockSimulation) -> CGImage? {
+        let width = DeskClockSimulation.width, height = DeskClockSimulation.height
+        let groundY = DeskClockSimulation.groundY
+        let solid = (0..<height).map { y in (0..<width).map { x in sim.isSolid(x: x, y: y) } }
+        func isSolid(_ x: Int, _ y: Int) -> Bool { x >= 0 && x < width && y >= 0 && y < height && solid[y][x] }
+        let macWidth = width * 2, macHeight = height * 2, tile = Self.textureSize
+        var pixels = [UInt8](repeating: 0, count: macWidth * macHeight * 4)
+        for macY in 0..<macHeight {
+            let y = macY / 2
+            for macX in 0..<macWidth {
+                let x = macX / 2
+                guard solid[y][x] else { continue }
+                var edge: [UInt8]?
+                if y < groundY {
+                    if macY % 2 == 0 && !isSolid(x, y - 1) { edge = Self.lightEdge }
+                    if macY % 2 == 1 && !isSolid(x, y + 1) { edge = Self.darkEdge }
+                    if macX % 2 == 1 && !isSolid(x + 1, y) { edge = Self.darkEdge }
+                }
+                let offset = (macY * macWidth + macX) * 4
+                let source = ((macY % tile) * tile + macX % tile) * 4
+                for channel in 0..<4 { pixels[offset + channel] = edge?[channel] ?? texture[source + channel] }
+            }
+        }
+        return Self.image(rgba: Data(pixels), width: macWidth, height: macHeight)
+    }
+
+    private func drawGrass(in context: CGContext) {
+        for tuft in Self.tufts {
+            guard let grass = sprite(bank: Self.groundsBank, index: tuft.piece) else { continue }
+            // No grass across the exit.
+            let x = CGFloat(tuft.x)
+            if x + CGFloat(grass.frame.width) / 2 > Self.exit.x + 8 && x < Self.exit.x + 42 { continue }
+            draw(grass, at: CGPoint(x: x, y: CGFloat(DeskClockSimulation.groundY) - CGFloat(grass.frame.height) / 2 + 1),
+                 in: context)
+        }
+    }
+
+    private func drawLemming(_ lemming: DeskClockLemming, in context: CGContext) {
+        let pose: ClassicLemmingPose, tick: Int, footOffset: Int
+        var y = lemming.y
+        switch lemming.state {
+        case .walk: (pose, tick, footOffset) = (.walking, lemming.tick, -10)
+        case .fall:
             if let umbrella = lemming.umbrellaTick {
-                pose = umbrella < 4 ? .umbrellaOpening : .floating
-                tick = umbrella < 4 ? umbrella : umbrella - 4
-                offset = -16
+                (pose, tick, footOffset) = (umbrella < 4 ? .umbrellaOpening : .floating, umbrella, -16)
             } else {
-                switch lemming.state {
-                case .walk: pose = .walking; offset = -10
-                case .fall: pose = .falling; offset = -10
-                case .descend: pose = .floating; offset = -16
-                case .block: pose = .blocking; offset = -10
-                case .exit: pose = .exiting; offset = -10
-                case .dig: pose = .digging; offset = -12
-                case .build: pose = .building; offset = -13
-                case .ohNo: pose = .ohNo; offset = -10
-                }
+                (pose, tick, footOffset) = (.falling, lemming.tick, -10)
             }
-            let index = ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: lemming.facingLeft, tick: tick)
-            if let frame = artwork.frame(1400, index) {
-                draw(1400, index, at: CGPoint(x: (lemming.x - 8) * 2 + frame.x,
-                    y: (lemming.y + offset) * 2 + frame.y), context: context)
+        case .descend: (pose, tick, footOffset) = (.floating, lemming.tick, -16)
+        case .block: (pose, tick, footOffset) = (.blocking, lemming.tick, -10)
+        case .exit: (pose, tick, footOffset) = (.exiting, min(7, lemming.tick), -13)
+        case .dig:
+            (pose, tick, footOffset) = (.digging, lemming.tick, -12)
+            y += 2
+        case .build: (pose, tick, footOffset) = (.building, lemming.tick, -13)
+        case .ohNo: (pose, tick, footOffset) = (.ohNo, min(15, lemming.tick), -10)
+        }
+        let left = lemming.facingLeft && ![.block, .exit, .ohNo].contains(lemming.state)
+        let index = ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: left, tick: tick)
+        drawSprite(bank: Self.lemmingsBank, index: index,
+                   at: CGPoint(x: lemming.x - 8, y: y + footOffset), in: context)
+    }
+
+    private func dateLine(_ now: Date, calendar: Calendar) -> String {
+        if dates?.calendar != calendar {
+            let formatter = DateFormatter()
+            formatter.calendar = calendar
+            formatter.locale = calendar.locale ?? .current
+            formatter.timeZone = calendar.timeZone
+            formatter.dateFormat = "EEE d MMM"
+            dates = (calendar, formatter)
+        }
+        guard let formatter = dates?.formatter else { return "" }
+        return formatter.string(from: now).uppercased(with: formatter.locale)
+    }
+
+    // MARK: - Sprites and text
+
+    /// Monospaced Mac text. Cells are half the font's Mac cell, so Charset1 is 6 classic px and Charset2 is 8.
+    private func text(_ string: String, x: CGFloat, y: CGFloat, font face: ClassicMacUserInterface.Face, align: Align,
+                      tint: UInt32?, in context: CGContext) {
+        let font = face == .small ? small : large
+        let cell = CGFloat(font.cellWidth) / 2
+        let width = CGFloat(string.count) * cell
+        var pen: CGFloat
+        switch align {
+        case .left: pen = x
+        case .center: pen = (x - width / 2).rounded()
+        case .right: pen = x - width
+        }
+        for character in string {
+            let glyph = font.glyph(for: character) ?? (character == " " ? nil : font.glyph(for: "?"))
+            if let glyph, let sprite = cached(Key(source: "\(face.rawValue):\(character)", tint: tint), frame: glyph) {
+                draw(sprite, at: CGPoint(x: pen, y: y), in: context)
             }
-            if let fuse = lemming.fuse {
-                let count = max(1, min(5, Int(ceil(fuse.timeIntervalSince(now)))))
-                text(String(count), in: CGRect(x: lemming.x * 2 - 12, y: lemming.y * 2 - 44, width: 24, height: 20), context: context)
+            pen += cell
+        }
+    }
+
+    private func drawSprite(bank: Int, index: Int, at point: CGPoint, in context: CGContext) {
+        if let sprite = sprite(bank: bank, index: index) { draw(sprite, at: point, in: context) }
+    }
+
+    private func draw(_ sprite: Sprite, at point: CGPoint, in context: CGContext) {
+        let frame = sprite.frame
+        GameStoneArt.drawImage(sprite.image, in: CGRect(x: point.x + CGFloat(frame.x) / 2, y: point.y + CGFloat(frame.y) / 2,
+                                                        width: CGFloat(frame.width) / 2, height: CGFloat(frame.height) / 2),
+                               context: context)
+    }
+
+    private func sprite(bank: Int, index: Int) -> Sprite? {
+        guard let frame = artwork.frame(bank, index) else { return nil }
+        return cached(Key(source: "\(bank):\(index)", tint: nil), frame: frame)
+    }
+
+    private func cached(_ key: Key, frame: ClassicMacArtwork.Frame) -> Sprite? {
+        if let sprite = sprites[key] { return sprite }
+        var image = Self.image(rgba: frame.rgba, width: frame.width, height: frame.height)
+        if let tint = key.tint, let plain = image { image = Self.tinted(plain, colour: tint) }
+        let sprite = image.map { Sprite(image: $0, frame: frame) }
+        sprites[key] = sprite
+        return sprite
+    }
+
+    // MARK: - Pixels
+
+    private static func image(rgba: Data, width: Int, height: Int) -> CGImage? {
+        guard let provider = CGDataProvider(data: rgba as CFData) else { return nil }
+        return CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+                       bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                       bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                       provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+    }
+
+    /// The colour laid over the glyph's own pixels at 70%, as the prototype's source-atop fill does.
+    private static func tinted(_ image: CGImage, colour: UInt32) -> CGImage? {
+        guard let context = CGContext(data: nil, width: image.width, height: image.height, bitsPerComponent: 8,
+                                      bytesPerRow: image.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        let bounds = CGRect(x: 0, y: 0, width: image.width, height: image.height)
+        context.draw(image, in: bounds)
+        context.setBlendMode(.sourceAtop)
+        context.setAlpha(0.7)
+        let channel = { (shift: UInt32) in CGFloat((colour >> shift) & 0xff) / 255 }
+        context.setFillColor(CGColor(red: channel(16), green: channel(8), blue: channel(0), alpha: 1))
+        context.fill(bounds)
+        return context.makeImage()
+    }
+
+    private static func rgba(_ colour: UInt32) -> [UInt8] {
+        [UInt8((colour >> 16) & 0xff), UInt8((colour >> 8) & 0xff), UInt8(colour & 0xff), 255]
+    }
+
+    /// The first fully opaque 40 x 40 square of the rock, mirrored 2 x 2 into an 80 x 80 tile.
+    private static func tile(from rock: ClassicMacArtwork.Frame) -> [UInt8]? {
+        let side = textureSize / 2, width = rock.width, height = rock.height
+        let bytes = [UInt8](rock.rgba)
+        // Summed counts of transparent pixels, so each square is checked in constant time.
+        var holes = [Int](repeating: 0, count: (width + 1) * (height + 1))
+        for y in 0..<height {
+            for x in 0..<width {
+                let hole = bytes[(y * width + x) * 4 + 3] == 0 ? 1 : 0
+                holes[(y + 1) * (width + 1) + x + 1] = hole + holes[y * (width + 1) + x + 1]
+                    + holes[(y + 1) * (width + 1) + x] - holes[y * (width + 1) + x]
             }
         }
-        for blast in simulation.blasts {
-            draw(1400, 75, at: CGPoint(x: blast.x * 2 - 32, y: blast.y * 2 - 28), context: context)
+        func empty(_ x: Int, _ y: Int) -> Bool {
+            holes[(y + side) * (width + 1) + x + side] - holes[y * (width + 1) + x + side]
+                - holes[(y + side) * (width + 1) + x] + holes[y * (width + 1) + x] == 0
         }
-        if let event, DeskClockFace.phase(event: event, now: now) != .calm || event.start > now {
-            text(L10n.text("NEXT") + " " + event.start.formatted(date: .omitted, time: .shortened),
-                in: CGRect(x: 12, y: 148, width: 392, height: 22), context: context)
-            let title = GameTextLayout.truncated(event.title, width: 392, font: typography.font(.large), preservesCase: true)
-            text(title, in: CGRect(x: 12, y: 175, width: 392, height: 26), face: .large, context: context)
-            let blink = simulation.phase != .soon || Int(now.timeIntervalSince1970 * 2) % 2 == 0
-            if blink { text(DeskClockFace.countdown(to: event.start, now: now),
-                in: CGRect(x: 12, y: 207, width: 310, height: 22), context: context) }
-        }
-        text(L10n.text("OUT \(simulation.lemmings.count)") + "  " + L10n.text("IN \(simulation.saved)") + "  "
-            + now.formatted(.dateTime.day().month(.abbreviated)),
-            in: CGRect(x: 8, y: 274, width: 400, height: 20), context: context)
-        if nightDim && DeskClockFace.isNight(now, calendar: .current) {
-            context.setFillColor(CGColor(gray: 0, alpha: 0.5))
-            context.fill(CGRect(x: 0, y: 0, width: 416, height: 298))
-        }
-    }
-
-    /**
-     * Small widgets keep full-size bitmap labels beneath enlarged terrain digits.
-     */
-    public func drawWidget(_ simulation: DeskClockSimulation, event: DeskClockEvent?, now: Date,
-                           in context: CGContext, rect: CGRect, compact: Bool) {
-        guard compact else {
-            draw(simulation, event: event, now: now, in: context, rect: rect, nightDim: false)
-            return
-        }
-        guard let source = CGContext(data: nil, width: 416, height: 298, bitsPerComponent: 8,
-            bytesPerRow: 416 * 4, space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
-        source.translateBy(x: 0, y: 298); source.scaleBy(x: 1, y: -1)
-        draw(simulation, event: nil, now: now, in: source, rect: CGRect(x: 0, y: 0, width: 416, height: 298), nightDim: false)
-        context.saveGState()
-        defer { context.restoreGState() }
-        context.clip(to: rect)
-        context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(rect)
-        let width = max(1, rect.width - 16)
-        if let digits = source.makeImage()?.cropping(to: CGRect(x: 80, y: 62, width: 256, height: 76)) {
-            GameStoneArt.drawImage(digits, in: CGRect(x: rect.minX + 8, y: rect.minY + 12,
-                width: width, height: width * 76 / 256), context: context)
-        }
-        let title = event?.title ?? now.formatted(.dateTime.day().month(.abbreviated))
-        let fitted = GameTextLayout.truncated(title, width: width, font: typography.font(.small), preservesCase: true)
-        text(fitted, in: CGRect(x: rect.minX + 8, y: rect.midY - 12, width: width, height: 22), context: context)
-        if let event {
-            let remaining = DeskClockFace.countdown(to: event.start, now: now, compact: true)
-            let fitted = GameTextLayout.truncated(remaining, width: width, font: typography.font(.small))
-            text(fitted, in: CGRect(x: rect.minX + 8, y: rect.midY + 12, width: width, height: 22), context: context)
-        }
-        context.translateBy(x: rect.minX + 8, y: rect.maxY - 42)
-        context.scaleBy(x: 0.5, y: 0.5)
-        for x in stride(from: 0, to: Int(width * 2), by: 144) {
-            draw(1500, 3, at: CGPoint(x: x, y: 54), context: context)
-        }
-        draw(1600, 0, at: CGPoint(x: 0, y: 0), context: context)
-        draw(1400, simulation.lemmings.first?.state == .ohNo ? 337 : 0,
-             at: CGPoint(x: Int(width), y: 36), context: context)
-        draw(1600, 16, at: CGPoint(x: width * 2 - 54, y: 20), context: context)
-    }
-
-    private func terrainTile() -> CGImage? {
-        if let digitTile { return digitTile }
-        guard let frame = artwork.frame(1500, 10), let image = image(1500, 10) else { return nil }
-        let bytes = [UInt8](frame.rgba)
-        for y in stride(from: 0, through: frame.height - 10, by: 2) {
-            for x in stride(from: 0, through: frame.width - 10, by: 2) {
-                let opaque = (y..<y + 10).allSatisfy { row in
-                    (x..<x + 10).allSatisfy { column in bytes[(row * frame.width + column) * 4 + 3] == 255 }
-                }
-                if opaque {
-                    digitTile = image.cropping(to: CGRect(x: x, y: y, width: 10, height: 10))
-                    return digitTile
-                }
+        guard width > side, height > side,
+              let origin = (0..<(height - side)).lazy.flatMap({ y in (0..<(width - side)).lazy.map { (x: $0, y: y) } })
+                .first(where: { empty($0.x, $0.y) }) else { return nil }
+        var tile = [UInt8](repeating: 0, count: textureSize * textureSize * 4)
+        for y in 0..<textureSize {
+            for x in 0..<textureSize {
+                let sourceX = x < side ? x : 2 * side - 1 - x, sourceY = y < side ? y : 2 * side - 1 - y
+                let source = ((origin.y + sourceY) * width + origin.x + sourceX) * 4
+                tile.replaceSubrange((y * textureSize + x) * 4..<(y * textureSize + x) * 4 + 4,
+                                     with: bytes[source..<source + 4])
             }
         }
-        return nil
+        return tile
     }
+}
 
-    private func text(_ value: String, in rect: CGRect, face: GameMenuTypography.Face = .small, context: CGContext) {
-        typography.menuLine(value, in: rect, context: context, face: face, preservesCase: true)
-    }
+/// The prototype's Park-Miller generator with seed 7, so the stars and grass sit where the owner approved them.
+private struct PrototypeRandom {
+    private var state: Int64 = 7
 
-    private func draw(_ bank: Int, _ frame: Int, at point: CGPoint, context: CGContext) {
-        guard let image = image(bank, frame) else { return }
-        GameStoneArt.drawImage(image, in: CGRect(origin: point, size: CGSize(width: image.width, height: image.height)), context: context)
-    }
-
-    private func image(_ bank: Int, _ index: Int) -> CGImage? {
-        let key = "\(bank)-\(index)"
-        if let cached = images[key] { return cached }
-        guard let frame = artwork.frame(bank, index), let provider = CGDataProvider(data: frame.rgba as CFData),
-              let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
-                bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
-                decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
-        images[key] = image
-        return image
+    mutating func next() -> Double {
+        state = (state * 16807) % 2_147_483_647
+        return Double(state) / 2_147_483_647
     }
 }

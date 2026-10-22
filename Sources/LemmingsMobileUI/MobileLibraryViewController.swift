@@ -74,7 +74,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var viewIsVisible = false
     private var sceneIsActive = false
     private let activityObservers = MobileNotificationObserverBag()
-    override var canBecomeFirstResponder: Bool { !deskClockBlocksInput && game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
+    override var canBecomeFirstResponder: Bool { game == nil && !deskClockShown && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings2) != nil
@@ -159,6 +159,17 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var preparingLevel = false
     var preparingCloudLevel: Bool { preparingLevel }
     var game: MobileGameViewController?
+    #if os(iOS)
+    /// The Desk Clock over the menu. The library stays underneath, paused.
+    var deskClock: MobileDeskClockController?
+    #endif
+    private var deskClockShown: Bool {
+        #if os(iOS)
+        deskClock != nil
+        #else
+        false
+        #endif
+    }
     private var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
         if let list = library as? MobileFavouritesLibrary {
@@ -319,6 +330,37 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         #endif
     }
+    private var deskClockAvailable: Bool {
+        #if os(iOS)
+        true
+        #else
+        false
+        #endif
+    }
+
+    #if os(iOS)
+    func presentDeskClock(reason: DeskClockReason) {
+        // A level that is loading or showing owns the screen.
+        guard deskClock == nil, game == nil, presentedViewController == nil,
+              !preparingLevel, !learningPreparing, !shortGamesPreparing else { return }
+        let clock = MobileDeskClockController(reason: reason)
+        clock.onClose = { [weak self, weak clock] in
+            guard let self, self.deskClock === clock else { return }
+            self.deskClock = nil
+            self.libraryInput.reset()
+            self.becomeFirstResponder()
+            self.syncPages()
+        }
+        deskClock = clock
+        libraryInput.reset()
+        resignFirstResponder()
+        clock.present(in: self)
+        syncPages()
+    }
+
+    func dismissDeskClock() { deskClock?.close() }
+    #endif
+
     private func presentCloudAuthentication() {
         #if os(iOS)
         guard game == nil, presentedViewController == nil, view.window != nil, let controller = cloudAuthentication else { return }
@@ -327,6 +369,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #endif
     }
     @objc private func cloudForeground() {
+        // Calendar access may have changed in iOS Settings.
+        if route == .settingsGroup(.deskClock) { rebuild() }
         libraryCloud.requestSync()
         #if os(iOS)
         if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() }
@@ -428,7 +472,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #endif
 
     private func updateLibraryDisplayLink() {
-        let active = viewIsVisible && sceneIsActive && game == nil
+        let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
         if !active { unfold.stop() }
         let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
             && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
@@ -615,10 +659,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: resumableLearningJourney != nil || savedLevel != nil || playlists.run != nil ? MobileHomeArt.journeyMap(completed: completedJourneyLevelCount, enabled: catalogue != nil)
                     : canStartJourney ? .init("journey", L10n.text("Start journey"), enabled: catalogue != nil && journey != nil) : nil,
-                families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
-            #if os(iOS)
-            canvas.page.footer.insert(.init("deskClock", L10n.text("Desk Clock")), at: 4)
-            #endif
+                families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil,
+                deskClock: deskClockAvailable)
             canvas.preview = nil
         case .support:
             canvas.page = GameSupport.page
@@ -782,7 +824,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if deskClock != nil { MobileMusic.shared.suspend(); return }
         #endif
         MobileMusic.shared.selectProfile(settingsProfileID)
-        MobileMusic.shared.setMenu(visible: game == nil && viewIsVisible, active: sceneIsActive)
+        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible, active: sceneIsActive)
     }
 
     private func coverArtwork(_ index: Int) async -> CGImage? {
@@ -1314,6 +1356,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         stopMenuPreviews()
         let cancelledPreviews = previewDrain
         let generation = UUID(); previewGeneration = generation
+        #if os(iOS)
+        dismissDeskClock()
+        #endif
         notice = ""; preparingLevel = true; loading = true; rebuild()
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
@@ -1510,9 +1555,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             let previous = game
             if let previous { next.inheritSolution(from: previous) }
+            #if os(iOS)
+            MobileDeskClockController.attach(next, to: self, closing: deskClock)
+            #else
             addChild(next); next.view.frame = view.bounds
             next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.addSubview(next.view); next.didMove(toParent: self)
+            #endif
             game = next
             rememberHomeBackdrop(content.session, at: index)
             syncPages()

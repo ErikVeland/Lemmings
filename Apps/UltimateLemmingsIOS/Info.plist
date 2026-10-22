@@ -82,6 +82,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

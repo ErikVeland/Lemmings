@@ -72,10 +72,10 @@ public struct DeskClockSimulation: Equatable, Sendable {
     public private(set) var shownDigits = "    "
     public private(set) var hatchOpenedAt: Date
 
-    let uses24Hour: Bool
+    public let uses24Hour: Bool
     let reduceMotion: Bool
     let reduceFlashes: Bool
-    let calendar: Calendar
+    public let calendar: Calendar
     private var random: SplitMix64
     private var mask: [UInt8]
     private var jobs: [Job?] = [nil, nil, nil, nil]
@@ -176,6 +176,11 @@ public struct DeskClockSimulation: Equatable, Sendable {
         fillMask(x: x, y: y, width: width, height: height, solid: solid)
     }
 
+    /// Knocks one block out of a digit. Tests use this to start a repair job.
+    mutating func removeBlock(digit: Int, column: Int, row: Int) {
+        setBlock(digit, column: column, row: row, on: false)
+    }
+
     // MARK: - Steps
 
     private mutating func jump(to now: Date, event: DeskClockEvent?) {
@@ -198,6 +203,9 @@ public struct DeskClockSimulation: Equatable, Sendable {
         for digit in 0..<4 {
             retarget(digit, to: digits[digit], instant: true, deadline: nil)
         }
+        // Every other stored time is relative or dropped above. After a backward jump the hatch must
+        // already be open, and no blast may stay on screen for the whole jump.
+        hatchOpenedAt = min(hatchOpenedAt, now.addingTimeInterval(-1))
         blasts.removeAll()
         updatePhase(event: event, at: now)
     }
