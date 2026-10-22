@@ -49,7 +49,7 @@ below a dated migration notice.
 
 The [consolidation verification](ReleaseReadiness/RepositoryConsolidation-2026-10-21.json)
 records copied asset sizes and SHA-256 digests, the transferred issue, preserved
-refs and archived repository. All 36 existing app and music releases retain
-their assets. `v2.1.1` remains the latest app release, and the update feed is
-unchanged. No app build or gameplay test was run for these repository and
-documentation changes.
+refs and archived repository. At the 21 October migration, all 36 existing app and music releases retained
+their assets; `v2.1.1` was the latest app release and the migration left the feed
+unchanged. Later app delivery is tracked in [release scope](ReleaseScope.md).
+No app build or gameplay test was run for the repository migration itself.

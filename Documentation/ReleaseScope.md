@@ -1,12 +1,18 @@
 # Release scope
 
-The next coordinated Apple release is tracked in the
-[shared 2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md). It separates
-implemented changes, headless verification, physical acceptance and distribution.
-The consolidated 2.1.2 source cut is being prepared for Mac and the existing
-iOS/tvOS TestFlight groups. Publication receipts remain pending. The owner
-waived fresh broad test suites and a new release audit for this hotfix; focused
-change evidence and mandatory distribution checks remain explicit.
+Mac 2.1.2 build 96 is published, with verified universal full/slim downloads,
+five signed direct updates and the live update feed. iOS 2.1.2 build 19 is
+Testing in the existing group. TV build 9 is Waiting for Review in TV Private
+Beta with saved notes and automatic notifications. Its uploaded font banks are
+verified, and the local font repair is confirmed. Apple Beta Review remains the
+delivery gate. All release archives use source `48282886`.
+See the [release record](ReleaseReadiness/2.1.2-build96/README.md) and
+[shared checklist](ReleaseReadiness/2.1.2Checklist.md).
+
+The owner waived fresh broad test suites and a new release audit for this
+hotfix. Focused change evidence and mandatory distribution checks are recorded
+separately from physical-device, live-cloud and full-corpus acceptance. Replay
+and level proofing continue outside this release. Classifications remain unchanged.
 
 The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
 scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)

@@ -1,0 +1,82 @@
+{
+  "version": "2.1.2",
+  "build": 96,
+  "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+  "compiledCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+  "releaseUrl": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.1.2",
+  "platform": "universal macOS 12.3+",
+  "validation": {
+    "nativeEngineAndHeadlessUI": "retained evidence and focused change checks; fresh broad suites and release audit waived by owner",
+    "verifiedDirectDeltas": 5,
+    "rescueCertificates": 294,
+    "rescueRecords": 315,
+    "foregroundLaunch": "not run under offscreen-only instructions"
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.1.2-build96.zip",
+      "bytes": 2055710567,
+      "sha256": "9d32711508a333fc0a44ed5a1ebde0e9e8454819954969ba73928a36cc83af94",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-2.1.2-build96.zip",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-2.1.2-build96-slim.zip",
+      "bytes": 271639123,
+      "sha256": "888a45383d6b59d7266d8b38fe1a493102c306602277e74c804f10dfcd1bcd36",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-2.1.2-build96-slim.zip",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-build96-from95.delta",
+      "bytes": 40382898,
+      "sha256": "a7824d75698f608d6347e253004eb677af826ffc699538b4c848b05608be2cad",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from95.delta",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-build96-from93.delta",
+      "bytes": 2945034,
+      "sha256": "035423050b1f0d61fd64558894d9215f2e2099e0676b0ece2a6a956e9cb6ce71",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from93.delta",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-build96-from91.delta",
+      "bytes": 50934830,
+      "sha256": "8ae5de6a050cf293815af4983173c6927357d1c3ce6013fdba6861d1a53edf40",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from91.delta",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-build96-from90.delta",
+      "bytes": 51024622,
+      "sha256": "4d009fec27f1ed1612770c8570f04c3eed40f26eb3a42f5af98e29ff465d284f",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from90.delta",
+      "publicHttpsStatus": 200
+    },
+    {
+      "name": "UltimateLemmings-build96-from87.delta",
+      "bytes": 45422462,
+      "sha256": "56a9c59999394a381d67ab63b76011d83baf8c83e08bac533ea620d7de68a879",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from87.delta",
+      "publicHttpsStatus": 200
+    }
+  ],
+  "notarisation": {
+    "standard": {
+      "id": "dd2222dc-e494-43a2-9135-db0a644039d4",
+      "status": "Accepted"
+    },
+    "slim": {
+      "id": "a3183178-4c68-4409-be5e-08881b995685",
+      "status": "Accepted"
+    }
+  },
+  "appcast": {
+    "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+    "sha256": "e4d5619da32b3ee2093ee7ec62163da67051f1469181171a03d9f725642776de",
+    "remoteMainMatches": true,
+    "publicHttpsMatches": true
+  }
+}

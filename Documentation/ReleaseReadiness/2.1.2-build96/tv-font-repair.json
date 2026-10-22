@@ -1,0 +1,65 @@
+{
+  "version": "2.1.2",
+  "build": 9,
+  "reportedAreas": [
+    "main menu",
+    "gameplay"
+  ],
+  "localDeveloperBuild": {
+    "executableUUID": "4C82EFDE-4767-3E44-BAAB-33AAFB161CDD",
+    "productModifiedLocal": "2026-10-22T10:07:38+10:00",
+    "fontManifestPresentBeforeRepair": false
+  },
+  "cause": "The default Mac artwork input was a dangling link into the retired 2.1 Mac package. The shared mobile artwork copier silently accepted missing banks.",
+  "repair": {
+    "defaultArtworkRestoredToRetainedDirectory": true,
+    "gameCodeChanged": false,
+    "fonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "signatureVerified": true,
+    "installed": true,
+    "physicalFontVisibility": "owner confirmed fonts restored in main menu and gameplay",
+    "installedUTC": "2026-10-22T00:42:48.938734+00:00",
+    "launchedByAgent": false,
+    "appDataContainerRelocated": true,
+    "sharedDataContainersUnchanged": true,
+    "existingSaveInventory": {
+      "record": 3,
+      "playlist": 6,
+      "checkpoint": 1
+    },
+    "inventoryEntries": 521,
+    "inventoryEntriesPredatingRepair": 449,
+    "fullSaveContentEqualityChecked": false,
+    "physicalFontVisibilityVerifiedUTC": "2026-10-22T00:50:12.219678+00:00"
+  },
+  "prevention": {
+    "copyRejectsMissingOrIncompleteFonts": true,
+    "archiveAndExportVerifyBothFonts": true,
+    "focusedPackagingTestsPassed": 9
+  },
+  "releaseArchives": {
+    "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+    "tvosFontBanksVerified": true,
+    "iosExportFontBanksVerified": true,
+    "initialUploadStoppedForFontReport": true,
+    "uploadAcceptedByApple": false,
+    "lastUploadFailure": {
+      "message": "Account credentials have expired.",
+      "observedUTC": "2026-10-22T00:59:08.828362+00:00",
+      "stage": "finalisation after 100 percent transfer"
+    }
+  },
+  "hostRenderCheck": {
+    "fontRenders": 6,
+    "menuRenders": 1,
+    "menuTargetCentersVerified": 4,
+    "scope": "Retained Mac audit modules rendered the packaged artwork offscreen with muted audio. This is not a native TV compositing check."
+  },
+  "recordedUTC": "2026-10-22T00:34:49.653627+00:00"
+}

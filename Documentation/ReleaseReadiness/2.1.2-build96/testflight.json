@@ -1,0 +1,103 @@
+{
+  "version": "2.1.2",
+  "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+  "ios": {
+    "version": "2.1.2",
+    "build": 19,
+    "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+    "gitCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+    "ipaSHA256": "7dd2a9cd26bd513c54c6cb99bb63d8fd0294f598a72f108b50036a9f658de557",
+    "symbolUUIDs": [
+      [
+        "B3891EBD-F525-3CB9-A28A-DCD35D8EE538",
+        "arm64"
+      ]
+    ],
+    "archiveSigned": true,
+    "exportSignatureVerified": true,
+    "uploaded": true,
+    "uploadFinishedUTC": "2026-10-21T14:31:55.800149+00:00",
+    "TestFlightStatus": "Testing",
+    "automaticTesterNotifications": true,
+    "testNotesSaved": true,
+    "musicScope": "main",
+    "minimumOS": "16.0",
+    "appID": "6822112090",
+    "buildID": "a180bf28-f4ef-4177-88d2-e9ddfac2e4a9",
+    "status": "Testing",
+    "group": "iOS Private Beta",
+    "groupID": "7cc0d55f-1757-4799-ba5a-4757a1267ad0",
+    "notesSaved": true,
+    "verifiedUTC": "2026-10-21T23:43:43.559Z"
+  },
+  "tvos": {
+    "version": "2.1.2",
+    "build": 9,
+    "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+    "gitCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+    "ipaSHA256": "34ac6c588b0745b86ca8d469a7f6ef817a7ef3bf3ffb6a1c0eafbbd9a29ee616",
+    "symbols": [
+      {
+        "bundle": "UltimateLemmingsTV.app",
+        "uuids": [
+          [
+            "B1885394-FA25-3CAB-AADB-AADAD6E099D7",
+            "arm64"
+          ]
+        ]
+      },
+      {
+        "bundle": "TopShelf.appex",
+        "uuids": [
+          [
+            "48BB21CF-7BD7-3981-94E0-76F21944689D",
+            "arm64"
+          ]
+        ]
+      }
+    ],
+    "archiveVerified": true,
+    "exportVerified": true,
+    "uploaded": true,
+    "musicScope": "full",
+    "appID": "6810873426",
+    "status": "Waiting for Review",
+    "group": "TV Private Beta",
+    "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
+    "fontBanksVerified": true,
+    "localFontRepairInstalled": true,
+    "physicalFontVisibility": "owner confirmed restored in main menu and gameplay",
+    "TestFlightStatus": "Waiting for Review",
+    "uploadFinishedUTC": "2026-10-22T01:35:48.408086+00:00",
+    "resolvedUploadFailures": [
+      {
+        "message": "Account credentials have expired.",
+        "observedUTC": "2026-10-22T00:59:08.828362+00:00",
+        "stage": "finalisation after 100 percent transfer"
+      }
+    ],
+    "uploadAuthentication": "fresh Xcode sign-in completed by owner",
+    "uploadedIPABytes": 1976801468,
+    "uploadedIPASHA256": "4abda8793333ab23c27feb8535469e2fefeb08484652901fce9d34fd09f5df4f",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "archiveManifestMatches": true,
+    "buildID": "24574c30-e9d0-4e39-b2ef-6feca1735322",
+    "notesSaved": true,
+    "testNotesSaved": true,
+    "notesLanguage": "English (U.K.)",
+    "automaticTesterNotifications": true,
+    "betaReviewSubmitted": true,
+    "betaReviewSubmittedUTC": "2026-10-22T01:52:14.711131+00:00",
+    "verifiedUTC": "2026-10-22T01:52:14.711131+00:00",
+    "groupAssigned": true,
+    "agentSubmissionActionsComplete": true,
+    "remainingDeliveryGate": "Apple Beta Review"
+  },
+  "exportRetention": "Local export hashes identify validated IPAs. Redundant TV IPA and iOS archive product were retired for temporary storage; signed TV archive, all dSYMs and verification receipts remain. Upload re-exports the same signed archive."
+}

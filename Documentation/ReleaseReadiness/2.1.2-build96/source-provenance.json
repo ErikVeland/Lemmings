@@ -1,0 +1,29 @@
+{
+  "version": "2.1.2",
+  "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+  "compiledCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
+  "builds": {
+    "macOS": 96,
+    "iOS": 19,
+    "tvOS": 9
+  },
+  "productSource": "One frozen managed checkout; committed and pushed before publication.",
+  "sourceManifest": "../2.1.2Preparation-2026-10-21/consolidated-source.json",
+  "retainedEngineEvidence": "../2.1.2Preparation-2026-10-21/simulation-source-equivalence.json",
+  "testPolicy": "Owner waived fresh broad test suites and a new release audit. Focused source-scoped change evidence and mandatory distribution checks were retained.",
+  "directDeltaComparison": {
+    "filesAndLinks": 18567,
+    "fields": [
+      "file SHA256",
+      "symlink destination",
+      "file permissions"
+    ],
+    "expectedManifestSHA256": "96634a9bb0de76a911d26ee1eb3fab877047e836e1befa89e388091658be76ac"
+  },
+  "supersededCandidate": {
+    "sourceCommit": "2c632f6428ee52e3f7bd0fcab42927bad1b8a08c",
+    "uploadedOrPublished": false,
+    "reason": "Rebuilt to include completed copy, assessment, Duo and documentation changes."
+  },
+  "distributionRetry": "Temporary storage contention interrupted the first update/TV upload attempts. Retried sequentially; no published asset was replaced."
+}
