@@ -61,11 +61,18 @@
     "uploaded": false,
     "musicScope": "full",
     "appID": "6810873426",
-    "status": "upload held during local TV font repair",
+    "status": "upload finalisation rejected: expired Xcode upload session",
     "group": "TV Private Beta",
     "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
     "fontBanksVerified": true,
-    "deliveryHold": "Local developer-installed build 9 omitted artwork through a dangling input. The separate signed release archive contains complete fonts. Upload stopped before completion pending local repair and visibility confirmation."
+    "localFontRepairInstalled": true,
+    "physicalFontVisibility": "owner confirmed restored in main menu and gameplay",
+    "TestFlightStatus": "not uploaded",
+    "lastUploadFailure": {
+      "message": "Account credentials have expired.",
+      "observedUTC": "2026-10-22T00:59:08.828362+00:00",
+      "stage": "finalisation after 100 percent transfer"
+    }
   },
   "exportRetention": "Local export hashes identify validated IPAs. Redundant TV IPA and iOS archive product were retired for temporary storage; signed TV archive, all dSYMs and verification receipts remain. Upload re-exports the same signed archive."
 }

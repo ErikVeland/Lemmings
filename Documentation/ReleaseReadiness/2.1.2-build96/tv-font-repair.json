@@ -22,8 +22,21 @@
       }
     },
     "signatureVerified": true,
-    "installed": false,
-    "physicalFontVisibility": "pending owner confirmation"
+    "installed": true,
+    "physicalFontVisibility": "owner confirmed fonts restored in main menu and gameplay",
+    "installedUTC": "2026-10-22T00:42:48.938734+00:00",
+    "launchedByAgent": false,
+    "appDataContainerRelocated": true,
+    "sharedDataContainersUnchanged": true,
+    "existingSaveInventory": {
+      "record": 3,
+      "playlist": 6,
+      "checkpoint": 1
+    },
+    "inventoryEntries": 521,
+    "inventoryEntriesPredatingRepair": 449,
+    "fullSaveContentEqualityChecked": false,
+    "physicalFontVisibilityVerifiedUTC": "2026-10-22T00:50:12.219678+00:00"
   },
   "prevention": {
     "copyRejectsMissingOrIncompleteFonts": true,
@@ -34,7 +47,13 @@
     "sourceCommit": "48282886baf4c78217e62c90a935d8aecf74b843",
     "tvosFontBanksVerified": true,
     "iosExportFontBanksVerified": true,
-    "TVUploadStoppedBeforeCompletion": true
+    "initialUploadStoppedForFontReport": true,
+    "uploadAcceptedByApple": false,
+    "lastUploadFailure": {
+      "message": "Account credentials have expired.",
+      "observedUTC": "2026-10-22T00:59:08.828362+00:00",
+      "stage": "finalisation after 100 percent transfer"
+    }
   },
   "hostRenderCheck": {
     "fontRenders": 6,
