@@ -27,7 +27,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #endif
     #if os(iOS)
     var deskClockBlocksInput: Bool { deskClock != nil }
-    let deskClockActivity = DeskClockActivity()
+    let deskClockEntry = DeskClockAutomaticEntry()
     nonisolated(unsafe) private var deskClockTimer: Timer?
     #else
     var deskClockBlocksInput: Bool { false }
@@ -224,7 +224,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #if os(iOS)
         UIDevice.current.isBatteryMonitoringEnabled = true
         let activity = UITapGestureRecognizer()
-        activity.delegate = deskClockActivity
+        activity.delegate = deskClockEntry
         activity.cancelsTouchesInView = false
         view.addGestureRecognizer(activity)
         deskClockTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
@@ -346,7 +346,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         clock.onClose = { [weak self, weak clock] in
             guard let self, self.deskClock === clock else { return }
             self.deskClock = nil
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.deskClockEntry.noteInput()
             self.libraryInput.reset()
             self.becomeFirstResponder()
             self.syncPages()
@@ -359,6 +359,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func dismissDeskClock() { deskClock?.close() }
+
+    /// Runs every 5 s. A shown automatic clock is also checked on each layout change.
+    private func checkDeskClock() {
+        guard deskClock != nil || (viewIsVisible && sceneIsActive) else { return }
+        deskClockEntry.check(self)
+    }
     #endif
 
     private func presentCloudAuthentication() {
@@ -412,7 +418,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
                     self.sceneIsActive = name == UIScene.didActivateNotification
                     #if os(iOS)
-                    self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+                    self.deskClockEntry.noteInput()
                     #endif
                     self.libraryInput.reset()
                     self.syncPages()
@@ -426,33 +432,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             })
         }
     }
-
-    #if os(iOS)
-    private func checkDeskClock() {
-        let regions = MobileSystemRegions.read(in: view)
-        let charging = UIDevice.current.batteryState == .charging || UIDevice.current.batteryState == .full
-        let idle = ProcessInfo.processInfo.systemUptime - deskClockActivity.lastInput
-        let menu = viewIsVisible && sceneIsActive && game == nil && presentedViewController == nil
-            && !preparingLevel && !scrollView.isTracking && !scrollView.isDecelerating
-            && route == .home && !searchField.isFirstResponder
-        let safe = view.safeAreaLayoutGuide.layoutFrame
-        let trigger = DeskClockTrigger.evaluate(.init(foldable: MobileSystemRegions.isFoldable(in: view),
-            regions: regions, safe: .init(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
-            idle: idle, charging: charging, screen: menu ? .menu : .modal, settings: mobileSettings.deskClock))
-        if let deskClock, deskClock.reason.isAutomatic {
-            if (deskClock.reason == .stacked && trigger != .stacked)
-                || (deskClock.reason == .closedCharging && trigger != .closedCharging) {
-                deskClock.close()
-            }
-            return
-        }
-        switch trigger {
-        case .stacked: presentDeskClock(reason: .stacked)
-        case .closedCharging: presentDeskClock(reason: .closedCharging)
-        case .none: break
-        }
-    }
-    #endif
 
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
@@ -486,6 +465,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        #if os(iOS)
+        if deskClock != nil { checkDeskClock() }
+        #endif
         let expanded = previousSize.width > 0 && view.bounds.width > previousSize.width * 1.25
         let division = MobileSystemRegions.read(in: view).contains { $0.kind == .division && $0.frame.height > $0.frame.width }
         if previousSize != view.bounds.size {
@@ -1560,5 +1542,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             else { notice = error.localizedDescription; rebuild() }
         }
     }
+}
+#endif
+
+#if os(iOS)
+extension MobileLibraryViewController: DeskClockHost {
+    /// Only Home counts as the menu. A level, a sheet, a loading level, a moving scroll view or an active
+    /// text field blocks the clock.
+    var deskClockScreen: DeskClockScreen {
+        DeskClockAutomaticEntry.screen(game: game?.deskClockScreen, home: route == .home,
+            textEditing: searchField.isFirstResponder || mobileInsights.field?.isFirstResponder == true
+                || familiarNames.field?.isFirstResponder == true,
+            blocked: presentedViewController != nil || preparingLevel || learningPreparing || shortGamesPreparing
+                || scrollView.isTracking || scrollView.isDecelerating)
+    }
+    var deskClockSettings: DeskClockSettings { mobileSettings.deskClock }
+    var deskClockRegionView: UIView { view }
 }
 #endif

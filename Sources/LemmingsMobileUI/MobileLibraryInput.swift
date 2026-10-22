@@ -19,7 +19,7 @@ extension MobileLibraryViewController {
         adapter.onMenuMove = { [weak self] delta in
             guard let self else { return }
             #if os(iOS)
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.deskClockEntry.noteInput()
             #endif
             if self.browserShown { self.selectLevel(max(0, min((self.library?.levels.count ?? 1) - 1, self.selectedIndex + delta))) }
             else { self.canvas.moveFocus(delta) }
@@ -27,7 +27,7 @@ extension MobileLibraryViewController {
         adapter.onMenuActivate = { [weak self] in
             guard let self else { return }
             #if os(iOS)
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.deskClockEntry.noteInput()
             #endif
             if self.browserShown { self.startLevel(self.selectedIndex, checkpoint: nil) }
             else { self.canvas.activateFocused() }
@@ -36,14 +36,14 @@ extension MobileLibraryViewController {
         adapter.onMenuScroll = { [weak self] delta in
             guard let self else { return }
             #if os(iOS)
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.deskClockEntry.noteInput()
             #endif
             self.canvas.scrollInput(delta: delta)
         }
         adapter.onMenuBack = { [weak self] in
             guard let self else { return }
             #if os(iOS)
-            self.deskClockActivity.lastInput = ProcessInfo.processInfo.systemUptime
+            self.deskClockEntry.noteInput()
             #endif
             if self.browserShown { self.navigate(self.levelsBackRoute) }
             else { self.canvas.goBack() }
