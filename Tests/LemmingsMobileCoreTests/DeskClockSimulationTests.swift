@@ -279,9 +279,48 @@ struct DeskClockSimulationTests {
         #expect(simulation.lemmings.map(\.id) == walkers)
     }
 
+    @Test func backwardJumpKeepsTheHatchOpen() {
+        var simulation = simulation(at: date(12, 34))
+        run(&simulation, from: date(12, 34), to: date(12, 34, second: 30))
+        simulation.advance(to: date(11, 34, second: 30), event: nil)
+        #expect(simulation.shownDigits == "1134")
+        #expect(simulation.hatchOpenedAt <= date(11, 34, second: 29))
+        let before = simulation.spawned
+        run(&simulation, from: date(11, 34, second: 30), to: date(11, 34, second: 38))
+        #expect(simulation.spawned > before)
+
+        var (nuked, _, event) = nukeSetUp()
+        run(&nuked, from: date(12, 39, second: 50), to: date(12, 40, second: 0.3), event: event)
+        #expect(!nuked.blasts.isEmpty)
+        nuked.advance(to: date(11, 40, second: 0.3), event: event)
+        #expect(nuked.blasts.isEmpty)
+        run(&nuked, from: date(11, 40, second: 0.3), to: date(11, 40, second: 8.3), event: event)
+        #expect(nuked.blasts.isEmpty)
+    }
+
     @Test func busyWorkerFinishesBeforeNextJob() {
         var simulation = simulation(at: date(12, 34, second: 30))
-        run(&simulation, from: date(12, 34, second: 30), to: date(12, 35))
+        run(&simulation, from: date(12, 34, second: 30), to: date(12, 34, second: 49.5))
+        // Row 3 column 0 is in both `4` and `5`. A repair worker comes for it at once.
+        simulation.removeBlock(digit: 3, column: 0, row: 3)
+        simulation.advance(to: date(12, 34, second: 49.5 + 1.0 / 30), event: nil)
+        let repairer = workers(simulation).first { $0.workerDigit == 3 }?.id
+        #expect(repairer != nil)
+        // The minute job for 4 → 5 is due before the repair worker reaches the hole.
+        var interrupted = false
+        run(&simulation, from: date(12, 34, second: 49.5 + 1.0 / 30), to: date(12, 35)) { simulation, _ in
+            guard !interrupted, let repairer,
+                  let next = workers(simulation).first(where: { $0.workerDigit == 3 }), next.id != repairer else { return }
+            interrupted = true
+            // The old job's last block landed at once, and the old worker is a walker again.
+            #expect(simulation.blocks[3][3][0])
+            let old = simulation.lemmings.first { $0.id == repairer }
+            #expect(old != nil)
+            #expect(old?.workerDigit == nil)
+            #expect(old?.state == .walk || old?.state == .fall)
+        }
+        #expect(interrupted)
+        #expect(digitsMatch(simulation, "1235"))
         simulation.advance(to: date(12, 35, second: 0.5), event: nil)
         simulation.advance(to: date(12, 36), event: nil)
         run(&simulation, from: date(12, 36), to: date(12, 36, second: 30))
