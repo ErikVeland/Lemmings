@@ -321,8 +321,13 @@ for library in sorted((contents / 'Frameworks').glob('*.dylib')):
 for framework in sorted((contents / 'Frameworks').glob('*.framework')):
     signing['sign_framework'](sys.argv[3], framework)
 PYSIGN
-  codesign --force --options runtime --timestamp --sign "$signing_identity" "$app"
+  # The hardened runtime blocks EventKit unless the app declares calendar access.
+  codesign --force --options runtime --timestamp --sign "$signing_identity" \
+    --entitlements "$project_dir/Resources/UltimateLemmings.entitlements" "$app"
   codesign --verify --deep --strict --verbose=1 "$app"
+  codesign -d --entitlements :- "$app" 2>/dev/null |
+    grep -q 'com.apple.security.personal-information.calendars' ||
+    fail "The calendar entitlement is missing from $app. The Desk Clock cannot show the next event."
 }
 
 package_app() {
@@ -475,6 +480,9 @@ codesign --verify --deep --strict --verbose=1 "$game_center_app"
 codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
   grep -q 'com.apple.developer.game-center' ||
   fail "Game Center entitlement is missing from the Game Center target."
+codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
+  grep -q 'com.apple.security.personal-information.calendars' ||
+  fail "The calendar entitlement is missing from the Game Center target."
 launch_check "$game_center_app" ||
   fail "The Game Center target did not launch cleanly."
 package_app "$game_center_app" "$game_center_zip"

@@ -13,6 +13,7 @@ import tempfile
 
 BUNDLE_ID = 'academy.glasscode.lemmings'
 CAPABILITIES = ('com.apple.developer.game-center', 'com.apple.developer.spatial-audio.profile-access')
+CALENDARS = 'com.apple.security.personal-information.calendars'
 CLOUD_CONTAINER = 'iCloud.academy.glasscode.lemmings'
 CLOUD_KEYS = ('com.apple.developer.icloud-container-identifiers', 'com.apple.developer.ubiquity-container-identifiers')
 
@@ -120,6 +121,8 @@ def main():
         return
     # Only request app capabilities and the identifiers authorised by this profile.
     entitlements = {key: True for key in CAPABILITIES}
+    # The hardened runtime blocks EventKit unless the app declares calendar access.
+    entitlements[CALENDARS] = True
     if cloud_enabled:
         entitlements['com.apple.developer.icloud-services'] = ['CloudDocuments']
         for key in CLOUD_KEYS:
@@ -157,7 +160,7 @@ def main():
     require_one_team(args.app)
     signed = subprocess.run(['codesign', '-d', '--entitlements', ':-', str(args.app)], capture_output=True, check=True)
     actual = plistlib.loads(signed.stdout)
-    if not all(actual.get(key) is True for key in CAPABILITIES):
+    if not all(actual.get(key) is True for key in (*CAPABILITIES, CALENDARS)):
         raise SystemExit('The finished signature is missing a required capability.')
     if cloud_enabled and ('CloudDocuments' not in actual.get('com.apple.developer.icloud-services', [])
                           or any(actual.get(key) != [CLOUD_CONTAINER] for key in CLOUD_KEYS)):
