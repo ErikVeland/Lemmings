@@ -138,6 +138,7 @@ typealias MobileGameControllerBase = UIViewController
     var lifecycle = MobileLifecycleState()
     private weak var owningScene: UIWindowScene?
     var clock: MobileTickClock
+    private var resumeFramePending = false
     nonisolated(unsafe) private var displayLink: CADisplayLink?
     private var viewIsVisible = false
     private var displayUpdatesSuspended = false
@@ -600,6 +601,16 @@ typealias MobileGameControllerBase = UIViewController
                 gpuSeconds: MobileDevicePerformance.gpuFrameCost,
                 active: !paused && !countdown.isActive && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
             if framePacing.framesPerSecond != appliedFrameRate { updatePerformanceBudget() }
+            if resumeFramePending {
+                resumeFramePending = false
+                // Include deferred controller draws and layout before restarting simulation time.
+                view.layoutIfNeeded()
+                if !paused, overlay.isHidden, !countdown.isActive {
+                    clock.resume(at: CACurrentMediaTime())
+                } else {
+                    clock.suspend()
+                }
+            }
         }
         pollingController = true
         playfieldView.deferFrameUpdates = true
@@ -661,6 +672,8 @@ typealias MobileGameControllerBase = UIViewController
             updateHUD()
         }
         guard !paused, overlay.isHidden, !snapshot.isComplete else { return }
+        // Present the frozen tick before counting time toward the next simulation step.
+        guard !resumeFramePending else { return }
         let ticks = clock.advance(at: link.timestamp)
         guard ticks > 0 else { return }
         let deadline = frameStarted + min(0.012, 0.6 / Double(max(1, appliedFrameRate)))
@@ -1299,6 +1312,7 @@ typealias MobileGameControllerBase = UIViewController
         if !needsLifecycleResume { resumeAudio() }
         session.resumeFromCurrentTick()
         clock.suspend()
+        resumeFramePending = true
         playfieldView.cancelInteraction()
         overlay.isHidden = true
         layoutSolutionSelector()

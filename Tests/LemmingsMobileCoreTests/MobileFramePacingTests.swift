@@ -2,6 +2,26 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileFramePacingTests {
+    @Test func resumeDiscardsPresentationWorkAndStaleDisplayCallbacksForEveryEngine() {
+        for rate in [17.0, 17.5, 23.0] {
+            for speed in [1.0, 2.0, 8.0] {
+                var clock = MobileTickClock(ticksPerSecond: rate, speed: speed, maximumCatchUpTicks: 24)
+                _ = clock.advance(at: 0)
+                clock.deferTicks(3)
+                clock.suspend()
+                // Resume's first frame redraws the frozen tick, taking 200 ms.
+                clock.resume(at: 100.2)
+                #expect(clock.advance(at: 100) == 0)
+                #expect(clock.advance(at: 100.1) == 0)
+                #expect(clock.advance(at: 100.2) == 0)
+                let step = 1 / (rate * speed)
+                #expect(clock.advance(at: 100.2 + step / 2) == 0)
+                #expect(clock.advance(at: 100.2 + step) == 1)
+                #expect(clock.advance(at: 100.2 + 2 * step) == 1)
+            }
+        }
+    }
+
     @Test func exhaustedFrameDefersWholeTicksWithoutLosingTime() {
         for rate in [17.0, 17.5, 23.0] {
             var clock = MobileTickClock(ticksPerSecond: rate, speed: 8, maximumCatchUpTicks: 24)

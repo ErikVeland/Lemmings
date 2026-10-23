@@ -115,45 +115,119 @@ public final class GameDeskClockArt: @unchecked Sendable {
         }
     }
 
-    /**
-     * Draws compact widget labels at their native bitmap size.
-     */
+    /// Reflows the clock scene to the widget bounds without stretching the artwork.
     public func drawWidget(_ simulation: DeskClockSimulation, event: DeskClockEvent?, now: Date,
                            in context: CGContext, rect: CGRect, compact: Bool) {
-        guard compact else {
-            draw(simulation, event: event, now: now, time: 0, in: context, rect: rect, nightDim: false)
-            return
-        }
-        guard let source = CGContext(data: nil, width: 208, height: 149, bitsPerComponent: 8,
-                                     bytesPerRow: 208 * 4, space: CGColorSpaceCreateDeviceRGB(),
-                                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
-        source.translateBy(x: 0, y: 149)
-        source.scaleBy(x: 1, y: -1)
-        draw(simulation, event: nil, now: now, time: 0, in: source, rect: CGRect(x: 0, y: 0, width: 208, height: 149),
-             nightDim: false)
-
+        guard rect.width > 0, rect.height > 0 else { return }
+        lock.lock()
+        defer { lock.unlock() }
         context.saveGState()
         defer { context.restoreGState() }
         context.clip(to: rect)
-        context.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 1))
-        context.fill(rect)
-        let width = max(1, rect.width - 16)
-        if let digits = source.makeImage()?.cropping(to: CGRect(x: 40, y: 31, width: 128, height: 38)) {
-            GameStoneArt.drawImage(digits, in: CGRect(x: rect.minX + 8, y: rect.minY + 12,
-                                                      width: width, height: width * 38 / 128), context: context)
+        context.translateBy(x: rect.minX, y: rect.minY)
+        let unit = max(1, min(rect.width / Self.sceneSize.width, rect.height / Self.sceneSize.height))
+        context.scaleBy(x: unit, y: unit)
+        context.interpolationQuality = .none
+        let width = rect.width / unit, height = rect.height / unit
+        let ground = height - 22
+        context.setFillColor(CGColor(gray: 0, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        for star in Self.stars where sin(star.phase) > -0.2 {
+            context.setFillColor(CGColor(gray: sin(star.phase) > 0.6 ? 1 : 0.4, alpha: 1))
+            context.fill(CGRect(x: CGFloat(star.x) / 208 * width,
+                                y: CGFloat(star.y) / 110 * ground, width: 0.5, height: 0.5))
         }
-        let cell = CGFloat(small.cellWidth) / 2
-        let maximum = max(1, Int(width / cell))
-        lock.lock()
-        defer { lock.unlock() }
-        let title = event?.title ?? dateLine(now, calendar: simulation.calendar)
-        let label = String(title.prefix(maximum))
-        text(label, x: rect.minX + 8, y: rect.midY - 10, font: .small, align: .left,
-             tint: Self.white, in: context)
+
+        let wide = width > height * 1.5
+        let eventHeight: CGFloat = event == nil ? 0 : (wide ? 30 : 40)
+        let digitScale = max(0.1, min((width - 24) / 128, (ground - 22 - eventHeight) / 38))
+        let digitWidth = 128 * digitScale, digitHeight = 38 * digitScale
+        let digitX = (width - digitWidth) / 2
+        let digitY = 22 + max(0, ground - 22 - eventHeight - digitHeight) * 0.35
+        if terrain?.blocks != simulation.blocks, let image = terrainImage(simulation) {
+            terrain = (simulation.blocks, image)
+        }
+        if let digits = terrain?.image.cropping(to: CGRect(x: 80, y: 62, width: 256, height: 76)) {
+            GameStoneArt.drawImage(digits, in: CGRect(x: digitX, y: digitY, width: digitWidth, height: digitHeight),
+                                   context: context)
+        }
+        drawSprite(bank: Self.objectsBank, index: Self.hatchFrame(age: now.timeIntervalSince(simulation.hatchOpenedAt)),
+                   at: CGPoint(x: digitX, y: digitY - 22), in: context)
+        for lemming in simulation.lemmings where lemming.y < 90 {
+            context.saveGState()
+            context.translateBy(x: digitX + CGFloat(lemming.x - 40) * digitScale - CGFloat(lemming.x),
+                                y: digitY + CGFloat(lemming.y - 31) * digitScale - CGFloat(lemming.y))
+            drawLemming(lemming, in: context)
+            context.restoreGState()
+        }
+
         if let event {
+            let cell = CGFloat(small.cellWidth) / 2
+            let maximum = max(1, Int((width - 24) / cell))
+            func shortened(_ title: String, to count: Int) -> String {
+                title.count > count ? String(title.prefix(max(0, count - 1))) + "." : title
+            }
             let countdown = DeskClockFace.countdown(to: event.start, now: now, compact: true)
-            text(String(countdown.prefix(maximum)), x: rect.minX + 8, y: rect.midY + 12,
-                 font: .small, align: .left, tint: Self.green, in: context)
+            let digits = Array(DeskClockFace.digits(for: event.start, uses24Hour: simulation.uses24Hour,
+                                                   calendar: simulation.calendar))
+            let clock = String(digits[0..<2]).trimmingCharacters(in: .whitespaces) + ":" + String(digits[2..<4])
+            let heading = compact ? countdown : L10n.text("NEXT") + " " + clock + "  " + countdown
+            let lineHeight: CGFloat = wide ? 8 : 20
+            let y = digitY + digitHeight + max(4, (ground - 14 - digitY - digitHeight - lineHeight) / 2)
+            if wide {
+                let prefix = L10n.text("NEXT") + " " + clock + "  "
+                let suffix = "  " + countdown
+                let title = shortened(event.title, to: max(1, maximum - prefix.count - suffix.count))
+                let x = (width - CGFloat(prefix.count + title.count + suffix.count) * cell) / 2
+                text(prefix + title, x: x, y: y, font: .small, align: .left, tint: nil, in: context)
+                text(suffix, x: x + CGFloat(prefix.count + title.count) * cell, y: y, font: .small,
+                     align: .left, tint: simulation.phase == .soon ? Self.amber : Self.green, in: context)
+            } else {
+                text(shortened(event.title, to: maximum), x: width / 2, y: y, font: .small,
+                     align: .center, tint: nil, in: context)
+                text(heading, x: width / 2, y: y + 10, font: .small,
+                     align: .center, tint: simulation.phase == .soon ? Self.amber : Self.green, in: context)
+            }
+        }
+
+        // Repeat the shipped rock and slab across the full width, with the exit at the right edge.
+        if let rock = Self.image(rgba: Data(texture), width: Self.textureSize, height: Self.textureSize) {
+            context.saveGState()
+            context.clip(to: CGRect(x: 0, y: ground, width: width, height: 22))
+            for x in stride(from: CGFloat(0), to: width, by: 40) {
+                GameStoneArt.drawImage(rock, in: CGRect(x: x, y: ground, width: 40, height: 40), context: context)
+            }
+            context.restoreGState()
+        }
+        for x in stride(from: CGFloat(-2), to: width, by: 70) {
+            drawSprite(bank: Self.groundsBank, index: 3, at: CGPoint(x: x, y: ground - 1), in: context)
+        }
+        for tuft in Self.tufts {
+            guard let grass = sprite(bank: Self.groundsBank, index: tuft.piece) else { continue }
+            let x = CGFloat(tuft.x) / 208 * width
+            guard x < width - 55, !wide || event == nil || grass.frame.height <= 24 else { continue }
+            draw(grass, at: CGPoint(x: x, y: ground - CGFloat(grass.frame.height) / 2 + 1), in: context)
+        }
+        let exit = CGPoint(x: width - 48, y: ground - 17)
+        drawSprite(bank: Self.objectsBank, index: 16, at: exit, in: context)
+        drawSprite(bank: Self.objectsBank, index: 10, at: CGPoint(x: exit.x, y: exit.y - 6), in: context)
+        for lemming in simulation.lemmings where lemming.y >= 90 {
+            context.saveGState()
+            context.translateBy(x: CGFloat(lemming.x) / 208 * width - CGFloat(lemming.x),
+                                y: ground - CGFloat(DeskClockSimulation.groundY))
+            drawLemming(lemming, in: context)
+            context.restoreGState()
+        }
+        if compact {
+            text(dateLine(now, calendar: simulation.calendar), x: width / 2, y: height - 16,
+                 font: .small, align: .center, tint: Self.green, in: context)
+        } else {
+            let out = simulation.lemmings.filter { ![.descend, .dig, .build].contains($0.state) }.count
+            text(L10n.text("OUT \(out)"), x: 12, y: height - 16, font: .small, align: .left, tint: Self.green, in: context)
+            text(L10n.text("IN \(simulation.saved)"), x: 60, y: height - 16, font: .small, align: .left,
+                 tint: Self.green, in: context)
+            text(dateLine(now, calendar: simulation.calendar), x: width - 12, y: height - 16,
+                 font: .small, align: .right, tint: Self.green, in: context)
         }
     }
 

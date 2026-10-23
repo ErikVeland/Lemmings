@@ -157,6 +157,27 @@ struct MobilePortraitHUDTests {
         #expect(layout.interface.controlFrames.last?.maxX == 797)
     }
 
+    @Test func runningPauseActsOnTouchDownWithoutResumingOnRelease() {
+        var press = MobileHUDPress(.pause)
+        #expect(press.begin(at: 0, activateOnBegin: true) == [.activate])
+        #expect(press.update(at: 0.1).isEmpty)
+        #expect(press.end(at: 0.15).isEmpty)
+        // The same button now shows Play. Holding it must keep the game paused.
+        #expect(press.begin(at: 1).isEmpty)
+        #expect(press.end(at: 1.15) == [.activate])
+    }
+
+    @Test func immediatePauseStillOpensMenuOnHoldAndStaysPausedOnCancel() {
+        var press = MobileHUDPress(.pause)
+        #expect(press.begin(at: 0, activateOnBegin: true) == [.activate])
+        #expect(press.update(at: 0.61) == [.hold])
+        #expect(press.end(at: 1).isEmpty)
+        #expect(press.begin(at: 2, activateOnBegin: true) == [.activate])
+        #expect(press.end(at: 2.1, cancelled: true).isEmpty)
+        #expect(press.begin(at: 3).isEmpty)
+        #expect(press.end(at: 4) == [.hold])
+    }
+
     @Test func pauseAndNukeHoldNeverAlsoTap() {
         for kind in [MobileHUDPress.Kind.pause, .nuke] {
             var press = MobileHUDPress(kind)

@@ -58,26 +58,43 @@ struct DeskClockArtTests {
         let art = try #require(GameDeskClockArt(directory: Self.artwork))
         let now = Date(timeIntervalSince1970: 1_792_150_200)
         let event = DeskClockEvent(start: now.addingTimeInterval(300), title: "Design review with everyone", nuke: false)
-        let sim = DeskClockSimulation.still(at: now, event: event, uses24Hour: true, calendar: Self.calendar)
-        let size = CGSize(width: 158, height: 158)
-        // The small widget: enlarged digits, then the title and the compact countdown at the font's own size.
-        let small = try Self.renderWidget(art, sim, event: event, now: now, size: size, compact: true, name: "widget-small")
-        let calm = DeskClockSimulation.still(at: now, event: nil, uses24Hour: true, calendar: Self.calendar)
-        let date = try Self.renderWidget(art, calm, event: nil, now: now, size: size, compact: true, name: "widget-small-calm")
-        func lit(_ pixels: [UInt8], rows: ClosedRange<Int>) -> Int {
-            rows.reduce(0) { total, y in total + (0..<316).filter { Self.isLit(pixels, width: 316, x: $0, y: y) }.count }
+        for (family, size, compact) in [
+            ("small", CGSize(width: 158, height: 158), true),
+            ("medium", CGSize(width: 338, height: 158), false),
+            ("large", CGSize(width: 338, height: 354), false),
+            ("mac-small", CGSize(width: 164, height: 164), true),
+            ("mac-medium", CGSize(width: 344, height: 164), false),
+            ("mac-large", CGSize(width: 344, height: 344), false)
+        ] {
+            for (state, candidate) in [
+                ("calm", Optional<DeskClockEvent>.none), ("soon", event),
+                ("start", DeskClockEvent(start: now, title: "Design review with everyone", nuke: false)),
+                ("nuke", DeskClockEvent(start: now, title: "Design review with everyone", nuke: true))
+            ] {
+                let sim = DeskClockSimulation.still(at: now, event: candidate, uses24Hour: true, calendar: Self.calendar)
+                let pixels = try Self.renderWidget(art, sim, event: candidate, now: now, size: size, compact: compact,
+                    name: "widget-\(family)-\(state)")
+                let width = Int(size.width) * 2, height = Int(size.height) * 2
+                // The scene covers the whole rectangular canvas before the system rounds its corners.
+                #expect(stride(from: 3, to: pixels.count, by: 4).allSatisfy { pixels[$0] == 255 })
+                for x in [0, 1, width - 2, width - 1] {
+                    #expect(Self.isLit(pixels, width: width, x: x, y: height - 2))
+                }
+                // Terrain digits occupy most of the width, instead of a centred scene with side gutters.
+                var left = width, right = 0
+                for y in 0..<(height * 2 / 3) {
+                    for x in 0..<width {
+                        let offset = (y * width + x) * 4
+                        let red = Int(pixels[offset]), green = Int(pixels[offset + 1]), blue = Int(pixels[offset + 2])
+                        if red > 80, red > green * 3 / 2, green > blue {
+                            left = min(left, x)
+                            right = max(right, x)
+                        }
+                    }
+                }
+                #expect(right - left > width * 2 / 3)
+            }
         }
-        // Rows in 2x pixels: enlarged digits 20-110, title 134-160, countdown 178-204, nothing between.
-        #expect(lit(small, rows: 20...110) > 5000)
-        #expect(lit(small, rows: 134...160) > 1000)
-        #expect(lit(small, rows: 178...204) > 300)
-        #expect(lit(small, rows: 112...132) == 0 && lit(small, rows: 162...176) == 0)
-        // Without an event the small widget shows the date and no countdown.
-        #expect(lit(date, rows: 134...160) > 500)
-        #expect(lit(date, rows: 178...204) == 0)
-        // The medium widget shows the whole scene.
-        _ = try Self.renderWidget(art, sim, event: event, now: now, size: CGSize(width: 338, height: 158),
-                                  compact: false, name: "widget-medium")
     }
 
     @Test(.enabled(if: hasArtwork, "The Macintosh artwork export is absent; run the Mac artwork export first."))

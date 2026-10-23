@@ -1,5 +1,34 @@
 # iOS and tvOS pause overview
 
+## Pause response and resume timing
+
+The touch HUD pauses a running attempt on touch-down. Releasing that press
+keeps it paused. Play activates on release so holding the same control can
+still open the pause menu without advancing the attempt. Fast-speed reset
+retains its existing first-press behaviour.
+
+Resume presents the frozen tick before restarting the simulation clock.
+The new clock baseline follows the first display callback's controller draws,
+HUD work and layout. Older queued display timestamps cannot move that baseline
+backward. Pending catch-up ticks and pause time are discarded. This shared
+controller path covers Classic, Lemmings 2 and Lemmings 3 on iOS and tvOS,
+including planning pauses and Resume from the menu. Ready handovers and the
+fresh-start countdown retain their existing boundaries.
+
+Validation on 23 October 2026: 23 focused clock, touch and HUD tests pass.
+Their timing cases cover all three engines' tick rates at 1×, 2× and 8×.
+Both arm64 Simulator SDK builds pass, including the final shared UI module.
+The muted, hostless UIKit suite passes 13 tests on the booted iOS Simulator.
+It checks touch-down pause, release behaviour, an unchanged hit target, distinct
+Pause/Play renders and the frozen first frame for planning and menu Resume.
+The three button renders were inspected. The first run needed corrected
+accessibility-label expectations and was stopped after Xcode stalled collecting
+its results. The corrected run completes successfully.
+Physical iPad touch response and Apple TV controller/display timing remain
+device checks.
+
+## Overview
+
 The pause menu shows the current level, attempt owner and frozen playfield.
 It groups rescue progress, population, time, controls and music in the shipped
 bitmap lettering and stone artwork. Resume remains the primary action at the

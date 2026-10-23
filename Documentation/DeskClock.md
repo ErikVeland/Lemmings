@@ -152,12 +152,20 @@ phone starts to charge. StandBy covers that case through the widget.
   Home Screen, small in StandBy, and rectangular on the Lock Screen.
 - A WidgetKit extension in the Mac app, from the same source. Families: small,
   medium and large on the desktop and in Notification Center. A tap opens the Mac app.
-- WidgetKit cannot animate. Each timeline entry is one still frame for one minute:
+- WidgetKit supports short transitions when content changes, rather than the
+  app's continuous simulation. Each timeline entry requests one still frame per minute:
   the digits, the trapdoor, the exit, and one lemming in a pose chosen from the minute.
   In the start minute of a nuke event, that lemming is in the "Oh no!" pose.
 - The timeline holds 60 entries and asks for a new timeline after them.
 - The Lock Screen family shows the time and the next event in Charset1 only.
 - The small family enlarges the terrain digits and uses compact countdowns to keep labels legible.
+- Home Screen and Mac widgets disable system content margins. The renderer
+  reflows the scene to each widget's bounds, enlarges the terrain digits and
+  repeats the ground to both edges. Sprites keep their proportions. Wide
+  widgets combine event details on one row; square widgets use two rows.
+- The image explicitly keeps its colour in accented mode. In vibrant mode,
+  its luminance supplies the opacity of a white silhouette, so desktop tinting
+  preserves the clock shapes instead of treating the opaque canvas as one tile.
 - The extension bundles a pruned copy of `MacArtwork/lemmings` with only the frames
   the clock uses. The copy keeps the manifest format, so `ClassicMacArtwork` loads
   it in the same way as the app. Calendar reads use EventKit in the extension.
@@ -217,6 +225,71 @@ The app and the widget draw with the same `GameDeskClockArt` code, so the art st
 - Add a native UI test through `Tools/UITestRunner/run.py`, offscreen and muted.
 - Render each widget family in the Simulator. Inspect the renders.
 - Add the Desk Clock rows to the Duo coverage matrix.
+
+### Mac extension startup
+
+The Mac widget must use `NSExtensionMain` as its process entry point. The
+build script passes `-Xlinker -e -Xlinker _NSExtensionMain` and retains the
+Swift widget entry in `__swift5_entry`. macOS initialises the extension host
+before it calls that Swift entry.
+
+The original 2.2 build 97 omitted this linker option. On macOS 27.2, the
+extension registered with PlugInKit but crashed in
+`_EXRunningExtension._shared` before returning its widget descriptors. The
+gallery therefore showed no Lemmings widget. Refreshing registration alone
+did not repair the crash.
+
+Local verification on 23 October 2026: rebuilt the extension for arm64,
+signed the repaired app with the existing Developer ID and installed it with
+an original-app backup. The app passed deep, strict signature verification.
+After registration, `chronod` accepted the Desk Clock descriptor and cached
+small, medium and large placeholders successfully, with no new startup
+crash reports. These checks ran in the background. The desktop gallery and
+placed-widget interaction still need manual confirmation. This repairs the
+local installation; the published 2.2 downloads retain the original binary.
+
+The later widget layout repair passed six focused artwork tests, including
+24 widget renders across iPhone and Mac sizes and four event states. Pixel
+checks cover opaque edge-to-edge output, ground at both sides and enlarged
+digits. Small, medium and large renders were inspected. The Mac extension
+build and iOS 16 SDK checks passed. The shared widget URL remains the only
+input target. The signed local Mac installation was updated and its old
+descriptor cache was purged. Physical iPhone placement, the refreshed Mac
+gallery and widget taps still need manual checks. The iPhone installation
+and public downloads have not been updated with this layout repair.
+
+### Desktop appearances
+
+The desktop can use a different rendering mode from the gallery. The original
+opaque clock bitmap became a solid rectangle under desktop tinting, even though
+the extension completed its timelines and their archived PNGs contained the
+clock. This matches Apple's description of
+[opaque images in accented rendering](https://developer.apple.com/documentation/widgetkit/optimizing-your-widget-for-accented-rendering-mode-and-liquid-glass).
+
+`ClockArtworkImage` preserves full colour in accented mode on iOS 18/macOS 15
+and later. Vibrant mode uses a white luminance mask with a transparent sky.
+Calendar privacy marking remains in place. Earlier systems retain their existing
+full-colour path where the newer image modifier is unavailable.
+
+The SwiftUI appearance audit renders three sizes in full-colour, accented and
+vibrant modes through `Tools/UITestRunner/run.py`, offscreen and muted. All nine
+renders pass. A control with the original image treatment fails the opaque-mask
+check. The artwork-only tests could not detect this host-appearance problem.
+After running `DeskClockArtTests`, run the view audit against built Mac modules:
+
+```sh
+zsh Tools/DeskClock/audit_widget_view.sh .build/local .build/desk-clock/renders .build/desk-clock/view-renders
+```
+
+The audit requires macOS 15 or later. It checks image output and opacity; the
+actual desktop composition and placed-widget taps still require manual checks.
+
+The desktop-appearance fix was signed and installed locally on 23 October 2026.
+macOS kept the old extension process alive across the app replacement, so that
+process was terminated before refreshing registration. A new process then
+successfully generated placeholders and 60-entry live timelines for all three
+sizes. The installed app passed deep, strict signature verification. Refreshing
+an existing installation must load the new process as well as the new bundle.
 
 ## Known limits
 

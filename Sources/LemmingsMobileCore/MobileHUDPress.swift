@@ -13,17 +13,20 @@ public struct MobileHUDPress: Sendable {
     private var held = false
     private var lastTapEndedAt: TimeInterval?
     private var isDoubleTap = false
+    private var activatedOnBegin = false
     public init(_ kind: Kind) { self.kind = kind }
 
-    public mutating func begin(at now: TimeInterval) -> [Effect] {
+    public mutating func begin(at now: TimeInterval, activateOnBegin: Bool = false) -> [Effect] {
         guard startedAt == nil else { return [] }
         startedAt = now; held = false; nextRepeat = now + 0.35
+        activatedOnBegin = kind == .pause && activateOnBegin
         isDoubleTap = kind == .releaseRate && lastTapEndedAt.map { now >= $0 && now - $0 <= 0.3 } == true
         lastTapEndedAt = nil
         if isDoubleTap { return [.doubleTap] }
         switch kind {
         case .rate, .releaseRate: return [.activate]
         case .speed, .rewind: return [.pedal(true, allowTap: false)]
+        case .pause: return activatedOnBegin ? [.activate] : []
         default: return []
         }
     }
@@ -55,7 +58,7 @@ public struct MobileHUDPress: Sendable {
                 + (!cancelled && now - start < GameplaySpeed.holdDelay ? [.activate] : [])
         case .rewind: return pending + [.pedal(false, allowTap: false)]
         case .rate, .releaseRate: return pending
-        default: return pending + (!cancelled && !held ? [.activate] : [])
+        default: return pending + (!cancelled && !held && !activatedOnBegin ? [.activate] : [])
         }
     }
 }

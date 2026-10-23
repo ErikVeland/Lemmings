@@ -4,6 +4,7 @@ import Testing
 import UIKit
 import GameController
 import NxlvKit
+import LemmingsGameArt
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
 
@@ -87,6 +88,53 @@ import LemmingsMobileCore
     #endif
 
     #if os(iOS)
+    @Test func pauseTargetStopsOnTouchDownAndPlayWaitsForRelease() async throws {
+        try await withGame { game in
+            game.resumePlay()
+            game.pauseForPlanning()
+            game.resumePlay()
+            let layout = MobileHUDLayout.make(container: .init(width: game.view.bounds.width, height: game.view.bounds.height),
+                safeArea: .init(), hasRate: game.session.snapshot.releaseRate != nil,
+                skillCount: game.session.snapshot.skills.count, supportsRewind: game.session.supportsRewind,
+                hasPlayer: true, engineIdentifier: game.session.engineIdentifier)
+            let target = try #require(MobileHUDRenderer.targets(layout: layout, snapshot: game.session.snapshot,
+                selectedSkill: game.selectedControl, paused: false, speed: 1, endRunArmed: false).first { $0.action == .pause })
+            let point = CGPoint(x: target.inputFrame.midX, y: target.inputFrame.midY)
+            let button = try #require(game.hud.hitTest(point, with: nil) as? UIControl)
+            #expect(button.accessibilityLabel == L10n.text("Pause, hold for pause menu"))
+            @MainActor func renderedButton(_ name: String) throws -> Data {
+                game.hud.layer.displayIfNeeded()
+                let image = UIGraphicsImageRenderer(size: target.inputFrame.size).image { context in
+                    context.cgContext.translateBy(x: -target.inputFrame.minX, y: -target.inputFrame.minY)
+                    game.hud.layer.render(in: context.cgContext)
+                }
+                let data = try #require(image.pngData())
+                if let path = ProcessInfo.processInfo.environment["LEMMINGS_PAUSE_RENDER_DIR"] {
+                    let directory = URL(fileURLWithPath: path)
+                    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                    try data.write(to: directory.appendingPathComponent(name + ".png"))
+                }
+                return data
+            }
+            let runningImage = try renderedButton("running")
+            let snapshot = game.session.snapshot
+            button.sendActions(for: .touchDown)
+            #expect(game.paused && game.session.snapshot == snapshot)
+            #expect(button.accessibilityLabel == L10n.text("Resume, hold for pause menu"))
+            let pausedImage = try renderedButton("paused")
+            #expect(pausedImage != runningImage)
+            #expect(game.hud.hitTest(point, with: nil) === button)
+            button.sendActions(for: .touchUpInside)
+            #expect(game.paused)
+            button.sendActions(for: .touchDown)
+            #expect(game.paused)
+            button.sendActions(for: .touchUpInside)
+            #expect(!game.paused && game.session.snapshot == snapshot)
+            #expect(button.accessibilityLabel == L10n.text("Pause, hold for pause menu"))
+            #expect(try renderedButton("resumed") == runningImage)
+        }
+    }
+
     @Test(arguments: [MobileTargetInput.touch, .precision])
     func releasedContactClearsAimWithoutHover(input: MobileTargetInput) async throws {
         try await withGame { game in
@@ -177,6 +225,27 @@ import LemmingsMobileCore
             game.resumePlay()
             #expect(!game.paused && !game.isDisplayLinkPaused)
             #expect(game.clock.advance(at: 1000) == 0)
+        }
+    }
+
+    @Test func firstResumeFrameRetainsTheFrozenTickAndDiscardsOldDisplayTime() async throws {
+        try await withGame { game in
+            game.viewWillAppear(false)
+            game.resumePlay()
+            game.pauseForPlanning()
+            for menu in [false, true] {
+                if menu { game.pausePlay(showControls: true) }
+                let snapshot = game.session.snapshot
+                game.resumePlay()
+                let target = MobileDisplayLinkTarget { _ in }
+                let frame = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+                game.displayFrame(frame)
+                frame.invalidate()
+                #expect(game.session.snapshot == snapshot)
+                #expect(game.clock.advance(at: frame.timestamp) == 0)
+                #expect(game.clock.advance(at: CACurrentMediaTime()) == 0)
+                game.pauseForPlanning()
+            }
         }
     }
 

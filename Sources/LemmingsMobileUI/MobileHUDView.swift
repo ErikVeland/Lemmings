@@ -177,6 +177,7 @@ import UIKit
                                           paused: paused, speed: speed, endRunArmed: endRunArmed)
         if previousActions != items.map(\.action) { rebuildButtons() }
         for (button, item) in zip(buttons, items) {
+            (button as? MobileHUDButton)?.activatesOnPress = item.action == .pause && !paused
             if case .skill = item.action, let portrait = layout.portrait {
                 if button.superview !== skillCanvas { skillCanvas.addSubview(button) }
                 button.frame = item.inputFrame.offsetBy(dx: -portrait.skills.minX, dy: -portrait.skills.minY)
@@ -491,6 +492,7 @@ import UIKit
     #endif
     var onEffect: ((MobileHUDPress.Effect) -> Void)?
     var onAccessiblePress: (() -> Void)?
+    var activatesOnPress = false
     private var press: MobileHUDPress
     private var timer: Timer?
     init(kind: MobileHUDPress.Kind) {
@@ -509,7 +511,7 @@ import UIKit
     }
     func cancelPress() { finishPress(cancelled: true) }
     private func beginPress() {
-        let effects = press.begin(at: ProcessInfo.processInfo.systemUptime)
+        let effects = press.begin(at: ProcessInfo.processInfo.systemUptime, activateOnBegin: activatesOnPress)
         timer?.invalidate()
         let timer = Timer(timeInterval: 0.04, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {

@@ -13,12 +13,14 @@ inputs=()
 for architecture in "${architectures[@]}"; do
   compatibility=()
   [[ "$architecture" == x86_64 ]] && compatibility=(-runtime-compatibility-version none)
+  # Initialise the extension host before macOS calls the Swift widget entry point.
   swiftc "${compatibility[@]}" -swift-version 6 -parse-as-library -application-extension \
     -target "$architecture-apple-macosx12.3" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$build_dir/$architecture/modules" -L "$build_dir/$architecture" \
     -lLemmingsGameArt -lLemmingsMobileCore -lLemmingsAppCore -lLemmingsTVCore -lNxlvKit \
     -framework SwiftUI -framework WidgetKit \
+    -Xlinker -e -Xlinker _NSExtensionMain \
     -Xlinker -rpath -Xlinker @executable_path/../../../../Frameworks \
     -o "$build_dir/$architecture/DeskClockMacWidget" \
     "$project_dir/Apps/DeskClockWidget/DeskClockWidget.swift"

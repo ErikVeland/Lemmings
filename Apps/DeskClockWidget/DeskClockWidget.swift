@@ -44,7 +44,7 @@ struct ClockWidgetView: View {
     var body: some View {
         GeometryReader { geometry in
             if let image = render(size: geometry.size) {
-                Image(decorative: image, scale: 1).resizable().interpolation(.none)
+                ClockArtworkImage(image: image)
                     .accessibilityLabel(label)
             }
         }
@@ -91,6 +91,39 @@ struct ClockWidgetView: View {
     }
 }
 
+struct ClockArtworkImage: View {
+    let image: CGImage
+
+    var body: some View {
+        if #available(iOS 16, macOS 13, *) {
+            AdaptiveClockArtworkImage(image: image)
+        } else {
+            Image(decorative: image, scale: 1).resizable().interpolation(.none)
+        }
+    }
+}
+
+@available(iOS 16, macOS 13, *)
+private struct AdaptiveClockArtworkImage: View {
+    let image: CGImage
+    @Environment(\.widgetRenderingMode) private var renderingMode
+
+    private var artwork: Image {
+        Image(decorative: image, scale: 1).resizable().interpolation(.none)
+    }
+
+    var body: some View {
+        if renderingMode == .vibrant {
+            // Vibrancy uses opacity as its mask. An opaque scene would become a solid tile.
+            Color.white.mask(artwork.luminanceToAlpha())
+        } else if #available(iOS 18, macOS 15, *) {
+            artwork.widgetAccentedRenderingMode(.fullColor)
+        } else {
+            artwork
+        }
+    }
+}
+
 struct ClockBackground: ViewModifier {
     @ViewBuilder func body(content: Content) -> some View {
         if #available(iOS 17, macOS 14, *) {
@@ -101,13 +134,17 @@ struct ClockBackground: ViewModifier {
     }
 }
 
-@main struct DeskClockWidget: Widget {
+#if !LEMMINGS_WIDGET_AUDIT
+@main
+#endif
+struct DeskClockWidget: Widget {
     let kind = "DeskClock"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ClockProvider()) { ClockWidgetView(entry: $0) }
             .configurationDisplayName(L10n.text("Desk Clock"))
             .description(L10n.text("Lemmings keep the time and watch for your next event."))
             .supportedFamilies(families)
+            .contentMarginsDisabled()
     }
     private var families: [WidgetFamily] {
         #if os(iOS)

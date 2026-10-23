@@ -1,5 +1,9 @@
 # Release scope
 
+Version 2.2.1 is in release preparation: Mac build 98, iOS build 21 and
+tvOS build 11. It includes the confirmed desktop widget fixes and shared mobile
+pause/resume timing changes. See the [candidate record](ReleaseReadiness/2.2.1-build98/README.md).
+
 Mac 2.2 build 97 is published, with verified universal full/slim downloads,
 five signed direct updates and the live update feed. iPhone/iPad/Duo build 20
 and Apple TV build 10 are Waiting for Review in their existing TestFlight

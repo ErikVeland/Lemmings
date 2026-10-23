@@ -181,6 +181,8 @@ public struct MobileTickClock: Equatable, Sendable {
             lastTime = time
             return 0
         }
+        // A queued display callback can predate the completed Resume frame.
+        guard time >= previous else { return 0 }
         lastTime = time
         let elapsed = min(0.25, max(0, time - previous))
         accumulator += elapsed * speed
@@ -198,6 +200,12 @@ public struct MobileTickClock: Equatable, Sendable {
     public mutating func suspend() {
         lastTime = nil
         accumulator = 0
+    }
+
+    /// Start timing after the frozen Resume frame has finished its presentation work.
+    public mutating func resume(at time: Double) {
+        suspend()
+        if time.isFinite { lastTime = time }
     }
 
     /// Retains ticks admitted by the clock when the current frame exhausts its CPU budget.
