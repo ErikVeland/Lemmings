@@ -13,6 +13,7 @@ cancellation and four exact bundled fan-level exclusions.
 | --- | ---: | --- |
 | macOS | 97 | Published; full/slim universal downloads and the signed update feed verified. |
 | iPhone/iPad/Duo | 20 | Waiting for Review in iOS Private Beta. Notes saved; automatic notifications enabled. |
+| iPhone/iPad AltStore Classic | 20 | Published source and unchanged iOS export on the canonical 2.2 release. Device re-signing and installation not run. |
 | Apple TV | 10 | Waiting for Review in TV Private Beta. Notes saved; automatic notifications enabled. |
 
 All three archives use the frozen source. Mac application and widget contain
@@ -33,7 +34,7 @@ Both Mac ZIPs passed CRC, size, signature, notarisation, stapling and Gatekeeper
 checks after extraction. Five direct updates from builds 96, 95, 93, 91 and 90
 reproduce all 18,943 files and links, including file permissions. Each patched
 bundle passes code-signature validation. The installed Ed25519 public key
-verifies the full update and all five patches. All seven public assets match
+verifies the full update and all five patches. All seven public Mac assets match
 their sizes and SHA-256 digests and respond over HTTPS. The live signed feed
 matches remote main. See the [publication](publication.json),
 [delta](delta-verification.json) and [signature](signature-verification.json) receipts.
@@ -44,6 +45,17 @@ validated export hashes. Upload separately exported each verified signed
 archive; the validated export hash is not asserted as the uploaded IPA hash.
 Browser status was retained as text. Automatic approval review rejected a
 whole-window screenshot because it included unrelated private Safari tabs.
+
+The [AltStore Classic source](../../../altstore.json) offers the same validated
+iOS export, SHA-256 `516ecbf97362a2ac5e282ae08646bfca3b29591589b383caa622f006385c9cf9`.
+The [AltStore receipt](altstore.json) checks the source metadata against the
+IPA, CRC, both bundle signatures, unencrypted arm64 executables and the union
+of app/widget entitlements and privacy descriptions. It also records public
+source, icon and IPA verification. The [driver](drivers/verify-altstore.py)
+repeats the local package checks. AltStore re-signing, installation, widget
+acceptance and access to cloud or Game Center services remain unverified.
+See the [AltStore guide](../../AltStore.md) for the stable source URL and the
+separate PAL requirements.
 
 ## Source and verification
 

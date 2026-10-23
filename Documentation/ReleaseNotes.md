@@ -10,6 +10,8 @@ in their existing TestFlight groups. Notes are saved and automatic notifications
 are enabled. Apple Beta Review determines external tester availability.
 All release archives use frozen source `a9c154af`. See
 [release scope](ReleaseScope.md) for the current boundaries.
+The same iOS 2.2 build 20 export is also published through the
+[AltStore Classic source](AltStore.md).
 
 The [2.1.2 notes](ReleaseNotes-2.1.2-build96.md) and
 [release record](ReleaseReadiness/2.1.2-build96/README.md) retain the previous delivery evidence.

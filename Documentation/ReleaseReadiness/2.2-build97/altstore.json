@@ -1,0 +1,113 @@
+{
+  "sourceCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+  "channel": "AltStore Classic",
+  "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
+  "sourceSHA256": "2982950e7aa072e49997f39216fee81256f64f329ef459d9bd2f9d170bb047a2",
+  "ipaURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-2.2-build20-ios.ipa",
+  "ipaBytes": 207228372,
+  "ipaSHA256": "516ecbf97362a2ac5e282ae08646bfca3b29591589b383caa622f006385c9cf9",
+  "bundles": [
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios",
+      "version": "2.2",
+      "build": "20",
+      "minimumOS": "16.0",
+      "deviceFamily": [
+        1,
+        2
+      ],
+      "cryptids": [
+        0
+      ],
+      "signature": "verified",
+      "entitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios",
+        "beta-reports-active": true,
+        "com.apple.developer.game-center": true,
+        "com.apple.developer.icloud-container-environment": "Production",
+        "com.apple.developer.icloud-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "com.apple.developer.icloud-services": [
+          "CloudDocuments",
+          "CloudKit"
+        ],
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "com.apple.developer.ubiquity-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "get-task-allow": false
+      }
+    },
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios.DeskClockWidget",
+      "version": "2.2",
+      "build": "20",
+      "minimumOS": "16.0",
+      "deviceFamily": [
+        1,
+        2
+      ],
+      "cryptids": [
+        0
+      ],
+      "signature": "verified",
+      "entitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios.DeskClockWidget",
+        "beta-reports-active": true,
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "get-task-allow": false
+      }
+    }
+  ],
+  "zipCRC": "passed",
+  "permissionsMatchIPA": true,
+  "privacy": {
+    "NSCalendarsFullAccessUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.",
+    "NSCalendarsUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar."
+  },
+  "deviceInstallation": "not run",
+  "iCloudAndGameCenterAfterResigning": "not verified",
+  "verifiedUTC": "2026-10-23T01:51:53.862370+00:00",
+  "publicVerification": {
+    "verifiedUTC": "2026-10-23T01:57:38.626889+00:00",
+    "source": {
+      "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
+      "httpsStatus": 200,
+      "bytes": 3158,
+      "sha256": "2982950e7aa072e49997f39216fee81256f64f329ef459d9bd2f9d170bb047a2",
+      "contentType": "text/plain; charset=utf-8"
+    },
+    "icon": {
+      "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/a9c154af8380a9371d73e66bbd6830ddfc5f6081/Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "httpsStatus": 200,
+      "bytes": 1635916,
+      "sha256": "52f957ee35182675ef4fbe240544de813adea39e874d0ebc942d147d3bc11578",
+      "contentType": "image/png"
+    },
+    "ipa": {
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-2.2-build20-ios.ipa",
+      "httpsStatus": 200,
+      "bytes": 207228372,
+      "sha256": "516ecbf97362a2ac5e282ae08646bfca3b29591589b383caa622f006385c9cf9",
+      "contentType": "application/octet-stream"
+    },
+    "macAppcast": {
+      "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+      "httpsStatus": 200,
+      "bytes": 122165,
+      "sha256": "9584cbf9d2382e86aad7d692e5af051b6c56caf3bfe00ebb027ff3f1712695e0",
+      "contentType": "text/plain; charset=utf-8"
+    },
+    "sourceMatchesRepository": true,
+    "existingSevenAssetsUnchanged": true,
+    "latestRelease": "v2.2",
+    "releaseID": 421357874,
+    "ipaAssetID": 667668527,
+    "githubAssetDigest": "sha256:516ecbf97362a2ac5e282ae08646bfca3b29591589b383caa622f006385c9cf9",
+    "releaseNotesLinkSource": true
+  },
+  "sourcePublicationCommit": "685e273d54bac19a4b9864a75cb2d1ba2f342371",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.2",
+  "specification": "https://faq.altstore.io/developers/make-a-source"
+}
