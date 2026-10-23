@@ -1,6 +1,34 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
+        <item>
+            <title>2.2</title>
+            <pubDate>Fri, 23 Oct 2026 10:29:13 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>97</sparkle:version>
+            <sparkle:shortVersionString>2.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>A little time for lemmings</h3>
+<p>Desk Clock shows the time in Classic Macintosh pixels. Lemmings rebuild the digits each minute. When you allow calendar access, the clock can show the next event and a countdown. Open it from the iPhone or iPad app, or add the widget to an iPhone, iPad or Mac. The clock stays silent and does not enter a game.</p>
+<p>On Duo, the clock can open when the app is idle in a supported pose. The app uses available screen regions to place its controls. A layout change cancels an unfinished touch gesture. Gameplay and Hot Seat Ready handovers remain under player control.</p>
+<h3>Easier to read and choose</h3>
+<p>Reading pages leave more space between paragraphs and limit the text width. Mobile settings group related choices and show checked states. Cursor style, paused inspection and Hot Seat ghost visibility now have explicit controls. Mac Desk Clock widgets join the existing desktop app.</p>
+<p>Narrow menus keep button words intact at large text sizes. Return and forward actions stack when the screen needs more room. Calendar details clear when the clock closes or the app becomes inactive. Cancelled reads cannot restore them.</p>
+<p>Bundled browsing and shuffle omit four exact fan levels with impossible rescue conditions on Mac, iPhone, iPad and Apple TV. Original archives and imported copies remain available.</p>
+<h3>What carries forward</h3>
+<p>Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta with their documented content and engine limits. The mobile Journey still plays Classic levels. The Desk Clock uses Classic Macintosh art.</p>
+<p>Mac supports Apple silicon and Intel on macOS 12.3 or later. iPhone and iPad need iOS 16 or later. Apple TV remains in the existing TestFlight channel. Physical Duo, widget gallery, calendar permission and device acceptance need checks on the signed builds. TestFlight processing and beta review determine when the mobile builds become available.</p>
+<p class="meta">Build: 97<br>Release commit: a9c154af8380a9371d73e66bbd6830ddfc5f6081<br>Release base: v2.1.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-2.2-build97.zip" length="2056573553" type="application/octet-stream" sparkle:edSignature="wGX6pt3pmW6o7NKdBEuG2JJUzpqQhNbp5IbsgoW1lylncFPSjHdUtryD29xmI3b6EDwWUXtkP35AkjcSh1+lCg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from96.delta" sparkle:deltaFrom="96" length="42672110" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="0/IUH7EUurS+l1lao7IXVL91Q0P87YyStUbsjpMkgePofs+VYtvuv7iFguTUgZBHKfWw60S4OUeMvOUhwIbKCg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from95.delta" sparkle:deltaFrom="95" length="48956050" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="GNHY5SNyqSJLibCxWeTpDkNK42uz0aF5YE7Nqf7licF5YGjxZcKsXAWuUX0jdCKcP40lrfJFb2ErxLE9c3RCCA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from93.delta" sparkle:deltaFrom="93" length="43484338" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="OuRT/EvZ5KB55vohN7R9cBDDFE7RzdFbPdqs5udG2O+iF6kXAvf66Vc/mSPAm2tIglnkds6CDdM/RA0I882rCQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from91.delta" sparkle:deltaFrom="91" length="48418214" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="H2BguXmqggkoAM5SlkTRapEssR37aTr2yPPj+dVaKCU9k0DKOtT7ulQOXxpCjkv53tj6QP4Fn/PUGQJmer7VAg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from90.delta" sparkle:deltaFrom="90" length="48495886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="8Tl1f5Gia7riUtCDnXYyxhYlEjV/+HQDr6CZh+NA/JFXEhqmngcS2UXPx8KPcAbr+YwgOUwRyBR3Js882uEjBg=="/>
+            </sparkle:deltas>
+        </item>
         <item>
             <title>2.1.2</title>
             <pubDate>Thu, 22 Oct 2026 00:37:51 +1000</pubDate>
