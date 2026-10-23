@@ -1,0 +1,5 @@
+PASS AdlibSequencer renders silence, because the driver format is undecoded
+PASS SNESAudioPlayer renders silence, because there is no SPC700 core
+PASS GenesisFMPlayer renders silence, because there is no YM2612 core
+PASS only sources with a decoder behind them are offered
+Audio matrix tests passed successfully.

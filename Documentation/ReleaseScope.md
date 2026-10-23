@@ -1,41 +1,32 @@
 # Release scope
 
-Mac 2.1.2 build 96 is published, with verified universal full/slim downloads,
-five signed direct updates and the live update feed. iOS 2.1.2 build 19 is
-Testing in the existing group. TV build 9 is Testing in TV Private Beta,
-confirmed 23 October 2026, with saved notes and automatic notifications.
-Its uploaded font banks are verified, and the local font repair is confirmed.
-Apple Beta Review and coordinated delivery are complete. All release archives
-use source `48282886`.
-See the [release record](ReleaseReadiness/2.1.2-build96/README.md) and
-[shared checklist](ReleaseReadiness/2.1.2Checklist.md).
+Mac 2.2 build 97 is published, with verified universal full/slim downloads,
+five signed direct updates and the live update feed. iPhone/iPad/Duo build 20
+and Apple TV build 10 are Waiting for Review in their existing TestFlight
+groups. Notes are saved and automatic notifications are enabled. Apple Beta
+Review determines external tester availability. All three archives use frozen
+source `a9c154af`. See the [release record](ReleaseReadiness/2.2-build97/README.md).
 
-The owner waived fresh broad test suites and a new release audit for this
-hotfix. Focused change evidence and mandatory distribution checks are recorded
-separately from physical-device, live-cloud and full-corpus acceptance. Replay
-and level proofing continue outside this release. Classifications remain unchanged.
+All 56 minor-release check commands have passing results after background
+reruns and test-fixture corrections. Automated windows stayed offscreen and
+audio stayed muted. Foreground focus, launch and actual updater relaunch were
+not run. Physical-device, live-cloud and full-corpus acceptance retain their
+recorded limits. Later mobile pause/HUD work is outside this frozen release.
 
 The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
 scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)
 for the combined runtime and replay identities.
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-As of 21 October 2026, the published Mac release is 2.1.1 build 95. Both
-universal archives passed signing, notarisation, stapling and Gatekeeper.
-Five direct updates passed exact tree and signature checks. Public assets and
-the live signed feed match the recorded hashes. See the
-[2.1.1 release record](ReleaseReadiness/2.1.1-build95/README.md).
+The [2.1.2 release record](ReleaseReadiness/2.1.2-build96/README.md) and
+[2.1.1 release record](ReleaseReadiness/2.1.1-build95/README.md) retain their
+earlier package and delivery evidence.
 
-The [2.1.1 notes](ReleaseNotes-2.1.1-build95.md) cover Journey progress recovery,
-automatic worldwide rankings and the latest merged runtime and menu changes.
 The current Classic and The Tribes Complete classifications and Chronicles
-and NeoLemmix Beta classifications remain unchanged. Fresh rescue checks retain
+and NeoLemmix Beta classifications remain unchanged. Retained rescue evidence has
 294 certificates and 315 records across 615 configurations; six remain unknown.
-Human, foreground and device acceptance limits remain explicit.
-iOS 2.1.1 build 18 is Testing. tvOS 2.1.1 build 8 is
-Waiting for Review. Both were uploaded to their existing TestFlight
-groups with automatic notifications enabled. These uploads do not establish
-physical-device acceptance or close engine-fidelity gaps.
+The 2.2 fingerprint migration checked source equivalence and all 609 witness
+hashes; it adds no winning route. Human and device acceptance limits remain explicit.
 
 The previous [2.1 release record](ReleaseReadiness/2.1-build93/README.md)
 retains its publication and validation evidence.
@@ -51,10 +42,6 @@ source-behaviour evidence for its advertised rules. See the [content roadmap](Co
 Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
-
-Macintosh 2.1.1 build 95 retains the published classifications and known limits.
-Its publication record documents the signed update deltas. Existing engine
-closure evidence and open limits remain in force.
 
 ## Current bundled route counts
 

@@ -2525,7 +2525,7 @@ extension AppDelegate {
     let sharedRun = arcadeRunID, sharedID = store.hotSeatID
     returnToLibrary()
     try check(menuRecovery?.runID == sharedRun && menuRecovery?.tick == 0
-      && playfield.overlayLines.first == "RESUME - " + store.sessionProfiles.map(\.initials).joined(separator: " v "),
+      && playfield.overlayLines.first == L10n.text("RESUME JOURNEY - \(store.sessionProfiles.map(\.initials).joined(separator: " v "))"),
       "Fresh Hot Seat attempt was lost or Resume omitted its roster")
     advancePhase()
     try check(arcadeRunID == sharedRun && arcadeProfileID == guest.id && arcadeHotSeatID == sharedID && session?.currentTick == 0 && isPaused,
@@ -2982,7 +2982,9 @@ extension AppDelegate {
     for face in ClassicMacUserInterface.Face.allCases {
       let font = renderer.font(face)!
       let text = "OUT 100 HOME 10 TIME 02:45 !?<-+>"
-      for scale in [1, 2] {
+      // The line cache uses the source face. At 2x and 4x, the renderer uses
+      // the authored display/countdown faces instead of scaled source glyphs.
+      for scale in [1, 3] {
         let size = CGSize(width: font.width(of: text, scale: scale) + 20, height: font.height(scale: scale) + 20)
         func render(cached: Bool) -> Data? {
           ReplayFrameCapture.image(size: size) {
@@ -4508,12 +4510,29 @@ extension AppDelegate {
   fileprivate func testHomeSettingsButton() throws {
     if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
+    let previousArcade = ArcadeStore.shared, previousCache = playlistStoreCache
+    let previousRecovery = menuRecovery
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("home-settings-\(UUID())")
+    let defaultsName = "home-settings-\(UUID())"
+    let defaults = UserDefaults(suiteName: defaultsName)!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"),
+      bundledProofs: nil, defaults: defaults)
+    try check(arcade.addProfile(initials: "NEW", portrait: 0, select: true) != nil,
+      "The home screen fixture could not create a fresh player")
+    let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+    ArcadeStore.shared = arcade
+    playlistStoreCache = (arcade.records.activeProfileID, store)
+    menuRecovery = nil
     let previousFlow = flow
     let previousFanScreen = fanScreen
     let previousFanPlaying = fanPlaying
     let previousWindowFrame = window.frame
     defer {
       GameScreen.shared.dismissAll()
+      ArcadeStore.shared = previousArcade; playlistStoreCache = previousCache
+      menuRecovery = previousRecovery
+      defaults.removePersistentDomain(forName: defaultsName)
+      try? FileManager.default.removeItem(at: directory)
       flow = previousFlow
       fanScreen = previousFanScreen
       fanPlaying = previousFanPlaying
@@ -4545,13 +4564,22 @@ extension AppDelegate {
     }) else {
       throw IntegrationFailure(message: "The home screen omitted the all-level run")
     }
-    let journeyCompleted = LearningJourneyLibrary.journey.flatMap { journey in
-      try? playlistStore().learningProgress.solvedCount(in: journey)
-    } ?? 0
-    let journeyLessons = LearningJourneyLibrary.journey?.lessons.count ?? 0
-    try check(journeyLessons > 0 && allLemmings.title
-      == L10n.text("JOURNEY MAP  \(journeyCompleted)/\(journeyLessons) SOLVED"),
-      "The all-level run did not use its player-facing name and journey progress")
+    try check(allLemmings.title == L10n.text("START JOURNEY"),
+      "A fresh player did not get the Start Journey action")
+    guard let journey = LearningJourneyLibrary.journey, journey.lessons.count >= 2 else {
+      throw IntegrationFailure(message: "The home screen fixture has no journey lessons")
+    }
+    try store.add(journey.playlist())
+    let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+      pool: .init(id: LearningJourney.version, summary: "Home screen fixture"),
+      entries: Array(journey.lessons.prefix(2).map(\.entry)))
+    try store.startRun(run, hotSeatID: nil)
+    try store.recordLearningWin(runID: run.id, level: run.currentEntry.identity)
+    try check(homeMenuItems().contains { item in
+      if case .fullQuest = item.action { return item.title == L10n.text("JOURNEY MAP  1 SOLVED") }
+      return false
+    }, "A returning player did not get the Journey Map with the saved win count")
+    renderScreen()
     let nonFanTitles = Set(HomeContentFamily.allCases
       .filter { $0 != .fan }.flatMap(\.titles))
     try check(nonFanTitles == Set(ClassicTitle.allCases),
@@ -5010,6 +5038,8 @@ extension AppDelegate {
     let defaultsName = "journey-transition-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: defaultsName)!
     let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil, defaults: defaults)
+    try check(arcade.addProfile(initials: "NEW", portrait: 0, select: true) != nil,
+      "The journey transition fixture could not create an isolated player")
     ArcadeStore.shared = arcade
     defer {
       returnToLibrary(); ArcadeStore.shared = oldArcade
@@ -5041,8 +5071,10 @@ extension AppDelegate {
       let run = try LevelSequenceRun.playlist(playlist, pool: .init(id: LearningJourney.version, summary: LearningJourney.title))
       try store.startRun(run, hotSeatID: arcade.hotSeatID)
       playlistStoreCache = (arcade.records.activeProfileID, store); sequencePlaylistStore = store
+      try check(try recoveryStore.latest(profileID: arcade.playingProfileID, hotSeatID: arcade.hotSeatID) == nil,
+        "The journey transition fixture inherited an unrelated checkpoint")
       try check(homeMenuItems().contains { if case .resumeSequence = $0.action { return true }; return false },
-        "Home did not expose the saved journey independently of checkpoints")
+        "A saved journey without a checkpoint did not expose Resume")
       if !hotSeat {
         renderScreen()
         let image = ReplayFrameCapture.image(size: playfield.bounds.size) { ReplayFrameCapture.draw(playfield, in: playfield.bounds) }

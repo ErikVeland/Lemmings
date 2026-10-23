@@ -1,0 +1,41 @@
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS classic: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS classic: store ownership, resumed session, new session and solo boundaries
+PASS classic: native sprite colours and unchanged input surface
+PASS lemmings2: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS lemmings2: store ownership, resumed session, new session and solo boundaries
+PASS lemmings2: native sprite colours and unchanged input surface
+PASS lemmings3: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS lemmings3: store ownership, resumed session, new session and solo boundaries
+PASS lemmings3: native sprite colours and unchanged input surface
+PASS ghost controls: pre-play, active play, button targets and Command-G
+PASS mobile classic: exact action capture, ghost pixels, unchanged targets and rewind
+PASS mobile lemmings2: exact action capture, ghost pixels, unchanged targets and rewind
+PASS mobile lemmings3: exact action capture, ghost pixels, unchanged targets and rewind
+PASS mobile: roster storage, Records replay and review ghosts
+Hot Seat ghost checks passed

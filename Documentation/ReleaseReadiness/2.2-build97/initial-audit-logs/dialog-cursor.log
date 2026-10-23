@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS system cursor over overlay buttons, gaps and disabled controls; hidden controls, terrain and flipped coordinates
+PASS Original cross/target pixels, colour, zoom/Retina scaling, colour-independent Modern states and dialog suppression
+PASS dialog focus rows, hidden controls and gameplay cursor policy

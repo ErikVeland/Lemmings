@@ -1,0 +1,399 @@
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.000s
+
+OK
+4912 message uses; 3527 translation keys; 0 direct UI literals to review
+es-419: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+de: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+fr: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+pt-BR: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+it: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+nl: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+nb: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+ta: 3519/3519 texts; 8/8 plurals; 0 errors; PASS
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+warning: 'lemmings': found 7 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/artwork.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/build.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/content.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/game_center.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/games.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/install.cpython-314.pyc
+    /Users/veland/Lemmings/Tools/IOSBeta/__pycache__/ports.cpython-314.pyc
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 822]
+[Planning 1 / 822]
+[Planning deferred tasks]
+[Starting]
+[2 / 68] NxlvKit
+[5 / 83] NxlvKit
+[6 / 83] NxlvKit
+[8 / 83] NxlvKit
+[11 / 83] NxlvKit
+[12 / 83] NxlvKit
+[13 / 83] NxlvKit
+[15 / 89] LemmingsDataTool-product
+[17 / 91] LemmingsDataTool-product
+[19 / 103] LemmingsAppCore
+[21 / 103] LemmingsAudio
+[22 / 103] LemmingsAudio
+[23 / 118] NxlvKit
+[25 / 118] NxlvKit
+[27 / 118] NxlvKit
+[30 / 118] LemmingsDataTool-product
+[31 / 118] LemmingsAudio
+[34 / 118] LemmingsAudio
+[35 / 118] LemmingsAudio
+[37 / 118] LemmingsAudio
+[39 / 121] LemmingsAudio
+[43 / 121] LemmingsAudio
+[45 / 121] LemmingsAudio
+[47 / 121] LemmingsAppCore
+[50 / 121] LemmingsAppCore
+[52 / 121] LemmingsAppCore
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[55 / 123] LemmingsAppCore
+[55 / 123] LemmingsMobileCore
+[57 / 138] LemmingsMobileCore
+[58 / 138] LemmingsMobileCore
+[59 / 138] LemmingsMobileCore
+[62 / 138] LemmingsMobileCore
+[64 / 138] LemmingsMobileCore
+[66 / 138] LemmingsMobileCore
+[68 / 141] LemmingsTVCore
+[69 / 141] LemmingsMobileBetaTool-product
+[70 / 141] LemmingsMobileCore
+[71 / 152] LemmingsTVCore
+[71 / 154] LemmingsTVCore
+[76 / 154] LemmingsTVCore
+[79 / 160] LemmingsGameArt
+[81 / 160] LemmingsTVCore
+[82 / 160] LemmingsGameArt
+[85 / 175] LemmingsGameArt
+[85 / 175] LemmingsTVCore
+[86 / 175] LemmingsTVCore
+[87 / 175] LemmingsGameArt
+[90 / 175] LemmingsMobileCore
+[93 / 175] LemmingsMobileCore
+[94 / 175] LemmingsMobileCore
+[95 / 175] LemmingsMobileBetaTool-product
+[97 / 175] LemmingsMobileBetaTool-product
+[98 / 175] LemmingsGameArt
+[101 / 175] LemmingsGameArt
+[103 / 175] LemmingsGameArt
+[104 / 182] LemmingsGameArt
+[106 / 182] LemmingsMobileMenuAudit-product
+[106 / 182] LemmingsMobileUI
+[107 / 197] LemmingsMobileMenuAudit-product
+[109 / 212] LemmingsMobileMenuAudit-product
+[111 / 212] LemmingsLocal-product
+[114 / 227] LemmingsLocal-product
+[115 / 227] LemmingsMobileUI
+[116 / 242] LemmingsLocal
+[116 / 242] LemmingsLocal-product
+[117 / 242] LemmingsMobileUI
+[119 / 242] LemmingsMobileUI
+[121 / 244] LemmingsTVUI
+[122 / 244] LemmingsMobileUI
+[122 / 251] LemmingsMobileUI
+[124 / 251] LemmingsTVUI
+[132 / 252] LemmingsTVUI
+[135 / 252] LemmingsMobileUI
+[138 / 252] LemmingsMobileUI
+[139 / 252] LemmingsMobileUI
+[141 / 252] LemmingsMobileUI
+[143 / 252] LemmingsMobileMenuAudit-product
+[146 / 252] LemmingsMobileMenuAudit-product
+[147 / 252] LemmingsMobileMenuAudit-product
+[148 / 252] LemmingsMobileMenuAudit-product
+[151 / 252] LemmingsMobileMenuAudit-product
+[152 / 252] LemmingsMobileMenuAudit-product
+[155 / 252] LemmingsMobileMenuAudit-product
+[157 / 252] LemmingsLocal-product
+[158 / 252] LemmingsLocal-product
+[161 / 252] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6283:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6281 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6282 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6283 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6284 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6285 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6709:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6707 |       openPanel.canChooseFiles = true
+6708 |       openPanel.canChooseDirectories = false
+6709 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6710 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6711 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8094:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8092 |       openPanel.canChooseFiles = true
+8093 |       openPanel.canChooseDirectories = false
+8094 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8095 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8096 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8937:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8935 |     keyboard.controllerRewindHeld = { [weak self] held in
+8936 |       guard let self else { return }
+8937 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8938 |       else if self.rewindHeld { self.endContinuousRewind() }
+8939 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[163 / 252] LemmingsLocal-product
+[164 / 252] LemmingsLocal-product
+[165 / 252] LemmingsLocal-product
+[166 / 252] LemmingsLocal-product
+[168 / 252] LemmingsLocal-product
+[170 / 252] LemmingsLocal-product
+[172 / 252] LemmingsLocal
+[172 / 252] LemmingsLocal-product
+[173 / 252] LemmingsLocal
+[176 / 252] LemmingsLocal
+[177 / 253] LemmingsLocal
+[179 / 253] LemmingsLocal-product
+[180 / 254] LemmingsLocal
+[182 / 254] LemmingsLocal
+[184 / 254] LemmingsLocal
+[185 / 254] LemmingsLocal
+[186 / 254] LemmingsLocal
+[187 / 254] LemmingsLocal
+[188 / 254] LemmingsGameArt
+[189 / 254] LemmingsGameArt
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6283:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6281 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+6282 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+6283 |     } else if let savedSequence {
+     |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+6284 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+6285 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6709:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6707 |       openPanel.canChooseFiles = true
+6708 |       openPanel.canChooseDirectories = false
+6709 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6710 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+6711 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8094:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8092 |       openPanel.canChooseFiles = true
+8093 |       openPanel.canChooseDirectories = false
+8094 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+8095 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+8096 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8937:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8935 |     keyboard.controllerRewindHeld = { [weak self] held in
+8936 |       guard let self else { return }
+8937 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8938 |       else if self.rewindHeld { self.endContinuousRewind() }
+8939 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[191 / 254] LemmingsGameArt
+[193 / 254] LemmingsGameArt
+[194 / 254] LemmingsGameArt
+[195 / 254] LemmingsGameArt
+[196 / 254] LemmingsGameArt
+[200 / 254] LemmingsAppCore
+[201 / 254] LemmingsAppCore
+[204 / 253] NxlvKitTests-product
+[206 / 254] NxlvKitTests-product
+[209 / 252] NxlvKitTests-product
+[213 / 282] LemmingsAppCoreTests-product
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[214 / 282] NxlvKitTests-product
+[215 / 282] NxlvKitTests-product
+[216 / 282] NxlvKitTests-product
+[217 / 282] NxlvKitTests-product
+[218 / 282] NxlvKitTests-product
+[220 / 282] NxlvKitTests-product
+[222 / 282] NxlvKitTests-product
+[223 / 282] NxlvKitTests-product
+[224 / 282] NxlvKitTests-product
+[225 / 282] NxlvKitTests-product
+[228 / 282] LemmingsAppCoreTests-product
+[228 / 282] NxlvKitTests-product
+[229 / 282] LemmingsAppCoreTests-product
+[232 / 282] NxlvKitTests-product
+[234 / 282] LemmingsAppCoreTests-product
+[234 / 283] LemmingsAppCoreTests-product
+[236 / 285] LemmingsAppCoreTests-product
+[239 / 285] LemmingsAppCoreTests-product
+/Users/veland/Lemmings/Tests/LemmingsAppCoreTests/LemmingInspectionTests.swift:22:45: warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 20 |                     #expect(result == .assigned)
+ 21 |                     commands.append(.init(tick: game.tickCount, action: "assign", lemming: id,
+ 22 |                         skill: try #require(ClassicSkill.allCases.firstIndex(of: skill))))
+    |                                             `- warning: '#require(_:_:)' is redundant because 'ClassicSkill.allCases.firstIndex(of: skill)' never equals 'nil' (from macro 'require')
+ 23 |                 }
+ 24 |                 #expect(game.lemmings[0].hasClimber && game.lemmings[0].hasFloater)
+[242 / 285] LemmingsAppCoreTests-product
+[243 / 285] LemmingsAppCoreTests-product
+[245 / 285] LemmingsAppCoreTests-product
+[245 / 285]
+[248 / 285] LemmingsMobileCoreTests-product
+[250 / 300] LemmingsMobileCoreTests-product
+[250 / 301] LemmingsAppCoreTests-product
+[253 / 301] LemmingsMobileCoreTests-product
+[254 / 301] LemmingsMobileCoreTests-product
+[255 / 301] LemmingsMobileCoreTests-product
+[256 / 301] LemmingsMobileCoreTests-product
+[257 / 301] LemmingsMobileCoreTests-product
+[259 / 301] LemmingsMobileCoreTests-product
+[262 / 301] LemmingsMobileCoreTests-product
+[263 / 301] LemmingsMobileCoreTests-product
+[264 / 301] LemmingsMobileCoreTests-product
+[266 / 301] LemmingsMobileCoreTests-product
+[267 / 301] LemmingsMobileCoreTests-product
+[269 / 301] LemmingsTVCore
+[272 / 302] LemmingsTVCoreTests-product
+[281 / 318] LemmingsTVCoreTests-product
+[285 / 315] LemmingsTVCoreTests-product
+[288 / 316]
+[290 / 314] LemmingsAppCoreTests-product
+[291 / 314] LemmingsMobileMenuAudit-product
+[292 / 315] LemmingsLocal-product
+[294 / 315] LemmingsMobileUITests-product
+[297 / 325] LemmingsMobileUITests-product
+[302 / 325] LemmingsMobileUITests-product
+[303 / 325] LemmingsMobileUITests-product
+[303 / 325] LemmingsTVCoreTests-product
+[307 / 325] LemmingsMobileUITests-product
+[308 / 325] LemmingsMobileUITests-product
+[310 / 325] LemmingsMobileUITests-product
+[315 / 327] LemmingsLocal-product
+[318 / 328] LemmingsLocalTests-product
+[319 / 328] LemmingsLocalTests-product
+[321 / 328] LemmingsMobileUITests-product
+[321 / 326] LemmingsLocalTests-product
+[323 / 341] LemmingsLocalTests-product
+[325 / 341] LemmingsLocalTests-product
+[326 / 341] LemmingsLocalTests-product
+[330 / 341] LemmingsLocalTests-product
+[331 / 341] NxlvKitTests-product
+[334 / 341] LemmingsLocalTests-product
+[335 / 341] LemmingsLocalTests-product
+[338 / 341] LemmingsLocalTests-product
+[340 / 341] LemmingsLocalTests-product
+[342 / 342] LemmingsLocalTests-product
+[345 / 346] LemmingsMobileMenuAudit-product
+Build complete! (108.44 sec.)
+Test Suite 'Selected tests' started at 2026-10-23 10:08:27.800.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-23 10:08:27.803.
+Test Suite 'InterfaceLocalisationTests' started at 2026-10-23 10:08:27.803.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEnglishFallbackPreservesCompleteMessagesAndPlayerValues]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEnglishFallbackPreservesCompleteMessagesAndPlayerValues]' passed (0.004 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEveryDraftLocaleLoadsItsStringsAndPluralTable]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEveryDraftLocaleLoadsItsStringsAndPluralTable]' passed (0.347 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEveryEnglishCatalogueEntryRoundTrips]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testEveryEnglishCatalogueEntryRoundTrips]' passed (0.035 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testNativePluralRulesAndUnsupportedLanguageFallback]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testNativePluralRulesAndUnsupportedLanguageFallback]' passed (0.000 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testSystemLanguageMatchingReorderedArgumentsAndMissingTranslations]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testSystemLanguageMatchingReorderedArgumentsAndMissingTranslations]' passed (0.003 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testTamilRegionalMatchingCountsPlaceholdersAndCompleteFontCoverage]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testTamilRegionalMatchingCountsPlaceholdersAndCompleteFontCoverage]' passed (0.126 seconds).
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testTextExpansionLeavesInterpolatedDataAndPreferenceIDsIntact]' started.
+Test Case '-[NxlvKitTests.InterfaceLocalisationTests testTextExpansionLeavesInterpolatedDataAndPreferenceIDsIntact]' passed (0.000 seconds).
+Test Suite 'InterfaceLocalisationTests' passed at 2026-10-23 10:08:28.318.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.515 (0.516) seconds
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-23 10:08:28.318.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.515 (0.516) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:28.318.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.515 (0.518) seconds
+Test Suite 'Selected tests' started at 2026-10-23 10:08:28.440.
+Test Suite 'LemmingsTVCoreTests.xctest' started at 2026-10-23 10:08:28.441.
+Test Suite 'LemmingsTVCoreTests.xctest' passed at 2026-10-23 10:08:28.441.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:28.441.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-23 10:08:28.562.
+Test Suite 'LemmingsMobileUITests.xctest' started at 2026-10-23 10:08:28.563.
+Test Suite 'LemmingsMobileUITests.xctest' passed at 2026-10-23 10:08:28.563.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:28.563.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-23 10:08:28.680.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-23 10:08:28.682.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-23 10:08:28.682.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:28.682.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-23 10:08:28.804.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-23 10:08:28.805.
+Test Suite 'LanguagePickerTests' started at 2026-10-23 10:08:28.805.
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testEveryLanguageRetainsMouseKeyboardAccessibilityAndRenderedStates]' started.
+2026-10-23 10:08:28.858 xctest[81423:14304690] Error obtaining permanent ID: Error Domain=NSCocoaErrorDomain Code=134020 "The model configuration used to open the store is incompatible with the one that was used to create the store."
+/Users/veland/Lemmings/Sources/LemmingsLocal/GameScreen.swift:181: warning: -[LemmingsLocalTests.LanguagePickerTests testEveryLanguageRetainsMouseKeyboardAccessibilityAndRenderedStates] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testEveryLanguageRetainsMouseKeyboardAccessibilityAndRenderedStates]' passed (6.395 seconds).
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testReleaseNotesUseCurrentVersionAndRetainTranslatedTargets]' started.
+/Users/veland/Lemmings/Sources/LemmingsLocal/GameScreen.swift:181: warning: -[LemmingsLocalTests.LanguagePickerTests testReleaseNotesUseCurrentVersionAndRetainTranslatedTargets] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testReleaseNotesUseCurrentVersionAndRetainTranslatedTargets]' passed (1.911 seconds).
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testSelectionTargetsPreviewApplyAndCancel]' started.
+/Users/veland/Lemmings/Sources/LemmingsLocal/GameScreen.swift:181: warning: -[LemmingsLocalTests.LanguagePickerTests testSelectionTargetsPreviewApplyAndCancel] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.LanguagePickerTests testSelectionTargetsPreviewApplyAndCancel]' passed (0.744 seconds).
+Test Suite 'LanguagePickerTests' passed at 2026-10-23 10:08:37.855.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 9.049 (9.050) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-23 10:08:37.855.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 9.049 (9.050) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:37.855.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 9.049 (9.051) seconds
+Test Suite 'Selected tests' started at 2026-10-23 10:08:37.989.
+Test Suite 'LemmingsAppCoreTests.xctest' started at 2026-10-23 10:08:37.990.
+Test Suite 'LemmingsAppCoreTests.xctest' passed at 2026-10-23 10:08:37.990.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-23 10:08:37.990.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds

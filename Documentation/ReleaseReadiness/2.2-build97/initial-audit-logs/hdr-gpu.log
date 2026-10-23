@@ -1,0 +1,27 @@
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+FAIL: Failure(message: "Metal is unavailable")

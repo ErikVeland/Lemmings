@@ -1,0 +1,41 @@
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+Mac GPU: Apple M4 Pro, desktop overlay budget 33554432 pixels
+PASS selection release timing, repeated frames, reselection and reset
+PASS idle HDR overlay skips masks and clears the last effect
+PASS minimum quality keeps cinematic blasts and clears them on request
+PASS world-anchored explosions across camera pan, zoom, resize and offscreen travel
+PASS golden sprite aura, bounded SDR/HDR light, additive enhancement, preserved sprite pixels and idle cleanup
+PASS bitmap and Metal selection fade, including bloom and final cleanup
+Selection raster benchmark: 0.173 ms/frame (includes bitmap allocation and readback)
+PASS cached flat/CRT outlines, visible breathing halo, Retina, fractional zoom, mirror, clipping and idle HDR
+PASS arrow glints: white HDR light, bounded peak, clip, camera and unchanged SDR
+Display Studio Display: current EDR 1.0, potential 2.0
+Display Mi Monitor: current EDR 1.0, potential 1.0
+PASS actual FP16 GPU output: 8x HDR core, warm second tick, unchanged SDR/background, bounded headroom and expiry
+PASS cinematic nuclear blast: visible SDR exposure, HDR peak, animated fireball, pressure ring, origin, expiry and nuke limits
+PASS superheroic speed: animated SDR/HDR streaks, engagement, clear centre and controls, pause and resume

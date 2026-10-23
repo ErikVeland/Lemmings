@@ -1,0 +1,97 @@
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:19:24: warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+17 |         // credentials use the login Keychain, whose ACL can reject a new signer.
+18 |         var wasAllowed: DarwinBoolean = false
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+   |                        `- warning: 'SecKeychainGetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:21:24: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+19 |         let previous = SecKeychainGetUserInteractionAllowed(&wasAllowed)
+20 |         guard previous == errSecSuccess else { return previous }
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+   |                        `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+
+/Users/veland/Lemmings/Sources/LemmingsAppCore/Records/BackgroundKeychain.swift:23:21: warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+21 |         let disabled = SecKeychainSetUserInteractionAllowed(false)
+22 |         guard disabled == errSecSuccess else { return disabled }
+23 |         defer { _ = SecKeychainSetUserInteractionAllowed(wasAllowed.boolValue) }
+   |                     `- warning: 'SecKeychainSetUserInteractionAllowed' was deprecated in macOS 10.10: SecKeychain is deprecated [#DeprecatedDeclaration]
+24 | #endif
+25 |         return operation()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-2.2/integration-corrected/main.swift:6283:19: warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 6281 |       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+ 6282 |       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
+ 6283 |     } else if let savedSequence {
+      |                   `- warning: value 'savedSequence' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 6284 |       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+ 6285 |         profileID: ArcadeStore.shared.records.activeProfileID)
+
+/Users/veland/Lemmings/.build/release-2.2/integration-corrected/main.swift:6709:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6707 |       openPanel.canChooseFiles = true
+ 6708 |       openPanel.canChooseDirectories = false
+ 6709 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6710 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6711 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.2/integration-corrected/main.swift:8094:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 8092 |       openPanel.canChooseFiles = true
+ 8093 |       openPanel.canChooseDirectories = false
+ 8094 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 8095 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 8096 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.2/integration-corrected/main.swift:8937:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8935 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8936 |       guard let self else { return }
+ 8937 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8938 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8939 |     }
+
+/Users/veland/Lemmings/.build/release-2.2/integration-corrected/main.swift:18657:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+18655 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+18656 |     "Sparkle could not deliver session cleanup callbacks")
+18657 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+18658 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+18659 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS restrained launch defaults, no presentation gate, saved choices and independent live controls
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PASS 25 available music source transitions and settings applied during shuffled playback
+PASS saved silence, volume and preset; Macintosh/Amiga sound coverage
+PASS global mute persists and title suspension stops all players
+PASS CRT-to-menu transition, mismatched phase, native menu resolution and full-screen resize
+PASS CRT dimensions, shader coordinates, held rate, release and minimap drag
+PASS overlapping DJ cues, fade completion and stop/start cancellation
+PASS R brakes the music like a record and the retry releases it
+PASS elapsed-time catch-up and audio interruption recovery
+PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing
+PASS same-window pages, paused clock, display changes, focus and resuming play
+PASS restart preserves selected skills, including empty slots, while level selection uses its default
+PASS level skips: failed-level offer and zero-balance state, owner pays, next level opens, Hot Seat hands over
+PASS bundled proof matches live Classic conditions and replays to a full rescue
+PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork
+PASS super speed controls: flat/CRT, pause, resume, 1x, menus, results and independent explosion settings
+PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership
+PASS optional 25× setting: off/on/unavailable renders, input target and live speed label
+PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release
+PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode
+PASS actual Classic simulation clock at 2x, 3x, 5x, 10x, 25x and quick return to 1x
+FAIL IntegrationFailure(message: "Cached game text changed pixels for small at 2x")

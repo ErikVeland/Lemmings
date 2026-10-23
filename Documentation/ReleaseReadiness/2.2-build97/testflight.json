@@ -1,0 +1,104 @@
+{
+  "version": "2.2",
+  "sourceCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+  "exportHashScope": "Validated App Store Connect export; upload was separately exported from the same verified signed archive.",
+  "ios": {
+    "version": "2.2",
+    "build": 20,
+    "sourceCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+    "gitCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+    "symbolUUIDs": [
+      [
+        "229DD68E-87C1-3A73-9F05-8EE3D978B7A0",
+        "arm64"
+      ]
+    ],
+    "archiveSigned": true,
+    "exportSignatureVerified": true,
+    "uploaded": true,
+    "uploadFinishedUTC": "2026-10-23T00:09:15.771841+00:00",
+    "musicScope": "main",
+    "minimumOS": "16.0",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "exportMenuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "validatedExportIPASHA256": "516ecbf97362a2ac5e282ae08646bfca3b29591589b383caa622f006385c9cf9",
+    "physicalDeviceAcceptance": "pending",
+    "appID": "6822112090",
+    "buildID": "df70adec-2afb-4f3d-a664-a9c57fdfabca",
+    "group": "iOS Private Beta",
+    "groupID": "7cc0d55f-1757-4799-ba5a-4757a1267ad0",
+    "status": "Waiting for Review",
+    "notesSaved": true,
+    "notesLanguage": "English (Australia)",
+    "automaticTesterNotifications": true,
+    "betaReviewSubmitted": true,
+    "verifiedUTC": "2026-10-23T00:48:59.597049+00:00",
+    "preparedTestNotesSHA256": "33702584db3e57cc19f0e73583ec8fdcc6e11ff10aed3e6f32aaf8bac1670a10",
+    "groupAssigned": true
+  },
+  "tvos": {
+    "version": "2.2",
+    "build": 10,
+    "sourceCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+    "symbols": [
+      {
+        "bundle": "UltimateLemmingsTV.app",
+        "uuids": [
+          [
+            "E95FE0AC-B176-3960-8C49-7B731AFEC01A",
+            "arm64"
+          ]
+        ]
+      },
+      {
+        "bundle": "TopShelf.appex",
+        "uuids": [
+          [
+            "EBAC80A4-48C9-3650-A51B-BBDE41ADF9D3",
+            "arm64"
+          ]
+        ]
+      }
+    ],
+    "archiveVerified": true,
+    "exportVerified": true,
+    "uploaded": true,
+    "uploadFinishedUTC": "2026-10-23T00:17:23.512346+00:00",
+    "musicScope": "full",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "validatedExportIPASHA256": "26dc4c22f5dbfd3c32e838a4b9443e9fd3b11334284e07b89d4578d9141406f8",
+    "physicalDeviceAcceptance": "pending",
+    "appID": "6810873426",
+    "group": "TV Private Beta",
+    "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
+    "status": "Waiting for Review",
+    "preparedTestNotesSHA256": "4514042b035d4fbc019fdafd52724c550c04bb93f5ca56044993d7da82cef752",
+    "groupAssigned": true,
+    "notesSaved": true,
+    "betaReviewSubmitted": true,
+    "buildID": "bf5bd375-2a56-47ee-9957-5b8dc3cfeb73",
+    "notesLanguage": "English (U.K.)",
+    "automaticTesterNotifications": true,
+    "internalGroup": "Lemmings",
+    "verifiedUTC": "2026-10-23T01:36:16.364982+00:00"
+  },
+  "browserEvidence": "Text status receipts; whole-window screenshot rejected by automatic approval review because unrelated private Safari tabs were visible."
+}

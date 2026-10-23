@@ -1,0 +1,6 @@
+{
+  "runtimeValuesEqual": true,
+  "textKeys": 3519,
+  "onlyEnglishStringsChange": "Close source reference moves from MobileDeskClockController.swift:77 to :85",
+  "directLiteralFinding": "Keychain service identifier; never displayed as UI"
+}

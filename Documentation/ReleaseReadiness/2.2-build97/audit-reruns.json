@@ -1,0 +1,72 @@
+[
+  {
+    "name": "replay-movies",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T00:17:59.841385+00:00",
+    "log": "logs/replay-movies-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "mac-app-integration",
+    "status": "failed",
+    "exitCode": 1,
+    "startedUTC": "2026-10-23T00:19:40.803215+00:00",
+    "log": "logs/mac-app-integration-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "mac-sequence-checkpoint-recovery",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T00:22:43.226742+00:00",
+    "log": "logs/mac-sequence-checkpoint-recovery-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "local-performance-measurement",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T00:28:01.463647+00:00",
+    "log": "logs/local-performance-measurement-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "sequel-views",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T00:36:33.696514+00:00",
+    "log": "logs/sequel-views-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "arcade-records",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T00:50:01.694684+00:00",
+    "log": "logs/arcade-records-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  },
+  {
+    "name": "hot-seat-ghosts",
+    "status": "passed",
+    "exitCode": 0,
+    "startedUTC": "2026-10-23T01:03:02.042052+00:00",
+    "log": "logs/hot-seat-ghosts-offscreen.log",
+    "windowMode": "offscreen",
+    "audio": "muted",
+    "reasonForRerun": "Restricted-shell network, GPU or media-service access failed in the original audit."
+  }
+]

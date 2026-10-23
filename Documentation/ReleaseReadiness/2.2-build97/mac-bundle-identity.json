@@ -1,0 +1,24 @@
+{
+  "sourceCommit": "a9c154af8380a9371d73e66bbd6830ddfc5f6081",
+  "bundles": [
+    {
+      "bundle": "Ultimate Lemmings.app",
+      "version": "2.2",
+      "build": "97",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    {
+      "bundle": "DeskClockMacWidget.appex",
+      "version": "2.2",
+      "build": "97",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    }
+  ],
+  "currentProofHintsAndExclusionsMatch": true
+}

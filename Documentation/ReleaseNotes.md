@@ -1,15 +1,18 @@
 # Release notes
 
-The latest Mac release is [2.1.2 build 96](ReleaseNotes-2.1.2-build96.md).
-Its [release record](ReleaseReadiness/2.1.2-build96/README.md) covers the signed
-packages, five direct updates, source identity and validation limits.
-iOS 2.1.2 build 19 is Testing in the existing group. TV build 9 is Testing
-in TV Private Beta, confirmed 23 October 2026, with saved notes and automatic
-notifications. Coordinated 2.1.2 delivery is complete.
-Its uploaded font banks are verified, and the local font repair is confirmed.
-Source and feed versions, retained acceptance evidence and completion limits
-are recorded in [release scope](ReleaseScope.md) and the
-[shared 2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md).
+The latest Mac release is [2.2 build 97](ReleaseNotes-2.2-build97.md).
+Its [release record](ReleaseReadiness/2.2-build97/README.md) covers the notarised
+full/slim universal packages, five direct updates, public asset/feed verification
+and 56 passing minor-release check commands. Foreground and device acceptance
+limits remain explicit.
+iPhone/iPad/Duo 2.2 build 20 and Apple TV 2.2 build 10 are Waiting for Review
+in their existing TestFlight groups. Notes are saved and automatic notifications
+are enabled. Apple Beta Review determines external tester availability.
+All release archives use frozen source `a9c154af`. See
+[release scope](ReleaseScope.md) for the current boundaries.
+
+The [2.1.2 notes](ReleaseNotes-2.1.2-build96.md) and
+[release record](ReleaseReadiness/2.1.2-build96/README.md) retain the previous delivery evidence.
 
 The [2.1.1 notes](ReleaseNotes-2.1.1-build95.md) and
 [release record](ReleaseReadiness/2.1.1-build95/README.md) retain the earlier evidence.
