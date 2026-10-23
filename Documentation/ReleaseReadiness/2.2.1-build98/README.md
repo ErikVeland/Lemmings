@@ -30,8 +30,8 @@ signature and symbol checks. All 27 iOS and 18 TV localisation tables match the
 frozen source. The [mobile receipt](testflight.json) records delivery status;
 Apple processing and Beta Review determine external tester availability.
 The [AltStore receipt](altstore-verification.json) checks the unencrypted IPA,
-both bundle signatures and the declared permissions. Device re-signing and
-installation remain unverified.
+both bundle signatures and the declared permissions. The [public AltStore source](altstore-publication.json), icon and IPA link pass
+verification. Device re-signing and installation remain unverified.
 
 ## Source and checks
 
