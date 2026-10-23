@@ -12,6 +12,7 @@ import UIKit
     var onHover: ((MobilePoint?) -> Void)?
     var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?
+    var canHoldSelection: ((MobilePoint) -> Bool)?
     var onViewportChanged: ((MobileViewport) -> Void)?
     var deferFrameUpdates = false
 
@@ -167,7 +168,7 @@ import UIKit
         isAccessibilityElement = true
         accessibilityIdentifier = "game.playfield"
         accessibilityLabel = L10n.text("Game playfield")
-        accessibilityHint = L10n.text("Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.")
+        accessibilityHint = L10n.text("Tap to assign. Hold, then slide left or right to browse lemmings. While holding, drag a second finger to pan. Lift the first finger to assign. Drag to pan. Pinch to zoom.")
         accessibilityTraits = .allowsDirectInteraction
     }
 
@@ -212,6 +213,9 @@ import UIKit
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         #if os(iOS)
+        if router.isHoldingSelection,
+           gestureRecognizer is UIPinchGestureRecognizer || gestureRecognizer is UISwipeGestureRecognizer
+            || gestureRecognizer is UITapGestureRecognizer { return false }
         if UIAccessibility.isVoiceOverRunning,
            gestureRecognizer is UITapGestureRecognizer || gestureRecognizer is UISwipeGestureRecognizer {
             return false
@@ -246,6 +250,8 @@ import UIKit
     #endif
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
+        let touchEffects = router.advance(at: now, horizontalRange: 0...max(0, Double(bounds.width)))
+        if !touchEffects.isEmpty { onTouchEffects?(touchEffects) }
         #if os(iOS)
         completionGlow.advance(at: now)
         #endif
@@ -342,6 +348,7 @@ import UIKit
 
     func cancelInteraction(clearHover: Bool = false) {
         activeTouchID = nil
+        if !trackedTouchIDs.isEmpty { ignoresTouchSequenceUntilLift = true }
         // Changed events from an old pose must wait for a fresh gesture begin.
         pinchGestureActive = false
         scrollGestureActive = false
@@ -354,8 +361,11 @@ import UIKit
         layoutBitmap()
     }
 
-    /// Larger bitmaps than every supported GPU's texture limit keep the CPU path.
-    private var bitmapUsesLayer: Bool { bitmap.map { max($0.width, $0.height) <= 8192 } ?? false }
+    /// Blend the funeral mood with the actual scene, never a transparent sibling layer.
+    /// Normal play keeps GPU scaling. Oversized bitmaps also use the drawing path.
+    private var bitmapUsesLayer: Bool {
+        failureAmount == 0 && (bitmap.map { max($0.width, $0.height) <= 8192 } ?? false)
+    }
 
     /// The view area of the arrow glint mask on the flat bitmap layer. The curved tube has no glints.
     private func arrowGlintRect(_ glints: ClassicMacScene.ArrowGlints) -> CGRect? {
@@ -590,6 +600,14 @@ import UIKit
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         trackedTouchIDs.formUnion(touches.map(ObjectIdentifier.init))
         guard !ignoresTouchSequenceUntilLift else { return }
+        if trackedTouchIDs.count == 2, activeTouchID != nil, router.isHoldingSelection,
+           touches.count == 1, let touch = touches.first, touch.type == .direct,
+           acceptsInput(at: touch.location(in: self)) {
+            let point = inputPoint(touch.location(in: self))
+            onTouchEffects?(router.began(id: ObjectIdentifier(touch).hashValue,
+                at: .init(x: point.x, y: point.y), time: touch.timestamp))
+            return
+        }
         guard trackedTouchIDs.count == 1, activeTouchID == nil, let touch = touches.first else {
             ignoresTouchSequenceUntilLift = true
             activeTouchID = nil
@@ -608,15 +626,23 @@ import UIKit
             id: id,
             at: MobilePoint(x: point.x, y: point.y),
             time: touch.timestamp,
-            allowsPanning: touch.type != .pencil
+            allowsPanning: touch.type != .pencil,
+            allowsHolding: touch.type == .direct && canHoldSelection?(.init(x: point.x, y: point.y)) == true
         ))
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touchID = activeTouchID,
-              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
-        let point = inputPoint(touch.location(in: self))
-        onTouchEffects?(router.moved(id: touchID.hashValue, to: MobilePoint(x: point.x, y: point.y)))
+        guard activeTouchID != nil, !ignoresTouchSequenceUntilLift else { return }
+        // Process the selection finger first when both contacts move in one event.
+        let ordered = touches.sorted { ObjectIdentifier($0) == activeTouchID && ObjectIdentifier($1) != activeTouchID }
+        var effects: [MobileTouchEffect] = []
+        for touch in ordered {
+            guard acceptsInput(at: touch.location(in: self)) else { cancelInteraction(); return }
+            let point = inputPoint(touch.location(in: self))
+            effects += router.moved(id: ObjectIdentifier(touch).hashValue,
+                to: .init(x: point.x, y: point.y), time: touch.timestamp)
+        }
+        if !effects.isEmpty { onTouchEffects?(effects) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -625,19 +651,21 @@ import UIKit
             resetTouchSequenceIfNeeded()
             return
         }
-        guard let touchID = activeTouchID,
-              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
-        activeTouchID = nil
-        let point = inputPoint(touch.location(in: self))
-        guard acceptsInput(at: touch.location(in: self)) else {
-            onTouchEffects?(router.cancel())
+        guard let touchID = activeTouchID else { resetTouchSequenceIfNeeded(); return }
+        guard touches.allSatisfy({ acceptsInput(at: $0.location(in: self)) }) else {
+            cancelInteraction()
+            resetTouchSequenceIfNeeded()
             return
         }
-        onTouchEffects?(router.ended(
-            id: touchID.hashValue,
-            at: MobilePoint(x: point.x, y: point.y),
-            time: touch.timestamp
-        ))
+        let ordered = touches.sorted { ObjectIdentifier($0) != touchID && ObjectIdentifier($1) == touchID }
+        for touch in ordered {
+            let point = inputPoint(touch.location(in: self))
+            onTouchEffects?(router.ended(id: ObjectIdentifier(touch).hashValue,
+                at: .init(x: point.x, y: point.y), time: touch.timestamp))
+            if ObjectIdentifier(touch) == touchID { activeTouchID = nil }
+        }
+        if activeTouchID == nil, !trackedTouchIDs.isEmpty { ignoresTouchSequenceUntilLift = true }
+        resetTouchSequenceIfNeeded()
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -646,10 +674,8 @@ import UIKit
             resetTouchSequenceIfNeeded()
             return
         }
-        guard let activeTouchID,
-              touches.contains(where: { ObjectIdentifier($0) == activeTouchID }) else { return }
-        self.activeTouchID = nil
-        onTouchEffects?(router.cancel())
+        cancelInteraction()
+        resetTouchSequenceIfNeeded()
     }
 
     private func resetTouchSequenceIfNeeded() {

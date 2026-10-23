@@ -18,6 +18,7 @@ extension MobileLibraryViewController {
                               self.game == nil, !self.preparingCloudLevel else { return }
                         self.catalogue?.updateMeasuredCounts(counts)
                         if self.route == .family(.fan) { self.rebuild() }
+                        else if case .fanGroup = self.route { self.rebuild() }
                     }
                 }
             } catch is CancellationError { }

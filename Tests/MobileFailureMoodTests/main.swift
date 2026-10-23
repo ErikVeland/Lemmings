@@ -2,6 +2,7 @@ import Foundation
 import CoreGraphics
 import ImageIO
 import Metal
+import QuartzCore
 
 @main struct MobileFailureMoodTests {
     static let width = 64, height = 32
@@ -44,6 +45,7 @@ import Metal
         }
         precondition(FailureMoodArt.saturation(0) == 1 && FailureMoodArt.brightness(0) == 1)
         precondition(FailureMoodArt.saturation(1) < 0.3 && FailureMoodArt.brightness(1) < 0.75)
+        try checkLayerComposition()
         let metalChecked = try checkMetal(original)
         if CommandLine.arguments.count > 1 {
             let root = URL(fileURLWithPath: CommandLine.arguments[1])
@@ -67,6 +69,45 @@ import Metal
         }
         print("PASS flat funeral desaturation, preserved black, darkening and exact recovery")
         if metalChecked { print("PASS Metal funeral desaturation, preserved black, darkening and exact recovery") }
+    }
+
+    /// Reproduce the GPU bitmap plus transparent UIView composition, then verify the opaque scene path.
+    static func checkLayerComposition() throws {
+        let bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        let source = context(); patches(source)
+        let normal = pixels(source)
+        let effect = context()
+        FailureMoodArt.draw(in: bounds, amount: 1, context: effect)
+        let root = CALayer(), bitmap = CALayer(), overlay = CALayer()
+        root.frame = bounds; bitmap.frame = bounds; overlay.frame = bounds
+        bitmap.contents = source.makeImage()!
+        overlay.contents = effect.makeImage()!
+        root.addSublayer(bitmap); root.addSublayer(overlay)
+        let veiled = context()
+        root.render(in: veiled)
+        precondition(pixel(pixels(veiled), 0).contains { $0 > 0 },
+            "The regression fixture must reproduce the milky veil from a transparent sibling")
+        // The funeral path replaces the bitmap layer with an opaque canvas containing the scene.
+        patches(effect)
+        FailureMoodArt.draw(in: bounds, amount: 1, context: effect)
+        bitmap.isHidden = true
+        overlay.contents = effect.makeImage()!
+        let funeral = context()
+        root.render(in: funeral)
+        precondition(pixel(pixels(funeral), 0) == [0, 0, 0])
+        precondition(pixels(funeral) == pixels(effect), "Layer composition changed the desaturated scene")
+        bitmap.isHidden = false; overlay.isHidden = true
+        let recovered = context()
+        root.render(in: recovered)
+        precondition(pixels(recovered) == normal, "Layer recovery did not restore the original bitmap")
+        let output = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
+        for (name, canvas) in [("layer-normal", source), ("layer-regression-veil", veiled), ("layer-funeral", funeral)] {
+            let destination = CGImageDestinationCreateWithURL(output.appendingPathComponent(name + ".png") as CFURL,
+                "public.png" as CFString, 1, nil)!
+            CGImageDestinationAddImage(destination, canvas.makeImage()!, nil)
+            precondition(CGImageDestinationFinalize(destination))
+        }
+        print("PASS reproduced transparent-layer veil, opaque-scene desaturation and exact layer recovery")
     }
 
     static func checkMetal(_ source: [UInt8]) throws -> Bool {

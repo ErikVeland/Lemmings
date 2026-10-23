@@ -8,7 +8,7 @@ import WidgetKit
 
 /// Why the clock opened. Only the player's own choices may ask for calendar access.
 enum DeskClockReason: Sendable {
-    case menu, widget, stacked, closedCharging
+    case menu, widget, tent, stacked, closedCharging
 
     var asksForCalendar: Bool { self == .menu || self == .widget }
     var isAutomatic: Bool { !asksForCalendar }
@@ -43,6 +43,7 @@ enum DeskClockReason: Sendable {
     private var batteryMonitoring: Bool?
     private var observers = MobileNotificationObserverBag()
     private(set) var isShown = false
+    private var presentedModally = false
     /// The library pauses its own input under the clock, so the clock reads the controller itself.
     private(set) lazy var input = makeInput()
     private var inputLink: CADisplayLink?
@@ -73,6 +74,8 @@ enum DeskClockReason: Sendable {
     }
 
     required init?(coder: NSCoder) { nil }
+    override var prefersStatusBarHidden: Bool { true }
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
 
     private var settings: DeskClockSettings { MobileSettings.load(from: defaults).deskClock }
 
@@ -84,6 +87,7 @@ enum DeskClockReason: Sendable {
         view.addSubview(clockView)
         closeButton.title = L10n.text("Close")
         closeButton.isPrimary = true
+        closeButton.redNightVision = clockView.isRedNightVisionActive(at: Date())
         closeButton.isHidden = true
         closeButton.onPress = { [weak self] in self?.close() }
         view.addSubview(closeButton)
@@ -94,9 +98,11 @@ enum DeskClockReason: Sendable {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let safe = view.safeAreaLayoutGuide.layoutFrame
+        let safe = MobileSystemRegions.usesFullDisplay(in: view) ? view.bounds : view.safeAreaLayoutGuide.layoutFrame
         layout = DeskClockLayout.make(safe: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
-                                      regions: regions(view))
+                                      regions: regions(view),
+                                      bounds: MobileRect(x: view.bounds.minX, y: view.bounds.minY,
+                                                         width: view.bounds.width, height: view.bounds.height))
         guard let layout else { return }
         clockView.frame = cg(layout.scene)
         closeButton.frame = cg(layout.close)
@@ -146,10 +152,26 @@ enum DeskClockReason: Sendable {
 
     // MARK: - Show and close
 
-    /// Adds the clock full screen over `parent`, which stays underneath.
-    func present(in parent: UIViewController) {
+    /// Presents above the visible controller. UIKit must own a controller's view when it
+    /// crosses a window boundary; adding a child of `parent` directly to its window aborts.
+    func present(in parent: UIViewController, surface: UIView? = nil) {
         guard !isShown else { return }
         isShown = true
+        let window = parent.view.window ?? (surface as? UIWindow) ?? surface?.window
+        if let window {
+            presentedModally = true
+            var presenter = parent.view.window === window ? parent : (window.rootViewController ?? parent)
+            while let presented = presenter.presentedViewController { presenter = presented }
+            modalPresentationStyle = .overFullScreen
+            modalPresentationCapturesStatusBarAppearance = true
+            presenter.present(self, animated: false) { [weak self] in
+                guard let self else { return }
+                guard self.isShown else { self.dismiss(animated: false); return }
+                self.start()
+            }
+            return
+        }
+        // A detached test host has no window, so containment keeps layout tests headless.
         parent.addChild(self)
         view.frame = parent.view.bounds
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -175,9 +197,13 @@ enum DeskClockReason: Sendable {
         if let batteryMonitoring { UIDevice.current.isBatteryMonitoringEnabled = batteryMonitoring }
         batteryMonitoring = nil
         resumeMusic()
-        willMove(toParent: nil)
-        view.removeFromSuperview()
-        removeFromParent()
+        if presentedModally {
+            dismiss(animated: false)
+        } else {
+            willMove(toParent: nil)
+            view.removeFromSuperview()
+            removeFromParent()
+        }
         onClose?()
     }
 
@@ -276,6 +302,7 @@ enum DeskClockReason: Sendable {
     }
 
     private func tick() {
+        closeButton.redNightVision = clockView.isRedNightVisionActive(at: Date())
         if Date().timeIntervalSince(lastRefresh) >= Self.eventRefreshInterval { refreshEvent() }
     }
 

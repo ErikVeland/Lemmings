@@ -1,4 +1,5 @@
 import CoreGraphics
+import LemmingsMobileCore
 
 /// The Mac-style cover browser uses the same frames for drawing and UIKit input.
 public struct LevelBrowserGeometry {
@@ -9,11 +10,17 @@ public struct LevelBrowserGeometry {
     /// Back, previous rank, next rank and Play, in that order, when `actionCount` is 4.
     public let actions: [CGRect]
 
-    public init(safe: CGRect, actionCount: Int = 4, titleText: String = "", subtitleText: String = "") {
+    public init(safe: CGRect, actionCount: Int = 4, titleText: String = "", subtitleText: String = "", occlusions: [MobileReservedRegion] = []) {
         board = safe.insetBy(dx: 8, dy: 12)
         let left = board.minX + 16, width = board.width - 32
-        title = CGRect(x: left, y: board.minY + 14, width: width, height: max(40, GameTextLayout.height(titleText, width: width, face: .large)))
-        subtitle = CGRect(x: left, y: title.maxY + 2, width: width, height: max(22, GameTextLayout.height(subtitleText, width: width)))
+        let heading = MobileDisplayRegions.clearHorizontalFrame(
+            .init(x: left, y: board.minY + 14, width: width, height: 40), avoiding: occlusions)
+        title = CGRect(x: heading.x, y: heading.y, width: heading.width,
+            height: max(40, GameTextLayout.height(titleText, width: max(1, heading.width), face: .large)))
+        let caption = MobileDisplayRegions.clearHorizontalFrame(
+            .init(x: left, y: title.maxY + 2, width: width, height: 22), avoiding: occlusions)
+        subtitle = CGRect(x: caption.x, y: caption.y, width: caption.width,
+            height: max(22, GameTextLayout.height(subtitleText, width: max(1, caption.width))))
         let height: CGFloat = 44
         let count = max(1, actionCount)
         let gaps = CGFloat(count - 1) * 12

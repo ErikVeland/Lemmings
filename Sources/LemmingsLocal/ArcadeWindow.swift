@@ -42,7 +42,7 @@ import NxlvKit
         arcadeView.onPrepareSkip = prepareSkip
         arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
         arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
-        arcadeView.onHints = hints.map { action in { [weak self] in self?.close(); action() } }
+        arcadeView.onHints = hints
         arcadeView.onMenu = menu.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
         arcadeView.onStoredReplay = storedReplay
@@ -117,7 +117,19 @@ import NxlvKit
 @MainActor final class ArcadeView: NSView, GameDialogCustomNavigation {
     enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat, achievement, earnedRewards }
     enum BoardScope { case level, career, worldwide }
-    var mode = Mode.records { didSet { if mode != oldValue { keyboardButton = nil } } }
+    var mode = Mode.records {
+        didSet {
+            if !changingPage { pageHistory.removeAll() }
+            if mode != oldValue { keyboardButton = nil }
+        }
+    }
+    private struct PageVisit {
+        let mode: Mode
+        let scope: BoardScope
+        let focus: Int?
+    }
+    private var pageHistory: [PageVisit] = []
+    private var changingPage = false
     var report: ArcadeReport? {
         didSet {
             finishCelebration()
@@ -204,7 +216,6 @@ import NxlvKit
     var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
     var onMenu: (() -> Void)?
-    var onCloudSaves: (() -> Void)?
     var continueTitle = L10n.text("Next level")
     var resultStatus: String?
     var continueHandlesHandover = false
@@ -440,7 +451,8 @@ import NxlvKit
         } else { GamePixelText.draw(value, in: rect, palette: .green) }
     }
     func button(_ label: String, _ rect: CGRect, primary: Bool = false, selected: Bool = false,
-        enabled: Bool = true, titleRuns: [GameFrontEnd.TextRun] = [], action: @escaping () -> Void) {
+        enabled: Bool = true, titleRuns: [GameFrontEnd.TextRun] = [], icon: GameFrontEnd.Action.Icon? = nil,
+        action: @escaping () -> Void) {
         let chosen = enabled && (primary || selected || hover == label)
         GameStyle.fill(rect, chosen ? NSColor(calibratedRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : NSColor(calibratedWhite: 0.025, alpha: 1))
         (chosen ? NSColor(calibratedRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
@@ -459,7 +471,12 @@ import NxlvKit
             arrow.close(); arrow.fill()
         }
         let caption = CGRect(x: rect.minX + 12, y: rect.midY - 10, width: rect.width - 24, height: 20)
-        if let font, !titleRuns.isEmpty, let context = NSGraphicsContext.current?.cgContext {
+        if icon == .favourite, let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setAlpha(enabled ? 1 : 0.45)
+            GameStarArt.draw(in: rect, earned: selected, context: context)
+            context.restoreGState()
+        } else if let font, !titleRuns.isEmpty, let context = NSGraphicsContext.current?.cgContext {
             GameSemanticText.draw(titleRuns, in: caption, typography: GameMenuTypography(interface: font.interface),
                 alpha: enabled ? 1 : 0.45, context: context)
         } else if let font {
@@ -517,17 +534,46 @@ import NxlvKit
         title(heading, x: 96, y: 48, width: 928, height: 40)
         text(subtitle ?? level?.game ?? L10n.text("Ultimate Lemmings"), 96, 106, 928, alignment: .center)
     }
-    func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
+    func page(_ next: Mode, scope: BoardScope? = nil) {
+        guard next != mode else { return }
+        pageHistory.append(PageVisit(mode: mode, scope: boardScope, focus: keyboardButton))
+        if let scope { boardScope = scope }
+        displayPage(next)
+    }
+    func returnToPage(_ previous: Mode) {
+        if let index = pageHistory.lastIndex(where: { $0.mode == previous }) {
+            let visit = pageHistory[index]
+            pageHistory.removeSubrange(index...)
+            restorePage(visit)
+        } else {
+            pageHistory.removeAll()
+            displayPage(previous)
+        }
+    }
+    private func restorePage(_ visit: PageVisit) {
+        boardScope = visit.scope
+        displayPage(visit.mode)
+        keyboardButton = visit.focus
+    }
+    private func displayPage(_ next: Mode) {
+        finishCelebration(); affinityPopover?.close()
+        changingPage = true
+        mode = next
+        changingPage = false
+        hover = nil; needsDisplay = true
+    }
+    var backTitle: String { pageHistory.last?.mode == .result ? L10n.text("Back to result") : L10n.text("Back") }
     func back() {
         if mode == .earnedRewards { returnFromEarnedRewards(); return }
         if mode == .result, let onMenu { onMenu(); return }
         if mode == .hotSeat { closeSession(); return }
         if mode == .profiles { closeProfiles(); return }
-        if mode != .result && mode != .profiles && report != nil { page(.result) }
+        if let previous = pageHistory.popLast() { restorePage(previous); return }
+        if mode != .result && mode != .profiles && report != nil { returnToPage(.result) }
         else { onClose?() }
     }
     func pageFooter() {
-        button(report == nil ? L10n.text("Back") : L10n.text("Back to result"), CGRect(x: 64, y: 634, width: 240, height: 48)) { [weak self] in self?.back() }
+        button(backTitle, CGRect(x: 64, y: 634, width: 240, height: 48)) { [weak self] in self?.back() }
         if report == nil && mode == .records && boardScope == .level {
             let index = recordLevels.firstIndex { $0.boardID == level?.boardID }
             button(L10n.text("< Previous level"), CGRect(x: 544, y: 634, width: 244, height: 48), enabled: index.map { $0 > 0 } ?? false) { [weak self] in self?.changeLevel(-1) }
@@ -545,7 +591,6 @@ import NxlvKit
     private func drawResult() {
         guard let report else { page(.records); return }
         drawGameResult(report)
-        if let onMenu { button(L10n.text("Menu"), CGRect(x: 940, y: 38, width: 116, height: 44), action: onMenu) }
     }
     func portraitImage(_ index: Int) -> NSImage? {
         if let cached = portraits[index] { return cached }
@@ -586,7 +631,7 @@ import NxlvKit
             if !store.hotSeatIsActive { store.prepareHotSeat() }
             if !store.sessionProfileIDs.contains(added.id) { store.toggleSessionProfile(added.id) }
             profilesReturnToHotSeat = false
-            page(.hotSeat); return
+            returnToPage(.hotSeat); return
         }
         selectProfile(added)
     }
@@ -627,7 +672,7 @@ import NxlvKit
         } else { playAsSelected() }
     }
     func closeProfiles() {
-        if profilesReturnToHotSeat { profilesReturnToHotSeat = false; page(.hotSeat) } else { onClose?() }
+        if profilesReturnToHotSeat { profilesReturnToHotSeat = false; returnToPage(.hotSeat) } else { onClose?() }
     }
     func startNewProfile(returnToHotSeat: Bool = false) {
         guard ArcadeStore.shared.records.profiles.count < 8 else { return }
@@ -678,7 +723,7 @@ import NxlvKit
         if ArcadeWindow.shared.prepareSession != nil { ArcadeWindow.shared.showSession(owner: window); return }
         ArcadeStore.shared.prepareHotSeat(); sessionReturnMode = mode; page(.hotSeat)
     }
-    func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
+    func closeSession() { if let previous = sessionReturnMode { returnToPage(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
         header(L10n.text("Hot Seat"), subtitle: L10n.text("TAKE TURNS ON THIS MAC"))
@@ -816,9 +861,6 @@ import NxlvKit
             }))
         }
         button(L10n.text("Back"), CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
-        if onCloudSaves != nil {
-            button(L10n.text("Tester sync"), CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
-        }
         if let id = selectedProfileID {
             button(L10n.text("Delete"), CGRect(x: 280, y: 627, width: 200, height: 55),
                    enabled: store.canDeleteProfile(id, runInProgress: runInProgress)) { [weak self] in self?.confirmDeleteSelectedProfile() }
@@ -1027,7 +1069,7 @@ import NxlvKit
             needsDisplay = true; return
         }
         if event.keyCode == 36 || event.keyCode == 76 || (event.keyCode == 49 && mode == .result) {
-            if mode == .result { performDefaultResultAction() } else if report != nil { page(.result) }
+            if mode == .result { performDefaultResultAction() } else if report != nil { returnToPage(.result) }
             return
         }
         if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil, boardScope == .level {

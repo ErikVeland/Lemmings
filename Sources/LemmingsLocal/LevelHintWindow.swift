@@ -109,7 +109,7 @@ import NxlvKit
         guard page == nil, !deck.stages.isEmpty else { return }
         if retainedRunID != runID || solutionSession == nil { clearSolution() }
         let page = GameMenuPage(title: deck.evidenceTitle, subtitle: deck.title)
-        page.backTitle = L10n.text("Back to game")
+        page.backTitle = GameScreen.shared.isPresented ? L10n.text("Back") : L10n.text("Back to game")
         let content = LevelHintContent(deck: deck, image: image)
         content.frame = page.body.bounds
         content.autoresizingMask = [.width, .height]

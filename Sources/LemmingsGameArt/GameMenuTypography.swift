@@ -7,7 +7,7 @@ import NxlvKit
 /// Rectangles use a top-left origin, as in `GameStoneArt`. Every glyph lands on a
 /// whole-number scale with no smoothing, as in the original.
 public final class GameMenuTypography {
-    public enum Palette: String, Sendable { case blue, green }
+    public enum Palette: String, Sendable { case blue, green, gold }
     public enum Alignment: Sendable { case left, center, right }
     public typealias Face = ClassicMacUserInterface.Face
 
@@ -169,6 +169,17 @@ public final class GameMenuTypography {
                 for i in stride(from: 0, to: bytes.count, by: 4) {
                     let red = bytes[i], green = bytes[i + 1], blue = bytes[i + 2]
                     bytes[i] = green; bytes[i + 1] = blue; bytes[i + 2] = red
+                }
+            }
+        } else if palette == .gold {
+            // Keep the source bitmap's relief while warming its blue ramp.
+            pixels.withUnsafeMutableBytes { raw in
+                let bytes = raw.bindMemory(to: UInt8.self)
+                for i in stride(from: 0, to: bytes.count, by: 4) {
+                    let value = max(bytes[i], bytes[i + 1], bytes[i + 2])
+                    bytes[i] = value
+                    bytes[i + 1] = UInt8((UInt16(value) * 190) / 255)
+                    bytes[i + 2] = UInt8((UInt16(value) * 65) / 255)
                 }
             }
         }

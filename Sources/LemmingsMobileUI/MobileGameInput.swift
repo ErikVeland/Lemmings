@@ -95,7 +95,7 @@ extension MobileGameViewController {
         #endif
         adapter.isActive = { [weak self] in
             guard let self else { return false }
-            return self.lifecycle.acceptsInput(menuVisible: !self.overlay.isHidden)
+            return !self.deskClockVisible && self.lifecycle.acceptsInput(menuVisible: !self.overlay.isHidden)
         }
         adapter.isMenu = { [weak self] in self?.overlay.isHidden == false || self?.isChoosingToolDirection == true }
         adapter.onCommand = { [weak self] in self?.performCommand($0) }
@@ -145,6 +145,8 @@ extension MobileGameViewController {
         renderCurrentFrame(force: true)
     }
     func restoreHoverAim() {
+        touchSelection = nil
+        browsingTouchSelection = false
         #if os(tvOS)
         hoverAimActive = false
         ensureTVPointer()
@@ -266,7 +268,7 @@ extension MobileGameViewController {
 
     private func moveSolutionMenuFocus(_ delta: Int) {
         guard !solutionSelector.isHidden else { overlayCanvas.moveFocus(delta); return }
-        let actions = (overlayCanvas.page.rows + overlayCanvas.page.orderedFooter).filter(\.enabled)
+        let actions = overlayCanvas.focusableActions
         let selectorCount = solutionSelector.showsGhost ? 3 : 2
         let current = solutionSelector.focusedIndex
             ?? (actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }).map { $0 + selectorCount } ?? selectorCount)
@@ -350,58 +352,78 @@ extension MobileGameViewController {
         if changed { updatePerformanceBudget(); updateHUD() }
     }
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false,
-                            language: Bool = false) {
-        guard let library = parent as? MobileLibraryViewController else { return }
+                            language: Bool = false, returningTo caller: (() -> Void)? = nil, preservingPosition: Bool = false) {
+        let sourceGame = presentingViewController as? MobileGameViewController
+        guard let library = parent as? MobileLibraryViewController
+            ?? presentingViewController as? MobileLibraryViewController
+            ?? sourceGame?.parent as? MobileLibraryViewController else { return }
+        let back = caller ?? overlayReturnAction()
+        let offset = overlay.contentOffset, focus = overlayCanvas.focusedID
         if !language { library.finishLanguageSelection(apply: false) }
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
         overlayCanvas.page = language ? library.languagePage() : soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0, inGame: true) } ?? library.settingsGroupsPage(inGame: true)
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
-            if id == "home" { self.pausePlay(showControls: true) }
-            else if id == "settings" { self.showInGameSettings() }
-            else if id.hasPrefix("settingsGroup."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) { self.showInGameSettings(next) }
-            else if id == "setting.language" { self.showInGameSettings(.gameplay, language: true) }
+            if id == "home" || id == "settings" { back() }
+            else if id.hasPrefix("settingsGroup."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) { if next == group, mappings || soundtrack || insights || language { back() }
+                else { self.showInGameSettings(next, returningTo: self.overlayReturnAction()) }
+            }
+            else if id == "setting.language" { self.showInGameSettings(.gameplay, language: true, returningTo: self.overlayReturnAction()) }
             else if id == "language.cancel" || id == "language.apply" {
                 library.finishLanguageSelection(apply: id == "language.apply")
                 self.updateHUD()
-                self.showInGameSettings(.gameplay)
+                back()
             }
             else if id.hasPrefix("language."), library.handleSettings(id) {
-                self.showInGameSettings(.gameplay, language: true)
+                self.showInGameSettings(.gameplay, language: true, returningTo: back, preservingPosition: true)
             }
-            else if id == "controllerMappings" { self.showInGameSettings(.controller, mappings: true) }
+            else if id == "controllerMappings" { self.showInGameSettings(.controller, mappings: true, returningTo: self.overlayReturnAction()) }
             else if id == "soundtrack" {
+                let returnToAudio = self.overlayReturnAction()
                 MobileMusicLibraries.shared.onChange = { [weak self] in
                     guard let self, !self.overlay.isHidden, self.overlayCanvas.page.title == L10n.text("Soundtrack") else { return }
-                    self.showInGameSettings(.audio, soundtrack: true)
+                    self.showInGameSettings(.audio, soundtrack: true, returningTo: returnToAudio, preservingPosition: true)
                 }
-                self.showInGameSettings(.audio, soundtrack: true)
-            } else if id == "playInsights" { self.showInGameSettings(.privacy, insights: true)
+                self.showInGameSettings(.audio, soundtrack: true, returningTo: returnToAudio)
+            } else if id == "playInsights" { self.showInGameSettings(.privacy, insights: true, returningTo: self.overlayReturnAction())
             } else if id.hasPrefix("lib."), let pack = MobileMusicLibraries.shared.catalogue?.packs.first(where: { $0.id == String(id.dropFirst(4)) }) {
                 let libraries = MobileMusicLibraries.shared
                 if libraries.progress[pack.id] != nil { libraries.cancel(pack) }
                 else if libraries.isInstalled(pack) { libraries.remove(pack) }
                 else { libraries.download(pack) }
-                self.showInGameSettings(.audio, soundtrack: true)
+                self.showInGameSettings(.audio, soundtrack: true, returningTo: back, preservingPosition: true)
             } else if library.handleSettings(id) {
                 self.inputSpeed.ridiculousEnabled = library.mobileSettings.classic.ridiculousSpeedEnabled
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
                 self.applyGameSettings(library.mobileSettings)
-                self.showInGameSettings(group, mappings: mappings, language: language)
+                self.showInGameSettings(group, mappings: mappings, language: language, returningTo: back, preservingPosition: true)
             }
+        }
+        layoutOverlay()
+        if preservingPosition {
+            overlayCanvas.focusedID = focus
+            let maximum = max(0, overlay.contentSize.height - overlay.bounds.height)
+            overlay.setContentOffset(CGPoint(x: offset.x, y: min(maximum, max(0, offset.y))), animated: false)
         }
         view.setNeedsLayout()
     }
 
     func showControlsHelp() {
+        let returnToPreviousPage = overlayReturnAction()
         #if os(tvOS)
         let help = TVControllerBindings.help.components(separatedBy: "\n") + [L10n.text("DualSense touchpad swipe: step back / forward")]
         #else
-        let help = GameplayCommands.help + [L10n.text("Three-finger tap on the playfield: change graphics"), L10n.text("Two-finger swipe on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"), L10n.text("DualSense touchpad swipe: step back / forward")]
+        let help = GameplayCommands.help + [
+            L10n.text("Hold a lemming, then slide left or right to browse the group."),
+            L10n.text("While holding, drag a second finger to pan. Lift the first finger to assign."),
+            L10n.text("Three-finger tap on the playfield: change graphics"),
+            L10n.text("Two-finger swipe on the playfield: DJ shuffle"),
+            L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"),
+            L10n.text("DualSense touchpad swipe: step back / forward")]
         #endif
         showCustomOverlay(title: L10n.text("Controls"), details: help, reading: true, list: true,
-                          actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
+                          actions: [(L10n.text("BACK"), returnToPreviousPage)])
     }
 }
 #endif

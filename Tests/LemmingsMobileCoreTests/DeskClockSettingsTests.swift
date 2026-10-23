@@ -8,6 +8,7 @@ import Testing
         #expect(settings.openWhenStacked)
         #expect(settings.openWhenCharging)
         #expect(settings.showNextEvent)
+        #expect(!settings.redNightVision)
         #expect(!settings.calendarRequested)
     }
 
@@ -31,14 +32,17 @@ import Testing
         #expect(decoded.openWhenStacked)
         #expect(decoded.openWhenCharging)
         #expect(!decoded.calendarRequested)
+        #expect(!decoded.redNightVision)
     }
 
     @Test func roundTrip() throws {
         var settings = MobileSettings()
         settings.deskClock.openWhenCharging = false
+        settings.deskClock.redNightVision = true
         let decoded = try JSONDecoder().decode(MobileSettings.self, from: JSONEncoder().encode(settings))
         #expect(decoded == settings)
         #expect(!decoded.deskClock.openWhenCharging)
+        #expect(decoded.deskClock.redNightVision)
     }
 }
 

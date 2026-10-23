@@ -27,7 +27,7 @@ public enum MobileHomeArt {
     }
 
     public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
-                            families: [GameFrontEnd.Action], initials: String,
+                            families: [GameFrontEnd.Action], initials: String, nextPlayerIndex: Int? = nil,
                             subtitle: String = "", collectionsAvailable: Bool = true,
                             deskClock: Bool = false) -> GameFrontEnd.Page {
         var rows = resume + [journey].compactMap { $0 } + families
@@ -40,10 +40,14 @@ public enum MobileHomeArt {
         if let index = rows.firstIndex(where: { $0.enabled }) {
             for row in rows.indices { rows[row].primary = row == index }
         }
-        return .init(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
+        var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
+            subtitle: nextPlayerIndex == nil ? subtitle : (["PVP", subtitle].filter { !$0.isEmpty }.joined(separator: "  ")),
+            home: true, rows: rows,
             footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
-                     .init("collections", L10n.text("Playlists"), enabled: collectionsAvailable), GameSupport.menuAction]
+                     .init("collections", L10n.text("Collections"), enabled: collectionsAvailable), GameSupport.menuAction]
                 + (deskClock ? [GameFrontEnd.Action("deskClock", L10n.text("Desk Clock"))] : [])
                 + [.init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
+        page.homeNextPlayerIndex = nextPlayerIndex
+        return page
     }
 }

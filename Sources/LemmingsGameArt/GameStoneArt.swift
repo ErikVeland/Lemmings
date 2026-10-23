@@ -9,42 +9,53 @@ import NxlvKit
 /// Rectangles use a top-left origin, so a context must already be flipped to that
 /// orientation. AppKit views that return `isFlipped` and UIKit views both are.
 public enum GameStoneArt {
-    /// Reconstruct the panel rock once, retaining the original palette and half-width source pixels.
-    private static let detailedRock: CGImage? = {
-        let rows = PanelGlyphArt.rock.rows
-        let palette = PanelGlyphArt.rock.palette
-        guard let width = rows.first?.count else { return nil }
-        var pixels = [UInt8](repeating: 0, count: width * rows.count * 4)
-        for (y, row) in rows.enumerated() {
-            for (x, mark) in row.enumerated() {
-                guard let colour = palette[mark] else { continue }
-                let offset = (y * width + x) * 4
-                pixels[offset..<offset + 4] = [colour.0, colour.1, colour.2, 255]
-            }
+    private struct RockFrame: Decodable {
+        let width: Int, height: Int
+        let file: String
+    }
+    private struct RockManifest: Decodable {
+        let names: [String: String]
+        let banks: [String: [RockFrame?]]
+    }
+
+    /// The Macintosh background rock also supplies the original 1-bit button texture.
+    /// Cache its colour pixels with restrained opacity, using the existing artwork bank.
+    private static let rock: CGImage? = {
+        guard let directory = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
+              let data = try? Data(contentsOf: directory.appendingPathComponent("manifest.json")),
+              let manifest = try? JSONDecoder().decode(RockManifest.self, from: data),
+              let bank = manifest.names.first(where: { $0.value == "Charset2" })?.key,
+              let frames = manifest.banks[bank], frames.indices.contains(95), let frame = frames[95],
+              frame.width > 0, frame.height > 0, frame.width <= 4096, frame.height <= 4096,
+              !frame.file.contains("/"), !frame.file.contains(".."),
+              var pixels = try? Data(contentsOf: directory.appendingPathComponent(frame.file)),
+              pixels.count == frame.width * frame.height * 4 else { return nil }
+        // Keep the authored grain and palette. Opacity blends it into the original socket colours
+        // and still respects a caller's disabled alpha.
+        for offset in stride(from: 3, to: pixels.count, by: 4) {
+            pixels[offset] = UInt8(Double(pixels[offset]) * 0.35)
         }
-        guard let source = try? SequelMacFrame(width: width, height: rows.count, rgba: pixels),
-              let detailed = try? SequelMacArtwork.reconstruct(source, category: .architectural),
-              let provider = CGDataProvider(data: Data(detailed.rgba) as CFData) else { return nil }
-        return CGImage(width: detailed.width, height: detailed.height, bitsPerComponent: 8,
-            bitsPerPixel: 32, bytesPerRow: detailed.width * 4, space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+        guard let provider = CGDataProvider(data: pixels as CFData) else { return nil }
+        return CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
+            bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
             provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     }()
 
-    /// Fine rock grain stays the same size in short, wide and tall controls.
-    public static func drawDetailedRock(in context: CGContext, frame: CGRect, pixel: CGFloat) {
-        guard let image = detailedRock else { return }
-        let size = PanelGlyphArt.rock.pixelSize
-        let width = CGFloat(size.width * 2), height = CGFloat(size.height * 2)
+    /// Grain stays at one source pixel per logical pixel, independent of button size and bevel.
+    /// Continue the original background tile across large wells without enlarging its pixels.
+    public static func drawDetailedRock(in context: CGContext, frame: CGRect, pixel: CGFloat, selected: Bool = false) {
         let inner = well(frame, pixel: pixel)
-        guard inner.width > 0, inner.height > 0 else { return }
+        guard inner.width.isFinite, inner.height.isFinite, inner.minX.isFinite, inner.minY.isFinite,
+              inner.width > 0, inner.height > 0, let image = rock else { return }
+        let width = CGFloat(image.width), height = CGFloat(image.height)
         context.saveGState()
         defer { context.restoreGState() }
         context.clip(to: inner)
         context.interpolationQuality = .none
-        let columns = Int(ceil(inner.width / width)), rows = Int(ceil(inner.height / height))
-        for y in 0..<rows {
-            for x in 0..<columns {
+        context.setShouldAntialias(false)
+        for y in 0..<Int(ceil(inner.height / height)) {
+            for x in 0..<Int(ceil(inner.width / width)) {
                 drawImage(image, in: CGRect(x: inner.minX + CGFloat(x) * width,
                     y: inner.minY + CGFloat(y) * height, width: width, height: height), context: context)
             }
@@ -92,6 +103,7 @@ public enum GameStoneArt {
         fill(CGRect(x: inner.minX, y: inner.maxY, width: inner.width, height: pixel), light)
         fill(CGRect(x: inner.maxX, y: inner.minY, width: pixel, height: inner.height), light)
         fill(inner, monochrome ? CGColor(gray: 0, alpha: 1) : selected ? wellSelected : wellIdle)
+        if !monochrome { drawDetailedRock(in: context, frame: frame, pixel: pixel, selected: selected) }
     }
 
     /// Draws an original panel tile at the scale that fills the whole button, cropped to the

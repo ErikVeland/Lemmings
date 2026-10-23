@@ -41,7 +41,8 @@ extension MenuAudit {
                     if state == "long" { resume.append(.init("resumeLevel", "Resume level - PLA")) }
                     var page = MobileHomeArt.page(resume: resume, journey: .init("journey", "Journey map 1/227 solved"),
                         families: families, initials: state == "hot-seat" ? "ALICE v BOB" : "PLA",
-                        subtitle: state == "hot-seat" ? "Next: ALICE" : "Next: PLA", collectionsAvailable: state != "unavailable",
+                        nextPlayerIndex: state == "hot-seat" ? 0 : nil,
+                        subtitle: state == "hot-seat" ? "" : "Next: PLA", collectionsAvailable: state != "unavailable",
                         deskClock: true)
                     if state == "unavailable" {
                         page.rows[page.rows.count - 3].selected = true

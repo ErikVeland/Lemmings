@@ -58,7 +58,7 @@ import NxlvKit
     }
 
     func resultActions(y: CGFloat) {
-        let back = ResultAction(title: L10n.text("Back")) { [weak self] in self?.onClose?() }
+        let back = ResultAction(title: L10n.text("Back")) { [weak self] in self?.back() }
         let retry = ResultAction(title: nextSessionPlayer == nil ? L10n.text("Retry") : L10n.text("Retry as \(player.initials)")) { [weak self] in self?.onRetry?() }
         let primary = ResultAction(title: primaryResultTitle, primary: true) { [weak self] in self?.performDefaultResultAction() }
         let skip = ResultAction(title: skipTitle, enabled: canSpendSkip) { [weak self] in self?.skipLevel() }
@@ -81,17 +81,14 @@ import NxlvKit
         ], y: y - 52, links: true)
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
-            let library = ResultAction(title: L10n.text("Back to library")) { [weak self] in
-                if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
-            }
             let nextRetry = ResultAction(title: L10n.text("Retry as \(next.initials)"), primary: !cleared, enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             if cleared {
                 let owner = handsOverAfterClear ?? player
                 let forward = ResultAction(title: "\(continueTitle): \(owner.initials)", primary: true,
                     enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
-                resultActionRow([library, retry, nextRetry, forward], y: y)
+                resultActionRow([back, retry, nextRetry, forward], y: y)
             } else {
-                resultActionRow(offersSkip ? [library, retry, skip, nextRetry] : [library, retry, nextRetry], y: y)
+                resultActionRow(offersSkip ? [back, retry, skip, nextRetry] : [back, retry, nextRetry], y: y)
             }
         } else {
             var actions = [back]

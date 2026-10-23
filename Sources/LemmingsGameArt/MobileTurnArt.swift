@@ -17,15 +17,23 @@ public enum MobileTurnArt {
         if role == .current, (page.pause != nil || GameMenuTypography.menuText(page.title) == GameMenuTypography.menuText(L10n.text("Paused"))) {
             identified.title = L10n.text("Paused: \(playerName)")
             identified.titleRuns = GameSemanticText.named(identified.title, name: playerName)
+        } else if page.home, let sessionName,
+            sessionName.range(of: " v ", options: .caseInsensitive) != nil
+                || sessionName.range(of: " vs ", options: .caseInsensitive) != nil {
+            if identified.homeInitials.isEmpty { identified.homeInitials = sessionName }
+            if identified.homeNextPlayerIndex == nil {
+                let names = sessionName.replacingOccurrences(of: " vs ", with: " v ", options: .caseInsensitive)
+                    .components(separatedBy: " v ")
+                let matches = names.indices.filter { names[$0].caseInsensitiveCompare(playerName) == .orderedSame }
+                if matches.count == 1 { identified.homeNextPlayerIndex = matches[0] }
+            }
+            if !identified.subtitle.hasPrefix("PVP") {
+                identified.subtitle = (["PVP", identified.subtitle].filter { !$0.isEmpty }).joined(separator: "  ")
+            }
+            identified.subtitleRuns = [.init(identified.subtitle, .blue)]
         } else {
             identified.subtitle = subtitle(page.subtitle, playerName: playerName, role: role)
-            if page.home, let sessionName, !sessionName.isEmpty {
-                identified.subtitle = sessionName + "  " + identified.subtitle
-            }
             identified.subtitleRuns = []
-            if page.home, let sessionName {
-                identified.subtitleRuns += GameSemanticText.players(sessionName) + [.init("  ", .blue)]
-            }
             identified.subtitleRuns += GameSemanticText.named(subtitle(page.subtitle, playerName: playerName, role: role), name: playerName)
         }
         return identified

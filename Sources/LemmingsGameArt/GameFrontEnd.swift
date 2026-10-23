@@ -12,6 +12,7 @@ public struct GameFrontEnd {
         public init(_ text: String, _ palette: GameMenuTypography.Palette) { self.text = text; self.palette = palette }
     }
     public struct Action: Equatable, Sendable {
+        public enum Icon: Equatable, Sendable { case favourite }
         public var id: String
         public var title: String
         public var enabled: Bool
@@ -22,7 +23,9 @@ public struct GameFrontEnd {
         public var portrait: Int?
         public var backNavigation: Bool?
         public var gameLogo: GameLogo?
+        public var icon: Icon?
         public var titleRuns: [TextRun] = []
+        var visibleTitle: String { icon == nil ? title : "" }
         public var isBackNavigation: Bool {
             if let backNavigation { return backNavigation }
             if ["back", "cancel", "library", "close", "home"].contains(id) { return true }
@@ -31,12 +34,13 @@ public struct GameFrontEnd {
         }
         public init(_ id: String, _ title: String, enabled: Bool = true,
                     primary: Bool = false, selected: Bool = false, portrait: Int? = nil, backNavigation: Bool? = nil,
-                    gameLogo: GameLogo? = nil) {
+                    gameLogo: GameLogo? = nil, icon: Icon? = nil) {
             self.id = id; self.title = title; self.enabled = enabled
             self.primary = primary; self.selected = selected
             self.portrait = portrait
             self.backNavigation = backNavigation
             self.gameLogo = gameLogo
+            self.icon = icon
         }
     }
     public struct Page: Equatable, Sendable {
@@ -44,9 +48,18 @@ public struct GameFrontEnd {
         public var subtitle: String
         public var home: Bool
         public var homeInitials: String
+        public var homeNextPlayerIndex: Int? = nil
+        public var homeNextPlayerName: String? {
+            guard let homeNextPlayerIndex else { return nil }
+            let names = homeInitials.replacingOccurrences(of: " vs ", with: " v ", options: .caseInsensitive)
+                .components(separatedBy: " v ")
+            return names.indices.contains(homeNextPlayerIndex) ? names[homeNextPlayerIndex] : nil
+        }
         public var subtitleRuns: [TextRun] = []
         public var titleRuns: [TextRun] = []
         public var rows: [Action]
+        /// Search and list-wide actions belong to a separate, fixed toolbar.
+        public var listTools: [Action] = []
         public var details: [String]
         public var footer: [Action]
         /// Hardware Back can choose a safe, visible action on a required-choice page.
@@ -87,8 +100,10 @@ public struct GameFrontEnd {
         /// Earned rescue stars, 0 to 3, drawn as filled or outlined stars below the subtitle.
         public var stars: Int?
         public var footerColumns: Int?
-        /// Settings-style lists pair their rows when the board has room. A lone last row spans both columns.
+        /// Short peer lists can also use the adaptive columns applied to longer lists.
         public var pairsRows = false
+        /// Keep ordered steps or another deliberately linear list in one column.
+        public var singleColumnRows = false
         public var rowHeadings: [String: String] = [:]
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
@@ -140,7 +155,7 @@ public struct GameFrontEnd {
         let x = (width - boardWidth) / 2
         let requestedColumns = page.footerColumns ?? (boardWidth >= 620 ? 3 : 2)
         let minimumCaptionWidth = page.footer.map { action in
-            (action.title.split(whereSeparator: \.isWhitespace).map {
+            action.icon != nil ? 44 : (action.title.split(whereSeparator: \.isWhitespace).map {
                 GameTextLayout.width(of: String($0))
             }.max() ?? 0) + (action.primary ? 48 : 24)
         }.max() ?? 44
@@ -160,29 +175,11 @@ public struct GameFrontEnd {
             y = stars.maxY + 12
         }
         var targets: [Target] = []
-        let rowColumns = page.pairsRows && boardWidth >= 620 ? 2 : 1
-        let rowCell = (boardWidth - 40 - CGFloat(rowColumns - 1) * 12) / CGFloat(rowColumns)
-        let rowHeight = max(52, page.rows.map { GameTextLayout.height($0.title, width: rowCell - ($0.toggleValue == nil ? 48 : 76)) + 12 }.max() ?? 52)
-        var rowHeadings: [(String, CGRect)] = []
-        var rowIndex = 0
-        while rowIndex < page.rows.count {
-            if let title = page.rowHeadings[page.rows[rowIndex].id] {
-                y += 12
-                let height = GameTextLayout.height(title, width: boardWidth - 40)
-                rowHeadings.append((title, CGRect(x: x + 20, y: y, width: boardWidth - 40, height: height)))
-                y += height + 8
-            }
-            let count = rowColumns == 2 && rowIndex + 1 < page.rows.count
-                && page.rowHeadings[page.rows[rowIndex + 1].id] == nil ? 2 : 1
-            let group = page.rows[rowIndex..<rowIndex + count]
-            for (column, row) in group.enumerated() {
-                let width = group.count == 1 ? boardWidth - 40 : rowCell
-                targets.append(Target(action: row, frame: CGRect(x: x + 20 + CGFloat(column) * (rowCell + 12), y: y,
-                                                                  width: width, height: rowHeight)))
-            }
-            y += rowHeight + 8
-            rowIndex += count
-        }
+        let grid = GameListGrid(actions: page.rows, width: boardWidth - 40,
+            columnsEnabled: !page.singleColumnRows && (page.pairsRows || page.rows.count >= 4), rowHeadings: page.rowHeadings)
+        targets += grid.targets.map { Target(action: $0.action, frame: $0.frame.offsetBy(dx: x + 20, dy: y)) }
+        let rowHeadings = grid.headings.map { ($0.0, $0.1.offsetBy(dx: x + 20, dy: y)) }
+        if !page.rows.isEmpty { y += grid.height + 8 }
         var preview = CGRect.zero
         var details: [CGRect] = []
         let readingWidth = page.reading ? min(720, boardWidth - 40) : boardWidth - 40
@@ -211,7 +208,7 @@ public struct GameFrontEnd {
                 }
                 let footerCell = (boardWidth - 40 - CGFloat(footerGrid.columns - 1) * 12) / CGFloat(footerGrid.columns)
                 let actionHeight = max(48, page.footer.map {
-                    GameTextLayout.height($0.title, width: footerCell - ($0.primary ? 48 : 24)) + 8
+                    GameTextLayout.height($0.visibleTitle, width: footerCell - ($0.primary ? 48 : 24)) + 8
                 }.max() ?? 48)
                 let room = minimumHeight - y - 16 - detailHeight - CGFloat(footerGrid.rows) * (actionHeight + 12) - 36
                 preview = CGRect(x: x + 20, y: y, width: previewWidth,
@@ -228,7 +225,7 @@ public struct GameFrontEnd {
         let columns = footerGrid.columns
         let rows = footerGrid.rows
         let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
-        let footerHeight = max(48, page.footer.map { GameTextLayout.height($0.title, width: cell - ($0.primary ? 48 : 24)) + 8 }.max() ?? 48)
+        let footerHeight = max(48, page.footer.map { GameTextLayout.height($0.visibleTitle, width: cell - ($0.primary ? 48 : 24)) + 8 }.max() ?? 48)
         let footerPitch = footerHeight + 12
         let height = max(minimumHeight, y + CGFloat(rows) * footerPitch + 36)
         y = max(y + 12, height - CGFloat(rows) * footerPitch - 24)
@@ -273,6 +270,9 @@ public struct GameFrontEnd {
         let heading = CGRect(x: x + 62, y: 22, width: boardWidth - 124, height: 44)
         let subtitle = CGRect(x: x + 12, y: 70, width: inner,
             height: GameTextLayout.height(page.subtitle, width: inner))
+        let showsTurnAtTop = page.homeNextPlayerIndex != nil
+        let turnInitials = CGRect(x: x + 12, y: subtitle.maxY + 4, width: inner,
+            height: showsTurnAtTop ? 22 : 0)
         let gameStart = page.rows.firstIndex {
             $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id)
         } ?? page.rows.count
@@ -281,14 +281,14 @@ public struct GameFrontEnd {
                         library.filter { $0.gameLogo != nil }].filter { !$0.isEmpty }
         var targets: [Target] = []
         var sectionForAction: [String: Int] = [:]
-        var y = subtitle.maxY + 16
+        var y = (showsTurnAtTop ? turnInitials.maxY : subtitle.maxY) + 16
         for (section, actions) in sections.enumerated() {
             if section > 0 { y += groupGap }
             let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3 : columns
             let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
             let logos = actions.allSatisfy { $0.gameLogo != nil }
             let rowHeight = logos ? CGFloat(compact ? 64 : 112) : max(44, actions.map {
-                GameTextLayout.height($0.title, width: (actions.count == 1 ? inner : cell) - 48) + 8
+                GameTextLayout.height($0.visibleTitle, width: (actions.count == 1 ? inner : cell) - 48) + 8
             }.max() ?? 44)
             for start in stride(from: 0, to: actions.count, by: sectionColumns) {
                 let group = actions[start..<min(start + sectionColumns, actions.count)]
@@ -303,9 +303,10 @@ public struct GameFrontEnd {
             y -= gap
         }
         y += groupGap
-        let initials = CGRect(x: x + 12, y: y, width: inner, height: page.homeInitials.isEmpty ? 0 : 22)
-        y = initials.maxY + 8
-        let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: footerCell - 24) + 8 }.max() ?? 44)
+        let initials = showsTurnAtTop ? turnInitials
+            : CGRect(x: x + 12, y: y, width: inner, height: page.homeInitials.isEmpty ? 0 : 22)
+        if !showsTurnAtTop { y = initials.maxY + 8 }
+        let footerHeight = max(44, footer.map { GameTextLayout.height($0.visibleTitle, width: footerCell - 24) + 8 }.max() ?? 44)
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: CGRect(x: x + 12 + CGFloat(slot.column) * (footerCell + gap),
                 y: y + CGFloat(slot.row) * (footerHeight + gap),
@@ -333,7 +334,7 @@ public struct GameFrontEnd {
                 board: CGRect(x: x, y: 3, width: boardWidth, height: height - 3),
                 heading: CGRect(x: heading.minX, y: heading.minY, width: heading.width, height: heading.height + logoGrowth),
                 subtitle: subtitle.offsetBy(dx: 0, dy: logoGrowth), preview: .zero, details: [],
-                targets: expanded, initials: initials.offsetBy(dx: 0, dy: spare))
+                targets: expanded, initials: initials.offsetBy(dx: 0, dy: showsTurnAtTop ? logoGrowth : spare))
         }
         let offset = max(0, (height - contentHeight) / 2)
         return Layout(size: CGSize(width: width, height: height),
@@ -356,7 +357,7 @@ public struct GameFrontEnd {
         let footerGrid = GameFooterGrid(actions: page.orderedFooter, columns: width >= 600 ? 3 : 2, spanSingleAction: true)
         let columns = footerGrid.columns
         let cell = (inner - CGFloat(columns - 1) * gap) / CGFloat(columns)
-        let footerHeight = max(44, page.footer.map { GameTextLayout.height($0.title, width: cell - 48) + 8 }.max() ?? 44)
+        let footerHeight = max(44, page.footer.map { GameTextLayout.height($0.visibleTitle, width: cell - 48) + 8 }.max() ?? 44)
         let footerRows = footerGrid.rows
         let actionsHeight = CGFloat(footerRows) * (footerHeight + gap)
         let sideBySide = width >= 600
@@ -372,7 +373,7 @@ public struct GameFrontEnd {
         }
         var targets: [Target] = []
         for action in page.rows {
-            let height = max(44, GameTextLayout.height(action.title, width: detailWidth - 24) + 8)
+            let height = max(44, GameTextLayout.height(action.visibleTitle, width: detailWidth - 24) + 8)
             targets.append(Target(action: action, frame: CGRect(x: sideBySide ? x + inset + inner - detailWidth : x + inset,
                                                                y: y, width: detailWidth, height: height)))
             y += height + gap
@@ -432,7 +433,8 @@ public struct GameFrontEnd {
             } else { GameTextLayout.draw(page.subtitle, in: layout.subtitle, typography: typography, context: context) }
         }
         if page.home, !page.homeInitials.isEmpty {
-            GameSemanticText.draw(GameSemanticText.players(page.homeInitials), in: layout.initials, typography: typography, context: context)
+            GameSemanticText.draw(GameSemanticText.players(page.homeInitials, nextPlayerIndex: page.homeNextPlayerIndex),
+                in: layout.initials, typography: typography, context: context)
         }
         if page.pause != nil {
             MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
@@ -472,7 +474,7 @@ public struct GameFrontEnd {
             GameTextLayout.draw(title, in: frame, typography: typography, palette: .green, alignment: .left, context: context)
         }
         let rowIDs = Set(page.rows.map(\.id))
-        for target in layout.targets {
+        for target in layout.targets where !target.frame.isEmpty {
             let action = target.action
             let chosen = action.enabled && (action.primary || action.selected)
             let focused = action.enabled && highlighted == action.id
@@ -510,6 +512,13 @@ public struct GameFrontEnd {
                                     width: target.frame.width - 16, height: 3))
             }
             if focused { drawFocus(target.frame, in: context) }
+            if action.icon == .favourite {
+                context.saveGState()
+                context.setAlpha(action.enabled ? 1 : 0.45)
+                GameStarArt.draw(in: target.frame, earned: action.selected, context: context)
+                context.restoreGState()
+                continue
+            }
             if action.primary, action.enabled {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
                 context.beginPath()

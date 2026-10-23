@@ -27,6 +27,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/ControllerPointer.swift" \
   "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
   "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
+  "$project_dir/Sources/LemmingsLocal/LemmingCrowdPresentation.swift" \
   "$project_dir/Sources/LemmingsLocal/ClassicSkillBackpack.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/PrecisionZoomLens+AppKit.swift" \

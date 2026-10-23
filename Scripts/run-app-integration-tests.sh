@@ -30,6 +30,7 @@ cat "$project_dir/Sources/LemmingsLocal/main.swift" \
   "$project_dir/Tests/AppIntegrationTests/gameplay-quick-controls.swift" \
   "$project_dir/Tests/AppIntegrationTests/extra-skills.swift" \
   "$project_dir/Tests/AppIntegrationTests/journey-progress.swift" \
+  "$project_dir/Tests/AppIntegrationTests/fan-library.swift" \
   "$project_dir/Tests/AppIntegrationTests/lemmings-typography.swift" > "$build_dir/main.swift"
 sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
@@ -86,6 +87,7 @@ if [[ "${TEST_SCOPE:-all}" == frame-performance ]]; then test_flags+=(-D FRAME_P
 if [[ "${TEST_SCOPE:-all}" == release-blockers ]]; then test_flags+=(-D RELEASE_BLOCKER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hints ]]; then test_flags+=(-D HINT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == fan-library ]]; then test_flags+=(-D FAN_LIBRARY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == content-browser ]]; then test_flags+=(-D CONTENT_BROWSER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi

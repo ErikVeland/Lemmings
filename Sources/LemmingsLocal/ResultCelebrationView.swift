@@ -105,11 +105,10 @@ import NxlvKit
         drawResultCareerCard(c)
         if let entry = LevelCollections.entry(attemptID: run.id) {
             let saved = LevelCollections.isFavourite(entry, profileID: run.profileID)
-            button(saved ? L10n.text("Unfavourite") : L10n.text("Favourite"), CGRect(x: 808, y: resultCardsY + 124, width: 232, height: 34), selected: saved) { [weak self] in
+            button(saved ? L10n.text("Remove favourite") : L10n.text("Add favourite"), CGRect(x: 996, y: resultCardsY + 120, width: 44, height: 44), selected: saved, icon: .favourite) { [weak self] in
                 LevelCollections.toggle(entry, profileID: run.profileID, owner: self?.window)
                 self?.needsDisplay = true
             }
-            GameStar.draw(at: CGPoint(x: 820, y: resultCardsY + 132), earned: saved, size: 2)
         }
         resultActions(y: resultActionsY)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
@@ -232,7 +231,7 @@ import NxlvKit
             progressBar(value: delta.after.value, goal: delta.after.goal, in: CGRect(x: 80, y: y + 61, width: 960, height: 5), earned: delta.after.earned)
         }
         link(L10n.text("More \(careerPage % pages + 1)/\(pages) >"), CGRect(x: 786, y: 574, width: 254, height: 34)) { [weak self] in self?.careerPage += 1; self?.needsDisplay = true }
-        link(L10n.text("Career leaderboard >"), CGRect(x: 80, y: 574, width: 590, height: 34), alignment: .left) { [weak self] in self?.boardScope = .career; self?.page(.records) }
+        link(L10n.text("Career leaderboard >"), CGRect(x: 80, y: 574, width: 590, height: 34), alignment: .left) { [weak self] in self?.page(.records, scope: .career) }
         pageFooter()
         let skipDetails: String = {
             guard !assisted else { return "" }

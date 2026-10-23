@@ -21,6 +21,8 @@ import NxlvKit
         let roundedHUD = CommandLine.arguments.last == "--rounded-hud"
         let bookHome = CommandLine.arguments.last == "--book-home"
         let support = CommandLine.arguments.last == "--support"
+        let replayControls = CommandLine.arguments.last == "--replay-controls"
+        let edgeToEdge = CommandLine.arguments.last == "--edge-to-edge"
         let duo = CommandLine.arguments.last == "--duo"
         let staticHome = CommandLine.arguments.last == "--static-home"
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
@@ -37,7 +39,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -45,6 +47,7 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if edgeToEdge { try checkEdgeToEdge(typography: typography, content: content, output: output); return }
         if duoRelease { try checkDuoRelease(typography: typography, artwork: artwork, output: output); return }
         if sharing { try checkSharingPrivacy(typography: typography, output: output); return }
         if previewFill { try checkPreviewFill(typography: typography, content: content, output: output); return }
@@ -64,6 +67,7 @@ import NxlvKit
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
         else { throw invalidTargets(line: #line) }
+        if replayControls { try checkReplayControls(library: library, typography: typography, output: output); return }
         if hierarchy { try checkHierarchy(library: library, typography: typography, output: output); return }
         if pause { try checkPause(library: library, typography: typography, output: output); return }
         if ghostSolution { try checkGhostSolution(library: library, typography: typography,
@@ -125,6 +129,9 @@ import NxlvKit
         pages += MobileSettingsGroup.allCases.map {
             ("settings-" + $0.rawValue, MobileSettingsArt.page($0, settings: MobileSettings()))
         }
+        var redClock = MobileSettings()
+        redClock.deskClock.redNightVision = true
+        pages.append(("settings-deskClock-red-on", MobileSettingsArt.page(.deskClock, settings: redClock)))
         pages.append(("settings-controller-remap", MobileSettingsArt.controllerMappings(MobileSettings())))
         let insightCounts = ["starts": 120, "wins": 80, "fails": 30, "abandoned": 10,
                              "saved": 560, "solo": 70, "hotSeat": 50, "music": 1, "downloads": 1]

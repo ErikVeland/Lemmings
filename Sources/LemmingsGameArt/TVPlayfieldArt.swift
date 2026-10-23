@@ -99,7 +99,8 @@ import NxlvKit
         for index in start..<(start + skillCount) {
             let skill = snapshot.skills[index]
             let box = CGRect(x: CGFloat(index - start) * cell, y: y, width: cell - 8, height: 132)
-            GameStoneArt.draw(in: context, frame: box, selected: index == game.selectedControl, pixel: 2)
+            GamePlayButtonArt.draw(in: context, frame: box, selected: index == game.selectedControl,
+                pixel: 2, face: .skill(index))
             if index == game.selectedControl { SkillPointerBadge.innerGlow(in: box.insetBy(dx: 4, dy: 4), context: context) }
             if let icon = game.session.skillCursorFrame(control: index).flatMap(MobileBitmapRenderer.image) {
                 let iconScale = max(1, floor(min(44 / CGFloat(icon.width), 44 / CGFloat(icon.height))))

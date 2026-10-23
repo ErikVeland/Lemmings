@@ -139,15 +139,19 @@ import NxlvKit
         super.init(frame: .zero)
         title = L10n.text("Favourite"); target = self; action = #selector(invoke)
         setButtonType(.momentaryPushIn)
-        setAccessibilityLabel(L10n.text("Favourite"))
+        setAccessibilityLabel(L10n.text("Add favourite"))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     @objc private func invoke() { onPress?() }
+    override var intrinsicContentSize: NSSize { NSSize(width: 44, height: 44) }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: isHighlighted, pixel: 1)
-        GameStar.draw(at: CGPoint(x: 10, y: bounds.midY - 11), earned: state == .on, size: 2)
-        GameControlText.draw(title, in: CGRect(x: 40, y: 0, width: bounds.width - 46, height: bounds.height),
-                             enabled: isEnabled, role: .body)
+        if let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setAlpha(isEnabled ? 1 : 0.45)
+            GameStarArt.draw(in: bounds, earned: state == .on, context: context)
+            context.restoreGState()
+        }
         GameControlText.focus(self)
     }
     func showSaved(_ saved: Bool) {
@@ -449,7 +453,12 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
-        GameStoneButton.draw(bounds, selected: window?.firstResponder === currentEditor(), pixel: 1)
+        GameStyle.fill(bounds, NSColor(calibratedWhite: 0.045, alpha: 1))
+        let focused = window?.firstResponder === currentEditor()
+        (focused ? NSColor.white : NSColor(calibratedWhite: 0.48, alpha: 1)).setStroke()
+        let border = NSBezierPath(rect: bounds.insetBy(dx: 0.5, dy: 0.5))
+        border.lineWidth = 1
+        border.stroke()
         GameControlText.draw(stringValue.isEmpty ? (placeholderString ?? L10n.text("Search")) : stringValue,
             in: bounds.insetBy(dx: 10, dy: 2))
     }

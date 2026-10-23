@@ -68,7 +68,7 @@ extension MobileLibraryViewController {
     func addToPlaylistPage(subtitle: String) -> GameFrontEnd.Page {
         var rows = playlists.playlists.map { GameFrontEnd.Action("add." + $0.id.uuidString, $0.name + "  \($0.entries.count)") }
         rows.append(.init("addNew", L10n.text("New playlist")))
-        return .init(title: L10n.text("Add to playlist"), subtitle: subtitle, rows: rows, footer: [.init("back", L10n.text("Back"))])
+        return .init(title: L10n.text("Add to playlist"), subtitle: subtitle, rows: rows, footer: [.init("addPlaylistBack", L10n.text("Back"))])
     }
 
     // MARK: - Actions

@@ -38,6 +38,10 @@ extension MobileLibraryViewController {
                 do { try learningStorage.save(saved, name: "learning") }
                 catch { notice = error.localizedDescription }
             }
+            do {
+                try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id,
+                    entries: saved.run?.entries ?? [])
+            } catch { notice = error.localizedDescription }
             return saved
         }
         set {
@@ -48,7 +52,8 @@ extension MobileLibraryViewController {
     func saveLearningState(_ value: MobileLearningState) throws {
         var saved = value; saved.refreshJourneySession()
         try learningStorage.save(saved, name: "learning")
-        try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id)
+        try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id,
+            entries: saved.run?.entries ?? [])
         if let snapshot = saved.journeySession {
             try GameProgressPreferences.saveJourneySession(snapshot, profileID: profiles.activeID, sessionID: hotSeat?.id)
         }

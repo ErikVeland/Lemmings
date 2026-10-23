@@ -28,6 +28,7 @@ import LemmingsGameArt
     weak var gameWindow: NSWindow?
     var onPresent: (() -> Void)?
     var onNavigate: (() -> Void)?
+    var onMainMenu: (() -> Void)?
     private struct Page {
         let view: NSView
         var focus: NSResponder?
@@ -35,6 +36,46 @@ import LemmingsGameArt
         let container: GamePageContainer
     }
     private var pages: [Page] = []
+    /// Retains the actual browsing pages, including their scroll views and focus.
+    final class NavigationReturn {
+        fileprivate var restore: (() -> Void)?
+        fileprivate var discard: (() -> Void)?
+        func cancel() {
+            let action = discard
+            restore = nil; discard = nil
+            action?()
+        }
+    }
+    func retainNavigation() -> NavigationReturn? {
+        guard !pages.isEmpty, let window = gameWindow else { return nil }
+        pages[pages.count - 1].focus = window.firstResponder
+        let retained = pages
+        let focus = gameFocus
+        let modal = wasAccessibilityModal
+        let result = NavigationReturn()
+        result.restore = { [weak self, weak window] in
+            guard let self, let window else { return }
+            self.dismissAll()
+            self.gameWindow = window
+            self.pages = retained
+            self.gameFocus = focus
+            self.wasAccessibilityModal = modal
+            self.onPresent?()
+            self.reattach()
+            self.keyboardNavigation.focus(retained.last?.focus, in: window)
+            self.updateAccessibility()
+        }
+        result.discard = { retained.reversed().forEach { $0.dismiss?() } }
+        for page in pages { page.container.removeFromSuperview() }
+        pages.removeAll()
+        updateAccessibility()
+        return result
+    }
+    func restoreNavigation(_ navigation: NavigationReturn) {
+        let action = navigation.restore
+        navigation.restore = nil; navigation.discard = nil
+        action?()
+    }
     private var loadingID: UUID?
     private var loadingView: GameLoadingIndicator?
     @discardableResult func beginLoading(owner: NSWindow) -> UUID {
@@ -96,10 +137,8 @@ import LemmingsGameArt
             }
         }
         guard event.window === window, window.attachedSheet == nil, let current = pages.last else { return false }
-        return keyboardNavigation.handle(event, in: current.view, window: window) {
-            if let page = current.view as? GameMenuPage { page.onBack?() }
-            else if let replay = current.view as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
-            else { self.dismiss(current.view) }
+        return keyboardNavigation.handle(event, in: current.container, window: window) {
+            self.goBack(from: current.view)
         }
     }
     private func updateCursor(suppressed: Bool) {
@@ -136,6 +175,17 @@ import LemmingsGameArt
     var isPresented: Bool { !pages.isEmpty || gameWindow?.attachedSheet != nil }
     func contains(_ view: NSView) -> Bool { pages.contains { $0.view === view } }
     func controllerPage(in window: NSWindow) -> NSView? { gameWindow === window ? pages.last?.view : nil }
+    func controllerNavigationRoot(in window: NSWindow) -> NSView? { gameWindow === window ? pages.last?.container : nil }
+    func pageForNavigationRoot(_ root: NSView) -> NSView? {
+        pages.first { $0.container === root }?.view
+    }
+    func goBack(from page: NSView) {
+        if let menu = page as? GameMenuPage { menu.onBack?() }
+        else if let arcade = page as? ArcadeView { arcade.back() }
+        else if let help = page as? KeyboardOverlayView { help.onClose() }
+        else if let replay = page as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
+        else { dismiss(page) }
+    }
 
     @discardableResult func present(_ view: NSView, owner: NSWindow? = nil,
         focus: NSResponder? = nil, onDismiss: (() -> Void)? = nil) -> Bool {
@@ -266,7 +316,54 @@ import LemmingsGameArt
 }
 
 /// Enlarged pages retain their full layout and scroll instead of clipping controls.
-@MainActor private final class GamePageContainer: NSScrollView {
+@MainActor private final class GamePageContainer: NSView {
+    private let scroll: GamePageScrollView
+    private let home = GameActionButton(title: L10n.text("Main menu"), primary: false)
+    private let back = GameActionButton(title: L10n.text("Back"), primary: false)
+    private let page: NSView
+    override var isFlipped: Bool { true }
+    init(page: NSView) {
+        self.page = page
+        scroll = GamePageScrollView(page: page)
+        super.init(frame: .zero)
+        addSubview(scroll)
+        home.setAccessibilityIdentifier("navigation.home")
+        home.onPress = { GameScreen.shared.onMainMenu?() }
+        addSubview(home)
+        back.setAccessibilityIdentifier("navigation.back")
+        back.onPress = { [weak page] in if let page { GameScreen.shared.goBack(from: page) } }
+        addSubview(back)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilitySubrole(.dialog)
+        setAccessibilityLabel(page.accessibilityLabel() ?? L10n.text("Game dialog"))
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func draw(_ dirtyRect: NSRect) { GameStyle.fill(bounds, .black) }
+    override func mouseDown(with event: NSEvent) {}
+    override func swipe(with event: NSEvent) {
+        if !back.isHidden, event.deltaX > 0 { GameScreen.shared.goBack(from: page) }
+        else { super.swipe(with: event) }
+    }
+    override func layout() {
+        super.layout()
+        let visible = GameScreen.shared.onMainMenu != nil
+        home.isHidden = !visible
+        let showsBack = (page as? GameMenuPage)?.controllerBackButton.isHidden != true
+        back.title = (page as? GameMenuPage)?.backTitle ?? L10n.text("Back")
+        back.isHidden = !visible || !showsBack
+        let layout = GameNavigationArt.layout(width: bounds.width, actions: GameNavigationArt.actions(back: showsBack, backTitle: back.title))
+        for target in layout.targets {
+            if target.action.id == "navigation.back" { back.frame = target.frame }
+            else if target.action.id == "navigation.home" { home.frame = target.frame }
+        }
+        let height = visible ? layout.size.height : 0
+        scroll.frame = CGRect(x: 0, y: height, width: bounds.width, height: max(0, bounds.height - height))
+        scroll.layoutSubtreeIfNeeded()
+    }
+}
+
+@MainActor private final class GamePageScrollView: NSScrollView {
     private let page: NSView
     init(page: NSView) {
         self.page = page
@@ -325,6 +422,10 @@ import LemmingsGameArt
     var onBack: (() -> Void)?
     var onHorizontalNavigation: ((Int) -> Void)?
     let body = NSView()
+    var listMinimumHeight: CGFloat = 56
+    private var listActions: [(index: Int, button: GameActionButton)] = []
+    private let listScroll = NSScrollView()
+    private let listDocument = GameMenuListDocument()
     private let canvas: GameMenuCanvas
     private let back = GameActionButton(title: L10n.text("Back"), primary: false)
     var controllerBackButton: NSButton { back }
@@ -354,6 +455,7 @@ import LemmingsGameArt
         canvas.frame = CGRect(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2,
                               width: 1120 * scale, height: 720 * scale)
         canvas.bounds = CGRect(x: 0, y: 0, width: 1120, height: 720)
+        layoutListActions()
         canvas.layoutSubtreeIfNeeded()
     }
     override func draw(_ dirtyRect: NSRect) {
@@ -419,9 +521,34 @@ import LemmingsGameArt
         action: @escaping () -> Void
     ) -> NSButton {
         let button = GameActionButton(title: title, primary: false, onPress: action)
-        button.frame = CGRect(x: 40, y: 400 - index * 76, width: 860, height: 56)
-        body.addSubview(button)
+        button.wrapsTitle = true
+        if listScroll.superview == nil {
+            listScroll.drawsBackground = false
+            listScroll.scrollerStyle = .overlay
+            listScroll.verticalScrollElasticity = .none
+            listScroll.horizontalScrollElasticity = .none
+            listScroll.documentView = listDocument
+            body.addSubview(listScroll)
+        }
+        listActions.removeAll { $0.button.superview == nil }
+        listActions.append((index, button))
+        listDocument.addSubview(button)
+        needsLayout = true
         return button
+    }
+    private func layoutListActions() {
+        guard listScroll.superview != nil else { return }
+        listActions.removeAll { $0.button.superview == nil }
+        let ordered = listActions.sorted { $0.index < $1.index }
+        listScroll.frame = body.bounds
+        let viewport = listScroll.contentSize
+        let grid = GameListGrid(actions: ordered.enumerated().map { .init(String($0.offset), $0.element.button.title) },
+            width: max(1, viewport.width - 24), columnsEnabled: ordered.count >= 4,
+            minimumHeight: listMinimumHeight, captionInset: 24, font: GameMenuArtwork.renderer()?.font(.small))
+        let size = CGSize(width: viewport.width, height: max(viewport.height, grid.height + 24))
+        listScroll.hasVerticalScroller = size.height > viewport.height + 0.5
+        listDocument.frame = CGRect(origin: .zero, size: size)
+        for (item, target) in zip(ordered, grid.targets) { item.button.frame = target.frame.offsetBy(dx: 12, dy: 12) }
     }
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.isARepeat, [36, 76, 49].contains(event.keyCode) { return true }
@@ -440,6 +567,10 @@ import LemmingsGameArt
         if activatePrimary(with: event) { return }
         if event.keyCode == 53 { onBack?() } else { super.keyDown(with: event) }
     }
+}
+
+@MainActor private final class GameMenuListDocument: NSView {
+    override var isFlipped: Bool { true }
 }
 
 @MainActor private final class GameMenuCanvas: NSView {
@@ -484,6 +615,7 @@ import LemmingsGameArt
 }
 
 @MainActor class GameActionButton: NSButton {
+    var wrapsTitle = false
     var onPress: (() -> Void)?
     private let primary: Bool
     private let renderer = GameMenuArtwork.renderer()
@@ -508,6 +640,14 @@ import LemmingsGameArt
         let chosen = isEnabled && (primary || isHighlighted)
         GameStoneButton.draw(bounds, selected: chosen, pixel: 1)
         GameControlText.focus(self)
+        if wrapsTitle, let renderer {
+            let height = min(bounds.height - 12,
+                GameTextLayout.height(title, width: bounds.width - 24, face: .small, font: renderer.font(.small)))
+            renderer.menuParagraph(title, in: CGRect(x: 12, y: (bounds.height - height) / 2,
+                width: bounds.width - 24, height: height), alignment: .center,
+                face: .small, palette: .blue, alpha: isEnabled ? 1 : 0.45)
+            return
+        }
         let height = max(20, renderer?.height(of: title, face: .small, scale: 1) ?? 20)
         let caption = CGRect(x: 12, y: bounds.midY - height / 2, width: bounds.width - 24, height: height)
         if let renderer {

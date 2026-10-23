@@ -10,15 +10,22 @@ Lemmings 2 and Lemmings 3. It does not change engine rules or campaign progress.
   Lemmings 2 and Lemmings 3.
 - `Oh My! ALL Lemmings!` starts or resumes one run through every installed
   non-fan release. It does not add imported or archived fan levels.
-- Each family opens its filtered CoverFlow catalogue. A family with one pack
+- Fan Lemmings opens a grouped library with at most ten entries per page. Numbered
+  series and multi-rating collections stay together. See [Fan levels](FanLevels.md).
+- Other families open their filtered CoverFlow catalogue. A family with one pack
   opens its level carousel directly. A missing family stays visible and reports
   that its data is not available in the build.
 - Fan Lemmings includes installed fan archives and imported scanned Classic
   packs. Oh Yes! More Lemmings keeps its own family and release identity.
 - Fan progress totals include installed packs only. New records use the pack's
   catalogue identity, and older name-based records migrate when read.
-- `File > Level Select` opens the complete pack carousel, then a level carousel.
-- The centre card is the selected item. `Start` is the only primary action.
+- `File > Level Select` opens the pack carousel, then a level carousel. Fan Lemmings
+  occupies one card that opens the grouped fan library.
+- The centre card is the selected item. `Start` is the primary action. On Mac,
+  returning from an unfinished attempt keeps that card selected and changes the
+  same action to `Resume`. Resume restores the saved attempt paused. Back retains
+  the browser's parent pages, selection, focus and scroll position; Main menu
+  explicitly returns Home. Sequence runs keep their existing saved-run actions.
 - The carousel uses one shared perspective camera. The centre cover faces
   forward at 1.5 times its base size. Side covers remain full size and rotate
   45 degrees towards the centre. The near-card pitch keeps the transformed

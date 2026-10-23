@@ -9,7 +9,10 @@ import UIKit
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: L10n.text("Lemmings")) {
         didSet {
+            pendingReflowAnchor = nil
             if oldValue.title != page.title { focusedID = nil; televisionPageIndex = 0 }
+            globalNavigation?.showsBack = page.backAction != nil
+            globalNavigation?.backTitle = page.backAction?.title ?? L10n.text("Back")
             rebuild()
         }
     }
@@ -18,11 +21,15 @@ import UIKit
     var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
     private var televisionPageIndex = 0
     private var measuredViewport = CGSize.zero
+    private var pendingReflowAnchor: (id: String, offset: CGFloat)?
     private var televisionViewport = CGSize.zero
     private var televisionScaleCache: (page: GameFrontEnd.Page, width: CGFloat, height: CGFloat, preferred: CGFloat, scale: CGFloat)?
     private var displayedPage: GameFrontEnd.Page {
         var result = page.home && boxesHome ? page
             : MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+        if !result.listTools.isEmpty, globalNavigation?.isHidden == false, globalNavigation?.showsBack == true {
+            result.footer.removeAll { $0.isBackNavigation }
+        }
         #if os(tvOS)
         if result.home { result = TVMenuPresentation.homePage(result) }
         if result.televisionGrid, televisionViewport.width > 0 {
@@ -43,6 +50,7 @@ import UIKit
     var bookHomePanes: [CGRect] = [] {
         didSet {
             guard bookHomePanes != oldValue else { return }
+            (superview as? MobileMenuScrollView)?.cancelInteraction()
             pageLayout = nil
             setNeedsLayout()
             setNeedsDisplay()
@@ -80,7 +88,15 @@ import UIKit
     var onPageChanged: (() -> Void)?
     private var targets: [UIButton] = []
     private var highlighted: String?
-    var focusedID: String?
+    weak var globalNavigation: MobileNavigationView?
+    weak var listTools: MobileListToolsView?
+    var focusableActions: [GameFrontEnd.Action] {
+        ((globalNavigation?.actions ?? []) + (listTools?.isHidden == false ? listTools?.actions ?? [] : [])
+            + (pageLayout?.targets.map(\.action) ?? (displayedPage.rows + displayedPage.orderedFooter))).filter(\.enabled)
+    }
+    var focusedID: String? {
+        didSet { globalNavigation?.focusedID = focusedID; listTools?.focusedID = focusedID }
+    }
     private var pageLayout: GameFrontEnd.Layout?
     var requiresNeutralActivation = false
     private var tvActivation = TVActivationGate()
@@ -111,6 +127,8 @@ import UIKit
 
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
+        if globalNavigation?.actions.contains(where: { $0.id == focusedID }) == true, let globalNavigation { return [globalNavigation] }
+        if listTools?.isHidden == false, listTools?.actions.contains(where: { $0.id == focusedID }) == true, let listTools { return [listTools] }
         let preferred = targets.first { $0.isEnabled && $0.accessibilityIdentifier == "menu." + (focusedID ?? "") }
         return preferred.map { [$0] } ?? Array(targets.filter(\.isEnabled).prefix(1))
     }
@@ -171,6 +189,14 @@ import UIKit
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
         let measured = CGSize(width: width, height: minimumHeight)
         if measuredViewport != measured {
+            if measuredViewport.width > 0, measuredViewport.width != width,
+               !page.home, page.pause == nil, !page.rows.isEmpty,
+               let scroll = superview as? UIScrollView {
+                let visible = CGRect(origin: scroll.contentOffset, size: measuredViewport)
+                if let anchor = targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
+                    pendingReflowAnchor = (anchor.accessibilityIdentifier ?? "", anchor.frame.minY - visible.minY)
+                }
+            }
             measuredViewport = measured
             pageLayout = nil
             setNeedsLayout()
@@ -208,6 +234,13 @@ import UIKit
             button.frame = target.frame.applying(transform)
             return button
         }
+        if let anchor = pendingReflowAnchor, let scroll = superview as? UIScrollView {
+            pendingReflowAnchor = nil
+            if let target = targets.first(where: { $0.accessibilityIdentifier == anchor.id }) {
+                let maximum = max(0, scroll.contentSize.height - scroll.bounds.height)
+                scroll.setContentOffset(CGPoint(x: 0, y: min(maximum, max(0, target.frame.minY - anchor.offset))), animated: false)
+            }
+        }
         var elements: [Any] = []
         for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
@@ -223,7 +256,9 @@ import UIKit
         }
         if page.home, !page.homeInitials.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = L10n.text("Active players: \(page.homeInitials)")
+            element.accessibilityLabel = page.homeNextPlayerName.map {
+                L10n.text("Active players: \(page.homeInitials). Next: \($0)")
+            } ?? L10n.text("Active players: \(page.homeInitials)")
             element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
             elements.append(element)
@@ -256,7 +291,8 @@ import UIKit
         let page = displayedPage
         if page.televisionGrid { televisionPageIndex = page.televisionPageIndex }
         let actions = page.rows + page.orderedFooter
-        if !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
+        let available = actions + page.listTools + (globalNavigation?.actions ?? [])
+        if !available.contains(where: { $0.id == focusedID && $0.enabled }) {
             focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL").uppercased() })?.id
                 ?? actions.first(where: { $0.primary && $0.enabled })?.id
                 ?? actions.first(where: \.enabled)?.id
@@ -315,7 +351,7 @@ import UIKit
         #endif
     }
     func moveFocus(_ offset: Int) {
-        let enabled = (pageLayout?.targets.map(\.action) ?? (displayedPage.rows + displayedPage.orderedFooter)).filter(\.enabled)
+        let enabled = focusableActions
         guard !enabled.isEmpty else { return }
         let current = enabled.firstIndex { $0.id == focusedID }
         let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
@@ -333,7 +369,7 @@ import UIKit
         setNeedsDisplay()
     }
     func focusAction(_ id: String) {
-        guard (displayedPage.rows + displayedPage.orderedFooter).contains(where: { $0.id == id && $0.enabled }) else { return }
+        guard focusableActions.contains(where: { $0.id == id }) else { return }
         focusedID = id; highlighted = id
         #if os(tvOS)
         setNeedsFocusUpdate()
@@ -341,6 +377,14 @@ import UIKit
         setNeedsDisplay()
     }
     func activateFocused() {
+        if let focusedID, globalNavigation?.actions.contains(where: { $0.id == focusedID }) == true {
+            globalNavigation?.activate(focusedID)
+            return
+        }
+        if let focusedID, listTools?.isHidden == false, listTools?.actions.contains(where: { $0.id == focusedID }) == true {
+            listTools?.activate(focusedID)
+            return
+        }
         let page = displayedPage
         let actions = page.rows + page.orderedFooter
         guard let action = actions.first(where: { $0.id == focusedID && $0.enabled })
@@ -378,12 +422,12 @@ import UIKit
         defer { context.restoreGState() }
         context.scaleBy(x: scale, y: scale)
         let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: ((superview as? UIScrollView)?.bounds.height
-                ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)) / scale, scale: scale)
+            ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)) / scale, scale: scale)
         guard let typography = MobileGameArt.typography else {
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
             if let heading = layout.libraryHeading { MobilePixelText.draw(L10n.text("Levels"), in: heading, palette: .green) }
-            for target in layout.targets {
+            for target in layout.targets where !target.frame.isEmpty {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))
                 if target.action.selected {

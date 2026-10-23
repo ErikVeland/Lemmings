@@ -99,7 +99,7 @@ public enum MobileCareerArt {
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
         return .init(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
-            rows: [.init("recordList", L10n.text("Records") + "  \(levels)"),
+            rows: [.init("recordList", L10n.text("Records") + " / " + L10n.text("Replay") + "  \(levels)"),
                    .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
                    .init("worldwide", L10n.text("Worldwide")),
                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],

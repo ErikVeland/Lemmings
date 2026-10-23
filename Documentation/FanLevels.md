@@ -34,6 +34,31 @@ cannot hide the embedded packs. Duplicate catalogue IDs appear once.
 The updater covers compatible releases in this database. It does not search forum
 attachments or install engines and graphics dependencies for unsupported formats.
 
+## Browsing
+
+Fan Lemmings groups the installed library into Learning, Magazines & books,
+Fan levels, Contests & community, and Ports & remakes. The Mac File menu and
+home screen use the same library. Level Select presents one Fan Lemmings card.
+iPhone, iPad and TV use the same grouping rules.
+
+Numbered packs form one series in numeric order, including archive spelling
+variants. Multi-rating collections stay together. Large sections use alphabetical
+ranges and smaller subgroups. Each page has at most ten collection or pack
+entries. Selecting a pack opens its existing level browser. Back returns through
+the groups. Mobile search filters the whole installed library before grouping it.
+
+Lists reflow into up to three columns when the content area has room. Narrow
+phones retain one column. Labels wrap, section headings start a new row, and
+incomplete final rows fill the available width. Mobile resizing keeps the visible
+entry and selection. Longer Mac lists scroll inside their body while navigation
+stays fixed.
+
+Grouping changes navigation only. It preserves archive names, original pack and
+level titles, catalogue IDs, progress, favourites, playlists and saved runs.
+New downloads and local imports use the same rules. Unrecognised collections
+remain visible under Fan levels. The shared classification lives in
+`FanLevelOrganisation.swift`, including the explicit aliases for older archives.
+
 ## Alternate artwork
 
 Macintosh and Amiga modes use release artwork for pieces that match the stock
@@ -58,6 +83,14 @@ level and distinct changed asset without gameplay ticks.
 `Scripts/run-fan-library-tests.sh` exercises first-run discovery, duplicate IDs,
 download validation, pagination, repeat launches, offline operation and malformed
 responses. Pass `--live` to also check the current public catalogue.
+
+`FanLevelOrganisationTests` checks complete pack coverage, stable identities,
+numeric and mixed-case sorting, categories, search and bounded groups.
+`TEST_SCOPE=fan-library zsh Scripts/run-app-integration-tests.sh` checks every
+Mac group at three window sizes, full captions, input targets and Back focus.
+It also captures shared phone, tablet and TV bitmap pages. These checks run
+muted and offscreen. iOS and tvOS compilation was checked from an isolated
+source snapshot. Physical device and controller journeys remain manual checks.
 
 `Scripts/build-local-app.sh` runs `Scripts/index-fan-levels.sh` before packaging,
 so the first launch has an accurate total without scanning every pack.

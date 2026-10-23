@@ -26,7 +26,15 @@ import UIKit
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (button, frame) in zip(buttons, SolutionSwitchArt.frames(in: bounds)) { button.frame = frame }
+        for (button, frame) in zip(buttons, ReplayMoveArt.frames(in: bounds)) { button.frame = frame }
+    }
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !isHidden, isUserInteractionEnabled, alpha > 0.01 else { return nil }
+        for button in buttons where button.frame.contains(point) {
+            // Disabled controls still consume their target. The map between them remains interactive.
+            return button.isEnabled ? button.hitTest(convert(point, to: button), with: event) : self
+        }
+        return nil
     }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }

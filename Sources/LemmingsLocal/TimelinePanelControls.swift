@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 #if canImport(NxlvKit)
 import NxlvKit
 #endif
@@ -7,13 +8,12 @@ import NxlvKit
 /// The same timeline buttons and hit regions serve all three game panels.
 @MainActor final class TimelinePanelControls {
     enum Action: Int, CaseIterable {
-        case rewind, backward, forward, hints
+        case rewind, backward, forward
         var label: String {
             switch self {
             case .rewind: return L10n.text("Rewind two seconds")
             case .backward: return L10n.text("Step backward one tick")
             case .forward: return L10n.text("Step forward one tick")
-            case .hints: return L10n.text("Level hints (H)")
             }
         }
         var glyph: PanelGlyph? {
@@ -21,7 +21,6 @@ import NxlvKit
             case .rewind: return .rewind
             case .backward: return .stepBackward
             case .forward: return .stepForward
-            case .hints: return nil
             }
         }
     }
@@ -33,27 +32,28 @@ import NxlvKit
     private let accessibility = GameAccessibleElements()
 
     func rect(for action: Action) -> CGRect {
-        let unit = frame.width / 4.5
+        let unit = frame.width / CGFloat(Action.allCases.count)
         return CGRect(x: frame.minX + CGFloat(action.rawValue) * unit, y: frame.minY,
-                      width: (action == .hints ? unit * 1.5 : unit) - 2, height: frame.height)
+                      width: unit - 2, height: frame.height)
     }
     func draw() {
         NSColor.black.setFill(); frame.fill()
         for action in Action.allCases {
             let box = rect(for: action)
+            let face: GamePlayButtonArt.Face
+            switch action {
+            case .rewind: face = .rewind
+            case .backward: face = .stepBackward
+            case .forward: face = .stepForward
+            }
             GameStoneButton.draw(box, selected: false, pixel: 1,
-                backdrop: rock?(box.size) ?? PanelGlyph.rock.image(fitting: box.size), monochrome: monochrome)
+                backdrop: rock?(box.size), monochrome: monochrome, playFace: face)
             let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3
             let size = box.insetBy(dx: 4, dy: 4).size
             if let image = monochrome ? action.glyph?.monochromeImage(fitting: size) : action.glyph?.image(fitting: size) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
                     fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            } else {
-                NSGraphicsContext.saveGraphicsState()
-                NSGraphicsContext.current?.cgContext.setAlpha(alpha)
-                GamePixelText.draw(L10n.text("HINT"), in: box.insetBy(dx: 4, dy: 4), maxScale: 2, palette: monochrome ? .monochrome : .blue)
-                NSGraphicsContext.restoreGraphicsState()
             }
             if monochrome && !enabled(action), let context = NSGraphicsContext.current?.cgContext {
                 context.saveGState()

@@ -152,11 +152,12 @@ import NxlvKit
         button.helpText = L10n.text("Change game, sound and display settings. (⌘,)")
         return button
     }()
-    private lazy var graphicsButton: GameplayMenuButton = {
+    private lazy var hintsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
-        button.fadeAppearance = navigationAppearance; button.glyph = .graphics
-        button.title = L10n.text("Graphics"); button.target = self; button.action = #selector(cycleGraphics)
-        button.setAccessibilityLabel(L10n.text("Next graphics"))
+        button.fadeAppearance = navigationAppearance
+        button.title = L10n.text("Hints"); button.target = self; button.action = #selector(openHints)
+        button.setAccessibilityLabel(L10n.text("Level hints"))
+        button.helpText = L10n.text("Level goals and tiered hints") + " (I / F1)"
         return button
     }()
     private lazy var ghostsButton: GameplayMenuButton = {
@@ -202,13 +203,14 @@ import NxlvKit
         if !event.isARepeat { toggleHotSeatGhosts() }
         return true
     }
-    private var navigationButtons: [GameplayMenuButton] { [extraSkillButton, ghostsButton, graphicsButton, settingsButton, navigationButton] }
+    private var navigationButtons: [GameplayMenuButton] { [extraSkillButton, ghostsButton, hintsButton, settingsButton, navigationButton] }
     @objc private func openInspection() {
         guard inspectionAvailable() else { return }
         inspectLemmings?()
     }
     @objc private func openMainMenu() { controlHelp.dismissForInput(); mainMenu?() }
     @objc private func openSettings() { controlHelp.dismissForInput(); settings?() }
+    @objc private func openHints() { controlHelp.dismissForInput(); hints?() }
     @objc private func cycleGraphics() {
         guard graphicsAvailable() else { return }
         controlHelp.dismissForInput()
@@ -235,7 +237,7 @@ import NxlvKit
         func available(_ button: GameplayMenuButton) -> Bool {
             button === extraSkillButton ? extraSkill != nil && modern() && active()
                 : button === ghostsButton ? ArcadeStore.shared.hotSeatIsActive
-                : button === navigationButton || (active() && (button === settingsButton ? settings != nil : nextGraphics != nil))
+                : button === navigationButton || (active() && (button === settingsButton ? settings != nil : hints != nil))
         }
         let buttons = navigationButtons
         let wasVisible = buttons.contains { !$0.isHidden && $0.superview === root }
@@ -244,7 +246,8 @@ import NxlvKit
             y: root.isFlipped ? root.bounds.minY + 12 : root.bounds.maxY - 56, width: 44, height: 44)
         var right = navigationButton.frame.minX - (available(settingsButton) ? 8 : 24)
         for button in buttons.reversed() where button !== navigationButton && available(button) {
-            button.frame = CGRect(x: right - 44, y: navigationButton.frame.minY, width: 44, height: 44)
+            let width: CGFloat = button === hintsButton ? max(88, hintsButton.intrinsicContentSize.width) : 44
+            button.frame = CGRect(x: right - width, y: navigationButton.frame.minY, width: width, height: 44)
             right = button.frame.minX - (button === settingsButton ? 24 : 8)
         }
         extraSkillButton.title = extraSkillTitle()
@@ -295,14 +298,6 @@ import NxlvKit
         }
         navigationAppearance.update(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
         navigationArtworkOpacityChanged(visible ? navigationAppearance.opacity : 0)
-        let canCycle = graphicsAvailable()
-        if graphicsButton.isEnabled != canCycle { graphicsButton.isEnabled = canCycle }
-        let name = graphicsName()
-        let tooltip = L10n.text("Next graphics (F2)") + "\n" + L10n.text("Current graphics: \(name)")
-        if graphicsButton.helpText != tooltip {
-            graphicsButton.setAccessibilityValue(name)
-            graphicsButton.helpText = tooltip
-        }
         updateControlHelp(in: root, available: visible && window?.isKeyWindow == true, at: now, pointer: pointer)
         updateInspectionHover(in: root, available: visible && active() && inspectionAvailable() && window?.isKeyWindow == true
             && controlHelp.panel == nil && !controlsFrame.contains(pointer) && rewardDisplayArea()?.contains(pointer) != true,
@@ -568,14 +563,14 @@ import NxlvKit
     var controllerPlaying: Bool { controllerEnabled() && controllerAvailable && controllerMenuRoot == nil && active() }
     var controllerMenuRoot: NSView? {
         guard let window else { return nil }
-        return window.attachedSheet?.contentView ?? GameScreen.shared.controllerPage(in: window)
+        return window.attachedSheet?.contentView ?? GameScreen.shared.controllerNavigationRoot(in: window)
     }
     var controllerContext: ObjectIdentifier? { (controllerMenuRoot ?? window?.contentView).map(ObjectIdentifier.init) }
     var focusedControllerControl: NSControl? { menuNavigator.selected }
     func controllerMenuScroll(_ delta: Double) { if let root = controllerMenuRoot { menuNavigator.scroll(delta, in: root) } }
     func controllerMenuAction(_ action: ControllerBindings.Action) {
         if let root = controllerMenuRoot {
-            if let overlay = root as? KeyboardOverlayView, action == .cancel || action == .pause { overlay.onClose(); return }
+            if let overlay = (GameScreen.shared.pageForNavigationRoot(root) ?? root) as? KeyboardOverlayView, action == .cancel || action == .pause { overlay.onClose(); return }
             menuNavigator.handle(action, in: root, sheet: window?.attachedSheet)
             return
         }
@@ -746,10 +741,7 @@ import NxlvKit
         }
         view.onClose = { [weak view] in if let view { GameScreen.shared.dismiss(view) } }
         view.onCommands = { [weak self] in self?.showCommandList() }
-        view.onHints = { [weak self, weak view] in
-            if let view { GameScreen.shared.dismiss(view) }
-            self?.hints?()
-        }
+        view.onHints = { [weak self] in self?.hints?() }
         if !GameScreen.shared.present(view, owner: window, onDismiss: { [weak self] in self?.overlay = nil; resume() }) {
             overlay = nil; resume()
         }
@@ -770,7 +762,6 @@ import NxlvKit
             resume()
             if response == .alertSecondButtonReturn {
                 DispatchQueue.main.async { [weak self] in
-                    if let overlay = self?.overlay { GameScreen.shared.dismiss(overlay) }
                     self?.hints?()
                 }
             }

@@ -70,6 +70,8 @@ import UIKit
     var title = "" { didSet { accessibilityLabel = title; setNeedsDisplay() } }
     var isPrimary = false { didSet { setNeedsDisplay() } }
     var isSelectedState = false { didSet { setNeedsDisplay() } }
+    var redNightVision = false { didSet { setNeedsDisplay() } }
+    var icon: GameFrontEnd.Action.Icon? { didSet { setNeedsDisplay() } }
     var onPress: (() -> Void)?
 
     override init(frame: CGRect) {
@@ -111,8 +113,22 @@ import UIKit
         guard let context = UIGraphicsGetCurrentContext() else { return }
         let chosen = isEnabled && (isPrimary || isSelectedState || isHighlighted)
         GameStoneArt.draw(in: context, frame: bounds, selected: chosen, pixel: 1)
+        if icon == .favourite {
+            context.saveGState()
+            context.setAlpha(isEnabled ? 1 : 0.45)
+            GameStarArt.draw(in: bounds, earned: isSelectedState, context: context)
+            context.restoreGState()
+            return
+        }
         MobilePixelText.draw(title, in: CGRect(x: 12, y: bounds.midY - 10, width: bounds.width - 24, height: 20),
                              palette: chosen ? .green : .blue, alpha: isEnabled ? 1 : 0.45)
+        if redNightVision {
+            context.saveGState()
+            context.setBlendMode(.multiply)
+            context.setFillColor(CGColor(red: 1, green: 0, blue: 0, alpha: 1))
+            context.fill(bounds)
+            context.restoreGState()
+        }
     }
 }
 /// The black page with the stone edging and moss cap the Mac menu pages use.

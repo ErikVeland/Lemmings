@@ -111,6 +111,7 @@ public enum MobileSettingsArt {
                                toggle("deskClockCharging", L10n.text("Open when closed and charging"), clock.openWhenCharging)] : []
             // Without calendar access the row stays off and opens iOS Settings.
             rows.append(toggle("deskClockEvents", L10n.text("Show next event"), clock.showNextEvent && !calendarDenied))
+            rows.append(toggle("deskClockRedNight", L10n.text("Red night vision"), clock.redNightVision))
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),

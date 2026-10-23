@@ -2,6 +2,13 @@ import CoreGraphics
 
 /// The rescue star uses the same filled and outlined pixels on each platform.
 public enum GameStarArt {
+    /// Keep the star centred on whole pixels in every button size.
+    public static func draw(in frame: CGRect, earned: Bool, context: CGContext) {
+        let size = max(1, min(3, floor(min((frame.width - 16) / 11, (frame.height - 12) / 9))))
+        draw(at: CGPoint(x: floor(frame.midX - 11 * size / 2), y: floor(frame.midY - 9 * size / 2)),
+             earned: earned, size: size, context: context)
+    }
+
     public static func draw(at origin: CGPoint, earned: Bool, size: CGFloat, context: CGContext) {
         let pixels = [".....#.....", "....###....", "....###....", "###########", ".#########.",
                       "..#######..", "..#######..", ".####.####.", ".##.....##."].map(Array.init)

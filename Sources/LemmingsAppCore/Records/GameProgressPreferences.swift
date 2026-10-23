@@ -152,6 +152,9 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
                 result.values[base] = .chronicles(progress)
             }
         }
+        let learning = Self.learning(profileID: profileID, sessionID: sessionID, defaults: defaults)
+        try? result.merge(JourneySourceCompletion.progress(learning,
+            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []))
         return result
     }
 
@@ -232,10 +235,35 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         return defaults.data(forKey: key)
             .flatMap { try? JSONDecoder().decode(LearningJourneyProgress.self, from: $0) } ?? .init()
     }
-    @MainActor public static func saveLearning(_ progress: LearningJourneyProgress, profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) throws {
+    @MainActor public static func saveLearning(_ progress: LearningJourneyProgress, profileID: String, sessionID: String? = nil,
+        entries: [LevelPlaylistEntry] = [], defaults: UserDefaults = .standard) throws {
         let merged = GameProgressValue.mergeLearning(learning(profileID: profileID, sessionID: sessionID, defaults: defaults), progress)
         let key = sessionID.map { "HotSeat.\($0).LearningJourneyProgress" } ?? ArcadeStore.progressKey("LearningJourneyProgress", profileID: profileID)
-        defaults.set(try JSONEncoder().encode(merged), forKey: key)
+        if learning(profileID: profileID, sessionID: sessionID, defaults: defaults) != merged {
+            defaults.set(try JSONEncoder().encode(merged), forKey: key)
+        }
+        var credits = JourneySourceCompletion.progress(merged,
+            entries: entries + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []))
+        for (key, value) in credits.values {
+            switch value {
+            case .completed(let wins):
+                let pack = String(key.dropFirst("cleared/".count))
+                let scope = sessionID.map { "hotseat." + $0 } ?? profileID
+                let cloud = Set(defaults.array(forKey: completedKey(pack: pack, profileID: scope)) as? [Int] ?? [])
+                let suffix = sessionID.map { ".hotseat." + $0 } ?? (profileID == "default" ? "" : "." + profileID)
+                let mobile = Set(defaults.array(forKey: "mobile.completed." + pack + suffix) as? [Int] ?? [])
+                let union = wins.union(cloud).union(mobile)
+                credits.values[key] = cloud == union && mobile == union ? nil : .completed(union)
+            case .fanLevels(let wins):
+                let destination = sessionID.map { "HotSeat.\($0).FanLevelsPassed" }
+                    ?? ArcadeStore.progressKey("FanLevelsPassed", profileID: profileID)
+                let saved = Set(defaults.stringArray(forKey: destination) ?? [])
+                let union = saved.union(wins)
+                credits.values[key] = saved == union ? nil : .fanLevels(union)
+            default: break
+            }
+        }
+        try credits.apply(defaults: defaults, profileID: profileID, sessionID: sessionID)
     }
     @MainActor public static func journeySession(profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) -> JourneySessionSnapshot? {
         let key = sessionID.map { "HotSeat.\($0).LearningJourneySession" }
@@ -256,7 +284,11 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
     }
     @MainActor public static func fanLevels(profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) -> Set<String> {
         let key = sessionID.map { "HotSeat.\($0).FanLevelsPassed" } ?? ArcadeStore.progressKey("FanLevelsPassed", profileID: profileID)
-        return Set(defaults.stringArray(forKey: key) ?? [])
+        var levels = Set(defaults.stringArray(forKey: key) ?? [])
+        let credits = JourneySourceCompletion.progress(learning(profileID: profileID, sessionID: sessionID, defaults: defaults),
+            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+        if case let .fanLevels(wins) = credits.values["FanLevelsPassed"] { levels.formUnion(wins) }
+        return levels
     }
     @MainActor public static func saveFanLevel(pack: URL, label: String, profileID: String, sessionID: String? = nil,
                                              defaults: UserDefaults = .standard) {
@@ -267,7 +299,12 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
     }
     public static func completedKey(pack: String, profileID: String) -> String { "GameCenterProgress.cleared.\(profileID).\(pack)" }
     @MainActor public static func completed(pack: String, profileID: String, defaults: UserDefaults = .standard) -> Set<Int> {
-        Set(defaults.array(forKey: completedKey(pack: pack, profileID: profileID)) as? [Int] ?? [])
+        var indices = Set(defaults.array(forKey: completedKey(pack: pack, profileID: profileID)) as? [Int] ?? [])
+        let sessionID = profileID.hasPrefix("hotseat.") ? String(profileID.dropFirst(8)) : nil
+        let credits = JourneySourceCompletion.progress(learning(profileID: profileID, sessionID: sessionID, defaults: defaults),
+            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+        if case let .completed(wins) = credits.values["cleared/" + pack] { indices.formUnion(wins) }
+        return indices
     }
     public static func classicProgress(_ saved: ClassicGameFlow.Progress?, completed: Set<Int>, ranks: [ClassicRank]) -> ClassicGameFlow.Progress {
         var progress = saved ?? .init(furthestReached: [:], passed: [])

@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-23",
+  "timezone": "Australia/Brisbane",
+  "repository": "ErikVeland/Lemmings",
+  "status": "Source and synthetic checks pass. Physical pose and OS delivery acceptance remain open. No app installed or published.",
+  "confirmedAppDefects": [
+    "Per-row occlusion clearing changed menu widths during scroll.",
+    "Tall divided lower panes forced native skills into multiple rows.",
+    "Full-display HUD ignored bottom camera occlusions.",
+    "Pose changes did not cancel minimap and skill-strip gestures or keep a selected scrolled skill visible."
+  ],
+  "attributionLimit": "No device region trace or controlled iOS 27.1 versus exact 27.2 beta comparison. General OS pose defect is unproven.",
+  "verification": {
+    "coreTests": 53,
+    "coreSuites": 3,
+    "partialFoldLayouts": 120,
+    "frontCameraCases": 24,
+    "menuPoseFixtures": 31,
+    "menuPages": 17,
+    "interfaceSizes": 3,
+    "menuScrollBounceLayouts": 6085,
+    "bitmapCaptures": {
+      "menus": 2923,
+      "gameplay": 341,
+      "results": 360,
+      "book-home": 120,
+      "navigation": 656
+    },
+    "totalUniqueBitmapCaptures": 4400,
+    "navigationStates": 82,
+    "navigationLayouts": 1968,
+    "gameplayPoseFixtures": 18,
+    "nativeEngines": [
+      "Classic",
+      "Lemmings 2",
+      "Lemmings 3"
+    ],
+    "uikitDirectedTransitionFixtures": 18,
+    "uikitDirectedTransitionsDefined": 918,
+    "uikitTests": "Source type-check passed; NOT EXECUTED. Includes selected-skill resize and menu tracking cancellation.",
+    "sdk": "iOS and tvOS DEBUG modules. Final changed core, artwork and UI compiled from frozen source; final UI and regression sources rechecked after selected-skill visibility change.",
+    "windows": "offscreen default via Tools/UITestRunner/run.py; bitmap capture creates no windows",
+    "audio": "muted"
+  },
+  "validatedSource": {
+    "Sources/LemmingsMobileCore/MobileDisplayRegions.swift": {
+      "validatedSHA256": "167ada7f9b06dbc7a7fcc4e4e12996acba1232277b3a56eafdd59b2783d4356b",
+      "currentSHA256": "167ada7f9b06dbc7a7fcc4e4e12996acba1232277b3a56eafdd59b2783d4356b",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileCore/MobileHUDLayout.swift": {
+      "validatedSHA256": "e57b08def27fb54452e941e469a373fb06caf65bbc60bf190800e9c922f55c4d",
+      "currentSHA256": "e57b08def27fb54452e941e469a373fb06caf65bbc60bf190800e9c922f55c4d",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileUI/MobileReservedRegions.swift": {
+      "validatedSHA256": "76a6f2144cdb2c84826003a541adc28cd6b767d87bff595cb16369b0c1902360",
+      "currentSHA256": "76a6f2144cdb2c84826003a541adc28cd6b767d87bff595cb16369b0c1902360",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileUI/MobileMenuCanvas.swift": {
+      "validatedSHA256": "71f361b3433c5db080a6b1a7400fa133e3f16be9af3f9835e702eb26bc65d548",
+      "currentSHA256": "71f361b3433c5db080a6b1a7400fa133e3f16be9af3f9835e702eb26bc65d548",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileUI/MobileMenuScrollView.swift": {
+      "validatedSHA256": "49b27abe7abf683996a3dc68907213dfb9f4fb01cdb9024d0f5ead4b26f29b4e",
+      "currentSHA256": "49b27abe7abf683996a3dc68907213dfb9f4fb01cdb9024d0f5ead4b26f29b4e",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileUI/MobileHUDView.swift": {
+      "validatedSHA256": "6335d74ae8e8a413d6ad8f83ae557e56a2d29bba0be7ff8f96cf242e9ffdaa59",
+      "currentSHA256": "6335d74ae8e8a413d6ad8f83ae557e56a2d29bba0be7ff8f96cf242e9ffdaa59",
+      "currentMatchesValidatedSource": true
+    },
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": {
+      "validatedSHA256": "e9d5ba0dce4e4ad4684e7fe53323940d53d74d5948412ab12f5b54e32d3f0d57",
+      "currentSHA256": "cade0bc6cc036d6312dea1f79eab02fc068f2d71aa0e52496714a0d73c1a54e1",
+      "currentMatchesValidatedSource": false
+    },
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": {
+      "validatedSHA256": "6a8ab3d47a8bca44e3d673ac88cf0845d388afd5a3d237c11bf231c223666dd4",
+      "currentSHA256": "6a8ab3d47a8bca44e3d673ac88cf0845d388afd5a3d237c11bf231c223666dd4",
+      "currentMatchesValidatedSource": true
+    },
+    "Tests/LemmingsMobileCoreTests/MobileAdaptiveLayoutTests.swift": {
+      "validatedSHA256": "d1b777d7abe0d327e3e0dd762172fc2129ac60ee3abaf6d896cb4534b651f90c",
+      "currentSHA256": "d1b777d7abe0d327e3e0dd762172fc2129ac60ee3abaf6d896cb4534b651f90c",
+      "currentMatchesValidatedSource": true
+    },
+    "Tests/LemmingsMobileUITests/MobileMenuScrollGeometryTests.swift": {
+      "validatedSHA256": "873a91f350d4cbf5712b6e79aebe338a8f077437683d99276ff41280b9706093",
+      "currentSHA256": "873a91f350d4cbf5712b6e79aebe338a8f077437683d99276ff41280b9706093",
+      "currentMatchesValidatedSource": true
+    },
+    "Tests/LemmingsMobileUITests/MobileDuoHUDTransitionTests.swift": {
+      "validatedSHA256": "da71daab7b1ba7a901822a0c0356592f475bd1e373a2fa80e2348a9a5a2276e9",
+      "currentSHA256": "da71daab7b1ba7a901822a0c0356592f475bd1e373a2fa80e2348a9a5a2276e9",
+      "currentMatchesValidatedSource": true
+    },
+    "Tools/IOSMenuAudit/edge-to-edge.swift": {
+      "validatedSHA256": "82bfcde8a29bbf6de4bfa0e05452dbea0189333e18913060775c29c3a352729a",
+      "currentSHA256": "82bfcde8a29bbf6de4bfa0e05452dbea0189333e18913060775c29c3a352729a",
+      "currentMatchesValidatedSource": true
+    },
+    "Tools/IOSMenuAudit/duo.swift": {
+      "validatedSHA256": "0207a5f17eb96f163f2ce150fa8445a2b2ca631787414bc16ddd24ed8a01baaf",
+      "currentSHA256": "0207a5f17eb96f163f2ce150fa8445a2b2ca631787414bc16ddd24ed8a01baaf",
+      "currentMatchesValidatedSource": true
+    }
+  },
+  "sourceLimit": "The current MobileGameViewController has later touch-selection edits from another task. The recorded frozen source includes these layout changes and is the SDK validation boundary.",
+  "logs": {
+    ".build/duo-layout-reevaluation-verified-tests.log": "5e7be560349a022b6da20c9bdf82b9c4b358e48ddc74b9560f53a851edb9afd9",
+    ".build/duo-layout-verified-audits.log": "170896c10b6abfdb563a56148900cb3b5c5b79bc0556cb490c8952be072b1f4e",
+    ".build/duo-layout-verified-menus.log": "4dd4daae441741e44379bc565a5e708e53556dfc8aa1f28dcdd8883ed4de0030",
+    ".build/duo-layout-verified-gameplay.log": "1678a05267d5803294c594cc44277c069c7a36356b245b3a8104e5ad0a52157a",
+    ".build/duo-layout-verified-results.log": "5a7ceceddddec8f78b7402d9285d9d848c620977c2e94e86ade4ac9c20392c49",
+    ".build/duo-layout-verified-book-home.log": "cb9149617f81bc5613bea767873a2d7d58b7e2fe2a5ab97c9cf41d57af53f1a5",
+    ".build/duo-layout-verified-navigation.log": "09707ae5abec9a0d4e2b31f6e4da3a65477f3ad892decf41559ad078941b64b9",
+    ".build/duo-layout-reevaluation-sdk-snapshot.log": "92066e516d0c14ceb287579ceeb281f4f8731f0fd865926781c74b0aa0a81aa6",
+    ".build/duo-layout-reevaluation-sdk-ui-final.log": "318dbc8502d508318db06240d13c7b42b3ab844c7533a064e2ff16935c512bec",
+    ".build/duo-layout-reevaluation-uikit-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "deviceAcceptance": [
+    "Exact app and iOS beta build record",
+    "Raw scene regions in the failing tent pose",
+    "All real pose/orientation transitions during touch and held input",
+    "Ready, Hot Seat ownership, replay and navigation preservation",
+    "VoiceOver, controller routing and composited output",
+    "Extended NeoLemmix skill sets",
+    "Signed candidate resources"
+  ],
+  "inspectedImages": [
+    ".build/duo-layout-verified-menus/tent-landscape-right-top-home-standard-122.5.png",
+    ".build/duo-layout-verified-gameplay/lemmings2-stacked-running.png",
+    ".build/duo-layout-verified-gameplay/lemmings3-book-selected-last.png",
+    ".build/duo-layout-verified-gameplay/classic-dos-compact-stacked-running.png",
+    ".build/duo-layout-verified-gameplay/classic-dos-front-full-bottom-right-running.png",
+    ".build/duo-layout-verified-gameplay/lemmings3-front-full-portrait-bottom-left-selected-last.png"
+  ]
+}

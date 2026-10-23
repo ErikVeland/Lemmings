@@ -11,7 +11,10 @@ public enum MobileBookHomeArt {
         let libraryHeading = CGRect(x: right.minX + padding, y: 22, width: rightWidth - 52, height: 56)
         let subtitle = CGRect(x: left.minX + padding, y: heading.maxY + 6, width: leftWidth,
                               height: GameTextLayout.height(page.subtitle, width: leftWidth))
-        let start = max(subtitle.maxY, libraryHeading.maxY) + 16
+        let showsTurnAtTop = page.homeNextPlayerIndex != nil
+        let turnInitials = CGRect(x: left.minX + padding, y: subtitle.maxY + 4,
+            width: leftWidth, height: showsTurnAtTop ? 22 : 0)
+        let start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 16
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: leftWidth - 24) + 8 }.max() ?? 44)
@@ -34,7 +37,8 @@ public enum MobileBookHomeArt {
             }
             return (targets, y - (actions.isEmpty ? 0 : gap))
         }
-        let footerSpace = (page.homeInitials.isEmpty ? 0 : 30) + CGFloat(footer.count) * (footerHeight + gap) + 24
+        let footerSpace = (page.homeInitials.isEmpty || showsTurnAtTop ? 0 : 30)
+            + CGFloat(footer.count) * (footerHeight + gap) + 24
         // Balance measured content, including saved games, wrapped captions and the footer list.
         let splits = page.rows.count > 1 ? Array(1..<page.rows.count) : [page.rows.count]
         let split = splits.min { a, b in
@@ -47,9 +51,10 @@ public enum MobileBookHomeArt {
         let leading = rows(Array(page.rows.prefix(split)), in: left)
         let trailing = rows(Array(page.rows.dropFirst(split)), in: right)
         let contentHeight = max(height, max(leading.bottom + footerSpace, trailing.bottom + 24))
-        let initials = CGRect(x: left.minX + padding, y: max(leading.bottom + 20,
+        let initials = showsTurnAtTop ? turnInitials : CGRect(x: left.minX + padding, y: max(leading.bottom + 20,
             contentHeight - footerSpace + 12), width: leftWidth, height: page.homeInitials.isEmpty ? 0 : 22)
-        var footerY = initials.maxY + (page.homeInitials.isEmpty ? 0 : 8)
+        var footerY = showsTurnAtTop ? max(leading.bottom + 20, contentHeight - footerSpace + 12)
+            : initials.maxY + (page.homeInitials.isEmpty ? 0 : 8)
         var footerTargets: [GameFrontEnd.Target] = []
         for action in footer {
             footerTargets.append(.init(action: action, frame: CGRect(x: left.minX + padding, y: footerY,

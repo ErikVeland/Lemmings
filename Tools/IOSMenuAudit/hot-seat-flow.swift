@@ -78,21 +78,21 @@ extension MenuAudit {
             for (state, owner, role, original) in states {
                 let page = MobileTurnArt.page(original, playerName: owner, role: role, sessionName: original.home ? original.homeInitials.replacingOccurrences(of: " v ", with: " vs ") : nil)
                 if let owner {
-                    guard page.title.contains(owner) || page.subtitle.contains(owner) else { throw Failure.invalidTargets }
+                    guard page.title.contains(owner) || page.subtitle.contains(owner) || page.homeNextPlayerName == owner else { throw invalidTargets(line: #line) }
                     if state.hasPrefix("paused-") { guard page.title == "Paused: " + owner else { throw Failure.invalidTargets } }
                     if role == .result { guard page.subtitle.hasPrefix("Played: " + owner) else { throw Failure.invalidTargets } }
                     if state.contains("ready"), !state.hasPrefix("solo-") { guard page.title == owner, page.subtitle == original.subtitle else { throw Failure.invalidTargets } }
-                    if state == "next-library" { guard page.subtitle == "LEM vs AB  Next: LEM" else { throw Failure.invalidTargets } }
+                    if state == "next-library" { guard page.subtitle == "PVP", page.homeNextPlayerName == "LEM" else { throw invalidTargets(line: #line) } }
                 } else { guard page == original else { throw Failure.invalidTargets } }
                 if state == "saved-shared-journey" {
-                    guard page.subtitle == "ERI vs UVA  Next: UVA",
-                          page.rows.first?.title == "Resume journey run  4/120", page.rows.first?.primary == true else { throw Failure.invalidTargets }
+                    guard page.subtitle == "PVP", page.homeNextPlayerName == "UVA",
+                          page.rows.first?.id == "learningRunResume", page.rows.first?.primary == true else { throw invalidTargets(line: #line) }
                 }
                 if state.hasPrefix("selected-seat-") {
-                    guard page.subtitle == "LEM vs AB  Next: AB",
+                    guard page.subtitle == "PVP", page.homeNextPlayerName == "AB",
                           !page.rows.contains(where: { $0.id == "seatOther" || $0.title.lowercased().contains("solo") }),
                           page.rows.first?.id == (state.hasSuffix("no-level") ? "journey" : "resume")
-                    else { throw Failure.invalidTargets }
+                    else { throw invalidTargets(line: #line) }
                 }
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
                 for (index, target) in layout.targets.enumerated() {

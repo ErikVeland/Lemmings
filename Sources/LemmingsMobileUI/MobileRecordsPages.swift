@@ -200,11 +200,11 @@ extension MobileLibraryViewController {
                 navigate(.recordLevel(key)); loadRecordDetail(key)
             }
             else if id.hasPrefix("award."), let award = ArcadeLevelAchievement(rawValue: String(id.dropFirst(6))) {
-                canvas.page = Self.awardPage(award.title, detail: award.detail)
+                showLibraryDetail(Self.awardPage(award.title, detail: award.detail))
             } else if id.hasPrefix("careerAward."), let award = TrolleyAchievement(rawValue: String(id.dropFirst(12))) {
-                canvas.page = Self.awardPage(award.title, detail: award.detail)
+                showLibraryDetail(Self.awardPage(award.title, detail: award.detail))
             } else if id.hasPrefix("campaignAward."), let award = ClassicAchievement.catalog.first(where: { $0.id.rawValue == String(id.dropFirst(14)) }) {
-                canvas.page = Self.awardPage(award.title, detail: award.detail)
+                showLibraryDetail(Self.awardPage(award.title, detail: award.detail))
             } else { return false }
         }
         return true

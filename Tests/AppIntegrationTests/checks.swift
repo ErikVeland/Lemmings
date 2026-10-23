@@ -3299,7 +3299,7 @@ extension AppDelegate {
       try capture(page, name: "family-\(title.rawValue)-\(levelIndex)")
       try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
       page.cancelOperation(nil)
-      try check(!isPaused, "Closing campaign hints failed to restore play")
+      try check(isPaused, "Closing campaign hints resumed play without Resume")
     }
     // Exercise every shipped page plus an oversized imported-level coaching page.
     let longDeck = LevelHintDeck(title: "Long coaching", checked: false, stages: [
@@ -3828,7 +3828,7 @@ extension AppDelegate {
     }
     let escapeEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!
     overlay.keyDown(with: escapeEvent)
-    try check(!isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help failed to restore play")
+    try check(isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help resumed play without Resume")
     isPaused = true
     gameplayKeyboard?.showHelp()
     gameplayKeyboard?.controllerMenuAction(.cancel)
@@ -3863,7 +3863,6 @@ extension AppDelegate {
       return view.subviews.compactMap(find).first
     }
     guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
-    let helpInterruption = gameplayKeyboard?.interruptionCount
     GameScreen.shared.keyboardNavigation.focus(hints, in: sheet)
     let selectedEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
       windowNumber: sheet.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 76)!
@@ -3871,13 +3870,12 @@ extension AppDelegate {
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
     GameScreen.shared.dismissAll()
-    try check(isPaused == (gameplayKeyboard?.interruptionCount != helpInterruption), "Closing hints after controls help restored the wrong pause state")
+    try check(isPaused, "Closing hints after controls help resumed play")
     isPaused = false
     gameplayKeyboard?.escape()
     guard let pause = window.attachedSheet, let hints = pause.contentView.flatMap(find) else {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
-    let pauseInterruption = gameplayKeyboard?.interruptionCount
     GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
     let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
       windowNumber: pause.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
@@ -3885,9 +3883,9 @@ extension AppDelegate {
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
     GameScreen.shared.dismissAll()
-    try check(isPaused == (gameplayKeyboard?.interruptionCount != pauseInterruption), "Closing hints after pause menu restored the wrong pause state")
+    try check(isPaused, "Closing hints after pause menu resumed play")
     isPaused = false
-    print("PASS controls-help and pause-menu buttons open hints and restore play")
+    print("PASS controls-help and pause-menu buttons open hints and keep play paused")
   }
 
   fileprivate func testVariableSimulationClock() throws {
@@ -8142,7 +8140,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS
+    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8396,6 +8394,8 @@ Task { @MainActor in
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
     }
+    #elseif FAN_LIBRARY_TESTS
+    try await subject.testFanLevelOrganisation()
     #elseif CONTENT_BROWSER_TESTS
     try await subject.testClassicRatingBrowser()
     try await subject.testNeoLemmixPackBrowser()
@@ -8583,19 +8583,19 @@ extension AppDelegate {
   controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
   var performed: [TimelinePanelControls.Action] = []
   controls.perform = { performed.append($0) }
-  controls.enabled = { $0 == .forward || $0 == .hints }
+  controls.enabled = { $0 == .forward }
   for action in TimelinePanelControls.Action.allCases {
     let box = controls.rect(for: action)
     try check(controls.click(at: CGPoint(x: box.midX, y: box.midY)), "Timeline target leaked its click")
   }
-  try check(performed == [.forward, .hints], "Disabled timeline controls activated")
+  try check(performed == [.forward], "Disabled timeline controls activated")
   let first = controls.rect(for: .rewind)
   try check(controls.click(at: CGPoint(x: first.maxX + 1, y: first.midY)), "Timeline gap leaked input")
-  try check(performed.count == 2, "Timeline gap activated a neighbour")
+  try check(performed.count == 1, "Timeline gap activated a neighbour")
   let directory = URL(fileURLWithPath: ".build/transport")
   try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
   for enabled in [false, true] {
-    controls.enabled = { enabled || $0 == .hints }
+    controls.enabled = { _ in enabled }
     let image = NSImage(size: CGSize(width: 260, height: 38))
     image.lockFocusFlipped(true); controls.draw(); image.unlockFocus()
     let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
@@ -8633,12 +8633,7 @@ extension AppDelegate {
   try capture("-paused")
   click(.rewind)
   try check(tick() == 0 && paused(), "Rewind toolbar button failed " + name)
-  click(.hints)
-  try check(LevelHintWindow.shared.page != nil && paused(), "Hint toolbar button failed " + name)
-  try check(GameCursor.gameplaySuppressed, "Hints retained the game cursor in " + name)
-  try capture("-hint-background")
-  GameScreen.shared.dismissAll()
-  print("PASS " + name + " toolbar input, history and paused hints")
+  print("PASS " + name + " toolbar input and paused history")
 }
 
 extension AppDelegate {
@@ -9601,16 +9596,16 @@ extension AppDelegate {
         level: arcadeLevel!, saved: won ? arcadeLevel!.total : 0, didWin: won, skills: [:], seconds: 20))!
       for width in [900, 1600] {
         window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
-        for key in ["Menu", "q", "\u{1b}"] {
+        for key in ["Back", "q", "\u{1b}"] {
           ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: { advances += 1 }, replay: { _ in }, menu: { exits += 1 })
           let result = ArcadeWindow.shared.arcadeView; result.finishCelebration()
           let image = ReplayFrameCapture.image(size: result.bounds.size) { ReplayFrameCapture.draw(result, in: result.bounds) }!
           try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/exit-progress/result-\(won)-\(width).png"))
-          if key == "Menu" {
-            guard let button = result.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.accessibilityLabel() == "Menu" }) else {
-              throw IntegrationFailure(message: "Result omitted Menu")
+          if key == "Back" {
+            guard let button = result.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.accessibilityLabel() == "Back" }) else {
+              throw IntegrationFailure(message: "Result omitted Back")
             }
-            try check(button.localFrame.width >= 28 && button.localFrame.height >= 28 && result.bounds.contains(button.localFrame), "Result Menu target was clipped")
+            try check(button.localFrame.width >= 28 && button.localFrame.height >= 28 && result.bounds.contains(button.localFrame), "Result Back target was clipped")
             let point = result.convert(CGPoint(x: button.localFrame.midX, y: button.localFrame.midY), to: nil)
             let click = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
               windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!

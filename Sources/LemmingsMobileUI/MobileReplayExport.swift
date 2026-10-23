@@ -7,17 +7,19 @@ import UIKit
 
 extension MobileGameViewController {
     /// Draws a separate replay at the current camera position for the share sheet.
-    func shareReplayMovie(document: Data) {
+    func shareReplayMovie(document: Data, returningTo caller: (() -> Void)? = nil) {
+        let back = caller ?? overlayReturnAction()
         // Export runs after gameplay and can wait for encoder capacity.
         let recorder = ReplayMovieRecorder(ticksPerSecond: session.ticksPerSecond,
             admissionTimeout: .milliseconds(500))
         let viewport = playfieldView.gameViewport
         let cancelled = MobileReplayExportCancellation()
-        showCustomOverlay(title: L10n.text("Replay movie"), details: [], actions: [(L10n.text("CANCEL"), { [weak self] in
+        showCustomOverlay(title: L10n.text("Replay movie"), details: [], actions: [(L10n.text("CANCEL"), {
             cancelled.cancelled = true
             recorder.discard()
-            self?.returnToResult()
+            back()
         })])
+        let request = replayExportRequestID
         Task { @MainActor [weak self] in
             guard let self else { recorder.discard(); return }
             do {
@@ -28,7 +30,7 @@ extension MobileGameViewController {
                 let movieEffects = effects.movieEffects()
                 let expected = try JSONDecoder().decode(ClassicDOSReplay.self, from: document).expected?.ticks
                 repeat {
-                    guard !cancelled.cancelled else { return }
+                    guard !cancelled.cancelled, self.replayExportRequestID == request else { recorder.discard(); return }
                     let frame = try replay.render(highlight: nil)
                     guard let bitmap = MobileBitmapRenderer.image(frame),
                           let image = Self.movieFrame(bitmap, viewport: viewport, renderScale: replay.renderScale, level: self.summary) else {
@@ -41,39 +43,39 @@ extension MobileGameViewController {
                     replay.tick()
                     await Task.yield()
                 } while !cancelled.cancelled
-                guard !cancelled.cancelled else { return }
+                guard !cancelled.cancelled, self.replayExportRequestID == request else { recorder.discard(); return }
                 recorder.finish { [weak self] result in
-                    guard let self, !cancelled.cancelled else { return }
+                    guard let self, !cancelled.cancelled, self.replayExportRequestID == request else { return }
                     switch result {
                     case let .success(url):
                         #if os(tvOS)
-                        MobileTVFileTransfer.exportFile(url, from: self) { [weak self] in
+                        MobileTVFileTransfer.exportFile(url, from: self) {
                             try? FileManager.default.removeItem(at: url)
-                            self?.returnToResult()
+                            back()
                         }
                         #else
                         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                         sheet.popoverPresentationController?.sourceView = self.view
                         sheet.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 1, height: 1)
-                        sheet.completionWithItemsHandler = { [weak self] _, _, _, _ in
-                            self?.returnToResult()
+                        sheet.completionWithItemsHandler = { _, _, _, _ in
+                            back()
                         }
                         self.present(sheet, animated: true)
                         #endif
                     case let .failure(error):
                         self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
-                            (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document) }),
-                            (L10n.text("BACK"), { [weak self] in self?.returnToResult() }),
+                            (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document, returningTo: back) }),
+                            (L10n.text("BACK"), back),
                             (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
                         ])
                     }
                 }
             } catch {
                 recorder.discard()
-                guard !cancelled.cancelled else { return }
+                guard !cancelled.cancelled, self.replayExportRequestID == request else { recorder.discard(); return }
                 self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
-                    (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document) }),
-                    (L10n.text("BACK"), { [weak self] in self?.returnToResult() }),
+                    (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document, returningTo: back) }),
+                    (L10n.text("BACK"), back),
                 ])
             }
         }

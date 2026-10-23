@@ -36,10 +36,12 @@ extension MobileLibraryViewController {
 
     func settingsGroupsPage(inGame: Bool = false) -> GameFrontEnd.Page {
         #if os(tvOS)
-        MobileSettingsArt.groups(inGame: inGame, television: true)
+        var page = MobileSettingsArt.groups(inGame: inGame, television: true)
         #else
-        MobileSettingsArt.groups(inGame: inGame)
+        var page = MobileSettingsArt.groups(inGame: inGame)
         #endif
+        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
+        return page
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
         #if os(tvOS)
@@ -211,6 +213,7 @@ extension MobileLibraryViewController {
             case "telemetry": AnonymousTelemetry.shared.setSharing(!AnonymousTelemetry.shared.sharesCounts)
             case "deskClockStacked": settings.deskClock.openWhenStacked.toggle()
             case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()
+            case "deskClockRedNight": settings.deskClock.redNightVision.toggle()
             case "deskClockEvents":
                 #if os(iOS)
                 if DeskClockEventsRowAction(access: EventKitDeskClockSource.authorization()) == .openSettings {

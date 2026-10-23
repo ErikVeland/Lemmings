@@ -89,10 +89,10 @@ Pending saved attempts move later while past visits and ownership remain intact.
 ## Replay identity
 
 The replay pause overview retains the full level caption and title. Playback
-also shows the level number and full name in a persistent stone panel. Long
-names wrap in the shipped bitmap font. This panel accepts no input. TV uses
-2x lettering. Exported replay movies include the same identity above the
-playfield, preserving the complete gameplay image.
+shows the level number and name on one line in the top status box. Long names
+end in an ellipsis. Accessibility retains the full identity. The skill-use
+panel sits at the playfield's upper-right edge. Exported replay movies include
+the same single-line identity above the complete gameplay image.
 
 ## Retained solution views across Mac, iOS and tvOS
 
@@ -111,7 +111,9 @@ after closing the app. The original spoiler confirmation remains required.
 
 Mac supports Control-Tab to switch views, Escape or controller Back to return,
 and Control-Left/Right for move navigation. Touch uses the selector and stone
-Previous move/Next move controls over the replay playfield. TV uses the same
+Previous move/Next move icons on either side of the map. Each target is at least
+44 points. One-finger dragging moves the replay camera while running or paused,
+without changing the simulation or transport. TV uses the same
 selector, direct remote Back, and focused move actions on the pause page.
 Held activation cannot accept a new TV page before neutral input.
 
@@ -203,3 +205,13 @@ Retained-solution validation, 14 October 2026:
   TV-core dependencies required by current shared artwork. Validation used an
   isolated dependency build and the current production sources with the focused
   test method. No foreground window, audible playback or release audit was used.
+
+Replay viewing update, 24 October 2026: a muted, windowless audit checks 60
+start, playing, move and end renders at five phone/tablet sizes across three
+engine HUD layouts. It checks single-line truncation, top-right skill history,
+44-point move targets and their separation from the map and other controls.
+Representative portrait, landscape and tablet renders were inspected. These
+use a Classic scene fixture; sequel replay playback is not implemented on mobile.
+The shared UI compiles against iOS and tvOS SDKs. UIKit regressions for camera-only
+input, paused/running/final frames and disabled move targets compile, but their
+execution and physical finger gestures remain unverified.

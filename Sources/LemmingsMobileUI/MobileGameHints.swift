@@ -23,10 +23,11 @@ actor MobileTeachingLoader {
 }
 
 extension MobileGameViewController {
-    func showHints(stage: Int = 0) {
+    func showHints(stage: Int = 0, returningTo caller: (() -> Void)? = nil) {
         guard !session.isReadOnly else { pausePlay(showControls: true); return }
+        let returnToCaller = caller ?? overlayReturnAction()
         pauseForPlanning()
-        showCustomOverlay(title: L10n.text("Hints"), details: [L10n.text("Loading...")], actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
+        showCustomOverlay(title: L10n.text("Hints"), details: [L10n.text("Loading...")], actions: [(L10n.text("BACK"), returnToCaller)])
         let request = UUID(); hintRequestID = request
         let initial = (session as? ClassicMobileSession)?.initialSimulation
         let title = summary.title, skills = session.snapshot.skills.filter { $0.count != 0 }.map(\.name)
@@ -34,16 +35,16 @@ extension MobileGameViewController {
             let (deck, solution) = await MobileTeachingLoader.shared.load(initial: initial, title: title, skills: skills,
                 chronicles: self?.session is Lemmings3MobileSession)
             guard let self, self.hintRequestID == request, self.paused else { return }
-            self.presentHints(deck: deck, solution: solution, stage: stage)
+            self.presentHints(deck: deck, solution: solution, stage: stage, returningTo: returnToCaller)
         }
     }
 
-    private func presentHints(deck: LevelHintDeck, solution: VerifiedSolution?, stage: Int) {
+    private func presentHints(deck: LevelHintDeck, solution: VerifiedSolution?, stage: Int, returningTo caller: @escaping () -> Void) {
         let index = min(max(0, stage), deck.stages.count - 1)
         let hint = deck.presentation(at: index)
         var actions: [(String, () -> Void)] = []
-        if index > 0 { actions.append((L10n.text("PREVIOUS"), { [weak self] in self?.showHints(stage: index - 1) })) }
-        if index + 1 < deck.stages.count { actions.append((deck.checked ? L10n.text("NEXT HINT") : L10n.text("Next coaching"), { [weak self] in self?.showHints(stage: index + 1) })) }
+        if index > 0 { actions.append((L10n.text("PREVIOUS"), { [weak self] in self?.showHints(stage: index - 1, returningTo: caller) })) }
+        if index + 1 < deck.stages.count { actions.append((deck.checked ? L10n.text("NEXT HINT") : L10n.text("Next coaching"), { [weak self] in self?.showHints(stage: index + 1, returningTo: caller) })) }
         if let solution {
             actions.append((L10n.text("WATCH SOLUTION"), { [weak self] in
                 if self?.hasSolutionPair == true { self?.selectSolutionMode(.solution); return }
@@ -59,7 +60,7 @@ extension MobileGameViewController {
                 }))
             }
         }
-        actions.append((L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }))
+        actions.append((L10n.text("BACK"), caller))
         showCustomOverlay(title: hint.title,
                           details: [hint.section] + hint.body.components(separatedBy: "\n").filter { !$0.isEmpty },
                           reading: true, headings: [0], actions: actions)
@@ -67,10 +68,11 @@ extension MobileGameViewController {
 
     /// Both reveals keep the spoiler confirmation, with Cancel returning to the same hint.
     private func confirmSolution(_ solution: VerifiedSolution, stage: Int, title: String, confirm: String, ghostOnly: Bool) {
+        let returnToHint = overlayReturnAction()
         showCustomOverlay(title: title,
             details: [L10n.text("Want to see one way through? This reveals a full winning route. Your game stays paused.")],
             reading: true, actions: [
-            (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: stage) }),
+            (L10n.text("CANCEL"), returnToHint),
             (confirm, { [weak self] in
                 guard let data = try? JSONEncoder().encode(solution.replay) else { return }
                 self?.showReplay(document: data, solution: true, ghostOnly: ghostOnly)

@@ -86,7 +86,11 @@ public enum TVMenuArt {
             let inset: CGFloat = action.portrait == nil ? 32 : 52
             let box = CGRect(x: target.frame.minX + inset, y: target.frame.minY + 5,
                 width: target.frame.width - inset - 32, height: target.frame.height - 10)
-            if let game = action.gameLogo, let image = typography?.homeLogos.image(game) {
+            if action.icon == .favourite {
+                context.saveGState(); context.setAlpha(action.enabled ? 1 : 0.45)
+                GameStarArt.draw(in: target.frame, earned: action.selected, context: context)
+                context.restoreGState()
+            } else if let game = action.gameLogo, let image = typography?.homeLogos.image(game) {
                 context.saveGState(); context.setAlpha(action.enabled ? 1 : 0.45)
                 fitted(image, in: target.frame.insetBy(dx: 24, dy: 8), context: context)
                 context.restoreGState()

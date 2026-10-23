@@ -12,11 +12,13 @@ import NxlvKit
     func reset() { root = nil; selected = nil; ring.removeFromSuperview() }
 
     @discardableResult func handle(_ action: ControllerBindings.Action, in view: NSView, sheet: NSWindow? = nil) -> Bool {
+        let pageView = GameScreen.shared.pageForNavigationRoot(view) ?? view
         if root !== view { reset(); root = view }
         if action == .cancel || action == .pause {
             reset()
-            if let page = view as? GameMenuPage { page.onBack?() }
-            else if let replay = view as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
+            if let page = pageView as? GameMenuPage { page.onBack?() }
+            else if let replay = pageView as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
+            else if GameScreen.shared.pageForNavigationRoot(view) != nil { GameScreen.shared.dismiss(pageView) }
             else if let sheet {
                 let cancel = controls(in: view).compactMap { $0 as? NSButton }.first {
                     $0.keyEquivalent == "\u{1b}" || [L10n.text("Cancel"), L10n.text("Close"), L10n.text("Resume"), L10n.text("Back")].contains($0.title)
@@ -33,7 +35,7 @@ import NxlvKit
         let choices = controls(in: view)
         guard !choices.isEmpty else { return false }
         if !choices.contains(where: { $0 === selected }) {
-            selected = ((view as? GameMenuPage)?.controllerInitialControl).flatMap { initial in choices.first(where: { $0 === initial }) }
+            selected = ((pageView as? GameMenuPage)?.controllerInitialControl).flatMap { initial in choices.first(where: { $0 === initial }) }
                 ?? (sheet?.defaultButtonCell?.controlView as? NSControl).flatMap { candidate in
                     choices.first(where: { $0 === candidate })
                 }

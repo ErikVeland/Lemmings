@@ -17,11 +17,13 @@ Devices on the same iCloud account discover the library automatically. No
 Game Center login, code, recovery file or manual sync action is needed.
 
 For the shared tester library, open **Settings → Privacy → Tester sync** on
-mobile/TV, or **Players → Tester sync** / **Ultimate Lemmings → Tester Sync…**
-on Mac. Select **Enable tester sync** once on each device. The button uses `test99` automatically. It links the whole
-library: every player, solo progress and every saved Hot Seat, regardless of which
-player or session is selected. No password entry or session-specific setup is
-needed. Existing libraries combine without replacing either device's records.
+mobile/TV, or **Ultimate Lemmings → Tester Sync…** on Mac. Select **Enable tester sync**
+once on each device. The button uses `test99` automatically. It links the whole
+library: every player, solo progress and every saved Hot Seat, regardless of
+which player or session is selected. No password entry or session-specific setup is
+needed. The setup page does not display the password. Tester sync has no shortcut
+on the Players screen. Existing libraries combine without replacing either
+device's records.
 
 Keychain retains the derived credentials and the enabled state survives relaunch.
 Setup works offline and during play. Sync, provider selection and retries run in

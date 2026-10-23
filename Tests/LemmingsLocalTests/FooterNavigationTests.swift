@@ -123,21 +123,21 @@ final class FooterNavigationTests: XCTestCase {
                     let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
                         .filter { $0.accessibilityRole() == .button }
                     let back = try XCTUnwrap(buttons.first { ($0.accessibilityLabel() ?? "").hasPrefix("Back") })
-                    let menu = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "Menu" })
-                    XCTAssertTrue(view.bounds.contains(back.localFrame) && view.bounds.contains(menu.localFrame))
+                    XCTAssertFalse(buttons.contains { $0.accessibilityLabel() == "Menu" })
+                    XCTAssertTrue(view.bounds.contains(back.localFrame))
                     XCTAssertEqual(back.localFrame.minX, buttons.map { $0.localFrame.minX }.min())
                     XCTAssertTrue(buttons.filter { $0 !== back }.allSatisfy { !$0.localFrame.intersects(back.localFrame) })
-                    XCTAssertTrue(back.accessibilityPerformPress()); XCTAssertEqual(backs, 1)
-                    XCTAssertTrue(menu.accessibilityPerformPress()); XCTAssertEqual(menus, 1)
+                    XCTAssertTrue(back.accessibilityPerformPress()); XCTAssertEqual(menus, 1)
+                    XCTAssertEqual(backs, 0)
                     let point = view.convert(CGPoint(x: back.localFrame.midX, y: back.localFrame.midY), to: nil)
                     view.mouseDown(with: try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown, location: point,
                         modifierFlags: [], timestamp: 0, windowNumber: window.windowNumber, context: nil,
                         eventNumber: 0, clickCount: 1, pressure: 1)))
-                    XCTAssertEqual(backs, 2)
+                    XCTAssertEqual(menus, 2)
                     view.keyDown(with: try XCTUnwrap(NSEvent.keyEvent(with: .keyDown, location: .zero,
                         modifierFlags: [], timestamp: 0, windowNumber: window.windowNumber, context: nil,
                         characters: "q", charactersIgnoringModifiers: "q", isARepeat: false, keyCode: 12)))
-                    XCTAssertEqual(menus, 2)
+                    XCTAssertEqual(menus, 3)
                     if !hotSeat {
                         let retry = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "Try again" })
                         XCTAssertTrue(retry.accessibilityPerformPress()); XCTAssertEqual(retries, 1)
