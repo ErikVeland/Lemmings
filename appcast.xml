@@ -2,6 +2,32 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.2.1</title>
+            <pubDate>Fri, 23 Oct 2026 14:35:00 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>98</sparkle:version>
+            <sparkle:shortVersionString>2.2.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>A clock at home</h3>
+<p>Mac Desk Clock widgets now start correctly after installation. Clock artwork fills each widget size. Full-colour and tinted desktop appearances keep the clock visible; monochrome appearances show its pixel silhouette.</p>
+<p>Widgets update through the system timeline. Open Desk Clock in the app for continuous animation.</p>
+<h3>Pause when you press</h3>
+<p>The mobile touch HUD pauses on touch-down. Releasing the same press keeps the game paused. Resume presents the frozen playfield before the next game tick and discards time spent paused. These timing fixes apply to Classic, The Tribes and Chronicles, including fast play. Hot Seat still waits for Ready.</p>
+<h3>Platforms and scope</h3>
+<p>Mac build 98 supports Apple silicon and Intel on macOS 12.3 or later. iPhone, iPad and Duo use build 21 on iOS 16 or later. Apple TV uses build 11. The existing TestFlight groups and AltStore Classic source continue.</p>
+<p>Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta with their documented limits. Mobile Journey still plays Classic levels. Physical-device acceptance retains its recorded limits. Apple processing and Beta Review determine external TestFlight availability.</p>
+<p class="meta">Build: 98<br>Release commit: 285dbabd432ecdf3fc3414e087a92058b7018f0b<br>Release base: v2.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build98.zip" length="2056641801" type="application/octet-stream" sparkle:edSignature="7hXdayVQY0s+Rg7qu/2UXxzhhOnxam0/dwf+QhA3slk2G9bTk4FvT/fEvCkZE6Qeu4bpsJXt0V0+wGA3B6xPBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from97.delta" sparkle:deltaFrom="97" length="675234" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="OzYFhlLTuqyl0H5+VN6V1WMeW9iSPXpLZm/S5623gPf5kscVRXZobY2gpVqu2XGEKZFLgdElzoK02QonPLSWBw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from96.delta" sparkle:deltaFrom="96" length="42731490" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="YiazH45Gqdv+y4t3rryMcaTCV6oq+CgfEuVnTS1ZgJWVXJx2nTVUnYjKOBt0uZ/dtvjkJbD9ZMcsIHT6LiIEBQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from95.delta" sparkle:deltaFrom="95" length="49012966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="51KH0IOXHk6pL2GFaQliYHghu5GW7nIGQBhbW1xRNdtSLbXR5DVLu7QV0W/cDaX8Ee81E8thuE5uAgitO+tiCg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from93.delta" sparkle:deltaFrom="93" length="43540398" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="5rl8LZ61vdzxBBS0mm89w8jUrafbm+CekeEFR36L73TsecPgdCtFT1oVldMw25Ny+5Yk33yIgL8rgdnnjCOZBg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from91.delta" sparkle:deltaFrom="91" length="48476810" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="kQ6Ck7r+SmgY4kFxDKIsvsikTPcab8M86NQV3o6Dlr76lBpEjTMQxKxu0MFdYec/ZOJWOQtH26wheT1KE3yPAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.2</title>
             <pubDate>Fri, 23 Oct 2026 10:29:13 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
