@@ -1,0 +1,7 @@
+Ultimate Lemmings 2.2.1 (21)
+
+Check Desk Clock widgets at every size. The pixel clock should fill the widget and remain visible with full-colour, tinted and monochrome appearances. Widgets use system timeline updates; open Desk Clock for continuous animation.
+
+During Classic, The Tribes and Chronicles, Pause should respond on touch-down. Releasing that press must keep the game paused. Resume should first show the frozen playfield, then continue without catching up time spent paused. Check normal and fast play, and Ready handovers in Hot Seat.
+
+Saved progress and the existing game classifications carry forward. Mobile Journey remains Classic-only. Check phone, iPad and supported Duo layouts.

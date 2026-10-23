@@ -1,0 +1,90 @@
+{
+  "de": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "38a94a1b21bdf52ae10c47bb5661604e4ccc9a06083586098a6c07766e4bbbbb",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "es-419": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "feee14c1b47bbf2867f1d4dbb30e9882a74e32575214f5ebb4b9d13001b39913",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "fr": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "3714b9499adb88fc595951345793ccd69637c1ba1d449c3b791e7deb040e0410",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "it": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "25d4266cf8b75ab3c83bb8bafd5899e75c047b5dd1b1956ec9a2d14294abfbe0",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "nb": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "19b54b96343d3f1a76f92feb00b0d062fd210473d93c1e0ca44c5ca465b2dab6",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "nl": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "4609ea8b9f3978f72ae239d9ac9bc8c8ad0e41b2e7451ae69ed3cd2f2eda3814",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "pt-BR": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "c64b7b4a4a02ca7904795d92a417aeac885b8d36ed021b01b3f42bace6318473",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  },
+  "ta": {
+    "complete": true,
+    "errors": [],
+    "missing_plurals": [],
+    "missing_text": [],
+    "plural_keys": 8,
+    "sha256": "677c31f3c5631dde8678d4ad3bb0e3dabf0c0aa4591d44a73f13907f6a6417f8",
+    "text_keys": 3517,
+    "total_plural_keys": 8,
+    "total_text_keys": 3517
+  }
+}

@@ -18,6 +18,15 @@
       "category": "games",
       "versions": [
         {
+          "version": "2.2.1",
+          "buildVersion": "21",
+          "date": "2026-10-23T03:49:15.224830Z",
+          "localizedDescription": "Desk Clock widgets fill every size and stay visible with desktop colour and tint settings. Mac widget startup is fixed. The mobile Pause control responds on touch-down; Resume presents the frozen playfield before continuing. Existing saves, Ready handovers and game classifications carry forward.",
+          "downloadURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build21-ios.ipa",
+          "size": 207258280,
+          "minOSVersion": "16.0"
+        },
+        {
           "version": "2.2",
           "buildVersion": "20",
           "date": "2026-10-23T01:49:04Z",

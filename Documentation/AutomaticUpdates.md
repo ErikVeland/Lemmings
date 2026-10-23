@@ -23,10 +23,10 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 2.2 build 97 is the current Mac release. Its
-[release record](ReleaseReadiness/2.2-build97/README.md) covers notarised full and
-slim archives, the live signed feed and direct deltas from builds 96, 95, 93,
-91 and 90. Every delta matches the target app tree and signature. The installed
+Public 2.2.1 build 98 is the current Mac release. Its
+[release record](ReleaseReadiness/2.2.1-build98/README.md) covers notarised full and
+slim archives, the live signed feed and direct deltas from builds 97, 96, 95,
+93 and 91. Every delta matches the target app tree and signature. The installed
 public key verifies the update archive and each delta. Foreground launch and
 actual updater relaunch remain unrun under the offscreen-only instruction.
 Publish a feed only with its matching signed and notarised archive.

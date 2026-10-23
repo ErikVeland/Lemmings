@@ -1,11 +1,12 @@
 # Public testing
 
-The current public Mac release is 2.2 build 97.
-See its [release notes](ReleaseNotes-2.2-build97.md) and
-[release checks](ReleaseReadiness/2.2-build97/README.md). iOS build 20 and TV
-build 10 are Waiting for Review in the existing TestFlight groups, with saved
-notes and automatic notifications enabled. Freeze one source commit for a public
-candidate. Earlier package records do not certify it.
+The current public Mac release is 2.2.1 build 98. See its
+[release notes](ReleaseNotes-2.2.1-build98.md) and
+[release checks](ReleaseReadiness/2.2.1-build98/README.md).
+iPhone/iPad/Duo build 21 is Waiting for Review. Apple TV build 11: Waiting for Review
+Apple processing and Beta Review determine external tester availability.
+Freeze one source commit for each public candidate; earlier records do not
+certify a new package.
 
 ## Newcomer and veteran playtests
 

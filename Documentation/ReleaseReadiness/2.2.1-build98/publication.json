@@ -1,0 +1,84 @@
+{
+  "verified": true,
+  "verifiedUTC": "2026-10-23T05:30:37.609476+00:00",
+  "version": "2.2.1",
+  "macBuild": 98,
+  "iosBuild": 21,
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.1",
+  "releaseTag": "v2.2.1",
+  "latestReleaseVerified": true,
+  "tagCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.2.1-build98.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build98.zip",
+      "size": 2056641801,
+      "sha256": "31ef203dae8456461eb2fd27a3bc16019d994821ce96d29e604f0fc0d51759b0",
+      "githubDigest": "sha256:31ef203dae8456461eb2fd27a3bc16019d994821ce96d29e604f0fc0d51759b0",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-2.2.1-build98-slim.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build98-slim.zip",
+      "size": 272570440,
+      "sha256": "f25b4046936e010891b4ee1f7f009b4c335026592795ed467b3f0c8c5b64efd9",
+      "githubDigest": "sha256:f25b4046936e010891b4ee1f7f009b4c335026592795ed467b3f0c8c5b64efd9",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build98-from91.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from91.delta",
+      "size": 48476810,
+      "sha256": "0256aa6893a24826786f4051fcac071aef5f1b592e9c6128303da73d5f8ef91e",
+      "githubDigest": "sha256:0256aa6893a24826786f4051fcac071aef5f1b592e9c6128303da73d5f8ef91e",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build98-from93.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from93.delta",
+      "size": 43540398,
+      "sha256": "f48af12bfc0a902359338f6119169ea118f51a7dec0eb743b428d8be6d9e4bb9",
+      "githubDigest": "sha256:f48af12bfc0a902359338f6119169ea118f51a7dec0eb743b428d8be6d9e4bb9",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build98-from95.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from95.delta",
+      "size": 49012966,
+      "sha256": "e8ab690ebd50e6181b952f9659f432e09f343da91aed9f3fb0d4a1773af47907",
+      "githubDigest": "sha256:e8ab690ebd50e6181b952f9659f432e09f343da91aed9f3fb0d4a1773af47907",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build98-from96.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from96.delta",
+      "size": 42731490,
+      "sha256": "41621370537fa3d1d96bf8b49b9acdaa15d13ff16e158548c39491ff9edbc067",
+      "githubDigest": "sha256:41621370537fa3d1d96bf8b49b9acdaa15d13ff16e158548c39491ff9edbc067",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build98-from97.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from97.delta",
+      "size": 675234,
+      "sha256": "0562e42d79a2c55a7d3907e51af8996a80ad9e03556d9f82d24aba71451d85b3",
+      "githubDigest": "sha256:0562e42d79a2c55a7d3907e51af8996a80ad9e03556d9f82d24aba71451d85b3",
+      "downloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-2.2.1-build21-ios.ipa",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build21-ios.ipa",
+      "size": 207258280,
+      "sha256": "7afef7f86adfe6137f652fecf043bbf350207dc8e22f426b59b6d8efd4e0990b",
+      "githubDigest": "sha256:7afef7f86adfe6137f652fecf043bbf350207dc8e22f426b59b6d8efd4e0990b",
+      "downloadVerified": true
+    }
+  ],
+  "appcast": {
+    "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+    "sha256": "712964e2e71f4eed4228dd102b18980f6ece936fbe37b4856750969cba6bfa80",
+    "githubBlobSHA": "1ade868ccf5a16e2ba8d55950329e8d44f26b8ba",
+    "rawContentVerified": true
+  }
+}

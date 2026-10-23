@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "reason": "Mobile content identity rejects a fixture path that traverses the external checkout symlink",
+  "matchingFiles": 1908,
+  "allFileHashesMatch": true,
+  "sourceChanged": false
+}

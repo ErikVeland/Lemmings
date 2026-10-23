@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "checks": {
+    "files": 7179,
+    "markdown": 249,
+    "local_links": 3191,
+    "plist": 26,
+    "json": 3571,
+    "python": 196,
+    "shell": 191
+  },
+  "errors": []
+}

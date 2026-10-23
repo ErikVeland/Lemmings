@@ -1,0 +1,186 @@
+{
+  "ios": [
+    {
+      "locale": "de.lproj",
+      "differences": []
+    },
+    {
+      "locale": "en.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nb.lproj",
+      "differences": []
+    },
+    {
+      "locale": "es-419.lproj",
+      "differences": []
+    },
+    {
+      "locale": "it.lproj",
+      "differences": []
+    },
+    {
+      "locale": "ta.lproj",
+      "differences": []
+    },
+    {
+      "locale": "pt-BR.lproj",
+      "differences": []
+    },
+    {
+      "locale": "fr.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nl.lproj",
+      "differences": []
+    },
+    {
+      "locale": "de.lproj",
+      "differences": []
+    },
+    {
+      "locale": "en.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nb.lproj",
+      "differences": []
+    },
+    {
+      "locale": "es-419.lproj",
+      "differences": []
+    },
+    {
+      "locale": "it.lproj",
+      "differences": []
+    },
+    {
+      "locale": "ta.lproj",
+      "differences": []
+    },
+    {
+      "locale": "pt-BR.lproj",
+      "differences": []
+    },
+    {
+      "locale": "fr.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nl.lproj",
+      "differences": []
+    },
+    {
+      "locale": "de.lproj",
+      "differences": []
+    },
+    {
+      "locale": "en.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nb.lproj",
+      "differences": []
+    },
+    {
+      "locale": "es-419.lproj",
+      "differences": []
+    },
+    {
+      "locale": "it.lproj",
+      "differences": []
+    },
+    {
+      "locale": "ta.lproj",
+      "differences": []
+    },
+    {
+      "locale": "pt-BR.lproj",
+      "differences": []
+    },
+    {
+      "locale": "fr.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nl.lproj",
+      "differences": []
+    }
+  ],
+  "tvos": [
+    {
+      "locale": "de.lproj",
+      "differences": []
+    },
+    {
+      "locale": "en.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nb.lproj",
+      "differences": []
+    },
+    {
+      "locale": "es-419.lproj",
+      "differences": []
+    },
+    {
+      "locale": "it.lproj",
+      "differences": []
+    },
+    {
+      "locale": "ta.lproj",
+      "differences": []
+    },
+    {
+      "locale": "pt-BR.lproj",
+      "differences": []
+    },
+    {
+      "locale": "fr.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nl.lproj",
+      "differences": []
+    },
+    {
+      "locale": "de.lproj",
+      "differences": []
+    },
+    {
+      "locale": "en.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nb.lproj",
+      "differences": []
+    },
+    {
+      "locale": "es-419.lproj",
+      "differences": []
+    },
+    {
+      "locale": "it.lproj",
+      "differences": []
+    },
+    {
+      "locale": "ta.lproj",
+      "differences": []
+    },
+    {
+      "locale": "pt-BR.lproj",
+      "differences": []
+    },
+    {
+      "locale": "fr.lproj",
+      "differences": []
+    },
+    {
+      "locale": "nl.lproj",
+      "differences": []
+    }
+  ]
+}

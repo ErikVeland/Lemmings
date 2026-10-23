@@ -1,17 +1,20 @@
 # Release notes
 
-The latest Mac release is [2.2 build 97](ReleaseNotes-2.2-build97.md).
-Its [release record](ReleaseReadiness/2.2-build97/README.md) covers the notarised
+The latest Mac release is [2.2.1 build 98](ReleaseNotes-2.2.1-build98.md).
+Its [release record](ReleaseReadiness/2.2.1-build98/README.md) covers the notarised
 full/slim universal packages, five direct updates, public asset/feed verification
-and 56 passing minor-release check commands. Foreground and device acceptance
-limits remain explicit.
-iPhone/iPad/Duo 2.2 build 20 and Apple TV 2.2 build 10 are Waiting for Review
-in their existing TestFlight groups. Notes are saved and automatic notifications
-are enabled. Apple Beta Review determines external tester availability.
-All release archives use frozen source `a9c154af`. See
+and 56 passing minor-release check commands, including the recorded reruns.
+Foreground and device acceptance limits remain explicit.
+iPhone/iPad/Duo 2.2.1 build 21 is Waiting for Review.
+Apple TV 2.2.1 build 11: Waiting for Review
+Apple Beta Review determines external tester availability.
+All release archives use frozen source `285dbabd`. See
 [release scope](ReleaseScope.md) for the current boundaries.
-The same iOS 2.2 build 20 export is also published through the
+The same iOS build 21 export is published through the
 [AltStore Classic source](AltStore.md).
+
+The [2.2 notes](ReleaseNotes-2.2-build97.md) and
+[release record](ReleaseReadiness/2.2-build97/README.md) retain the previous delivery evidence.
 
 The [2.1.2 notes](ReleaseNotes-2.1.2-build96.md) and
 [release record](ReleaseReadiness/2.1.2-build96/README.md) retain the previous delivery evidence.

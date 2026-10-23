@@ -1,0 +1,60 @@
+{
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "reason": "Six compiler-cache aliases and one fixture-path alias after checkout isolation. Reruns use the same frozen sources and identical data.",
+  "checks": [
+    {
+      "name": "localisation",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 728.0,
+      "log": "rerun-localisation.log"
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 734.8,
+      "log": "rerun-hdr-gpu.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 2.9,
+      "log": "rerun-controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 2.0,
+      "log": "rerun-variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 146.7,
+      "log": "rerun-pointer-capture.log"
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "exitCode": 0,
+      "seconds": 145.6,
+      "log": "rerun-dialog-cursor.log"
+    },
+    {
+      "name": "hot-seat-ghosts",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "rerun-hot-seat-ghosts.log",
+      "reason": "Identical fixture bytes cloned into checkout to avoid external symlink identity rejection",
+      "fixtureEvidence": "ports-isolation.json",
+      "runner": "Tools/UITestRunner/run.py",
+      "windowMode": "offscreen",
+      "audio": "muted"
+    }
+  ],
+  "verifiedUTC": "2026-10-23T05:13:13.843514+00:00"
+}

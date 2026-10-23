@@ -1,0 +1,77 @@
+{
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "version": "2.2.1",
+  "build": 98,
+  "bundleID": "academy.glasscode.lemmings",
+  "widgetBundleID": "academy.glasscode.lemmings.DeskClockWidget",
+  "minimumOS": "12.3",
+  "artworkAndAppCompiledFromFrozenCheckout": true,
+  "baseEngineLibrariesUseUnchangedFrozenInputs": true,
+  "standardCapabilitiesMatchPreviousRelease": true,
+  "binaries": [
+    {
+      "path": "Contents/MacOS/LemmingsLocal",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "e018f7d07d4ae904437a14d77bd8d5abcc122b6a6cc8ee424cbae06c58434c66"
+    },
+    {
+      "path": "Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "de7e963239fc826c5bc6da8c9b565ba7b7ad73a0a475ecf95815f042ffb9c32c"
+    },
+    {
+      "path": "Contents/Frameworks/libLemmingsAppCore.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "cc4d3a64e072a4de56a342d9a614c52452557fe2cbacd6976220efb9bd503052"
+    },
+    {
+      "path": "Contents/Frameworks/libLemmingsAudio.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "750ab79792fd44a5258afb76f3dde24a4dc897212876fea7909c0ecd9577ee4f"
+    },
+    {
+      "path": "Contents/Frameworks/libLemmingsGameArt.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "807870128ef6fa1c8d1dd7a9d89f15e72ae32c4be141e0afdb9159c771a3831a"
+    },
+    {
+      "path": "Contents/Frameworks/libLemmingsMobileCore.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "ae6c8c94befcc1dbc77d3a59f7a74fd6b46b2239a303897d29d597f315cc6bdc"
+    },
+    {
+      "path": "Contents/Frameworks/libLemmingsTVCore.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "7228c020af415ab2dc5a5d7b206d44327ce20b06879a1d675a23255b514c8553"
+    },
+    {
+      "path": "Contents/Frameworks/libNxlvKit.dylib",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ],
+      "sha256": "a3f4480e5932eb516a012a2e2ce680f8feff48411cd8903b63c8988a1655267f"
+    }
+  ]
+}

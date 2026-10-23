@@ -1,21 +1,17 @@
 # Release scope
 
-Version 2.2.1 is in release preparation: Mac build 98, iOS build 21 and
-tvOS build 11. It includes the confirmed desktop widget fixes and shared mobile
-pause/resume timing changes. See the [candidate record](ReleaseReadiness/2.2.1-build98/README.md).
+Mac 2.2.1 build 98 is published with verified universal full/slim downloads,
+five signed direct updates and the live update feed. iPhone/iPad/Duo build 21
+is Waiting for Review. Apple TV build 11: Waiting for Review
+All archives use frozen source `285dbabd`. See the
+[release record](ReleaseReadiness/2.2.1-build98/README.md).
 
-Mac 2.2 build 97 is published, with verified universal full/slim downloads,
-five signed direct updates and the live update feed. iPhone/iPad/Duo build 20
-and Apple TV build 10 are Waiting for Review in their existing TestFlight
-groups. Notes are saved and automatic notifications are enabled. Apple Beta
-Review determines external tester availability. All three archives use frozen
-source `a9c154af`. See the [release record](ReleaseReadiness/2.2-build97/README.md).
-
-All 56 minor-release check commands have passing results after background
-reruns and test-fixture corrections. Automated windows stayed offscreen and
-audio stayed muted. Foreground focus, launch and actual updater relaunch were
-not run. Physical-device, live-cloud and full-corpus acceptance retain their
-recorded limits. Later mobile pause/HUD work is outside this frozen release.
+All 56 minor-release check commands pass after six compiler-cache reruns and
+one fixture-path rerun, with
+no source drift. Automated windows stayed offscreen and audio stayed muted.
+Foreground launch, focus and actual updater relaunch were not run. Physical,
+live-cloud and full-corpus acceptance retain their documented limits.
+The earlier [2.2 record](ReleaseReadiness/2.2-build97/README.md) remains historical.
 
 The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
 scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)

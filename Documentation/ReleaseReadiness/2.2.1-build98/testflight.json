@@ -1,0 +1,108 @@
+{
+  "ios": {
+    "TestFlightStatus": "Waiting for Review",
+    "archiveSigned": true,
+    "build": 21,
+    "exportMenuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "exportSignatureVerified": true,
+    "gitCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+    "ipaSHA256": "7afef7f86adfe6137f652fecf043bbf350207dc8e22f426b59b6d8efd4e0990b",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "minimumOS": "16.0",
+    "musicScope": "main",
+    "physicalDeviceAcceptance": "pending",
+    "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+    "symbolUUIDs": [
+      [
+        "17763086-D5A5-30AF-89FF-A55C42A18B0D",
+        "arm64"
+      ]
+    ],
+    "uploadFinishedUTC": "2026-10-23T03:53:23.858382+00:00",
+    "uploaded": true,
+    "version": "2.2.1",
+    "appID": "6822112090",
+    "buildID": "3a71ceac-7a00-441d-8b07-7d2ec24c72fd",
+    "group": "iOS Private Beta",
+    "groupID": "7cc0d55f-1757-4799-ba5a-4757a1267ad0",
+    "internalGroup": "Lemmings",
+    "notesSaved": true,
+    "notesLanguage": "English (Australia)",
+    "groupAssigned": true,
+    "automaticTesterNotifications": true,
+    "betaReviewSubmitted": true,
+    "preparedTestNotesSHA256": "ddf4bb97050276544768a1af1125f78823f37b0122297eaea892849069a26c97",
+    "verifiedUTC": "2026-10-23T05:24:16.337512+00:00",
+    "externalTesterCount": 199
+  },
+  "tvos": {
+    "TestFlightStatus": "Waiting for Review",
+    "appID": "6810873426",
+    "archiveVerified": true,
+    "build": 11,
+    "exportVerified": true,
+    "group": "TV Private Beta",
+    "groupID": "a948d270-443d-4dc9-b26c-36a0bd57a2b3",
+    "ipaSHA256": "63497f4c0eb8309f9288da6619d0558dfc38869eea11e91c143cd8a9f41955c8",
+    "menuFonts": {
+      "manifestSHA256": "5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34",
+      "printableGlyphs": {
+        "Charset1": 94,
+        "Charset2": 94
+      }
+    },
+    "musicScope": "full",
+    "physicalDeviceAcceptance": "pending",
+    "platform": "tvOS",
+    "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+    "symbols": [
+      {
+        "bundle": "UltimateLemmingsTV.app",
+        "uuids": [
+          [
+            "58A232F9-B314-3196-83B6-B39AF63C9F30",
+            "arm64"
+          ]
+        ]
+      },
+      {
+        "bundle": "TopShelf.appex",
+        "uuids": [
+          [
+            "ED1679A1-D05C-3B76-9941-622A16AF61B2",
+            "arm64"
+          ]
+        ]
+      }
+    ],
+    "uploadFinishedUTC": "2026-10-23T05:05:06.932366+00:00",
+    "uploaded": true,
+    "version": "2.2.1",
+    "verifiedUTC": "2026-10-23T05:24:16.338702+00:00",
+    "buildID": "7d95035b-b218-4788-9db5-e9df591a25d2",
+    "internalGroup": "Lemmings",
+    "internalGroupID": "51721520-036f-4b57-8ac4-af366e29176d",
+    "groupAssigned": true,
+    "notesSaved": true,
+    "notesLanguage": "English (U.K.)",
+    "automaticTesterNotifications": true,
+    "betaReviewSubmitted": true,
+    "preparedTestNotesSHA256": "1f7677b200910671f9c4069abeeaff270c455f3764403af97d63642d4db53b43",
+    "externalTesterCount": 26
+  },
+  "version": "2.2.1",
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "exportHashScope": "Validated App Store Connect export; upload separately exports the same signed archive. Export hashes are not asserted as uploaded IPA hashes."
+}

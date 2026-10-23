@@ -7,8 +7,8 @@ https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json
 ```
 
 Open **Sources**, tap **+**, and paste the address. The source offers Ultimate
-Lemmings 2.2 build 20 for iOS 16 or later. Its IPA is attached to the
-[canonical 2.2 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2).
+Lemmings 2.2.1 build 21 for iOS 16 or later. Its IPA is attached to the
+[canonical 2.2.1 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.1).
 The [source JSON](../altstore.json) and app icon also stay in this repository.
 
 AltStore Classic re-signs the IPA with the installing player's Apple Account.
@@ -40,5 +40,5 @@ Upload each IPA to this repository's app release before updating `altstore.json`
 Keep existing downloads and the Mac update feed. Verify the public source,
 icon and complete IPA download, including the release asset's SHA-256 digest.
 Commit the source, documentation and receipt without unrelated workspace work.
-The [2.2 release record](ReleaseReadiness/2.2-build97/README.md) retains the
+The [2.2.1 release record](ReleaseReadiness/2.2.1-build98/README.md) retains the
 frozen source identity and AltStore publication checks.

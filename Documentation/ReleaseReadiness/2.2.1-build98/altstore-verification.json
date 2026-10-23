@@ -1,0 +1,72 @@
+{
+  "sourceCommit": "285dbabd432ecdf3fc3414e087a92058b7018f0b",
+  "channel": "AltStore Classic",
+  "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
+  "sourceSHA256": "2b8d23db8a1190d9f5a6e0bb3ed87d520f90c2ca48893952b6386f8685212f2e",
+  "ipaURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build21-ios.ipa",
+  "ipaBytes": 207258280,
+  "ipaSHA256": "7afef7f86adfe6137f652fecf043bbf350207dc8e22f426b59b6d8efd4e0990b",
+  "bundles": [
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios",
+      "version": "2.2.1",
+      "build": "21",
+      "minimumOS": "16.0",
+      "deviceFamily": [
+        1,
+        2
+      ],
+      "cryptids": [
+        0
+      ],
+      "signature": "verified",
+      "entitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios",
+        "beta-reports-active": true,
+        "com.apple.developer.game-center": true,
+        "com.apple.developer.icloud-container-environment": "Production",
+        "com.apple.developer.icloud-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "com.apple.developer.icloud-services": [
+          "CloudDocuments",
+          "CloudKit"
+        ],
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "com.apple.developer.ubiquity-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "get-task-allow": false
+      }
+    },
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios.DeskClockWidget",
+      "version": "2.2.1",
+      "build": "21",
+      "minimumOS": "16.0",
+      "deviceFamily": [
+        1,
+        2
+      ],
+      "cryptids": [
+        0
+      ],
+      "signature": "verified",
+      "entitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios.DeskClockWidget",
+        "beta-reports-active": true,
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "get-task-allow": false
+      }
+    }
+  ],
+  "zipCRC": "passed",
+  "permissionsMatchIPA": true,
+  "privacy": {
+    "NSCalendarsFullAccessUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.",
+    "NSCalendarsUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar."
+  },
+  "deviceInstallation": "not run",
+  "iCloudAndGameCenterAfterResigning": "not verified",
+  "verifiedUTC": "2026-10-23T03:52:03.289539+00:00"
+}

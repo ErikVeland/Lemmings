@@ -1,0 +1,12 @@
+{
+  "standard": {
+    "message": "Processing complete",
+    "status": "Accepted",
+    "id": "8e4597c6-8943-4fdd-b815-a9f45481f823"
+  },
+  "slim": {
+    "id": "73748a62-2001-4f86-8619-8a1b5b238b3d",
+    "message": "Processing complete",
+    "status": "Accepted"
+  }
+}

@@ -1,0 +1,7 @@
+Ultimate Lemmings 2.2.1 (11)
+
+Check pause and resume timing in Classic, The Tribes and Chronicles, including fast play. Resume should first show the frozen playfield, then continue without catching up time spent paused. Hot Seat must still wait for Ready.
+
+Check Siri Remote and controller input, existing saved runs, Top Shelf and the full soundtrack. The touch-down Pause change applies to the mobile touch HUD; Apple TV uses its existing remote and controller controls. Desk Clock remains on iPhone, iPad and Mac.
+
+Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta. Journey remains Classic-only.
