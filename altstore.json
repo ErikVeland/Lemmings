@@ -1,0 +1,50 @@
+{
+  "name": "Ultimate Lemmings",
+  "subtitle": "Lemmings for iPhone and iPad",
+  "description": "The Ultimate Lemmings source for AltStore Classic. An unofficial native Swift port of the 2D Lemmings games.",
+  "website": "https://github.com/ErikVeland/Lemmings",
+  "iconURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/a9c154af8380a9371d73e66bbd6830ddfc5f6081/Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+  "featuredApps": [
+    "academy.glasscode.lemmings.ios"
+  ],
+  "apps": [
+    {
+      "name": "Ultimate Lemmings",
+      "bundleIdentifier": "academy.glasscode.lemmings.ios",
+      "developerName": "Erik Veland",
+      "subtitle": "Save the lemmings. Watch the clock.",
+      "localizedDescription": "An unofficial native Swift port of the 2D Lemmings games for iPhone and iPad. Play Classic and The Tribes, try the Chronicles and NeoLemmix betas, and take turns with Hot Seat. Journey plays Classic levels. Desk Clock rebuilds the time in Classic Macintosh pixels and includes a widget.\n\nRequires iOS 16 or later. AltStore Classic re-signs the app with your Apple Account. iCloud sync and Game Center depend on the resulting signing capabilities and have not been verified through AltStore.\n\nNot affiliated with, endorsed by or licensed by Sony Interactive Entertainment.",
+      "iconURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/a9c154af8380a9371d73e66bbd6830ddfc5f6081/Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "category": "games",
+      "versions": [
+        {
+          "version": "2.2",
+          "buildVersion": "20",
+          "date": "2026-10-23T01:49:04Z",
+          "localizedDescription": "Desk Clock and its widget show the time in Classic Macintosh pixels, with an optional calendar countdown. Duo entry and touch recovery, reading pages, settings and narrow menus are improved. Bundled browsing and shuffle omit four exact fan levels with impossible rescue conditions. Classic and The Tribes remain Complete; Chronicles and NeoLemmix remain Beta. Journey still plays Classic levels.",
+          "downloadURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-2.2-build20-ios.ipa",
+          "size": 207228372,
+          "minOSVersion": "16.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "application-identifier",
+          "beta-reports-active",
+          "com.apple.developer.game-center",
+          "com.apple.developer.icloud-container-environment",
+          "com.apple.developer.icloud-container-identifiers",
+          "com.apple.developer.icloud-services",
+          "com.apple.developer.team-identifier",
+          "com.apple.developer.ubiquity-container-identifiers",
+          "get-task-allow"
+        ],
+        "privacy": {
+          "NSCalendarsFullAccessUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.",
+          "NSCalendarsUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar."
+        }
+      }
+    }
+  ],
+  "news": []
+}
