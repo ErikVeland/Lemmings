@@ -1578,7 +1578,7 @@
 /* Sources/LemmingsLocal/main.swift:4061 */
 "Classic and The Tribes" = "Classic and The Tribes";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:13 */
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:12 */
 "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only." = "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.";
 
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:132; Sources/LemmingsLocal/SettingsWindow.swift:537 */
@@ -1704,9 +1704,6 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:189 */
 "Cleared without assigning a skill." = "Cleared without assigning a skill.";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
-"Clearer pages" = "Clearer pages";
-
 /* Sources/LemmingsLocal/ArcadeWindow.swift:914; Sources/LemmingsLocal/TrolleyResultView.swift:233 */
 "Clears" = "Clears";
 
@@ -1736,9 +1733,6 @@
 
 /* Sources/NxlvKit/SkillVocabulary.swift:18 */
 "Clock" = "Clock";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
-"Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture." = "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.";
 
 /* Sources/NxlvKit/SkillVocabulary.swift:19 */
 "Cloner" = "Cloner";
@@ -2294,9 +2288,6 @@
 
 /* Sources/LemmingsLocal/ControllerDevicePresentation.swift:84; Sources/LemmingsMobileUI/MobileGameInput.swift:399; Sources/LemmingsMobileUI/MobileGameInput.swift:401 */
 "DualSense touchpad swipe: step back / forward" = "DualSense touchpad swipe: step back / forward";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
-"Duo" = "Duo";
 
 /* Sources/NxlvKit/Lemmings3Style.swift:34 */
 "Duplicate Chronicles object ID {0}." = "Duplicate Chronicles object ID {0}.";
@@ -4314,9 +4305,6 @@
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:258 */
 "Lemmings 3 · {0}" = "Lemmings 3 · {0}";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:7 */
-"Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac." = "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.";
-
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:43 */
 "Lemmings saved" = "Lemmings saved";
 
@@ -4595,6 +4583,9 @@
 
 /* Sources/NxlvKit/ArchivalCatalog.swift:76 */
 "Mac 2× High-Resolution (512x342 / 640x480)" = "Mac 2× High-Resolution (512x342 / 640x480)";
+
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:7 */
+"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances.";
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:536 */
 "Machine" = "Machine";
@@ -5862,6 +5853,9 @@
 /* Sources/LemmingsTVUI/TVPlayfieldView.swift:35 */
 "Pause and open controls" = "Pause and open controls";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
+"Pause and resume" = "Pause and resume";
+
 /* Sources/LemmingsMobileUI/MobileHUDView.swift:300 */
 "Pause menu" = "Pause menu";
 
@@ -6434,9 +6428,6 @@
 
 /* Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:138 */
 "Read it twice." = "Read it twice.";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
-"Reading pages have more room between paragraphs. Mobile settings group choices and show checked states." = "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states.";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:184 */
 "Ready" = "Ready";
@@ -7257,7 +7248,7 @@
 /* Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:54 */
 "Saved on this device" = "Saved on this device";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10 */
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
 "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 
 /* Sources/NxlvKit/ArcadeRecords.swift:413 */
@@ -8567,6 +8558,9 @@
 
 /* Sources/LemmingsGameArt/MobileResultAchievementsArt.swift:32; Sources/LemmingsLocal/ResultCelebrationView.swift:93 */
 "The maximum rescue target for this level is not established yet." = "The maximum rescue target for this level is not established yet.";
+
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
+"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick.";
 
 /* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1437 */
 "The movie could not open in the game window." = "The movie could not open in the game window.";
@@ -9945,7 +9939,7 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:844 */
 "Your first rescue starts the story." = "Your first rescue starts the story.";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10; Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:52; Sources/LemmingsGameArt/SolutionSwitchArt.swift:25; Sources/LemmingsLocal/SolutionSwitchView.swift:28; Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:51 */
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9; Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:52; Sources/LemmingsGameArt/SolutionSwitchArt.swift:25; Sources/LemmingsLocal/SolutionSwitchView.swift:28; Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:51 */
 "Your game" = "Your game";
 
 /* Sources/LemmingsLocal/GameCenterScores.swift:134 */

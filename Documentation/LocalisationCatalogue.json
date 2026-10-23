@@ -3412,7 +3412,7 @@
   "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:13"
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:12"
     ]
   },
   "Classic artwork": {
@@ -3663,12 +3663,6 @@
       "Sources/LemmingsLocal/ResultCelebrationView.swift:189"
     ]
   },
-  "Clearer pages": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
-    ]
-  },
   "Clears": {
     "kind": "text",
     "references": [
@@ -3731,12 +3725,6 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/SkillVocabulary.swift:18"
-    ]
-  },
-  "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
     ]
   },
   "Cloner": {
@@ -4946,12 +4934,6 @@
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:84",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:399",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:401"
-    ]
-  },
-  "Duo": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
     ]
   },
   "Duplicate Chronicles object ID {0}.": {
@@ -9218,12 +9200,6 @@
       "Sources/LemmingsLocal/TelemetryDashboard.swift:258"
     ]
   },
-  "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7"
-    ]
-  },
   "Lemmings saved": {
     "kind": "text",
     "references": [
@@ -9841,6 +9817,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ArchivalCatalog.swift:76"
+    ]
+  },
+  "Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7"
     ]
   },
   "Machine": {
@@ -12560,6 +12542,12 @@
       "Sources/LemmingsTVUI/TVPlayfieldView.swift:35"
     ]
   },
+  "Pause and resume": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
+    ]
+  },
   "Pause menu": {
     "kind": "text",
     "references": [
@@ -13817,12 +13805,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:138"
-    ]
-  },
-  "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
     ]
   },
   "Ready": {
@@ -15606,7 +15588,7 @@
   "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
     ]
   },
   "Saved result identities conflict.": {
@@ -18378,6 +18360,12 @@
     "references": [
       "Sources/LemmingsGameArt/MobileResultAchievementsArt.swift:32",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:93"
+    ]
+  },
+  "The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
     ]
   },
   "The movie could not open in the game window.": {
@@ -21221,7 +21209,7 @@
   "Your game": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10",
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9",
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:52",
       "Sources/LemmingsGameArt/SolutionSwitchArt.swift:25",
       "Sources/LemmingsLocal/SolutionSwitchView.swift:28",
