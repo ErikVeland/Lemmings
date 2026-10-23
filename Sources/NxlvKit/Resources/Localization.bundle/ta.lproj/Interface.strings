@@ -728,6 +728,7 @@
 "Delete {0} and discard its saved runs?" = "{0} நீக்க மற்றும் அதன் சேமிக்கப்பட்ட ரன்ன்கள் கைவிட?";
 "Delete {0}?" = "{0} நீக்கவா?";
 "Deletes this player's records and saved progress on linked devices." = "இந்த வீரரின் பதிவுகளை நீக்குகிறது மற்றும் இணைக்கப்பட்ட சாதனங்களில் முன்னேற்றத்தை சேமிக்கிறது.";
+"Desk Clock" = "Desk Clock";
 "Details" = "விவரங்கள்";
 "Difficult" = "கடினம்";
 "Difficulty" = "கடினத்தன்மை";
@@ -973,6 +974,8 @@
 "GAME CONTROLS" = "விளையாட்டுக் கட்டுப்பாடுகள்";
 "GARY TIMMONS" = "GARY TIMMONS";
 "GHOST SOLUTION" = "நிழல் தீர்வு";
+"GHOSTS OFF" = "GHOSTS OFF";
+"GHOSTS ON" = "GHOSTS ON";
 "GLIDE" = "கிளீட்";
 "GLUE POURER" = "பசை ஊற்றுபவர்";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1105,6 +1108,7 @@
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
 "Hot Seat" = "மாறிமுறை";
+"Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "மாறிமுறைத் தொடக்கங்கள்";
 "Hot Seat: {0}" = "மாறிமுறை: {0}";
 "Hot Seat…" = "மாறிமுறை…";
@@ -1113,6 +1117,10 @@
 "How it works" = "செயல்படும் முறை";
 "Hudson Soft / Sunsoft" = "Hudson Soft / Sunsoft";
 "ICARUS WINGS" = "இக்காரஸ் இறக்கைகள்";
+"IN 1 MINUTE" = "IN 1 MINUTE";
+"IN {0}" = "IN {0}";
+"IN {0} MINUTES" = "IN {0} MINUTES";
+"IN {0}H {1}M" = "IN {0}H {1}M";
 "INF" = "INF";
 "INITIALS" = "ஆரம்பநிலைகள்";
 "INSPECT LEMMINGS" = "INSPECT LEMMINGS";
@@ -1366,6 +1374,7 @@
 "LEMMINGS 3" = "LEMMINGS 3";
 "LEM_DIR must start with L or R." = "LEM_DIR என்பது L அல்லது R என்ற எழுத்தில் தொடங்க வேண்டும்.";
 "LESS IS MORE" = "குறைவானது அதிகமாகும்";
+"LET'S GO!" = "LET'S GO!";
 "LEVEL COMPLETE" = "நிலை நிறைவு";
 "LEVEL COMPLETE\n{0} SAVED" = "நிலை நிறைவு\n{0} மீட்கப்பட்டது";
 "LEVEL CONTROLS" = "நிலைக் கட்டுப்பாடுகள்";
@@ -1519,6 +1528,7 @@
 "MOVIE SAVED" = "காணொளி சேமிக்கப்பட்டது";
 "MUSIC" = "இசை";
 "Mac 2× High-Resolution (512x342 / 640x480)" = "மேக் 2 × உயர் தெளிவுத்திறன் (512x342 / 640x480)";
+"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Mac விட்ஜெட்டுகள் சரியாகத் தொடங்கி எல்லா அளவுகளையும் நிரப்புகின்றன. முழு வண்ணம், வண்ணச் சாயல் மற்றும் ஒற்றை வண்ணத் தோற்றங்களில் கடிகாரம் தெரியும்.";
 "Machine" = "கணினி";
 "Machine preset" = "கணினி முன்னமைவு";
 "Macintosh" = "Macintosh";
@@ -1711,6 +1721,7 @@
 "Next unassigned" = "அடுத்த ஒதுக்கப்படாதவர்";
 "Next unassigned lemming" = "அடுத்து நியமிக்கப்படாத லெம்மிங்";
 "Next: {0}" = "அடுத்து: {0}";
+"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
 "Nice one! But can you give that extra bit of effort?" = "நன்று! இன்னும் கொஞ்சம் முயற்சி செய்ய முடியுமா?";
 "No .mod files were found in that folder." = "அந்த கோப்புறையில் எந்த .mod கோப்புகளும் காணப்படவில்லை.";
 "No Exit? Watch Me" = "வெளியேற வழி இல்லை?";
@@ -1787,6 +1798,7 @@
 "ORIGINAL MOVIES" = "அசல் திரைப்படங்கள்";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "எங்கள் வழிகாட்டல் தலிஸ்மன் பிளவுபட்டது";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "நம் வாழ்வில் செல்வமும் பலன் கிடைத்துள்ளது";
+"OUT {0}" = "OUT {0}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "வெளியே {0} சேமிக்க {1} இடது {2} இழந்து {3}";
 "OUT {0}/{1}" = "வெளியே {0}/{1}";
 "OVERVIEW" = "மேலோட்டம்";
@@ -1840,8 +1852,10 @@
 "Open Game Center from the game window to sign in." = "உள்நுழைவதற்கு விளையாட்டு ஜன்னலில் இருந்து Game Center திறக்கவும்.";
 "Open Level File…" = "திறந்த நிலை கோப்பு...";
 "Open Replay Movie…" = "திறந்த ரீப்ளே திரைப்படம்...";
+"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
 "Open this address on another device:" = "இந்த முகவரியை வேறு சாதனத்தில் திறக்கவும்ஃ";
 "Open this level with its original game data to watch the action replay." = "இந்த நிலை திறக்க அதன் அசல் விளையாட்டு தரவு நடவடிக்கை மீண்டும் பார்க்க.";
+"Open when closed and charging" = "Open when closed and charging";
 "Opening" = "Opening";
 "Opening moves" = "தொடக்கச் செயல்கள்";
 "Opens it for reassurance." = "Opens it for reassurance.";
@@ -1937,6 +1951,7 @@
 "Pause action replay" = "செயல் மறு இயக்கத்தை இடைநிறுத்து";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "இடைநிறுத்தி நுழைவாயிலிலிருந்து வெளியேறும் வாயில்வரை பாதையைப் பார்க்கவும். லெம்மிங் பாதுகாப்பாகக் கடக்க முடியாத முதல் இடத்தைக் கண்டறியவும்.";
 "Pause and open controls" = "இடைநிறுத்தம் மற்றும் திறந்த கட்டுப்பாடுகள்";
+"Pause and resume" = "இடைநிறுத்தி மீண்டும் தொடங்கு";
 "Pause menu" = "இடைநிறுத்தப் பட்டி";
 "Pause on interruption" = "இடைநிறுத்தத்தில் இடைநிறுத்தம்";
 "Pause on skill change" = "திறன்களை மாற்றுவதில் இடைநிறுத்தம்";
@@ -1974,6 +1989,7 @@
 "Play style" = "விளையாடும் பாணி";
 "Play {0} Beta…" = "விளையாட {0} பீட்டா ...";
 "Playable" = "விளையாடலாம்";
+"Playback" = "Playback";
 "Playback behaviour" = "பின்னூட்டம் நடத்தை";
 "Played: {0}" = "விளையாடியது: {0}";
 "Player" = "வீரர்";
@@ -2400,6 +2416,7 @@
 "Saved level sequences" = "சேமிக்கப்பட்ட நிலை வரிசைகள்";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "இந்த சாதனத்தில் சேமிக்கப்பட்டது";
+"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 "Saved result identities conflict." = "சேமிக்கப்பட்ட முடிவு அடையாளங்கள் மோதல்.";
 "Saved run restored. Press Space when you are ready." = "சேமித்த ஆட்டம் மீட்டமைக்கப்பட்டது. தயாரானதும் Space அழுத்தவும்.";
 "Saved the last biscuit for later." = "Saved the last biscuit for later.";
@@ -2479,6 +2496,8 @@
 "Show full solution" = "முழுத் தீர்வைக் காட்டு";
 "Show ghost solution?" = "நிழல் தீர்வைக் காட்டவா?";
 "Show lemming count" = "லெம்மிங் எண்ணிக்கை காட்டு";
+"Show next event" = "Show next event";
+"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
 "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)";
 "Show practice tips" = "பயிற்சிக் குறிப்புகளைக் காட்டு";
 "Show skill backpacks" = "திறமையான முதுகெலும்புகளை காட்டவும்";
@@ -2834,6 +2853,7 @@
 "The library keys conflict. Existing saves were kept." = "நூலக விசைகள் முரண்படுகின்றன. ஏற்கெனவே உள்ள சேமிப்புகள் பாதுகாக்கப்பட்டன.";
 "The linked local player was removed." = "இணைக்கப்பட்ட உள்ளூர் வீரர் அகற்றப்பட்டது.";
 "The maximum rescue target for this level is not established yet." = "இந்த மட்டத்திற்கான அதிகபட்ச மீட்பு இலக்கு இன்னும் நிர்ணயிக்கப்படவில்லை.";
+"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "மொபைலில் இடைநிறுத்தக் கட்டுப்பாட்டைத் தொட்டவுடன் அது செயல்படும். மீண்டும் தொடங்கும்போது அடுத்த விளையாட்டுப் படிக்கு முன் உறைந்த விளையாட்டுக் களம் காட்டப்படும்.";
 "The movie could not open in the game window." = "விளையாட்டுச் சாளரத்தில் காணொளியைத் திறக்க முடியவில்லை.";
 "The movie encoder has no frame buffer." = "திரைப்பட குறியீட்டாளர் எந்த அட்டவணை பஃப்பர் இல்லை.";
 "The movie encoder stopped responding." = "சினிமா குறியீட்டாளர் பதிலளிப்பதை நிறுத்தியது.";
@@ -3041,6 +3061,7 @@
 "This soundtrack library is already downloading." = "இந்த ஒலிப்பதிவு நூலகம் ஏற்கனவே பதிவிறக்கம் செய்யப்படுகிறது.";
 "This worldwide board is not available yet." = "இந்த உலகளாவிய பலகை இன்னும் கிடைக்கவில்லை.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "தாமஸ் ஹாப்ஸ் சமாதானத்தையும் பாதுகாப்பையும் மிக முக்கியமாகக் கருதினார். பகிரப்பட்ட விதிகள் மற்றும் அதிகாரம் மக்களை மோதல்களிலிருந்து பாதுகாக்கின்றன.";
+"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
 "Three-star" = "மூன்று நட்சத்திரங்கள்";
 "Three-star levels" = "மூன்று நட்சத்திர நிலைகள்";
 "Three-star levels {0} > {1}" = "மூன்று நட்சத்திர நிலைகள் {0} > {1}";
@@ -3103,6 +3124,7 @@
 "Two assigned workers execute skills in the same simulation frame." = "இரண்டு பணியாளர்கள் ஒரே மாதிரியான உருவகப்படுத்துதல் கட்டத்தில் திறன்களை செயல்படுத்துகின்றனர்.";
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "இரு பணியாளர்கள்";
+"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
 "Type first names" = "முதற்பெயர்களை உள்ளிடு";
 "U" = "U";
 "UI TEST" = "இடைமுகச் சோதனை";
@@ -3422,6 +3444,7 @@
 "{0} / {1} earned" = "{0} / {1} பெறப்பட்டது";
 "{0} Lemmings" = "{0} லெம்மிங்கள்";
 "{0} Lemmings   Save {1}" = "{0} லெம்மிங்கள்   {1} மீட்கவும்";
+"{0} MIN" = "{0} MIN";
 "{0} NEW {1}{2}" = "{0} புதிய {1}{2}";
 "{0} Ranked catalogue only, without rewinds." = "{0} தரவரிசை பட்டியல் மட்டுமே, பின்னோக்கி சுழல் இல்லாமல்.";
 "{0} Start new records to save again. The unreadable files stay in the records folder." = "{0} மீண்டும் சேமிக்க புதிய பதிவுகளை தொடங்கவும். படிக்க முடியாத கோப்புகள் பதிவுகள் கோப்புறையில் இருக்கும்.";
@@ -3492,30 +3515,5 @@
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: மறு இயக்கப் பகுப்பாய்வு தோல்வி: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
-"{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";
-"Clearer pages" = "Clearer pages";
-"Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture." = "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.";
-"Desk Clock" = "Desk Clock";
-"Duo" = "Duo";
-"GHOSTS OFF" = "GHOSTS OFF";
-"GHOSTS ON" = "GHOSTS ON";
-"Hot Seat ghosts" = "Hot Seat ghosts";
-"IN 1 MINUTE" = "IN 1 MINUTE";
-"IN {0}" = "IN {0}";
-"IN {0} MINUTES" = "IN {0} MINUTES";
-"IN {0}H {1}M" = "IN {0}H {1}M";
-"LET'S GO!" = "LET'S GO!";
-"Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac." = "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.";
-"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
-"OUT {0}" = "OUT {0}";
-"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
-"Open when closed and charging" = "Open when closed and charging";
-"Playback" = "Playback";
-"Reading pages have more room between paragraphs. Mobile settings group choices and show checked states." = "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states.";
-"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
-"Show next event" = "Show next event";
-"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
-"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
-"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
-"{0} MIN" = "{0} MIN";
 "{0}H {1}M" = "{0}H {1}M";
+"{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";

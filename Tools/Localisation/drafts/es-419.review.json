@@ -560,12 +560,12 @@
   ],
   "draft": {
     "current_catalogue_text_count": 3130,
-    "entry_count": 3172,
+    "entry_count": 3517,
     "missing_catalogue_text_count": 0,
     "obsolete_key_count": 0,
     "path": "Tools/Localisation/drafts/es-419.json",
-    "sha256": "e8e79fb164d3977c3543f521df7d9d5f7c8e3e5d0dcfa745f7a1b4b79cc4838f",
-    "text_count": 3172,
+    "sha256": "feee14c1b47bbf2867f1d4dbb30e9882a74e32575214f5ebb4b9d13001b39913",
+    "text_count": 3517,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0
   },
@@ -696,9 +696,9 @@
     "native_language_approved": false
   },
   "catalogue_snapshot": {
-    "text_count": 3172,
+    "text_count": 3517,
     "plural_count": 8,
-    "sha256": "d61934371796bf4d3f8e17eddda706cca74de3b48bab47d7450b2f68ac75f16a"
+    "sha256": "456a35081f0fc0b8f909966cbed628314ab7055db2ed9af7bdf124f4bee3c6ab"
   },
   "maintenance_2_0_3": {
     "date": "2026-10-16",
@@ -741,5 +741,21 @@
       "Type first names"
     ],
     "scope": "Optional familiar-name settings only"
+  },
+  "release_2_2_1": {
+    "date": "2026-10-23",
+    "aiDraftedKeys": [
+      "Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances.",
+      "Pause and resume",
+      "The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick."
+    ],
+    "removedObsoleteKeys": [
+      "Clearer pages",
+      "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.",
+      "Duo",
+      "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.",
+      "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states."
+    ],
+    "humanReview": "pending"
   }
 }

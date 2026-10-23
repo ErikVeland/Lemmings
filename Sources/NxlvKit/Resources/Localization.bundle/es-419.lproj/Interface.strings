@@ -728,6 +728,7 @@
 "Delete {0} and discard its saved runs?" = "¿Eliminar {0} y descartar sus partidas guardadas?";
 "Delete {0}?" = "¿Eliminar {0}?";
 "Deletes this player's records and saved progress on linked devices." = "Elimina los récords de este jugador y el progreso guardado en los dispositivos vinculados.";
+"Desk Clock" = "Desk Clock";
 "Details" = "Detalles";
 "Difficult" = "Difícil";
 "Difficulty" = "Dificultad";
@@ -973,6 +974,8 @@
 "GAME CONTROLS" = "CONTROLES DEL JUEGO";
 "GARY TIMMONS" = "GARY TIMMONS";
 "GHOST SOLUTION" = "SOLUCIÓN FANTASMA";
+"GHOSTS OFF" = "GHOSTS OFF";
+"GHOSTS ON" = "GHOSTS ON";
 "GLIDE" = "PLANEAR";
 "GLUE POURER" = "VERTEDOR DE PEGAMENTO";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1105,6 +1108,7 @@
 "Hopper" = "Brincón";
 "Host" = "Anfitrión";
 "Hot Seat" = "Turnos compartidos";
+"Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Partidas de Hot Seat";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Turnos…";
@@ -1113,6 +1117,10 @@
 "How it works" = "Cómo funciona";
 "Hudson Soft / Sunsoft" = "Hudson Soft / Sunsoft";
 "ICARUS WINGS" = "ALAS DE ÍCARO";
+"IN 1 MINUTE" = "IN 1 MINUTE";
+"IN {0}" = "IN {0}";
+"IN {0} MINUTES" = "IN {0} MINUTES";
+"IN {0}H {1}M" = "IN {0}H {1}M";
 "INF" = "INF";
 "INITIALS" = "INICIALES";
 "INSPECT LEMMINGS" = "INSPECT LEMMINGS";
@@ -1366,6 +1374,7 @@
 "LEMMINGS 3" = "LEMMINGS 3";
 "LEM_DIR must start with L or R." = "LEM_DIR debe comenzar con L o R.";
 "LESS IS MORE" = "MENOS ES MÁS";
+"LET'S GO!" = "LET'S GO!";
 "LEVEL COMPLETE" = "NIVEL COMPLETADO";
 "LEVEL COMPLETE\n{0} SAVED" = "NIVEL COMPLETADO\n{0} RESCATADOS";
 "LEVEL CONTROLS" = "CONTROLES DEL NIVEL";
@@ -1519,6 +1528,7 @@
 "MOVIE SAVED" = "VÍDEO GUARDADO";
 "MUSIC" = "MÚSICA";
 "Mac 2× High-Resolution (512x342 / 640x480)" = "Alta resolución de Mac 2× (512×342 / 640×480)";
+"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Los widgets de Mac se inician correctamente y ocupan todo el espacio en cada tamaño. El reloj sigue visible en color, con tinte y en monocromo.";
 "Machine" = "Máquina";
 "Machine preset" = "Ajuste preestablecido de máquina";
 "Macintosh" = "Macintosh";
@@ -1711,6 +1721,7 @@
 "Next unassigned" = "Siguiente sin asignar";
 "Next unassigned lemming" = "Siguiente lemming sin asignar";
 "Next: {0}" = "Siguiente: {0}";
+"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
 "Nice one! But can you give that extra bit of effort?" = "¡Muy bien! ¿Pero puedes esforzarte un poco más?";
 "No .mod files were found in that folder." = "No se encontraron archivos .mod en esa carpeta.";
 "No Exit? Watch Me" = "¿Sin salida? ¡Mírame!";
@@ -1787,6 +1798,7 @@
 "ORIGINAL MOVIES" = "VÍDEOS ORIGINALES";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "NUESTRO TALISMÁN GUÍA FUE DIVIDIDO";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "NUESTRAS VIDAS HAN SIDO PLENAS Y PRÓSPERAS";
+"OUT {0}" = "OUT {0}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "FUERA {0} RESCATAR {1} RESTAN {2} PERDIDOS {3}";
 "OUT {0}/{1}" = "FUERA {0}/{1}";
 "OVERVIEW" = "RESUMEN";
@@ -1840,8 +1852,10 @@
 "Open Game Center from the game window to sign in." = "Abre Game Center desde la ventana del juego para iniciar sesión.";
 "Open Level File…" = "Abrir archivo de nivel…";
 "Open Replay Movie…" = "Abrir película de repetición…";
+"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
 "Open this address on another device:" = "Abre esta dirección en otro dispositivo:";
 "Open this level with its original game data to watch the action replay." = "Abre este nivel con los datos originales del juego para ver la repetición de acciones.";
+"Open when closed and charging" = "Open when closed and charging";
 "Opening" = "Opening";
 "Opening moves" = "Primeros movimientos";
 "Opens it for reassurance." = "Opens it for reassurance.";
@@ -1937,6 +1951,7 @@
 "Pause action replay" = "Pausar la repetición de acciones";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Pausa y sigue la ruta desde la entrada hasta la salida. Busca el primer punto por el que un lemming no puede pasar sin peligro.";
 "Pause and open controls" = "Pausar y abrir los controles";
+"Pause and resume" = "Pausa y reanudación";
 "Pause menu" = "Menú de pausa";
 "Pause on interruption" = "Pausar si se interrumpe";
 "Pause on skill change" = "Pausar al cambiar de habilidad";
@@ -1974,6 +1989,7 @@
 "Play style" = "Estilo de juego";
 "Play {0} Beta…" = "Jugar {0} Beta…";
 "Playable" = "Jugable";
+"Playback" = "Playback";
 "Playback behaviour" = "Comportamiento de reproducción";
 "Played: {0}" = "Jugados: {0}";
 "Player" = "Jugador";
@@ -2400,6 +2416,7 @@
 "Saved level sequences" = "Secuencias de nivel guardadas";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Guardado en este dispositivo";
+"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 "Saved result identities conflict." = "Las identidades de los resultados guardados entran en conflicto.";
 "Saved run restored. Press Space when you are ready." = "Partida guardada restaurada. Pulsa Espacio cuando estés listo.";
 "Saved the last biscuit for later." = "Saved the last biscuit for later.";
@@ -2479,6 +2496,8 @@
 "Show full solution" = "Mostrar la solución completa";
 "Show ghost solution?" = "¿Mostrar solución fantasma?";
 "Show lemming count" = "Mostrar cantidad de lemmings";
+"Show next event" = "Show next event";
+"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
 "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)";
 "Show practice tips" = "Mostrar consejos de práctica";
 "Show skill backpacks" = "Mostrar mochilas de habilidades";
@@ -2834,6 +2853,7 @@
 "The library keys conflict. Existing saves were kept." = "Las claves de la biblioteca entran en conflicto. Se conservaron los guardados existentes.";
 "The linked local player was removed." = "Se eliminó el jugador local vinculado.";
 "The maximum rescue target for this level is not established yet." = "Aún no se ha establecido el objetivo máximo de rescate de este nivel.";
+"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "En dispositivos móviles, el control Pausa responde al tocarlo. Al reanudar, se muestra el escenario detenido antes del siguiente paso del juego.";
 "The movie could not open in the game window." = "No se pudo abrir la película en la ventana del juego.";
 "The movie encoder has no frame buffer." = "El codificador de películas no tiene búfer de fotogramas.";
 "The movie encoder stopped responding." = "El codificador de películas dejó de responder.";
@@ -3041,6 +3061,7 @@
 "This soundtrack library is already downloading." = "Esta biblioteca de bandas sonoras ya se está descargando.";
 "This worldwide board is not available yet." = "Esta clasificación mundial aún no está disponible.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes consideraba esenciales la paz y la seguridad. Las reglas y la autoridad compartidas protegen a las personas de los conflictos.";
+"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
 "Three-star" = "Tres estrellas";
 "Three-star levels" = "Niveles de tres estrellas";
 "Three-star levels {0} > {1}" = "Niveles de tres estrellas {0} > {1}";
@@ -3103,6 +3124,7 @@
 "Two assigned workers execute skills in the same simulation frame." = "Dos trabajadores asignados ejecutan habilidades en el mismo fotograma de simulación.";
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "Dos trabajadores";
+"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
 "Type first names" = "Escribir nombres";
 "U" = "U";
 "UI TEST" = "PRUEBA DE INTERFAZ";
@@ -3422,6 +3444,7 @@
 "{0} / {1} earned" = "{0} / {1} conseguidos";
 "{0} Lemmings" = "{0} lemmings";
 "{0} Lemmings   Save {1}" = "{0} lemmings   Rescatar {1}";
+"{0} MIN" = "{0} MIN";
 "{0} NEW {1}{2}" = "{0} NUEVO {1}{2}";
 "{0} Ranked catalogue only, without rewinds." = "{0} Solo catálogo clasificado, sin rebobinados.";
 "{0} Start new records to save again. The unreadable files stay in the records folder." = "{0} Inicia récords nuevos para volver a guardar. Los archivos ilegibles permanecen en la carpeta de récords.";
@@ -3492,30 +3515,5 @@
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: falló el análisis de la repetición: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
-"{0}{1} more to rescue for three stars." = "Rescata a {0}{1} más para conseguir tres estrellas.";
-"Clearer pages" = "Clearer pages";
-"Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture." = "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.";
-"Desk Clock" = "Desk Clock";
-"Duo" = "Duo";
-"GHOSTS OFF" = "GHOSTS OFF";
-"GHOSTS ON" = "GHOSTS ON";
-"Hot Seat ghosts" = "Hot Seat ghosts";
-"IN 1 MINUTE" = "IN 1 MINUTE";
-"IN {0}" = "IN {0}";
-"IN {0} MINUTES" = "IN {0} MINUTES";
-"IN {0}H {1}M" = "IN {0}H {1}M";
-"LET'S GO!" = "LET'S GO!";
-"Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac." = "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.";
-"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
-"OUT {0}" = "OUT {0}";
-"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
-"Open when closed and charging" = "Open when closed and charging";
-"Playback" = "Playback";
-"Reading pages have more room between paragraphs. Mobile settings group choices and show checked states." = "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states.";
-"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
-"Show next event" = "Show next event";
-"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
-"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
-"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
-"{0} MIN" = "{0} MIN";
 "{0}H {1}M" = "{0}H {1}M";
+"{0}{1} more to rescue for three stars." = "Rescata a {0}{1} más para conseguir tres estrellas.";

@@ -728,6 +728,7 @@
 "Delete {0} and discard its saved runs?" = "Slette {0} og forkaste lagrede forsøk?";
 "Delete {0}?" = "Slette {0}?";
 "Deletes this player's records and saved progress on linked devices." = "Sletter denne spillerens rekorder og lagrede framdrift på tilkoblede enheter.";
+"Desk Clock" = "Desk Clock";
 "Details" = "Detaljer";
 "Difficult" = "Vanskelig";
 "Difficulty" = "Vanskelighetsgrad";
@@ -973,6 +974,8 @@
 "GAME CONTROLS" = "SPILLKONTROLLER";
 "GARY TIMMONS" = "GARY TIMMONS";
 "GHOST SOLUTION" = "SPØKELSESLØSNING";
+"GHOSTS OFF" = "GHOSTS OFF";
+"GHOSTS ON" = "GHOSTS ON";
 "GLIDE" = "GLI";
 "GLUE POURER" = "LIMHELLER";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1105,6 +1108,7 @@
 "Hopper" = "Spretter";
 "Host" = "Vert";
 "Hot Seat" = "Hot Seat";
+"Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Hot Seat-start";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Hot Seat…";
@@ -1113,6 +1117,10 @@
 "How it works" = "Slik fungerer det";
 "Hudson Soft / Sunsoft" = "Hudson Soft / Sunsoft";
 "ICARUS WINGS" = "IKAROSVINGER";
+"IN 1 MINUTE" = "IN 1 MINUTE";
+"IN {0}" = "IN {0}";
+"IN {0} MINUTES" = "IN {0} MINUTES";
+"IN {0}H {1}M" = "IN {0}H {1}M";
 "INF" = "INF";
 "INITIALS" = "INITIALER";
 "INSPECT LEMMINGS" = "INSPECT LEMMINGS";
@@ -1366,6 +1374,7 @@
 "LEMMINGS 3" = "LEMMINGS 3";
 "LEM_DIR must start with L or R." = "LEM_DIR må begynne med L eller R.";
 "LESS IS MORE" = "MINDRE ER MER";
+"LET'S GO!" = "LET'S GO!";
 "LEVEL COMPLETE" = "BRETT FULLFØRT";
 "LEVEL COMPLETE\n{0} SAVED" = "BRETT FULLFØRT\n{0} REDDET";
 "LEVEL CONTROLS" = "BRETTKONTROLLER";
@@ -1519,6 +1528,7 @@
 "MOVIE SAVED" = "FILM LAGRET";
 "MUSIC" = "MUSIKK";
 "Mac 2× High-Resolution (512x342 / 640x480)" = "Mac 2× høy oppløsning (512 × 342 / 640 × 480)";
+"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Mac-widgeter starter riktig og fyller alle størrelser. Klokken forblir synlig i fullfarge, med fargetone og i monokrom visning.";
 "Machine" = "Maskin";
 "Machine preset" = "Maskinforhåndsvalg";
 "Macintosh" = "Macintosh";
@@ -1711,6 +1721,7 @@
 "Next unassigned" = "Neste uten ferdighet";
 "Next unassigned lemming" = "Neste lemming uten ferdighet";
 "Next: {0}" = "Neste: {0}";
+"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
 "Nice one! But can you give that extra bit of effort?" = "Bra gjort! Men klarer du å legge inn en ekstra innsats?";
 "No .mod files were found in that folder." = "Fant ingen .mod-filer i den mappen.";
 "No Exit? Watch Me" = "Ingen utgang? Følg med!";
@@ -1787,6 +1798,7 @@
 "ORIGINAL MOVIES" = "ORIGINALFILMER";
 "OUR GUIDING TALISMAN WAS DIVIDED" = "VÅR LEDENDE TALISMAN BLE DELT";
 "OUR LIVES HAVE BEEN RICH AND FRUITFUL" = "LIVENE VÅRE HAR VÆRT RIKT OG FRUKTBART";
+"OUT {0}" = "OUT {0}";
 "OUT {0} SAVE {1} LEFT {2} LOST {3}" = "UTE {0} REDD {1} IGJEN {2} TAPT {3}";
 "OUT {0}/{1}" = "UTE {0}/{1}";
 "OVERVIEW" = "OVERSIKT";
@@ -1840,8 +1852,10 @@
 "Open Game Center from the game window to sign in." = "Åpne Game Center fra spillvinduet for å logge på.";
 "Open Level File…" = "Åpne brettfil…";
 "Open Replay Movie…" = "Åpne reprisevideo…";
+"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
 "Open this address on another device:" = "Åpne denne adressen på en annen enhet:";
 "Open this level with its original game data to watch the action replay." = "Åpne dette brettet med de opprinnelige spilldataene for å se reprisen.";
+"Open when closed and charging" = "Open when closed and charging";
 "Opening" = "Opening";
 "Opening moves" = "Første trekk";
 "Opens it for reassurance." = "Opens it for reassurance.";
@@ -1937,6 +1951,7 @@
 "Pause action replay" = "Sett reprisen på pause";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Sett på pause og følg ruten fra inngangen til utgangen. Finn det første stedet en lemming ikke kan passere trygt.";
 "Pause and open controls" = "Sett på pause og åpne kontrollene";
+"Pause and resume" = "Pause og fortsett";
 "Pause menu" = "Pausemeny";
 "Pause on interruption" = "Sett på pause ved avbrudd";
 "Pause on skill change" = "Sett på pause ved ferdighetsendring";
@@ -1974,6 +1989,7 @@
 "Play style" = "Spillestil";
 "Play {0} Beta…" = "Spill {0}-beta …";
 "Playable" = "Spillbar";
+"Playback" = "Playback";
 "Playback behaviour" = "Avspillingsatferd";
 "Played: {0}" = "Spilt: {0}";
 "Player" = "Spiller";
@@ -2400,6 +2416,7 @@
 "Saved level sequences" = "Lagrede brettsekvenser";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Lagret på denne enheten";
+"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 "Saved result identities conflict." = "Identitetene til de lagrede resultatene er i konflikt.";
 "Saved run restored. Press Space when you are ready." = "Lagret spill gjenopprettet. Trykk på mellomrom når du er klar.";
 "Saved the last biscuit for later." = "Saved the last biscuit for later.";
@@ -2479,6 +2496,8 @@
 "Show full solution" = "Vis hele løsningen";
 "Show ghost solution?" = "Vise spøkelsesløsning?";
 "Show lemming count" = "Vis antall lemminger";
+"Show next event" = "Show next event";
+"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
 "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)" = "Show or hide ghosts of earlier Hot Seat attempts. (⌘G)";
 "Show practice tips" = "Vis øvingstips";
 "Show skill backpacks" = "Vis ferdighetsryggsekker";
@@ -2834,6 +2853,7 @@
 "The library keys conflict. Existing saves were kept." = "Biblioteksnøklene er i konflikt. Eksisterende lagringer ble beholdt.";
 "The linked local player was removed." = "Den tilknyttede lokale spilleren ble fjernet.";
 "The maximum rescue target for this level is not established yet." = "Maksimalt redningsmål for dette brettet er ikke fastsatt ennå.";
+"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "På mobilen reagerer Pause-knappen med en gang du berører den. Når du fortsetter, vises det frosne spillefeltet før neste spillsteg.";
 "The movie could not open in the game window." = "Filmen kunne ikke åpnes i spillvinduet.";
 "The movie encoder has no frame buffer." = "Filmencoderen mangler rammebuffer.";
 "The movie encoder stopped responding." = "Filmencoderen sluttet å svare.";
@@ -3041,6 +3061,7 @@
 "This soundtrack library is already downloading." = "Dette lydsporbiblioteket lastes allerede ned.";
 "This worldwide board is not available yet." = "Denne verdensranglisten er ikke tilgjengelig ennå.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes mente at fred og trygghet var avgjørende. Felles regler og myndighet beskytter folk mot konflikt.";
+"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
 "Three-star" = "Tre stjerner";
 "Three-star levels" = "Brett med tre stjerner";
 "Three-star levels {0} > {1}" = "Trestjernersnivåer {0} > {1}";
@@ -3103,6 +3124,7 @@
 "Two assigned workers execute skills in the same simulation frame." = "To arbeidere med tildelte ferdigheter utfører dem i samme simuleringsframe.";
 "Two controllers required." = "Two controllers required.";
 "Two workers" = "To arbeidere";
+"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
 "Type first names" = "Skriv inn fornavn";
 "U" = "U";
 "UI TEST" = "GR. SNITTSJEKK";
@@ -3422,6 +3444,7 @@
 "{0} / {1} earned" = "{0} / {1} opptjent";
 "{0} Lemmings" = "{0} lemminger";
 "{0} Lemmings   Save {1}" = "{0} lemminger   Redd {1}";
+"{0} MIN" = "{0} MIN";
 "{0} NEW {1}{2}" = "{0} NY {1}{2}";
 "{0} Ranked catalogue only, without rewinds." = "{0} Kun rangert katalog, uten tilbakespoling.";
 "{0} Start new records to save again. The unreadable files stay in the records folder." = "{0} Start nye rekorder for å lagre igjen. Filene som ikke kan leses, blir liggende i rekordmappen.";
@@ -3492,30 +3515,5 @@
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: repriseanalysering mislyktes: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
-"{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
-"Clearer pages" = "Clearer pages";
-"Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture." = "Clock access and game controls adapt to the available screen regions. A layout change cancels an unfinished gesture.";
-"Desk Clock" = "Desk Clock";
-"Duo" = "Duo";
-"GHOSTS OFF" = "GHOSTS OFF";
-"GHOSTS ON" = "GHOSTS ON";
-"Hot Seat ghosts" = "Hot Seat ghosts";
-"IN 1 MINUTE" = "IN 1 MINUTE";
-"IN {0}" = "IN {0}";
-"IN {0} MINUTES" = "IN {0} MINUTES";
-"IN {0}H {1}M" = "IN {0}H {1}M";
-"LET'S GO!" = "LET'S GO!";
-"Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac." = "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.";
-"Next: {0} at {1}, {2}" = "Next: {0} at {1}, {2}";
-"OUT {0}" = "OUT {0}";
-"Open in Stacked pose when idle" = "Open in Stacked pose when idle";
-"Open when closed and charging" = "Open when closed and charging";
-"Playback" = "Playback";
-"Reading pages have more room between paragraphs. Mobile settings group choices and show checked states." = "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states.";
-"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
-"Show next event" = "Show next event";
-"Show next event in Desk Clock widget…" = "Show next event in Desk Clock widget…";
-"Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
-"Two-finger swipe on the playfield: DJ shuffle" = "Two-finger swipe on the playfield: DJ shuffle";
-"{0} MIN" = "{0} MIN";
 "{0}H {1}M" = "{0}H {1}M";
+"{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
