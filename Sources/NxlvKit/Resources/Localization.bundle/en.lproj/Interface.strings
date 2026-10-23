@@ -3678,7 +3678,7 @@
 /* Sources/NxlvKit/TrolleyHistory.swift:212 */
 "Invalid Trolley attempt history. The saved file must be preserved." = "Invalid Trolley attempt history. The saved file must be preserved.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:664 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:672 */
 "Invalid archived level slot mapping." = "Invalid archived level slot mapping.";
 
 /* Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift:221 */
@@ -8457,10 +8457,10 @@
 /* Sources/LemmingsAppCore/Hints/LevelHints.swift:124 */
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:543 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:551 */
 "The fan level archive could not be listed." = "The fan level archive could not be listed.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:535 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:543 */
 "The fan level archive could not be verified." = "The fan level archive could not be verified.";
 
 /* Sources/LemmingsLocal/main.swift:4096; Sources/LemmingsLocal/main.swift:5240 */
@@ -9426,7 +9426,7 @@
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:265 */
 "Unable to continue" = "Unable to continue";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:901 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:909 */
 "Unambiguous {0}" = "Unambiguous {0}";
 
 /* Sources/LemmingsLocal/TrolleyResultView.swift:62; Sources/LemmingsLocal/main.swift:3354; Sources/LemmingsLocal/main.swift:365; Sources/NxlvKit/LevelCatalogue.swift:51 */
@@ -9558,7 +9558,7 @@
 /* Sources/LemmingsAppCore/Records/GameProgressPreferences.swift:207 */
 "Unsupported cloud progress key." = "Unsupported cloud progress key.";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:748; Sources/NxlvKit/ClassicFanPack.swift:401 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:756; Sources/NxlvKit/ClassicFanPack.swift:401 */
 "Unsupported or missing fan graphics style: {0}" = "Unsupported or missing fan graphics style: {0}";
 
 /* Sources/NxlvKit/Lemmings2GAL.swift:114 */
@@ -10221,7 +10221,7 @@
 /* Sources/NxlvKit/PlatformProfile.swift:25; Sources/NxlvKit/PlatformProfile.swift:41 */
 "silent" = "silent";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:738 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:746 */
 "slot {0}" = "slot {0}";
 
 /* Sources/NxlvKit/NxrpReplay.swift:160 */
@@ -10230,7 +10230,7 @@
 /* Sources/NxlvKit/ClassicGraphics.swift:183 */
 "terrain piece {0}" = "terrain piece {0}";
 
-/* Sources/LemmingsLocal/FanLevelLibrary.swift:648 */
+/* Sources/LemmingsLocal/FanLevelLibrary.swift:656 */
 "text canvas" = "text canvas";
 
 /* Sources/NxlvKit/ClassicADFVolume.swift:24 */

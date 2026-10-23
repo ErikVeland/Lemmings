@@ -7882,7 +7882,7 @@
   "Invalid archived level slot mapping.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:664"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:672"
     ]
   },
   "Invalid cloud device list.": {
@@ -18183,13 +18183,13 @@
   "The fan level archive could not be listed.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:543"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:551"
     ]
   },
   "The fan level archive could not be verified.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:535"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:543"
     ]
   },
   "The fan level pack changed or could not be read.": {
@@ -20182,7 +20182,7 @@
   "Unambiguous {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:901"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:909"
     ]
   },
   "Unavailable": {
@@ -20455,7 +20455,7 @@
   "Unsupported or missing fan graphics style: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:748",
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:756",
       "Sources/NxlvKit/ClassicFanPack.swift:401"
     ]
   },
@@ -21880,7 +21880,7 @@
   "slot {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:738"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:746"
     ]
   },
   "spawn interval {0} lacks spawned count": {
@@ -21898,7 +21898,7 @@
   "text canvas": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/FanLevelLibrary.swift:648"
+      "Sources/LemmingsLocal/FanLevelLibrary.swift:656"
     ]
   },
   "the block chain for {0} does not hold together": {
