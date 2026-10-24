@@ -6,12 +6,12 @@ improvements across Mac, iPhone, iPad and Apple TV.
 
 ## Delivery
 
-| Channel | Build | Verified state at 13:00 Brisbane |
+| Channel | Build | Verified state at 18:20 Brisbane |
 | --- | ---: | --- |
 | Mac | 99 | Available: universal full/slim downloads, five signed updates and live updater feed. |
 | AltStore Classic | 33 | Available: live source, icon and public IPA verified. |
-| iPhone/iPad/Duo TestFlight | 33 | Not uploaded: Xcode account credentials rejected before delivery. |
-| Apple TV TestFlight | 12 | Not uploaded: same Xcode account blocker. |
+| iPhone/iPad/Duo TestFlight | 33 | Uploaded: Apple processing, verified in App Store Connect. |
+| Apple TV TestFlight | 12 | Transfer reached 100%; final delivery unconfirmed after session expiry. |
 
 All eight public downloads match their complete SHA-256 hashes. The release tag,
 latest-release identity, notes and live feeds match the candidate. See the
@@ -25,9 +25,10 @@ reconstruct all 18,942 files, links and modes. The full update and all five patc
 pass [Ed25519 signature verification](signature-verification.json).
 
 The validated iOS and TV archives retain their widgets/extensions, signatures,
-content and symbols. Both upload attempts stopped at Xcode account authentication.
-Existing groups remain iOS Private Beta and TV Private Beta; no new build is claimed
-as processing, under review or externally Testing. See [TestFlight](testflight.json).
+content and symbols. The owner refreshed Xcode authentication at 18:07 Brisbane.
+iOS upload succeeded at 18:10 and App Store Connect confirms Processing. TV transfer reached 100%, then its final status request failed because the Apple
+session expired. The server-side outcome must be checked before any retry. Existing groups remain iOS Private Beta and TV Private Beta.
+Neither new build is externally Testing yet. See [TestFlight](testflight.json).
 The [AltStore validation](altstore-verification.json) checks the unencrypted IPA,
 bundle signatures and declared permissions. Device re-signing and installation
 remain unverified.
