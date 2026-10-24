@@ -852,10 +852,21 @@ extension AppDelegate {
     keyboard.controllerAction(.settings)
     try check(keyboard.controllerMenuRoot != nil, "Controller settings command did not open Settings")
     keyboard.controllerMenuAction(.cycle(1))
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.rate(-1))
-    keyboard.controllerMenuAction(.assign)
+    func chooseControllerSetting(_ title: String) throws {
+      // Navigation is pinned outside the settings body. Find each control
+      // through real D-pad steps instead of assuming its old row offset.
+      for _ in 0..<20 {
+        if (keyboard.focusedControllerControl as? NSButton)?.title == L10n.text(title) {
+          keyboard.controllerMenuAction(.assign)
+          return
+        }
+        keyboard.controllerMenuAction(.rate(-1))
+      }
+      throw IntegrationFailure(message: "Controller could not reach setting: " + title)
+    }
+    try chooseControllerSetting("Tap RT to toggle fast-forward")
     try check(!preferences.current.controllerTapSpeed, "D-pad and A could not change the trigger setting")
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.assign)
+    try chooseControllerSetting("Swap sticks")
     try check(preferences.current.controllerSwapSticks, "D-pad and A could not swap sticks")
     if let page = keyboard.controllerMenuRoot {
       page.layoutSubtreeIfNeeded()
