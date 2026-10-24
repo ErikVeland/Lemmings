@@ -4137,6 +4137,11 @@ extension AppDelegate {
   /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
   private func recordsWithSkips(_ skips: Int) throws -> URL {
     var records = ArcadeRecords()
+    // A new records file still uses the legacy profile. Give each fixture its
+    // own progress scope so earlier campaign and Journey wins cannot leak in.
+    guard records.addProfile(initials: "LEM", portrait: 0) != nil else {
+      throw IntegrationFailure(message: "Could not create the skip fixture owner")
+    }
     for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
       let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
         rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
@@ -4385,6 +4390,8 @@ extension AppDelegate {
     guard let skipped = arcadeLevel, let skippedNumber = flow?.currentNumber else {
       throw IntegrationFailure(message: "The failed level had no records identity")
     }
+    try check(flow?.hasPassed(rank: flow!.currentRank!.name, position: skippedNumber - 1) == false,
+      "The skip fixture already had a passed level before Skip")
     view.skipLevel()
     try check(ArcadeStore.shared.records.hasSkipped(skipped, profileID: owner)
       && ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0, "Skip did not spend the owner's skip")
