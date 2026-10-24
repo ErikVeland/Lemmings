@@ -1,0 +1,21 @@
+{
+  "ready": true,
+  "sourceCommit": "fea37bf39fee3aa5b23f3112188b37199bc5b73e",
+  "artifactSourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+  "platforms": [
+    "ios",
+    "tvos"
+  ],
+  "requiredChecks": [
+    "release-audit-final",
+    "source-gate-final",
+    "extra-regressions-sdk",
+    "release-tool-suite",
+    "ios-final",
+    "tv-archive",
+    "altstore-validation-compatible"
+  ],
+  "sourceEquivalence": "test-only-source-equivalence.json",
+  "verifiedUTC": "2026-10-24T02:35:47.411958+00:00",
+  "scope": "Final full audit passed; mobile artifact validations remain valid because only two Mac integration-test files changed. Physical-device acceptance limits remain explicit."
+}

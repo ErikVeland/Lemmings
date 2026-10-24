@@ -1,0 +1,12 @@
+{
+  "full": {
+    "status": "Accepted",
+    "id": "dfc1732d-8bd0-4582-afe4-6ff6e0d169a3",
+    "message": "Processing complete"
+  },
+  "slim": {
+    "id": "f800d639-240b-4ecd-bc5d-478d2c9b81eb",
+    "status": "Accepted",
+    "message": "Processing complete"
+  }
+}

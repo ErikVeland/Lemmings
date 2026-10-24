@@ -1,6 +1,7 @@
 # Ultimate Lemmings 2.2.2
 
 Build: 99
+Release commit: fea37bf39fee3aa5b23f3112188b37199bc5b73e
 Release base: v2.2.1
 
 ## Made for Duo. Refined everywhere.
@@ -15,7 +16,7 @@ Menus and gameplay use the full front display, with controls arranged around
 camera cutouts. Layouts adapt between the outer screen and divided inner display.
 
 Desk Clock opens reliably from Home and fills the active display. Tent Pose can
-open it during a game, preserving the attempt and pausing play until you return.
+open it during a game, preserving the attempt and pausing play until you choose Resume.
 The clock follows your display brightness, offers optional red night vision and
 improves how its lemmings move around the digits and reach their doorway.
 
@@ -40,7 +41,7 @@ across Mac, iPhone, iPad and Apple TV.
 
 Touch controls make overlapping lemmings easier to browse. Revised mobile replay
 controls keep the title compact, skills visible and camera movement within reach.
-Crowded playfields gain subtle sprite separation at closer zoom levels.
+On Mac, crowded playfields gain subtle sprite separation at closer zoom levels.
 
 ## Platforms and scope
 

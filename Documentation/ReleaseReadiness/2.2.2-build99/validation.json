@@ -1,0 +1,200 @@
+{
+  "release-audit-final": {
+    "name": "release-audit-final",
+    "command": [
+      "python3",
+      "Tools/ReleaseReadiness/audit.py",
+      "--app",
+      "--app-bundle",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/standard/Ultimate Lemmings.app",
+      "--out",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/audit-final"
+    ],
+    "sourceCommit": "fea37bf39fee3aa5b23f3112188b37199bc5b73e",
+    "pid": 23699,
+    "status": "passed",
+    "startedUTC": "2026-10-24T01:45:36.603776+00:00",
+    "childPID": 23709,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T02:35:40.497182+00:00",
+    "sourceClean": true
+  },
+  "source-gate-final": {
+    "name": "source-gate-final",
+    "command": [
+      "env",
+      "SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+      "zsh",
+      "Scripts/run-source-tests.sh",
+      "--jobs",
+      "4"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 55929,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:22:04.771271+00:00",
+    "childPID": 55938,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:23:28.060468+00:00",
+    "sourceClean": true,
+    "reusedFromSourceCommit": "6d3509fb717016d35548f18380cf4dcea93b52c2",
+    "reusedEvidence": "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2/source-gate-final.json",
+    "reuseReason": "Only proof fingerprint exclusion policy and its evidence changed. Swift sources, tests, and all inputs for this suite are byte-identical; fingerprint policy has its own fresh tests."
+  },
+  "extra-regressions-sdk": {
+    "name": "extra-regressions-sdk",
+    "command": [
+      "env",
+      "SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk",
+      "zsh",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2/extra-regressions.zsh"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 23252,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:09:51.838131+00:00",
+    "childPID": 23263,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:12:23.355652+00:00",
+    "sourceClean": true,
+    "reusedFromSourceCommit": "6d3509fb717016d35548f18380cf4dcea93b52c2",
+    "reusedEvidence": "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2/extra-regressions-sdk.json",
+    "reuseReason": "Only proof fingerprint exclusion policy and its evidence changed. Swift sources, tests, and all inputs for this suite are byte-identical; fingerprint policy has its own fresh tests."
+  },
+  "release-tool-suite": {
+    "name": "release-tool-suite",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "Tests/ReleaseReadinessTests",
+      "-p",
+      "test_*.py"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 28974,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:13:08.023058+00:00",
+    "childPID": 28983,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:13:12.106131+00:00",
+    "sourceClean": true,
+    "reusedFromSourceCommit": "6d3509fb717016d35548f18380cf4dcea93b52c2",
+    "reusedEvidence": "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2/release-tool-suite.json",
+    "reuseReason": "Only proof fingerprint exclusion policy and its evidence changed. Swift sources, tests, and all inputs for this suite are byte-identical; fingerprint policy has its own fresh tests."
+  },
+  "mac-package-public": {
+    "name": "mac-package-public",
+    "command": [
+      "zsh",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/package-mac.zsh"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 68458,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:38:03.753672+00:00",
+    "childPID": 68464,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T01:22:13.423197+00:00",
+    "sourceClean": true
+  },
+  "direct-delta-verification": {
+    "name": "direct-delta-verification",
+    "command": [
+      "python3",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/verify-deltas.py"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 10085,
+    "status": "passed",
+    "startedUTC": "2026-10-24T01:22:25.692477+00:00",
+    "childPID": 10088,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T01:25:47.774054+00:00",
+    "sourceClean": true
+  },
+  "update-signature-verification": {
+    "name": "update-signature-verification",
+    "command": [
+      "python3",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/verify-signatures.py"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 12482,
+    "status": "passed",
+    "startedUTC": "2026-10-24T01:25:47.995515+00:00",
+    "childPID": 12486,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T01:25:52.445560+00:00",
+    "sourceClean": true
+  },
+  "ios-final": {
+    "name": "ios-final",
+    "command": [
+      "python3",
+      "Tools/IOSBeta/build.py",
+      "--build",
+      "33",
+      "--output",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/ios-final",
+      "--export",
+      "app-store-connect",
+      "--music-scope",
+      "main",
+      "--allow-provisioning-updates"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 68312,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:37:34.738776+00:00",
+    "childPID": 68321,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:42:54.454836+00:00",
+    "sourceClean": true
+  },
+  "tv-archive": {
+    "name": "tv-archive",
+    "command": [
+      "zsh",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/build-tv.zsh"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 72195,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:43:02.739627+00:00",
+    "childPID": 72198,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:48:33.832229+00:00",
+    "sourceClean": true
+  },
+  "altstore-validation-compatible": {
+    "name": "altstore-validation-compatible",
+    "command": [
+      "python3",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/verify-altstore.py",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/ios-final/Export/UltimateLemmingsIOS.ipa",
+      "--source",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/altstore.json",
+      "--output",
+      "/Volumes/Games/CodexBuilds/UltimateLemmings-2.2.2/source/.build/release-2.2.2-r2/altstore-verification.json",
+      "--expected-sha256",
+      "c413b14de8dbc9f67c75dcc1fd45049498e9b7eb3607341d02d1f7dc88cd6f60"
+    ],
+    "sourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+    "pid": 72155,
+    "status": "passed",
+    "startedUTC": "2026-10-24T00:42:55.797967+00:00",
+    "childPID": 72158,
+    "exitCode": 0,
+    "finishedUTC": "2026-10-24T00:43:02.573265+00:00",
+    "sourceClean": true
+  },
+  "public-verification-stage": {
+    "status": "passed",
+    "pid": 65790,
+    "startedUTC": "2026-10-24T02:56:20.506664+00:00",
+    "finishedUTC": "2026-10-24T03:00:14.023223+00:00"
+  }
+}

@@ -1,17 +1,17 @@
 # Release scope
 
-Mac 2.2.1 build 98 is published with verified universal full/slim downloads,
-five signed direct updates and the live update feed. iPhone/iPad/Duo build 21
-is Waiting for Review. Apple TV build 11: Waiting for Review
-All archives use frozen source `285dbabd`. See the
-[release record](ReleaseReadiness/2.2.1-build98/README.md).
+Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
+full/slim downloads, five signed updates, all eight public asset hashes and both
+live feeds are verified. iPhone/iPad/Duo build 33 and Apple TV build 12 are not
+uploaded: Xcode account credentials rejected both delivery attempts. See the
+[current release record](ReleaseReadiness/2.2.2-build99/README.md).
 
-All 56 minor-release check commands pass after six compiler-cache reruns and
-one fixture-path rerun, with
-no source drift. Automated windows stayed offscreen and audio stayed muted.
-Foreground launch, focus and actual updater relaunch were not run. Physical,
-live-cloud and full-corpus acceptance retain their documented limits.
-The earlier [2.2 record](ReleaseReadiness/2.2-build97/README.md) remains historical.
+The final frozen source is `fea37bf3`; artifacts use `9ffc23e7` with identical
+production inputs. Only two Mac integration-test files differ. All 56 final
+minor-release checks pass with no source drift. Automated windows stayed offscreen
+and audio stayed muted. Foreground launch, focus and actual updater relaunch were
+not run. Physical, live-cloud and full-corpus acceptance retain their limits.
+The [2.2.1 record](ReleaseReadiness/2.2.1-build98/README.md) remains historical.
 
 The 21 October merge combines the two Mole runtime changes. Earlier L3 trace
 scores describe their recorded source snapshots. See the [merge validation](ReleaseReadiness/Release211ProgressionMerge-2026-10-21.md)

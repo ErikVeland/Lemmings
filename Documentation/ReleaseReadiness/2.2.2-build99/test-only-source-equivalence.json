@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "fea37bf39fee3aa5b23f3112188b37199bc5b73e",
+  "artifactSourceCommit": "9ffc23e7118267a003dfd995f69e84ff221306c5",
+  "changedFiles": [
+    "Tests/AppIntegrationTests/checks.swift",
+    "Tests/SequelMacArtworkAppTests/checks.swift"
+  ],
+  "unchangedProductionTrees": {
+    "Sources": "fad2add86fe842b95a39a027d48f21a41038f523",
+    "Resources": "9855cf2f1aa8125e7793774619c504d477a1393c",
+    "Scripts": "604c518b830a3b33310bb1f4be9aa7622efa8561",
+    "Tools": "fb9e7443ec53d8ea61d01dce0dc2e8f1d76fcaae"
+  },
+  "reason": "Only integration-test assertions and fixture isolation changed. Production source, build scripts and tracked resources are identical; existing archive and notarisation receipts are retained. Content is not a tracked tree. Final audit rehashes all actual inputs and bundled resources.",
+  "verifiedUTC": "2026-10-24T01:45:36.475844+00:00"
+}

@@ -48,7 +48,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 ## Start here
 
 - [Roadmap through 3.0](Documentation/Roadmap.md) — historical milestones, the current baseline and proposed delivery gates through 3.0.
-- [2.2.1 release checks](Documentation/ReleaseReadiness/2.2.1-build98/README.md) — clock widget, pause timing and delivery status.
+- [2.2.2 release checks](Documentation/ReleaseReadiness/2.2.2-build99/README.md) — Duo improvements, shared controls and actual platform delivery.
 - [2.2 Duo launch plan](Documentation/2.2Roadmap.md) — launch priorities, delivery evidence and device acceptance.
 - [Developer handover](Documentation/DeveloperHandover.md) — start without private assets, verify an isolated source snapshot, and find the code and checks for a change.
 - [Handover dependencies](Documentation/HandoverDependencies.md) — code ownership, asset rights, optional services and signing inputs still to establish.

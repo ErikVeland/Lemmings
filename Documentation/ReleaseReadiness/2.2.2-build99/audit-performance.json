@@ -1,0 +1,162 @@
+{
+  "passes" : 1,
+  "scenarios" : [
+    {
+      "cpuFrameMS" : {
+        "max" : 29.193958325777203,
+        "p50" : 0.43366666068322957,
+        "p95" : 22.887333354447037,
+        "p99" : 23.967083339812234
+      },
+      "display" : "flat",
+      "encodedReplayFrames" : 340,
+      "encoderWaitSeconds" : 0.00022416692809201777,
+      "frames" : 1000,
+      "gpuCompletionMS" : {
+
+      },
+      "gpuExecutionMS" : {
+
+      },
+      "gpuFrames" : 0,
+      "initialReplayFrames" : 0,
+      "nukeTriggered" : true,
+      "observedSimulationSpeed" : 0.99931718114342283,
+      "pass" : 1,
+      "replayCaptureSeconds" : 2.2614982498635072,
+      "replayFrames" : 340,
+      "requestedSpeed" : 1,
+      "residentBytes" : {
+        "first" : 486801408,
+        "last" : 655130624,
+        "peak" : 655835136
+      },
+      "sceneRenderSeconds" : 0.10364983335603029,
+      "seconds" : 20.013665708334884,
+      "ticks" : 340,
+      "windowHeight" : 720,
+      "windowWidth" : 1280
+    },
+    {
+      "cpuFrameMS" : {
+        "max" : 66.571750008733943,
+        "p50" : 29.066041664918885,
+        "p95" : 32.242291665170342,
+        "p99" : 43.681958311935887
+      },
+      "display" : "flat",
+      "encodedReplayFrames" : 1206,
+      "encoderWaitSeconds" : 0.00058854176313616335,
+      "frames" : 485,
+      "gpuCompletionMS" : {
+
+      },
+      "gpuExecutionMS" : {
+
+      },
+      "gpuFrames" : 0,
+      "initialReplayFrames" : 0,
+      "nukeTriggered" : true,
+      "observedSimulationSpeed" : 4.7010419818394622,
+      "pass" : 1,
+      "replayCaptureSeconds" : 7.2584054173203185,
+      "replayFrames" : 1206,
+      "requestedSpeed" : 10,
+      "residentBytes" : {
+        "first" : 655540224,
+        "last" : 651214848,
+        "peak" : 664928256
+      },
+      "sceneRenderSeconds" : 0.42552362472633831,
+      "seconds" : 15.090521791687934,
+      "ticks" : 1206,
+      "windowHeight" : 720,
+      "windowWidth" : 1280
+    },
+    {
+      "cpuFrameMS" : {
+        "max" : 86.522875004447997,
+        "p50" : 30.102791672106832,
+        "p95" : 34.041333332424983,
+        "p99" : 39.995250001084059
+      },
+      "display" : "monitor",
+      "encodedReplayFrames" : 895,
+      "encoderWaitSeconds" : 0.00040054175769910216,
+      "frames" : 476,
+      "gpuCompletionMS" : {
+        "max" : 14.188666682457551,
+        "p50" : 2.4319166841451079,
+        "p95" : 8.1688749778550118,
+        "p99" : 10.580250003840774
+      },
+      "gpuExecutionMS" : {
+        "max" : 13.545750000048429,
+        "p50" : 1.9972916634287685,
+        "p95" : 7.6105000043753535,
+        "p99" : 9.8654583271127194
+      },
+      "gpuFrames" : 477,
+      "initialReplayFrames" : 0,
+      "nukeTriggered" : true,
+      "observedSimulationSpeed" : 3.3571004804899967,
+      "pass" : 1,
+      "replayCaptureSeconds" : 8.1798875001550186,
+      "replayFrames" : 895,
+      "requestedSpeed" : 10,
+      "residentBytes" : {
+        "first" : 612712448,
+        "last" : 643547136,
+        "peak" : 643547136
+      },
+      "sceneRenderSeconds" : 0.35787904183962382,
+      "seconds" : 15.682300583343022,
+      "ticks" : 895,
+      "windowHeight" : 720,
+      "windowWidth" : 1280
+    },
+    {
+      "cpuFrameMS" : {
+        "max" : 86.971749988151714,
+        "p50" : 29.47800001129508,
+        "p95" : 33.426916663302109,
+        "p99" : 34.927333326777443
+      },
+      "display" : "television",
+      "encodedReplayFrames" : 917,
+      "encoderWaitSeconds" : 0.00038070810842327774,
+      "frames" : 487,
+      "gpuCompletionMS" : {
+        "max" : 14.085625007282943,
+        "p50" : 2.4847500026226044,
+        "p95" : 9.3884166853968054,
+        "p99" : 12.629874981939793
+      },
+      "gpuExecutionMS" : {
+        "max" : 13.199374981923029,
+        "p50" : 2.1046249894425273,
+        "p95" : 8.4623333241324872,
+        "p99" : 11.421125003835186
+      },
+      "gpuFrames" : 488,
+      "initialReplayFrames" : 0,
+      "nukeTriggered" : true,
+      "observedSimulationSpeed" : 3.4463828214289447,
+      "pass" : 1,
+      "replayCaptureSeconds" : 8.1828719588229433,
+      "replayFrames" : 917,
+      "requestedSpeed" : 10,
+      "residentBytes" : {
+        "first" : 630996992,
+        "last" : 660340736,
+        "peak" : 660340736
+      },
+      "sceneRenderSeconds" : 0.37925279239425436,
+      "seconds" : 15.651533583324635,
+      "ticks" : 917,
+      "windowHeight" : 720,
+      "windowWidth" : 1280
+    }
+  ],
+  "scope" : "Local 1280x720 production app loop with asynchronous Metal submission and enabled replay recording. CPU work, GPU execution and submission-to-completion latency are separate measurements. GPU draining occurs outside the timed loop. Audio is silent. Repeated passes cover level restarts, display changes, nukes and replay finalisation. They do not certify uninterrupted long play or other hardware."
+}

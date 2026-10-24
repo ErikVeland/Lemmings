@@ -1,0 +1,20 @@
+{
+  "version": "2.2.2",
+  "checkedUTC": "2026-10-24T03:00:14Z",
+  "externalAvailabilityVerified": false,
+  "blocker": "Xcode account credentials invalid; archive export for upload stopped before delivery. User asked to sign in again in Xcode Settings > Accounts.",
+  "ios": {
+    "build": 33,
+    "appID": "6822112090",
+    "existingExternalGroup": "iOS Private Beta",
+    "uploaded": false,
+    "status": "blocked-before-upload"
+  },
+  "tvos": {
+    "build": 12,
+    "appID": "6810873426",
+    "existingExternalGroup": "TV Private Beta",
+    "uploaded": false,
+    "status": "blocked-before-upload"
+  }
+}
