@@ -847,10 +847,14 @@ extension AppDelegate {
     try check(LevelHintWindow.shared.page != nil, "Controller could not select the hints button in controls help; selected \(helpSelection), sheet remains \(host.attachedSheet != nil)")
     keyboard.controllerMenuAction(.cancel)
 
+    let settingsCaller = GameScreen.shared.controllerPage(in: host)
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     keyboard.settings = { preferences.show() }
     keyboard.controllerAction(.settings)
-    try check(keyboard.controllerMenuRoot != nil, "Controller settings command did not open Settings")
+    guard let settingsPage = GameScreen.shared.controllerPage(in: host) else {
+      throw IntegrationFailure(message: "Controller settings command did not open Settings")
+    }
+    try check(settingsPage !== settingsCaller, "Settings did not open above its caller")
     keyboard.controllerMenuAction(.cycle(1))
     func chooseControllerSetting(_ title: String) throws {
       // Navigation is pinned outside the settings body. Find each control
@@ -877,7 +881,10 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: output)
     }
     keyboard.controllerMenuAction(.cancel)
-    try check(!GameScreen.shared.isPresented, "B did not close Settings")
+    try check(!GameScreen.shared.contains(settingsPage)
+      && GameScreen.shared.controllerPage(in: host) === settingsCaller,
+      "B did not close Settings and return to its caller")
+    GameScreen.shared.dismissAll()
     keyboard.controllerEnabled = { false }
     try check(!keyboard.controllerPlaying, "Disabled controller stayed active during gameplay")
     keyboard.controllerEnabled = { true }; keyboard.ownsController = { false }
