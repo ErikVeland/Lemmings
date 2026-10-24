@@ -1,6 +1,6 @@
 {
   "version": "2.2.2",
-  "checkedUTC": "2026-10-24T08:50:07.035438+00:00",
+  "checkedUTC": "2026-10-24T09:03:10.542348+00:00",
   "externalAvailabilityVerified": false,
   "blocker": null,
   "ios": {
@@ -24,7 +24,7 @@
     "appID": "6810873426",
     "existingExternalGroup": "TV Private Beta",
     "uploaded": true,
-    "status": "processing",
+    "status": "waiting-for-review",
     "attempt": "upload-tvos-account-retry3",
     "priorUploadAbsentInAppStoreConnectUTC": "2026-10-24T08:36:30Z",
     "priorAttempt": {
@@ -36,7 +36,15 @@
       "absentInAppStoreConnect": true
     },
     "uploadFinishedUTC": "2026-10-24T08:45:57.574493+00:00",
-    "processingVerifiedInAppStoreConnect": true
+    "processingVerifiedInAppStoreConnect": true,
+    "buildID": "03e5b1d8-27e4-4201-a220-7e7fd1fa766a",
+    "betaReviewSubmittedUTC": "2026-10-24T09:03:10.542348+00:00",
+    "externalGroupAssigned": true,
+    "internalGroupAssigned": true,
+    "automaticallyNotifyTesters": true,
+    "testNotesSaved": true,
+    "externalAvailabilityVerified": false,
+    "buildIdentityNote": "Processed build uses the same ID as the earlier expired-session attempt; successful retry receipt and current App Store Connect state are retained."
   },
   "authenticationRestored": true
 }
