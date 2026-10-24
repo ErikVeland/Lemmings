@@ -6,12 +6,12 @@ improvements across Mac, iPhone, iPad and Apple TV.
 
 ## Delivery
 
-| Channel | Build | Verified state at 18:38 Brisbane |
+| Channel | Build | Verified state at 18:50 Brisbane |
 | --- | ---: | --- |
 | Mac | 99 | Available: universal full/slim downloads, five signed updates and live updater feed. |
 | AltStore Classic | 33 | Available: live source, icon and public IPA verified. |
 | iPhone/iPad/Duo TestFlight | 33 | Waiting for Review: existing external group assigned; notes saved. |
-| Apple TV TestFlight | 12 | New upload running after Apple confirmed the prior build was absent. |
+| Apple TV TestFlight | 12 | Uploaded: Apple processing, verified in App Store Connect. |
 
 All eight public downloads match their complete SHA-256 hashes. The release tag,
 latest-release identity, notes and live feeds match the candidate. See the
@@ -28,7 +28,8 @@ The validated iOS and TV archives retain their widgets/extensions, signatures,
 content and symbols. iOS build 33 is Waiting for Review with the existing iOS
 Private Beta group and automatic tester notifications. The TV transfer reached
 100% before its session expired. After the owner restored authentication, Apple
-showed no build 12 in builds or upload history. A new upload is in progress.
+showed no build 12 in builds or upload history. The new upload succeeded at
+18:45:57 Brisbane. App Store Connect confirms Processing.
 Neither new build is externally Testing yet. See [TestFlight](testflight.json).
 The [AltStore validation](altstore-verification.json) checks the unencrypted IPA,
 bundle signatures and declared permissions. Device re-signing and installation

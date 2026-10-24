@@ -1,6 +1,6 @@
 {
   "version": "2.2.2",
-  "checkedUTC": "2026-10-24T08:38:23.597494+00:00",
+  "checkedUTC": "2026-10-24T08:50:07.035438+00:00",
   "externalAvailabilityVerified": false,
   "blocker": null,
   "ios": {
@@ -23,8 +23,8 @@
     "build": 12,
     "appID": "6810873426",
     "existingExternalGroup": "TV Private Beta",
-    "uploaded": null,
-    "status": "upload-in-progress",
+    "uploaded": true,
+    "status": "processing",
     "attempt": "upload-tvos-account-retry3",
     "priorUploadAbsentInAppStoreConnectUTC": "2026-10-24T08:36:30Z",
     "priorAttempt": {
@@ -34,7 +34,9 @@
       "finishedUTC": "2026-10-24T08:17:14.475875+00:00",
       "status": "failed-expired-credentials",
       "absentInAppStoreConnect": true
-    }
+    },
+    "uploadFinishedUTC": "2026-10-24T08:45:57.574493+00:00",
+    "processingVerifiedInAppStoreConnect": true
   },
   "authenticationRestored": true
 }

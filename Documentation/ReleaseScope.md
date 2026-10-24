@@ -3,8 +3,8 @@
 Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
 full/slim downloads, five signed updates, all eight public asset hashes and both
 live feeds are verified. iPhone/iPad/Duo build 33 is Waiting for Review with the
-existing external group. Apple TV build 12 is uploading after a session-expiry
-failure and verification that Apple had no retained build. External TestFlight
+existing external group. Apple TV build 12 uploaded successfully and Apple is
+processing it. External TestFlight
 availability is not yet verified. See the
 [current release record](ReleaseReadiness/2.2.2-build99/README.md).
 
