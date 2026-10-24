@@ -6,12 +6,12 @@ improvements across Mac, iPhone, iPad and Apple TV.
 
 ## Delivery
 
-| Channel | Build | Verified state at 18:20 Brisbane |
+| Channel | Build | Verified state at 18:38 Brisbane |
 | --- | ---: | --- |
 | Mac | 99 | Available: universal full/slim downloads, five signed updates and live updater feed. |
 | AltStore Classic | 33 | Available: live source, icon and public IPA verified. |
-| iPhone/iPad/Duo TestFlight | 33 | Uploaded: Apple processing, verified in App Store Connect. |
-| Apple TV TestFlight | 12 | Transfer reached 100%; final delivery unconfirmed after session expiry. |
+| iPhone/iPad/Duo TestFlight | 33 | Waiting for Review: existing external group assigned; notes saved. |
+| Apple TV TestFlight | 12 | New upload running after Apple confirmed the prior build was absent. |
 
 All eight public downloads match their complete SHA-256 hashes. The release tag,
 latest-release identity, notes and live feeds match the candidate. See the
@@ -25,9 +25,10 @@ reconstruct all 18,942 files, links and modes. The full update and all five patc
 pass [Ed25519 signature verification](signature-verification.json).
 
 The validated iOS and TV archives retain their widgets/extensions, signatures,
-content and symbols. The owner refreshed Xcode authentication at 18:07 Brisbane.
-iOS upload succeeded at 18:10 and App Store Connect confirms Processing. TV transfer reached 100%, then its final status request failed because the Apple
-session expired. The server-side outcome must be checked before any retry. Existing groups remain iOS Private Beta and TV Private Beta.
+content and symbols. iOS build 33 is Waiting for Review with the existing iOS
+Private Beta group and automatic tester notifications. The TV transfer reached
+100% before its session expired. After the owner restored authentication, Apple
+showed no build 12 in builds or upload history. A new upload is in progress.
 Neither new build is externally Testing yet. See [TestFlight](testflight.json).
 The [AltStore validation](altstore-verification.json) checks the unencrypted IPA,
 bundle signatures and declared permissions. Device re-signing and installation

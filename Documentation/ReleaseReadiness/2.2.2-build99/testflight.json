@@ -1,29 +1,40 @@
 {
   "version": "2.2.2",
-  "checkedUTC": "2026-10-24T08:18:58.505648+00:00",
+  "checkedUTC": "2026-10-24T08:38:23.597494+00:00",
   "externalAvailabilityVerified": false,
-  "blocker": "Apple session expired during final tvOS upload status check. App Store Connect also requires sign-in; server-side retention must be checked before retry.",
+  "blocker": null,
   "ios": {
     "build": 33,
     "appID": "6822112090",
     "existingExternalGroup": "iOS Private Beta",
     "uploaded": true,
-    "status": "processing",
+    "status": "waiting-for-review",
     "attempt": "upload-ios-account-retry2",
     "uploadID": "ffdc034b-5222-4295-9b61-2fb5b8035791",
     "uploadFinishedUTC": "2026-10-24T08:10:58.100514+00:00",
-    "processingVerifiedInAppStoreConnect": true
+    "processingVerifiedInAppStoreConnect": true,
+    "betaReviewSubmittedUTC": "2026-10-24T08:38:23.597494+00:00",
+    "externalGroupAssigned": true,
+    "automaticallyNotifyTesters": true,
+    "testNotesSaved": true,
+    "externalAvailabilityVerified": false
   },
   "tvos": {
     "build": 12,
     "appID": "6810873426",
     "existingExternalGroup": "TV Private Beta",
     "uploaded": null,
-    "status": "upload-outcome-unconfirmed-credentials-expired",
-    "attempt": "upload-tvos-account-retry2",
-    "uploadID": "03e5b1d8-27e4-4201-a220-7e7fd1fa766a",
-    "transferReached100Percent": true,
-    "attemptFinishedUTC": "2026-10-24T08:17:14.475875+00:00"
+    "status": "upload-in-progress",
+    "attempt": "upload-tvos-account-retry3",
+    "priorUploadAbsentInAppStoreConnectUTC": "2026-10-24T08:36:30Z",
+    "priorAttempt": {
+      "attempt": "upload-tvos-account-retry2",
+      "uploadID": "03e5b1d8-27e4-4201-a220-7e7fd1fa766a",
+      "transferReached100Percent": true,
+      "finishedUTC": "2026-10-24T08:17:14.475875+00:00",
+      "status": "failed-expired-credentials",
+      "absentInAppStoreConnect": true
+    }
   },
   "authenticationRestored": true
 }
