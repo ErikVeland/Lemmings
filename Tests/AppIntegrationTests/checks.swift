@@ -3132,8 +3132,15 @@ extension AppDelegate {
       for _ in 0..<min(338, expected.ticks) { ghost.advance() }
       try capture(ghost.page, name: "solution-playing-\(mode)")
       button("Pause", in: ghost.page)!.performClick(nil)
-      try check(ghost.page.bounds.size == window.contentView!.bounds.size,
-        "Replay did not fill the game window")
+      guard let replayViewport = ghost.page.enclosingScrollView,
+        let replayNavigation = GameScreen.shared.controllerNavigationRoot(in: window) else {
+        throw IntegrationFailure(message: "Replay lost its window viewport or fixed navigation")
+      }
+      try check(replayNavigation.bounds.size == window.contentView!.bounds.size
+        && ghost.page.bounds.size == replayViewport.contentSize
+        && ghost.page.bounds.width == window.contentView!.bounds.width
+        && ghost.page.bounds.height > window.contentView!.bounds.height * 0.5,
+        "Replay did not fill the viewport below fixed navigation")
       try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
       for target in [2.0, 3, 5, 10] {
