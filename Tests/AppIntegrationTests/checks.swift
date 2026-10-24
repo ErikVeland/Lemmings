@@ -856,7 +856,7 @@ extension AppDelegate {
       // Navigation is pinned outside the settings body. Find each control
       // through real D-pad steps instead of assuming its old row offset.
       for _ in 0..<20 {
-        if (keyboard.focusedControllerControl as? NSButton)?.title == L10n.text(title) {
+        if (keyboard.focusedControllerControl as? NSButton)?.title == title {
           keyboard.controllerMenuAction(.assign)
           return
         }
@@ -864,9 +864,9 @@ extension AppDelegate {
       }
       throw IntegrationFailure(message: "Controller could not reach setting: " + title)
     }
-    try chooseControllerSetting("Tap RT to toggle fast-forward")
+    try chooseControllerSetting(L10n.text("Tap RT to toggle fast-forward"))
     try check(!preferences.current.controllerTapSpeed, "D-pad and A could not change the trigger setting")
-    try chooseControllerSetting("Swap sticks")
+    try chooseControllerSetting(L10n.text("Swap sticks"))
     try check(preferences.current.controllerSwapSticks, "D-pad and A could not swap sticks")
     if let page = keyboard.controllerMenuRoot {
       page.layoutSubtreeIfNeeded()
