@@ -1,5 +1,44 @@
 # UI clarity
 
+See [Player navigation](Navigation.md) for the route and return contract.
+A level launched from the Mac browser returns to the same browser pages, with
+selection, focus and scrolling intact. Explicit Main menu discards that context.
+Hints and controls help leave gameplay paused until Resume. Hints replaces the
+Mac graphics-cycle tile; graphics remains in Settings and on F2. Remove the
+duplicate timeline Hint and keep that group for rewind and stepping. Home uses
+Collections for the page containing favourites, recents and playlists.
+
+On iOS and tvOS, Main menu stays at the top-right of the safe menu viewport.
+Back and optional tools occupy the remaining header space. Keep the header fixed
+while the page scrolls. Each menu action row fills its available width, including
+partial rows. Divide that row equally among its actual buttons. Reflow narrow
+level-browser controls into complete rows with at least 44-point targets.
+
+Required navigation stays outside scrolling content. Back and Main menu must
+remain visible at the first item, middle, end and empty state of every list.
+Gestures supplement these controls. They never replace them. Back returns to
+the caller without starting play or passing a Hot Seat turn.
+
+Search, filters, sorting and other controls that affect a list belong in a
+separate toolbar above its entries. Search uses an input well and the search
+accessibility role. Do not present it as another destination button. List-wide
+actions cannot appear among packs, levels or other list entries. Verify these
+boundaries with the full catalogue and a deliberately oversized list.
+
+Long lists reflow into readable columns when the content area has room. Use
+one column on narrow phones, then two or three as width permits. Preserve
+left-to-right reading and focus order, keep section headings with their group,
+and wrap full labels at the chosen lettering size. Measure each row separately
+so one long label does not enlarge the whole list. Keep deliberate sequences
+in one column. Overflow scrolls within the list, with navigation still fixed.
+
+Muted background validation covers adaptive columns, full labels, group boundaries,
+disabled targets and complete TV pagination. Native Mac checks exercise 8, 35 and
+200 entries and compact/wide renders. Hostless iOS checks verify the visible item,
+focus and hit target through width changes, plus the 6,001-item navigation case.
+Shared iOS/tvOS SDK compilation passes. Physical touch and Siri Remote focus remain
+device checks.
+
 Write invitations and optional help as if welcoming friends round to play.
 Keep the humour in the shared puzzle, the questionable bridge and the next idea.
 Use it sparingly so repeated visits still feel comfortable. Action names,
@@ -27,7 +66,9 @@ Tester Sync separates configuration from delivery. The selected On control
 means the library key is stored. The status reports Syncing, Synced, Saved on
 this device or Offline. Partial uploads and newer local saves cannot display
 Synced. Keep the shared library scope concise and make Back the primary next
-action after setup. Mac, iPhone, iPad and TV use the same bitmap page.
+action after setup. Do not display the tester password. Keep the entry in the
+Mac app menu and mobile/TV Privacy settings, outside the Players screens.
+Mac, iPhone, iPad and TV use the same bitmap page.
 
 Mac About uses the shared stone tabs for About, Version history and Contributors.
 Version history has a scrollable release index and a separate reading pane.
@@ -78,12 +119,17 @@ The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
 The iOS/tvOS funeral mood desaturates the playfield pixels directly. Flat mode
-draws over its opaque game canvas; CRT uses its existing saturation/brightness
-uniforms. Do not use a grey sibling UIView to blend with a Metal surface.
-The fade preserves black and adds no input target, Metal pass or source upload.
-Muted flat-render checks and inspected gameplay captures verify desaturation,
-dimming and exact recovery. Headless Metal output is unavailable in this
-environment and still needs device verification.
+draws the bitmap and effect together in one opaque canvas for the entire fade.
+The normal GPU-scaled bitmap layer stays hidden until recovery completes.
+Blending into a transparent sibling UIView produces a grey veil because that
+canvas does not contain the scene beneath it. This applies to Classic, L2 and L3.
+CRT uses its existing saturation/brightness uniforms.
+The fade preserves black and adds no input target or Metal pass.
+Muted layer-composition checks reproduce the transparent-layer regression and
+verify desaturation, dimming and exact recovery on the opaque scene path.
+UIKit layer-tree regressions cover phone and TV sizes, letterboxing, recovery
+and unchanged input targets. Their device execution and headless Metal output
+remain unverified in this environment.
 
 - Use the game's bitmap artwork and pixel controls throughout game pages and HUDs.
   Menu lettering must not depend on the selected level graphics.
@@ -133,9 +179,23 @@ environment and still needs device verification.
   Menu gaps and disabled controls must never pass clicks to the underlying screen.
 - Preserve accessible names and keyboard help. Visible captions should not be
   needed to explain a familiar icon, and images must not exclude screen-reader users.
+- Favourite uses the shipped outlined or filled star at every size. Keep its
+  Add favourite or Remove favourite action name available to accessibility.
+- Back and Cancel return to the page that opened the current page. Preserve its
+  selection, focus and scroll position where available. Temporary help and
+  confirmations must retain the caller's actions. Returning never starts play.
 - Inspect actual renders for success, partial success, failure, active, inactive,
   selected, focused and unavailable states. Check mouse and keyboard hit regions
   after changing layout. A successful compile does not establish usability.
+
+Favourite and return-path regressions pass 15 muted offscreen Mac tests, with
+56 bitmap captures covering compact and wide controls, both star states,
+disabled controls, focus and Classic/L2/L3 results. Native checks verify star
+actions, input bounds, nested record navigation and confirmation focus recovery.
+iOS and tvOS SDK builds and UIKit navigation-test typechecks pass. The shared
+UIKit controller restores the caller after help, Restart cancellation and Save
+cancellation. Physical touch, remote focus and UIKit runtime verification remain
+device checks.
 
 iOS and tvOS keep the player profile visible in solo and Hot Seat play. The HUD
 shows the profile portrait and green name at the left of a single status line,
@@ -145,6 +205,18 @@ pause/results and level browsing retain the same identity. Classic, Lemmings 2
 and Lemmings 3 use the shared controller. Headless, muted checks cover 99 Classic
 HUD renders and 135 menu states with input-target geometry. Both mobile SDKs
 compile. Physical touch, remote focus and sequel gameplay remain device checks.
+
+The Home screen shows the active Hot Seat player roster near the top, with the
+next player's bitmap name glowing gold. Keep the roster as one line without a
+PVP heading or its reserved space. Do not repeat the roster or add a visible
+“Next” caption. Accessibility names the next player.
+
+Home gives spare vertical space to the logo before adding empty margins.
+Grow it towards the available header width while preserving its aspect ratio
+and pixel artwork. Measure actions and the roster first so a larger logo never
+adds scrolling or crowds input targets. Mac uses the available menu viewport
+instead of capping the layout at 700 points. Apply the same rule to portrait,
+landscape, book and TV layouts.
 
 On iOS and tvOS, waking the scene or ending an audio interruption keeps the game
 paused until Resume. Foreground menus remain usable during an interruption.
@@ -1199,6 +1271,16 @@ minimap controls. Native skill sets stay visible together. Compact landscape
 uses the two-row deck when the single-row strip would need skill scrolling and
 there is enough height. Short phone landscapes retain their scrollable skill bank.
 
+Keep the native skill sequence in one row when 44-point targets fit, including
+partly folded and tabletop poses. A tall lower pane does not justify stacking
+the skills. Bound skill and transport heights, give the overview the spare area,
+and group navigation beside it. Keep controls clear of cameras at either the
+top or bottom after rotation. Move the fixed deck together when it needs clearance.
+Before a pose changes input geometry, cancel held buttons, minimap dragging,
+skill-strip momentum and menu tracking. Preserve the selected skill, session,
+turn owner and paused Ready boundary. A cancelled contact cannot activate at its
+old position. Clamp a retained skill-strip offset to the new visible range.
+
 Menu measurement, input targets and drawing use the same viewport height.
 Reserve space for details and footer actions before sizing a level preview.
 Keep the selected interface size and scroll when the remaining content cannot fit.
@@ -1355,8 +1437,111 @@ Forget removes retained names from saved runs too. Keep privacy wording literal.
 On iOS, three-finger tap cycles the installed artwork available to the current
 Classic level. Two-finger swipe in any direction requests DJ shuffle in all
 three games. Both gestures stay within the playfield and yield to VoiceOver,
-which exposes Graphics and DJ shuffle as custom actions. Multi-touch cancels
-pending skill assignment; pinch retains zoom. Graphics changes preserve the
-run, pause state and future-level Shuffle setting. Mobile Lemmings 2, Lemmings 3
+which exposes Graphics and DJ shuffle as custom actions. Outside a held selection,
+multi-touch cancels pending skill assignment; pinch retains zoom. Graphics changes
+preserve the run, pause state and future-level Shuffle setting. Mobile Lemmings 2, Lemmings 3
 and NeoLemmix do not yet implement artwork switching, so Graphics returns
 unavailable for those sessions. Physical gesture delivery requires a device check.
+
+In Classic, Lemmings 2 and Lemmings 3, hold a lemming for 0.35 seconds, then slide
+left or right to browse the nearby group. Each 24-point step changes the selected
+individual. Keep the original group's order while actors move. Stop at either
+end and skip individuals who have left play. Rest the finger at a horizontal
+playfield edge to keep browsing a dense crowd without lifting. The existing
+sprite highlight and bitmap magnifier show the current choice.
+While holding, drag a second finger to move the camera. Retain the chosen actor
+through camera movement and recheck their current eligibility when the first
+finger lifts. Never substitute another actor if the chosen individual disappears
+or cannot accept the skill. Camera movement alone cannot assign a skill.
+Held selection takes priority over pinch, DJ shuffle and artwork gestures.
+Cancellation, a third contact, a reserved input region or changing the skill
+clears the held choice. Wait for all contacts to lift before accepting a new
+gesture. Quick taps, immediate drags, stylus aiming and pointer input retain their
+existing behaviour. L2's fan retains its direct aiming flow. L3's directional tool
+chooser still opens for tool use. Browsing and panning do not resume paused play
+or a Hot Seat handover.
+
+Twenty-four focused tests pass with muted audio and offscreen windows. They
+cover hold timing, scrubbing, edge scrolling, camera contacts, cancellation,
+crowd identity, eligibility and native assignments in all three engines. iOS and
+tvOS SDK modules compile. UIKit integration tests typecheck and cover the same
+input flow and reserved regions at source level.
+Their device execution, rendered magnifier placement and physical gesture feel
+remain manual checks. The new help and accessibility text use English fallback
+until translated.
+
+
+On Duo's outer display, draw scenery and page backgrounds to every edge.
+Choose a fixed menu viewport from the scene's current reserved regions before
+measuring Home, level browsing, Ready, pause, results, recovery or settings.
+Prefer the full-width area above or below a corner cutout. Do not reserve a
+whole side for that corner, or resize individual controls as they scroll past it.
+Scrolling and bounce change only the content position. A real pose or window
+change can choose a new viewport. Gameplay keeps local clearance for its fixed
+HUD rows. The Desk Clock reflows its pixel scene
+across the display and keeps its time, event text and Close target clear of
+system UI. Tent pose opens it immediately from any app screen. Covered play,
+replays and Hot Seat handovers stay paused until an explicit Resume or Ready
+action after dismissal.
+
+Mac Modern cursor gives overlapping lemmings a fine dark silhouette rim. Fade it
+in between 2× and 4× zoom and keep it one output pixel wide in flat rendering,
+including Retina and precision magnification. Isolated sprites retain their
+artwork. Keep the feet, animation, collision and replay positions unchanged.
+Hover, clicks and paused inspection use the visible sprite mask before ordinary
+distance picking. Preserve explicit skill priorities and L3 carrier selection.
+Classic, Lemmings 2 and Lemmings 3 share this presentation.
+
+The mobile bitmap renderers, including Duo and TV, cast a subtle dark shadow
+from front lemmings onto rear lemming pixels. Keep it one native artwork pixel
+wide so it remains distinct as the camera zooms, including the touch magnifier
+and CRT output. Follow opaque sprite edges and preserve transparent gaps and
+mirroring. Terrain, ghosts and isolated sprites receive no shadow. Cap repeated
+shading so dense crowds do not turn black. Preserve draw order, sprite positions,
+touch selection and simulation state.
+
+The muted, offscreen crowd audit checks overlap, isolation, native ink,
+transparent gaps, mirroring, fractional zoom, Retina, stale targets and reset.
+It produces 36 native Classic/L2/L3 captures, including Macintosh artwork and
+L2 aspect ratio. Representative renders were inspected. Full Mac compilation
+and focused Classic hover, click, inspection and skill-priority regressions pass.
+The broader playfield suite reports separate trail-budget and PC bomb-pop
+assertion failures. Physical mouse use and CRT compositing remain manual checks.
+
+The same muted, offscreen audit also checks mobile shadows on rear ink only,
+unchanged foreground and terrain, level-edge clipping and repeated overlap.
+It verifies 1–12× zoom at 1×, 2× and 3× display scale and produces 36 additional
+mobile bitmap captures across Classic, L2 and L3 with native and high-resolution
+artwork. Representative close and maximum-zoom captures were inspected.
+The iOS SDK build and 25 focused artwork, explosion, sequel-renderer and
+touch-selection regressions pass with muted audio and offscreen windows.
+Physical Duo display and touch-magnifier/CRT presentation remain device checks.
+
+Mobile and TV native sprite feedback must use each engine's actual frame and
+position. L2/L3 and supported NeoLemmix supply masks to the same selection and
+assignment renderers as Classic. Keep acknowledgement time tied to simulation
+time and clear it after checkpoint restore or rewind. Reduced effects retain
+their existing policies, including TV's explicit completion-glow exclusion.
+Supported NeoLemmix Hot Seat ghosts use the shared archive, sprite tint and
+rear-layer blending. They add no input targets, sound or live simulation changes.
+The [cross-platform register](PlatformFeatureParity.md) records remaining source
+gaps separately from rendered and physical-device acceptance.
+
+Touch replay viewing keeps the level identity on one line in the top status box.
+Long names end in an ellipsis, with the full identity retained for accessibility.
+Skill-use history sits at the playfield's upper-right edge. Previous and next
+successful moves use the shared step artwork in 44-point targets on opposite
+sides of the map. The map retains its own input target. A one-finger drag pans
+the replay camera while playing, paused or at the final frame, without assigning
+skills or changing transport state. Classic solution replays use this shared mobile session path. Lemmings 2 and
+Lemmings 3 mobile sessions do not yet expose simulation replay navigation. Their
+HUD layouts are covered with replay fixtures. Recorded video keeps its captured
+camera. TV retains controller navigation and pause-panel move actions.
+
+
+Mac gameplay Menu and Escape open the shared pause page in Classic, Lemmings 2
+and Lemmings 3. Keep Resume as the primary action, with Retry, Hints and the
+eligible Skip level balance together. Show zero skips as disabled. Learning adds
+Try later. Earned skips remain available with Original or Modern controls.
+Q and Back to library retain the saved browsing return. Skip charges the attempt
+owner once and preserves the paused Hot Seat Ready handover.

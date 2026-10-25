@@ -1,5 +1,11 @@
 # iOS and Mac interface parity
 
+Use the [current cross-platform register](PlatformFeatureParity.md) for the
+25 October source audit and open capabilities. Shared frontend coverage does
+not establish full parity. In particular, non-Classic replay viewing/export,
+sequel artwork switching, L2 pointer interactions/practice, L2 short games and
+original sequel media still have mobile/TV gaps.
+
 The 2.0 iOS release must preserve the Mac app's artwork, navigation and shared
 features across Classic, Lemmings 2 and Lemmings 3. Touch layout may adapt the
 presentation, but it must not silently drop actions or bypass player-ready
@@ -45,7 +51,7 @@ subsequent sequel and supported NeoLemmix source work and its remaining limits.
 | Hot Seat | Attempt-owner records, scoped checkpoints, paused Ready pages, transactional turn saves, duplicate transition guards and previous-player ghosts for Classic, L2 and L3 |
 | Online | Shared Game Center IDs and score rules, iOS authentication adapter, hosted board consent, worldwide pages and verified action replay loading |
 | Input | Shared command data, keyboard discovery and presses including Command+Z step back, controller remapping/aim/pan/tap/hold speed, page focus/scrolling and pointer targeting |
-| Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, calmer sprite rescue auras and shared cached scenery haze, failure transitions and result stars |
+| Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, rescue border, failure transitions and result stars |
 | Audio | Shared Adaptive DJ and recording/module decks, pause rhythm, speed pitch, failure/nuke recovery, retry brake, positional effects, chimes and now-playing notices |
 | Information | What's New, explicit effects welcome, anonymous count consent, real local/shared Play Insights and background fan-count measurement |
 

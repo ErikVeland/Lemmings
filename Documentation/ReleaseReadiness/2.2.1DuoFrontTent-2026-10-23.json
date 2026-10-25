@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-23",
+  "timezone": "Australia/Brisbane",
+  "status": "Home-button clock verified; build 28 captured automatic Tent Pose clock on full front display; signed local build 29 installed for lighting and motion review",
+  "installedDeviceBuild": "2.2.1 (29), Apple Development signed local test build",
+  "tests": {
+    "core": 32,
+    "art": 7,
+    "fullDisplayClockCaptures": 18,
+    "gameplayAuditCaptures": 233,
+    "uiKitRuntime": "not executed; sources type-checked",
+    "edgeToEdgeMenuCaptures": 87,
+    "reportedCrash": "Build 21 SIGABRT in UIKit hierarchy check during MobileDeskClockController.present(in:); changed to UIKit overFullScreen presentation; owner confirmed Home-button clock stays open on Duo",
+    "fullIOSAppBuild": "Xcode Debug device build 29 succeeded with cached packages and existing Apple Development signing; installed on physical Duo",
+    "tentTriggerBuild26": "14 DeskClockTrigger tests passed; physical Tent Pose entry failed because UIKit reported the 0.905-radian hinge as closed",
+    "tentTriggerBuild28": "15 trigger tests passed; physical front-display capture verified automatic Tent Pose entry and full display fill",
+    "clockBuild29": "62 focused Desk Clock tests and 87 headless menu captures passed; physical lighting and lemming-motion review pending"
+  },
+  "sourceSHA256Build": 23,
+  "sourceSHA256": {
+    "Sources/LemmingsGameArt/GameDeskClockArt.swift": "7c4382e665c31d206f5fa3accaf807ae69743e592c555185425c20f9eea580f2",
+    "Sources/LemmingsGameArt/GameFrontEnd.swift": "00216a43fa587b2eeb9f34357f6289458fdae3b6121ad8a4a639c5e5f593956f",
+    "Sources/LemmingsGameArt/GameFrontEndOcclusions.swift": "6a1a01499d447cd188ea358b8fd7fb362b3fb161a78dae129cf344be71f15dfc",
+    "Sources/LemmingsGameArt/LevelBrowserGeometry.swift": "b7d304c4a5d1b71ac97de24e429a129f2757f4dc2cf1342df39a573118ddaf08",
+    "Sources/LemmingsMobileCore/DeskClockLayout.swift": "5464ac5167fefb92f26e79dacd61c796c7cd1c05146193f026666f362ced396b",
+    "Sources/LemmingsMobileCore/DeskClockTrigger.swift": "f08106c8073458759e9f67a9d19bd8fa5d338cbe2e3fe29c03820fe248b41366",
+    "Sources/LemmingsMobileCore/MobileDisplayRegions.swift": "9f7e8eb3404ba7f6b05b44d6dd603951aefeebe895a8e3f09f965ecc21223a08",
+    "Sources/LemmingsMobileCore/MobileHUDLayout.swift": "ed081e3eaa96cc3fb4c953e685cf33210228d1f2c5df1060dca852523c5f2788",
+    "Sources/LemmingsMobileUI/DeskClockAutomaticEntry.swift": "6ba4ce4300c4701e417901f7dae38f6a63c0b035256c4aa1458f0021bb9b502c",
+    "Sources/LemmingsMobileUI/MobileDeskClockController.swift": "5a8c8141cab1d4455d44087987d2db7d86b15c4d5c8d4bcb66cad66d08e933fc",
+    "Sources/LemmingsMobileUI/MobileDeskClockView.swift": "fb2b6cc6c9b4654517f55575473a62e21f622594ee04f72b58d9af4ad43e748e",
+    "Sources/LemmingsMobileUI/MobileGameInput.swift": "b65a14eb60417ccd9d3dbb20afbcc8711e6d7472f537447a76b407daeaeacf96",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "5e52ebbf8b7a083a4abfbe1389a0e4a6b22a9e55773527bbb172b581c69781e8",
+    "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift": "736c514f2099c19494c4194799783333f61000bdba50fe5c10cc6a8333a19ad6",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "6348fb65d0166116a6c692bdb324eabf4ac8bbd53f42c0de4a83d6bd3884fb30",
+    "Sources/LemmingsMobileUI/MobileMenuCanvas.swift": "d1f3510a8629c4228111fd4cc8ce5cda4c69391cd21a0aeb22dffaf74a462369",
+    "Sources/LemmingsMobileUI/MobileReservedRegions.swift": "ce87c696bd6c854dc2523de2e68c83135faae8d18696a2771b654a8e7ad235ae",
+    "Tools/IOSMenuAudit/duo.swift": "2ac3f99c548a8927bb40c52d55d10b330554ab77e10acce02c9cbee83e1b317c",
+    "Tools/IOSMenuAudit/edge-to-edge.swift": "6ac3a0c656c9e9bf9a02d30b7fbd50d5ab2a24fd446d9559bb44c3e8e932af8b"
+  }
+}

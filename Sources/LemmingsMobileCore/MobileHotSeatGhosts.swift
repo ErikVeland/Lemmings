@@ -31,11 +31,13 @@ extension HotSeatGhostPlayback {
 }
 
 /// Tints each shipped sprite pose once per roster colour, like the Classic solution ghost.
-final class MobileGhostSpriteCache: @unchecked Sendable {
+public final class MobileGhostSpriteCache: @unchecked Sendable {
     private let lock = NSLock()
     private var frames: [String: SolutionGhostPixels] = [:]
 
-    func ghost(key: String, colour: ReplayGhostColour, pixelScale: Int = 1,
+    public init() {}
+
+    public func ghost(key: String, colour: ReplayGhostColour, pixelScale: Int = 1,
                sprite: () -> (rgba: [UInt8], width: Int, height: Int)?) -> SolutionGhostPixels? {
         let cacheKey = "\(key)|\(colour.rawValue)|\(pixelScale)"
         if let cached = lock.withLock({ frames[cacheKey] }) { return cached }
@@ -51,7 +53,7 @@ final class MobileGhostSpriteCache: @unchecked Sendable {
     }
 
     /// Blends a translucent ghost over the frame. `x` and `y` place the unpadded sprite.
-    static func blend(_ ghost: SolutionGhostPixels, atX x: Int, y: Int, into rgba: inout [UInt8], width: Int, height: Int) {
+    public static func blend(_ ghost: SolutionGhostPixels, atX x: Int, y: Int, into rgba: inout [UInt8], width: Int, height: Int) {
         let originX = x - ghost.padding, originY = y - ghost.padding
         guard rgba.count >= width * height * 4 else { return }
         ghost.rgba.withUnsafeBytes { (source: UnsafeRawBufferPointer) in

@@ -4,6 +4,7 @@ import AppKit
 import NxlvKit
 #endif
 import LemmingsAppCore
+import LemmingsGameArt
 
 /// A level supplies its shipped renderer and an independent starting simulation.
 @MainActor struct LeaderboardReplayContext {
@@ -40,7 +41,7 @@ import LemmingsAppCore
             let b = GameActionButton(title: text, primary: primary, onPress: action)
             buttons.append(b); page.addSubview(b); return b
         }
-        _ = button(L10n.text("Back")) { [weak self] in self?.close() }
+        page.navigationBackButton = button(L10n.text("Back")) { [weak self] in self?.close() }
         _ = button(L10n.text("Restart")) { [weak self] in self?.seek(0) }
         _ = button(L10n.text("Back 1s")) { [weak self] in guard let self else { return }; seek(cursor.state.tick - Int(cursor.state.ticksPerSecond)) }
         play = button(L10n.text("Play"), primary: true) { [weak self] in self?.toggle() }
@@ -66,14 +67,19 @@ import LemmingsAppCore
     }
     private func layout() {
         let w = page.bounds.width, h = page.bounds.height
-        let columns = max(1, min(7, Int(w / 130))), rows = (buttons.count + columns - 1) / columns
-        field.frame = CGRect(x: 0, y: 32, width: w, height: max(1, h - 42 - CGFloat(rows) * 46))
+        let actions = buttons.enumerated().filter { $0.element.superview === page }.map {
+            GameFrontEnd.Action(String($0.offset), $0.element.title, primary: $0.element === play, backNavigation: $0.offset == 0)
+        }
+        let grid = GameFooterGrid(actions: actions, columns: max(1, min(7, Int(w / 150))))
+        field.frame = CGRect(x: 0, y: 32, width: w, height: max(1, h - 42 - CGFloat(grid.rows) * 50))
         status.frame = CGRect(x: 12, y: 2, width: w - 24, height: 26)
-        let width = (w - 24 - CGFloat(columns - 1) * 6) / CGFloat(columns)
         render(cursor.state)
         layoutSkillPanel()
-        for (i, b) in buttons.enumerated() {
-            b.frame = CGRect(x: 12 + CGFloat(i % columns) * (width + 6), y: field.frame.maxY + 6 + CGFloat(i / columns) * 46, width: width, height: 40)
+        for slot in grid.slots {
+            let button = buttons[Int(slot.action.id)!]
+            button.wrapsTitle = true
+            button.frame = grid.frame(for: slot, x: 12, y: field.frame.maxY + 6, width: w - 24,
+                height: 44, gap: 6, rowGap: 6)
         }
     }
     func show(owner: NSWindow, resume: @escaping () -> Void) {

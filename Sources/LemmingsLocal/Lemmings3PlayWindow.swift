@@ -19,6 +19,8 @@ import NxlvKit
         let isAvailable: Bool
     }
 
+    var currentAttemptID: UUID { arcadeRunID }
+    var currentLevelFingerprint: String? { arcadeLevel.conditions?.levelFingerprint }
     var onReturnToLibrary: (() -> Void)?
     var onProgressChanged: (() -> Void)?
     var onCampaignCompleted: (() -> Void)?
@@ -312,7 +314,11 @@ import NxlvKit
             default: break
             }
         }
-        canvas.onMenu = { [weak self] in self?.showGameMenu() }
+        canvas.onMenu = { [weak self] in
+            guard let self else { return }
+            if self.canvas.menuRows == nil, !self.game.isComplete { self.presentPauseMenu() }
+            else { self.showGameMenu() }
+        }
         canvas.onMenuRow = { [weak self] row in self?.menuAction(row) }
         canvas.onCancelDirection = { [weak self] in self?.pendingTool = nil }
         canvas.onDirection = { [weak self] direction in
@@ -343,7 +349,6 @@ import NxlvKit
             switch action {
             case .rewind, .backward: return game.tick > 0
             case .forward: return !game.isComplete || self.canStepForward
-            case .hints: return true
             }
         }
         canvas.timeline.perform = { [weak keyboard] action in
@@ -351,7 +356,6 @@ import NxlvKit
             case .rewind: keyboard?.rewind?()
             case .backward: keyboard?.step?(-1)
             case .forward: keyboard?.step?(1)
-            case .hints: keyboard?.hints?()
             }
         }
         keyboard.active = { [weak self] in
@@ -449,7 +453,9 @@ import NxlvKit
             if self.cancelRewindToOrigin() { return }
             if self.pendingTool != nil || self.canvas.directionPoint != nil {
                 self.pendingTool = nil; self.canvas.directionPoint = nil; self.refresh()
-            } else { self.showGameMenu() }
+            } else if self.canvas.menuRows == nil && !self.game.isComplete { self.presentPauseMenu() }
+            else if self.usesSharedWindow { self.paused = true; self.onReturnToLibrary?() }
+            else { self.showGameMenu() }
         }
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { Array(Lemmings3Panel.canonicalNames.prefix(5)) }
@@ -511,11 +517,10 @@ import NxlvKit
         keyboard.endRun = { [weak self] in self?.confirmEndRun() }
         keyboard.pauseForHelp = { [weak self] in
             guard let self else { return {} }
-            let interruption = self.gameplayKeyboard?.interruptionCount
-            let wasPaused = self.paused; self.paused = true; self.saveCheckpoint(immediately: true); self.refresh()
+            self.paused = true; self.saveCheckpoint(immediately: true); self.refresh()
             return { [weak self] in
                 guard let self else { return }
-                self.paused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
+                self.paused = true
                 self.accumulator = 0; self.refresh()
             }
         }
@@ -752,6 +757,21 @@ import NxlvKit
         print("PASS L3 optional 25× preference, canvas label and disable clamp")
     }
 
+    func testPauseLevelSkip() throws {
+        timer?.invalidate(); canvas.menuRows = nil; canvas.startCountdown.cancel()
+        audioSettings.modernControlsEnabled = false
+        let before = campaign.index, owner = arcadeProfileID, level = arcadeLevel
+        presentPauseMenu()
+        let page = GameScreen.shared.controllerPage(in: window!)!
+        try validatePauseSkipPage(page, owner: window!, name: "lemmings3", enabled: true)
+        let skip = DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }.first { $0.title.hasPrefix("Skip level") }!
+        skip.performClick(nil)
+        guard campaign.index == before + 1, ArcadeStore.shared.records.hasSkipped(level, profileID: owner),
+              ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0 else {
+            throw NSError(domain: "PauseSkip", code: 1)
+        }
+        GameScreen.shared.dismissAll()
+    }
     func testPauseKeyboard() throws {
         timer?.invalidate()
         canvas.startCountdown.cancel(); canvas.menuRows = nil; paused = false
@@ -864,19 +884,16 @@ import NxlvKit
         return result
     }
     func showLearningHints() {
-        if game.isComplete { retryLevel() }
         paused = true; accumulator = 0
         showLevelHints()
     }
     func showLevelHints() {
-        guard let window, !GameScreen.shared.isPresented, !game.isComplete else { return }
+        guard let window else { return }
         let deck = LevelHintDeck.practice(title: "\(campaign.tribe.title) \(campaign.index + 1)", skills: [], chronicles: true)
-        let wasPaused = paused
-        let interruption = gameplayKeyboard?.interruptionCount
         paused = true; accumulator = 0; saveCheckpoint(immediately: true); refresh()
         LevelHintWindow.shared.show(deck, owner: window, onDismiss: { [weak self] in
             guard let self else { return }
-            self.paused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
+            self.paused = true
             self.accumulator = 0; self.lastTime = ProcessInfo.processInfo.systemUptime; self.refresh()
         })
     }
@@ -1304,10 +1321,7 @@ import NxlvKit
         restart()
     }
     private func assign(x: Int, y: Int) {
-        guard let picked = game.target(x: x, y: y, selected: selected,
-            favorApproaching: audioSettings.favorApproachingLemmings,
-            favorBombBlockers: audioSettings.favorBombBlockers, favorBuilders: audioSettings.favorBuilders,
-            manualCarrierID: manualCarrierID) else { return }
+        guard let picked = canvas.target(x: x, y: y, selected: selected) else { return }
         if selected == 3 && (picked.tool == .bricks || picked.tool == .spade) {
             pendingTool = picked.id
             canvas.directionPoint = CGPoint(x: picked.x, y: picked.y)
@@ -1345,6 +1359,9 @@ import NxlvKit
     func playReadySound() { warningSound.play(.ready) }
     private func showGameMenu() {
         pendingTool = nil; canvas.directionPoint = nil
+        if usesSharedWindow, let onReturnToLibrary {
+            paused = true; onReturnToLibrary(); return
+        }
         if canvas.menuRows != nil { canvas.menuRows = nil; canvas.needsDisplay = true; return }
         canvas.menuNotice = L10n.text("EXPERIMENTAL GAMEPLAY")
         menuTribe = campaign.tribe.rawValue - 1; menuLevel = campaign.index
@@ -1666,17 +1683,39 @@ import NxlvKit
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: audioSettings.modernControlsEnabled && learningResultActions != nil
+            skip: learningResultActions != nil
                 ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
             status: needsTribeSurvivors ? L10n.text("Need 50 survivors to complete this tribe.") : nil,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
+    private func presentPauseMenu() {
+        paused = true; accumulator = 0; canvas.capturePointer(active: false)
+        saveCheckpoint(immediately: true); updateUserMusicPause(); refresh()
+        let learning = learningResultActions
+        let level = arcadeLevel
+        let skip: PauseLevelSkip? = {
+            if let learning {
+                return PauseLevelSkip(level: level, profileID: arcadeProfileID, prepare: learning.prepareSkip,
+                    handlesHandover: true, advance: learning.skip)
+            }
+            return canSkipLevel ? PauseLevelSkip(level: level, profileID: arcadeProfileID,
+                advance: { [weak self] in self?.skipLevel() }) : nil
+        }()
+        let page = GamePauseMenu.page(title: arcadeLevel.title,
+            resume: { [weak self] in
+                guard let self else { return }
+                self.paused = false; self.accumulator = 0
+                self.updateUserMusicPause(); self.refresh()
+            }, retry: { [weak self] in self?.retryLevel() },
+            hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
+        GameScreen.shared.present(page, owner: window)
+    }
     /// Level skips apply to a failed campaign level, not playlists.
-    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        audioSettings.modernControlsEnabled && onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
+        onSequenceContinue == nil && recordsCampaignProgress && (!game.isComplete || game.saved == 0) && campaign.canSkipLevel
             && availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil
     }
     /// The result screen has already spent the skip. This only moves the campaign.
@@ -1906,6 +1945,7 @@ import NxlvKit
     var isFastForward = false { didSet { syncSpeedEffects() } }
     var fullScreenHDRFlashes = true { didSet { if !fullScreenHDRFlashes { hdrOverlay?.clearExplosions() } } }
     private let speedTrails = SpeedTrails()
+    private let crowdPresentation = LemmingCrowdPresentation()
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
     private var selectionFade = SelectionFade<Int>()
@@ -1953,6 +1993,7 @@ import NxlvKit
         didSet {
             if game == nil || oldValue == nil || (game?.tick ?? 0) < (oldValue?.tick ?? 0) {
                 selectionFade.reset()
+                crowdPresentation.reset()
                 explosionTimeline.reset()
                 lastBlastTick = -1
             }
@@ -2080,14 +2121,35 @@ import NxlvKit
             self?.needsDisplay = true
         }
     }
+    func target(x: Int, y: Int, selected: Int) -> Lemmings3TargetCandidate? {
+        guard let game else { return nil }
+        let preferred = game.target(x: x, y: y, selected: selected,
+            favorApproaching: favorApproachingLemmings, favorBombBlockers: favorBombBlockers,
+            favorBuilders: favorBuilders, manualCarrierID: manualCarrierID)
+        guard gameplayCursorStyle == .modern, zoom > 2 else { return preferred }
+        if selected == 3, let preferred {
+            if favorBuilders, preferred.isBuilding, preferred.tool == .bricks { return preferred }
+            if favorBombBlockers, preferred.isBlocking, preferred.tool == .bomb || preferred.tool == .grenade { return preferred }
+        }
+        let ordinary = game.target(x: x, y: y, selected: selected,
+            favorApproaching: false, favorBombBlockers: false, favorBuilders: false)
+        guard manualCarrierID == nil, preferred?.id == ordinary?.id,
+              Lemmings3Runtime.Action.allCases.indices.contains(selected),
+              let id = crowdPresentation.target(at: CGPoint(x: x, y: y), tick: game.tick,
+                enabled: gameplayCursorStyle == .modern && zoom > 2 && menuRows == nil),
+              let visible = game.lemmings.first(where: { $0.id == id && $0.active }),
+              game.canAssign(Lemmings3Runtime.Action.allCases[selected], to: visible),
+              abs(visible.x - x) <= 9, abs(visible.y - 8 - y) <= 12 else { return preferred }
+        if favorApproachingLemmings, let preferred, preferred.direction != visible.direction { return preferred }
+        return Lemmings3TargetCandidate(id: visible.id, x: visible.x, y: visible.y,
+            direction: visible.direction, tool: visible.tool, isBuilding: visible.state == .building,
+            active: true, isBlocking: visible.state == .blocking)
+    }
     var pointerTarget: Int? {
-        guard let p = pointerPosition ?? controllerPointer, playfieldRect.contains(p), let game else { return nil }
+        guard let p = pointerPosition ?? controllerPointer, playfieldRect.contains(p), game != nil else { return nil }
         let source = precisionLens.source(p)
         let x = (source.x - origin.x) / zoom + cameraX, y = (source.y - origin.y) / zoom + cameraY
-        return game.target(x: Int(x), y: Int(y), selected: selectedAction,
-            favorApproaching: favorApproachingLemmings,
-            favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders,
-            manualCarrierID: manualCarrierID)?.id
+        return target(x: Int(x), y: Int(y), selected: selectedAction)?.id
     }
     var inspectionSelectionAvailable: () -> Bool = { false }
     private var highlightedLemmingID: Int? {
@@ -2098,6 +2160,9 @@ import NxlvKit
         let source = precisionLens.source(p)
         let point = CGPoint(x: (source.x - origin.x) / zoom + cameraX,
             y: (source.y - origin.y) / zoom + cameraY)
+        if let id = crowdPresentation.target(at: point, tick: game.tick,
+            enabled: gameplayCursorStyle == .modern && zoom > 2),
+            game.lemmings.contains(where: { $0.id == id && $0.active }) { return id }
         return LemmingInspectionHover.nearestID(at: point,
             actors: game.lemmings.filter(\.active).map { ($0.id, $0.x, $0.y) })
     }
@@ -2376,6 +2441,10 @@ import NxlvKit
             } else { selectionFade.reset() }
         }
         var selectedSprite: (pixels: CGImage, rect: CGRect)?
+        if !ghostsOnly && hotSeatColour == nil {
+            crowdPresentation.begin(tick: game.tick, zoom: zoom,
+                enabled: gameplayCursorStyle == .modern && menuRows == nil)
+        }
         for lem in game.lemmings where lem.active {
             // Animation IDs and anchors remain provisional. The bytes are native.
             let animation = lem.direction > 0 ? 0 : 1
@@ -2399,10 +2468,13 @@ import NxlvKit
                     colour: hotSeatColour, in: rect)
                 continue
             }
-            drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
                 width: sprite.size.width * zoom, height: sprite.size.height * zoom)
+            crowdPresentation.drawBehind(sprite, id: lem.id, rect: spriteRect,
+                worldRect: CGRect(x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height,
+                    width: sprite.size.width, height: sprite.size.height))
+            drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
             let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
@@ -2421,6 +2493,7 @@ import NxlvKit
                 GameTypography.annotation(label, at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom), palette: .blue)
             }
         }
+        if !ghostsOnly && hotSeatColour == nil { crowdPresentation.finish() }
         if hotSeatColour == nil, lemmingSelectionStyle == .modern, let selectedSprite {
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: playfieldRect,

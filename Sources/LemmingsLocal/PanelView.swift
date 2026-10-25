@@ -78,12 +78,13 @@ enum PanelButton: Equatable {
       monochromeRockImages[steps] = image
       return image
     }
-    return usesMacStyleControls ? PanelGlyph.rock.macImage(fitting: size) : PanelGlyph.rock.image(fitting: size)
+    return nil
   }
 
   private func controlImage(_ glyph: PanelGlyph, fitting size: CGSize) -> NSImage? {
     if isMonochrome { return glyph.monochromeImage(fitting: size) }
-    return usesMacStyleControls ? glyph.macImage(fitting: size) : glyph.image(fitting: size)
+    return usesMacStyleControls ? glyph.macImage(fitting: size, transparentRock: true)
+      : glyph.image(fitting: size, transparentRock: true)
   }
 
   private func cacheMacSkillImages() {
@@ -513,8 +514,8 @@ enum PanelButton: Equatable {
       guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true) else { continue }
       let active = (button == .pause && isPaused) || (button == .fastForward && isFastForward)
         || (button == .nuke && session?.canUndoNuke == true)
-      drawStoneButton(frame, selected: active)
-      if glyph.isOriginalTile, let image = glyph.image(fitting: frame.size) {
+      drawStoneButton(frame, selected: active, button: button)
+      if glyph.isOriginalTile, let image = glyph.image(fitting: frame.size, transparentRock: true) {
         GameStoneButton.drawTile(image, in: frame, pixel: max(1, panelScale / 2))
       } else if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
         image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
@@ -553,7 +554,7 @@ enum PanelButton: Equatable {
     for (button, frame) in buttonFrames {
       let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
         || (button == .fastForward && isFastForward) || (button == .nuke && session?.canUndoNuke == true)
-      drawStoneButton(frame, selected: selected, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
+      drawStoneButton(frame, selected: selected, button: button, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
       if case let .skill(index) = button, let image = macSkillImages[safe: index] ?? nil {
         let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 2 * panelScale,
           width: frame.width - 4 * panelScale, height: frame.height - 4 * panelScale)
@@ -591,10 +592,19 @@ enum PanelButton: Equatable {
   }
 
   /// Pixel bevels keep the controls in the same visual period as the sprites.
-  /// Every panel socket shows Amiga panel rock behind its glyph.
-  private func drawStoneButton(_ frame: CGRect, selected: Bool, invertRock: Bool = false) {
+  /// Each gameplay control retains its own Macintosh panel face.
+  private func drawStoneButton(_ frame: CGRect, selected: Bool, button: PanelButton, invertRock: Bool = false) {
+    let face: GamePlayButtonArt.Face
+    switch button {
+    case .skill(let index): face = .skill(index)
+    case .rateDown: face = .rateDown
+    case .rateUp: face = .rateUp
+    case .pause: face = .pause
+    case .nuke: face = .endRun
+    case .fastForward: face = .speed
+    }
     GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2),
-      backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome, invertedBackdrop: invertRock)
+      backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome, invertedBackdrop: invertRock, playFace: face)
   }
 
   private func drawSkillLabels() {
@@ -686,7 +696,7 @@ enum PanelButton: Equatable {
     let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
       || (button == .nuke && session?.canUndoNuke == true) || (button == .fastForward && isFastForward)
     let pixel = max(1, panelScale / 2)
-    drawStoneButton(frame, selected: selected, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
+    drawStoneButton(frame, selected: selected, button: button, invertRock: isMonochrome && button == .skill(selectedSkillIndex))
     let well = GameStoneButton.well(frame, pixel: pixel)
     switch button {
     case .skill(let index):
@@ -721,8 +731,8 @@ enum PanelButton: Equatable {
     default:
       guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
             let image = usesMacStyleControls
-              ? glyph.macImage(fitting: glyph.isOriginalTile ? frame.size : well.size)
-              : glyph.image(fitting: glyph.isOriginalTile ? frame.size : well.size) else { return }
+              ? glyph.macImage(fitting: glyph.isOriginalTile ? frame.size : well.size, transparentRock: true)
+              : glyph.image(fitting: glyph.isOriginalTile ? frame.size : well.size, transparentRock: true) else { return }
       if glyph.isOriginalTile {
         GameStoneButton.drawTile(image, in: frame, pixel: pixel)
       } else {

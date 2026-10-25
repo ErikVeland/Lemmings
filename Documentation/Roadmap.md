@@ -18,6 +18,18 @@ completion criteria, without calendar promises. The current
 [Release scope](ReleaseScope.md) governs published claims, and the
 [gate register](ReleaseReadiness/gates.json) retains actual acceptance status.
 
+## iOS store coverage
+
+On 25 October 2026, the owner required distribution across iOS sideloading stores.
+The [distribution register](IOSDistribution.md) tracks sources, catalogues,
+installers and notarised marketplaces with separate delivery and device checks.
+AltStore Classic 2.2.2 build 33 is live. Source compatibility alone does not close
+SideStore or Feather acceptance. PAL and the other marketplace submissions remain
+open until their actual listing and package evidence is recorded.
+
+Update every accepted channel for each release. Record eligibility limits,
+closed stores and new stores explicitly. Keep downloads in the canonical repository.
+
 ## The character to preserve
 
 The puzzles should invite curiosity, audacity and another attempt. Preserve the

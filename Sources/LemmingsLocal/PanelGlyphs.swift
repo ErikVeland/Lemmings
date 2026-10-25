@@ -36,11 +36,11 @@ enum PanelGlyph: String {
   /// Whole numbers only. A fraction would put some source pixels across two
   /// destination ones and leave the strokes uneven, which is exactly what a
   /// bitmap is here to avoid.
-  @MainActor func image(fitting box: CGSize) -> NSImage? {
+  @MainActor func image(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
-    return image(scale: steps)
+    return image(scale: steps, transparentRock: transparentRock)
   }
 
   @MainActor private static var cache: [String: NSImage] = [:]
@@ -74,19 +74,19 @@ enum PanelGlyph: String {
   /**
    * Recreates the panel art at Macintosh scale without changing its logical size.
    */
-  @MainActor func macImage(fitting box: CGSize) -> NSImage? {
+  @MainActor func macImage(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
     guard steps >= 1 else { return nil }
-    let key = "mac-\(rawValue)-\(steps)-\(SequelMacArtwork.revision)"
+    let key = "mac-\(rawValue)-\(steps)-\(transparentRock)-\(SequelMacArtwork.revision)"
     if let hit = Self.cache[key] { return hit }
     guard let first = rows.first else { return nil }
     let width = first.count, height = rows.count
     var source = [UInt8](repeating: 0, count: width * height * 4)
     for (y, row) in rows.enumerated() {
       for (x, symbol) in row.enumerated() {
-        guard let colour = palette[symbol] else { continue }
+        guard let colour = art.colour(for: symbol, transparentRock: transparentRock) else { continue }
         let offset = (y * width + x) * 4
         source[offset..<offset + 4] = [colour.0, colour.1, colour.2, 255]
       }
@@ -96,7 +96,7 @@ enum PanelGlyph: String {
     if isOriginalTile {
       guard let frame = try? SequelMacFrame(width: width, height: height, rgba: source),
             let recreated = try? SequelMacArtwork.reconstruct(frame,
-              category: .architectural) else { return image(scale: steps) }
+              category: .architectural) else { return image(scale: steps, transparentRock: transparentRock) }
       for y in 0..<highHeight { for x in 0..<highWidth {
         let from = (y * recreated.width + x * 2) * 4
         let to = (y * highWidth + x) * 4
@@ -150,13 +150,12 @@ enum PanelGlyph: String {
   ///
   /// Results are kept, because the bar redraws every frame and the scale only
   /// changes when the window does.
-  @MainActor func image(scale: Int) -> NSImage? {
+  @MainActor func image(scale: Int, transparentRock: Bool = false) -> NSImage? {
     let steps = max(1, scale)
-    let key = "\(rawValue)-\(steps)"
+    let key = "\(rawValue)-\(steps)-\(transparentRock)"
     if let hit = Self.cache[key] { return hit }
 
     let rows = self.rows
-    let palette = self.palette
     guard let first = rows.first, !first.isEmpty else { return nil }
     let width = first.count * steps
     let height = rows.count * steps
@@ -164,7 +163,7 @@ enum PanelGlyph: String {
 
     for (row, line) in rows.enumerated() {
       for (column, mark) in line.enumerated() {
-        guard let colour = palette[mark] else { continue }
+        guard let colour = art.colour(for: mark, transparentRock: transparentRock) else { continue }
         for dy in 0..<steps {
           for dx in 0..<steps {
             let offset = ((row * steps + dy) * width + column * steps + dx) * 4
@@ -215,7 +214,8 @@ enum PanelGlyph: String {
         let text = text ?? { GamePixelText.draw($0, in: $1, maxScale: .greatestFiniteMagnitude) }
         let boxes = SpeedPanelArt.boxes(in: rect)
         let pixel = SpeedPanelArt.pixel(forHeight: rect.height)
-        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop, monochrome: monochrome)
+        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop,
+            monochrome: monochrome, playFace: .speed)
         for (index, box) in boxes.enumerated() {
             if index == 1 {
                 // The label always names the speed the game is running at now.
@@ -253,9 +253,12 @@ enum PanelGlyph: String {
 
   /// `backdrop` replaces the flat well colour, for example with panel rock.
   static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil, monochrome: Bool = false,
-                   invertedBackdrop: Bool = false) {
+                   invertedBackdrop: Bool = false, playFace: GamePlayButtonArt.Face? = nil) {
     guard let context = NSGraphicsContext.current?.cgContext else { return }
     GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel, monochrome: monochrome)
+    if !monochrome, let playFace {
+      GamePlayButtonArt.drawFace(in: context, frame: frame, selected: selected, pixel: pixel, face: playFace)
+    }
     if let backdrop { drawTile(backdrop, in: frame, pixel: pixel) }
     if invertedBackdrop {
       context.saveGState()

@@ -71,6 +71,15 @@ ownership. Custom playlists and newer saved versions retain their order. The pat
 uses Classic mechanics. Lemmings 2 and Lemmings 3 retain their own campaigns and
 queues. Mac, iOS and tvOS bundle the same current Journey data.
 
+Winning a Golden Path lesson also completes that level in its source category.
+Classic, Oh No!, Oh Yes!, festive and fan levels share these completions with
+their normal level lists and cloud progress. Existing saved Journey wins receive
+the same credit without replaying. Deferred lessons do not count. Repeated wins
+count once, and solo profiles and Hot Seat sessions retain separate progress.
+Imported Classic sources retain their exact source identity. Legacy sequel
+Journey wins count as source completions without changing campaign populations,
+medals or endings.
+
 Current selection and evidence are in `Artifacts/LearningJourney`. Regenerate
 with `python3 Tools/DifficultyDiagnostics/human_journey.py`. Its `--check` option
 checks the manifest, curriculum, transition review and supporting outputs against

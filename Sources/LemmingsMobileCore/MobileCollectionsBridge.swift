@@ -57,7 +57,7 @@ import NxlvKit
             let same = old?.id == value.id && old?.source == source && old?.pool.summary == value.name && oldEntries == value.entries
                 && oldEntries?.map(\.sourceFingerprint) == value.entries.map(\.sourceFingerprint)
             return try LevelSequenceRun(id: value.id, source: source,
-                pool: LevelPool(id: "mobile", summary: value.name), entries: Self.sharedEntries(value.entries),
+                pool: LevelPool(id: Lemmings2ShortPlayMobileLibrary.matches(value.entries) ? "short-play-v1:lemmings2" : "mobile", summary: value.name), entries: Self.sharedEntries(value.entries),
                 currentIndex: value.position, seed: value.shuffled ? value.seed : nil,
                 algorithm: value.shuffled ? .splitMix64FisherYatesV1 : nil,
                 createdAt: same ? old!.createdAt : Date())
@@ -72,7 +72,7 @@ import NxlvKit
 
     public static func sharedEntries(_ values: [MobileFavourites.Entry]) throws -> [LevelPlaylistEntry] {
         try values.enumerated().map { index, value in
-            try LevelPlaylistEntry(identity: .init(engine: .classic, packID: value.pack, levelID: value.level),
+            try LevelPlaylistEntry(identity: .init(engine: value.pack.hasPrefix("tribes-") ? .lemmings2 : .classic, packID: value.pack, levelID: value.level),
                 catalogueRevision: "mobile-v1", sourceRevision: value.sourceFingerprint.map { "mobile-content-v1:" + $0 } ?? "mobile-v1", packNameSnapshot: value.pack,
                 levelNameSnapshot: value.title ?? value.level, levelNumberSnapshot: index + 1)
         }

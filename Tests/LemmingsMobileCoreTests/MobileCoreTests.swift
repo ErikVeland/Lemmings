@@ -1356,6 +1356,46 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func touchBrowseKeepsNativeActorIdentityAcrossAllThreeEngines() throws {
+        let sessions: [any MobileGameSession] = [
+            ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),
+            Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2",
+                levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2"),
+            Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3",
+                levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3")
+        ]
+        for session in sessions {
+            // Wait for both actors to leave their entrance animation and accept the skill.
+            let control = session.engineIdentifier == "lemmings3" ? 2 : 0
+            for _ in 0..<100 {
+                if session.targetCandidates(for: control).filter({ $0.assignment == .eligible }).count >= 2 { break }
+                session.tick()
+            }
+            let candidates = session.targetCandidates(for: control)
+            let eligible = candidates.filter { $0.assignment == .eligible }
+            try #require(eligible.count >= 2)
+            let first = eligible[0], neighbour = eligible[1]
+            let centre = MobilePoint(x: (first.point.x + neighbour.point.x) / 2,
+                y: (first.point.y + neighbour.point.y) / 2)
+            var camera = MobileViewport(levelSize: session.levelSize,
+                viewSize: .init(width: 80, height: 60), zoom: 1)
+            camera.origin = .init(x: centre.x - 40, y: centre.y - 30)
+            camera.clamp()
+            var selection = try #require(MobileTouchSelection(candidates: candidates,
+                touch: camera.viewPoint(fromLevel: centre), viewport: camera, selectedID: first.id))
+            selection.browse(by: selection.ids.first == first.id ? 1 : -1, candidates: candidates)
+            let chosen = try #require(selection.selection(in: candidates))
+            #expect(chosen.id != first.id)
+            camera.pan(viewDelta: .init(x: -30, y: 0))
+            session.tick()
+            let retained = try #require(selection.selection(in: session.targetCandidates(for: control)))
+            #expect(retained.id == chosen.id)
+            #expect(retained.state == .eligible)
+            #expect(session.assign(control: control, to: retained.id))
+            #expect(session.assignedSkillCount == 1)
+        }
+    }
+
     private static func classicSimulation() throws -> ClassicDOSSimulation {
         let width = 160
         let height = 80

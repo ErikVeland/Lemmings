@@ -38,6 +38,10 @@ extension MobileLibraryViewController {
                 do { try learningStorage.save(saved, name: "learning") }
                 catch { notice = error.localizedDescription }
             }
+            do {
+                try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id,
+                    entries: saved.run?.entries ?? [])
+            } catch { notice = error.localizedDescription }
             return saved
         }
         set {
@@ -48,7 +52,8 @@ extension MobileLibraryViewController {
     func saveLearningState(_ value: MobileLearningState) throws {
         var saved = value; saved.refreshJourneySession()
         try learningStorage.save(saved, name: "learning")
-        try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id)
+        try GameProgressPreferences.saveLearning(saved.progress, profileID: profiles.activeID, sessionID: hotSeat?.id,
+            entries: saved.run?.entries ?? [])
         if let snapshot = saved.journeySession {
             try GameProgressPreferences.saveJourneySession(snapshot, profileID: profiles.activeID, sessionID: hotSeat?.id)
         }
@@ -236,6 +241,34 @@ extension MobileLibraryViewController {
     }
 
     func loadMobileRankedContent(_ conditions: TrolleyConditions) throws -> MobileLevelContent {
+        let isolated = MobileStorage(directory: FileManager.default.temporaryDirectory.appendingPathComponent("replay-" + UUID().uuidString))
+        defer { try? FileManager.default.removeItem(at: isolated.directory) }
+        if conditions.gameID == "lemmings2" {
+            guard let root = store?.resolvedDataDirectory(for: .lemmings2) else { throw MobileSessionError.changedLevel }
+            let library = try Lemmings2MobileLibrary(directory: root, storage: isolated)
+            if conditions.levelID.hasPrefix("practice-"), let choice = Int(conditions.levelID.dropFirst(9)) {
+                let skills = Lemmings2Runtime.Skill.allCases.filter { conditions.startingSkills[TrolleyCapture.skillKey($0.name)] != nil }
+                return try library.loadPractice(at: choice, skills: skills)
+            }
+            let parts = conditions.levelID.split(separator: ":").compactMap { Int($0) }
+            guard parts.count == 2, (0..<12).contains(parts[0]), (0..<10).contains(parts[1]) else { throw MobileSessionError.changedLevel }
+            return try library.loadLevel(at: parts[0] * 10 + parts[1], population: conditions.population)
+        }
+        if conditions.gameID == "lemmings3" {
+            guard let root = store?.resolvedDataDirectory(for: .lemmings3), let number = Int(conditions.levelID) else { throw MobileSessionError.changedLevel }
+            let library = try Lemmings3MobileLibrary(directory: root, storage: isolated)
+            let reserves = conditions.modifiers["reserves"].flatMap(Int.init)
+                ?? conditions.population - (conditions.modifiers["extras"].flatMap(Int.init) ?? 0)
+            return try library.loadLevel(at: number / 100 * 30 + number % 100 - 1, population: reserves)
+        }
+        if conditions.gameID == "neolemmix" {
+            guard let root = store?.resolvedDataDirectory(for: .neoLemmix) else { throw MobileSessionError.changedLevel }
+            let library = try NeoLemmixMobileLibrary(directory: root, storage: isolated)
+            guard let index = library.levels.indices.first(where: {
+                library.levelKey(at: $0).contains("/" + conditions.packID + "/" + conditions.levelID + "/")
+            }) else { throw MobileSessionError.changedLevel }
+            return try library.loadLevel(at: index)
+        }
         let location = try mobileRankedLocation(conditions)
         let content = try location.library.loadLevel(at: location.index)
         guard let classic = content.session as? ClassicMobileSession,

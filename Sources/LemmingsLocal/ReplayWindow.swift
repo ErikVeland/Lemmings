@@ -2,6 +2,7 @@
 import AppKit
 @preconcurrency import AVFoundation
 import LemmingsAppCore
+import LemmingsGameArt
 import NxlvKit
 import UniformTypeIdentifiers
 
@@ -139,11 +140,13 @@ import UniformTypeIdentifiers
     root.onLayout = { [weak self] in
       guard let self else { return }
       let bounds = self.root.bounds
-      let scale = max(0.01, min(bounds.width / 1120, bounds.height / 720))
-      let height = 154 * scale
+      let scale = max(1, min(2, bounds.width / 1120, bounds.height / 720))
+      self.bar.showsBack = GameScreen.shared.onMainMenu == nil
+      let logicalHeight = self.bar.preferredHeight(for: bounds.width / scale)
+      let height = logicalHeight * scale
       self.video.frame = CGRect(x: 0, y: height, width: bounds.width, height: max(0, bounds.height - height))
       self.bar.frame = CGRect(x: 0, y: 0, width: bounds.width, height: height)
-      self.bar.bounds = CGRect(x: 0, y: 0, width: bounds.width / scale, height: 154)
+      self.bar.bounds = CGRect(x: 0, y: 0, width: bounds.width / scale, height: logicalHeight)
     }
     bar.onAction = { [weak self] action in self?.action(action) }
     bar.onSeek = { [weak self] fraction in self?.seek(fraction) }
@@ -318,24 +321,34 @@ import UniformTypeIdentifiers
   var movieTitle = L10n.text("Replay")
   var note = L10n.text("SPACE PLAY / PAUSE   - + SPEED   S SAVE MOVIE   ESC CLOSE")
   var playing = false
+  var showsBack = true
   private var buttons: [(Action, CGRect)] = []
   private var scrub = CGRect.zero
   private var keyboardIndex: Int? = 1
   private let accessibleElements = GameAccessibleElements()
-  private var choices: [(Action, String)] { [(.close, L10n.text("Back")), (.restart, L10n.text("Restart")),
-      (.slower, L10n.text("Slower")), (.faster, L10n.text("Faster")), (.save, L10n.text("Save movie")), (.play, playing ? L10n.text("Pause") : L10n.text("Play"))] }
+  private var choices: [(Action, String)] { (showsBack ? [(.close, L10n.text("Back"))] : [])
+      + [(.restart, L10n.text("Restart")), (.save, L10n.text("Save movie")),
+         (.slower, L10n.text("Slower")), (.faster, L10n.text("Faster")), (.play, playing ? L10n.text("Pause") : L10n.text("Play"))] }
+  private func actionGrid(width: CGFloat) -> GameFooterGrid {
+    GameFooterGrid(actions: choices.enumerated().map {
+      .init(String($0.offset), $0.element.1, primary: $0.element.0 == .play, backNavigation: false)
+    }, columns: max(1, Int((width - 36) / 156)))
+  }
+  func preferredHeight(for width: CGFloat) -> CGFloat { 103 + CGFloat(actionGrid(width: width).rows) * 56 }
   private func layoutControls() {
     scrub = CGRect(x: 24, y: 49, width: bounds.width - 48, height: 7)
-    let width = (bounds.width - 48) / 6
-    buttons = choices.enumerated().map { index, choice in
-      (choice.0, CGRect(x: 24 + CGFloat(index) * width, y: 75, width: width - 10, height: 42))
+    let grid = actionGrid(width: bounds.width)
+    buttons = grid.slots.map { slot in
+      (choices[Int(slot.action.id)!].0, grid.frame(for: slot, x: 24, y: 75, width: bounds.width - 48,
+        height: 44, gap: 12, rowGap: 12))
     }
+    keyboardIndex = keyboardIndex.map { min($0, choices.count) }
   }
   override func isAccessibilityElement() -> Bool { true }
   override func accessibilityRole() -> NSAccessibility.Role? { .group }
   override func accessibilityChildren() -> [Any]? {
     layoutControls()
-    let position = accessibleElements.element(id: "position", owner: self, label: L10n.text("Replay position"), frame: scrub.insetBy(dx: 0, dy: -7))
+    let position = accessibleElements.element(id: "position", owner: self, label: L10n.text("Replay position"), frame: scrub.insetBy(dx: 0, dy: -18.5))
     position.setAccessibilityRole(.slider)
     position.readNumber = { [weak self] in (self?.fraction ?? 0) * 100 }
     position.adjustValue = { [weak self] direction in
@@ -388,11 +401,8 @@ import UniformTypeIdentifiers
     GameStyle.fill(CGRect(x: scrub.minX, y: scrub.minY, width: scrub.width * fraction, height: scrub.height), NSColor.lightGray)
 
     for (index, choice) in choices.enumerated() {
-      let width = (bounds.width - 48) / 6
-      let rect = CGRect(x: 24 + CGFloat(index) * width, y: 75, width: width - 10, height: 42)
-      GameStyle.fill(rect, index == 0 ? NSColor(calibratedRed: 0.78, green: 0.82, blue: 0.88, alpha: 1) : NSColor(calibratedWhite: 0.025, alpha: 1))
-      NSColor(calibratedWhite: index == 0 ? 0.96 : 0.29, alpha: 1).setStroke()
-      NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
+      let rect = buttons[index].1
+      GameStoneButton.draw(rect, selected: choice.0 == .play, pixel: 1)
       text(choice.1, in: rect)
 
     }
@@ -402,14 +412,14 @@ import UniformTypeIdentifiers
       let outline = NSBezierPath(rect: box); outline.lineWidth = 2
       outline.setLineDash([3, 3], count: 2, phase: 0); outline.stroke()
     }
-    let hintRect = CGRect(x: 24, y: 127, width: bounds.width - 48, height: 20)
+    let hintRect = CGRect(x: 24, y: (buttons.last?.1.maxY ?? 119) + 8, width: bounds.width - 48, height: 20)
     if let font { font.menuLine(note, in: hintRect) }
     else { GamePixelText.draw(note, in: hintRect) }
   }
   override func mouseDown(with event: NSEvent) {
     window?.makeFirstResponder(self)
     let point = convert(event.locationInWindow, from: nil)
-    if scrub.insetBy(dx: 0, dy: -7).contains(point) { onSeek?((point.x - scrub.minX) / scrub.width) }
+    if scrub.insetBy(dx: 0, dy: -18.5).contains(point) { onSeek?((point.x - scrub.minX) / scrub.width) }
     else if let button = buttons.first(where: { $0.1.contains(point) }) { onAction?(button.0) }
   }
   override func mouseDragged(with event: NSEvent) {
@@ -421,7 +431,8 @@ import UniformTypeIdentifiers
     if event.isARepeat, [36, 76, 49, 53].contains(event.keyCode) { return }
     if event.keyCode == 48 || [125, 126].contains(event.keyCode) {
       let back = event.keyCode == 126 || (event.keyCode == 48 && event.modifierFlags.contains(.shift))
-      keyboardIndex = ((keyboardIndex ?? (back ? 0 : -1)) + (back ? -1 : 1) + 7) % 7
+      let count = choices.count + 1
+      keyboardIndex = ((keyboardIndex ?? (back ? 0 : -1)) + (back ? -1 : 1) + count) % count
       if let element = accessibilityChildren()?[keyboardIndex!] {
         NSAccessibility.post(element: element, notification: .focusedUIElementChanged)
       }

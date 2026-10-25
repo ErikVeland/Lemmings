@@ -2167,6 +2167,8 @@
 "Records were not saved. Check free space and folder access." = "Rekorde wurden nicht gespeichert. Prüfe den freien Speicherplatz und den Ordnerzugriff.";
 "Records were not saved. Retry the save before continuing." = "Rekorde wurden nicht gespeichert. Versuche erneut zu speichern, bevor du fortfährst.";
 "Recovery" = "Recovery";
+"Red night vision" = "Rote Nachtsicht";
+
 "Redbook CD Studio Soundtrack" = "Redbook-CD-Studio-Soundtrack";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook-CD-Audio + HuC6280-PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook-CD-Audio 44,1 kHz Stereo";
@@ -2478,7 +2480,7 @@
 "Shared campaign" = "Gemeinsame Kampagne";
 "Shared campaign revisions conflict." = "Versionen der gemeinsamen Kampagne stehen im Konflikt.";
 "Shared play counts" = "Gemeinsame Spielzahlen";
-"Shared tester library: test99" = "Shared tester library: test99";
+"Shared tester library" = "Shared tester library";
 "Shared: {0} days" = "Geteilt: {0} Tage";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
 "Sharing" = "Teilen";

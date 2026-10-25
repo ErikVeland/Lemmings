@@ -12,6 +12,14 @@ import UIKit
     var onMenuActivate: (() -> Void)?
     var onMenuBack: (() -> Void)?
     var onAim: ((Double, Double) -> Void)?
+    var onAssignHeld: ((Bool) -> Void)?
+    private var assignmentHeld = false
+
+    func updateAssignmentHeld(_ held: Bool) {
+        guard assignmentHeld != held else { return }
+        assignmentHeld = held
+        onAssignHeld?(held)
+    }
     var onPan: ((Double, Double) -> Void)?
     var onMenuScroll: ((Double) -> Void)?
     var onBoost: ((Bool) -> Void)?
@@ -43,6 +51,7 @@ import UIKit
     private var disabledMenuButton = ControllerButtonEdge()
 
     func reset() {
+        updateAssignmentHeld(false)
         onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
         touchpadClick.reset(); stepFeedback.reset()
         #if os(tvOS)
@@ -106,6 +115,7 @@ import UIKit
         ]
         for (button, input) in buttons where input?.isPressed == true { pressed.insert(button) }
         if !isMenu() { pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings) }
+        updateAssignmentHeld(!isMenu() && pressed.contains(.a))
         for action in bindings.update(pressed: pressed, inMenu: isMenu(), at: now) {
             perform(action)
             if case .step(let direction) = action, !isMenu() { stepFeedback.tick(direction, on: controller, at: now) }

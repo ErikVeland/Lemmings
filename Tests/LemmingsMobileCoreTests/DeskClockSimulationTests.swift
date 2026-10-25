@@ -233,6 +233,15 @@ struct DeskClockSimulationTests {
         #expect(!simulation.lemmings.contains { $0.id == walker })
     }
 
+    @Test func walkerOnDigitsStaysUntilAVisibleExit() {
+        var simulation = simulation(at: date(12, 34))
+        simulation.setTerrain(x: 69, y: 20, width: 2, height: 21)
+        simulation.setTerrain(x: 96, y: 20, width: 2, height: 21)
+        let walker = simulation.placeLemming(x: 75, y: 32, facingLeft: false)
+        run(&simulation, from: date(12, 34), to: date(12, 35, second: 35))
+        #expect(simulation.lemmings.contains { $0.id == walker })
+    }
+
     @Test func blockerHoldsExit() {
         var simulation = simulation(at: date(12, 34))
         let event = DeskClockEvent(start: date(12, 43), title: "Review", nuke: false)
@@ -271,12 +280,18 @@ struct DeskClockSimulationTests {
         var simulation = simulation(at: date(12, 34, second: 30))
         run(&simulation, from: date(12, 34, second: 30), to: date(12, 34, second: 58))
         #expect(!workers(simulation).isEmpty)
-        let walkers = simulation.lemmings.filter { $0.workerDigit == nil }.map(\.id)
+        let ids = Set(simulation.lemmings.map(\.id))
         simulation.advance(to: date(15, 10), event: nil)
         #expect(simulation.shownDigits == "1510")
         #expect(digitsMatch(simulation, "1510"))
         #expect(workers(simulation).isEmpty)
-        #expect(simulation.lemmings.map(\.id) == walkers)
+        #expect(Set(simulation.lemmings.map(\.id)) == ids)
+        #expect(simulation.lemmings.allSatisfy { $0.workerDigit == nil })
+        #expect(simulation.lemmings.allSatisfy { lemming in
+            lemming.y < 0 || !(max(0, lemming.y - 9)..<lemming.y).contains {
+                simulation.isSolid(x: lemming.x, y: $0)
+            }
+        })
     }
 
     @Test func backwardJumpKeepsTheHatchOpen() {
@@ -349,7 +364,56 @@ struct DeskClockSimulationTests {
         #expect(digitsMatch(simulation, "1134"))
         #expect(workers(simulation).isEmpty)
         run(&simulation, from: date(11, 34, second: 58), to: date(11, 35))
+        // After a clock jump the worker still has to do the visible work.
+        #expect(simulation.shownDigits == "1135")
+        run(&simulation, from: date(11, 35), to: date(11, 35, second: 20))
         #expect(digitsMatch(simulation, "1135"))
+    }
+
+    @Test func lemmingsNeverOccupyDigitStone() {
+        var simulation = simulation(at: date(12, 34))
+        var firstOverlap: (id: Int, x: Int, y: Int)?
+        run(&simulation, from: date(12, 34), to: date(12, 36)) { scene, _ in
+            guard firstOverlap == nil else { return }
+            for lemming in scene.lemmings where lemming.state != .exit && lemming.y >= 0 {
+                if (max(0, lemming.y - 9)..<lemming.y).contains(where: { scene.isSolid(x: lemming.x, y: $0) }) {
+                    firstOverlap = (lemming.id, lemming.x, lemming.y)
+                    break
+                }
+            }
+        }
+        #expect(firstOverlap == nil, "A lemming was inside stone: \(String(describing: firstOverlap))")
+    }
+
+    @Test func allUnitsDigitsFinishWithClearBodies() {
+        for minute in 30..<40 {
+            let start = date(12, minute, second: 30)
+            var simulation = simulation(at: start)
+            var overlap = false
+            var builderInsidePendingStone = false
+            run(&simulation, from: start, to: date(12, minute + 1, second: 20)) { scene, _ in
+                if scene.lemmings.contains(where: { lemming in
+                    lemming.y >= 0 && lemming.state != .exit &&
+                    (max(0, lemming.y - 9)..<lemming.y).contains { scene.isSolid(x: lemming.x, y: $0) }
+                }) { overlap = true }
+                for lemming in scene.lemmings {
+                    guard let digit = lemming.workerDigit, let job = scene.jobs[digit], job.acting,
+                          job.index < job.operations.count else { continue }
+                    let operation = job.operations[job.index]
+                    guard operation.add else { continue }
+                    let x = DeskClockSimulation.digitX[digit] + operation.column * DeskClockSimulation.blockSize
+                    let y = DeskClockSimulation.digitTop + operation.row * DeskClockSimulation.blockSize
+                    if (x..<(x + DeskClockSimulation.blockSize)).contains(lemming.x), lemming.y > y,
+                       lemming.y - 9 < y + DeskClockSimulation.blockSize {
+                        builderInsidePendingStone = true
+                    }
+                }
+            }
+            #expect(!overlap, "A lemming entered stone during minute \(minute)")
+            #expect(!builderInsidePendingStone, "A builder stood inside its next block during minute \(minute)")
+            let expected = DeskClockFace.digits(for: date(12, minute + 1), uses24Hour: true, calendar: calendar)
+            #expect(digitsMatch(simulation, expected), "The digit work stalled after minute \(minute)")
+        }
     }
 
     @Test func blockerLeavesWhenEventDisappears() {

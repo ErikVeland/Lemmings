@@ -12,7 +12,7 @@ public enum GameSemanticText {
         return [.init(String(text[..<split]), .green), .init(String(text[split...]), .blue)]
     }
 
-    public static func players(_ text: String) -> [GameFrontEnd.TextRun] {
+    public static func players(_ text: String, nextPlayerIndex: Int? = nil) -> [GameFrontEnd.TextRun] {
         let normal = text.replacingOccurrences(of: " vs ", with: " v ", options: .caseInsensitive)
         var names: [String] = [], remainder = normal[...]
         while let separator = remainder.range(of: " v ", options: .caseInsensitive) {
@@ -21,7 +21,8 @@ public enum GameSemanticText {
         }
         names.append(String(remainder))
         return names.enumerated().flatMap { index, name in
-            (index == 0 ? [] : [GameFrontEnd.TextRun(" v ", .blue)]) + [.init(name, .green)]
+            (index == 0 ? [] : [GameFrontEnd.TextRun(" v ", .blue)])
+                + [.init(name, index == nextPlayerIndex ? .gold : .green)]
         }
     }
 
@@ -75,9 +76,15 @@ public enum GameSemanticText {
                 var end = start + 1
                 while end < letters.count, letters[end].palette == letters[start].palette { end += 1 }
                 let run = letters[start..<end].map(\.sequence).joined()
+                context.saveGState()
+                if letters[start].palette == .gold {
+                    context.setShadow(offset: .zero, blur: 6,
+                        color: CGColor(srgbRed: 1, green: 0.66, blue: 0.12, alpha: 0.95))
+                }
                 typography.draw(run, face: face,
                     at: CGPoint(x: left - bearing + CGFloat(pen * scale), y: top + CGFloat(row) * pitch - CGFloat(bounds.top * scale)),
                     scale: scale, in: context, alpha: alpha, palette: letters[start].palette)
+                context.restoreGState()
                 pen += font.layout(run).reduce(0) { $0 + $1.advance }
                 start = end
             }

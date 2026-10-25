@@ -88,6 +88,32 @@ import LemmingsMobileCore
     #endif
 
     #if os(iOS)
+    @Test func deskClockSuspendsPlayAndPreservesReadyAndMenuPages() async throws {
+        try await withGame { game in
+            let ready = game.overlayCanvas.page
+            game.setDeskClockVisible(true)
+            #expect(game.playState.phase == .ready)
+            #expect(game.isDisplayLinkPaused && !game.inputAdapter.isActive())
+            #expect(!game.view.isUserInteractionEnabled && game.view.accessibilityElementsHidden)
+            game.resumePlay()
+            #expect(game.playState.phase == .ready)
+            game.setDeskClockVisible(false)
+            #expect(game.overlayCanvas.page.title == ready.title)
+            #expect(game.view.isUserInteractionEnabled && !game.view.accessibilityElementsHidden)
+            game.resumePlay()
+            game.setDeskClockVisible(true)
+            #expect(game.paused && !game.overlay.isHidden)
+            game.setDeskClockVisible(false)
+            #expect(game.paused)
+            game.showRestartLevel()
+            let restart = game.overlayCanvas.page
+            game.setDeskClockVisible(true)
+            game.setDeskClockVisible(false)
+            #expect(game.overlayCanvas.page.title == restart.title)
+            #expect(game.overlayCanvas.page.footer.map(\.id) == restart.footer.map(\.id))
+        }
+    }
+
     @Test func pauseTargetStopsOnTouchDownAndPlayWaitsForRelease() async throws {
         try await withGame { game in
             game.resumePlay()

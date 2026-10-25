@@ -11,7 +11,7 @@ import NxlvKit
     }
 
     func returnFromEarnedRewards() {
-        page(.result)
+        returnToPage(.result)
     }
 
     private func rewardHeight(_ reward: ResultAwards.EarnedReward) -> CGFloat {

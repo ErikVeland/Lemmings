@@ -69,7 +69,10 @@ public struct MobileHUDLayout: Equatable, Sendable {
                             reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
                             hasPlayer: Bool = false, engineIdentifier: String = "classic",
                             showsMenuButton: Bool = true, television: Bool = false,
-                            topBarInsets: MobileInsets = .init(), navigationRail: MobileRect? = nil) -> MobileHUDLayout {
+                            topBarInsets: MobileInsets = .init(), navigationRail: MobileRect? = nil,
+                            fillsDisplayWidth: Bool = false) -> MobileHUDLayout {
+        let systemRegions = reservedRegions
+        let reservedRegions = fillsDisplayWidth ? reservedRegions.filter { $0.kind == .division } : reservedRegions
         var layout = navigationRail.flatMap {
             navigationRailLayout(container: container, safeArea: safeArea, rail: $0,
                 hasRate: hasRate, skillCount: max(0, skillCount), supportsRewind: supportsRewind,
@@ -77,8 +80,40 @@ public struct MobileHUDLayout: Equatable, Sendable {
         } ?? makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
             skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
             hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
+        if fillsDisplayWidth, layout.interface.controlsPlacement != .trailingRail {
+            // A rotated front camera can sit at the bottom. Keep the entire fixed deck
+            // above it rather than dropping the occlusion or reshaping individual skills.
+            let deckFrames = Array(layout.interface.controlFrames.dropLast()) + [layout.minimapFrame].compactMap { frame in
+                frame.map { MobileRect(x: $0.minX, y: $0.minY, width: $0.width, height: $0.height) }
+            }
+            let blocking = systemRegions.filter { region in
+                region.kind == .occlusion && deckFrames.contains { $0.intersects(region.frame) }
+            }
+            if !blocking.isEmpty {
+                let clear = MobileDisplayRegions.scrollingMenuFrame(in: layout.interface.safeFrame, avoiding: blocking)
+                let clearance = MobileInsets(top: clear.minY, left: clear.minX,
+                    bottom: max(0, container.height - clear.maxY), right: max(0, container.width - clear.maxX))
+                layout = makeTouchLayout(container: container, safeArea: clearance, hasRate: hasRate,
+                    skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
+                    hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
+            }
+        }
         layout = topStatusLayout(layout, television: television)
-        guard !showsMenuButton else { return insettingHeader(layout, by: topBarInsets) }
+        if fillsDisplayWidth {
+            layout = MobileHUDLayout(portrait: layout.portrait, interface: layout.interface, panel: layout.panel,
+                compactScale: layout.compactScale, speedArrows: layout.speedArrows,
+                reservedRegions: systemRegions, supportsRewind: layout.supportsRewind,
+                isDiorama: layout.isDiorama, showsMenuButton: layout.showsMenuButton, television: layout.television)
+        }
+        if fillsDisplayWidth, !television { layout = extendingPlayfield(layout, width: container.width) }
+        var headerInsets = topBarInsets
+        if fillsDisplayWidth {
+            let safe = layout.interface.safeFrame
+            let header = MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: rowHeight)
+            let clear = MobileDisplayRegions.clearHorizontalFrame(header, avoiding: systemRegions)
+            headerInsets = MobileInsets(left: clear.minX - header.minX, right: header.maxX - clear.maxX)
+        }
+        guard !showsMenuButton else { return insettingHeader(layout, by: headerInsets) }
         let original = layout.interface
         // Console navigation comes from Back or Options/Menu, with no HUD target.
         let status = original.statusFrame.minY == original.safeFrame.minY
@@ -93,7 +128,24 @@ public struct MobileHUDLayout: Equatable, Sendable {
             compactScale: layout.compactScale, speedArrows: layout.speedArrows,
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
             isDiorama: layout.isDiorama, showsMenuButton: false, television: layout.television)
-        return insettingHeader(console, by: topBarInsets)
+        return insettingHeader(console, by: headerInsets)
+    }
+
+    /// Scenery reaches behind the outer display's vertical system bar. Controls retain their safe targets.
+    private static func extendingPlayfield(_ layout: MobileHUDLayout, width: Double) -> MobileHUDLayout {
+        let original = layout.interface
+        guard original.controlsPlacement != .trailingRail,
+              !layout.reservedRegions.contains(where: { $0.kind == .division }),
+              original.playfieldFrame.width == original.safeFrame.width else { return layout }
+        let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
+            playfieldFrame: .init(x: 0, y: original.playfieldFrame.y, width: width,
+                                 height: original.playfieldFrame.height),
+            statusFrame: original.statusFrame, controlsFrame: original.controlsFrame,
+            controlFrames: original.controlFrames, controlsPlacement: original.controlsPlacement)
+        return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
+            compactScale: layout.compactScale, speedArrows: layout.speedArrows,
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
+            isDiorama: layout.isDiorama, showsMenuButton: layout.showsMenuButton, television: layout.television)
     }
 
     /// Move the visible header and its input/accessibility targets together, without changing gameplay.
@@ -337,10 +389,10 @@ public struct MobileHUDLayout: Equatable, Sendable {
             MobileRect(x: division.frame.maxX, y: lower.minY, width: safe.maxX - division.frame.maxX, height: lower.height)
         ] : [lower]
         let counts = vertical ? [(skillCount + 1) / 2, skillCount / 2] : [skillCount]
-        let preferredColumns = !vertical && lower.width < lower.height * 2
-            ? max(1, (skillCount + 1) / 2) : max(1, skillCount)
         func columns(in width: Double, count: Int) -> Int {
-            max(1, min(count, preferredColumns, Int((width + 2) / 46)))
+            // A tall lower pane is not a reason to split skills into extra rows.
+            // Wrap only when the available width cannot keep every target at 44 points.
+            max(1, min(count, Int((width + 2) / 46)))
         }
         let rows = zip(paneFrames, counts).map { pane, count in
             max(1, Int(ceil(Double(count) / Double(columns(in: pane.width, count: count)))))
@@ -364,11 +416,16 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let top = banks.map(\.minY).max() ?? deck.minY
         let bottom = banks.map(\.maxY).min() ?? deck.maxY
         let minimumSkills = Double(rows) * 80 + Double(rows - 1) * 2
-        let navigationHeight = min(max(44, floor((bottom - top) * 0.20)), bottom - top - minimumSkills - 52)
-        let transportHeight = min(max(48, floor((bottom - top) * 0.28)), bottom - top - navigationHeight - minimumSkills - 4)
+        let transportHeight = min(80, max(48, floor((bottom - top) * 0.20)), bottom - top - minimumSkills - 48)
+        let narrowestSkill = zip(banks, counts).map { bank, count in
+            (bank.width - Double(max(0, columns(in: bank.width, count: count) - 1)) * 2)
+                / Double(columns(in: bank.width, count: count))
+        }.min() ?? 44
+        let preferredSkillHeight = Double(rows) * min(144, max(80, floor(narrowestSkill * 1.25))) + Double(rows - 1) * 2
+        let skillHeight = min(preferredSkillHeight, bottom - top - transportHeight - 48)
+        let navigationHeight = bottom - top - skillHeight - transportHeight - 4
         let skillY = top + navigationHeight + 2
         let transportY = bottom - transportHeight
-        let skillHeight = transportY - skillY - 2
         guard skillHeight >= Double(rows) * 80 + Double(rows - 1) * 2 else { return nil }
         let skillArea = CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight)
         var skills: [MobileRect] = []
@@ -386,12 +443,21 @@ public struct MobileHUDLayout: Equatable, Sendable {
         }
         let leading = banks[0], trailing = banks[banks.count - 1]
         let navigationCount = supportsRewind ? 3 : 1
-        let navigationWidth = vertical ? leading.width : floor(leading.width * 0.42)
-        let navigationCell = (navigationWidth - Double(navigationCount - 1) * 4) / Double(navigationCount)
+        let navigationGaps = Double(navigationCount - 1) * 4
+        let columnNavigation = !vertical && navigationHeight >= Double(navigationCount) * 44 + navigationGaps
+        let navigationWidth = vertical ? leading.width : columnNavigation ? 64 : floor(leading.width * 0.42)
+        let navigationCell = columnNavigation ? navigationWidth
+            : (navigationWidth - navigationGaps) / Double(navigationCount)
+        let navigationButtonHeight = columnNavigation
+            ? min(64, (navigationHeight - navigationGaps) / Double(navigationCount)) : min(64, navigationHeight)
+        let navigationY = columnNavigation
+            ? top + (navigationHeight - Double(navigationCount) * navigationButtonHeight - navigationGaps) / 2
+            : top + navigationHeight - navigationButtonHeight
         guard navigationCell >= 44 else { return nil }
         let navigation = (0..<navigationCount).map {
-            MobileRect(x: leading.minX + Double($0) * (navigationCell + 4), y: top,
-                       width: navigationCell, height: navigationHeight)
+            MobileRect(x: leading.minX + (columnNavigation ? 0 : Double($0) * (navigationCell + 4)),
+                       y: navigationY + (columnNavigation ? Double($0) * (navigationButtonHeight + 4) : 0),
+                       width: navigationCell, height: navigationButtonHeight)
         }
         let mapX = vertical ? trailing.minX : leading.minX + navigationWidth + 4
         let map = CGRect(x: mapX, y: top, width: trailing.maxX - mapX, height: navigationHeight)

@@ -33,7 +33,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
   let keyboard = GameplayKeyboard(window: host)
   defer { keyboard.removeNavigationControl() }
   keyboard.active = { true }; keyboard.modern = { true }; keyboard.ownsController = { true }
-  keyboard.mainMenu = {}; keyboard.settings = {}; keyboard.nextGraphics = {}
+  keyboard.mainMenu = {}; keyboard.settings = {}; keyboard.hints = {}
   keyboard.navigationReduceMotion = { false }; keyboard.fadeMenuButton = { true }
   var uses = 0, balance: CGFloat = 1
   keyboard.extraSkill = { uses += 1 }; keyboard.extraSkillAvailable = { true }
@@ -105,8 +105,9 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
         name + " status text or game-menu target was covered by the icon row")
     }
     for button in sorted {
-      try check(root.bounds.contains(button.frame) && button.frame.size == CGSize(width: 44, height: 44)
-        && button.frame.minY == sorted[0].frame.minY && button.glyph != nil,
+      try check(root.bounds.contains(button.frame) && button.frame.width >= 44 && button.frame.height == 44
+        && button.frame.minY == sorted[0].frame.minY
+        && (button.glyph != nil || button.title == L10n.text("Hints")),
         name + " quick controls did not form one row of icon tiles")
       try check(!(button.accessibilityLabel() ?? "").isEmpty && !button.helpText.isEmpty
         && button.accessibilityHelp() == button.helpText && button.toolTip == nil,
@@ -153,25 +154,27 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
       try check(!buttons.contains { $0 !== button && $0.frame.intersects(button.frame) }, name + " overlapped quick controls")
     }
     try shot(root, "visible-\(width)")
-    let graphics = buttons.first { $0.title == L10n.text("Graphics") }!
+    let hints = buttons.first { $0.title == L10n.text("Hints") }!
     let settings = buttons.first { $0.title == L10n.text("Settings") }!
-    let first = keyboard.graphicsName()
-    graphics.performClick(nil)
-    try check(keyboard.graphicsName() != first && graphics.accessibilityValue() as? String == keyboard.graphicsName(),
-      name + " graphics button did not update artwork and accessibility")
-    try shot(root, "cycled-\(width)")
+    hints.performClick(nil)
+    try check(LevelHintWindow.shared.page != nil, name + " Hints did not open directly")
+    try shot(root, "hints-\(width)")
+    LevelHintWindow.shared.page?.controllerBackButton.performClick(nil)
+    try check(!GameScreen.shared.isPresented, name + " Hints Back did not return to gameplay")
+    keyboard.showHelp()
+    guard let help = keyboard.overlay else { throw IntegrationFailure(message: name + " controls help unavailable") }
+    help.onHints()
+    try check(LevelHintWindow.shared.page != nil && GameScreen.shared.contains(help),
+      name + " hints discarded the controls guide")
+    LevelHintWindow.shared.page?.controllerBackButton.performClick(nil)
+    try check(GameScreen.shared.controllerPage(in: owner) === help, name + " hints did not return to the guide")
+    help.onClose()
     settings.performClick(nil)
     try check(GameScreen.shared.isPresented, name + " Settings button did not open settings")
     keyboard.refreshNavigationControl()
     try check(keyboard.navigationFrame(in: root) == nil, name + " quick controls remained active through settings")
     try shot(root, "settings-\(width)")
     GameScreen.shared.dismissAll(); keyboard.refreshNavigationControl(at: 100)
-    keyboard.graphicsAvailable = { false }; keyboard.refreshNavigationControl(at: 100)
-    let current = keyboard.graphicsName()
-    graphics.performClick(nil)
-    try check(!graphics.isEnabled && keyboard.graphicsName() == current, name + " unavailable graphics still changed")
-    try shot(root, "unavailable-\(width)")
-    keyboard.graphicsAvailable = oldAvailable
     keyboard.fadeMenuButton = { true }
     keyboard.navigationReduceMotion = { false }
     buttons.forEach { $0.resetAppearance() }
@@ -266,10 +269,70 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
   keyboard.ownsController = oldOwnership
   try check(keyboard.commandRows.contains { $0.keys == "F2" } && keyboard.commandRows.contains { $0.keys == "⌘," },
     name + " omitted shortcut help")
-  print("PASS " + name + " Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards")
+  print("PASS " + name + " Settings/Hints buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards")
 }
 
 extension AppDelegate {
+  private func testBrowserReturnJourneys() throws {
+    for engine in ["Classic", "Lemmings 2", "Lemmings 3"] {
+      returnToLibrary()
+      let packs = GameMenuPage(title: "Fan levels")
+      let chosen = packs.addListAction("Selected pack", at: 0) {}
+      GameScreen.shared.present(packs, owner: window, focus: chosen)
+      let levels = GameMenuPage(title: "Selected pack")
+      let start = levels.addPrimaryAction("Start") {}
+      GameScreen.shared.present(levels, owner: window, focus: start)
+      if engine == "Lemmings 2" {
+        try check(openNativeL2(selection: .init(tribe: 0, level: 0)), "L2 return fixture failed")
+        nativeL2Window!.testRecoveryAdvance(ticks: 18)
+      } else if engine == "Lemmings 3" {
+        try check(openNativeL3(selection: .init(tribe: .classic, level: 0)), "L3 return fixture failed")
+        nativeL3Window!.testRecoveryAdvance(ticks: 18)
+      } else {
+        retainBrowserForReturn()
+        prepareLibrary(preservingMusic: false)
+        gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+        selectDataSet(); loadLevel(at: 0)
+        flow?.selectLevel(rank: 0, position: 0); flow?.beginPlaying(); renderScreen()
+        for _ in 0..<18 { session?.tick() }
+      }
+      let identity = LevelCatalogueIdentity(engine: engine == "Classic" ? .classic : engine == "Lemmings 2" ? .lemmings2 : .lemmings3,
+        packID: "navigation-fixture", levelID: "1")
+      browserPlayingIdentity = identity
+      browserPlayingFingerprint = nativeL2Window?.currentLevelFingerprint ?? nativeL3Window?.currentLevelFingerprint
+        ?? arcadeLevel?.conditions?.levelFingerprint
+      try check(browserReturn != nil && !GameScreen.shared.isPresented, engine + " discarded its browser")
+      returnToBrowsing()
+      try check(GameScreen.shared.controllerPage(in: window) === levels && window.firstResponder === start,
+        engine + " lost the selected level or focus")
+      guard let resume = browserResume, resume.identity == identity else {
+        throw IntegrationFailure(message: engine + " lost its resumable attempt on Back")
+      }
+      try check(resume.checkpoint.tick == 18, engine + " saved the wrong gameplay position")
+      levels.controllerBackButton.performClick(nil)
+      try check(GameScreen.shared.controllerPage(in: window) === packs && window.firstResponder === chosen,
+        engine + " lost its parent pack")
+      if engine == "Lemmings 2" {
+        try check(openNativeL2(recovery: resume.checkpoint), "L2 could not resume after browser Back")
+        try check(nativeL2Window!.testRecoveryIsPaused, "L2 resumed running before Ready")
+      } else if engine == "Lemmings 3" {
+        try check(openNativeL3(recovery: resume.checkpoint), "L3 could not resume after browser Back")
+        try check(nativeL3Window!.testRecoverySnapshot.paused, "L3 resumed running before Ready")
+      } else {
+        GameScreen.shared.dismissAll()
+        loadLevel(at: 0)
+        restoreSequenceCheckpoint(resume.checkpoint)
+        try check(isPaused, "Classic resumed running before Ready")
+      }
+      try saveBeforeSessionChange()
+      let restored = try recoveryStore.latest(profileID: resume.checkpoint.profileID, hotSeatID: resume.checkpoint.hotSeatID)
+      try check(restored?.runID == resume.checkpoint.runID && restored?.tick == resume.checkpoint.tick
+        && restored?.stateHash == resume.checkpoint.stateHash, engine + " changed the attempt on Resume")
+    }
+    returnToLibrary()
+    print("PASS Classic/L2/L3 retained browsing pages, selected actions, parent returns and exact paused attempt recovery")
+  }
+
   fileprivate func testGameplayQuickControls() throws {
     try testQuickControlGroupHover()
     if window == nil { buildInterface() }
@@ -306,6 +369,7 @@ extension AppDelegate {
     try check(openNativeL3(selection: .init(tribe: .classic, level: 0)), "L3 quick controls fixture did not open")
     try nativeL3Window!.testGameplayQuickControls()
     try testGameplayIconHelp()
+    try testBrowserReturnJourneys()
   }
 }
 
@@ -323,7 +387,7 @@ extension AppDelegate {
   let keyboard = GameplayKeyboard(window: host)
   defer { keyboard.removeNavigationControl() }
   keyboard.active = { true }; keyboard.modern = { true }; keyboard.ownsController = { true }
-  keyboard.mainMenu = {}; keyboard.settings = {}; keyboard.nextGraphics = {}
+  keyboard.mainMenu = {}; keyboard.settings = {}; keyboard.hints = {}
   keyboard.graphicsName = { "Original PC" }; keyboard.navigationReduceMotion = { false }
   var status = PrecisionZoomStatus(superzoom: 12, skips: 4, extraSkills: 2, active: .superzoom, isEmpty: false)
   keyboard.extraSkill = {}; keyboard.extraSkillAvailable = { status.extraSkills > 0 && !status.bonusSkillUsed }
@@ -348,7 +412,7 @@ extension AppDelegate {
     host.pointer = root.convert(CGPoint(x: 2, y: 2), to: nil)
     keyboard.removeNavigationControl(); keyboard.refreshNavigationControl(at: 100)
     let buttons = root.subviews.compactMap { $0 as? GameplayMenuButton }.filter { !$0.isHidden }
-    var items = buttons.map { ($0.glyph!.rawValue, $0.title, $0.frame) }
+    var items = buttons.map { ($0.glyph?.rawValue ?? "hints", $0.title, $0.frame) }
     let area = keyboard.rewardDisplayArea()!
     for item in status.badgeFrames(scale: width >= 960 ? 2 : 1) {
       items.append(("counter-" + item.badge.rawValue, item.badge.title,
@@ -374,9 +438,9 @@ extension AppDelegate {
       let hit = root.hitTest(helpPoint)
       try check(hit !== help && hit?.isDescendant(of: help) != true, "Icon popover intercepted gameplay input")
       try shot(item.0 + "-" + String(width))
-      if item.0 == "graphics" {
-        let graphics = buttons.first { $0.glyph == .graphics }!
-        try check(graphics.accessibilityPerformPress(), "Explained Graphics icon lost its action")
+      if item.0 == "hints" {
+        let hints = buttons.first { $0.title == L10n.text("Hints") }!
+        try check(hints.accessibilityPerformPress(), "Hints lost its accessible action")
         keyboard.refreshNavigationControl(at: now + 0.9)
         try check(panel() == nil, "Icon explanation survived an accessible action")
       }

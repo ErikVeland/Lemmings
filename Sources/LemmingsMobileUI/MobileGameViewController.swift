@@ -39,12 +39,19 @@ typealias MobileGameControllerBase = UIViewController
     lazy var inputAdapter = makeInputAdapter()
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
+    let globalNavigation = MobileNavigationView()
+    #if os(iOS)
+    private var menuBackGesture: UIScreenEdgePanGestureRecognizer?
+    #endif
     /// Called with the player who acts next, before the game leaves for a retry or the next level.
     var onHandover: ((String) -> Bool)?
     var soloOwnerID: String?
     var journeyContext = MobileCheckpointEnvelope.JourneyContext()
     var canDefer = false
     var onSkipLevel: (() -> Bool)?
+    var onSkipBalance: (() -> Int)?
+    var onRefundSkip: (() -> Bool)?
+    private var skipPending = false
     var onExtraSkillBalance: (() -> Int)?
     var onSpendExtraSkill: ((MobileExtraSkillChoice) -> Bool)?
     var onExtraSkillUse: (() -> ExtraSkillUse?)?
@@ -108,7 +115,7 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.page.rows = [.init("resultAward", L10n.text("Awards (\(awards.count))"))]
     }
     private var rewindHeld = false
-    private var lastRewindTime = 0.0
+    private var rewindStartedAt = 0.0
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
     let summary: MobileLevelSummary
@@ -142,6 +149,26 @@ typealias MobileGameControllerBase = UIViewController
     nonisolated(unsafe) private var displayLink: CADisplayLink?
     private var viewIsVisible = false
     private var displayUpdatesSuspended = false
+    private(set) var deskClockVisible = false
+
+    /// Keep the exact screen and Ready boundary underneath the clock. Returning never resumes play.
+    func setDeskClockVisible(_ visible: Bool) {
+        guard deskClockVisible != visible else { return }
+        loadViewIfNeeded()
+        deskClockVisible = visible
+        // Replays and retained solutions can be presented above the live attempt.
+        (presentedViewController as? MobileGameViewController)?.setDeskClockVisible(visible)
+        if visible {
+            if overlay.isHidden && presentedViewController == nil { pausePlay(showControls: true) }
+            else { pausePlay(showControls: false) }
+            inputAdapter.reset()
+            resignFirstResponder()
+            suspendAudio()
+        }
+        view.isUserInteractionEnabled = !visible
+        view.accessibilityElementsHidden = visible
+        updateDisplayLinkState()
+    }
     var isDisplayLinkPaused: Bool { displayLink?.isPaused ?? true }
     private var framePacing = MobileFramePacing()
     private var appliedFrameRate = 0
@@ -163,13 +190,25 @@ typealias MobileGameControllerBase = UIViewController
     var controllerSpeedResetConsumed = false
     var inputSpeed = GameplaySpeed(legacyMultiplier: 3)
     var hintRequestID = UUID()
+    var replayExportRequestID = UUID()
     var lastAssignmentControl: Int?
     var lastInputAssignment: MobileTargetSelection?
     var previewPoint: MobilePoint?
     var previewInput: MobileTargetInput = .touch
     var hoverAimActive = false
     var highlightedTarget: MobileTargetSelection?
+    var touchSelection: MobileTouchSelection?
+    var browsingTouchSelection = false
     var fanMode = false
+    var l2PrimaryHeld = false
+
+    func updateL2Aim(at point: MobilePoint?, held: Bool) {
+        guard !session.isReadOnly, let tribes = session as? Lemmings2MobileSession else { return }
+        guard !fanMode, overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted,
+              let point else { tribes.releasePointerInput(); return }
+        tribes.setAim(at: playfieldView.gameViewport.levelPoint(fromView: point),
+            held: held && playState.phase == .running)
+    }
 
     func updateFan(at point: MobilePoint?, active: Bool) {
         guard let tribes = session as? Lemmings2MobileSession else { return }
@@ -212,7 +251,6 @@ typealias MobileGameControllerBase = UIViewController
     let effects = MobileEffects()
     private let nowPlaying = MobileNowPlayingView()
     private let replaySkillInfo = MobileReplaySkillView()
-    private let replayTitle = MobileReplayTitleView()
     private let replayMoves = MobileReplayMoveView()
     let solutionSelector = MobileSolutionSwitchView()
     private var solutionPanelContentFrame: CGRect?
@@ -282,8 +320,14 @@ typealias MobileGameControllerBase = UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        overlay.contentInsetAdjustmentBehavior = .never
+        achievementScroll.contentInsetAdjustmentBehavior = .never
         overlay.onVisibilityChanged = { [weak self] in
             self?.updateDisplayLinkState()
+            self?.globalNavigation.isHidden = self?.overlay.isHidden ?? true
+            #if os(iOS)
+            self?.menuBackGesture?.isEnabled = self?.overlay.isHidden == false
+            #endif
             if let self, self.overlay.isHidden { self.clearSplitResult() }
             #if os(tvOS)
             self?.updateTVInputRouting()
@@ -298,8 +342,6 @@ typealias MobileGameControllerBase = UIViewController
         view.addSubview(touchLoupe)
         view.addSubview(nowPlaying)
         view.addSubview(replaySkillInfo)
-        view.addSubview(replayTitle)
-        replayTitle.level = session.isReadOnly ? summary : nil
         countdownLabel.palette = .green
         countdownLabel.maximumScale = 6
         countdownLabel.face = .large
@@ -320,6 +362,8 @@ typealias MobileGameControllerBase = UIViewController
         solutionSelector.onSelect = { [weak self] mode in self?.selectSolutionMode(mode) }
         solutionSelector.onToggleGhost = { [weak self] in self?.toggleGhostSolution() }
         hud.onRewindHold = { [weak self] held in self?.setRewindHeld(held) }
+        hud.onRewindRepeat = { [weak self] in self?.repeatHeldRewind() }
+        hud.onStepBatch = { [weak self] action, count in self?.handleSteps(action, count: count) }
         hud.onSpeedHold = { [weak self] held, allowTap in self?.setSpeedInput(.mouse, held: held, allowTap: allowTap) }
         onHints = { [weak self] in self?.showHints() }
         onControlsHelp = { [weak self] in self?.showControlsHelp() }
@@ -359,6 +403,13 @@ typealias MobileGameControllerBase = UIViewController
             self?.handle(.releaseRate(wasMaximum ? -99 : 99))
         }
         playfieldView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
+        playfieldView.canHoldSelection = { [weak self] point in
+            guard let self, !self.session.isReadOnly, self.overlay.isHidden, self.playState.canEdit,
+                  self.lifecycle.isForeground, !self.lifecycle.isInterrupted, !self.fanMode,
+                  !self.session.snapshot.isComplete else { return false }
+            return MobileTargetSelector.select(candidates: self.session.targetCandidates(for: self.selectedControl),
+                touch: point, viewport: self.playfieldView.gameViewport, radius: 30, input: .touch) != nil
+        }
         hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
         playfieldView.onViewportChanged = { [weak self] viewport in
             guard let self else { return }
@@ -481,7 +532,7 @@ typealias MobileGameControllerBase = UIViewController
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         synchronizeSceneActivity()
-        let insets = view.safeAreaInsets
+        let insets = MobileSystemRegions.contentInsets(in: view)
         let layout = hudLayout(insets: insets)
 #if DEBUG
         if lastHUDLayout != layout {
@@ -512,21 +563,19 @@ typealias MobileGameControllerBase = UIViewController
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
         playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }
         layoutSolutionSelector()
-        layoutReplayMoves()
-        replayTitle.position(in: playfieldView.frame)
-        if !solutionSelector.isHidden { replayTitle.frame.origin.y = max(replayTitle.frame.minY, solutionSelector.frame.maxY + 8) }
-        if session.isReadOnly, layout.portrait != nil { replayTitle.frame.origin.y += 48 }
+        layoutReplayMoves(layout: layout)
         countdownLabel.frame = CGRect(x: floor(playfieldView.frame.midX - 40), y: floor(playfieldView.frame.midY - 48), width: 80, height: 96)
         let replayTargets = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot,
             selectedSkill: selectedControl, paused: paused, speed: speed,
             endRunArmed: endRunArmedUntil > ProcessInfo.processInfo.systemUptime)
         replaySkillInfo.frame = MobileReplaySkillArt.frame(in: playfieldView.frame,
-            below: session.isReadOnly ? replayTitle.frame.maxY + 8 : playfieldView.frame.minY,
+            below: playfieldView.frame.minY,
             avoiding: replayTargets.map(\.inputFrame) + layout.reservedRegions.map { Self.cgRect($0.frame) }
-                + [layout.minimapFrame].compactMap { $0 }) ?? .zero
+                + [hud.replayMapFrame ?? layout.minimapFrame].compactMap { $0 }
+                + (replayMoves.isHidden ? [] : ReplayMoveArt.frames(in: replayMoves.frame))) ?? .zero
         var musicArea = playfieldView.frame
         if session.isReadOnly || hasSolutionPair {
-            let top = min(musicArea.maxY, max(musicArea.minY, replayTitle.frame.maxY + 8))
+            let top = min(musicArea.maxY, max(musicArea.minY, solutionSelector.isHidden ? musicArea.minY : solutionSelector.frame.maxY + 8))
             musicArea.size.height = musicArea.maxY - top
             musicArea.origin.y = top
         }
@@ -536,7 +585,6 @@ typealias MobileGameControllerBase = UIViewController
         nowPlaying.position(in: musicArea)
         hud.frame = view.bounds
         updateHUD(layout: layout)
-        overlay.frame = view.bounds
         layoutOverlay()
         if previewPoint != nil { renderCurrentFrame(force: true) }
     }
@@ -563,7 +611,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func updateDisplayLinkState() {
-        let active = viewIsVisible && lifecycle.acceptsInput(menuVisible: !overlay.isHidden) && !displayUpdatesSuspended
+        let active = viewIsVisible && lifecycle.acceptsInput(menuVisible: !overlay.isHidden) && !displayUpdatesSuspended && !deskClockVisible
         displayLink?.isPaused = !active || (!overlay.isHidden && GCController.controllers().isEmpty)
         if isDisplayLinkPaused {
             clock.suspend()
@@ -582,7 +630,7 @@ typealias MobileGameControllerBase = UIViewController
 
     @objc func displayFrame(_ link: CADisplayLink) {
         synchronizeSceneActivity()
-        guard viewIsVisible, lifecycle.acceptsInput(menuVisible: !overlay.isHidden), !displayUpdatesSuspended else {
+        guard viewIsVisible, lifecycle.acceptsInput(menuVisible: !overlay.isHidden), !displayUpdatesSuspended, !deskClockVisible else {
             updateDisplayLinkState()
             return
         }
@@ -655,16 +703,6 @@ typealias MobileGameControllerBase = UIViewController
         }
         if rewindHeld {
             guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else { setRewindHeld(false); return }
-            if link.timestamp - lastRewindTime >= 0.08 {
-                lastRewindTime = link.timestamp
-                if session.rewind(seconds: 0.4) {
-                    MobileMusic.shared.playRewind()
-                    effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
-                }
-                clock.suspend()
-                renderCurrentFrame(force: true)
-                updateHUD()
-            }
             return
         }
         if endRunArmedUntil > 0, link.timestamp > endRunArmedUntil {
@@ -696,6 +734,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
+        let insets = MobileSystemRegions.usesFullDisplay(in: view) ? UIEdgeInsets.zero : insets
         #if os(tvOS)
         let showsMenuButton = false
         let television = true
@@ -714,7 +753,8 @@ typealias MobileGameControllerBase = UIViewController
             engineIdentifier: session.engineIdentifier,
             showsMenuButton: showsMenuButton, television: television,
             topBarInsets: MobileSystemRegions.topBarInsets(in: view),
-            navigationRail: MobileSystemRegions.navigationRail(in: view)
+            navigationRail: MobileSystemRegions.navigationRail(in: view),
+            fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view)
         )
     }
 
@@ -729,6 +769,7 @@ typealias MobileGameControllerBase = UIViewController
             saveCheckpoint(reason: .periodic)
         case let .skill(index):
             guard session.snapshot.skills.indices.contains(index) else { return }
+            if playfieldView.hasActiveTouch { playfieldView.cancelInteraction() }
             updateFan(at: nil, active: false); fanMode = false
             selectedControl = index
             if gameSettings.pauseToAssign {
@@ -757,19 +798,16 @@ typealias MobileGameControllerBase = UIViewController
             }
             paused ? resumePlay() : pauseForPlanning()
         case .step:
-            guard playState.canStep else { return }
-            playfieldView.cancelInteraction()
-            _ = session.stepForward()
-            effects.update(session: session, viewport: playfieldView.gameViewport)
-            clock.suspend()
-            renderCurrentFrame(force: true)
-            saveCheckpoint(reason: .periodic)
-            if session.snapshot.isComplete { presentCompletion() }
-        case .rewind, .stepBackward:
+            handleSteps(.step, count: 1)
+            return
+        case .stepBackward:
+            handleSteps(.stepBackward, count: 1)
+            return
+        case .rewind:
             if session.isReadOnly { completionPresented = false }
             pauseForPlanning()
             playfieldView.cancelInteraction()
-            let rewound = action == .rewind ? session.rewind(seconds: 2) : session.stepBackward()
+            let rewound = session.rewind(seconds: 2)
             if rewound {
                 MobileMusic.shared.playRewind()
                 effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
@@ -876,44 +914,61 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func handle(_ touchEffects: [MobileTouchEffect], input: MobileTargetInput? = nil) {
-        guard !session.isReadOnly, overlay.isHidden, playState.canEdit,
-              lifecycle.isForeground, !lifecycle.isInterrupted,
-              !session.snapshot.isComplete else { return }
+        if touchEffects.contains(.cancelPreview) {
+            (session as? Lemmings2MobileSession)?.releasePointerInput()
+            touchSelection = nil
+            browsingTouchSelection = false
+        }
+        guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        if session.isReadOnly {
+            for case let .pan(delta) in touchEffects {
+                playfieldView.stopAutomaticFitting()
+                playfieldView.gameViewport.pan(viewDelta: delta)
+            }
+            return
+        }
+        guard playState.canEdit, !session.snapshot.isComplete else { return }
         var needsFrame = false
         let touchInput = input ?? playfieldView.touchInput
         for effect in touchEffects {
             switch effect {
             case let .preview(point), let .movePreview(point):
+                updateL2Aim(at: point, held: true)
                 hoverAimActive = false
                 previewInput = touchInput
                 previewPoint = point
-                highlightedTarget = target(at: point)
+                if !browsingTouchSelection { highlightedTarget = target(at: point) }
                 needsFrame = true
+            case let .holdSelection(point):
+                updateL2Aim(at: point, held: false)
+                browsingTouchSelection = true
+                let candidates = session.targetCandidates(for: selectedControl)
+                touchSelection = target(at: point).flatMap {
+                    MobileTouchSelection(candidates: candidates, touch: point,
+                        viewport: playfieldView.gameViewport, selectedID: $0.id)
+                }
+                highlightedTarget = touchSelection?.selection(in: candidates)
+                needsFrame = true
+            case let .browseSelection(steps):
+                let candidates = session.targetCandidates(for: selectedControl)
+                let previous = highlightedTarget
+                touchSelection?.browse(by: steps, candidates: candidates)
+                highlightedTarget = touchSelection?.selection(in: candidates)
+                needsFrame = needsFrame || highlightedTarget != previous
             case let .commit(point):
-                if fanMode {
-                    previewPoint = point
-                    updateFan(at: point, active: (session as? Lemmings2MobileSession)?.isFanActive != true)
-                    restoreHoverAim()
-                    needsFrame = true
-                    continue
-                }
                 previewInput = touchInput
-                if let selection = target(at: point), selection.state == .eligible {
-                    if !beginL3ToolDirectionSelection(control: selectedControl,
-                        target: selection.id, selection: selection) {
-                        let accepted = session.assign(control: selectedControl, to: selection.id)
-                        if accepted {
-                            lastInputAssignment = selection; lastAssignmentControl = selectedControl
-                            effects.update(session: session, viewport: playfieldView.gameViewport)
-                        } else { effects.rejectedAssignment() }
-                        saveCheckpoint(reason: .periodic)
-                    }
-                    highlightedTarget = selection
-                } else {
-                    highlightedTarget = target(at: point)
-                }
-                restoreHoverAim()
+                commitTouch(at: point, held: false)
                 needsFrame = true
+            case .commitSelection:
+                if let point = previewPoint { commitTouch(at: point, held: true) }
+                else { restoreHoverAim() }
+                needsFrame = true
+            case let .panHoldingSelection(delta):
+                guard browsingTouchSelection else { continue }
+                playfieldView.stopAutomaticFitting()
+                let oldViewport = playfieldView.gameViewport
+                playfieldView.gameViewport.pan(viewDelta: delta)
+                needsFrame = playfieldView.gameViewport == oldViewport
             case let .pan(delta):
                 restoreHoverAim()
                 playfieldView.stopAutomaticFitting()
@@ -929,6 +984,38 @@ typealias MobileGameControllerBase = UIViewController
             renderCurrentFrame(force: true)
             updateHUD()
         }
+    }
+
+    private func commitTouch(at point: MobilePoint, held: Bool) {
+        defer { updateL2Aim(at: point, held: false) }
+        if fanMode {
+            previewPoint = point
+            updateFan(at: point, active: (session as? Lemmings2MobileSession)?.isFanActive != true)
+            restoreHoverAim()
+            return
+        }
+        if !held, let tribes = session as? Lemmings2MobileSession,
+           tribes.interact(at: playfieldView.gameViewport.levelPoint(fromView: point)) {
+            effects.update(session: session, viewport: playfieldView.gameViewport)
+            saveCheckpoint(reason: .periodic)
+            restoreHoverAim()
+            return
+        }
+        let selection = held
+            ? touchSelection?.selection(in: session.targetCandidates(for: selectedControl)) : target(at: point)
+        if let selection, selection.state == .eligible {
+            if !beginL3ToolDirectionSelection(control: selectedControl,
+                target: selection.id, selection: selection) {
+                let accepted = session.assign(control: selectedControl, to: selection.id)
+                if accepted {
+                    lastInputAssignment = selection; lastAssignmentControl = selectedControl
+                    effects.update(session: session, viewport: playfieldView.gameViewport)
+                } else { effects.rejectedAssignment() }
+                saveCheckpoint(reason: .periodic)
+            }
+        }
+        highlightedTarget = selection
+        restoreHoverAim()
     }
 
     func target(at point: MobilePoint) -> MobileTargetSelection? {
@@ -998,7 +1085,8 @@ typealias MobileGameControllerBase = UIViewController
             } else if let previewPoint { highlightedTarget = selectTarget(at: previewPoint, candidates: candidates) }
             else { highlightedTarget = nil }
             #else
-            if let previewPoint { highlightedTarget = selectTarget(at: previewPoint, candidates: candidates) }
+            if browsingTouchSelection { highlightedTarget = touchSelection?.selection(in: candidates) }
+            else if let previewPoint { highlightedTarget = selectTarget(at: previewPoint, candidates: candidates) }
             else { highlightedTarget = nil }
             #endif
         }
@@ -1074,6 +1162,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func suspendAudio() {
+        (session as? Lemmings2MobileSession)?.releasePointerInput()
         playfieldView.suspendVisualEffects()
         hud.cancelHeldControls()
         setRewindHeld(false)
@@ -1092,7 +1181,7 @@ typealias MobileGameControllerBase = UIViewController
     private func resumeAudio() {
         audio.resume { [weak self] succeeded in
             guard let self, succeeded, self.viewIsVisible, self.lifecycle.isForeground,
-                  !self.lifecycle.isInterrupted, !self.displayUpdatesSuspended, !self.paused else { return }
+                  !self.lifecycle.isInterrupted, !self.displayUpdatesSuspended, !self.deskClockVisible, !self.paused else { return }
             self.effects.prepare()
             self.effects.resume()
             if self.readyCuePending && !self.paused {
@@ -1138,7 +1227,7 @@ typealias MobileGameControllerBase = UIViewController
         tvCameraMode = false
         showOverlay(title: L10n.text("PAUSED"), actions: [
             (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
-            (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
+            (session.isReadOnly ? L10n.text("BACK") : L10n.text("Back to library"), { [weak self] in self?.leaveToLibrary() }),
         ] + (session.isReadOnly ? [] : [
             (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
             (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
@@ -1148,27 +1237,46 @@ typealias MobileGameControllerBase = UIViewController
             title: L10n.text("PAUSED"),
             actions: [
                 (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
-                (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
-            ] + (session.isReadOnly ? [] : pauseShelfTools()),
+                (session.isReadOnly ? L10n.text("BACK") : L10n.text("Back to library"), { [weak self] in self?.leaveToLibrary() }),
+            ] + (session.isReadOnly ? [(L10n.text("CONTROLS HELP"), { [weak self] in self?.onControlsHelp?() })] : pauseShelfTools()),
             pauseOverview: true
         )
         #endif
+        let help = session.isReadOnly ? 2 : 4
+        if overlayCanvas.page.footer.indices.contains(help) { overlayCanvas.page.footer[help].group = .preferences }
         appendExtraSkillAction()
+        appendLevelSkipAction()
         if !session.isReadOnly, gameSettings.classic.inspectWhilePaused, ["classic-dos", "lemmings2", "lemmings3"].contains(session.engineIdentifier) {
             let inspectAction = overlayActions.count
             overlayActions.append { [weak self] in self?.showLemmingInspection() }
             overlayCanvas.page.footer.append(.init(String(inspectAction), L10n.text("INSPECT LEMMINGS")))
+            overlayCanvas.page.footer[overlayCanvas.page.footer.count - 1].group = .inspection
         }
         if !session.isReadOnly, let ghosts = session.hotSeatGhosts, ghosts.count > 0 {
             let ghostsAction = overlayActions.count
             overlayActions.append { [weak self] in self?.toggleHotSeatGhosts() }
             overlayCanvas.page.footer.append(.init(String(ghostsAction),
-                ghosts.hidden ? L10n.text("GHOSTS OFF") : L10n.text("GHOSTS ON"), selected: !ghosts.hidden))
+                L10n.text("Hot Seat ghosts"), selected: !ghosts.hidden))
+            overlayCanvas.page.footer[overlayCanvas.page.footer.count - 1].toggleValue = !ghosts.hidden
+            overlayCanvas.page.footer[overlayCanvas.page.footer.count - 1].group = .inspection
+        }
+        if !session.isReadOnly, let classic = session as? ClassicMobileSession, classic.hasGhostSolution {
+            let action = overlayActions.count
+            overlayActions.append { [weak self] in
+                guard let self, let classic = self.session as? ClassicMobileSession else { return }
+                classic.ghostSolutionEnabled.toggle()
+                self.renderCurrentFrame(force: true)
+                self.pausePlay(showControls: true)
+            }
+            var toggle = GameFrontEnd.Action(String(action), L10n.text("Ghost solution"), selected: classic.ghostSolutionEnabled)
+            toggle.toggleValue = classic.ghostSolutionEnabled
+            toggle.group = .inspection
+            overlayCanvas.page.footer.append(toggle)
         }
         let settingsAction = overlayActions.count
         overlayActions.append { [weak self] in self?.showInGameSettings() }
         overlayCanvas.page.footer.append(.init(String(settingsAction), L10n.text("SETTINGS")))
-        layoutOverlay()
+        overlayCanvas.page.footer[overlayCanvas.page.footer.count - 1].group = .preferences
         if session.isReadOnly, !session.replayMoveNavigation.ticks.isEmpty {
             let previous = overlayActions.count
             overlayActions += [{ [weak self] in self?.seekSolutionMove(-1) }, { [weak self] in self?.seekSolutionMove(1) }]
@@ -1176,6 +1284,45 @@ typealias MobileGameControllerBase = UIViewController
                 .init(String(previous), L10n.text("PREVIOUS MOVE"), enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: -1) != nil),
                 .init(String(previous + 1), L10n.text("NEXT MOVE"), enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: 1) != nil),
             ]
+            for index in overlayCanvas.page.footer.indices.suffix(2) { overlayCanvas.page.footer[index].group = .playback }
+        }
+        overlayCanvas.page = MobilePauseArt.organizingActions(overlayCanvas.page)
+        layoutOverlay()
+    }
+
+    var levelSkipTitle: String {
+        let balance = onSkipBalance?() ?? 0
+        return turn.map { L10n.text("Skip as \($0.ownerName) (\(balance))") }
+            ?? L10n.text("Skip level (\(balance))")
+    }
+    var canSpendLevelSkip: Bool {
+        !session.isReadOnly && !session.snapshot.didWin && onSkipLevel != nil
+            && (onSkipBalance?() ?? 0) > 0 && !transitionInFlight && !skipPending && recordSaveError == nil
+    }
+    private func appendLevelSkipAction() {
+        guard !session.isReadOnly, onSkipLevel != nil else { return }
+        let index = overlayActions.count
+        overlayActions.append { [weak self] in self?.performLevelSkip() }
+        overlayCanvas.page.footer.append(.init(String(index), levelSkipTitle, enabled: canSpendLevelSkip))
+    }
+    func performLevelSkip() {
+        guard canSpendLevelSkip else { return }
+        guard onSkipLevel?() == true else {
+            showRecoveryOverlay(title: L10n.text("Skip was not saved")) { [weak self] in self?.performLevelSkip() }
+            return
+        }
+        skipPending = true
+        finish(.next, handingTo: turn?.choices(false).first?.choice.player)
+    }
+    private func recoverLevelSkip(_ message: String) {
+        let returned = onRefundSkip?() ?? false
+        skipPending = false
+        resetTransition()
+        if returned {
+            showRecoveryOverlay(title: message) { [weak self] in self?.performLevelSkip() }
+        } else {
+            showCustomOverlay(title: L10n.text("Skip could not be returned"), details: [],
+                actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
         }
     }
 
@@ -1256,18 +1403,20 @@ typealias MobileGameControllerBase = UIViewController
 
     func showRestartLevel() {
         guard !session.isReadOnly else { return }
+        let returnToPreviousPage = overlayReturnAction()
         pausePlay(showControls: false)
         showCustomOverlay(title: L10n.text("Restart level?"), details: [summary.locationLabel, summary.title], actions: [
-            (L10n.text("CANCEL"), { [weak self] in self?.pausePlay(showControls: true) }),
+            (L10n.text("CANCEL"), returnToPreviousPage),
             (L10n.text("RESTART LEVEL"), { [weak self] in self?.finish(.retry) }),
         ])
         overlayCanvas.page.footer[0].primary = false
         overlayCanvas.page.footer[1].primary = true
-        overlayCanvas.page.footerColumns = 1
+        overlayCanvas.page.footerColumns = 2
         overlayCanvas.page.detailTitles = [1]
     }
 
     func pauseForPlanning() {
+        (session as? Lemmings2MobileSession)?.releasePointerInput()
         updateFan(at: nil, active: false)
         countdown.cancel()
         countdownLabel.isHidden = true
@@ -1286,7 +1435,7 @@ typealias MobileGameControllerBase = UIViewController
         cancelPendingL3ToolDirection()
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
-              playState.phase != .completed, lifecycle.isForeground else { return }
+              playState.phase != .completed, lifecycle.isForeground, !deskClockVisible else { return }
         // Let the tenth planning pause finish before asking on the player's next Play action.
         if !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
             showOverlay(title: L10n.text("Skill selection"), actions: [
@@ -1390,17 +1539,13 @@ typealias MobileGameControllerBase = UIViewController
             }))
         }
         if !snapshot.didWin, onSkipLevel != nil {
-            actions.append((L10n.text("SKIP LEVEL"), { [weak self] in
-                guard let self, !self.transitionInFlight, self.onSkipLevel?() == true else { return }
-                self.finish(.next, handingTo: self.turn?.choices(false).first?.choice.player)
-            }))
+            actions.append((levelSkipTitle, { [weak self] in self?.performLevelSkip() }))
         }
         if let data = try? session.replayDocument() {
             actions.append((L10n.text("REVIEW"), { [weak self] in self?.showReplay(document: data) }))
             actions.append((L10n.text("SHARE MOVIE"), { [weak self] in self?.shareReplayMovie(document: data) }))
         }
         let following = turn?.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
-        actions.append((L10n.text("MENU"), { [weak self] in self?.finish(.menu, handingTo: following) }))
         completionTitle = result
         completionActions = actions
         if let recordSaveError {
@@ -1412,7 +1557,6 @@ typealias MobileGameControllerBase = UIViewController
                     self.presentCompletion()
                 }),
                 (L10n.text("BACK"), { [weak self] in self?.finish(.library, handingTo: following) }),
-                (L10n.text("MENU"), { [weak self] in self?.finish(.menu, handingTo: following) }),
             ]
             returnToResult()
             return
@@ -1464,28 +1608,53 @@ typealias MobileGameControllerBase = UIViewController
                 await checkpointSaveTask?.value
                 try await checkpointStore.retire(runID: runID)
                 if let player, onHandover?(player) == false {
+                    if skipPending { recoverLevelSkip(L10n.text("Hot Seat was not saved")); return }
                     resetTransition()
                     showRecoveryOverlay(title: L10n.text("HOT SEAT WAS NOT SAVED")) { [weak self] in self?.finish(action, handingTo: player) }
                     return
                 }
                 onExit?(action)
             } catch {
+                if skipPending { recoverLevelSkip(L10n.text("Run was not closed")); return }
                 resetTransition()
                 showRecoveryOverlay(title: L10n.text("RUN WAS NOT CLOSED")) { [weak self] in self?.finish(action, handingTo: player) }
             }
         }
     }
 
-    func leaveToLibrary() {
+    func leaveToMainMenu() {
+        if let game = solutionGame {
+            pausePlay(showControls: false)
+            dismiss(animated: false) { [weak game] in game?.leaveToMainMenu() }
+            return
+        }
+        if session.isReadOnly {
+            pausePlay(showControls: false)
+            let sourceGame = presentingViewController as? MobileGameViewController
+            let library = presentingViewController as? MobileLibraryViewController
+                ?? parent as? MobileLibraryViewController
+            if parent is MobileLibraryViewController { onExit?(.menu); return }
+            dismiss(animated: false) { [weak library, weak sourceGame] in
+                if let sourceGame { sourceGame.leaveToMainMenu() }
+                else { library?.navigate(.home) }
+            }
+            return
+        }
+        leaveToLibrary(destination: .menu)
+    }
+
+    func leaveToLibrary(destination: MobileGameExitAction = .library) {
         if solutionGame != nil { returnToSolutionGame(); return }
         if session.isReadOnly { dismiss(animated: false); return }
+        let returnToPreviousPage = overlayReturnAction()
         playState.suspend()
         clock.suspend()
         displayUpdatesSuspended = true
         updateDisplayLinkState()
         suspendAudio()
         guard !session.snapshot.isComplete else {
-            finish(.library)
+            let following = turn?.choices(session.snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
+            finish(destination, handingTo: following)
             return
         }
         let request = UUID()
@@ -1495,7 +1664,7 @@ typealias MobileGameControllerBase = UIViewController
             self.leaveRequestID = UUID()
             self.displayUpdatesSuspended = false
             self.updateDisplayLinkState()
-            self.pausePlay(showControls: true)
+            returnToPreviousPage()
         })])
         do {
             let encoding = try makeCheckpoint()
@@ -1508,14 +1677,14 @@ typealias MobileGameControllerBase = UIViewController
                     try await checkpointStore.save(envelope)
                     guard leaveRequestID == request else { return }
                     MobileMusic.shared.stop()
-                    onExit?(.library)
+                    onExit?(destination)
                 } catch {
                     guard leaveRequestID == request else { return }
-                    showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary() }
+                    showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary(destination: destination) }
                 }
             }
         } catch {
-            showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary() }
+            showRecoveryOverlay(title: error.localizedDescription) { [weak self] in self?.leaveToLibrary(destination: destination) }
         }
     }
 
@@ -1758,6 +1927,7 @@ typealias MobileGameControllerBase = UIViewController
             hud.skillIcons = snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             hudArtworkSource = gameSettings.classic.graphics
         }
+        hud.replayLevel = session.isReadOnly ? summary : nil
         hud.counterStyle = gameSettings.classic.counterStyle
         hud.statusDetails = .init(lostCount: session.lostLemmingCount,
             deathCounter: FailureMoodDecision.deathCounter(saved: snapshot.saved,
@@ -1857,7 +2027,27 @@ typealias MobileGameControllerBase = UIViewController
         achievementScroll.isHidden = true
         achievementScroll.addSubview(achievementCanvas)
         view.addSubview(achievementScroll)
+        globalNavigation.onHome = { [weak self] in self?.leaveToMainMenu() }
+        globalNavigation.onBack = { [weak self] in self?.overlayCanvas.goBack() }
+        overlayCanvas.globalNavigation = globalNavigation
+        globalNavigation.onSecondary = { [weak self] in self?.pausePlay(showControls: true) }
+        view.addSubview(globalNavigation)
+        #if os(iOS)
+        let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(menuEdgeBack(_:)))
+        backGesture.edges = .left
+        backGesture.isEnabled = !overlay.isHidden
+        view.addGestureRecognizer(backGesture)
+        menuBackGesture = backGesture
+        #endif
     }
+
+    #if os(iOS)
+    @objc private func menuEdgeBack(_ gesture: UIScreenEdgePanGestureRecognizer) {
+        guard gesture.state == .ended, !overlay.isHidden, !displayUpdatesSuspended,
+              gesture.translation(in: view).x > 60 || gesture.velocity(in: view).x > 500 else { return }
+        overlayCanvas.goBack()
+    }
+    #endif
 
     func returnToResult() {
         guard completionPresented else { pausePlay(showControls: true); return }
@@ -1876,7 +2066,7 @@ typealias MobileGameControllerBase = UIViewController
         displayUpdatesSuspended = false
         updateDisplayLinkState()
         showCustomOverlay(title: title, details: [], actions: [])
-        overlayCanvas.page = GameRecoveryArt.page(title: title)
+        overlayCanvas.page = GameRecoveryArt.page(title: title, includesMenu: false)
         overlayCanvas.onAction = { [weak self] id in
             guard let self else { return }
             switch id {
@@ -2038,16 +2228,16 @@ typealias MobileGameControllerBase = UIViewController
         view.bringSubviewToFront(solutionSelector)
     }
 
-    private func layoutReplayMoves() {
+    private func layoutReplayMoves(layout: MobileHUDLayout) {
+        hud.replayMapFrame = nil
         #if os(tvOS)
         replayMoves.isHidden = true
         #else
         replayMoves.isHidden = !session.isReadOnly || !overlay.isHidden || session.replayMoveNavigation.ticks.isEmpty
         guard !replayMoves.isHidden else { return }
-        let area = playfieldView.frame
-        let width = min(384, area.width - 16)
-        let height = ReplayMoveArt.height(width: width)
-        replayMoves.frame = CGRect(x: area.midX - width / 2, y: area.maxY - height - 8, width: width, height: height)
+        guard let frame = ReplayMoveArt.frame(layout: layout) else { replayMoves.isHidden = true; return }
+        replayMoves.frame = frame
+        hud.replayMapFrame = ReplayMoveArt.mapFrame(in: frame)
         replayMoves.update(previous: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: -1) != nil,
             next: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: 1) != nil)
         playfieldView.blockedInputFrames.append(playfieldView.convert(replayMoves.frame, from: view))
@@ -2091,14 +2281,69 @@ typealias MobileGameControllerBase = UIViewController
             #if !os(tvOS)
             previewPoint = nil
             #endif
-            if session.rewind(seconds: 0.4) { MobileMusic.shared.playRewind() }
-            lastRewindTime = ProcessInfo.processInfo.systemUptime
+            rewindStartedAt = ProcessInfo.processInfo.systemUptime
+            if session.rewind(seconds: MobileHUDPress.rewindSeconds(heldFor: 0)) { MobileMusic.shared.playRewind() }
             renderCurrentFrame(force: true)
         }
         rewindHeld = held
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: held)
         if !held { saveCheckpoint(reason: .periodic) }
         updateHUD()
+    }
+
+    private func repeatHeldRewind() {
+        guard rewindHeld, session.supportsRewind, overlay.isHidden, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        let elapsed = ProcessInfo.processInfo.systemUptime - rewindStartedAt
+        if session.rewind(seconds: MobileHUDPress.rewindSeconds(heldFor: elapsed)) {
+            MobileMusic.shared.playRewind()
+            effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
+            clock.suspend()
+            renderCurrentFrame(force: true)
+            updateHUD()
+        }
+    }
+
+    private func handleSteps(_ action: MobileHUDAction, count: Int) {
+        guard count > 0, overlay.isHidden, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              !session.snapshot.isComplete || (session.isReadOnly && action == .stepBackward) else { return }
+        cancelPendingL3ToolDirection()
+        switch action {
+        case .step:
+            guard playState.canStep else { return }
+            playfieldView.cancelInteraction()
+            var advanced = false
+            for _ in 0..<count { guard session.stepForward() else { break }; advanced = true }
+            guard advanced else { return }
+            effects.update(session: session, viewport: playfieldView.gameViewport)
+            clock.suspend()
+            renderCurrentFrame(force: true)
+            saveCheckpoint(reason: .periodic)
+            updateHUD()
+            if session.snapshot.isComplete { presentCompletion() }
+        case .stepBackward:
+            if session.isReadOnly { completionPresented = false }
+            if !paused { pauseForPlanning() }
+            playfieldView.cancelInteraction()
+            var rewound = false
+            for _ in 0..<count { guard session.stepBackward() else { break }; rewound = true }
+            guard rewound else { return }
+            MobileMusic.shared.playRewind()
+            effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
+            clock.suspend()
+            highlightedTarget = nil
+            #if os(tvOS)
+            tvTargetLock.clear()
+            ensureTVPointer()
+            #else
+            previewPoint = nil
+            #endif
+            renderCurrentFrame(force: true)
+            saveCheckpoint(reason: .periodic)
+            updateHUD()
+        default: break
+        }
     }
 
     func showPreparationError(_ message: String) {
@@ -2124,6 +2369,7 @@ typealias MobileGameControllerBase = UIViewController
 
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false, pauseOverview: Bool = false) {
         hintRequestID = UUID()
+        replayExportRequestID = UUID()
         replayMoves.isHidden = true
         cancelPendingL3ToolDirection()
         playfieldView.suspendVisualEffects()
@@ -2164,7 +2410,8 @@ typealias MobileGameControllerBase = UIViewController
         let wasHidden = overlay.isHidden
         overlayCanvas.page = .init(title: heading, subtitle: subtitle,
                                    details: (ready && turn == nil ? [] : [summary.title]) + details,
-                                   footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) },
+                                   footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, enabled: $0.element.0 != levelSkipTitle || canSpendLevelSkip,
+                                       primary: $0.offset == 0) },
                                    preview: ready || completed)
         if !(ready && turn == nil) && !completed { overlayCanvas.page.detailTitles = [0] }
         overlayCanvas.page.result = completed
@@ -2231,6 +2478,44 @@ typealias MobileGameControllerBase = UIViewController
                       width: visible.width * session.renderScale, height: visible.height * session.renderScale)
     }
 
+    /// Keep the caller's page and actions together when opening a temporary page.
+    func overlayReturnAction() -> () -> Void {
+        guard !overlay.isHidden else { return { [weak self] in self?.pausePlay(showControls: true) } }
+        let page = overlayCanvas.page
+        let actions = overlayActions
+        let onAction = overlayCanvas.onAction
+        let help = overlayCanvas.actionHelp
+        let focus = overlayCanvas.focusedID
+        let stars = overlayCanvas.resultStars
+        let preview = overlayCanvas.preview
+        let previewSource = overlayCanvas.previewSource
+        let offset = overlay.contentOffset
+        return { [weak self] in
+            guard let self else { return }
+            self.showOverlay(title: page.title, actions: [])
+            self.overlayActions = actions
+            self.overlayCanvas.page = page
+            self.overlayCanvas.onAction = onAction
+            self.overlayCanvas.actionHelp = help
+            self.overlayCanvas.focusedID = focus
+            self.overlayCanvas.resultStars = stars
+            self.overlayCanvas.preview = preview
+            self.overlayCanvas.previewSource = previewSource
+            self.overlay.bounces = page.pause == nil
+            #if os(tvOS)
+            self.overlay.panGestureRecognizer.isEnabled = page.pause != nil && page.footer.count == 1
+            #endif
+            self.layoutOverlay()
+            let maximum = max(0, self.overlay.contentSize.height - self.overlay.bounds.height)
+            self.overlay.setContentOffset(CGPoint(x: offset.x, y: min(offset.y, maximum)), animated: false)
+            #if os(tvOS)
+            self.setNeedsFocusUpdate()
+            self.updateFocusIfNeeded()
+            #endif
+            UIAccessibility.post(notification: .screenChanged, argument: self.overlayCanvas)
+        }
+    }
+
     func showCustomOverlay(title: String, details: [String], reading: Bool = false, list: Bool = false,
                            headings: Set<Int> = [], actions: [(String, () -> Void)]) {
         showOverlay(title: title, actions: actions)
@@ -2242,7 +2527,9 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView === overlay, overlayCanvas.page.pause != nil { overlayCanvas.setNeedsLayout() }
+        if scrollView === overlay, overlayCanvas.page.pause != nil {
+            overlayCanvas.setNeedsLayout()
+        }
     }
 
     private func clearSplitResult() {
@@ -2265,11 +2552,14 @@ typealias MobileGameControllerBase = UIViewController
         if visible { overlayCanvas.page.details.insert(contentsOf: receipts, at: min(3, overlayCanvas.page.details.count)) }
     }
 
-    private func layoutSplitResult() -> CGRect? {
+    private func layoutSplitResult(navigationBottom: CGFloat) -> CGRect? {
         guard overlayCanvas.page.result, !session.isReadOnly else { clearSplitResult(); return nil }
         let safe = view.safeAreaLayoutGuide.layoutFrame
         let panes = MobileDisplayRegions.resultPanes(in: .init(x: safe.minX, y: safe.minY,
-            width: safe.width, height: safe.height), avoiding: MobileSystemRegions.read(in: view))
+            width: safe.width, height: safe.height), avoiding: MobileSystemRegions.read(in: view)).map { pane in
+                let top = max(pane.minY, min(pane.maxY, navigationBottom))
+                return MobileRect(x: pane.minX, y: top, width: pane.width, height: pane.maxY - top)
+            }
         guard panes.count == 2 else {
             let wasSplit = showsSplitResult
             clearSplitResult()
@@ -2294,7 +2584,7 @@ typealias MobileGameControllerBase = UIViewController
         items += resultAchievements.filter { !covered.contains($0.title) }.map { .init($0.title, detail: $0.detail) }
         let page = MobileResultAchievementsArt.page(items)
         if achievementCanvas.page != page { achievementCanvas.page = page }
-        achievementScroll.frame = Self.cgRect(panes[1])
+        achievementScroll.setViewportFrame(Self.cgRect(panes[1]))
         let size = achievementCanvas.size(width: achievementScroll.bounds.width, minimumHeight: achievementScroll.bounds.height)
         achievementCanvas.frame = CGRect(origin: .zero, size: size)
         achievementScroll.contentSize = size
@@ -2302,18 +2592,27 @@ typealias MobileGameControllerBase = UIViewController
         achievementScroll.isHidden = false
         hud.isHidden = true
         overlay.accessibilityViewIsModal = false
-        view.accessibilityElements = [overlay, achievementScroll]
+        view.accessibilityElements = [globalNavigation, overlay, achievementScroll]
         return Self.cgRect(panes[0])
     }
 
-    private func layoutOverlay() {
+    func layoutOverlay() {
         guard !overlay.isHidden else { return }
         var region = MobileSystemRegions.menuFrame(in: view)
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = solutionSelector.isHidden
         if let content = solutionPanelContentFrame { region = content }
-        if let resultPane = layoutSplitResult() { region = resultPane }
-        overlay.frame = region
+        globalNavigation.isHidden = false
+        globalNavigation.isUserInteractionEnabled = !displayUpdatesSuspended
+        globalNavigation.secondaryTitle = playState.phase == .ready || session.snapshot.isComplete
+            || overlayCanvas.page.pause != nil ? nil : L10n.text("Pause menu")
+        let navigationHeight = globalNavigation.height(for: region.width)
+        globalNavigation.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: navigationHeight)
+        view.bringSubviewToFront(globalNavigation)
+        region.origin.y += navigationHeight
+        region.size.height -= navigationHeight
+        if let resultPane = layoutSplitResult(navigationBottom: region.minY) { region = resultPane }
+        overlay.setViewportFrame(region)
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
         overlayCanvas.frame = CGRect(origin: .zero, size: size)
         overlay.contentSize = size
@@ -2321,6 +2620,10 @@ typealias MobileGameControllerBase = UIViewController
         overlay.isScrollEnabled = !overlayCanvas.page.televisionGrid
         if !overlay.isScrollEnabled { overlay.contentOffset = .zero }
         #endif
+        overlay.accessibilityViewIsModal = false
+        view.accessibilityElements = [globalNavigation]
+            + (solutionSelector.isHidden ? [] : [solutionSelector]) + [overlay]
+            + (achievementScroll.isHidden ? [] : [achievementScroll])
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {

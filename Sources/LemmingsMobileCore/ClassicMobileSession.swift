@@ -28,6 +28,14 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
         }
     }
 
+    public func canSkipLevel(at index: Int) -> Bool {
+        levels.indices.contains(index) && levels.indices.contains(index + 1)
+    }
+    public func prepareLevelSkip(at index: Int) throws -> () throws -> Void {
+        guard canSkipLevel(at: index) else { throw MobileSessionError.changedLevel }
+        return {}
+    }
+
     public func checkpointLevelIdentifier(at index: Int) throws -> String? {
         guard dataSet.campaign.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = dataSet.campaign.levels[index]
@@ -232,6 +240,7 @@ public final class ClassicMobileSession: MobileGameSession {
     public var initialSimulation: ClassicDOSSimulation { levelInitial }
     public var supportsRewind: Bool { true }
     public var isReadOnly: Bool { playbackReplay != nil }
+    public var replayEndTick: Int? { playbackEndTick }
 
     /// Renders a level, starts its simulation and wraps both in a session.
     ///
@@ -569,11 +578,22 @@ public final class ClassicMobileSession: MobileGameSession {
         drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
         drawHotSeatGhosts(into: &pixels, width: width, height: height, scale: scale)
         if assets != nil, palette.count >= 8 {
+            var crowdShadow = MobileCrowdShadow()
             for lemming in simulation.lemmings where lemming.isActive {
                 if lemming.action == .exploding,
                    !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
                        enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
                 if let sprite = spriteHighlight(lemming) {
+                    if lemming.action != .exploding {
+                        pixels.withUnsafeMutableBytes { destination in
+                            sprite.frame.rgba.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
+                                crowdShadow.cast(spriteWidth: sprite.frame.width, spriteHeight: sprite.frame.height,
+                                    x: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)),
+                                    width: width, height: height, pixels: destination,
+                                    opaque: { sx, sy in source[(sy * sprite.frame.width + sx) * 4 + 3] >= 128 })
+                            }
+                        }
+                    }
                     Self.composite(sprite.frame.rgba, sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
                         atX: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)), into: &pixels, width: width, height: height)
                 }

@@ -134,10 +134,12 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         let session = NeoLemmixMobileSession(simulation: simulation, controls: controls,
             engineFingerprint: Self.engineFingerprint, levelIdentifier: identifier,
             levelIndex: index, levelFingerprint: fingerprint, renderer: renderer.render,
+            ghostRenderer: renderer.render,
             gadgetSounds: gadgetSounds,
             soundDirectory: stylesRoot.deletingLastPathComponent().appendingPathComponent("sound")) { [weak self] result in
                 self?.record(result, key: identifier, at: index)
             }
+        session.spriteProvider = renderer.spriteHighlight
         return MobileLevelContent(summary: entry.summary, session: session)
     }
 

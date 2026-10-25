@@ -25,15 +25,30 @@ public enum MobilePauseArt {
         return page
     }
 
+    /// Keep navigation and transport fixed while related tools scroll as sections.
+    public static func organizingActions(_ source: GameFrontEnd.Page) -> GameFrontEnd.Page {
+        var page = source
+        let tools = source.footer.filter { !$0.primary && !$0.isBackNavigation }
+        page.footer = source.footer.filter { $0.primary || $0.isBackNavigation }
+        let titles = [L10n.text("Level"), L10n.text("Replay"), L10n.text("Inspect"), L10n.text("Help and settings")]
+        for group in GameFrontEnd.Action.Group.allCases {
+            let actions = tools.filter { $0.group == group }
+            if let first = actions.first { page.rowHeadings[first.id] = titles[group.rawValue] }
+            page.rows += actions
+        }
+        return page
+    }
+
     public static func layout(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat,
                               television: Bool = false) -> GameFrontEnd.Layout {
         let width = max(280, width)
         let boardWidth = min(960, width - 28)
         let x = (width - boardWidth) / 2
-        let inner = boardWidth - 32
-        let left = x + 16
+        let compact = television || minimumHeight < 520
+        let inset: CGFloat = compact ? 12 : 16
+        let inner = boardWidth - inset * 2
+        let left = x + inset
         let wide = inner >= 560
-        let compact = wide && (television || minimumHeight < 520)
         let sideBySide = wide && (television || width > minimumHeight)
         let heading = CGRect(x: left, y: 26, width: inner, height: compact ? 32 : 44)
         let subtitle = CGRect(x: left, y: heading.maxY + 2, width: inner, height: max(compact ? 20 : 24, textHeight(page.subtitle, width: inner, lineHeight: 22)))
@@ -42,6 +57,12 @@ public enum MobilePauseArt {
         let titleHeight = GameTextLayout.height(page.details[0], width: inner, face: .large)
         details.append(CGRect(x: left, y: y, width: inner, height: titleHeight))
         y += titleHeight + 12
+        let tools = GameListGrid(actions: page.rows, width: inner, columnsEnabled: true,
+            maximumColumns: 4, minimumColumnWidth: compact ? 104 : 180,
+            minimumHeight: 48, captionInset: 24, rowHeadings: page.rowHeadings)
+        var targets = tools.targets.map { GameFrontEnd.Target(action: $0.action, frame: $0.frame.offsetBy(dx: left, dy: y)) }
+        let toolHeadings = tools.headings.map { ($0.0, $0.1.offsetBy(dx: left, dy: y)) }
+        if !page.rows.isEmpty { y += tools.height + 24 }
         let previewWidth = sideBySide ? floor(inner * 0.44) : inner
         let previewHeight = min(compact ? 92 : wide ? (sideBySide ? 156 : 320) : 132, floor(previewWidth / 2))
         let preview = CGRect(x: left, y: y, width: previewWidth, height: previewHeight)
@@ -97,25 +118,31 @@ public enum MobilePauseArt {
         let pitch = footerHeight + 8
         let height = max(minimumHeight, y + CGFloat(rows) * pitch + 26)
         y = max(y, height - CGFloat(rows) * pitch - 26)
-        var targets: [GameFrontEnd.Target] = []
         for slot in grid.slots {
-            targets.append(.init(action: slot.action, frame: CGRect(x: left + CGFloat(slot.column) * (footerWidth + 12),
-                y: y + CGFloat(slot.row) * pitch, width: footerWidth * CGFloat(slot.span) + CGFloat(slot.span - 1) * 12, height: footerHeight)))
+            targets.append(.init(action: slot.action, frame: grid.frame(for: slot, x: left, y: y, width: inner,
+                height: footerHeight, gap: 12, rowGap: 8)))
         }
-        return .init(size: CGSize(width: width, height: height),
+        var layout = GameFrontEnd.Layout(size: CGSize(width: width, height: height),
             board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
             heading: heading, subtitle: subtitle, preview: preview, details: details, targets: targets)
+        layout.rowHeadings = toolHeadings
+        return layout
     }
 
     /// The body scrolls behind an opaque action shelf. Resume stays in the same place.
-    public static func pinningFooter(_ layout: GameFrontEnd.Layout, viewport: CGRect) -> GameFrontEnd.Layout {
-        guard let first = layout.targets.first, let last = layout.targets.last else { return layout }
+    public static func pinningFooter(_ layout: GameFrontEnd.Layout, viewport: CGRect,
+                                     actionIDs: Set<String>? = nil) -> GameFrontEnd.Layout {
+        let footer = layout.targets.filter { actionIDs?.contains($0.action.id) ?? true }
+        guard let first = footer.first, let last = footer.last else { return layout }
         let height = last.frame.maxY - first.frame.minY
         let top = max(viewport.minY + 8, viewport.maxY - height - 24)
         let delta = top - first.frame.minY
-        let targets = layout.targets.map { GameFrontEnd.Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: delta)) }
-        return .init(size: layout.size, board: layout.board, heading: layout.heading,
+        let targets = layout.targets.map { GameFrontEnd.Target(action: $0.action,
+            frame: actionIDs?.contains($0.action.id) == false ? $0.frame : $0.frame.offsetBy(dx: 0, dy: delta)) }
+        var result = GameFrontEnd.Layout(size: layout.size, board: layout.board, heading: layout.heading,
             subtitle: layout.subtitle, preview: layout.preview, details: layout.details, targets: targets)
+        result.rowHeadings = layout.rowHeadings
+        return result
     }
 
     public static func draw(_ page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, typography: GameMenuTypography,

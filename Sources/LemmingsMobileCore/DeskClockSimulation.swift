@@ -78,7 +78,7 @@ public struct DeskClockSimulation: Equatable, Sendable {
     public let calendar: Calendar
     private var random: SplitMix64
     private var mask: [UInt8]
-    private var jobs: [Job?] = [nil, nil, nil, nil]
+    private(set) var jobs: [Job?] = [nil, nil, nil, nil]
     private var nextID = 0
     private(set) var blockerID: Int?
     private var origin: Date
@@ -190,9 +190,8 @@ public struct DeskClockSimulation: Equatable, Sendable {
         stepCount = 0
         paradeLeft = 0
         paradeTimer = 0
-        let workerIDs = Set(jobs.compactMap { $0?.lemmingID })
-        jobs = [nil, nil, nil, nil]
-        lemmings.removeAll { workerIDs.contains($0.id) }
+        // A time jump completes any digit work, but its lemmings remain in the scene.
+        for digit in jobs.indices { finishWorker(digit) }
         // Old fuses would all go off at once after the gap.
         fusedEventStart = nil
         for index in lemmings.indices {
@@ -350,10 +349,16 @@ public struct DeskClockSimulation: Equatable, Sendable {
                 stepWalk(&lemming, blocker: blocker)
             }
         }
-        // A walker stuck on the digits for a long time leaves, so the trapdoor keeps releasing new ones.
-        if lemming.state == .walk && lemming.age > 80 && lemming.id != blockerID && lemming.y != Self.groundY {
-            lemming.gone = true
+    }
+
+    /// The collision body is narrower than the animation's hair and arms, as in the game.
+    /// Its feet may touch a solid row; every row above them must remain empty.
+    private func bodyIsClear(x: Int, y: Int) -> Bool {
+        guard x >= 3, x < Self.width - 3, y >= 0, y < Self.height else { return false }
+        for row in max(0, y - 9)..<y {
+            if isSolid(x: x, y: row) { return false }
         }
+        return true
     }
 
     private func stepWalk(_ lemming: inout DeskClockLemming, blocker: DeskClockLemming?) {
@@ -370,27 +375,33 @@ public struct DeskClockSimulation: Equatable, Sendable {
             return
         }
         if isSolid(x: nextX, y: lemming.y) {
-            // Climb at most 6 px: the first free pixel above must be within 7 rows.
-            var height = 1
-            while height <= 7 && isSolid(x: nextX, y: lemming.y - height) { height += 1 }
-            if height > 7 {
+            // A step is possible only if the whole body clears the new position and
+            // the lemming does not pass through stone on the way up.
+            let landing = (0...6).map { lemming.y - $0 }.first {
+                isSolid(x: nextX, y: $0) && bodyIsClear(x: nextX, y: $0)
+            }
+            guard let landing else {
                 lemming.facingLeft.toggle()
                 return
             }
             lemming.x = nextX
-            lemming.y -= height - 1
-        } else {
+            lemming.y = landing
+        } else if bodyIsClear(x: nextX, y: lemming.y) {
+            lemming.x = nextX
             var drop = 1
             while drop <= 3 && !isSolid(x: nextX, y: lemming.y + drop) { drop += 1 }
-            lemming.x = nextX
-            if drop <= 3 {
+            if drop <= 3 && bodyIsClear(x: nextX, y: lemming.y + drop) {
                 lemming.y += drop
             } else {
                 lemming.state = .fall
                 lemming.fallDistance = 0
             }
+        } else {
+            lemming.facingLeft.toggle()
+            return
         }
-        if lemming.state == .walk && lemming.y == Self.groundY && lemming.x == Self.exitX
+        if lemming.state == .walk && lemming.y == Self.groundY && abs(lemming.x - Self.exitX) <= 1
+            && isSolid(x: Self.exitX, y: Self.groundY)
             && (blocker == nil || blocker?.id == lemming.id) {
             lemming.state = .exit
             lemming.tick = 0
@@ -401,19 +412,20 @@ public struct DeskClockSimulation: Equatable, Sendable {
     private func stepFall(_ lemming: inout DeskClockLemming) {
         lemming.tick += 1
         if isSolid(x: lemming.x, y: lemming.y) {
+            guard bodyIsClear(x: lemming.x, y: lemming.y) else { return }
             lemming.state = lemming.id == blockerID && phase == .soon ? .block : .walk
             lemming.umbrellaTick = nil
             lemming.tick = 0
             lemming.tickClock = 0
             return
         }
+        guard lemming.y + 1 < Self.height, bodyIsClear(x: lemming.x, y: lemming.y + 1) else { return }
         lemming.y += 1
         lemming.fallDistance += 1
         if lemming.fallDistance > 26 && lemming.umbrellaTick == nil {
             lemming.umbrellaTick = 0
             lemming.umbrellaClock = 0
         }
-        if lemming.y >= Self.height { lemming.gone = true }
     }
 
     private mutating func becomeWalker(_ index: Int) {
@@ -476,25 +488,31 @@ public struct DeskClockSimulation: Equatable, Sendable {
         (0..<Self.height).first { isSolid(x: x, y: $0) } ?? Self.groundY
     }
 
-    private mutating func setBlock(_ digit: Int, column: Int, row: Int, on: Bool) {
-        blocks[digit][row][column] = on
+    @discardableResult
+    private mutating func setBlock(_ digit: Int, column: Int, row: Int, on: Bool) -> Bool {
         let x = Self.digitX[digit] + column * Self.blockSize
         let y = Self.digitTop + row * Self.blockSize
+        if on && lemmings.contains(where: { lemming in
+            guard !lemming.gone, lemming.x >= x, lemming.x < x + Self.blockSize else { return false }
+            // A block can be built beneath feet, but never through a body or around
+            // feet already below the block's top surface.
+            return lemming.y - 9 < y + Self.blockSize && lemming.y - 1 >= y
+                || lemming.y > y && lemming.y < y + Self.blockSize
+        }) { return false }
+        blocks[digit][row][column] = on
         fillMask(x: x, y: y, width: Self.blockSize, height: Self.blockSize, solid: on)
-        guard on else { return }
-        // A new block under a walker's body lifts the walker onto it.
-        for index in lemmings.indices where lemmings[index].workerDigit == nil {
-            let lemming = lemmings[index]
-            if lemming.x >= x && lemming.x < x + Self.blockSize && lemming.y - 1 >= y && lemming.y - 1 < y + Self.blockSize {
-                lemmings[index].y = y
-            }
-        }
+        return true
     }
 }
 
 // MARK: - Workers
 
 extension DeskClockSimulation {
+    struct RoutePoint: Equatable, Sendable {
+        var x: Int
+        var y: Int
+    }
+
     struct Operation: Equatable, Sendable {
         var column: Int
         var row: Int
@@ -510,6 +528,8 @@ extension DeskClockSimulation {
         var acting = false
         var timer = 0.0
         var first = true
+        var route: [RoutePoint] = []
+        var routeIndex = 0
         /// The last block waits for this moment. A repair job has none.
         var deadline: Date?
     }
@@ -520,6 +540,52 @@ extension DeskClockSimulation {
 
     private static func target(_ digit: Int, _ operation: Operation) -> (x: Double, y: Double) {
         (Double(digitX[digit] + operation.column * blockSize + 2), Double(digitTop + operation.row * blockSize))
+    }
+
+    /// Find open air to an action point at the block. A worker may be airdropped,
+    /// but never travels through the solid pixels of a filled digit.
+    private func route(from start: RoutePoint, to target: RoutePoint, building: Bool) -> [RoutePoint]? {
+        let width = Self.width, limit = Self.groundY
+        let origin = max(0, min(limit - 1, start.y)) * width + start.x
+        var previous = Array(repeating: -1, count: width * limit)
+        var distance = Array(repeating: 0, count: width * limit)
+        var queue = [origin]
+        previous[origin] = origin
+        var head = 0
+        while head < queue.count {
+            let current = queue[head]
+            head += 1
+            let x = current % width, y = current / width
+            for (nextX, nextY) in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)] {
+                guard nextX >= 3, nextX < width - 3, nextY >= 0, nextY < limit,
+                      bodyIsClear(x: nextX, y: nextY) else { continue }
+                let next = nextY * width + nextX
+                guard previous[next] == -1 else { continue }
+                previous[next] = current
+                distance[next] = distance[current] + 1
+                queue.append(next)
+            }
+        }
+        let endpoint = queue.filter { index in
+            let x = index % width, y = index / width
+            guard abs(x - target.x) + abs(y - target.y) <= 8 else { return false }
+            // A builder must work from above the new block or beside it. A
+            // merely close route point inside the block would leave the worker
+            // waiting forever for their own body to clear the stone.
+            return !building || x < target.x - 2 || x > target.x + 2 || y <= target.y
+        }.min { left, right in
+            let leftReach = abs(left % width - target.x) + abs(left / width - target.y)
+            let rightReach = abs(right % width - target.x) + abs(right / width - target.y)
+            return leftReach == rightReach ? distance[left] < distance[right] : leftReach < rightReach
+        }
+        guard var cursor = endpoint else { return nil }
+        var path: [RoutePoint] = []
+        while cursor != origin {
+            path.append(RoutePoint(x: cursor % width, y: cursor / width))
+            cursor = previous[cursor]
+        }
+        path.reverse()
+        return path
     }
 
     /// A digger removes old blocks top-down, then a builder adds new ones bottom-up.
@@ -562,9 +628,6 @@ extension DeskClockSimulation {
         let current = Array(DeskClockFace.digits(for: Date(timeIntervalSince1970: minuteStart), uses24Hour: uses24Hour, calendar: calendar))
         let upcoming = Array(DeskClockFace.digits(for: next, uses24Hour: uses24Hour, calendar: calendar))
         for digit in 0..<4 {
-            if let deadline = jobs[digit]?.deadline, time.timeIntervalSince(deadline) >= -Self.timeTolerance {
-                finishWorker(digit)
-            }
             let shown = Array(shownDigits)[digit]
             var want = current[digit]
             var deadline: Date?
@@ -629,19 +692,31 @@ extension DeskClockSimulation {
             let operation = job.operations[job.index]
             let point = Self.target(digit, operation)
             if !job.acting {
-                let speed = job.first ? 30.0 : 50.0
-                let dx = point.x - job.x
-                let dy = point.y - job.y
-                let distance = hypot(dx, dy)
-                if abs(dx) > 0.5 { facingLeft = dx < 0 }
-                if distance <= speed * budget {
-                    budget -= distance / speed
-                    job.x = point.x
-                    job.y = point.y
+                if job.route.isEmpty && job.routeIndex == 0 {
+                    let start = RoutePoint(x: Int(job.x.rounded()), y: Int(job.y.rounded()))
+                    let destination = RoutePoint(x: Int(point.x), y: Int(point.y))
+                    guard let route = route(from: start, to: destination, building: operation.add) else { break }
+                    job.route = route
+                    if job.y < 0 { job.route.insert(RoutePoint(x: start.x, y: 0), at: 0) }
+                }
+                let speed = job.first ? 60.0 : 100.0
+                if job.routeIndex >= job.route.count {
                     job.acting = true
                     job.timer = operation.add ? 0.55 : 0.45
                     job.first = false
                     lemmings[index].tickClock = 0
+                    continue
+                }
+                let next = job.route[job.routeIndex]
+                let dx = Double(next.x) - job.x
+                let dy = Double(next.y) - job.y
+                let distance = hypot(dx, dy)
+                if abs(dx) > 0.5 { facingLeft = dx < 0 }
+                if distance <= speed * budget {
+                    budget -= distance / speed
+                    job.x = Double(next.x)
+                    job.y = Double(next.y)
+                    job.routeIndex += 1
                 } else {
                     job.x += dx / distance * speed * budget
                     job.y += dy / distance * speed * budget
@@ -658,9 +733,16 @@ extension DeskClockSimulation {
                     break
                 }
                 budget -= job.timer
-                setBlock(digit, column: operation.column, row: operation.row, on: operation.add)
+                guard setBlock(digit, column: operation.column, row: operation.row, on: operation.add) else {
+                    // Another lemming occupies this space. Keep the builder and the
+                    // unfinished block in the world until the path clears.
+                    job.timer = 0
+                    break
+                }
                 job.index += 1
                 job.acting = false
+                job.route = []
+                job.routeIndex = 0
                 if job.index >= job.operations.count {
                     finished = true
                     break
@@ -673,7 +755,7 @@ extension DeskClockSimulation {
         lemming.facingLeft = facingLeft
         lemming.tickClock += dt * 14
         lemming.tick = Int(lemming.tickClock)
-        if job.first {
+        if !job.acting {
             lemming.state = .descend
         } else {
             lemming.state = job.operations[min(job.index, job.operations.count - 1)].add ? .build : .dig

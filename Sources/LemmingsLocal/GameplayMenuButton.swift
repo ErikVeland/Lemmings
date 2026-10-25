@@ -159,8 +159,7 @@ import AppKit
         context.setAlpha(artworkOpacity)
         context.beginTransparencyLayer(auxiliaryInfo: nil)
         if let glyph {
-            GameStoneButton.draw(bounds, selected: (usesToggleState && state == .on) || isHighlighted || isHovered, pixel: 1,
-                backdrop: PanelGlyph.rock.image(fitting: bounds.size))
+            GameStoneButton.draw(bounds, selected: (usesToggleState && state == .on) || isHighlighted || isHovered, pixel: 1)
             let well = GameStoneButton.well(bounds, pixel: 1).insetBy(dx: 2, dy: 2)
             if let image = glyph.image(fitting: well.size) {
                 image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2),

@@ -17,6 +17,7 @@ import UIKit
     var onSelect: ((Int) -> Void)?
     var onFavourite: ((Int) -> Void)?
     var onPlaylist: ((Int) -> Void)?
+    var showsBack = true { didSet { if showsBack != oldValue { setNeedsLayout() } } }
 
     var playerName: String? { didSet { if oldValue != playerName { updateSubtitle() } } }
     var statusText = "" { didSet { if oldValue != statusText { updateSubtitle(); setNeedsLayout() } } }
@@ -48,6 +49,7 @@ import UIKit
         rankPrevious.title = L10n.text("< RANK")
         rankNext.title = L10n.text("RANK >")
         favourite.title = L10n.text("FAVOURITE")
+        favourite.icon = .favourite
         playlist.title = L10n.text("PLAYLIST")
         play.title = L10n.text("PLAY")
         play.isPrimary = true
@@ -91,6 +93,8 @@ import UIKit
     /// Marks the current level as starred or not.
     func setFavourite(_ on: Bool) {
         favourite.isSelectedState = on
+        favourite.accessibilityLabel = on ? L10n.text("Remove favourite") : L10n.text("Add favourite")
+        favourite.accessibilityValue = on ? "1" : "0"
     }
 
     var selectedLevel: Int? {
@@ -129,10 +133,14 @@ import UIKit
         // A short screen has room for four actions in a row, so the rank pair steps aside.
         // The carousel itself still reaches every level.
         let wideRoom = bounds.height >= 430
-        let buttons = hasRanks && wideRoom ? [back, rankPrevious, rankNext, favourite, playlist, play]
-            : [back, favourite, playlist, play]
+        let buttons = (showsBack ? [back] : []) + (hasRanks && wideRoom ? [rankPrevious, rankNext] : [])
+            + [favourite, playlist, play]
+        back.isHidden = !showsBack
         for button in [rankPrevious, rankNext] { button.isHidden = !(hasRanks && wideRoom) }
-        let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count, titleText: titleLabel.text, subtitleText: subtitleLabel.text)
+        let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count, titleText: titleLabel.text, subtitleText: subtitleLabel.text,
+            actionTitles: buttons.map { $0.icon == .favourite ? "" : $0.title },
+            includesBack: showsBack, rankActions: hasRanks && wideRoom ? (showsBack ? 1..<3 : 0..<2) : nil,
+            occlusions: MobileSystemRegions.usesFullDisplay(in: self) ? MobileSystemRegions.read(in: self) : [])
         backdrop.frame = bounds
         backdrop.board = layout.board
         titleLabel.frame = layout.title

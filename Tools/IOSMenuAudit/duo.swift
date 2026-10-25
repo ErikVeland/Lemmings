@@ -22,6 +22,22 @@ extension MenuAudit {
                 [.init(kind: .division, frame: .init(x: 318, y: 0, width: 14, height: 465))]),
             ("compact-stacked", .init(width: 465, height: 650), .init(top: 20, bottom: 20),
                 [.init(kind: .division, frame: .init(x: 0, y: 318, width: 465, height: 14))]),
+            ("front-full-left", .init(width: 720, height: 495), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 0, y: 0, width: 92, height: 80))]),
+            ("front-full-right", .init(width: 720, height: 495), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 628, y: 0, width: 92, height: 80))]),
+            ("front-full-bottom-left", .init(width: 720, height: 495), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 0, y: 415, width: 92, height: 80))]),
+            ("front-full-bottom-right", .init(width: 720, height: 495), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 628, y: 415, width: 92, height: 80))]),
+            ("front-full-portrait-left", .init(width: 495, height: 720), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 0, y: 0, width: 92, height: 80))]),
+            ("front-full-portrait-right", .init(width: 495, height: 720), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 403, y: 0, width: 92, height: 80))]),
+            ("front-full-portrait-bottom-left", .init(width: 495, height: 720), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 0, y: 640, width: 92, height: 80))]),
+            ("front-full-portrait-bottom-right", .init(width: 495, height: 720), .init(),
+                [.init(kind: .occlusion, frame: .init(x: 403, y: 640, width: 92, height: 80))]),
             ("closed-landscape", .init(width: 650, height: 465), .init(top: 20, left: 20, bottom: 20, right: 20), []),
             ("closed-portrait", .init(width: 465, height: 650), .init(top: 20, bottom: 20), []),
             ("navigation-right", .init(width: 495, height: 720), .init(top: 10, left: 10, bottom: 44, right: 95), []),
@@ -54,16 +70,22 @@ extension MenuAudit {
                         isEndingRun: state == "undo", skills: original.skills)
                     let rail: MobileRect? = pose.hasPrefix("navigation-")
                         ? .init(x: pose == "navigation-right" ? 404 : 4, y: 60, width: 87, height: 600) : nil
+                    let header = MobileDisplayRegions.clearHorizontalFrame(
+                        .init(x: 0, y: 0, width: size.width, height: 44), avoiding: regions)
+                    let headerInsets = pose.hasPrefix("front-full-")
+                        ? MobileInsets(left: header.minX, right: size.width - header.maxX) : .init()
                     let layout = MobileHUDLayout.make(container: size, safeArea: insets,
                         hasRate: snapshot.releaseRate != nil, skillCount: snapshot.skills.count,
                         reservedRegions: regions, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier,
-                        navigationRail: rail)
-                    guard layout.canPlay, let minimap = layout.minimapFrame else { throw invalidTargets(line: #line) }
+                        topBarInsets: headerInsets, navigationRail: rail, fillsDisplayWidth: pose.hasPrefix("front-full-"))
+                    guard layout.canPlay else { throw invalidTargets(line: #line) }
+                    let minimap = layout.minimapFrame ?? .zero
+                    guard layout.minimapFrame != nil || layout.panel?.style == .lemmings3 else { throw invalidTargets(line: #line) }
                     if let deck = layout.portrait {
                         guard deck.skillContentWidth <= deck.skills.width + 0.001 else { throw invalidTargets(line: #line) }
                     } else {
-                        guard ["classic", "classic-dos"].contains(session.engineIdentifier),
-                              let panel = layout.panel, panel.scale >= 3,
+                        guard let panel = layout.panel,
+                              panel.style == .lemmings3 ? panel.scale >= 2 : (["classic", "classic-dos"].contains(session.engineIdentifier) && panel.scale >= 3),
                               panel.frame.width == 320 * panel.scale else { throw invalidTargets(line: #line) }
                     }
                     let paused = state == "paused"
@@ -71,7 +93,12 @@ extension MenuAudit {
                     let speed = state == "fast" ? 4.0 : 1
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
                         selectedSkill: selected, paused: paused, speed: speed, endRunArmed: state == "armed")
+                    let skillTargets = targets.filter { if case .skill = $0.action { return true }; return false }
+                    guard Set(skillTargets.map { $0.frame.minY }).count == 1 else { throw invalidTargets(line: #line) }
                     let field = cg(layout.interface.playfieldFrame)
+                    if pose.hasPrefix("front-full-") {
+                        guard field.minX == 0, field.maxX == size.width else { throw invalidTargets(line: #line) }
+                    }
                     if let rail {
                         let pause = targets.first { $0.action == .pause }?.frame
                         let end = targets.first { $0.action == .endRun }?.frame
@@ -138,8 +165,10 @@ extension MenuAudit {
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: speed,
                         endRunArmed: state == "armed", panelImage: panel, typography: typography,
                         skillIcons: icons, playerName: "ALICE").draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-                    GameMinimapArt.draw(in: context, bounds: minimap, image: image,
-                        visible: cg(viewport.visibleLevelRect), levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: true)
+                    if layout.minimapFrame != nil {
+                        GameMinimapArt.draw(in: context, bounds: minimap, image: image,
+                            visible: cg(viewport.visibleLevelRect), levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: true)
+                    }
                     for region in regions {
                         context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame))
                     }

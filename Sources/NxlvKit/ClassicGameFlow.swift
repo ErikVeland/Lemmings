@@ -203,11 +203,15 @@ public struct ClassicGameFlow: Sendable {
         screen = .rankComplete(rank: rank.name)
     }
 
-    /// Whether the result on screen is a failure a level skip can pass over.
+    /// Whether the current attempt or failed result can take a level skip.
     /// The game's final level cannot be skipped.
     public var canSkipLevel: Bool {
-        guard case let .results(_, saved, required, _) = screen, saved < required,
-              let rank = currentRank else { return false }
+        switch screen {
+        case .playing: break
+        case let .results(_, saved, required, _) where saved < required: break
+        default: return false
+        }
+        guard let rank = currentRank else { return false }
         return currentRankIndex + 1 < ranks.count || positionInRank + 1 < rank.levelIndices.count
     }
 

@@ -118,13 +118,45 @@ struct MobilePortraitHUDTests {
         #expect(press.update(at: 2).isEmpty)
     }
 
-    @Test func heldRewindStopsOnceAndCannotBecomeATap() {
+    @Test func heldRewindRepeatsAndStopsWithoutReleaseTick() {
         var press = MobileHUDPress(.rewind)
         #expect(press.begin(at: 0) == [.pedal(true, allowTap: false)])
         #expect(press.begin(at: 0.01).isEmpty)
-        #expect(press.update(at: 1).isEmpty)
-        #expect(press.end(at: 1, cancelled: true) == [.pedal(false, allowTap: false)])
-        #expect(press.end(at: 2).isEmpty)
+        #expect(press.update(at: 0.34).isEmpty)
+        #expect(press.update(at: 0.35) == [.activate])
+        #expect(press.update(at: 0.42).isEmpty)
+        #expect(press.update(at: 0.44) == [.activate])
+        #expect(press.end(at: 1) == [.pedal(false, allowTap: false)])
+        #expect(press.update(at: 1.5).isEmpty)
+        #expect(press.begin(at: 2) == [.pedal(true, allowTap: false)])
+        #expect(press.end(at: 2.1, cancelled: true) == [.pedal(false, allowTap: false)])
+        #expect(press.end(at: 3).isEmpty)
+    }
+
+    @Test func heldTickStepsAccelerateAndStopOnRelease() {
+        var press = MobileHUDPress(.step)
+        #expect(press.begin(at: 0) == [.step(1)])
+        #expect(press.end(at: 0.1).isEmpty)
+        #expect(press.begin(at: 1) == [.step(1)])
+        #expect(press.update(at: 1.34).isEmpty)
+        #expect(press.update(at: 1.35) == [.step(1)])
+        #expect(press.update(at: 1.5).isEmpty)
+        #expect(press.update(at: 1.52) == [.step(1)])
+        #expect(press.update(at: 2.02) == [.step(2)])
+        #expect(press.update(at: 2.1).isEmpty)
+        #expect(press.update(at: 2.15) == [.step(2)])
+        #expect(press.update(at: 3.02) == [.step(4)])
+        #expect(press.update(at: 3.07).isEmpty)
+        #expect(press.update(at: 3.11) == [.step(4)])
+        #expect(press.end(at: 3.5, cancelled: true).isEmpty)
+        #expect(press.update(at: 4).isEmpty)
+    }
+
+    @Test func heldRewindDistanceAccelerates() {
+        #expect(MobileHUDPress.rewindSeconds(heldFor: 0) == 0.4)
+        #expect(MobileHUDPress.rewindSeconds(heldFor: 0.99) == 0.4)
+        #expect(MobileHUDPress.rewindSeconds(heldFor: 1) == 0.8)
+        #expect(MobileHUDPress.rewindSeconds(heldFor: 2) == 1.6)
     }
 
     @Test func shortPortraitKeepsNavigationAndMenuApart() throws {
@@ -206,7 +238,7 @@ struct MobilePortraitHUDTests {
                     case let .pedal(held, allowTap):
                         if held { speed.press(.mouse, at: time) }
                         else { speed.release(.mouse, at: time, allowTap: allowTap, retainReachedSpeed: allowTap) }
-                    case .hold, .doubleTap: break
+                    case .step, .hold, .doubleTap: break
                     }
                 }
             }

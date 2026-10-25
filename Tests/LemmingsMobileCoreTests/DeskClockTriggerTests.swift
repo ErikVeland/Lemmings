@@ -17,6 +17,77 @@ import Testing
                                      charging: charging, screen: screen, settings: settings)
     }
 
+    @Test func tentOpensImmediatelyFromEveryScreenWithoutCharging() {
+        for screen in [DeskClockScreen.menu, .level, .replay, .pause, .handover, .modal] {
+            var value = input(idle: 0, screen: screen)
+            value.safe = Self.bookSafe
+            value.hinge = .partiallyOpen
+            #expect(DeskClockTrigger.evaluate(value) == .tent)
+            value.safe = Self.stackedSafe
+            #expect(DeskClockTrigger.evaluate(value) == .tent)
+            value.hinge = .closed
+            #expect(DeskClockTrigger.evaluate(value) == .none)
+            value.hinge = .fullyOpen
+            #expect(DeskClockTrigger.evaluate(value) == .none)
+        }
+    }
+
+    @Test func openHingeDoesNotCountAsClosedCharging() {
+        var value = input(charging: true)
+        value.hinge = .partiallyOpen
+        #expect(DeskClockTrigger.evaluate(value) == .tent)
+        value.hinge = .fullyOpen
+        #expect(DeskClockTrigger.evaluate(value) == .none)
+    }
+
+    @Test func duoTentAngleOpensEvenWhenUIKitCallsTheHingeClosed() {
+        for screen in [DeskClockScreen.menu, .level, .replay, .pause, .handover, .modal] {
+            var value = input(idle: 0, screen: screen)
+            value.hinge = .closed
+            value.hingeAngle = 0.9050147095486298
+            #expect(DeskClockTrigger.evaluate(value) == .tent)
+            value.hingeAngle = 0.1
+            #expect(DeskClockTrigger.evaluate(value) == .none)
+            value.hingeAngle = 0.9050147095486298
+            value.regions = [Self.bookDivision]
+            #expect(DeskClockTrigger.evaluate(value) == .none)
+        }
+    }
+
+    @Test func innerDisplayDivisionDoesNotCountAsTent() {
+        var value = input(book: true, idle: 0)
+        value.hinge = .partiallyOpen
+        #expect(DeskClockTrigger.evaluate(value) == .none)
+        value = input(stacked: true, idle: 0)
+        value.hinge = .partiallyOpen
+        #expect(DeskClockTrigger.evaluate(value) == .none)
+        value = input(idle: 0)
+        value.hinge = .partiallyOpen
+        #expect(DeskClockTrigger.evaluate(value) == .tent)
+    }
+
+    @Test func cameraDoesNotReserveAWholeClockEdge() {
+        let bounds = MobileRect(x: 0, y: 0, width: 720, height: 495)
+        let camera = MobileReservedRegion(kind: .occlusion, frame: .init(x: 0, y: 0, width: 92, height: 80))
+        let content = MobileDisplayRegions.fullWidthContent(in: bounds, avoiding: [camera])
+        #expect(content == MobileRect(x: 0, y: 80, width: 720, height: 415))
+        let clock = DeskClockLayout.make(safe: bounds, regions: [camera], bounds: bounds)
+        #expect(clock.scene == bounds)
+        #expect(clock.close.minX == 16 && !clock.close.intersects(camera.frame))
+    }
+
+    @Test func fullDisplaySceneKeepsCloseWithinTheSafeArea() {
+        for size in [MobileSize(width: 495, height: 720), .init(width: 720, height: 495)] {
+            let bounds = MobileRect(x: 0, y: 0, width: size.width, height: size.height)
+            let safe = MobileRect(x: 12, y: 36, width: size.width - 100, height: size.height - 70)
+            let layout = DeskClockLayout.make(safe: safe, regions: [], bounds: bounds)
+            #expect(layout.scene == bounds)
+            #expect(layout.close.minX >= safe.minX && layout.close.maxX <= safe.maxX)
+            #expect(layout.close.minY >= safe.minY && layout.close.maxY <= safe.maxY)
+            #expect(layout.close.width >= 44 && layout.close.height >= 44)
+        }
+    }
+
     @Test func stackedIdleOpens() {
         #expect(DeskClockTrigger.evaluate(input(stacked: true)) == .stacked)
     }

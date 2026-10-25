@@ -11,9 +11,17 @@ extension UIControl.Event {
     }
 }
 
+@MainActor class MobileAccessibleFocusButton: UIButton {
+    var onAccessibilityFocus: ((UIButton) -> Void)?
+    override func accessibilityElementDidBecomeFocused() {
+        super.accessibilityElementDidBecomeFocused()
+        onAccessibilityFocus?(self)
+    }
+}
+
 #if os(tvOS)
 /// Focus decorates the exact bitmap target without stretching the shipped artwork.
-@MainActor final class MobileFocusButton: UIButton {
+@MainActor final class MobileFocusButton: MobileAccessibleFocusButton {
     var onSelectBegan: (() -> Void)?
     var onHold: (() -> Void)?
     private var holdTask: Task<Void, Never>?
@@ -67,6 +75,6 @@ extension UIControl.Event {
     }
 }
 #else
-typealias MobileFocusButton = UIButton
+typealias MobileFocusButton = MobileAccessibleFocusButton
 #endif
 #endif

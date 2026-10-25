@@ -103,6 +103,8 @@ import LemmingsGameArt
     private var zoomFactor = 1.0
     private var pressedF = false
     private var buttons: [GameActionButton] = []
+    private let controlsScroll = NSScrollView()
+    private let controlsDocument = GameMenuListDocument()
     private weak var transport: NSButton?
     private weak var speedButton: NSButton?
     private weak var trackingButton: NSButton?
@@ -135,7 +137,7 @@ import LemmingsGameArt
             value.setAccessibilityLabel(help); value.toolTip = help
             page.addSubview(value); buttons.append(value); return value
         }
-        _ = button(L10n.text("Back to game"), L10n.text("Back to your paused game. Escape.")) { [weak self] in self?.close() }
+        page.navigationBackButton = button(L10n.text("Back to game"), L10n.text("Back to your paused game. Escape.")) { [weak self] in self?.close() }
         previousMoveButton = button(L10n.text("Previous move"), L10n.text("Previous successful skill use. Control-Left.")) { [weak self] in self?.seekMove(-1) }
         nextMoveButton = button(L10n.text("Next move"), L10n.text("Next successful skill use. Control-Right.")) { [weak self] in self?.seekMove(1) }
         _ = button(L10n.text("Back 1s"), L10n.text("Rewind one second.")) { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
@@ -144,10 +146,10 @@ import LemmingsGameArt
         _ = button(L10n.text("Speed -"), L10n.text("Slower. Shift+[.")) { [weak self] in self?.speedControl.step(-1, at: ProcessInfo.processInfo.systemUptime) }
         speedButton = button("1×", L10n.text("Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost."), speed: true) { [weak self] in self?.speedControl.tap() }
         _ = button(L10n.text("Speed +"), L10n.text("Faster. Shift+].")) { [weak self] in self?.speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) }
-        _ = button(L10n.text("Home"), L10n.text("Centre entrance. H or Home.")) { [weak self] in self?.centre(entrance: true) }
+        _ = button(L10n.text("Entrance"), L10n.text("Centre entrance. H or Home.")) { [weak self] in self?.centre(entrance: true) }
         _ = button(L10n.text("Goal"), L10n.text("Centre exit. G or End.")) { [weak self] in self?.centre(entrance: false) }
-        _ = button(L10n.text("Previous"), L10n.text("Track previous unassigned lemming. [.")) { [weak self] in self?.focusUnassigned(-1) }
-        _ = button(L10n.text("Next"), L10n.text("Track next unassigned lemming. ].")) { [weak self] in self?.focusUnassigned(1) }
+        _ = button(L10n.text("Previous lemming"), L10n.text("Track previous unassigned lemming. [.")) { [weak self] in self?.focusUnassigned(-1) }
+        _ = button(L10n.text("Next lemming"), L10n.text("Track next unassigned lemming. ].")) { [weak self] in self?.focusUnassigned(1) }
         _ = button(L10n.text("Last skill"), L10n.text("Track last assignment. Backslash.")) { [weak self] in
             guard let self else { return }; self.follow(self.lastAssignedID)
         }
@@ -157,6 +159,15 @@ import LemmingsGameArt
         }
         zoomButton = button(L10n.text("Zoom 1×"), L10n.text("Zoom. Z: 2×. Shift+Z: 4×. Click to cycle.")) { [weak self] in
             guard let self else { return }; self.setZoom(self.zoomFactor == 1 ? 2 : self.zoomFactor == 2 ? 4 : 1)
+        }
+        controlsScroll.drawsBackground = false
+        controlsScroll.scrollerStyle = .overlay
+        controlsScroll.verticalScrollElasticity = .none
+        controlsScroll.documentView = controlsDocument
+        page.addSubview(controlsScroll)
+        for (index, button) in buttons.enumerated() where index != 0 && button !== transport {
+            button.wrapsTitle = true
+            controlsDocument.addSubview(button)
         }
         speedControl.onChange = { [weak self] in self?.refresh() }
         page.onLayout = { [weak self] in self?.layout() }
@@ -177,24 +188,37 @@ import LemmingsGameArt
         let size = page.bounds.size
         let scale = max(1, min(2, size.width / 1120, size.height / 720))
         let gap = 6.0 * scale, margin = 8.0 * scale
-        let rowHeight = 38.0 * scale
-        let columns = max(2, min(5, Int(size.width / (190 * scale))))
-        let rows = (buttons.count + columns - 1) / columns
+        let rowHeight = 44.0 * scale
+        let controlsHeight = min(220 * scale, size.height * 0.34)
         selector.frame = CGRect(x: max(margin, (size.width - 320 * scale) / 2), y: 8 * scale, width: 320 * scale, height: 48 * scale)
         selector.bounds.size = SolutionSwitchArt.size
-        field.frame = CGRect(x: 0, y: 90 * scale, width: size.width, height: max(1, size.height - 102 * scale - Double(rows) * (rowHeight + gap)))
+        field.frame = CGRect(x: 0, y: 90 * scale, width: size.width,
+            height: max(1, size.height - 90 * scale - controlsHeight - rowHeight - 4 * gap))
         marker.frame = field.frame
         layoutSkillPanel(scale: scale)
         status.frame = CGRect(x: margin, y: 60 * scale, width: size.width - 2 * margin, height: 26 * scale)
         status.bounds.size = CGSize(width: status.frame.width / scale, height: 26)
-        let width = (size.width - 2 * margin - Double(columns - 1) * gap) / Double(columns)
-        let actions = buttons.enumerated().map { GameFrontEnd.Action(String($0.offset), $0.offset == 0 ? L10n.text("Back") : $0.element.title, primary: $0.element === transport) }
-        let grid = GameFooterGrid(actions: actions, columns: columns)
+        controlsScroll.frame = CGRect(x: margin, y: field.frame.maxY + gap, width: size.width - 2 * margin, height: controlsHeight)
+        let tools = buttons.enumerated().filter { $0.element.superview === controlsDocument }
+        let toolsWidth = controlsScroll.contentSize.width / scale
+        let toolsGrid = GameListGrid(actions: tools.map { .init(String($0.offset), $0.element.title) }, width: toolsWidth - 24,
+            maximumColumns: 4, minimumColumnWidth: 180, minimumHeight: 44, captionInset: 24,
+            rowHeadings: ["1": L10n.text("Replay"), "6": L10n.text("Speed"), "9": L10n.text("Camera")],
+            font: GameMenuArtwork.renderer()?.font(.small))
+        let contentHeight = max(controlsHeight / scale, toolsGrid.height + 24)
+        controlsDocument.frame = CGRect(x: 0, y: 0, width: toolsWidth * scale, height: contentHeight * scale)
+        controlsDocument.bounds = CGRect(x: 0, y: 0, width: toolsWidth, height: contentHeight)
+        controlsDocument.headings = toolsGrid.headings.map { ($0.0, $0.1.offsetBy(dx: 12, dy: 12)) }
+        for target in toolsGrid.targets { buttons[Int(target.action.id)!].frame = target.frame.offsetBy(dx: 12, dy: 12) }
+        let actions = buttons.enumerated().filter { $0.element.superview === page }.map {
+            GameFrontEnd.Action(String($0.offset), $0.element.title, primary: $0.element === transport, backNavigation: $0.offset == 0)
+        }
+        let grid = GameFooterGrid(actions: actions, columns: 2)
         for slot in grid.slots {
             let button = buttons[Int(slot.action.id)!]
-            button.frame = CGRect(x: margin + Double(slot.column) * (width + gap),
-                y: field.frame.maxY + 8 * scale + Double(slot.row) * (rowHeight + gap), width: width, height: rowHeight)
-            button.bounds.size = CGSize(width: width / scale, height: rowHeight / scale)
+            button.frame = grid.frame(for: slot, x: margin, y: size.height - rowHeight - gap,
+                width: size.width - 2 * margin, height: rowHeight, gap: gap, rowGap: gap)
+            button.bounds.size = CGSize(width: button.frame.width / scale, height: rowHeight / scale)
         }
         let center = field.viewport.levelPoint(from: CGPoint(x: field.bounds.midX, y: field.bounds.midY))
         field.viewport.viewSize = field.bounds.size
@@ -398,6 +422,7 @@ import LemmingsGameArt
 }
 
 @MainActor final class SolutionReplayPage: NSView, GameFullWindowPage {
+    var navigationBackButton: GameActionButton?
     var onReturnToGame: (() -> Void)?
     var onLayout: (() -> Void)?
     var onKey: ((NSEvent) -> Bool)?

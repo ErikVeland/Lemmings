@@ -12,6 +12,11 @@ public enum GameMenuLogo {
         CGSize(width: CGFloat(image.width) / resolutionScale, height: CGFloat(image.height) / resolutionScale)
     }
 
+    /// Reserve enough height to fill the header width with the shipped 629 × 190 mark.
+    public static func preferredHeight(width: CGFloat) -> CGFloat {
+        ceil(width * 190 / 629)
+    }
+
     /// Centres the original mark while allowing the badge to extend left.
     public static func frame(canvasSize: CGSize, originalWidth: CGFloat, in box: CGRect,
                              topAligned: Bool = false, wholeNumberScale: Bool = true) -> CGRect {

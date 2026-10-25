@@ -7,7 +7,7 @@ import NxlvKit
 public enum MobileSettingsArt {
     public static func skillSelectionPauseChoice() -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("Skill selection"), subtitle: L10n.text("Keep pausing?"),
-              footer: [.init("1", L10n.text("Keep pausing")), .init("0", L10n.text("Turn off"), primary: true)], footerColumns: 1)
+              footer: [.init("1", L10n.text("Keep pausing")), .init("0", L10n.text("Turn off"), primary: true)], footerColumns: 2)
         page.backActionID = "1"
         return page
     }
@@ -111,6 +111,7 @@ public enum MobileSettingsArt {
                                toggle("deskClockCharging", L10n.text("Open when closed and charging"), clock.openWhenCharging)] : []
             // Without calendar access the row stays off and opens iOS Settings.
             rows.append(toggle("deskClockEvents", L10n.text("Show next event"), clock.showNextEvent && !calendarDenied))
+            rows.append(toggle("deskClockRedNight", L10n.text("Red night vision"), clock.redNightVision))
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),

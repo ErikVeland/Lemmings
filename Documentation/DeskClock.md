@@ -1,6 +1,6 @@
 # Desk Clock
 
-Status: source implementation added on 22 October 2026. Signed builds and device checks remain open.
+Status: signed local iPhone build 32 is installed on the Duo. The owner confirmed automatic Tent Pose entry, red-only night vision and no digit entrapment on build 31. Build 32 lowers the ground and gives the time and next event more space; physical review of this layout remains open.
 Target release: tonight's 2.2 Duo update, including the iOS and Mac widgets.
 The owner's latest instruction replaces the earlier 2.2.x scope decision.
 See the [current check record](ReleaseReadiness/2.2DuoPolish-2026-10-22.md).
@@ -15,16 +15,19 @@ it on the desk while they work. It shows the time and the next calendar event.
 The joy comes from the lemmings: they rebuild the clock digits by hand every
 minute, and a blocker holds the exit shut until the next meeting starts.
 
-The feature started as a "tent pose" idea for the iPhone Duo. iOS 27.2 has no
-API that reports a tent pose or a hinge angle. The app can detect only the
-reserved regions (division and occlusion) and the navigation rail edge. The
-clock therefore opens from triggers the app can detect, and from a widget.
+The Duo clock observes Apple's public `UIHingeInteraction` on iOS 27.1 and
+later. A partially open hinge with an undivided front display triggers tent
+entry immediately. The physical Duo reports a 0.905-radian Tent Pose as
+`closed`, so an undivided front display with a closed-status hinge angle above
+30 degrees also triggers. This combines hinge state with display regions. See Apple's
+[hinge guidance](https://developer.apple.com/videos/play/tech-talks/111464/).
+Physical pose delivery remains a device acceptance check.
 
 ## Goals
 
 - Show the time as terrain digits that lemmings rebuild each minute.
 - Show the next calendar event and a countdown to it.
-- Open the clock four ways: Stacked pose when idle, closed and charging, a menu entry, and a widget.
+- Open the clock in tent pose from anywhere, plus idle Stacked, closed charging, Home and widget entry.
 - Work on every iPhone and iPad. The Duo poses add the automatic triggers.
 - Give the Mac a desktop widget (owner decision, 22 October 2026).
 - Use the shipped Macintosh artwork for all sprites, terrain, objects and text.
@@ -32,7 +35,7 @@ clock therefore opens from triggers the app can detect, and from a widget.
 ## Non-goals
 
 - Gameplay. Lemmings in the clock take no player input.
-- A tent pose or a back face. No API can detect them.
+- Running while the app is in the background, or showing a second independent back-face scene.
 - Lemmings 2 and Lemmings 3 art. Version 1 uses Classic Macintosh art only. Record this as a known limit.
 - Apple TV, and a clock screen in the Mac app. Record these as not supported in version 1. The Mac gets the widget only.
 - Calendar editing. The clock only reads events.
@@ -41,7 +44,7 @@ clock therefore opens from triggers the app can detect, and from a widget.
 
 These make the feature a failure even if it works:
 
-- The clock opens while a level runs, during a Hot Seat handover, or over a pause menu.
+- A covered level keeps running, consumes controller input, or resumes without the player after the clock closes.
 - The clock plays music or sound effects.
 - The clock keeps the screen awake on battery.
 - The clock asks for calendar access before the player opens it.
@@ -121,18 +124,25 @@ for "every third event or so".
 
 | Trigger | Condition | Exit |
 | --- | --- | --- |
+| Tent | Partially open hinge, or a closed-status hinge angle above 30 degrees, and no active division, in either display orientation. No idle delay, charging requirement or screen restriction. | Any touch, controller B or Menu, Escape, or leaving tent pose. After dismissal, leave and re-enter tent pose to open again. |
 | Stacked, idle | A horizontal division is present (`MobileDisplayRegions.tablePanes` returns two panes). The app shows Home. No input for 60 seconds. | Any touch on either pane, controller B or Menu, Escape, or a pose change |
 | Closed, charging | Duo only. The device is closed (no division), the battery state is charging or full, and the app is idle on Home for 60 seconds | Any touch, controller B or Menu, Escape, or the charger is removed |
 | Menu entry | The player picks Desk Clock from Home | Close, controller B or Menu, or Escape. A touch or controller A shows the close control. |
 | Widget | The player adds the widget to the Home Screen, Lock Screen or StandBy | Tap opens the app on the Desk Clock |
 
 In Stacked pose, the clock fills the top pane and shows the next event. The
-bottom pane shows only the close control. The idle triggers fire only on Home.
-They never fire on another menu page, during a level, a replay, a pause menu,
-a Hot Seat handover, or any modal sheet.
+bottom pane shows only the close control. The other poses fill the display with
+sky and ground. Digits, event text and controls respect the safe area. Artwork
+reflows without stretching sprites or centring a fixed-size scene.
+
+Idle triggers fire only on Home. Tent entry covers any app screen, including
+levels, replays, pause/settings pages, Ready handovers and sheets. The shared
+game controller stops simulation, audio and input underneath. Closing the clock
+keeps the current page and requires explicit Resume or Ready. Classic, Lemmings
+2 and Lemmings 3 use the same suspension path.
 
 The automatic triggers apply to the Duo only. `DeskClockTrigger` takes a
-"foldable" input from the presence of inactive division regions
+"foldable" input from hinge availability or the presence of inactive division regions
 (`reservedRegions(kind:options:)` with `.includeInactive`). Other iPhones and
 iPads use the menu entry and the widget. The app cannot start itself when the
 phone starts to charge. StandBy covers that case through the widget.
@@ -142,7 +152,10 @@ phone starts to charge. StandBy covers that case through the widget.
 - The clock disables the idle timer only while the device charges.
 - On battery, the system can lock the screen as usual.
 - Every 3 minutes, the whole scene moves by up to 2 points to reduce OLED burn-in.
-- Between 22:00 and 07:00 local time, the clock dims the scene, the same as the prototype Night state.
+- The live clock uses the display's system brightness. It does not add a dark overlay at night.
+- Red night vision is optional and off by default. When enabled, the live clock
+  emits red-only pixels from 22:00 to 06:59; the Close control follows the same
+  palette. This does not change the system brightness or widget appearance.
 - Reduce Motion: the digits change at once, no worker comes, and at most 2 lemmings walk.
 - The clock pauses menu music while it shows, and plays no sound.
 
@@ -206,7 +219,7 @@ Follow the existing split. Keep simulation logic free of UIKit so tests run head
 | --- | --- | --- |
 | `DeskClockSimulation` | LemmingsMobileCore | Terrain mask, digit glyphs, workers, walkers, event phase. Takes an injected clock and seed. |
 | `DeskClockEventSource` | LemmingsMobileCore | Protocol for the next event. Tests use a stub. |
-| `DeskClockTrigger` | LemmingsMobileCore | Pure decision from regions, idle time, battery state, screen and settings |
+| `DeskClockTrigger` | LemmingsMobileCore | Pure decision from hinge state, regions, idle time, battery state, screen and settings |
 | `GameDeskClockArt` | LemmingsGameArt | Loads frames through `ClassicMacArtwork`, like `GameUnfoldArt`. Draws one state into a `CGContext`. |
 | `MobileDeskClockView` | LemmingsMobileUI | Display-link view. Reuses the HUD and stone controls for the close control. |
 | EventKit adapter | LemmingsMobileUI | Implements `DeskClockEventSource` |
@@ -312,7 +325,7 @@ source verification from signed builds and device acceptance.
 These are my calls, not decisions the owner made:
 
 - The trigger delay is 60 seconds of no input.
-- The night dim runs from 22:00 to 07:00.
+- The live clock follows the device's display brightness; it adds no night overlay.
 - The clock pauses menu music.
 - The clock shows events in the next 24 hours only, and skips all-day and declined events.
 - The widget bundles a pruned copy of the Mac artwork instead of reading the app's artwork through an app group.
@@ -320,3 +333,40 @@ These are my calls, not decisions the owner made:
 - Only the menu entry and a widget tap ask for calendar access. An unattended clock never shows the prompt.
 - The minimum iOS version stays 16.0, with availability gates for the iOS 17 features.
 - One event in three is a nuke, chosen by a stable hash, not by counting. A count would change when an event moves or the app restarts.
+
+## Front display and tent correction, 23 October 2026
+
+The owner reported an unused strip on the front display, a clock that did not
+fill its screen, and missing tent entry during gameplay. Outer-display pages
+and gameplay now use the full bounds, with local clearance around system
+cutouts. The clock uses the whole display canvas and a separate safe content
+rectangle. Tent entry uses hinge updates and runs independently of Home idle
+entry. It does not ask for calendar access.
+
+The owner also reported that build 21 quit as soon as Desk Clock opened from
+the Home menu button. Its Duo crash report shows UIKit aborting when the clock
+controller's view was added directly to the window even though the controller
+was a child of the library. The clock now uses UIKit's full-screen modal
+presentation from the visible controller. The source also registers the clock
+before suspension, caps its frame bitmap to three million pixels and reuses the
+rock tile image across frames. The owner confirmed that the Home-button clock
+stays open. Automatic Tent Pose entry still failed in build 26 because UIKit
+called the 0.905-radian hinge `closed`. Build 28 accepts that angle on an
+undivided front display; its on-device capture shows the clock across the
+active front screen. Build 29 removes the extra night dim; the owner confirmed
+its brightness. Build 30 keeps each lemming's horizontal screen position fixed
+through a fall, aligns the simulated exit with the visible doorway, checks the
+body before walking or landing, waits to build blocks occupied by lemmings, and
+routes digit workers through open space. Workers become walkers after their job,
+including across time jumps. The Desk Clock setting enables optional red-only
+night vision during night hours. Build 31 was installed for physical review.
+
+Build 32 replaces the short repeating ground tile with a broad, seamless strip
+from the Macintosh rock artwork. On the front display, the ground and grounded
+exit sit lower, with about ten classic pixels of clearance above the camera
+boundary. The next-event lines have a larger gap. Full-resolution Duo, portrait,
+landscape and widget renders pass headless artwork checks; the Duo-sized render
+was inspected for the spacing and texture.
+
+Local checks and remaining device checks are recorded in
+[the correction record](ReleaseReadiness/2.2.1DuoFrontTent-2026-10-23.md).

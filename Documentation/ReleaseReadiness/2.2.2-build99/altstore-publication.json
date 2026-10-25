@@ -1,0 +1,16 @@
+{
+  "verified": true,
+  "verifiedUTC": "2026-10-24T03:00:14.012882+00:00",
+  "version": "2.2.2",
+  "build": 33,
+  "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
+  "sourceSHA256": "09a3a70364c1d0bc1e8f27d9774939cab6316383df8bf52c9eeeb89cd76e9610",
+  "githubBlobSHA": "9601fbcba07db199bce57a5db335f8e159650cba",
+  "ipaURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build33-ios.ipa",
+  "ipaSHA256": "c413b14de8dbc9f67c75dcc1fd45049498e9b7eb3607341d02d1f7dc88cd6f60",
+  "ipaBytes": 207620836,
+  "publicIPADownloadVerified": true,
+  "iconURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/a9c154af8380a9371d73e66bbd6830ddfc5f6081/Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+  "iconSHA256": "52f957ee35182675ef4fbe240544de813adea39e874d0ebc942d147d3bc11578",
+  "previousVersionRetained": true
+}

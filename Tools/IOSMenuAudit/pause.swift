@@ -131,8 +131,8 @@ extension MenuAudit {
             let level = MobileLevelSummary(index: 33, rank: "Journey", number: 34,
                 title: "The Crankshaft and a long level name that must retain its complete ending")
             let size = MobileReplayTitleArt.size(level: level, width: width)
-            guard size.height >= 68,
-                  GameTextLayout.lines(level.title, width: width - 24).joined(separator: " ") == level.title.uppercased()
+            guard size.height == 44,
+                  MobileReplayTitleArt.caption(level: level, width: width, typography: typography).hasSuffix("...")
             else { throw invalidTargets(line: #line) }
             guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
                 bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
@@ -145,6 +145,6 @@ extension MenuAudit {
             CGImageDestinationAddImage(destination, image, nil)
             guard CGImageDestinationFinalize(destination) else { throw Failure.missingArtwork }
         }
-        print("PASS: replay number and full wrapped title at four widths.")
+        print("PASS: replay number and single-line ellipsised title at four widths.")
     }
 }

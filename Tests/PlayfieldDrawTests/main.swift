@@ -1569,10 +1569,53 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS cursor policy keeps the system arrow over controls and menus")
 }
 
+@MainActor private func testModernCrowdPrecisionTarget() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  let animation = assets.animation(for: .walking, direction: .right)!
+  let session = TargetingSession()
+  session.actors = [
+    .init(id: 0, x: 40, y: 30, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 41, y: 30, pose: .walking, facingLeft: false, animationFrame: 3, countdown: nil)
+  ]
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  view.session = session; view.phase = .playing; view.assets = assets
+  view.palette = ClassicLemmingPalette.panelVGA; view.viewport.zoom = 6
+  view.favorApproachingLemmings = false; view.favorBuilders = false; view.favorBombBlockers = false
+  view.lemmingSelectionStyle = .none
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: bitmap)
+  var checked = 0, refined = 0
+  for y in stride(from: 17.25, through: 30.25, by: 0.5) {
+    for x in stride(from: 35.25, through: 46.25, by: 0.5) {
+      let point = CGPoint(x: x, y: y)
+      guard let visible = session.actors.reversed().first(where: { actor in
+        animation.frames[actor.animationFrame].paletteIndex(
+          x: Int(floor(x - Double(actor.x + animation.offsetX))),
+          y: Int(floor(y - Double(actor.y + animation.offsetY)))) != nil
+      }), view.hasLemming(at: point) else { continue }
+      checked += 1
+      try require(view.lemming(at: point)?.id == visible.id && view.clickTarget(at: point)?.id == visible.id,
+        "Modern hover or click disagreed with visible crowd ink")
+      view.gameplayCursorStyle = .original
+      if view.lemming(at: point)?.id != visible.id { refined += 1 }
+      view.gameplayCursorStyle = .modern
+      view.handleMove(to: view.viewport.viewPoint(fromLevel: point))
+      try require(view.inspectionPointerID == visible.id, "Paused inspection disagreed with the visible silhouette")
+    }
+  }
+  try require(checked > 50 && refined > 0, "The crowd fixture did not exercise precise targeting")
+  print("PASS native crowd ink agrees with hover, click and paused inspection, including exposed rear sprites")
+}
+
 @MainActor private func run() {
   let app = NSApplication.shared
   app.setActivationPolicy(.accessory)
   do {
+    try testModernCrowdPrecisionTarget()
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
     try testClassicSessionRewindBranch()

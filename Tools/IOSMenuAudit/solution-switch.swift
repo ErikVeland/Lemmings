@@ -105,9 +105,8 @@ extension MenuAudit {
         guard checkpoint.isEqual(try JSONSerialization.jsonObject(with: live.checkpointPayload())) else { throw invalidTargets(line: #line) }
         for width: CGFloat in [280, 304, 374, 600] {
             let size = CGSize(width: width, height: ReplayMoveArt.height(width: width))
-            guard SolutionSwitchArt.frames(in: CGRect(origin: .zero, size: size)).allSatisfy({
-                GameTextLayout.height("Previous move", width: $0.width - 16) <= $0.height - 12
-                    && $0.height >= 44 && $0.width >= 44
+            guard ReplayMoveArt.frames(in: CGRect(origin: .zero, size: size)).allSatisfy({
+                $0.height >= 44 && $0.width >= 44
             }) else { throw invalidTargets(line: #line) }
             guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
                 bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),

@@ -218,6 +218,15 @@ public enum PanelGlyphArt: String, Sendable {
     }
   }
 
+  /// Isolated symbols sit above a dark stone face. Pause uses the same pale ink as Play.
+  public func colour(for mark: Character, transparentRock: Bool) -> (UInt8, UInt8, UInt8)? {
+    if transparentRock, self == .pause || self == .nuke {
+      if "9abcde".contains(mark) { return nil }
+      if self == .pause, mark == "0" { return PanelGlyphArt.play.palette["#"] }
+    }
+    return palette[mark]
+  }
+
   // Amiga panel1: 640×40, four planar bitplanes. Crop the two 32×24 cells
   // at (320,16) and (352,16) by two horizontal and one vertical border pixels.
   // Rock takes the same crop from the ten skill cells. Tools/ClassicPanelArt/check.py
@@ -268,15 +277,13 @@ public enum PanelGlyphArt: String, Sendable {
   func cgImage(scale: Int, transparentRock: Bool) -> CGImage? {
     let steps = max(1, scale)
     let rows = self.rows
-    let palette = self.palette
     guard let first = rows.first, !first.isEmpty else { return nil }
     let width = first.count * steps
     let height = rows.count * steps
     var pixels = [UInt8](repeating: 0, count: width * height * 4)
     for (row, line) in rows.enumerated() {
       for (column, mark) in line.enumerated() {
-        if transparentRock, self == .pause || self == .nuke, "9abcde".contains(mark) { continue }
-        guard let colour = palette[mark] else { continue }
+        guard let colour = colour(for: mark, transparentRock: transparentRock) else { continue }
         for dy in 0..<steps {
           for dx in 0..<steps {
             let offset = ((row * steps + dy) * width + column * steps + dx) * 4

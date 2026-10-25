@@ -2167,6 +2167,8 @@
 "Records were not saved. Check free space and folder access." = "Rekordene ble ikke lagret. Kontroller ledig plass og tilgang til mappen.";
 "Records were not saved. Retry the save before continuing." = "Rekordene ble ikke lagret. Prøv å lagre på nytt før du fortsetter.";
 "Recovery" = "Recovery";
+"Red night vision" = "Rødt nattsyn";
+
 "Redbook CD Studio Soundtrack" = "Redbook CD Studio-lydspor";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook CD-lyd + HuC6280 PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook CD-lyd, 44,1 kHz stereo";
@@ -2478,7 +2480,7 @@
 "Shared campaign" = "Delt kampanje";
 "Shared campaign revisions conflict." = "Versjonene av den delte kampanjen er i konflikt.";
 "Shared play counts" = "Delte antall spill";
-"Shared tester library: test99" = "Shared tester library: test99";
+"Shared tester library" = "Shared tester library";
 "Shared: {0} days" = "Delt: {0} dager";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
 "Sharing" = "Deling";

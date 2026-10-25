@@ -2813,13 +2813,15 @@ extension AppDelegate {
     try check(replay.playback.session.currentTick == first && replay.paused, "Previous move did not retain a paused solution")
     let output = URL(fileURLWithPath: ".build/solution-switch-mac-renders")
     try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-    for size in [CGSize(width: 1120, height: 720), CGSize(width: 800, height: 600)] {
+    for size in [CGSize(width: 640, height: 480), .init(width: 800, height: 600), .init(width: 1120, height: 720), .init(width: 1600, height: 900)] {
       replay.page.frame.size = size; replay.page.needsLayout = true; replay.page.layoutSubtreeIfNeeded()
       func checkTargets(_ view: NSView) throws {
         for child in view.subviews {
           if child.isHidden { continue }
           if let control = child as? NSButton {
+            control.scrollToVisible(control.bounds)
             let rect = control.convert(control.bounds, to: replay.page)
+            try check(rect.width >= 44 && rect.height >= 44, "Replay target is too small: \(control.title)")
             try check(replay.page.bounds.contains(rect), "Replay target leaves the page: \(control.title)")
             let hit = replay.page.hitTest(CGPoint(x: rect.midX, y: rect.midY))
             try check(hit === control || hit?.isDescendant(of: control) == true, "Replay target is blocked: \(control.title)")
@@ -2831,6 +2833,25 @@ extension AppDelegate {
       let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
       replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("solution-\(Int(size.width)).png"))
+    }
+    for width: CGFloat in [320, 640, 900, 1120, 1600] {
+      for showsBack in [false, true] {
+        let bar = ReplayBar()
+        bar.showsBack = showsBack
+        bar.frame = CGRect(x: 0, y: 0, width: width, height: bar.preferredHeight(for: width))
+        let elements = (bar.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+        try check(elements.allSatisfy { $0.localFrame.width >= 44 && $0.localFrame.height >= 44 && bar.bounds.contains($0.localFrame) },
+          "Movie replay has a small or clipped input target")
+        let buttons = elements.filter { $0.accessibilityRole() == .button }
+        try check(buttons.count == (showsBack ? 6 : 5), "Movie replay duplicated or lost its return")
+        for row in Dictionary(grouping: buttons, by: { $0.localFrame.minY }).values {
+          try check(row.map { $0.localFrame.minX }.min() == 24 && row.map { $0.localFrame.maxX }.max() == width - 24,
+            "Movie replay leaves an incomplete action row")
+        }
+        let bitmap = bar.bitmapImageRepForCachingDisplay(in: bar.bounds)!
+        bar.displayIgnoringOpacity(bar.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+        try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("movie-\(Int(width))-\(showsBack).png"))
+      }
     }
     LevelHintWindow.shared.selectSolutionMode(.game)
     let ghostToggle = try { () throws -> NSButton in
@@ -3299,7 +3320,7 @@ extension AppDelegate {
       try capture(page, name: "family-\(title.rawValue)-\(levelIndex)")
       try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
       page.cancelOperation(nil)
-      try check(!isPaused, "Closing campaign hints failed to restore play")
+      try check(isPaused, "Closing campaign hints resumed play without Resume")
     }
     // Exercise every shipped page plus an oversized imported-level coaching page.
     let longDeck = LevelHintDeck(title: "Long coaching", checked: false, stages: [
@@ -3476,17 +3497,17 @@ extension AppDelegate {
     controller.update(at: 16, active: true); controller.update(at: 16.13, active: true)
     try check(musicCents == 0, "Reset left the music pitch raised")
     controller.tap(at: 17)
-    var escaped = false; keyboard.mainMenu = { escaped = true }
+    var escaped = false; keyboard.escape = { escaped = true }; keyboard.mainMenu = {}
     _ = keyboard.handle(key(.keyDown, 18, text: "\u{1b}", code: 53))
-    try check(!controller.isFast && escaped, "Escape failed to stop speed and reach the main menu in one press")
+    try check(!controller.isFast && escaped, "Escape failed to stop speed and open the pause menu in one press")
     _ = keyboard.handle(key(.keyDown, 19, text: "\u{1b}", code: 53))
-    try check(escaped, "Escape at 1x failed to reach the main menu")
+    try check(escaped, "Escape at 1x failed to open the pause menu")
     escaped = false
     _ = keyboard.handle(key(.flagsChanged, 19.1, text: "", code: 56, flags: .shift))
     controller.update(at: 19.5, active: true)
     _ = keyboard.handle(key(.keyDown, 19.6, text: "\u{1b}", code: 53, flags: .shift))
     _ = keyboard.handle(key(.flagsChanged, 19.7, text: "", code: 56))
-    try check(controller.multiplier == 1 && escaped, "Escape while holding Shift missed the main menu or restarted speed")
+    try check(controller.multiplier == 1 && escaped, "Escape while holding Shift missed the pause menu or restarted speed")
     let attached = SpeedTestWindow(contentRect: host.frame, styleMask: [], backing: .buffered, defer: false)
     keyboard.bind(to: attached)
     try check(keyboard.handle(key(.keyDown, 20)) != nil, "The detached window retained speed control")
@@ -3828,7 +3849,7 @@ extension AppDelegate {
     }
     let escapeEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!
     overlay.keyDown(with: escapeEvent)
-    try check(!isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help failed to restore play")
+    try check(isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help resumed play without Resume")
     isPaused = true
     gameplayKeyboard?.showHelp()
     gameplayKeyboard?.controllerMenuAction(.cancel)
@@ -3863,7 +3884,6 @@ extension AppDelegate {
       return view.subviews.compactMap(find).first
     }
     guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
-    let helpInterruption = gameplayKeyboard?.interruptionCount
     GameScreen.shared.keyboardNavigation.focus(hints, in: sheet)
     let selectedEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
       windowNumber: sheet.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 76)!
@@ -3871,23 +3891,23 @@ extension AppDelegate {
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
     GameScreen.shared.dismissAll()
-    try check(isPaused == (gameplayKeyboard?.interruptionCount != helpInterruption), "Closing hints after controls help restored the wrong pause state")
+    try check(isPaused, "Closing hints after controls help resumed play")
     isPaused = false
     gameplayKeyboard?.escape()
-    guard let pause = window.attachedSheet, let hints = pause.contentView.flatMap(find) else {
+    guard let pause = GameScreen.shared.controllerPage(in: window),
+      let hints = pauseSkipButtons(in: pause).first(where: { $0.title == "Hints" }) else {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
-    let pauseInterruption = gameplayKeyboard?.interruptionCount
-    GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
+    GameScreen.shared.keyboardNavigation.focus(hints, in: window)
     let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
-      windowNumber: pause.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
-    try check(GameScreen.shared.handleDialogKey(pauseEnter), "Native pause sheet did not activate the focused hints button with Return")
+      windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(pauseEnter), "Pause menu did not activate the focused hints button with Return")
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
     GameScreen.shared.dismissAll()
-    try check(isPaused == (gameplayKeyboard?.interruptionCount != pauseInterruption), "Closing hints after pause menu restored the wrong pause state")
+    try check(isPaused, "Closing hints after pause menu resumed play")
     isPaused = false
-    print("PASS controls-help and pause-menu buttons open hints and restore play")
+    print("PASS controls-help and pause-menu buttons open hints and keep play paused")
   }
 
   fileprivate func testVariableSimulationClock() throws {
@@ -4139,6 +4159,7 @@ extension AppDelegate {
   /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
   private func recordsWithSkips(_ skips: Int) throws -> URL {
     var records = ArcadeRecords()
+    _ = records.addProfile(initials: "LEM", portrait: 0)
     for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
       let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
         rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
@@ -4339,6 +4360,76 @@ extension AppDelegate {
       }
     }
     print("PASS Classic/L2/L3 Learning Skip: solo, both Hot Seat rules, owner pays, saved revisit, failed-save refund, Ready, keyboard/mouse/accessibility, 18 renders")
+  }
+
+  fileprivate func testPauseLevelSkips() async throws {
+    if window == nil { buildInterface() }
+    let previous = ArcadeStore.shared
+    defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous }
+    for count in [0, 1] {
+      ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(count), bundledProofs: nil)
+      try await failFirstClassicLevel()
+      ArcadeWindow.shared.close()
+      retry()
+      playfield.startCountdown.cancel()
+      isPaused = true; panel.isPaused = true
+      let level = arcadeLevel!, number = flow!.currentNumber
+      let owner = arcadeProfileID
+      settings.modernControlsEnabled = false
+      presentPauseMenu()
+      let page = GameScreen.shared.controllerPage(in: window)!
+      try validatePauseSkipPage(page, owner: window, name: "classic-\(count)", enabled: count > 0)
+      let skip = pauseSkipButtons(in: page).first { $0.title.hasPrefix("Skip level") }!
+      if count == 0 {
+        try check(!skip.isEnabled && isPaused && flow?.currentNumber == number, "Zero pause skip changed the attempt")
+        GameScreen.shared.dismissAll()
+      } else {
+        skip.performClick(nil)
+        try check(flow?.currentNumber == number + 1 && ArcadeStore.shared.records.hasSkipped(level, profileID: owner)
+          && !flow!.hasPassed(rank: flow!.currentRank!.name, position: number - 1), "Pause skip failed: number=\(flow?.currentNumber ?? -1), expected=\(number + 1), charged=\(ArcadeStore.shared.records.hasSkipped(level, profileID: owner)), passed=\(flow!.hasPassed(rank: flow!.currentRank!.name, position: number - 1)), balance=\(ArcadeStore.shared.records.levelSkips(profileID: owner).available), storage=\(ArcadeStore.shared.storageError ?? "none")")
+      }
+    }
+    // A failed journey save must keep the pause screen, balance and turn.
+    let store = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    ArcadeStore.shared = store
+    let owner = store.playingProfileID, level = arcadeLevel!
+    var advanced = false, dismissed = false
+    let action = PauseLevelSkip(level: level, profileID: owner,
+      prepare: { throw IntegrationFailure(message: "Journey conflict") }, advance: { advanced = true })
+    do { try action.perform(owner: window) { dismissed = true }; throw IntegrationFailure(message: "Conflict accepted") }
+    catch { try check(!advanced && !dismissed && store.records.levelSkips(profileID: owner).available == 1
+      && store.playingProfileID == owner, "Pause skip conflict did not refund and retain ownership") }
+    for policy in [ArcadeStore.TurnPolicy.everyLevel, .atFirstFail] {
+      let seat = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+      ArcadeStore.shared = seat
+      let payer = seat.playingProfileID
+      let guest = seat.addProfile(initials: "PAL", portrait: 2, select: false)!
+      seat.toggleSessionProfile(guest.id); seat.turnPolicy = policy
+      var moves = 0
+      let skip = PauseLevelSkip(level: level, profileID: payer, advance: { moves += 1 })
+      let page = GamePauseMenu.page(title: level.title, resume: {}, retry: {}, hints: {}, skip: skip, leave: {})
+      GameScreen.shared.present(page, owner: window)
+      try validatePauseSkipPage(page, owner: window, name: "hot-seat-\(policy)", enabled: true)
+      let button = pauseSkipButtons(in: page).first { $0.title.hasPrefix("Skip as") }!
+      try check(button.accessibilityPerformPress(), "Hot Seat pause skip rejected accessibility input")
+      try check(moves == 1 && seat.playingProfileID == guest.id && seat.records.levelSkips(profileID: payer).available == 0
+        && GameScreen.shared.isPresented, "Hot Seat pause skip lost its charge, turn or Ready boundary")
+      try skip.perform(owner: window) { moves += 100 }
+      try check(moves == 1 && seat.playingProfileID == guest.id, "Repeated pause skip charged or passed twice")
+      GameScreen.shared.dismissAll(); seat.endHotSeat()
+    }
+    for engine in [2, 3] {
+      ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+      if engine == 2 {
+        let native = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), selection: .init(tribe: 0, level: 0))
+        try native.testPauseLevelSkip(); native.stop()
+      } else {
+        let native = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3())
+        try native.testPauseLevelSkip(); native.stop()
+      }
+    }
+    settings.modernControlsEnabled = true
+    print("PASS pause skips: Classic/L2/L3, rendered targets, zero, original controls, spending and save-conflict refund")
   }
 
   fileprivate func testLevelSkipResult() async throws {
@@ -8142,7 +8233,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS
+    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8309,6 +8400,7 @@ Task { @MainActor in
     try await subject.testLearningLevelSkips()
     print("Earned reward presentation and result navigation integration tests passed.")
     #elseif LEVEL_SKIP_TESTS
+    try await subject.testPauseLevelSkips()
     try testPrecisionRewardResults()
     try testLevelSkipBadges()
     try await subject.testLevelSkipResult()
@@ -8396,6 +8488,8 @@ Task { @MainActor in
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
     }
+    #elseif FAN_LIBRARY_TESTS
+    try await subject.testFanLevelOrganisation()
     #elseif CONTENT_BROWSER_TESTS
     try await subject.testClassicRatingBrowser()
     try await subject.testNeoLemmixPackBrowser()
@@ -8583,19 +8677,19 @@ extension AppDelegate {
   controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
   var performed: [TimelinePanelControls.Action] = []
   controls.perform = { performed.append($0) }
-  controls.enabled = { $0 == .forward || $0 == .hints }
+  controls.enabled = { $0 == .forward }
   for action in TimelinePanelControls.Action.allCases {
     let box = controls.rect(for: action)
     try check(controls.click(at: CGPoint(x: box.midX, y: box.midY)), "Timeline target leaked its click")
   }
-  try check(performed == [.forward, .hints], "Disabled timeline controls activated")
+  try check(performed == [.forward], "Disabled timeline controls activated")
   let first = controls.rect(for: .rewind)
   try check(controls.click(at: CGPoint(x: first.maxX + 1, y: first.midY)), "Timeline gap leaked input")
-  try check(performed.count == 2, "Timeline gap activated a neighbour")
+  try check(performed.count == 1, "Timeline gap activated a neighbour")
   let directory = URL(fileURLWithPath: ".build/transport")
   try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
   for enabled in [false, true] {
-    controls.enabled = { enabled || $0 == .hints }
+    controls.enabled = { _ in enabled }
     let image = NSImage(size: CGSize(width: 260, height: 38))
     image.lockFocusFlipped(true); controls.draw(); image.unlockFocus()
     let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
@@ -8633,12 +8727,7 @@ extension AppDelegate {
   try capture("-paused")
   click(.rewind)
   try check(tick() == 0 && paused(), "Rewind toolbar button failed " + name)
-  click(.hints)
-  try check(LevelHintWindow.shared.page != nil && paused(), "Hint toolbar button failed " + name)
-  try check(GameCursor.gameplaySuppressed, "Hints retained the game cursor in " + name)
-  try capture("-hint-background")
-  GameScreen.shared.dismissAll()
-  print("PASS " + name + " toolbar input, history and paused hints")
+  print("PASS " + name + " toolbar input and paused history")
 }
 
 extension AppDelegate {
@@ -9342,16 +9431,17 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 
 @MainActor func validateExitControl(_ keyboard: GameplayKeyboard, owner: NSWindow, name: String) throws {
   GameScreen.shared.dismissAll()
-  let oldAction = keyboard.mainMenu, oldActive = keyboard.active, oldAvailable = keyboard.navigationAvailable
+  let oldAction = keyboard.mainMenu, oldEscape = keyboard.escape, oldActive = keyboard.active, oldAvailable = keyboard.navigationAvailable
   let oldOwnership = keyboard.ownsController
   let oldReduction = keyboard.navigationReduceMotion
   let oldFade = keyboard.fadeMenuButton
-  var exits = 0
+  var exits = 0, pauseRequests = 0
+  keyboard.escape = { exits += 1; pauseRequests += 1 }
   keyboard.mainMenu = { exits += 1 }; keyboard.navigationAvailable = { true }; keyboard.ownsController = { true }
   keyboard.navigationReduceMotion = { false }
   keyboard.fadeMenuButton = { true }
   defer {
-    keyboard.mainMenu = oldAction; keyboard.active = oldActive; keyboard.navigationAvailable = oldAvailable
+    keyboard.mainMenu = oldAction; keyboard.escape = oldEscape; keyboard.active = oldActive; keyboard.navigationAvailable = oldAvailable
     keyboard.ownsController = oldOwnership; keyboard.bind(to: owner); keyboard.refreshNavigationControl()
     keyboard.navigationReduceMotion = oldReduction
     keyboard.fadeMenuButton = oldFade
@@ -9423,8 +9513,9 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   for active in [false, true] {
     keyboard.active = { active }
     for key in ["q", "\u{1b}"] {
-      let before = exits
-      try check(keyboard.handle(event(key)) == nil && exits == before + 1, name + " failed exit key")
+      let before = exits, previousPauses = pauseRequests
+      try check(keyboard.handle(event(key)) == nil && exits == before + 1, name + " failed navigation key")
+      try check(pauseRequests == previousPauses + (active && key != "q" ? 1 : 0), name + " confused Pause and Back to library")
       _ = keyboard.handle(event(key, repeatKey: true))
       try check(exits == before + 1, name + " repeated exit")
       try check(keyboard.handle(event(key, modifiers: [.command])) != nil && exits == before + 1, name + " stole app shortcut")
@@ -9601,16 +9692,16 @@ extension AppDelegate {
         level: arcadeLevel!, saved: won ? arcadeLevel!.total : 0, didWin: won, skills: [:], seconds: 20))!
       for width in [900, 1600] {
         window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
-        for key in ["Menu", "q", "\u{1b}"] {
+        for key in ["Back", "q", "\u{1b}"] {
           ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: { advances += 1 }, replay: { _ in }, menu: { exits += 1 })
           let result = ArcadeWindow.shared.arcadeView; result.finishCelebration()
           let image = ReplayFrameCapture.image(size: result.bounds.size) { ReplayFrameCapture.draw(result, in: result.bounds) }!
           try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/exit-progress/result-\(won)-\(width).png"))
-          if key == "Menu" {
-            guard let button = result.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.accessibilityLabel() == "Menu" }) else {
-              throw IntegrationFailure(message: "Result omitted Menu")
+          if key == "Back" {
+            guard let button = result.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.accessibilityLabel() == "Back" }) else {
+              throw IntegrationFailure(message: "Result omitted Back")
             }
-            try check(button.localFrame.width >= 28 && button.localFrame.height >= 28 && result.bounds.contains(button.localFrame), "Result Menu target was clipped")
+            try check(button.localFrame.width >= 28 && button.localFrame.height >= 28 && result.bounds.contains(button.localFrame), "Result Back target was clipped")
             let point = result.convert(CGPoint(x: button.localFrame.midX, y: button.localFrame.midY), to: nil)
             let click = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
               windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
@@ -10253,4 +10344,34 @@ extension AppDelegate {
     }
   }
   print("PASS passive perk counts and brief glow: automatic once, reduced motion, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards")
+}
+
+@MainActor func validatePauseSkipPage(_ page: NSView, owner: NSWindow, name: String, enabled: Bool) throws {
+  let folder = URL(fileURLWithPath: ".build/level-skip-pause")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 620), .init(width: 1440, height: 1000), .init(width: 1920, height: 1080)] {
+    owner.setContentSize(size); owner.contentView!.layoutSubtreeIfNeeded()
+    let controls = pauseSkipButtons(in: page)
+    guard let skip = controls.first(where: { $0.title.hasPrefix("Skip level") || $0.title.hasPrefix("Skip as") }) else {
+      throw IntegrationFailure(message: name + " pause omitted Skip")
+    }
+    try checkGameplayQuickControl(skip.isEnabled == enabled, name + " pause skip has wrong enabled state")
+    if enabled {
+      let point = skip.convert(CGPoint(x: skip.bounds.midX, y: skip.bounds.midY), to: page)
+      try checkGameplayQuickControl(page.hitTest(point) === skip, name + " Skip lost its mouse target")
+    }
+    let frame = skip.convert(skip.bounds, to: owner.contentView!)
+    try checkGameplayQuickControl(owner.contentView!.bounds.contains(frame) && frame.height >= 44,
+      name + " pause skip is outside its visible target")
+    let root = owner.contentView!
+    func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+    invalidate(root)
+    let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+    root.displayIgnoringOpacity(root.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-\(Int(size.width)).png"))
+  }
+}
+
+@MainActor func pauseSkipButtons(in root: NSView) -> [NSButton] {
+  (root as? NSButton).map { [$0] } ?? root.subviews.flatMap { pauseSkipButtons(in: $0) }
 }

@@ -18,6 +18,15 @@
       "category": "games",
       "versions": [
         {
+          "version": "2.2.2",
+          "buildVersion": "33",
+          "date": "2026-10-24T00:42:55.666962Z",
+          "localizedDescription": "Made for Duo. Refined everywhere. Duo uses more of its front display and inner panels, with safer tent-mode Desk Clock transitions and optional red night vision. Clearer navigation, grouped fan levels, source progress from Golden Path lessons, touch selection and replay controls improve play across the supported platforms. Classic and The Tribes remain Complete; Chronicles and NeoLemmix remain Beta. Mobile Journey remains Classic-only.",
+          "downloadURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build33-ios.ipa",
+          "size": 207620836,
+          "minOSVersion": "16.0"
+        },
+        {
           "version": "2.2.1",
           "buildVersion": "21",
           "date": "2026-10-23T03:49:15.224830Z",

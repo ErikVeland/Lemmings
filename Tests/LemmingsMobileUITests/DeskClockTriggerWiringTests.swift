@@ -44,6 +44,7 @@ private final class SilentDeskClockEvents: DeskClockEventSource, @unchecked Send
         clock.onClose = { [weak self, weak clock] in
             guard let self, self.deskClock === clock else { return }
             self.deskClock = nil
+            self.entry.noteDismissal(reason: reason)
         }
         deskClock = clock
         clock.present(in: self)
@@ -65,6 +66,63 @@ private final class SilentDeskClockEvents: DeskClockEventSource, @unchecked Send
         host.view.frame = CGRect(x: 0, y: 0, width: 465, height: 650)
         host.entry.noteInput()
         return host
+    }
+
+    @Test func hingeCapabilityKeepsOuterDisplayLayoutsFullWidth() {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 720, height: 495))
+        let view = UIView(frame: window.bounds)
+        window.addSubview(view)
+        MobileSystemRegions.noteHinge(in: window)
+        #expect(MobileSystemRegions.isFoldable(in: view))
+        #expect(MobileSystemRegions.usesFullDisplay(in: view))
+        #expect(MobileSystemRegions.menuFrame(in: view) == view.bounds)
+        #expect(MobileSystemRegions.contentInsets(in: view) == .zero)
+        #expect(window.isHidden)
+    }
+
+    @Test func hingeObserverAttachesToSceneContentView() {
+        let host = host()
+        host.entry.observePose(in: host.view)
+        #if compiler(>=6.3)
+        if #available(iOS 27.1, *) {
+            #expect(host.view.interactions.contains { $0 is UIHingeInteraction })
+        }
+        #endif
+    }
+
+    @Test func tentPresentsOverEveryScreenAndWaitsAfterDismissal() {
+        for screen in [DeskClockScreen.menu, .level, .replay, .pause, .handover, .modal] {
+            let host = host()
+            host.view.frame.size = CGSize(width: 720, height: 495)
+            host.deskClockScreen = screen
+            host.entry.hinge = .partiallyOpen
+            host.check()
+            #expect(host.presented == [.tent])
+            host.dismissDeskClock()
+            host.check()
+            #expect(host.presented == [.tent])
+            host.entry.hinge = .fullyOpen
+            host.check()
+            host.entry.hinge = .partiallyOpen
+            host.check()
+            #expect(host.presented == [.tent, .tent])
+            host.dismissDeskClock()
+        }
+    }
+
+    @Test func leavingAndReenteringTentReopensWithoutAnExtraCheck() {
+        let host = host()
+        host.view.frame.size = CGSize(width: 720, height: 495)
+        host.entry.hinge = .partiallyOpen
+        host.check()
+        #expect(host.presented == [.tent])
+        host.entry.hinge = .fullyOpen
+        host.check()
+        #expect(host.deskClock == nil)
+        host.entry.hinge = .partiallyOpen
+        host.check()
+        #expect(host.presented == [.tent, .tent])
+        host.dismissDeskClock()
     }
 
     @Test func idleStackedPresents() {

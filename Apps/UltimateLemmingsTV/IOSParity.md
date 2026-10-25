@@ -2,6 +2,11 @@
 
 **Status: shared frontend connected; acceptance gate open.**
 
+The [25 October cross-platform register](../../Documentation/PlatformFeatureParity.md)
+records current source gaps separately from device acceptance. Reusing the
+iOS frontend also inherits its missing replay, sequel artwork, L2 interaction,
+practice/sampler and original-media capabilities.
+
 Baseline: the local iOS and tvOS source on 14 October 2026. The checkout has
 uncommitted changes. This record describes the current implementation and its
 validation boundaries, rather than a shipped TV release.

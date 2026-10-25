@@ -70,6 +70,25 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         }
     }
 
+    public func canSkipLevel(at index: Int) -> Bool {
+        campaignLock.lock(); defer { campaignLock.unlock() }
+        return progressFailure == nil && index == campaign.tribe * 10 + campaign.level && campaign.canSkipLevel
+    }
+    public func prepareLevelSkip(at index: Int) throws -> () throws -> Void {
+        campaignLock.lock(); defer { campaignLock.unlock() }
+        guard canSkipLevel(at: index) else { throw MobileSessionError.changedLevel }
+        let previous = campaign
+        var proposed = campaign
+        guard proposed.skipLevel() else { throw MobileSessionError.changedLevel }
+        try storage.save(proposed.progress, name: "lemmings2-campaign")
+        campaign = proposed
+        return { [self] in
+            campaignLock.lock(); defer { campaignLock.unlock() }
+            try storage.save(previous.progress, name: "lemmings2-campaign")
+            campaign = previous
+        }
+    }
+
     public func levelKey(at index: Int) -> String {
         guard levels.indices.contains(index) else { return "" }
         return "lemmings2/\(levelFingerprints[index])"
@@ -81,6 +100,11 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
+        try loadLevel(at: index, population: nil)
+    }
+
+    /// Explicit populations create isolated sampler/replay sessions.
+    public func loadLevel(at index: Int, population override: Int?) throws -> MobileLevelContent {
         try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = index / 10
@@ -92,13 +116,13 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         do {
             if let progressFailure { throw Lemmings2MobileLibraryError.progressSave(progressFailure) }
             var proposed = campaign
-            try proposed.select(tribe: tribe, level: levelNumber)
-            if proposed.progress != campaign.progress {
+            if override == nil { try proposed.select(tribe: tribe, level: levelNumber) }
+            if override == nil, proposed.progress != campaign.progress {
                 try storage.save(proposed.progress, name: "lemmings2-campaign")
                 campaign = proposed
             }
-            selectedLevel = proposed.current
-            population = proposed.population
+            selectedLevel = override == nil ? proposed.current : proposed.levels[index]
+            population = override ?? proposed.population
             if let cached = styles[tribe] {
                 style = cached
             } else {
@@ -114,20 +138,44 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             throw error
         }
 
+        return try makeContent(level: selectedLevel, style: style, population: population,
+            skills: nil, summary: levels[index], identifier: "lemmings2/\(levelFingerprints[index])",
+            fingerprint: levelFingerprints[index], recordsProgress: override == nil)
+    }
+
+    public func loadPractice(at index: Int, skills: [Lemmings2Runtime.Skill]) throws -> MobileLevelContent {
+        let practice = try Lemmings2Practice(root: directory)
+        guard practice.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
+        let level = practice.levels[index]
+        let style = try Lemmings2Style(data: Data(contentsOf: directory.appendingPathComponent(
+            "STYLES/" + Lemmings2Campaign.styleNames[level.style] + ".DAT")))
+        let key = "lemmings2/practice/\(index)/" + skills.map { String($0.rawValue) }.joined(separator: "-")
+        let fingerprint = MobileContentFingerprint.levelFingerprint(
+            content: try MobileContentFingerprint.digest(directory: directory),
+            level: level.fingerprint + ":" + skills.map { String($0.rawValue) }.joined(separator: ","))
+        return try makeContent(level: level, style: style, population: 60, skills: skills,
+            summary: .init(index: index, rank: L10n.text("Practice"), number: index + 1,
+                title: Lemmings2Campaign.tribeNames[level.style]),
+            identifier: key, fingerprint: fingerprint, recordsProgress: false)
+    }
+
+    private func makeContent(level selectedLevel: Lemmings2Level, style: Lemmings2Style, population: Int,
+                             skills: [Lemmings2Runtime.Skill]?, summary: MobileLevelSummary,
+                             identifier: String, fingerprint: String, recordsProgress: Bool) throws -> MobileLevelContent {
+        let index = summary.index
         let assets = try loadAssets()
         try Task.checkCancellation()
         let runtime = try Lemmings2Runtime(level: selectedLevel, style: style,
-                                           masks: assets.masks, total: population)
+                                           masks: assets.masks, total: population, practiceSkills: skills)
         try Task.checkCancellation()
         let renderer = try Lemmings2MobileSceneRenderer(level: selectedLevel, style: style,
                                                         sprites: assets.sprites, intern: assets.intern,
                                                         walker: assets.walker, explosion: assets.explosion)
-        let identifier = "lemmings2/\(levelFingerprints[index])"
         let session = renderer.makeSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: identifier, levelIndex: index,
-            levelFingerprint: levelFingerprints[index], soundBank: assets.soundBank) { [weak self] completedRuntime in
-                self?.record(completedRuntime, at: index)
+            levelFingerprint: fingerprint, soundBank: assets.soundBank) { [weak self] completedRuntime in
+                if recordsProgress { self?.record(completedRuntime, at: index) }
             }
         session.skillCursorFrames = runtime.configuration.skills.map { skill in
             guard let panel = assets.panel, panel.skills.indices.contains(skill.rawValue - 1) else { return nil }
@@ -146,7 +194,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             return try? image.cropped(around: .init(x: Double(left + right + 1) / 2, y: Double(top + bottom + 1) / 2),
                 width: right - left + 1, height: bottom - top + 1)
         }
-        return MobileLevelContent(summary: levels[index], session: session)
+        return MobileLevelContent(summary: summary, session: session)
     }
 
     private func loadAssets() throws -> Assets {

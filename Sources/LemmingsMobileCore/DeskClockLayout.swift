@@ -14,11 +14,22 @@ public struct DeskClockLayout: Equatable, Sendable {
 
     public var stacked: Bool { pane != nil }
 
-    public static func make(safe: MobileRect, regions: [MobileReservedRegion]) -> DeskClockLayout {
+    public static func make(safe: MobileRect, regions: [MobileReservedRegion], bounds: MobileRect? = nil) -> DeskClockLayout {
         let panes = MobileDisplayRegions.tablePanes(in: safe, avoiding: regions)
         // Book pose keeps the scene on one side of the hinge, as the menus do.
-        let scene = panes.count == 2 ? panes[0] : MobileDisplayRegions.menuFrame(in: safe, avoiding: regions)
-        let host = panes.count == 2 ? panes[1] : scene
+        let content = MobileDisplayRegions.menuFrame(in: safe, avoiding: regions)
+        let canvas = bounds ?? safe
+        let scene: MobileRect
+        if panes.count == 2 {
+            scene = MobileRect(x: canvas.minX, y: canvas.minY, width: canvas.width,
+                               height: panes[0].maxY - canvas.minY)
+        } else if regions.contains(where: { $0.kind == .division }) {
+            scene = content
+        } else {
+            scene = canvas
+        }
+        let host = panes.count == 2 ? panes[1]
+            : regions.contains(where: { $0.kind == .division }) ? content : safe
         let close = MobileRect(x: host.minX + margin, y: host.maxY - margin - closeSize.height,
                                width: min(closeSize.width, host.width - 2 * margin), height: closeSize.height)
         return DeskClockLayout(scene: scene, pane: panes.count == 2 ? panes[1] : nil, close: close)

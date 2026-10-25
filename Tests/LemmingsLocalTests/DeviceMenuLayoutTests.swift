@@ -235,9 +235,27 @@ final class DeviceMenuLayoutTests: XCTestCase {
 
     func testPlayerTitleAndQuantityRolesDoNotDependOnSelection() {
         let page = MobileTurnArt.page(.init(title: "Lemmings", home: true), playerName: "UVA", role: .next, sessionName: "UVA v EKV")
-        XCTAssertEqual(page.subtitleRuns.filter { $0.palette == .green }.map(\.text), ["UVA", "EKV", "UVA"])
-        XCTAssertTrue(page.subtitleRuns.contains { $0.text == " v " && $0.palette == .blue })
-        XCTAssertTrue(page.subtitleRuns.contains { $0.text.contains("Next:") && $0.palette == .blue })
+        XCTAssertEqual(page.subtitle, "")
+        XCTAssertEqual(page.homeNextPlayerIndex, 0)
+        XCTAssertEqual(page.homeNextPlayerName, "UVA")
+        XCTAssertEqual(GameSemanticText.players(page.homeInitials, nextPlayerIndex: page.homeNextPlayerIndex).map(\.palette),
+            [.gold, .blue, .green])
+        let otherTurn = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic")], initials: "EKV v UVA",
+            nextPlayerIndex: 1, subtitle: "Saved")
+        XCTAssertEqual(otherTurn.subtitle, "Saved")
+        XCTAssertEqual(otherTurn.homeNextPlayerName, "UVA")
+        XCTAssertEqual(GameSemanticText.players(otherTurn.homeInitials,
+            nextPlayerIndex: otherTurn.homeNextPlayerIndex).map(\.palette), [.green, .blue, .gold])
+        let phone = GameFrontEnd.layout(otherTurn, width: 390, minimumHeight: 763)
+        XCTAssertLessThan(phone.initials.maxY, phone.targets.first { $0.action.id == "classic" }!.frame.minY)
+        let book = MobileBookHomeArt.layout(otherTurn, width: 650, height: 465,
+            panes: [CGRect(x: 0, y: 0, width: 318, height: 465),
+                    CGRect(x: 332, y: 0, width: 318, height: 465)])
+        XCTAssertLessThan(book.initials.maxY, book.targets.first { $0.action.id == "classic" }!.frame.minY)
+        XCTAssertLessThan(book.initials.maxY, 465)
+        let solo = MobileHomeArt.page(journey: nil, families: [], initials: "EKV", subtitle: "Saved")
+        XCTAssertEqual(solo.subtitle, "Saved")
+        XCTAssertNil(solo.homeNextPlayerName)
         let title = GameSemanticText.title("Classic Lemmings 0/120")
         XCTAssertEqual(title.map(\.palette), [.green, .blue])
         XCTAssertEqual(title.last?.text, "0/120")

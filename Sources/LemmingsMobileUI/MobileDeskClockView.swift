@@ -11,6 +11,9 @@ import UIKit
         GameDeskClockArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
     }
     private static let density = 2
+    // A full-screen image is replaced every frame. Keep its backing store bounded on large
+    // displays so opening the clock cannot allocate several screen-sized bitmaps at once.
+    private static let maximumBitmapPixels: CGFloat = 3_000_000
 
     var event: DeskClockEvent? {
         didSet {
@@ -21,11 +24,13 @@ import UIKit
     }
     private let scene = CALayer()
     private var simulation: DeskClockSimulation
+    private let nightVisionEnabled: Bool
     private var link: CADisplayLink?
     private let started = CACurrentMediaTime()
     private var labelMinute = -1
 
     init(now: Date = Date(), settings: MobileSettings = .current(from: .standard)) {
+        nightVisionEnabled = settings.deskClock.redNightVision
         simulation = DeskClockSimulation(now: now, uses24Hour: DeskClockFace.uses24Hour(locale: .current),
             reduceMotion: UIAccessibility.isReduceMotionEnabled || settings.classic.reduceMotion,
             reduceFlashes: settings.classic.reduceFlashes,
@@ -43,6 +48,10 @@ import UIKit
     }
 
     required init?(coder: NSCoder) { nil }
+
+    func isRedNightVisionActive(at date: Date) -> Bool {
+        nightVisionEnabled && DeskClockFace.isNight(date, calendar: simulation.calendar)
+    }
 
     /// Starts or pauses the display link. The controller pauses it while the app is inactive.
     var isRunning: Bool {
@@ -73,24 +82,37 @@ import UIKit
     private func tick(now: Date) {
         simulation.advance(to: now, event: event)
         refreshAccessibility(now: now)
-        let size = GameDeskClockArt.sceneSize
-        let fit = min(bounds.width / size.width, bounds.height / size.height)
-        guard fit > 0 else { return }
-        let scale = fit >= 1 ? fit.rounded(.down) : fit
-        let shift = DeskClockFace.burnInOffset(at: now)
-        scene.frame = CGRect(x: ((bounds.width - size.width * scale) / 2).rounded(.down) + CGFloat(shift.x),
-                             y: ((bounds.height - size.height * scale) / 2).rounded(.down) + CGFloat(shift.y),
-                             width: size.width * scale, height: size.height * scale)
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        scene.frame = bounds
         guard let art = Self.artwork else { return }
-        let width = Int(size.width) * Self.density, height = Int(size.height) * Self.density
+        let area = bounds.width * bounds.height
+        let bitmapScale = min(CGFloat(Self.density), sqrt(Self.maximumBitmapPixels / area))
+        let width = max(1, Int(ceil(bounds.width * bitmapScale)))
+        let height = max(1, Int(ceil(bounds.height * bitmapScale)))
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
                                       bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
-                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
+                                      bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue |
+                                          CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
-        art.draw(simulation, event: event, now: now, time: CACurrentMediaTime() - started, in: context,
+        let content: CGRect
+        if MobileSystemRegions.usesFullDisplay(in: self) {
+            let free = MobileDisplayRegions.fullWidthContent(in: .init(x: 0, y: 0, width: bounds.width, height: bounds.height),
+                avoiding: MobileSystemRegions.read(in: self))
+            content = CGRect(x: free.x, y: free.y, width: free.width, height: free.height)
+        } else {
+            content = safeAreaLayoutGuide.layoutFrame
+        }
+        // System brightness already responds to the room; a second night overlay made the
+        // clock suddenly dull as soon as it opened after 22:00.
+        art.drawFullScreen(simulation, event: event, now: now, time: CACurrentMediaTime() - started, in: context,
                  rect: CGRect(x: 0, y: 0, width: width, height: height),
-                 nightDim: DeskClockFace.isNight(now, calendar: simulation.calendar))
+                 nightDim: false,
+                 contentRect: content.applying(CGAffineTransform(scaleX: bitmapScale, y: bitmapScale)))
+        if isRedNightVisionActive(at: now), let data = context.data {
+            GameDeskClockArt.applyRedNightVision(to: data, width: width, height: height,
+                                                  bytesPerRow: context.bytesPerRow)
+        }
         scene.contents = context.makeImage()
     }
 

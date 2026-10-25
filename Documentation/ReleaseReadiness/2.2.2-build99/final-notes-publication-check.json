@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "fea37bf39fee3aa5b23f3112188b37199bc5b73e",
+  "verifiedUTC": "2026-10-24T01:47:02.950506+00:00",
+  "publicationInputsPassed": true,
+  "enclosuresUnchanged": true,
+  "scope": "Only release commit metadata, explicit Resume wording and Mac-only crowd scope changed. All archive and delta URLs, lengths and signatures are identical.",
+  "sha256": {
+    "ReleaseNotes-2.2.2-build99.md": "6cb709c00cd2be800e07e1da9bb88da525637ef321e6f6ac3246b4b1816aa51d",
+    "updates/UltimateLemmings-2.2.2-build99.html": "bb2a37293e1fcec537892d9627655fa333fbc26ceba088f788d60b0dfabc0bbb",
+    "appcast.xml": "a0f02afdec5b8a0b3e0fbe19e1977ff02056336ee2c6fea9bf9b61d9ae719cb6"
+  }
+}

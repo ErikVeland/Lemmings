@@ -14,10 +14,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
 @MainActor final class MobileLibraryViewController: UIViewController {
     enum Route: Equatable {
-        case home, support, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
+        case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
         case journey, progression, techniques, rankings
-        case collections, shortGames, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
+        case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -28,11 +28,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #if os(iOS)
     var deskClockBlocksInput: Bool { deskClock != nil }
     let deskClockEntry = DeskClockAutomaticEntry()
+    private weak var deskClockWindow: UIWindow?
     nonisolated(unsafe) private var deskClockTimer: Timer?
     #else
     var deskClockBlocksInput: Bool { false }
     #endif
     private let scrollView = MobileMenuScrollView()
+    #if os(iOS)
+    private var menuBackGesture: UIScreenEdgePanGestureRecognizer?
+    #endif
     private let homeBackdropView = MobileHomeBackdropView()
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
@@ -50,11 +54,28 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }
     let canvas = MobileMenuCanvas()
+    let globalNavigation = MobileNavigationView()
+    let listTools = MobileListToolsView()
     private let unfold = MobileUnfoldView()
     private var previousSize = CGSize.zero
     let browser = MobileLevelBrowserView()
     var browserShown = false
     var route = Route.home
+    struct NavigationPosition {
+        let route: Route
+        let offset: CGPoint
+        let focus: String?
+    }
+    private var navigationHistory: [NavigationPosition] = []
+    private var detailReturnPosition: NavigationPosition?
+
+    func showLibraryDetail(_ page: GameFrontEnd.Page) {
+        detailReturnPosition = NavigationPosition(route: route, offset: scrollView.contentOffset, focus: canvas.focusedID)
+        canvas.page = page
+        scrollView.setContentOffset(.zero, animated: false)
+        view.setNeedsLayout()
+    }
+    var settingsReturn: (route: Route, offset: CGPoint, focus: String?)?
     var languageSelectionOriginal: InterfaceLanguage?
     var confirmingRecordsReset = false
     #if os(tvOS)
@@ -90,6 +111,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var catalogue: MobileCatalogue?
     var currentPack: MobileContentPack?
     var levelsBackRoute = Route.home
+    var dataBackRoute = Route.home
     /// The players on this device. Each has their own collections and progress.
     var profiles = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players") ?? MobileProfiles()
     lazy var arcadeStore = ArcadeStore(storage: .current(), bundledProofs: nil)
@@ -106,6 +128,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     /// Progression and Shuffle all open from Playlists as well as from Journey and the fan library.
     var progressionBackID = "journey"
     var shuffleBackID = "fanBack"
+    var practiceChoice = 0
+    var practiceSkills: [Lemmings2Runtime.Skill] = [.jumper, .runner, .builder, .basher, .digger, .climber, .floater, .roper]
+    var tribesShortGamesEntries: [MobileFavourites.Entry]?
     var shortGamesEntries: [MobileFavourites.Entry]?
     var shortGamesSelection = "classic"
     var shortGamesPreparing = false
@@ -193,8 +218,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if pack == "release/lemmings", profiles.active.id == MobileProfiles.defaultID, hotSeat == nil {
             all.formUnion(defaults.array(forKey: "mobile.completed.Lemmings") as? [Int] ?? [])
         }
-        if hotSeat == nil, let pack {
-            all.formUnion(GameProgressPreferences.completed(pack: pack, profileID: profiles.activeID))
+        if let pack {
+            all.formUnion(GameProgressPreferences.completed(pack: pack,
+                profileID: hotSeat.map { "hotseat." + $0.id } ?? profiles.activeID))
         }
         if let fan = library as? ClassicFanMobileLibrary, pack == fan.catalogueID {
             let passed = GameProgressPreferences.fanLevels(profileID: profiles.activeID, sessionID: hotSeat?.id)
@@ -211,7 +237,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     #if os(iOS)
     override var prefersStatusBarHidden: Bool { true }
-    override var prefersHomeIndicatorAutoHidden: Bool { game != nil }
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
     #endif
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -223,6 +249,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         super.viewDidLoad()
         #if os(iOS)
         UIDevice.current.isBatteryMonitoringEnabled = true
+        deskClockEntry.onPoseChange = { [weak self] in self?.checkDeskClock() }
         let activity = UITapGestureRecognizer()
         activity.delegate = deskClockEntry
         activity.cancelsTouchesInView = false
@@ -234,6 +261,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         view.backgroundColor = .black
         view.addSubview(homeBackdropView)
         scrollView.backgroundColor = .black
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.alwaysBounceVertical = false
         scrollView.addSubview(canvas)
         view.addSubview(scrollView)
@@ -259,11 +287,27 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.artworkLoader = { [weak self] index in await self?.coverArtwork(index) }
         view.addSubview(browser)
         view.addSubview(unfold)
+        globalNavigation.onHome = { [weak self] in self?.navigate(.home) }
+        globalNavigation.onBack = { [weak self] in self?.goBack() }
+        canvas.globalNavigation = globalNavigation
+        canvas.listTools = listTools
+        listTools.onAction = { [weak self] in self?.handle($0) }
+        view.addSubview(listTools)
+        globalNavigation.onSecondary = { [weak self] in self?.openGlobalSettings() }
+        globalNavigation.secondaryTitle = L10n.text("Settings")
+        view.addSubview(globalNavigation)
+        #if os(iOS)
+        let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgeBack(_:)))
+        backGesture.edges = .left
+        view.addGestureRecognizer(backGesture)
+        menuBackGesture = backGesture
+        #endif
         #if os(iOS)
         for direction in [UISwipeGestureRecognizer.Direction.left, .right] {
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swiped(_:)))
             swipe.direction = direction
             swipe.cancelsTouchesInView = false
+            if let menuBackGesture { swipe.require(toFail: menuBackGesture) }
             canvas.addGestureRecognizer(swipe)
         }
         #endif
@@ -289,7 +333,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         searchField.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
-            else { self.searchQuery = self.searchField.text ?? "" }
+            else {
+                self.searchQuery = self.searchField.text ?? ""
+                if case .fanGroup = self.route { self.route = .family(.fan); self.canvas.focusedID = "search" }
+                self.scrollView.setContentOffset(.zero, animated: false)
+            }
             self.rebuild()
         }, for: .editingChanged)
         searchField.addAction(UIAction { [weak self] _ in self?.searchField.resignFirstResponder(); self?.rebuild() }, for: .editingDidEndOnExit)
@@ -321,6 +369,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             #endif
         }
         NotificationCenter.default.addObserver(self, selector: #selector(cloudForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(cloudBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         #if os(iOS)
         cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
         cloudTransport.start { [weak self] controller in
@@ -339,22 +388,33 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     #if os(iOS)
     func presentDeskClock(reason: DeskClockReason) {
-        // A level that is loading or showing owns the screen.
-        guard deskClock == nil, game == nil, presentedViewController == nil,
-              !preparingLevel, !learningPreparing, !shortGamesPreparing else { return }
-        let clock = MobileDeskClockController(reason: reason)
+        guard deskClock == nil else { return }
+        if reason != .tent {
+            guard game == nil, presentedViewController == nil,
+                  !preparingLevel, !learningPreparing, !shortGamesPreparing else { return }
+        }
+        let clock = MobileDeskClockController(reason: reason, resumeMusic: { [weak self] in
+            guard let self, self.game == nil else { return }
+            self.syncMenuMusic()
+        })
         clock.onClose = { [weak self, weak clock] in
             guard let self, self.deskClock === clock else { return }
             self.deskClock = nil
-            self.deskClockEntry.noteInput()
+            self.deskClockEntry.noteDismissal(reason: reason)
             self.libraryInput.reset()
-            self.becomeFirstResponder()
+            self.game?.setDeskClockVisible(false)
+            if let game = self.game { game.becomeFirstResponder() }
+            else { self.becomeFirstResponder() }
             self.syncPages()
         }
         deskClock = clock
+        // Hold the clock before pausing gameplay or ending editing: either operation can lay out
+        // the library and recheck the hinge while presentation is in progress.
+        view.endEditing(true)
+        game?.setDeskClockVisible(true)
         libraryInput.reset()
         resignFirstResponder()
-        clock.present(in: self)
+        clock.present(in: self, surface: deskClockWindow)
         syncPages()
     }
 
@@ -362,7 +422,19 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     /// Runs every 5 s. A shown automatic clock is also checked on each layout change.
     private func checkDeskClock() {
-        guard deskClock != nil || (viewIsVisible && sceneIsActive) else { return }
+        let window = view.window ?? deskClockWindow
+        #if DEBUG
+        let sceneState = String(describing: window?.windowScene?.activationState)
+        if UserDefaults.standard.string(forKey: "DeskClockSceneState") != sceneState {
+            UserDefaults.standard.set(sceneState, forKey: "DeskClockSceneState")
+            var history = UserDefaults.standard.stringArray(forKey: "DeskClockSceneHistory") ?? []
+            history.append("\(Date().timeIntervalSince1970) \(sceneState)")
+            UserDefaults.standard.set(Array(history.suffix(32)), forKey: "DeskClockSceneHistory")
+        }
+        #endif
+        guard let window, window.windowScene?.activationState == .foregroundActive else { return }
+        deskClockWindow = window
+        deskClockEntry.observePose(in: window)
         deskClockEntry.check(self)
     }
     #endif
@@ -374,10 +446,40 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         present(controller, animated: true)
         #endif
     }
+    private var cloudBackgroundTask: Task<Void, Never>?
+    private var cloudBackgroundID: UIBackgroundTaskIdentifier = .invalid
+
+    @objc private func cloudBackground() {
+        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted",
+              libraryCloud.enabled, cloudBackgroundTask == nil else { return }
+        arcadeStore.flushPendingSaves()
+        cloudBackgroundID = UIApplication.shared.beginBackgroundTask(withName: "Cloud library sync") { [weak self] in
+            Task { @MainActor in
+                self?.cloudBackgroundTask?.cancel()
+                self?.endCloudBackgroundTime()
+            }
+        }
+        cloudBackgroundTask = Task { [weak self] in
+            guard let self else { return }
+            await libraryCloud.syncForLifecycle()
+            finishCloudBackground()
+        }
+    }
+    private func endCloudBackgroundTime() {
+        if cloudBackgroundID != .invalid {
+            UIApplication.shared.endBackgroundTask(cloudBackgroundID)
+            cloudBackgroundID = .invalid
+        }
+    }
+    private func finishCloudBackground() {
+        endCloudBackgroundTime()
+        cloudBackgroundTask = nil
+    }
+
     @objc private func cloudForeground() {
         // Calendar access may have changed in iOS Settings.
         if route == .settingsGroup(.deskClock) { rebuild() }
-        libraryCloud.requestSync()
+        libraryCloud.requestSync(immediately: true)
         #if os(iOS)
         if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() }
         #endif
@@ -385,6 +487,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewIsVisible = true
+        #if os(iOS)
+        if let window = view.window {
+            deskClockWindow = window
+            deskClockEntry.observePose(in: view)
+            deskClockEntry.observePose(in: window)
+        }
+        #endif
         sceneIsActive = view.window?.windowScene?.activationState == .foregroundActive
         syncPages()
         if game == nil { becomeFirstResponder() }
@@ -422,6 +531,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     #endif
                     self.libraryInput.reset()
                     self.syncPages()
+                    #if os(iOS)
+                    if name == UIScene.didActivateNotification { self.checkDeskClock() }
+                    #endif
                 }
             })
         }
@@ -466,7 +578,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         #if os(iOS)
-        if deskClock != nil { checkDeskClock() }
+        checkDeskClock()
         #endif
         let expanded = previousSize.width > 0 && view.bounds.width > previousSize.width * 1.25
         let division = MobileSystemRegions.read(in: view).contains { $0.kind == .division && $0.frame.height > $0.frame.width }
@@ -483,7 +595,40 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
             in: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
             avoiding: MobileSystemRegions.read(in: view)) : []
-        scrollView.frame = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
+        var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
+        globalNavigation.isHidden = game != nil || route == .home || deskClockShown
+        browser.showsBack = globalNavigation.isHidden
+        switch route {
+        case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
+            globalNavigation.secondaryTitle = nil
+        default: globalNavigation.secondaryTitle = L10n.text("Settings")
+        }
+        if menuRegion.width < 440 || !canvas.page.listTools.isEmpty { globalNavigation.secondaryTitle = nil }
+        #if os(iOS)
+        menuBackGesture?.isEnabled = !globalNavigation.isHidden
+        #endif
+        if !globalNavigation.isHidden {
+            globalNavigation.showsBack = browserShown || canvas.page.backAction != nil
+            globalNavigation.backTitle = browserShown ? L10n.text("Back") : canvas.page.backAction?.title ?? L10n.text("Back")
+            let navigationHeight = globalNavigation.height(for: menuRegion.width)
+            globalNavigation.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY,
+                width: menuRegion.width, height: navigationHeight)
+            menuRegion.origin.y += navigationHeight
+            menuRegion.size.height -= navigationHeight
+            browser.frame = CGRect(x: 0, y: menuRegion.minY, width: view.bounds.width, height: menuRegion.height)
+            view.bringSubviewToFront(globalNavigation)
+        }
+        listTools.actions = canvas.page.listTools
+        listTools.searchQuery = searchQuery
+        listTools.isHidden = globalNavigation.isHidden || listTools.actions.isEmpty
+        if !listTools.isHidden {
+            listTools.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: 0)
+            listTools.frame.size.height = listTools.shelfHeight
+            menuRegion.origin.y += listTools.shelfHeight
+            menuRegion.size.height -= listTools.shelfHeight
+            view.bringSubviewToFront(listTools)
+        }
+        scrollView.setViewportFrame(menuRegion)
         canvas.bookHomePanes = book.map {
             CGRect(x: $0.minX - safe.minX, y: $0.minY - safe.minY, width: $0.width, height: $0.height)
         }
@@ -616,6 +761,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                  .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
             let journey = bundledJourney
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
+            let nextPlayerIndex = hotSeat.flatMap { $0.players.firstIndex(of: $0.turn) }
             #if os(tvOS)
             let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
             #else
@@ -624,32 +770,24 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: resumableLearningJourney != nil || savedLevel != nil || playlists.run != nil ? MobileHomeArt.journeyMap(completed: completedJourneyLevelCount, enabled: catalogue != nil)
                     : canStartJourney ? .init("journey", L10n.text("Start journey"), enabled: catalogue != nil && journey != nil) : nil,
-                families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil,
+                families: families, initials: initials, nextPlayerIndex: nextPlayerIndex,
+                subtitle: homeSubtitle, collectionsAvailable: catalogue != nil,
                 deskClock: deskClockAvailable)
             canvas.preview = nil
         case .support:
             canvas.page = GameSupport.page
             canvas.preview = GameSupport.qrCode
             canvas.previewSource = nil
+        case .family(.fan):
+            canvas.page = fanLibraryPage(path: [], subtitle: subtitle); canvas.preview = nil
+        case let .fanGroup(path):
+            canvas.page = fanLibraryPage(path: path, subtitle: subtitle); canvas.preview = nil
         case let .family(family):
-            let all = catalogue?.packs(in: family) ?? []
-            let query = searchQuery.trimmingCharacters(in: .whitespaces).lowercased()
-            let packs = query.isEmpty ? all : all.filter { $0.title.lowercased().contains(query) }
-            var rows: [GameFrontEnd.Action] = []
-            if family == .fan {
-                rows.append(.init("search", "Search: " + searchQuery.uppercased() + (searchField.isFirstResponder ? "_" : ""),
-                                  selected: !query.isEmpty))
-                rows.append(.init("shuffleAll", L10n.text("Shuffle all")))
+            let packs = catalogue?.packs(in: family) ?? []
+            let rows = packs.map { pack in
+                GameFrontEnd.Action("pack." + pack.id, pack.title + (pack.levelCount.map { "  \($0)" } ?? "") + solvedMark(pack))
             }
-            rows += packs.map { pack in
-                .init("pack." + pack.id, pack.title + (pack.levelCount.map { "  \($0)" } ?? "") + solvedMark(pack))
-            }
-            if family == .fan {
-                rows.append(.init("fanUpdate", fanUpdating ? L10n.text("Checking for new packs...") : L10n.text("Check for new packs"), enabled: !fanUpdating))
-            }
-            let count = query.isEmpty ? L10n.plural("count.packs", count: all.count, one: "%ld pack", other: "%ld packs") : L10n.text("\(packs.count)/\(all.count) packs")
-            canvas.page = .init(title: family.title,
-                                subtitle: !subtitle.isEmpty ? subtitle : (fanUpdateStatus.isEmpty ? count : fanUpdateStatus),
+            canvas.page = .init(title: family.title, subtitle: subtitle,
                                 rows: rows, footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
         case .levels:
@@ -672,8 +810,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", L10n.text("< Rank")), .init("rankNext", L10n.text("Rank >"))] : [])
                                     + [.init("previous", L10n.text("< Level"), enabled: rankIndex > 0),
                                          .init("next", L10n.text("Level >"), enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
-                                         .init("favourite", L10n.text("Favourite"), selected: isFavourite(selectedIndex)),
+                                         .init("favourite", isFavourite(selectedIndex) ? L10n.text("Remove favourite") : L10n.text("Add favourite"), selected: isFavourite(selectedIndex), icon: .favourite),
                                          .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
+                                    + (library is Lemmings2MobileLibrary ? [.init("l2Practice", L10n.text("Practice"))] : [])
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
                                     + [.init("back", L10n.text("Back")),
                                          .init("play", solved.contains(selectedIndex) ? L10n.text("Play again") : L10n.text("Play"), enabled: !loading, primary: true)],
@@ -685,6 +824,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
         case .journey:
             canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
+        case .l2Practice:
+            canvas.page = l2PracticePage(subtitle: subtitle); canvas.preview = nil
         case .shortGames:
             canvas.page = shortGamesPage(subtitle: subtitle); canvas.preview = nil
         case .progression:
@@ -755,7 +896,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                                  "\(action) \(kind.displayTitle)", enabled: !loading)
                                 },
                                 details: library.map { ["\($0.displayName)", L10n.plural("count.levels", count: $0.levels.count, one: "%ld level", other: "%ld levels")] } ?? [],
-                                footer: [.init("home", L10n.text("Back"))])
+                                footer: [.init("dataBack", L10n.text("Back"))])
             canvas.preview = nil
         }
         if !{ switch route { case .levels, .recordLevel, .recordHint: true; default: false } }() { canvas.previewSource = nil }
@@ -800,7 +941,30 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let source = preview.sourceRect
         return image.cropping(to: CGRect(x: source.x, y: source.y, width: source.width, height: source.height))
     }
+    func openGlobalSettings() {
+        settingsReturn = (route, scrollView.contentOffset, canvas.focusedID)
+        navigate(.settings)
+    }
+
     func navigate(_ next: Route) {
+        let position = NavigationPosition(route: route, offset: scrollView.contentOffset, focus: canvas.focusedID)
+        let returning = navigationHistory.lastIndex { $0.route == next }
+        let restore: NavigationPosition?
+        if next == .home {
+            restore = nil
+            navigationHistory.removeAll()
+        } else if next == route {
+            restore = detailReturnPosition ?? position
+        } else if let returning {
+            restore = navigationHistory[returning]
+            navigationHistory.removeSubrange(returning...)
+        } else {
+            restore = nil
+            navigationHistory.append(position)
+        }
+        detailReturnPosition = nil
+        if next == .home { settingsReturn = nil }
+        if next == .data, route != .data { dataBackRoute = route }
         if next != .familiarNames { familiarNames.clear() }
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
         confirmingRecordsReset = false
@@ -834,13 +998,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if !preserveWelcomeLoad { loading = false }
         preparingLevel = false
         if route != next { canvas.focusedID = nil }
+        globalNavigation.focusedID = nil
         route = next; notice = ""
         libraryInput.reset()
         if game == nil { becomeFirstResponder() }
         scrollView.setContentOffset(.zero, animated: false)
         rebuild()
+        if let restore {
+            view.layoutIfNeeded()
+            let maximum = max(0, scrollView.contentSize.height - scrollView.bounds.height)
+            scrollView.setContentOffset(CGPoint(x: restore.offset.x, y: min(maximum, max(0, restore.offset.y))), animated: false)
+            if let focus = restore.focus { canvas.focusAction(focus) }
+        }
     }
     func handle(_ id: String) {
+        if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
         if handleLearning(id) || handleRankings(id) { return }
@@ -855,13 +1027,35 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if hasNeoLemmixData { openNeoLemmix() } else { navigate(.data) }
         case "home": navigate(.home)
         case "back": navigate(levelsBackRoute)
+        case "dataBack": navigate(dataBackRoute)
+        case "addPlaylistBack": navigate(.levels); selectLevel(selectedIndex)
         case "favourite": toggleFavourite(selectedIndex)
         case "favourites": openFavourites()
+        case "fanGroupBack":
+            if case let .fanGroup(path) = route {
+                navigate(path.count > 1 ? .fanGroup(Array(path.dropLast())) : .family(.fan))
+            }
         case "fanUpdate": checkForFanPacks()
         case "search":
             if searchField.isFirstResponder { searchField.resignFirstResponder() } else { searchField.becomeFirstResponder() }
             rebuild()
+        case "searchClear":
+            searchQuery = ""
+            searchField.text = ""
+            canvas.focusedID = "search"
+            scrollView.setContentOffset(.zero, animated: false)
+            rebuild()
         case "settings": navigate(.settings)
+        case "settingsBack":
+            let source = settingsReturn
+            settingsReturn = nil
+            navigate(source?.route ?? .home)
+            view.layoutIfNeeded()
+            if let source {
+                let maximum = max(0, scrollView.contentSize.height - scrollView.bounds.height)
+                scrollView.setContentOffset(CGPoint(x: source.offset.x, y: min(source.offset.y, maximum)), animated: false)
+                if let focus = source.focus { canvas.focusAction(focus) }
+            }
         #if os(iOS)
         case "deskClock": presentDeskClock(reason: .menu)
         #endif
@@ -905,6 +1099,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 rebuild()
             } else if id.hasPrefix("family."), let family = MobileFamily(rawValue: String(id.dropFirst(7))) {
                 openFamily(family)
+            } else if id.hasPrefix("fanGroup.") {
+                let path: [String]
+                if case let .fanGroup(current) = route { path = current } else { path = [] }
+                let childID = String(id.dropFirst(9))
+                if fanLibraryRoot().group(at: path)?.children.contains(where: { $0.id == childID && $0.packID == nil }) == true {
+                    navigate(.fanGroup(path + [childID]))
+                }
             } else if id.hasPrefix("pack."), let pack = catalogue?.pack(id: String(id.dropFirst(5))) {
                 openPack(pack, back: route)
             }
@@ -938,7 +1139,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func openFavourites() {
-        openList(favourites.entries, name: "Favourites", back: .home)
+        openList(favourites.entries, name: "Favourites", back: route)
     }
 
     private func checkForFanPacks() {
@@ -979,10 +1180,23 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return MobileCatalogue(portsRoot: ports, fanFolders: fan)
     }
 
+    func fanLibraryRoot() -> FanLevelOrganisation.Group {
+        FanLevelOrganisation.library((catalogue?.packs(in: .fan) ?? []).map { .init(id: $0.id, title: $0.title) }, query: searchQuery)
+    }
+
+    private func fanLibraryPage(path: [String], subtitle: String) -> GameFrontEnd.Page {
+        let packs = catalogue?.packs(in: .fan) ?? []
+        let details = Dictionary(packs.map { ($0.id, ($0.levelCount.map { "  \($0)" } ?? "") + solvedMark($0)) }, uniquingKeysWith: { first, _ in first })
+        return FanLevelLibraryArt.page(root: fanLibraryRoot(), path: path, query: searchQuery,
+            editing: searchField.isFirstResponder, status: subtitle.isEmpty ? fanUpdateStatus : subtitle,
+            updating: fanUpdating, packDetails: details)
+    }
+
     private func openFamily(_ family: MobileFamily) {
         guard let catalogue else { return }
         let packs = catalogue.packs(in: family)
-        if packs.count == 1, let pack = packs.first { openPack(pack, back: .home) }
+        if family == .fan { searchQuery = ""; searchField.text = ""; navigate(.family(.fan)) }
+        else if packs.count == 1, let pack = packs.first { openPack(pack, back: .home) }
         else { navigate(.family(family)) }
     }
 
@@ -1050,6 +1264,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         guard route == .levels, game == nil else { return }
         moveLevel(gesture.direction == .left ? 1 : -1)
     }
+    func goBack() {
+        guard game == nil, !deskClockBlocksInput else { return }
+        if searchField.isFirstResponder { searchField.resignFirstResponder(); rebuild(); return }
+        if browserShown { navigate(levelsBackRoute) } else { canvas.goBack() }
+    }
+    #if os(iOS)
+    @objc private func edgeBack(_ gesture: UIScreenEdgePanGestureRecognizer) {
+        guard gesture.state == .ended, game == nil, !globalNavigation.isHidden,
+              gesture.translation(in: view).x > 60 || gesture.velocity(in: view).x > 500 else { return }
+        goBack()
+    }
+    #endif
     private func moveLevel(_ offset: Int) {
         guard let library else { return }
         let index = selectedIndex + offset
@@ -1116,6 +1342,17 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         catch { notice = error.localizedDescription; rebuild(); return }
         openLibrary({ try store.loadLemmings2Library(storage: progressStorage) }) { [self] opened in
             guard let loaded = opened as? Lemmings2MobileLibrary else { navigate(.data); return }
+            if let checkpoint, let practice = try? Lemmings2PracticeMobileLibrary.restoring(checkpoint.levelIdentifier, source: loaded) {
+                library = practice
+                currentPack = nil; activeRun = nil; levelsBackRoute = .l2Practice
+                selectedIndex = 0; selectedPreview = nil
+                let directory = loaded.directory, choice = practice.choice, skills = practice.skills
+                previewLoader = MobileMenuPreviewLoader {
+                    try Lemmings2PracticeMobileLibrary(source: Lemmings2MobileLibrary(directory: directory, storage: progressStorage), choice: choice, skills: skills)
+                }
+                navigate(.levels); startLevel(0, checkpoint: checkpoint)
+                return
+            }
             library = loaded
             currentPack = nil
             activeRun = nil
@@ -1414,8 +1651,44 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     throw MobileSessionError.invalidCheckpoint
                 }
             }
-            if !inRun, library.levels.indices.contains(index + 1), arcadeStore.records.levelSkips(profileID: ownerID).available > 0 {
-                next.onSkipLevel = { [weak self] in self?.arcadeStore.spendLevelSkip(on: recordLevel, profileID: ownerID) ?? false }
+            var skipRollback: (() throws -> Void)?
+            var skippedJourneyAdvance: Bool?
+            if inLearning || (!inRun && library.canSkipLevel(at: index)) {
+                next.onSkipBalance = { [weak self] in
+                    guard let self, !self.arcadeStore.records.hasSkipped(recordLevel, profileID: ownerID),
+                          self.arcadeStore.profilesAreWritable, self.arcadeStore.storageError == nil else { return 0 }
+                    return self.arcadeStore.records.levelSkips(profileID: ownerID).available
+                }
+                next.onSkipLevel = { [weak self] in
+                    guard let self, self.arcadeStore.spendLevelSkip(on: recordLevel, profileID: ownerID) else { return false }
+                    do {
+                        if inLearning {
+                            let previous = self.learning
+                            skipRollback = { [weak self] in try self?.saveLearningState(previous) }
+                            var saved = previous
+                            saved.record(won: false)
+                            let advanced = saved.advance()
+                            try self.saveLearningState(saved)
+                            skippedJourneyAdvance = advanced
+                        } else { skipRollback = try library.prepareLevelSkip(at: index) }
+                        return true
+                    } catch {
+                        try? skipRollback?()
+                        skipRollback = nil; skippedJourneyAdvance = nil
+                        _ = self.arcadeStore.returnLevelSkip(on: recordLevel, profileID: ownerID)
+                        self.notice = error.localizedDescription
+                        return false
+                    }
+                }
+                next.onRefundSkip = { [weak self] in
+                    guard let self else { return false }
+                    do {
+                        try skipRollback?()
+                        guard self.arcadeStore.returnLevelSkip(on: recordLevel, profileID: ownerID) else { return false }
+                        skipRollback = nil; skippedJourneyAdvance = nil
+                        return true
+                    } catch { self.notice = error.localizedDescription; return false }
+                }
             }
             if checkpoint == nil {
                 guard arcadeStore.beginAttempt(id: attemptID, profileID: ownerID, level: recordLevel,
@@ -1458,6 +1731,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                         GameProgressPreferences.saveFanLevel(pack: fan.pack.url, label: fan.entries[level].label,
                             profileID: ownerID, sessionID: ghostSeat?.id)
                     }
+                }
+                if let sequence = library as? Lemmings2ShortPlayMobileLibrary, let run = self.activeRun {
+                    do {
+                        if let progress = try sequence.record(session) {
+                            try self.collectionsBridge?.store.setL2Progress(progress, key: Lemmings2ShortPlayMobileLibrary.progressKey, runID: run.id)
+                        }
+                    } catch { return ([], error.localizedDescription) }
                 }
                 if inLearning {
                     do { try self.recordLearningResult(snapshot) }
@@ -1512,7 +1792,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 case .next:
                     if inLearning {
                         do {
-                            if try !self.advanceLearningRun() {
+                            let advanced: Bool
+                            if let skipped = skippedJourneyAdvance {
+                                advanced = skipped; skippedJourneyAdvance = nil; skipRollback = nil
+                            } else { advanced = try self.advanceLearningRun() }
+                            if !advanced {
                                 self.navigate(.journey); self.game?.onExit?(.library); return
                             }
                         } catch { self.game?.showPreparationError(error.localizedDescription); return }
@@ -1524,7 +1808,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let previous = game
             if let previous { next.inheritSolution(from: previous) }
             #if os(iOS)
-            MobileDeskClockController.attach(next, to: self, closing: deskClock)
+            if let deskClock, deskClock.reason == .tent {
+                next.setDeskClockVisible(true)
+                MobileDeskClockController.attach(next, to: self, closing: nil)
+                deskClock.view.superview?.bringSubviewToFront(deskClock.view)
+            } else {
+                MobileDeskClockController.attach(next, to: self, closing: deskClock)
+            }
             #else
             addChild(next); next.view.frame = view.bounds
             next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -1557,6 +1847,6 @@ extension MobileLibraryViewController: DeskClockHost {
                 || scrollView.isTracking || scrollView.isDecelerating)
     }
     var deskClockSettings: DeskClockSettings { mobileSettings.deskClock }
-    var deskClockRegionView: UIView { view }
+    var deskClockRegionView: UIView { deskClockWindow ?? view }
 }
 #endif

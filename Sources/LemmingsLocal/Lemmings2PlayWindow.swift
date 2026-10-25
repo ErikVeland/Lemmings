@@ -18,6 +18,8 @@ import NxlvKit
         let isAvailable: Bool
     }
 
+    var currentAttemptID: UUID { arcadeRunID }
+    var currentLevelFingerprint: String? { arcadeLevel?.conditions?.levelFingerprint }
     var onReturnToLibrary: (() -> Void)?
     var onProgressChanged: (() -> Void)?
     var onCampaignCompleted: (() -> Void)?
@@ -313,7 +315,6 @@ import NxlvKit
             switch action {
             case .rewind, .backward: return game.tick > 0
             case .forward: return !game.isComplete || self.canStepForward
-            case .hints: return true
             }
         }
         canvas.timeline.perform = { [weak keyboard] action in
@@ -321,7 +322,6 @@ import NxlvKit
             case .rewind: keyboard?.rewind?()
             case .backward: keyboard?.step?(-1)
             case .forward: keyboard?.step?(1)
-            case .hints: keyboard?.hints?()
             }
         }
         keyboard.active = { [weak self] in self?.screen == .playing && self?.game?.isComplete == false }
@@ -423,6 +423,8 @@ import NxlvKit
             guard let self else { return }
             if self.cancelRewindToOrigin() { return }
             if self.fanSelected { self.fanSelected = false; self.releasePointerInput(); self.refreshGame() }
+            else if self.screen == .playing { self.presentPauseMenu() }
+            else if self.usesSharedWindow { self.paused = true; self.releasePointerInput(); self.onReturnToLibrary?() }
             else { self.releasePointerInput(); self.key("\u{1b}") }
         }
         keyboard.cyclesSharedSkillLetters = false
@@ -503,12 +505,10 @@ import NxlvKit
         }
         keyboard.pauseForHelp = { [weak self] in
             guard let self else { return {} }
-            let interruption = self.gameplayKeyboard?.interruptionCount
-            let wasPaused = self.paused
             self.paused = true; self.releasePointerInput(); self.saveCheckpoint(immediately: true); self.refreshGame()
             return { [weak self] in
                 guard let self else { return }
-                self.paused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
+                self.paused = true
                 self.accumulator = 0; self.refreshGame()
             }
         }
@@ -739,6 +739,21 @@ import NxlvKit
         print("PASS L2 optional 25× preference, canvas label and disable clamp")
     }
 
+    func testPauseLevelSkip() throws {
+        timer?.invalidate(); prepareBriefing(); startLevel(); canvas.startCountdown.cancel()
+        audioSettings.modernControlsEnabled = false
+        let before = campaign.level, owner = arcadeProfileID, level = arcadeLevel!
+        presentPauseMenu()
+        let page = GameScreen.shared.controllerPage(in: window!)!
+        try validatePauseSkipPage(page, owner: window!, name: "lemmings2", enabled: true)
+        let skip = DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }.first { $0.title.hasPrefix("Skip level") }!
+        skip.performClick(nil)
+        guard campaign.level == before + 1, ArcadeStore.shared.records.hasSkipped(level, profileID: owner),
+              ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0 else {
+            throw NSError(domain: "PauseSkip", code: 1)
+        }
+        GameScreen.shared.dismissAll()
+    }
     func testPauseKeyboard() throws {
         timer?.invalidate()
         prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
@@ -779,20 +794,17 @@ import NxlvKit
 
     func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(front) }
     func showLearningHints() {
-        if game?.isComplete == true { retryLevel() }
         paused = true; accumulator = 0
         showLevelHints()
     }
     func showLevelHints() {
-        guard let window, !GameScreen.shared.isPresented, screen == .playing || screen == .briefing else { return }
+        guard let window, screen == .playing || screen == .briefing || screen == .results else { return }
         let names = game?.configuration.skills.map(\.name) ?? []
         let deck = LevelHintDeck.practice(title: level.title, skills: names)
-        let wasPaused = paused
-        let interruption = gameplayKeyboard?.interruptionCount
         paused = true; accumulator = 0; releasePointerInput(); saveCheckpoint(immediately: true); refreshGame()
         LevelHintWindow.shared.show(deck, owner: window, onDismiss: { [weak self] in
             guard let self else { return }
-            self.paused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
+            self.paused = true
             self.accumulator = 0; self.lastTime = ProcessInfo.processInfo.systemUptime; self.refreshGame()
         })
     }
@@ -1399,8 +1411,7 @@ import NxlvKit
         nukeGesture.reset()
         if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
         if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
-        if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings,
-            preferBombBlockers: audioSettings.favorBombBlockers, preferBuilders: audioSettings.favorBuilders) {
+        if !fanSelected, let lem = canvas.target(slot: selected, x: x, y: y) {
             if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
                 assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
                 canvas.didAssign(to: lem.id)
@@ -1926,17 +1937,38 @@ import NxlvKit
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
             rewardVolumeProvider: { [weak self] in self?.sounds.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: audioSettings.modernControlsEnabled && learningResultActions != nil
+            skip: learningResultActions != nil
                 ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
+    private func presentPauseMenu() {
+        paused = true; accumulator = 0; releasePointerInput()
+        saveCheckpoint(immediately: true); updateUserMusicPause(); refreshGame()
+        let learning = learningResultActions
+        let skip = arcadeLevel.flatMap { level -> PauseLevelSkip? in
+            if let learning {
+                return PauseLevelSkip(level: level, profileID: arcadeProfileID, prepare: learning.prepareSkip,
+                    handlesHandover: true, advance: learning.skip)
+            }
+            return canSkipLevel ? PauseLevelSkip(level: level, profileID: arcadeProfileID,
+                advance: { [weak self] in self?.skipLevel() }) : nil
+        }
+        let page = GamePauseMenu.page(title: arcadeLevel?.title ?? "",
+            resume: { [weak self] in
+                guard let self else { return }
+                self.paused = false; self.accumulator = 0
+                self.updateUserMusicPause(); self.refreshGame()
+            }, retry: { [weak self] in self?.retryLevel() },
+            hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
+        GameScreen.shared.present(page, owner: window)
+    }
     /// Level skips apply to a failed campaign level, not practice or playlists.
-    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        audioSettings.modernControlsEnabled && practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
-            && game?.didWin == false && campaign.canSkipLevel
+        practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
+            && (game?.isComplete == false || game?.didWin == false) && campaign.canSkipLevel
     }
     /// The result screen has already spent the skip. This only moves the campaign.
     private func skipLevel() {
@@ -2517,13 +2549,12 @@ import NxlvKit
         skillBadge = skillFrame.map { image(width: $0.width, height: $0.height, pixels: $0.pixels,
                                              palette: palette, opaque: $0.opaque, category: .sprite) }
         var label: String?
-        if let window, let game {
+        if let window, game != nil {
             let point = controllerPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
             let source = gameplayRect.contains(point) ? precisionLens.source(point) : point
             let x = (source.x - origin.x) / zoom, y = (source.y - origin.y) / (zoom * 1.2)
             if (0..<visibleWidth).contains(x), (0..<160).contains(y) {
-                if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
-            preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders) {
+                if !fan, let target = target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY)) {
                     switch target.state {
                     case .walking: label = L10n.text("WALKER")
                     case .running: label = L10n.text("RUNNER")
@@ -2683,6 +2714,7 @@ import NxlvKit
     var isFastForward = false { didSet { syncSpeedEffects() } }
     var fullScreenHDRFlashes = true { didSet { if !fullScreenHDRFlashes { hdrOverlay?.clearExplosions() } } }
     private let speedTrails = SpeedTrails()
+    private let crowdPresentation = LemmingCrowdPresentation()
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
     private var selectionFade = SelectionFade<Int>()
@@ -2727,6 +2759,7 @@ import NxlvKit
     }
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
+        crowdPresentation.reset()
         hotSeatGhostSprites.clear()
         if resetPresentation {
             explosionTimeline.reset()
@@ -2786,7 +2819,7 @@ import NxlvKit
     }
     func update(_ game: Lemmings2Runtime) {
         explosionTimeline.update(tick: game.tick, bursts: PixelExplosion.lemmings2(game))
-        if game.tick < (self.game?.tick ?? 0) { selectionFade.reset() }
+        if game.tick < (self.game?.tick ?? 0) { selectionFade.reset(); crowdPresentation.reset() }
         if terrainRevision != game.terrainRevision || game.tick < (self.game?.tick ?? 0) {
             terrain = image(width: game.configuration.width, height: game.configuration.height,
                             pixels: game.pixels, palette: game.configuration.palette, category: terrainCategory)
@@ -2847,6 +2880,10 @@ import NxlvKit
             } else { selectionFade.reset() }
         }
         var selectedSprite: (pixels: CGImage, rect: CGRect, mirrored: Bool)?
+        if !ghostsOnly && hotSeatColour == nil {
+            crowdPresentation.begin(tick: game.tick, zoom: zoom,
+                enabled: gameplayCursorStyle == .modern)
+        }
         for lem in game.lemmings where lem.active && lem.state != .trapped {
             let motion = ghostsOnly ? speedTrails.motion(actor: lem.id) : .zero
             if ghostsOnly && motion == .zero { continue }
@@ -3078,11 +3115,15 @@ import NxlvKit
                     in: rect, mirrored: mirrored)
                 continue
             }
-            drawImage(sprite.image, x: CGFloat(lem.x + offsetX + sprite.x),
-                y: CGFloat(lem.y + offsetY + sprite.y), mirrored: mirrored)
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
                 width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
+            let worldRect = CGRect(x: CGFloat(lem.x + offsetX + sprite.x), y: CGFloat(lem.y + offsetY + sprite.y),
+                width: sprite.image.size.width, height: sprite.image.size.height)
+            crowdPresentation.drawBehind(sprite.image, id: lem.id, rect: spriteRect,
+                worldRect: worldRect, mirrored: mirrored)
+            drawImage(sprite.image, x: CGFloat(lem.x + offsetX + sprite.x),
+                y: CGFloat(lem.y + offsetY + sprite.y), mirrored: mirrored)
             let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
@@ -3131,6 +3172,7 @@ import NxlvKit
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
             }
         }
+        if !ghostsOnly && hotSeatColour == nil { crowdPresentation.finish() }
         if hotSeatColour == nil, lemmingSelectionStyle == .modern, let selectedSprite {
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: gameplayRect,
@@ -3406,13 +3448,33 @@ import NxlvKit
         focusNotice = text; needsDisplay = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in self?.focusNotice = nil; self?.needsDisplay = true }
     }
+    func target(slot: Int, x: Int, y: Int) -> Lemmings2Runtime.Lemming? {
+        guard let game else { return nil }
+        let preferred = game.target(slot: slot, x: x, y: y, preferApproaching: favorApproachingLemmings,
+            preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders)
+        guard gameplayCursorStyle == .modern, zoom > 2 else { return preferred }
+        if let preferred, game.configuration.skills.indices.contains(slot) {
+            let skill = game.configuration.skills[slot]
+            if favorBuilders, skill == .builder, [.building, .shrugging].contains(preferred.state) { return preferred }
+            if favorBombBlockers, [.bomber, .blastBomber].contains(skill), preferred.state == .blocking { return preferred }
+        }
+        let ordinary = game.target(slot: slot, x: x, y: y)
+        // Retain explicit skill priorities before considering the visible silhouette.
+        guard preferred?.id == ordinary?.id,
+              let id = crowdPresentation.target(at: CGPoint(x: x, y: y), tick: game.tick,
+                enabled: gameplayCursorStyle == .modern && zoom > 2),
+              game.canAssign(slot: slot, to: id),
+              let visible = game.lemmings.first(where: { $0.id == id && $0.active }),
+              abs(visible.x - x) <= 9, abs(visible.y - 5 - y) <= 12 else { return preferred }
+        if favorApproachingLemmings, let preferred, preferred.direction != visible.direction { return preferred }
+        return visible
+    }
     func pointerTarget(slot: Int) -> Int? {
-        guard let game, let p = cursorPoint(), gameplayRect.contains(p) else { return nil }
+        guard game != nil, let p = cursorPoint(), gameplayRect.contains(p) else { return nil }
         let source = precisionLens.source(p)
         let x = (source.x - origin.x) / zoom, y = (source.y - origin.y) / (zoom * 1.2)
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
-        return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
-            preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders)?.id
+        return target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY))?.id
     }
     var inspectionSelectionAvailable: () -> Bool = { false }
     private var highlightedLemmingID: Int? {
@@ -3424,6 +3486,9 @@ import NxlvKit
         let source = precisionLens.source(p)
         let point = CGPoint(x: (source.x - origin.x) / zoom + cameraX,
             y: (source.y - origin.y) / (zoom * 1.2) + cameraY)
+        if let id = crowdPresentation.target(at: point, tick: game.tick,
+            enabled: gameplayCursorStyle == .modern && zoom > 2),
+            game.lemmings.contains(where: { $0.id == id && $0.active }) { return id }
         return LemmingInspectionHover.nearestID(at: point,
             actors: game.lemmings.filter(\.active).map { ($0.id, $0.x, $0.y) })
     }

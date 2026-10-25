@@ -71,6 +71,23 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
 }
 
 @MainActor struct DeskClockPresentationTests {
+    @Test func windowBackedClockUsesUIKitPresentation() {
+        let fixture = DeskClockFixture(access: .denied)
+        let window = UIWindow(frame: fixture.host.view.bounds)
+        window.rootViewController = fixture.host
+        window.isHidden = false
+        defer { window.isHidden = true }
+
+        let clock = fixture.clock(.menu)
+        clock.present(in: fixture.host, surface: window)
+        #expect(clock.modalPresentationStyle == .overFullScreen)
+        #expect(clock.presentingViewController === fixture.host)
+        #expect(clock.parent == nil)
+        #expect(clock.view.superview !== window)
+        clock.close()
+        #expect(!clock.isShown && clock.view.superview == nil)
+    }
+
     @Test func menuOpensClock() async {
         let home = MobileHomeArt.page(journey: nil, families: [], initials: "PLA", deskClock: true)
         let footer = home.footer.map(\.id)
@@ -244,6 +261,22 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
         #expect(MobileSettingsArt.groups().rows.contains { $0.id == id })
         #expect(!MobileSettingsArt.groups(inGame: true).rows.contains { $0.id == id })
         #expect(!MobileSettingsArt.groups(television: true).rows.contains { $0.id == id })
+    }
+
+    @Test func redNightVisionSettingHasAVisibleToggleAndNightBoundary() {
+        var settings = MobileSettings()
+        let key = "setting.deskClockRedNight"
+        let off = MobileSettingsArt.page(.deskClock, settings: settings).rows.first { $0.id == key }
+        #expect(off?.toggleValue == false)
+        settings.deskClock.redNightVision = true
+        let on = MobileSettingsArt.page(.deskClock, settings: settings).rows.first { $0.id == key }
+        #expect(on?.toggleValue == true)
+        let view = MobileDeskClockView(settings: settings)
+        let calendar = Calendar.current
+        let night = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 23))!
+        let day = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 12))!
+        #expect(view.isRedNightVisionActive(at: night))
+        #expect(!view.isRedNightVisionActive(at: day))
     }
 
     @Test func accessibilityLabelReadsTimeAndEvent() {

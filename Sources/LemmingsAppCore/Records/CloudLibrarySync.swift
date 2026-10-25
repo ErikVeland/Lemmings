@@ -71,7 +71,7 @@ import NxlvKit
         stopped = false
         // Sync is automatic in normal builds. Retire the old manual pause switch.
         if defaultEnabled && !enabled { enabled = true }
-        requestSync()
+        requestSync(immediately: true)
         timer = Task { [weak self] in
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 30_000_000_000)
@@ -81,12 +81,12 @@ import NxlvKit
         }
     }
     public func stop() { stopped = true; requested = false; timer?.cancel(); timer = nil; task?.cancel(); task = nil }
-    public func requestSync() {
+    public func requestSync(immediately: Bool = false) {
         guard !stopped else { return }
         requested = true
         guard task == nil, !running else { return }
         task = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            if !immediately { try? await Task.sleep(nanoseconds: 1_000_000_000) }
             guard let self, !Task.isCancelled else { return }
             // A save during import/upload gets another pass. An unchanged offline
             // provider waits for the periodic retry or next foreground activation.
@@ -97,6 +97,19 @@ import NxlvKit
                 if self.state == .offline || { if case .failed = self.state { return true }; return false }() { break }
             }
             self.task = nil
+        }
+    }
+    /// Finish an active pass, then capture again so exit-time saves are included.
+    /// Platform callers bound the available exit/background time.
+    public func syncForLifecycle() async {
+        guard !stopped, enabled else { return }
+        for _ in 0..<3 {
+            await waitUntilIdle()
+            guard !Task.isCancelled, !stopped else { return }
+            requested = false
+            await syncNow()
+            guard requested, state != .offline else { return }
+            if case .failed = state { return }
         }
     }
     private func persist(_ value: LocalState) async throws {
@@ -180,6 +193,9 @@ import NxlvKit
             }
             let discovered = try await transport.discover(identities)
             identities = try AppleCloudLibraryTransport.mergeIdentities(identities, discovered)
+            if !testerSyncEnabled, identities.contains(try await Self.testerIdentity.value) {
+                defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
+            }
             if let apple = transport as? AppleCloudLibraryTransport {
                 let keys = try await apple.storeCredentials(identities)
                 identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
@@ -348,6 +364,9 @@ import NxlvKit
         requestSync()
     }
     public static let testerPassword = "test99"
+    private static let testerIdentity = Task.detached(priority: .utility) {
+        try CloudLibraryIdentity(password: "test99")
+    }
     public var testerSyncEnabled: Bool { defaults.bool(forKey: "CloudLibrary.testerSync.enabled") }
     /// The test link covers the whole library, independent of the selected player or session.
     public func enableTesterSync() async throws {
@@ -364,8 +383,11 @@ import NxlvKit
         let shared = try await Task.detached(priority: .userInitiated) { try CloudLibraryIdentity(password: password) }.value
         let keys = try await apple.storeCredentials(try AppleCloudLibraryTransport.mergeIdentities(identities, [shared]))
         identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
+        if shared == (try await Self.testerIdentity.value) {
+            defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
+        }
         enabled = true
-        requestSync()
+        requestSync(immediately: true)
     }
     private func waitUntilIdle() async {
         while running { await withCheckedContinuation { idleWaiters.append($0) } }

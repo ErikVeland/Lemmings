@@ -52,6 +52,18 @@ retry/continue actions, handovers, hints or saved-run navigation. Reuse shared
 controls and flows. Keep handovers paused until the player is ready. Record
 engine-specific limits and validation gaps instead of silently omitting support.
 
+# Cross-platform parity
+
+Applicable features must work on Mac, iPhone, iPad, Duo and Apple TV, including
+supported NeoLemmix content. Adapt input, layout and file transfer to each
+platform without silently dropping capabilities. Prefer shared feature logic
+and renderers. Check every affected engine and platform when adding or fixing
+a feature. Keep deliberate platform exceptions explicit, including the user's
+TV effects budget. Record source gaps separately from physical-device and
+service acceptance. Maintain `Documentation/PlatformFeatureParity.md` as the
+current source-backed register. Older release notes and historical port plans
+do not establish current parity.
+
 # Local test builds
 
 A request for a test build means a quick local build for manual testing.

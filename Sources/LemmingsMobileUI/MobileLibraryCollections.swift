@@ -68,7 +68,7 @@ extension MobileLibraryViewController {
     func addToPlaylistPage(subtitle: String) -> GameFrontEnd.Page {
         var rows = playlists.playlists.map { GameFrontEnd.Action("add." + $0.id.uuidString, $0.name + "  \($0.entries.count)") }
         rows.append(.init("addNew", L10n.text("New playlist")))
-        return .init(title: L10n.text("Add to playlist"), subtitle: subtitle, rows: rows, footer: [.init("back", L10n.text("Back"))])
+        return .init(title: L10n.text("Add to playlist"), subtitle: subtitle, rows: rows, footer: [.init("addPlaylistBack", L10n.text("Back"))])
     }
 
     // MARK: - Actions
@@ -106,7 +106,7 @@ extension MobileLibraryViewController {
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()
         default:
-            if id == "shortSelect.classic" { shortGamesSelection = "classic"; rebuild() }
+            if id.hasPrefix("shortSelect."), ["classic", "lemmings2"].contains(String(id.dropFirst(12))) { shortGamesSelection = String(id.dropFirst(12)); rebuild() }
             else if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
             else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
             else if id.hasPrefix("add."), let uuid = UUID(uuidString: String(id.dropFirst(4))) { addCurrentLevel(to: uuid) }
@@ -209,6 +209,10 @@ extension MobileLibraryViewController {
     func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0,
                   checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false,
                   restoringMatchingCheckpoint: Bool = false) {
+        if let run, Lemmings2ShortPlayMobileLibrary.matches(entries) {
+            openTribesShortRun(run, back: back, position: position, checkpoint: checkpoint, startImmediately: startImmediately)
+            return
+        }
         guard let catalogue else { return }
         // A long list shows its titles without opening every pack.
         let lazy = run != nil || (entries.count > 100 && entries.allSatisfy { $0.title != nil })
@@ -242,6 +246,10 @@ extension MobileLibraryViewController {
 
     func resumeRun() {
         guard let run = playlists.run, let catalogue else { return }
+        if Lemmings2ShortPlayMobileLibrary.matches(run.entries) {
+            openTribesShortRun(run, back: .collections, position: run.position, checkpoint: pendingCheckpoint, startImmediately: true)
+            return
+        }
         let owner = profiles.activeID, scope = hotSeat?.scope
         learningTask?.cancel()
         learningTask = Task { [weak self] in

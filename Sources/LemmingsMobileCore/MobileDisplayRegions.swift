@@ -13,6 +13,15 @@ public struct MobileReservedRegion: Equatable, Sendable {
 }
 
 public enum MobileDisplayRegions {
+    /// Choose the viewport before laying out a scrolling page. A corner cutout can
+    /// shorten its height, but scrolling must never change button widths or hit areas.
+    public static func scrollingMenuFrame(in bounds: MobileRect, avoiding regions: [MobileReservedRegion]) -> MobileRect {
+        let fullWidth = freeFrames(in: bounds, avoiding: regions).filter {
+            $0.minX == bounds.minX && $0.maxX == bounds.maxX && $0.width >= 280 && $0.height >= 88
+        }
+        return fullWidth.max { $0.height < $1.height } ?? menuFrame(in: bounds, avoiding: regions)
+    }
+
     /// Candidate rectangles avoid every reserved region. A menu uses one rectangle so
     /// scrolling cannot move an action behind a hinge or camera cutout.
     public static func freeFrames(in safe: MobileRect, avoiding regions: [MobileReservedRegion]) -> [MobileRect] {
@@ -33,6 +42,22 @@ public enum MobileDisplayRegions {
             }
         }
         return frames
+    }
+
+    /// Use the full width below a corner cutout instead of reserving that side for the whole screen.
+    public static func fullWidthContent(in bounds: MobileRect, avoiding regions: [MobileReservedRegion]) -> MobileRect {
+        freeFrames(in: bounds, avoiding: regions)
+            .filter { $0.minX == bounds.minX && $0.maxX == bounds.maxX }
+            .max { $0.height < $1.height } ?? menuFrame(in: bounds, avoiding: regions)
+    }
+
+    /// Keep a row at its existing height, using the widest horizontal span clear of local cutouts.
+    public static func clearHorizontalFrame(_ frame: MobileRect, avoiding regions: [MobileReservedRegion]) -> MobileRect {
+        guard frame.width > 0, frame.height > 0 else { return frame }
+        return freeFrames(in: frame, avoiding: regions)
+            .filter { $0.minY == frame.minY && $0.maxY == frame.maxY }
+            .max { $0.width < $1.width }
+            ?? MobileRect(x: frame.x, y: frame.y, width: 0, height: frame.height)
     }
 
     /// Full-height banks keep vertically scrolling Home lists clear of cutouts and the hinge.

@@ -66,6 +66,13 @@ private func testFailingRepeats() throws {
 }
 
 private func testSkipOpensTheNextLevel() throws {
+    var paused = makeFlow()
+    paused.startGame(); paused.selectRank(0); paused.beginPlaying()
+    try require(paused.canSkipLevel && paused.skipLevel() && paused.screen == .briefing(level: 1),
+        "a paused attempt must skip directly to the next briefing")
+    try require(!paused.hasPassed(rank: "Fun", position: 0), "a paused skip awarded a clear")
+    paused.selectLevel(rank: 1, position: 1); paused.beginPlaying()
+    try require(!paused.canSkipLevel, "the final level offered a paused skip")
     var flow = makeFlow()
     flow.startGame()
     flow.selectRank(0)

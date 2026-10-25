@@ -15,12 +15,56 @@ public typealias Lemmings2MobileGhostRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings2MobileSession: MobileGameSession {
+    public var artworkRenderer: ((Lemmings2Runtime, MobileTargetSelection?, [MobileReplayGhost<Lemmings2Runtime>], Bool) throws -> MobilePixelFrame)?
+    private var macArtwork = false
+    private let macSpriteCache = MobileSequelArtworkCache()
+    public var renderScale: Double { macArtwork && artworkRenderer != nil ? 2 : 1 }
+    public var availableGraphics: [ClassicGraphicsSource] { artworkRenderer == nil ? [] : [.dosVGA, .macintosh] }
+    private func artworkSprite(_ value: MobileSpriteHighlight?) -> MobileSpriteHighlight? {
+        guard macArtwork else { return value }
+        return macSpriteCache.sprite(value, category: value?.cacheKey.contains("walker-") == true ? .lemmings2Walker : .sprite)
+    }
+    public func makeReplayClone() -> (any MobileGameSession)? {
+        let copy = Lemmings2MobileSession(runtime: initial, engineFingerprint: engineFingerprint,
+            levelIdentifier: levelIdentifier, levelIndex: levelIndex, levelFingerprint: levelFingerprint,
+            renderer: renderer, ghostRenderer: ghostRenderer, soundBank: soundBank)
+        copy.skillCursorFrames = skillCursorFrames
+        copy.spriteProvider = spriteProvider
+        copy.artworkRenderer = artworkRenderer
+        copy.applySettings(spriteFeedback.settings)
+        return copy
+    }
+
+    private var spriteFeedback = MobileSpriteFeedback<Lemmings2Runtime>()
+    public var spriteProvider: ((Lemmings2Runtime, Int) -> MobileSpriteHighlight?)? {
+        get { spriteFeedback.provider }
+        set { spriteFeedback.provider = newValue }
+    }
+    public func applySettings(_ settings: ClassicSettings) {
+        spriteFeedback.settings = settings
+        macArtwork = settings.graphics == .macintosh || settings.graphics == .macintoshMonochrome
+    }
+    public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.sprite(in: runtime, id: actor, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+    public var selectionSprite: MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.selection(in: runtime, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+    public var assignmentProgress: Double? { spriteFeedback.progress(at: runtime.tick, ticksPerSecond: ticksPerSecond) }
+    public var assignmentSprite: MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.acknowledgement(in: runtime, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+
     public var familiarNamesStore: FamiliarNamesStore? = .shared
     private enum Input: Codable, Sendable {
         case assign(tick: Int, control: Int, target: Int)
         case endRun(tick: Int)
         case fan(tick: Int, x: Int, y: Int, active: Bool)
         case bonusSkill(tick: Int, control: Int)
+        case aim(tick: Int, x: Int, y: Int, held: Bool)
+        case machine(tick: Int, x: Int, y: Int)
+        case chain(tick: Int, x: Int, y: Int)
+        case releasePointer(tick: Int)
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -40,6 +84,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return .init(x: Double(point.x + point.width / 2), y: Double(point.y + point.height / 2))
     }
 
+    public var lostLemmingCount: Int { runtime.lost }
     public let engineIdentifier = "lemmings2"
     public let engineFingerprint: String
     public let levelIdentifier: String
@@ -67,6 +112,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     }
     private var beforeEndRun: Lemmings2Runtime?
     private var inputs: [Input] = []
+    private var pointerAim: (x: Int, y: Int, held: Bool)?
     private let onCompletion: ((Lemmings2Runtime) -> Void)?
     private var didNotifyCompletion = false
     public private(set) var rewindCount = 0
@@ -148,6 +194,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public var isFanActive: Bool {
         for input in inputs.reversed() {
+            if case .releasePointer = input { return false }
             if case let .fan(_, _, _, active) = input { return active }
         }
         return false
@@ -164,6 +211,34 @@ public final class Lemmings2MobileSession: MobileGameSession {
         if !active && !isFanActive { return }
         runtime.setFan(x: x, y: y, active: active)
         inputs.append(.fan(tick: runtime.tick, x: x, y: y, active: active))
+    }
+
+    public func setAim(at point: MobilePoint, held: Bool) {
+        guard !runtime.isComplete, !runtime.isNuking, point.x.isFinite, point.y.isFinite else { return }
+        let x = Int(min(levelSize.width - 1, max(0, point.x)))
+        let y = Int(min(levelSize.height - 1, max(0, point.y)))
+        guard pointerAim?.x != x || pointerAim?.y != y || pointerAim?.held != held else { return }
+        pointerAim = (x, y, held)
+        runtime.setAim(x: x, y: y, held: held)
+        inputs.append(.aim(tick: runtime.tick, x: x, y: y, held: held))
+    }
+
+    @discardableResult public func interact(at point: MobilePoint) -> Bool {
+        guard !runtime.isComplete, !runtime.isNuking, point.x.isFinite, point.y.isFinite else { return false }
+        let x = Int(min(levelSize.width - 1, max(0, point.x)))
+        let y = Int(min(levelSize.height - 1, max(0, point.y)))
+        if runtime.moveMachine(x: x, y: y) { inputs.append(.machine(tick: runtime.tick, x: x, y: y)) }
+        else if runtime.releaseChain(x: x, y: y) { inputs.append(.chain(tick: runtime.tick, x: x, y: y)) }
+        else { return false }
+        appendSoundRequests(runtime.drainSoundEvents())
+        return true
+    }
+
+    public func releasePointerInput() {
+        guard pointerAim != nil || isFanActive else { return }
+        runtime.releasePointerInput()
+        pointerAim = nil
+        inputs.append(.releasePointer(tick: runtime.tick))
     }
 
     public var snapshot: MobileGameSnapshot {
@@ -221,6 +296,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         guard runtime.assign(slot: control, to: target) else { return false }
         appendSoundRequests(runtime.drainSoundEvents())
         inputs.append(.assign(tick: runtime.tick, control: control, target: target))
+        spriteFeedback.assigned(to: target, tick: runtime.tick)
         return true
     }
 
@@ -253,14 +329,26 @@ public final class Lemmings2MobileSession: MobileGameSession {
         runtime = beforeEndRun
         soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
+        spriteFeedback.reset()
+        pointerAim = nil
         self.beforeEndRun = nil
-        if case .endRun = inputs.last { inputs.removeLast() }
+        if let index = inputs.lastIndex(where: { if case .endRun = $0 { true } else { false } }) {
+            inputs.removeSubrange(index...)
+        }
+        pointerAim = nil
         usedRewind = true
         undoCount += 1
         return true
     }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        spriteFeedback.selected = highlight?.id
+        if let artworkRenderer {
+            let ghosts = hotSeatGhosts?.states(at: runtime.tick) { state -> Lemmings2Runtime? in
+                if case let .lemmings2(ghost) = state { return ghost }; return nil
+            } ?? []
+            return try artworkRenderer(runtime, highlight, ghosts, macArtwork)
+        }
         guard let renderer else { throw MobileSessionError.frameUnavailable }
         if let ghostRenderer, hotSeatGhosts != nil {
             let ghosts = hotSeatGhosts!.states(at: runtime.tick) { state -> Lemmings2Runtime? in
@@ -286,6 +374,10 @@ public final class Lemmings2MobileSession: MobileGameSession {
             case let .endRun(tick): .init(tick: tick, action: "nuke")
             case let .fan(tick, x, y, active): .init(tick: tick, action: "fan", x: x, y: y, held: active)
             case let .bonusSkill(tick, control): .init(tick: tick, action: "bonusSkill", skill: control)
+            case let .aim(tick, x, y, held): .init(tick: tick, action: "aim", x: x, y: y, held: held)
+            case let .machine(tick, x, y): .init(tick: tick, action: "machine", x: x, y: y)
+            case let .chain(tick, x, y): .init(tick: tick, action: "chain", x: x, y: y)
+            case let .releasePointer(tick): .init(tick: tick, action: "releasePointer")
             }
         }
         return .init(initial: .lemmings2(initial), final: .lemmings2(runtime), commands: commands)
@@ -316,6 +408,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
         runtime = restored
         soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
+        spriteFeedback.reset()
+        pointerAim = nil
         didNotifyCompletion = false
         inputs = checkpoint.inputs
         beforeEndRun = restoredBeforeEndRun
@@ -361,6 +455,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
             inputs = retainedInputs
             beforeEndRun = restoredBeforeEndRun
             explosionTimeline.reset()
+            spriteFeedback.reset()
+            pointerAim = nil
             didNotifyCompletion = false
             usedRewind = true
             rewindCount += 1
@@ -385,6 +481,12 @@ public final class Lemmings2MobileSession: MobileGameSession {
                     restored.nuke()
                 case let .fan(_, x, y, active):
                     restored.setFan(x: x, y: y, active: active)
+                case let .aim(_, x, y, held): restored.setAim(x: x, y: y, held: held)
+                case let .machine(_, x, y):
+                    guard restored.moveMachine(x: x, y: y) else { throw MobileSessionError.invalidCheckpoint }
+                case let .chain(_, x, y):
+                    guard restored.releaseChain(x: x, y: y) else { throw MobileSessionError.invalidCheckpoint }
+                case .releasePointer: restored.releasePointerInput()
                 case let .bonusSkill(_, control):
                     guard restored.grantBonusSkill(slot: control) else { throw MobileSessionError.invalidCheckpoint }
                 }
@@ -403,7 +505,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     private func inputTick(_ input: Input) -> Int {
         switch input {
-        case let .assign(tick, _, _), let .endRun(tick), let .fan(tick, _, _, _), let .bonusSkill(tick, _): tick
+        case let .assign(tick, _, _), let .endRun(tick), let .fan(tick, _, _, _), let .bonusSkill(tick, _), let .aim(tick, _, _, _), let .machine(tick, _, _), let .chain(tick, _, _), let .releasePointer(tick): tick
         }
     }
 
@@ -423,6 +525,46 @@ public typealias Lemmings3MobileGhostRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings3MobileSession: MobileGameSession {
+    public var artworkRenderer: ((Lemmings3Runtime, MobileTargetSelection?, [MobileReplayGhost<Lemmings3Runtime>], Bool) throws -> MobilePixelFrame)?
+    private var macArtwork = false
+    private let macSpriteCache = MobileSequelArtworkCache()
+    public var renderScale: Double { macArtwork && artworkRenderer != nil ? 2 : 1 }
+    public var availableGraphics: [ClassicGraphicsSource] { artworkRenderer == nil ? [] : [.dosVGA, .macintosh] }
+    private func artworkSprite(_ value: MobileSpriteHighlight?) -> MobileSpriteHighlight? {
+        guard macArtwork else { return value }
+        return macSpriteCache.sprite(value, category: value?.cacheKey.contains("walker-") == true ? .lemmings2Walker : .sprite)
+    }
+    public func makeReplayClone() -> (any MobileGameSession)? {
+        let copy = Lemmings3MobileSession(runtime: initial, engineFingerprint: engineFingerprint,
+            levelIdentifier: levelIdentifier, levelIndex: levelIndex, levelFingerprint: levelFingerprint,
+            panelFrame: panelFrame, directionPickerFrames: directionPickerFrames, renderer: renderer,
+            ghostRenderer: ghostRenderer, soundBank: soundBank)
+        copy.spriteProvider = spriteProvider
+        copy.artworkRenderer = artworkRenderer
+        copy.applySettings(spriteFeedback.settings)
+        return copy
+    }
+
+    private var spriteFeedback = MobileSpriteFeedback<Lemmings3Runtime>()
+    public var spriteProvider: ((Lemmings3Runtime, Int) -> MobileSpriteHighlight?)? {
+        get { spriteFeedback.provider }
+        set { spriteFeedback.provider = newValue }
+    }
+    public func applySettings(_ settings: ClassicSettings) {
+        spriteFeedback.settings = settings
+        macArtwork = settings.graphics == .macintosh || settings.graphics == .macintoshMonochrome
+    }
+    public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.sprite(in: runtime, id: actor, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+    public var selectionSprite: MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.selection(in: runtime, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+    public var assignmentProgress: Double? { spriteFeedback.progress(at: runtime.tick, ticksPerSecond: ticksPerSecond) }
+    public var assignmentSprite: MobileSpriteHighlight? {
+        artworkSprite(spriteFeedback.acknowledgement(in: runtime, tick: runtime.tick, ticksPerSecond: ticksPerSecond))
+    }
+
     public var familiarNamesStore: FamiliarNamesStore? = .shared
     private let skillStates = Lemmings3Runtime.Action.allCases.map {
         MobileSkillState(name: $0.rawValue.capitalized, count: 0, isUnlimited: true)
@@ -627,6 +769,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let lemming = runtime.lemmings.first { $0.id == target }
         let before = Lemmings3SoundCue.Snapshot(runtime)
         guard runtime.assign(action, to: target) else { return false }
+        spriteFeedback.assigned(to: target, tick: runtime.tick)
         if let lemming {
             soundCues.append(.init(action == .use && lemming.tool == .bomb ? .ohNo : .assignSkill,
                 at: .init(x: Double(lemming.x), y: Double(lemming.y))))
@@ -648,6 +791,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let lemming = runtime.lemmings.first { $0.id == target }
         let before = Lemmings3SoundCue.Snapshot(runtime)
         guard runtime.useTool(to: target, direction: direction) else { return false }
+        spriteFeedback.assigned(to: target, tick: runtime.tick)
         if let lemming {
             soundCues.append(.init(lemming.tool == .bomb ? .ohNo : .assignSkill,
                 at: .init(x: Double(lemming.x), y: Double(lemming.y))))
@@ -678,6 +822,13 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public func undoEndRun() -> Bool { false }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        spriteFeedback.selected = highlight?.id
+        if let artworkRenderer {
+            let ghosts = hotSeatGhosts?.states(at: runtime.tick) { state -> Lemmings3Runtime? in
+                if case let .lemmings3(ghost) = state { return ghost }; return nil
+            } ?? []
+            return try artworkRenderer(runtime, highlight, ghosts, macArtwork)
+        }
         guard let renderer else { throw MobileSessionError.frameUnavailable }
         if let ghostRenderer, hotSeatGhosts != nil {
             let ghosts = hotSeatGhosts!.states(at: runtime.tick) { state -> Lemmings3Runtime? in
@@ -731,6 +882,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         runtime = restored
         soundCues.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
+        spriteFeedback.reset()
         inputs = checkpoint.inputs
         didNotifyCompletion = false
         rewindCount = checkpoint.rewindCount ?? 0
@@ -770,6 +922,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
             runtime = restored
             inputs = retainedInputs
             explosionTimeline.reset()
+            spriteFeedback.reset()
             didNotifyCompletion = false
             usedRewind = true
             rewindCount += 1
@@ -827,10 +980,37 @@ public typealias NeoLemmixMobileRenderer = (
  * Adapts the supported NeoLemmix simulation to the shared mobile session contract.
  */
 public final class NeoLemmixMobileSession: MobileGameSession {
+    public func makeReplayClone() -> (any MobileGameSession)? {
+        let copy = NeoLemmixMobileSession(simulation: initial, controls: controls, engineFingerprint: engineFingerprint,
+            levelIdentifier: levelIdentifier, levelIndex: levelIndex, levelFingerprint: levelFingerprint,
+            renderer: renderer, ghostRenderer: ghostRenderer, gadgetSounds: gadgetSounds, soundDirectory: soundDirectory)
+        copy.spriteProvider = spriteProvider
+        copy.applySettings(spriteFeedback.settings)
+        return copy
+    }
+
+    private var spriteFeedback = MobileSpriteFeedback<NeoLemmixSimulation>()
+    public var spriteProvider: ((NeoLemmixSimulation, Int) -> MobileSpriteHighlight?)? {
+        get { spriteFeedback.provider }
+        set { spriteFeedback.provider = newValue }
+    }
+    public func applySettings(_ settings: ClassicSettings) { spriteFeedback.settings = settings }
+    public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
+        spriteFeedback.sprite(in: simulation, id: actor, tick: simulation.tickCount, ticksPerSecond: ticksPerSecond)
+    }
+    public var selectionSprite: MobileSpriteHighlight? {
+        spriteFeedback.selection(in: simulation, tick: simulation.tickCount, ticksPerSecond: ticksPerSecond)
+    }
+    public var assignmentProgress: Double? { spriteFeedback.progress(at: simulation.tickCount, ticksPerSecond: ticksPerSecond) }
+    public var assignmentSprite: MobileSpriteHighlight? {
+        spriteFeedback.acknowledgement(in: simulation, tick: simulation.tickCount, ticksPerSecond: ticksPerSecond)
+    }
+
     private enum Input: Codable, Sendable {
         case assign(tick: Int, skill: NeoLemmixSkill, target: Int)
         case spawnInterval(tick: Int, value: Int)
         case nuke(tick: Int)
+        case bonusSkill(tick: Int, skill: NeoLemmixSkill)
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -847,6 +1027,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         var usedRewind: Bool? = nil
         var nukeCount: Int? = nil
         var undoCount: Int? = nil
+        var bonusSkillID: String? = nil
     }
 
     public var entrancePoint: MobilePoint {
@@ -858,6 +1039,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         return .init(x: Double(zone.bounds.x + zone.bounds.width / 2), y: Double(zone.bounds.y + zone.bounds.height / 2))
     }
 
+    public var lostLemmingCount: Int { simulation.lostCount }
     public let engineIdentifier = "neolemmix"
     public let engineFingerprint: String
     public let levelIdentifier: String
@@ -871,6 +1053,9 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     private let initial: NeoLemmixSimulation
     private let controls: [NeoLemmixSkill]
     private let renderer: NeoLemmixMobileRenderer?
+    private let ghostRenderer: ((_ simulation: NeoLemmixSimulation, _ highlight: MobileTargetSelection?,
+        _ ghosts: [MobileReplayGhost<NeoLemmixSimulation>]) throws -> MobilePixelFrame)?
+    public var hotSeatGhosts: HotSeatGhostPlayback?
     private let onCompletion: ((NeoLemmixSimulation) -> Void)?
     private var historyBase: NeoLemmixSimulation
     private var historyBaseBeforeNuke: NeoLemmixSimulation?
@@ -885,10 +1070,39 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     public private(set) var usedRewind = false
     public private(set) var nukeCount = 0
     public private(set) var undoCount = 0
+    public private(set) var bonusSkillID: String?
+    public var actualSpawnInterval: Int { simulation.spawnInterval }
+    public var existingLevelSkills: Set<String> {
+        Set(initial.configuration.skills.compactMap { skill, supply in
+            if case let .finite(count) = supply, count > 0 { return skill.rawValue }
+            return nil
+        })
+    }
+    public var extraSkillChoices: [MobileExtraSkillChoice] {
+        guard bonusSkillID == nil else { return [] }
+        return controls.enumerated().compactMap { control, skill in
+            simulation.canGrantBonusSkill(skill)
+                ? .init(skillID: skill.rawValue, title: SkillVocabulary.title(skill.rawValue), control: control) : nil
+        }
+    }
+    @discardableResult public func grantExtraSkill(_ choice: MobileExtraSkillChoice) -> Bool {
+        guard extraSkillChoices.contains(choice), controls.indices.contains(choice.control),
+              simulation.grantBonusSkill(controls[choice.control]) else { return false }
+        inputs.append(.bonusSkill(tick: simulation.tickCount, skill: controls[choice.control]))
+        bonusSkillID = choice.skillID
+        return true
+    }
+    @discardableResult public func retainExtraSkillUse(_ skillID: String) -> Bool {
+        guard existingLevelSkills.contains(skillID), bonusSkillID == nil || bonusSkillID == skillID else { return false }
+        bonusSkillID = skillID
+        return true
+    }
 
     public init(simulation: NeoLemmixSimulation, controls: [NeoLemmixSkill],
                 engineFingerprint: String, levelIdentifier: String, levelIndex: Int,
                 levelFingerprint: String, renderer: NeoLemmixMobileRenderer? = nil,
+                ghostRenderer: ((_ simulation: NeoLemmixSimulation, _ highlight: MobileTargetSelection?,
+                    _ ghosts: [MobileReplayGhost<NeoLemmixSimulation>]) throws -> MobilePixelFrame)? = nil,
                 gadgetSounds: [Int: String] = [:], soundDirectory: URL? = nil,
                 onCompletion: ((NeoLemmixSimulation) -> Void)? = nil) {
         initial = simulation
@@ -902,6 +1116,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
         self.renderer = renderer
+        self.ghostRenderer = ghostRenderer
         self.gadgetSounds = gadgetSounds
         self.soundDirectory = soundDirectory
         self.onCompletion = onCompletion
@@ -979,6 +1194,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         guard simulation.assign(skill: skill, to: target).wasAssigned else { return false }
         appendSoundCues(for: simulation.lastTickEvents)
         inputs.append(.assign(tick: simulation.tickCount, skill: skill, target: target))
+        spriteFeedback.assigned(to: target, tick: simulation.tickCount)
         return true
     }
 
@@ -1012,6 +1228,15 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         return true
     }
 
+    @discardableResult public func setSpawnInterval(_ value: Int) -> Bool {
+        guard !simulation.isComplete, !simulation.isNuking, !simulation.configuration.spawnIntervalLocked,
+              (NeoLemmixRules.minimumSpawnInterval...simulation.configuration.spawnInterval).contains(value) else { return false }
+        requestedSpawnInterval = value
+        simulation.enqueue(.setSpawnInterval(value))
+        inputs.append(.spawnInterval(tick: simulation.tickCount, value: value))
+        return true
+    }
+
     @discardableResult
     public func beginEndRun() -> Bool {
         guard !simulation.isComplete, !simulation.isNuking, simulationBeforeNuke == nil else { return false }
@@ -1026,6 +1251,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     public func undoEndRun() -> Bool {
         guard let simulationBeforeNuke, !simulation.isComplete else { return false }
         soundCues.removeAll(keepingCapacity: true)
+        spriteFeedback.reset()
         let restoredRequestedInterval = inputs.reversed().compactMap { input -> Int? in
             if case let .spawnInterval(_, value) = input { return value }
             return nil
@@ -1048,8 +1274,53 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        spriteFeedback.selected = highlight?.id
         guard let renderer else { throw MobileSessionError.frameUnavailable }
+        if let ghostRenderer, hotSeatGhosts != nil {
+            let ghosts = hotSeatGhosts!.states(at: simulation.tickCount) { state -> NeoLemmixSimulation? in
+                if case let .neolemmix(ghost) = state { return ghost }
+                return nil
+            }
+            if !ghosts.isEmpty { return try ghostRenderer(simulation, highlight, ghosts) }
+        }
         return try renderer(simulation, highlight)
+    }
+
+    public var actionReplayInitial: ActionReplayState? {
+        initial.tickCount == 0 && historyBase.tickCount == 0 ? .neolemmix(initial) : nil
+    }
+
+    public var assignedSkills: [String: Int] {
+        inputs.reduce(into: [:]) { counts, input in
+            if case let .assign(_, skill, _) = input { counts[skill.rawValue, default: 0] += 1 }
+        }
+    }
+
+    public func actionCapture() -> MobileActionCapture? {
+        // Legacy saves with only a mid-level state cannot reconstruct the whole attempt.
+        guard initial.tickCount == 0, historyBase.tickCount == 0 else { return nil }
+        let order = NeoLemmixSkill.allCases.filter { initial.configuration.skills[$0] != nil }
+        var interval = initial.spawnInterval
+        var requested = interval
+        var rateTick = initial.tickCount
+        var commands: [LeaderboardActionReplay.Command] = []
+        for input in inputs {
+            switch input {
+            case let .assign(tick, skill, target):
+                guard let control = order.firstIndex(of: skill) else { return nil }
+                commands.append(.init(tick: tick, action: "assign", lemming: target, skill: control))
+            case let .spawnInterval(tick, value):
+                // Queued rate changes at one tick all use that tick's actual interval.
+                if tick > rateTick { interval = requested }
+                commands.append(.init(tick: tick, action: "rate", value: value - interval))
+                requested = value; rateTick = tick
+            case let .nuke(tick): commands.append(.init(tick: tick, action: "nuke"))
+            case let .bonusSkill(tick, skill):
+                guard let control = order.firstIndex(of: skill) else { return nil }
+                commands.append(.init(tick: tick, action: "bonusSkill", skill: control))
+            }
+        }
+        return .init(initial: .neolemmix(initial), final: .neolemmix(simulation), commands: commands)
     }
 
     public func checkpointPayload() throws -> Data {
@@ -1070,7 +1341,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
             rewindCount: rewindCount,
             usedRewind: usedRewind,
             nukeCount: nukeCount,
-            undoCount: undoCount
+            undoCount: undoCount,
+            bonusSkillID: bonusSkillID
         ))
     }
 
@@ -1119,10 +1391,12 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         }
         didNotifyCompletion = false
         soundCues.removeAll(keepingCapacity: true)
+        spriteFeedback.reset()
         rewindCount = checkpoint.rewindCount ?? 0
         usedRewind = checkpoint.usedRewind ?? false
         nukeCount = checkpoint.nukeCount ?? (checkpoint.simulationBeforeNuke == nil ? 0 : 1)
         undoCount = checkpoint.undoCount ?? 0
+        bonusSkillID = checkpoint.bonusSkillID
     }
 
     @discardableResult
@@ -1132,12 +1406,14 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         let distance = Int(min(Double(currentTick - historyBase.tickCount), (seconds * ticksPerSecond).rounded()))
         guard distance > 0 else { return false }
         soundCues.removeAll(keepingCapacity: true)
+        spriteFeedback.reset()
         return move(to: currentTick - distance)
     }
 
     @discardableResult
     public func stepBackward() -> Bool {
         soundCues.removeAll(keepingCapacity: true)
+        spriteFeedback.reset()
         return move(to: simulation.snapshot().tickCount - 1)
     }
 
@@ -1198,6 +1474,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
                     }
                     restored.enqueue(.setSpawnInterval(value))
                     requestedInterval = value
+                case let .bonusSkill(_, skill):
+                    guard restored.grantBonusSkill(skill) else { throw MobileSessionError.invalidCheckpoint }
                 case .nuke:
                     guard !restored.isComplete, !restored.isNuking, restoredBeforeNuke == nil else {
                         throw MobileSessionError.invalidCheckpoint
@@ -1220,7 +1498,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
 
     private func inputTick(_ input: Input) -> Int {
         switch input {
-        case let .assign(tick, _, _), let .spawnInterval(tick, _), let .nuke(tick): tick
+        case let .assign(tick, _, _), let .spawnInterval(tick, _), let .nuke(tick), let .bonusSkill(tick, _): tick
         }
     }
 

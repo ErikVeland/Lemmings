@@ -46,11 +46,16 @@ import UIKit
     var onHold: ((MobileHUDAction) -> Void)?
     private typealias Item = MobileHUDRenderer.Item
     var onRewindHold: ((Bool) -> Void)?
+    var onRewindRepeat: (() -> Void)?
+    var onStepBatch: ((MobileHUDAction, Int) -> Void)?
     private var readOnly = false
     var playerName: String?
     var playerPortrait: CGImage?
     private let playerIdentity = UIView()
     private let statusIdentity = UIView()
+    var replayLevel: MobileLevelSummary?
+    var replayMapFrame: CGRect?
+    private var mapFrame: CGRect? { replayMapFrame ?? layout?.minimapFrame }
     var statusDetails: MobileHUDRenderer.StatusDetails?
     private let toolDirectionPicker = MobileToolDirectionPickerView()
     private let rateValueTap = UITapGestureRecognizer()
@@ -114,7 +119,7 @@ import UIKit
     required init?(coder: NSCoder) { nil }
 
     func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil) {
-        minimapView.isHidden = layout?.minimapFrame == nil
+        minimapView.isHidden = mapFrame == nil
         guard !minimapView.isHidden else { return }
         minimapView.image = image ?? Self.image(frame)
         minimapView.visible = Self.cgRect(visible)
@@ -142,18 +147,23 @@ import UIKit
         readOnly: Bool = false
     ) {
         self.readOnly = readOnly
+        let layoutChanged = self.layout != layout
         self.layout = layout
-        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).player
+        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil).player
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
         playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
         statusIdentity.isHidden = false
-        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).counters
+        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil).counters
         let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
             engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
             paused: paused, speed: speed)
         statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
             .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
+        if let replayLevel {
+            statusIdentity.accessibilityLabel = [L10n.text("Replay, \(replayLevel.locationLabel), \(replayLevel.title)"),
+                statusIdentity.accessibilityLabel ?? ""].joined(separator: ". ")
+        }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -161,15 +171,19 @@ import UIKit
         self.speed = speed
         self.endRunArmed = endRunArmed
         panelImage = panel.flatMap(Self.image)
-        minimapView.frame = layout.minimapFrame ?? .zero
-        minimapView.overlay = layout.portrait != nil
-        minimapView.isHidden = layout.minimapFrame == nil
+        minimapView.frame = mapFrame ?? .zero
+        minimapView.overlay = layout.portrait != nil || replayMapFrame != nil
+        minimapView.isHidden = mapFrame == nil
         skillScroll.isHidden = layout.portrait == nil
         if let portrait = layout.portrait {
             skillScroll.frame = portrait.skills
             skillScroll.contentSize = CGSize(width: portrait.skillContentWidth, height: portrait.skills.height)
             skillCanvas.frame = CGRect(origin: .zero, size: skillScroll.contentSize)
-            if skillScroll.contentSize.width <= skillScroll.bounds.width { skillScroll.contentOffset = .zero }
+            let maximumOffset = max(0, skillScroll.contentSize.width - skillScroll.bounds.width)
+            let offset = CGPoint(x: min(maximumOffset, max(0, skillScroll.contentOffset.x)), y: 0)
+            if (layoutChanged || maximumOffset == 0), offset != skillScroll.contentOffset {
+                skillScroll.setContentOffset(offset, animated: false)
+            }
         }
 
         let previousActions = items.map(\.action)
@@ -191,7 +205,7 @@ import UIKit
             button.isEnabled = isEnabled(item.action)
             button.accessibilityElementsHidden = readOnly && !button.isEnabled
         }
-        if previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
+        if layoutChanged || previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
            button.superview === skillCanvas { skillScroll.scrollRectToVisible(button.frame, animated: false) }
         setNeedsDisplay()
         skillCanvas.setNeedsDisplay()
@@ -252,7 +266,7 @@ import UIKit
         guard let layout, let snapshot else { return nil }
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel)
     }
 
     private func rebuildButtons() {
@@ -264,6 +278,7 @@ import UIKit
             case .speedStep: kind = .rate
             case .speed: kind = .speed
             case .rewind: kind = .rewind
+            case .step, .stepBackward: kind = .step
             case .pause: kind = .pause
             case .endRun: kind = .nuke
             default: kind = .tap
@@ -281,7 +296,9 @@ import UIKit
                 switch effect {
                 case .activate:
                     if case .releaseRate = item.action { rateStartedAtMaximum = self?.snapshot?.releaseRate == 99 }
-                    self?.onAction?(item.action)
+                    if item.action == .rewind { self?.onRewindRepeat?() }
+                    else { self?.onAction?(item.action) }
+                case let .step(count): self?.onStepBatch?(item.action, count)
                 case .doubleTap: self?.onRateDoubleTap?(rateStartedAtMaximum)
                 case .hold: self?.onHold?(item.action)
                 case let .pedal(held, allowTap):
@@ -310,6 +327,13 @@ import UIKit
         buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress() }
         rateValueTap.isEnabled = false
         rateValueTap.isEnabled = true
+        for recognizer in minimapView.gestureRecognizers ?? [] {
+            recognizer.isEnabled = false
+            recognizer.isEnabled = true
+        }
+        skillScroll.setContentOffset(skillScroll.contentOffset, animated: false)
+        skillScroll.panGestureRecognizer.isEnabled = false
+        skillScroll.panGestureRecognizer.isEnabled = true
     }
 
     @discardableResult

@@ -2167,6 +2167,8 @@
 "Records were not saved. Check free space and folder access." = "பதிவுகள் சேமிக்கப்படவில்லை. காலி இடத்தையும் கோப்புறை அணுகலையும் சரிபார்க்கவும்.";
 "Records were not saved. Retry the save before continuing." = "பதிவுகள் சேமிக்கப்படவில்லை. தொடரும் முன் சேமிப்பை மீண்டும் முயலவும்.";
 "Recovery" = "Recovery";
+"Red night vision" = "சிவப்பு இரவுப் பார்வை";
+
 "Redbook CD Studio Soundtrack" = "Redbook CD ஸ்டுடியோ ஒலிப்பதிவு";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook CD-Audio + HuC6280 PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook CD-Audio 44.1 kHz ஸ்டீரியோ";
@@ -2478,7 +2480,7 @@
 "Shared campaign" = "பகிரப்பட்ட பிரச்சாரம்";
 "Shared campaign revisions conflict." = "பகிரப்பட்ட பிரச்சார திருத்தங்கள் மோதல்.";
 "Shared play counts" = "பகிர்ந்த விளையாட்டு எண்ணிக்கைகள்";
-"Shared tester library: test99" = "Shared tester library: test99";
+"Shared tester library" = "Shared tester library";
 "Shared: {0} days" = "பகிர்ந்தது: {0} நாட்கள்";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
 "Sharing" = "பகிரப்படுகிறது";

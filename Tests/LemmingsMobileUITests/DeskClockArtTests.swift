@@ -7,12 +7,34 @@ import LemmingsMobileCore
 import NxlvKit
 
 struct DeskClockArtTests {
+    @Test func nightVisionKeepsOnlyRedLight() {
+        var pixels: [UInt8] = [40, 180, 120, 255, 255, 0, 0, 128]
+        pixels.withUnsafeMutableBytes { bytes in
+            GameDeskClockArt.applyRedNightVision(to: bytes.baseAddress!, width: 2, height: 1, bytesPerRow: 8)
+        }
+        #expect(pixels == [117, 0, 0, 255, 165, 0, 0, 128])
+    }
+
     private static let root = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     private static let artwork = root.appendingPathComponent(".build/mac-artwork/export/lemmings")
     private static let hasArtwork = FileManager.default.fileExists(atPath: artwork.appendingPathComponent("manifest.json").path)
     private static let renders = root.appendingPathComponent(".build/desk-clock/renders")
     private static let width = 832, height = 596
+
+    @Test func lemmingProjectionIsContinuousThroughFallAndGroundLanding() {
+        func point(_ y: Int) -> CGPoint {
+            GameDeskClockArt.adaptiveLemmingPoint(x: 94, y: y, digitX: 160, digitY: 80,
+                digitScale: 2, ground: 360, exitX: 680)
+        }
+        for boundary in [67, 90, 128] {
+            let before = point(boundary - 1)
+            let after = point(boundary)
+            #expect(hypot(after.x - before.x, after.y - before.y) < 6)
+        }
+        #expect(point(32).x == point(128).x)
+        #expect(point(128).y == 360)
+    }
 
     private static var calendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)

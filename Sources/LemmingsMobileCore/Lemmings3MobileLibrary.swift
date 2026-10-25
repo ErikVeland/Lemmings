@@ -56,6 +56,30 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         }
     }
 
+    public func canSkipLevel(at index: Int) -> Bool {
+        progressLock.lock(); defer { progressLock.unlock() }
+        guard progressFailure == nil, levels.indices.contains(index), index % 30 < 29,
+              let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1) else { return false }
+        return savedProgress.progress(for: tribe)?.completed[index % 30] == nil
+    }
+    public func prepareLevelSkip(at index: Int) throws -> () throws -> Void {
+        progressLock.lock(); defer { progressLock.unlock() }
+        guard canSkipLevel(at: index), let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1) else {
+            throw MobileSessionError.changedLevel
+        }
+        let previous = savedProgress
+        var campaign = try Lemmings3ClassicCampaign(root: directory, tribe: tribe)
+        if let progress = savedProgress.progress(for: tribe) { try campaign.restore(progress) }
+        if campaign.index != index % 30 { try campaign.select(index % 30) }
+        guard campaign.skipLevel() else { throw MobileSessionError.changedLevel }
+        try save(campaign.progress, tribe: tribe)
+        return { [self] in
+            progressLock.lock(); defer { progressLock.unlock() }
+            try storage.save(previous, name: "lemmings3-campaign")
+            savedProgress = previous
+        }
+    }
+
     public func levelKey(at index: Int) -> String {
         guard levels.indices.contains(index), let data = try? levelData(at: index) else { return "" }
         let fingerprint = MobileContentFingerprint.levelFingerprint(
@@ -70,7 +94,9 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         return "lemmings3/\(fingerprint)"
     }
 
-    public func loadLevel(at index: Int) throws -> MobileLevelContent {
+    public func loadLevel(at index: Int) throws -> MobileLevelContent { try loadLevel(at: index, population: nil) }
+
+    public func loadLevel(at index: Int, population override: Int?) throws -> MobileLevelContent {
         try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1)!
@@ -99,7 +125,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
             if let progress = savedProgress.progress(for: tribe) { try campaign.restore(progress) }
             if campaign.index != localIndex {
                 try campaign.select(localIndex)
-                try save(campaign.progress, tribe: tribe)
+                if override == nil { try save(campaign.progress, tribe: tribe) }
             }
             loadedCampaign = campaign
             progressLock.unlock()
@@ -109,7 +135,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         }
 
         let runtime = try Lemmings3Runtime(level: level, style: style, permanent: permanent,
-                                           temporary: temporary, total: loadedCampaign.population)
+                                           temporary: temporary, total: override ?? loadedCampaign.population)
         var creatureBanks: [Lemmings3Runtime.Creature.Kind: Lemmings3MobileSceneRenderer.CreatureBank] = [:]
         for kind in Set(runtime.creatures.map(\.kind)) {
             try Task.checkCancellation()
@@ -144,7 +170,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let renderer = try Lemmings3MobileSceneRenderer(scene: scene, style: style,
                                                        sprites: sprites, palette: actorPalette,
                                                        creatureBanks: creatureBanks,
-                                                       animatedObjects: animatedObjects)
+                                                       animatedObjects: animatedObjects, terrainStyle: level.style)
         let fingerprint = MobileContentFingerprint.levelFingerprint(
             content: contentFingerprint, level: Self.digest(level.rawData))
         let session = Lemmings3MobileSession(runtime: runtime,
@@ -152,10 +178,16 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
             levelFingerprint: fingerprint, panelFrame: panel,
             directionPickerFrames: try renderer.directionPickerFrames(), renderer: renderer.render,
-            ghostRenderer: renderer.render,
+            ghostRenderer: { runtime, highlight, ghosts in
+                try renderer.render(runtime, highlight: highlight, ghosts: ghosts)
+            },
             soundBank: soundBank) { [weak self] completed in
-                self?.record(completed, at: localIndex, tribe: tribe)
+                if override == nil { self?.record(completed, at: localIndex, tribe: tribe) }
             }
+        session.spriteProvider = renderer.spriteHighlight
+        session.artworkRenderer = { runtime, highlight, ghosts, mac in
+            try renderer.render(runtime, highlight: highlight, ghosts: ghosts, macintosh: mac)
+        }
         return MobileLevelContent(summary: levels[index], session: session)
     }
 

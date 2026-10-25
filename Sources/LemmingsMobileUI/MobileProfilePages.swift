@@ -28,11 +28,10 @@ extension MobileLibraryViewController {
         #else
         let holdToEdit = false
         #endif
-        var page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
+        let page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
             creating: creatingPlayer, portrait: draftPortrait, canDelete: canDeleteActivePlayer,
             confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) }, holdToEdit: holdToEdit,
             editingPlayerID: editingPlayerID, hasSavedHotSeats: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty)
-        if !renamingPlayer { page.rows.append(.init("cloudSaves", L10n.text("Cloud saves"))) }
         return page
     }
 

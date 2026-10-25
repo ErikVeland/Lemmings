@@ -77,7 +77,7 @@ public enum MobileCareerArt {
             details: status.isEmpty ? [] : [status],
             footer: [.init("records", L10n.text("Back")),
                      .init("rankRefresh", community || connected ? L10n.text("Refresh") : L10n.text("Connect"),
-                           enabled: !busy && available, primary: true)], footerColumns: 1)
+                           enabled: !busy && available, primary: true)], footerColumns: 2)
     }
 
     public static func recordsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
@@ -99,7 +99,7 @@ public enum MobileCareerArt {
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
         return .init(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
-            rows: [.init("recordList", L10n.text("Records") + "  \(levels)"),
+            rows: [.init("recordList", L10n.text("Records") + " / " + L10n.text("Replay") + "  \(levels)"),
                    .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
                    .init("worldwide", L10n.text("Worldwide")),
                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],

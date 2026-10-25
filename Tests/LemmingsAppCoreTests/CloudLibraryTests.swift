@@ -16,6 +16,7 @@ import Testing
     var failedReads: Set<String> = []
     var failedWrites: Set<String> = []
     var afterSave: (() -> Void)?
+    var beforeSave: (() async -> Void)?
     init(_ server: LibraryServer) { self.server = server }
     func discover(_ identities: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] { beforeDiscover?(); return identities }
     func load(_ identity: CloudLibraryIdentity) async throws -> [Data] {
@@ -24,6 +25,7 @@ import Testing
         afterLoad?(); return result
     }
     func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
+        await beforeSave?()
         if offline || failedWrites.contains(identity.id) { throw URLError(.notConnectedToInternet) }
         writes += 1; server.files[identity.id, default: [:]][device] = data
         afterSave?()
@@ -42,6 +44,70 @@ private final class LibraryCredentials: @unchecked Sendable {
 }
 
 @MainActor struct CloudLibraryTests {
+    @Test func lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() async throws {
+        let storage = try AppStorage.temporary(named: "lifecycle-library")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let identity = CloudLibraryIdentity(), transport = LibraryTransport(LibraryServer())
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: transport, identities: [identity])
+        defer { sync.stop() }
+        transport.afterSave = {
+            transport.afterSave = nil
+            _ = store.record(self.run(store.records.mainProfileID, index: 7))
+        }
+        await sync.syncForLifecycle()
+        #expect(sync.state == .synced)
+        let uploaded = try #require(transport.server.files[identity.id]?.values.first)
+        #expect(try CloudLibraryArchive.decode(uploaded).players.values.contains { $0.records.runs.count == 1 })
+        let writes = transport.writes
+        await sync.syncForLifecycle()
+        #expect(transport.writes > writes)
+        transport.offline = true
+        await sync.syncForLifecycle()
+        #expect(sync.state == .offline)
+        transport.offline = false
+        await sync.syncForLifecycle()
+        #expect(sync.state == .synced)
+    }
+    @Test func lifecycleWaitsForAnExistingUploadThenCapturesAgain() async throws {
+        let storage = try AppStorage.temporary(named: "lifecycle-in-flight")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let identity = CloudLibraryIdentity(), transport = LibraryTransport(LibraryServer())
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: transport, identities: [identity])
+        defer { sync.stop() }
+        let (started, signal) = AsyncStream<Void>.makeStream()
+        let (release, resume) = AsyncStream<Void>.makeStream()
+        transport.beforeSave = {
+            transport.beforeSave = nil
+            signal.yield(())
+            for await _ in release { break }
+        }
+        let active = Task { await sync.syncNow() }
+        for await _ in started { break }
+        let exit = Task { await sync.syncForLifecycle() }
+        await Task.yield()
+        #expect(transport.writes == 0)
+        _ = store.record(run(store.records.mainProfileID, index: 7))
+        resume.yield(())
+        await active.value
+        await exit.value
+        #expect(transport.writes >= 2)
+        #expect(sync.state == .synced)
+        let uploaded = try #require(transport.server.files[identity.id]?.values.first)
+        #expect(try CloudLibraryArchive.decode(uploaded).players.values.contains { $0.records.runs.count == 1 })
+    }
+    @Test func legacyTesterIdentityRestoresTesterStatus() async throws {
+        let storage = try AppStorage.temporary(named: "legacy-tester-library")
+        defer { storage.removeTemporaryFiles() }
+        let sync = CloudLibrarySync(store: ArcadeStore(storage: storage, bundledProofs: nil), storage: storage,
+            transport: LibraryTransport(LibraryServer()), identities: [try CloudLibraryIdentity(password: "test99")])
+        defer { sync.stop() }
+        #expect(!sync.testerSyncEnabled)
+        await sync.syncForLifecycle()
+        #expect(sync.testerSyncEnabled)
+        #expect(sync.state == .synced)
+    }
     @Test func partialLibrariesStayPendingUntilEveryLibraryRecovers() async throws {
         for failRead in [false, true] {
             let storage = try AppStorage.temporary(named: "partial-library")
@@ -127,7 +193,7 @@ private final class LibraryCredentials: @unchecked Sendable {
         defer { sync.stop() }
         sync.canImport = { false }
         sync.enabled = false
-        try await sync.enableTesterSync()
+        try await sync.joinPassword("  test99\n")
         #expect(sync.testerSyncEnabled)
         let shared = try CloudLibraryIdentity(password: "test99")
         #expect(sync.enabled)

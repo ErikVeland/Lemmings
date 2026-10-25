@@ -243,7 +243,8 @@ struct ReticleFeedback {
       let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale, layout: home.layout))
       if !rect.isEmpty {
         items.append(accessibleElements.element(id: "home-players", owner: owner,
-          label: L10n.text("Active players: \(initials)"), frame: transform(rect)))
+          label: home.page.homeNextPlayerName.map { L10n.text("Active players: \(initials). Next: \($0)") }
+            ?? L10n.text("Active players: \(initials)"), frame: transform(rect)))
       }
     }
     if let overlaySavedCounts {
@@ -285,6 +286,7 @@ struct ReticleFeedback {
   var overlaySavedCounts: String?
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
   var overlayProfileInitials: String?
+  var overlayNextPlayerIndex: Int?
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
   var onPlaylists: (() -> Void)?
@@ -437,7 +439,7 @@ struct ReticleFeedback {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { invalidateClassicScene(); reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset(); selectionFade.reset() } }
+    didSet { if oldValue !== session { invalidateClassicScene(); reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset(); selectionFade.reset(); crowdPresentation.reset() } }
   }
   var failureMoodAmount: CGFloat = 0 { didSet { if oldValue != failureMoodAmount { needsDisplay = true } } }
   var completionGlowAmount: CGFloat = 0 { didSet { if oldValue != completionGlowAmount { needsDisplay = true } } }
@@ -500,6 +502,7 @@ struct ReticleFeedback {
   var onRetry: (() -> Void)?
   private var overlayLineRects: [CGRect] = []
 
+  private let crowdPresentation = LemmingCrowdPresentation()
   private var spriteCache: [String: NSImage] = [:]
   var hotSeatGhosts: HotSeatGhostPlayback?
   private let hotSeatGhostSprites = ReplayGhostSprites()
@@ -572,7 +575,11 @@ struct ReticleFeedback {
   }
   var inspectionPointerID: Int? {
     guard let cursorViewPoint, let session else { return nil }
-    return LemmingInspectionHover.nearestID(at: viewport.levelPoint(from: precisionLens.source(cursorViewPoint)),
+    let point = viewport.levelPoint(from: precisionLens.source(cursorViewPoint))
+    if let id = crowdPresentation.target(at: point, tick: session.currentTick,
+      enabled: gameplayCursorStyle == .modern && viewport.zoom > 2 && phase == .playing),
+      session.lemmings.contains(where: { $0.id == id }) { return id }
+    return LemmingInspectionHover.nearestID(at: point,
       actors: session.lemmings.map { ($0.id, $0.x, $0.y) })
   }
   private var cursorViewPoint: CGPoint?
@@ -804,7 +811,10 @@ struct ReticleFeedback {
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
+    let visibleID = crowdPresentation.target(at: point, tick: session.currentTick,
+      enabled: gameplayCursorStyle == .modern && viewport.zoom > 2 && phase == .playing)
     let candidates = session.lemmings.filter { contains($0, point) }.sorted {
+      if ($0.id == visibleID) != ($1.id == visibleID) { return $0.id == visibleID }
       let a = distanceSquared($0, point), b = distanceSquared($1, point)
       return a == b ? $0.id > $1.id : a < b
     }
@@ -867,6 +877,10 @@ struct ReticleFeedback {
       if (favorBuilders && name == "builder") || (favorBombBlockers && name == "bomber") {
         return currentTarget
       }
+    }
+    if let currentTarget, currentTarget.id == crowdPresentation.target(at: point,
+      tick: session?.currentTick ?? -1, enabled: gameplayCursorStyle == .modern && viewport.zoom > 2) {
+      return currentTarget
     }
     if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
        hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
@@ -1084,11 +1098,13 @@ struct ReticleFeedback {
       footer[index].selected = overlayHighlight == rows.count + index
       footer[index].busy = footer[index].id == "whatsNew" && overlayUpdateIsBusy
     }
-    let page = GameFrontEnd.Page(title: L10n.text("Lemmings"), home: true, rows: rows, footer: footer,
+    var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
+      home: true, rows: rows, footer: footer,
       footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
+    page.homeNextPlayerIndex = overlayNextPlayerIndex
     let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
     return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
-      minimumHeight: min(700, homeViewport.height / scale)), scale)
+      minimumHeight: homeViewport.height / scale), scale)
   }
   private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
     return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(
@@ -1331,8 +1347,7 @@ struct ReticleFeedback {
       GameStoneButton.draw(
         settings,
         selected: hovered,
-        pixel: pixel,
-        backdrop: PanelGlyph.rock.image(fitting: settings.size))
+        pixel: pixel)
       let well = GameStoneButton.well(settings, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
       if let image = PanelGlyph.settings.image(fitting: well.size) {
         image.draw(
@@ -1350,8 +1365,7 @@ struct ReticleFeedback {
     }
     if let update = overlayUpdateButtonFrame(layout) {
       let pixel = max(1, floor(scale))
-      GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel,
-        backdrop: PanelGlyph.rock.image(fitting: update.size))
+      GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel)
       let well = GameStoneButton.well(update, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
       let glyph: PanelGlyph = overlayUpdateIsBusy ? .hourglass : .download
       if let image = glyph.image(fitting: well.size) {
@@ -1580,9 +1594,14 @@ struct ReticleFeedback {
     context.restoreGState()
   }
 
-  private func drawSprite(_ sprite: NSImage, key: String, in rect: CGRect, alpha: CGFloat) {
+  private func drawSprite(_ sprite: NSImage, key: String, in rect: CGRect, alpha: CGFloat, actor: Int?) {
     guard let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
     if spritePixels.count < 1500 { spritePixels[key] = pixels }
+    if alpha == 1, let actor {
+      crowdPresentation.drawBehind(sprite, id: actor, rect: rect,
+        worldRect: CGRect(origin: viewport.levelPoint(from: rect.origin),
+          size: CGSize(width: rect.width / viewport.zoom, height: rect.height / viewport.zoom)))
+    }
     drawPixels(pixels, in: rect, alpha: alpha)
   }
 
@@ -1660,6 +1679,8 @@ struct ReticleFeedback {
       selectionOpacity = selection?.opacity ?? 1
     } else { selectionFade.reset() }
     selectedSprite = nil
+    crowdPresentation.begin(tick: session.currentTick, zoom: viewport.zoom,
+      enabled: gameplayCursorStyle == .modern && phase == .playing)
     if usesTrails {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
@@ -1668,6 +1689,7 @@ struct ReticleFeedback {
       selectedID: assignmentHighlight.target,
       highlightedID: pointerLemmingID)
     for lemming in solidLemmings { draw(lemming) }
+    crowdPresentation.finish()
     for lem in lemmings where lem.pose == .explosion {
       let burst = PixelExplosion(id: lem.id, birthTick: session.currentTick - lem.animationFrame, x: lem.x, y: lem.y - 6)
       ExplosionHDR.drawSpray(burst, at: session.currentTick,
@@ -1758,7 +1780,7 @@ struct ReticleFeedback {
         hotSeatGhostSprites.draw(frame.image, key: key, colour: hotSeatColour, in: rect, pixelScale: frame.pixelScale)
         return
       }
-      drawSprite(frame.image, key: key, in: rect, alpha: fraction)
+      drawSprite(frame.image, key: key, in: rect, alpha: fraction, actor: action == .exploding ? nil : lemming.id)
       captureSelectionSprite(for: lemming, key: key, sprite: frame.image, in: rect)
       drawAssignmentPulse(for: lemming, key: key, sprite: frame.image, in: rect)
       if action == .exploding { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
@@ -1814,7 +1836,7 @@ struct ReticleFeedback {
           return
         }
         if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }
-        drawSprite(sprite, key: key, in: rect, alpha: fraction)
+        drawSprite(sprite, key: key, in: rect, alpha: fraction, actor: pose == .explosion ? nil : lemming.id)
         captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
         drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
@@ -1854,7 +1876,7 @@ struct ReticleFeedback {
       return
     }
     if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }
-    drawSprite(sprite, key: key, in: rect, alpha: fraction)
+    drawSprite(sprite, key: key, in: rect, alpha: fraction, actor: pose == .explosion ? nil : lemming.id)
     captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
     drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }

@@ -198,6 +198,7 @@ public protocol MobileGameSession: AnyObject {
     var snapshot: MobileGameSnapshot { get }
     var panelFrame: MobilePixelFrame? { get }
     var renderScale: Double { get }
+    var availableGraphics: [ClassicGraphicsSource] { get }
     var activeLemmingCount: Int { get }
     var lostLemmingCount: Int { get }
     var nukeRemainingTicks: Int? { get }
@@ -211,6 +212,7 @@ public protocol MobileGameSession: AnyObject {
     var assignmentProgress: Double? { get }
     var replaySkillUses: [MobileReplaySkillUse] { get }
     var replayMoveNavigation: ReplayMoveNavigation { get }
+    var replayEndTick: Int? { get }
     @discardableResult func seekReplay(to tick: Int) -> Bool
 
     var entrancePoint: MobilePoint { get }
@@ -236,6 +238,7 @@ public protocol MobileGameSession: AnyObject {
     func resumeFromCurrentTick()
     func replayDocument() throws -> Data?
     func makeReplaySession(document: Data) throws -> (any MobileGameSession)?
+    func makeReplayClone() -> (any MobileGameSession)?
     func skillCursorFrame(control: Int) -> MobilePixelFrame?
     func skillCursorRemaining(control: Int, target: Int?) -> Int?
     func applySettings(_ settings: ClassicSettings)
@@ -280,6 +283,7 @@ public extension MobileGameSession {
         .init(encoded: try checkpointPayload())
     }
     var renderScale: Double { 1 }
+    var availableGraphics: [ClassicGraphicsSource] { [] }
     var activeLemmingCount: Int { max(0, snapshot.released - snapshot.saved) }
     var nukeRemainingTicks: Int? { nil }
     var allNukeExplosionsPlayed: Bool { snapshot.isComplete }
@@ -299,8 +303,15 @@ public extension MobileGameSession {
     func stepBackward() -> Bool { false }
     func stepForward() -> Bool { tick(); return true }
     func resumeFromCurrentTick() {}
-    func replayDocument() throws -> Data? { nil }
-    func makeReplaySession(document: Data) throws -> (any MobileGameSession)? { nil }
+    func replayDocument() throws -> Data? {
+        guard let capture = try actionCapture(), capture.initial.tick == 0 else { return nil }
+        return try JSONEncoder().encode(MobileActionReplayDocument(session: self, capture: capture))
+    }
+    func makeReplaySession(document: Data) throws -> (any MobileGameSession)? {
+        try MobileActionReplaySession(document: document, source: self)
+    }
+    func makeReplayClone() -> (any MobileGameSession)? { nil }
+    var replayEndTick: Int? { nil }
     func skillCursorFrame(control: Int) -> MobilePixelFrame? { nil }
     func skillCursorRemaining(control: Int, target: Int?) -> Int? {
         guard snapshot.skills.indices.contains(control), !snapshot.skills[control].isUnlimited else { return nil }

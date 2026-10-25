@@ -79,7 +79,8 @@ enum FanLevelLibrary {
     }
 
     @MainActor static var passed: Set<String> {
-      Set(UserDefaults.standard.stringArray(forKey: ArcadeStore.shared.progressKey(passedKey)) ?? [])
+      GameProgressPreferences.fanLevels(profileID: ArcadeStore.shared.records.activeProfileID,
+        sessionID: ArcadeStore.shared.hotSeatID)
     }
 
     @MainActor static func record(pack: URL, label: String) {

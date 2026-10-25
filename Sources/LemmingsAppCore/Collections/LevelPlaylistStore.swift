@@ -223,6 +223,14 @@ import NxlvKit
     public var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
 
     /// Saves an existing mobile collection as one transaction. Ownership stays with the file's profile ID.
+    public func setL2Progress(_ data: Data, key: String, runID: UUID) throws {
+        guard document.activeRun?.id == runID, data.count <= 1_000_000 else { throw Failure.invalidDocument }
+        _ = try JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data)
+        let previous = document
+        document.activeRunL2Progress = activeRunL2Progress.merging([key: data]) { _, new in new }
+        do { try save() } catch { document = previous; throw error }
+    }
+
     public func importMobileCollections(playlists: [LevelPlaylist], favourites: [LevelPlaylistEntry],
                                         recents: [LevelPlaylistEntry], run: LevelSequenceRun?, hotSeatID: String? = nil) throws {
         let previous = document
