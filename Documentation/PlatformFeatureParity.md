@@ -1,6 +1,6 @@
 # Cross-platform feature parity
 
-Source audit: 25 October 2026, Australia/Brisbane. This register describes the
+Source audit: 26 October 2026, Australia/Brisbane. This register describes the
 working checkout. It does not establish availability in an installed release.
 
 Applicable capabilities belong on Mac, iPhone, iPad, Duo and Apple TV. Input,
@@ -12,23 +12,36 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
-## Confirmed source gaps
+## 2.3 consolidation and parity work
 
-These rows have source evidence. They are not an exhaustive acceptance claim.
-P1 affects gameplay, recovery or an established product capability. P2 covers
-remaining presentation and optional-content parity.
+The `feature/2.3` consolidation retained the crowd-shadow and native-session
+work. The following routes are now connected in source. Device acceptance is
+still required; these rows do not describe an installed release.
 
-| Priority | Capability | Mac | iPhone / iPad / Duo / TV | Source and required closure |
-| --- | --- | --- | --- | --- |
-| P1 | L2 machine, chain and held aiming input | Routes machine/chain interactions before ordinary skill assignment and records pointer inputs | Session records skills, nuke and fan only | `Lemmings2PlayWindow.assign`, `SequelMobileSessions.Lemmings2MobileSession.Input`. Add shared input adapters and retain commands through checkpoint, rewind and ghost playback. |
-| P1 | Review and movie export for L2, L3 and supported NeoLemmix attempts | Captures and plays visual recordings for all engines | Only Classic implements `replayDocument` and `makeReplaySession`. Other sessions inherit nil defaults, so their result actions are absent | `MobileGameSession`, `ClassicMobileSession`, `MobileGameViewController.presentCompletion`, `MobileReplayExport`. Export also decodes a Classic replay directly. Add bounded recordings/playback, move history, cancellation and engine sound banks without changing progress or turns. |
-| P1 | Saved action replay viewing beyond Classic | Shared action replay viewer supports the native engines and NeoLemmix | Record/online playback routes construct Classic sessions only | `MobileRecordsPages`, `MobileRankings`, `LeaderboardActionReplay`. Use the correct engine, validate inputs/outcomes and keep playback read-only. |
-| P1 | L2 practice | Native practice menu and selectable practice skills | Native mobile library exposes campaign levels only | `Lemmings2PlayWindow` practice flow and `Lemmings2MobileLibrary`. Add an isolated practice route without granting campaign progress. |
-| P2 | Sequel artwork switching | L2/L3 support reconstructed Macintosh artwork alongside original PC artwork | L2/L3 render native indexed artwork. Their settings do not replace terrain, actors or objects | `Lemmings2PlayWindow`, `Lemmings3PlayWindow`, native mobile scene renderers, `MobileGameInput.cycleGraphics`. Port matching artwork choices and preserve the run, camera and input geometry. NeoLemmix machine-art substitution is not an existing Mac capability. |
-| P2 | Sprite speed afterimages and rewind echoes | Shared `SpeedTrails` draws native sprite echoes across engines | Mobile has other speed feedback and shared rewind audio, but no sprite-echo pass | `GameplayPresentation`, `MobilePlayfieldView`, `MobileHDRView`. Reuse bounded sprite masks, respect reduced effects and retain the explicit TV performance policy. |
-| P2 | L2 short-game samplers | Catalogue can start carried L2 sequences | Mobile short games prepare and launch the Classic sequence only | `main.shortGameEntries`, `MobileLibraryShortGames`, `MobileShortPlayCatalogue`. Preserve L2 population carry-over and saved queue ownership. L3 carried samplers remain a shared limit. |
-| P2 | Original sequel media | L3 pause menu includes the original FLIC movie gallery. Mac also has native sequel story/media routes | No matching mobile/TV movie gallery or story-media adapter | `Lemmings3PlayWindow.showOriginalMovies`, `OriginalMoviePlayer`, native mobile libraries. Keep media separate from run replays and keep covered gameplay paused. Automatic L3 story playback is also incomplete on Mac. |
-| P2 | NeoLemmix extra-skill rewards and individual inspection | Extra skill grants exist. Individual naming has explicit engine limits | Mobile NeoLemmix inherits empty bonus-skill choices and nil inspection | `SequelMobileSessions.NeoLemmixMobileSession`, `MobileGameSession`, `ExtraSkillRewards`. Port valid charge grants and assistance markers. Preserve the explicit naming deferral for preplaced actors, clones and unlimited populations. |
+| Capability | Current mobile / TV implementation | Validation and limits |
+| --- | --- | --- |
+| L2 machine, chain and held aiming input | Native pointer commands precede ordinary assignment and survive checkpoint/replay reconstruction. Touch, keyboard/controller and TV adapters release held input on cancellation. | Native command replay passes. Physical input delivery remains open. |
+| L2/L3/Neo attempt review and movie export | Bounded action documents drive isolated, read-only replay sessions, move history and movie export with native sound banks. | Exact command/state and outcome checks pass. Encoder, sharing and TV LAN transfer require device acceptance. |
+| Saved and online action replays | Conditions select the matching engine and population; shared replay validation checks commands and outcome. Loading native review content uses isolated storage. | New practice recordings preserve ordered skills. Older practice recordings without the panel order cannot be reconstructed safely. |
+| L2 practice | Four original maps, eight distinct skills, isolated progress and exact checkpoint restore. | All four maps pass restore/state checks. The Play route has its required preview loader. |
+| Sequel PC/Mac artwork | L2/L3 terrain, actors, objects and sprite feedback use the shared reconstruction with native input geometry. | Render captures check doubled output dimensions, unchanged state and selection geometry. |
+| Sprite afterimages and rewind echoes | Bounded native-sprite history draws on existing surfaces; rewind retains the previous sprite samples. Reduced effects clear the history. | Budget, expiry and reduced-effects checks pass. Physical CRT presentation remains open. TV gains no extra HDR surface. |
+| L2 short game | The checked five-level Classic tribe opening carries survivors through an owner-scoped saved queue. | Retry and restored-next-level populations pass. A failed shared save does not advance local carry-over. L3 carried samplers remain a shared limit. |
+| Original sequel media | L2 introduction, ending and gold ending; all five original L3 FLIC movies. Shared bitmap menus provide pause, back and continuation through library and game pause routes. Covered gameplay stays paused. | All eight sources decode and advance. Automatic campaign story triggers remain separate WIP below. |
+| Neo extra-skill rewards | Valid finite charges retain assistance and one-use state across checkpoint/rewind. | Charge and recovery checks pass. Individual naming remains explicitly deferred for clones, preplaced actors and unlimited populations. |
+
+## Remaining source work
+
+- Automatic sequel campaign story triggers still need mobile/TV integration.
+  The gallery is available, but entering a campaign and earning an ending do
+  not yet invoke the matching media automatically. Mac L3 already has opening
+  and earned-ending rules in `Lemmings3StoryFlow`; the previous audit incorrectly
+  described that Mac implementation as incomplete. Preserve Hot Seat Ready
+  boundaries and skip automatic introductions on restore or selected-level entry.
+- Verified sequel solutions/checked hints and L3 carried samplers remain shared
+  engine/content limits. They are not platform-specific omissions.
+- Neo individual inspection/naming needs identity rules for preplaced actors,
+  clones and unlimited populations before it can match the native games.
 
 ## Corrections in this audit
 
@@ -68,9 +81,8 @@ Physical-device lifecycle and live service acceptance remain open.
 Validation: 29 `CloudLibraryTests` pass with muted audio, including repeated
 lifecycle passes, an upload already in flight, changes during upload, offline
 recovery and legacy tester credentials. The Mac frontend compiled in the first
-successful test build. iOS/tvOS shared core SDK modules compiled. Full frontend
-checks remain blocked by unrelated `MobileLibraryLearning.swift` access to the
-private `MobileLibraryViewController.store` property in the working checkout.
+successful test build. iOS/tvOS shared core SDK modules compiled. The `MobileLibraryViewController.store` access error has been corrected for
+the split frontend extensions. Fresh iOS/tvOS frontend checks are recorded below.
 These checks launched no app or Simulator windows.
 
 ## Shared coverage and intentional adaptations
@@ -99,27 +111,36 @@ also Classic-only across platforms.
 
 ## Validation and remaining acceptance
 
+Menu follow-up on the consolidated `feature/2.3` branch, 26 October 2026:
+the shared pause/replay renderer groups tools, fills each occupied row, and
+keeps return, Main menu and the primary action fixed. Eligible skip balances
+remain visible, including disabled zero balances. The focused layout checks
+pass 14 tests and produce 120 pause/replay captures across 20 geometries and
+three lettering sizes. These include Duo book, table and outer-screen cutout
+arrangements. Compact-book and wide-phone captures were inspected. Both Apple
+SDK module and application-entry checks pass. This evidence covers shared
+geometry and source compilation, not physical folding, VoiceOver or Siri Remote
+delivery. Native Mac replay changes require separate AppKit evidence.
+
 Run `Scripts/run-platform-parity-tests.sh` with the default muted, offscreen
 runner. It supplies the packaged engine identity to the test hosts so ghost
 archives exercise the production validation rules. Native captures are written
 to `.build/platform-parity/renders`. Run both Apple SDK checks after changing
 shared UI. SDK compilation verifies source coverage, not device input delivery.
 
-Current evidence: 39 focused tests pass with muted audio and offscreen execution.
-They cover native sequel masks and assignment feedback, reduced effects,
-checkpoint/reset behaviour, exact NeoLemmix command/state replay, ghost drawing
-and unchanged targets, plus existing touch, precision, reward and rewind
-regressions. Six native captures were produced and representative L2/L3
-highlights and NeoLemmix ghost/selection output were inspected. Both iOS and
-tvOS SDK module/application checks pass. These checks do not close the source
-gaps in the table or physical-device acceptance.
+Current evidence: 44 focused core tests and three render tests pass with muted
+audio and offscreen execution. They cover native sequel masks and feedback,
+reduced effects, exact replay, read-only review, practice restore, carried L2
+population and retry, original media decoding, Neo extra charges and early end
+run. Render coverage includes PC/Mac sprite geometry and 24 menu layouts at
+phone, Duo-pane and TV dimensions. Representative bitmap captures were inspected.
 
-The audit also exposed a shared NeoLemmix engine limit: nuking before the final
-hatch release can leave a run incomplete after all active actors disappear.
-`NeoLemmixSimulation.isComplete` still requires the unreleased population to
-reach zero while nuke suppresses further release. This affects the shared engine
-and needs its own rule, result, replay and recovery regression. Ghost rendering
-acceptance must not conceal that failure with a platform-specific workaround.
+The shared Neo early-nuke rule now completes when no active actors remain,
+without counting unreleased actors as deaths. Neo result population includes
+preplaced actors and clones. The replay regression checks the same final hash.
+
+Apple SDK frontend checks are in progress for the final 2.3 working tree.
+Compilation alone cannot establish physical input or presentation acceptance.
 
 Physical touch, Siri Remote, controller/keyboard delivery, VoiceOver, CRT/EDR,
 thermal behaviour and live service/cloud journeys remain device acceptance.

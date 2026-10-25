@@ -1,5 +1,10 @@
 # Release scope
 
+The [release schedule](ReleaseSchedule.md), adopted 26 October 2026, sets the
+order: Mac, iOS, tvOS, then sideloading stores. For Mac releases, skip tests
+unless the candidate changes an engine. Keep required package and publication
+verification. Older release receipts below retain the checks actually performed.
+
 Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
 full/slim downloads, five signed updates, all eight public asset hashes and both
 live feeds are verified. iPhone/iPad/Duo build 33 is Waiting for Review with the
@@ -458,8 +463,11 @@ against the original engine. Expect differences.
 
 Winning replays and their solvability and difficulty evidence are durable
 release evidence. A routine minor release keeps this evidence and does not
-replay every level again. It checks the stored fixture manifests and runs the
-focused engine regression suites.
+replay every level again. Under the [release schedule](ReleaseSchedule.md), a
+Mac candidate without engine changes skips tests and test-running release
+audits. Carry forward existing engine evidence and record the skipped checks.
+When an engine changes, check stored fixture manifests and run the affected
+engine regression suites and replay checks below.
 
 For bundled levels, the MVP route bar is one verified winning route per level.
 Keep existing routes when they still pass. Build or verify a simple winning

@@ -1,10 +1,15 @@
 # iOS distribution
 
-Updated 25 October 2026, Brisbane.
+Updated 26 October 2026, Brisbane. Store evidence below was checked on 25 October.
 
 The owner requires distribution across iOS sideloading stores. Treat each active
 store as release work. A compatible source, a downloadable IPA, a catalogue
 listing and a verified device installation are separate milestones.
+
+All channels in this register are priority 4 in the
+[release schedule](ReleaseSchedule.md), after Mac, iOS and tvOS. Complete their
+onboarding and cut their releases in that order. Pending store work must not
+delay the higher-priority platforms.
 
 ## Current release
 
@@ -90,7 +95,8 @@ Keep the source, issues and downloads in `ErikVeland/Lemmings`. Keep `main` as
 the default branch and preserve the stable Classic source URL. Publish additional
 download-only releases without replacing the latest app release.
 
-For each app release:
+For each app release, complete this work in the priority-4 queue after the
+higher-priority platform deliveries:
 
 1. Publish the unencrypted IPA on the canonical app release.
 2. Validate all contained app and extension identities, minimum OS and permissions.

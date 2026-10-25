@@ -689,7 +689,12 @@ import LemmingsGameArt
         return true
     }
     override var acceptsFirstResponder: Bool { isEnabled }
-    override func becomeFirstResponder() -> Bool { needsDisplay = true; return super.becomeFirstResponder() }
+    override func becomeFirstResponder() -> Bool {
+        let accepted = super.becomeFirstResponder()
+        if accepted { scrollToVisible(bounds) }
+        needsDisplay = true
+        return accepted
+    }
     override func resignFirstResponder() -> Bool { needsDisplay = true; return super.resignFirstResponder() }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {

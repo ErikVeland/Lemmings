@@ -198,7 +198,7 @@ import UIKit
             var seen = Set<String>()
             for request in requests {
                 if let effect = request.supplementalEffect {
-                    cues.append(.init(effect: effect, point: request.point)); continue
+                    cues.append(.init(effect, at: request.point)); continue
                 }
                 guard !request.isBottomFall || settings.bottomFallSounds else { continue }
                 let region = request.point.map { "\(Int($0.x / 32)),\(Int($0.y / 32))" } ?? "interface"

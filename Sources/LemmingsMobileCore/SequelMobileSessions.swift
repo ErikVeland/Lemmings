@@ -1137,8 +1137,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         }
         return MobileGameSnapshot(
             tick: state.tickCount,
-            released: state.releasedCount,
-            total: simulation.configuration.totalLemmings,
+            released: state.releasedCount + simulation.configuration.preplacedLemmings.count + simulation.clonedCount,
+            total: simulation.totalPopulation,
             saved: state.savedCount,
             required: simulation.configuration.requiredToSave,
             remainingSeconds: state.remainingTimeTicks.map { max(0, $0 / NeoLemmixRules.ticksPerSecond) },

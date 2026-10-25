@@ -2837,7 +2837,9 @@ extension AppDelegate {
         for child in view.subviews {
           if child.isHidden { continue }
           if let control = child as? NSButton {
-            control.scrollToVisible(control.bounds)
+            if control.isEnabled {
+              try check(window.makeFirstResponder(control), "Replay control cannot receive keyboard focus: \(control.title)")
+            } else { control.scrollToVisible(control.bounds) }
             let rect = control.convert(control.bounds, to: replay.page)
             try check(rect.width >= 44 && rect.height >= 44, "Replay target is too small: \(control.title)")
             try check(replay.page.bounds.contains(rect), "Replay target leaves the page: \(control.title)")
@@ -3923,7 +3925,7 @@ extension AppDelegate {
       let hints = pauseSkipButtons(in: pause).first(where: { $0.title == "Hints" }) else {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
-    GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
+    GameScreen.shared.keyboardNavigation.focus(hints, in: window)
     let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
       windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
     try check(GameScreen.shared.handleDialogKey(pauseEnter), "Pause menu did not activate the focused hints button with Return")

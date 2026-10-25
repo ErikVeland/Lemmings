@@ -134,6 +134,7 @@ typealias MobileGameControllerBase = UIViewController
     private let touchLoupe = MobileTouchLoupe()
     let overlay = MobileGameOverlay()
     let overlayCanvas = MobileMenuCanvas()
+    var onOriginalMovies: (() -> Void)?
     private var overlayActions: [() -> Void] = []
     private var latestFrame: MobilePixelFrame?
 
@@ -1090,7 +1091,7 @@ typealias MobileGameControllerBase = UIViewController
             else { highlightedTarget = nil }
             #endif
         }
-        if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects() }
+        if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects(preservingTrails: true) }
         do {
             let frame = try session.render(highlight: highlightedTarget)
             latestFrame = frame
@@ -1273,6 +1274,11 @@ typealias MobileGameControllerBase = UIViewController
             toggle.toggleValue = classic.ghostSolutionEnabled
             toggle.group = .inspection
             overlayCanvas.page.footer.append(toggle)
+        }
+        if let onOriginalMovies {
+            let movieAction = overlayActions.count
+            overlayActions.append(onOriginalMovies)
+            overlayCanvas.page.footer.append(.init(String(movieAction), L10n.text("Original movies")))
         }
         let settingsAction = overlayActions.count
         overlayActions.append { [weak self] in self?.showInGameSettings() }

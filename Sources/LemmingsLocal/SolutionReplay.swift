@@ -161,6 +161,8 @@ import LemmingsGameArt
             guard let self else { return }; self.setZoom(self.zoomFactor == 1 ? 2 : self.zoomFactor == 2 ? 4 : 1)
         }
         controlsScroll.drawsBackground = false
+        controlsScroll.hasVerticalScroller = true
+        controlsScroll.autohidesScrollers = true
         controlsScroll.scrollerStyle = .overlay
         controlsScroll.verticalScrollElasticity = .none
         controlsScroll.documentView = controlsDocument

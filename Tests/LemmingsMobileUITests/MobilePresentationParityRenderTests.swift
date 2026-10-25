@@ -31,6 +31,47 @@ import Testing
             let b = try capture(plain, session: session, target: target.point, sprite: sprite,
                 name: session.engineIdentifier + "-selection")
             #expect(a != b)
+            let state = session.snapshot
+            var settings = ClassicSettings()
+            settings.graphics = .macintosh
+            session.applySettings(settings)
+            let mac = try session.render(highlight: nil)
+            let macSprite = try #require(session.spriteHighlight(for: target.id))
+            #expect(mac.width == plain.width * 2 && mac.height == plain.height * 2)
+            #expect(macSprite.rect == sprite.rect)
+            #expect(macSprite.frame.width == sprite.frame.width * 2)
+            #expect(session.snapshot == state)
+            _ = try capture(mac, session: session, target: target.point, sprite: macSprite,
+                name: session.engineIdentifier + "-mac-selection")
+        }
+    }
+
+    @Test func sequelMenusRenderReachableControlsAcrossDisplaySizes() throws {
+        let typography = try #require(GameMenuTypography(directory: Self.root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        let pages = [MobileSequelMenuArt.practice(choice: 0, skills: [.builder, .basher, .digger, .jumper, .climber, .floater, .roper, .runner], subtitle: ""),
+            MobileSequelMenuArt.movies(engine: "lemmings2"), MobileSequelMenuArt.movies(engine: "lemmings3"),
+            MobileSequelMenuArt.movie(.tribesEnding, paused: false, finished: false, failure: nil),
+            MobileSequelMenuArt.movie(.chronicles(.introduction), paused: true, finished: false, failure: nil),
+            ShortGamesArt.page(classicAvailable: true, tribesAvailable: true, selected: "lemmings2", loading: false, subtitle: "")]
+        let output = Self.root.appendingPathComponent(".build/platform-parity/renders")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        for (width, height) in [(320, 568), (590, 834), (834, 590), (1920, 1080)] {
+            for (index, page) in pages.enumerated() {
+                let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: CGFloat(height))
+                #expect(Set(layout.targets.map { $0.action.id }) == Set((page.rows + page.footer).map(\.id)))
+                for target in layout.targets {
+                    #expect(target.frame.width >= 44 && target.frame.height >= 44)
+                    #expect(target.frame.minX >= 0 && target.frame.maxX <= layout.size.width)
+                    #expect(target.frame.minY >= 0 && target.frame.maxY <= layout.size.height)
+                }
+                let context = try #require(CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height), bitsPerComponent: 8,
+                    bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                context.translateBy(x: 0, y: layout.size.height); context.scaleBy(x: 1, y: -1)
+                GameFrontEnd.draw(page, layout: layout, typography: typography, in: context)
+                let destination = try #require(CGImageDestinationCreateWithURL(output.appendingPathComponent("menu-\(width)-\(index).png") as CFURL, "public.png" as CFString, 1, nil))
+                CGImageDestinationAddImage(destination, try #require(context.makeImage()), nil)
+                #expect(CGImageDestinationFinalize(destination))
+            }
         }
     }
 

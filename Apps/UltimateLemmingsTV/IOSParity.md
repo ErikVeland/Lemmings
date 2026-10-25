@@ -2,10 +2,11 @@
 
 **Status: shared frontend connected; acceptance gate open.**
 
-The [25 October cross-platform register](../../Documentation/PlatformFeatureParity.md)
-records current source gaps separately from device acceptance. Reusing the
-iOS frontend also inherits its missing replay, sequel artwork, L2 interaction,
-practice/sampler and original-media capabilities.
+The [26 October cross-platform register](../../Documentation/PlatformFeatureParity.md)
+records the 2.3 source changes separately from device acceptance. The shared
+frontend now connects native replay, sequel artwork, L2 interaction,
+practice/sampler and original-media browsing. Automatic campaign story triggers
+remain WIP; the TV performance exclusions remain intentional.
 
 Baseline: the local iOS and tvOS source on 14 October 2026. The checkout has
 uncommitted changes. This record describes the current implementation and its

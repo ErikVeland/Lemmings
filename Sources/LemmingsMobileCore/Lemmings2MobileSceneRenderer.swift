@@ -536,8 +536,11 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         let colour: (UInt8, UInt8, UInt8) = (255, 255, 0)
         for (px, py) in [(x - 8, y - 12), (x + 7, y - 12), (x - 8, y + 1), (x + 7, y + 1)] {
             guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-            let offset = (py * width + px) * 4
-            rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            let scale = rgba.count == width * height * 16 ? 2 : 1
+            for dy in 0..<scale { for dx in 0..<scale {
+                let offset = ((py * scale + dy) * width * scale + px * scale + dx) * 4
+                rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            } }
         }
     }
 }

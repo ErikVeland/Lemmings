@@ -330,7 +330,10 @@ import UIKit
         hdr = view
     }
     func suspendVisualEffects() { spriteTrails.reset(); hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
-    func resetTransientEffects() { spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll() }
+    func resetTransientEffects(preservingTrails: Bool = false) {
+        if !preservingTrails { spriteTrails.reset() }
+        hdr?.clear(); explosionBirths.removeAll()
+    }
     func releaseEffectResources() {
         releaseHDR()
         tube?.releaseEffectResources()

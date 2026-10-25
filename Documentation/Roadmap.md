@@ -1,6 +1,10 @@
 # Ultimate Lemmings roadmap through 3.0
 
-Updated 22 October 2026.
+Updated 26 October 2026. Earlier milestone dates below retain their original context.
+
+The [release schedule](ReleaseSchedule.md) now sets delivery priority: Mac first,
+then iOS, then tvOS, then sideloading stores. Ship Mac quickly and skip tests
+unless the candidate changes an engine. Lower-priority channels follow separately.
 
 The owner has prioritised the [2.2 Duo launch plan](2.2Roadmap.md) for existing
 TestFlight groups by Friday, 23 October. On 22 October the owner moved the Duo

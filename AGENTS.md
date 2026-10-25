@@ -64,6 +64,22 @@ service acceptance. Maintain `Documentation/PlatformFeatureParity.md` as the
 current source-backed register. Older release notes and historical port plans
 do not establish current parity.
 
+# Release schedule
+
+Follow `Documentation/ReleaseSchedule.md`. The owner's priority order is:
+
+1. Ship the Mac release quickly. Skip tests unless the candidate changes an engine.
+2. Deliver iOS.
+3. Deliver tvOS.
+4. Deliver sideloading stores and installers from `Documentation/IOSDistribution.md`.
+
+Publish each platform when ready. Lower-priority delivery must not delay Mac.
+For a Mac candidate without engine changes, skip test suites and test-running
+release audits. Keep required build, signing, notarisation, package and feed
+verification. For engine changes, run affected engine checks under the release
+replay policy. Record skipped checks explicitly. This policy supersedes older
+routine-release test requirements.
+
 # Local test builds
 
 A request for a test build means a quick local build for manual testing.

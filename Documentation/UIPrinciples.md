@@ -8,11 +8,20 @@ Mac graphics-cycle tile; graphics remains in Settings and on F2. Remove the
 duplicate timeline Hint and keep that group for rewind and stepping. Home uses
 Collections for the page containing favourites, recents and playlists.
 
-On iOS and tvOS, Main menu stays at the top-right of the safe menu viewport.
+On Mac, iOS and tvOS, Main menu stays at the top-right of the safe menu viewport.
 Back and optional tools occupy the remaining header space. Keep the header fixed
 while the page scrolls. Each menu action row fills its available width, including
 partial rows. Divide that row equally among its actual buttons. Reflow narrow
 level-browser controls into complete rows with at least 44-point targets.
+Keep paired rank controls together when the browser wraps. Do not repeat its
+Back control when the fixed header supplies the same return.
+
+Pause and replay use the same hierarchy: fixed return and Main menu, related
+tools in labelled groups, then one fixed primary action. Place Level tools
+before previews and statistics so compact panes expose Skip level promptly.
+Let each group choose its columns independently. Focus must reveal scrolling
+tools and information above the primary-action shelf. The shelf blocks input
+to covered controls, including through gaps between buttons.
 
 Required navigation stays outside scrolling content. Back and Main menu must
 remain visible at the first item, middle, end and empty state of every list.
@@ -152,6 +161,9 @@ remain unverified in this environment.
   unearned stars are outlined. An unknown target uses a question mark.
 - Keep one primary action per screen. Give it a stronger outline and a directional
   marker. Selection has an underline; keyboard focus has its own outline.
+- Use the fixed header for Back when Main menu is present. Do not duplicate
+  that return in the body. Without header navigation, apply the footer return
+  placement below.
 - Put forward game actions (Start, Play, Ready, Next, Continue and Resume) at the
   bottom of a vertical group or the right edge of its last row. Back stays furthest
   left, at the bottom-left of a multi-row action group. Reserve that slot for
