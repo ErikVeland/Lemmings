@@ -735,7 +735,6 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
-        let insets = MobileSystemRegions.usesFullDisplay(in: view) ? UIEdgeInsets.zero : insets
         #if os(tvOS)
         let showsMenuButton = false
         let television = true

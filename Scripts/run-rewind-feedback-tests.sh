@@ -32,7 +32,7 @@ swiftc -swift-version 6 -target "$target" -module-cache-path "$build_dir/ModuleC
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   "$build_dir/main.swift" "${app_sources[@]}" -o "$build_dir/views"
 python3 Tools/UITestRunner/run.py "$build_dir/views"
-cat Sources/LemmingsAudio/SoundEffectPlayer.swift Tests/SpatialAudioTests/checks.swift > "$build_dir/main.swift"
+cat Sources/LemmingsAudio/BufferedAudioSource.swift Sources/LemmingsAudio/SoundEffectPlayer.swift Tests/SpatialAudioTests/checks.swift > "$build_dir/main.swift"
 swiftc -swift-version 6 -target "$target" -module-cache-path "$build_dir/ModuleCache" \
   -I "$module_dir" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \
   "$build_dir/main.swift" -o "$build_dir/audio"

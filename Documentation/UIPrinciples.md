@@ -1483,6 +1483,18 @@ remain manual checks. The new help and accessibility text use English fallback
 until translated.
 
 
+Duo's controls embrace the rounded display. Use rounded stone sockets, flat
+rounded information panels and matching focus outlines in the shared bitmap
+renderers. Keep crisp pixel edges, shipped textures and bitmap lettering.
+Use smaller curves on controls than on their enclosing panels. Keep the full
+rectangular touch and accessibility targets, including the transparent corners.
+Retain the system's corner-adapted safe area for HUD controls, using the longer
+display axis so short landscape playfields retain their height. Outer-display
+menus keep full width and vertical corner clearance, with scrolling. Keep scenery
+edge to edge and use reserved-region logic for cameras and hinges.
+The original full-width game panel remains authored artwork. Rounded treatment
+applies to adaptive controls and the shared menu surfaces across all engines.
+
 On Duo's outer display, draw scenery and page backgrounds to every edge.
 Choose a fixed menu viewport from the scene's current reserved regions before
 measuring Home, level browsing, Ready, pause, results, recovery or settings.

@@ -44,6 +44,33 @@ private final class LibraryCredentials: @unchecked Sendable {
 }
 
 @MainActor struct CloudLibraryTests {
+    @Test func journeyWithoutRosterCannotReportCompleteSync() async throws {
+        let storage = try AppStorage.temporary(named: "orphaned-journey-sync")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let guest = try #require(store.addProfile(initials: "PAL", portrait: 1, select: false))
+        let owner = store.records.mainProfileID, session = UUID().uuidString
+        let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+            catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+            levelNameSnapshot: "Saved level", levelNumberSnapshot: 1)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: [entry])
+        let snapshot = JourneySessionSnapshot(run: run)
+        try GameProgressPreferences.saveJourneySession(snapshot, profileID: owner, sessionID: session, defaults: storage.defaults)
+        let transport = LibraryTransport(LibraryServer()), identity = CloudLibraryIdentity()
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: transport, identities: [identity])
+        defer { sync.stop() }
+        await sync.syncNow()
+        #expect(sync.state == .pending)
+        #expect(sync.lastSynced == nil)
+        #expect(GameProgressPreferences.journeySession(profileID: owner, sessionID: session, defaults: storage.defaults) == snapshot)
+        try store.importLibraryHotSeats([.init(id: session, host: owner, players: [owner, guest.id], turn: guest.id, active: false)])
+        await sync.syncNow()
+        #expect(sync.state == .synced)
+        let uploaded = try #require(transport.server.files[identity.id]?.values.first)
+        let archive = try CloudLibraryArchive.decode(uploaded)
+        #expect(archive.seats[session]?.first?.progress.values["LearningJourneySession"] == .journeySession(snapshot))
+    }
     @Test func lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() async throws {
         let storage = try AppStorage.temporary(named: "lifecycle-library")
         defer { storage.removeTemporaryFiles() }

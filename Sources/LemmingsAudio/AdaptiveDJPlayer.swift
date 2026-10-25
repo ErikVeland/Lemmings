@@ -44,6 +44,7 @@ import NxlvKit
       recording = player
     }
   }
+  var audioDiagnostics: AudioBufferStatistics? { recording?.audioDiagnostics ?? module?.audioDiagnostics }
   var sourceSeconds: Double { recording?.sourceSeconds ?? module?.sourceSeconds ?? 0 }
   var beatInfo: (bpm: Double, delay: Double)? {
     if let timing { return timing.nextBeat(at: sourceSeconds, rate: Double(playbackRate)) }
@@ -81,6 +82,7 @@ import NxlvKit
 
 /// Mixes versions of the level theme, including a lift at the rescue target.
 @MainActor public final class AdaptiveDJPlayer {
+  public var audioDiagnostics: [AudioBufferStatistics] { allDecks.compactMap(\.audioDiagnostics) }
   /// How long each kind of change takes.
   private enum Fade {
     /// Long enough to read as a mix rather than a cut.

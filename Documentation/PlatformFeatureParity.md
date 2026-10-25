@@ -87,6 +87,27 @@ These checks launched no app or Simulator windows.
 
 ## Shared coverage and intentional adaptations
 
+### Journey resume integrity — 26 October 2026
+
+Mac Home resolves the selected session's saved queue even when another session
+occupies the active slot. Activating Resume restores that queue and retains the
+other session's queue. Independent checkpoints retain a separate Resume level
+action on Mac and the shared iPhone/iPad/Duo/TV frontend.
+
+Starting a different route retains the journey snapshot on Mac and mobile/TV.
+Mobile also retains the displaced run when the player resumes the journey.
+Only completing the journey creates its completion marker on mobile. The shared
+sync coordinator keeps delivery pending when a surviving journey has no roster,
+instead of reporting Synced while omitting that save. Native integration builds
+now use a process-specific temporary save root, separate from production data.
+
+Focused persistence checks cover selected-session lookup for Classic, L2, L3
+and NeoLemmix queue identities, reopen, unrelated-route completion, snapshot
+retention and recovery, offline merges, repeated imports and missing-roster sync
+status. Queue identity coverage does not expand the Classic-only mobile journey
+loader. Mid-level checkpoint transfer remains local-only. Physical device resume
+and provider propagation remain separate acceptance items.
+
 The source connects native campaign play, owner-scoped checkpoints, rewind and
 single stepping, Retry/Continue, named Hot Seat choices and paused Ready
 handovers across the three native games. Shared libraries also provide profiles,
@@ -118,9 +139,21 @@ remain visible, including disabled zero balances. The focused layout checks
 pass 14 tests and produce 120 pause/replay captures across 20 geometries and
 three lettering sizes. These include Duo book, table and outer-screen cutout
 arrangements. Compact-book and wide-phone captures were inspected. Both Apple
-SDK module and application-entry checks pass. This evidence covers shared
-geometry and source compilation, not physical folding, VoiceOver or Siri Remote
-delivery. Native Mac replay changes require separate AppKit evidence.
+SDK module and application-entry checks pass with input hashes matching the
+current source. Nine hostless UIKit checks pass across all three game identities,
+including skip balances/refunds, one header return, focus revealing tools and
+text above Resume, browser rows and Duo safe navigation. Six native captures
+were produced. Compact captures exposed fallback buttons drawn beneath Resume;
+the corrected clipping and group headings were rerun and inspected.
+
+The arm64 Mac compilation and focused offscreen replay check pass. Native
+solution controls retain at least 44-point targets at four sizes from 640×480
+to 1600×900. Keyboard focus reveals the scrolling tools. Movie controls fill
+their rows at five widths from 320 to 1600, with and without header navigation.
+Retained position, camera, paused returns, ghost viewing and Hot Seat ownership
+also pass. Compact solution and movie captures were inspected. All runs used
+muted audio and the default background runner. Physical folding, VoiceOver and
+Siri Remote delivery remain device checks.
 
 Run `Scripts/run-platform-parity-tests.sh` with the default muted, offscreen
 runner. It supplies the packaged engine identity to the test hosts so ghost
@@ -139,7 +172,10 @@ The shared Neo early-nuke rule now completes when no active actors remain,
 without counting unreleased actors as deaths. Neo result population includes
 preplaced actors and clones. The replay regression checks the same final hash.
 
-Apple SDK frontend checks are in progress for the final 2.3 working tree.
+Both iOS and tvOS SDK checks pass for all eight shared modules and their
+application entry points. Their recorded input hashes match the current source.
+The native Apple Silicon debug build also passes. Crowd checks pass at 1–12×
+zoom and 1×/2×/3× backing scale, with 36 native and 36 mobile bitmap captures.
 Compilation alone cannot establish physical input or presentation acceptance.
 
 Physical touch, Siri Remote, controller/keyboard delivery, VoiceOver, CRT/EDR,
@@ -152,3 +188,31 @@ Older matrices and port checklists contain historical claims. Use this register
 for the gaps above, with [iOS coverage](IOSInterfaceParity.md),
 [TV adaptations](../Apps/UltimateLemmingsTV/IOSParity.md) and
 [cross-game behaviour](ReleaseReadiness/CrossGameParity.md) for detailed context.
+
+## Duo rounded controls — 26 October 2026
+
+Duo opts into `GameControlShape.rounded` through the existing foldable/hinge
+identification, including its outer display. Shared renderers round menu cards,
+stone buttons, search tools, pause panels, adaptive HUD sockets and focus rings.
+Classic, L2, L3 and supported NeoLemmix use the same frontend path. Mac, ordinary
+iPhone/iPad and TV keep their existing square presentation. The original full
+native HUD panel remains authored artwork. Rectangular touch targets, engine
+input and paused handovers remain intact. Duo HUDs retain UIKit's corner-adapted
+safe area along the longer display axis. Outer-display menus use vertical
+corner clearance to retain full width around local camera cutouts. The gameplay adapter no longer discards those insets on the outer
+display. Scenery still extends across that display.
+
+Muted, windowless rendering checks cover 72 Classic/L2/L3 HUD states and 120
+book Home states, including focus, disabled, selected and busy controls. Their
+checks cover all visible HUD targets against rounded screen masks, action sets,
+touch targets and scroll reachability.
+A separate control sheet checks normal, selected, focused, disabled and primary
+buttons, search and passive panels, including input at transparent button corners.
+Physical Duo corner clearance, pose transitions and composited output remain
+unverified. Imported NeoLemmix content has shared source coverage only.
+The synthetic screen-radius fixtures model the system insets. They do not
+validate UIKit's reported corner geometry on physical Duo hardware.
+
+Shared artwork compiles for Mac. Final UI modules compile against the iOS and
+tvOS SDKs. Engine suites were skipped because simulation and input semantics
+are unchanged. Evidence is in ignored `.build/duo-rounded/` files.

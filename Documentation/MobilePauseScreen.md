@@ -53,6 +53,14 @@ Large lettering adapts in landscape to keep the action targets within the viewpo
 
 ## Rescue and run details
 
+Validation on 26 October 2026: nine hostless UIKit checks pass, including
+Classic/L2/L3 skip balances, refund on failed handover, fixed navigation,
+scrolling focus, browser rank pairs and Duo safe regions. The shared layout
+matrix passes 14 tests and renders 120 pause/replay states. Both Apple SDKs
+compile. Native hostless captures use fallback lettering; separate shared
+captures verify shipped bitmap typography. Physical touch, VoiceOver and Siri
+Remote remain device checks. See [platform evidence](PlatformFeatureParity.md).
+
 The overview shows saved and required counts, active lemmings, waiting lemmings,
 losses, further permitted losses, time left, elapsed simulation time, speed,
 release rate, population, skill assignments, rewind use and remaining skill stock.

@@ -26,12 +26,19 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     var isRescue = false
     var isReleaseRate = false
     var rescueLayers: [RescueLayer] = []
+    var lastSample: Float = 0
+    var transitionFrom: Float = 0
+    var transitionRemaining = 0
   }
 
   public var onPlay: (@Sendable ([Float], Double, Float) -> Void)?
   private let engine = AVAudioEngine()
   private let environment = AVAudioEnvironmentNode()
-  private var sourceNodes: [AVAudioSourceNode] = []
+  private let limiter = MusicOutputSafety.limiter()
+  private var sourceNodes: [AVAudioPlayerNode] = []
+  private var bufferedSource: BufferedAudioSource?
+  private var lastActiveFrame: Int64 = 0
+  public var audioDiagnostics: AudioBufferStatistics { bufferedSource?.diagnostics ?? AudioBufferStatistics() }
   private var spatialMixers: [AVAudioMixerNode] = []
   private let lock = NSLock()
 
@@ -40,6 +47,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var rates: [ClassicSoundEffect: Double] = [:]
   private var gains: [ClassicSoundEffect: Float] = [:]
   private var supplementalEffects = Set<ClassicSoundEffect>()
+  private var pendingPlayNotifications: [MovieCue] = []
   private var recentEffectTimes: [String: Double] = [:]
   private var namedSounds: [String: (samples: [Float], rate: Double)] = [:]
   private var releaseRateSound: (samples: [Float], rate: Double)?
@@ -115,18 +123,17 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     environment.outputType = .auto
     environment.distanceAttenuationParameters.rolloffFactor = 0
     environment.reverbParameters.enable = false
-    engine.connect(environment, to: engine.mainMixerNode, format: stereo)
+    engine.attach(limiter)
+    engine.connect(environment, to: limiter, format: stereo)
+    engine.connect(limiter, to: engine.mainMixerNode, format: stereo)
+    let source = BufferedAudioSource(label: "Lemmings.effects-pcm", format: mono, count: voices.count) { [weak self] index, buffer, time in
+      self?.fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList),
+        frames: Int(buffer.frameLength), sampleTime: Double(time))
+    }
+    bufferedSource = source
     for index in voices.indices {
       let mixer = AVAudioMixerNode()
-      let node = AVAudioSourceNode(format: mono) { [weak self] _, timestamp, frameCount, buffers in
-        let list = UnsafeMutableAudioBufferListPointer(buffers)
-        guard let self else {
-          for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
-          return noErr
-        }
-        self.fillVoice(index, buffers: list, frames: Int(frameCount), sampleTime: timestamp.pointee.mSampleTime)
-        return noErr
-      }
+      let node = source.nodes[index]
       engine.attach(node)
       engine.attach(mixer)
       engine.connect(node, to: mixer, format: mono)
@@ -137,10 +144,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       sourceNodes.append(node)
       spatialMixers.append(mixer)
     }
+    engine.mainMixerNode.outputVolume = isMuted || level == 0 ? 0 : 1
     do { try engine.start() }
-    catch { detachSources(); throw error }
+    catch { source.stop(); detachSources(); throw error }
+    source.start()
     isRunning = true
-    lock.lock()
+   lock.lock()
     outputSuspended = false
     lock.unlock()
   }
@@ -149,6 +158,8 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     for node in sourceNodes { engine.detach(node) }
     for mixer in spatialMixers { engine.detach(mixer) }
     engine.detach(environment)
+    engine.detach(limiter)
+    bufferedSource = nil
     sourceNodes = []
     spatialMixers = []
   }
@@ -156,6 +167,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   public func stop() {
     guard isRunning else { return }
     engine.stop()
+    bufferedSource?.stop()
     detachSources()
     silence()
     isRunning = false
@@ -168,30 +180,34 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     guard isRunning else { return }
     lock.lock()
     outputSuspended = true
-    for index in voices.indices {
+   for index in voices.indices {
       voices[index].isActive = false
       voices[index].rescueLayers.removeAll()
     }
     lock.unlock()
     engine.pause()
+    bufferedSource?.stop()
   }
 
   /// Park a silent graph after the last voice finishes. Playback adapters own retries.
   @discardableResult public func suspendOutputIfIdle() -> Bool {
     lock.lock()
     let idle = !voices.contains { $0.isActive }
+    let tail = lastActiveFrame
     lock.unlock()
-    guard idle else { return false }
+    guard idle, bufferedSource.map({ $0.playedFrame >= tail }) ?? true else { return false }
     suspendOutput()
     return true
-  }
+ }
 
   public func resumeOutput() throws {
     guard isRunning else { return }
-    if !engine.isRunning { try engine.start() }
     lock.lock()
     outputSuspended = false
     lock.unlock()
+    do { if !engine.isRunning { try engine.start() } }
+    catch { suspendOutput(); throw error }
+    bufferedSource?.start()
   }
 
   private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int, sampleTime: Double) {
@@ -211,7 +227,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       for index in rewindRenderedVoices.indices { rewindRenderedVoices[index] = false }
     }
     rewindRenderedVoices[index] = true
-    // Clear the history once per block, rather than for every silent spatial source.
+   // Clear the history once per block, rather than for every silent spatial source.
     // Scrub-only renders retain their history and never record their own output.
     if rewindRenderCount == 0, voice.rewindSequence == nil, !recentRenderPrepared {
       for frame in 0..<frames {
@@ -222,11 +238,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       latestRecentSample = max(latestRecentSample ?? start, start + Int64(max(0, frames - 1)))
       recentRenderPrepared = true
-    }
+   }
     guard !isMuted, voice.isActive else {
       for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
       return
     }
+    lastActiveFrame = start + Int64(frames)
     let rewindGain: Float = voice.rewindSequence == nil ? 1 : 1 / Float(max(1, rewindRenderCount))
     for frame in 0..<frames {
       var sample: Float = 0
@@ -238,6 +255,10 @@ public final class SoundEffectPlayer: @unchecked Sendable {
         if position < voice.samples.count {
           let next = min(position + 1, voice.samples.count - 1)
           sourceSample = voice.samples[position] + (voice.samples[next] - voice.samples[position]) * Float(voice.position - Double(position))
+          // Short edge fades suppress clicks from sample truncation and voice stealing.
+          if voice.rewindSequence == nil {
+            sourceSample *= Float(min(1, max(0, (Double(voice.samples.count - 1) - voice.position) / (64 * voice.increment))))
+          }
           sample = sourceSample * Float(level) * voice.gain * voice.distanceGain * rewindGain
           historySample = sourceSample * voice.gain * voice.distanceGain
           voice.position += voice.increment
@@ -253,8 +274,15 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           historySample += layerSample * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           voice.rescueLayers[index].position += voice.rescueLayers[index].increment
         }
-        voice.rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
+
       }
+      if voice.transitionRemaining > 0 {
+        let weight = Float(voice.transitionRemaining) / 64
+        historySample = historySample * (1 - weight) + voice.transitionFrom * weight
+        sample = historySample * Float(level)
+        voice.transitionRemaining -= 1
+      }
+      voice.lastSample = historySample
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
       if voice.rewindSequence != nil { lastRewindSample = sourceSample }
 
@@ -267,6 +295,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     if voice.rewindSequence != nil {
       rewindHistoryHead = rewindSliceHead - VinylBackspin.distance(frames: voice.position, sampleRate: sampleRate)
     }
+    voice.rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
     voices[index] = voice
   }
 
@@ -291,26 +320,27 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       if let name = sound.name { byName[name] = sound }
     }
 
+    let supplement = Self.supplementSounds(supplementDirectory)
+    let decoded = byName.mapValues { ($0.floatSamples(), $0.sampleRate) }
+    let amiga = amigaFallbackDirectory.flatMap { try? Self.amigaSounds(in: $0) } ?? [:]
     lock.lock()
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
-    releaseRateSound = byName["MousePress"].map { ($0.floatSamples(), $0.sampleRate) }
+    releaseRateSound = decoded["MousePress"]
     for (effect, name) in ClassicSoundMapping.macintoshNames {
-      guard let sound = byName[name] else { continue }
-      library[effect] = sound.floatSamples()
-      rates[effect] = sound.sampleRate
+      guard let sound = decoded[name] else { continue }
+      library[effect] = sound.0
+      rates[effect] = sound.1
     }
-    if let amigaFallbackDirectory {
-      // A missing or damaged Amiga bank leaves these gaps silent, as before.
-      let amiga = (try? Self.amigaSounds(in: amigaFallbackDirectory)) ?? [:]
+    if !amiga.isEmpty {
       for (effect, name) in ClassicSoundMapping.amigaVoiceNames where library[effect] == nil {
         guard let sound = amiga[name.lowercased()] else { continue }
         library[effect] = sound.samples
         rates[effect] = sound.sampleRate
       }
     }
-    fillFromSupplementLocked(supplementDirectory)
+    fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
     lock.unlock()
@@ -321,18 +351,26 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Fills each still-silent event from a sound file named after it, such as
   /// `yippee.mp3`. Neither the Mac disk nor the Amiga banks has a Yippee.
-  private func fillFromSupplementLocked(_ directory: URL?) {
-    guard let directory else { return }
-    for effect in ClassicSoundEffect.allCases where library[effect] == nil || supplementalEffects.contains(effect) {
+  private static func supplementSounds(_ directory: URL?) -> [ClassicSoundEffect: (samples: [Float], rate: Double)] {
+    guard let directory else { return [:] }
+    var clips: [ClassicSoundEffect: (samples: [Float], rate: Double)] = [:]
+    for effect in ClassicSoundEffect.allCases {
       for ext in ["wav", "m4a", "mp3"] {
         let url = directory.appendingPathComponent(effect.rawValue).appendingPathExtension(ext)
         guard let decoded = Self.monoSamples(url) else { continue }
-        library[effect] = decoded.samples
-        rates[effect] = decoded.rate
-        gains[effect] = 0.6
-        supplementalEffects.remove(effect)
+        clips[effect] = decoded
         break
       }
+    }
+    return clips
+  }
+
+  private func fillFromSupplementLocked(_ clips: [ClassicSoundEffect: (samples: [Float], rate: Double)]) {
+    for (effect, clip) in clips where library[effect] == nil || supplementalEffects.contains(effect) {
+      library[effect] = clip.samples
+      rates[effect] = clip.rate
+      gains[effect] = 0.6
+      supplementalEffects.remove(effect)
     }
   }
 
@@ -346,8 +384,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Original voices supplied by the app take precedence over preview effects.
   public func loadSupplementSounds(directory: URL?) {
+    let supplement = Self.supplementSounds(directory)
     lock.lock(); defer { lock.unlock() }
-    fillFromSupplementLocked(directory)
+    fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     loadedEffects = library.keys.sorted { $0.rawValue < $1.rawValue }
   }
@@ -386,23 +425,25 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
     }
     let byName = try Self.amigaSounds(in: directory)
+    let supplement = Self.supplementSounds(supplementDirectory)
+    let decoded = macintosh.mapValues { ($0.floatSamples(), $0.sampleRate) }
 
     lock.lock()
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
-    releaseRateSound = macintosh["MousePress"].map { ($0.floatSamples(), $0.sampleRate) }
+    releaseRateSound = decoded["MousePress"]
     for (effect, name) in ClassicSoundMapping.amigaVoiceNames {
       guard let sound = byName[name.lowercased()] else { continue }
       library[effect] = sound.samples
       rates[effect] = sound.sampleRate
     }
     for (effect, name) in ClassicSoundMapping.macintoshNames where library[effect] == nil {
-      guard let sound = macintosh[name] else { continue }
-      library[effect] = sound.floatSamples()
-      rates[effect] = sound.sampleRate
+      guard let sound = decoded[name] else { continue }
+      library[effect] = sound.0
+      rates[effect] = sound.1
     }
-    fillFromSupplementLocked(supplementDirectory)
+    fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
     lock.unlock()
@@ -474,12 +515,15 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   public func silence() {
     lock.lock()
-    defer { lock.unlock() }
     for index in voices.indices {
       voices[index].isActive = false
       voices[index].rescueLayers.removeAll()
     }
-    recentEffectTimes.removeAll(keepingCapacity: true)
+    recentEffectTimes.removeAll(keepingCapacity: true) 
+    let restart = isRunning && !outputSuspended && engine.isRunning
+    lock.unlock()
+    bufferedSource?.stop()
+    if restart { bufferedSource?.start() }
   }
 
   /// Let the final rescue chorus finish as the result page opens.
@@ -501,12 +545,15 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Backspin the captured effect mix with a falling pitch and soft envelope.
   /// Repeated requests continue the active groove without stacking voices.
   public func playRewindScrub() {
+    let audibleFrame = bufferedSource?.playedFrame
     lock.lock()
-    defer { lock.unlock() }
+    defer { deliverPlayNotificationsAndUnlock() }
     refreshResourceBudgetLocked()
     guard !isMuted, !outputSuspended else { return }
     let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
-    guard let latest = latestRecentSample else { return }
+    guard let captured = latestRecentSample else { return }
+    let latest = min(captured, audibleFrame.map { $0 - 1 } ?? captured)
+    guard latest >= 0 else { return }
     let now = ProcessInfo.processInfo.systemUptime
     let continuing = rewindHistoryAnchor == latest && now - lastRewindTrigger <= VinylBackspin.settleSeconds
     let head: Double
@@ -553,7 +600,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true,
       gain: 0.4, rewindSequence: rewindSequence)
     if spatialMixers.indices.contains(index) { spatialMixers[index].position = AVAudio3DPoint(x: 0, y: 0, z: -1) }
-    onPlay?(samples, sampleRate, Float(level) * 0.4)
+    enqueuePlayLocked(samples, rate: sampleRate, gain: Float(level) * 0.4)
   }
 
   /// Turns a stereo position into a pair of channel gains.
@@ -606,7 +653,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func setNukeActive(_ active: Bool) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
     guard active != nukeActive else { return }
     nukeActive = active
     lastNukeImpact = -Double.infinity
@@ -616,7 +663,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func playNukeImpact(at point: GameplaySoundPoint?) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
     playNukeImpactLocked(at: point)
   }
 
@@ -628,7 +675,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func play(_ effect: ClassicSoundEffect, pan: Float = 0.0, at point: GameplaySoundPoint? = nil) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
     guard effect != .fallOut || bottomFallSounds, let samples = library[effect],
           allowsEffectLocked(effect, at: point) else { return }
     playLocked(samples: samples, rate: rates[effect] ?? sampleRate, gain: gains[effect] ?? 0.6,
@@ -638,7 +685,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Held rate controls keep one centred cue, without filling the spatial voice pool.
   public func playReleaseRate(_ rate: Int, time: Double = ProcessInfo.processInfo.systemUptime) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
     guard !isMuted, !outputSuspended, time - lastReleaseRateTime >= 0.02,
       let clip = releaseRateSound else { return }
     lastReleaseRateTime = time
@@ -649,7 +696,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Shared spatial voices also play L2's original bank and sample pitches.
   public func play(samples: [Float], rate: Double, gain: Float = 0.5, at point: GameplaySoundPoint? = nil,
             semanticEffect: ClassicSoundEffect? = nil) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
     if let semanticEffect, !allowsEffectLocked(semanticEffect, at: point) { return }
     playLocked(samples: samples, rate: rate, gain: gain, pan: 0, at: point,
       priority: semanticEffect?.presentationPriority ?? 1, rescue: semanticEffect?.isRescue ?? false)
@@ -666,11 +713,23 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       recentEffectTimes = recentEffectTimes.filter { now - $0.value < 1 }
     }
     return true
-  }
+ }
 
   private static func regionKey(_ point: GameplaySoundPoint?) -> String {
     guard let point, point.x.isFinite, point.y.isFinite else { return ":interface" }
     return ":\(floor(point.x / 32)),\(floor(point.y / 32))"
+  }
+
+  private func enqueuePlayLocked(_ samples: [Float], rate: Double, gain: Float) {
+    if onPlay != nil { pendingPlayNotifications.append(MovieCue(samples: samples, rate: rate, gain: gain)) }
+  }
+
+  private func deliverPlayNotificationsAndUnlock() {
+    let callback = onPlay
+    let notifications = pendingPlayNotifications
+    pendingPlayNotifications = []
+    lock.unlock()
+    for cue in notifications { callback?(cue.samples, cue.rate, cue.gain) }
   }
 
   private func playLocked(samples: [Float], rate: Double, gain: Float, pan: Float, at point: GameplaySoundPoint?,
@@ -696,7 +755,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       voices[index].rescueLayers.append(RescueLayer(samples: samples, increment: rate / sampleRate,
         gain: gain, worldPoint: point, distanceGain: distanceGain))
       voices[index].priority = max(voices[index].priority, priority)
-      onPlay?(samples, rate, Float(level) * gain * distanceGain)
+      enqueuePlayLocked(samples, rate: rate, gain: Float(level) * gain * distanceGain)
       return
     }
     let index = available ?? voices.indices.filter { voices[$0].isActive }.min {
@@ -711,16 +770,17 @@ public final class SoundEffectPlayer: @unchecked Sendable {
         increment: voices[index].increment, gain: voices[index].gain,
         worldPoint: voices[index].worldPoint, distanceGain: voices[index].distanceGain))
     }
+    let previousSample = voices[index].isActive ? voices[index].lastSample : 0
     voices[index] = Voice(samples: samples, position: 0, increment: rate / sampleRate,
                           isActive: true, worldPoint: point, gain: gain, priority: priority, isRescue: rescue,
                           isReleaseRate: releaseRate,
-                          rescueLayers: retainedRescues)
+                          rescueLayers: retainedRescues, transitionFrom: previousSample, transitionRemaining: 64)
     if spatialMixers.indices.contains(index) {
       let angle = (pan.isFinite ? max(-1, min(1, pan)) : 0) * Float.pi / 3
       spatialMixers[index].position = AVAudio3DPoint(x: sin(angle), y: 0, z: -cos(angle))
     }
     placeVoice(index)
-    onPlay?(samples, rate, Float(level) * gain * voices[index].distanceGain)
+    enqueuePlayLocked(samples, rate: rate, gain: Float(level) * gain * voices[index].distanceGain)
   }
 
   /// Admission changes without rebuilding the audio graph or changing settings.
@@ -775,7 +835,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           playLocked(samples: clip.samples, rate: clip.rate, gain: 0.6, pan: 0, at: cue.point,
             priority: cue.effect.presentationPriority, rescue: cue.effect.isRescue)
         }
-        lock.unlock()
+        deliverPlayNotificationsAndUnlock()
         if clip != nil || !cue.allowsFallback { continue }
       }
       play(cue.effect, at: cue.point)
@@ -825,13 +885,15 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Sets the output level, from silent to full.
   public func setVolume(_ value: Double) {
     lock.lock()
-    level = min(1, max(0, value))
+    level = value.isFinite ? min(1, max(0, value)) : 0
+    engine.mainMixerNode.outputVolume = isMuted || level == 0 ? 0 : 1
     lock.unlock()
   }
 
   public func setMuted(_ muted: Bool) {
     lock.lock()
     isMuted = muted
+    engine.mainMixerNode.outputVolume = muted || level == 0 ? 0 : 1
     if muted {
       for index in voices.indices {
         voices[index].isActive = false
@@ -839,7 +901,11 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       recentEffectTimes.removeAll(keepingCapacity: true)
     }
-    lock.unlock()
+    lock.unlock() 
+    if muted {
+      bufferedSource?.stop()
+      if isRunning && engine.isRunning { bufferedSource?.start() }
+    }
   }
 
   public var muted: Bool {

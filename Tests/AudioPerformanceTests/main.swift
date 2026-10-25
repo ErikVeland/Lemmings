@@ -39,13 +39,14 @@ extension ModuleMusicPlayer {
         precondition(bufferedEnergy > 0.01, "Tracker reserve ran dry during a bounded synthesis stall")
         // The reverse source shares this engine and runs during forward music.
         // A UI command or recorder must never block its render callback.
-        rewindAudio.checkNonblockingCallbacks(output)
+        rewindAudio.drain()
         var energy = 0.0
         var previousSeconds = 0.0
         for _ in 0..<80 {
             let result = try engine.renderOffline(512, to: output)
             precondition(result == .success)
             synthesisQueue.sync {}
+            rewindAudio.drain()
             for channel in 0..<2 {
                 for frame in 0..<Int(output.frameLength) {
                     let sample = output.floatChannelData![channel][frame]
@@ -67,6 +68,10 @@ extension ModuleMusicPlayer {
         let join = nextSourceFrameLocked()
         lock.unlock()
         precondition(abs(join.left - 0.3) < 0.00001 && abs(join.right + 0.3) < 0.00001)
+        engine.stop()
+        try resumeOutput()
+        synthesisQueue.sync {}
+        precondition(sourceNode?.isPlaying == true && engine.isRunning, "Tracker did not restore its queue after engine reset")
         setMuted(true)
         precondition(spatialMixer.outputVolume == 0)
         stop()
@@ -79,17 +84,38 @@ extension ModuleMusicPlayer {
 }
 
 extension MusicRewindBuffer {
-    func checkNonblockingCallbacks(_ output: AVAudioPCMBuffer) {
+    func checkBufferedReverse() throws {
+        let engine = AVAudioEngine()
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+        let node = source(format: format)
+        engine.attach(node)
+        engine.connect(node, to: engine.mainMixerNode, format: format)
+        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        let input = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 44100)!
+        input.frameLength = 44100
+        for channel in 0..<2 {
+            for frame in 0..<44100 { input.floatChannelData![channel][frame] = Float(sin(Double(frame) * 0.05)) * 0.2 }
+        }
+        record(input)
+        try engine.start()
+        precondition(trigger())
+        let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
         lock.lock()
-        defer { lock.unlock() }
-        let buffers = UnsafeMutableAudioBufferListPointer(output.mutableAudioBufferList)
-        let begin = DispatchTime.now().uptimeNanoseconds
-        render(buffers, frames: Int(output.frameLength))
-        record(output)
-        precondition((0..<Int(output.frameLength)).allSatisfy { output.floatChannelData![0][$0] == 0 })
-        let elapsed = Double(DispatchTime.now().uptimeNanoseconds - begin) / 1_000_000
-        precondition(elapsed < 20, "Rewind callbacks waited for a control lock")
-        print("PASS contended history capture and reverse render return without waiting: \(elapsed) ms")
+        let began = ProcessInfo.processInfo.systemUptime
+        var energy = 0.0
+        for _ in 0..<2 {
+            let status = try engine.renderOffline(512, to: output)
+            precondition(status == .success)
+            record(output)
+            energy += (0..<512).reduce(0) { $0 + abs(Double(output.floatChannelData![0][$1])) }
+        }
+        let elapsed = ProcessInfo.processInfo.systemUptime - began
+        lock.unlock()
+        precondition(energy > 0.01 && elapsed < 0.1, "Reverse audio stopped during a bounded control stall")
+        cancel()
+        engine.stop()
+        engine.disableManualRenderingMode()
+        print("PASS buffered reverse audio survives a held history lock without zeroing output")
     }
 }
 
@@ -105,7 +131,8 @@ extension SoundEffectPlayer {
         voices[3] = Voice(samples: [Float](repeating: 0.2, count: 1024), isActive: true)
         // Silent sources before and after active sources must not erase the mixed history.
         for index in voices.indices { fillVoice(index, buffers: buffers, frames: 1024, sampleTime: 1024) }
-        precondition((1024..<2048).allSatisfy { abs(recentSamples[$0] - 0.18) < 0.00001 })
+        precondition((1024..<1984).allSatisfy { abs(recentSamples[$0] - 0.18) < 0.00001 })
+        precondition(recentSamples[2047] == 0, "Effect endpoint did not fade out")
         silence()
         let begin = DispatchTime.now().uptimeNanoseconds
         for block in 0..<100 {
@@ -117,6 +144,8 @@ extension SoundEffectPlayer {
 }
 
 try ModuleMusicPlayer().checkBufferedPlayback()
+let reverseBuffer = MusicRewindBuffer()
+try reverseBuffer.checkBufferedReverse()
 SoundEffectPlayer().checkIdleWorkAndHistory()
 
 extension SoundEffectPlayer {
@@ -158,3 +187,52 @@ for gib in [2, 4, 8, 16] {
     SoundEffectPlayer(resources: resources.underPressure(thermalLevel: 0, lowPower: false, memoryPressure: true)).checkResourceAdmission()
 }
 print("PASS bounded sources and rescue layers on 2/4/8/16 GiB devices, pressure trimming, warning priority and replay budgets")
+
+
+extension SoundEffectPlayer {
+    func checkBufferedEffects() throws {
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        let tone = (0..<44100).map { Float(sin(Double($0) * 0.05)) * 0.9 }
+        for _ in voices.indices { play(samples: tone, rate: 44100, gain: 1) }
+        try start()
+        defer { stop(); engine.disableManualRenderingMode() }
+        let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
+        for _ in 0..<16 {
+            let status = try engine.renderOffline(512, to: output)
+            precondition(status == .success)
+            bufferedSource?.drain()
+        }
+        lock.lock()
+        let began = ProcessInfo.processInfo.systemUptime
+        var energy = 0.0
+        for _ in 0..<2 {
+            let status = try engine.renderOffline(512, to: output)
+            precondition(status == .success)
+            for frame in 0..<512 {
+                let sample = output.floatChannelData![0][frame]
+                precondition(sample.isFinite && abs(sample) <= 1.001, "Effect chorus clipped")
+                energy += Double(sample * sample)
+            }
+        }
+        let elapsed = ProcessInfo.processInfo.systemUptime - began
+        lock.unlock()
+        precondition(energy > 1 && elapsed < 0.1, "Effect output waited for a control lock")
+        bufferedSource?.drain()
+        setMuted(true)
+        for _ in 0..<6 {
+            let status = try engine.renderOffline(512, to: output)
+            precondition(status == .success)
+            bufferedSource?.drain()
+            precondition((0..<512).allSatisfy { output.floatChannelData![0][$0] == 0 }, "Mute leaked queued effects")
+        }
+        print("PASS buffered spatial chorus survives control contention, limits peaks and mutes queued PCM")
+    }
+}
+let bufferedEffects = SoundEffectPlayer(voiceCount: 24)
+try bufferedEffects.checkBufferedEffects()
+let callbackEffects = SoundEffectPlayer(voiceCount: 4)
+callbackEffects.onPlay = { [weak callbackEffects] _, _, _ in callbackEffects?.setVolume(0.5) }
+callbackEffects.play(.builderWarning)
+precondition(callbackEffects.volume == 0.5, "Replay callback did not run synchronously outside the effects lock")
+print("PASS synchronous replay capture can re-enter effect controls without blocking synthesis")

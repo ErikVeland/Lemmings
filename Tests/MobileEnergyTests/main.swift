@@ -99,6 +99,7 @@ extension SoundEffectPlayer {
         for _ in 0..<8 {
             let rendered = try engine.renderOffline(1024, to: output)
             require(rendered == .success, "Effect fixture did not render")
+            bufferedSource?.drain()
         }
         require(suspendOutputIfIdle() && !engine.isRunning, "Effects renderer ran after its last voice finished")
         try resumeOutput()

@@ -487,8 +487,24 @@ import UIKit
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
             if let heading = layout.libraryHeading { MobilePixelText.draw(L10n.text("Levels"), in: heading, palette: .green) }
+            let footerIDs = Set(page.footer.map(\.id))
+            let shelfTop = page.pause == nil ? nil : layout.targets.first(where: { footerIDs.contains($0.action.id) }).map { $0.frame.minY - 8 }
+            if let shelfTop {
+                context.setFillColor(CGColor(gray: 0, alpha: 1))
+                context.fill(CGRect(x: 0, y: shelfTop, width: layout.size.width,
+                                    height: max(0, layout.size.height - shelfTop)))
+            }
+            for (title, frame) in layout.rowHeadings where shelfTop.map({ frame.maxY <= $0 }) ?? true {
+                MobilePixelText.draw(title, in: frame, palette: .green)
+            }
             for target in layout.targets where !target.frame.isEmpty {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
+                context.saveGState()
+                defer { context.restoreGState() }
+                if let shelfTop, !footerIDs.contains(target.action.id) {
+                    guard target.frame.minY < shelfTop else { continue }
+                    context.clip(to: CGRect(x: 0, y: 0, width: layout.size.width, height: max(0, shelfTop)))
+                }
+                GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1, shape: MobileSystemRegions.controlShape(in: self))
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))
                 if target.action.selected {
                     context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
@@ -499,7 +515,7 @@ import UIKit
             return
         }
         GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
-                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), in: context)
+                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), shape: MobileSystemRegions.controlShape(in: self), in: context)
         if let resultStars, !layout.preview.isEmpty {
             let preview = layout.preview
             let pixel: CGFloat = preview.width >= 400 ? 3 : 2
@@ -523,7 +539,7 @@ import UIKit
             let above = target.frame.minY - height - 8
             let y = above >= visible.minY + 8 ? above : target.frame.maxY + 8
             let frame = CGRect(x: visible.midX - width / 2, y: y, width: width, height: height)
-            GameDisplayArt.draw(in: context, frame: frame, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: frame, pixel: 2, shape: MobileSystemRegions.controlShape(in: self))
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(frame.insetBy(dx: 8, dy: 8))
             GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, alignment: .left, context: context)

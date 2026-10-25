@@ -64,6 +64,18 @@ service acceptance. Maintain `Documentation/PlatformFeatureParity.md` as the
 current source-backed register. Older release notes and historical port plans
 do not establish current parity.
 
+# Save, sync and resume trust
+
+Save, sync and resume are core features. Preserve the session ID, player roster,
+next turn, queue position, completion records and compatible checkpoint across
+saves and reopenings. Starting another route must not publish a journey deletion.
+Home must resolve saved queues for the selected session, including archived queues.
+Never report Synced while a surviving journey lacks the roster needed to restore it.
+Keep automated test saves outside production storage. During persistence work,
+verify reopen, offline/reconnect and cross-device import with isolated saves.
+Preserve recovery evidence before repairing user saves. Separate source validation
+from hosted-service verification and physical-device acceptance.
+
 # Release schedule
 
 Follow `Documentation/ReleaseSchedule.md`. The owner's priority order is:

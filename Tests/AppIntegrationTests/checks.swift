@@ -2865,7 +2865,8 @@ extension AppDelegate {
         let buttons = elements.filter { $0.accessibilityRole() == .button }
         try check(buttons.count == (showsBack ? 6 : 5), "Movie replay duplicated or lost its return")
         for row in Dictionary(grouping: buttons, by: { $0.localFrame.minY }).values {
-          try check(row.map { $0.localFrame.minX }.min() == 24 && row.map { $0.localFrame.maxX }.max() == width - 24,
+          try check(abs(row.map { $0.localFrame.minX }.min()! - 24) < 0.01
+            && abs(row.map { $0.localFrame.maxX }.max()! - (width - 24)) < 0.01,
             "Movie replay leaves an incomplete action row")
         }
         let bitmap = bar.bitmapImageRepForCachingDisplay(in: bar.bounds)!
@@ -8455,6 +8456,9 @@ Task { @MainActor in
     try subject.testBundledNeoLemmixPacks()
     try await subject.testNeoLemmixPackBrowser()
     print("NeoLemmix pack integration tests passed.")
+    #elseif JOURNEY_RESUME_TESTS
+    try subject.testArchivedJourneyHomeResume()
+    print("Archived journey Home integration tests passed.")
     #elseif SEQUENCE_RECOVERY_TESTS
     try await subject.testSequenceCheckpointResume()
     print("Sequence checkpoint integration tests passed.")
@@ -9569,6 +9573,67 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 }
 
 extension AppDelegate {
+  fileprivate func testArchivedJourneyHomeResume() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll(); loadContent(); settings.music = .silent; settings.soundVolume = 0
+    let previous = ArcadeStore.shared, oldCache = playlistStoreCache, oldRecovery = menuRecovery
+    let storage = try AppStorage.temporary(named: "archived-journey-home")
+    let arcade = ArcadeStore(storage: storage, bundledProofs: nil)
+    ArcadeStore.shared = arcade
+    defer {
+      ArcadeStore.shared = previous; playlistStoreCache = oldCache; menuRecovery = oldRecovery
+      storage.removeTemporaryFiles()
+    }
+    let guest = arcade.addProfile(initials: "PAL", portrait: 1, select: false)!
+    arcade.toggleSessionProfile(guest.id)
+    let selectedSeat = arcade.hotSeatID
+    let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+      catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+      levelNameSnapshot: "Saved journey", levelNumberSnapshot: 1)
+    let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: [entry])
+    let file = storage.applicationSupport.appendingPathComponent("playlists.json")
+    let store = try LevelPlaylistStore(file: file)
+    try store.add(playlist)
+    let journey = try LevelSequenceRun.playlist(playlist, pool: .init(id: LearningJourney.version, summary: playlist.name))
+    try store.startRun(journey, hotSeatID: selectedSeat)
+    let other = try LevelSequenceRun.playlist(playlist, pool: journey.pool)
+    try store.startRun(other, hotSeatID: "other-session")
+    let reopened = try LevelPlaylistStore(file: file)
+    playlistStoreCache = (arcade.records.activeProfileID, reopened); menuRecovery = nil
+    let rows = homeMenuItems()
+    try check(rows.contains { if case .resumeSequence = $0.action { return true }; return false },
+      "Home hid the selected Hot Seat's archived journey")
+    try check(reopened.activeRun == other && arcade.hotSeatID == selectedSeat,
+      "Reading Home changed the selected run or Hot Seat")
+    let folder = URL(fileURLWithPath: ".build/journey-resume-renders")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    for size in [CGSize(width: 640, height: 480), CGSize(width: 900, height: 620), CGSize(width: 1600, height: 1000)] {
+      let probe = PlayfieldView(frame: CGRect(origin: .zero, size: size))
+      probe.phase = .briefing; probe.overlayTitle = "LEMMINGS"; probe.overlayLines = rows.map(\.title)
+      probe.overlayProfileInitials = arcade.sessionProfiles.map(\.initials).joined(separator: " v ")
+      probe.overlayHighlight = 0
+      probe.overlayHomeLeadingCount = rows.firstIndex { if case .browse = $0.action { return true }; return false } ?? rows.count
+      let image = ReplayFrameCapture.image(size: size) { ReplayFrameCapture.draw(probe, in: probe.bounds) }!
+      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent("home-\(Int(size.width)).png"))
+      let controls = probe.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
+      guard let button = controls.first(where: { $0.accessibilityLabel() == rows[0].title }) else {
+        throw IntegrationFailure(message: "Archived journey has no accessible Home action")
+      }
+      try check(probe.bounds.contains(button.localFrame) && button.localFrame.height >= 44,
+        "Archived journey Home target is clipped or too small")
+      var selected: Int?
+      probe.onSelectOverlayLine = { selected = $0 }
+      probe.handleClick(at: CGPoint(x: button.localFrame.midX, y: button.localFrame.midY))
+      try check(selected == 0, "Archived journey Home target activated another action")
+    }
+    try reopened.resumeRun(id: journey.id)
+    try check(reopened.activeRun == journey && reopened.activeRunHotSeatID == selectedSeat,
+      "Resume selected another session's queue")
+    try check(reopened.resumableRun(hotSeatID: "other-session")?.run == other,
+      "Resume discarded the other session's queue")
+  }
+
   fileprivate func testHotSeatResumeRoster() throws {
     GameScreen.shared.dismissAll(); loadContent(); settings.music = .silent; settings.soundVolume = 0
     let previous = ArcadeStore.shared, oldCache = playlistStoreCache

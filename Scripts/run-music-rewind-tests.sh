@@ -11,7 +11,7 @@ swiftc -swift-version 6 -target "$target" -parse-as-library -module-cache-path "
   -emit-module -emit-library -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
-cat Sources/LemmingsAudio/MusicRewindBuffer.swift Sources/LemmingsAudio/MusicFileDeck.swift \
+cat Sources/LemmingsAudio/BufferedAudioSource.swift Sources/LemmingsAudio/MusicRewindBuffer.swift Sources/LemmingsAudio/MusicFileDeck.swift \
   Sources/LemmingsAudio/ModuleMusicPlayer.swift Sources/LemmingsAudio/VinylRamp.swift \
   Sources/LemmingsAudio/SoundtrackPlayer.swift Sources/LemmingsAudio/MusicLibrary.swift \
   Sources/LemmingsAudio/AdaptiveDJPlayer.swift Tests/MusicRewindTests/checks.swift > "$build_dir/main.swift"

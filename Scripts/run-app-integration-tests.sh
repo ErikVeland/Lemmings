@@ -70,6 +70,7 @@ if [[ "${TEST_SCOPE:-all}" == result-navigation ]]; then test_flags+=(-D RESULT_
 if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sequence-recovery ]]; then test_flags+=(-D SEQUENCE_RECOVERY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == journey-resume ]]; then test_flags+=(-D JOURNEY_RESUME_TESTS -D SEQUENCE_RECOVERY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi

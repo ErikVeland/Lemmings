@@ -165,6 +165,8 @@ extension MobileLibraryViewController {
             }
         }
         guard saveHotSeats() else { rebuild(); return }
+        do { try saveLearningState(saved.state) }
+        catch { notice = error.localizedDescription; rebuild(); return }
         hotSeatRoster = nil; activeRun = nil
         reloadPlayerData()
         let owner = profiles.activeID, scope = hotSeat?.scope

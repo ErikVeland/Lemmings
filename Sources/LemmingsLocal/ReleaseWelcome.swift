@@ -10,7 +10,7 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.2.2"
+    static let notesVersion = "2.3"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
         GameReleaseCopy.sections + [(L10n.text("Compatibility"),

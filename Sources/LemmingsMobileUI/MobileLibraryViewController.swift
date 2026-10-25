@@ -739,8 +739,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             var resume: [GameFrontEnd.Action] = []
             let savedLevel = pendingCheckpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
             if let saved = savedLevel, !checkpointResumesLearningRun(saved) {
-                resume.append(.init("resume", L10n.text("Resume journey - \(playerName(saved.owner ?? profiles.activeID))")))
-            } else if catalogue != nil, let saved = resumableLearningRun {
+                resume.append(.init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))")))
+            }
+            if catalogue != nil, let saved = resumableLearningRun {
                 let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
                 resume.append(.init("learningRunResume", saved.resumeTitle + session))
             }

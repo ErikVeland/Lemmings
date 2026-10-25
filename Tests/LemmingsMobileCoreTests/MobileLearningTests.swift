@@ -25,6 +25,24 @@ struct MobileLearningTests {
         let original = unrelated.run
         unrelated.importJourneySession(snapshot)
         #expect(unrelated.run == original)
+        unrelated.refreshJourneySession()
+        #expect(unrelated.journeySession == snapshot)
+        unrelated.advance()
+        unrelated.advance()
+        unrelated.refreshJourneySession()
+        #expect(unrelated.journeySession == snapshot, "Completing another route must not delete the journey")
+        unrelated.resumeJourney()
+        #expect(unrelated.run == source.run)
+
+        var switching = target
+        try switching.start(Array(journey.lessons.prefix(2).map(\.entry)), name: "Other", poolID: "other", playlistID: UUID())
+        let other = switching.run
+        switching.refreshJourneySession()
+        switching.resumeJourney()
+        #expect(switching.run == source.run)
+        #expect(switching.savedRuns.contains { $0 == other })
+        let reopened = try JSONDecoder().decode(MobileLearningState.self, from: JSONEncoder().encode(switching))
+        #expect(reopened == switching)
     }
     @Test func oldTVJourneyDefersQuickyWithoutChangingVisitsProgressOrHotSeatTurn() throws {
         let temporary = try AppStorage.temporary(named: "tv-journey-wall")

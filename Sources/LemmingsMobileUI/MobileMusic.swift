@@ -3,13 +3,14 @@ import LemmingsAudio
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import AVFAudio
 
 /// Uses the shared music decks and level-theme assignment on iPad.
 @MainActor final class MobileMusic {
     static let shared = MobileMusic()
-    private let module = ModuleMusicPlayer()
-    private let recordings = SoundtrackPlayer()
-    private let dj = AdaptiveDJPlayer()
+    private var module = ModuleMusicPlayer()
+    private var recordings = SoundtrackPlayer()
+    private var dj = AdaptiveDJPlayer()
     private var playing: String?
     private var usingRecording = false
     private var usingDJ = false
@@ -35,7 +36,31 @@ import UIKit
     private(set) var currentSoundtrackName: String?
     var onTrackChange: ((String, String) -> Void)?
     var currentTrackURL: URL? { usingDJ ? dj.currentURL : lastTrack }
-    private init() { connectFailureMusic() }
+    private let audioObservers = MobileNotificationObserverBag()
+    var audioDiagnostics: [AudioBufferStatistics] {
+        usingDJ ? dj.audioDiagnostics : usingRecording ? [recordings.audioDiagnostics].compactMap { $0 } : [module.audioDiagnostics]
+    }
+    private init() {
+        connectFailureMusic()
+        audioObservers.append(NotificationCenter.default.addObserver(
+            forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                let resumeMenu = self.playing == self.menuKey && !self.inactive
+                self.stop()
+                // Media-services resets invalidate every existing engine and audio unit.
+                self.module = ModuleMusicPlayer()
+                self.recordings = SoundtrackPlayer()
+                self.dj = AdaptiveDJPlayer()
+                self.appliedRespectMuteSetting = nil
+                self.applySettings()
+                if resumeMenu && UIApplication.shared.applicationState == .active {
+                    self.setMenu(visible: true, active: true)
+                }
+            }
+        })
+    }
     private func connectFailureMusic() {
         failureMusic.onChange = { [weak self] rate in
             self?.module.setTempoScale(rate); self?.recordings.setPlaybackRate(rate); self?.dj.setPlaybackRate(rate)

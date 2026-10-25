@@ -21,6 +21,11 @@ final class MusicRewindBuffer: @unchecked Sendable {
   private var gain: Float = 1
   private var lastTrigger = -Double.infinity
   private var anchorWritten: Int64 = -1
+  private var bufferedSource: BufferedAudioSource?
+  private var tailUntil = -Double.infinity
+  var audioDiagnostics: AudioBufferStatistics { bufferedSource?.diagnostics ?? AudioBufferStatistics() }
+  func drain() { bufferedSource?.drain() }
+  func startOutput() { bufferedSource?.start() }
 
   init(sampleRate: Double = 44_100) {
     self.sampleRate = sampleRate
@@ -29,7 +34,7 @@ final class MusicRewindBuffer: @unchecked Sendable {
     right = .init(repeating: 0, count: capacity)
   }
 
-  var isRewinding: Bool { lock.lock(); defer { lock.unlock() }; return remaining > 0 }
+  var isRewinding: Bool { lock.lock(); defer { lock.unlock() }; return remaining > 0 || ProcessInfo.processInfo.systemUptime < tailUntil }
   func setRecording(_ enabled: Bool) { lock.lock(); recording = enabled; lock.unlock() }
   func setGain(_ value: Float) { lock.lock(); gain = min(1, max(0, value)); lock.unlock() }
 
@@ -52,8 +57,8 @@ final class MusicRewindBuffer: @unchecked Sendable {
 
   /// Repeated taps extend the same reverse read rather than layering copies.
   @discardableResult func trigger(skipping frames: Int = 0) -> Bool {
-    lock.lock(); defer { lock.unlock() }
-    guard written > 1 else { return false }
+    lock.lock()
+    guard written > 1 else { lock.unlock(); return false }
     let now = ProcessInfo.processInfo.systemUptime
     if remaining == 0 && (now - lastTrigger > VinylBackspin.settleSeconds || anchorWritten != written || readHead < Double(max(0, written - Int64(left.count)))) {
       readHead = Double(max(max(0, written - Int64(left.count)), written - 1 - Int64(max(0, frames))))
@@ -63,36 +68,39 @@ final class MusicRewindBuffer: @unchecked Sendable {
     if remaining == 0 { attackFrames = 0 }
     total = Int(sampleRate * Self.impulseSeconds)
     remaining = total
+    lock.unlock()
+    if bufferedSource?.nodes[0].engine?.isRunning == true { bufferedSource?.start() }
     return true
   }
 
   func cancel(clearHistory: Bool = false) {
-    lock.lock(); defer { lock.unlock() }
+    lock.lock()
     remaining = 0
+    tailUntil = -.infinity
     if clearHistory { written = 0; readHead = 0; lastTrigger = -.infinity; anchorWritten = -1 }
+    lock.unlock()
+    bufferedSource?.stop()
   }
 
-  func source(format: AVAudioFormat) -> AVAudioSourceNode {
-    AVAudioSourceNode(format: format) { [weak self] _, _, frames, output in
-      let buffers = UnsafeMutableAudioBufferListPointer(output)
-      if let self { self.render(buffers, frames: Int(frames)) }
-      else { for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) } }
-      return noErr
+  func source(format: AVAudioFormat) -> AVAudioPlayerNode {
+    bufferedSource?.stop()
+    let source = BufferedAudioSource(label: "Lemmings.rewind-pcm", format: format) { [weak self] _, buffer, _ in
+      self?.render(UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: Int(buffer.frameLength))
     }
+    bufferedSource = source
+    return source.nodes[0]
   }
 
   func render(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
-    // This source runs even when no scratch is playing. It must not wait for
-    // the recorder or a UI command on the device's render thread.
-    guard lock.try() else {
-      for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
-      return
-    }
+    // Only the PCM worker renders the groove. A control edit cannot zero a
+    // device callback or hold the device's render thread.
+    lock.lock()
     defer { lock.unlock() }
     guard remaining > 0 else {
       for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
       return
     }
+    if bufferedSource != nil { tailUntil = ProcessInfo.processInfo.systemUptime + 2048 / sampleRate }
     let oldest = max(0, written - Int64(left.count))
     for index in 0..<frames {
       var l: Float = 0, r: Float = 0

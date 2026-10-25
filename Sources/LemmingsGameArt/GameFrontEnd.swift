@@ -389,15 +389,15 @@ public struct GameFrontEnd {
 
     public static func draw(_ page: Page, layout: Layout, typography: GameMenuTypography,
                             preview: CGImage? = nil, previewSource: CGRect? = nil,
-                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, fillsCanvas: Bool = true, in context: CGContext) {
+                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, fillsCanvas: Bool = true, shape: GameControlShape = .square, in context: CGContext) {
         context.saveGState()
         defer { context.restoreGState() }
         context.setFillColor(CGColor(gray: 0, alpha: 1))
         let boards = [layout.board] + (layout.secondaryBoard.map { [$0] } ?? [])
         if fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
         for board in boards {
-            if !fillsCanvas { context.fill(board) }
-            GameMenuFrameArt.draw(in: context, board: board)
+            if !fillsCanvas { shape.fill(board, in: context) }
+            GameMenuFrameArt.draw(in: context, board: board, shape: shape)
         }
         if let heading = layout.libraryHeading {
             GameTextLayout.draw(L10n.text("Levels"), in: heading, typography: typography, face: .large,
@@ -425,16 +425,16 @@ public struct GameFrontEnd {
                 in: layout.initials, typography: typography, context: context)
         }
         if page.pause != nil {
-            MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
+            MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, shape: shape, in: context)
         } else if page.preview {
             let image = preview.flatMap { preview in previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview }
             if page.previewFitsImage {
-                GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
+                GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2, shape: shape)
                 if let image {
                     drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
                 }
             } else {
-                GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image)
+                GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image, shape: shape)
             }
         }
         if let earned = page.stars, layout.stars != .zero {
@@ -479,36 +479,36 @@ public struct GameFrontEnd {
                 // The home screen uses the same dark rows and green selection as the Mac title overlay.
                 context.setFillColor(chosen ? CGColor(srgbRed: 0.18, green: 0.27, blue: 0.12, alpha: 1)
                     : CGColor(gray: 0.07, alpha: 1))
-                context.fill(target.frame)
+                shape.fill(target.frame, in: context)
                 context.setStrokeColor(chosen ? CGColor(srgbRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
                     : CGColor(gray: 0.29, alpha: 1))
                 context.setLineWidth(chosen ? 2 : 1)
-                context.stroke(target.frame.insetBy(dx: 1, dy: 1))
+                shape.stroke(target.frame, inset: 1, in: context)
             } else if page.home, ["settings", "whatsNew"].contains(action.id) {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
+                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
                 let glyph: PanelGlyphArt = action.id == "settings" ? .settings : action.busy ? .hourglass : .download
                 let well = GameStoneArt.well(target.frame, pixel: 1).insetBy(dx: 2, dy: 2)
                 let scale = glyph.scale(fitting: well.size)
                 if let image = glyph.cgImage(scale: scale) {
                     drawImage(image, fittedIn: well, context: context)
                 }
-                if focused { drawFocus(target.frame, in: context) }
+                if focused { drawFocus(target.frame, shape: shape, in: context) }
                 continue
             } else if page.home {
                 context.setFillColor(chosen ? CGColor(srgbRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : CGColor(gray: 0.025, alpha: 1))
-                context.fill(target.frame)
+                shape.fill(target.frame, in: context)
                 context.setStrokeColor(chosen ? CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : CGColor(gray: 0.35, alpha: 1))
                 context.setLineWidth(1)
-                context.stroke(target.frame.insetBy(dx: 0.5, dy: 0.5))
+                shape.stroke(target.frame, inset: 0.5, in: context)
             } else {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
+                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
             }
             if action.selected {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: action.enabled ? 1 : 0.45))
                 context.fill(CGRect(x: target.frame.minX + 8, y: target.frame.maxY - 6,
                                     width: target.frame.width - 16, height: 3))
             }
-            if focused { drawFocus(target.frame, in: context) }
+            if focused { drawFocus(target.frame, shape: shape, in: context) }
             if action.icon == .favourite {
                 context.saveGState()
                 context.setAlpha(action.enabled ? 1 : 0.45)
@@ -560,10 +560,10 @@ public struct GameFrontEnd {
         }
     }
 
-    private static func drawFocus(_ frame: CGRect, in context: CGContext) {
+    private static func drawFocus(_ frame: CGRect, shape: GameControlShape, in context: CGContext) {
         context.setStrokeColor(CGColor(gray: 1, alpha: 1))
         context.setLineWidth(1)
-        context.stroke(frame.insetBy(dx: 2.5, dy: 2.5))
+        shape.stroke(frame, inset: 2.5, in: context)
     }
 
     private static func actionLabel(_ text: String, box: CGRect, typography: GameMenuTypography,

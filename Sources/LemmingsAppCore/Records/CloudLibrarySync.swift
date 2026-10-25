@@ -51,7 +51,8 @@ import NxlvKit
         case .idle: L10n.text("Cloud saves")
         case .syncing: L10n.text("Syncing")
         case .synced: L10n.text("Synced")
-        case .pending: L10n.text("Saved on this device")
+        case .pending: hasUnlinkedJourneys
+            ? L10n.text("A saved journey needs its players restored.") : L10n.text("Saved on this device")
         case .offline: L10n.text("Offline")
         case .paused: L10n.text("Cloud saves paused")
         case .failed(let message): message
@@ -60,6 +61,19 @@ import NxlvKit
     public var enabled: Bool {
         get { defaults.object(forKey: enabledKey) as? Bool ?? defaultEnabled }
         set { defaults.set(newValue, forKey: enabledKey); if newValue { requestSync() } else { setState(.paused) } }
+    }
+    /// A queue without its roster cannot be offered on another device.
+    /// Do not report complete sync while that recoverable local save is omitted.
+    private var hasUnlinkedJourneys: Bool {
+        let known = Set((store.libraryHotSeats + captureSeats()).map(\.id))
+        let prefix = "HotSeat.", suffix = ".LearningJourneySession"
+        return defaults.dictionaryRepresentation().contains { key, value in
+            guard key.hasPrefix(prefix), key.hasSuffix(suffix), let data = value as? Data,
+                let snapshot = try? JSONDecoder().decode(JourneySessionSnapshot.self, from: data),
+                snapshot.run != nil else { return false }
+            let session = String(key.dropFirst(prefix.count).dropLast(suffix.count))
+            return !known.contains(session)
+        }
     }
     public var providerNames: String {
         guard let apple = transport as? AppleCloudLibraryTransport else { return "Cloud" }
@@ -302,6 +316,7 @@ import NxlvKit
             if changedDuringUpload { requested = true }
             let partial = (transport as? AppleCloudLibraryTransport)?.issues.isEmpty == false
             let complete = safe && !partial && uploaded == identities.count && !changedDuringUpload
+                && !hasUnlinkedJourneys
             if complete { lastSynced = Date() }
             setState(complete ? .synced : .pending)
         } catch {

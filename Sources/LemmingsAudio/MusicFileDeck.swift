@@ -3,15 +3,6 @@ import AudioToolbox
 import Foundation
 import NxlvKit
 
-/// Peak protection follows EQ, pitch and reverb so their boosts cannot clip.
-enum MusicOutputSafety {
-  static func limiter() -> AVAudioUnitEffect {
-    AVAudioUnitEffect(audioComponentDescription: AudioComponentDescription(
-      componentType: kAudioUnitType_Effect, componentSubType: kAudioUnitSubType_PeakLimiter,
-      componentManufacturer: kAudioUnitManufacturer_Apple, componentFlags: 0, componentFlagsMask: 0))
-  }
-}
-
 /// Decode ahead on one worker. Neither the UI nor the render callback reads files.
 private final class MusicPCMStream: @unchecked Sendable {
   private final class Buffer: @unchecked Sendable {
@@ -20,12 +11,13 @@ private final class MusicPCMStream: @unchecked Sendable {
       pcm = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frames))!
     }
   }
-  private let queue = DispatchQueue(label: "Lemmings.recording-pcm", qos: .userInitiated)
+  private let queue = DispatchQueue(label: "Lemmings.recording-pcm", qos: .userInteractive)
   private let file: AVAudioFile
   private let node: AVAudioPlayerNode
   private let repeats: Bool
   private let firstSegment: (start: Int64, count: Int64)
   private let loopSegment: (start: Int64, count: Int64)
+  private let read: @Sendable (AVAudioFile, AVAudioPCMBuffer, AVAudioFrameCount) throws -> Void
   private let scratch: AVAudioPCMBuffer
   private let frames = 2048
   private let bufferCount = 8
@@ -38,8 +30,14 @@ private final class MusicPCMStream: @unchecked Sendable {
   private var joining = false
   private var joinFrame = 0
   private let joinFrames: Int
+  private var statistics = AudioBufferStatistics()
+  var diagnostics: AudioBufferStatistics { queue.sync { statistics } }
 
-  init(file: AVAudioFile, node: AVAudioPlayerNode, repeats: Bool, profile: MusicPlaybackCatalogue.Entry?) {
+  init(file: AVAudioFile, node: AVAudioPlayerNode, repeats: Bool, profile: MusicPlaybackCatalogue.Entry?,
+       read: @escaping @Sendable (AVAudioFile, AVAudioPCMBuffer, AVAudioFrameCount) throws -> Void = {
+         try $0.read(into: $1, frameCount: $2)
+       }) {
+    self.read = read
     self.file = file; self.node = node; self.repeats = repeats
     firstSegment = profile?.segment(first: true, repeats: repeats, fileFrames: file.length,
       fileRate: file.processingFormat.sampleRate) ?? (0, file.length)
@@ -51,9 +49,11 @@ private final class MusicPCMStream: @unchecked Sendable {
     joinFrames = max(1, Int(file.processingFormat.sampleRate * 0.003))
   }
 
-  func start(offline: Bool, completion: @escaping @Sendable () -> Void) throws {
+  func start(offline: Bool, completion: @escaping @Sendable (Result<Void, Error>) -> Void) throws {
     try queue.sync {
       generation += 1
+      statistics.starts += 1
+      statistics.lastError = nil
       let token = generation
       file.framePosition = firstSegment.start
       segmentEnd = firstSegment.start + firstSegment.count
@@ -72,8 +72,11 @@ private final class MusicPCMStream: @unchecked Sendable {
   func drain() { queue.sync {} }
 
   private func schedule(_ buffer: Buffer, token: Int, offline: Bool,
-                        completion: @escaping @Sendable () -> Void) throws {
+                        completion: @escaping @Sendable (Result<Void, Error>) -> Void) throws {
     guard generation == token, !ended else { return }
+    let began = ProcessInfo.processInfo.systemUptime
+    defer { statistics.recordRefill(seconds: ProcessInfo.processInfo.systemUptime - began,
+      reserveSeconds: Double(frames * (bufferCount - 1)) / file.processingFormat.sampleRate) }
     let pcm = buffer.pcm
     var filled = 0
     while filled < frames {
@@ -84,9 +87,10 @@ private final class MusicPCMStream: @unchecked Sendable {
         joining = true; joinFrame = 0
       }
       let count = min(frames - filled, Int(segmentEnd - file.framePosition))
-      try file.read(into: scratch, frameCount: AVAudioFrameCount(count))
+      guard count > 0 else { throw CocoaError(.fileReadCorruptFile) }
+      try read(file, scratch, AVAudioFrameCount(count))
       let read = Int(scratch.frameLength)
-      guard read > 0 else { ended = true; break }
+      guard read > 0 else { throw CocoaError(.fileReadCorruptFile) }
       for index in 0..<read {
         if joining {
           for channel in lastSamples.indices {
@@ -118,8 +122,16 @@ private final class MusicPCMStream: @unchecked Sendable {
       guard let self else { return }
       self.queue.async { [weak self] in
         guard let self, self.generation == token else { return }
-        if final { completion() }
-        else { try? self.schedule(buffer, token: token, offline: offline, completion: completion) }
+        if final { completion(.success(())) }
+        else {
+          do { try self.schedule(buffer, token: token, offline: offline, completion: completion) }
+          catch {
+            self.statistics.recordFailure(error)
+            self.ended = true
+            self.generation += 1
+            completion(.failure(error))
+          }
+        }
       }
     }
   }
@@ -169,7 +181,7 @@ public final class MusicFileDeck {
   private let limiter = MusicOutputSafety.limiter()
   private lazy var rewindAudio = MusicRewindBuffer(sampleRate: file.processingFormat.sampleRate)
   private var rewindTask: Task<Void, Never>?
-  private var rewindNode: AVAudioSourceNode?
+  private var rewindNode: AVAudioPlayerNode?
   private let file: AVAudioFile
   private let stream: MusicPCMStream
   private let repeats: Bool
@@ -199,6 +211,9 @@ public final class MusicFileDeck {
   private var mixPitch: Double = 0
   private var appliedPitch: Float?
   private var muted = false
+  public private(set) var lastPlaybackError: String?
+  public var audioDiagnostics: AudioBufferStatistics { stream.diagnostics }
+  public var rewindDiagnostics: AudioBufferStatistics { rewindAudio.audioDiagnostics }
 
   /// Turntable timings for a pause and the spin-up that follows it.
   private enum Turntable {
@@ -365,20 +380,34 @@ public final class MusicFileDeck {
     // A deck held for its next beat was not playing when paused. Play still
     // starts it, as it did before the spin-up.
     if outputSuspended, started { resumeAfterSuspend = true; resumeOutput(); return }
+    // Launch, focus and audio-engine configuration can request playback more
+    // than once while the first soundtrack is already running. Do not pull a
+    // live recording down to silence and restart its fade for those requests.
+    if started, player.isPlaying, engine.isRunning { return }
+    if started, !engine.isRunning, !outputSuspended {
+      // A route reset can discard scheduled PCM. Reopen this track cleanly.
+      stream.stop(); player.stop(); started = false
+    }
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
     sourceMixer.outputVolume = 0
+    lastPlaybackError = nil
     do {
       if !started {
         finishedLoops = 0
         playbackGeneration += 1
         let generation = playbackGeneration
-        try stream.start(offline: engine.isInManualRenderingMode) { [weak self] in
+        try stream.start(offline: engine.isInManualRenderingMode) { [weak self] result in
           Task { @MainActor [weak self] in
             guard let self, self.started, self.playbackGeneration == generation else { return }
             self.started = false
-            self.finishedLoops = 1
+            switch result {
+            case .success: self.finishedLoops = 1
+            case .failure(let error):
+              self.lastPlaybackError = String(describing: error)
+              self.engine.pause()
+            }
             self.player.stop()
             self.fadeTask?.cancel(); self.fadeTask = nil
             self.rhythmTask?.cancel(); self.rhythmTask = nil
@@ -391,6 +420,8 @@ public final class MusicFileDeck {
       }
       if !engine.isRunning { try engine.start() }
     } catch {
+      lastPlaybackError = String(describing: error)
+      started = false
       stream.stop(); player.stop()
       return
     }
@@ -469,7 +500,10 @@ public final class MusicFileDeck {
     cancelRewind()
     rewindAudio.setRecording(true)
     setRhythmMode(false)
-    guard outputSuspended else { return }
+    guard outputSuspended else {
+      if started && !engine.isRunning { play() }
+      return
+    }
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
@@ -477,7 +511,12 @@ public final class MusicFileDeck {
     varispeed.rate = max(0.25, requestedRate * vinyl.rate * Turntable.spinUpFloor)
     sourceMixer.outputVolume = Turntable.spinUpFloor
     do { if !engine.isRunning { try engine.start() } }
-    catch { applyRate(); sourceMixer.outputVolume = 1; return }
+    catch {
+      lastPlaybackError = String(describing: error)
+      outputSuspended = true
+      applyRate(); sourceMixer.outputVolume = 1
+      return
+    }
     if resumeAfterSuspend && !player.isPlaying { player.play() }
     resumeAfterSuspend = false
     // A quick spin-up brings the platter back to speed.
@@ -527,7 +566,8 @@ public final class MusicFileDeck {
     guard started, !muted, masterVolume > 0, rewindAudio.trigger() else { return }
     spatialMixer.outputVolume = 0
     do { if !engine.isRunning { try engine.start() } }
-    catch { cancelRewind(); return }
+    catch { lastPlaybackError = String(describing: error); cancelRewind(); return }
+    rewindAudio.startOutput()
     rewindTask?.cancel()
     rewindTask = Task { @MainActor [weak self] in
       do { try await Task.sleep(nanoseconds: UInt64(VinylBackspin.settleSeconds * 1_000_000_000)) } catch { return }

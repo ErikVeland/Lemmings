@@ -1,5 +1,93 @@
 # Runtime performance
 
+## 2.3 audio and performance blocker — 26 October 2026
+
+The owner reports crackling on the latest iPhone Duo, iPad 8th generation and
+Apple TV 4K. Output routes, OS versions, soundtrack and exact triggering stages
+have not yet been isolated. Treat this as a reproduced user-facing blocker on
+those platforms. Its cause is not yet proved. Clean compilation and muted UI
+checks do not close it. The requirement applies throughout launch, menus,
+loading, gameplay, pause, results, replay and transitions.
+
+Source assessment at `234acea9`, including the working-tree recording-deck
+idempotence change:
+
+| Finding | Evidence | Required work |
+| --- | --- | --- |
+| Effects callbacks can wait on control work | `SoundEffectPlayer.fillVoice` takes the same blocking `NSLock` as library changes, camera placement and rewind construction. `playRewindScrub` allocates and constructs a sample slice while holding it. Supplement decoding also occurs under this lock. | Remove control-thread waits from render callbacks. Prepare samples and rewind work outside the render-owned state, then transfer bounded commands or prepared buffers. Do not substitute silent blocks for blocked callbacks and call the dropout fixed. |
+| Render work includes mutable collections | `fillVoice` copies a `Voice`, updates its rescue-layer array and removes completed layers inside the sample loop. | Bound and preallocate render state. Measure allocations and callback time with active rescue layers, not just idle sources. |
+| Music buffering lacks release diagnostics | MOD uses eight 1,024-frame buffers. Recordings use eight 2,048-frame buffers. `scheduledFrames` supports the MOD clock; it is not a reported starvation counter. `MusicPCMStream` discards refill errors with `try?`. | Record reserve low-water marks, refill delays/errors, callback deadline misses and unexpected engine restarts without logging or allocating in the render callback. Surface decoder failures outside that callback. |
+| Nonblocking rewind can still lose audio | `MusicRewindBuffer.record` skips history under contention. Its reverse source outputs zero when its try-lock fails. | Measure contention and audible continuity during repeated rewind. Nonblocking execution alone does not establish uninterrupted output. |
+| Lifecycle and route evidence is missing | Mobile requests a preferred buffer duration and handles interruptions/route loss. Repeated recording `play()` has a working-tree guard against restarting its fade. | Verify actual negotiated rate, buffer duration and output route. Exercise interruptions, background/foreground, media-service reset, speaker/headphone changes and TV HDMI on the installed candidate. The idempotence change is not proof of a general crackling fix. |
+
+At 44.1 kHz, those queues nominally hold about 186 ms of MOD audio and 372 ms
+of recording audio. These are reserve sizes, not measured end-to-end latency
+or a guarantee under contention. The earlier four-buffer/93 ms description below
+is historical. Do not keep increasing buffers without measuring latency and the
+work that exhausts them.
+
+### Evidence limits
+
+`Scripts/run-audio-performance-tests.sh` exercises offline audio. Its MOD fixture
+covers a bounded synthesis stall, refill and loop joins. The idle effects check
+calls voices directly; it does not run a complete game with competing graphics,
+loading and audio callbacks. The DJ command uses `--signal-only`, so the later
+real-time file-loop, suspend/resume and installed-track scenarios in that test
+program are not executed by this script. Some signal-path coverage still runs.
+Muted UIKit gameplay checks bypass normal effects preparation and playback.
+They establish UI behaviour, not simultaneous audio/render performance.
+
+The latest published Mac measurement retained in
+[2.2.2 build 99](ReleaseReadiness/2.2.2-build99/audit-performance.json) is also
+silent, uses one Classic workload at 1280×720 with recording enabled, and lasts
+about 15–20 seconds per scenario. Its `television` case is the Mac CRT preset,
+not an Apple TV hardware run.
+
+| Mac scenario | Requested speed | Observed speed | CPU p95 | CPU p99 |
+| --- | ---: | ---: | ---: | ---: |
+| Flat | 1× | 1.00× | 22.89 ms | 23.97 ms |
+| Flat | 10× | 4.70× | 32.24 ms | 43.68 ms |
+| Monitor | 10× | 3.36× | 34.04 ms | 40.00 ms |
+| Television preset | 10× | 3.45× | 33.43 ms | 34.93 ms |
+
+This report does not establish current 2.3 speeds or a regression against another
+machine. It does establish that a passing measurement command did not require
+the requested throughput or clean audible output. CPU p95 at 1× exceeded a
+16.67 ms presentation interval in that sample. Frame delivery needs its own
+measurement; CPU and GPU percentiles cannot be added.
+
+`Tools/ReleaseReadiness/audit.py` defaults to the `minor` scope and checks open
+gates in its exit status only when closure is required. Recording P0 entries
+under the broad scopes is not automatic publication enforcement. The release
+approval path must consult the applicable 2.3 blockers explicitly, while
+retaining the owner's rule against unrelated routine Mac test suites.
+
+### Closure order
+
+1. Add bounded audio diagnostics and isolate music-only, effects-only and mixed
+   output on each reported device. Record build/content identity and output route.
+2. Remove shared callback waits and heavy locked work. Check file refill errors,
+   gain/loop continuity and repeated start/resume separately. Preserve spatial
+   feedback, warnings, musical timing and deliberate vinyl effects.
+3. Stress the combined production path: Classic/L2/L3/Neo crowds, 1× and fast
+   speeds, supported nukes, repeated rewind, camera/zoom, replay capture/export,
+   engine changes, catalogue loading and cloud activity. Measure both cold and
+   warm transitions.
+4. Use installed, optimised candidates for sustained sessions and thermal/low-power
+   runs. Begin with the reported Duo, iPad 8 and Apple TV 4K, then the supported
+   Mac and remaining iPhone/iPad hardware. A proposed minimum is 30 minutes per
+   representative device workload, plus repeated transitions; this is not a claim
+   that a finite soak proves every future session.
+5. Close the gate only with no unintended crackle, clicks or dropouts in those
+   runs, no unexplained starvation/deadline failures, and measured presentation,
+   input, memory and achieved simulation speed. Track maximum callback cost and
+   p95/p99, not averages alone. Reduce decorative work before compromising audio
+   or input. Record the supported presentation target for each device.
+
+Mechanical checks remain offscreen and muted. Audible acceptance needs an explicit
+owner-requested listening run under `AGENTS.md`; none was performed for this audit.
+See [2.3 release assessment](ReleaseScope.md#23-release-assessment).
+
 ## Crowded play, 18 October 2026
 
 A 100-lemming Classic crowd and real L2/L3 levels were measured with optimised

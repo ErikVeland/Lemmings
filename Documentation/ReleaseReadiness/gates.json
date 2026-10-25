@@ -260,5 +260,27 @@
       "all",
       "apple-2.1.2"
     ]
+  },
+  {
+    "area": "2.3 uninterrupted audio across Apple platforms",
+    "priority": "P0",
+    "status": "open",
+    "exitCriteria": "No unintended crackling, clicks or dropouts throughout launch, menus, loading, gameplay, pause, results, replay, transitions and supported audio-route/lifecycle changes on the installed candidate. Close the reported Duo, iPad 8th generation and Apple TV 4K failures. Record source/content, model, OS, route, actual buffer format, callback deadlines, refill/starvation diagnostics and sustained mixed-workload results. Muted UI tests and offline signal tests alone cannot close audible acceptance. Preserve AGENTS.md requirements for explicitly requested audible runs.",
+    "progress": "26 October 2026 owner priority: performance is the main remaining gap and crackling at any stage is a release blocker. The owner reports it on the latest Duo, iPad 8th generation and Apple TV 4K. Source audit at 234acea9 plus working tree finds blocking effects-render locks shared with sample loading, camera updates and rewind construction; music refill errors are discarded and runtime starvation diagnostics are missing. These are concrete risks, not a proven diagnosis. The recording play-idempotence change is WIP. No audible acceptance was performed. See Documentation/RuntimePerformance.md and Documentation/ReleaseScope.md#23-release-assessment.",
+    "scopes": [
+      "all",
+      "macos-2.0"
+    ]
+  },
+  {
+    "area": "2.3 sustained production performance",
+    "priority": "P0",
+    "status": "open",
+    "exitCriteria": "Measure the actual optimised candidate with simultaneous music/effects, graphics, input, loading and recording work across Classic, L2, L3 and supported Neo content. Record presentation p50/p95/p99 and misses, maximum audio callback cost, achieved simulation speed, input latency, memory and thermal behaviour on supported platform hardware. Include reported Duo/iPad 8/Apple TV 4K devices, Mac, repeated transitions, crowds, supported nukes, rewind and route changes. Declare the supported presentation budget per device and require passing outcomes rather than only a successfully written measurement report.",
+    "progress": "26 October 2026 audit: the retained 2.2.2 Mac production-loop report uses silent audio, one Classic workload and roughly 15-20 seconds per scenario. Its 1x CPU p95 is 22.89 ms; requested 10x reaches 4.70x Flat, 3.36x Monitor and 3.45x Television preset. The last case is a Mac CRT preset, not Apple TV hardware. Those historical measurements do not establish current 2.3 performance. No current sustained mixed-audio device result closes this gate. See Documentation/ReleaseReadiness/2.2.2-build99/audit-performance.json and Documentation/RuntimePerformance.md.",
+    "scopes": [
+      "all",
+      "macos-2.0"
+    ]
   }
 ]

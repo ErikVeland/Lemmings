@@ -146,7 +146,7 @@ public enum MobilePauseArt {
     }
 
     public static func draw(_ page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, typography: GameMenuTypography,
-                            preview: CGImage?, previewSource: CGRect?, in context: CGContext) {
+                            preview: CGImage?, previewSource: CGRect?, shape: GameControlShape = .square, in context: CGContext) {
         guard let summary = page.pause, layout.details.count == 15 + summary.supplies.count else { return }
         context.saveGState()
         defer { context.restoreGState() }
@@ -155,13 +155,13 @@ public enum MobilePauseArt {
         text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
         GameTextLayout.draw(summary.level.title, in: boxes[0], typography: typography, face: .large, palette: .green, context: context)
         let image = preview.flatMap { preview in previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview }
-        GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image)
+        GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image, shape: shape)
         text(summary.status, box: boxes[1], palette: .blue, typography: typography, context: context)
         let progress = boxes[2]
         text(summary.rescueText, box: CGRect(x: progress.minX, y: progress.minY, width: progress.width, height: progress.height - 18),
              typography: typography, context: context)
         let rail = CGRect(x: progress.minX, y: progress.maxY - 12, width: progress.width, height: 10)
-        GameDisplayArt.draw(in: context, frame: rail)
+        GameDisplayArt.draw(in: context, frame: rail, shape: shape)
         let well = rail.insetBy(dx: 4, dy: 3)
         let fraction = summary.required > 0 ? min(1, CGFloat(summary.saved) / CGFloat(summary.required)) : 1
         context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
@@ -170,7 +170,7 @@ public enum MobilePauseArt {
         for (index, field) in summary.fields.enumerated() {
             let box = boxes[index + 3]
             context.setFillColor(CGColor(gray: 0.035, alpha: 1))
-            context.fill(box)
+            shape.fill(box, in: context)
             text(field.label, box: CGRect(x: box.minX + 6, y: box.minY + 3, width: box.width - 12, height: labelHeight),
                  typography: typography, context: context)
             text(field.value, box: CGRect(x: box.minX + 6, y: box.minY + labelHeight + 5, width: box.width - 12, height: box.height - labelHeight - 8),
@@ -187,7 +187,7 @@ public enum MobilePauseArt {
         }
         let musicStart = 12 + summary.supplies.count
         let music = boxes[musicStart].union(boxes[musicStart + 2]).insetBy(dx: -12, dy: -8)
-        GameDisplayArt.draw(in: context, frame: music)
+        GameDisplayArt.draw(in: context, frame: music, shape: shape)
         for index in musicStart..<(musicStart + 3) {
             text(page.details[index], box: boxes[index], palette: index == musicStart + 1 ? .green : .blue,
                  typography: typography, context: context)

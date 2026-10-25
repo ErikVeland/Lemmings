@@ -112,7 +112,7 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         let chosen = isEnabled && (isPrimary || isSelectedState || isHighlighted)
-        GameStoneArt.draw(in: context, frame: bounds, selected: chosen, pixel: 1)
+        GameStoneArt.draw(in: context, frame: bounds, selected: chosen, pixel: 1, shape: MobileSystemRegions.controlShape(in: self))
         if icon == .favourite {
             context.saveGState()
             context.setAlpha(isEnabled ? 1 : 0.45)
@@ -147,7 +147,7 @@ import UIKit
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext(), !board.isEmpty else { return }
-        GameMenuFrameArt.draw(in: context, board: board)
+        GameMenuFrameArt.draw(in: context, board: board, shape: MobileSystemRegions.controlShape(in: self))
     }
 }
 #else

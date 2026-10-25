@@ -4,11 +4,30 @@ import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import AVFAudio
+import os
 
 /// Each game owns its effect voices, including simulation replays.
 @MainActor final class MobileEffects {
-    private let player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
+    private var player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
                                           rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
+    private let audioObservers = MobileNotificationObserverBag()
+    private let logger = Logger(subsystem: "com.ultimatelemmings.audio", category: "Effects")
+    var audioDiagnostics: AudioBufferStatistics { player.audioDiagnostics }
+    init() {
+        audioObservers.append(NotificationCenter.default.addObserver(
+            forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.stop()
+                self.player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
+                    rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
+                self.source = nil
+                self.loadedNeoLemmixSoundIdentity = nil
+            }
+        })
+    }
     private var prepared = false
     private var suspended = false
     private var source: ClassicSoundSource?
@@ -48,7 +67,10 @@ import UIKit
             }
             source = settings.sound
         }
-        if !prepared { try? player.start(); prepared = player.isRunning }
+        if !prepared {
+            do { try player.start(); prepared = player.isRunning }
+            catch { logger.error("Effects start failed: \(String(describing: error), privacy: .public)") }
+        }
         scheduleIdleSuspension()
     }
 
@@ -113,7 +135,8 @@ import UIKit
     func stop() { idleTask?.cancel(); idleTask = nil; player.stop(); prepared = false }
 
     private func resumeForCue() {
-        try? player.resumeOutput()
+        do { try player.resumeOutput() }
+        catch { logger.error("Effects resume failed: \(String(describing: error), privacy: .public)") }
         scheduleIdleSuspension()
     }
 

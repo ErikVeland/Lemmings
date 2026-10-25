@@ -72,3 +72,13 @@ remaining blockers. A submission alone does not establish store availability.
 This schedule supersedes older delivery orders and routine Mac test requirements.
 Historical release receipts remain unchanged. Product acceptance and feature
 work retain their recorded limits without becoming new non-engine Mac test gates.
+
+## Version-history build gate
+
+Every Mac, iOS and tvOS app build must pass
+`Scripts/check-release-history.sh` before compilation. The gate requires a
+tracked notes file for the exact Mac version/build, a matching current-candidate
+entry in `Documentation/ReleaseNotes.md`, a resolvable release base, matching
+mobile marketing versions and build numbers, and the same version in the Mac
+What's New page. Release-input checks repeat this gate before package
+verification. A stale or missing version history stops the build.
