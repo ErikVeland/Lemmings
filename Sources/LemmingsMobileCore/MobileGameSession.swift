@@ -199,6 +199,7 @@ public protocol MobileGameSession: AnyObject {
     var panelFrame: MobilePixelFrame? { get }
     var renderScale: Double { get }
     var availableGraphics: [ClassicGraphicsSource] { get }
+    var spriteActorIDs: [Int] { get }
     var activeLemmingCount: Int { get }
     var lostLemmingCount: Int { get }
     var nukeRemainingTicks: Int? { get }
@@ -284,6 +285,7 @@ public extension MobileGameSession {
     }
     var renderScale: Double { 1 }
     var availableGraphics: [ClassicGraphicsSource] { [] }
+    var spriteActorIDs: [Int] { [] }
     var activeLemmingCount: Int { max(0, snapshot.released - snapshot.saved) }
     var nukeRemainingTicks: Int? { nil }
     var allNukeExplosionsPlayed: Bool { snapshot.isComplete }

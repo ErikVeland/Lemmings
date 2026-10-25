@@ -65,6 +65,14 @@ Mid-level checkpoints remain local on every platform. Force-quit, offline
 providers and expired background time cannot guarantee completed uploads.
 Physical-device lifecycle and live service acceptance remain open.
 
+Validation: 29 `CloudLibraryTests` pass with muted audio, including repeated
+lifecycle passes, an upload already in flight, changes during upload, offline
+recovery and legacy tester credentials. The Mac frontend compiled in the first
+successful test build. iOS/tvOS shared core SDK modules compiled. Full frontend
+checks remain blocked by unrelated `MobileLibraryLearning.swift` access to the
+private `MobileLibraryViewController.store` property in the working checkout.
+These checks launched no app or Simulator windows.
+
 ## Shared coverage and intentional adaptations
 
 The source connects native campaign play, owner-scoped checkpoints, rewind and

@@ -1126,6 +1126,7 @@ typealias MobileGameControllerBase = UIViewController
             playfieldView.setRescueFeedback(saved: snapshot.saved, required: snapshot.required, total: snapshot.total,
                 isComplete: snapshot.isComplete, didWin: snapshot.didWin)
             playfieldView.failed = snapshot.isComplete ? !snapshot.didWin : (snapshot.saved + session.activeLemmingCount + max(0, snapshot.total - snapshot.released) < snapshot.required)
+            playfieldView.captureSpriteTrails(session: session)
             try playfieldView.update(frame: frame)
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = playfieldView.bitmap

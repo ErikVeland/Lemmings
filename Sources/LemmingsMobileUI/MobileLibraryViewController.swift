@@ -1495,6 +1495,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
+        if let run = playlists.run, Lemmings2ShortPlayMobileLibrary.matches(run.entries),
+           checkpoint.matchesJourney(runID: run.id, position: run.position, levelIdentifier: checkpoint.levelIdentifier) {
+            openTribesShortRun(run, back: .collections, position: run.position, checkpoint: checkpoint, startImmediately: true)
+            return
+        }
         if checkpoint.engine == "lemmings2" {
             openLemmings2(at: checkpoint.levelIndex, checkpoint: checkpoint)
             return

@@ -49,6 +49,7 @@ import UIKit
     private let tube = MobileCRTView(tubeDevice: true)
     private var hdr: MobileHDRView?
     private var attemptedHDR = false
+    private var spriteTrails = MobileSpriteTrails()
     private var speedMultiplier = 1.0
     private var speedEffectsActive = false
     private var sprites: [String: CGImage] = [:]
@@ -248,8 +249,45 @@ import UIKit
     }
 
     #endif
+    func captureSpriteTrails(session: any MobileGameSession) {
+        let enabled = displaySettings.hdEffectsEnabled && !motionReduced && !displaySettings.reduceFlashes
+        guard enabled else { spriteTrails.reset(); return }
+        let visible = gameViewport.visibleLevelRect
+        var current: [Int: MobileSpriteHighlight] = [:]
+        let limit = MobileDevicePerformance.constrained ? 24 : 48
+        for actor in session.spriteActorIDs {
+            guard let sprite = session.spriteHighlight(for: actor),
+                  sprite.rect.x + sprite.rect.width >= visible.x, sprite.rect.x <= visible.x + visible.width,
+                  sprite.rect.y + sprite.rect.height >= visible.y, sprite.rect.y <= visible.y + visible.height else { continue }
+            current[actor] = sprite
+            if current.count >= limit { break }
+        }
+        spriteTrails.sample(current, tick: session.snapshot.tick, time: ProcessInfo.processInfo.systemUptime,
+            fast: speedEffectsActive && speedMultiplier > 1, enabled: enabled, budget: limit * 2)
+    }
+
+    private func drawSpriteTrails(viewport: MobileViewport, context: CGContext) {
+        guard !motionReduced, !displaySettings.reduceFlashes, displaySettings.hdEffectsEnabled else { return }
+        let content = viewport.contentFrame, now = ProcessInfo.processInfo.systemUptime
+        context.saveGState(); defer { context.restoreGState() }
+        context.clip(to: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
+        context.interpolationQuality = .none
+        for echo in spriteTrails.echoes {
+            guard let image = spriteImage(echo.sprite) else { continue }
+            let rect = spriteRect(echo.sprite, viewport: viewport)
+            context.saveGState()
+            context.setAlpha(echo.opacity(at: now))
+            context.translateBy(x: rect.minX, y: rect.maxY); context.scaleBy(x: 1, y: -1)
+            context.draw(image, in: CGRect(origin: .zero, size: rect.size))
+            context.restoreGState()
+        }
+    }
+
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
+        if !spriteTrails.echoes.isEmpty {
+            spriteTrails.expire(at: now); updateTube(); setNeedsDisplay()
+        }
         let touchEffects = router.advance(at: now, horizontalRange: 0...max(0, Double(bounds.width)))
         if !touchEffects.isEmpty { onTouchEffects?(touchEffects) }
         #if os(iOS)
@@ -291,8 +329,8 @@ import UIKit
         insertSubview(view, belowSubview: bombCountdownView)
         hdr = view
     }
-    func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
-    func resetTransientEffects() { hdr?.clear(); explosionBirths.removeAll() }
+    func suspendVisualEffects() { spriteTrails.reset(); hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
+    func resetTransientEffects() { spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll() }
     func releaseEffectResources() {
         releaseHDR()
         tube?.releaseEffectResources()
@@ -335,7 +373,7 @@ import UIKit
     }
 
     func purgeBitmap() {
-        hdr?.clear(); explosionBirths.removeAll()
+        spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll()
         bitmap = nil; arrowGlints = nil
         updateBombCountdowns()
         tube?.isHidden = true
@@ -403,7 +441,7 @@ import UIKit
     private var hasOverlayContent: Bool {
         (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil
             || (assignmentSprite != nil && assignmentProgress != nil) || !explosions.isEmpty
-            || cursorPoint != nil || failureAmount > 0
+            || cursorPoint != nil || failureAmount > 0 || !spriteTrails.echoes.isEmpty
     }
 
     private func drawOverlay(in context: CGContext) {
@@ -415,6 +453,7 @@ import UIKit
             context.fill(bounds)
             MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
         }
+        drawSpriteTrails(viewport: gameViewport, context: context)
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -464,6 +503,7 @@ import UIKit
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
+        drawSpriteTrails(viewport: viewport, context: context)
         drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
