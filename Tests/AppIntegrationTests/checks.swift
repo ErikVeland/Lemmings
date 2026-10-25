@@ -847,15 +847,30 @@ extension AppDelegate {
     try check(LevelHintWindow.shared.page != nil, "Controller could not select the hints button in controls help; selected \(helpSelection), sheet remains \(host.attachedSheet != nil)")
     keyboard.controllerMenuAction(.cancel)
 
+    let settingsCaller = GameScreen.shared.controllerPage(in: host)
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     keyboard.settings = { preferences.show() }
     keyboard.controllerAction(.settings)
-    try check(keyboard.controllerMenuRoot != nil, "Controller settings command did not open Settings")
+    guard let settingsPage = GameScreen.shared.controllerPage(in: host) else {
+      throw IntegrationFailure(message: "Controller settings command did not open Settings")
+    }
+    try check(settingsPage !== settingsCaller, "Settings did not open above its caller")
     keyboard.controllerMenuAction(.cycle(1))
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.rate(-1))
-    keyboard.controllerMenuAction(.assign)
+    func chooseControllerSetting(_ title: String) throws {
+      // Navigation is pinned outside the settings body. Find each control
+      // through real D-pad steps instead of assuming its old row offset.
+      for _ in 0..<20 {
+        if (keyboard.focusedControllerControl as? NSButton)?.title == title {
+          keyboard.controllerMenuAction(.assign)
+          return
+        }
+        keyboard.controllerMenuAction(.rate(-1))
+      }
+      throw IntegrationFailure(message: "Controller could not reach setting: " + title)
+    }
+    try chooseControllerSetting(L10n.text("Tap RT to toggle fast-forward"))
     try check(!preferences.current.controllerTapSpeed, "D-pad and A could not change the trigger setting")
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.assign)
+    try chooseControllerSetting(L10n.text("Swap sticks"))
     try check(preferences.current.controllerSwapSticks, "D-pad and A could not swap sticks")
     if let page = keyboard.controllerMenuRoot {
       page.layoutSubtreeIfNeeded()
@@ -866,7 +881,10 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: output)
     }
     keyboard.controllerMenuAction(.cancel)
-    try check(!GameScreen.shared.isPresented, "B did not close Settings")
+    try check(!GameScreen.shared.contains(settingsPage)
+      && GameScreen.shared.controllerPage(in: host) === settingsCaller,
+      "B did not close Settings and return to its caller")
+    GameScreen.shared.dismissAll()
     keyboard.controllerEnabled = { false }
     try check(!keyboard.controllerPlaying, "Disabled controller stayed active during gameplay")
     keyboard.controllerEnabled = { true }; keyboard.ownsController = { false }
@@ -3135,8 +3153,15 @@ extension AppDelegate {
       for _ in 0..<min(338, expected.ticks) { ghost.advance() }
       try capture(ghost.page, name: "solution-playing-\(mode)")
       button("Pause", in: ghost.page)!.performClick(nil)
-      try check(ghost.page.bounds.size == window.contentView!.bounds.size,
-        "Replay did not fill the game window")
+      guard let replayViewport = ghost.page.enclosingScrollView,
+        let replayNavigation = GameScreen.shared.controllerNavigationRoot(in: window) else {
+        throw IntegrationFailure(message: "Replay lost its window viewport or fixed navigation")
+      }
+      try check(replayNavigation.bounds.size == window.contentView!.bounds.size
+        && ghost.page.bounds.size == replayViewport.contentSize
+        && ghost.page.bounds.width == window.contentView!.bounds.width
+        && ghost.page.bounds.height > window.contentView!.bounds.height * 0.5,
+        "Replay did not fill the viewport below fixed navigation")
       try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
       for target in [2.0, 3, 5, 10] {
@@ -3898,7 +3923,7 @@ extension AppDelegate {
       let hints = pauseSkipButtons(in: pause).first(where: { $0.title == "Hints" }) else {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
-    GameScreen.shared.keyboardNavigation.focus(hints, in: window)
+    GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
     let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
       windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
     try check(GameScreen.shared.handleDialogKey(pauseEnter), "Pause menu did not activate the focused hints button with Return")
@@ -4159,7 +4184,11 @@ extension AppDelegate {
   /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
   private func recordsWithSkips(_ skips: Int) throws -> URL {
     var records = ArcadeRecords()
-    _ = records.addProfile(initials: "LEM", portrait: 0)
+    // A new records file still uses the legacy profile. Give each fixture its
+    // own progress scope so earlier campaign and Journey wins cannot leak in.
+    guard records.addProfile(initials: "LEM", portrait: 0) != nil else {
+      throw IntegrationFailure(message: "Could not create the skip fixture owner")
+    }
     for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
       let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
         rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
@@ -4478,6 +4507,8 @@ extension AppDelegate {
     guard let skipped = arcadeLevel, let skippedNumber = flow?.currentNumber else {
       throw IntegrationFailure(message: "The failed level had no records identity")
     }
+    try check(flow?.hasPassed(rank: flow!.currentRank!.name, position: skippedNumber - 1) == false,
+      "The skip fixture already had a passed level before Skip")
     view.skipLevel()
     try check(ArcadeStore.shared.records.hasSkipped(skipped, profileID: owner)
       && ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0, "Skip did not spend the owner's skip")

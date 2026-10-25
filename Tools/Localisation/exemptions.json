@@ -73,5 +73,15 @@
     "file": "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift",
     "source": "academy.glasscode.lemmings.cloud-library-credentials",
     "reason": "Stable Keychain service identifier, never displayed as interface text"
+  },
+  {
+    "file": "Sources/LemmingsMobileUI/MobileListToolsView.swift",
+    "source": "search",
+    "reason": "Stable action identifier in accessibility label selection; displayed labels use L10n.text"
+  },
+  {
+    "file": "Sources/LemmingsMobileUI/MobileListToolsView.swift",
+    "source": "searchClear",
+    "reason": "Stable action identifier in accessibility label selection; displayed labels use L10n.text"
   }
 ]

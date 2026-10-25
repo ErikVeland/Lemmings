@@ -1,17 +1,17 @@
 {
   "catalogue_snapshot": {
-    "text_count": 3517,
+    "text_count": 3519,
     "plural_count": 8,
-    "sha256": "456a35081f0fc0b8f909966cbed628314ab7055db2ed9af7bdf124f4bee3c6ab"
+    "sha256": "eb050b7d0e132f45e1946c53e124df9044a6a3cf60b4dcacaad79da4a93aed64"
   },
   "draft": {
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
     "path": "Tools/Localisation/drafts/nb.json",
-    "sha256": "19b54b96343d3f1a76f92feb00b0d062fd210473d93c1e0ca44c5ca465b2dab6",
-    "text_count": 3517,
+    "sha256": "cc18796776af7e11aebf77499160d5a5282c9f29d1c30403d393151046fc19f0",
+    "text_count": 3519,
     "unknown_current_text_count": 0,
-    "entry_count": 3517
+    "entry_count": 3519
   },
   "handover_date": "2026-10-15",
   "intentionally_unchanged": {
@@ -355,6 +355,27 @@
       "Lemmings rebuild the time each minute. Open the clock on iPhone and iPad, or add its widget on iPhone, iPad and Mac.",
       "Reading pages have more room between paragraphs. Mobile settings group choices and show checked states."
     ],
+    "humanReview": "pending"
+  },
+  "release_2_2_2": {
+    "date": "2026-10-24",
+    "aiDraftedKeys": [
+      "Duo uses more of its display. Tent Pose opens Desk Clock with your game safely paused. Optional red night vision keeps the clock quiet.",
+      "Clearer navigation keeps your place. Fan packs are grouped for browsing, and Golden Path wins count in their original collections.",
+      "Shared stone artwork and clearer controls improve every platform. Touch selection and replay controls are easier to use.",
+      "Hold a lemming, then slide left or right to browse the group.",
+      "Ports & remakes",
+      "Learning",
+      "Tap to assign. Hold, then slide left or right to browse lemmings. While holding, drag a second finger to pan. Lift the first finger to assign. Drag to pan. Pinch to zoom.",
+      "While holding, drag a second finger to pan. Lift the first finger to assign.",
+      "Active players: {0}. Next: {1}",
+      "Magazines & books",
+      "Clear",
+      "Red night vision",
+      "Save failed",
+      "Contests & community"
+    ],
+    "removedObsoleteKeys": [],
     "humanReview": "pending"
   }
 }

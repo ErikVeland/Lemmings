@@ -155,6 +155,7 @@
 "Activate selected menu choice" = "Activar la opción seleccionada";
 "Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level." = "Se perderán los lemmings activos. Se conservarán los rescatados y las reservas. Puedes volver a intentarlo.";
 "Active players: {0}" = "Jugadores activos: {0}";
+"Active players: {0}. Next: {1}" = "Jugadores activos: {0}. Siguiente: {1}";
 "Ad-Lib FM" = "Ad-Lib FM";
 "Adaptive DJ" = "DJ adaptable";
 "Adaptive DJ Mix (The True Choice) 🎧" = "Mezcla de DJ adaptable (la verdadera elección) 🎧";
@@ -533,6 +534,7 @@
 "Classic tribe 1–5" = "Classic tribe 1–5";
 "Classic tribe movie" = "Vídeo de la tribu clásica";
 "Clean rescue" = "Rescate limpio";
+"Clear" = "Borrar";
 "Clear a level as Jeremy Bentham, with an evidenced trade-off." = "Completa un nivel como Jeremy Bentham y demuestra una decisión con ventajas y desventajas.";
 "Clear a level using one skill type." = "Completa un nivel usando un solo tipo de habilidad.";
 "Clear a level with The Absurdist play style." = "Completa un nivel con el estilo de juego El absurdista.";
@@ -568,6 +570,7 @@
 "Cleared the level using one skill type." = "Completaste el nivel con un solo tipo de habilidad.";
 "Cleared the level without assigning a skill." = "Completaste el nivel sin asignar habilidades.";
 "Cleared without assigning a skill." = "Completado sin asignar habilidades.";
+"Clearer navigation keeps your place. Fan packs are grouped for browsing, and Golden Path wins count in their original collections." = "La navegación más clara conserva tu lugar. Los paquetes de fans están agrupados, y las victorias de la Ruta Dorada cuentan en sus colecciones originales.";
 "Clears" = "Victorias";
 "Click or Return to practise" = "Haz clic o pulsa Intro para practicar";
 "Click or press Enter to try again" = "Haz clic o pulsa Intro para volver a intentarlo";
@@ -625,6 +628,7 @@
 "Connecting to Game Center..." = "Conectando con Game Center…";
 "Connecting..." = "Conectando…";
 "Consequentialist optimisation with a strong rescue outcome." = "Optimización consecuencialista con un gran resultado de rescate.";
+"Contests & community" = "Concursos y comunidad";
 "Continue" = "Continuar";
 "Continue journey" = "Continue journey";
 "Continue or start level" = "Continuar o iniciar nivel";
@@ -671,7 +675,6 @@
 "Crisp retina-class 2× graphics, high-res fonts, Mac UI panel, and festive Xmas sprites." = "Gráficos nítidos 2× de calidad Retina, fuentes de alta resolución, panel de interfaz para Mac y sprites navideños.";
 "Cross / A" = "Cruz / A";
 "Crowd spacing" = "Espacio entre lemmings";
-"Current graphics: {0}" = "Current graphics: {0}";
 "Current level" = "Nivel actual";
 "Current route {0}/{1}" = "Current route {0}/{1}";
 "Current turn: {0}" = "Turno actual: {0}";
@@ -763,6 +766,7 @@
 "DualSense touchpad click" = "Clic en el panel táctil de DualSense";
 "DualSense touchpad click: DJ shuffle" = "Clic en el panel táctil de DualSense: mezcla aleatoria de DJ";
 "DualSense touchpad swipe: step back / forward" = "Deslizar en el panel táctil de DualSense: retroceder / avanzar un paso";
+"Duo uses more of its display. Tent Pose opens Desk Clock with your game safely paused. Optional red night vision keeps the clock quiet." = "Duo aprovecha más su pantalla. La posición de carpa abre el reloj de escritorio con la partida pausada. La visión nocturna roja opcional mantiene el reloj discreto.";
 "Duplicate Chronicles object ID {0}." = "El ID {0} del objeto de Chronicles está duplicado.";
 "Duplicate L2 sprite animation." = "La animación de sprites de L2 está duplicada.";
 "During the winding course of Lemmings the Second, the following occurred:" = "Durante el sinuoso recorrido de Lemmings the Second, ocurrió lo siguiente:";
@@ -974,8 +978,6 @@
 "GAME CONTROLS" = "CONTROLES DEL JUEGO";
 "GARY TIMMONS" = "GARY TIMMONS";
 "GHOST SOLUTION" = "SOLUCIÓN FANTASMA";
-"GHOSTS OFF" = "GHOSTS OFF";
-"GHOSTS ON" = "GHOSTS ON";
 "GLIDE" = "PLANEAR";
 "GLUE POURER" = "VERTEDOR DE PEGAMENTO";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1086,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Quien da voz a los lemmings a la luz de la luna";
 "Help" = "Ayuda";
 "Help / extra actions" = "Ayuda / acciones adicionales";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Ayúdanos a encontrar niveles que necesitan trabajo";
 "High" = "Alta";
 "High rescue rate with efficient skill use." = "Una tasa de rescate alta con uso eficiente de habilidades.";
@@ -1095,6 +1098,7 @@
 "Highest count of one skill, then most saved, fewest skills and fastest time." = "Primero, la mayor cantidad de una habilidad; luego, más rescates, menos habilidades y el menor tiempo.";
 "Highland" = "Tierras altas";
 "Hints" = "Pistas";
+"Hold a lemming, then slide left or right to browse the group." = "Mantén presionado un lemming y desliza a la izquierda o derecha para recorrer el grupo.";
 "Hold to edit player" = "Mantén pulsado para editar al jugador";
 "Hold: fixed fast-forward" = "Mantener: avance rápido fijo";
 "Hold: ramp up; release: previous speed" = "Mantener: acelerar gradualmente; soltar: volver a la velocidad anterior";
@@ -1103,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "Inicio";
 "Home {0}/{1}" = "A salvo {0}/{1}";
 "Hopper" = "Brincón";
 "Host" = "Anfitrión";
 "Hot Seat" = "Turnos compartidos";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Partidas de Hot Seat";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Turnos…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Pasa el turno {1}. {2} Usa las teclas numéricas para añadir o quitar jugadores. N añade un jugador. Elige un juego para continuar esta campaña compartida. Un Hot Seat nuevo empieza desde el principio.";
@@ -1151,6 +1155,7 @@
 "Increase speed" = "Aumentar velocidad";
 "Initials: {0}_" = "Iniciales: {0}_";
 "Insights" = "Estadísticas";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Observa las herramientas del nivel. Decide qué trabajador necesita cada una y prepara la ruta por partes.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1407,6 +1412,7 @@
 "Later was unexpectedly pleasant." = "Later was unexpectedly pleasant.";
 "Leaderboards" = "Clasificaciones";
 "Learned to cook for someone." = "Learned to cook for someone.";
+"Learning" = "Aprendizaje";
 "Least skills" = "Menos habilidades";
 "Leave Hot Seat?" = "¿Salir de Hot Seat?";
 "Left" = "Izquierda";
@@ -1459,7 +1465,6 @@
 "Level goals and bests >" = "Objetivos y récords del nivel >";
 "Level goals and tiered hints" = "Objetivos del nivel y pistas por niveles";
 "Level hints" = "Pistas del nivel";
-"Level hints (H)" = "Pistas del nivel (H)";
 "Level hints…" = "Pistas del nivel…";
 "Level locked" = "Nivel bloqueado";
 "Level locked. Complete the preceding level or change the Classic unlock setting." = "El nivel está bloqueado. Completa el nivel anterior o cambia el ajuste de desbloqueo de Classic.";
@@ -1528,7 +1533,6 @@
 "MOVIE SAVED" = "VÍDEO GUARDADO";
 "MUSIC" = "MÚSICA";
 "Mac 2× High-Resolution (512x342 / 640x480)" = "Alta resolución de Mac 2× (512×342 / 640×480)";
-"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Los widgets de Mac se inician correctamente y ocupan todo el espacio en cada tamaño. El reloj sigue visible en color, con tinte y en monocromo.";
 "Machine" = "Máquina";
 "Machine preset" = "Ajuste preestablecido de máquina";
 "Macintosh" = "Macintosh";
@@ -1541,6 +1545,7 @@
 "Macintosh-style 2× artwork" = "Gráficos estilo Macintosh 2×";
 "Made a friend during a queue." = "Made a friend during a queue.";
 "Made enough jam for the winter." = "Made enough jam for the winter.";
+"Magazines & books" = "Revistas y libros";
 "Magic Carpet" = "Alfombra mágica";
 "Magno Booter" = "Botas magnéticas";
 "Main menu" = "Menú principal";
@@ -1707,7 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Siguiente lemming disponible";
 "Next graphics" = "Gráficos siguientes";
-"Next graphics (F2)" = "Gráficos siguientes (F2)";
+"Next lemming" = "Next lemming";
 "Next level" = "Siguiente nivel";
 "Next level >" = "Siguiente nivel >";
 "Next move" = "Siguiente movimiento";
@@ -1951,7 +1956,7 @@
 "Pause action replay" = "Pausar la repetición de acciones";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Pausa y sigue la ruta desde la entrada hasta la salida. Busca el primer punto por el que un lemming no puede pasar sin peligro.";
 "Pause and open controls" = "Pausar y abrir los controles";
-"Pause and resume" = "Pausa y reanudación";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Menú de pausa";
 "Pause on interruption" = "Pausar si se interrumpe";
 "Pause on skill change" = "Pausar al cambiar de habilidad";
@@ -2033,6 +2038,7 @@
 "Pole Vaulter" = "Saltador con pértiga";
 "Portrait" = "Vertical";
 "Portrait: {0}" = "Retrato: {0}";
+"Ports & remakes" = "Adaptaciones y remakes";
 "Practice" = "Práctica";
 "Practice levels" = "Niveles de práctica";
 "Practise" = "Practise";
@@ -2056,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Mejor resultado anterior: {0}. Esta partida: {1}.";
 "Previous eligible lemming" = "Lemming disponible anterior";
 "Previous hint" = "Pista anterior";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Movimiento anterior";
 "Previous page" = "Página anterior";
 "Previous record: {0}. New record: {1}." = "Récord anterior: {0}. Nuevo récord: {1}.";
@@ -2082,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q DE NUEVO PARA SALIR  *  ESC PARA SEGUIR";
 "Queued" = "En cola";
 "Quit Ultimate Lemmings" = "Salir de Ultimate Lemmings";
-"Quit to main menu" = "Volver al menú principal";
 "Quit?" = "¿Salir?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R REINTENTAR - RESCATA MÁS, USA MENOS";
@@ -2168,7 +2174,6 @@
 "Records were not saved. Retry the save before continuing." = "No se guardaron los récords. Vuelve a intentar guardarlos antes de continuar.";
 "Recovery" = "Recovery";
 "Red night vision" = "Visión nocturna roja";
-
 "Redbook CD Studio Soundtrack" = "Banda sonora Redbook CD de estudio";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook CD-Audio + HuC6280 PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook CD-Audio estéreo de 44.1 kHz";
@@ -2316,6 +2321,7 @@
 "Run paused" = "Partida en pausa";
 "Run recovery save failed: {0}" = "Error al guardar la recuperación de la partida: {0}";
 "Run unavailable" = "Partida no disponible";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Corredor";
 "Running." = "En curso.";
 "S" = "S";
@@ -2347,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "LOS CAMBIOS DE HABILIDAD PUEDEN PAUSAR LA PARTIDA PARA PLANIFICAR";
 "SKILL MODE" = "MODO DE HABILIDADES";
 "SKILLS" = "HABILIDADES";
-"SKIP LEVEL" = "SALTAR NIVEL";
 "SKIPS {0}" = "SALTOS {0}";
 "SLIDE" = "DESLIZARSE";
 "SLIDER" = "DESLIZADOR";
@@ -2397,13 +2402,13 @@
 "Save at least 20 more than required in one successful clear." = "Rescata al menos 20 más de los necesarios en una victoria.";
 "Save at least 5 extra and 20% of the starting population beyond the requirement." = "Rescata al menos 5 más de los necesarios y supera el requisito en un 20 % de la población inicial.";
 "Save cancelled" = "Guardado cancelado";
+"Save failed" = "Error al guardar";
 "Save game" = "Guardar partida";
 "Save movie" = "Guardar vídeo";
 "Save one more" = "Rescata a uno más";
 "Save playlist" = "Guardar lista de reproducción";
 "Save run and return to library" = "Guardar partida y volver a la biblioteca";
 "Save this replay at {0}× speed, with music and sound effects." = "Guardar esta repetición a velocidad {0}×, con música y efectos de sonido.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Guardar en el espacio seleccionado";
 "Save {0}  ({1}%)" = "Rescatar {0}  ({1} %)";
 "Save {0} more above requirements." = "Rescata a {0} más de los necesarios.";
@@ -2418,7 +2423,6 @@
 "Saved level sequences" = "Secuencias de nivel guardadas";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Guardado en este dispositivo";
-"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 "Saved result identities conflict." = "Las identidades de los resultados guardados entran en conflicto.";
 "Saved run restored. Press Space when you are ready." = "Partida guardada restaurada. Pulsa Espacio cuando estés listo.";
 "Saved the last biscuit for later." = "Saved the last biscuit for later.";
@@ -2458,7 +2462,6 @@
 "Sequel artwork" = "Gráficos de las secuelas";
 "Sequel artwork requires binary transparency." = "Los gráficos de las secuelas requieren transparencia binaria.";
 "Sequel reconstruction exceeds the image limit." = "La reconstrucción de la secuela supera el límite de imagen.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "El servicio ve la IP";
 "Session not changed" = "No se cambió la sesión";
@@ -2480,6 +2483,7 @@
 "Shared campaign" = "Campaña compartida";
 "Shared campaign revisions conflict." = "Las revisiones de la campaña compartida entran en conflicto.";
 "Shared play counts" = "Recuentos de partidas compartidos";
+"Shared stone artwork and clearer controls improve every platform. Touch selection and replay controls are easier to use." = "El diseño de piedra compartido y los controles más claros mejoran todas las plataformas. La selección táctil y los controles de repetición son más fáciles de usar.";
 "Shared tester library" = "Shared tester library";
 "Shared: {0} days" = "Compartido: {0} días";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
@@ -2535,7 +2539,9 @@
 "Skills used: {0}" = "Habilidades usadas: {0}";
 "Skip" = "Saltar";
 "Skip as {0} ({1})" = "Saltar como {0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Saltar nivel ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Saltos";
 "Slider" = "Deslizador";
 "Slot {0}" = "Espacio {0}";
@@ -2695,8 +2701,8 @@
 "Talks about it fondly." = "Talks about it fondly.";
 "Tap RT for fast-forward" = "Toca RT para avanzar rápido";
 "Tap RT to toggle fast-forward" = "Toca RT para alternar el avance rápido";
-"Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom." = "Toca un lemming para asignarle la habilidad seleccionada. Arrastra un dedo para mover la cámara. Pellizca para acercar o alejar.";
 "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost." = "Toca el gatillo derecho para alternar el avance rápido. Mantenlo pulsado para un impulso temporal.";
+"Tap to assign. Hold, then slide left or right to browse lemmings. While holding, drag a second finger to pan. Lift the first finger to assign. Drag to pan. Pinch to zoom." = "Toca para asignar. Mantén presionado y desliza a la izquierda o derecha para recorrer los lemmings. Sin soltar, arrastra con un segundo dedo para mover la vista. Levanta el primer dedo para asignar. Arrastra para mover la vista. Pellizca para ajustar el zoom.";
 "Tap: toggle fast-forward; hold: fixed fast-forward" = "Toca: alternar avance rápido; mantén pulsado: avance rápido fijo";
 "Tap: toggle fast-forward; hold: ramp up; release: previous speed" = "Toca: alternar avance rápido; mantén pulsado: acelerar gradualmente; suelta: volver a la velocidad anterior";
 "Tap: toggle fast-forward; hold: temporary boost" = "Toca: alternar avance rápido; mantén pulsado: impulso temporal";
@@ -2855,7 +2861,6 @@
 "The library keys conflict. Existing saves were kept." = "Las claves de la biblioteca entran en conflicto. Se conservaron los guardados existentes.";
 "The linked local player was removed." = "Se eliminó el jugador local vinculado.";
 "The maximum rescue target for this level is not established yet." = "Aún no se ha establecido el objetivo máximo de rescate de este nivel.";
-"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "En dispositivos móviles, el control Pausa responde al tocarlo. Al reanudar, se muestra el escenario detenido antes del siguiente paso del juego.";
 "The movie could not open in the game window." = "No se pudo abrir la película en la ventana del juego.";
 "The movie encoder has no frame buffer." = "El codificador de películas no tiene búfer de fotogramas.";
 "The movie encoder stopped responding." = "El codificador de películas dejó de responder.";
@@ -3154,7 +3159,6 @@
 "Unexpected data after L2 ark animation." = "Hay datos inesperados después de la animación del arca de L2.";
 "Unexpected style in the Chronicles {0} sequence." = "Estilo inesperado en la secuencia {0} de Chronicles.";
 "Unexpected tribe in the Classic sequence." = "Tribu inesperada en la secuencia de Classic.";
-"Unfavourite" = "Quitar de favoritos";
 "Unfinished" = "Incompleto";
 "Unknown" = "Desconocido";
 "Unknown Chronicles frame encoding {0}." = "La codificación del fotograma de Chronicles {0} es desconocida.";
@@ -3280,6 +3284,7 @@
 "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away." = "Si los lemmings se superponen, prioriza a uno apto que aún se acerca en lugar de uno que ya se aleja.";
 "When the Tribes settled in these lands" = "Cuando las tribus se establecieron en estas tierras";
 "Where" = "Dónde";
+"While holding, drag a second finger to pan. Lift the first finger to assign." = "Sin soltar, arrastra con un segundo dedo para mover la vista. Levanta el primer dedo para asignar.";
 "Who did some graphic stuff." = "Quien hizo algunos gráficos.";
 "Who saved us once before" = "Quien nos salvó una vez";
 "Whole pixels" = "Píxeles enteros";
@@ -3513,7 +3518,6 @@
 "{0}/{1} across {2} titles: {3}" = "{0}/{1} en {2} títulos: {3}";
 "{0}/{1} earned" = "{0}/{1} conseguidos";
 "{0}/{1} levels passed in this rating." = "{0}/{1} niveles completados en esta clasificación.";
-"{0}/{1} packs" = "{0}/{1} paquetes";
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: falló el análisis de la repetición: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
