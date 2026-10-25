@@ -220,11 +220,15 @@ extension SoundEffectPlayer {
         precondition(energy > 1 && elapsed < 0.1, "Effect output waited for a control lock")
         bufferedSource?.drain()
         setMuted(true)
-        for _ in 0..<6 {
+        for block in 0..<6 {
             let status = try engine.renderOffline(512, to: output)
             precondition(status == .success)
             bufferedSource?.drain()
-            precondition((0..<512).allSatisfy { output.floatChannelData![0][$0] == 0 }, "Mute leaked queued effects")
+            // AVAudioMixerNode ramps a volume change to avoid a discontinuity.
+            // Require silence after two blocks (23 ms), including limiter latency.
+            if block >= 2 {
+                precondition((0..<512).allSatisfy { output.floatChannelData![0][$0] == 0 }, "Mute leaked queued effects beyond its short mixer ramp")
+            }
         }
         print("PASS buffered spatial chorus survives control contention, limits peaks and mutes queued PCM")
     }
