@@ -519,7 +519,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       voices[index].isActive = false
       voices[index].rescueLayers.removeAll()
     }
-    recentEffectTimes.removeAll(keepingCapacity: true) 
+    recentEffectTimes.removeAll(keepingCapacity: true)
     let restart = isRunning && !outputSuspended && engine.isRunning
     lock.unlock()
     bufferedSource?.stop()
@@ -901,7 +901,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       recentEffectTimes.removeAll(keepingCapacity: true)
     }
-    lock.unlock() 
+    lock.unlock()
     if muted {
       bufferedSource?.stop()
       if isRunning && engine.isRunning { bufferedSource?.start() }

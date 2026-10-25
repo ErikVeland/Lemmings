@@ -1496,6 +1496,9 @@ The original full-width game panel remains authored artwork. Rounded treatment
 applies to adaptive controls and the shared menu surfaces across all engines.
 
 On Duo's outer display, draw scenery and page backgrounds to every edge.
+Place Main menu at the left of the fixed gameplay header. Let the status strip
+continue to the right edge of its camera-safe span. Keep the button and strip
+separate for focus and touch, with the same pixel contours as the other controls.
 Choose a fixed menu viewport from the scene's current reserved regions before
 measuring Home, level browsing, Ready, pause, results, recovery or settings.
 Prefer the full-width area above or below a corner cutout. Do not reserve a

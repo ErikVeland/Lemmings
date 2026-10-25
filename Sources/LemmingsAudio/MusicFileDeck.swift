@@ -120,8 +120,10 @@ private final class MusicPCMStream: @unchecked Sendable {
       ? (offline ? .dataRendered : .dataPlayedBack) : .dataConsumed
     node.scheduleBuffer(pcm, completionCallbackType: callback) { [weak self] _ in
       guard let self else { return }
+      let submitted = DispatchTime.now().uptimeNanoseconds
       self.queue.async { [weak self] in
         guard let self, self.generation == token else { return }
+        self.statistics.recordQueueWait(since: submitted, reserveSeconds: Double(self.frames * (self.bufferCount - 1)) / self.file.processingFormat.sampleRate)
         if final { completion(.success(())) }
         else {
           do { try self.schedule(buffer, token: token, offline: offline, completion: completion) }

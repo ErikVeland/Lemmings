@@ -202,6 +202,11 @@ safe area along the longer display axis. Outer-display menus use vertical
 corner clearance to retain full width around local camera cutouts. The gameplay adapter no longer discards those insets on the outer
 display. Scenery still extends across that display.
 
+The outer-display gameplay header places Main menu at the left of the camera-safe
+span. The rounded status strip fills the remaining width to its right. Its
+contents and the menu keep separate rectangular input and accessibility bounds.
+Split-screen, TV and ordinary phone layouts retain their existing placement.
+
 Muted, windowless rendering checks cover 72 Classic/L2/L3 HUD states and 120
 book Home states, including focus, disabled, selected and busy controls. Their
 checks cover all visible HUD targets against rounded screen masks, action sets,

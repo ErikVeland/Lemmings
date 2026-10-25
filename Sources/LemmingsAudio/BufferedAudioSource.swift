@@ -84,8 +84,10 @@ final class BufferedAudioSource: @unchecked Sendable {
     for (index, node) in nodes.enumerated() {
       node.scheduleBuffer(batch.buffers[index], completionCallbackType: .dataConsumed) { [weak self] _ in
         guard let self else { return }
+        let submitted = DispatchTime.now().uptimeNanoseconds
         self.queue.async { [weak self] in
           guard let self, self.running, self.generation == token else { return }
+          self.statistics.recordQueueWait(since: submitted, reserveSeconds: Double(self.frames * (self.depth - 1)) / self.format.sampleRate)
           batch.pending -= 1
           // All spatial nodes must release their buffer before any buffer is reused.
           if batch.pending == 0 {
@@ -109,6 +111,8 @@ public struct AudioBufferStatistics: Codable, Sendable {
   public internal(set) var refillFailures = 0
   public internal(set) var refillsOverReserve = 0
   public internal(set) var maximumRefillSeconds = 0.0
+  public internal(set) var maximumQueueWaitSeconds = 0.0
+  public internal(set) var queueWaitsOverReserve = 0
   public internal(set) var lastError: String?
   public internal(set) var emptyReserveObservations = 0
   public internal(set) var minimumReserveFrames: Int64?
@@ -116,6 +120,17 @@ public struct AudioBufferStatistics: Codable, Sendable {
   mutating func observeReserve(frames: Int64) {
     minimumReserveFrames = min(minimumReserveFrames ?? frames, frames)
     if frames == 0 { emptyReserveObservations += 1 }
+  }
+
+  mutating func recordQueueWait(since submitted: UInt64, reserveSeconds: Double) {
+    let elapsed = Double(DispatchTime.now().uptimeNanoseconds - submitted) / 1_000_000_000
+    maximumQueueWaitSeconds = max(maximumQueueWaitSeconds, elapsed)
+    if elapsed > reserveSeconds {
+      queueWaitsOverReserve += 1
+      if queueWaitsOverReserve == 1 {
+        Self.logger.error("Audio worker delayed beyond reserve: \(elapsed, privacy: .public) seconds")
+      }
+    }
   }
 
   mutating func recordRefill(seconds: Double, reserveSeconds: Double) {

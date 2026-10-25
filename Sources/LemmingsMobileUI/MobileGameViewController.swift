@@ -754,7 +754,8 @@ typealias MobileGameControllerBase = UIViewController
             showsMenuButton: showsMenuButton, television: television,
             topBarInsets: MobileSystemRegions.topBarInsets(in: view),
             navigationRail: MobileSystemRegions.navigationRail(in: view),
-            fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view)
+            fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view),
+            menuLeading: MobileSystemRegions.usesFullDisplay(in: view)
         )
     }
 

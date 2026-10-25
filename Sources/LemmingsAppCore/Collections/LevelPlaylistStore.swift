@@ -552,6 +552,12 @@ import NxlvKit
             throw Failure.missingPlaylist
         }
         let previous = document
+        if run == nil, document.activeRun?.source == .playlist(LearningJourney.playlistID) {
+            // Explicit completion must not revive an older archived journey.
+            let scope = document.activeRunHotSeatID ?? "solo"
+            if document.journeySessions == nil { document.journeySessions = [:] }
+            document.journeySessions?[scope] = .init(run: nil)
+        }
         if run?.id != document.activeRun?.id {
             document.activeRunHotSeatID = nil
             document.activeRunL2Progress = nil

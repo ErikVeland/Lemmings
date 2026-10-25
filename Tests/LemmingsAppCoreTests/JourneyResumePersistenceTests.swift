@@ -68,5 +68,12 @@ import Testing
         try destination.importJourneySession(snapshot, hotSeatID: "shared")
         #expect(destination.resumableRun(hotSeatID: "shared")?.run == journey)
         #expect(destination.activeRunL2Progress == ["carry": Data([3])])
+        let replacement = try LevelSequenceRun.playlist(playlist, pool: journey.pool)
+        try destination.startRun(replacement, hotSeatID: "shared")
+        try destination.setActiveRun(nil)
+        try destination.ensureJourneySnapshots()
+        #expect(destination.journeySessions["shared"]?.run == nil)
+        #expect(destination.resumableRun(hotSeatID: "shared") == nil)
+        #expect(destination.resumableRun(id: journey.id)?.run == journey)
     }
 }

@@ -31,6 +31,7 @@ extension MenuAudit {
             let panel = session.panelFrame.flatMap(MobileBitmapRenderer.image)
             let icons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             for (pose, size, safe, clearance, radius, regions) in poses {
+                let menuLeading = regions.isEmpty
                 let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
                 let screen = CGPath(roundedRect: bounds, cornerWidth: radius, cornerHeight: radius, transform: nil)
                 func fits(_ frame: CGRect) -> Bool {
@@ -51,7 +52,8 @@ extension MenuAudit {
                         isEndingRun: state == "undo", skills: original.skills)
                     let layout = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance)
+                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance,
+                        menuLeading: menuLeading)
                     let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier)
@@ -65,10 +67,16 @@ extension MenuAudit {
                     }
                     guard visibleTargets.allSatisfy({ fits($0.inputFrame) }) else { throw invalidTargets(line: #line) }
                     let identity = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
+                    if menuLeading, let menu = targets.first(where: { $0.action == .menu }),
+                       menu.frame.maxX + 4 != layout.interface.statusFrame.minX {
+                        print("Header geometry \(session.engineIdentifier) \(pose): menu=\(menu.frame) status=\(layout.interface.statusFrame) safe=\(layout.interface.safeFrame)")
+                    }
                     guard layout.canPlay, layout.interface.playfieldFrame == baseline.interface.playfieldFrame,
                           layout.interface.controlsFrame == baseline.interface.controlsFrame,
                           let menu = targets.first(where: { $0.action == .menu }), fits(menu.inputFrame),
                           menu.inputFrame.width == 44 && menu.inputFrame.height == 44,
+                          (!menuLeading || (menu.frame.maxX + 4 == layout.interface.statusFrame.minX &&
+                              layout.interface.statusFrame.maxX == layout.interface.safeFrame.maxX - clearance.right)),
                           targets.first(where: { $0.inputFrame.contains(.init(x: menu.frame.midX, y: menu.frame.midY)) })?.action == .menu,
                           targets.filter({ $0.action != .menu }).allSatisfy({ !$0.inputFrame.intersects(menu.inputFrame) })
                     else { throw invalidTargets(line: #line) }

@@ -180,8 +180,12 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     bufferClockLock.lock(); scheduledFrames += Int64(bufferedFrameCount); bufferClockLock.unlock()
     node.scheduleBuffer(buffer.value, completionCallbackType: .dataConsumed) { [weak self] _ in
       guard let self else { return }
+      let submitted = DispatchTime.now().uptimeNanoseconds
       self.synthesisQueue.async { [weak self] in
-        self?.queueBuffer(buffer, node: node, generation: generation)
+        guard let self, self.bufferGeneration == generation else { return }
+        self.bufferStatistics.recordQueueWait(since: submitted,
+          reserveSeconds: Double(self.bufferedFrameCount * (self.bufferCount - 1)) / self.sampleRate)
+        self.queueBuffer(buffer, node: node, generation: generation)
       }
     }
   }
