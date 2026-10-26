@@ -140,6 +140,11 @@ package, rights, privacy and review gates.
 
 ### 2.3 First play and the next day
 
+**Human acceptance: green, 26 October 2026.** The owner reports that the
+first-session and next-day playtests are complete, with players other than the
+owner observed on every supported device. See the
+[acceptance record](ReleaseReadiness/2.3-human-acceptance-2026-10-26.md).
+
 Observe newcomers, returning players and veterans through the first half-hour
 and a next-day return, using the [existing playtest protocol](BetaTesting.md#newcomer-and-veteran-playtests).
 Include children with a guardian and people unfamiliar with games where practical.

@@ -269,7 +269,14 @@ public struct GameFrontEnd {
         let groupGap: CGFloat = compact ? 12 : 24
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
-        let footerGrid = GameFooterGrid(actions: footer, columns: portraitPhone ? 1 : 3,
+        let requestedFooterColumns = portraitPhone ? 1 : 3
+        let minimumCaptionWidth = footer.map { action in
+            action.icon != nil ? 44 : (action.title.split(whereSeparator: \.isWhitespace).map {
+                GameTextLayout.width(of: String($0))
+            }.max() ?? 0) + (action.primary ? 48 : 24)
+        }.max() ?? 44
+        let fittingFooterColumns = max(1, Int((inner + gap) / (minimumCaptionWidth + gap)))
+        let footerGrid = GameFooterGrid(actions: footer, columns: min(requestedFooterColumns, fittingFooterColumns),
             spanSingleAction: true, alignTrailing: false)
         let footerCell = (inner - CGFloat(footerGrid.columns - 1) * gap) / CGFloat(footerGrid.columns)
         let heading = CGRect(x: x + 62, y: 22, width: boardWidth - 124, height: 44)

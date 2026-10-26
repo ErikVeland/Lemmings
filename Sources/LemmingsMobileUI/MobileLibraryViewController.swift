@@ -436,6 +436,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #endif
         guard let window, window.windowScene?.activationState == .foregroundActive else { return }
         deskClockWindow = window
+        if deskClockEntry.hinge != .unavailable { MobileSystemRegions.noteHinge(in: window) }
         deskClockEntry.observePose(in: window)
         deskClockEntry.check(self)
     }
