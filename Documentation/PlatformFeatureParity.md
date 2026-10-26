@@ -156,12 +156,14 @@ Least skills and Most saved, from direct runs only.
 
 Limits: the hosted service returns only rank, name and score for each entry.
 World therefore shows one score column. This device and This Mac also show
-cleared and three-star counts. More World columns need a server change. Game
-Center is enabled in the bundled catalogue for every TestFlight and
-development-signed build. Developer ID and ad-hoc Mac builds still switch it
-off, because Apple allows Game Center only with App Store, TestFlight or
-development signing. Not yet checked: rendered captures, live service data,
-physical devices and controller focus on Apple TV.
+cleared and three-star counts. More World columns need a server change. Mobile
+and TV staging now enables Game Center only when the exact iOS bundle and board
+catalogue have an Apple-verified activation record. The repository currently has
+a Mac activation record only, so iPhone, iPad, Duo and Apple TV candidate builds
+keep this service disabled. Developer ID and ad-hoc Mac builds also switch it
+off; App Store, TestFlight and development signing are the supported routes.
+Not yet checked: rendered captures, live service data, physical devices and
+controller focus on Apple TV.
 
 ## Validation and remaining acceptance
 

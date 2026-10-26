@@ -41,6 +41,8 @@ class IOSGameCenterTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             app = Path(directory) / 'App'
             app.mkdir()
+            source_catalogue = game_center.ROOT / 'Resources/GameCenter/leaderboards.json'
+            source_catalogue_before = source_catalogue.read_bytes()
             with patch.dict(content.os.environ, {}, clear=True):
                 content.copy_parity_resources(game_center.ROOT / 'Resources', app)
             self.assertFalse(json.loads((app / 'GameCenter/leaderboards.json').read_text())['enabled'])
@@ -51,4 +53,4 @@ class IOSGameCenterTests(unittest.TestCase):
             with patch.dict(content.os.environ, {'IOS_GAME_CENTER_ACTIVATION': str(file)}, clear=True):
                 content.copy_parity_resources(game_center.ROOT / 'Resources', app)
             self.assertTrue(json.loads((app / 'GameCenter/leaderboards.json').read_text())['enabled'])
-            self.assertFalse(json.loads((game_center.ROOT / 'Resources/GameCenter/leaderboards.json').read_text())['enabled'])
+            self.assertEqual(source_catalogue.read_bytes(), source_catalogue_before)

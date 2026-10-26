@@ -31,9 +31,10 @@ def copy_parity_resources(resources, app):
     if activation:
         from game_center import validate_activation
         validate_activation(activation, resources, os.environ.get("IOS_GAME_CENTER_BUNDLE_ID", "academy.glasscode.lemmings.ios"))
-        catalogue = app / "GameCenter/leaderboards.json"
+    catalogue = app / "GameCenter/leaderboards.json"
+    if catalogue.is_file():
         config = json.loads(catalogue.read_text())
-        config["enabled"] = True
+        config["enabled"] = bool(activation)
         catalogue.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n")
 
 
