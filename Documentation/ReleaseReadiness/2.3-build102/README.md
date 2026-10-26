@@ -17,16 +17,18 @@ guidance and the Hot Seat progress selector. The release notes are
 | Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
-| Universal Mac local app build | PASS; ad hoc signature verifies; arm64 and x86_64 |
+| Universal Mac local app preflight | PASS at `03818736`; ad hoc signature verifies; arm64 and x86_64 |
 | Release history and input checks | PASS |
-| Release script dry run | PASS; no build or upload performed |
+| Release script dry run at `0b349063` | PASS; live feed comparison unavailable because `origin/main` could not be fetched; no build or upload performed |
 
 The iOS and tvOS checks compile sources. They do not establish archive,
 provisioning, signing, store processing or physical-device acceptance.
 The Mac preflight app is in ignored `.build/2.3-build102-mac-preflight/`; it is
-ad hoc signed and is not a release package. Its first build attempt stopped on
-the sandboxed Swift module cache and hardware-thread query. The successful
-retry used an in-workspace module cache and `MUSIC_AAC_JOBS=2`.
+ad hoc signed and is not a release package. It was built before the audio-time
+fix at `b1dd685f`, so the universal app must be rebuilt from the final source
+before packaging. Its first build attempt stopped on the sandboxed Swift module
+cache and hardware-thread query. The successful preflight used an in-workspace
+module cache and `MUSIC_AAC_JOBS=2`.
 
 ## Affected engine checks
 
@@ -40,7 +42,8 @@ retry used an in-workspace module cache and `MUSIC_AAC_JOBS=2`.
 The existing build-100 NeoLemmix simulation/replay, Classic DOS replay and
 extra-skill checks remain applicable to unchanged source. The mechanical
 checks used the muted, offscreen runner. No physical-device listening run was
-performed.
+performed. `xcdevice list` reports only the Mac; CoreSimulator is unavailable
+in this session, so the Duo, iPad and Apple TV checks cannot run here.
 
 ## Open release gates
 
