@@ -284,6 +284,7 @@ extension MobileLibraryViewController {
                 }
             }
         } catch { notice = error.localizedDescription }
+        mobileRankings.community.refreshLevel(conditions: run.level.conditions)
         mobileRankings.completed(run.profileID, history: arcadeStore.records.trolley)
         return (details, nil)
     }

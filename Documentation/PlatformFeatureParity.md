@@ -130,6 +130,29 @@ also Classic-only across platforms.
 | Manual familiar-name entry on TV | Native contact-picker difference. Do not silently request broader contact access. |
 | Duo hinge-triggered clock versus ordinary clock routes elsewhere | Device-specific hardware trigger. The shared clock remains available through platform-appropriate entry points. |
 
+### Worldwide and level leaderboards — 26 October 2026
+
+Worldwide is one list. It ranks every shared player by the selected metric:
+Career stars, Levels cleared or Three-star levels. It does not depend on the
+last level played and does not split rewind runs into a separate view.
+
+Every level has its own list. It ranks every shared player by Most saved,
+Fastest clear, Fastest 100% or Least skills, from direct runs only. The result
+screen shows that list, its top three rows and every tied leader. Arrows (Mac)
+or the metric row (iPhone, iPad, Duo, Apple TV) change the metric. The list
+loads again after the player's own result is shared.
+
+| Platform | Worldwide list | Level list on result | Source check |
+| --- | --- | --- | --- |
+| Mac | Yes | Yes, Classic, L2, L3 | `LevelLeaderboardResultTests` renders all three engines, loaded and offline |
+| iPhone, iPad, Duo | Yes | Yes | `LevelLeaderboardPageTests` at 320–1194 pt; simulator build |
+| Apple TV | Yes | Yes | `LevelLeaderboardPageTests` at 1920 pt; simulator build |
+
+Limits: the result list shows no action replays; Worldwide no longer offers
+level action replays. Game Center boards are unchanged. Not yet checked: the
+hosted service returning shared rank 1 for ties, live service data, physical
+devices and controller focus on Apple TV.
+
 ## Validation and remaining acceptance
 
 Menu follow-up on the consolidated `feature/2.3` branch, 26 October 2026:

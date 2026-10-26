@@ -139,6 +139,17 @@ extension MobileLibraryViewController {
                      rules: "classic-dos-v1", total: snapshot.total, required: snapshot.required, conditions: conditions)
     }
 
+    /// The result screen's level leaderboard. Nil when the level has no ranked conditions.
+    func mobileLevelLeaderboard() -> (metric: String, lines: [String])? {
+        let community = mobileRankings.community
+        guard community.levelConditions != nil else { return nil }
+        let category = community.levelCategory
+        let rows = community.levelBoard?.entries.prefix(3).map { HostedLeaderboardText.row($0, category: category) } ?? []
+        let leaders = HostedLeaderboardText.leaders(community.levelBoard, category: category)
+        let lines = (leaders.map { [$0] } ?? []) + rows
+        return (category.title, lines.isEmpty ? (community.levelStatus.isEmpty ? [] : [community.levelStatus]) : lines)
+    }
+
     func rankingsPage(subtitle: String) -> GameFrontEnd.Page {
         let rankings = mobileRankings
         let community = rankings.provider == .community
@@ -148,9 +159,10 @@ extension MobileLibraryViewController {
             rows.append(.init("rankCategory", rankings.category.title, enabled: !busy))
             rows.append(.init("rankShare", L10n.text("Share records"), enabled: rankings.community.endpoint != nil,
                               selected: rankings.community.sharing(profiles.activeID)))
+            // Worldwide is one list of every shared player. Level rankings live on each level's result screen.
             for entry in rankings.community.board?.entries ?? [] {
-                rows.append(.init("rankReplay.\(entry.rank)", "#\(entry.rank)  \(entry.name)  " + rankings.category.score(entry.score),
-                                  enabled: (entry.replay || (entry.actionReplay == true && rankings.conditions != nil)) && !busy))
+                rows.append(.init("rankReplay.\(entry.rank)", HostedLeaderboardText.row(entry, category: rankings.category),
+                                  enabled: entry.replay && !busy))
             }
         } else {
             if let config = rankings.gameCenter.configuration {
@@ -191,9 +203,7 @@ extension MobileLibraryViewController {
         case "rankCommunity": rankings.provider = .community; rebuild()
         case "rankGameCenter": rankings.provider = .gameCenter; rebuild()
         case "rankCategory":
-            let available = HostedCategory.allCases.filter { $0.career || rankings.conditions != nil }
-            let index = available.firstIndex(of: rankings.category) ?? 0
-            rankings.category = available[(index + 1) % available.count]; refreshRankings()
+            rankings.category = rankings.category.next(); refreshRankings()
         case "rankShare":
             rankings.community.setSharing(!rankings.community.sharing(profiles.activeID), profile: profiles.activeID); rebuild()
         case "rankRefresh": refreshRankings()
@@ -204,12 +214,6 @@ extension MobileLibraryViewController {
             }
             guard id.hasPrefix("rankReplay."), let rank = Int(id.dropFirst(11)),
                   let entry = rankings.community.board?.entries.first(where: { $0.rank == rank }) else { return false }
-            if entry.actionReplay == true, let conditions = rankings.conditions {
-                rankings.community.playbackActions(entry, conditions: conditions) { [weak self] replay, title in
-                    self?.showRankedActionReplay(replay, title: title)
-                }
-                return true
-            }
             rankings.community.playback(entry) { [weak self] file, _ in
                 guard let self else { return }
                 do {
@@ -252,7 +256,7 @@ extension MobileLibraryViewController {
     func refreshRankings(boardID: String? = nil) {
         let rankings = mobileRankings
         if rankings.provider == .community {
-            rankings.community.refresh(conditions: rankings.conditions, category: rankings.category, assisted: false)
+            rankings.community.refresh(conditions: nil, category: rankings.category, assisted: false)
         } else if let config = rankings.gameCenter.configuration {
             let board = boardID ?? rankings.gameCenter.boardID ?? config.starsID
             if rankings.gameCenter.account == nil {

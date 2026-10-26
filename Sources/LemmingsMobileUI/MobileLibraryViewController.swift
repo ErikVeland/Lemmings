@@ -1821,6 +1821,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
             next.onResultRewards = { [weak self] in self?.mobileResultRewards(runID: attemptID) ?? [] }
+            next.onLevelLeaderboard = { [weak self] in self?.mobileLevelLeaderboard() }
+            next.onLevelLeaderboardMetric = { [weak self] in
+                guard let community = self?.mobileRankings.community else { return }
+                community.refreshLevel(conditions: community.levelConditions, category: community.levelCategory.next())
+            }
+            mobileRankings.community.onLevelChange = { [weak next] in next?.refreshLevelLeaderboard() }
             next.onHandover = { [weak self] player in self?.handOver(to: player) ?? false }
             next.onCompleted = { [weak self] snapshot in
                 guard let self else { return }

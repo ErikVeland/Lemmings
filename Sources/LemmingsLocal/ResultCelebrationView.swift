@@ -111,8 +111,35 @@ import NxlvKit
             }
         }
         resultActions(y: resultActionsY)
+        let board = drawResultLevelLeaderboard(run)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
-        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Enter: \(primaryResultTitle). R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns."))
+        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. \(board)Enter: \(primaryResultTitle). R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns."))
+    }
+    /// One worldwide ranking for this level, with every tied leader named. Returns its spoken summary.
+    private func drawResultLevelLeaderboard(_ run: ArcadeRun) -> String {
+        guard let conditions = run.level.conditions else { return "" }
+        let service = HostedRankings.shared, y = resultLeaderboardY
+        if service.levelConditions != conditions {
+            service.onLevelChange = { [weak self] in self?.needsDisplay = true }
+            service.refreshLevel(conditions: conditions)
+        }
+        let category = service.levelCategory
+        GameStyle.fill(CGRect(x: 80, y: y, width: 960, height: Self.resultLeaderboardHeight), GameStyle.accent.withAlphaComponent(0.065))
+        button("‹", CGRect(x: 92, y: y + 8, width: 52, height: 36), enabled: !service.levelBusy) {
+            service.refreshLevel(conditions: conditions, category: category.next(-1))
+        }
+        text(L10n.text("LEVEL LEADERBOARD") + "  " + category.title.uppercased(), 156, y + 14, 808,
+             alignment: .center, height: 24, palette: .green)
+        button("›", CGRect(x: 976, y: y + 8, width: 52, height: 36), enabled: !service.levelBusy) {
+            service.refreshLevel(conditions: conditions, category: category.next())
+        }
+        let leaders = HostedLeaderboardText.leaders(service.levelBoard, category: category)
+        if let leaders { text(leaders, 96, y + 54, 928, height: 24, palette: .green) }
+        let rows = service.levelBoard?.entries.prefix(3).map { HostedLeaderboardText.row($0, category: category) } ?? []
+        for (index, row) in rows.enumerated() { text(row, 96, y + 88 + CGFloat(index * 26), 928, height: 24) }
+        if rows.isEmpty { text(service.levelStatus, 96, y + 88, 928, height: 24, alpha: 0.8) }
+        return ([L10n.text("Level leaderboard, \(category.title).")] + (leaders.map { [$0 + "."] } ?? [])
+            + rows.map { $0 + "." } + (rows.isEmpty && !service.levelStatus.isEmpty ? [service.levelStatus] : [])).joined(separator: " ") + " "
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: resultCardsY, width: 466, height: 116)

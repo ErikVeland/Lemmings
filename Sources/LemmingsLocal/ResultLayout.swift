@@ -48,9 +48,12 @@ import NxlvKit
         let hasReviewRow = cleared || onLater == nil || nextSessionPlayer != nil || offersSkip
         return resultCardsY + (hasReviewRow ? 220 : 168)
     }
+    /// The level leaderboard sits below the result actions so the outcome and next step stay first.
+    var resultLeaderboardY: CGFloat { resultActionsY + 66 }
+    static let resultLeaderboardHeight: CGFloat = 168
     var pageContentHeight: CGFloat {
         switch mode {
-        case .result: return resultActionsY + 86
+        case .result: return resultLeaderboardY + Self.resultLeaderboardHeight + 38
         case .earnedRewards: return earnedRewardsFooterY + 86
         case .achievement: return achievementFooterY + 86
         default: return 720

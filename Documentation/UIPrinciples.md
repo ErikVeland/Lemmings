@@ -788,6 +788,12 @@ caused by a Nuke skill, so do not label losses as nukes. Best times shows the
 fastest qualifying direct result for each recorded level. Rewind results stay in
 Records and remain separate from direct rankings.
 
+## Worldwide and level leaderboards
+
+Worldwide shows one ranked list of all shared players for one metric. A level
+result shows that level's ranked list below the result actions, with every tied
+leader named. Keep the outcome and next action above it.
+
 ## Records level browsing and music notices
 
 Records Previous/Next follows the current campaign or pack order, including

@@ -6,7 +6,7 @@ import NxlvKit
 @MainActor extension ArcadeView {
     func openWorldwideBoard() {
         usesGameCenter = false; boardScope = .worldwide; hostedPage = 0
-        if level?.conditions == nil { hostedCategory = .stars }
+        if !hostedCategory.career { hostedCategory = .stars }
         page(.records)
         HostedRankings.shared.onChange = { [weak self] in self?.needsDisplay = true }
         HostedRankings.shared.onSyncComplete = { [weak self] in self?.refreshHostedBoard() }
@@ -15,24 +15,22 @@ import NxlvKit
     }
     func refreshHostedBoard() {
         guard boardScope == .worldwide, !usesGameCenter else { return }
-        HostedRankings.shared.refresh(conditions: level?.conditions, category: hostedCategory, assisted: assisted, page: hostedPage)
+        // Worldwide is one list of every shared player. Level rankings live on each level's result screen.
+        HostedRankings.shared.refresh(conditions: nil, category: hostedCategory, assisted: false, page: hostedPage)
     }
     func drawWorldwideBoard() {
         if usesGameCenter { drawGameCenterBoard(); return }
         header(L10n.text("Worldwide leaderboard")); tabs(); boardScopeLinks()
         let service = HostedRankings.shared
-        let choices = HostedCategory.allCases.filter { $0.career || level?.conditions != nil }
-        let index = choices.firstIndex(of: hostedCategory) ?? 0
         button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
             guard let self else { return }
-            hostedCategory = choices[(index + choices.count - 1) % choices.count]; hostedPage = 0; refreshHostedBoard()
+            hostedCategory = hostedCategory.next(-1); hostedPage = 0; refreshHostedBoard()
         }
         text(hostedCategory.title, 153, 218, 520)
         button("›", CGRect(x: 687, y: 212, width: 66, height: 44)) { [weak self] in
             guard let self else { return }
-            hostedCategory = choices[(index + 1) % choices.count]; hostedPage = 0; refreshHostedBoard()
+            hostedCategory = hostedCategory.next(); hostedPage = 0; refreshHostedBoard()
         }
-        rewindFilter()
         text(L10n.text("RANK"), 80, 273, 130); text(L10n.text("PLAYER"), 230, 273, 240)
         text(L10n.text("RESULT"), 495, 273, 250); text(L10n.text("REPLAY"), 780, 273, 270)
         if let board = service.board {
@@ -40,7 +38,7 @@ import NxlvKit
                 let y = CGFloat(306 + i * 47)
                 text("#\(row.rank)", 80, y, 130); text(row.name, 230, y, 240)
                 text(hostedCategory.score(row.score), 495, y, 250)
-                if row.actionReplay == true && (1...10).contains(row.rank) {
+                if row.actionReplay == true && (1...10).contains(row.rank) && level?.conditions != nil {
                     link(L10n.text("Play replay >"), CGRect(x: 780, y: y - 5, width: 270, height: 40), alignment: .left) { [weak self] in
                         service.playbackActions(row, conditions: self?.level?.conditions) { [weak self] replay, title in
                             guard let self, self.boardScope == .worldwide, self.level?.conditions == replay.conditions else { return }
@@ -79,9 +77,8 @@ import NxlvKit
             refreshHostedBoard()
         }
         pageFooter()
-        let rewinds = assisted ? L10n.text("used") : L10n.text("unused")
         let entries = service.board?.entries.map { L10n.text("Rank \($0.rank), \($0.name), \(hostedCategory.score($0.score)).") }.joined(separator: " ") ?? ""
-        setAccessibilityLabel(L10n.text("Worldwide community leaderboard. \(hostedCategory.title). Rewinds \(rewinds). \(service.status). \(entries)"))
+        setAccessibilityLabel(L10n.text("Worldwide community leaderboard. \(hostedCategory.title). \(service.status). \(entries)"))
     }
 }
 #endif

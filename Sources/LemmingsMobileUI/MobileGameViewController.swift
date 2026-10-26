@@ -62,6 +62,10 @@ typealias MobileGameControllerBase = UIViewController
     private let achievementCanvas = MobileMenuCanvas()
     private var showsSplitResult = false
     var onResultAwards: (() -> (stars: Int, ornament: Bool))?
+    /// This level's worldwide leaderboard: the metric title and its leader and top rows.
+    var onLevelLeaderboard: (() -> (metric: String, lines: [String])?)?
+    var onLevelLeaderboardMetric: (() -> Void)?
+    private var leaderboardLineCount = 0
     private var celebrationTask: Task<Void, Never>?
     var onRecordCompletion: ((MobileGameSnapshot) -> (details: [String], error: String?))?
     var onHints: (() -> Void)?
@@ -106,6 +110,21 @@ typealias MobileGameControllerBase = UIViewController
         showCustomOverlay(title: award.title, details: [award.detail], reading: true, actions: actions)
     }
 
+    /// Replace the leaderboard lines and metric switch on the result page when the board loads or changes.
+    func refreshLevelLeaderboard() {
+        guard !overlay.isHidden, overlayCanvas.page.result else { return }
+        applyLevelLeaderboard(); layoutOverlay()
+    }
+    private func applyLevelLeaderboard() {
+        var page = overlayCanvas.page
+        page.details = Array(page.details.dropLast(leaderboardLineCount))
+        page.rows.removeAll { $0.id == "levelBoardMetric" }
+        if let board = onLevelLeaderboard?() {
+            page.details += board.lines; leaderboardLineCount = board.lines.count
+            page.rows.append(.init("levelBoardMetric", L10n.text("Level leaderboard: \(board.metric)")))
+        } else { leaderboardLineCount = 0 }
+        overlayCanvas.page = page
+    }
     private func updateResultAchievements() {
         achievementTask?.cancel(); achievementTask = nil
         guard !showsSplitResult else { return }
@@ -2038,6 +2057,7 @@ typealias MobileGameControllerBase = UIViewController
         overlay.addSubview(overlayCanvas)
         overlayCanvas.onAction = { [weak self] id in
             if id == "resultAward" { self?.showResultAchievement(); return }
+            if id == "levelBoardMetric" { self?.onLevelLeaderboardMetric?(); return }
             guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
             self.overlayActions[index]()
         }
@@ -2440,6 +2460,8 @@ typealias MobileGameControllerBase = UIViewController
         if completed {
             overlayCanvas.page.detailHeadings = [0]
             updateResultAchievements()
+            leaderboardLineCount = 0
+            applyLevelLeaderboard()
         }
         let isPause = pauseOverview && !ready && !completed
         if isPause {

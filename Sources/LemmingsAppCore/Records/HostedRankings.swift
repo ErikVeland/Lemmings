@@ -23,9 +23,11 @@ public struct HostedBoard: Codable, Equatable {
     public init(entries: [Entry], page: Int, hasMore: Bool, verification: String) {
         self.entries = entries; self.page = page; self.hasMore = hasMore; self.verification = verification
     }
+    /// Rank 1 can be shared. Every tied first-place entry leads.
+    public var leaders: [Entry] { page == 0 ? entries.filter { $0.rank == 1 } : [] }
 }
 
-public enum HostedCategory: String, CaseIterable {
+public enum HostedCategory: String, CaseIterable, Sendable {
     case fastestClear, fastestAllSaved, mostSaved, leastSkills, stars, clears, perfect
     public var title: String {
         switch self {
@@ -39,10 +41,35 @@ public enum HostedCategory: String, CaseIterable {
         }
     }
     public var career: Bool { [.stars, .clears, .perfect].contains(self) }
+    /// Worldwide ranks every shared player once across all levels.
+    public static let worldwide: [HostedCategory] = [.stars, .clears, .perfect]
+    /// Each level ranks every shared player once by their best direct run on that level.
+    public static let level: [HostedCategory] = [.mostSaved, .fastestClear, .fastestAllSaved, .leastSkills]
+    /// The next metric in the same leaderboard kind, wrapping at the end.
+    public func next(_ offset: Int = 1) -> HostedCategory {
+        let list = career ? Self.worldwide : Self.level
+        let index = list.firstIndex(of: self) ?? 0
+        return list[((index + offset) % list.count + list.count) % list.count]
+    }
     @MainActor public func score(_ value: Int) -> String {
         let seconds = Double(value) / 1000
         return [.fastestClear, .fastestAllSaved].contains(self)
             ? String(format: "%d:%05.2f", Int(seconds) / 60, seconds.truncatingRemainder(dividingBy: 60)) : String(value)
+    }
+}
+
+/// Shared row text for both leaderboard kinds, so every platform reads the same list.
+public enum HostedLeaderboardText {
+    @MainActor public static func row(_ entry: HostedBoard.Entry, category: HostedCategory) -> String {
+        "#\(entry.rank)  \(entry.name)  " + category.score(entry.score)
+    }
+    /// One line naming the current leader or tied leaders. Nil when nobody has shared a result.
+    @MainActor public static func leaders(_ board: HostedBoard?, category: HostedCategory) -> String? {
+        guard let board, let first = board.leaders.first else { return nil }
+        let names = board.leaders.map(\.name).joined(separator: ", ")
+        return board.leaders.count == 1
+            ? L10n.text("Leader: \(names)  \(category.score(first.score))")
+            : L10n.text("Leaders: \(names)  \(category.score(first.score))")
     }
 }
 
@@ -75,6 +102,14 @@ public enum HostedCategory: String, CaseIterable {
     public private(set) var status = ""
     public private(set) var syncStatus = ""
     private var requestID = UUID()
+    /// The level leaderboard loads beside the worldwide board, so a result screen never clears it.
+    public var onLevelChange: (() -> Void)?
+    public private(set) var levelBoard: HostedBoard?
+    public private(set) var levelConditions: TrolleyConditions?
+    public private(set) var levelBusy = false
+    public private(set) var levelStatus = ""
+    public private(set) var levelCategory = HostedCategory.mostSaved
+    private var levelRequestID = UUID()
     private var submitted: Set<UUID> = []
     private var actions: Set<UUID> = []
     private var pending: Set<String> = []
@@ -206,6 +241,30 @@ public enum HostedCategory: String, CaseIterable {
             busy = false; onChange?()
         }
     }
+    /// Load one level's ranking. Direct runs only, first page, so rank 1 is always present.
+    public func refreshLevel(conditions: TrolleyConditions?, category: HostedCategory? = nil) {
+        if let category, !category.career { levelCategory = category }
+        levelRequestID = UUID(); let ticket = levelRequestID
+        levelConditions = conditions; levelBoard = nil
+        guard let conditions else { levelBusy = false; levelStatus = ""; onLevelChange?(); return }
+        levelBusy = true; levelStatus = L10n.text("Loading..."); onLevelChange?()
+        let board = levelCategory
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let request = try self.request("/v1/boards?board=\(board.rawValue)&assisted=0&page=0&conditions=\(conditions.fingerprint)")
+                let (data, response) = try await transport.data(for: request)
+                try checked(response)
+                let loaded = try JSONDecoder().decode(HostedBoard.self, from: data)
+                guard ticket == levelRequestID else { return }
+                levelBoard = loaded; levelStatus = loaded.entries.isEmpty ? L10n.text("No shared records yet.") : ""
+            } catch {
+                guard ticket == levelRequestID else { return }
+                levelStatus = L10n.text("Offline. Local records are saved.")
+            }
+            levelBusy = false; onLevelChange?()
+        }
+    }
     public func completed(profileID: String) {
         retryRemovals()
         guard networkEnabled, endpoint != nil, sharing(profileID) else { return }
@@ -214,7 +273,11 @@ public enum HostedCategory: String, CaseIterable {
         syncing = true
         Task { [weak self] in
             guard let self else { return }
-            defer { syncing = false; retryRemovals(); onSyncComplete?(); onChange?() }
+            defer {
+                syncing = false; retryRemovals(); onSyncComplete?(); onChange?()
+                // A just-shared result must appear on the level board that the result screen shows.
+                if let conditions = levelConditions { refreshLevel(conditions: conditions) }
+            }
             while let profile = pending.first {
                 pending.remove(profile)
                 guard sharing(profile), let player = recordsStoreProvider().records.profile(profile) else { continue }
