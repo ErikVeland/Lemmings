@@ -1,0 +1,52 @@
+# 2.3 build 102 release candidate
+
+Status: **blocked; no platform package or submission recorded**.
+
+Candidate source: `038187364` on `main`  
+Release base: `v2.2.2`  
+Platform build numbers: Mac 102, iPhone/iPad/Duo 36, Apple TV 15
+
+Build 102 contains the centered main-menu logo, optical background-corner
+guidance and the Hot Seat progress selector. The release notes are
+[`ReleaseNotes-2.3-build102.md`](../../ReleaseNotes-2.3-build102.md).
+
+## Source and UI checks
+
+| Check | Result |
+| --- | --- |
+| Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
+| iOS SDK module and application-entry compile | PASS |
+| tvOS SDK module and application-entry compile | PASS |
+| Release history and input checks | PASS |
+| Release script dry run | PASS; no build or upload performed |
+
+The iOS and tvOS checks compile sources. They do not establish archive,
+provisioning, signing, store processing or physical-device acceptance.
+
+## Affected engine checks
+
+| Check | Result |
+| --- | --- |
+| Hot Seat ghost | BLOCKED; headless process exited 134 after starting the runner, with no diagnostic output |
+| Music rewind | FAIL in headless environment; PCM and rewind-source checks passed, then Core Audio threw while creating `AVAudioUnitEQ` |
+| Save recovery | PASS after directing the Swift module cache to `/private/tmp` |
+
+The existing build-100 NeoLemmix simulation/replay, Classic DOS replay and
+extra-skill checks remain applicable to unchanged source. No audible test was
+run. The mechanical checks used the muted, offscreen runner where supported.
+
+## Open release gates
+
+- The reported crackling remains a release blocker on Duo, iPad 8th generation
+  and Apple TV 4K. The 2.3 audio assessment says there is no clean-device
+  acceptance and that muted checks cannot close this gate. See
+  [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
+- Apple notarization and App Store credentials are unavailable in the current
+  keychain state. The `lemmings-beta` notary profile was not found; no Apple
+  Distribution identity was present during the earlier release check. No
+  package was signed, notarized or uploaded.
+- Sustained optimized-package performance and physical-device recovery/input
+  acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
+
+The candidate is prepared for review, but publication must wait for these gates
+and the required signed package and feed/store verification for each platform.
