@@ -1,13 +1,14 @@
 # Release notes
 
-## Current build candidate
-
-The current source version is **2.3** (Mac build 100, iOS build 34, tvOS build 13). Read the
-[complete 2.3 candidate notes](ReleaseNotes-2.3-build100.md). These notes cover
-the consolidated work since 2.2.2 and must stay current with the source selected
-for a build.
-
 ## Latest published release
+
+Mac 2.3 build 100 is in release. See the
+[complete 2.3 notes](ReleaseNotes-2.3-build100.md) and
+[release record](ReleaseReadiness/2.3-build100/README.md).
+Mac notarisation, iOS/tvOS TestFlight submission and AltStore Classic source
+update are in progress. See the release record for delivery state.
+
+## Previous release
 
 Mac 2.2.2 build 99 is available. Its
 [release record](ReleaseReadiness/2.2.2-build99/README.md) records the notarised
