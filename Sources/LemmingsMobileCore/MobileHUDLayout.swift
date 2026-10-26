@@ -445,7 +445,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let navigationCount = supportsRewind ? 3 : 1
         let navigationGaps = Double(navigationCount - 1) * 4
         let columnNavigation = !vertical && navigationHeight >= Double(navigationCount) * 44 + navigationGaps
-        let navigationWidth = vertical ? leading.width : columnNavigation ? 64 : floor(leading.width * 0.42)
+        let minimumNavigationWidth = Double(navigationCount) * 44 + navigationGaps
+        let navigationWidth = vertical ? leading.width : columnNavigation ? 64
+            : min(leading.width - 48, minimumNavigationWidth)
         let navigationCell = columnNavigation ? navigationWidth
             : (navigationWidth - navigationGaps) / Double(navigationCount)
         let navigationButtonHeight = columnNavigation

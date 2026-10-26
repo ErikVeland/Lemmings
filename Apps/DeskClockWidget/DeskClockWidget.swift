@@ -150,7 +150,11 @@ struct DeskClockWidget: Widget {
         #if os(iOS)
         [.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular]
         #else
-        [.systemSmall, .systemMedium, .systemLarge]
+        if #available(macOS 14.0, *) {
+            [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
+        } else {
+            [.systemSmall, .systemMedium, .systemLarge]
+        }
         #endif
     }
 }
