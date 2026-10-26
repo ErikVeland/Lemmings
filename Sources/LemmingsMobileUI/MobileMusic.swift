@@ -31,6 +31,12 @@ import AVFAudio
     private var compositionID: String?
     /// One main theme plays on the library menus for the whole launch.
     private var menuTheme: MenuThemeSelection.Choice?
+    /// Launch loads art, saves and sync on many threads at once. A first theme
+    /// started during that burst underruns its render thread and crackles.
+    private static let launchSettleSeconds = 1.5
+    private var launchSettled = false
+    private var launchSettleTask: Task<Void, Never>?
+    private var requestedMenu = (visible: false, active: false)
     private var menuKey: String { "menu|" + soundtrack }
     private(set) var currentTrackTitle: String?
     private(set) var currentSoundtrackName: String?
@@ -127,6 +133,7 @@ import AVFAudio
 
     /// Plays the main theme while the library shows and no level is open.
     func setMenu(visible: Bool, active: Bool) {
+        requestedMenu = (visible, active)
         applySettings()
         guard visible, isEnabled, settings.classic.menuMusic, settings.classic.musicVolume > 0, !isTestAudioMuted else {
             if playing == menuKey { stop() }
@@ -135,6 +142,18 @@ import AVFAudio
         if playing == menuKey { active ? resume() : suspend(); return }
         // A level's attempt owns the decks until it exits and stops them.
         guard active, playing == nil else { return }
+        guard launchSettled else {
+            guard launchSettleTask == nil else { return }
+            launchSettleTask = Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: UInt64(Self.launchSettleSeconds * 1_000_000_000))
+                guard let self else { return }
+                self.launchSettled = true
+                self.launchSettleTask = nil
+                // Use the latest library state: a level or the clock may have opened meanwhile.
+                self.setMenu(visible: self.requestedMenu.visible, active: self.requestedMenu.active)
+            }
+            return
+        }
         let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: macintoshMusic != nil,
             otherVersions: musicRoot.map(MenuThemeSelection.otherVersions(at:)) ?? [])
         menuTheme = theme
