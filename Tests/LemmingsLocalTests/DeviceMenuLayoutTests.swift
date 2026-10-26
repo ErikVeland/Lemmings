@@ -210,7 +210,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
         }
     }
 
-    func testHomeLibrarySpacingSequelRowAndThreeColumnFooter() {
+    func testHomeLibrarySpacingSequelRowAndBalancedFooter() {
         let libraries = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Library \($0) 0/120") }
             + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         for size in [CGSize(width: 1194, height: 834), .init(width: 834, height: 1194), .init(width: 740, height: 430)] {
@@ -224,9 +224,12 @@ final class DeviceMenuLayoutTests: XCTestCase {
             let sequels = layout.targets.filter { $0.action.gameLogo != nil }
             XCTAssertEqual(sequels.count, 2)
             XCTAssertTrue(sequels.allSatisfy { $0.frame.minY > grid.last!.frame.maxY && $0.frame.height == 112 })
-            let footer = layout.targets.filter { ["players", "records", "collections"].contains($0.action.id) }
-            XCTAssertEqual(footer.count, 3)
-            XCTAssertEqual(Set(footer.map { $0.frame.minY }).count, 1)
+            // Four footer actions balance as two full rows of two, not three over one.
+            let footer = layout.targets.filter { ["players", "records", "collections", "donate"].contains($0.action.id) }
+            XCTAssertEqual(footer.count, 4)
+            let footerRows = Dictionary(grouping: footer, by: { $0.frame.minY })
+            XCTAssertEqual(footerRows.count, 2)
+            XCTAssertTrue(footerRows.values.allSatisfy { $0.count == 2 && abs($0[0].frame.width - $0[1].frame.width) < 0.01 })
             for target in layout.targets {
                 XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
             }

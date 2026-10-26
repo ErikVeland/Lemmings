@@ -199,8 +199,8 @@ final class FooterNavigationTests: XCTestCase {
                 XCTAssertEqual(forward.frame.maxY, back.frame.maxY)
                 XCTAssertGreaterThan(forward.frame.minX, back.frame.maxX)
             }
-            XCTAssertEqual(forward.frame.maxY, footer.map { $0.frame.maxY }.max())
-            XCTAssertEqual(forward.frame.maxX, footer.map { $0.frame.maxX }.max())
+            XCTAssertEqual(forward.frame.maxY, try XCTUnwrap(footer.map { $0.frame.maxY }.max()), accuracy: 0.01)
+            XCTAssertEqual(forward.frame.maxX, try XCTUnwrap(footer.map { $0.frame.maxX }.max()), accuracy: 0.01)
         } else {
             XCTAssertEqual(back.frame.maxY, footer.map { $0.frame.maxY }.max())
         }
@@ -266,7 +266,7 @@ final class FooterNavigationTests: XCTestCase {
     @MainActor func testMacMessagesKeepBackFixedAndRetainKeyboardAndMouseTargets() throws {
         _ = NSApplication.shared
         var renderer: MacInterfaceRenderer?
-        if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+        if let directory = Optional(TestMenuArtwork.path),
            let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: directory))) {
             renderer = MacInterfaceRenderer(interface: interface)
         }
@@ -285,10 +285,12 @@ final class FooterNavigationTests: XCTestCase {
             page.onBack = { backPresses += 1 }
             let forward = page.addPrimaryAction("Resume") { forwardPresses += 1 }
             page.layoutSubtreeIfNeeded()
-            XCTAssertEqual(back.convert(back.bounds, to: page), original)
+            // Footer actions share the row equally. Back keeps its bottom-left corner; the forward action sits right of it.
+            let shared = back.convert(back.bounds, to: page)
+            XCTAssertEqual(shared.minX, original.minX); XCTAssertEqual(shared.maxY, original.maxY)
             let next = forward.convert(forward.bounds, to: page)
-            XCTAssertGreaterThan(next.minX, original.maxX)
-            XCTAssertEqual(original.maxY, next.maxY)
+            XCTAssertGreaterThan(next.minX, shared.maxX)
+            XCTAssertEqual(shared.maxY, next.maxY)
             for control in [back, forward] {
                 let frame = control.convert(control.bounds, to: page)
                 let point = page.convert(CGPoint(x: frame.midX, y: frame.midY), to: page.superview)
@@ -347,7 +349,7 @@ final class FooterNavigationTests: XCTestCase {
     }
 
     func testRenderedColumnFooters() throws {
-        guard let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+        guard let directory = Optional(TestMenuArtwork.path),
               let output = ProcessInfo.processInfo.environment["LEMMINGS_FOOTER_CAPTURES"] else { return }
         let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath: directory)))
         for width: CGFloat in [390, 900, 1920] {

@@ -69,7 +69,15 @@ public struct RunRecovery: Codable, Sendable {
         self.extraSkillUse = extraSkillUse
     }
 
-    public static let bundledEngine: String = engineFingerprint(resources: AppStorage.current().resources)
+    public static let bundledEngine: String = {
+        let bundled = engineFingerprint(resources: AppStorage.current().resources)
+        guard bundled.isEmpty else { return bundled }
+        // `swift test` runs inside a tool bundle without app resources. Read this checkout's file instead.
+        // Shipped apps always bundle the file, and this source path does not exist on players' devices.
+        return engineFingerprint(resources: URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("Resources"))
+    }()
     /// Shipped engines whose recorded actions still replay on this one: 2.1.2 and 2.2 to 2.2.2.
     /// Action replays still check their final state, so a replay that diverges is rejected.
     static let earlierCompatibleEngines: Set<String> = [

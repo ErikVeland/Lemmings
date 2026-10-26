@@ -26,7 +26,7 @@ final class LemmingInspectionPageTests: XCTestCase {
         let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
             .deletingLastPathComponent().appendingPathComponent(".build/inspection-hover-renders")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        let artworkPath = try XCTUnwrap(ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"])
+        let artworkPath = TestMenuArtwork.path
         let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: artworkPath))
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
         for size in [CGSize(width: 640, height: 480), CGSize(width: 900, height: 620), CGSize(width: 1120, height: 720)] {
@@ -110,7 +110,7 @@ final class LemmingInspectionPageTests: XCTestCase {
     @MainActor func testInspectionSettingRendersAndTogglesFromCaptionAndBox() throws {
         _ = NSApplication.shared
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let artworkPath = try XCTUnwrap(ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"])
+        let artworkPath = TestMenuArtwork.path
         let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: artworkPath))
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
         try GameMenuArtwork.withRenderer(renderer) {
@@ -172,7 +172,7 @@ final class LemmingInspectionPageTests: XCTestCase {
             .deletingLastPathComponent().appendingPathComponent(".build/inspection-renders")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         var renderer: MacInterfaceRenderer?
-        if let path = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+        if let path = Optional(TestMenuArtwork.path),
            let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: path))) {
             renderer = MacInterfaceRenderer(interface: interface)
         }
@@ -250,7 +250,7 @@ final class LemmingInspectionPageTests: XCTestCase {
                 XCTAssertEqual(try initial.inspectionHash(), before)
             }
             let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath:
-                ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"] ?? "", isDirectory: true)))
+                TestMenuArtwork.path, isDirectory: true)))
             for size in [CGSize(width: 320, height: 568), CGSize(width: 390, height: 844),
                          CGSize(width: 844, height: 390), CGSize(width: 1024, height: 768), CGSize(width: 1920, height: 1080)] {
                 let page = LemmingInspectionArt.page(snapshot)

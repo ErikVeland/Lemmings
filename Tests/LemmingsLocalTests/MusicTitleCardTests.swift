@@ -186,7 +186,7 @@ final class MusicTitleCardTests: XCTestCase {
     }
 
     func testRenderedCreditsAtMacPhoneTabletAndTVSizes() throws {
-        guard let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+        guard let directory = Optional(TestMenuArtwork.path),
               let output = ProcessInfo.processInfo.environment["LEMMINGS_MUSIC_CARD_CAPTURES"] else { return }
         try FileManager.default.createDirectory(at: URL(fileURLWithPath: output), withIntermediateDirectories: true)
         let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath: directory)))

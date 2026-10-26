@@ -17,7 +17,7 @@ final class FamiliarNamesPageTests: XCTestCase {
         let store = FamiliarNamesStore(directory: root)
         try store.replace(with: ["Sarah", "Alex"])
         _ = try store.names(for: "retained")
-        let artworkURL = URL(fileURLWithPath: try XCTUnwrap(ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"]))
+        let artworkURL = URL(fileURLWithPath: TestMenuArtwork.path)
         let typography = try XCTUnwrap(GameMenuTypography(directory: artworkURL))
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: artworkURL))))
         let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()

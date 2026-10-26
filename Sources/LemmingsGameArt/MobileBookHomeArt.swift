@@ -52,7 +52,8 @@ public enum MobileBookHomeArt {
         } ?? 0
         let measuredLeft = rows(Array(page.rows.prefix(split)), in: left).bottom + footerSpace
         let measuredRight = rows(Array(page.rows.dropFirst(split)), in: right).bottom + 24
-        let logoGrowth = min(max(0, height - max(measuredLeft, measuredRight)),
+        // Grow the logo only into space left after the bottom padding that contentHeight adds back.
+        let logoGrowth = min(max(0, height - bottomPadding - max(measuredLeft, measuredRight)),
             max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height))
         heading.size.height += logoGrowth
         subtitle.origin.y += logoGrowth

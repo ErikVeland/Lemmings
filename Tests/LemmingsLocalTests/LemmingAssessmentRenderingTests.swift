@@ -22,7 +22,7 @@ final class LemmingAssessmentRenderingTests: XCTestCase {
         let snapshot = try LemmingInspection(initial: .lemmings3(initial), current: .lemmings3(current), commands: [])
         XCTAssertEqual(snapshot.individuals.count, 128)
         XCTAssertEqual(Set(snapshot.individuals.map { $0.preference + " " + $0.want }).count, 128)
-        let path = try XCTUnwrap(ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"])
+        let path = TestMenuArtwork.path
         let artworkURL = URL(fileURLWithPath: path)
         let typography = try XCTUnwrap(GameMenuTypography(directory: artworkURL))
         let renderer = MacInterfaceRenderer(interface: try XCTUnwrap(

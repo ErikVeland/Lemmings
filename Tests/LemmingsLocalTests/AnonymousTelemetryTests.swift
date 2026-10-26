@@ -479,7 +479,7 @@ final class AnonymousTelemetryTests: XCTestCase {
                 try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
                     .write(to: URL(fileURLWithPath: path + suffix + ".png"))
             }
-            if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+            if let directory = Optional(TestMenuArtwork.path),
                let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: directory))) {
                 try GameMenuArtwork.withRenderer(MacInterfaceRenderer(interface: interface)) {
                     try capture("")
@@ -597,7 +597,7 @@ final class AnonymousTelemetryTests: XCTestCase {
                 try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
                     .write(to: URL(fileURLWithPath: path))
             }
-            if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+            if let directory = Optional(TestMenuArtwork.path),
                let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: directory))) {
                 try GameMenuArtwork.withRenderer(MacInterfaceRenderer(interface: interface), capture)
             } else { try capture() }
@@ -623,7 +623,7 @@ final class AnonymousTelemetryTests: XCTestCase {
                     XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)),
                                    target.action.enabled ? target.action.id : nil)
                 }
-                if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+                if let directory = Optional(TestMenuArtwork.path),
                    let output = ProcessInfo.processInfo.environment["LEMMINGS_TELEMETRY_MOBILE_CAPTURES"] {
                     let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath: directory)))
                     let context = try XCTUnwrap(CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height),
@@ -702,7 +702,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         func buttons(in view: NSView) -> [NSButton] {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
-        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Share counts" })
+        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Share" })
         for control in [page.controllerBackButton, share] {
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect))

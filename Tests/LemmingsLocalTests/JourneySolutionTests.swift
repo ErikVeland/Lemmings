@@ -13,9 +13,10 @@ final class JourneySolutionTests: XCTestCase {
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: project.appendingPathComponent("Resources/Progression/learning.json")))
         XCTAssertFalse(journey.lessons.contains { $0.objective == "introduce:miner" })
+        // Tame 17 needs 25 of 50. Its witness saved all 50, but 2.3 places it by route demand, not by that witness.
         for lesson in journey.lessons where lesson.entry.levelNameSnapshot == "Honey, I Saved The Lemmings" {
-            XCTAssertGreaterThanOrEqual(lesson.demand, 360)
-            XCTAssertNotEqual(lesson.stage, .fun)
+            XCTAssertFalse(lesson.objective?.hasPrefix("introduce:") ?? false)
+            XCTAssertTrue(lesson.introduced.isEmpty)
         }
     }
 
