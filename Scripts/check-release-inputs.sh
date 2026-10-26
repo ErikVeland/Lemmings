@@ -23,6 +23,7 @@ done
 args=(--root "$project_dir")
 (( allow_empty )) && args+=(--allow-empty-appcast --allow-stale-appcast)
 python3 "$project_dir/Tools/ReleaseReadiness/automatic_updates.py" "${args[@]}"
+zsh "$project_dir/Scripts/check-release-history.sh"
 git -C "$project_dir" diff --check
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$project_dir/Resources/Info.plist")"
 # The What's New page is written by hand for each release.

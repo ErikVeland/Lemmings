@@ -95,7 +95,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var sceneIsActive = false
     private let activityObservers = MobileNotificationObserverBag()
     override var canBecomeFirstResponder: Bool { game == nil && !deskClockShown && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
-    private var store: MobileContentStore?
+    var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings2) != nil
     }
@@ -434,6 +434,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #endif
         guard let window, window.windowScene?.activationState == .foregroundActive else { return }
         deskClockWindow = window
+        if deskClockEntry.hinge != .unavailable { MobileSystemRegions.noteHinge(in: window) }
         deskClockEntry.observePose(in: window)
         deskClockEntry.check(self)
     }
@@ -739,8 +740,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             var resume: [GameFrontEnd.Action] = []
             let savedLevel = pendingCheckpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
             if let saved = savedLevel, !checkpointResumesLearningRun(saved) {
-                resume.append(.init("resume", L10n.text("Resume journey - \(playerName(saved.owner ?? profiles.activeID))")))
-            } else if catalogue != nil, let saved = resumableLearningRun {
+                resume.append(.init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))")))
+            }
+            if catalogue != nil, let saved = resumableLearningRun {
                 let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
                 resume.append(.init("learningRunResume", saved.resumeTitle + session))
             }
@@ -812,6 +814,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                          .init("next", L10n.text("Level >"), enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
                                          .init("favourite", isFavourite(selectedIndex) ? L10n.text("Remove favourite") : L10n.text("Add favourite"), selected: isFavourite(selectedIndex), icon: .favourite),
                                          .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
+                                    + (library is Lemmings2MobileLibrary || library is Lemmings3MobileLibrary ? [.init("originalMovies", L10n.text("Original movies"))] : [])
                                     + (library is Lemmings2MobileLibrary ? [.init("l2Practice", L10n.text("Practice"))] : [])
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
                                     + [.init("back", L10n.text("Back")),
@@ -1019,6 +1022,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if handleSettings(id) { return }
         switch id {
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
+        case "originalMovies": showOriginalMovies(); return
         case "l2":
             if hasLemmings2Data { openLemmings2() } else { navigate(.data) }
         case "l3":
@@ -1495,6 +1499,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
+        if let run = playlists.run, Lemmings2ShortPlayMobileLibrary.matches(run.entries),
+           checkpoint.matchesJourney(runID: run.id, position: run.position, levelIdentifier: checkpoint.levelIdentifier) {
+            openTribesShortRun(run, back: .collections, position: run.position, checkpoint: checkpoint, startImmediately: true)
+            return
+        }
         if checkpoint.engine == "lemmings2" {
             openLemmings2(at: checkpoint.levelIndex, checkpoint: checkpoint)
             return
@@ -1734,8 +1743,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }
                 if let sequence = library as? Lemmings2ShortPlayMobileLibrary, let run = self.activeRun {
                     do {
-                        if let progress = try sequence.record(session) {
-                            try self.collectionsBridge?.store.setL2Progress(progress, key: Lemmings2ShortPlayMobileLibrary.progressKey, runID: run.id)
+                        guard let bridge = self.collectionsBridge else { throw MobileSessionError.invalidCheckpoint }
+                        _ = try sequence.record(session) { progress in
+                            try bridge.store.setL2Progress(progress, key: Lemmings2ShortPlayMobileLibrary.progressKey, runID: run.id)
                         }
                     } catch { return ([], error.localizedDescription) }
                 }
@@ -1753,6 +1763,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let run = MobileGameResult.capture(id: attemptID, profileID: ownerID,
                     level: completedLevel, session: session)
                 return self.recordMobileCompletion(run, session: session, hotSeat: ghostSeat)
+            }
+            if ["lemmings2", "lemmings3"].contains(content.session.engineIdentifier),
+               let directory = store?.resolvedDataDirectory(for: content.session.engineIdentifier == "lemmings2" ? .lemmings2 : .lemmings3) {
+                let engine = content.session.engineIdentifier
+                next.onOriginalMovies = { [weak next] in
+                    guard let next else { return }
+                    next.pausePlay(showControls: true)
+                    next.present(MobileOriginalMediaController(engine: engine, directory: directory), animated: false)
+                }
             }
             next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }

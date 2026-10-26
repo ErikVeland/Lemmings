@@ -16,6 +16,8 @@ import NxlvKit
   static public let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
   private var player: MusicFileDeck?
+  public var audioDiagnostics: AudioBufferStatistics? { player?.audioDiagnostics }
+  public var lastPlaybackError: String? { player?.lastPlaybackError }
   public var sourceSeconds: Double { player?.sourceSeconds ?? 0 }
   public private(set) var currentURL: URL?
   private var resumeAfterSleep = false
@@ -186,6 +188,7 @@ import NxlvKit
       vinylRamp.run(.start, apply: { made.setVinyl(rate: $0, gain: $1) }) { made.setVinyl(rate: 1, gain: 1) }
     }
     made.play()
+    guard made.isPlaying else { currentURL = nil; return nil }
     currentURL = url
     return url.deletingPathExtension().lastPathComponent
   }

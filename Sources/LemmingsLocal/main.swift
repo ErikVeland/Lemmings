@@ -4991,6 +4991,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let originalRunID = store.activeRun?.id
     let reusesJourneySession = run.source == .playlist(LearningJourney.playlistID)
       && store.resumableLearningJourney(hotSeatID: originalHotSeatID) != nil
+    // The Golden Path joins the current Hot Seat. A new session ID would split one
+    // roster into a Classic session and a Journey session.
+    let continuesHotSeat = run.source == .playlist(LearningJourney.playlistID) && !reusesJourneySession
+      && arcade.hotSeatIsActive
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
@@ -5036,7 +5040,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
             resumeMusic: false)
-          if reusesJourneySession {
+          if reusesJourneySession || continuesHotSeat {
             // Map and revisit actions retain this roster, turn and session identity.
           } else if hotSeat {
             arcade.prepareHotSeat()
@@ -5061,6 +5065,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     if reusesJourneySession { begin(arcade.hotSeatIsActive, run); return }
+    if continuesHotSeat { begin(true, run); return }
     guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: L10n.text("Start a new session?"))
     page.setDetail(L10n.text("Your current session will stay saved."))
@@ -5608,8 +5613,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func resumeHomeSequence() {
-    guard allowNavigationAwayFromSequence(), let store = try? playlistStore(),
-      let run = store.activeRun else { return }
+    guard allowNavigationAwayFromSequence() else { return }
+    let store: LevelPlaylistStore
+    let run: LevelSequenceRun
+    do {
+      store = try playlistStore()
+      guard let saved = store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID) else { return }
+      if store.activeRun?.id != saved.run.id { try store.resumeRun(id: saved.run.id) }
+      run = saved.run
+    } catch {
+      GameScreen.shared.message(L10n.text("Run unavailable"), detail: error.localizedDescription)
+      return
+    }
     let owner = ArcadeStore.shared.records.activeProfileID
     let hotSeat = ArcadeStore.shared.hotSeatID
     let discoveryTask = levelBrowserWarmTask ?? makeLevelBrowserDiscoveryTask()
@@ -6446,19 +6461,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func homeMenuItems() -> [HomeMenuItem] {
     var items: [HomeMenuItem] = []
     let savedSequence = (try? playlistStore()).flatMap { store in
-      store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? store.activeRun : nil
+      store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
     }
     let recovery = menuRecovery.flatMap {
       $0.hotSeatID == ArcadeStore.shared.hotSeatID && $0.profileID == ArcadeStore.shared.playingProfileID ? $0 : nil
     }
-    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
-      let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
-      items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
-    } else if let savedSequence {
+    if savedSequence != nil {
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"),
         action: .resumeSequence))
+    }
+    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
+      let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+      items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
     }
     if let store = try? playlistStore(),
        store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) != nil || recovery != nil {

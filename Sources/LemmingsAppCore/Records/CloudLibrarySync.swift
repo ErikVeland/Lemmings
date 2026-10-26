@@ -51,7 +51,8 @@ import NxlvKit
         case .idle: L10n.text("Cloud saves")
         case .syncing: L10n.text("Syncing")
         case .synced: L10n.text("Synced")
-        case .pending: L10n.text("Saved on this device")
+        case .pending: hasUnlinkedJourneys
+            ? L10n.text("A saved journey needs its players restored.") : L10n.text("Saved on this device")
         case .offline: L10n.text("Offline")
         case .paused: L10n.text("Cloud saves paused")
         case .failed(let message): message
@@ -60,6 +61,19 @@ import NxlvKit
     public var enabled: Bool {
         get { defaults.object(forKey: enabledKey) as? Bool ?? defaultEnabled }
         set { defaults.set(newValue, forKey: enabledKey); if newValue { requestSync() } else { setState(.paused) } }
+    }
+    /// A queue without its roster cannot be offered on another device.
+    /// Do not report complete sync while that recoverable local save is omitted.
+    private var hasUnlinkedJourneys: Bool {
+        let known = Set((store.libraryHotSeats + captureSeats()).map(\.id))
+        let prefix = "HotSeat.", suffix = ".LearningJourneySession"
+        return defaults.dictionaryRepresentation().contains { key, value in
+            guard key.hasPrefix(prefix), key.hasSuffix(suffix), let data = value as? Data,
+                let snapshot = try? JSONDecoder().decode(JourneySessionSnapshot.self, from: data),
+                snapshot.run != nil else { return false }
+            let session = String(key.dropFirst(prefix.count).dropLast(suffix.count))
+            return !known.contains(session)
+        }
     }
     public var providerNames: String {
         guard let apple = transport as? AppleCloudLibraryTransport else { return "Cloud" }
@@ -122,6 +136,44 @@ import NxlvKit
         }.value
         saved = value
     }
+    static let journeySplitRepairKey = "CloudLibrary.journeySplitRepair.v1"
+    /// Older Mac builds started the Golden Path in a new session with the same host and
+    /// players. Once per device, merge each such session without a journey into the one
+    /// Journey session. Sessions started later with "Start new Hot Seat" stay separate.
+    private func mergeJourneySplits(_ local: inout LocalState) throws {
+        guard !defaults.bool(forKey: Self.journeySplitRepairKey) else { return }
+        func hasJourney(_ id: String) -> Bool {
+            guard let data = defaults.data(forKey: "HotSeat.\(id).LearningJourneySession"),
+                  let snapshot = try? JSONDecoder().decode(JourneySessionSnapshot.self, from: data) else { return false }
+            return snapshot.run != nil
+        }
+        var merged = local.archive.mergedSeats ?? [:]
+        let profileIDs = store.records.profiles.map(\.id)
+        let groups = Dictionary(grouping: store.libraryHotSeats.filter { merged[$0.id] == nil }) { [$0.host] + $0.players.sorted() }
+        for group in groups.values where group.count > 1 {
+            let journeys = group.filter { hasJourney($0.id) }
+            guard journeys.count == 1, let target = journeys.first else { continue }
+            var progress = GameProgressPreferences.capture(defaults: defaults, profileID: target.host,
+                profileIDs: profileIDs, sessionID: target.id)
+            try progress.merge(captureExtra(target.host, target.id))
+            for seat in group where seat.id != target.id {
+                var retired = GameProgressPreferences.capture(defaults: defaults, profileID: seat.host,
+                    profileIDs: profileIDs, sessionID: seat.id)
+                try retired.merge(captureExtra(seat.host, seat.id))
+                // The retired session has no journey. Its empty snapshot must not replace the run.
+                retired.values["LearningJourneySession"] = nil
+                try progress.merge(retired)
+                merged[seat.id] = target.id
+            }
+            try progress.apply(defaults: defaults, profileID: target.host, sessionID: target.id)
+        }
+        if !merged.isEmpty {
+            local.archive.mergedSeats = merged
+            local.archive.seats = local.archive.seats.filter { merged[$0.key] == nil }
+            try store.retireLibraryHotSeats(merged)
+        }
+        defaults.set(true, forKey: Self.journeySplitRepairKey)
+    }
     private func capture(_ base: LocalState) throws -> LocalState {
         var local = base
         let next = CloudLibraryArchive.Stamp(counter: base.archive.counter + 1, device: base.device)
@@ -154,7 +206,7 @@ import NxlvKit
             local.archive.players[global] = player
         }
         let seats = store.libraryHotSeats + captureSeats()
-        for seat in seats {
+        for seat in seats where local.archive.mergedSeats?[seat.id] == nil {
             guard let host = local.mapping[seat.host], seat.players.allSatisfy({ local.mapping[$0] != nil }) else { continue }
             var progress = GameProgressPreferences.capture(defaults: defaults, profileID: seat.host, profileIDs: Array(localIDs), sessionID: seat.id)
             try progress.merge(captureExtra(seat.host, seat.id))
@@ -256,6 +308,7 @@ import NxlvKit
                     base.archive.players[first] = player
                 }
             }
+            if canImport() { try mergeJourneySplits(&base) }
             var local = try capture(base)
             // A copied Hot Seat can have its progress and roster but no local
             // revision file. Reuse an identical revision instead of creating a fork.
@@ -302,6 +355,7 @@ import NxlvKit
             if changedDuringUpload { requested = true }
             let partial = (transport as? AppleCloudLibraryTransport)?.issues.isEmpty == false
             let complete = safe && !partial && uploaded == identities.count && !changedDuringUpload
+                && !hasUnlinkedJourneys
             if complete { lastSynced = Date() }
             setState(complete ? .synced : .pending)
         } catch {
@@ -324,7 +378,13 @@ import NxlvKit
             try local.archive.players[global]!.progress.apply(defaults: defaults, profileID: id)
         }
         var seats: [ArcadeStore.SavedHotSeat] = []
-        for (id, branches) in local.archive.seats {
+        for (id, original) in local.archive.seats {
+            var branches = original
+            // Offline revisions of one roster are one session. Only a changed roster keeps a separate branch.
+            if branches.count > 1, Set(branches.map { [$0.host] + $0.players.sorted() }).count == 1 {
+                branches = [try CloudLibraryArchive.Seat.merging(branches)]
+                local.archive.seats[id] = branches
+            }
             let localRevision = local.seatRevisions[id]
             let chosen = branches.first(where: { branch in
                 branch.revision == localRevision || localRevision.map { branch.ancestors.contains($0) } == true
@@ -345,6 +405,7 @@ import NxlvKit
                 }
             }
         }
+        try store.retireLibraryHotSeats(local.archive.mergedSeats ?? [:])
         try store.importLibraryHotSeats(seats); try importSeats(seats)
         return previousRecords != store.records || !(beforeDefaults.isEqual(to: defaults.dictionaryRepresentation()))
     }

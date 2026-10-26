@@ -134,6 +134,7 @@ typealias MobileGameControllerBase = UIViewController
     private let touchLoupe = MobileTouchLoupe()
     let overlay = MobileGameOverlay()
     let overlayCanvas = MobileMenuCanvas()
+    var onOriginalMovies: (() -> Void)?
     private var overlayActions: [() -> Void] = []
     private var latestFrame: MobilePixelFrame?
 
@@ -734,7 +735,6 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
-        let insets = MobileSystemRegions.usesFullDisplay(in: view) ? UIEdgeInsets.zero : insets
         #if os(tvOS)
         let showsMenuButton = false
         let television = true
@@ -754,7 +754,8 @@ typealias MobileGameControllerBase = UIViewController
             showsMenuButton: showsMenuButton, television: television,
             topBarInsets: MobileSystemRegions.topBarInsets(in: view),
             navigationRail: MobileSystemRegions.navigationRail(in: view),
-            fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view)
+            fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view),
+            menuLeading: MobileSystemRegions.usesFullDisplay(in: view)
         )
     }
 
@@ -1090,7 +1091,7 @@ typealias MobileGameControllerBase = UIViewController
             else { highlightedTarget = nil }
             #endif
         }
-        if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects() }
+        if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects(preservingTrails: true) }
         do {
             let frame = try session.render(highlight: highlightedTarget)
             latestFrame = frame
@@ -1126,6 +1127,7 @@ typealias MobileGameControllerBase = UIViewController
             playfieldView.setRescueFeedback(saved: snapshot.saved, required: snapshot.required, total: snapshot.total,
                 isComplete: snapshot.isComplete, didWin: snapshot.didWin)
             playfieldView.failed = snapshot.isComplete ? !snapshot.didWin : (snapshot.saved + session.activeLemmingCount + max(0, snapshot.total - snapshot.released) < snapshot.required)
+            playfieldView.captureSpriteTrails(session: session)
             try playfieldView.update(frame: frame)
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = playfieldView.bitmap
@@ -1272,6 +1274,11 @@ typealias MobileGameControllerBase = UIViewController
             toggle.toggleValue = classic.ghostSolutionEnabled
             toggle.group = .inspection
             overlayCanvas.page.footer.append(toggle)
+        }
+        if let onOriginalMovies {
+            let movieAction = overlayActions.count
+            overlayActions.append(onOriginalMovies)
+            overlayCanvas.page.footer.append(.init(String(movieAction), L10n.text("Original movies")))
         }
         let settingsAction = overlayActions.count
         overlayActions.append { [weak self] in self?.showInGameSettings() }

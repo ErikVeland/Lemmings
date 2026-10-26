@@ -31,6 +31,7 @@ extension MenuAudit {
             let panel = session.panelFrame.flatMap(MobileBitmapRenderer.image)
             let icons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             for (pose, size, safe, clearance, radius, regions) in poses {
+                let menuLeading = regions.isEmpty
                 let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
                 let screen = CGPath(roundedRect: bounds, cornerWidth: radius, cornerHeight: radius, transform: nil)
                 func fits(_ frame: CGRect) -> Bool {
@@ -38,27 +39,44 @@ extension MenuAudit {
                     return [CGPoint(x: box.minX, y: box.minY), .init(x: box.maxX, y: box.minY),
                         .init(x: box.minX, y: box.maxY), .init(x: box.maxX, y: box.maxY)].allSatisfy { screen.contains($0) }
                 }
+                // Model corner adaptation on the longer axis without consuming the
+                // short playfield dimension. Every visible control must fit the screen.
+                let cornerSafe = size.width > size.height
+                    ? MobileInsets(top: safe.top, left: max(safe.left, radius), bottom: safe.bottom, right: max(safe.right, radius))
+                    : MobileInsets(top: max(safe.top, radius), left: safe.left, bottom: max(safe.bottom, radius), right: safe.right)
                 for state in ["running", "paused", "selected-last", "undo"] {
                     let original = session.snapshot
                     let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
                         saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
                         releaseRate: original.releaseRate, isComplete: false, didWin: false,
                         isEndingRun: state == "undo", skills: original.skills)
-                    let layout = MobileHUDLayout.make(container: size, safeArea: safe, hasRate: snapshot.releaseRate != nil,
+                    let layout = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance)
-                    let baseline = MobileHUDLayout.make(container: size, safeArea: safe, hasRate: snapshot.releaseRate != nil,
+                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance,
+                        menuLeading: menuLeading)
+                    let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier)
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
                         selectedSkill: selected, paused: paused, speed: 1, endRunArmed: false)
+                    let visibleTargets = targets.filter { item in
+                        guard let portrait = layout.portrait, case .skill = item.action else { return true }
+                        return portrait.skills.contains(item.inputFrame)
+                    }
+                    guard visibleTargets.allSatisfy({ fits($0.inputFrame) }) else { throw invalidTargets(line: #line) }
                     let identity = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
+                    if menuLeading, let menu = targets.first(where: { $0.action == .menu }),
+                       menu.frame.maxX + 4 != layout.interface.statusFrame.minX {
+                        print("Header geometry \(session.engineIdentifier) \(pose): menu=\(menu.frame) status=\(layout.interface.statusFrame) safe=\(layout.interface.safeFrame)")
+                    }
                     guard layout.canPlay, layout.interface.playfieldFrame == baseline.interface.playfieldFrame,
                           layout.interface.controlsFrame == baseline.interface.controlsFrame,
                           let menu = targets.first(where: { $0.action == .menu }), fits(menu.inputFrame),
                           menu.inputFrame.width == 44 && menu.inputFrame.height == 44,
+                          (!menuLeading || (menu.frame.maxX + 4 == layout.interface.statusFrame.minX &&
+                              layout.interface.statusFrame.maxX == layout.interface.safeFrame.maxX - clearance.right)),
                           targets.first(where: { $0.inputFrame.contains(.init(x: menu.frame.midX, y: menu.frame.midY)) })?.action == .menu,
                           targets.filter({ $0.action != .menu }).allSatisfy({ !$0.inputFrame.intersects(menu.inputFrame) })
                     else { throw invalidTargets(line: #line) }
@@ -83,7 +101,7 @@ extension MenuAudit {
                         MobileBitmapRenderer.draw(image, viewport: viewport, in: context); context.restoreGState()
                     }
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: 1,
-                        endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA")
+                        endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded)
                         .draw(in: context, bounds: bounds)
                     context.restoreGState()
                     for region in regions { context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame)) }
@@ -92,7 +110,7 @@ extension MenuAudit {
                 }
             }
         }
-        print("PASS: \(captures) rounded-screen HUD captures across Classic/L2/L3, both orientations and Duo poses; complete header rectangles, bitmap fields, Menu input, reserved regions and unchanged gameplay geometry. Windowless and muted.")
+        print("PASS: \(captures) rounded-screen HUD captures across Classic/L2/L3, both orientations and Duo poses; complete visible control rectangles, bitmap fields, Menu input, reserved regions and unchanged gameplay geometry. Windowless and muted.")
     }
 }
 

@@ -165,6 +165,8 @@ extension MobileLibraryViewController {
             }
         }
         guard saveHotSeats() else { rebuild(); return }
+        do { try saveLearningState(saved.state) }
+        catch { notice = error.localizedDescription; rebuild(); return }
         hotSeatRoster = nil; activeRun = nil
         reloadPlayerData()
         let owner = profiles.activeID, scope = hotSeat?.scope
@@ -247,7 +249,7 @@ extension MobileLibraryViewController {
             guard let root = store?.resolvedDataDirectory(for: .lemmings2) else { throw MobileSessionError.changedLevel }
             let library = try Lemmings2MobileLibrary(directory: root, storage: isolated)
             if conditions.levelID.hasPrefix("practice-"), let choice = Int(conditions.levelID.dropFirst(9)) {
-                let skills = Lemmings2Runtime.Skill.allCases.filter { conditions.startingSkills[TrolleyCapture.skillKey($0.name)] != nil }
+                let skills = (conditions.modifiers["practiceSkills"] ?? "").split(separator: ",").compactMap { Int($0).flatMap(Lemmings2Runtime.Skill.init(rawValue:)) }
                 return try library.loadPractice(at: choice, skills: skills)
             }
             let parts = conditions.levelID.split(separator: ":").compactMap { Int($0) }

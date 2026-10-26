@@ -1,10 +1,10 @@
 # iOS and Mac interface parity
 
 Use the [current cross-platform register](PlatformFeatureParity.md) for the
-25 October source audit and open capabilities. Shared frontend coverage does
-not establish full parity. In particular, non-Classic replay viewing/export,
-sequel artwork switching, L2 pointer interactions/practice, L2 short games and
-original sequel media still have mobile/TV gaps.
+26 October 2.3 source audit. Native replay viewing/export, sequel artwork,
+L2 pointer interactions, practice, carried short games and original-media
+browsing now have shared mobile/TV routes. Automatic campaign story triggers
+remain WIP. Source coverage does not establish physical-device parity.
 
 The 2.0 iOS release must preserve the Mac app's artwork, navigation and shared
 features across Classic, Lemmings 2 and Lemmings 3. Touch layout may adapt the

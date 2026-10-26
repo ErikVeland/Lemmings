@@ -417,8 +417,11 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         for offset in -2...2 {
             for point in [(x + offset, y - 2), (x + offset, y + 2), (x - 2, y + offset), (x + 2, y + offset)] {
                 guard (0..<width).contains(point.0), (0..<height).contains(point.1) else { continue }
-                let target = (point.1 * width + point.0) * 4
-                rgba[target] = 255; rgba[target + 1] = 220; rgba[target + 2] = 48; rgba[target + 3] = 255
+                let scale = rgba.count == width * height * 16 ? 2 : 1
+                for dy in 0..<scale { for dx in 0..<scale {
+                    let target = ((point.1 * scale + dy) * width * scale + point.0 * scale + dx) * 4
+                    rgba[target] = 255; rgba[target + 1] = 220; rgba[target + 2] = 48; rgba[target + 3] = 255
+                } }
             }
         }
     }

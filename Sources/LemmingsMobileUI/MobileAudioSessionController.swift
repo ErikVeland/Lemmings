@@ -1,35 +1,51 @@
 #if os(iOS) || os(tvOS)
 import AVFAudio
 import Foundation
+import os
 import LemmingsMobileCore
 
 /// Blocking audio-session configuration runs on this actor's executor.
 private actor MobileAudioSessionWorker {
     static let shared = MobileAudioSessionWorker()
+    private let logger = Logger(subsystem: "com.ultimatelemmings.audio", category: "Session")
 
     func perform(_ operation: MobileAudioSessionOperation) async throws {
         let session = AVAudioSession.sharedInstance()
+        do {
         switch operation {
         case .prepare:
             try prepare(session)
         case .resume:
             try prepare(session)
             try session.setActive(true)
+            let route = session.currentRoute.outputs.map { $0.portType.rawValue }.joined(separator: ",")
+            logger.notice("Audio active: rate=\(session.sampleRate, privacy: .public), IO=\(session.ioBufferDuration, privacy: .public), latency=\(session.outputLatency, privacy: .public), route=\(route, privacy: .public)")
         case .suspend:
             try session.setActive(false, options: [.notifyOthersOnDeactivation])
+        }
+        } catch {
+            logger.error("Audio session failed: \(String(describing: error), privacy: .public)")
+            throw error
         }
     }
 
     private func prepare(_ session: AVAudioSession) throws {
         #if os(iOS)
         let respectMute = MobileSettings.load(from: .standard).respectMuteSetting
-        try session.setCategory(respectMute ? .ambient : .playback, mode: .default,
-                                options: respectMute ? [] : [.mixWithOthers])
+        let category: AVAudioSession.Category = respectMute ? .ambient : .playback
+        let options: AVAudioSession.CategoryOptions = respectMute ? [] : [.mixWithOthers]
         #else
-        try session.setCategory(.ambient, mode: .default, options: [])
+        let category: AVAudioSession.Category = .ambient
+        let options: AVAudioSession.CategoryOptions = []
         #endif
-        // Give tracker synthesis and effects one 1,024-frame buffer at 44.1 kHz.
-        try session.setPreferredIOBufferDuration(1024.0 / 44100.0)
+        if session.category != category || session.mode != .default || session.categoryOptions != options {
+            try session.setCategory(category, mode: .default, options: options)
+        }
+        // The device chooses the actual duration. Log it after activation.
+        let preferredDuration = 1024.0 / 44100.0
+        if abs(session.preferredIOBufferDuration - preferredDuration) > 0.0001 {
+            try session.setPreferredIOBufferDuration(preferredDuration)
+        }
     }
 }
 

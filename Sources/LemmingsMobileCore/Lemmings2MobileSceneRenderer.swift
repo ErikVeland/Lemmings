@@ -301,7 +301,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             name = "LM5C"; phase = lemming.state == .walking ? 6 + lemming.age % 8 : lemming.pose
             offsetX = -9; offsetY = -10; directional = false
         case .falling:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         case .floating:
             name = "LM16"; phase = lemming.age % 16; offsetX = -7; offsetY = -16; directional = true
         case .climbing:
@@ -446,7 +446,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         case .stomping:
             name = "LM1D"; phase = lemming.age % 8; offsetX = -7; offsetY = -9; directional = false
         case .terrainRising:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         default:
             name = "LM5C"; phase = 6 + lemming.age % 8; offsetX = -9; offsetY = -10; directional = false
         }
@@ -536,8 +536,11 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         let colour: (UInt8, UInt8, UInt8) = (255, 255, 0)
         for (px, py) in [(x - 8, y - 12), (x + 7, y - 12), (x - 8, y + 1), (x + 7, y + 1)] {
             guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-            let offset = (py * width + px) * 4
-            rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            let scale = rgba.count == width * height * 16 ? 2 : 1
+            for dy in 0..<scale { for dx in 0..<scale {
+                let offset = ((py * scale + dy) * width * scale + px * scale + dx) * 4
+                rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            } }
         }
     }
 }

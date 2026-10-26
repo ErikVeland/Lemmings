@@ -35,17 +35,17 @@ public enum GameListToolsArt {
     }
 
     public static func draw(_ layout: GameFrontEnd.Layout, typography: GameMenuTypography?,
-                            highlighted: String? = nil, scale: CGFloat = 1, in context: CGContext) {
+                            highlighted: String? = nil, scale: CGFloat = 1, shape: GameControlShape = .square, in context: CGContext) {
         context.setFillColor(CGColor(gray: 0, alpha: 1))
         context.fill(CGRect(origin: .zero, size: layout.size))
         for target in layout.targets {
             let frame = target.frame
             if target.action.id == "search" {
                 context.setFillColor(CGColor(gray: 0.045, alpha: 1))
-                context.fill(frame)
+                shape.fill(frame, in: context)
                 context.setStrokeColor(CGColor(gray: highlighted == "search" ? 1 : 0.48, alpha: 1))
                 context.setLineWidth(1)
-                context.stroke(frame.insetBy(dx: 0.5, dy: 0.5))
+                shape.stroke(frame, inset: 0.5, in: context)
                 let p = scale
                 let origin = CGPoint(x: frame.minX + 12, y: frame.midY - 8 * p)
                 context.setStrokeColor(CGColor(srgbRed: 0.35, green: 0.7, blue: 1, alpha: 1))
@@ -71,10 +71,10 @@ public enum GameListToolsArt {
                 context.strokePath()
             } else {
                 context.setFillColor(CGColor(gray: 0.025, alpha: 1))
-                context.fill(frame)
+                shape.fill(frame, in: context)
                 context.setStrokeColor(CGColor(gray: 0.35, alpha: target.action.enabled ? 1 : 0.45))
                 context.setLineWidth(1)
-                context.stroke(frame.insetBy(dx: 0.5, dy: 0.5))
+                shape.stroke(frame, inset: 0.5, in: context)
                 context.saveGState()
                 context.setAlpha(target.action.enabled ? 1 : 0.45)
                 context.translateBy(x: frame.minX + 12, y: frame.minY + 6)
@@ -89,7 +89,7 @@ public enum GameListToolsArt {
                 if target.action.id == highlighted {
                     context.setStrokeColor(CGColor(gray: 1, alpha: 1))
                     context.setLineWidth(2)
-                    context.stroke(frame.insetBy(dx: 3, dy: 3))
+                    shape.stroke(frame, inset: 3, in: context)
                 }
             }
         }

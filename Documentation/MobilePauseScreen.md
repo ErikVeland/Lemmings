@@ -32,23 +32,34 @@ device checks.
 The pause menu shows the current level, attempt owner and frozen playfield.
 It groups rescue progress, population, time, controls and music in the shipped
 bitmap lettering and stone artwork. Resume remains the primary action at the
-bottom or right. The action shelf stays visible while the information scrolls.
+bottom-right. Resume stays visible while tools and information scroll.
 The opening fade respects Reduce Motion, Reduce Flashes and the system setting.
 Ready handovers retain their existing paused boundary.
 
-The iOS action shelf holds Hint, Restart level, Controls help, Settings,
-Library and Resume. Eligible campaign and Learning levels also show Skip level
-with the attempt owner’s current balance. Zero stays visible and disabled. Lemmings 2 adds its Fan / Skill mode toggle. Hint is the
-first action, so a hint is one tap from Pause. Library stays at bottom-left and
-Resume at bottom-right. The tvOS shelf holds Hint, Restart level, Game controls,
-Settings, Library and Resume. TV Game controls keeps the remote command list.
+The fixed header holds Back to library at the left and Main menu at the right.
+Do not repeat the return action in the footer. Level tools come before the
+preview and statistics: Hint, Restart level and eligible Skip level or Bonus
+skill actions. Skip level shows the attempt owner's balance, including a disabled
+zero. Lemmings 2 adds its Fan / Skill mode toggle. Replay, Inspect, and Help and
+settings form separate groups when present. Controls help retains the platform's
+input guide. Each group chooses columns from its available width and full labels.
+Every occupied row fills its width, including the final row.
 Restart level opens a confirmation with Cancel focused. Confirmation retires
 the old checkpoint and starts a fresh attempt with the current owner.
 Hot Seat waits at Ready. Replays omit Hint and Restart level.
-The TV Game controls overview lets the remote scroll all level and music details.
+Keyboard, remote and accessibility focus reveal tools and text above the fixed
+Resume shelf. Covered controls and gaps cannot activate tools beneath that shelf.
 Large lettering adapts in landscape to keep the action targets within the viewport.
 
 ## Rescue and run details
+
+Validation on 26 October 2026: nine hostless UIKit checks pass, including
+Classic/L2/L3 skip balances, refund on failed handover, fixed navigation,
+scrolling focus, browser rank pairs and Duo safe regions. The shared layout
+matrix passes 14 tests and renders 120 pause/replay states. Both Apple SDKs
+compile. Native hostless captures use fallback lettering; separate shared
+captures verify shipped bitmap typography. Physical touch, VoiceOver and Siri
+Remote remain device checks. See [platform evidence](PlatformFeatureParity.md).
 
 The overview shows saved and required counts, active lemmings, waiting lemmings,
 losses, further permitted losses, time left, elapsed simulation time, speed,

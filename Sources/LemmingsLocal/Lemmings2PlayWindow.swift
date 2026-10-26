@@ -129,7 +129,8 @@ import NxlvKit
             levelFingerprint: fingerprint, rulesetVersion: rules, physicsMode: rules,
             population: c.total, rescueRequirement: 1, startingSkills: skills, timeLimitSeconds: Double(c.timeLimit),
             modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
-                        "firstReleaseTick": String(c.firstReleaseTick), "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
+                        "firstReleaseTick": String(c.firstReleaseTick),
+                        "practiceSkills": c.isPractice ? c.skills.map { String($0.rawValue) }.joined(separator: ",") : "", "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
         return ArcadeLevel(id: "l2:" + level.fingerprint, title: level.title,
             game: L10n.text("Lemmings 2 - \(Lemmings2Campaign.tribeNames[level.style])"), rules: rules,
             total: c.total, required: 1, conditions: conditions)
@@ -3068,7 +3069,7 @@ import NxlvKit
             case .blocking:
                 name = "LM33"; offsetX = -7; offsetY = -10; phase = lem.age % 16; directional = false
             case .falling:
-                name = "LM40"; offsetX = -8; offsetY = -10; phase = lem.age % 4
+                name = "LM40"; offsetX = -3; offsetY = -10; phase = lem.age % 4
             case .shrugging:
                 name = "LM7B"; offsetX = lem.direction > 0 ? -9 : -8; offsetY = -13; phase = lem.age % 8
             case .exploding:

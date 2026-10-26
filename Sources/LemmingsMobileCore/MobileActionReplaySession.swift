@@ -81,6 +81,7 @@ public final class MobileActionReplaySession: MobileGameSession {
     public var ticksPerSecond: Double { native.ticksPerSecond }
     public var renderScale: Double { native.renderScale }
     public var panelFrame: MobilePixelFrame? { native.panelFrame }
+    public var spriteActorIDs: [Int] { native.spriteActorIDs }
     public var activeLemmingCount: Int { native.activeLemmingCount }
     public var lostLemmingCount: Int { native.lostLemmingCount }
     public var explosions: [MobileExplosion] { native.explosions }

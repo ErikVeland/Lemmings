@@ -70,7 +70,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                             hasPlayer: Bool = false, engineIdentifier: String = "classic",
                             showsMenuButton: Bool = true, television: Bool = false,
                             topBarInsets: MobileInsets = .init(), navigationRail: MobileRect? = nil,
-                            fillsDisplayWidth: Bool = false) -> MobileHUDLayout {
+                            fillsDisplayWidth: Bool = false, menuLeading: Bool = false) -> MobileHUDLayout {
         let systemRegions = reservedRegions
         let reservedRegions = fillsDisplayWidth ? reservedRegions.filter { $0.kind == .division } : reservedRegions
         var layout = navigationRail.flatMap {
@@ -113,7 +113,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
             let clear = MobileDisplayRegions.clearHorizontalFrame(header, avoiding: systemRegions)
             headerInsets = MobileInsets(left: clear.minX - header.minX, right: header.maxX - clear.maxX)
         }
-        guard !showsMenuButton else { return insettingHeader(layout, by: headerInsets) }
+        guard !showsMenuButton else { return insettingHeader(layout, by: headerInsets, menuLeading: menuLeading) }
         let original = layout.interface
         // Console navigation comes from Back or Options/Menu, with no HUD target.
         let status = original.statusFrame.minY == original.safeFrame.minY
@@ -149,22 +149,30 @@ public struct MobileHUDLayout: Equatable, Sendable {
     }
 
     /// Move the visible header and its input/accessibility targets together, without changing gameplay.
-    private static func insettingHeader(_ layout: MobileHUDLayout, by insets: MobileInsets) -> MobileHUDLayout {
+    private static func insettingHeader(_ layout: MobileHUDLayout, by insets: MobileInsets,
+                                        menuLeading: Bool = false) -> MobileHUDLayout {
         let original = layout.interface
         let safe = original.safeFrame
         guard original.statusFrame.minY == safe.minY,
-              insets.left > 0 || insets.right > 0 else { return layout }
+              insets.left > 0 || insets.right > 0 || menuLeading else { return layout }
         let left = safe.minX + max(0, insets.left.mobileFiniteOrZero)
         let right = safe.maxX - max(0, insets.right.mobileFiniteOrZero)
         var frames = original.controlFrames
+        var statusLeft = max(left, original.statusFrame.minX)
         var statusRight = min(right, original.statusFrame.maxX)
         if layout.showsMenuButton, original.controlsPlacement != .trailingRail,
            let menu = frames.last, menu.minY == safe.minY {
-            frames[frames.count - 1].x = right - menu.width
-            statusRight = right - menu.width - 4
+            if menuLeading {
+                frames[frames.count - 1].x = left
+                statusLeft = left + menu.width + 4
+                statusRight = right
+            } else {
+                frames[frames.count - 1].x = right - menu.width
+                statusRight = right - menu.width - 4
+            }
         }
-        let status = MobileRect(x: max(left, original.statusFrame.minX), y: original.statusFrame.minY,
-            width: max(0, statusRight - max(left, original.statusFrame.minX)), height: original.statusFrame.height)
+        let status = MobileRect(x: statusLeft, y: original.statusFrame.minY,
+            width: max(0, statusRight - statusLeft), height: original.statusFrame.height)
         let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: safe,
             playfieldFrame: original.playfieldFrame, statusFrame: status,
             controlsFrame: original.controlsFrame, controlFrames: frames, controlsPlacement: original.controlsPlacement)
@@ -445,7 +453,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let navigationCount = supportsRewind ? 3 : 1
         let navigationGaps = Double(navigationCount - 1) * 4
         let columnNavigation = !vertical && navigationHeight >= Double(navigationCount) * 44 + navigationGaps
-        let navigationWidth = vertical ? leading.width : columnNavigation ? 64 : floor(leading.width * 0.42)
+        let minimumNavigationWidth = Double(navigationCount) * 44 + navigationGaps
+        let navigationWidth = vertical ? leading.width : columnNavigation ? 64
+            : min(leading.width - 48, minimumNavigationWidth)
         let navigationCell = columnNavigation ? navigationWidth
             : (navigationWidth - navigationGaps) / Double(navigationCount)
         let navigationButtonHeight = columnNavigation

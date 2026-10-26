@@ -25,11 +25,11 @@ class AutomaticUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "Info.plist"
             info = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())
-            for version in ("1.7.9", "1.8", "1.8.1", "1.9", "1.9.1", "2.0", "2.0.1", "2.1", "2.1.1", "2.2"):
+            for version in ("1.7.9", "1.8", "1.8.1", "1.9", "1.9.1", "2.0", "2.0.1", "2.1", "2.1.1", "2.2", "2.2.2", "2.3"):
                 info["CFBundleShortVersionString"] = version
                 path.write_bytes(plistlib.dumps(info))
                 self.assertEqual(validate_info_plist(path)[0], version)
-            for version in ("1.8-beta", "1.8.1.2", "1.9-beta", "2.0-beta", "2.0.1.2", "2.1-beta", "2.1.1.2", "2.2-beta", "2.2.1.2"):
+            for version in ("1.8-beta", "1.8.1.2", "1.9-beta", "2.0-beta", "2.0.1.2", "2.1-beta", "2.1.1.2", "2.2-beta", "2.2.1.2", "2.3-beta", "2.3.1.2", "2.4"):
                 info["CFBundleShortVersionString"] = version
                 path.write_bytes(plistlib.dumps(info))
                 with self.assertRaisesRegex(ValueError, "application"):

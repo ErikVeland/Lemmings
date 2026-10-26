@@ -79,8 +79,12 @@ enum FanLevelLibrary {
     }
 
     @MainActor static var passed: Set<String> {
-      GameProgressPreferences.fanLevels(profileID: ArcadeStore.shared.records.activeProfileID,
+      #if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
+      return GameProgressPreferences.fanLevels(profileID: ArcadeStore.shared.records.activeProfileID,
         sessionID: ArcadeStore.shared.hotSeatID)
+      #else
+      return Set(UserDefaults.standard.stringArray(forKey: ArcadeStore.shared.progressKey(passedKey)) ?? [])
+      #endif
     }
 
     @MainActor static func record(pack: URL, label: String) {

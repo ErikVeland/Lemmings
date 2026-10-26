@@ -10,10 +10,13 @@ certify a new package.
 
 ## Newcomer and veteran playtests
 
-This protocol supports the [2.1 foundation priorities](2.1Roadmap.md#priorities-and-acceptance).
+This protocol supports the [2.1 foundation priorities](2.1Roadmap.md#priorities-and-acceptance)
+and the [2.3 first-play milestone](Roadmap.md#23-first-play-and-the-next-day).
 Recruit a small varied group of children with a guardian, adults unfamiliar with
 games, returning players and veterans. Participation and observation need their
-agreement. No recruitment or completed human session is recorded by this update.
+agreement. On 26 October 2026, the owner confirmed the first-session and next-day
+playtests complete, with non-owner players observed on every supported device.
+See the [acceptance record](ReleaseReadiness/2.3-human-acceptance-2026-10-26.md).
 
 Use a fresh disposable profile and record the exact build, language, device and
 input. Keep the player's ordinary saves separate. Let the first thirty minutes

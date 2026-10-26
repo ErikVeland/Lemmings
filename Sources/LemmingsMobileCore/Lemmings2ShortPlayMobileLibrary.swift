@@ -43,13 +43,15 @@ public final class Lemmings2ShortPlayMobileLibrary: MobileGameLibrary {
         try progress.select(tribe: 0, level: index)
         return try source.loadLevel(at: index, population: progress.population)
     }
-    public func record(_ session: any MobileGameSession) throws -> Data? {
+    public func record(_ session: any MobileGameSession, persist: (Data) throws -> Void = { _ in }) throws -> Data? {
         guard let capture = try session.actionCapture(), case let .lemmings2(runtime) = capture.final,
               runtime.isComplete, runtime.didWin, levels.indices.contains(session.levelIndex) else { return nil }
         var value = try campaign()
         try value.select(tribe: 0, level: session.levelIndex)
         guard value.advance(after: runtime) else { throw MobileSessionError.invalidCheckpoint }
+        let data = try JSONEncoder().encode(value.progress)
+        try persist(data)
         try storage.save(value.progress, name: "lemmings2-campaign")
-        return try JSONEncoder().encode(value.progress)
+        return data
     }
 }

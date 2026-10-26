@@ -186,6 +186,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
+    public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
     public var assignedSkillCount: Int {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
@@ -700,6 +701,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
+    public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
     public var assignedSkillCount: Int { assignedSkills.values.reduce(0, +) }
     /// Extras start on the map and are not included in the entrance's released count.
@@ -1039,6 +1041,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         return .init(x: Double(zone.bounds.x + zone.bounds.width / 2), y: Double(zone.bounds.y + zone.bounds.height / 2))
     }
 
+    public var spriteActorIDs: [Int] { simulation.lemmings.filter(\.isActive).map(\.id) }
+    public var activeLemmingCount: Int { simulation.lemmings.filter(\.isActive).count }
     public var lostLemmingCount: Int { simulation.lostCount }
     public let engineIdentifier = "neolemmix"
     public let engineFingerprint: String
@@ -1133,8 +1137,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         }
         return MobileGameSnapshot(
             tick: state.tickCount,
-            released: state.releasedCount,
-            total: simulation.configuration.totalLemmings,
+            released: state.releasedCount + simulation.configuration.preplacedLemmings.count + simulation.clonedCount,
+            total: simulation.totalPopulation,
             saved: state.savedCount,
             required: simulation.configuration.requiredToSave,
             remainingSeconds: state.remainingTimeTicks.map { max(0, $0 / NeoLemmixRules.ticksPerSecond) },

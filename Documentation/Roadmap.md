@@ -1,6 +1,10 @@
 # Ultimate Lemmings roadmap through 3.0
 
-Updated 22 October 2026.
+Updated 26 October 2026. Earlier milestone dates below retain their original context.
+
+The [release schedule](ReleaseSchedule.md) now sets delivery priority: Mac first,
+then iOS, then tvOS, then sideloading stores. Ship Mac quickly and skip tests
+unless the candidate changes an engine. Lower-priority channels follow separately.
 
 The owner has prioritised the [2.2 Duo launch plan](2.2Roadmap.md) for existing
 TestFlight groups by Friday, 23 October. On 22 October the owner moved the Duo
@@ -148,6 +152,11 @@ remain distinct from physical acceptance. Public store delivery requires its own
 package, rights, privacy and review gates.
 
 ### 2.3 First play and the next day
+
+**Human acceptance: green, 26 October 2026.** The owner reports that the
+first-session and next-day playtests are complete, with players other than the
+owner observed on every supported device. See the
+[acceptance record](ReleaseReadiness/2.3-human-acceptance-2026-10-26.md).
 
 Observe newcomers, returning players and veterans through the first half-hour
 and a next-day return, using the [existing playtest protocol](BetaTesting.md#newcomer-and-veteran-playtests).

@@ -5,21 +5,18 @@ import LemmingsMobileCore
 import NxlvKit
 
 extension MobileLibraryViewController {
-    func l2PracticePage(subtitle: String) -> GameFrontEnd.Page {
-        let maps = Lemmings2Practice.tribes.enumerated().map { index, tribe in
-            GameFrontEnd.Action("practiceMap.\(index)", Lemmings2Campaign.tribeNames[tribe], selected: practiceChoice == index)
-        }
-        let skills = Lemmings2Runtime.Skill.allCases.filter { $0 != .unused }.map { skill in
-            let order = practiceSkills.firstIndex(of: skill)
-            return GameFrontEnd.Action("practiceSkill.\(skill.rawValue)",
-                (order.map { "\($0 + 1)  " } ?? "") + SkillVocabulary.title(skill.name),
-                enabled: order != nil || practiceSkills.count < 8, selected: order != nil)
-        }
-        return .init(title: L10n.text("Practice"), subtitle: subtitle,
-            rows: maps + skills, details: [L10n.text("\(practiceSkills.count) of 8 selected")],
-            footer: [.init("practiceBack", L10n.text("Back")),
-                     .init("practicePlay", L10n.text("Play"), enabled: practiceSkills.count == 8, primary: true)])
+    func showOriginalMovies() {
+        let engine = library is Lemmings3MobileLibrary ? "lemmings3" : "lemmings2"
+        guard let directory = store?.resolvedDataDirectory(for: engine == "lemmings2" ? .lemmings2 : .lemmings3) else { return }
+        let player = MobileOriginalMediaController(engine: engine, directory: directory)
+        player.onClose = { MobileMusic.shared.resume() }
+        present(player, animated: false)
     }
+
+    func l2PracticePage(subtitle: String) -> GameFrontEnd.Page {
+        MobileSequelMenuArt.practice(choice: practiceChoice, skills: practiceSkills, subtitle: subtitle)
+    }
+
     func handleL2Practice(_ id: String) -> Bool {
         if id == "l2Practice" { navigate(.l2Practice) }
         else if id == "practiceBack" { handle("l2") }
@@ -32,7 +29,13 @@ extension MobileLibraryViewController {
         } else if id == "practicePlay", let source = (library as? Lemmings2MobileLibrary) ?? (library as? Lemmings2PracticeMobileLibrary)?.source {
             do {
                 library = try Lemmings2PracticeMobileLibrary(source: source, choice: practiceChoice, skills: practiceSkills)
-                levelsBackRoute = .l2Practice; selectedIndex = 0; selectedPreview = nil; previewLoader = nil
+                let directory = source.directory, storage = learningStorage
+                let choice = practiceChoice, skills = practiceSkills
+                previewLoader = MobileMenuPreviewLoader {
+                    let source = try Lemmings2MobileLibrary(directory: directory, storage: storage)
+                    return try Lemmings2PracticeMobileLibrary(source: source, choice: choice, skills: skills)
+                }
+                levelsBackRoute = .l2Practice; selectedIndex = 0; selectedPreview = nil
                 startLevel(0, checkpoint: nil)
             } catch { notice = error.localizedDescription; rebuild() }
         } else { return false }

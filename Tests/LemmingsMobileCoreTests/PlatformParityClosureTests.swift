@@ -18,6 +18,110 @@ import Testing
             levelIdentifier: "neo-fixture", levelIndex: 0, levelFingerprint: "neo-fixture")
     }
 
+    @Test func practiceRestoresTheExactPanelWithoutCampaignWrites() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let storage = MobileStorage(directory: directory)
+        let source = try Lemmings2MobileLibrary(directory: Self.root.appendingPathComponent("Sources/Ports/Lemm2"), storage: storage)
+        let skills: [Lemmings2Runtime.Skill] = [.roper, .floater, .climber, .digger, .basher, .builder, .runner, .jumper]
+        for choice in 0..<4 {
+            let library = try Lemmings2PracticeMobileLibrary(source: source, choice: choice, skills: skills)
+            let game = try #require(try library.loadLevel(at: 0).session as? Lemmings2MobileSession)
+            #expect(game.initialRuntime.configuration.isPractice)
+            #expect(game.initialRuntime.configuration.skills == skills)
+            for _ in 0..<100 { game.tick() }
+            let payload = try game.checkpointPayload()
+            let restored = try Lemmings2PracticeMobileLibrary.restoring(game.levelIdentifier, source: source).loadLevel(at: 0).session
+            try restored.restoreCheckpointPayload(payload)
+            #expect(restored.snapshot == game.snapshot)
+            #expect(try restored.actionCapture()?.final.hash() == game.actionCapture()?.final.hash())
+            #expect(game.beginEndRun())
+            for _ in 0..<3000 where !game.snapshot.isComplete { game.tick() }
+        }
+        #expect(storage.load(Lemmings2Campaign.Progress.self, name: "lemmings2-campaign") == nil)
+        #expect(throws: (any Error).self) { try source.loadPractice(at: 0, skills: Array(repeating: .builder, count: 8)) }
+    }
+
+    @Test func shortOpeningCarriesSurvivorsAndRestoresItsOwnQueue() throws {
+        struct Witness: Decodable {
+            struct Input: Decodable { let tick: Int, skill: Int, lemming: Int }
+            let inputs: [Input]
+        }
+        let root = Self.root.appendingPathComponent("Sources/Ports/Lemm2")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let storage = MobileStorage(directory: directory)
+        let entries = try Lemmings2ShortPlayMobileLibrary.entries(directory: root)
+        let library = try Lemmings2ShortPlayMobileLibrary(directory: root, storage: storage, entries: entries, name: "Opening")
+        #expect(throws: (any Error).self) { try library.loadLevel(at: 1) }
+        let game = try #require(try library.loadLevel(at: 0).session as? Lemmings2MobileSession)
+        let witness = try JSONDecoder().decode(Witness.self, from: Data(contentsOf: Self.root.appendingPathComponent("Tests/Lemmings2CompletionTests/Fixtures/classic-01.json")))
+        for _ in 0..<5000 where game.snapshot.saved == 0 && !game.snapshot.isComplete {
+            for input in witness.inputs where input.tick == game.snapshot.tick {
+                let slot = try #require(game.initialRuntime.configuration.skills.firstIndex { $0.rawValue == input.skill })
+                #expect(game.assign(control: slot, to: input.lemming))
+            }
+            game.tick()
+        }
+        #expect(game.snapshot.saved > 0)
+        #expect(game.beginEndRun())
+        for _ in 0..<3000 where !game.snapshot.isComplete { game.tick() }
+        #expect(game.snapshot.didWin)
+        #expect(game.snapshot.saved < 60)
+        #expect(throws: (any Error).self) {
+            try library.record(game) { _ in throw MobileSessionError.invalidCheckpoint }
+        }
+        #expect(throws: (any Error).self) { try library.loadLevel(at: 1) }
+        let progress = try #require(try library.record(game))
+        let stored = try JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: progress)
+        #expect(stored.results[0]?.saved == game.snapshot.saved)
+        let reopened = try Lemmings2ShortPlayMobileLibrary(directory: root, storage: storage, entries: entries, name: "Opening")
+        let next = try reopened.loadLevel(at: 1).session
+        #expect(next.snapshot.total == game.snapshot.saved)
+        #expect(try reopened.loadLevel(at: 0).session.snapshot.total == 60)
+        #expect(!Lemmings2ShortPlayMobileLibrary.matches(Array(entries.reversed())))
+    }
+
+    @Test func trailsAreBoundedFadeAndClearForReducedEffects() throws {
+        let frame = try MobilePixelFrame(width: 1, height: 1, rgba: Data([10, 200, 40, 255]))
+        func sprites(_ x: Int) -> [Int: MobileSpriteHighlight] {
+            Dictionary(uniqueKeysWithValues: (0..<12).map { ($0, .init(frame: frame,
+                rect: .init(x: Double(x + $0), y: 10, width: 1, height: 1), cacheKey: "one", time: nil)) })
+        }
+        var trails = MobileSpriteTrails()
+        for tick in 0..<10 { trails.sample(sprites(tick), tick: tick, time: Double(tick) / 100, fast: true, enabled: true, budget: 20) }
+        #expect(trails.echoes.count == 20)
+        trails.sample(sprites(5), tick: 5, time: 0.1, fast: false, enabled: true, budget: 20)
+        #expect(trails.echoes.contains { $0.rewind })
+        trails.expire(at: 1)
+        #expect(trails.echoes.isEmpty)
+        trails.sample(sprites(6), tick: 6, time: 1.1, fast: true, enabled: false)
+        trails.sample(sprites(7), tick: 7, time: 1.2, fast: true, enabled: true)
+        #expect(trails.echoes.isEmpty)
+    }
+
+    @Test func originalMediaStreamsFramesWithoutGameState() throws {
+        for engine in ["lemmings2", "lemmings3"] {
+            let directory = Self.root.appendingPathComponent(engine == "lemmings2" ? "Sources/Ports/Lemm2" : "Sources/Ports/LEM3CD")
+            for item in MobileOriginalMedia.Item.all(engine: engine) {
+                let media = try MobileOriginalMedia(item: item, directory: directory)
+                let initial = media.frameCount
+                try media.advance(seconds: .infinity); try media.advance(seconds: -1)
+                #expect(media.frameCount == initial)
+                for _ in 0..<20 {
+                    media.requestContinue(); try media.advance(seconds: 0.1)
+                    _ = media.drainSounds()
+                }
+                #expect(media.frameCount > initial)
+                #expect(media.frame.rgba.count == media.frame.width * media.frame.height * 4)
+                media.discardElapsedTime()
+                let count = media.frameCount
+                try media.advance(seconds: 0)
+                #expect(media.frameCount == count)
+            }
+        }
+    }
+
     @Test func earlyNeoNukeCompletesWithoutInventingUnreleasedDeaths() throws {
         let game = try neo()
         let before = game.snapshot

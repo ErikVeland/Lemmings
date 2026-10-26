@@ -7,19 +7,23 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
     public var progress = LearningJourneyProgress()
     public var run: LevelSequenceRun?
     public var journeySession: JourneySessionSnapshot?
+    public private(set) var savedRuns: [LevelSequenceRun] = []
     public init() {}
-    private enum CodingKeys: String, CodingKey { case progress, run, journeySession }
+    private enum CodingKeys: String, CodingKey { case progress, run, journeySession, savedRuns }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         progress = try values.decode(LearningJourneyProgress.self, forKey: .progress)
         run = try values.decodeIfPresent(LevelSequenceRun.self, forKey: .run)?.removingMultiplayerLevels()
         journeySession = try values.decodeIfPresent(JourneySessionSnapshot.self, forKey: .journeySession)
+        savedRuns = try values.decodeIfPresent([LevelSequenceRun].self, forKey: .savedRuns) ?? []
     }
 
     public mutating func refreshJourneySession() {
-        let current = run.flatMap { $0.source == .playlist(LearningJourney.playlistID) ? $0 : nil }
+        // A progression run does not end the journey saved alongside it.
+        guard let run, run.source == .playlist(LearningJourney.playlistID) else { return }
+        let current = run
         guard journeySession?.run != current else { return }
-        let l2 = current?.id == journeySession?.run?.id ? journeySession?.l2Progress ?? [:] : [:]
+        let l2 = current.id == journeySession?.run?.id ? journeySession?.l2Progress ?? [:] : [:]
         journeySession = .init(run: current, l2Progress: l2)
     }
     public mutating func importJourneySession(_ incoming: JourneySessionSnapshot) {
@@ -29,8 +33,22 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
     }
     public mutating func start(_ entries: [LevelPlaylistEntry], name: String, poolID: String,
                                playlistID: UUID = LearningJourney.playlistID) throws {
-        run = try LevelSequenceRun(source: .playlist(playlistID),
+        let next = try LevelSequenceRun(source: .playlist(playlistID),
             pool: LevelPool(id: poolID, summary: name), entries: entries.filter { LearningJourney.isSinglePlayer($0) })
+        refreshJourneySession()
+        preserveCurrentRun()
+        run = next
+    }
+    private mutating func preserveCurrentRun() {
+        guard let run else { return }
+        savedRuns.removeAll { $0.id == run.id }
+        savedRuns.insert(run, at: 0)
+    }
+    public mutating func resumeJourney() {
+        guard let saved = journeySession?.run, saved.id != run?.id else { return }
+        preserveCurrentRun()
+        savedRuns.removeAll { $0.id == saved.id }
+        run = saved
     }
     public mutating func select(_ index: Int) throws {
         guard let current = run else { return }
@@ -45,7 +63,13 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
     }
     @discardableResult public mutating func advance() -> Bool {
         guard var current = run else { return false }
-        guard current.advance() else { run = nil; return false }
+        guard current.advance() else {
+            if current.source == .playlist(LearningJourney.playlistID) {
+                journeySession = .init(run: nil)
+            }
+            run = nil
+            return false
+        }
         run = current; return true
     }
 }
@@ -74,8 +98,9 @@ public struct MobileLearningResume: Sendable {
             : [(owner, nil)] + candidates.map { ($0.scope, $0) }
         let scopes = currentSessionOnly ? Array(allScopes.prefix(1)) : allScopes
         for (scope, seat) in scopes {
-            guard let state = storage(scope).load(MobileLearningState.self, name: "learning"),
-                  let run = state.run else { continue }
+            guard var state = storage(scope).load(MobileLearningState.self, name: "learning") else { continue }
+            if journeyOnly || state.run == nil { state.resumeJourney() }
+            guard let run = state.run else { continue }
             if journeyOnly, !(run.source == .playlist(LearningJourney.playlistID) && run.pool.id.hasPrefix("learning-")) { continue }
             return Self(state: state, seat: seat, owner: owner)
         }

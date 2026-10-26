@@ -3,6 +3,10 @@
 See the [roadmap through 3.0](Roadmap.md) for historical milestones and the
 proposed product sequence. This plan retains the detailed platform and release gates.
 
+The [release schedule](ReleaseSchedule.md), adopted 26 October 2026, supersedes
+older delivery orders and routine Mac test requirements: Mac first, then iOS,
+tvOS and sideloading stores. Ship Mac quickly and skip tests unless engines change.
+
 Updated 19 October 2026. This plan records package evidence and the remaining platform and fidelity work.
 
 Current source candidates, published feed versions and retained package evidence
@@ -45,7 +49,9 @@ Current route counts and their exact source limits are recorded in [release scop
 
 [gates.json](ReleaseReadiness/gates.json) is the checklist with priorities, current status and concrete exit criteria. A passing regression suite does not close untested gates.
 
-Maintenance candidates need exact-source checks and distribution evidence. The broader evaluation milestone retains these requirements:
+Maintenance candidates follow the release schedule's engine-change test policy
+and retain source identity and distribution evidence. The broader evaluation
+milestone retains these requirements:
 
 1. All current regression checks pass against a recorded source and fixture manifest.
 2. Preserve winning routes and their solvability and difficulty evidence for every campaign advertised as complete. Use the [release replay policy](ReleaseScope.md#release-replay-policy) to choose between the minor audit and full campaign replay gates. Continue to label incomplete sequel support accurately.

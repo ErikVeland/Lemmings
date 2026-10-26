@@ -23,5 +23,6 @@
   "TouchpadJog.swift",
   "AssignmentPointerShape.swift",
   "PrecisionZoomLedger.swift",
-  "PrecisionZoomScrollGesture.swift"
+  "PrecisionZoomScrollGesture.swift",
+  "FanLevelOrganisation.swift"
 ]

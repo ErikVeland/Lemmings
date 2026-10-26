@@ -157,8 +157,12 @@ public enum GamePlayButtonArt {
 
     /// Paint inside the existing socket before its selection marker and glyphs.
     public static func draw(in context: CGContext, frame: CGRect, selected: Bool,
-                            pixel: CGFloat, face: Face) {
-        GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel)
+                            pixel: CGFloat, face: Face, shape: GameControlShape = .square) {
+        GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel, shape: shape)
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.addPath(shape.path(in: frame, inset: 4 * pixel))
+        context.clip()
         drawFace(in: context, frame: frame, selected: selected, pixel: pixel, face: face)
         GameStoneArt.drawAccent(in: context, frame: frame, selected: selected, pixel: pixel)
     }

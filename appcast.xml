@@ -2,6 +2,39 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.2.2</title>
+            <pubDate>Sat, 24 Oct 2026 11:01:18 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>99</sparkle:version>
+            <sparkle:shortVersionString>2.2.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Made for Duo. Refined everywhere.</h3>
+<p>Duo has driven a wider round of improvements to Ultimate Lemmings. Version 2.2.2 gives its changing displays more care, while improving the shared experience on Mac, iPhone, iPad and Apple TV.</p>
+<h3>More room on Duo</h3>
+<p>Menus and gameplay use the full front display, with controls arranged around camera cutouts. Layouts adapt between the outer screen and divided inner display.</p>
+<p>Desk Clock opens reliably from Home and fills the active display. Tent Pose can open it during a game, preserving the attempt and pausing play until you choose Resume. The clock follows your display brightness, offers optional red night vision and improves how its lemmings move around the digits and reach their doorway.</p>
+<h3>A clearer route through the game</h3>
+<p>Shared navigation gives menus a consistent route home and keeps Back controls within reach on long pages. Cancelling an action returns to the page you came from. Hot Seat handovers still wait for Ready.</p>
+<p>The fan library groups learning levels, magazines and books, community collections, ports and remakes. Numbered packs stay together in order. Your progress, favourites and saved runs keep their existing identities.</p>
+<p>Winning a Golden Path lesson also credits the level in its original collection. Existing saved wins receive the same credit without another playthrough.</p>
+<h3>Familiar stone, clearer controls</h3>
+<p>Shared buttons use rock artwork drawn from the original Macintosh game. Gameplay controls have distinct faces, readable symbols and consistent states across Mac, iPhone, iPad and Apple TV.</p>
+<p>Touch controls make overlapping lemmings easier to browse. Revised mobile replay controls keep the title compact, skills visible and camera movement within reach. On Mac, crowded playfields gain subtle sprite separation at closer zoom levels.</p>
+<h3>Platforms and scope</h3>
+<p>The release covers Mac on Apple silicon and Intel, iPhone, iPad, Duo and Apple TV, with the existing TestFlight and AltStore Classic channels. Apple processing and Beta Review determine external TestFlight availability.</p>
+<p>Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta with their documented limits. Mobile Journey still plays Classic levels. Physical-device acceptance retains its recorded limits. The release record distinguishes automated checks from device acceptance and records delivery status.</p>
+<p class="meta">Build: 99<br>Release commit: fea37bf39fee3aa5b23f3112188b37199bc5b73e<br>Release base: v2.2.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build99.zip" length="2056896617" type="application/octet-stream" sparkle:edSignature="Z42oZbn2PMpinQ//nwXhZJC0Jxxg6prCh4NQOJfFCIAyVQxEcetdRa4u0aOryzuYWuMNmo2yzVMGTSBccXWZDg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from98.delta" sparkle:deltaFrom="98" length="3033370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="w9IOLetnPaLrieM07tNMfhC4tmXTGx91dfZkezlveWWfpeMk7RQz8pEFctyyhEz533+ClGQVrEkIJ1zYFRuCAA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from97.delta" sparkle:deltaFrom="97" length="3082958" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="2HcAFUkm+gZKipSHt7yZQpT+Ihot22m/7MbT+NRr9HDNSpDQ3bkcIK5LHZnGeVTcFZ+bkIhkFpTESwbI2BL7Dw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from96.delta" sparkle:deltaFrom="96" length="43469790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="tmc9H7ntTEZQKrZN81ihiO3bTbh4hYxSWcM/k+yNgjswRxrRqrbeo2sS1Vq2/xnea9LbOSHy4hM580HkCC4ZDA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from95.delta" sparkle:deltaFrom="95" length="49647074" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="8192Wkc0PIfxnksr8yg6snU3sLX7m7+OR07shEZCQOfx+bHsGdgiF2m8JptFI8A33JUGIbcD8OdLj8QpgnNHCA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from93.delta" sparkle:deltaFrom="93" length="44116814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="wWPF1ICgVBAxBiaPQ7PEoLw52PuVy27ON8gnVq8qkFnSrCFWi/tXmQIjl5uvp4qyJE8SqI2ORVNulbiqkK+CDA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.2.1</title>
             <pubDate>Fri, 23 Oct 2026 14:35:00 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

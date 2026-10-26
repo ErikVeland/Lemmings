@@ -106,7 +106,7 @@ extension MusicFileDeck {
         for _ in 0..<40 {
             _ = try deck.engine.renderOffline(1024, to: output)
             // Offline time advances faster than the decoder's wall clock.
-            deck.stream.drain()
+            deck.stream.drain(); deck.rewindAudio.drain()
         }
         RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         try assertMusicRewind(deck.rewindAudio.capturedFrames > 4096, "The recording tap did not capture real soundtrack PCM")
@@ -122,6 +122,7 @@ extension MusicFileDeck {
         for _ in 0..<6 {
             let status = try deck.engine.renderOffline(1024, to: output)
             try assertMusicRewind(status == .success, "The parked recording could not render a scratch")
+            deck.rewindAudio.drain()
             reverseEnergy += energy(output)
         }
         try assertMusicRewind(reverseEnergy > 1, "The recording rewind was silent")
@@ -159,30 +160,30 @@ extension ModuleMusicPlayer {
         let output = stereoBuffer(1024)
         try engine.enableManualRenderingMode(.offline, format: output.format, maximumFrameCount: 1024)
         defer { stop(); engine.disableManualRenderingMode() }
-        try start(); synthesisQueue.sync {}
+        try start(); synthesisQueue.sync {}; rewindAudio.drain()
         for _ in 0..<40 {
             _ = try engine.renderOffline(1024, to: output)
-            synthesisQueue.sync {}
+            synthesisQueue.sync {}; rewindAudio.drain()
         }
         try assertMusicRewind(rewindAudio.capturedFrames > 4096, "The MOD mixer did not capture its own samples")
         try resumeOutput()
         try assertMusicRewind(startFadeFrames == 0 && spinUpFrames == 0,
             "Resuming a playing MOD restarted its fade-in and dropped the music to silence")
         suspendOutput()
-        for _ in 0..<32 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        for _ in 0..<32 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {}; rewindAudio.drain() }
         RunLoop.current.run(until: Date().addingTimeInterval(1.8))
         try assertMusicRewind(!engine.isRunning, "Paused MOD output did not park")
         playRewind()
         try assertMusicRewind(engine.isRunning && spatialMixer.outputVolume == 0,
             "MOD rewind failed to wake parked output or retained the forward mix")
         var reverseEnergy = 0.0
-        for _ in 0..<6 { _ = try engine.renderOffline(1024, to: output); reverseEnergy += energy(output); synthesisQueue.sync {} }
+        for _ in 0..<6 { _ = try engine.renderOffline(1024, to: output); reverseEnergy += energy(output); synthesisQueue.sync {}; rewindAudio.drain() }
         try assertMusicRewind(reverseEnergy > 1, "The MOD scratch was silent")
         setVolume(0); playRewind()
-        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {}; rewindAudio.drain() }
         try assertMusicRewind(energy(output) == 0, "Zero music volume leaked reversed MOD audio")
         setVolume(0.7); playRewind(); setMuted(true)
-        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {}; rewindAudio.drain() }
         try assertMusicRewind(energy(output) == 0 && !rewindAudio.isRewinding, "Mute leaked a MOD scratch")
         setMuted(false); playRewind(); suspendOutput()
         try assertMusicRewind(!rewindAudio.isRewinding, "Suspension retained the MOD scratch")

@@ -186,6 +186,40 @@ import NxlvKit
             defaults.set(try encoder.encode(local), forKey: sessionKey(host: seat.host))
         }
     }
+    /// Remove sessions merged into another session. A device that was playing a retired
+    /// session continues the surviving one with the same players.
+    public func retireLibraryHotSeats(_ merged: [String: String]) throws {
+        guard !merged.isEmpty else { return }
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid(L10n.text("Local saves are not writable.")) }
+        let encoder = JSONEncoder()
+        let all = libraryHotSeats
+        for profile in records.profiles {
+            let history = savedSessionHistory(host: profile.id)
+            let kept = history.filter { merged[$0.id] == nil }
+            if kept.count != history.count {
+                defaults.set(try encoder.encode(kept), forKey: sessionKey(host: profile.id) + ".history")
+            }
+            let key = sessionKey(host: profile.id)
+            guard let data = defaults.data(forKey: key),
+                  let saved = try? JSONDecoder().decode(SavedHotSeat.self, from: data),
+                  let target = merged[saved.id] else { continue }
+            if let survivor = all.first(where: { $0.id == target }) {
+                let moved = SavedHotSeat(id: survivor.id, host: survivor.host, players: survivor.players,
+                    turn: survivor.turn, active: saved.active, savedAt: survivor.savedAt, policy: survivor.policy)
+                defaults.set(try encoder.encode(moved), forKey: key)
+            } else { defaults.removeObject(forKey: key) }
+        }
+        if let id = hotSeatID, let target = merged[id] {
+            if let survivor = all.first(where: { $0.id == target }), survivor.host == hotSeatHostID {
+                hotSeatID = target; sessionProfileIDs = survivor.players
+                sessionTurnID = survivor.turn.flatMap { survivor.players.contains($0) ? $0 : nil }
+            } else {
+                // The surviving session arrives with the next import. Keep the roster and turn.
+                hotSeatID = target
+            }
+            persistSession()
+        }
+    }
     @discardableResult public func resumeHotSeat(id: String) -> Bool {
         guard canWrite, storageError == nil else { return false }
         if id == hotSeatID { return true }

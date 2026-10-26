@@ -7,6 +7,14 @@ changes its owner or passes a Hot Seat turn.
 
 ## Existing routes
 
+Menu headers place the return action at the top-left and Main menu at the
+top-right of the safe viewport. Keep these positions through scrolling and
+layout changes. Remove the matching body return when the header supplies it.
+The primary forward action stays at the bottom-right. Group related tools in
+the body, with complete rows that divide their width among the actual buttons.
+Pause and replay share this structure. Mac solution replay groups Replay,
+Speed and Camera tools above its fixed Play/Pause action.
+
 | Player task | Route and return behaviour |
 | --- | --- |
 | Start or resume | Home keeps the saved run and current player visible. Start/Ready remains the deliberate forward action. Resume restores the saved attempt before play. |

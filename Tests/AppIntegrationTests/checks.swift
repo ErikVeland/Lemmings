@@ -847,15 +847,30 @@ extension AppDelegate {
     try check(LevelHintWindow.shared.page != nil, "Controller could not select the hints button in controls help; selected \(helpSelection), sheet remains \(host.attachedSheet != nil)")
     keyboard.controllerMenuAction(.cancel)
 
+    let settingsCaller = GameScreen.shared.controllerPage(in: host)
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     keyboard.settings = { preferences.show() }
     keyboard.controllerAction(.settings)
-    try check(keyboard.controllerMenuRoot != nil, "Controller settings command did not open Settings")
+    guard let settingsPage = GameScreen.shared.controllerPage(in: host) else {
+      throw IntegrationFailure(message: "Controller settings command did not open Settings")
+    }
+    try check(settingsPage !== settingsCaller, "Settings did not open above its caller")
     keyboard.controllerMenuAction(.cycle(1))
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.rate(-1))
-    keyboard.controllerMenuAction(.assign)
+    func chooseControllerSetting(_ title: String) throws {
+      // Navigation is pinned outside the settings body. Find each control
+      // through real D-pad steps instead of assuming its old row offset.
+      for _ in 0..<20 {
+        if (keyboard.focusedControllerControl as? NSButton)?.title == title {
+          keyboard.controllerMenuAction(.assign)
+          return
+        }
+        keyboard.controllerMenuAction(.rate(-1))
+      }
+      throw IntegrationFailure(message: "Controller could not reach setting: " + title)
+    }
+    try chooseControllerSetting(L10n.text("Tap RT to toggle fast-forward"))
     try check(!preferences.current.controllerTapSpeed, "D-pad and A could not change the trigger setting")
-    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.assign)
+    try chooseControllerSetting(L10n.text("Swap sticks"))
     try check(preferences.current.controllerSwapSticks, "D-pad and A could not swap sticks")
     if let page = keyboard.controllerMenuRoot {
       page.layoutSubtreeIfNeeded()
@@ -866,7 +881,10 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: output)
     }
     keyboard.controllerMenuAction(.cancel)
-    try check(!GameScreen.shared.isPresented, "B did not close Settings")
+    try check(!GameScreen.shared.contains(settingsPage)
+      && GameScreen.shared.controllerPage(in: host) === settingsCaller,
+      "B did not close Settings and return to its caller")
+    GameScreen.shared.dismissAll()
     keyboard.controllerEnabled = { false }
     try check(!keyboard.controllerPlaying, "Disabled controller stayed active during gameplay")
     keyboard.controllerEnabled = { true }; keyboard.ownsController = { false }
@@ -2819,7 +2837,9 @@ extension AppDelegate {
         for child in view.subviews {
           if child.isHidden { continue }
           if let control = child as? NSButton {
-            control.scrollToVisible(control.bounds)
+            if control.isEnabled {
+              try check(window.makeFirstResponder(control), "Replay control cannot receive keyboard focus: \(control.title)")
+            } else { control.scrollToVisible(control.bounds) }
             let rect = control.convert(control.bounds, to: replay.page)
             try check(rect.width >= 44 && rect.height >= 44, "Replay target is too small: \(control.title)")
             try check(replay.page.bounds.contains(rect), "Replay target leaves the page: \(control.title)")
@@ -2845,7 +2865,8 @@ extension AppDelegate {
         let buttons = elements.filter { $0.accessibilityRole() == .button }
         try check(buttons.count == (showsBack ? 6 : 5), "Movie replay duplicated or lost its return")
         for row in Dictionary(grouping: buttons, by: { $0.localFrame.minY }).values {
-          try check(row.map { $0.localFrame.minX }.min() == 24 && row.map { $0.localFrame.maxX }.max() == width - 24,
+          try check(abs(row.map { $0.localFrame.minX }.min()! - 24) < 0.01
+            && abs(row.map { $0.localFrame.maxX }.max()! - (width - 24)) < 0.01,
             "Movie replay leaves an incomplete action row")
         }
         let bitmap = bar.bitmapImageRepForCachingDisplay(in: bar.bounds)!
@@ -3135,8 +3156,15 @@ extension AppDelegate {
       for _ in 0..<min(338, expected.ticks) { ghost.advance() }
       try capture(ghost.page, name: "solution-playing-\(mode)")
       button("Pause", in: ghost.page)!.performClick(nil)
-      try check(ghost.page.bounds.size == window.contentView!.bounds.size,
-        "Replay did not fill the game window")
+      guard let replayViewport = ghost.page.enclosingScrollView,
+        let replayNavigation = GameScreen.shared.controllerNavigationRoot(in: window) else {
+        throw IntegrationFailure(message: "Replay lost its window viewport or fixed navigation")
+      }
+      try check(replayNavigation.bounds.size == window.contentView!.bounds.size
+        && ghost.page.bounds.size == replayViewport.contentSize
+        && ghost.page.bounds.width == window.contentView!.bounds.width
+        && ghost.page.bounds.height > window.contentView!.bounds.height * 0.5,
+        "Replay did not fill the viewport below fixed navigation")
       try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
       for target in [2.0, 3, 5, 10] {
@@ -4159,7 +4187,11 @@ extension AppDelegate {
   /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
   private func recordsWithSkips(_ skips: Int) throws -> URL {
     var records = ArcadeRecords()
-    _ = records.addProfile(initials: "LEM", portrait: 0)
+    // A new records file still uses the legacy profile. Give each fixture its
+    // own progress scope so earlier campaign and Journey wins cannot leak in.
+    guard records.addProfile(initials: "LEM", portrait: 0) != nil else {
+      throw IntegrationFailure(message: "Could not create the skip fixture owner")
+    }
     for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
       let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
         rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
@@ -4478,6 +4510,8 @@ extension AppDelegate {
     guard let skipped = arcadeLevel, let skippedNumber = flow?.currentNumber else {
       throw IntegrationFailure(message: "The failed level had no records identity")
     }
+    try check(flow?.hasPassed(rank: flow!.currentRank!.name, position: skippedNumber - 1) == false,
+      "The skip fixture already had a passed level before Skip")
     view.skipLevel()
     try check(ArcadeStore.shared.records.hasSkipped(skipped, profileID: owner)
       && ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0, "Skip did not spend the owner's skip")
@@ -8422,6 +8456,9 @@ Task { @MainActor in
     try subject.testBundledNeoLemmixPacks()
     try await subject.testNeoLemmixPackBrowser()
     print("NeoLemmix pack integration tests passed.")
+    #elseif JOURNEY_RESUME_TESTS
+    try subject.testArchivedJourneyHomeResume()
+    print("Archived journey Home integration tests passed.")
     #elseif SEQUENCE_RECOVERY_TESTS
     try await subject.testSequenceCheckpointResume()
     print("Sequence checkpoint integration tests passed.")
@@ -9536,6 +9573,67 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 }
 
 extension AppDelegate {
+  fileprivate func testArchivedJourneyHomeResume() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll(); loadContent(); settings.music = .silent; settings.soundVolume = 0
+    let previous = ArcadeStore.shared, oldCache = playlistStoreCache, oldRecovery = menuRecovery
+    let storage = try AppStorage.temporary(named: "archived-journey-home")
+    let arcade = ArcadeStore(storage: storage, bundledProofs: nil)
+    ArcadeStore.shared = arcade
+    defer {
+      ArcadeStore.shared = previous; playlistStoreCache = oldCache; menuRecovery = oldRecovery
+      storage.removeTemporaryFiles()
+    }
+    let guest = arcade.addProfile(initials: "PAL", portrait: 1, select: false)!
+    arcade.toggleSessionProfile(guest.id)
+    let selectedSeat = arcade.hotSeatID
+    let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+      catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+      levelNameSnapshot: "Saved journey", levelNumberSnapshot: 1)
+    let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: [entry])
+    let file = storage.applicationSupport.appendingPathComponent("playlists.json")
+    let store = try LevelPlaylistStore(file: file)
+    try store.add(playlist)
+    let journey = try LevelSequenceRun.playlist(playlist, pool: .init(id: LearningJourney.version, summary: playlist.name))
+    try store.startRun(journey, hotSeatID: selectedSeat)
+    let other = try LevelSequenceRun.playlist(playlist, pool: journey.pool)
+    try store.startRun(other, hotSeatID: "other-session")
+    let reopened = try LevelPlaylistStore(file: file)
+    playlistStoreCache = (arcade.records.activeProfileID, reopened); menuRecovery = nil
+    let rows = homeMenuItems()
+    try check(rows.contains { if case .resumeSequence = $0.action { return true }; return false },
+      "Home hid the selected Hot Seat's archived journey")
+    try check(reopened.activeRun == other && arcade.hotSeatID == selectedSeat,
+      "Reading Home changed the selected run or Hot Seat")
+    let folder = URL(fileURLWithPath: ".build/journey-resume-renders")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    for size in [CGSize(width: 640, height: 480), CGSize(width: 900, height: 620), CGSize(width: 1600, height: 1000)] {
+      let probe = PlayfieldView(frame: CGRect(origin: .zero, size: size))
+      probe.phase = .briefing; probe.overlayTitle = "LEMMINGS"; probe.overlayLines = rows.map(\.title)
+      probe.overlayProfileInitials = arcade.sessionProfiles.map(\.initials).joined(separator: " v ")
+      probe.overlayHighlight = 0
+      probe.overlayHomeLeadingCount = rows.firstIndex { if case .browse = $0.action { return true }; return false } ?? rows.count
+      let image = ReplayFrameCapture.image(size: size) { ReplayFrameCapture.draw(probe, in: probe.bounds) }!
+      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent("home-\(Int(size.width)).png"))
+      let controls = probe.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
+      guard let button = controls.first(where: { $0.accessibilityLabel() == rows[0].title }) else {
+        throw IntegrationFailure(message: "Archived journey has no accessible Home action")
+      }
+      try check(probe.bounds.contains(button.localFrame) && button.localFrame.height >= 44,
+        "Archived journey Home target is clipped or too small")
+      var selected: Int?
+      probe.onSelectOverlayLine = { selected = $0 }
+      probe.handleClick(at: CGPoint(x: button.localFrame.midX, y: button.localFrame.midY))
+      try check(selected == 0, "Archived journey Home target activated another action")
+    }
+    try reopened.resumeRun(id: journey.id)
+    try check(reopened.activeRun == journey && reopened.activeRunHotSeatID == selectedSeat,
+      "Resume selected another session's queue")
+    try check(reopened.resumableRun(hotSeatID: "other-session")?.run == other,
+      "Resume discarded the other session's queue")
+  }
+
   fileprivate func testHotSeatResumeRoster() throws {
     GameScreen.shared.dismissAll(); loadContent(); settings.music = .silent; settings.soundVolume = 0
     let previous = ArcadeStore.shared, oldCache = playlistStoreCache

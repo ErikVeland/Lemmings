@@ -14,7 +14,7 @@ extension MobileLibraryViewController {
         adapter.isMenu = { true }
         adapter.isActive = { [weak self] in
             guard let self else { return false }
-            return !self.deskClockBlocksInput && self.game == nil && !self.searchField.isFirstResponder && self.mobileInsights.field?.isFirstResponder != true && self.view.window?.windowScene?.activationState == .foregroundActive
+            return !self.deskClockBlocksInput && self.game == nil && self.presentedViewController == nil && !self.searchField.isFirstResponder && self.mobileInsights.field?.isFirstResponder != true && self.view.window?.windowScene?.activationState == .foregroundActive
         }
         adapter.onMenuMove = { [weak self] delta in
             guard let self else { return }

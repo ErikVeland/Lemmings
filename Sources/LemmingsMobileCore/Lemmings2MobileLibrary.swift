@@ -144,6 +144,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     }
 
     public func loadPractice(at index: Int, skills: [Lemmings2Runtime.Skill]) throws -> MobileLevelContent {
+        guard skills.count == 8, Set(skills).count == 8, !skills.contains(.unused) else { throw MobileSessionError.unsupportedControl }
         let practice = try Lemmings2Practice(root: directory)
         guard practice.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let level = practice.levels[index]

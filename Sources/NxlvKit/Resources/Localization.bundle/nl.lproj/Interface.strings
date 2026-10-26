@@ -155,6 +155,7 @@
 "Activate selected menu choice" = "Geselecteerde menuoptie activeren";
 "Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level." = "Actieve lemmings gaan verloren. Geredde lemmings en reserves blijven behouden. Je kunt het level opnieuw proberen.";
 "Active players: {0}" = "Actieve spelers: {0}";
+"Active players: {0}. Next: {1}" = "Actieve spelers: {0}. Volgende: {1}";
 "Ad-Lib FM" = "Ad-Lib FM";
 "Adaptive DJ" = "Adaptieve dj";
 "Adaptive DJ Mix (The True Choice) 🎧" = "Adaptieve dj-mix (de juiste keuze) 🎧";
@@ -533,6 +534,7 @@
 "Classic tribe 1–5" = "Classic tribe 1–5";
 "Classic tribe movie" = "Film van klassieke stam";
 "Clean rescue" = "Schone redding";
+"Clear" = "Wissen";
 "Clear a level as Jeremy Bentham, with an evidenced trade-off." = "Voltooi een level als Jeremy Bentham, met een onderbouwde afweging.";
 "Clear a level using one skill type." = "Voltooi een level met één type vaardigheid.";
 "Clear a level with The Absurdist play style." = "Voltooi een level met de speelstijl De absurdist.";
@@ -568,6 +570,7 @@
 "Cleared the level using one skill type." = "Het level voltooid met slechts één type vaardigheid.";
 "Cleared the level without assigning a skill." = "Het level voltooid zonder een vaardigheid toe te wijzen.";
 "Cleared without assigning a skill." = "Voltooid zonder vaardigheden toe te wijzen.";
+"Clearer navigation keeps your place. Fan packs are grouped for browsing, and Golden Path wins count in their original collections." = "Duidelijkere navigatie onthoudt je plek. Fanpakketten zijn gegroepeerd en overwinningen op het Gouden Pad tellen mee in hun oorspronkelijke collecties.";
 "Clears" = "Voltooide levels";
 "Click or Return to practise" = "Klik of druk op Enter om te oefenen";
 "Click or press Enter to try again" = "Klik of druk op Enter om opnieuw te proberen";
@@ -625,6 +628,7 @@
 "Connecting to Game Center..." = "Verbinding maken met Game Center…";
 "Connecting..." = "Verbinden…";
 "Consequentialist optimisation with a strong rescue outcome." = "Consequentialistische optimalisatie met een sterk reddingsresultaat.";
+"Contests & community" = "Wedstrijden en community";
 "Continue" = "Doorgaan";
 "Continue journey" = "Continue journey";
 "Continue or start level" = "Doorgaan of niveau starten";
@@ -671,7 +675,6 @@
 "Crisp retina-class 2× graphics, high-res fonts, Mac UI panel, and festive Xmas sprites." = "Scherpe 2×-afbeeldingen van retinakwaliteit, hoge-resolutiefonts, een Mac-interfacepaneel en feestelijke kerstsprites.";
 "Cross / A" = "Kruis / A";
 "Crowd spacing" = "Afstand tussen lemmings";
-"Current graphics: {0}" = "Current graphics: {0}";
 "Current level" = "Huidig niveau";
 "Current route {0}/{1}" = "Current route {0}/{1}";
 "Current turn: {0}" = "Huidige beurt: {0}";
@@ -763,6 +766,7 @@
 "DualSense touchpad click" = "Klik op het DualSense-touchpad";
 "DualSense touchpad click: DJ shuffle" = "Klik op het DualSense-touchpad: dj-shuffle";
 "DualSense touchpad swipe: step back / forward" = "Veeg over het DualSense-touchpad: stap terug / vooruit";
+"Duo uses more of its display. Tent Pose opens Desk Clock with your game safely paused. Optional red night vision keeps the clock quiet." = "Duo benut meer van het scherm. De tentstand opent de bureauklok terwijl je spel veilig is gepauzeerd. Optioneel rood nachtzicht houdt de klok rustig.";
 "Duplicate Chronicles object ID {0}." = "Dubbele Chronicles-object-ID {0}.";
 "Duplicate L2 sprite animation." = "Dubbele L2-spriteanimatie.";
 "During the winding course of Lemmings the Second, the following occurred:" = "In de bewogen geschiedenis van Lemmings the Second gebeurde het volgende:";
@@ -974,8 +978,6 @@
 "GAME CONTROLS" = "SPELBEDIENING";
 "GARY TIMMONS" = "GARY TIMMONS";
 "GHOST SOLUTION" = "SPOOKOPLOSSING";
-"GHOSTS OFF" = "GHOSTS OFF";
-"GHOSTS ON" = "GHOSTS ON";
 "GLIDE" = "ZWEVEN";
 "GLUE POURER" = "LIJMGIETER";
 "GRAEME ANDERSON" = "GRAEME ANDERSON";
@@ -1086,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Hij die bij maanlicht de stemmen van de lemmings inspreekt";
 "Help" = "Hulp";
 "Help / extra actions" = "Help / extra acties";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Help ons levels te vinden die aandacht nodig hebben";
 "High" = "Hoog";
 "High rescue rate with efficient skill use." = "Hoog reddingspercentage met efficiënt gebruik van vaardigheden.";
@@ -1095,6 +1098,7 @@
 "Highest count of one skill, then most saved, fewest skills and fastest time." = "Eerst het hoogste aantal van één vaardigheid, daarna de meeste geredde lemmings, het minste aantal vaardigheden en de snelste tijd.";
 "Highland" = "Hoogland";
 "Hints" = "Hints";
+"Hold a lemming, then slide left or right to browse the group." = "Houd een lemming vast en veeg naar links of rechts om door de groep te bladeren.";
 "Hold to edit player" = "Houd ingedrukt om de speler te bewerken";
 "Hold: fixed fast-forward" = "Vasthouden: vaste doorspoelsnelheid";
 "Hold: ramp up; release: previous speed" = "Vasthouden: geleidelijk versnellen; loslaten: vorige snelheid";
@@ -1103,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "Home";
 "Home {0}/{1}" = "Thuis {0}/{1}";
 "Hopper" = "Hopper";
 "Host" = "Host";
 "Hot Seat" = "Hot Seat";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Hot Seat-starts";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Hot Seat…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Geef de beurt door met {1}. {2} Met de cijfertoetsen voeg je spelers toe of verwijder je ze. N voegt een nieuwe speler toe. Kies een spel om deze gedeelde campagne voort te zetten. Een nieuwe Hot Seat begint vanaf het begin.";
@@ -1151,6 +1155,7 @@
 "Increase speed" = "Snelheid verhogen";
 "Initials: {0}_" = "Initialen: {0}_";
 "Insights" = "Inzichten";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Se på verktøyene på brettet. Bestem hvem som trenger hvert verktøy, og klargjør én del av ruten om gangen.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1407,6 +1412,7 @@
 "Later was unexpectedly pleasant." = "Later was unexpectedly pleasant.";
 "Leaderboards" = "Ranglijsten";
 "Learned to cook for someone." = "Learned to cook for someone.";
+"Learning" = "Leren";
 "Least skills" = "Minste vaardigheden";
 "Leave Hot Seat?" = "Hot Seat verlaten?";
 "Left" = "Links";
@@ -1459,7 +1465,6 @@
 "Level goals and bests >" = "Niveaudoelen en records >";
 "Level goals and tiered hints" = "Leveldoelen en hints in stappen";
 "Level hints" = "Levelhints";
-"Level hints (H)" = "Levelhints (H)";
 "Level hints…" = "Niveauhints…";
 "Level locked" = "Level vergrendeld";
 "Level locked. Complete the preceding level or change the Classic unlock setting." = "Level vergrendeld. Voltooi het vorige level of wijzig de instelling voor het ontgrendelen van Classic-levels.";
@@ -1528,7 +1533,6 @@
 "MOVIE SAVED" = "FILM OPGESLAGEN";
 "MUSIC" = "MUZIEK";
 "Mac 2× High-Resolution (512x342 / 640x480)" = "Mac 2× hoge resolutie (512×342 / 640×480)";
-"Mac widgets start correctly and fill every size. The clock stays visible in full-colour, tinted and monochrome appearances." = "Mac-widgets starten correct en vullen elk formaat. De klok blijft zichtbaar in kleur, met een tint en in zwart-wit.";
 "Machine" = "Machine";
 "Machine preset" = "Machinevoorinstelling";
 "Macintosh" = "Macintosh";
@@ -1541,6 +1545,7 @@
 "Macintosh-style 2× artwork" = "Macintosh-stijl artwork 2×";
 "Made a friend during a queue." = "Made a friend during a queue.";
 "Made enough jam for the winter." = "Made enough jam for the winter.";
+"Magazines & books" = "Tijdschriften en boeken";
 "Magic Carpet" = "Vliegend tapijt";
 "Magno Booter" = "Magneetlaarzen";
 "Main menu" = "Hoofdmenu";
@@ -1707,7 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Volgende geschikte lemming";
 "Next graphics" = "Volgende grafische stijl";
-"Next graphics (F2)" = "Volgende grafische stijl (F2)";
+"Next lemming" = "Next lemming";
 "Next level" = "Volgend level";
 "Next level >" = "Volgend niveau >";
 "Next move" = "Volgende zet";
@@ -1951,7 +1956,7 @@
 "Pause action replay" = "Actiereplay pauzeren";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Pauzeer en volg de route van ingang naar uitgang. Zoek de eerste plek waar een lemming niet veilig langs kan.";
 "Pause and open controls" = "Pauzeren en bediening openen";
-"Pause and resume" = "Pauzeren en hervatten";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Pauzemenu";
 "Pause on interruption" = "Pauzeren bij onderbreking";
 "Pause on skill change" = "Pauzeren bij vaardigheidswisseling";
@@ -2033,6 +2038,7 @@
 "Pole Vaulter" = "Polsstokspringer";
 "Portrait" = "Portret";
 "Portrait: {0}" = "Portret: {0}";
+"Ports & remakes" = "Ports en remakes";
 "Practice" = "Oefenen";
 "Practice levels" = "Oefenniveaus";
 "Practise" = "Practise";
@@ -2056,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Vorig record {0}. Deze poging {1}.";
 "Previous eligible lemming" = "Vorige geschikte lemming";
 "Previous hint" = "Vorige hint";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Vorige zet";
 "Previous page" = "Vorige pagina";
 "Previous record: {0}. New record: {1}." = "Vorig record: {0}. Nieuw record: {1}.";
@@ -2082,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q NOGMAALS OM AF TE SLUITEN  *  ESC OM TE BLIJVEN";
 "Queued" = "In wachtrij";
 "Quit Ultimate Lemmings" = "Ultimate Lemmings afsluiten";
-"Quit to main menu" = "Terug naar het hoofdmenu";
 "Quit?" = "Afsluiten?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R OPNIEUW - RED MEER, GEBRUIK MINDER";
@@ -2168,7 +2174,6 @@
 "Records were not saved. Retry the save before continuing." = "Records zijn niet opgeslagen. Probeer opnieuw op te slaan voordat je doorgaat.";
 "Recovery" = "Recovery";
 "Red night vision" = "Rood nachtzicht";
-
 "Redbook CD Studio Soundtrack" = "Redbook-cd-studiosoundtrack";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook-cd-audio + HuC6280 PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook-cd-audio, 44,1 kHz stereo";
@@ -2316,6 +2321,7 @@
 "Run paused" = "Poging gepauzeerd";
 "Run recovery save failed: {0}" = "Herstelopslag van de poging mislukt: {0}";
 "Run unavailable" = "Poging niet beschikbaar";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Renner";
 "Running." = "Bezig.";
 "S" = "S";
@@ -2347,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "VAARDIGHEIDSWISSELS KUNNEN PAUZEREN VOOR PLANNING";
 "SKILL MODE" = "VAARDIGHEIDSMODUS";
 "SKILLS" = "VAARDIGHEDEN";
-"SKIP LEVEL" = "LEVEL OVERSLAAN";
 "SKIPS {0}" = "SLAAT {0} OVER";
 "SLIDE" = "GLIJDEN";
 "SLIDER" = "GLIJDER";
@@ -2397,13 +2402,13 @@
 "Save at least 20 more than required in one successful clear." = "Red bij één geslaagde voltooiing minstens 20 lemmings meer dan vereist.";
 "Save at least 5 extra and 20% of the starting population beyond the requirement." = "Red minstens 5 lemmings extra en daarnaast 20% van de beginpopulatie boven het vereiste aantal.";
 "Save cancelled" = "Opslaan geannuleerd";
+"Save failed" = "Opslaan mislukt";
 "Save game" = "Spel opslaan";
 "Save movie" = "Film opslaan";
 "Save one more" = "Red er nog één";
 "Save playlist" = "Afspeellijst opslaan";
 "Save run and return to library" = "Poging opslaan en terug naar bibliotheek";
 "Save this replay at {0}× speed, with music and sound effects." = "Sla deze replay op met {0}× snelheid, inclusief muziek en geluidseffecten.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Opslaan in geselecteerde opslag";
 "Save {0}  ({1}%)" = "Red {0}  ({1}%)";
 "Save {0} more above requirements." = "Red nog {0} boven het vereiste aantal.";
@@ -2418,7 +2423,6 @@
 "Saved level sequences" = "Opgeslagen levelreeksen";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Op dit apparaat opgeslagen";
-"Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level." = "Saved progress and Ready handovers keep their existing safeguards. The Desk Clock does not interrupt a level.";
 "Saved result identities conflict." = "De identiteiten van opgeslagen resultaten conflicteren.";
 "Saved run restored. Press Space when you are ready." = "Opgeslagen spel hersteld. Druk op Spatie als je klaar bent.";
 "Saved the last biscuit for later." = "Saved the last biscuit for later.";
@@ -2458,7 +2462,6 @@
 "Sequel artwork" = "Vervolgafbeeldingen";
 "Sequel artwork requires binary transparency." = "Voor vervolgafbeeldingen is binaire transparantie vereist.";
 "Sequel reconstruction exceeds the image limit." = "De reconstructie van de vervolgafbeelding overschrijdt de afbeeldingslimiet.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "De dienst ziet het IP-adres";
 "Session not changed" = "Sessie niet gewijzigd";
@@ -2480,6 +2483,7 @@
 "Shared campaign" = "Gedeelde campagne";
 "Shared campaign revisions conflict." = "De versies van de gedeelde campagne conflicteren.";
 "Shared play counts" = "Gedeelde spelaantallen";
+"Shared stone artwork and clearer controls improve every platform. Touch selection and replay controls are easier to use." = "Gedeelde steenafbeeldingen en duidelijkere bediening verbeteren elk platform. Aanraakselectie en replaybediening zijn eenvoudiger te gebruiken.";
 "Shared tester library" = "Shared tester library";
 "Shared: {0} days" = "Gedeeld: {0} dagen";
 "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery." = "Shares play counts and worldwide records. Public records include player initials, scores and action replays. No Apple account or email address is sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery.";
@@ -2535,7 +2539,9 @@
 "Skills used: {0}" = "Gebruikte vaardigheden: {0}";
 "Skip" = "Overslaan";
 "Skip as {0} ({1})" = "Overslaan als {0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Level overslaan ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Overslaan";
 "Slider" = "Glijder";
 "Slot {0}" = "Opslag {0}";
@@ -2695,8 +2701,8 @@
 "Talks about it fondly." = "Talks about it fondly.";
 "Tap RT for fast-forward" = "Tik op RT om door te spoelen";
 "Tap RT to toggle fast-forward" = "Tik op RT om doorspoelen in of uit te schakelen";
-"Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom." = "Tik op een lemming om de geselecteerde vaardigheid toe te wijzen. Sleep met een vinger om te verschuiven. Knijp om te zoomen.";
 "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost." = "Tik op de rechtertrigger om doorspoelen in of uit te schakelen. Houd deze ingedrukt voor een tijdelijke snelheidsboost.";
+"Tap to assign. Hold, then slide left or right to browse lemmings. While holding, drag a second finger to pan. Lift the first finger to assign. Drag to pan. Pinch to zoom." = "Tik om toe te wijzen. Houd vast en veeg naar links of rechts om door lemmings te bladeren. Sleep tijdens het vasthouden met een tweede vinger om het beeld te verplaatsen. Til de eerste vinger op om toe te wijzen. Sleep om het beeld te verplaatsen. Knijp om te zoomen.";
 "Tap: toggle fast-forward; hold: fixed fast-forward" = "Tik: doorspoelen in-/uitschakelen; vasthouden: vaste doorspoelsnelheid";
 "Tap: toggle fast-forward; hold: ramp up; release: previous speed" = "Tik: doorspoelen in-/uitschakelen; vasthouden: geleidelijk versnellen; loslaten: vorige snelheid";
 "Tap: toggle fast-forward; hold: temporary boost" = "Tik: doorspoelen in-/uitschakelen; vasthouden: tijdelijke boost";
@@ -2855,7 +2861,6 @@
 "The library keys conflict. Existing saves were kept." = "De bibliotheeksleutels conflicteren. Bestaande opslagbestanden zijn behouden.";
 "The linked local player was removed." = "De gekoppelde lokale speler is verwijderd.";
 "The maximum rescue target for this level is not established yet." = "Het maximale reddingsdoel voor dit level is nog niet vastgesteld.";
-"The mobile Pause control responds on touch-down. Resume shows the frozen playfield before the next game tick." = "Op mobiele apparaten reageert de pauzeknop zodra je hem aanraakt. Bij hervatten verschijnt het bevroren speelveld vóór de volgende spelstap.";
 "The movie could not open in the game window." = "De film kon niet in het spelvenster worden geopend.";
 "The movie encoder has no frame buffer." = "De video-encoder heeft geen beeldbuffer.";
 "The movie encoder stopped responding." = "De video-encoder reageert niet meer.";
@@ -3154,7 +3159,6 @@
 "Unexpected data after L2 ark animation." = "Onverwachte gegevens na de L2-arkanimatie.";
 "Unexpected style in the Chronicles {0} sequence." = "Onverwachte stijl in de Chronicles-reeks {0}.";
 "Unexpected tribe in the Classic sequence." = "Onverwachte stam in de Classic-reeks.";
-"Unfavourite" = "Uit favorieten verwijderen";
 "Unfinished" = "Onvoltooid";
 "Unknown" = "Onbekend";
 "Unknown Chronicles frame encoding {0}." = "Onbekende framecodering van Chronicles {0}.";
@@ -3280,6 +3284,7 @@
 "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away." = "Als lemmings elkaar overlappen, geef dan voorrang aan een geschikte lemming die nog nadert in plaats van een die is omgekeerd.";
 "When the Tribes settled in these lands" = "Toen de stammen zich in deze landen vestigden";
 "Where" = "Waar";
+"While holding, drag a second finger to pan. Lift the first finger to assign." = "Sleep tijdens het vasthouden met een tweede vinger om het beeld te verplaatsen. Til de eerste vinger op om toe te wijzen.";
 "Who did some graphic stuff." = "Die wat grafisch werk deed.";
 "Who saved us once before" = "Die ons eerder heeft gered";
 "Whole pixels" = "Hele pixels";
@@ -3513,7 +3518,6 @@
 "{0}/{1} across {2} titles: {3}" = "{0}/{1} over {2} titels: {3}";
 "{0}/{1} earned" = "{0}/{1} behaald";
 "{0}/{1} levels passed in this rating." = "{0}/{1} levels voltooid in deze beoordeling.";
-"{0}/{1} packs" = "{0}/{1} pakketten";
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: replayanalyse mislukt: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";

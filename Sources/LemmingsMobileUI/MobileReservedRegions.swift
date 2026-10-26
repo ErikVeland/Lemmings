@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsMobileCore
+import LemmingsGameArt
 import UIKit
 
 @MainActor enum MobileSystemRegions {
@@ -12,6 +13,14 @@ import UIKit
         window.rootViewController?.view.setNeedsLayout()
     }
 
+    static func controlShape(in view: UIView) -> GameControlShape {
+        #if os(iOS)
+        isFoldable(in: view) ? .rounded : .square
+        #else
+        .square
+        #endif
+    }
+
     static func usesFullDisplay(in view: UIView) -> Bool {
         #if os(iOS)
         return isFoldable(in: view) && !read(in: view).contains { $0.kind == .division }
@@ -22,7 +31,14 @@ import UIKit
 
     /// The display is the canvas. Local occlusions constrain content, rather than reserving a whole edge.
     static func contentInsets(in view: UIView) -> UIEdgeInsets {
-        usesFullDisplay(in: view) ? .zero : view.safeAreaInsets
+        guard isFoldable(in: view) else { return view.safeAreaInsets }
+        // Fit controls along the longer axis. Scenery still extends across the display.
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            return view.edgeInsets(for: .safeArea(cornerAdaptation:
+                view.bounds.width > view.bounds.height ? .horizontal : .vertical))
+        }
+        return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0,
+                            bottom: view.safeAreaInsets.bottom, right: 0)
     }
 
     /**
@@ -84,7 +100,18 @@ import UIKit
     static func menuFrame(in view: UIView) -> CGRect {
         let regions = read(in: view)
         let fullDisplay = isFoldable(in: view) && !regions.contains { $0.kind == .division }
-        let available = fullDisplay ? view.bounds : view.safeAreaLayoutGuide.layoutFrame
+        let available: CGRect
+        if fullDisplay {
+            // Menus can scroll vertically. Preserve their full width around corner
+            // cameras instead of reserving a whole side through safeAreaInsets.
+            let corners: UIEdgeInsets
+            if #available(iOS 26.0, tvOS 26.0, *) {
+                corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .vertical))
+            } else { corners = view.safeAreaInsets }
+            available = view.bounds.inset(by: UIEdgeInsets(top: corners.top, left: 0, bottom: corners.bottom, right: 0))
+        } else {
+            available = isFoldable(in: view) ? view.bounds.inset(by: contentInsets(in: view)) : view.safeAreaLayoutGuide.layoutFrame
+        }
         let rect = menuFrame(
             in: MobileRect(x: available.minX, y: available.minY, width: available.width, height: available.height),
             avoiding: regions)

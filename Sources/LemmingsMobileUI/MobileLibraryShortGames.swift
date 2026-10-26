@@ -73,6 +73,7 @@ extension MobileLibraryViewController {
               let id = playlists.create(name: sequence.title, entries: entries),
               let run = playlists.startRun(id, shuffle: false) else { return }
         savePlaylists()
+        guard playlists.run?.id == run.id else { rebuild(); return }
         openList(run.entries, name: run.name, back: .shortGames, run: run)
     }
 }

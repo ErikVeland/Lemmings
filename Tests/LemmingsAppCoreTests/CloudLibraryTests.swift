@@ -44,6 +44,33 @@ private final class LibraryCredentials: @unchecked Sendable {
 }
 
 @MainActor struct CloudLibraryTests {
+    @Test func journeyWithoutRosterCannotReportCompleteSync() async throws {
+        let storage = try AppStorage.temporary(named: "orphaned-journey-sync")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let guest = try #require(store.addProfile(initials: "PAL", portrait: 1, select: false))
+        let owner = store.records.mainProfileID, session = UUID().uuidString
+        let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+            catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+            levelNameSnapshot: "Saved level", levelNumberSnapshot: 1)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: [entry])
+        let snapshot = JourneySessionSnapshot(run: run)
+        try GameProgressPreferences.saveJourneySession(snapshot, profileID: owner, sessionID: session, defaults: storage.defaults)
+        let transport = LibraryTransport(LibraryServer()), identity = CloudLibraryIdentity()
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: transport, identities: [identity])
+        defer { sync.stop() }
+        await sync.syncNow()
+        #expect(sync.state == .pending)
+        #expect(sync.lastSynced == nil)
+        #expect(GameProgressPreferences.journeySession(profileID: owner, sessionID: session, defaults: storage.defaults) == snapshot)
+        try store.importLibraryHotSeats([.init(id: session, host: owner, players: [owner, guest.id], turn: guest.id, active: false)])
+        await sync.syncNow()
+        #expect(sync.state == .synced)
+        let uploaded = try #require(transport.server.files[identity.id]?.values.first)
+        let archive = try CloudLibraryArchive.decode(uploaded)
+        #expect(archive.seats[session]?.first?.progress.values["LearningJourneySession"] == .journeySession(snapshot))
+    }
     @Test func lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() async throws {
         let storage = try AppStorage.temporary(named: "lifecycle-library")
         defer { storage.removeTemporaryFiles() }
@@ -559,8 +586,8 @@ private final class LibraryCredentials: @unchecked Sendable {
         try archive.merge(incoming)
         #expect(Set(archive.seats[id]!.map(\.revision)) == [descendant.revision, right.revision])
     }
-    @Test func offlineHotSeatForksKeepProgressAfterRepeatedImports() async throws {
-        let aa = try AppStorage.temporary(named: "fork-a"), bb = try AppStorage.temporary(named: "fork-b")
+    @Test func offlineHotSeatRevisionsMergeIntoOneSession() async throws {
+        let aa = try AppStorage.temporary(named: "merge-a"), bb = try AppStorage.temporary(named: "merge-b")
         defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
         let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: bb, bundledProofs: nil)
         _ = try #require(a.addProfile(initials: "GF", portrait: 7, select: false))
@@ -576,17 +603,59 @@ private final class LibraryCredentials: @unchecked Sendable {
         try GameProgressPreferences(values: ["cleared/release/lemmings": .completed([1])])
             .apply(defaults: bb.defaults, profileID: b.records.mainProfileID, sessionID: original)
         await sa.syncNow(); await sb.syncNow(); await sa.syncNow()
-        let fork = try #require(b.libraryHotSeats.first { $0.id != original })
-        let old = GameProgressPreferences.capture(defaults: bb.defaults, profileID: fork.host,
-            profileIDs: b.records.profiles.map(\.id), sessionID: fork.id)
-        var advanced = old; advanced.addCompleted([5], pack: "release/lemmings")
-        try advanced.apply(defaults: bb.defaults, profileID: fork.host, sessionID: fork.id)
+        func cleared(_ store: ArcadeStore, _ storage: AppStorage) -> GameProgressValue? {
+            GameProgressPreferences.capture(defaults: storage.defaults, profileID: store.records.mainProfileID,
+                profileIDs: store.records.profiles.map(\.id), sessionID: original).values["cleared/release/lemmings"]
+        }
+        // Both offline revisions continue the one session. No second session appears.
+        for (store, storage) in [(a, aa), (b, bb)] {
+            #expect(store.libraryHotSeats.map(\.id) == [original])
+            #expect(cleared(store, storage) == .completed([0, 1]))
+        }
+        try GameProgressPreferences(values: ["cleared/release/lemmings": .completed([0, 1, 5])])
+            .apply(defaults: bb.defaults, profileID: b.records.mainProfileID, sessionID: original)
         await sb.syncNow(); await sa.syncNow(); await sb.syncNow(); await sa.syncNow()
-        let restored = GameProgressPreferences.capture(defaults: aa.defaults, profileID: a.records.mainProfileID,
-            profileIDs: a.records.profiles.map(\.id), sessionID: fork.id)
-        #expect(restored == advanced)
-        #expect(a.libraryHotSeats.contains { $0.id == original })
-        #expect(b.libraryHotSeats.contains { $0.id == fork.id })
+        #expect(cleared(a, aa) == .completed([0, 1, 5]))
+        #expect(a.libraryHotSeats.map(\.id) == [original] && b.libraryHotSeats.map(\.id) == [original])
+    }
+    @Test func legacyJourneySessionAbsorbsItsClassicTwinOnEveryDevice() async throws {
+        let aa = try AppStorage.temporary(named: "journey-split-a"), bb = try AppStorage.temporary(named: "journey-split-b")
+        defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
+        let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: bb, bundledProofs: nil)
+        _ = try #require(a.addProfile(initials: "UVA", portrait: 7, select: false))
+        a.prepareHotSeat()
+        let classic = try #require(a.hotSeatID), owner = a.records.mainProfileID
+        try GameProgressPreferences(values: ["cleared/release/xmasLemmings1991": .completed([0, 1, 2])])
+            .apply(defaults: aa.defaults, profileID: owner, sessionID: classic)
+        let server = LibraryServer(), identity = CloudLibraryIdentity()
+        let sa = CloudLibrarySync(store: a, storage: aa, transport: LibraryTransport(server), identities: [identity])
+        let sb = CloudLibrarySync(store: b, storage: bb, transport: LibraryTransport(server), identities: [identity])
+        await sa.syncNow(); await sb.syncNow()
+        #expect(b.resumeHotSeat(id: classic))
+        // Older Mac builds started the Golden Path in a new session with the same players.
+        #expect(a.startNewHotSeat())
+        let journey = try #require(a.hotSeatID)
+        let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+            catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+            levelNameSnapshot: "Pea Soup", levelNumberSnapshot: 1)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: [entry])
+        try GameProgressPreferences.saveJourneySession(JourneySessionSnapshot(run: run), profileID: owner,
+            sessionID: journey, defaults: aa.defaults)
+        // The repair runs on the first sync after the update.
+        aa.defaults.removeObject(forKey: CloudLibrarySync.journeySplitRepairKey)
+        await sa.syncNow(); await sb.syncNow(); await sa.syncNow()
+        for (store, storage) in [(a, aa), (b, bb)] {
+            #expect(store.libraryHotSeats.map(\.id) == [journey])
+            let progress = GameProgressPreferences.capture(defaults: storage.defaults, profileID: owner,
+                profileIDs: store.records.profiles.map(\.id), sessionID: journey)
+            #expect(progress.values["cleared/release/xmasLemmings1991"] == .completed([0, 1, 2]))
+            #expect(GameProgressPreferences.journeySession(profileID: owner, sessionID: journey, defaults: storage.defaults)?.run == run)
+        }
+        // The device that was playing the Classic session continues the Journey session.
+        #expect(b.hotSeatID == journey)
+        let uploaded = try CloudLibraryArchive.decode(try #require(server.files[identity.id]?.values.first))
+        #expect(uploaded.mergedSeats == [classic: journey] && uploaded.seats[classic] == nil)
     }
     @Test func encryptionRejectsWrongLibraryKeyAndTamperedBytes() throws {
         let identity = CloudLibraryIdentity(), other = CloudLibraryIdentity()

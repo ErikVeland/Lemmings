@@ -114,6 +114,7 @@ public final class ClassicMobileSession: MobileGameSession {
     private var terrainFrame: Data?
     private var cachedPanelFrame: MobilePixelFrame?
     public var renderScale: Double { nativeScene == nil ? 1 : 2 }
+    public var spriteActorIDs: [Int] { simulation.lemmings.filter { $0.isActive }.map(\.id) }
     public var activeLemmingCount: Int { simulation.activeCount }
     public var bombCountdowns: [MobileBombCountdown] {
         simulation.lemmings.filter(\.isActive).compactMap { lemming in

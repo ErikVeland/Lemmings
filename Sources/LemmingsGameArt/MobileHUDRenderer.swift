@@ -60,10 +60,12 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let typography: GameMenuTypography?
     private let items: [Item]
     private let statusDetails: StatusDetails?
+    private let shape: GameControlShape
     private let replayLevel: MobileLevelSummary?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square) {
+        self.shape = shape
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
@@ -153,9 +155,13 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.fill(statusFrame)
             if layout.portrait != nil {
                 context.setFillColor(CGColor(gray: 0.06, alpha: 1))
-                context.fill(statusFrame)
-                context.setFillColor(CGColor(gray: 0.25, alpha: 1))
-                context.fill(CGRect(x: statusFrame.minX, y: statusFrame.maxY - 1, width: statusFrame.width, height: 1))
+                shape.fill(statusFrame, in: context)
+                if shape == .rounded {
+                    GameDisplayArt.outline(in: context, frame: statusFrame, color: CGColor(gray: 0.25, alpha: 1), shape: shape)
+                } else {
+                    context.setFillColor(CGColor(gray: 0.25, alpha: 1))
+                    context.fill(CGRect(x: statusFrame.minX, y: statusFrame.maxY - 1, width: statusFrame.width, height: 1))
+                }
                 context.setFillColor(CGColor(gray: 0, alpha: 1))
                 context.fill(Self.cgRect(layout.interface.controlsFrame))
                 if let value = layout.portrait?.rateValue {
@@ -367,13 +373,19 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func outline(_ frame: CGRect, context: CGContext) {
         context.setStrokeColor(CGColor(gray: 1, alpha: 1))
         context.setLineWidth(2)
-        context.stroke(frame.insetBy(dx: 2, dy: 2))
+        shape.stroke(frame, inset: 2, in: context)
     }
 
     // MARK: - Compact cells
 
     private func drawCell(_ item: Item, context: CGContext) {
         let frame = item.frame
+        context.saveGState()
+        defer { context.restoreGState() }
+        if shape == .rounded {
+            context.addPath(shape.path(in: frame, inset: 1))
+            context.clip()
+        }
         let selected: Bool
         if case let .skill(index) = item.action { selected = index == selectedSkill }
         else if item.action == .pause { selected = paused }
@@ -449,7 +461,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawIconButton(_ item: Item, context: CGContext) {
         let enabled = item.action == .step ? paused : (item.action == .stepBackward || item.action == .rewind ? snapshot.tick > 0 : true)
         if item.action == .menu {
-            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1)
+            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
         } else {
             let face: GamePlayButtonArt.Face = item.action == .rewind ? .rewind
                 : item.action == .stepBackward ? .stepBackward : .stepForward
@@ -487,7 +499,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat,
                                  face: GamePlayButtonArt.Face, context: CGContext) {
-        GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face)
+        GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face, shape: shape)
     }
 
     private func drawGlyphButton(_ item: Item, context: CGContext, pixel: CGFloat) {
@@ -517,7 +529,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         if item.action == .step {
             drawStoneSocket(item.frame, selected: false, pixel: 1, face: .stepForward, context: context)
         } else {
-            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1)
+            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
         }
         let title = item.action == .step ? L10n.text("STEP") : L10n.text("MENU")
         GamePixelTypography.draw(title, in: item.frame.insetBy(dx: 8, dy: 2), context: context, typography: typography, palette: .blue, alpha: enabled ? 1 : 0.45)

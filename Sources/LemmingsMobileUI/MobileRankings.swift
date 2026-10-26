@@ -71,7 +71,8 @@ extension MobileLibraryViewController {
                 physicsMode: session.engineFingerprint, population: c.total, rescueRequirement: 1,
                 startingSkills: skills, timeLimitSeconds: Double(c.timeLimit),
                 modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
-                    "firstReleaseTick": String(c.firstReleaseTick)])
+                    "firstReleaseTick": String(c.firstReleaseTick),
+                    "practiceSkills": c.isPractice ? c.skills.map { String($0.rawValue) }.joined(separator: ",") : ""])
             return .init(id: session.levelFingerprint, title: summary.title, game: pack,
                 rules: session.engineFingerprint, total: c.total, required: 1, conditions: conditions)
         }
