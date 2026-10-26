@@ -377,9 +377,15 @@ extension MobileGameViewController {
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
         overlayCanvas.page = language ? library.languagePage() : soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0, inGame: true) } ?? library.settingsGroupsPage(inGame: true)
+        if overlayCanvas.page.settingsTabs == nil { overlayCanvas.page.settingsTabs = [] }
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
             if id == "home" || id == "settings" { back() }
+            else if id.hasPrefix("settingsTab."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(12))) {
+                library.selectedSettingsGroup = next
+                self.showInGameSettings(next, returningTo: back)
+                self.overlayCanvas.focusAction(id)
+            }
             else if id.hasPrefix("settingsGroup."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) { if next == group, mappings || soundtrack || insights || language { back() }
                 else { self.showInGameSettings(next, returningTo: self.overlayReturnAction()) }
             }

@@ -1,0 +1,1062 @@
+{
+  "date": "2026-10-26",
+  "decision": "Add all unique seasonal puzzles with explicit provisional placements. Keep the existing tested opening. Use the seasonal rehearsals first. Retain three Classic fan candidates for observed later gaps. Defer native NeoLemmix insertion until shared Journey routing and exact-version teaching fit are validated.",
+  "fanCandidateScreen": {
+    "eligibleRecoveryCandidates": 88,
+    "freshNativeProofs": 3,
+    "screen": "Winning recorded routes, visible initial exits/traps where recorded, at most three used skills, at most one worker skill change, at most one measured narrow assignment, minimum rate no higher than 50, at most 12 assignments, at least five allowed losses and spare used skills. This screen does not measure discovery."
+  },
+  "fanShortlist": [
+    {
+      "context": {
+        "allowedLosses": 18,
+        "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+        "assignments": 2,
+        "availableSkillTypes": 6,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 38.0,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": null,
+        "hatchCount": 2,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 1,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 50,
+        "probedAssignments": 2,
+        "quotaTimingVerified": false,
+        "remainingSeconds": 202.0,
+        "remainingSecondsAtReplayEnd": 202.0,
+        "replayRevision": "SHA256 digest: d5916b9cff52933284e2ffa9806924bc7b2abcdc81ac52a084a06af8930ad0bb",
+        "required": 32,
+        "rescueFraction": 0.64,
+        "savedAboveRequirement": 16,
+        "scarceAvailableSkills": [
+          "builder"
+        ],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 48.625,
+        "spareUsedSkills": {
+          "blocker": 4,
+          "digger": 9
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 41,
+        "usedSkillUtilisation": {
+          "blocker": 0.2,
+          "digger": 0.1
+        },
+        "usedSkills": {
+          "blocker": 1,
+          "digger": 1
+        },
+        "workers": 2
+      },
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "B424298A-101D-9C77-16EA-FDE7A5A01351",
+        "identity": {
+          "engine": "classic",
+          "levelID": "JM06.DAT#2",
+          "packID": "fan:lldb-332"
+        },
+        "levelNameSnapshot": "On the Outside",
+        "levelNumberSnapshot": 3,
+        "packNameSnapshot": "JM06",
+        "sourceRevision": "2d8a2b43d7d560df4e3522b847f200d06be59ce95f257abc4a622b3883052ea6"
+      },
+      "humanDiscoveryReview": "not performed",
+      "nativeProof": {
+        "detail": "48/32 saved at tick 646; exact final state verified",
+        "firstQuotaTick": 518,
+        "identity": {
+          "engine": "classic",
+          "levelID": "JM06.DAT#2",
+          "packID": "fan:lldb-332"
+        },
+        "passed": true,
+        "replayRevision": "SHA256 digest: d5916b9cff52933284e2ffa9806924bc7b2abcdc81ac52a084a06af8930ad0bb",
+        "sourceRevision": "2d8a2b43d7d560df4e3522b847f200d06be59ce95f257abc4a622b3883052ea6",
+        "title": "On the Outside",
+        "toolsRemainingAtQuota": {
+          "basher": 10,
+          "blocker": 4,
+          "bomber": 5,
+          "builder": 1,
+          "climber": 0,
+          "digger": 9,
+          "floater": 0,
+          "miner": 10
+        }
+      },
+      "purpose": "Blocker and digger routing with recovery stock. Candidate before later worker-routing constraints if a human playtest identifies that gap.",
+      "recommendation": "Retain as a human-playtest candidate. Do not insert without a demonstrated gap after the added seasonal practice.",
+      "sourceRulesParity": "not independently established by a native win"
+    },
+    {
+      "context": {
+        "allowedLosses": 25,
+        "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+        "assignments": 2,
+        "availableSkillTypes": 8,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 27.705882352941178,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": null,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 50,
+        "probedAssignments": 2,
+        "quotaTimingVerified": false,
+        "remainingSeconds": 272.29411764705884,
+        "remainingSecondsAtReplayEnd": 272.29411764705884,
+        "replayRevision": "SHA256 digest: 64158679d5d789c6f97c5f059ead38a582c3f5bffb596d532f5dca36d3661fd6",
+        "required": 25,
+        "rescueFraction": 0.5,
+        "savedAboveRequirement": 25,
+        "scarceAvailableSkills": [],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 0.0,
+        "spareUsedSkills": {
+          "builder": 19,
+          "digger": 19
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 160,
+        "usedSkillUtilisation": {
+          "builder": 0.05,
+          "digger": 0.05
+        },
+        "usedSkills": {
+          "builder": 1,
+          "digger": 1
+        },
+        "workers": 2
+      },
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "8DC09AB0-3127-F6A6-E88B-51F29C5EBA7F",
+        "identity": {
+          "engine": "classic",
+          "levelID": "Lemmings Plus DOS Project - 01 - Mild (Part 1).dat#2",
+          "packID": "fan:lldb-551"
+        },
+        "levelNameSnapshot": "Heading on in...",
+        "levelNumberSnapshot": 3,
+        "packNameSnapshot": "Lemmings Plus DOS Project Mild",
+        "sourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e"
+      },
+      "humanDiscoveryReview": "not performed",
+      "nativeProof": {
+        "detail": "50/25 saved at tick 471; exact final state verified",
+        "firstQuotaTick": 413,
+        "identity": {
+          "engine": "classic",
+          "levelID": "Lemmings Plus DOS Project - 01 - Mild (Part 1).dat#2",
+          "packID": "fan:lldb-551"
+        },
+        "passed": true,
+        "replayRevision": "SHA256 digest: 64158679d5d789c6f97c5f059ead38a582c3f5bffb596d532f5dca36d3661fd6",
+        "sourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+        "title": "Heading on in...",
+        "toolsRemainingAtQuota": {
+          "basher": 20,
+          "blocker": 20,
+          "bomber": 20,
+          "builder": 19,
+          "climber": 20,
+          "digger": 19,
+          "floater": 20,
+          "miner": 20
+        }
+      },
+      "purpose": "Builder and digger combination with generous recovery room. Candidate rehearsal before strict worker plans.",
+      "recommendation": "Retain as a human-playtest candidate. Do not insert without a demonstrated gap after the added seasonal practice.",
+      "sourceRulesParity": "not independently established by a native win"
+    },
+    {
+      "context": {
+        "allowedLosses": 20,
+        "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+        "assignments": 3,
+        "availableSkillTypes": 2,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 53.23529411764706,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "firstQuotaTick": null,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 50,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 1,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 40,
+        "probedAssignments": 3,
+        "quotaTimingVerified": false,
+        "remainingSeconds": 246.76470588235293,
+        "remainingSecondsAtReplayEnd": 246.76470588235293,
+        "replayRevision": "SHA256 digest: 304eb191f0d1c8ecdbaa99168c3ce4f532601bc46ec3a4df31cd1022cd742a0b",
+        "required": 20,
+        "rescueFraction": 0.5,
+        "savedAboveRequirement": 20,
+        "scarceAvailableSkills": [],
+        "slowestHatchIntervalSeconds": 1.6470588235294117,
+        "sourceToolScarcity": 32.5,
+        "spareUsedSkills": {
+          "basher": 9,
+          "builder": 8
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 20,
+        "usedSkillUtilisation": {
+          "basher": 0.1,
+          "builder": 0.2
+        },
+        "usedSkills": {
+          "basher": 1,
+          "builder": 2
+        },
+        "workers": 3
+      },
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "A7F5386E-12A5-D1D1-4B9E-15CAC9C55497",
+        "identity": {
+          "engine": "classic",
+          "levelID": "KillerMaster 1 Tame 2.dat#0",
+          "packID": "fan:lldb-505"
+        },
+        "levelNameSnapshot": "Create & Remove Collection",
+        "levelNumberSnapshot": 11,
+        "packNameSnapshot": "KillerMasters Lemmings 1 Tame",
+        "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+      },
+      "humanDiscoveryReview": "not performed",
+      "nativeProof": {
+        "detail": "40/20 saved at tick 905; exact final state verified",
+        "firstQuotaTick": 831,
+        "identity": {
+          "engine": "classic",
+          "levelID": "KillerMaster 1 Tame 2.dat#0",
+          "packID": "fan:lldb-505"
+        },
+        "passed": true,
+        "replayRevision": "SHA256 digest: 304eb191f0d1c8ecdbaa99168c3ce4f532601bc46ec3a4df31cd1022cd742a0b",
+        "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+        "title": "Create & Remove Collection",
+        "toolsRemainingAtQuota": {
+          "basher": 9,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 8,
+          "climber": 0,
+          "digger": 0,
+          "floater": 0,
+          "miner": 0
+        }
+      },
+      "purpose": "Builder and basher combination with spare tools. Candidate rehearsal before precision bashing or tight construction.",
+      "recommendation": "Retain as a human-playtest candidate. Do not insert without a demonstrated gap after the added seasonal practice.",
+      "sourceRulesParity": "not independently established by a native win"
+    }
+  ],
+  "journeyVersion": "learning-30",
+  "neoLemmixScreen": {
+    "catalogueRows": 794,
+    "historicalEvidenceOnly": true,
+    "source": "Artifacts/DifficultyEvaluation/levels.csv"
+  },
+  "neoLemmixShortlist": [
+    {
+      "currentNativeReplayRerun": false,
+      "historicalReplayStatus": "verified win",
+      "identity": "Lemmings_Redux/Gentle/A_Block_from_Home.nxlv",
+      "journeyRouting": "unsupported on the shared mobile/TV adapter and the current direct Mac playlist route",
+      "recommendation": "Reuses a Holiday puzzle with a 50% rescue target and generous tools. Prefer the exact Classic source already added; the edited variant can reveal the same puzzle solution.",
+      "recordedReplaySHA256": "1fc860d7961fd0fd2d4677d44f2a9ce5930af540741625d7a19c374c426e3ae3",
+      "sourceHeader": "TITLE A Block from Home\nAUTHOR Holiday Lemmings\nTHEME ohno_snow\nID xEE9A23EBEE9A23EB\nLEMMINGS 20\nSAVE_REQUIREMENT 10\nMAX_SPAWN_INTERVAL 43\nWIDTH 464\nHEIGHT 160\nSTART_X 160\nSTART_Y 80\n\n$SKILLSET\n  CLIMBER 10\n  FLOATER 10\n  BOMBER 10\n  BLOCKER 10\n  BUILDER 10\n  BASHER 10\n  MINER 10\n  DIGGER 10\n$END\n\n",
+      "sourceSHA256": "f32736cd346906004dff14a3c007b7545b173164d7cd8d5883e4bc8aae9d8a02"
+    },
+    {
+      "currentNativeReplayRerun": false,
+      "historicalReplayStatus": "verified win",
+      "identity": "NeoLemmix_Introduction_Pack/Basic_Training_1/The_Builder_Drain.nxlv",
+      "journeyRouting": "unsupported on the shared mobile/TV adapter and the current direct Mac playlist route",
+      "recommendation": "Uses only builders, but requires full rescue at a locked spawn interval. It is a possible construction rehearsal after native Journey routing and exact-source validation.",
+      "recordedReplaySHA256": "e134eb7a01cac282549dd7b71495a7a6395583364ed1044cdce58c205bf16f84",
+      "sourceHeader": "TITLE The Builder Drain\nAUTHOR IchoTolot\nTHEME orig_sega\nID x667B9611411852FB\nLEMMINGS 40\nSAVE_REQUIREMENT 40\nMAX_SPAWN_INTERVAL 28\nSPAWN_INTERVAL_LOCKED\nWIDTH 592\nHEIGHT 160\nSTART_X 160\nSTART_Y 80\n\n$SKILLSET\n  BUILDER 25\n$END\n\n",
+      "sourceSHA256": "f3f269526a762bd6207166be8ed363259131dd908a4cc70b971e54ab583294fc"
+    },
+    {
+      "currentNativeReplayRerun": false,
+      "historicalReplayStatus": "verified win",
+      "identity": "NeoLemmix_Introduction_Pack/Skills/Building_Flat_And_Building_High.nxlv",
+      "journeyRouting": "unsupported on the shared mobile/TV adapter and the current direct Mac playlist route",
+      "recommendation": "Adds Platformer alongside Builder. This introduces a new skill and does not directly rehearse the current Classic curve.",
+      "recordedReplaySHA256": "a55395444863e620bf02a36c32ccaa0a4faecb7f2d62d87e0640f48e15d36baa",
+      "sourceHeader": "TITLE Building Flat And Building High\nAUTHOR IchoTolot\nTHEME orig_pillar\nID x49921C53674670D2\nLEMMINGS 30\nSAVE_REQUIREMENT 5\nMAX_SPAWN_INTERVAL 53\nWIDTH 480\nHEIGHT 160\nSTART_X 160\nSTART_Y 80\n\n$SKILLSET\n  PLATFORMER 15\n  BUILDER 15\n$END\n\n",
+      "sourceSHA256": "db10980e4732c8c3133b61326ef54a514a241a38a8fb0bfc6924ac8f17c993c5"
+    }
+  ],
+  "ownerObservation": {
+    "approximatelyCompleted": 80,
+    "limits": "Overall user report. It does not certify individual route difficulty or later lessons.",
+    "players": [
+      "Erik",
+      "Uva"
+    ],
+    "reportedCurve": "good so far"
+  },
+  "preservedOpening": {
+    "baselineSHA256": "1232884c1230e404cfc3d1073b427c34471a8b4b162d6248a2b0a95d3ffe5d73",
+    "baselineVersion": "learning-29",
+    "exactLessonDataUnchanged": true,
+    "lessons": 80
+  },
+  "priorityHumanPlaytests": [
+    {
+      "chapter": "small-budgets",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "47:Tricky:18:9:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "It's Lemmingentry Watson",
+      "newPressurePeaks": [],
+      "placementReason": "Player-reported early wall. Put this scarce-tool deduction puzzle after simpler budget exercises, not beside basic skill introductions.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "90:Mayhem:1:5:5",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Steel Works",
+          "step": 73
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "81:Taxing:22:4:6",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Come on over to my place",
+          "step": 63
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "27:Fun:28:6:1",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "If only they could fly",
+          "step": 37
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 95.938,
+        "hatches": 0.0,
+        "minimumReleaseRate": 50,
+        "precision": 0,
+        "quotaDeadline": 0.0,
+        "rescue": 90.0,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 17.088,
+        "hatches": 0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 0,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 97
+    },
+    {
+      "chapter": "precision",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "113:Mayhem:24:8:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "All or Nothing",
+      "newPressurePeaks": [],
+      "placementReason": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "88:Taxing:29:2:1",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "How do I dig up the way?",
+          "step": 121
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "92:Havoc:13:4:5",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "HIGHLAND FLING",
+          "step": 132
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "15:Flurry:16:5:7",
+            "packID": "holidayLemmings1993-MACLEVL-32"
+          },
+          "level": "The Long Way Around",
+          "step": 111
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 55.25,
+        "hatches": 0.0,
+        "minimumReleaseRate": 99,
+        "precision": 50,
+        "quotaDeadline": 70.14705882352942,
+        "rescue": 100.0,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 0,
+        "hatches": 0,
+        "minimumReleaseRate": 79,
+        "precision": 0,
+        "quotaDeadline": 66.52,
+        "rescue": 2.5,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 144
+    },
+    {
+      "chapter": "hatches",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "107:Mayhem:18:7:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "And then there were four....",
+      "newPressurePeaks": [],
+      "placementReason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "43:Tricky:14:0:2",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "MENACING !!",
+          "step": 66
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "104:Mayhem:15:7:3",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "The Fast Food Kitchen...",
+          "step": 156
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "6:Tame:7:10:6",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Who`s That Lemming",
+          "step": 22
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 10,
+        "availableToolScarcity": 54.357,
+        "hatches": 100.0,
+        "minimumReleaseRate": 1,
+        "precision": 0,
+        "quotaDeadline": 0.0,
+        "rescue": 90.0,
+        "skillChains": 70
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 0,
+        "hatches": 100.0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 0,
+        "rescue": 77.5,
+        "skillChains": 20
+      },
+      "quotaTimingVerified": true,
+      "role": "practice",
+      "step": 159
+    },
+    {
+      "chapter": "combined-plans",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Combine worker planning, rescue discipline and limited tools after their separate chapters. Put repeated skill-chain practice before Quicky, then reserve more complex combinations for the chapter end.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "109:Mayhem:20:9:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "No added colours or Lemmings",
+      "newPressurePeaks": [],
+      "placementReason": "Combine worker planning, rescue discipline and limited tools after their separate chapters. Put repeated skill-chain practice before Quicky, then reserve more complex combinations for the chapter end.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "72:Taxing:13:3:6",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Upsidedown World",
+          "step": 174
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "43:Tricky:14:0:2",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "MENACING !!",
+          "step": 66
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "35:Crazy:16:2:6",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Across The Gap",
+          "step": 189
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 10,
+        "availableToolScarcity": 95.45,
+        "hatches": 0.0,
+        "minimumReleaseRate": 85,
+        "precision": 25,
+        "quotaDeadline": 0.0,
+        "rescue": 100.0,
+        "skillChains": 40
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 61.325,
+        "hatches": 0,
+        "minimumReleaseRate": 84,
+        "precision": 25,
+        "quotaDeadline": 0,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 190
+    },
+    {
+      "chapter": "clocks",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "93:Mayhem:4:6:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "The Crossroads",
+      "newPressurePeaks": [],
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "113:Mayhem:24:8:2",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "All or Nothing",
+          "step": 144
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "0:Flurry:1:4:0",
+            "packID": "holidayLemmings1993-MACLEVL-32"
+          },
+          "level": "Climbing to the Top!",
+          "step": 129
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "88:Taxing:29:2:1",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "How do I dig up the way?",
+          "step": 121
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 16.25,
+        "hatches": 0.0,
+        "minimumReleaseRate": 99,
+        "precision": 50,
+        "quotaDeadline": 89.85294117647058,
+        "rescue": 80.0,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 0,
+        "hatches": 0,
+        "minimumReleaseRate": 98,
+        "precision": 25,
+        "quotaDeadline": 0,
+        "rescue": 70.0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "practice",
+      "step": 196
+    },
+    {
+      "chapter": "clocks",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "105:Mayhem:16:7:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Just a Minute...",
+      "newPressurePeaks": [],
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "45:Wild:6:7:5",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Just A Quicky",
+          "step": 186
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "70:Taxing:11:3:4",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "The ascending pillar scenario",
+          "step": 188
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "64:Wicked:5:0:5",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Chill out!",
+          "step": 177
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 40,
+        "availableToolScarcity": 60.75,
+        "hatches": 0.0,
+        "minimumReleaseRate": 10,
+        "precision": 0,
+        "quotaDeadline": 99.01960784313725,
+        "rescue": 100.0,
+        "skillChains": 80
+      },
+      "pressureRises": {
+        "assignmentDensity": 20,
+        "availableToolScarcity": 8.312,
+        "hatches": 0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 99.02,
+        "rescue": 10.0,
+        "skillChains": 60
+      },
+      "quotaTimingVerified": true,
+      "role": "practice",
+      "step": 199
+    },
+    {
+      "chapter": "clocks",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "25:Fun:26:7:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "level": "Nightmare on Lem street",
+      "newPressurePeaks": [],
+      "placementReason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "2:Xmas:3:0:2",
+            "packID": "xmasLemmings1992-LEVEL-4"
+          },
+          "level": "A Lemming Holiday",
+          "step": 205
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "35:Tricky:6:3:3",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Lemmingology",
+          "step": 64
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "69:Taxing:10:3:3",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Izzie Wizzie lemmings get busy",
+          "step": 187
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 70,
+        "availableToolScarcity": 0.0,
+        "hatches": 0.0,
+        "minimumReleaseRate": 30,
+        "precision": 0,
+        "quotaDeadline": 0.0,
+        "rescue": 100.0,
+        "skillChains": 100
+      },
+      "pressureRises": {
+        "assignmentDensity": 30,
+        "availableToolScarcity": 0,
+        "hatches": 0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 0,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "practice",
+      "step": 206
+    },
+    {
+      "chapter": "capstones",
+      "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
+      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Frost:10:1:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "level": "Four Play",
+      "newPressurePeaks": [],
+      "placementReason": "Add seasonal challenge after the tested opening. The native route has near-full rescue, 3 measured narrow assignments, 1 seconds left at the rescue quota, 3 entrances. Rehearse basher + builder + digger in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "83:Havoc:4:2:7",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "The race against cliches",
+          "step": 227
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "8:Flurry:9:5:0",
+            "packID": "holidayLemmings1993-MACLEVL-32"
+          },
+          "level": "A Block from Home",
+          "step": 226
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "38:Crazy:19:4:3",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "DON`T PANIC",
+          "step": 91
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 63.594,
+        "hatches": 66.66666666666667,
+        "minimumReleaseRate": 4,
+        "precision": 75,
+        "quotaDeadline": 98.82352941176471,
+        "rescue": 100.0,
+        "skillChains": 20
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 0,
+        "hatches": 33.333,
+        "minimumReleaseRate": 0,
+        "precision": 25,
+        "quotaDeadline": 10.196,
+        "rescue": 0,
+        "skillChains": 10
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 286
+    },
+    {
+      "chapter": "capstones",
+      "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
+      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Frost:8:0:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "level": "Division Bell",
+      "newPressurePeaks": [],
+      "placementReason": "Add seasonal challenge after the tested opening. The native route has a minimum release rate of 60, 12 seconds left at the rescue quota. Rehearse digger in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "80:Taxing:21:4:5",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Feel the heat!",
+          "step": 197
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "53:Tricky:24:1:0",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Tightrope City",
+          "step": 209
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "60:Taxing:1:2:2",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "If at first you don`t succeed..",
+          "step": 201
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 32.5,
+        "hatches": 0.0,
+        "minimumReleaseRate": 60,
+        "precision": 0,
+        "quotaDeadline": 89.70588235294117,
+        "rescue": 93.75,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 0,
+        "hatches": 0,
+        "minimumReleaseRate": 59,
+        "precision": 0,
+        "quotaDeadline": 0,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 294
+    },
+    {
+      "chapter": "capstones",
+      "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
+      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "21:Hail:6:2:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "level": "Surprise Package?",
+      "newPressurePeaks": [],
+      "placementReason": "Keep this later seasonal puzzle in advanced practice. The native route has 19 seconds left at the rescue quota. Rehearse route observation in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "89:Havoc:10:0:3",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Flow Control",
+          "step": 77
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "30:Mega Drive Sunsoft:1:0:30",
+            "packID": "ohYesMoreLemmings-OHYES-60"
+          },
+          "level": "Rules to fall",
+          "step": 170
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "32:Crazy:13:0:4",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "It`s a trade off",
+          "step": 79
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 96.75,
+        "hatches": 0.0,
+        "minimumReleaseRate": 20,
+        "precision": 0,
+        "quotaDeadline": 84.06862745098039,
+        "rescue": 33.75,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 64.25,
+        "hatches": 0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 0,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 295
+    }
+  ],
+  "scope": {
+    "extraFansInserted": 0,
+    "neoLemmixInserted": 0,
+    "newLessons": 297,
+    "newSeasonalSources": 70,
+    "oldLessons": 227,
+    "seasonalExactStateAliases": 2,
+    "seasonalSourcesCovered": 72,
+    "tailLessonsReviewed": 217
+  },
+  "sources": {
+    "Artifacts/DifficultyEvaluation/levels.csv": "0e1cd82d19dfe353f5ae39c41c6ad5a81917d25fad7bf81ac4c959fcf9edf1eb",
+    "Artifacts/LearningJourney/course-plan.json": "9eeb38ac54e5bec5fd10b37f5118bdeb31a18fcc86c992e51f07af9efec64cec",
+    "Artifacts/LearningJourney/course-review.json": "0c866bc3202b54ce515e486d9ca0412c95bd5d038033c5b611209a836bb690f7",
+    "Artifacts/LearningJourney/seasonal-native-validation.json": "b92c0cf2cb09a2f642493532a0cfef21e9c6bbc60c6e3525de23287f32613ad0",
+    "Artifacts/LearningJourney/seasonal-plan.json": "ab16e3d7ea0aba814d94427b2961c2b34115bbea205aa3737b70bde9b1acea48",
+    "Resources/Progression/learning.json": "d7863ad96c6d82d32bfee1cfc45aa88a11754a6e0b2c053dcac3a06d75da476e"
+  },
+  "transitionChecks": {
+    "compoundRisesOver30": 2,
+    "limits": "These checks measure execution and resource pressure on one verified route. They cannot measure solution discovery or prove the easiest route.",
+    "newPressurePeaksAtOnce": 1,
+    "postOpeningTransitions": 217,
+    "pressureAxes": 8
+  },
+  "verification": {
+    "audio": "muted",
+    "focusedSwiftTests": {
+      "failed": 0,
+      "passed": 39,
+      "suites": [
+        "LearningJourneyTests",
+        "MobileLearningTests",
+        "JourneySourceCompletionTests",
+        "JourneyCompletionSummaryTests"
+      ]
+    },
+    "generatedOutputCheck": "passed",
+    "limits": [
+      "Installed build 95 supplied exact source assets. These checks do not certify a signed 2.3 package.",
+      "No physical touch, remote, live cloud or later human discovery acceptance was performed.",
+      "An initial mobile integration run lacked Sources/Ports fixtures. It passed with the explicit installed-resource fixture."
+    ],
+    "nativeFanCandidateRoutes": {
+      "currentRun": true,
+      "failed": 0,
+      "passed": 3
+    },
+    "nativeSeasonalSourceRoutes": {
+      "currentRun": true,
+      "failed": 0,
+      "passed": 72
+    },
+    "pythonAdmissionTests": {
+      "failed": 0,
+      "passed": 6
+    },
+    "sharedMobileTVSourceLoads": {
+      "checkpointIdentifiersMatched": true,
+      "initialTick": 0,
+      "passed": 70
+    },
+    "windows": "offscreen"
+  },
+  "version": "tail-curve-review-1"
+}

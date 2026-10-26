@@ -22,14 +22,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 4,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 68.0,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1156,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 0,
@@ -42,7 +42,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 10,
       "probedAssignments": 4,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 292.0,
       "remainingSecondsAtReplayEnd": 292.0,
       "replayRevision": "f58b2e86d5a81d6d9815eabec6a4410d99eacd4e381f1b5dd6cc2d8308e152ad",
@@ -84,13 +84,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has a minimum release rate of 50, near-full rescue, 2 measured narrow assignments. Rehearse basher + builder in make deliberate timed assignments. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "precision",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 724.5,
+      "position": 724.5,
+      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+      "replayRevision": "f58b2e86d5a81d6d9815eabec6a4410d99eacd4e381f1b5dd6cc2d8308e152ad",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 724.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Climbing to the Top!"
   },
   {
@@ -116,14 +130,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 185.11764705882354,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3147,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 0,
@@ -136,7 +150,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 174.88235294117646,
       "remainingSecondsAtReplayEnd": 174.88235294117646,
       "replayRevision": "f4bb220d301d15be18799ab36cf56f7d547a823d635dc5840becfceec5fdc5d4",
@@ -175,13 +189,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 1 measured narrow assignments. Rehearse basher in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 677.2275,
+      "position": 677.2275,
+      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+      "replayRevision": "f4bb220d301d15be18799ab36cf56f7d547a823d635dc5840becfceec5fdc5d4",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 677.2275
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Chains of Command"
   },
   {
@@ -332,14 +360,14 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 21,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 286.2352941176471,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4856,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 14,
@@ -352,8 +380,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 13.764705882352942,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 14.352941176470589,
       "remainingSecondsAtReplayEnd": 13.764705882352942,
       "replayRevision": "de5a35c9e3936293677c6c3c596c3b47a6f68a397d51b1c320a26b4fed36b0c7",
       "required": 25,
@@ -403,13 +431,27 @@
       "packID": "xmasLemmings1991-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1991",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 14 recorded worker skill changes, 14 seconds left at the rescue quota. Rehearse basher + builder + climber + digger + miner in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 854.106,
+      "position": 854.106,
+      "reference": "Quirky/The_Far_Side.nxlv",
+      "replayRevision": "de5a35c9e3936293677c6c3c596c3b47a6f68a397d51b1c320a26b4fed36b0c7",
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 854.106
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
     "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Merry Christmas Mr Lemming"
   },
   {
@@ -435,14 +477,14 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 1,
       "availableSkillTypes": 1,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 94.3529411764706,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 904,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 0,
@@ -455,8 +497,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 1,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 205.64705882352942,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 246.8235294117647,
       "remainingSecondsAtReplayEnd": 205.64705882352942,
       "replayRevision": "16cc8f7938fd7132a6c976f36adaaecd29f0fe4a0af6774233d3272b80546788",
       "required": 25,
@@ -494,11 +536,25 @@
       "packID": "xmasLemmings1992-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1992",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has a minimum release rate of 50. Rehearse basher in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 682.803125,
+      "position": 682.803125,
+      "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv",
+      "replayRevision": "16cc8f7938fd7132a6c976f36adaaecd29f0fe4a0af6774233d3272b80546788",
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.803125
+    },
     "risks": [
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Jingle Lemming"
   },
   {
@@ -1051,14 +1107,14 @@
     ],
     "context": {
       "allowedLosses": 2,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 3,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 89.3529411764706,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1511,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.823529411764706,
       "jobChanges": 1,
@@ -1071,8 +1127,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 3,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 150.64705882352942,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 151.11764705882354,
       "remainingSecondsAtReplayEnd": 150.64705882352942,
       "replayRevision": "ccbb62a89532d5e6953cff0798abd194bddeba13ef95df5a9d78eeb8e1ab131a",
       "required": 78,
@@ -1113,12 +1169,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has near-full rescue. Rehearse basher + digger in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 666.591,
+      "position": 666.591,
+      "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+      "replayRevision": "ccbb62a89532d5e6953cff0798abd194bddeba13ef95df5a9d78eeb8e1ab131a",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 666.591
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "At Home in a Cave"
   },
   {
@@ -1144,7 +1214,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 8,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -1153,7 +1223,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2428,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 1,
@@ -1166,7 +1236,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 8,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 277.1764705882353,
       "remainingSecondsAtReplayEnd": 277.1764705882353,
       "replayRevision": "8cdf76dc9b8c0bb43a151a7f3e4c7315335816a1a9920d569939281f77536e3c",
@@ -1214,13 +1284,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue. Rehearse blocker + builder + digger + miner in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 694.3,
+      "position": 694.3,
+      "reference": "Lunatic/Anxiety.nxlv",
+      "replayRevision": "8cdf76dc9b8c0bb43a151a7f3e4c7315335816a1a9920d569939281f77536e3c",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 694.3
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Maybe not such a doddle"
   },
   {
@@ -2129,14 +2213,14 @@
     ],
     "context": {
       "allowedLosses": 3,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 4,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 101.0,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1693,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 1,
@@ -2149,8 +2233,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 4,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 139.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 140.41176470588235,
       "remainingSecondsAtReplayEnd": 139.0,
       "replayRevision": "401b2500d64e7f75b85cf6869d3ea89b0a4bb323f0f580d9cb6948013c72f844",
       "required": 77,
@@ -2191,13 +2275,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has a minimum release rate of 50, near-full rescue, 1 measured narrow assignments, 2 entrances. Rehearse basher + builder in coordinate entrances and groups. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "hatches",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 761.7204999999999,
+      "position": 761.7204999999999,
+      "reference": "Gentle/You_Live_and_Lem.nxlv",
+      "replayRevision": "401b2500d64e7f75b85cf6869d3ea89b0a4bb323f0f580d9cb6948013c72f844",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 761.7204999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Presents of Mind"
   },
   {
@@ -2223,7 +2321,7 @@
     ],
     "context": {
       "allowedLosses": 2,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 3,
       "canSlowReleaseBelowStartingRate": false,
@@ -2234,7 +2332,7 @@
         "basher",
         "digger"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2114,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 2,
@@ -2247,7 +2345,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 115.6470588235294,
       "remainingSecondsAtReplayEnd": 115.6470588235294,
       "replayRevision": "33a75aed7cc0ea47c20347688d89ca5a76c7196c92b692ef2f2b1eeac48912f1",
@@ -2295,6 +2393,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 2 measured narrow assignments. Rehearse basher + builder + digger in make deliberate timed assignments. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "precision",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 757.5,
+      "position": 757.5,
+      "reference": "Quirky/DON'T_PANIC.nxlv",
+      "replayRevision": "33a75aed7cc0ea47c20347688d89ca5a76c7196c92b692ef2f2b1eeac48912f1",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 757.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -2302,7 +2414,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "It's Boxing Day!"
   },
   {
@@ -2446,7 +2558,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 3,
       "availableSkillTypes": 3,
       "canSlowReleaseBelowStartingRate": false,
@@ -2455,7 +2567,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1977,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 1,
@@ -2468,7 +2580,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 3,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 123.70588235294117,
       "remainingSecondsAtReplayEnd": 123.70588235294117,
       "replayRevision": "3cb2a72cc5573f27e94d94fe9454d91ce04ee050f1d9002a82c40347008c219c",
@@ -2513,13 +2625,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has near-full rescue. Rehearse builder + climber in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 652.409,
+      "position": 652.409,
+      "reference": "Manic/Down_the_tube.nxlv",
+      "replayRevision": "3cb2a72cc5573f27e94d94fe9454d91ce04ee050f1d9002a82c40347008c219c",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 652.409
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Yo-yo Lem-lem"
   },
   {
@@ -2545,7 +2671,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 3,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
@@ -2554,7 +2680,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1460,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 0,
@@ -2567,7 +2693,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 3,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 34.11764705882353,
       "remainingSecondsAtReplayEnd": 34.11764705882353,
       "replayRevision": "60bb498fa31f2ff7ca6edabb2c8ba1dd32d460e83407f390b6bb262e24223e1e",
@@ -2611,13 +2737,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has near-full rescue, 34 seconds left at the rescue quota, 2 entrances. Rehearse basher + builder in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 842.2275,
+      "position": 842.2275,
+      "reference": "Gentle/Get_a_little_extra_help.nxlv",
+      "replayRevision": "60bb498fa31f2ff7ca6edabb2c8ba1dd32d460e83407f390b6bb262e24223e1e",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 842.2275
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "2 Minutes before midnight"
   },
   {
@@ -2881,14 +3021,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 4,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 127.70588235294117,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2128,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.823529411764706,
       "jobChanges": 0,
@@ -2901,8 +3041,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 4,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 112.29411764705883,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 114.82352941176471,
       "remainingSecondsAtReplayEnd": 112.29411764705883,
       "replayRevision": "679011238212c9ce0ed27853ee3375a08b0828ba00ce23a962fe49ef2c212050",
       "required": 75,
@@ -2943,13 +3083,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 2 measured narrow assignments. Rehearse basher + builder in make deliberate timed assignments. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "precision",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 723.75,
+      "position": 723.75,
+      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+      "replayRevision": "679011238212c9ce0ed27853ee3375a08b0828ba00ce23a962fe49ef2c212050",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 723.75
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Marshmallow Land"
   },
   {
@@ -2975,7 +3129,7 @@
     ],
     "context": {
       "allowedLosses": 10,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
@@ -2984,7 +3138,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1436,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 1,
@@ -2997,8 +3151,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 86.52941176470588,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 95.52941176470588,
       "remainingSecondsAtReplayEnd": 86.52941176470588,
       "replayRevision": "c9927baaa5399bf6b98e768eaf2dd0b44cf28171932c30466b32a32cfc8a0062",
       "required": 40,
@@ -3039,6 +3193,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 4 measured narrow assignments. Rehearse basher + builder in make deliberate timed assignments. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "precision",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 742.5,
+      "position": 742.5,
+      "reference": "Quirky/Take_care,_Sweetie.nxlv",
+      "replayRevision": "c9927baaa5399bf6b98e768eaf2dd0b44cf28171932c30466b32a32cfc8a0062",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 742.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3046,7 +3214,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Happy New Year II!"
   },
   {
@@ -3209,14 +3377,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 42.23529411764706,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 718,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 0,
@@ -3229,7 +3397,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 10,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 137.76470588235293,
       "remainingSecondsAtReplayEnd": 137.76470588235293,
       "replayRevision": "851916199eb2a8c6dd6902b091d96a58b1c974d98754dcd1d89ac06b0eb644d7",
@@ -3268,13 +3436,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 4 measured narrow assignments. Rehearse builder in make deliberate timed assignments. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "precision",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 743.25,
+      "position": 743.25,
+      "reference": "Manic/The_Lemming_Funhouse.nxlv",
+      "replayRevision": "851916199eb2a8c6dd6902b091d96a58b1c974d98754dcd1d89ac06b0eb644d7",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 743.25
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Head for the Hills!"
   },
   {
@@ -3300,7 +3482,7 @@
     ],
     "context": {
       "allowedLosses": 1,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -3311,7 +3493,7 @@
         "basher",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2337,
       "hatchCount": 3,
       "initialHatchIntervalSeconds": 1.8235294117647058,
       "jobChanges": 1,
@@ -3324,7 +3506,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 162.52941176470588,
       "remainingSecondsAtReplayEnd": 162.52941176470588,
       "replayRevision": "74c2cb528d7fcad97bc3b7940faa185cb5da7b02e5837aa8492f978fdbb3ef74",
@@ -3374,13 +3556,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 3 entrances. Rehearse basher + builder + miner in coordinate entrances and groups. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "hatches",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 797.8530000000001,
+      "position": 797.8530000000001,
+      "reference": "Quirky/PoP_YoR_ToP!!!.nxlv",
+      "replayRevision": "74c2cb528d7fcad97bc3b7940faa185cb5da7b02e5837aa8492f978fdbb3ef74",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 797.8530000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Plethora of Presents"
   },
   {
@@ -3667,7 +3863,7 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 8,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -3676,7 +3872,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3081,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 3,
@@ -3689,8 +3885,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 8,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 58.76470588235294,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "b2285013202adc66ec593abeeecb7f79b4bd518067af2a4db43c913b16a8867c",
       "required": 45,
@@ -3734,15 +3930,28 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 1 measured narrow assignments, 3 recorded worker skill changes, 59 seconds left at the rescue quota. Rehearse basher + blocker + builder in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 691.7,
+      "position": 691.7,
+      "reference": "Quirky/DON'T_PANIC.nxlv",
+      "replayRevision": "b2285013202adc66ec593abeeecb7f79b4bd518067af2a4db43c913b16a8867c",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 691.7
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Long Way Around"
   },
   {
@@ -3768,7 +3977,7 @@
     ],
     "context": {
       "allowedLosses": 1,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -3779,7 +3988,7 @@
         "floater",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1010,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.0,
       "jobChanges": 2,
@@ -3792,7 +4001,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 120.58823529411765,
       "remainingSecondsAtReplayEnd": 120.58823529411765,
       "replayRevision": "bb48e548f2791758194cad1384ac30d8744e72f65e27b1b8a3f160a76eb47fd5",
@@ -3842,6 +4051,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 1 measured narrow assignments. Rehearse builder + climber + floater in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 673.682,
+      "position": 673.682,
+      "reference": "Quirky/Exodus!.nxlv",
+      "replayRevision": "bb48e548f2791758194cad1384ac30d8744e72f65e27b1b8a3f160a76eb47fd5",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 673.682
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -3849,7 +4072,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Up on the Rooftops"
   },
   {
@@ -4105,7 +4328,7 @@
     ],
     "context": {
       "allowedLosses": 3,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 13,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -4117,7 +4340,7 @@
         "floater",
         "blocker"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 6027,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 0.7647058823529411,
       "jobChanges": 5,
@@ -4130,8 +4353,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 25,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 176.35294117647058,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 185.47058823529412,
       "remainingSecondsAtReplayEnd": 176.35294117647058,
       "replayRevision": "fea87a49c95189cda988b3cc364f9fcdac77606d5ad7167a17598eef098e6360",
       "required": 22,
@@ -4189,13 +4412,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 80, 5 recorded worker skill changes. Rehearse basher + blocker + builder + climber + digger + floater in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 930.9749999999999,
+      "position": 930.9749999999999,
+      "reference": "Manic/Temple_of_Love.nxlv",
+      "replayRevision": "fea87a49c95189cda988b3cc364f9fcdac77606d5ad7167a17598eef098e6360",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 930.9749999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Oogilemming!"
   },
   {
@@ -4317,7 +4554,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -4328,7 +4565,7 @@
         "floater",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2147,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 3,
@@ -4341,7 +4578,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 75,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 233.7058823529412,
       "remainingSecondsAtReplayEnd": 233.7058823529412,
       "replayRevision": "1a52ac06fbd069a7639284bc27dd04d6156eef9b372be5857b776c80032aa52d",
@@ -4396,6 +4633,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 50, near-full rescue, 3 measured narrow assignments, 3 recorded worker skill changes. Rehearse basher + builder + climber + floater in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 944.5,
+      "position": 944.5,
+      "reference": "Quirky/Exodus!.nxlv",
+      "replayRevision": "1a52ac06fbd069a7639284bc27dd04d6156eef9b372be5857b776c80032aa52d",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 944.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -4403,7 +4654,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Go Thataway!"
   },
   {
@@ -4546,7 +4797,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 12,
       "availableSkillTypes": 3,
       "canSlowReleaseBelowStartingRate": false,
@@ -4556,7 +4807,7 @@
         "builder",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2176,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 1,
@@ -4569,7 +4820,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 172.0,
       "remainingSecondsAtReplayEnd": 172.0,
       "replayRevision": "32701d5a20c89e76f80391e189f2250548a9dffeac04e5cdbfd95186b4bc7496",
@@ -4614,6 +4865,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue. Rehearse basher + builder in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 928.7,
+      "position": 928.7,
+      "reference": "Gentle/Careless_clicking_costs_lives.nxlv",
+      "replayRevision": "32701d5a20c89e76f80391e189f2250548a9dffeac04e5cdbfd95186b4bc7496",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 928.7
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -4621,7 +4886,7 @@
       "four or more assignments within two seconds"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemmings Up High"
   },
   {
@@ -4765,7 +5030,7 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 7,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -4774,7 +5039,7 @@
       "exhaustedUsedSkills": [
         "blocker"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 903,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 0.23529411764705882,
       "jobChanges": 2,
@@ -4787,8 +5052,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 7,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 66.88235294117646,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "9f7b72f76dc5ae3e1faeff2451d905b747d212f197bf42092b53a55833d0813a",
       "required": 75,
@@ -4832,15 +5097,28 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 99, 2 measured narrow assignments. Rehearse blocker + bomber in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 933.425,
+      "position": 933.425,
+      "reference": "Manic/Come_on_over_to_my_place.nxlv",
+      "replayRevision": "9f7b72f76dc5ae3e1faeff2451d905b747d212f197bf42092b53a55833d0813a",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 933.425
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Break On Through"
   },
   {
@@ -4987,7 +5265,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 1,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -4996,7 +5274,7 @@
       "exhaustedUsedSkills": [
         "digger"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1448,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 0,
@@ -5009,7 +5287,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 1,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 274.8235294117647,
       "remainingSecondsAtReplayEnd": 274.8235294117647,
       "replayRevision": "0971e4a79607a7e4490bb330095db146a0a288a7133ce11067551fa970204abc",
@@ -5052,13 +5330,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 1 measured narrow assignments. Rehearse digger in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 932.9000000000001,
+      "position": 932.9000000000001,
+      "reference": "Gentle/Just_dig!.nxlv",
+      "replayRevision": "0971e4a79607a7e4490bb330095db146a0a288a7133ce11067551fa970204abc",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 932.9000000000001
+    },
     "risks": [
       "spatial tolerance unmeasured",
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Check Your Hints!"
   },
   {
@@ -5205,14 +5497,14 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 23,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 506.47058823529414,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 8524,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.0,
       "jobChanges": 13,
@@ -5225,8 +5517,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 33.529411764705884,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 38.588235294117645,
       "remainingSecondsAtReplayEnd": 33.529411764705884,
       "replayRevision": "1925992aa002713421b039e512fb644eb3576a22d9334ef0706678c96fc9c047",
       "required": 25,
@@ -5270,12 +5562,26 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 13 recorded worker skill changes, 39 seconds left at the rescue quota. Rehearse basher + builder + miner in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 953.5,
+      "position": 953.5,
+      "reference": "Gentle/A_Beast_of_a_level.nxlv",
+      "replayRevision": "1925992aa002713421b039e512fb644eb3576a22d9334ef0706678c96fc9c047",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 953.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "And a Happy New Year!"
   },
   {
@@ -5422,7 +5728,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -5435,7 +5741,7 @@
         "builder",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 5732,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.235294117647059,
       "jobChanges": 4,
@@ -5448,7 +5754,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 22.823529411764707,
       "remainingSecondsAtReplayEnd": 22.823529411764707,
       "replayRevision": "ee16c583e975bd56c02863a7596834c46beebfd3c7277eb6ece8294fe4e4b5f9",
@@ -5506,6 +5812,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 4 recorded worker skill changes, 23 seconds left at the rescue quota. Rehearse basher + builder + climber + digger + floater in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 931.5,
+      "position": 931.5,
+      "reference": "Lunatic/The_Great_Lemming_Caper.nxlv",
+      "replayRevision": "ee16c583e975bd56c02863a7596834c46beebfd3c7277eb6ece8294fe4e4b5f9",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 931.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -5513,7 +5833,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Santus Lemmingus"
   },
   {
@@ -5663,7 +5983,7 @@
     ],
     "context": {
       "allowedLosses": 2,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -5674,7 +5994,7 @@
         "blocker",
         "bomber"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1645,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 3,
@@ -5687,8 +6007,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 200.94117647058823,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 203.23529411764707,
       "remainingSecondsAtReplayEnd": 200.94117647058823,
       "replayRevision": "186ff44e2d0cffec3cee924125f9e31256f697aa0ee31739564e93eded5de6bf",
       "required": 78,
@@ -5741,6 +6061,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 4 measured narrow assignments, 3 recorded worker skill changes. Rehearse basher + blocker + bomber + miner in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 946.75,
+      "position": 946.75,
+      "reference": "Manic/Come_on_over_to_my_place.nxlv",
+      "replayRevision": "186ff44e2d0cffec3cee924125f9e31256f697aa0ee31739564e93eded5de6bf",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 946.75
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -5748,7 +6082,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemmintaschen?"
   },
   {
@@ -5896,14 +6230,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 21,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 65.6470588235294,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 911,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 1,
@@ -5916,8 +6250,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 20,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 414.3529411764706,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 426.4117647058824,
       "remainingSecondsAtReplayEnd": 414.3529411764706,
       "replayRevision": "2332d9634f20b0172d852d3064eaeb6ab2721903035bad2908dfa65805c1a8be",
       "required": 15,
@@ -5958,12 +6292,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse basher + floater in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 682.7625,
+      "position": 682.7625,
+      "reference": "Zany/KEEP_ON_TRUCKING.nxlv",
+      "replayRevision": "2332d9634f20b0172d852d3064eaeb6ab2721903035bad2908dfa65805c1a8be",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.7625
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Floating Lemming Flurry"
   },
   {
@@ -5989,7 +6337,7 @@
     ],
     "context": {
       "allowedLosses": 1,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 50,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -5998,7 +6346,7 @@
       "exhaustedUsedSkills": [
         "floater"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1703,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.3529411764705883,
       "jobChanges": 0,
@@ -6011,8 +6359,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 78.47058823529412,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 79.82352941176471,
       "remainingSecondsAtReplayEnd": 78.47058823529412,
       "replayRevision": "4e250eb87ece72766a56bc1f2c11ac1a3975cd7996990a22758b3031a268c647",
       "required": 49,
@@ -6058,13 +6406,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has a minimum release rate of 60, near-full rescue. Rehearse floater in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 696.9000000000001,
+      "position": 696.9000000000001,
+      "reference": "Manic/With_a_twist_of_lemming,_please.nxlv",
+      "replayRevision": "4e250eb87ece72766a56bc1f2c11ac1a3975cd7996990a22758b3031a268c647",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 696.9000000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Ski Jump!"
   },
   {
@@ -6217,14 +6579,14 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 22,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 268.52941176470586,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4546,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 12,
@@ -6237,8 +6599,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 31.470588235294116,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 32.588235294117645,
       "remainingSecondsAtReplayEnd": 31.470588235294116,
       "replayRevision": "4957b329a941adc06283c893c21c805a0b1bf800878e9c7b4e350068e9741e11",
       "required": 25,
@@ -6285,12 +6647,26 @@
       "packID": "xmasLemmings1991-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1991",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 12 recorded worker skill changes, 33 seconds left at the rescue quota. Rehearse basher + builder + climber + digger in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 854.477,
+      "position": 854.477,
+      "reference": "Quirky/The_Far_Side.nxlv",
+      "replayRevision": "4957b329a941adc06283c893c21c805a0b1bf800878e9c7b4e350068e9741e11",
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 854.477
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Christmas Bonus"
   },
   {
@@ -6316,7 +6692,7 @@
     ],
     "context": {
       "allowedLosses": 10,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -6325,7 +6701,7 @@
       "exhaustedUsedSkills": [
         "digger"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4125,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 0,
@@ -6338,8 +6714,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 26.176470588235293,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 57.35294117647059,
       "remainingSecondsAtReplayEnd": 26.176470588235293,
       "replayRevision": "fd5ab6269403050e4db4eac472f4498971f2eb0382f04bf8763db61600f0d3ae",
       "required": 70,
@@ -6382,14 +6758,27 @@
       "packID": "xmasLemmings1992-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1992",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has 57 seconds left at the rescue quota. Rehearse builder + digger in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 670.1365000000001,
+      "position": 670.1365000000001,
+      "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+      "replayRevision": "fd5ab6269403050e4db4eac472f4498971f2eb0382f04bf8763db61600f0d3ae",
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 670.1365000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Happy Holidays Mr Lemming!"
   },
   {
@@ -6655,7 +7044,7 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 12,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -6669,7 +7058,7 @@
         "digger",
         "miner"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1976,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 5,
@@ -6682,8 +7071,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 183.76470588235293,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "56119c485a125abaca1df2c98ea669cd90e92feed2e1dec3989524f3e83a6ee5",
       "required": 75,
@@ -6747,14 +7136,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 5 recorded worker skill changes. Rehearse basher + blocker + bomber + builder + climber + digger + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 902.0999999999999,
+      "position": 902.0999999999999,
+      "reference": "Zany/ONWARD_AND_UPWARD.nxlv",
+      "replayRevision": "56119c485a125abaca1df2c98ea669cd90e92feed2e1dec3989524f3e83a6ee5",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 902.0999999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "It Came Upon a Lemnight Clear"
   },
   {
@@ -6904,7 +7306,7 @@
     ],
     "context": {
       "allowedLosses": 12,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 43,
       "availableSkillTypes": 4,
       "canSlowReleaseBelowStartingRate": false,
@@ -6916,7 +7318,7 @@
         "builder",
         "blocker"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2304,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 4,
@@ -6929,8 +7331,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 44.470588235294116,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "a48e2d31a31d896e82fdd902a11c0c4857e0150cdb3125c0838bbe8ce63b4cd2",
       "required": 68,
@@ -6980,14 +7382,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 4 recorded worker skill changes, 44 seconds left at the rescue quota. Rehearse blocker + builder + digger + floater in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 916.0999999999999,
+      "position": 916.0999999999999,
+      "reference": "Manic/With_a_twist_of_lemming,_please.nxlv",
+      "replayRevision": "a48e2d31a31d896e82fdd902a11c0c4857e0150cdb3125c0838bbe8ce63b4cd2",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 916.0999999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Get the Point?"
   },
   {
@@ -7013,7 +7428,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 2,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -7023,7 +7438,7 @@
         "digger",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1604,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.0588235294117647,
       "jobChanges": 1,
@@ -7036,7 +7451,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 2,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 145.64705882352942,
       "remainingSecondsAtReplayEnd": 145.64705882352942,
       "replayRevision": "5212ecdbaea85f2381788a130443cdd92c672befbdde7ac11eae75ece98262aa",
@@ -7082,6 +7497,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 70, near-full rescue, 1 measured narrow assignments. Rehearse builder + digger in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 933.25,
+      "position": 933.25,
+      "reference": "Gentle/You_Live_and_Lem.nxlv",
+      "replayRevision": "5212ecdbaea85f2381788a130443cdd92c672befbdde7ac11eae75ece98262aa",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 933.25
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -7089,7 +7518,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "A Single Lemming..."
   },
   {
@@ -7115,14 +7544,14 @@
     ],
     "context": {
       "allowedLosses": 53,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 0,
       "availableSkillTypes": 1,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 45.1764705882353,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 695,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 0,
@@ -7135,8 +7564,8 @@
       "peakDistinctWorkersPerSecond": 0,
       "population": 80,
       "probedAssignments": 0,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 14.823529411764707,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 19.11764705882353,
       "remainingSecondsAtReplayEnd": 14.823529411764707,
       "replayRevision": "d92572c4b0ea2a1a497fa0a3c7c85417386930c08a030d909053b7292c6065a4",
       "required": 27,
@@ -7170,12 +7599,26 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 19 seconds left at the rescue quota. Rehearse route observation in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 973.75,
+      "position": 973.75,
+      "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv",
+      "replayRevision": "d92572c4b0ea2a1a497fa0a3c7c85417386930c08a030d909053b7292c6065a4",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 973.75
+    },
     "risks": [
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Surprise Package?"
   },
   {
@@ -7201,14 +7644,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 7,
       "availableSkillTypes": 4,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 179.41176470588235,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3025,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.235294117647059,
       "jobChanges": 1,
@@ -7221,8 +7664,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 60,
       "probedAssignments": 7,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 60.588235294117645,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 62.05882352941177,
       "remainingSecondsAtReplayEnd": 60.588235294117645,
       "replayRevision": "3e25eefae16facab13e261bb9b4eaa5beab5ac213af3dc9a51d1a38913eafcaa",
       "required": 55,
@@ -7263,13 +7706,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 3 measured narrow assignments. Rehearse basher + builder in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 943.375,
+      "position": 943.375,
+      "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+      "replayRevision": "3e25eefae16facab13e261bb9b4eaa5beab5ac213af3dc9a51d1a38913eafcaa",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 943.375
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Break on through..."
   },
   {
@@ -7518,7 +7975,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 14,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
@@ -7527,7 +7984,7 @@
       "exhaustedUsedSkills": [
         "climber"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 5066,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 1,
@@ -7540,7 +7997,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 2.0,
       "remainingSecondsAtReplayEnd": 2.0,
       "replayRevision": "6590fce9a1d8853e81be948c3c59fa51d6e34ba5e019fc4b0fb458a9622e62e7",
@@ -7584,6 +8041,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 2 seconds left at the rescue quota. Rehearse builder + climber in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 971.5,
+      "position": 971.5,
+      "reference": "Gentle/Careless_clicking_costs_lives.nxlv",
+      "replayRevision": "6590fce9a1d8853e81be948c3c59fa51d6e34ba5e019fc4b0fb458a9622e62e7",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 971.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -7591,7 +8062,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Steel Ice Span"
   },
   {
@@ -7617,7 +8088,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 4,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
@@ -7626,7 +8097,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1699,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 1.5294117647058822,
       "jobChanges": 0,
@@ -7639,7 +8110,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 4,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 20.058823529411764,
       "remainingSecondsAtReplayEnd": 20.058823529411764,
       "replayRevision": "71486214a47c0816c13b4c008b2ec7a0faf0f5dfbb756629589ffa7eed3e74c7",
@@ -7683,6 +8154,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 55, near-full rescue, 1 measured narrow assignments, 20 seconds left at the rescue quota, 2 entrances. Rehearse basher + builder in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 932.5500000000001,
+      "position": 932.5500000000001,
+      "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+      "replayRevision": "71486214a47c0816c13b4c008b2ec7a0faf0f5dfbb756629589ffa7eed3e74c7",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 932.5500000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -7691,7 +8176,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Presents of Mind II"
   },
   {
@@ -7968,7 +8453,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 29,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -7978,7 +8463,7 @@
         "digger",
         "miner"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 5639,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.235294117647059,
       "jobChanges": 3,
@@ -7991,7 +8476,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 28.294117647058822,
       "remainingSecondsAtReplayEnd": 28.294117647058822,
       "replayRevision": "ed777af0d0bd8b3099f80ebe7e48f07f059a85694c3e1077e4420e62bd025828",
@@ -8041,6 +8526,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 3 recorded worker skill changes, 28 seconds left at the rescue quota. Rehearse builder + digger + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 913.3,
+      "position": 913.3,
+      "reference": "Manic/AAAAAARRRRRRGGGGGGHHHHHH!!!!!!.nxlv",
+      "replayRevision": "ed777af0d0bd8b3099f80ebe7e48f07f059a85694c3e1077e4420e62bd025828",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 913.3
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -8048,7 +8547,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Sir Edmund Hilemming"
   },
   {
@@ -8074,14 +8573,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 20,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 317.2352941176471,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 5393,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 11,
@@ -8094,7 +8593,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 222.76470588235293,
       "remainingSecondsAtReplayEnd": 222.76470588235293,
       "replayRevision": "02bdc656b1d1d65538ddaab504669b0d0139e3436d915f00c40d8b9f3af037b8",
@@ -8145,12 +8644,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 11 recorded worker skill changes. Rehearse basher + blocker + builder + digger in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 955.75,
+      "position": 955.75,
+      "reference": "Lunatic/Save_Me.nxlv",
+      "replayRevision": "02bdc656b1d1d65538ddaab504669b0d0139e3436d915f00c40d8b9f3af037b8",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 955.75
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemmings...The Motion Picture"
   },
   {
@@ -8416,7 +8929,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 10,
       "availableSkillTypes": 3,
       "canSlowReleaseBelowStartingRate": false,
@@ -8425,7 +8938,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4681,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 1,
@@ -8438,7 +8951,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 204.64705882352942,
       "remainingSecondsAtReplayEnd": 204.64705882352942,
       "replayRevision": "335456bd2d69d1d080566ebf972840c1cbbd4d6185cdf380b2359e8726d54fbd",
@@ -8483,13 +8996,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue. Rehearse basher + builder in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 929.05,
+      "position": 929.05,
+      "reference": "Gentle/Careless_clicking_costs_lives.nxlv",
+      "replayRevision": "335456bd2d69d1d080566ebf972840c1cbbd4d6185cdf380b2359e8726d54fbd",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 929.05
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Up, up, and away!"
   },
   {
@@ -8515,14 +9042,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 226.35294117647058,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3848,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 1,
@@ -8535,7 +9062,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 13.647058823529411,
       "remainingSecondsAtReplayEnd": 13.647058823529411,
       "replayRevision": "52a97743a3389396799973ff12e0a1efe1fef61ffaa435feb710f153e17691fa",
@@ -8581,6 +9108,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 2 measured narrow assignments, 14 seconds left at the rescue quota, 2 entrances. Rehearse basher + builder in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 947.875,
+      "position": 947.875,
+      "reference": "Lunatic/This_Corrosion.nxlv",
+      "replayRevision": "52a97743a3389396799973ff12e0a1efe1fef61ffaa435feb710f153e17691fa",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 947.875
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -8588,7 +9129,7 @@
       "less than 30 seconds spare on the witness"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Wrath of Lem"
   },
   {
@@ -8880,7 +9421,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 9,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -8889,7 +9430,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3700,
       "hatchCount": 3,
       "initialHatchIntervalSeconds": 1.3529411764705883,
       "jobChanges": 3,
@@ -8902,7 +9443,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 9,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 22.352941176470587,
       "remainingSecondsAtReplayEnd": 22.352941176470587,
       "replayRevision": "9f0fa0b323b46e8f89970d7f1a868ba0ba41c15785ef84b98ace3b594deda6ad",
@@ -8947,6 +9488,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 60, near-full rescue, 1 measured narrow assignments, 3 recorded worker skill changes, 22 seconds left at the rescue quota, 3 entrances. Rehearse basher + builder in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 948.4375,
+      "position": 948.4375,
+      "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+      "replayRevision": "9f0fa0b323b46e8f89970d7f1a868ba0ba41c15785ef84b98ace3b594deda6ad",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 948.4375
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -8955,7 +9510,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemmy in the cold, cold ground"
   },
   {
@@ -8981,7 +9536,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 12,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -8994,7 +9549,7 @@
         "builder",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2649,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.0,
       "jobChanges": 2,
@@ -9007,7 +9562,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 204.1764705882353,
       "remainingSecondsAtReplayEnd": 204.1764705882353,
       "replayRevision": "0451dbd642284ab8705398f7cc86fec6e796ab6167648abe2bd2a89a96990e49",
@@ -9065,13 +9620,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue. Rehearse basher + builder + climber + digger + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 927.3,
+      "position": 927.3,
+      "reference": "Zany/Dolly_Dimple.nxlv",
+      "replayRevision": "0451dbd642284ab8705398f7cc86fec6e796ab6167648abe2bd2a89a96990e49",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 927.3
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Search for Lem"
   },
   {
@@ -9240,7 +9809,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 12,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -9252,7 +9821,7 @@
         "digger",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3316,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 5,
@@ -9265,7 +9834,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 70,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 164.94117647058823,
       "remainingSecondsAtReplayEnd": 164.94117647058823,
       "replayRevision": "bdddad811473eb7f682165721704a1726073d0dbab64c92512fbdf25c26b75ec",
@@ -9320,13 +9889,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 50, near-full rescue, 5 recorded worker skill changes, 2 entrances. Rehearse builder + climber + digger + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 903.5,
+      "position": 903.5,
+      "reference": "Lunatic/Lemming_about_town.nxlv",
+      "replayRevision": "bdddad811473eb7f682165721704a1726073d0dbab64c92512fbdf25c26b75ec",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 903.5
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Emmings!  (No L)"
   },
   {
@@ -9352,7 +9935,7 @@
     ],
     "context": {
       "allowedLosses": 10,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 3,
       "availableSkillTypes": 2,
       "canSlowReleaseBelowStartingRate": false,
@@ -9362,7 +9945,7 @@
         "digger",
         "bomber"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4857,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.7058823529411766,
       "jobChanges": 1,
@@ -9375,8 +9958,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 3,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 112.6470588235294,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 134.2941176470588,
       "remainingSecondsAtReplayEnd": 112.6470588235294,
       "replayRevision": "3bc1886d1415b484e533654644b51120f6bcc2f3faa8bf4147d0101dc77ee809",
       "required": 70,
@@ -9420,6 +10003,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 1 measured narrow assignments. Rehearse bomber + digger in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 933.075,
+      "position": 933.075,
+      "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+      "replayRevision": "3bc1886d1415b484e533654644b51120f6bcc2f3faa8bf4147d0101dc77ee809",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 933.075
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -9427,7 +10024,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Voyage Home..."
   },
   {
@@ -9580,14 +10177,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 1,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 140.76470588235293,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2393,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 0,
@@ -9600,7 +10197,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 25,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 159.23529411764707,
       "remainingSecondsAtReplayEnd": 159.23529411764707,
       "replayRevision": "69f902327635faf6c128813a47cec9035d446dbd7c7b9af206dd4c4490356e67",
@@ -9639,13 +10236,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 3 measured narrow assignments. Rehearse builder in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 942.25,
+      "position": 942.25,
+      "reference": "Manic/The_Lemming_Funhouse.nxlv",
+      "replayRevision": "69f902327635faf6c128813a47cec9035d446dbd7c7b9af206dd4c4490356e67",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 942.25
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Merry Christmaze"
   },
   {
@@ -9671,7 +10282,7 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 11,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -9681,7 +10292,7 @@
         "blocker",
         "bomber"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2465,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 2,
@@ -9694,8 +10305,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 70,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 263.7647058823529,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 275.0,
       "remainingSecondsAtReplayEnd": 263.7647058823529,
       "replayRevision": "6f2161c7a06e9d3e99ec56de61e9d02a78e3f82caf47757ef46da0b381fa5958",
       "required": 65,
@@ -9747,13 +10358,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route uses familiar skills with measured recovery room. Rehearse blocker + bomber + builder in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 927.4749999999999,
+      "position": 927.4749999999999,
+      "reference": "Lunatic/Anxiety.nxlv",
+      "replayRevision": "6f2161c7a06e9d3e99ec56de61e9d02a78e3f82caf47757ef46da0b381fa5958",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 927.4749999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Final Frontier"
   },
   {
@@ -10004,7 +10629,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 7,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -10017,7 +10642,7 @@
         "digger",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2760,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 4,
@@ -10030,7 +10655,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 50,
       "probedAssignments": 7,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 197.64705882352942,
       "remainingSecondsAtReplayEnd": 197.64705882352942,
       "replayRevision": "a739de780c7af22c74fc94eed5cb332529394bd9f8bd415dd0701980ad1d61bb",
@@ -10088,13 +10713,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 4 recorded worker skill changes. Rehearse basher + builder + climber + digger + floater in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 931.15,
+      "position": 931.15,
+      "reference": "Lunatic/The_Great_Lemming_Caper.nxlv",
+      "replayRevision": "a739de780c7af22c74fc94eed5cb332529394bd9f8bd415dd0701980ad1d61bb",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 931.15
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Polar Expedition"
   },
   {
@@ -10120,14 +10759,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 2,
       "availableSkillTypes": 3,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 239.76470588235293,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 4076,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.823529411764706,
       "jobChanges": 0,
@@ -10140,7 +10779,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 2,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 300.2352941176471,
       "remainingSecondsAtReplayEnd": 300.2352941176471,
       "replayRevision": "7cfdfbbd7d6a11d5e6bb0375a352917ec0b0053ecf570ee35344bdf7f4f2c334",
@@ -10182,12 +10821,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue. Rehearse digger + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 929.2249999999999,
+      "position": 929.2249999999999,
+      "reference": "Gentle/Just_dig!.nxlv",
+      "replayRevision": "7cfdfbbd7d6a11d5e6bb0375a352917ec0b0053ecf570ee35344bdf7f4f2c334",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 929.2249999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Undiscovered Country"
   },
   {
@@ -10335,7 +10988,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 25,
       "availableSkillTypes": 7,
       "canSlowReleaseBelowStartingRate": false,
@@ -10345,7 +10998,7 @@
         "basher",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3334,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 5,
@@ -10358,7 +11011,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 65,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 343.88235294117646,
       "remainingSecondsAtReplayEnd": 343.88235294117646,
       "replayRevision": "ea9ce4cafd31f4d264d2989d1f884c53ba566ac1cc719b02fe0824608766f163",
@@ -10402,13 +11055,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 50, near-full rescue, 5 recorded worker skill changes, 2 entrances. Rehearse basher + builder in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 903.85,
+      "position": 903.85,
+      "reference": "Manic/Poles_Apart.nxlv",
+      "replayRevision": "ea9ce4cafd31f4d264d2989d1f884c53ba566ac1cc719b02fe0824608766f163",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 903.85
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Rendezvous II"
   },
   {
@@ -10434,14 +11101,14 @@
     ],
     "context": {
       "allowedLosses": 30,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 1,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 197.64705882352942,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2370,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 0,
@@ -10454,8 +11121,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 1,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 222.35294117647058,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 280.5882352941176,
       "remainingSecondsAtReplayEnd": 222.35294117647058,
       "replayRevision": "420e9efd7f71178cf5aba4467c4a720c3057180f6985ebec7bd4658022cdfd52",
       "required": 50,
@@ -10493,11 +11160,25 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse basher in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 682.84375,
+      "position": 682.84375,
+      "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv",
+      "replayRevision": "420e9efd7f71178cf5aba4467c4a720c3057180f6985ebec7bd4658022cdfd52",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.84375
+    },
     "risks": [
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Holiday Mining"
   },
   {
@@ -10523,7 +11204,7 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 13,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -10532,7 +11213,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2114,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 0,
@@ -10545,8 +11226,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 174.47058823529412,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 175.64705882352942,
       "remainingSecondsAtReplayEnd": 174.47058823529412,
       "replayRevision": "61d8736d4ac77e0a1e55e59aae6ac041f018b857bdf79311bae322e4b27def16",
       "required": 75,
@@ -10587,13 +11268,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has a minimum release rate of 50. Rehearse basher + blocker in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 677.670625,
+      "position": 677.670625,
+      "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
+      "replayRevision": "61d8736d4ac77e0a1e55e59aae6ac041f018b857bdf79311bae322e4b27def16",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 677.670625
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "CindyLand"
   },
   {
@@ -10744,14 +11439,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 41,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 443.05882352941177,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 7532,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 21,
@@ -10764,7 +11459,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 96.94117647058823,
       "remainingSecondsAtReplayEnd": 96.94117647058823,
       "replayRevision": "0de033df0da2969bf6ec09aaa82846ae02ef0d1bbcc7989022a20b8f0f049b03",
@@ -10818,13 +11513,27 @@
       "packID": "xmasLemmings1992-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1992",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 21 recorded worker skill changes. Rehearse basher + builder + climber + digger + floater + miner in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 854.6624999999999,
+      "position": 854.6624999999999,
+      "reference": "Zany/Last_one_out_is_a_rotten_egg!.nxlv",
+      "replayRevision": "0de033df0da2969bf6ec09aaa82846ae02ef0d1bbcc7989022a20b8f0f049b03",
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 854.6624999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
     "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "A Lemming Holiday"
   },
   {
@@ -10850,7 +11559,7 @@
     ],
     "context": {
       "allowedLosses": 7,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 23,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -10861,7 +11570,7 @@
         "builder",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2165,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 11,
@@ -10874,8 +11583,8 @@
       "peakDistinctWorkersPerSecond": 5,
       "population": 15,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 352.6470588235294,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "033e97299d8679c94c50f24a0fc7c9ad8d090849f96fac41b2a0a61eb336c128",
       "required": 8,
@@ -10928,15 +11637,28 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has a minimum release rate of 50, 11 recorded worker skill changes. Rehearse basher + bomber + builder + climber + floater in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 941.125,
+      "position": 941.125,
+      "reference": "Lunatic/The_Boiler_Room.nxlv",
+      "replayRevision": "033e97299d8679c94c50f24a0fc7c9ad8d090849f96fac41b2a0a61eb336c128",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 941.125
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Needs of the Many..."
   },
   {
@@ -11080,7 +11802,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -11089,7 +11811,7 @@
       "exhaustedUsedSkills": [
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 803,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 2,
@@ -11102,7 +11824,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 60,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 252.76470588235293,
       "remainingSecondsAtReplayEnd": 252.76470588235293,
       "replayRevision": "bba30e67c0ff6c446758bc0eeaf7aba947159cced37b74a807b5c50f964a7790",
@@ -11152,13 +11874,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue. Rehearse basher + builder + digger in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 927.65,
+      "position": 927.65,
+      "reference": "Manic/If_at_first_you_don't_succeed....nxlv",
+      "replayRevision": "bba30e67c0ff6c446758bc0eeaf7aba947159cced37b74a807b5c50f964a7790",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 927.65
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Steel Block Party"
   },
   {
@@ -11427,7 +12163,7 @@
     ],
     "context": {
       "allowedLosses": 3,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -11439,7 +12175,7 @@
         "blocker",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1755,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.235294117647059,
       "jobChanges": 0,
@@ -11452,8 +12188,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 196.52941176470588,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 196.76470588235293,
       "remainingSecondsAtReplayEnd": 196.52941176470588,
       "replayRevision": "b77510c5ab859931c8491ee2f3ee315074671b4ec806fc551a1c272b7e64f86a",
       "required": 47,
@@ -11508,6 +12244,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has 1 measured narrow assignments. Rehearse basher + blocker + bomber + builder + miner in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 932.9875000000001,
+      "position": 932.9875000000001,
+      "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+      "replayRevision": "b77510c5ab859931c8491ee2f3ee315074671b4ec806fc551a1c272b7e64f86a",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 932.9875000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -11515,7 +12265,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Next Lemeration"
   },
   {
@@ -11664,7 +12414,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 13,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -11673,7 +12423,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1299,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 3,
@@ -11686,7 +12436,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 10,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 43.588235294117645,
       "remainingSecondsAtReplayEnd": 43.588235294117645,
       "replayRevision": "312bcf9244c72ae696404fdcce04345c35e2b3aaa19b213cd8c963b9d3de1784",
@@ -11736,13 +12486,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Keep this later seasonal puzzle in advanced practice. The native route has near-full rescue, 3 recorded worker skill changes, 44 seconds left at the rescue quota. Rehearse basher + blocker + builder + floater in consolidate advanced route planning. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "advanced-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 914.7,
+      "position": 914.7,
+      "reference": "Lunatic/Water_processing_plant.nxlv",
+      "replayRevision": "312bcf9244c72ae696404fdcce04345c35e2b3aaa19b213cd8c963b9d3de1784",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 914.7
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Peak of Performance"
   },
   {
@@ -14154,14 +14918,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 7,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 159.1764705882353,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2698,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.411764705882353,
       "jobChanges": 0,
@@ -14174,8 +14938,8 @@
       "peakDistinctWorkersPerSecond": 3,
       "population": 50,
       "probedAssignments": 7,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 200.8235294117647,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 201.2941176470588,
       "remainingSecondsAtReplayEnd": 200.8235294117647,
       "replayRevision": "8a3097857ca3765cc5203c39df911819ab714990aa4ee6970562bee3c898f8fe",
       "required": 45,
@@ -14219,12 +14983,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse basher + blocker + miner in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 683.9000000000001,
+      "position": 683.9000000000001,
+      "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
+      "replayRevision": "8a3097857ca3765cc5203c39df911819ab714990aa4ee6970562bee3c898f8fe",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 683.9000000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemming Tracks in the Snow!"
   },
   {
@@ -14250,7 +15028,7 @@
     ],
     "context": {
       "allowedLosses": 1,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 2,
       "availableSkillTypes": 4,
       "canSlowReleaseBelowStartingRate": false,
@@ -14260,7 +15038,7 @@
         "builder",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2113,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 0,
@@ -14273,8 +15051,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 2,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 172.58823529411765,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 175.7058823529412,
       "remainingSecondsAtReplayEnd": 172.58823529411765,
       "replayRevision": "e12deae374c682d0a74109700ea9b2e8373cdf1054906b4ed10fc3cafa465b51",
       "required": 49,
@@ -14320,13 +15098,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has near-full rescue, 2 entrances. Rehearse basher + builder in coordinate entrances and groups. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "hatches",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 761.1469999999999,
+      "position": 761.1469999999999,
+      "reference": "Gentle/Get_a_little_extra_help.nxlv",
+      "replayRevision": "e12deae374c682d0a74109700ea9b2e8373cdf1054906b4ed10fc3cafa465b51",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 761.1469999999999
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Separate Ways"
   },
   {
@@ -14352,7 +15144,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 14,
       "availableSkillTypes": 6,
       "canSlowReleaseBelowStartingRate": false,
@@ -14362,7 +15154,7 @@
         "climber",
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2380,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 5,
@@ -14375,7 +15167,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 2,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 40.0,
       "remainingSecondsAtReplayEnd": 40.0,
       "replayRevision": "7f46dd250319a2a83364739db13389339a8c2af31965e22d7321bdebd5205428",
@@ -14425,13 +15217,27 @@
       "packID": "xmasLemmings1992-LEVEL-4"
     },
     "pack": "Xmas Lemmings 1992",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue, 5 recorded worker skill changes, 40 seconds left at the rescue quota. Rehearse builder + climber + digger in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 841.85625,
+      "position": 841.85625,
+      "reference": "Lunatic/Lemming_about_town.nxlv",
+      "replayRevision": "7f46dd250319a2a83364739db13389339a8c2af31965e22d7321bdebd5205428",
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 841.85625
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The North Poles"
   },
   {
@@ -17053,14 +17859,14 @@
     ],
     "context": {
       "allowedLosses": 50,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 1,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 175.11764705882354,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1327,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 0,
@@ -17073,8 +17879,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 75,
       "probedAssignments": 1,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 124.88235294117646,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 221.94117647058823,
       "remainingSecondsAtReplayEnd": 124.88235294117646,
       "replayRevision": "c8d047c29c81bcb8f682845c5d5d10d2a71bd136c692c9e2498ec51693c9d96b",
       "required": 25,
@@ -17112,11 +17918,25 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse miner in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 682.79296875,
+      "position": 682.79296875,
+      "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv",
+      "replayRevision": "c8d047c29c81bcb8f682845c5d5d10d2a71bd136c692c9e2498ec51693c9d96b",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.79296875
+    },
     "risks": [
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Christmas South of the Equator"
   },
   {
@@ -17142,14 +17962,14 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 4,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 106.58823529411765,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1812,
       "hatchCount": 2,
       "initialHatchIntervalSeconds": 0.9411764705882353,
       "jobChanges": 0,
@@ -17162,7 +17982,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 70,
       "probedAssignments": 4,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 193.41176470588235,
       "remainingSecondsAtReplayEnd": 193.41176470588235,
       "replayRevision": "1bdf6d7cbfc20b8f14016465f00c9f7f6381ada1d995af8a038df283bbc070ac",
@@ -17204,13 +18024,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has a minimum release rate of 75, near-full rescue, 2 measured narrow assignments, 2 entrances. Rehearse basher + miner in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 861.5305000000001,
+      "position": 861.5305000000001,
+      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+      "replayRevision": "1bdf6d7cbfc20b8f14016465f00c9f7f6381ada1d995af8a038df283bbc070ac",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 861.5305000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemming Reunification"
   },
   {
@@ -18914,14 +19748,14 @@
     ],
     "context": {
       "allowedLosses": 40,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 8,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 251.8235294117647,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2841,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 2,
@@ -18934,8 +19768,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 8,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 288.1764705882353,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 372.88235294117646,
       "remainingSecondsAtReplayEnd": 288.1764705882353,
       "replayRevision": "dd366ee5cb096a1bd4c533077504acabe9c74ff1e9583557ca74a9b3aefa7ff7",
       "required": 40,
@@ -18976,12 +19810,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse basher + builder in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 665.7045,
+      "position": 665.7045,
+      "reference": "Zany/SNOW_JOKE.nxlv",
+      "replayRevision": "dd366ee5cb096a1bd4c533077504acabe9c74ff1e9583557ca74a9b3aefa7ff7",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 665.7045
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemming Snowfall"
   },
   {
@@ -19007,7 +19855,7 @@
     ],
     "context": {
       "allowedLosses": 1,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 6,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -19018,7 +19866,7 @@
         "blocker",
         "bomber"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2979,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 1,
@@ -19031,7 +19879,7 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 70,
       "probedAssignments": 6,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 184.76470588235293,
       "remainingSecondsAtReplayEnd": 184.76470588235293,
       "replayRevision": "f31f806506c8719a391deb1ecd1cbf1b8907d17eedcd1d93109f26fb1a110d4e",
@@ -19081,13 +19929,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has near-full rescue. Rehearse blocker + bomber + builder in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 651.5225,
+      "position": 651.5225,
+      "reference": "Lunatic/Anxiety.nxlv",
+      "replayRevision": "f31f806506c8719a391deb1ecd1cbf1b8907d17eedcd1d93109f26fb1a110d4e",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 651.5225
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "The Land of the Bizarre"
   },
   {
@@ -20893,14 +21755,14 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 2,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 188.52941176470588,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2489,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 1,
@@ -20913,8 +21775,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 2,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 111.47058823529412,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 153.58823529411765,
       "remainingSecondsAtReplayEnd": 111.47058823529412,
       "replayRevision": "83bd71c7665e2c543b2af8465d9cd6e85a35068d588bfc1832b79a4400e49e01",
       "required": 25,
@@ -20955,13 +21817,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 1 measured narrow assignments. Rehearse basher + digger in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 682.7828125000001,
+      "position": 682.7828125000001,
+      "reference": "Manic/Just_a_Minute_(Part_Two).nxlv",
+      "replayRevision": "83bd71c7665e2c543b2af8465d9cd6e85a35068d588bfc1832b79a4400e49e01",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.7828125000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Lemming Snowjourn"
   },
   {
@@ -20987,7 +21863,7 @@
     ],
     "context": {
       "allowedLosses": 25,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 14,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -20996,7 +21872,7 @@
       "exhaustedUsedSkills": [
         "blocker"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2687,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 6,
@@ -21009,8 +21885,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 50,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 201.94117647058823,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "9d1114a7692ca27da3c6bde3a41d9f27e8798f203596c3cc0f30a6727dd98899",
       "required": 25,
@@ -21060,14 +21936,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 6 recorded worker skill changes. Rehearse basher + blocker + bomber + builder in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 717.7,
+      "position": 717.7,
+      "reference": "Lunatic/The_Steel_Mines_of_Kessel.nxlv",
+      "replayRevision": "9d1114a7692ca27da3c6bde3a41d9f27e8798f203596c3cc0f30a6727dd98899",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 717.7
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Happy New Year!"
   },
   {
@@ -23350,7 +24239,7 @@
     ],
     "context": {
       "allowedLosses": 10,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 18,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -23359,7 +24248,7 @@
       "exhaustedUsedSkills": [
         "builder"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3424,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.9411764705882353,
       "jobChanges": 1,
@@ -23372,8 +24261,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 0.0,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 158.58823529411765,
       "remainingSecondsAtReplayEnd": 0.0,
       "replayRevision": "c001440401b3b3ac97310ab9913a4909c751027352fe154ad7739a528b54624c",
       "required": 70,
@@ -23417,14 +24306,27 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse basher + blocker + builder in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 683.25,
+      "position": 683.25,
+      "reference": "Gentle/Careless_clicking_costs_lives.nxlv",
+      "replayRevision": "c001440401b3b3ac97310ab9913a4909c751027352fe154ad7739a528b54624c",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 683.25
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
-      "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Clouds of Lemmings"
   },
   {
@@ -23450,14 +24352,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 1,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 53.705882352941174,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 810,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.3529411764705883,
       "jobChanges": 0,
@@ -23470,8 +24372,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 80,
       "probedAssignments": 1,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 6.294117647058823,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 12.352941176470589,
       "remainingSecondsAtReplayEnd": 6.294117647058823,
       "replayRevision": "ebd1167352f52d89eeae6b5383fee083aad08d0bfd7ecdd1385d7352d85c9937",
       "required": 75,
@@ -23509,12 +24411,26 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal challenge after the tested opening. The native route has a minimum release rate of 60, 12 seconds left at the rescue quota. Rehearse digger in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 972.625,
+      "position": 972.625,
+      "reference": "Gentle/Just_dig!.nxlv",
+      "replayRevision": "ebd1167352f52d89eeae6b5383fee083aad08d0bfd7ecdd1385d7352d85c9937",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 972.625
+    },
     "risks": [
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Division Bell"
   },
   {
@@ -25050,14 +25966,14 @@
     ],
     "context": {
       "allowedLosses": 5,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 8,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 225.41176470588235,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3617,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.5294117647058822,
       "jobChanges": 2,
@@ -25070,8 +25986,8 @@
       "peakDistinctWorkersPerSecond": 2,
       "population": 80,
       "probedAssignments": 8,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 14.588235294117647,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 27.235294117647058,
       "remainingSecondsAtReplayEnd": 14.588235294117647,
       "replayRevision": "acdae875187562033896d1b8318db8ea0aa4208462fb275cd17b23393be3d391",
       "required": 75,
@@ -25115,6 +26031,20 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route has 2 measured narrow assignments, 27 seconds left at the rescue quota. Rehearse basher + builder + digger in work under clocks and fast releases. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "clocks",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 882.3185000000001,
+      "position": 882.3185000000001,
+      "reference": "Lunatic/There's_madness_in_the_method.nxlv",
+      "replayRevision": "acdae875187562033896d1b8318db8ea0aa4208462fb275cd17b23393be3d391",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 882.3185000000001
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -25122,7 +26052,7 @@
       "less than 30 seconds spare on the witness"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "A Block from Home"
   },
   {
@@ -25148,7 +26078,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 3,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -25157,7 +26087,7 @@
       "exhaustedUsedSkills": [
         "miner"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 1301,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 1.6470588235294117,
       "jobChanges": 0,
@@ -25170,7 +26100,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 40,
       "probedAssignments": 3,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 163.47058823529412,
       "remainingSecondsAtReplayEnd": 163.47058823529412,
       "replayRevision": "730cd6735186e6625e706247191e1ec3be7234841b4706e66450905d5d9b027e",
@@ -25216,13 +26146,27 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal recovery after the tested opening. The native route has a minimum release rate of 50, near-full rescue. Rehearse builder + miner in solve smaller tool budgets. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "small-budgets",
+      "humanReviewPending": true,
+      "learningRole": "recovery",
+      "lower": 678.11375,
+      "position": 678.11375,
+      "reference": "Manic/Down_the_tube.nxlv",
+      "replayRevision": "730cd6735186e6625e706247191e1ec3be7234841b4706e66450905d5d9b027e",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 678.11375
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Quest for Kieran"
   },
   {
@@ -27046,14 +27990,14 @@
     ],
     "context": {
       "allowedLosses": 7,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 10,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
       "completionSeconds": 225.47058823529412,
       "discoveryDifficulty": "unknown from replay",
       "exhaustedUsedSkills": [],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 3795,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 2.176470588235294,
       "jobChanges": 2,
@@ -27066,8 +28010,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 32,
       "probedAssignments": 10,
-      "quotaTimingVerified": false,
-      "remainingSeconds": 194.52941176470588,
+      "quotaTimingVerified": true,
+      "remainingSeconds": 196.76470588235293,
       "remainingSecondsAtReplayEnd": 194.52941176470588,
       "replayRevision": "ac74a0b22d62ce746b33a644fe3486e671dede5d5a6702b00e750945fd32cd07",
       "required": 25,
@@ -27111,12 +28055,26 @@
       "packID": "holidayLemmings1993-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1993",
+    "placement": {
+      "adjustment": "Add seasonal practice after the tested opening. The native route uses familiar skills with measured recovery room. Rehearse builder + digger + miner in plan a worker and skill chains. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "worker-routes",
+      "humanReviewPending": true,
+      "learningRole": "practice",
+      "lower": 682.925,
+      "position": 682.925,
+      "reference": "Gentle/Let's_be_careful_out_there.nxlv",
+      "replayRevision": "ac74a0b22d62ce746b33a644fe3486e671dede5d5a6702b00e750945fd32cd07",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 682.925
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "32 Lemmings Below Zero"
   },
   {
@@ -27142,7 +28100,7 @@
     ],
     "context": {
       "allowedLosses": 0,
-      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
+      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
       "assignments": 5,
       "availableSkillTypes": 8,
       "canSlowReleaseBelowStartingRate": false,
@@ -27152,7 +28110,7 @@
         "digger",
         "basher"
       ],
-      "firstQuotaTick": null,
+      "firstQuotaTick": 2016,
       "hatchCount": 3,
       "initialHatchIntervalSeconds": 3.0,
       "jobChanges": 2,
@@ -27165,7 +28123,7 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 4,
       "probedAssignments": 5,
-      "quotaTimingVerified": false,
+      "quotaTimingVerified": true,
       "remainingSeconds": 1.411764705882353,
       "remainingSecondsAtReplayEnd": 1.411764705882353,
       "replayRevision": "43d8a69f45b15e7964fdcc42ebf6de87235e8129d85a60fe1aa6a4f9e1d25992",
@@ -27213,6 +28171,20 @@
       "packID": "holidayLemmings1994-MACLEVL-32"
     },
     "pack": "Holiday Lemmings 1994",
+    "placement": {
+      "adjustment": "Add seasonal challenge after the tested opening. The native route has near-full rescue, 3 measured narrow assignments, 1 seconds left at the rescue quota, 3 entrances. Rehearse basher + builder + digger in finish with the hardest combinations. Discovery difficulty remains unmeasured.",
+      "basis": "seasonalCurriculum",
+      "courseChapter": "capstones",
+      "humanReviewPending": true,
+      "learningRole": "challenge",
+      "lower": 948.15625,
+      "position": 948.15625,
+      "reference": "Manic/The_race_against_cliches.nxlv",
+      "replayRevision": "43d8a69f45b15e7964fdcc42ebf6de87235e8129d85a60fe1aa6a4f9e1d25992",
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 948.15625
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -27221,7 +28193,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-    "status": "seasonal level withheld pending exact human difficulty review",
+    "status": "included by owner seasonal scope; human difficulty review outstanding",
     "title": "Four Play"
   },
   {

@@ -6,6 +6,11 @@ import Testing
 
 struct MobileLearningTests {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    private var ports: URL {
+        ProcessInfo.processInfo.environment["LEMMINGS_TEST_BUNDLED_RESOURCES"].map {
+            URL(fileURLWithPath: $0).appendingPathComponent("Ports")
+        } ?? root.appendingPathComponent("Sources/Ports")
+    }
     @Test func syncedJourneyKeepsItsQueueAndDoesNotReplaceAnUnrelatedRun() throws {
         let temporary = try AppStorage.temporary(named: "synced-journey-state")
         defer { temporary.removeTemporaryFiles() }
@@ -106,7 +111,7 @@ struct MobileLearningTests {
         defer { temporary.removeTemporaryFiles() }
         let storage = AppStorage(applicationSupport: temporary.applicationSupport, resources: resources, defaults: temporary.defaults)
         let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
-        let catalogue = MobileCatalogue(portsRoot: root.appendingPathComponent("Sources/Ports"),
+        let catalogue = MobileCatalogue(portsRoot: ports,
             fanFolders: [URL(fileURLWithPath: "/nonexistent-future-packs")])
         let library = MobileJourneyLibrary(entries: journey.lessons.map(\.entry), name: LearningJourney.title, catalogue: catalogue)
         #expect(library.levels.count == journey.lessons.count)
@@ -119,6 +124,27 @@ struct MobileLearningTests {
         #expect(content.session.snapshot.tick == 0)
         #expect(content.session.snapshot.total == 10)
         #expect(content.session.snapshot.required == 1)
+    }
+
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["LEMMINGS_TEST_BUNDLED_RESOURCES"] != nil,
+        "Requires exact bundled game data through LEMMINGS_TEST_BUNDLED_RESOURCES"))
+    func seasonalJourneyEntriesResolveTheirExactSourceWithoutStartingPlay() throws {
+        let journey = try #require(LearningJourneyLibrary.journey(storage: AppStorage(
+            applicationSupport: root, resources: root.appendingPathComponent("Resources"), defaults: .standard)))
+        let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: [])
+        let library = MobileJourneyLibrary(entries: journey.lessons.map(\.entry), name: LearningJourney.title, catalogue: catalogue)
+        var resolved = 0
+        for (index, lesson) in journey.lessons.enumerated() where LearningJourney.isOfficialSeasonal(lesson.entry) {
+            let source = try library.origin(of: index)
+            #expect(source.pack == "release/" + String(lesson.entry.identity.packID.split(separator: "-")[0]))
+            let content = try library.loadLevel(at: index)
+            #expect(content.summary.title == lesson.entry.levelNameSnapshot)
+            #expect(content.session.engineIdentifier == "classic-dos")
+            #expect(content.session.snapshot.tick == 0)
+            #expect(try library.checkpointLevelIdentifier(at: index) == content.session.levelIdentifier)
+            resolved += 1
+        }
+        #expect(resolved == 70)
     }
     @Test func selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() throws {
         let temporary = try AppStorage.temporary(named: "journey-select")

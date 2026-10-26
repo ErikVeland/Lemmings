@@ -21,6 +21,23 @@ SPEC.loader.exec_module(BUILD)
 
 
 class IOSBetaBuildTests(unittest.TestCase):
+    def test_game_mode_source_and_package_contract(self):
+        info = plistlib.loads((TOOLS.parents[1] / "Apps/UltimateLemmingsIOS/Info.plist").read_bytes())
+        BUILD.validate_game_mode(info)
+        for key, invalid_values in {
+            "LSApplicationCategoryType": [None, "public.app-category.utilities"],
+            "LSSupportsGameMode": [None, False, "true", 1],
+            "GCSupportsGameMode": [None, False, "true", 1],
+        }.items():
+            for value in invalid_values:
+                with self.subTest(key=key, value=value):
+                    changed = dict(info)
+                    changed.pop(key)
+                    if value is not None:
+                        changed[key] = value
+                    with self.assertRaisesRegex(ValueError, key):
+                        BUILD.validate_game_mode(changed)
+
     def test_privacy_accepts_reviewed_services_and_rejects_scope_changes(self):
         privacy = plistlib.loads((TOOLS.parents[1] / "Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy").read_bytes())
         BUILD.validate_privacy(privacy)
@@ -60,10 +77,12 @@ class IOSBetaBuildTests(unittest.TestCase):
                 (art / "charset.png").write_bytes(b"changed font pixels")
                 self.assertNotEqual(before, BUILD.source_manifest())
 
-    def make_package(self, root, devices):
+    def make_package(self, root, devices, game_mode=True):
         package = root / "beta.ipa"
         info = {"CFBundleIdentifier": "test.beta", "CFBundleVersion": "2",
-                "UIDeviceFamily": [1, 2], "CFBundleExecutable": "Beta", "MinimumOSVersion": "16.0"}
+                "UIDeviceFamily": [1, 2], "CFBundleExecutable": "Beta", "MinimumOSVersion": "16.0",
+                "LSApplicationCategoryType": "public.app-category.games",
+                "LSSupportsGameMode": game_mode, "GCSupportsGameMode": game_mode}
         profile = {"ExpirationDate": datetime(2030, 1, 1), "ProvisionedDevices": devices}
         with zipfile.ZipFile(package, "w") as bundle:
             executable = zipfile.ZipInfo("Payload/Beta.app/Beta")
@@ -89,6 +108,27 @@ class IOSBetaBuildTests(unittest.TestCase):
             result = self.validate(package, root, profile, record, "ipad")
             self.assertTrue(result["requestedDeviceIncluded"])
             self.assertEqual((root / "Install/Payload/Beta.app/Beta").stat().st_mode & 0o777, 0o755)
+
+    def test_export_rejects_disabled_game_mode_before_signature_checks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            package, profile, record = self.make_package(root, ["ipad"], game_mode=False)
+            with patch.object(BUILD, "run") as run:
+                with self.assertRaisesRegex(ValueError, "LSSupportsGameMode"):
+                    BUILD.validate_export(package, root, record, "ipad", "debugging")
+                run.assert_not_called()
+
+    def test_archive_rejects_missing_game_mode_before_content_checks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            archive = Path(directory)
+            app = archive / "Products/Applications/UltimateLemmingsIOS.app"
+            app.mkdir(parents=True)
+            (app / "Info.plist").write_bytes(plistlib.dumps({
+                "LSApplicationCategoryType": "public.app-category.games",
+                "GCSupportsGameMode": True,
+            }))
+            with self.assertRaisesRegex(ValueError, "LSSupportsGameMode"):
+                BUILD.validate_archive(archive, 33, "test.beta", False)
 
     def test_export_rejects_profile_without_requested_ipad(self):
         with tempfile.TemporaryDirectory() as directory:

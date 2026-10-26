@@ -12,6 +12,25 @@ from automatic_updates import validate_appcast, validate_info_plist, validate_re
 
 
 class AutomaticUpdateTests(unittest.TestCase):
+    def test_game_mode_metadata_cannot_be_removed_or_disabled(self):
+        source = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "Info.plist"
+            for key, invalid_values in {
+                "LSApplicationCategoryType": [None, "public.app-category.utilities"],
+                "LSSupportsGameMode": [None, False, "true", 1],
+                "GCSupportsGameMode": [None, False, "true", 1],
+            }.items():
+                for value in invalid_values:
+                    with self.subTest(key=key, value=value):
+                        info = dict(source)
+                        info.pop(key)
+                        if value is not None:
+                            info[key] = value
+                        path.write_bytes(plistlib.dumps(info))
+                        with self.assertRaisesRegex(ValueError, key):
+                            validate_info_plist(path)
+
     def test_current_repository_inputs_are_valid(self):
         version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
         info = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())

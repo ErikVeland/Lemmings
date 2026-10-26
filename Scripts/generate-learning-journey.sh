@@ -14,7 +14,7 @@ if [[ -f "$product_dir/NxlvKit.o" ]]; then
 else
   module_dir="$product_dir/Modules"
   objects=("$product_dir"/NxlvKit.build/*.o)
-  revision_objects=("$product_dir/LemmingsAppCore.build/ClassicSourceRevision.swift.o")
+  revision_objects=("$product_dir"/LemmingsAppCore.build/*.o)
 fi
 swiftc -swift-version 6 -I "$module_dir" "${objects[@]}" \
   "$project_dir/Tools/DifficultyDiagnostics/LearningJourney.swift" \
@@ -33,7 +33,8 @@ swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[
   -o "$build_dir/JourneyResources"
 "$build_dir/JourneyResources" "$build_dir/pool.json" "$resources" \
   "$project_dir/Artifacts/LearningJourney/source-resources.json"
-python3 "$project_dir/Tools/DifficultyDiagnostics/human_journey.py"
+python3 "$project_dir/Tools/DifficultyDiagnostics/human_journey.py" \
+  --reference-root "$resources/NeoLemmix/levels/Lemmings_Redux"
 
 # A level count or stored win flag is not a proof. Re-run every selected route.
 swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[@]}" \

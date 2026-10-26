@@ -26,6 +26,8 @@ public enum MobileSettingsArt {
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
         page.pairsRows = true
+        page.settingsTabs = MobileSettingsTabsArt.actions(selected: .gameplay, inGame: inGame, television: television)
+        page.settingsIndex = true
         return page
     }
 
@@ -121,6 +123,7 @@ public enum MobileSettingsArt {
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
         var page = GameFrontEnd.Page(title: group.title, rows: rows,
                                      footer: [.init("settings", L10n.text("Back"))])
+        page.settingsTabs = MobileSettingsTabsArt.actions(selected: group, inGame: inGame)
         page.pairsRows = true
         switch group {
         case .gameplay:

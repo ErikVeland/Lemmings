@@ -10,12 +10,14 @@ struct LearningJourneyTests {
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
     }
 
-    @Test func goldenPathIsOfficialHeavyWithoutUnreviewedFanOrSeasonalPadding() throws {
+    @Test func goldenPathKeepsReviewedFansAndExplicitSeasonalPlacements() throws {
         let journey = try bundledJourney()
         let official = journey.lessons.filter { !$0.entry.identity.packID.hasPrefix("fan:") }
         #expect(official.count * 5 >= journey.lessons.count * 4)
-        #expect(journey.lessons.count < 295)
-        #expect(!journey.lessons.contains { LearningJourney.isSeasonal($0.entry) })
+        let seasonal = journey.lessons.filter { LearningJourney.isOfficialSeasonal($0.entry) }
+        #expect(seasonal.count == 70)
+        #expect(seasonal.allSatisfy { $0.placement?.basis == "seasonalCurriculum"
+            && $0.placement?.humanReviewPending == true && $0.needsSupport })
         #expect(!journey.lessons.contains { $0.entry.identity.packID.hasPrefix("fan:")
             && $0.placement?.basis == "solutionEstimate" })
         #expect(journey.lessons[0].entry.levelNameSnapshot == "Just dig!")
@@ -27,6 +29,41 @@ struct LearningJourneyTests {
         for name in ["Come back!", "Stop, Block and Blow", "The COVOX Level", "Something Wrong?"] {
             #expect(!journey.lessons.contains { $0.entry.levelNameSnapshot == name })
         }
+    }
+
+    @Test func seasonalExpansionKeepsTheTestedOpeningAndResumesTheExistingRun() throws {
+        let journey = try bundledJourney()
+        let oldEntries = journey.lessons.filter { !LearningJourney.isOfficialSeasonal($0.entry) }.map(\.entry)
+        #expect(oldEntries.count == 227)
+        #expect(Array(journey.lessons.prefix(80).map(\.entry)) == Array(oldEntries.prefix(80)))
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-29", summary: "Existing journey"), entries: oldEntries, currentIndex: 80)
+        let migrated = try #require(try journey.migrating(run))
+        #expect(migrated.id == run.id && migrated.currentIndex == 80)
+        #expect(Array(migrated.entries.prefix(80)) == Array(oldEntries.prefix(80)))
+        #expect(migrated.entries.count == journey.lessons.count)
+        #expect(Set(migrated.entries.map(\.identity)) == Set(journey.lessons.map(\.entry.identity)))
+        #expect(try journey.migrating(migrated) == migrated)
+        for lesson in journey.lessons where LearningJourney.isOfficialSeasonal(lesson.entry) {
+            let rank = lesson.entry.identity.levelID.split(separator: ":").dropFirst().first
+            if rank == "Blizzard" || rank == "Hail" { #expect(lesson.demand >= 900) }
+        }
+    }
+
+    @Test func provisionalSeasonalEvidenceCannotClaimHumanApprovalOrAdmitOtherPacks() throws {
+        let journey = try bundledJourney()
+        let index = try #require(journey.lessons.firstIndex { LearningJourney.isOfficialSeasonal($0.entry) })
+        var lessons = journey.lessons
+        lessons[index].placement?.humanReviewPending = false
+        #expect(throws: LevelPlaylistError.self) {
+            try LearningJourney(version: journey.version, lessons: lessons,
+                placementPolicy: journey.placementPolicy).validated()
+        }
+        let old = lessons[index].entry
+        let fan = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:holiday", levelID: "1"),
+            catalogueRevision: old.catalogueRevision, sourceRevision: old.sourceRevision,
+            packNameSnapshot: "Holiday fan pack", levelNameSnapshot: "Fan", levelNumberSnapshot: 1)
+        #expect(!LearningJourney.isOfficialSeasonal(fan))
     }
 
     @Test func generousPracticePrecedesRestrictedPuzzles() throws {

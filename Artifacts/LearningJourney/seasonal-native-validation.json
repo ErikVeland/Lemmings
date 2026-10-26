@@ -1,0 +1,1658 @@
+[
+  {
+    "detail": "10/10 saved at tick 1156; exact final state verified",
+    "firstQuotaTick": 1156,
+    "identity": {
+      "engine": "classic",
+      "levelID": "0:Flurry:1:4:0",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "f58b2e86d5a81d6d9815eabec6a4410d99eacd4e381f1b5dd6cc2d8308e152ad",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Climbing to the Top!",
+    "toolsRemainingAtQuota": {
+      "basher": 19,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 17,
+      "climber": 20,
+      "digger": 20,
+      "floater": 20,
+      "miner": 20
+    }
+  },
+  {
+    "detail": "50/50 saved at tick 3147; exact final state verified",
+    "firstQuotaTick": 3147,
+    "identity": {
+      "engine": "classic",
+      "levelID": "0:Frost:1:0:0",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "f4bb220d301d15be18799ab36cf56f7d547a823d635dc5840becfceec5fdc5d4",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Chains of Command",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 6,
+      "bomber": 6,
+      "builder": 6,
+      "climber": 6,
+      "digger": 6,
+      "floater": 6,
+      "miner": 6
+    }
+  },
+  {
+    "detail": "50/25 saved at tick 4866; exact final state verified",
+    "firstQuotaTick": 4856,
+    "identity": {
+      "engine": "classic",
+      "levelID": "0:Xmas:1:0:0",
+      "packID": "xmasLemmings1991-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "de5a35c9e3936293677c6c3c596c3b47a6f68a397d51b1c320a26b4fed36b0c7",
+    "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+    "title": "Merry Christmas Mr Lemming",
+    "toolsRemainingAtQuota": {
+      "basher": 15,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 9,
+      "climber": 19,
+      "digger": 19,
+      "floater": 20,
+      "miner": 17
+    }
+  },
+  {
+    "detail": "50/25 saved at tick 1604; exact final state verified",
+    "firstQuotaTick": 904,
+    "identity": {
+      "engine": "classic",
+      "levelID": "0:Xmas:1:0:0",
+      "packID": "xmasLemmings1992-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "16cc8f7938fd7132a6c976f36adaaecd29f0fe4a0af6774233d3272b80546788",
+    "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+    "title": "Jingle Lemming",
+    "toolsRemainingAtQuota": {
+      "basher": 24,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/78 saved at tick 1519; exact final state verified",
+    "firstQuotaTick": 1511,
+    "identity": {
+      "engine": "classic",
+      "levelID": "10:Flurry:11:5:2",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ccbb62a89532d5e6953cff0798abd194bddeba13ef95df5a9d78eeb8e1ab131a",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "At Home in a Cave",
+    "toolsRemainingAtQuota": {
+      "basher": 3,
+      "blocker": 0,
+      "bomber": 10,
+      "builder": 10,
+      "climber": 10,
+      "digger": 4,
+      "floater": 10,
+      "miner": 5
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 2428; exact final state verified",
+    "firstQuotaTick": 2428,
+    "identity": {
+      "engine": "classic",
+      "levelID": "10:Frost:11:1:2",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "8cdf76dc9b8c0bb43a151a7f3e4c7315335816a1a9920d569939281f77536e3c",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Maybe not such a doddle",
+    "toolsRemainingAtQuota": {
+      "basher": 5,
+      "blocker": 4,
+      "bomber": 5,
+      "builder": 0,
+      "climber": 5,
+      "digger": 4,
+      "floater": 5,
+      "miner": 4
+    }
+  },
+  {
+    "detail": "80/77 saved at tick 1717; exact final state verified",
+    "firstQuotaTick": 1693,
+    "identity": {
+      "engine": "classic",
+      "levelID": "11:Flurry:12:5:3",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "401b2500d64e7f75b85cf6869d3ea89b0a4bb323f0f580d9cb6948013c72f844",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Presents of Mind",
+    "toolsRemainingAtQuota": {
+      "basher": 9,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 2,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/78 saved at tick 2114; exact final state verified",
+    "firstQuotaTick": 2114,
+    "identity": {
+      "engine": "classic",
+      "levelID": "11:Frost:12:1:3",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "33a75aed7cc0ea47c20347688d89ca5a76c7196c92b692ef2f2b1eeac48912f1",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "It's Boxing Day!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 1977; exact final state verified",
+    "firstQuotaTick": 1977,
+    "identity": {
+      "engine": "classic",
+      "levelID": "12:Flurry:13:5:4",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "3cb2a72cc5573f27e94d94fe9454d91ce04ee050f1d9002a82c40347008c219c",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Yo-yo Lem-lem",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 9,
+      "digger": 0,
+      "floater": 0,
+      "miner": 1
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 1460; exact final state verified",
+    "firstQuotaTick": 1460,
+    "identity": {
+      "engine": "classic",
+      "levelID": "12:Frost:13:1:4",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "60bb498fa31f2ff7ca6edabb2c8ba1dd32d460e83407f390b6bb262e24223e1e",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "2 Minutes before midnight",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 1,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/75 saved at tick 2171; exact final state verified",
+    "firstQuotaTick": 2128,
+    "identity": {
+      "engine": "classic",
+      "levelID": "13:Flurry:14:5:5",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "679011238212c9ce0ed27853ee3375a08b0828ba00ce23a962fe49ef2c212050",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Marshmallow Land",
+    "toolsRemainingAtQuota": {
+      "basher": 7,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 9,
+      "climber": 10,
+      "digger": 10,
+      "floater": 10,
+      "miner": 10
+    }
+  },
+  {
+    "detail": "40/40 saved at tick 1589; exact final state verified",
+    "firstQuotaTick": 1436,
+    "identity": {
+      "engine": "classic",
+      "levelID": "13:Frost:14:1:5",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "c9927baaa5399bf6b98e768eaf2dd0b44cf28171932c30466b32a32cfc8a0062",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Happy New Year II!",
+    "toolsRemainingAtQuota": {
+      "basher": 2,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "10/10 saved at tick 718; exact final state verified",
+    "firstQuotaTick": 718,
+    "identity": {
+      "engine": "classic",
+      "levelID": "14:Flurry:15:5:6",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "851916199eb2a8c6dd6902b091d96a58b1c974d98754dcd1d89ac06b0eb644d7",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Head for the Hills!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 4,
+      "climber": 10,
+      "digger": 0,
+      "floater": 10,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "49/49 saved at tick 2337; exact final state verified",
+    "firstQuotaTick": 2337,
+    "identity": {
+      "engine": "classic",
+      "levelID": "14:Frost:15:1:6",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "74c2cb528d7fcad97bc3b7940faa185cb5da7b02e5837aa8492f978fdbb3ef74",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Plethora of Presents",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 1,
+      "builder": 0,
+      "climber": 2,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "48/45 saved at tick 4080; exact final state verified",
+    "firstQuotaTick": 3081,
+    "identity": {
+      "engine": "classic",
+      "levelID": "15:Flurry:16:5:7",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "b2285013202adc66ec593abeeecb7f79b4bd518067af2a4db43c913b16a8867c",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Long Way Around",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 3,
+      "bomber": 5,
+      "builder": 2,
+      "climber": 5,
+      "digger": 0,
+      "floater": 5,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "79/79 saved at tick 1010; exact final state verified",
+    "firstQuotaTick": 1010,
+    "identity": {
+      "engine": "classic",
+      "levelID": "15:Frost:16:1:7",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "bb48e548f2791758194cad1384ac30d8744e72f65e27b1b8a3f160a76eb47fd5",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Up on the Rooftops",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 1,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "22/22 saved at tick 6182; exact final state verified",
+    "firstQuotaTick": 6027,
+    "identity": {
+      "engine": "classic",
+      "levelID": "16:Blizzard:1:6:0",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "fea87a49c95189cda988b3cc364f9fcdac77606d5ad7167a17598eef098e6360",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Oogilemming!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 7,
+      "climber": 24,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "75/75 saved at tick 2147; exact final state verified",
+    "firstQuotaTick": 2147,
+    "identity": {
+      "engine": "classic",
+      "levelID": "16:Hail:1:2:0",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "1a52ac06fbd069a7639284bc27dd04d6156eef9b372be5857b776c80032aa52d",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Go Thataway!",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 2,
+      "bomber": 2,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 2176; exact final state verified",
+    "firstQuotaTick": 2176,
+    "identity": {
+      "engine": "classic",
+      "levelID": "17:Blizzard:2:6:1",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "32701d5a20c89e76f80391e189f2250548a9dffeac04e5cdbfd95186b4bc7496",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Lemmings Up High",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 1,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "75/75 saved at tick 2040; exact final state verified",
+    "firstQuotaTick": 903,
+    "identity": {
+      "engine": "classic",
+      "levelID": "17:Hail:2:2:1",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "9f7b72f76dc5ae3e1faeff2451d905b747d212f197bf42092b53a55833d0813a",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Break On Through",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 2,
+      "builder": 5,
+      "climber": 1,
+      "digger": 0,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 1448; exact final state verified",
+    "firstQuotaTick": 1448,
+    "identity": {
+      "engine": "classic",
+      "levelID": "18:Blizzard:3:6:2",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "0971e4a79607a7e4490bb330095db146a0a288a7133ce11067551fa970204abc",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Check Your Hints!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 5,
+      "bomber": 0,
+      "builder": 1,
+      "climber": 1,
+      "digger": 0,
+      "floater": 5,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "35/25 saved at tick 8610; exact final state verified",
+    "firstQuotaTick": 8524,
+    "identity": {
+      "engine": "classic",
+      "levelID": "18:Hail:3:2:2",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "1925992aa002713421b039e512fb644eb3576a22d9334ef0706678c96fc9c047",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "And a Happy New Year!",
+    "toolsRemainingAtQuota": {
+      "basher": 43,
+      "blocker": 50,
+      "bomber": 50,
+      "builder": 37,
+      "climber": 50,
+      "digger": 50,
+      "floater": 50,
+      "miner": 47
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 5732; exact final state verified",
+    "firstQuotaTick": 5732,
+    "identity": {
+      "engine": "classic",
+      "levelID": "19:Blizzard:4:6:3",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ee16c583e975bd56c02863a7596834c46beebfd3c7277eb6ece8294fe4e4b5f9",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Santus Lemmingus",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 2,
+      "bomber": 5,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "79/78 saved at tick 1684; exact final state verified",
+    "firstQuotaTick": 1645,
+    "identity": {
+      "engine": "classic",
+      "levelID": "19:Hail:4:2:3",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "186ff44e2d0cffec3cee924125f9e31256f697aa0ee31739564e93eded5de6bf",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Lemmintaschen?",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 20,
+      "climber": 1,
+      "digger": 0,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "20/15 saved at tick 1116; exact final state verified",
+    "firstQuotaTick": 911,
+    "identity": {
+      "engine": "classic",
+      "levelID": "1:Flurry:2:4:1",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "2332d9634f20b0172d852d3064eaeb6ab2721903035bad2908dfa65805c1a8be",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Floating Lemming Flurry",
+    "toolsRemainingAtQuota": {
+      "basher": 24,
+      "blocker": 25,
+      "bomber": 25,
+      "builder": 25,
+      "climber": 25,
+      "digger": 25,
+      "floater": 5,
+      "miner": 25
+    }
+  },
+  {
+    "detail": "50/49 saved at tick 1726; exact final state verified",
+    "firstQuotaTick": 1703,
+    "identity": {
+      "engine": "classic",
+      "levelID": "1:Frost:2:0:1",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "4e250eb87ece72766a56bc1f2c11ac1a3975cd7996990a22758b3031a268c647",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Ski Jump!",
+    "toolsRemainingAtQuota": {
+      "basher": 2,
+      "blocker": 2,
+      "bomber": 2,
+      "builder": 2,
+      "climber": 2,
+      "digger": 2,
+      "floater": 0,
+      "miner": 2
+    }
+  },
+  {
+    "detail": "50/25 saved at tick 4565; exact final state verified",
+    "firstQuotaTick": 4546,
+    "identity": {
+      "engine": "classic",
+      "levelID": "1:Xmas:2:0:1",
+      "packID": "xmasLemmings1991-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "4957b329a941adc06283c893c21c805a0b1bf800878e9c7b4e350068e9741e11",
+    "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+    "title": "Christmas Bonus",
+    "toolsRemainingAtQuota": {
+      "basher": 9,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 11,
+      "climber": 19,
+      "digger": 19,
+      "floater": 20,
+      "miner": 20
+    }
+  },
+  {
+    "detail": "80/70 saved at tick 4655; exact final state verified",
+    "firstQuotaTick": 4125,
+    "identity": {
+      "engine": "classic",
+      "levelID": "1:Xmas:2:0:1",
+      "packID": "xmasLemmings1992-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "fd5ab6269403050e4db4eac472f4498971f2eb0382f04bf8763db61600f0d3ae",
+    "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+    "title": "Happy Holidays Mr Lemming!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 5,
+      "bomber": 5,
+      "builder": 1,
+      "climber": 5,
+      "digger": 0,
+      "floater": 5,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "77/75 saved at tick 5100; exact final state verified",
+    "firstQuotaTick": 1976,
+    "identity": {
+      "engine": "classic",
+      "levelID": "20:Blizzard:5:6:4",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "56119c485a125abaca1df2c98ea669cd90e92feed2e1dec3989524f3e83a6ee5",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "It Came Upon a Lemnight Clear",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 4,
+      "climber": 0,
+      "digger": 0,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "70/68 saved at tick 3060; exact final state verified",
+    "firstQuotaTick": 2304,
+    "identity": {
+      "engine": "classic",
+      "levelID": "20:Hail:5:2:4",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "a48e2d31a31d896e82fdd902a11c0c4857e0150cdb3125c0838bbe8ce63b4cd2",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Get the Point?",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 1604; exact final state verified",
+    "firstQuotaTick": 1604,
+    "identity": {
+      "engine": "classic",
+      "levelID": "21:Blizzard:6:6:5",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "5212ecdbaea85f2381788a130443cdd92c672befbdde7ac11eae75ece98262aa",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "A Single Lemming...",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 5,
+      "bomber": 5,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "42/27 saved at tick 768; exact final state verified",
+    "firstQuotaTick": 695,
+    "identity": {
+      "engine": "classic",
+      "levelID": "21:Hail:6:2:5",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "d92572c4b0ea2a1a497fa0a3c7c85417386930c08a030d909053b7292c6065a4",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Surprise Package?",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 1,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "60/55 saved at tick 3050; exact final state verified",
+    "firstQuotaTick": 3025,
+    "identity": {
+      "engine": "classic",
+      "levelID": "22:Blizzard:7:6:6",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "3e25eefae16facab13e261bb9b4eaa5beab5ac213af3dc9a51d1a38913eafcaa",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Break on through...",
+    "toolsRemainingAtQuota": {
+      "basher": 91,
+      "blocker": 0,
+      "bomber": 25,
+      "builder": 14,
+      "climber": 0,
+      "digger": 0,
+      "floater": 12,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 5066; exact final state verified",
+    "firstQuotaTick": 5066,
+    "identity": {
+      "engine": "classic",
+      "levelID": "22:Hail:7:2:6",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "6590fce9a1d8853e81be948c3c59fa51d6e34ba5e019fc4b0fb458a9622e62e7",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Steel Ice Span",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 12,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 1699; exact final state verified",
+    "firstQuotaTick": 1699,
+    "identity": {
+      "engine": "classic",
+      "levelID": "23:Blizzard:8:6:7",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "71486214a47c0816c13b4c008b2ec7a0faf0f5dfbb756629589ffa7eed3e74c7",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Presents of Mind II",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 5639; exact final state verified",
+    "firstQuotaTick": 5639,
+    "identity": {
+      "engine": "classic",
+      "levelID": "23:Hail:8:2:7",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ed777af0d0bd8b3099f80ebe7e48f07f059a85694c3e1077e4420e62bd025828",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Sir Edmund Hilemming",
+    "toolsRemainingAtQuota": {
+      "basher": 2,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 23,
+      "climber": 0,
+      "digger": 0,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/75 saved at tick 5393; exact final state verified",
+    "firstQuotaTick": 5393,
+    "identity": {
+      "engine": "classic",
+      "levelID": "24:Blizzard:9:7:0",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "02bdc656b1d1d65538ddaab504669b0d0139e3436d915f00c40d8b9f3af037b8",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Lemmings...The Motion Picture",
+    "toolsRemainingAtQuota": {
+      "basher": 8,
+      "blocker": 9,
+      "bomber": 1,
+      "builder": 17,
+      "climber": 2,
+      "digger": 6,
+      "floater": 10,
+      "miner": 10
+    }
+  },
+  {
+    "detail": "50/50 saved at tick 4681; exact final state verified",
+    "firstQuotaTick": 4681,
+    "identity": {
+      "engine": "classic",
+      "levelID": "24:Hail:9:3:0",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "335456bd2d69d1d080566ebf972840c1cbbd4d6185cdf380b2359e8726d54fbd",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Up, up, and away!",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 16,
+      "climber": 0,
+      "digger": 1,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 3848; exact final state verified",
+    "firstQuotaTick": 3848,
+    "identity": {
+      "engine": "classic",
+      "levelID": "25:Blizzard:10:7:1",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "52a97743a3389396799973ff12e0a1efe1fef61ffaa435feb710f153e17691fa",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Wrath of Lem",
+    "toolsRemainingAtQuota": {
+      "basher": 2,
+      "blocker": 2,
+      "bomber": 0,
+      "builder": 1,
+      "climber": 0,
+      "digger": 2,
+      "floater": 0,
+      "miner": 1
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 3700; exact final state verified",
+    "firstQuotaTick": 3700,
+    "identity": {
+      "engine": "classic",
+      "levelID": "25:Hail:10:3:1",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "9f0fa0b323b46e8f89970d7f1a868ba0ba41c15785ef84b98ace3b594deda6ad",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Lemmy in the cold, cold ground",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 1,
+      "bomber": 1,
+      "builder": 1,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 5
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 2649; exact final state verified",
+    "firstQuotaTick": 2649,
+    "identity": {
+      "engine": "classic",
+      "levelID": "26:Blizzard:11:7:2",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "0451dbd642284ab8705398f7cc86fec6e796ab6167648abe2bd2a89a96990e49",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Search for Lem",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 1,
+      "bomber": 1,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "70/70 saved at tick 3316; exact final state verified",
+    "firstQuotaTick": 3316,
+    "identity": {
+      "engine": "classic",
+      "levelID": "26:Hail:11:3:2",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "bdddad811473eb7f682165721704a1726073d0dbab64c92512fbdf25c26b75ec",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Emmings!  (No L)",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 2,
+      "bomber": 2,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 2,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "78/70 saved at tick 5225; exact final state verified",
+    "firstQuotaTick": 4857,
+    "identity": {
+      "engine": "classic",
+      "levelID": "27:Blizzard:12:7:3",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "3bc1886d1415b484e533654644b51120f6bcc2f3faa8bf4147d0101dc77ee809",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Voyage Home...",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "25/25 saved at tick 2393; exact final state verified",
+    "firstQuotaTick": 2393,
+    "identity": {
+      "engine": "classic",
+      "levelID": "27:Hail:12:3:3",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "69f902327635faf6c128813a47cec9035d446dbd7c7b9af206dd4c4490356e67",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Merry Christmaze",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 19,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "65/65 saved at tick 2656; exact final state verified",
+    "firstQuotaTick": 2465,
+    "identity": {
+      "engine": "classic",
+      "levelID": "28:Blizzard:13:7:4",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "6f2161c7a06e9d3e99ec56de61e9d02a78e3f82caf47757ef46da0b381fa5958",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Final Frontier",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 1,
+      "climber": 1,
+      "digger": 2,
+      "floater": 1,
+      "miner": 1
+    }
+  },
+  {
+    "detail": "50/50 saved at tick 2760; exact final state verified",
+    "firstQuotaTick": 2760,
+    "identity": {
+      "engine": "classic",
+      "levelID": "28:Hail:13:3:4",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "a739de780c7af22c74fc94eed5cb332529394bd9f8bd415dd0701980ad1d61bb",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Polar Expedition",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 2,
+      "bomber": 5,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 4076; exact final state verified",
+    "firstQuotaTick": 4076,
+    "identity": {
+      "engine": "classic",
+      "levelID": "29:Blizzard:14:7:5",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "7cfdfbbd7d6a11d5e6bb0375a352917ec0b0053ecf570ee35344bdf7f4f2c334",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Undiscovered Country",
+    "toolsRemainingAtQuota": {
+      "basher": 10,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 0,
+      "digger": 9,
+      "floater": 0,
+      "miner": 9
+    }
+  },
+  {
+    "detail": "65/65 saved at tick 3334; exact final state verified",
+    "firstQuotaTick": 3334,
+    "identity": {
+      "engine": "classic",
+      "levelID": "29:Hail:14:3:5",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ea9ce4cafd31f4d264d2989d1f884c53ba566ac1cc719b02fe0824608766f163",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Rendezvous II",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 2,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 5,
+      "digger": 3,
+      "floater": 5,
+      "miner": 3
+    }
+  },
+  {
+    "detail": "80/50 saved at tick 3360; exact final state verified",
+    "firstQuotaTick": 2370,
+    "identity": {
+      "engine": "classic",
+      "levelID": "2:Flurry:3:4:2",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "420e9efd7f71178cf5aba4467c4a720c3057180f6985ebec7bd4658022cdfd52",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Holiday Mining",
+    "toolsRemainingAtQuota": {
+      "basher": 29,
+      "blocker": 30,
+      "bomber": 30,
+      "builder": 30,
+      "climber": 30,
+      "digger": 30,
+      "floater": 30,
+      "miner": 30
+    }
+  },
+  {
+    "detail": "80/75 saved at tick 2134; exact final state verified",
+    "firstQuotaTick": 2114,
+    "identity": {
+      "engine": "classic",
+      "levelID": "2:Frost:3:0:2",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "61d8736d4ac77e0a1e55e59aae6ac041f018b857bdf79311bae322e4b27def16",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "CindyLand",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 1,
+      "bomber": 7,
+      "builder": 7,
+      "climber": 7,
+      "digger": 7,
+      "floater": 7,
+      "miner": 7
+    }
+  },
+  {
+    "detail": "80/80 saved at tick 7532; exact final state verified",
+    "firstQuotaTick": 7532,
+    "identity": {
+      "engine": "classic",
+      "levelID": "2:Xmas:3:0:2",
+      "packID": "xmasLemmings1992-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "0de033df0da2969bf6ec09aaa82846ae02ef0d1bbcc7989022a20b8f0f049b03",
+    "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+    "title": "A Lemming Holiday",
+    "toolsRemainingAtQuota": {
+      "basher": 13,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 7,
+      "climber": 19,
+      "digger": 15,
+      "floater": 19,
+      "miner": 16
+    }
+  },
+  {
+    "detail": "8/8 saved at tick 8160; exact final state verified",
+    "firstQuotaTick": 2165,
+    "identity": {
+      "engine": "classic",
+      "levelID": "30:Blizzard:15:7:6",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "033e97299d8679c94c50f24a0fc7c9ad8d090849f96fac41b2a0a61eb336c128",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Needs of the Many...",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 4,
+      "builder": 0,
+      "climber": 3,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "60/60 saved at tick 803; exact final state verified",
+    "firstQuotaTick": 803,
+    "identity": {
+      "engine": "classic",
+      "levelID": "30:Hail:15:3:6",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "bba30e67c0ff6c446758bc0eeaf7aba947159cced37b74a807b5c50f964a7790",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Steel Block Party",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 2,
+      "bomber": 1,
+      "builder": 2,
+      "climber": 1,
+      "digger": 2,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "48/47 saved at tick 1759; exact final state verified",
+    "firstQuotaTick": 1755,
+    "identity": {
+      "engine": "classic",
+      "levelID": "31:Blizzard:16:7:7",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "b77510c5ab859931c8491ee2f3ee315074671b4ec806fc551a1c272b7e64f86a",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "The Next Lemeration",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 4,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "10/10 saved at tick 1299; exact final state verified",
+    "firstQuotaTick": 1299,
+    "identity": {
+      "engine": "classic",
+      "levelID": "31:Hail:16:3:7",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "312bcf9244c72ae696404fdcce04345c35e2b3aaa19b213cd8c963b9d3de1784",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Peak of Performance",
+    "toolsRemainingAtQuota": {
+      "basher": 14,
+      "blocker": 14,
+      "bomber": 15,
+      "builder": 0,
+      "climber": 15,
+      "digger": 15,
+      "floater": 5,
+      "miner": 15
+    }
+  },
+  {
+    "detail": "50/45 saved at tick 2706; exact final state verified",
+    "firstQuotaTick": 2698,
+    "identity": {
+      "engine": "classic",
+      "levelID": "3:Flurry:4:4:3",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "8a3097857ca3765cc5203c39df911819ab714990aa4ee6970562bee3c898f8fe",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Lemming Tracks in the Snow!",
+    "toolsRemainingAtQuota": {
+      "basher": 16,
+      "blocker": 18,
+      "bomber": 20,
+      "builder": 20,
+      "climber": 20,
+      "digger": 20,
+      "floater": 20,
+      "miner": 19
+    }
+  },
+  {
+    "detail": "50/49 saved at tick 2166; exact final state verified",
+    "firstQuotaTick": 2113,
+    "identity": {
+      "engine": "classic",
+      "levelID": "3:Frost:4:0:3",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "e12deae374c682d0a74109700ea9b2e8373cdf1054906b4ed10fc3cafa465b51",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Separate Ways",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 1,
+      "builder": 0,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 1
+    }
+  },
+  {
+    "detail": "2/2 saved at tick 2380; exact final state verified",
+    "firstQuotaTick": 2380,
+    "identity": {
+      "engine": "classic",
+      "levelID": "3:Xmas:4:0:3",
+      "packID": "xmasLemmings1992-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "7f46dd250319a2a83364739db13389339a8c2af31965e22d7321bdebd5205428",
+    "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+    "title": "The North Poles",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 1,
+      "bomber": 1,
+      "builder": 0,
+      "climber": 0,
+      "digger": 2,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "75/25 saved at tick 2977; exact final state verified",
+    "firstQuotaTick": 1327,
+    "identity": {
+      "engine": "classic",
+      "levelID": "4:Flurry:5:4:4",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "c8d047c29c81bcb8f682845c5d5d10d2a71bd136c692c9e2498ec51693c9d96b",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Christmas South of the Equator",
+    "toolsRemainingAtQuota": {
+      "basher": 20,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 20,
+      "climber": 20,
+      "digger": 20,
+      "floater": 20,
+      "miner": 19
+    }
+  },
+  {
+    "detail": "70/70 saved at tick 1812; exact final state verified",
+    "firstQuotaTick": 1812,
+    "identity": {
+      "engine": "classic",
+      "levelID": "4:Frost:5:0:4",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "1bdf6d7cbfc20b8f14016465f00c9f7f6381ada1d995af8a038df283bbc070ac",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Lemming Reunification",
+    "toolsRemainingAtQuota": {
+      "basher": 8,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 10,
+      "climber": 10,
+      "digger": 10,
+      "floater": 10,
+      "miner": 8
+    }
+  },
+  {
+    "detail": "80/40 saved at tick 4281; exact final state verified",
+    "firstQuotaTick": 2841,
+    "identity": {
+      "engine": "classic",
+      "levelID": "5:Flurry:6:4:5",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "dd366ee5cb096a1bd4c533077504acabe9c74ff1e9583557ca74a9b3aefa7ff7",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Lemming Snowfall",
+    "toolsRemainingAtQuota": {
+      "basher": 8,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 4,
+      "climber": 10,
+      "digger": 10,
+      "floater": 10,
+      "miner": 10
+    }
+  },
+  {
+    "detail": "69/69 saved at tick 2979; exact final state verified",
+    "firstQuotaTick": 2979,
+    "identity": {
+      "engine": "classic",
+      "levelID": "5:Frost:6:0:5",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "f31f806506c8719a391deb1ecd1cbf1b8907d17eedcd1d93109f26fb1a110d4e",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "The Land of the Bizarre",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 1,
+      "digger": 0,
+      "floater": 2,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "50/25 saved at tick 3205; exact final state verified",
+    "firstQuotaTick": 2489,
+    "identity": {
+      "engine": "classic",
+      "levelID": "6:Flurry:7:4:6",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "83bd71c7665e2c543b2af8465d9cd6e85a35068d588bfc1832b79a4400e49e01",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Lemming Snowjourn",
+    "toolsRemainingAtQuota": {
+      "basher": 19,
+      "blocker": 20,
+      "bomber": 20,
+      "builder": 20,
+      "climber": 20,
+      "digger": 19,
+      "floater": 20,
+      "miner": 20
+    }
+  },
+  {
+    "detail": "32/25 saved at tick 6120; exact final state verified",
+    "firstQuotaTick": 2687,
+    "identity": {
+      "engine": "classic",
+      "levelID": "6:Frost:7:0:6",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "9d1114a7692ca27da3c6bde3a41d9f27e8798f203596c3cc0f30a6727dd98899",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Happy New Year!",
+    "toolsRemainingAtQuota": {
+      "basher": 1,
+      "blocker": 0,
+      "bomber": 1,
+      "builder": 3,
+      "climber": 0,
+      "digger": 0,
+      "floater": 0,
+      "miner": 5
+    }
+  },
+  {
+    "detail": "77/70 saved at tick 6120; exact final state verified",
+    "firstQuotaTick": 3424,
+    "identity": {
+      "engine": "classic",
+      "levelID": "7:Flurry:8:4:7",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "c001440401b3b3ac97310ab9913a4909c751027352fe154ad7739a528b54624c",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "Clouds of Lemmings",
+    "toolsRemainingAtQuota": {
+      "basher": 14,
+      "blocker": 13,
+      "bomber": 15,
+      "builder": 0,
+      "climber": 15,
+      "digger": 15,
+      "floater": 15,
+      "miner": 15
+    }
+  },
+  {
+    "detail": "80/75 saved at tick 913; exact final state verified",
+    "firstQuotaTick": 810,
+    "identity": {
+      "engine": "classic",
+      "levelID": "7:Frost:8:0:7",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ebd1167352f52d89eeae6b5383fee083aad08d0bfd7ecdd1385d7352d85c9937",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Division Bell",
+    "toolsRemainingAtQuota": {
+      "basher": 10,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 10,
+      "climber": 10,
+      "digger": 9,
+      "floater": 10,
+      "miner": 10
+    }
+  },
+  {
+    "detail": "80/75 saved at tick 3832; exact final state verified",
+    "firstQuotaTick": 3617,
+    "identity": {
+      "engine": "classic",
+      "levelID": "8:Flurry:9:5:0",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "acdae875187562033896d1b8318db8ea0aa4208462fb275cd17b23393be3d391",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "A Block from Home",
+    "toolsRemainingAtQuota": {
+      "basher": 9,
+      "blocker": 10,
+      "bomber": 10,
+      "builder": 4,
+      "climber": 10,
+      "digger": 9,
+      "floater": 10,
+      "miner": 10
+    }
+  },
+  {
+    "detail": "40/40 saved at tick 1301; exact final state verified",
+    "firstQuotaTick": 1301,
+    "identity": {
+      "engine": "classic",
+      "levelID": "8:Frost:9:1:0",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "730cd6735186e6625e706247191e1ec3be7234841b4706e66450905d5d9b027e",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Quest for Kieran",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 2,
+      "builder": 1,
+      "climber": 3,
+      "digger": 0,
+      "floater": 2,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "32/25 saved at tick 3833; exact final state verified",
+    "firstQuotaTick": 3795,
+    "identity": {
+      "engine": "classic",
+      "levelID": "9:Flurry:10:5:1",
+      "packID": "holidayLemmings1993-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "ac74a0b22d62ce746b33a644fe3486e671dede5d5a6702b00e750945fd32cd07",
+    "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "title": "32 Lemmings Below Zero",
+    "toolsRemainingAtQuota": {
+      "basher": 32,
+      "blocker": 32,
+      "bomber": 32,
+      "builder": 24,
+      "climber": 32,
+      "digger": 31,
+      "floater": 32,
+      "miner": 31
+    }
+  },
+  {
+    "detail": "4/4 saved at tick 2016; exact final state verified",
+    "firstQuotaTick": 2016,
+    "identity": {
+      "engine": "classic",
+      "levelID": "9:Frost:10:1:1",
+      "packID": "holidayLemmings1994-MACLEVL-32"
+    },
+    "passed": true,
+    "replayRevision": "43d8a69f45b15e7964fdcc42ebf6de87235e8129d85a60fe1aa6a4f9e1d25992",
+    "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "title": "Four Play",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 4,
+      "bomber": 4,
+      "builder": 1,
+      "climber": 4,
+      "digger": 0,
+      "floater": 4,
+      "miner": 3
+    }
+  },
+  {
+    "detail": "48/45 saved at tick 2050; exact final state verified",
+    "firstQuotaTick": 1800,
+    "identity": {
+      "engine": "classic",
+      "levelID": "2:Xmas:3:0:2",
+      "packID": "xmasLemmings1991-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
+    "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+    "title": "Time waits for no Lemming",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 1,
+      "digger": 0,
+      "floater": 10,
+      "miner": 0
+    }
+  },
+  {
+    "detail": "50/50 saved at tick 1377; exact final state verified",
+    "firstQuotaTick": 1377,
+    "identity": {
+      "engine": "classic",
+      "levelID": "3:Xmas:4:0:3",
+      "packID": "xmasLemmings1991-LEVEL-4"
+    },
+    "passed": true,
+    "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
+    "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+    "title": "This Corrosion",
+    "toolsRemainingAtQuota": {
+      "basher": 3,
+      "blocker": 0,
+      "bomber": 0,
+      "builder": 5,
+      "climber": 1,
+      "digger": 0,
+      "floater": 0,
+      "miner": 0
+    }
+  }
+]

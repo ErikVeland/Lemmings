@@ -179,6 +179,10 @@ remain unverified in this environment.
 - Use one column for portrait phone Home. Use wider grids where the screen has
   room for readable peer actions. A lone action in a mobile grid row spans the
   row. Do not leave an empty button slot beside it.
+- Two-pane Duo Home must fit its Standard-size actions without scrolling when
+  open. Tighten group gaps before reducing lettering or touch targets. Reserve
+  only the actual footer bounds, with clear space above the bottom frame.
+  Smaller panes and longer or enlarged text retain scrolling when needed.
 - Put music notices at the playfield's upper-left corner. Reserve room for
   navigation and replay overlays, and keep the notice outside the HUD.
 - Anchor the gameplay icon row 12 points from the content area's top and right
@@ -644,6 +648,13 @@ This is an editorial exclusion list, not a claim that all hidden exits have been
 automatically detected or that every lesson has a level-specific hint deck.
 
 ## Settings (1.9.2)
+
+Horizontal mobile and TV Settings use a fixed bitmap tab strip above the
+scrolling controls. Keep Back and Main menu fixed at the bottom. Long tab
+captions retain their full labels and scroll horizontally into view. A selected
+tab has a distinct state and accessibility selection. Changing tabs keeps the
+original caller and never resumes gameplay or advances a Hot Seat turn.
+Portrait layouts retain the category index. Mac keeps its existing tabs.
 
 Group each settings tab by purpose. Gameplay contains play controls, targeting,
 pointer feedback and level access. Pointer capture belongs with play controls.
@@ -1524,6 +1535,12 @@ across the display and keeps its time, event text and Close target clear of
 system UI. Tent pose opens it immediately from any app screen. Covered play,
 replays and Hot Seat handovers stay paused until an explicit Resume or Ready
 action after dismissal.
+
+Mobile Ready, pause and result pages use an opaque background across the full
+display, including the opened Duo's curved top area. Only their content uses
+the safe menu viewport. Cover the gameplay HUD and scenery outside that
+viewport, including between split result panes. Hide the background when play
+resumes. Classic, Lemmings 2 and Lemmings 3 share this presentation.
 
 Mac Modern cursor gives overlapping lemmings a fine dark silhouette rim. Fade it
 in between 2× and 4× zoom and keep it one output pixel wide in flat rendering,
