@@ -46,6 +46,21 @@ Mac, then iOS, tvOS and sideloading remains the delivery order. A platform may
 ship when its own blockers close. This order does not waive reported audio
 failure, and Mac need not wait for a later platform's store processing.
 
+### 2.3 build 102 follow-up — 27 October 2026
+
+Candidate source `b1dd685f` guards `AVAudioPlayerNode.playerTime` against an
+invalid `AVAudioTime` during output stop. The muted, offscreen audio performance
+suite, Music Rewind checks, Hot Seat ghost checks and save-recovery checks pass.
+The iOS and tvOS SDK/application-entry checks also pass. This fixes the
+reproduced stop-time exception; it does not close the owner's reported audio
+crackling gate. The shared effects callback still waits on control work, and no
+clean listening acceptance exists for Duo, iPad 8 or Apple TV 4K. The connected
+device list contains only the Mac, and CoreSimulator is unavailable here.
+
+The Developer ID identity and `lemmings-beta` notary profile are usable. No
+Apple Distribution identity is present. No build 102 release archive has been
+signed, notarized or uploaded. See the [build 102 record](ReleaseReadiness/2.3-build102/README.md).
+
 ## Latest published release
 
 Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
