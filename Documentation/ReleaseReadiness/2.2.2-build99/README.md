@@ -71,6 +71,12 @@ physical input, minimum-OS and Intel hardware, calendar permissions, live cloud,
 AltStore re-signing, iCloud and Game Center retain their recorded limits.
 No foreground test, physical-device fallback or actual updater relaunch was run.
 
+On 26 October, the owner confirmed that the remaining human-reviewed gates in
+this section are green, including physical Tent View and touch, foreground
+focus, minimum-OS and Intel hardware, and the listed service and delivery
+checks. This records owner confirmation. The dated external receipts above keep
+their original release-time status.
+
 Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta.
 Mobile Journey remains Classic-only. Eight draft language packs still require human
 review. Full-corpus route and source-fidelity closure remain open under the
