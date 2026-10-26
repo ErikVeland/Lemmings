@@ -17,11 +17,16 @@ guidance and the Hot Seat progress selector. The release notes are
 | Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
+| Universal Mac local app build | PASS; ad hoc signature verifies; arm64 and x86_64 |
 | Release history and input checks | PASS |
 | Release script dry run | PASS; no build or upload performed |
 
 The iOS and tvOS checks compile sources. They do not establish archive,
 provisioning, signing, store processing or physical-device acceptance.
+The Mac preflight app is in ignored `.build/2.3-build102-mac-preflight/`; it is
+ad hoc signed and is not a release package. Its first build attempt stopped on
+the sandboxed Swift module cache and hardware-thread query. The successful
+retry used an in-workspace module cache and `MUSIC_AAC_JOBS=2`.
 
 ## Affected engine checks
 
@@ -41,10 +46,12 @@ run. The mechanical checks used the muted, offscreen runner where supported.
   and Apple TV 4K. The 2.3 audio assessment says there is no clean-device
   acceptance and that muted checks cannot close this gate. See
   [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
-- Apple notarization and App Store credentials are unavailable in the current
-  keychain state. The `lemmings-beta` notary profile was not found; no Apple
-  Distribution identity was present during the earlier release check. No
-  package was signed, notarized or uploaded.
+- The `lemmings-beta` notary profile is now usable, and the Developer ID
+  Application identity is present. Notary history shows an accepted prior
+  standard archive, but it is not a build 102 package. The current signing
+  identities still do not include Apple Distribution, so iOS/tvOS App Store
+  signing and upload remain unavailable. No build 102 release archive has been
+  Developer ID signed, notarized or uploaded.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 
