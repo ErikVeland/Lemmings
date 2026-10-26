@@ -3069,7 +3069,7 @@ import NxlvKit
             case .blocking:
                 name = "LM33"; offsetX = -7; offsetY = -10; phase = lem.age % 16; directional = false
             case .falling:
-                name = "LM40"; offsetX = -8; offsetY = -10; phase = lem.age % 4
+                name = "LM40"; offsetX = -3; offsetY = -10; phase = lem.age % 4
             case .shrugging:
                 name = "LM7B"; offsetX = lem.direction > 0 ? -9 : -8; offsetY = -13; phase = lem.age % 8
             case .exploding:

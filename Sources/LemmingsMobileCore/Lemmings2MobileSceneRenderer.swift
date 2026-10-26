@@ -301,7 +301,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             name = "LM5C"; phase = lemming.state == .walking ? 6 + lemming.age % 8 : lemming.pose
             offsetX = -9; offsetY = -10; directional = false
         case .falling:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         case .floating:
             name = "LM16"; phase = lemming.age % 16; offsetX = -7; offsetY = -16; directional = true
         case .climbing:
@@ -446,7 +446,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         case .stomping:
             name = "LM1D"; phase = lemming.age % 8; offsetX = -7; offsetY = -9; directional = false
         case .terrainRising:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         default:
             name = "LM5C"; phase = 6 + lemming.age % 8; offsetX = -9; offsetY = -10; directional = false
         }
