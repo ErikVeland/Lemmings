@@ -13,6 +13,15 @@ public struct MobileReservedRegion: Equatable, Sendable {
 }
 
 public enum MobileDisplayRegions {
+    /// Keep a scrolling menu below a top camera and above the home indicator.
+    /// Those protected edges are often different heights on portrait phones.
+    public static func fullDisplayMenuFrame(in bounds: MobileRect, safeArea: MobileInsets,
+                                            avoiding regions: [MobileReservedRegion]) -> MobileRect {
+        let available = bounds.inset(by: MobileInsets(top: max(0, safeArea.top),
+            bottom: max(0, safeArea.bottom)))
+        return scrollingMenuFrame(in: available, avoiding: regions)
+    }
+
     /// Choose the viewport before laying out a scrolling page. A corner cutout can
     /// shorten its height, but scrolling must never change button widths or hit areas.
     public static func scrollingMenuFrame(in bounds: MobileRect, avoiding regions: [MobileReservedRegion]) -> MobileRect {

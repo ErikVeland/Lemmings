@@ -108,9 +108,13 @@ import UIKit
             if #available(iOS 26.0, tvOS 26.0, *) {
                 corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .vertical))
             } else { corners = view.safeAreaInsets }
-            // Inset both edges equally. The home indicator alone left a black bar at the bottom only.
-            let vertical = min(corners.top, corners.bottom)
-            available = view.bounds.inset(by: UIEdgeInsets(top: vertical, left: 0, bottom: vertical, right: 0))
+            // Keep the top camera and bottom home indicator clear independently.
+            let safeArea = MobileInsets(top: corners.top, bottom: corners.bottom)
+            let frame = MobileDisplayRegions.fullDisplayMenuFrame(
+                in: MobileRect(x: view.bounds.minX, y: view.bounds.minY,
+                    width: view.bounds.width, height: view.bounds.height),
+                safeArea: safeArea, avoiding: regions)
+            available = CGRect(x: frame.x, y: frame.y, width: frame.width, height: frame.height)
         } else {
             available = isFoldable(in: view) ? view.bounds.inset(by: contentInsets(in: view)) : view.safeAreaLayoutGuide.layoutFrame
         }

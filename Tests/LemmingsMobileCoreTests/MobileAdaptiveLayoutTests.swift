@@ -133,6 +133,15 @@ struct MobileAdaptiveLayoutTests {
         }
     }
 
+    @Test func portraitFullDisplayMenuKeepsDifferentCameraAndHomeIndicatorInsets() {
+        let bounds = MobileRect(x: 0, y: 0, width: 402, height: 874)
+        let frame = MobileDisplayRegions.fullDisplayMenuFrame(in: bounds,
+            safeArea: MobileInsets(top: 62, bottom: 34), avoiding: [])
+        #expect(frame.minY == 62)
+        #expect(frame.maxY == 840)
+        #expect(frame.width == bounds.width)
+    }
+
     @Test func outerDisplaySceneryFillsWidthWithoutMovingInputTargets() {
         for leading in [false, true] {
             let size = MobileSize(width: 720, height: 495)

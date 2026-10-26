@@ -2,18 +2,21 @@
 
 ## Current build candidate
 
-The current source version is **2.3** (Mac build 100, iOS build 34, tvOS build 13). Read the
-[complete 2.3 candidate notes](ReleaseNotes-2.3-build100.md). These notes cover
-the consolidated work since 2.2.2 and must stay current with the source selected
-for a build.
+The current source version is **2.3** (Mac build 101, iOS build 35, tvOS build 14). Read the
+[complete 2.3 candidate notes](ReleaseNotes-2.3-build101.md). These notes cover
+the current main source and must stay current with the source selected for a build.
 
 ## Latest published release
 
-Mac 2.3 build 100 is in release. See the
-[complete 2.3 notes](ReleaseNotes-2.3-build100.md) and
-[release record](ReleaseReadiness/2.3-build100/README.md).
-Mac notarisation, iOS/tvOS TestFlight submission and AltStore Classic source
-update are in progress. See the release record for delivery state.
+Version 2.2.2 is the latest published app release. Its Mac build 99 and
+AltStore Classic IPA are available. iPhone/iPad/Duo build 33 and Apple TV
+build 12 were submitted to TestFlight; their last recorded state was Waiting
+for Review. See the
+[2.2.2 release record](ReleaseReadiness/2.2.2-build99/README.md).
+
+The 2.3 build 100 tag has no published GitHub release and no platform delivery
+receipt. It is superseded by the current build 101 candidate. See the
+[build 100 candidate record](ReleaseReadiness/2.3-build100/README.md).
 
 ## Previous release
 

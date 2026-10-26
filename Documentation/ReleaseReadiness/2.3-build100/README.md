@@ -1,6 +1,9 @@
-# 2.3 build 100 release record
+# 2.3 build 100 candidate record
 
-Release in progress. [Release notes](../../ReleaseNotes-2.3-build100.md).
+Superseded; no platform package or submission is recorded for build 100. The
+`v2.3` tag points to this candidate source, but there is no published GitHub
+release. The current candidate uses build 101. Retain this file as build 100
+evidence only. [Release notes](../../ReleaseNotes-2.3-build100.md).
 
 Release commit: d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9
 Release base: v2.2.2
@@ -34,7 +37,7 @@ retain their recorded limits from [PlatformFeatureParity.md](../../PlatformFeatu
 
 | Channel | Build | State |
 | --- | ---: | --- |
-| Mac | 100 | Pending: build-and-notarise.sh |
-| iPhone/iPad/Duo TestFlight | 34 | Pending: Tools/IOSBeta/build.py then App Store Connect |
-| Apple TV TestFlight | 13 | Pending: Tools/IOSBeta/build.py then App Store Connect |
-| AltStore Classic | 34 | Pending: publish IPA to GitHub release and update altstore.json |
+| Mac | 100 | Superseded; no package delivered |
+| iPhone/iPad/Duo TestFlight | 34 | Superseded; no submission recorded |
+| Apple TV TestFlight | 13 | Superseded; no submission recorded |
+| AltStore Classic | 34 | Superseded; no IPA published |
