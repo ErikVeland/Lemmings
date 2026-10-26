@@ -120,6 +120,34 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "playInsights"])
         XCTAssertEqual(progress.footer.map(\.id), ["home"])
         XCTAssertTrue(progress.listTools.isEmpty)
+        let hotSeatProgress = MobileCareerArt.progressPage(records: records, profileID: guest.id,
+            profileName: "GU", subtitle: "", selectablePlayers: [
+                .init(id: host, name: "Host", portrait: 0),
+                .init(id: guest.id, name: "GU", portrait: 1)
+            ])
+        XCTAssertEqual(hotSeatProgress.listTools.map(\.id), ["progress.profile.\(host)", "progress.profile.\(guest.id)"])
+        XCTAssertEqual(hotSeatProgress.listTools.filter(\.selected).map(\.id), ["progress.profile.\(guest.id)"])
+        XCTAssertEqual(hotSeatProgress.listTools.compactMap(\.portrait), [0, 1])
+        for (width, scale) in [(CGFloat(390), CGFloat(1)), (CGFloat(960), CGFloat(2))] {
+            let tools = GameListToolsArt.layout(width: width, actions: hotSeatProgress.listTools, scale: scale)
+            XCTAssertEqual(tools.targets.map { $0.action.id }, hotSeatProgress.listTools.map(\.id))
+            for target in tools.targets {
+                XCTAssertEqual(tools.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+                XCTAssertGreaterThanOrEqual(target.frame.width * scale, 44)
+                XCTAssertGreaterThanOrEqual(target.frame.height * scale, 44)
+            }
+        }
+        let crowdedPlayers = (1...8).map {
+            GameFrontEnd.Action("progress.profile.player-\($0)", "PLAYER \($0)", portrait: $0 % 8)
+        }
+        for (width, scale) in [(CGFloat(390), CGFloat(1)), (CGFloat(960), CGFloat(2))] {
+            let tools = GameListToolsArt.layout(width: width, actions: crowdedPlayers, scale: scale)
+            XCTAssertEqual(tools.targets.count, crowdedPlayers.count)
+            XCTAssertEqual(Set(tools.targets.map { $0.action.id }), Set(crowdedPlayers.map(\.id)))
+            for target in tools.targets {
+                XCTAssertEqual(tools.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
+        }
         let key = "direct|" + level.boardID
         let full = MobileCareerArt.progressLevelPage(records: records, key: key, metric: "unknown")
         XCTAssertEqual(full.listTools.first { $0.selected }?.id, "progress.levelMetric.full")
@@ -127,5 +155,26 @@ final class LocalLeaderboardPageTests: XCTestCase {
         let clear = MobileCareerArt.progressLevelPage(records: records, key: key, metric: "clear")
         XCTAssertEqual(clear.details.first, "1. GU   0:10.00")
         XCTAssertEqual(clear.details.count, 2)
+    }
+
+    func testMainMenuLogoStaysCenteredWhenHeaderHasStatusAndSideControls() {
+        let page = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic Lemmings")],
+                                      initials: "ERI v UVA", subtitle: "Connected")
+        let phone = GameFrontEnd.layout(page, width: 390, minimumHeight: 763)
+        XCTAssertEqual(phone.heading.midX, 195, accuracy: 0.01)
+
+        let desktop = GameFrontEnd.layout(page, width: 1280, minimumHeight: 800)
+        XCTAssertEqual(desktop.heading.midX, 640, accuracy: 0.01)
+
+        let panes = [CGRect(x: 0, y: 0, width: 420, height: 900),
+                     CGRect(x: 420, y: 0, width: 420, height: 900)]
+        let duo = GameFrontEnd.layout(page, width: 840, minimumHeight: 900, bookHomePanes: panes)
+        XCTAssertEqual(duo.heading.midX, panes[0].midX, accuracy: 0.01)
+
+        let tv = TVMenuPresentation.homeLayout(page, width: 1920, height: 1080)
+        let inner = tv.board.width - 32
+        let leading = floor(inner * 0.30)
+        let tvLogoCenter = tv.board.minX + 16 + leading / 2
+        XCTAssertEqual(tv.heading.midX, tvLogoCenter, accuracy: 0.01)
     }
 }

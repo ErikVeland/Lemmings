@@ -2,8 +2,8 @@
 
 ## Current build candidate
 
-The current source version is **2.3** (Mac build 101, iOS build 35, tvOS build 14). Read the
-[complete 2.3 candidate notes](ReleaseNotes-2.3-build101.md). These notes cover
+The current source version is **2.3** (Mac build 102, iOS build 36, tvOS build 15). Read the
+[complete 2.3 candidate notes](ReleaseNotes-2.3-build102.md). These notes cover
 the current main source and must stay current with the source selected for a build.
 
 ## Latest published release
@@ -15,7 +15,8 @@ for Review. See the
 [2.2.2 release record](ReleaseReadiness/2.2.2-build99/README.md).
 
 The 2.3 build 100 tag has no published GitHub release and no platform delivery
-receipt. It is superseded by the current build 101 candidate. See the
+receipt. It is superseded by the current build 102 candidate. Build 101 was
+archived without a completed Mac package or mobile submission. See the
 [build 100 candidate record](ReleaseReadiness/2.3-build100/README.md).
 
 ## Previous release

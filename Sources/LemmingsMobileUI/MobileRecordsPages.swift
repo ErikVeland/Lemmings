@@ -53,16 +53,19 @@ extension MobileLibraryViewController {
 
     func recordsPage(subtitle: String) -> GameFrontEnd.Page {
         if confirmingRecordsReset { return GameRecoveryArt.recordsReset(arcadeStore.storageError ?? "") }
-        var page = MobileCareerArt.recordsPage(records: arcadeStore.records, profileID: profiles.activeID,
-                                    profileName: profiles.active.name, subtitle: arcadeStore.storageError ?? subtitle)
+        let profileID = progressDisplayProfileID
+        var page = MobileCareerArt.recordsPage(records: arcadeStore.records, profileID: profileID,
+                                    profileName: playerName(profileID), subtitle: arcadeStore.storageError ?? subtitle)
         if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
         return page
     }
     func progressPage(subtitle: String) -> GameFrontEnd.Page {
         if confirmingRecordsReset { return GameRecoveryArt.recordsReset(arcadeStore.storageError ?? "") }
-        var page = MobileCareerArt.progressPage(records: arcadeStore.records, profileID: profiles.activeID,
-            profileName: profiles.active.name, subtitle: arcadeStore.storageError ?? subtitle,
-            campaign: mobileCampaignProgress(profileID: profiles.activeID))
+        let profileID = progressDisplayProfileID
+        let seatPlayers = hotSeat?.players.compactMap { id in profiles.players.first { $0.id == id } } ?? []
+        var page = MobileCareerArt.progressPage(records: arcadeStore.records, profileID: profileID,
+            profileName: playerName(profileID), subtitle: arcadeStore.storageError ?? subtitle,
+            campaign: mobileCampaignProgress(profileID: profileID), selectablePlayers: seatPlayers)
         if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
         return page
     }
@@ -164,11 +167,20 @@ extension MobileLibraryViewController {
         return MobileCareerArt.campaignProgress(records: arcadeStore.records, profileID: profileID, levelCounts: counts)
     }
     func achievementsPage(subtitle: String) -> GameFrontEnd.Page {
-        MobileCareerArt.achievementsPage(records: arcadeStore.records, profileID: profiles.activeID,
-            profileName: profiles.active.name, subtitle: subtitle, campaign: mobileCampaignProgress(profileID: profiles.activeID))
+        let profileID = progressDisplayProfileID
+        return MobileCareerArt.achievementsPage(records: arcadeStore.records, profileID: profileID,
+            profileName: playerName(profileID), subtitle: subtitle, campaign: mobileCampaignProgress(profileID: profileID))
     }
 
     func handleRecords(_ id: String) -> Bool {
+        if id.hasPrefix("progress.profile.") {
+            let profileID = String(id.dropFirst("progress.profile.".count))
+            guard hotSeat?.players.contains(profileID) == true,
+                  profiles.players.contains(where: { $0.id == profileID }) else { return true }
+            progressProfileID = profileID
+            rebuild()
+            return true
+        }
         if id.hasPrefix("progress.metric.") {
             let metric = String(id.dropFirst("progress.metric.".count))
             guard ["stars", "saved", "lost"].contains(metric) else { return true }

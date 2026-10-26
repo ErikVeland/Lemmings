@@ -90,6 +90,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #endif
     var mobileInsights = MobileInsightsState()
     var progressMetric = "stars"
+    var progressProfileID: String?
     var progressLevelMetric = "full"
     var familiarNames = MobileFamiliarNamesState()
     var fanCountsTask: Task<Void, Never>?
@@ -1020,6 +1021,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             navigationHistory.append(position)
         }
         detailReturnPosition = nil
+        if case .home = next { progressProfileID = nil }
         if next == .home { settingsReturn = nil }
         if next == .data, route != .data { dataBackRoute = route }
         if next != .familiarNames { familiarNames.clear() }

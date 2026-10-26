@@ -8,6 +8,15 @@ import UIKit
 extension MobileLibraryViewController {
     var hotSeat: MobileHotSeat? { hotSeats.current }
 
+    /// Progress follows Home's highlighted turn owner. A temporary selector can inspect another seat.
+    var progressDisplayProfileID: String {
+        guard let seat = hotSeat else { return profiles.activeID }
+        if let selected = progressProfileID, seat.players.contains(selected), profiles.players.contains(where: { $0.id == selected }) {
+            return selected
+        }
+        return seat.turn
+    }
+
     var defaultHotSeatPlayers: [String] {
         hotSeat?.players ?? [profiles.activeID] + profiles.players.filter { $0.id != profiles.activeID }.prefix(1).map(\.id)
     }

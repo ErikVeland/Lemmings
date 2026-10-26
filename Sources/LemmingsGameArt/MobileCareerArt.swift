@@ -133,7 +133,8 @@ public enum MobileCareerArt {
     /// Progress is the active local player's own career: totals first, then their records, awards and insights.
     public static func progressPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
                                     campaign: ClassicAchievementProgress = .init(),
-                                    insightsAvailable: Bool = true) -> GameFrontEnd.Page {
+                                    insightsAvailable: Bool = true,
+                                    selectablePlayers: [MobileProfile] = []) -> GameFrontEnd.Page {
         let history = records.trolley
         let attempts = history.attempts.compactMap { attempt in
             attempt.run.level.conditions.map { attempt.assessed(using: history.maximum(conditions: $0, assisted: attempt.run.assisted)) }
@@ -149,6 +150,9 @@ public enum MobileCareerArt {
                       L10n.text("Three-star levels: \(career.threeStarLevels)")],
             footer: [.init("home", L10n.text("Back"))])
         page.singleColumnRows = true
+        page.listTools = selectablePlayers.map { player in
+            .init("progress.profile.\(player.id)", player.name, selected: player.id == profileID, portrait: player.portrait)
+        }
         return page
     }
 

@@ -1,5 +1,14 @@
 # UI clarity
 
+Rounded background corners use a consistent optical radius throughout the app.
+Reuse the same radius for backgrounds at the same visual level across screens
+and platforms. When their sizes or render scales differ, adjust the numeric
+radius only enough to make the corners look the same. Do not mix rounded
+backgrounds with visibly tighter or softer corners in one interface.
+
+Center the main logo in the main menu's logo area on every platform. Corner
+controls, status text and adjacent panes must not shift its optical centre.
+
 See [Player navigation](Navigation.md) for the route and return contract.
 A level launched from the Mac browser returns to the same browser pages, with
 selection, focus and scrolling intact. Explicit Main menu discards that context.
@@ -775,6 +784,11 @@ Recheck those changed renders and targets before accepting the new source.
 Physical VoiceOver and controller delivery remain manual checks.
 
 ## Progress leaderboards
+
+Progress shows the current profile. In Hot Seat, use Home's highlighted turn
+owner as the initial profile and show the session players as profile selectors.
+Changing the selector only changes whose progress is viewed; it does not pass
+the turn. Keep the selected profile through Records and Achievements.
 
 Progress opens on ranked local results. Keep the leaderboard visible on the first
 page. Put Career stars, Most saved and Most lost in the list toolbar. Every row
