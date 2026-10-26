@@ -27,9 +27,6 @@ public enum MobileTurnArt {
                 let matches = names.indices.filter { names[$0].caseInsensitiveCompare(playerName) == .orderedSame }
                 if matches.count == 1 { identified.homeNextPlayerIndex = matches[0] }
             }
-            if !identified.subtitle.hasPrefix("PVP") {
-                identified.subtitle = (["PVP", identified.subtitle].filter { !$0.isEmpty }).joined(separator: "  ")
-            }
             identified.subtitleRuns = [.init(identified.subtitle, .blue)]
         } else {
             identified.subtitle = subtitle(page.subtitle, playerName: playerName, role: role)

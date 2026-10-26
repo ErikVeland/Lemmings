@@ -13,6 +13,8 @@ if [[ -n "${LEMMINGS_ARCHITECTURES:-}" ]]; then
 fi
 swift_optimization="${LEMMINGS_SWIFT_OPTIMIZATION:--O}"
 
+zsh "$project_dir/Scripts/check-release-history.sh"
+
 if [[ -n "${LEMMINGS_TELEMETRY_URL:-}" ]]; then
   if ! python3 - "$LEMMINGS_TELEMETRY_URL" <<'PYURL'
 import sys

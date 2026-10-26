@@ -5,6 +5,14 @@ import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
 
+@MainActor private final class MobileMenuTextElement: UIAccessibilityElement {
+    var onFocus: (() -> Void)?
+    override func accessibilityElementDidBecomeFocused() {
+        super.accessibilityElementDidBecomeFocused()
+        onFocus?()
+    }
+}
+
 /// The artwork and UIKit targets share one layout, including disabled controls.
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: L10n.text("Lemmings")) {
@@ -32,6 +40,10 @@ import UIKit
         }
         if !result.listTools.isEmpty, globalNavigation?.isHidden == false, globalNavigation?.showsBack == true {
             result.footer.removeAll { $0.isBackNavigation }
+        }
+        if globalNavigation?.isHidden == false, globalNavigation?.showsBack == true,
+           let back = result.backAction {
+            result.footer.removeAll { $0.id == back.id }
         }
         #if os(tvOS)
         if result.home { result = TVMenuPresentation.homePage(result) }
@@ -108,6 +120,7 @@ import UIKit
         didSet { globalNavigation?.focusedID = focusedID; listTools?.focusedID = focusedID; settingsTabs?.focusedID = focusedID }
     }
     private var pageLayout: GameFrontEnd.Layout?
+    private let pauseShelfShield = UIView()
     var requiresNeutralActivation = false
     private var tvActivation = TVActivationGate()
     private static let portraits = Bundle.main.resourceURL.flatMap {
@@ -119,6 +132,9 @@ import UIKit
         backgroundColor = .black
         isOpaque = true
         contentMode = .redraw
+        pauseShelfShield.backgroundColor = .clear
+        pauseShelfShield.isHidden = true
+        addSubview(pauseShelfShield)
         #if os(iOS)
         addGestureRecognizer(UIHoverGestureRecognizer(target: self, action: #selector(hoverHelp(_:))))
         #endif
@@ -149,7 +165,7 @@ import UIKit
         guard let button = context.nextFocusedView as? UIButton, targets.contains(button) else { return }
         focusedID = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
         highlighted = focusedID
-        (superview as? UIScrollView)?.scrollRectToVisible(button.frame.insetBy(dx: 0, dy: -8), animated: false)
+        revealAction(button)
         setNeedsDisplay()
     }
     #endif
@@ -234,16 +250,29 @@ import UIKit
         var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale, scale: scale)
         if page.pause != nil, let scroll = superview as? UIScrollView {
             layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
-                width: scroll.bounds.width / scale, height: scroll.bounds.height / scale))
+                width: scroll.bounds.width / scale, height: scroll.bounds.height / scale), actionIDs: Set(page.footer.map(\.id)))
         }
         pageLayout = layout
+        let footerIDs = Set(page.footer.map(\.id))
+        let shelfTop = page.pause == nil ? nil : layout.targets.first(where: { footerIDs.contains($0.action.id) }).map { $0.frame.minY - 8 }
         let buttons = Dictionary(uniqueKeysWithValues: targets.compactMap { button in
             button.accessibilityIdentifier.map { ($0, button) }
         })
         targets = layout.targets.compactMap { target in
             guard let button = buttons["menu." + target.action.id] else { return nil }
             button.frame = target.frame.applying(transform)
+            button.isHidden = false
             return button
+        }
+        pauseShelfShield.isHidden = shelfTop == nil
+        if let shelfTop, let scroll = superview as? UIScrollView {
+            let top = shelfTop * scale
+            pauseShelfShield.frame = CGRect(x: 0, y: top, width: bounds.width,
+                height: max(0, scroll.contentOffset.y + scroll.bounds.height - top))
+            bringSubviewToFront(pauseShelfShield)
+            for target in targets where footerIDs.contains(target.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") {
+                bringSubviewToFront(target)
+            }
         }
         if let anchor = pendingReflowAnchor, let scroll = superview as? UIScrollView {
             pendingReflowAnchor = nil
@@ -254,7 +283,7 @@ import UIKit
         }
         var elements: [Any] = []
         for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
-            let element = UIAccessibilityElement(accessibilityContainer: self)
+            let element = textElement(frame.applying(transform))
             element.accessibilityLabel = text
             if let items = page.achievementItems,
                let index = page.details.indices.first(where: { page.details[$0] == text }), index % 2 == 0,
@@ -272,6 +301,13 @@ import UIKit
             } ?? L10n.text("Active players: \(page.homeInitials)")
             element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
+            elements.append(element)
+        }
+        for (title, frame) in layout.rowHeadings {
+            let element = textElement(frame.applying(transform))
+            element.accessibilityLabel = title
+            element.accessibilityTraits = .header
+            element.accessibilityFrameInContainerSpace = frame.applying(transform)
             elements.append(element)
         }
         if let heading = layout.libraryHeading {
@@ -292,6 +328,15 @@ import UIKit
                 let b = $1.frame.midX >= rightEdge ? 1 : 0
                 return a == b ? $0.frame.minY < $1.frame.minY : a < b
             }.map(\.element)
+        } else if page.pause != nil {
+            let positioned = elements.compactMap { element -> (element: Any, frame: CGRect)? in
+                guard let item = element as? UIAccessibilityElement else { return nil }
+                return (item, item.accessibilityFrameInContainerSpace)
+            } + targets.filter { !footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
+                .map { (element: $0 as Any, frame: $0.frame) }
+            accessibilityElements = positioned.sorted {
+                abs($0.frame.minY - $1.frame.minY) < 1 ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY
+            }.map(\.element) + targets.filter { footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
         } else { accessibilityElements = elements + targets }
         setNeedsDisplay()
     }
@@ -323,6 +368,7 @@ import UIKit
             button.accessibilityValue = action.toggleValue.map { $0 ? L10n.text("On") : L10n.text("Off") }
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
+            (button as? MobileAccessibleFocusButton)?.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
             #if os(tvOS)
             if let focusButton = button as? MobileFocusButton {
                 focusButton.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
@@ -361,6 +407,23 @@ import UIKit
         setNeedsFocusUpdate()
         #endif
     }
+    private func textElement(_ frame: CGRect) -> MobileMenuTextElement {
+        let element = MobileMenuTextElement(accessibilityContainer: self)
+        element.onFocus = { [weak self] in self?.revealContent(frame) }
+        return element
+    }
+    private func revealAction(_ button: UIButton) {
+        let id = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
+        if page.pause != nil, page.footer.contains(where: { $0.id == id }) { return }
+        revealContent(button.frame)
+    }
+    private func revealContent(_ target: CGRect) {
+        guard let scroll = superview as? UIScrollView else { return }
+        var frame = target.insetBy(dx: 0, dy: -8)
+        if page.pause != nil { frame.size.height += pauseShelfShield.bounds.height }
+        scroll.scrollRectToVisible(frame, animated: false)
+        setNeedsLayout()
+    }
     func moveFocus(_ offset: Int) {
         let enabled = focusableActions
         guard !enabled.isEmpty else { return }
@@ -368,9 +431,8 @@ import UIKit
         let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
         focusedID = enabled[index].id
         highlighted = focusedID
-        if let scroll = superview as? UIScrollView,
-           let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + focusedID! }) {
-            scroll.scrollRectToVisible(target.frame.insetBy(dx: 0, dy: -8), animated: false)
+        if let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + focusedID! }) {
+            revealAction(target)
         }
         #if os(tvOS)
         setNeedsFocusUpdate()
@@ -382,6 +444,7 @@ import UIKit
     func focusAction(_ id: String) {
         guard focusableActions.contains(where: { $0.id == id }) else { return }
         focusedID = id; highlighted = id
+        if let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + id }) { revealAction(target) }
         #if os(tvOS)
         setNeedsFocusUpdate()
         #endif
@@ -442,8 +505,24 @@ import UIKit
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
             if let heading = layout.libraryHeading { MobilePixelText.draw(L10n.text("Levels"), in: heading, palette: .green) }
+            let footerIDs = Set(page.footer.map(\.id))
+            let shelfTop = page.pause == nil ? nil : layout.targets.first(where: { footerIDs.contains($0.action.id) }).map { $0.frame.minY - 8 }
+            if let shelfTop {
+                context.setFillColor(CGColor(gray: 0, alpha: 1))
+                context.fill(CGRect(x: 0, y: shelfTop, width: layout.size.width,
+                                    height: max(0, layout.size.height - shelfTop)))
+            }
+            for (title, frame) in layout.rowHeadings where shelfTop.map({ frame.maxY <= $0 }) ?? true {
+                MobilePixelText.draw(title, in: frame, palette: .green)
+            }
             for target in layout.targets where !target.frame.isEmpty {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
+                context.saveGState()
+                defer { context.restoreGState() }
+                if let shelfTop, !footerIDs.contains(target.action.id) {
+                    guard target.frame.minY < shelfTop else { continue }
+                    context.clip(to: CGRect(x: 0, y: 0, width: layout.size.width, height: max(0, shelfTop)))
+                }
+                GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1, shape: MobileSystemRegions.controlShape(in: self))
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))
                 if target.action.selected {
                     context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
@@ -454,7 +533,7 @@ import UIKit
             return
         }
         GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
-                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), in: context)
+                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), shape: MobileSystemRegions.controlShape(in: self), in: context)
         if let resultStars, !layout.preview.isEmpty {
             let preview = layout.preview
             let pixel: CGFloat = preview.width >= 400 ? 3 : 2
@@ -478,7 +557,7 @@ import UIKit
             let above = target.frame.minY - height - 8
             let y = above >= visible.minY + 8 ? above : target.frame.maxY + 8
             let frame = CGRect(x: visible.midX - width / 2, y: y, width: width, height: height)
-            GameDisplayArt.draw(in: context, frame: frame, pixel: 2)
+            GameDisplayArt.draw(in: context, frame: frame, pixel: 2, shape: MobileSystemRegions.controlShape(in: self))
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(frame.insetBy(dx: 8, dy: 8))
             GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, alignment: .left, context: context)

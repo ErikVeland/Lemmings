@@ -3,12 +3,11 @@ import NxlvKit
 
 /// Error actions remain independent of the operation that failed.
 public enum GameRecoveryArt {
-    public static func page(title: String, details: [String] = []) -> GameFrontEnd.Page {
+    public static func page(title: String, details: [String] = [], includesMenu: Bool = true) -> GameFrontEnd.Page {
         .init(title: title, details: details, footer: [
             .init("retry", L10n.text("TRY AGAIN"), primary: true),
             .init("back", L10n.text("BACK")),
-            .init("menu", L10n.text("MENU")),
-        ])
+        ] + (includesMenu ? [.init("menu", L10n.text("MENU"))] : []))
     }
 
     public static func migrationFailure(_ message: String) -> GameFrontEnd.Page {

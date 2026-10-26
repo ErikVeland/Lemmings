@@ -235,14 +235,14 @@ final class DeviceMenuLayoutTests: XCTestCase {
 
     func testPlayerTitleAndQuantityRolesDoNotDependOnSelection() {
         let page = MobileTurnArt.page(.init(title: "Lemmings", home: true), playerName: "UVA", role: .next, sessionName: "UVA v EKV")
-        XCTAssertEqual(page.subtitle, "PVP")
+        XCTAssertEqual(page.subtitle, "")
         XCTAssertEqual(page.homeNextPlayerIndex, 0)
         XCTAssertEqual(page.homeNextPlayerName, "UVA")
         XCTAssertEqual(GameSemanticText.players(page.homeInitials, nextPlayerIndex: page.homeNextPlayerIndex).map(\.palette),
             [.gold, .blue, .green])
         let otherTurn = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic")], initials: "EKV v UVA",
             nextPlayerIndex: 1, subtitle: "Saved")
-        XCTAssertEqual(otherTurn.subtitle, "PVP  Saved")
+        XCTAssertEqual(otherTurn.subtitle, "Saved")
         XCTAssertEqual(otherTurn.homeNextPlayerName, "UVA")
         XCTAssertEqual(GameSemanticText.players(otherTurn.homeInitials,
             nextPlayerIndex: otherTurn.homeNextPlayerIndex).map(\.palette), [.green, .blue, .gold])

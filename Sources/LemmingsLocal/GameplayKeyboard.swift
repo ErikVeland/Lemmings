@@ -139,8 +139,8 @@ import NxlvKit
         let button = GameplayMenuButton(frame: .zero)
         button.fadeAppearance = navigationAppearance; button.glyph = .menu
         button.title = L10n.text("Menu"); button.target = self; button.action = #selector(openMainMenu)
-        button.setAccessibilityLabel(L10n.text("Save run and return to library"))
-        button.helpText = L10n.text("Save this run and return to the library. (Esc or Q)")
+        button.setAccessibilityLabel(L10n.text("Game menu"))
+        button.helpText = L10n.text("Pause and open the game menu. (Esc)")
         return button
     }()
     private lazy var settingsButton: GameplayMenuButton = {
@@ -208,7 +208,10 @@ import NxlvKit
         guard inspectionAvailable() else { return }
         inspectLemmings?()
     }
-    @objc private func openMainMenu() { controlHelp.dismissForInput(); mainMenu?() }
+    @objc private func openMainMenu() {
+        controlHelp.dismissForInput()
+        if active() { escape() } else { mainMenu?() }
+    }
     @objc private func openSettings() { controlHelp.dismissForInput(); settings?() }
     @objc private func openHints() { controlHelp.dismissForInput(); hints?() }
     @objc private func cycleGraphics() {
@@ -443,7 +446,8 @@ import NxlvKit
         if event.type == .keyDown, ownsController(), navigationAvailable(),
            event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q", let mainMenu {
             if !event.isARepeat {
-                pressedF = false; speedControl?.reset(at: now); mainMenu()
+                pressedF = false; speedControl?.reset(at: now)
+                if event.keyCode == 53, active() { escape() } else { mainMenu() }
             }
             return nil
         }
@@ -527,7 +531,8 @@ import NxlvKit
             if !event.isARepeat {
                 pressedF = false
                 speedControl?.reset(at: now)
-                if let mainMenu { mainMenu() } else { escape() }
+                if event.keyCode == 53 { escape() }
+                else if let mainMenu { mainMenu() } else { escape() }
             }
             return nil
         }
@@ -684,7 +689,8 @@ import NxlvKit
                          .init(keys: "Shift + \\ (|)", action: L10n.text("Immediately return to normal speed (1×)"), group: speed)]
             }
         }
-        rows += [.init(keys: "Escape / Q", action: L10n.text("Save run and return to library"), group: gameplay),
+        rows += [.init(keys: "Escape", action: L10n.text("Pause menu"), group: gameplay),
+                 .init(keys: "Q", action: L10n.text("Save run and return to library"), group: gameplay),
                  .init(keys: "?", action: L10n.text("Controls help"), group: gameplay)]
         if step != nil { rows.append(.init(keys: "⌘Z", action: L10n.text("Rewind one tick"), group: gameplay)) }
         if settings != nil { rows.append(.init(keys: "⌘,", action: L10n.text("Settings"), group: gameplay)) }

@@ -1,5 +1,9 @@
 # QoL and Hot Seat parity
 
+For current platform gaps, use the [cross-platform register](../PlatformFeatureParity.md).
+The engine matrix below does not establish that every Mac capability has a
+mobile or TV adapter.
+
 QoL and Hot Seat are shared product requirements for Classic, Lemmings 2 and
 Lemmings 3. A new feature must be checked in all three. Shared controls and
 result pages define the behaviour. Engine limitations must remain explicit.

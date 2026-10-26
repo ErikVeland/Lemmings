@@ -52,7 +52,7 @@ import NxlvKit
             #expect(backs == 1)
             canvas.focusAction("navigation.home")
             canvas.activateFocused()
-            canvas.moveFocus(1)
+            canvas.focusAction("navigation.secondary")
             canvas.activateFocused()
             #expect(home == 1 && pause == 1)
             navigation.isUserInteractionEnabled = false

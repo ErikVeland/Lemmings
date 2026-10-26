@@ -127,6 +127,11 @@ extension MobileGameViewController {
         adapter.onBoost = { [weak self] in self?.setControllerSpeedInput(held: $0) }
         adapter.onSpeedKey = { [weak self] in self?.setSpeedInput(.key, held: $0) }
         adapter.onPan = { [weak self] dx, dy in self?.panInput(dx: dx, dy: dy) }
+        adapter.onAssignHeld = { [weak self] held in
+            guard let self else { return }
+            self.l2PrimaryHeld = held
+            self.updateL2Aim(at: self.previewPoint, held: held)
+        }
         playfieldView.onHover = { [weak self] in self?.aim(at: $0, hover: true) }
         return adapter
     }
@@ -136,6 +141,7 @@ extension MobileGameViewController {
         hoverAimActive = hover
         previewInput = .precision
         previewPoint = point
+        updateL2Aim(at: point, held: l2PrimaryHeld)
         #if os(tvOS)
         if point != nil { tvTargetLock.clear() }
         if let point { tvPointerPoint = playfieldView.convert(playfieldView.controllerOutputPoint(CGPoint(x: point.x, y: point.y)), to: view) }
@@ -145,6 +151,8 @@ extension MobileGameViewController {
         renderCurrentFrame(force: true)
     }
     func restoreHoverAim() {
+        l2PrimaryHeld = false
+        updateL2Aim(at: previewPoint, held: false)
         touchSelection = nil
         browsingTouchSelection = false
         #if os(tvOS)
@@ -241,6 +249,13 @@ extension MobileGameViewController {
             if command == .assign, activateTVPointerControl() { return }
             #endif
             guard !session.isReadOnly else { return }
+            if command == .assign, !fanMode, let point = previewPoint,
+               let tribes = session as? Lemmings2MobileSession,
+               tribes.interact(at: playfieldView.gameViewport.levelPoint(fromView: point)) {
+                effects.update(session: session, viewport: playfieldView.gameViewport)
+                renderCurrentFrame(force: true); updateHUD()
+                return
+            }
             let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
             #if os(tvOS)
             refreshTVTarget(control: control)
@@ -310,9 +325,8 @@ extension MobileGameViewController {
     }
 
     @discardableResult func cycleGraphics() -> Bool {
-        guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted,
-              let classic = session as? ClassicMobileSession else { return false }
-        let choices = classic.availableGraphics
+        guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return false }
+        let choices = session.availableGraphics
         guard choices.count > 1 else { return false }
         var settings = gameSettings
         let index = choices.firstIndex(of: settings.classic.graphics) ?? -1

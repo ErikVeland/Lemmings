@@ -2,6 +2,35 @@ import CoreGraphics
 import Foundation
 import NxlvKit
 
+/// Rounded contours follow Duo's display while retaining crisp bitmap edges.
+/// Shape affects drawing only. Input and accessibility retain the full rectangle.
+public enum GameControlShape: Sendable {
+    case square, rounded
+
+    public func path(in frame: CGRect, inset: CGFloat = 0) -> CGPath {
+        let box = frame.insetBy(dx: inset, dy: inset)
+        guard box.width > 0, box.height > 0 else { return CGMutablePath() }
+        let radius = self == .rounded ? max(0, min(20, min(frame.width, frame.height) / 4) - inset) : 0
+        return CGPath(roundedRect: box, cornerWidth: radius, cornerHeight: radius, transform: nil)
+    }
+
+    public func fill(_ frame: CGRect, inset: CGFloat = 0, in context: CGContext) {
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(false)
+        context.addPath(path(in: frame, inset: inset))
+        context.fillPath()
+    }
+
+    public func stroke(_ frame: CGRect, inset: CGFloat = 0, in context: CGContext) {
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(false)
+        context.addPath(path(in: frame, inset: inset))
+        context.strokePath()
+    }
+}
+
 /// The stone socket every game control shares, drawn the same way on every platform.
 ///
 /// Colours are sRGB equivalents of the Mac app's calibrated values, so both look alike.
@@ -75,13 +104,38 @@ public enum GameStoneArt {
     }
 
     /// Bevel, rim and well. A caller may paint artwork into the well before `drawAccent`.
-    public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false) {
+    public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false, shape: GameControlShape = .square) {
         let light = monochrome ? CGColor(gray: 1, alpha: 1) : Self.light
         let stone = monochrome ? CGColor(gray: 1, alpha: 1) : Self.stone
         let shadow = monochrome ? CGColor(gray: 0, alpha: 1) : Self.shadow
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
+        if shape == .rounded {
+            let upper = selected ? shadow : light
+            let lower = selected ? light : shadow
+            context.setFillColor(lower)
+            shape.fill(frame, inset: pixel, in: context)
+            context.saveGState()
+            context.move(to: CGPoint(x: frame.minX, y: frame.maxY))
+            context.addLine(to: CGPoint(x: frame.minX, y: frame.minY))
+            context.addLine(to: CGPoint(x: frame.maxX, y: frame.minY))
+            context.closePath()
+            context.clip()
+            context.setFillColor(upper)
+            shape.fill(frame, inset: pixel, in: context)
+            context.restoreGState()
+            context.setFillColor(stone)
+            shape.fill(frame, inset: 2 * pixel, in: context)
+            context.setFillColor(shadow)
+            shape.fill(frame, inset: 3 * pixel, in: context)
+            context.setFillColor(monochrome ? CGColor(gray: 0, alpha: 1) : selected ? wellSelected : wellIdle)
+            shape.fill(frame, inset: 4 * pixel, in: context)
+            context.addPath(shape.path(in: frame, inset: 4 * pixel))
+            context.clip()
+            if !monochrome { drawDetailedRock(in: context, frame: frame, pixel: pixel, selected: selected) }
+            return
+        }
         func fill(_ rect: CGRect, _ color: CGColor) {
             context.setFillColor(color)
             context.fill(rect)
@@ -147,8 +201,8 @@ public enum GameStoneArt {
         context.restoreGState()
     }
 
-    public static func draw(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat) {
-        drawSocket(in: context, frame: frame, selected: selected, pixel: pixel)
+    public static func draw(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, shape: GameControlShape = .square) {
+        drawSocket(in: context, frame: frame, selected: selected, pixel: pixel, shape: shape)
         drawAccent(in: context, frame: frame, selected: selected, pixel: pixel)
     }
 }

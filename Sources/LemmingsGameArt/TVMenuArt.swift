@@ -25,9 +25,8 @@ public enum TVMenuArt {
         }
         let grid = GameFooterGrid(actions: page.orderedFooter, columns: page.footer.count)
         let gap: CGFloat = 12
-        let cell = (784 - CGFloat(grid.columns - 1) * gap) / CGFloat(grid.columns)
         targets += grid.slots.map { slot in
-            Target(action: slot.action, frame: CGRect(x: 40 + CGFloat(slot.column) * (cell + gap), y: 406, width: cell, height: 48))
+            Target(action: slot.action, frame: grid.frame(for: slot, x: 40, y: 406, width: 784, height: 48, gap: gap, rowGap: gap))
         }
         let details = page.details.enumerated().map { index, _ in
             CGRect(x: page.preview ? 40 : 60, y: (page.preview ? 346 : 138) + CGFloat(index) * (page.preview ? 28 : 30),

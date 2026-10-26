@@ -46,5 +46,15 @@
     "externalAvailabilityVerified": false,
     "buildIdentityNote": "Processed build uses the same ID as the earlier expired-session attempt; successful retry receipt and current App Store Connect state are retained."
   },
-  "authenticationRestored": true
+  "authenticationRestored": true,
+  "deadlineVerification": {
+    "deadlineUTC": "2026-10-24T14:00:00Z",
+    "recordedUTC": "2026-10-24T14:04:25Z",
+    "externalDeliveryVerifiedByDeadline": false,
+    "currentAppleStatus": "unverified",
+    "lastVerifiedStatus": "waiting-for-review",
+    "iosLastVerifiedUTC": "2026-10-24T10:44:00Z",
+    "tvosLastVerifiedUTC": "2026-10-24T10:39:00Z",
+    "verificationBlocker": "Automatic approval review blocked reading unrelated active Safari content; awaiting owner selection of the existing TestFlight tab."
+  }
 }

@@ -23,6 +23,7 @@ done
 swiftc -swift-version 6 -warnings-as-errors -parse-as-library -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$build_dir/ModuleCache" -I "$module_dir" \
   -framework AppKit -framework Metal -framework QuartzCore \
-  Sources/LemmingsLocal/LemmingCrowdPresentation.swift Tests/CrowdPresentationTests/main.swift \
+  Sources/LemmingsLocal/LemmingCrowdPresentation.swift Sources/LemmingsMobileCore/MobileCrowdShadow.swift \
+  Tests/CrowdPresentationTests/main.swift \
   "${objects[@]}" -o "$build_dir/CrowdAudit"
 python3 Tools/UITestRunner/run.py "$build_dir/CrowdAudit"

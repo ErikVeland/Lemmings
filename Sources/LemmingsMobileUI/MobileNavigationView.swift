@@ -19,7 +19,7 @@ import NxlvKit
         didSet { for button in buttons { button.isSelectedState = button.accessibilityIdentifier == focusedID } }
     }
     var actions: [GameFrontEnd.Action] {
-        isHidden || !isUserInteractionEnabled ? [] : GameNavigationArt.actions(back: showsBack, backTitle: backTitle, secondary: secondaryTitle)
+        isHidden || !isUserInteractionEnabled ? [] : navigationLayout.targets.map(\.action)
     }
     func activate(_ id: String) {
         guard actions.contains(where: { $0.id == id }) else { return }
@@ -71,7 +71,11 @@ import NxlvKit
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (button, target) in zip(buttons, navigationLayout.targets) { button.frame = target.frame }
+        let targets = navigationLayout.targets
+        for target in targets {
+            buttons.first { $0.accessibilityIdentifier == target.action.id }?.frame = target.frame
+        }
+        accessibilityElements = targets.compactMap { target in buttons.first { $0.accessibilityIdentifier == target.action.id } }
     }
 }
 #endif

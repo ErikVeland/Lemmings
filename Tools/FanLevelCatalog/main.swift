@@ -2,7 +2,10 @@ import Foundation
 
 // This build tool reuses the game's decoder. It never records player progress.
 @MainActor final class ArcadeStore {
+  struct Records { let activeProfileID = "default" }
   static let shared = ArcadeStore()
+  let records = Records()
+  let hotSeatID: String? = nil
   func progressKey(_ key: String) -> String { key }
 }
 let folder = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true)

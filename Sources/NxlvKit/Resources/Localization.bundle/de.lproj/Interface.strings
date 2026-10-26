@@ -1088,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Der Mann, der bei Mondschein Lemming-Stimmen spricht";
 "Help" = "Hilfe";
 "Help / extra actions" = "Hilfe / zusätzliche Aktionen";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Hilf uns, überarbeitungsbedürftige Level zu finden";
 "High" = "Hoch";
 "High rescue rate with efficient skill use." = "Hohe Rettungsquote mit effizientem Fähigkeitseinsatz.";
@@ -1106,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "Startseite";
 "Home {0}/{1}" = "Gerettet {0}/{1}";
 "Hopper" = "Hüpfer";
 "Host" = "Host";
 "Hot Seat" = "Hot Seat";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Hot-Seat-Starts";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Hot Seat…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Übergib den Zug mit {1}. {2} Mit den Zahlentasten fügst du Spieler hinzu oder entfernst sie. Mit N fügst du einen neuen Spieler hinzu. „Spiel auswählen“ setzt diese gemeinsame Kampagne fort. Ein neues Hot Seat beginnt von vorn.";
@@ -1154,6 +1155,7 @@
 "Increase speed" = "Tempo erhöhen";
 "Initials: {0}_" = "Initialen: {0}_";
 "Insights" = "Einblicke";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Sieh dir die Werkzeuge im Level an. Entscheide, wer welches Werkzeug braucht, und bereite den Weg Schritt für Schritt vor.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1710,6 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Nächster Lemming, der eine Fähigkeit erhalten kann";
 "Next graphics" = "Nächste Grafik";
+"Next lemming" = "Next lemming";
 "Next level" = "Nächstes Level";
 "Next level >" = "Nächstes Level >";
 "Next move" = "Nächster Zug";
@@ -1953,6 +1956,7 @@
 "Pause action replay" = "Aktionswiedergabe pausieren";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Pausiere und verfolge den Weg vom Eingang zum Ausgang. Suche die erste Stelle, die ein Lemming nicht sicher passieren kann.";
 "Pause and open controls" = "Pausieren und Steuerung öffnen";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Pausenmenü";
 "Pause on interruption" = "Bei Unterbrechung pausieren";
 "Pause on skill change" = "Bei Fähigkeitswechsel pausieren";
@@ -2058,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Vorheriger Bestwert {0}. Dieser Lauf {1}.";
 "Previous eligible lemming" = "Vorheriger Lemming, der eine Fähigkeit erhalten kann";
 "Previous hint" = "Vorheriger Hinweis";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Vorheriger Zug";
 "Previous page" = "Vorherige Seite";
 "Previous record: {0}. New record: {1}." = "Vorheriger Rekord: {0}. Neuer Rekord: {1}.";
@@ -2084,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q NOCHMALS ZUM BEENDEN  *  ESC ZUM BLEIBEN";
 "Queued" = "In Warteschlange";
 "Quit Ultimate Lemmings" = "Ultimate Lemmings beenden";
-"Quit to main menu" = "Zum Hauptmenü";
 "Quit?" = "Beenden?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R ERNEUT - MEHR RETTEN, WENIGER NUTZEN";
@@ -2169,7 +2173,7 @@
 "Records were not saved. Check free space and folder access." = "Rekorde wurden nicht gespeichert. Prüfe den freien Speicherplatz und den Ordnerzugriff.";
 "Records were not saved. Retry the save before continuing." = "Rekorde wurden nicht gespeichert. Versuche erneut zu speichern, bevor du fortfährst.";
 "Recovery" = "Recovery";
-"Red night vision" = "Rotes Nachtsichtlicht";
+"Red night vision" = "Rote Nachtsicht";
 "Redbook CD Studio Soundtrack" = "Redbook-CD-Studio-Soundtrack";
 "Redbook CD-Audio + HuC6280 PSG" = "Redbook-CD-Audio + HuC6280-PSG";
 "Redbook CD-Audio 44.1 kHz Stereo" = "Redbook-CD-Audio 44,1 kHz Stereo";
@@ -2317,6 +2321,7 @@
 "Run paused" = "Lauf pausiert";
 "Run recovery save failed: {0}" = "Wiederherstellung des Laufs konnte nicht gespeichert werden: {0}";
 "Run unavailable" = "Lauf nicht verfügbar";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Sprinter";
 "Running." = "Läuft.";
 "S" = "S";
@@ -2348,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "FÄHIGKEITSWECHSEL KÖNNEN ZUR PLANUNG PAUSIEREN";
 "SKILL MODE" = "FÄHIGKEITSMODUS";
 "SKILLS" = "Fähigkeiten";
-"SKIP LEVEL" = "LEVEL ÜBERSPRINGEN";
 "SKIPS {0}" = "ÜBERSPRINGT {0}";
 "SLIDE" = "RUTSCHEN";
 "SLIDER" = "Rutscher";
@@ -2405,7 +2409,6 @@
 "Save playlist" = "Playlist speichern";
 "Save run and return to library" = "Lauf speichern und zur Bibliothek zurückkehren";
 "Save this replay at {0}× speed, with music and sound effects." = "Diese Wiedergabe mit {0}× Tempo, Musik und Soundeffekten speichern.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Im ausgewählten Speicherplatz speichern";
 "Save {0}  ({1}%)" = "Gerettet {0}  ({1}%)";
 "Save {0} more above requirements." = "Rette {0} mehr als erforderlich.";
@@ -2459,7 +2462,6 @@
 "Sequel artwork" = "Sequel-Grafik";
 "Sequel artwork requires binary transparency." = "Sequel-Grafik benötigt binäre Transparenz.";
 "Sequel reconstruction exceeds the image limit." = "Die Sequel-Rekonstruktion überschreitet das Bildlimit.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "Dienst sieht IP-Adresse";
 "Session not changed" = "Sitzung nicht geändert";
@@ -2537,7 +2539,9 @@
 "Skills used: {0}" = "Verwendete Fähigkeiten: {0}";
 "Skip" = "Überspringen";
 "Skip as {0} ({1})" = "Als {0} überspringen ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Level überspringen ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Überspringen";
 "Slider" = "Rutscher";
 "Slot {0}" = "Platz {0}";

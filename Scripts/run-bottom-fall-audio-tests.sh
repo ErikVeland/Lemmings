@@ -10,6 +10,7 @@ swiftc -swift-version 6 -parse-as-library -emit-module -emit-library \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 swiftc -swift-version 6 -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
+  "$project_dir/Sources/LemmingsAudio/BufferedAudioSource.swift" \
   "$project_dir/Sources/LemmingsAudio/SoundEffectPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/Lemmings2SoundPlayer.swift" \
   "$project_dir/Tests/BottomFallAudioTests/main.swift" -o "$build_dir/BottomFallAudioTests"

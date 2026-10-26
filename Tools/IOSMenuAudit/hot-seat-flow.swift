@@ -82,14 +82,14 @@ extension MenuAudit {
                     if state.hasPrefix("paused-") { guard page.title == "Paused: " + owner else { throw Failure.invalidTargets } }
                     if role == .result { guard page.subtitle.hasPrefix("Played: " + owner) else { throw Failure.invalidTargets } }
                     if state.contains("ready"), !state.hasPrefix("solo-") { guard page.title == owner, page.subtitle == original.subtitle else { throw Failure.invalidTargets } }
-                    if state == "next-library" { guard page.subtitle == "PVP", page.homeNextPlayerName == "LEM" else { throw invalidTargets(line: #line) } }
+                    if state == "next-library" { guard page.subtitle.isEmpty, page.homeNextPlayerName == "LEM" else { throw invalidTargets(line: #line) } }
                 } else { guard page == original else { throw Failure.invalidTargets } }
                 if state == "saved-shared-journey" {
-                    guard page.subtitle == "PVP", page.homeNextPlayerName == "UVA",
+                    guard page.subtitle.isEmpty, page.homeNextPlayerName == "UVA",
                           page.rows.first?.id == "learningRunResume", page.rows.first?.primary == true else { throw invalidTargets(line: #line) }
                 }
                 if state.hasPrefix("selected-seat-") {
-                    guard page.subtitle == "PVP", page.homeNextPlayerName == "AB",
+                    guard page.subtitle.isEmpty, page.homeNextPlayerName == "AB",
                           !page.rows.contains(where: { $0.id == "seatOther" || $0.title.lowercased().contains("solo") }),
                           page.rows.first?.id == (state.hasSuffix("no-level") ? "journey" : "resume")
                     else { throw invalidTargets(line: #line) }

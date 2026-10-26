@@ -34,7 +34,7 @@ public enum TVMenuPresentation {
         let library = page.rows.filter { $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id) }
         let libraryIDs = Set(library.map(\.id))
         let saved = page.rows.filter { !libraryIDs.contains($0.id) }
-        let heading = CGRect(x: x + inset, y: 20, width: leadingWidth, height: 56)
+        var heading = CGRect(x: x + inset, y: 20, width: leadingWidth, height: 56)
         var targets: [GameFrontEnd.Target] = []
         var leftY = heading.maxY + 12
         for action in saved {
@@ -50,14 +50,16 @@ public enum TVMenuPresentation {
                 GameTextLayout.height($0.title, width: cell - 48) + 8
             }.max() ?? 44)
             for (index, action) in actions.enumerated() {
-                targets.append(.init(action: action, frame: CGRect(x: libraryX + CGFloat(index % columns) * (cell + gap),
-                    y: rightY + CGFloat(index / columns) * (rowHeight + gap), width: cell, height: rowHeight)))
+                let count = min(columns, actions.count - (index / columns) * columns)
+                let rowCell = (libraryWidth - CGFloat(count - 1) * gap) / CGFloat(count)
+                targets.append(.init(action: action, frame: CGRect(x: libraryX + CGFloat(index % columns) * (rowCell + gap),
+                    y: rightY + CGFloat(index / columns) * (rowHeight + gap), width: rowCell, height: rowHeight)))
             }
             rightY += CGFloat((actions.count + columns - 1) / columns) * (rowHeight + gap) + 4
         }
-        let initials = CGRect(x: x + inset, y: max(leftY, rightY), width: inner,
+        var initials = CGRect(x: x + inset, y: max(leftY, rightY), width: inner,
             height: GameTextLayout.height(page.homeInitials, width: inner))
-        let subtitle = CGRect(x: x + inset, y: initials.maxY + 6, width: inner,
+        var subtitle = CGRect(x: x + inset, y: initials.maxY + 6, width: inner,
             height: GameTextLayout.height(page.subtitle, width: inner))
         let footer = page.orderedFooter
         let icons = footer.filter { ["settings", "whatsNew"].contains($0.id) }
@@ -67,7 +69,18 @@ public enum TVMenuPresentation {
             GameTextLayout.height($0.title, width: cell - 24) + 8
         }.max() ?? 44)
         let footerY = subtitle.maxY + 8
-        let contentHeight = footerY + footerHeight + 20
+        var contentHeight = footerY + footerHeight + 20
+        let logoGrowth = min(max(0, rightY - leftY) + max(0, height - contentHeight),
+            max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height))
+        let contentGrowth = max(0, leftY + logoGrowth - max(leftY, rightY))
+        heading.size.height += logoGrowth
+        targets = targets.map { target in
+            .init(action: target.action, frame: target.frame.offsetBy(dx: 0,
+                dy: libraryIDs.contains(target.action.id) ? 0 : logoGrowth))
+        }
+        initials.origin.y += contentGrowth
+        subtitle.origin.y += contentGrowth
+        contentHeight += contentGrowth
         let actualHeight = max(height, contentHeight)
         let offset = floor((actualHeight - contentHeight) / 2)
         targets = targets.map { .init(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: offset)) }
@@ -152,7 +165,7 @@ public enum TVMenuPresentation {
         let headings = grid.headings.map { ($0.0, $0.1.offsetBy(dx: x + 16, dy: y)) }
         if !page.rows.isEmpty { y += grid.height + 8 }
         let footer = page.orderedFooter
-        let footerColumns = max(3, footer.count)
+        let footerColumns = max(1, footer.count)
         let footerCell = (inner - CGFloat(footerColumns - 1) * 8) / CGFloat(footerColumns)
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: footerCell - 24) + 8 }.max() ?? 44)
         let footerY = max(y + 8, height - footerHeight - 16)

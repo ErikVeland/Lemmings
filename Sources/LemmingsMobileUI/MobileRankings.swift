@@ -65,13 +65,14 @@ extension MobileLibraryViewController {
             let skills = Dictionary(zip(c.skills, c.supplies).map {
                 (TrolleyCapture.skillKey($0.0.name), $0.1)
             }, uniquingKeysWith: +)
-            let levelID = "\(session.levelIndex / 10):\(session.levelIndex % 10)"
+            let levelID = c.isPractice ? "practice-\(session.levelIndex)" : "\(session.levelIndex / 10):\(session.levelIndex % 10)"
             let conditions = TrolleyConditions(gameID: "lemmings2", packID: "tribes", levelID: levelID,
                 levelFingerprint: session.levelFingerprint, rulesetVersion: session.engineFingerprint,
                 physicsMode: session.engineFingerprint, population: c.total, rescueRequirement: 1,
                 startingSkills: skills, timeLimitSeconds: Double(c.timeLimit),
                 modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
-                    "firstReleaseTick": String(c.firstReleaseTick)])
+                    "firstReleaseTick": String(c.firstReleaseTick),
+                    "practiceSkills": c.isPractice ? c.skills.map { String($0.rawValue) }.joined(separator: ",") : ""])
             return .init(id: session.levelFingerprint, title: summary.title, game: pack,
                 rules: session.engineFingerprint, total: c.total, required: 1, conditions: conditions)
         }
@@ -86,6 +87,19 @@ extension MobileLibraryViewController {
                     "reserves": String(c.total), "extras": String(c.extras.count)])
             return .init(id: session.levelFingerprint, title: summary.title, game: pack,
                 rules: session.engineFingerprint, total: c.total + c.extras.count, required: 1, conditions: conditions)
+        }
+        if let initial = session.actionReplayInitial, case let .neolemmix(game) = initial {
+            let c = game.configuration
+            let parts = session.levelIdentifier.split(separator: "/", maxSplits: 2).map(String.init)
+            let skills = Dictionary(c.skills.map { (TrolleyCapture.skillKey($0.key.rawValue), $0.value.availableCount ?? -1) }, uniquingKeysWith: +)
+            let conditions = TrolleyConditions(gameID: "neolemmix", packID: parts.count > 1 ? parts[1] : pack,
+                levelID: parts.count > 2 ? parts[2] : session.levelIdentifier,
+                levelFingerprint: session.levelFingerprint, rulesetVersion: session.engineFingerprint,
+                physicsMode: session.engineFingerprint, population: c.totalLemmings, rescueRequirement: c.requiredToSave,
+                startingSkills: skills, timeLimitSeconds: c.timeLimitTicks.map { Double($0) / session.ticksPerSecond },
+                modifiers: ["spawnInterval": String(c.spawnInterval), "spawnIntervalLocked": String(c.spawnIntervalLocked)])
+            return .init(id: session.levelFingerprint, title: summary.title, game: pack,
+                rules: session.engineFingerprint, total: c.totalLemmings, required: c.requiredToSave, conditions: conditions)
         }
         guard let classic = session as? ClassicMobileSession else {
             return .init(id: session.levelFingerprint, title: summary.title, game: pack,
@@ -214,12 +228,18 @@ extension MobileLibraryViewController {
         Task {
             do {
                 let content = try loadMobileRankedContent(replay.conditions)
-                guard let classic = content.session as? ClassicMobileSession else { throw MobileSessionError.unsupportedControl }
-                let initial = classic.initialSimulation
-                let document = try await Task.detached(priority: .userInitiated) {
-                    try replay.classicReplay(initial: initial, title: title)
-                }.value
-                guard let session = try classic.makeReplaySession(document: document) else { throw MobileSessionError.invalidCheckpoint }
+                let document: Data
+                if let classic = content.session as? ClassicMobileSession {
+                    let initial = classic.initialSimulation
+                    document = try await Task.detached(priority: .userInitiated) {
+                        try replay.classicReplay(initial: initial, title: title)
+                    }.value
+                } else {
+                    document = try MobileActionReplayDocument.checked(replay, session: content.session)
+                }
+                guard let session = try content.session.makeReplaySession(document: document) else {
+                    throw MobileSessionError.invalidCheckpoint
+                }
                 let store = MobileCheckpointStore(url: FileManager.default.temporaryDirectory.appendingPathComponent("leaderboard-replay-" + UUID().uuidString))
                 let player = MobileGameViewController(summary: content.summary, session: session, checkpointStore: store, restoredCheckpoint: nil,
                     settingsProfileID: settingsProfileID)

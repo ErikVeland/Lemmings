@@ -314,7 +314,11 @@ import NxlvKit
             default: break
             }
         }
-        canvas.onMenu = { [weak self] in self?.showGameMenu() }
+        canvas.onMenu = { [weak self] in
+            guard let self else { return }
+            if self.canvas.menuRows == nil, !self.game.isComplete { self.presentPauseMenu() }
+            else { self.showGameMenu() }
+        }
         canvas.onMenuRow = { [weak self] row in self?.menuAction(row) }
         canvas.onCancelDirection = { [weak self] in self?.pendingTool = nil }
         canvas.onDirection = { [weak self] direction in
@@ -449,7 +453,8 @@ import NxlvKit
             if self.cancelRewindToOrigin() { return }
             if self.pendingTool != nil || self.canvas.directionPoint != nil {
                 self.pendingTool = nil; self.canvas.directionPoint = nil; self.refresh()
-            } else if self.usesSharedWindow { self.paused = true; self.onReturnToLibrary?() }
+            } else if self.canvas.menuRows == nil && !self.game.isComplete { self.presentPauseMenu() }
+            else if self.usesSharedWindow { self.paused = true; self.onReturnToLibrary?() }
             else { self.showGameMenu() }
         }
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
@@ -752,6 +757,21 @@ import NxlvKit
         print("PASS L3 optional 25× preference, canvas label and disable clamp")
     }
 
+    func testPauseLevelSkip() throws {
+        timer?.invalidate(); canvas.menuRows = nil; canvas.startCountdown.cancel()
+        audioSettings.modernControlsEnabled = false
+        let before = campaign.index, owner = arcadeProfileID, level = arcadeLevel
+        presentPauseMenu()
+        let page = GameScreen.shared.controllerPage(in: window!)!
+        try validatePauseSkipPage(page, owner: window!, name: "lemmings3", enabled: true)
+        let skip = DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }.first { $0.title.hasPrefix("Skip level") }!
+        skip.performClick(nil)
+        guard campaign.index == before + 1, ArcadeStore.shared.records.hasSkipped(level, profileID: owner),
+              ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0 else {
+            throw NSError(domain: "PauseSkip", code: 1)
+        }
+        GameScreen.shared.dismissAll()
+    }
     func testPauseKeyboard() throws {
         timer?.invalidate()
         canvas.startCountdown.cancel(); canvas.menuRows = nil; paused = false
@@ -1663,17 +1683,39 @@ import NxlvKit
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: audioSettings.modernControlsEnabled && learningResultActions != nil
+            skip: learningResultActions != nil
                 ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
             status: needsTribeSurvivors ? L10n.text("Need 50 survivors to complete this tribe.") : nil,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
+    private func presentPauseMenu() {
+        paused = true; accumulator = 0; canvas.capturePointer(active: false)
+        saveCheckpoint(immediately: true); updateUserMusicPause(); refresh()
+        let learning = learningResultActions
+        let level = arcadeLevel
+        let skip: PauseLevelSkip? = {
+            if let learning {
+                return PauseLevelSkip(level: level, profileID: arcadeProfileID, prepare: learning.prepareSkip,
+                    handlesHandover: true, advance: learning.skip)
+            }
+            return canSkipLevel ? PauseLevelSkip(level: level, profileID: arcadeProfileID,
+                advance: { [weak self] in self?.skipLevel() }) : nil
+        }()
+        let page = GamePauseMenu.page(title: arcadeLevel.title,
+            resume: { [weak self] in
+                guard let self else { return }
+                self.paused = false; self.accumulator = 0
+                self.updateUserMusicPause(); self.refresh()
+            }, retry: { [weak self] in self?.retryLevel() },
+            hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
+        GameScreen.shared.present(page, owner: window)
+    }
     /// Level skips apply to a failed campaign level, not playlists.
-    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        audioSettings.modernControlsEnabled && onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
+        onSequenceContinue == nil && recordsCampaignProgress && (!game.isComplete || game.saved == 0) && campaign.canSkipLevel
             && availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil
     }
     /// The result screen has already spent the skip. This only moves the campaign.

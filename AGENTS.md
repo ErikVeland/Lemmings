@@ -52,6 +52,46 @@ retry/continue actions, handovers, hints or saved-run navigation. Reuse shared
 controls and flows. Keep handovers paused until the player is ready. Record
 engine-specific limits and validation gaps instead of silently omitting support.
 
+# Cross-platform parity
+
+Applicable features must work on Mac, iPhone, iPad, Duo and Apple TV, including
+supported NeoLemmix content. Adapt input, layout and file transfer to each
+platform without silently dropping capabilities. Prefer shared feature logic
+and renderers. Check every affected engine and platform when adding or fixing
+a feature. Keep deliberate platform exceptions explicit, including the user's
+TV effects budget. Record source gaps separately from physical-device and
+service acceptance. Maintain `Documentation/PlatformFeatureParity.md` as the
+current source-backed register. Older release notes and historical port plans
+do not establish current parity.
+
+# Save, sync and resume trust
+
+Save, sync and resume are core features. Preserve the session ID, player roster,
+next turn, queue position, completion records and compatible checkpoint across
+saves and reopenings. Starting another route must not publish a journey deletion.
+Home must resolve saved queues for the selected session, including archived queues.
+Never report Synced while a surviving journey lacks the roster needed to restore it.
+Keep automated test saves outside production storage. During persistence work,
+verify reopen, offline/reconnect and cross-device import with isolated saves.
+Preserve recovery evidence before repairing user saves. Separate source validation
+from hosted-service verification and physical-device acceptance.
+
+# Release schedule
+
+Follow `Documentation/ReleaseSchedule.md`. The owner's priority order is:
+
+1. Ship the Mac release quickly. Skip tests unless the candidate changes an engine.
+2. Deliver iOS.
+3. Deliver tvOS.
+4. Deliver sideloading stores and installers from `Documentation/IOSDistribution.md`.
+
+Publish each platform when ready. Lower-priority delivery must not delay Mac.
+For a Mac candidate without engine changes, skip test suites and test-running
+release audits. Keep required build, signing, notarisation, package and feed
+verification. For engine changes, run affected engine checks under the release
+replay policy. Record skipped checks explicitly. This policy supersedes older
+routine-release test requirements.
+
 # Local test builds
 
 A request for a test build means a quick local build for manual testing.

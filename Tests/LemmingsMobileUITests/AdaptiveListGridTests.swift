@@ -22,7 +22,9 @@ struct AdaptiveListGridTests {
                 #expect(layout.action(at: CGPoint(x: entry.frame.midX, y: entry.frame.midY)) == (entry.action.enabled ? entry.action.id : nil))
                 for other in entries where entry.action.id != other.action.id { #expect(!entry.frame.intersects(other.frame)) }
             }
-            #expect(entries.last?.frame.width == layout.board.width - 40)
+            let lastRow = entries.filter { $0.frame.minY == entries.last?.frame.minY }
+            #expect(lastRow.first?.frame.minX == layout.board.minX + 20)
+            #expect(lastRow.last?.frame.maxX == layout.board.maxX - 20)
         }
         var steps = page
         steps.singleColumnRows = true

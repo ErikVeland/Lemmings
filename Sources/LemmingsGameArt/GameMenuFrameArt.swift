@@ -6,10 +6,21 @@ public enum GameMenuFrameArt {
     private static let moss = CGColor(srgbRed: 0.3244, green: 0.6678, blue: 0.1572, alpha: 1)
 
     /// The same stone edging and moss cap used by the level briefing.
-    public static func draw(in context: CGContext, board: CGRect, scale: CGFloat = 1) {
+    public static func draw(in context: CGContext, board: CGRect, scale: CGFloat = 1, shape: GameControlShape = .square) {
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
+        if shape == .rounded {
+            context.setStrokeColor(stone)
+            context.setLineWidth(2 * scale)
+            shape.stroke(board, inset: scale, in: context)
+            context.saveGState()
+            context.clip(to: CGRect(x: board.minX, y: board.minY, width: board.width, height: 5 * scale))
+            context.setStrokeColor(moss)
+            shape.stroke(board, inset: scale, in: context)
+            context.restoreGState()
+            return
+        }
         func fill(_ rect: CGRect, _ color: CGColor) {
             context.setFillColor(color)
             context.fill(rect)

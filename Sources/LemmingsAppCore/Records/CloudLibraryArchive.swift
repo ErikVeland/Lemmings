@@ -110,6 +110,20 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             let hex = SHA256.hash(data: Data((id + revision).utf8)).prefix(16).map { String(format: "%02x", $0) }.joined()
             return "\(hex.prefix(8))-\(hex.dropFirst(8).prefix(4))-\(hex.dropFirst(12).prefix(4))-\(hex.dropFirst(16).prefix(4))-\(hex.dropFirst(20))"
         }
+        /// One seat from offline revisions of the same roster. The result does not depend
+        /// on the order or the device, so every device makes the same revision.
+        public static func merging(_ branches: [Self]) throws -> Self {
+            let newest = branches.max { $0.stamp < $1.stamp }!
+            var progress = GameProgressPreferences()
+            for branch in branches.sorted(by: { $0.revision < $1.revision }) { try progress.merge(branch.progress) }
+            let revisions = branches.map(\.revision).sorted()
+            let hex = SHA256.hash(data: Data((newest.id + revisions.joined()).utf8)).prefix(16).map { String(format: "%02x", $0) }.joined()
+            let revision = "\(hex.prefix(8))-\(hex.dropFirst(8).prefix(4))-\(hex.dropFirst(12).prefix(4))-\(hex.dropFirst(16).prefix(4))-\(hex.dropFirst(20))"
+            return Self(id: newest.id, host: newest.host, players: newest.players, turn: newest.turn,
+                everyLevel: newest.everyLevel, progress: progress, revision: revision,
+                ancestors: branches.reduce(into: Set(revisions)) { $0.formUnion($1.ancestors) },
+                stamp: newest.stamp, savedAt: branches.map(\.savedAt).max()!)
+        }
         public func sameState(as other: Self) -> Bool {
             id == other.id && host == other.host && players == other.players && turn == other.turn
                 && everyLevel == other.everyLevel && progress == other.progress
@@ -120,6 +134,9 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
     public var deleted: Set<String>
     public var seats: [String: [Seat]]
     public var primary: String?
+    /// Retired session ID to the session that holds its progress. Older Mac builds
+    /// started the Golden Path in a new session with the same players.
+    public var mergedSeats: [String: String]?
     public init(players: [String: Player] = [:], deleted: Set<String> = [], seats: [String: [Seat]] = [:], primary: String? = nil) {
         version = 2; self.players = players; self.deleted = deleted; self.seats = seats; self.primary = primary
     }
@@ -144,9 +161,13 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             // The existing per-player archive validation also checks event and statistics ownership.
             try GameProgressArchive(owner: id, records: player.records, preferences: player.progress).validate(owner: id)
         }
+        let merged = mergedSeats ?? [:]
+        guard merged.count <= 200, merged.allSatisfy({ UUID(uuidString: $0.key) != nil && UUID(uuidString: $0.value) != nil
+            && $0.key != $0.value && merged[$0.value] == nil }) else { throw SequelDataError.invalid("Invalid shared campaign.") }
         for (id, branches) in seats {
             guard UUID(uuidString: id) != nil, !branches.isEmpty, branches.count <= 32,
                 Set(branches.map(\.revision)).count == branches.count else { throw SequelDataError.invalid("Invalid shared campaign.") }
+            guard mergedSeats?[id] == nil else { throw SequelDataError.invalid("Invalid shared campaign.") }
             for seat in branches {
                 guard seat.id == id, UUID(uuidString: seat.revision) != nil, seat.ancestors.count <= 10_000,
                     !seat.ancestors.contains(seat.revision), seat.ancestors.allSatisfy({ UUID(uuidString: $0) != nil }),
@@ -197,6 +218,15 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             let ancestors = branches.reduce(into: Set<String>()) { $0.formUnion($1.ancestors) }
             result.seats[id] = branches.filter { !ancestors.contains($0.revision) }.sorted { $0.revision < $1.revision }
         }
+        var merged = mergedSeats ?? [:]
+        for (id, target) in incoming.mergedSeats ?? [:] { merged[id] = min(merged[id] ?? target, target) }
+        // A chain of merges ends at the session that still exists.
+        for id in merged.keys {
+            var hops = 0
+            while let next = merged[merged[id]!], hops < merged.count { merged[id] = next; hops += 1 }
+        }
+        result.mergedSeats = merged.isEmpty ? nil : merged
+        result.seats = result.seats.filter { merged[$0.key] == nil }
         result.seats = result.seats.filter { $0.value.allSatisfy { seat in seat.players.allSatisfy { result.players[$0] != nil } } }
         try result.validate(); self = result
     }

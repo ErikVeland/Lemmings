@@ -63,7 +63,7 @@ public struct LeaderboardActionReplay: Codable, Sendable {
     }
     public func checked(initial: ActionReplayState) throws -> ActionReplayCursor {
         try validateStructure()
-        guard engineFingerprint == RunRecovery.bundledEngine, engine == initial.engine,
+        guard RunRecovery.isCompatibleEngine(engineFingerprint), engine == initial.engine,
               try initial.hash() == initialStateHash else { throw RunRecoveryError.differentGame }
         for command in commands where command.action == "bonusSkill" || command.action == "bonusTool" {
             guard initial.bonusSkillID(for: command) == conditions.bonusSkillID else { throw RunRecoveryError.invalid }

@@ -79,16 +79,12 @@ enum FanLevelLibrary {
     }
 
     @MainActor static var passed: Set<String> {
-      let defaults = UserDefaults.standard
-      var levels = Set(defaults.stringArray(forKey: ArcadeStore.shared.progressKey(passedKey)) ?? [])
       #if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
-      let learning = defaults.data(forKey: ArcadeStore.shared.progressKey("LearningJourneyProgress"))
-        .flatMap { try? JSONDecoder().decode(LearningJourneyProgress.self, from: $0) } ?? .init()
-      let credits = JourneySourceCompletion.progress(learning,
-        entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
-      if case let .fanLevels(wins) = credits.values["FanLevelsPassed"] { levels.formUnion(wins) }
+      return GameProgressPreferences.fanLevels(profileID: ArcadeStore.shared.records.activeProfileID,
+        sessionID: ArcadeStore.shared.hotSeatID)
+      #else
+      return Set(UserDefaults.standard.stringArray(forKey: ArcadeStore.shared.progressKey(passedKey)) ?? [])
       #endif
-      return levels
     }
 
     @MainActor static func record(pack: URL, label: String) {

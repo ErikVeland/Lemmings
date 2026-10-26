@@ -61,6 +61,9 @@ public protocol MobileGameLibrary: AnyObject {
     var displayName: String { get }
     var levels: [MobileLevelSummary] { get }
     func loadLevel(at index: Int) throws -> MobileLevelContent
+    func canSkipLevel(at index: Int) -> Bool
+    /// Saves campaign advancement and returns a rollback for a failed transition.
+    func prepareLevelSkip(at index: Int) throws -> () throws -> Void
     /// A key for the level that survives a pack gaining or losing other levels.
     func levelKey(at index: Int) -> String
     /// Identifies a saved run without constructing its simulation or artwork.
@@ -68,6 +71,8 @@ public protocol MobileGameLibrary: AnyObject {
 }
 
 public extension MobileGameLibrary {
+    func canSkipLevel(at index: Int) -> Bool { false }
+    func prepareLevelSkip(at index: Int) throws -> () throws -> Void { throw MobileSessionError.changedLevel }
     func checkpointLevelIdentifier(at index: Int) throws -> String? { nil }
 
     /**

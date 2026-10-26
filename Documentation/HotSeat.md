@@ -101,8 +101,10 @@ the attempt showed. The solution replay shows no Hot Seat ghosts.
 
 Mobile engine limits:
 
-- Classic, L2 and L3 draw ghosts. NeoLemmix sessions record no ghost turns and
-  show no ghosts on iOS or tvOS.
+- Classic, L2, L3 and supported NeoLemmix sessions draw ghosts. NeoLemmix uses
+  the shared action archive and native sprite tinting, including queued spawn
+  interval changes. Older NeoLemmix checkpoints with only a mid-level state
+  cannot reconstruct a complete turn and create no ghost recording.
 - L2 ghosts show the primary lemming sprite, as on Mac. Equipment,
   projectiles, countdowns and blast particles are omitted.
 - L3 ghosts use the live two-direction animation mapping.

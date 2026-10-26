@@ -86,7 +86,7 @@ extension MenuAudit {
                         context.clip(to: CGRect(x: 0, y: 0, width: safe.width, height: safe.height))
                         context.scaleBy(x: scale, y: scale); context.translateBy(x: 0, y: -scroll)
                         GameFrontEnd.draw(page, layout: layout, typography: typography,
-                            highlighted: position == "top" ? "resume" : "donate", in: context)
+                            highlighted: position == "top" ? "resume" : "donate", shape: .rounded, in: context)
                         context.restoreGState()
                         for region in regions {
                             context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame))

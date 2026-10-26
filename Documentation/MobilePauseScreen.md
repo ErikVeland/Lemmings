@@ -32,22 +32,34 @@ device checks.
 The pause menu shows the current level, attempt owner and frozen playfield.
 It groups rescue progress, population, time, controls and music in the shipped
 bitmap lettering and stone artwork. Resume remains the primary action at the
-bottom or right. The action shelf stays visible while the information scrolls.
+bottom-right. Resume stays visible while tools and information scroll.
 The opening fade respects Reduce Motion, Reduce Flashes and the system setting.
 Ready handovers retain their existing paused boundary.
 
-The iOS action shelf holds Hint, Restart level, Controls help, Settings,
-Library and Resume. Lemmings 2 adds its Fan / Skill mode toggle. Hint is the
-first action, so a hint is one tap from Pause. Library stays at bottom-left and
-Resume at bottom-right. The tvOS shelf holds Hint, Restart level, Game controls,
-Settings, Library and Resume. TV Game controls keeps the remote command list.
+The fixed header holds Back to library at the left and Main menu at the right.
+Do not repeat the return action in the footer. Level tools come before the
+preview and statistics: Hint, Restart level and eligible Skip level or Bonus
+skill actions. Skip level shows the attempt owner's balance, including a disabled
+zero. Lemmings 2 adds its Fan / Skill mode toggle. Replay, Inspect, and Help and
+settings form separate groups when present. Controls help retains the platform's
+input guide. Each group chooses columns from its available width and full labels.
+Every occupied row fills its width, including the final row.
 Restart level opens a confirmation with Cancel focused. Confirmation retires
 the old checkpoint and starts a fresh attempt with the current owner.
 Hot Seat waits at Ready. Replays omit Hint and Restart level.
-The TV Game controls overview lets the remote scroll all level and music details.
+Keyboard, remote and accessibility focus reveal tools and text above the fixed
+Resume shelf. Covered controls and gaps cannot activate tools beneath that shelf.
 Large lettering adapts in landscape to keep the action targets within the viewport.
 
 ## Rescue and run details
+
+Validation on 26 October 2026: nine hostless UIKit checks pass, including
+Classic/L2/L3 skip balances, refund on failed handover, fixed navigation,
+scrolling focus, browser rank pairs and Duo safe regions. The shared layout
+matrix passes 14 tests and renders 120 pause/replay states. Both Apple SDKs
+compile. Native hostless captures use fallback lettering; separate shared
+captures verify shipped bitmap typography. Physical touch, VoiceOver and Siri
+Remote remain device checks. See [platform evidence](PlatformFeatureParity.md).
 
 The overview shows saved and required counts, active lemmings, waiting lemmings,
 losses, further permitted losses, time left, elapsed simulation time, speed,
@@ -215,3 +227,33 @@ use a Classic scene fixture; sequel replay playback is not implemented on mobile
 The shared UI compiles against iOS and tvOS SDKs. UIKit regressions for camera-only
 input, paused/running/final frames and disabled move targets compile, but their
 execution and physical finger gestures remain unverified.
+
+
+## Skip and menu layout update, 25 October 2026
+
+Pause and failed results expose the same Skip level balance in Classic, Lemmings 2
+and Lemmings 3. Learning skips retain an unsolved lesson under Try later. A skip
+saves progression before leaving, charges the attempt owner once and passes a
+Hot Seat loss turn once. A failed transition refunds the skip and restores the
+prepared progression. L2 carries the whole starting population forward. L3 keeps
+its current population. Final campaign and tribe levels remain ineligible.
+
+Main menu occupies the top-right of the fixed navigation band. Results and
+recovery pages omit duplicate bottom Menu actions. Complete and
+partial button rows fill their width. This applies to pause, results, Settings,
+lists, recovery pages, Home footer actions and the level browser. The browser
+wraps its controls on narrow screens while retaining Back and Play at the bottom.
+
+Muted windowless checks pass 11 tests, including campaign persistence and rollback,
+full-width action rows, 44-point browser targets and top-right navigation. They
+produce 32 representative pause, result, settings and collection renders at four
+phone/tablet widths. Representative renders were inspected. Shared iOS and tvOS
+SDK compilation passes. Seven hostless UIKit tests cover live balances in all three
+engine layouts, both Hot Seat rules, one-time charges, handover refunds, result
+exit ownership, browser captions/targets, fixed navigation during scrolling and
+Main menu placement clear of book/tabletop hinges. Physical touch, folding and Siri Remote focus remain
+device checks.
+
+Final mobile validation uses a saved snapshot of the shared sources because
+NeoLemmix presentation interfaces changed during the first build. The snapshot
+and input hashes remain in `.build/ios-skip-menu-snapshot`.

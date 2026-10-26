@@ -28,6 +28,10 @@ extension MusicFileDeck {
     try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
     deck.play()
     deck.fadeTask?.cancel(); deck.fadeTask = nil; deck.sourceMixer.outputVolume = 1
+    let starts = deck.audioDiagnostics.starts
+    deck.play()
+    precondition(deck.audioDiagnostics.starts == starts && deck.sourceMixer.outputVolume == 1,
+      "Duplicate play restarted the queue or pulled live music into a fade")
     let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
     var introFrames = 0, loopFrames = 0, outroFrames = 0
     for _ in 0..<260 {
@@ -47,6 +51,9 @@ extension MusicFileDeck {
     precondition((40_000...46_000).contains(introFrames), "The intro repeated or went missing")
     precondition(loopFrames > 150_000 && outroFrames == 0, "Source loop repeated its fade/outro or stopped")
     precondition(deck.completedLoops >= 3, "Rendered loop completions did not replenish the queue")
+    deck.engine.stop()
+    deck.resumeOutput()
+    precondition(deck.isPlaying && deck.engine.isRunning, "Recording did not recover after engine reset")
     deck.stop(); deck.engine.disableManualRenderingMode()
     print("PASS offline recording signal with main actor held: intro once, continuing exact loop, no rendered outro/fade and measured trim routing")
   }
@@ -109,3 +116,55 @@ extension MusicFileDeck {
 
 try await MusicFileDeck.checkRecordedLoopSignal()
 try MusicFileDeck.checkShortLoopAndPeakProtection()
+
+
+private final class DecoderFault: @unchecked Sendable {
+  // Reads only occur on the decoder worker.
+  var reads = 0
+  private let lock = NSLock()
+  private var failures = 0
+  func read(_ file: AVAudioFile, _ buffer: AVAudioPCMBuffer, _ count: AVAudioFrameCount) throws {
+    reads += 1
+    if reads > 8 { throw CocoaError(.fileReadUnknown) }
+    try file.read(into: buffer, frameCount: count)
+  }
+  func complete(_ result: Result<Void, Error>) {
+    if case .failure = result { lock.lock(); failures += 1; lock.unlock() }
+  }
+  var failureCount: Int { lock.lock(); defer { lock.unlock() }; return failures }
+}
+
+@MainActor func checkDecoderFailure() throws {
+  let url = FileManager.default.temporaryDirectory.appendingPathComponent("refill-failure-\(UUID().uuidString).caf")
+  defer { try? FileManager.default.removeItem(at: url) }
+  let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+  do {
+    let file = try AVAudioFile(forWriting: url, settings: format.settings)
+    let input = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 44100)!
+    input.frameLength = 44100
+    for channel in 0..<2 { for frame in 0..<44100 { input.floatChannelData![channel][frame] = 0.1 } }
+    try file.write(from: input)
+  }
+  let engine = AVAudioEngine()
+  let node = AVAudioPlayerNode()
+  engine.attach(node)
+  engine.connect(node, to: engine.mainMixerNode, format: format)
+  try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
+  let fault = DecoderFault()
+  let stream = MusicPCMStream(file: try AVAudioFile(forReading: url), node: node, repeats: true, profile: nil,
+    read: { try fault.read($0, $1, $2) })
+  try engine.start()
+  try stream.start(offline: true) { fault.complete($0) }
+  node.play()
+  let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
+  for _ in 0..<24 {
+    let status = try engine.renderOffline(1024, to: output)
+    precondition(status == .success)
+    stream.drain()
+  }
+  precondition(fault.failureCount == 1 && stream.diagnostics.refillFailures == 1 && stream.diagnostics.lastError != nil,
+    "Decoder failure was swallowed, reported as a completed loop, or delivered more than once")
+  stream.stop(); node.stop(); engine.stop(); engine.disableManualRenderingMode()
+  print("PASS decoder refill error reports one failure and cancels stale refill callbacks")
+}
+try checkDecoderFailure()

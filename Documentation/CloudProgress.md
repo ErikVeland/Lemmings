@@ -1,6 +1,6 @@
 # Cloud saves
 
-Ultimate Lemmings syncs a private player library across Mac, iPhone and iPad.
+Ultimate Lemmings syncs a private player library across Mac, iPhone, iPad, Duo and Apple TV.
 The library includes each player's name, portrait, progress, fan-level completion
 identities, result records, scores, times, achievements and saved Hot Seat campaigns. Classic, Lemmings 2
 and Lemmings 3 use the same archive and merge coordinator.
@@ -30,6 +30,22 @@ Setup works offline and during play. Sync, provider selection and retries run in
 the background. Incoming progress waits for a safe menu; linking never changes
 the selected player, session, roster or turn. The tester button changes to a
 selected **Tester sync: On** state once the credentials are stored.
+
+Entering `test99` through the legacy password API also persists tester status.
+Existing shared tester credentials restore that status on the next provider pass.
+Every launch and foreground activation requests an immediate library sync.
+Mac quit flushes local saves and allows up to 20 seconds for a final sync.
+iPhone, iPad, Duo and Apple TV request system background time for the same final
+pass when the app enters the background. A final pass waits for any active sync,
+then captures again, with up to three passes for changes made during upload.
+These hooks use the whole-library coordinator for Classic, Lemmings 2,
+Lemmings 3, supported fan progress and saved Hot Seat campaigns.
+
+Network failures, force-quit and an expired system background allowance can
+prevent completion. Local progress remains saved and retries on the next load.
+Incoming progress still waits for a safe menu. Mid-level checkpoints remain
+local. Physical-device suspension and live cross-account sync need acceptance
+checks; headless coordinator tests do not prove service availability.
 
 The shared bitmap setup has Back and one tester button on Mac, iPhone, iPad and
 TV. Password fields, provider diagnostics, device codes, recovery files and manual

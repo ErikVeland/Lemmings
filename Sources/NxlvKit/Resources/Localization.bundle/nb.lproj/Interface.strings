@@ -1088,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Han som lager Lemming-stemmer i månelyset";
 "Help" = "Hjelp";
 "Help / extra actions" = "Hjelp / ekstra handlinger";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Hjelp oss med å finne brett som trenger arbeid";
 "High" = "Høy";
 "High rescue rate with efficient skill use." = "Høy redningsprosent med effektiv bruk av ferdigheter.";
@@ -1106,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "Hjem";
 "Home {0}/{1}" = "Hjem {0}/{1}";
 "Hopper" = "Spretter";
 "Host" = "Vert";
 "Hot Seat" = "Hot Seat";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Hot Seat-start";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Hot Seat…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Gi turen videre {1}. {2} Talltastene legger til eller fjerner spillere. N legger til en ny spiller. Velg et spill for å fortsette denne delte kampanjen. Ny Hot Seat starter fra begynnelsen.";
@@ -1154,6 +1155,7 @@
 "Increase speed" = "Øk farten";
 "Initials: {0}_" = "Initialer: {0}_";
 "Insights" = "Innsikt";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Se på verktøyene på brettet. Bestem hvem som trenger hvert verktøy, og klargjør én del av ruten om gangen.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1710,6 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Neste tilgjengelige lemming";
 "Next graphics" = "Neste grafikk";
+"Next lemming" = "Next lemming";
 "Next level" = "Neste brett";
 "Next level >" = "Neste brett >";
 "Next move" = "Neste trekk";
@@ -1953,6 +1956,7 @@
 "Pause action replay" = "Sett reprisen på pause";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Sett på pause og følg ruten fra inngangen til utgangen. Finn det første stedet en lemming ikke kan passere trygt.";
 "Pause and open controls" = "Sett på pause og åpne kontrollene";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Pausemeny";
 "Pause on interruption" = "Sett på pause ved avbrudd";
 "Pause on skill change" = "Sett på pause ved ferdighetsendring";
@@ -2058,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Forrige rekord {0}. Dette forsøket {1}.";
 "Previous eligible lemming" = "Forrige tilgjengelige lemming";
 "Previous hint" = "Forrige tips";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Forrige trekk";
 "Previous page" = "Forrige side";
 "Previous record: {0}. New record: {1}." = "Forrige rekord: {0}. Ny rekord: {1}.";
@@ -2084,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q IGJEN FOR Å AVSLUTTE  *  ESC FOR Å BLI";
 "Queued" = "Lagt i kø";
 "Quit Ultimate Lemmings" = "Avslutt Ultimate Lemmings";
-"Quit to main menu" = "Til hovedmenyen";
 "Quit?" = "Avslutte?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R PRØV IGJEN - REDD FLERE, BRUK FÆRRE";
@@ -2317,6 +2321,7 @@
 "Run paused" = "Forsøket er satt på pause";
 "Run recovery save failed: {0}" = "Kunne ikke lagre gjenoppretting av forsøket: {0}";
 "Run unavailable" = "Forsøket er utilgjengelig";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Løper";
 "Running." = "Kjører.";
 "S" = "S";
@@ -2348,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "FERDIGHETSENDRINGER KAN SETTE SPILLET PÅ PAUSE FOR PLANLEGGING";
 "SKILL MODE" = "FERDIGHETSMODUS";
 "SKILLS" = "FERDIGHETER";
-"SKIP LEVEL" = "HOPP OVER BRETT";
 "SKIPS {0}" = "HOPPER OVER {0}";
 "SLIDE" = "GLI";
 "SLIDER" = "GLIDER";
@@ -2405,7 +2409,6 @@
 "Save playlist" = "Lagre spilleliste";
 "Save run and return to library" = "Lagre forsøket og gå tilbake til biblioteket";
 "Save this replay at {0}× speed, with music and sound effects." = "Lagre denne reprisen med {0}× hastighet, musikk og lydeffekter.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Lagre på valgt plass";
 "Save {0}  ({1}%)" = "Redd {0}  ({1}%)";
 "Save {0} more above requirements." = "Redd {0} flere enn kravet.";
@@ -2459,7 +2462,6 @@
 "Sequel artwork" = "Grafikk fra oppfølgerne";
 "Sequel artwork requires binary transparency." = "Grafikk fra oppfølgerne krever binær gjennomsiktighet.";
 "Sequel reconstruction exceeds the image limit." = "Rekonstruksjonen av oppfølgergrafikken overskrider bildegrensen.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "Tjenesten ser IP-adressen";
 "Session not changed" = "Økten ble ikke endret";
@@ -2537,7 +2539,9 @@
 "Skills used: {0}" = "Ferdigheter brukt: {0}";
 "Skip" = "Hopp over";
 "Skip as {0} ({1})" = "Hopp over som {0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Hopp over brett ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Hopp";
 "Slider" = "Glider";
 "Slot {0}" = "Spor {0}";

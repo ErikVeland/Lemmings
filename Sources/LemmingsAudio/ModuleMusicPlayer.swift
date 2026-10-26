@@ -23,7 +23,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private let limiter = MusicOutputSafety.limiter()
   private var sourceNode: AVAudioPlayerNode?
   private let rewindAudio = MusicRewindBuffer()
-  private var rewindNode: AVAudioSourceNode?
+  private var rewindNode: AVAudioPlayerNode?
   @MainActor private var rewindTask: Task<Void, Never>?
   private var rewindLeft = [Float](repeating: 0, count: 1024)
   private var rewindRight = [Float](repeating: 0, count: 1024)
@@ -32,6 +32,9 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var bufferGeneration = 0
   private let bufferClockLock = NSLock()
   private var scheduledFrames: Int64 = 0
+  private var bufferStatistics = AudioBufferStatistics()
+  public var audioDiagnostics: AudioBufferStatistics { synthesisQueue.sync { bufferStatistics } }
+  public var rewindDiagnostics: AudioBufferStatistics { rewindAudio.audioDiagnostics }
   private let bufferedFrameCount = 1024
   private let bufferCount = 8
   private final class PCMBuffer: @unchecked Sendable {
@@ -152,28 +155,37 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     outputSuspended = false
     lock.unlock()
     isRunning = true
-    synthesisQueue.async { [weak self] in
-      guard let self else { return }
-      self.bufferGeneration += 1
-      self.bufferClockLock.lock(); self.scheduledFrames = 0; self.bufferClockLock.unlock()
-      let generation = self.bufferGeneration
-      for _ in 0..<self.bufferCount {
-        let buffer = PCMBuffer(format: format, frames: self.bufferedFrameCount)
-        self.queueBuffer(buffer, node: node, generation: generation)
-      }
-      node.play()
+    synthesisQueue.async { [weak self] in self?.prime(node, format: format) }
+  }
+
+  private func prime(_ node: AVAudioPlayerNode, format: AVAudioFormat) {
+    bufferGeneration += 1
+    bufferStatistics.starts += 1
+    node.stop()
+    bufferClockLock.lock(); scheduledFrames = 0; bufferClockLock.unlock()
+    for _ in 0..<bufferCount {
+      let buffer = PCMBuffer(format: format, frames: bufferedFrameCount)
+      queueBuffer(buffer, node: node, generation: bufferGeneration)
     }
+    node.play()
   }
 
   /// Buffer completion runs outside the audio render callback. Refill on the worker.
   private func queueBuffer(_ buffer: PCMBuffer, node: AVAudioPlayerNode, generation: Int) {
     guard generation == bufferGeneration else { return }
+    let began = ProcessInfo.processInfo.systemUptime
     fill(UnsafeMutableAudioBufferListPointer(buffer.value.mutableAudioBufferList), frames: bufferedFrameCount)
+    bufferStatistics.recordRefill(seconds: ProcessInfo.processInfo.systemUptime - began,
+      reserveSeconds: Double(bufferedFrameCount * (bufferCount - 1)) / sampleRate)
     bufferClockLock.lock(); scheduledFrames += Int64(bufferedFrameCount); bufferClockLock.unlock()
     node.scheduleBuffer(buffer.value, completionCallbackType: .dataConsumed) { [weak self] _ in
       guard let self else { return }
+      let submitted = DispatchTime.now().uptimeNanoseconds
       self.synthesisQueue.async { [weak self] in
-        self?.queueBuffer(buffer, node: node, generation: generation)
+        guard let self, self.bufferGeneration == generation else { return }
+        self.bufferStatistics.recordQueueWait(since: submitted,
+          reserveSeconds: Double(self.bufferedFrameCount * (self.bufferCount - 1)) / self.sampleRate)
+        self.queueBuffer(buffer, node: node, generation: generation)
       }
     }
   }
@@ -291,6 +303,12 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     lock.unlock()
     reverb.wetDryMix = 0
     if !engine.isRunning { try engine.start() }
+    if let node = sourceNode, !node.isPlaying {
+      synthesisQueue.sync {
+        // A route/configuration reset can discard the player's schedule.
+        if !node.isPlaying { prime(node, format: node.outputFormat(forBus: 0)) }
+      }
+    }
   }
 
   private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
@@ -578,6 +596,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     spatialMixer.outputVolume = 0
     do { if !engine.isRunning { try engine.start() } }
     catch { rewindAudio.cancel(); spatialMixer.outputVolume = muted ? 0 : 1; return }
+    rewindAudio.startOutput()
     rewindTask?.cancel()
     rewindTask = Task { @MainActor [weak self] in
       do { try await Task.sleep(nanoseconds: UInt64(VinylBackspin.settleSeconds * 1_000_000_000)) } catch { return }

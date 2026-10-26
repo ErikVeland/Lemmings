@@ -133,6 +133,16 @@ import NxlvKit
         return savedRuns.first { $0.run.id == id }
     }
 
+    /// Home follows the selected owner even when another session owns the active slot.
+    public func resumableRun(hotSeatID: String?) -> SavedRun? {
+        if let run = document.activeRun, document.activeRunHotSeatID == hotSeatID {
+            return resumableRun(id: run.id)
+        }
+        return resumableLearningJourney(hotSeatID: hotSeatID)
+            ?? savedRuns.first { $0.hotSeatID == hotSeatID
+                && $0.run.source != .playlist(LearningJourney.playlistID) }
+    }
+
     /// A map belongs only to the selected session; saved-session browsing is explicit.
     public func resumableLearningJourney(hotSeatID: String?) -> SavedRun? {
         func isJourney(_ run: LevelSequenceRun) -> Bool {
@@ -140,7 +150,7 @@ import NxlvKit
         }
         if let snapshot = document.journeySessions?[hotSeatID ?? "solo"], snapshot.run == nil { return nil }
         let active = document.activeRun.flatMap { isJourney($0) ? resumableRun(id: $0.id) : nil }
-        if document.activeRun != nil, document.activeRunHotSeatID == hotSeatID { return active }
+        if let active, active.hotSeatID == hotSeatID { return active }
         let saved = savedRuns.filter { isJourney($0.run) }
         return saved.first { $0.hotSeatID == hotSeatID }
     }
@@ -187,9 +197,9 @@ import NxlvKit
         for scope in scopes {
             let sessionID = scope == "solo" ? nil : scope
             let selected: SavedRun?
-            if let active = document.activeRun, document.activeRunHotSeatID == sessionID {
-                selected = active.source == .playlist(LearningJourney.playlistID)
-                    ? SavedRun(run: active, hotSeatID: sessionID, l2Progress: document.activeRunL2Progress) : nil
+            if let active = document.activeRun, document.activeRunHotSeatID == sessionID,
+               active.source == .playlist(LearningJourney.playlistID) {
+                selected = SavedRun(run: active, hotSeatID: sessionID, l2Progress: document.activeRunL2Progress)
             } else if let snapshot = previous[scope], snapshot.run == nil {
                 selected = nil
             } else {
@@ -223,6 +233,14 @@ import NxlvKit
     public var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
 
     /// Saves an existing mobile collection as one transaction. Ownership stays with the file's profile ID.
+    public func setL2Progress(_ data: Data, key: String, runID: UUID) throws {
+        guard document.activeRun?.id == runID, data.count <= 1_000_000 else { throw Failure.invalidDocument }
+        _ = try JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data)
+        let previous = document
+        document.activeRunL2Progress = activeRunL2Progress.merging([key: data]) { _, new in new }
+        do { try save() } catch { document = previous; throw error }
+    }
+
     public func importMobileCollections(playlists: [LevelPlaylist], favourites: [LevelPlaylistEntry],
                                         recents: [LevelPlaylistEntry], run: LevelSequenceRun?, hotSeatID: String? = nil) throws {
         let previous = document
@@ -534,6 +552,12 @@ import NxlvKit
             throw Failure.missingPlaylist
         }
         let previous = document
+        if run == nil, document.activeRun?.source == .playlist(LearningJourney.playlistID) {
+            // Explicit completion must not revive an older archived journey.
+            let scope = document.activeRunHotSeatID ?? "solo"
+            if document.journeySessions == nil { document.journeySessions = [:] }
+            document.journeySessions?[scope] = .init(run: nil)
+        }
         if run?.id != document.activeRun?.id {
             document.activeRunHotSeatID = nil
             document.activeRunL2Progress = nil

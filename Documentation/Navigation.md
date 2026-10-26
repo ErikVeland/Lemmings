@@ -7,6 +7,14 @@ changes its owner or passes a Hot Seat turn.
 
 ## Existing routes
 
+Menu headers place the return action at the top-left and Main menu at the
+top-right of the safe viewport. Keep these positions through scrolling and
+layout changes. Remove the matching body return when the header supplies it.
+The primary forward action stays at the bottom-right. Group related tools in
+the body, with complete rows that divide their width among the actual buttons.
+Pause and replay share this structure. Mac solution replay groups Replay,
+Speed and Camera tools above its fixed Play/Pause action.
+
 | Player task | Route and return behaviour |
 | --- | --- |
 | Start or resume | Home keeps the saved run and current player visible. Start/Ready remains the deliberate forward action. Resume restores the saved attempt before play. |
@@ -15,13 +23,14 @@ changes its owner or passes a Hot Seat turn.
 | Find saved levels | Home → Collections → Favourites, Recently played or Playlists. The Home caption matches Collections; Playlists names only the playlist list. |
 | Play a playlist or short game | Existing collection/setup pages lead to the existing level/Ready flow. Retry and Next retain the run's ownership and progression rules. No additional launcher is introduced. |
 | Follow the Journey | Home → Journey map → Continue, Resume, Choose level or Revisit. Progression playlists retain the Journey/Collections caller. Technique selection returns to its progression page. |
+| Pause or skip | Mac Menu/Escape and mobile gameplay Pause open their pause pages. Resume continues the same attempt. Eligible campaign and Learning levels show Skip with the owner’s balance, disabled at zero. Q and Back to library save the attempt and restore browsing. Failed results keep the same Skip action. |
 | Get hints | Mac: the labelled Hints control opens the current level's hints directly. It replaces the graphics-cycle tile; graphics remains in Settings and on F2. Mobile/TV: Pause → Hint. Hint Back restores the caller; moving between hint stages does not replace it. Reading hints after a failed Journey attempt retains the result and does not start a retry. |
 | Read controls | The existing controls guide stays underneath nested Mac hints. Back returns to the guide, then to paused gameplay. Mobile help retains the caller's page, actions, focus and scroll position. |
 | Study a solution | Existing hint stages and spoiler confirmation remain. Cancel retains the hint. Game/Solution switches retain the live attempt and the replay's study position. Returning to Game stays paused. Verified full solutions remain subject to engine/content availability. |
 | Watch a replay | Results → Replay, or Progress → Records / Replay → level → Replay on mobile. Mac records retain their existing replay actions and level navigation. Playback is read-only; closing it returns to its source. Movie export cancellation and completion retain the exact result page. Navigation away cancels stale export presentation. |
 | Inspect results or awards | Retry/Next remains the forward action. Back from details, achievements and rewards returns through the caller. The global Back button uses that same history. Solo and Hot Seat result Back return to the browser; the duplicate result Menu action is removed. Mobile award details retain the source list's scroll position and focus. |
 | Change settings | Settings retains the game/library caller. Horizontal mobile/TV layouts use fixed tabs above the content and fixed Back/Main menu controls below it. Tab changes replace the current group without adding Back steps. Portrait layouts retain the category index. Nested soundtrack/configuration pages return to their actual parent. Updating an option does not reset the scrolling group. Replays can use their presenting library's settings. |
-| Manage players and Hot Seat | Players owns profiles and shared-session setup. Cancel preserves the existing attempt/session. Ready remains paused. Temporary L2 fan and L3 direction selection are cancelled before Escape leaves gameplay. |
+| Manage players and Hot Seat | Players owns profiles and shared-session setup. Cancel preserves the existing attempt/session. Ready remains paused. Temporary L2 fan and L3 direction selection are cancelled before Escape opens the pause page. |
 | Recover from a failure | Existing save/import/replay recovery pages retain Retry and a safe Back/Cancel. Leaving an active attempt checks its save and keeps the attempt open if saving fails. Failed or cancelled loading must not replace the screen the player returned to. |
 | Read About, version history or welcome pages | Existing bounded reading pages and fixed navigation remain. About/version selection and help retain their caller. Welcome's Continue stays explicit. |
 | Use cloud, privacy and optional services | Cloud saves, sync, privacy and Play Insights keep their existing owners and return paths. External authentication, file pickers and sharing use platform presentation. No extra destination is added. |
@@ -72,3 +81,12 @@ external service or hardware input combination has passed a novice playthrough.
 L2/L3 hints currently offer practice guidance; verified solution availability
 must not be implied where no verified replay exists. Sequel short games remain
 unavailable on mobile/TV.
+
+The pause/skip flow supersedes the earlier direct Menu/Escape return described
+in the 24 October validation record. Q retains that direct return.
+
+
+On iOS/tvOS, Main menu is fixed at the safe menu viewport’s top-right. Optional
+header actions fill the remaining space. Every body and footer action row fills
+its width, including partial rows. The level carousel wraps its action shelf
+when targets would become too narrow.

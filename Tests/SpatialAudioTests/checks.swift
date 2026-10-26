@@ -1,4 +1,5 @@
 extension SoundEffectPlayer {
+  func bufferedSourceForDirectChecks() { bufferedSource?.stop(); bufferedSource = nil }
   func prepareOfflineForCheck() throws {
     try engine.enableManualRenderingMode(.offline,
       format: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!, maximumFrameCount: 512)
@@ -17,6 +18,7 @@ extension SoundEffectPlayer {
       var l = 0.0, r = 0.0
       for step in 0..<12 {
         let status = try engine.renderOffline(512, to: buffer)
+        bufferedSource?.drain()
         precondition(status == .success)
         if step < 4 { continue }
         for frame in 0..<Int(buffer.frameLength) {
@@ -51,6 +53,7 @@ extension SoundEffectPlayer {
     var left = 0.0, right = 0.0
     for _ in 0..<12 {
       let result = try engine.renderOffline(512, to: buffer)
+        bufferedSource?.drain()
       precondition(result == .success)
       for i in 0..<Int(buffer.frameLength) {
         let l = Double(buffer.floatChannelData![0][i])
@@ -75,14 +78,18 @@ extension SoundEffectPlayer {
     let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
     func energy() throws -> Double {
       let result = try engine.renderOffline(512, to: buffer)
+        bufferedSource?.drain()
       precondition(result == .success)
       return (0..<Int(buffer.frameLength)).reduce(0) { total, index in
         total + abs(Double(buffer.floatChannelData![0][index]))
       }
     }
-    let stale = try energy()
+    var stale = 0.0
+    for _ in 0..<6 { stale += try energy() }
     play(.builderWarning)
-    let fresh = try energy()
+    var fresh = 0.0
+    // The new cue must arrive within 70 ms, including the bounded PCM reserve.
+    for _ in 0..<6 { fresh += try energy() }
     stop()
     engine.disableManualRenderingMode()
     return (stale, fresh)
@@ -98,6 +105,7 @@ let backlog = try player.pauseBacklogForCheck()
 precondition(backlog.0 == 0 && backlog.1 > 0)
 try player.prepareOfflineForCheck()
 try player.start()
+player.bufferedSourceForDirectChecks()
 player.setMuted(true)
 player.play(.builderWarning)
 player.suspendOutput()

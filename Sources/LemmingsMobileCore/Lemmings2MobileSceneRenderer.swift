@@ -5,8 +5,11 @@ import NxlvKit
  * Composites native L2 terrain, object and lemming pixels for the mobile view.
  */
 public struct Lemmings2MobileSceneRenderer: Sendable {
+    private let macTerrain = MobileSequelArtworkCache(capacity: 1)
+    private static let macFrames = MobileSequelArtworkCache()
     private let terrainCache = MobileIndexedTerrainCache()
     private let ghostCache = MobileGhostSpriteCache()
+    private let spriteCache = MobileSpriteFrameCache()
     private let objects: Lemmings2Objects
     private let animations: [String: [Lemmings2SpriteFrame]]
     private let walker: Lemmings2Walker?
@@ -38,7 +41,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
      */
     public func render(_ runtime: Lemmings2Runtime,
                        highlight: MobileTargetSelection? = nil,
-                       ghosts: [MobileReplayGhost<Lemmings2Runtime>] = []) throws -> MobilePixelFrame {
+                       ghosts: [MobileReplayGhost<Lemmings2Runtime>] = [], macintosh: Bool = false) throws -> MobilePixelFrame {
         let width = runtime.configuration.width
         let height = runtime.configuration.height
         guard width > 0, height > 0, width <= Int.max / height,
@@ -48,6 +51,10 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         }
 
         var rgba = terrainCache.frame(pixels: runtime.pixels, palette: runtime.configuration.palette)
+        if macintosh {
+            rgba = [UInt8](try macTerrain.frame(width: width, height: height, rgba: rgba,
+                palette: runtime.configuration.palette, category: .lemmings2Terrain(tribe: runtime.configuration.tribe)).rgba)
+        }
         for part in objects.parts where !part.frames.isEmpty {
             let machine = runtime.machines.first(where: { $0.id == part.objectIndex })
             let movement = machine?.displacement ?? 0
@@ -56,7 +63,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                     : part.component.graphicsFlags & 0x10 != 0 ? runtime.tick / 2 : 0)
             let frame = part.frames[(frameIndex % part.frames.count + part.frames.count) % part.frames.count]
             Self.composite(frame, palette: runtime.configuration.palette,
-                           atX: part.x + movement, y: part.y, width: width, height: height, into: &rgba)
+                           atX: part.x + movement, y: part.y, width: width, height: height, category: part.type == 6 ? .liquid : .mechanical, into: &rgba)
         }
 
         if let flash = animations["EXPLOSION"]?.first {
@@ -87,6 +94,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
 
         drawGhosts(ghosts, palette: runtime.configuration.palette, width: width, height: height, into: &rgba)
 
+        var crowdShadow = MobileCrowdShadow()
         for lemming in runtime.lemmings where lemming.active && lemming.state != .trapped {
             if lemming.state == .exploding, lemming.age >= 17,
                let frames = explosion?.frames, frames.indices.contains(lemming.age - 17) {
@@ -100,9 +108,11 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             if lemming.state == .walking, let walker {
                 let phase = Lemmings2Walker.phase(x: lemming.x, direction: lemming.direction)
                 let frame = walker.frames[phase]
+                Self.castShadow(frame, atX: lemming.x - 2 + frame.x, y: lemming.y - 10 + frame.y,
+                    width: width, height: height, crowd: &crowdShadow, into: &rgba)
                 Self.composite(frame, palette: runtime.configuration.palette,
                                atX: lemming.x - 2 + frame.x, y: lemming.y - 10 + frame.y,
-                               width: width, height: height, into: &rgba)
+                               width: width, height: height, category: .lemmings2Walker, into: &rgba)
                 if let ticks = lemming.bombTicks,
                    let numbers = animations["COUNTDOWN"], numbers.indices.contains(ticks >> 4) {
                     let number = numbers[ticks >> 4]
@@ -120,6 +130,9 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             guard let pose = sprite(for: lemming, tribe: runtime.configuration.tribe),
                   let frames = animations[pose.name], !frames.isEmpty else { continue }
             let frame = frames[pose.phase % frames.count]
+            Self.castShadow(frame, atX: lemming.x + pose.offsetX + frame.x,
+                y: lemming.y + pose.offsetY + frame.y, width: width, height: height,
+                mirrored: pose.mirrored, crowd: &crowdShadow, into: &rgba)
             Self.composite(frame, palette: runtime.configuration.palette,
                            atX: lemming.x + pose.offsetX + frame.x,
                            y: lemming.y + pose.offsetY + frame.y,
@@ -149,7 +162,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                 Self.drawSelection(aroundX: lemming.x, y: lemming.y, width: width, height: height, into: &rgba)
             }
         }
-        return try MobilePixelFrame(width: width, height: height, rgba: Data(rgba))
+        return try MobilePixelFrame(width: width * (macintosh ? 2 : 1), height: height * (macintosh ? 2 : 1), rgba: Data(rgba))
     }
 
     private func drawEquipment(for lemming: Lemmings2Runtime.Lemming,
@@ -189,6 +202,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
     /// Ghosts show the primary lemming sprite only, as on Mac. Equipment and particles stay live-only.
     private func drawGhosts(_ ghosts: [MobileReplayGhost<Lemmings2Runtime>], palette: [UInt8],
                             width: Int, height: Int, into rgba: inout [UInt8]) {
+        let scale = rgba.count == width * height * 16 ? 2 : 1
         for ghost in ghosts {
             for lemming in ghost.state.lemmings where lemming.active && lemming.state != .trapped
                 && !(lemming.state == .exploding && lemming.age >= 17) {
@@ -206,13 +220,17 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                     x = lemming.x + pose.offsetX + frame.x; y = lemming.y + pose.offsetY + frame.y
                     mirrored = pose.mirrored; key = "\(pose.name)-\(index)-\(mirrored)"
                 }
-                guard let pixels = ghostCache.ghost(key: key, colour: ghost.colour, sprite: {
+                guard let pixels = ghostCache.ghost(key: "\(scale)/" + key, colour: ghost.colour, sprite: {
                     var sprite = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
                     Self.composite(frame, palette: palette, atX: 0, y: 0, width: frame.width, height: frame.height,
                                    mirrored: mirrored, into: &sprite)
+                    if scale == 2, let art = try? Self.macFrames.frame(width: frame.width, height: frame.height,
+                        rgba: sprite, palette: palette, category: key.hasPrefix("walker") ? .lemmings2Walker : .sprite) {
+                        return ([UInt8](art.rgba), art.width, art.height)
+                    }
                     return (sprite, frame.width, frame.height)
                 }) else { continue }
-                MobileGhostSpriteCache.blend(pixels, atX: x, y: y, into: &rgba, width: width, height: height)
+                MobileGhostSpriteCache.blend(pixels, atX: x * scale, y: y * scale, into: &rgba, width: width * scale, height: height * scale)
             }
         }
     }
@@ -222,7 +240,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                             levelFingerprint: String,
                             soundBank: Lemmings2SoundBank? = nil,
                             onCompletion: ((Lemmings2Runtime) -> Void)? = nil) -> Lemmings2MobileSession {
-        Lemmings2MobileSession(runtime: runtime, engineFingerprint: engineFingerprint,
+        let session = Lemmings2MobileSession(runtime: runtime, engineFingerprint: engineFingerprint,
                               levelIdentifier: levelIdentifier, levelIndex: levelIndex,
                               levelFingerprint: levelFingerprint,
                               renderer: { [self] runtime, highlight in
@@ -230,6 +248,38 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         }, ghostRenderer: { [self] runtime, highlight, ghosts in
             try render(runtime, highlight: highlight, ghosts: ghosts)
         }, soundBank: soundBank, onCompletion: onCompletion)
+        session.spriteProvider = spriteHighlight
+        session.artworkRenderer = { [self] runtime, highlight, ghosts, mac in
+            try render(runtime, highlight: highlight, ghosts: ghosts, macintosh: mac)
+        }
+        return session
+    }
+
+    public func spriteHighlight(_ runtime: Lemmings2Runtime, actor: Int) -> MobileSpriteHighlight? {
+        guard let lemming = runtime.lemmings.first(where: { $0.id == actor && $0.active }),
+              lemming.state != .trapped, lemming.state != .exploding else { return nil }
+        let frame: Lemmings2SpriteFrame, x: Int, y: Int, mirrored: Bool, key: String
+        if lemming.state == .walking, let walker {
+            let phase = Lemmings2Walker.phase(x: lemming.x, direction: lemming.direction)
+            frame = walker.frames[phase]
+            x = lemming.x - 2 + frame.x; y = lemming.y - 10 + frame.y
+            mirrored = false; key = "walker-\(phase)"
+        } else {
+            guard let pose = sprite(for: lemming, tribe: runtime.configuration.tribe),
+                  let frames = animations[pose.name], !frames.isEmpty else { return nil }
+            let index = pose.phase % frames.count
+            frame = frames[index]
+            x = lemming.x + pose.offsetX + frame.x; y = lemming.y + pose.offsetY + frame.y
+            mirrored = pose.mirrored; key = "\(pose.name)-\(index)-\(mirrored)"
+        }
+        guard let pixels = spriteCache.frame(key: key, make: {
+            var rgba = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
+            Self.composite(frame, palette: runtime.configuration.palette, atX: 0, y: 0,
+                width: frame.width, height: frame.height, mirrored: mirrored, into: &rgba)
+            return try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: Data(rgba))
+        }) else { return nil }
+        return .init(frame: pixels, rect: .init(x: Double(x), y: Double(y),
+            width: Double(frame.width), height: Double(frame.height)), cacheKey: "l2-\(key)", time: nil)
     }
 
     private struct Pose {
@@ -251,7 +301,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             name = "LM5C"; phase = lemming.state == .walking ? 6 + lemming.age % 8 : lemming.pose
             offsetX = -9; offsetY = -10; directional = false
         case .falling:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         case .floating:
             name = "LM16"; phase = lemming.age % 16; offsetX = -7; offsetY = -16; directional = true
         case .climbing:
@@ -396,7 +446,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         case .stomping:
             name = "LM1D"; phase = lemming.age % 8; offsetX = -7; offsetY = -9; directional = false
         case .terrainRising:
-            name = "LM40"; phase = lemming.age % 4; offsetX = -8; offsetY = -10; directional = true
+            name = "LM40"; phase = lemming.age % 4; offsetX = -3; offsetY = -10; directional = true
         default:
             name = "LM5C"; phase = 6 + lemming.age % 8; offsetX = -9; offsetY = -10; directional = false
         }
@@ -423,12 +473,34 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         return result
     }
 
+    private static func castShadow(_ frame: Lemmings2SpriteFrame, atX x: Int, y: Int,
+                                   width: Int, height: Int, mirrored: Bool = false,
+                                   crowd: inout MobileCrowdShadow, into rgba: inout [UInt8]) {
+        guard frame.opaque.count == frame.width * frame.height else { return }
+        let scale = rgba.count == width * height * 16 ? 2 : 1
+        rgba.withUnsafeMutableBytes { pixels in
+            crowd.cast(spriteWidth: frame.width * scale, spriteHeight: frame.height * scale, x: x * scale, y: y * scale,
+                width: width * scale, height: height * scale, pixels: pixels, opaque: { sx, sy in
+                    let sx = sx / scale, sy = sy / scale
+                    return frame.opaque[sy * frame.width + (mirrored ? frame.width - sx - 1 : sx)]
+                })
+        }
+    }
+
     static func composite(_ frame: Lemmings2SpriteFrame, palette: [UInt8],
                                   atX x: Int, y: Int, width: Int, height: Int,
-                                  mirrored: Bool = false, into rgba: inout [UInt8]) {
+                                  mirrored: Bool = false, category: SequelMacCategory = .sprite, into rgba: inout [UInt8]) {
         guard frame.width > 0, frame.height > 0,
               frame.pixels.count == frame.width * frame.height,
               frame.opaque.count == frame.pixels.count else { return }
+        if rgba.count == width * height * 16 {
+            var pixels = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
+            composite(frame, palette: palette, atX: 0, y: 0, width: frame.width, height: frame.height, into: &pixels)
+            if let art = try? macFrames.frame(width: frame.width, height: frame.height, rgba: pixels, palette: palette, category: category) {
+                MobileSequelArtworkCache.blend(art, x: x * 2, y: y * 2, width: width * 2, height: height * 2, mirrored: mirrored, into: &rgba)
+            }
+            return
+        }
         for sy in 0..<frame.height {
             let dy = y + sy
             guard (0..<height).contains(dy) else { continue }
@@ -451,11 +523,12 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                              width: Int, height: Int, into rgba: inout [UInt8]) {
         guard (0..<width).contains(x), (0..<height).contains(y), (0..<128).contains(colour) else { return }
         let source = colour * 4
-        let destination = (y * width + x) * 4
-        rgba[destination] = palette[source]
-        rgba[destination + 1] = palette[source + 1]
-        rgba[destination + 2] = palette[source + 2]
-        rgba[destination + 3] = 255
+        let scale = rgba.count == width * height * 16 ? 2 : 1
+        for dy in 0..<scale { for dx in 0..<scale {
+            let destination = ((y * scale + dy) * width * scale + x * scale + dx) * 4
+            rgba[destination] = palette[source]; rgba[destination + 1] = palette[source + 1]
+            rgba[destination + 2] = palette[source + 2]; rgba[destination + 3] = 255
+        } }
     }
 
     private static func drawSelection(aroundX x: Int, y: Int, width: Int, height: Int,
@@ -463,8 +536,11 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         let colour: (UInt8, UInt8, UInt8) = (255, 255, 0)
         for (px, py) in [(x - 8, y - 12), (x + 7, y - 12), (x - 8, y + 1), (x + 7, y + 1)] {
             guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-            let offset = (py * width + px) * 4
-            rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            let scale = rgba.count == width * height * 16 ? 2 : 1
+            for dy in 0..<scale { for dx in 0..<scale {
+                let offset = ((py * scale + dy) * width * scale + px * scale + dx) * 4
+                rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
+            } }
         }
     }
 }

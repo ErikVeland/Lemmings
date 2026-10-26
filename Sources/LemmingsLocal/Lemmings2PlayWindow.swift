@@ -129,7 +129,8 @@ import NxlvKit
             levelFingerprint: fingerprint, rulesetVersion: rules, physicsMode: rules,
             population: c.total, rescueRequirement: 1, startingSkills: skills, timeLimitSeconds: Double(c.timeLimit),
             modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
-                        "firstReleaseTick": String(c.firstReleaseTick), "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
+                        "firstReleaseTick": String(c.firstReleaseTick),
+                        "practiceSkills": c.isPractice ? c.skills.map { String($0.rawValue) }.joined(separator: ",") : "", "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
         return ArcadeLevel(id: "l2:" + level.fingerprint, title: level.title,
             game: L10n.text("Lemmings 2 - \(Lemmings2Campaign.tribeNames[level.style])"), rules: rules,
             total: c.total, required: 1, conditions: conditions)
@@ -423,6 +424,7 @@ import NxlvKit
             guard let self else { return }
             if self.cancelRewindToOrigin() { return }
             if self.fanSelected { self.fanSelected = false; self.releasePointerInput(); self.refreshGame() }
+            else if self.screen == .playing { self.presentPauseMenu() }
             else if self.usesSharedWindow { self.paused = true; self.releasePointerInput(); self.onReturnToLibrary?() }
             else { self.releasePointerInput(); self.key("\u{1b}") }
         }
@@ -738,6 +740,21 @@ import NxlvKit
         print("PASS L2 optional 25× preference, canvas label and disable clamp")
     }
 
+    func testPauseLevelSkip() throws {
+        timer?.invalidate(); prepareBriefing(); startLevel(); canvas.startCountdown.cancel()
+        audioSettings.modernControlsEnabled = false
+        let before = campaign.level, owner = arcadeProfileID, level = arcadeLevel!
+        presentPauseMenu()
+        let page = GameScreen.shared.controllerPage(in: window!)!
+        try validatePauseSkipPage(page, owner: window!, name: "lemmings2", enabled: true)
+        let skip = DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }.first { $0.title.hasPrefix("Skip level") }!
+        skip.performClick(nil)
+        guard campaign.level == before + 1, ArcadeStore.shared.records.hasSkipped(level, profileID: owner),
+              ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0 else {
+            throw NSError(domain: "PauseSkip", code: 1)
+        }
+        GameScreen.shared.dismissAll()
+    }
     func testPauseKeyboard() throws {
         timer?.invalidate()
         prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
@@ -1921,17 +1938,38 @@ import NxlvKit
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
             rewardVolumeProvider: { [weak self] in self?.sounds.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: audioSettings.modernControlsEnabled && learningResultActions != nil
+            skip: learningResultActions != nil
                 ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
+    private func presentPauseMenu() {
+        paused = true; accumulator = 0; releasePointerInput()
+        saveCheckpoint(immediately: true); updateUserMusicPause(); refreshGame()
+        let learning = learningResultActions
+        let skip = arcadeLevel.flatMap { level -> PauseLevelSkip? in
+            if let learning {
+                return PauseLevelSkip(level: level, profileID: arcadeProfileID, prepare: learning.prepareSkip,
+                    handlesHandover: true, advance: learning.skip)
+            }
+            return canSkipLevel ? PauseLevelSkip(level: level, profileID: arcadeProfileID,
+                advance: { [weak self] in self?.skipLevel() }) : nil
+        }
+        let page = GamePauseMenu.page(title: arcadeLevel?.title ?? "",
+            resume: { [weak self] in
+                guard let self else { return }
+                self.paused = false; self.accumulator = 0
+                self.updateUserMusicPause(); self.refreshGame()
+            }, retry: { [weak self] in self?.retryLevel() },
+            hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
+        GameScreen.shared.present(page, owner: window)
+    }
     /// Level skips apply to a failed campaign level, not practice or playlists.
-    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        audioSettings.modernControlsEnabled && practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
-            && game?.didWin == false && campaign.canSkipLevel
+        practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
+            && (game?.isComplete == false || game?.didWin == false) && campaign.canSkipLevel
     }
     /// The result screen has already spent the skip. This only moves the campaign.
     private func skipLevel() {
@@ -3031,7 +3069,7 @@ import NxlvKit
             case .blocking:
                 name = "LM33"; offsetX = -7; offsetY = -10; phase = lem.age % 16; directional = false
             case .falling:
-                name = "LM40"; offsetX = -8; offsetY = -10; phase = lem.age % 4
+                name = "LM40"; offsetX = -3; offsetY = -10; phase = lem.age % 4
             case .shrugging:
                 name = "LM7B"; offsetX = lem.direction > 0 ? -9 : -8; offsetY = -13; phase = lem.age % 8
             case .exploding:

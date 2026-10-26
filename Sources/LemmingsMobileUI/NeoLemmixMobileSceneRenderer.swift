@@ -10,6 +10,8 @@ import NxlvKit
 final class NeoLemmixMobileSceneRenderer {
     private let renderedLevel: NxlvRenderedLevel
     private let sprites: NeoLemmixMobileSpriteSet
+    private var highlightFrames: [String: MobilePixelFrame] = [:]
+    private let ghostCache = MobileGhostSpriteCache()
     private let stonerRGBA: [UInt8]
     private let stonerWidth: Int
     private let stonerHeight: Int
@@ -32,6 +34,11 @@ final class NeoLemmixMobileSceneRenderer {
     }
 
     func render(_ simulation: NeoLemmixSimulation, highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        try render(simulation, highlight: highlight, ghosts: [])
+    }
+
+    func render(_ simulation: NeoLemmixSimulation, highlight: MobileTargetSelection?,
+                ghosts: [MobileReplayGhost<NeoLemmixSimulation>]) throws -> MobilePixelFrame {
         let configuration = simulation.configuration
         let state = simulation.snapshot()
         var pixels = NeoLemmixSceneFrame.rgba(
@@ -51,11 +58,30 @@ final class NeoLemmixMobileSceneRenderer {
         let width = renderedLevel.width
         let height = renderedLevel.height
         guard pixels.count == width * height * 4 else { throw MobileSessionError.invalidFrame }
+        for ghost in ghosts {
+            for lemming in ghost.state.lemmings where lemming.action != .removed {
+                guard let sprite = spriteHighlight(ghost.state, actor: lemming.id) else { continue }
+                guard let frame = ghostCache.ghost(key: sprite.cacheKey, colour: ghost.colour, sprite: {
+                    (Array(sprite.frame.rgba), sprite.frame.width, sprite.frame.height)
+                }) else { continue }
+                MobileGhostSpriteCache.blend(frame, atX: Int(sprite.rect.x), y: Int(sprite.rect.y),
+                    into: &pixels, width: width, height: height)
+            }
+        }
         let ordered = NeoLemmixRenderOrder.sorted(state.lemmings,
             selectedID: nil, highlightedID: highlight?.id)
+        var crowd = MobileCrowdShadow()
         for lemming in ordered where lemming.action != .removed {
             guard let frame = sprites.frame(action: lemming.action, direction: lemming.direction,
                 animationFrame: lemming.animationFrame, traits: lemming.traits) else { continue }
+            if lemming.action != .exploding {
+                pixels.withUnsafeMutableBytes { destination in
+                    crowd.cast(spriteWidth: frame.width, spriteHeight: frame.height,
+                        x: lemming.position.x - frame.footX, y: lemming.position.y - frame.footY,
+                        width: width, height: height, pixels: destination,
+                        opaque: { sx, sy in frame.rgba[(sy * frame.width + sx) * 4 + 3] >= 128 })
+                }
+            }
             Self.composite(frame, atX: lemming.position.x - frame.footX,
                            y: lemming.position.y - frame.footY,
                            width: width, height: height, into: &pixels)
@@ -65,6 +91,25 @@ final class NeoLemmixMobileSceneRenderer {
                             width: width, height: height, into: &pixels)
         }
         return try MobilePixelFrame(width: width, height: height, rgba: Data(pixels))
+    }
+
+    func spriteHighlight(_ simulation: NeoLemmixSimulation, actor: Int) -> MobileSpriteHighlight? {
+        guard let lemming = simulation.lemmings.first(where: { $0.id == actor && $0.canReceiveSkills }),
+              let frame = sprites.frame(action: lemming.action, direction: lemming.direction,
+                animationFrame: lemming.animationFrame, traits: lemming.traits) else { return nil }
+        let traits = lemming.traits.map(\.rawValue).sorted().joined(separator: ",")
+        let key = "neo-\(lemming.action)-\(lemming.direction)-\(lemming.animationFrame)-\(traits)"
+        let pixels: MobilePixelFrame
+        if let cached = highlightFrames[key] { pixels = cached }
+        else {
+            guard let made = try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: Data(frame.rgba)) else { return nil }
+            pixels = made
+            if highlightFrames.count >= 512 { highlightFrames.removeAll(keepingCapacity: true) }
+            highlightFrames[key] = pixels
+        }
+        return .init(frame: pixels,
+            rect: .init(x: Double(lemming.position.x - frame.footX), y: Double(lemming.position.y - frame.footY),
+                width: Double(frame.width), height: Double(frame.height)), cacheKey: key, time: nil)
     }
 
     private static func composite(_ frame: NeoLemmixMobileSpriteFrame, atX x: Int, y: Int,

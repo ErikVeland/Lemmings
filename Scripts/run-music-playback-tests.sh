@@ -15,7 +15,8 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   "$project_dir/Tests/MusicPlaybackTests/main.swift"
 "$build_dir/MusicPlaybackTests" "$project_dir/Resources/Music/recording-playback.json"
 python3 "$project_dir/Tests/MusicPlaybackTests/check-assets.py"
-cat "$project_dir/Sources/LemmingsAudio/MusicRewindBuffer.swift" \
+cat "$project_dir/Sources/LemmingsAudio/BufferedAudioSource.swift" \
+  "$project_dir/Sources/LemmingsAudio/MusicRewindBuffer.swift" \
   "$project_dir/Sources/LemmingsAudio/MusicFileDeck.swift" \
   "$project_dir/Tests/MusicPlaybackTests/offline.swift" > "$build_dir/offline-main.swift"
 # The shared audio files join this single module here.

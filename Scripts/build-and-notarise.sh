@@ -110,6 +110,7 @@ done
 
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$project_dir/Resources/Info.plist")"
 build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_dir/Resources/Info.plist")"
+zsh "$project_dir/Scripts/check-release-history.sh"
 stamp="$(date +%Y%m%d-%H%M%S)"
 run_dir="$build_root/$version-$build_number-$stamp"
 

@@ -1,15 +1,28 @@
-# AltStore Classic
+# AltStore, SideStore and Feather
 
-Add this source in AltStore Classic on iPhone or iPad:
+Add this source in AltStore Classic, SideStore or Feather on iPhone or iPad:
 
 ```text
 https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json
 ```
 
-Open **Sources**, tap **+**, and paste the address. The source offers Ultimate
-Lemmings 2.2.1 build 21 for iOS 16 or later. Its IPA is attached to the
-[canonical 2.2.1 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.1).
+Open **Sources**, choose the add-source control, and paste the address. The source
+offers Ultimate Lemmings 2.2.2 build 33 for iOS 16 or later. Its IPA is attached to the
+[canonical 2.2.2 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.2).
 The [source JSON](../altstore.json) and app icon also stay in this repository.
+
+SideStore documents [full AltStore source compatibility](https://docs.sidestore.io/docs/advanced/app-sources).
+Feather documents [AltStore source support](https://feather.khcrysalis.dev/).
+These are supported source formats. Installation of Ultimate Lemmings through
+these clients has not been verified on a device. Adding our source does not
+place the app in a client's recommended or community catalogue.
+
+For installers that import IPA files, download
+[the current IPA](https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build33-ios.ipa).
+The published file is 207,620,836 bytes. Its SHA-256 is
+`c413b14de8dbc9f67c75dcc1fd45049498e9b7eb3607341d02d1f7dc88cd6f60`.
+The [distribution register](IOSDistribution.md) tracks other installers,
+catalogues and marketplaces, including their remaining acceptance work.
 
 AltStore Classic re-signs the IPA with the installing player's Apple Account.
 The original app and Desk Clock widget are included. The source declares the
@@ -40,5 +53,5 @@ Upload each IPA to this repository's app release before updating `altstore.json`
 Keep existing downloads and the Mac update feed. Verify the public source,
 icon and complete IPA download, including the release asset's SHA-256 digest.
 Commit the source, documentation and receipt without unrelated workspace work.
-The [2.2.1 release record](ReleaseReadiness/2.2.1-build98/README.md) retains the
+The [2.2.2 release record](ReleaseReadiness/2.2.2-build99/README.md) retains the
 frozen source identity and AltStore publication checks.

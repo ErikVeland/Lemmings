@@ -1,5 +1,53 @@
 # Release scope
 
+The [release schedule](ReleaseSchedule.md), adopted 26 October 2026, sets the
+order: Mac, iOS, tvOS, then sideloading stores. For Mac releases, skip tests
+unless the candidate changes an engine. Keep required package and publication
+verification. Older release receipts below retain the checks actually performed.
+
+## 2.3 release assessment
+
+Assessment: 26 October 2026, `feature/2.3` at `234acea9` plus the current
+working tree. This is a source/evidence audit, not a signed candidate acceptance.
+Performance is the owner's main remaining gap. Audio crackling at any stage is
+a release blocker. The owner reports it on the latest Duo, iPad 8th generation
+and Apple TV 4K. No current clean-audio acceptance is recorded for those devices.
+
+| Priority | Remaining gap | Closure needed |
+| --- | --- | --- |
+| P0 | Audio continuity across the shared Apple frontend | Diagnose and fix the reported crackle. Shared effects callbacks still take a blocking control lock; music refill failures and reserve pressure lack usable diagnostics. These are source risks, not an established diagnosis. Verify launch, menus, loads, play, pause, results, replay and output changes. See the [audio assessment](RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026). |
+| P0 | Sustained production performance | Obtain current optimised-package p50/p95/p99, input latency, callback deadlines, achieved speed, memory and thermal evidence with audio active. Existing short, silent Classic measurements and sprite benchmarks are insufficient. The prior Mac 10× samples achieved 3.36–4.70×. |
+| P0 | Release-gate enforcement | The audit defaults to `minor`, which excludes the broad performance gates. It reports an open gate as a failing exit only with `--require-closure`. The new P0 records do not themselves prevent a package from being published. Connect candidate approval to the applicable audio/performance outcome without restoring unrelated broad test suites. |
+| P0 | Device recovery and input acceptance | Exercise saved-run restoration, background termination, route changes and Hot Seat ownership on physical iPhone/iPad/Duo and TV. Include Duo pose changes, remote/controller navigation, VoiceOver and reduced effects. Simulator layout coverage does not close these journeys. |
+| P1 | Automatic sequel story presentation | Mobile/TV galleries exist, but automatic campaign introductions and earned endings remain unconnected. Preserve restore/selected-level exceptions and Ready handovers. |
+| P1 | 2.3 first-play/next-day outcome | The roadmap requires observed newcomer and returning-player journeys, including skill use, mistake recovery, help, continuation and the correct saved run. Current automated checks do not establish that human outcome. |
+| Release delivery | Exact 2.3 packages and service acceptance | Freeze the source/content, verify upgrades from 2.2.2 and produce platform-specific signed packages and receipts. Mac needs universal signing/notarisation/feed verification; iOS/tvOS need archive, provisioning and delivery evidence. Live sync, Game Center, export/share and TV transfer retain device/service limits. A 2.2.2 receipt does not certify 2.3. |
+
+The source contains substantial parity work: native sequel controls, practice,
+review/export, artwork, short games, original-media galleries and shared navigation.
+Do not repeat the older gate register's prototype-era missing-feature descriptions
+as current findings. Use [current parity](PlatformFeatureParity.md). Human review
+of draft translations and whole-journey accessibility remain open.
+
+L3's four unresolved level identities, Neo/fan route coverage, source fidelity,
+verified sequel hints and Neo individual identity rules remain explicit product
+limits. L3 and Neo stay Beta. L2 Gold Ark and improved survivor scores remain
+non-blocking better-completion work. These limits must not be mistaken for newly
+discovered 2.3 performance failures or silently relabelled Complete.
+
+This candidate changes Neo completion behaviour and native mobile input/replay
+paths relative to frozen 2.2.2 source `fea37bf3`. It is not solely a menu change.
+Select the affected engine/replay checks under the release policy; do not run an
+unrelated full audit by default. The audit itself ran no new suites or audible
+tests. It inspected current code and retained evidence. The existing local
+`MusicFileDeck.play()` idempotence change remains WIP, not a certified fix.
+
+Mac, then iOS, tvOS and sideloading remains the delivery order. A platform may
+ship when its own blockers close. This order does not waive reported audio
+failure, and Mac need not wait for a later platform's store processing.
+
+## Latest published release
+
 Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
 full/slim downloads, five signed updates, all eight public asset hashes and both
 live feeds are verified. iPhone/iPad/Duo build 33 is Waiting for Review with the
@@ -458,8 +506,11 @@ against the original engine. Expect differences.
 
 Winning replays and their solvability and difficulty evidence are durable
 release evidence. A routine minor release keeps this evidence and does not
-replay every level again. It checks the stored fixture manifests and runs the
-focused engine regression suites.
+replay every level again. Under the [release schedule](ReleaseSchedule.md), a
+Mac candidate without engine changes skips tests and test-running release
+audits. Carry forward existing engine evidence and record the skipped checks.
+When an engine changes, check stored fixture manifests and run the affected
+engine regression suites and replay checks below.
 
 For bundled levels, the MVP route bar is one verified winning route per level.
 Keep existing routes when they still pass. Build or verify a simple winning

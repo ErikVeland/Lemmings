@@ -44,18 +44,22 @@ extension MobileLibraryViewController {
         // Entries whose pack or level is gone stay listed, so the player can remove them.
         var titles = [Int: String]()
         for (offset, entryIndex) in shown.entryIndices.enumerated() { titles[entryIndex] = shown.levels[offset].title }
+        let tribes = Lemmings2ShortPlayMobileLibrary.matches(list.entries)
+        if tribes, store?.resolvedDataDirectory(for: .lemmings2) != nil {
+            for (index, entry) in list.entries.enumerated() { titles[index] = entry.title ?? entry.level }
+        }
         let rows = list.entries.enumerated().map { index, entry -> GameFrontEnd.Action in
             let title = titles[index].map { "\(index + 1)  " + $0 } ?? L10n.text("\(index + 1)  Unavailable")
             return .init("entry.\(index)", title, enabled: true, selected: playlistSelection == index)
         }
         let selected = playlistSelection
         let hasSelection = selected.map { list.entries.indices.contains($0) } ?? false
-        let playable = !shown.levels.isEmpty && shown.levels.count == list.entries.count
+        let playable = tribes ? store?.resolvedDataDirectory(for: .lemmings2) != nil : !shown.levels.isEmpty && shown.levels.count == list.entries.count
         return .init(
             title: list.name, subtitle: subtitle.isEmpty ? L10n.plural("count.levels", count: list.entries.count, one: "%ld level", other: "%ld levels") : subtitle, rows: rows,
             footer: [
                 .init("listPlay", L10n.text("Play"), enabled: playable, primary: true),
-                .init("listShuffle", L10n.text("Shuffle"), enabled: playable && list.entries.count > 1),
+                .init("listShuffle", L10n.text("Shuffle"), enabled: playable && !tribes && list.entries.count > 1),
                 .init("entryUp", "Up", enabled: hasSelection && (selected ?? 0) > 0),
                 .init("entryDown", L10n.text("Down"), enabled: hasSelection && (selected ?? 0) + 1 < list.entries.count),
                 .init("entryRemove", L10n.text("Remove"), enabled: hasSelection),
@@ -106,7 +110,7 @@ extension MobileLibraryViewController {
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()
         default:
-            if id == "shortSelect.classic" { shortGamesSelection = "classic"; rebuild() }
+            if id.hasPrefix("shortSelect."), ["classic", "lemmings2"].contains(String(id.dropFirst(12))) { shortGamesSelection = String(id.dropFirst(12)); rebuild() }
             else if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
             else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
             else if id.hasPrefix("add."), let uuid = UUID(uuidString: String(id.dropFirst(4))) { addCurrentLevel(to: uuid) }
@@ -209,6 +213,10 @@ extension MobileLibraryViewController {
     func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0,
                   checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false,
                   restoringMatchingCheckpoint: Bool = false) {
+        if let run, Lemmings2ShortPlayMobileLibrary.matches(entries) {
+            openTribesShortRun(run, back: back, position: position, checkpoint: checkpoint, startImmediately: startImmediately)
+            return
+        }
         guard let catalogue else { return }
         // A long list shows its titles without opening every pack.
         let lazy = run != nil || (entries.count > 100 && entries.allSatisfy { $0.title != nil })
@@ -242,6 +250,10 @@ extension MobileLibraryViewController {
 
     func resumeRun() {
         guard let run = playlists.run, let catalogue else { return }
+        if Lemmings2ShortPlayMobileLibrary.matches(run.entries) {
+            openTribesShortRun(run, back: .collections, position: run.position, checkpoint: pendingCheckpoint, startImmediately: true)
+            return
+        }
         let owner = profiles.activeID, scope = hotSeat?.scope
         learningTask?.cancel()
         learningTask = Task { [weak self] in

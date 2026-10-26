@@ -1,5 +1,6 @@
 import AppKit
 import LemmingsGameArt
+import LemmingsMobileCore
 import NxlvKit
 
 private struct Failure: Error { let message: String }
@@ -60,6 +61,88 @@ private struct Actor {
 }
 
 private func bytes(_ image: CGImage) -> Data { image.dataProvider!.data! as Data }
+
+@MainActor private func mobilePixels(_ actors: [Actor], enabled: Bool) throws -> MobilePixelFrame {
+    let scale = actors.map { actor in
+        CGFloat(actor.sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)!.width) / actor.sprite.size.width
+    }.max() ?? 1
+    let width = Int(110 * scale), height = Int(44 * scale)
+    var pixels = (0..<(width * height)).flatMap { _ -> [UInt8] in [43, 33, 25, 255] }
+    var shadow = MobileCrowdShadow()
+    for actor in actors {
+        let cg = actor.sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+        let w = Int(actor.sprite.size.width * scale), h = Int(actor.sprite.size.height * scale)
+        let source = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8,
+            bytesPerRow: w * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        source.interpolationQuality = .none
+        source.draw(cg, in: CGRect(x: 0, y: 0, width: w, height: h))
+        let ink = source.data!.assumingMemoryBound(to: UInt8.self)
+        let x = Int(actor.x * scale), y = Int(actor.y * scale)
+        func offset(_ sx: Int, _ sy: Int) -> Int { (sy * w + (actor.mirrored ? w - sx - 1 : sx)) * 4 }
+        if enabled {
+            pixels.withUnsafeMutableBytes { destination in
+                shadow.cast(spriteWidth: w, spriteHeight: h, x: x, y: y, width: width, height: height,
+                    pixels: destination, opaque: { sx, sy in ink[offset(sx, sy) + 3] >= 128 })
+            }
+        }
+        for sy in 0..<h where (0..<height).contains(y + sy) {
+            for sx in 0..<w where (0..<width).contains(x + sx) {
+                let from = offset(sx, sy), to = ((y + sy) * width + x + sx) * 4
+                guard ink[from + 3] >= 128 else { continue }
+                for channel in 0..<4 { pixels[to + channel] = ink[from + channel] }
+            }
+        }
+    }
+    return try MobilePixelFrame(width: width, height: height, rgba: Data(pixels))
+}
+
+@MainActor private func renderMobile(_ actors: [Actor], zoom: CGFloat, backing: CGFloat = 1,
+                                    stretch: CGFloat = 1, enabled: Bool) throws -> CGImage {
+    let frame = try mobilePixels(actors, enabled: enabled)
+    let width = Int(110 * zoom * backing), height = Int(44 * zoom * backing * stretch)
+    let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+        bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    context.translateBy(x: 0, y: CGFloat(height)); context.scaleBy(x: backing, y: -backing * stretch)
+    let viewport = MobileViewport(levelSize: .init(width: 110, height: 44),
+        viewSize: .init(width: 110 * zoom, height: 44 * zoom), zoom: zoom)
+    MobileBitmapRenderer.draw(MobileBitmapRenderer.image(frame)!, viewport: viewport, in: context)
+    return context.makeImage()!
+}
+
+@MainActor private func checkMobileGeometry() throws {
+    let rear = image(Data((0..<16).flatMap { _ -> [UInt8] in [90, 220, 110, 255] }), width: 4, height: 4)
+    var frontPixels = (0..<16).flatMap { _ -> [UInt8] in [220, 100, 80, 255] }
+    frontPixels[3] = 0
+    let front = image(Data(frontPixels), width: 4, height: 4)
+    for mirrored in [false, true] {
+        for x: CGFloat in [-3, 0, 8, 107, 110, 120] {
+            let actors = [Actor(sprite: rear, id: 1, x: x, y: 9),
+                Actor(sprite: front, id: 2, x: x + 2, y: 9, mirrored: mirrored)]
+            let result = try mobilePixels(actors, enabled: true)
+            let original = try mobilePixels(actors, enabled: false)
+            var changed = 0
+            for y in 0..<result.height { for px in 0..<result.width {
+                let i = (y * result.width + px) * 4
+                guard result.rgba[i..<i + 4] != original.rgba[i..<i + 4] else { continue }
+                changed += 1
+                try require(original.rgba[i..<i + 4] == Data([90, 220, 110, 255]), "Mobile shadow touched terrain or foreground ink")
+                try require(result.rgba[i..<i + 4] == Data([56, 136, 68, 255]), "Mobile shadow has the wrong strength or alpha")
+                try require(CGRect(x: x + 1, y: 8, width: 6, height: 6).contains(CGPoint(x: CGFloat(px), y: CGFloat(y))), "Mobile shadow exceeded one native pixel")
+            } }
+            if x == 8 { try require(changed > 0, "Mobile overlap has no shadow") }
+            try require(try mobilePixels([actors[0]], enabled: true) == mobilePixels([actors[0]], enabled: false), "Isolated mobile sprite changed")
+            try require(try mobilePixels(actors + [actors[1], actors[1]], enabled: true) == result, "Dense mobile crowd accumulated black shading")
+        }
+        let actors = [Actor(sprite: rear, id: 1, x: 8, y: 9), Actor(sprite: front, id: 2, x: 10, y: 9, mirrored: mirrored)]
+        for zoom: CGFloat in [1, 2, 2.5, 4, 7.25, 12] { for backing: CGFloat in [1, 2, 3] {
+            try require(try bytes(renderMobile(actors, zoom: zoom, backing: backing, enabled: true))
+                != bytes(renderMobile(actors, zoom: zoom, backing: backing, enabled: false)), "Mobile shadow disappeared with zoom or display scale")
+        } }
+    }
+    print("PASS mobile shadows: rear ink only, intact foreground/terrain, transparency, mirrors, level edges, dense crowds and 1–12× zoom at 1×/2×/3× display scale")
+}
 private func save(_ cg: CGImage, _ path: URL) throws {
     try NSBitmapImageRep(cgImage: cg).representation(using: .png, properties: [:])!.write(to: path)
 }
@@ -123,6 +206,7 @@ private func save(_ cg: CGImage, _ path: URL) throws {
     @MainActor static func main() throws {
         _ = NSApplication.shared
         try checkGeometry()
+        try checkMobileGeometry()
         let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         let output = root.appendingPathComponent(".build/crowd-presentation/renders")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
@@ -156,7 +240,14 @@ private func save(_ cg: CGImage, _ path: URL) throws {
                     try save(cg, output.appendingPathComponent("\(name)-\(zoom)-\(enabled ? "modern" : "original").png"))
                 }
             }
+            for zoom: CGFloat in [2, 4, 12] {
+                for enabled in [false, true] {
+                    let cg = try renderMobile(actors, zoom: zoom, stretch: stretch, enabled: enabled)
+                    try save(cg, output.appendingPathComponent("mobile-\(name)-\(zoom)-\(enabled ? "shadow" : "original").png"))
+                }
+            }
         }
         print("PASS 36 native Classic, L2 and L3 crowd captures, including Macintosh artwork and L2 aspect ratio")
+        print("PASS 36 mobile bitmap crowd captures, including maximum zoom and native/high-resolution artwork")
     }
 }

@@ -4,11 +4,30 @@ import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import AVFAudio
+import os
 
 /// Each game owns its effect voices, including simulation replays.
 @MainActor final class MobileEffects {
-    private let player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
+    private var player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
                                           rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
+    private let audioObservers = MobileNotificationObserverBag()
+    private let logger = Logger(subsystem: "com.ultimatelemmings.audio", category: "Effects")
+    var audioDiagnostics: AudioBufferStatistics { player.audioDiagnostics }
+    init() {
+        audioObservers.append(NotificationCenter.default.addObserver(
+            forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.stop()
+                self.player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
+                    rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
+                self.source = nil
+                self.loadedNeoLemmixSoundIdentity = nil
+            }
+        })
+    }
     private var prepared = false
     private var suspended = false
     private var source: ClassicSoundSource?
@@ -48,19 +67,23 @@ import UIKit
             }
             source = settings.sound
         }
-        if !prepared { try? player.start(); prepared = player.isRunning }
+        if !prepared {
+            do { try player.start(); prepared = player.isRunning }
+            catch { logger.error("Effects start failed: \(String(describing: error), privacy: .public)") }
+        }
         scheduleIdleSuspension()
     }
 
     func update(session: any MobileGameSession, viewport: MobileViewport, rewinding: Bool = false) {
         let cues = session.drainSoundCues()
-        let l2Session = session as? Lemmings2MobileSession
+        let engine = (session as? MobileActionReplaySession)?.engineSession ?? session
+        let l2Session = engine as? Lemmings2MobileSession
         let l2Requests = l2Session?.drainLemmings2SoundRequests() ?? []
         guard !isTestAudioMuted, !suspended, prepared else { return }
         let rect = viewport.visibleLevelRect
         player.setViewport(.init(x: rect.x, y: rect.y, width: rect.width, height: rect.height))
         player.setNukeActive(session.snapshot.isEndingRun)
-        if let neoLemmix = session as? NeoLemmixMobileSession,
+        if let neoLemmix = engine as? NeoLemmixMobileSession,
            let soundDirectory = neoLemmix.soundDirectory {
             let identity = [neoLemmix.levelFingerprint, soundDirectory.path,
                             neoLemmix.gadgetSounds.values.sorted().joined(separator: ",")].joined(separator: "|")
@@ -82,7 +105,7 @@ import UIKit
         } else if let l2Session {
             play(l2Requests, bank: l2Session.soundBank)
             player.play(cues)
-        } else if let chronicles = session as? Lemmings3MobileSession, let bank = chronicles.soundBank {
+        } else if let chronicles = engine as? Lemmings3MobileSession, let bank = chronicles.soundBank {
             play(cues, bank: bank)
         } else {
             player.play(cues)
@@ -112,7 +135,8 @@ import UIKit
     func stop() { idleTask?.cancel(); idleTask = nil; player.stop(); prepared = false }
 
     private func resumeForCue() {
-        try? player.resumeOutput()
+        do { try player.resumeOutput() }
+        catch { logger.error("Effects resume failed: \(String(describing: error), privacy: .public)") }
         scheduleIdleSuspension()
     }
 
@@ -186,10 +210,40 @@ import UIKit
     func record(session: any MobileGameSession, viewport: MobileViewport, into recorder: ReplayMovieRecorder) {
         let rect = viewport.visibleLevelRect
         player.setNukeActive(session.snapshot.isEndingRun)
-        let cues = player.movieCues(session.drainSoundCues(),
-            viewport: .init(x: rect.x, y: rect.y, width: rect.width, height: rect.height),
-            time: Double(session.snapshot.tick) / session.ticksPerSecond)
-        for cue in cues { recorder.sound(samples: cue.samples, rate: cue.rate, gain: cue.gain) }
+        let settings = MobileSettings.current(from: .standard).classic
+        let engine = (session as? MobileActionReplaySession)?.engineSession ?? session
+        let viewport = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
+        var cues = session.drainSoundCues()
+        let requests = session.drainLemmings2SoundRequests()
+        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted", settings.sound != .silent else { return }
+        let gain = Float(settings.soundVolume) * 0.5
+        if let tribes = engine as? Lemmings2MobileSession {
+            var seen = Set<String>()
+            for request in requests {
+                if let effect = request.supplementalEffect {
+                    cues.append(.init(effect, at: request.point)); continue
+                }
+                guard !request.isBottomFall || settings.bottomFallSounds else { continue }
+                let region = request.point.map { "\(Int($0.x / 32)),\(Int($0.y / 32))" } ?? "interface"
+                guard seen.insert("\(request.sample):\(request.timeConstant ?? 0):" + region).inserted,
+                      let bank = tribes.soundBank, bank.clips.indices.contains(request.sample) else { continue }
+                let clip = bank.clips[request.sample]
+                recorder.sound(samples: clip.samples,
+                    rate: request.timeConstant.map { 1_000_000 / Double(256 - Int($0)) } ?? clip.sampleRate,
+                    gain: gain * (request.point.map { viewport.placement(of: $0).gain } ?? 1))
+            }
+        } else if let chronicles = engine as? Lemmings3MobileSession, let bank = chronicles.soundBank {
+            cues = cues.filter { cue in
+                guard cue.effect != .fallOut || settings.bottomFallSounds else { return false }
+                guard let clip = bank.clips[cue.effect] else { return true }
+                recorder.sound(samples: clip.samples, rate: clip.sampleRate,
+                    gain: gain * (cue.point.map { viewport.placement(of: $0).gain } ?? 1))
+                return false
+            }
+        }
+        for cue in player.movieCues(cues, viewport: viewport, time: Double(session.snapshot.tick) / session.ticksPerSecond) {
+            recorder.sound(samples: cue.samples, rate: cue.rate, gain: cue.gain)
+        }
     }
 }
 #endif

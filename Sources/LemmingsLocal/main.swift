@@ -654,6 +654,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private var cloudQuitPending = false
+  func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted",
+          let libraryCloud, libraryCloud.enabled else { return .terminateNow }
+    guard !cloudQuitPending else { return .terminateLater }
+    cloudQuitPending = true
+    saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush(); ArcadeStore.shared.flushPendingSaves()
+    let sync = Task { await libraryCloud.syncForLifecycle() }
+    let deadline = Task {
+      try? await Task.sleep(nanoseconds: 20_000_000_000)
+      guard !Task.isCancelled, self.cloudQuitPending else { return }
+      sync.cancel()
+      self.cloudQuitPending = false
+      sender.reply(toApplicationShouldTerminate: true)
+    }
+    Task {
+      await sync.value
+      guard self.cloudQuitPending else { return }
+      deadline.cancel()
+      self.cloudQuitPending = false
+      sender.reply(toApplicationShouldTerminate: true)
+    }
+    return .terminateLater
+  }
+
   func applicationWillTerminate(_ notification: Notification) {
     saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush(); ArcadeStore.shared.flushPendingSaves()
   }
@@ -765,7 +790,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     libraryCloud.requestSync()
   }
   func applicationDidBecomeActive(_ notification: Notification) {
-    libraryCloud?.requestSync()
+    libraryCloud?.requestSync(immediately: true)
     if libraryCloud?.enabled != false { cloudProgress?.requestSync() }
   }
 
@@ -4893,12 +4918,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func presentLearningPause() {
     guard isLearningJourneyActive, let run = sequencePlaylistStore?.activeRun else { return }
     isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
-    let page = LearningJourneyMenu.pause(title: run.currentEntry.levelNameSnapshot,
-      resume: { [weak self] in
-        self?.dismissLearningPause()
-        self?.isPaused = false; self?.panel.isPaused = false; self?.lastStepTime = nil
-      }, hints: { [weak self] in self?.dismissLearningPause(); self?.showLearningHints() },
-      later: { [weak self] in self?.dismissLearningPause(); self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) },
+    let learning = learningResultActions(runID: run.id, level: run.currentEntry.identity)
+    let skip = arcadeLevel.flatMap { level in learning.map { actions in
+      PauseLevelSkip(level: level, profileID: arcadeProfileID, prepare: actions.prepareSkip,
+        handlesHandover: true, advance: actions.skip)
+    } }
+    let page = GamePauseMenu.page(title: run.currentEntry.levelNameSnapshot,
+      resume: { [weak self] in if self?.isPaused == true { self?.togglePause() } },
+      retry: { [weak self] in self?.retry() },
+      hints: { [weak self] in self?.showLearningHints() },
+      later: learning?.later, skip: skip,
       leave: { [weak self] in self?.returnToLibrary(); self?.presentLearningJourney() })
     GameScreen.shared.present(page, owner: window)
   }
@@ -4962,6 +4991,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let originalRunID = store.activeRun?.id
     let reusesJourneySession = run.source == .playlist(LearningJourney.playlistID)
       && store.resumableLearningJourney(hotSeatID: originalHotSeatID) != nil
+    // The Golden Path joins the current Hot Seat. A new session ID would split one
+    // roster into a Classic session and a Journey session.
+    let continuesHotSeat = run.source == .playlist(LearningJourney.playlistID) && !reusesJourneySession
+      && arcade.hotSeatIsActive
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
@@ -5007,7 +5040,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
             resumeMusic: false)
-          if reusesJourneySession {
+          if reusesJourneySession || continuesHotSeat {
             // Map and revisit actions retain this roster, turn and session identity.
           } else if hotSeat {
             arcade.prepareHotSeat()
@@ -5032,6 +5065,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     if reusesJourneySession { begin(arcade.hotSeatIsActive, run); return }
+    if continuesHotSeat { begin(true, run); return }
     guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: L10n.text("Start a new session?"))
     page.setDetail(L10n.text("Your current session will stay saved."))
@@ -5579,8 +5613,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func resumeHomeSequence() {
-    guard allowNavigationAwayFromSequence(), let store = try? playlistStore(),
-      let run = store.activeRun else { return }
+    guard allowNavigationAwayFromSequence() else { return }
+    let store: LevelPlaylistStore
+    let run: LevelSequenceRun
+    do {
+      store = try playlistStore()
+      guard let saved = store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID) else { return }
+      if store.activeRun?.id != saved.run.id { try store.resumeRun(id: saved.run.id) }
+      run = saved.run
+    } catch {
+      GameScreen.shared.message(L10n.text("Run unavailable"), detail: error.localizedDescription)
+      return
+    }
     let owner = ArcadeStore.shared.records.activeProfileID
     let hotSeat = ArcadeStore.shared.hotSeatID
     let discoveryTask = levelBrowserWarmTask ?? makeLevelBrowserDiscoveryTask()
@@ -6417,19 +6461,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func homeMenuItems() -> [HomeMenuItem] {
     var items: [HomeMenuItem] = []
     let savedSequence = (try? playlistStore()).flatMap { store in
-      store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? store.activeRun : nil
+      store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
     }
     let recovery = menuRecovery.flatMap {
       $0.hotSeatID == ArcadeStore.shared.hotSeatID && $0.profileID == ArcadeStore.shared.playingProfileID ? $0 : nil
     }
-    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
-      let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
-      items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"), action: .resume))
-    } else if let savedSequence {
+    if savedSequence != nil {
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
       items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"),
         action: .resumeSequence))
+    }
+    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
+      let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
+      items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
     }
     if let store = try? playlistStore(),
        store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) != nil || recovery != nil {
@@ -8855,7 +8900,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         rewardVolume: effects.muted ? 0 : effects.volume,
         rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
         continueHandlesHandover: true,
-        skip: settings.modernControlsEnabled ? learning?.skip : nil,
+        skip: learning?.skip,
         prepareSkip: learning?.prepareSkip,
         later: learning?.later, hints: learning?.hints,
         menu: { [weak self] in self?.returnToBrowsing() })
@@ -8872,10 +8917,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
       menu: { [weak self] in self?.returnToBrowsing() })
   }
 
+  private func presentPauseMenu() {
+    let skip = canSkipClassicLevel ? arcadeLevel.map { level in
+      PauseLevelSkip(level: level, profileID: arcadeProfileID,
+        advance: { [weak self] in self?.skipClassicLevel() })
+    } : nil
+    let page = GamePauseMenu.page(title: arcadeLevel?.title ?? "",
+      resume: { [weak self] in if self?.isPaused == true { self?.togglePause() } },
+      retry: { [weak self] in self?.retry() },
+      hints: { [weak self] in self?.showLevelHints() }, skip: skip,
+      leave: { [weak self] in self?.returnToBrowsing() })
+    GameScreen.shared.present(page, owner: window)
+  }
+
   /// Level skips apply to campaign ranks, not fan packs, playlists or practice.
-  /// Old school turns them off with the other modern controls.
   private var canSkipClassicLevel: Bool {
-    settings.modernControlsEnabled && !fanPlaying && sequencePlayingIdentity == nil
+    !fanPlaying && sequencePlayingIdentity == nil
       && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
   }
 
@@ -9283,29 +9340,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       if self.cancelRewindToOrigin() { return }
       if self.isLearningJourneyActive { self.presentLearningPause(); return }
-      let resume = keyboard?.pauseForHelp() ?? {}
-      let alert = NSAlert(); alert.messageText = L10n.text("Paused")
-      alert.addButton(withTitle: L10n.text("Resume")); alert.addButton(withTitle: L10n.text("Retry level"))
-      alert.addButton(withTitle: L10n.text("Level hints"))
-      alert.addButton(withTitle: L10n.text("Quit to main menu"))
-      let quitResponse = NSApplication.ModalResponse(
-        rawValue: NSApplication.ModalResponse.alertThirdButtonReturn.rawValue + 1)
-      alert.beginSheetModal(for: self.window) { [weak self] response in
-        if response == .alertSecondButtonReturn { self?.retry() }
-        else if response == quitResponse {
-          // Leave the run rather than resume it. Its normal checkpoint or
-          // saved sequence position remains available.
-          guard let self else { return }
-          if self.sequenceIsActive { self.returnToLibrary() }
-          else { self.showTitle() }
-        }
-        else {
-          resume()
-          if response == .alertThirdButtonReturn {
-            DispatchQueue.main.async { [weak self] in self?.showLevelHints() }
-          }
-        }
-      }
+      _ = keyboard?.pauseForHelp()
+      self.presentPauseMenu()
     }
 
     NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in

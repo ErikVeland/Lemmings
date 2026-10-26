@@ -26,9 +26,13 @@ extension MobileGameViewController {
                 guard let replay = try self.session.makeReplaySession(document: document) else {
                     throw MobileSessionError.unsupportedControl
                 }
-                recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(MobileSettings.current(from: .standard).classic.musicVolume))
+                let settings = MobileSettings.current(from: .standard)
+                if ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted",
+                   settings.musicEnabled, settings.classic.music != .silent {
+                    recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(settings.classic.musicVolume))
+                }
                 let movieEffects = effects.movieEffects()
-                let expected = try JSONDecoder().decode(ClassicDOSReplay.self, from: document).expected?.ticks
+                let expected = replay.replayEndTick
                 repeat {
                     guard !cancelled.cancelled, self.replayExportRequestID == request else { recorder.discard(); return }
                     let frame = try replay.render(highlight: nil)

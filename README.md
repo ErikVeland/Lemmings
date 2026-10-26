@@ -33,8 +33,11 @@ between advertised versions and retained acceptance evidence, and the
 [tester guide](Documentation/BetaTesting.md) for manual testing.
 
 iPhone and iPad users can add the
-[AltStore Classic source](https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json).
-See the [AltStore guide](Documentation/AltStore.md) for installation and signing limits.
+[app source](https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json)
+in AltStore Classic, SideStore or Feather, or download the IPA from the release.
+See the [installation guide](Documentation/AltStore.md) for signing and device-check
+limits, and the [iOS distribution register](Documentation/IOSDistribution.md) for
+other stores and outstanding submissions.
 
 Use this repository for project source, bug reports and release downloads,
 including supplemental artwork handoffs. See the

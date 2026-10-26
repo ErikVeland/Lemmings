@@ -7,7 +7,7 @@ import NxlvKit
 public enum MobileSettingsArt {
     public static func skillSelectionPauseChoice() -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("Skill selection"), subtitle: L10n.text("Keep pausing?"),
-              footer: [.init("1", L10n.text("Keep pausing")), .init("0", L10n.text("Turn off"), primary: true)], footerColumns: 1)
+              footer: [.init("1", L10n.text("Keep pausing")), .init("0", L10n.text("Turn off"), primary: true)], footerColumns: 2)
         page.backActionID = "1"
         return page
     }

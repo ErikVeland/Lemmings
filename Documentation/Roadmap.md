@@ -1,6 +1,10 @@
 # Ultimate Lemmings roadmap through 3.0
 
-Updated 22 October 2026.
+Updated 26 October 2026. Earlier milestone dates below retain their original context.
+
+The [release schedule](ReleaseSchedule.md) now sets delivery priority: Mac first,
+then iOS, then tvOS, then sideloading stores. Ship Mac quickly and skip tests
+unless the candidate changes an engine. Lower-priority channels follow separately.
 
 The owner has prioritised the [2.2 Duo launch plan](2.2Roadmap.md) for existing
 TestFlight groups by Friday, 23 October. On 22 October the owner moved the Duo
@@ -17,6 +21,18 @@ completion criteria, without calendar promises. The current
 [2.1.2 checklist](ReleaseReadiness/2.1.2Checklist.md) remains the immediate plan.
 [Release scope](ReleaseScope.md) governs published claims, and the
 [gate register](ReleaseReadiness/gates.json) retains actual acceptance status.
+
+## iOS store coverage
+
+On 25 October 2026, the owner required distribution across iOS sideloading stores.
+The [distribution register](IOSDistribution.md) tracks sources, catalogues,
+installers and notarised marketplaces with separate delivery and device checks.
+AltStore Classic 2.2.2 build 33 is live. Source compatibility alone does not close
+SideStore or Feather acceptance. PAL and the other marketplace submissions remain
+open until their actual listing and package evidence is recorded.
+
+Update every accepted channel for each release. Record eligibility limits,
+closed stores and new stores explicitly. Keep downloads in the canonical repository.
 
 ## The character to preserve
 

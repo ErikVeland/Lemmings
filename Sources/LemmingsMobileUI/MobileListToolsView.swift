@@ -54,7 +54,7 @@ import NxlvKit
     }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        GameListToolsArt.draw(toolsLayout, typography: MobileGameArt.typography, highlighted: focusedID, scale: scale, in: context)
+        GameListToolsArt.draw(toolsLayout, typography: MobileGameArt.typography, highlighted: focusedID, scale: scale, shape: MobileSystemRegions.controlShape(in: self), in: context)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {

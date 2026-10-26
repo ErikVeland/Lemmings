@@ -13,19 +13,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
 
 /// Decodes one original FLIC frame at a time inside the game window.
 @MainActor final class OriginalMoviePlayer: NSView {
-    enum Movie: String, CaseIterable {
-        case introduction = "INTRO.FLI", classic = "C-LEV15.FLI", shadow = "SHA-WALK.FLI"
-        case egyptian = "E-LEV10.FLI", ending = "THE-END.FLI"
-        var title: String {
-            switch self {
-            case .introduction: L10n.text("Introduction")
-            case .classic: L10n.text("Classic tribe movie")
-            case .shadow: L10n.text("Shadow tribe movie")
-            case .egyptian: L10n.text("Egyptian tribe movie")
-            case .ending: L10n.text("Ending")
-            }
-        }
-    }
+    typealias Movie = Lemmings3OriginalMovie
     private let movie: FLICMovie
     private let soundtrack: (any OriginalMovieAudio)?
     private let returnsToGameWhenFinished: Bool

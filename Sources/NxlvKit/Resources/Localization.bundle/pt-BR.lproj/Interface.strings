@@ -1088,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Aquele que faz as vozes dos Lemmings ao luar";
 "Help" = "Ajuda";
 "Help / extra actions" = "Ajuda / ações extras";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Ajude-nos a encontrar fases que precisam de ajustes";
 "High" = "Alta";
 "High rescue rate with efficient skill use." = "Alta taxa de resgate com uso eficiente de habilidades.";
@@ -1106,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "Home";
 "Home {0}/{1}" = "Casa {0}/{1}";
 "Hopper" = "Saltitante";
 "Host" = "Anfitrião";
 "Hot Seat" = "Hot Seat";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Partidas de Hot Seat";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat: {0}";
 "Hot Seat…" = "Hot Seat…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Passe a vez {1}. {2} As teclas numéricas adicionam ou removem jogadores. N adiciona um jogador. Escolher um jogo continua esta campanha compartilhada. Um novo Hot Seat começa do início.";
@@ -1154,6 +1155,7 @@
 "Increase speed" = "Aumentar velocidade";
 "Initials: {0}_" = "Iniciais: {0}_";
 "Insights" = "Informações";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Observe as ferramentas do nível. Decida quem precisa de cada uma e prepare o percurso por partes.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1710,6 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Próximo lemming disponível";
 "Next graphics" = "Próximos gráficos";
+"Next lemming" = "Next lemming";
 "Next level" = "Nível seguinte";
 "Next level >" = "Próximo nível >";
 "Next move" = "Próximo movimento";
@@ -1953,6 +1956,7 @@
 "Pause action replay" = "Pausar replay da ação";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Pause e siga o percurso da entrada à saída. Encontre o primeiro ponto que um lemming não consegue atravessar em segurança.";
 "Pause and open controls" = "Pausar e abrir controles";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Menu de pausa";
 "Pause on interruption" = "Pausar quando houver interrupção";
 "Pause on skill change" = "Pausar ao trocar de habilidade";
@@ -2058,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Melhor resultado anterior: {0}. Esta partida: {1}.";
 "Previous eligible lemming" = "Lemming disponível anterior";
 "Previous hint" = "Dica anterior";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Movimento anterior";
 "Previous page" = "Página anterior";
 "Previous record: {0}. New record: {1}." = "Recorde anterior: {0}. Novo recorde: {1}.";
@@ -2084,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q DE NOVO PARA SAIR  *  ESC PARA FICAR";
 "Queued" = "Na fila";
 "Quit Ultimate Lemmings" = "Sair do Ultimate Lemmings";
-"Quit to main menu" = "Voltar ao menu principal";
 "Quit?" = "Sair?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R TENTAR DE NOVO - SALVE MAIS, USE MENOS";
@@ -2317,6 +2321,7 @@
 "Run paused" = "Partida pausada";
 "Run recovery save failed: {0}" = "Falha ao guardar a recuperação da tentativa: {0}";
 "Run unavailable" = "Partida indisponível";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Corredor";
 "Running." = "Em execução.";
 "S" = "S";
@@ -2348,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "TROCAS DE HABILIDADE PODEM PAUSAR PARA PLANEJAMENTO";
 "SKILL MODE" = "MODO DE HABILIDADES";
 "SKILLS" = "HABILIDADES";
-"SKIP LEVEL" = "PULAR FASE";
 "SKIPS {0}" = "SALTOS: {0}";
 "SLIDE" = "DESLIZAR";
 "SLIDER" = "DESLIZADOR";
@@ -2405,7 +2409,6 @@
 "Save playlist" = "Salvar playlist";
 "Save run and return to library" = "Salvar partida e voltar à biblioteca";
 "Save this replay at {0}× speed, with music and sound effects." = "Salvar este replay na velocidade {0}×, com música e efeitos sonoros.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Guardar no espaço selecionado";
 "Save {0}  ({1}%)" = "Salvar {0}  ({1}%)";
 "Save {0} more above requirements." = "Salve mais {0} além do necessário.";
@@ -2459,7 +2462,6 @@
 "Sequel artwork" = "Arte das sequências";
 "Sequel artwork requires binary transparency." = "A arte das sequências exige transparência binária.";
 "Sequel reconstruction exceeds the image limit." = "A reconstrução da sequência excede o limite da imagem.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "O serviço vê o endereço IP";
 "Session not changed" = "A sessão não foi alterada";
@@ -2537,7 +2539,9 @@
 "Skills used: {0}" = "Habilidades usadas: {0}";
 "Skip" = "Pular";
 "Skip as {0} ({1})" = "Pular como {0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Pular fase ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Pulos";
 "Slider" = "Deslizador";
 "Slot {0}" = "Posição {0}";

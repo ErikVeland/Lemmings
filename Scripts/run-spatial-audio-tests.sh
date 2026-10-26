@@ -8,7 +8,8 @@ swiftc -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-library 
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
-cat "$project_dir/Sources/LemmingsAudio/SoundEffectPlayer.swift" \
+cat "$project_dir/Sources/LemmingsAudio/BufferedAudioSource.swift" \
+  "$project_dir/Sources/LemmingsAudio/SoundEffectPlayer.swift" \
   "$project_dir/Tests/SpatialAudioTests/checks.swift" > "$build_dir/main.swift"
 swiftc -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
@@ -20,6 +21,7 @@ cp "$project_dir/Tests/SpatialAudioTests/l2-checks.swift" "$build_dir/l2/main.sw
 swiftc -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
+  "$project_dir/Sources/LemmingsAudio/BufferedAudioSource.swift" \
   "$project_dir/Sources/LemmingsAudio/SoundEffectPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/Lemmings2SoundPlayer.swift" "$build_dir/l2/main.swift" \
   -o "$build_dir/l2-spatial-audio-tests"

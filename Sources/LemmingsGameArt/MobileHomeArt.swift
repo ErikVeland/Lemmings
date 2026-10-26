@@ -41,7 +41,7 @@ public enum MobileHomeArt {
             for row in rows.indices { rows[row].primary = row == index }
         }
         var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
-            subtitle: nextPlayerIndex == nil ? subtitle : (["PVP", subtitle].filter { !$0.isEmpty }.joined(separator: "  ")),
+            subtitle: subtitle,
             home: true, rows: rows,
             footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
                      .init("collections", L10n.text("Collections"), enabled: collectionsAvailable), GameSupport.menuAction]

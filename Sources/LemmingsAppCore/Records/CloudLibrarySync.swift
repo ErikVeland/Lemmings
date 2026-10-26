@@ -51,7 +51,8 @@ import NxlvKit
         case .idle: L10n.text("Cloud saves")
         case .syncing: L10n.text("Syncing")
         case .synced: L10n.text("Synced")
-        case .pending: L10n.text("Saved on this device")
+        case .pending: hasUnlinkedJourneys
+            ? L10n.text("A saved journey needs its players restored.") : L10n.text("Saved on this device")
         case .offline: L10n.text("Offline")
         case .paused: L10n.text("Cloud saves paused")
         case .failed(let message): message
@@ -60,6 +61,19 @@ import NxlvKit
     public var enabled: Bool {
         get { defaults.object(forKey: enabledKey) as? Bool ?? defaultEnabled }
         set { defaults.set(newValue, forKey: enabledKey); if newValue { requestSync() } else { setState(.paused) } }
+    }
+    /// A queue without its roster cannot be offered on another device.
+    /// Do not report complete sync while that recoverable local save is omitted.
+    private var hasUnlinkedJourneys: Bool {
+        let known = Set((store.libraryHotSeats + captureSeats()).map(\.id))
+        let prefix = "HotSeat.", suffix = ".LearningJourneySession"
+        return defaults.dictionaryRepresentation().contains { key, value in
+            guard key.hasPrefix(prefix), key.hasSuffix(suffix), let data = value as? Data,
+                let snapshot = try? JSONDecoder().decode(JourneySessionSnapshot.self, from: data),
+                snapshot.run != nil else { return false }
+            let session = String(key.dropFirst(prefix.count).dropLast(suffix.count))
+            return !known.contains(session)
+        }
     }
     public var providerNames: String {
         guard let apple = transport as? AppleCloudLibraryTransport else { return "Cloud" }
@@ -71,7 +85,7 @@ import NxlvKit
         stopped = false
         // Sync is automatic in normal builds. Retire the old manual pause switch.
         if defaultEnabled && !enabled { enabled = true }
-        requestSync()
+        requestSync(immediately: true)
         timer = Task { [weak self] in
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 30_000_000_000)
@@ -81,12 +95,12 @@ import NxlvKit
         }
     }
     public func stop() { stopped = true; requested = false; timer?.cancel(); timer = nil; task?.cancel(); task = nil }
-    public func requestSync() {
+    public func requestSync(immediately: Bool = false) {
         guard !stopped else { return }
         requested = true
         guard task == nil, !running else { return }
         task = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            if !immediately { try? await Task.sleep(nanoseconds: 1_000_000_000) }
             guard let self, !Task.isCancelled else { return }
             // A save during import/upload gets another pass. An unchanged offline
             // provider waits for the periodic retry or next foreground activation.
@@ -99,6 +113,19 @@ import NxlvKit
             self.task = nil
         }
     }
+    /// Finish an active pass, then capture again so exit-time saves are included.
+    /// Platform callers bound the available exit/background time.
+    public func syncForLifecycle() async {
+        guard !stopped, enabled else { return }
+        for _ in 0..<3 {
+            await waitUntilIdle()
+            guard !Task.isCancelled, !stopped else { return }
+            requested = false
+            await syncNow()
+            guard requested, state != .offline else { return }
+            if case .failed = state { return }
+        }
+    }
     private func persist(_ value: LocalState) async throws {
         // The periodic pass usually changes nothing. Skip the rewrite of the whole archive.
         guard value != saved || !FileManager.default.fileExists(atPath: stateFile.path) else { return }
@@ -108,6 +135,44 @@ import NxlvKit
             try JSONEncoder().encode(value).write(to: file, options: .atomic)
         }.value
         saved = value
+    }
+    static let journeySplitRepairKey = "CloudLibrary.journeySplitRepair.v1"
+    /// Older Mac builds started the Golden Path in a new session with the same host and
+    /// players. Once per device, merge each such session without a journey into the one
+    /// Journey session. Sessions started later with "Start new Hot Seat" stay separate.
+    private func mergeJourneySplits(_ local: inout LocalState) throws {
+        guard !defaults.bool(forKey: Self.journeySplitRepairKey) else { return }
+        func hasJourney(_ id: String) -> Bool {
+            guard let data = defaults.data(forKey: "HotSeat.\(id).LearningJourneySession"),
+                  let snapshot = try? JSONDecoder().decode(JourneySessionSnapshot.self, from: data) else { return false }
+            return snapshot.run != nil
+        }
+        var merged = local.archive.mergedSeats ?? [:]
+        let profileIDs = store.records.profiles.map(\.id)
+        let groups = Dictionary(grouping: store.libraryHotSeats.filter { merged[$0.id] == nil }) { [$0.host] + $0.players.sorted() }
+        for group in groups.values where group.count > 1 {
+            let journeys = group.filter { hasJourney($0.id) }
+            guard journeys.count == 1, let target = journeys.first else { continue }
+            var progress = GameProgressPreferences.capture(defaults: defaults, profileID: target.host,
+                profileIDs: profileIDs, sessionID: target.id)
+            try progress.merge(captureExtra(target.host, target.id))
+            for seat in group where seat.id != target.id {
+                var retired = GameProgressPreferences.capture(defaults: defaults, profileID: seat.host,
+                    profileIDs: profileIDs, sessionID: seat.id)
+                try retired.merge(captureExtra(seat.host, seat.id))
+                // The retired session has no journey. Its empty snapshot must not replace the run.
+                retired.values["LearningJourneySession"] = nil
+                try progress.merge(retired)
+                merged[seat.id] = target.id
+            }
+            try progress.apply(defaults: defaults, profileID: target.host, sessionID: target.id)
+        }
+        if !merged.isEmpty {
+            local.archive.mergedSeats = merged
+            local.archive.seats = local.archive.seats.filter { merged[$0.key] == nil }
+            try store.retireLibraryHotSeats(merged)
+        }
+        defaults.set(true, forKey: Self.journeySplitRepairKey)
     }
     private func capture(_ base: LocalState) throws -> LocalState {
         var local = base
@@ -141,7 +206,7 @@ import NxlvKit
             local.archive.players[global] = player
         }
         let seats = store.libraryHotSeats + captureSeats()
-        for seat in seats {
+        for seat in seats where local.archive.mergedSeats?[seat.id] == nil {
             guard let host = local.mapping[seat.host], seat.players.allSatisfy({ local.mapping[$0] != nil }) else { continue }
             var progress = GameProgressPreferences.capture(defaults: defaults, profileID: seat.host, profileIDs: Array(localIDs), sessionID: seat.id)
             try progress.merge(captureExtra(seat.host, seat.id))
@@ -180,6 +245,9 @@ import NxlvKit
             }
             let discovered = try await transport.discover(identities)
             identities = try AppleCloudLibraryTransport.mergeIdentities(identities, discovered)
+            if !testerSyncEnabled, identities.contains(try await Self.testerIdentity.value) {
+                defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
+            }
             if let apple = transport as? AppleCloudLibraryTransport {
                 let keys = try await apple.storeCredentials(identities)
                 identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
@@ -240,6 +308,7 @@ import NxlvKit
                     base.archive.players[first] = player
                 }
             }
+            if canImport() { try mergeJourneySplits(&base) }
             var local = try capture(base)
             // A copied Hot Seat can have its progress and roster but no local
             // revision file. Reuse an identical revision instead of creating a fork.
@@ -286,6 +355,7 @@ import NxlvKit
             if changedDuringUpload { requested = true }
             let partial = (transport as? AppleCloudLibraryTransport)?.issues.isEmpty == false
             let complete = safe && !partial && uploaded == identities.count && !changedDuringUpload
+                && !hasUnlinkedJourneys
             if complete { lastSynced = Date() }
             setState(complete ? .synced : .pending)
         } catch {
@@ -308,7 +378,13 @@ import NxlvKit
             try local.archive.players[global]!.progress.apply(defaults: defaults, profileID: id)
         }
         var seats: [ArcadeStore.SavedHotSeat] = []
-        for (id, branches) in local.archive.seats {
+        for (id, original) in local.archive.seats {
+            var branches = original
+            // Offline revisions of one roster are one session. Only a changed roster keeps a separate branch.
+            if branches.count > 1, Set(branches.map { [$0.host] + $0.players.sorted() }).count == 1 {
+                branches = [try CloudLibraryArchive.Seat.merging(branches)]
+                local.archive.seats[id] = branches
+            }
             let localRevision = local.seatRevisions[id]
             let chosen = branches.first(where: { branch in
                 branch.revision == localRevision || localRevision.map { branch.ancestors.contains($0) } == true
@@ -329,6 +405,7 @@ import NxlvKit
                 }
             }
         }
+        try store.retireLibraryHotSeats(local.archive.mergedSeats ?? [:])
         try store.importLibraryHotSeats(seats); try importSeats(seats)
         return previousRecords != store.records || !(beforeDefaults.isEqual(to: defaults.dictionaryRepresentation()))
     }
@@ -348,6 +425,9 @@ import NxlvKit
         requestSync()
     }
     public static let testerPassword = "test99"
+    private static let testerIdentity = Task.detached(priority: .utility) {
+        try CloudLibraryIdentity(password: "test99")
+    }
     public var testerSyncEnabled: Bool { defaults.bool(forKey: "CloudLibrary.testerSync.enabled") }
     /// The test link covers the whole library, independent of the selected player or session.
     public func enableTesterSync() async throws {
@@ -364,8 +444,11 @@ import NxlvKit
         let shared = try await Task.detached(priority: .userInitiated) { try CloudLibraryIdentity(password: password) }.value
         let keys = try await apple.storeCredentials(try AppleCloudLibraryTransport.mergeIdentities(identities, [shared]))
         identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
+        if shared == (try await Self.testerIdentity.value) {
+            defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
+        }
         enabled = true
-        requestSync()
+        requestSync(immediately: true)
     }
     private func waitUntilIdle() async {
         while running { await withCheckedContinuation { idleWaiters.append($0) } }

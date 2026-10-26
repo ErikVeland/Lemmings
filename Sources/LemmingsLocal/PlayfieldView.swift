@@ -1099,12 +1099,12 @@ struct ReticleFeedback {
       footer[index].busy = footer[index].id == "whatsNew" && overlayUpdateIsBusy
     }
     var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
-      subtitle: overlayNextPlayerIndex == nil ? "" : "PVP", home: true, rows: rows, footer: footer,
+      home: true, rows: rows, footer: footer,
       footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
     page.homeNextPlayerIndex = overlayNextPlayerIndex
     let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
     return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
-      minimumHeight: min(700, homeViewport.height / scale)), scale)
+      minimumHeight: homeViewport.height / scale), scale)
   }
   private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
     return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(

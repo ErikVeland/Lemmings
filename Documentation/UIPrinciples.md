@@ -8,6 +8,21 @@ Mac graphics-cycle tile; graphics remains in Settings and on F2. Remove the
 duplicate timeline Hint and keep that group for rewind and stepping. Home uses
 Collections for the page containing favourites, recents and playlists.
 
+On Mac, iOS and tvOS, Main menu stays at the top-right of the safe menu viewport.
+Back and optional tools occupy the remaining header space. Keep the header fixed
+while the page scrolls. Each menu action row fills its available width, including
+partial rows. Divide that row equally among its actual buttons. Reflow narrow
+level-browser controls into complete rows with at least 44-point targets.
+Keep paired rank controls together when the browser wraps. Do not repeat its
+Back control when the fixed header supplies the same return.
+
+Pause and replay use the same hierarchy: fixed return and Main menu, related
+tools in labelled groups, then one fixed primary action. Place Level tools
+before previews and statistics so compact panes expose Skip level promptly.
+Let each group choose its columns independently. Focus must reveal scrolling
+tools and information above the primary-action shelf. The shelf blocks input
+to covered controls, including through gaps between buttons.
+
 Required navigation stays outside scrolling content. Back and Main menu must
 remain visible at the first item, middle, end and empty state of every list.
 Gestures supplement these controls. They never replace them. Back returns to
@@ -146,6 +161,9 @@ remain unverified in this environment.
   unearned stars are outlined. An unknown target uses a question mark.
 - Keep one primary action per screen. Give it a stronger outline and a directional
   marker. Selection has an underline; keyboard focus has its own outline.
+- Use the fixed header for Back when Main menu is present. Do not duplicate
+  that return in the body. Without header navigation, apply the footer return
+  placement below.
 - Put forward game actions (Start, Play, Ready, Next, Continue and Resume) at the
   bottom of a vertical group or the right edge of its last row. Back stays furthest
   left, at the bottom-left of a multi-row action group. Reserve that slot for
@@ -204,9 +222,17 @@ and Lemmings 3 use the shared controller. Headless, muted checks cover 99 Classi
 HUD renders and 135 menu states with input-target geometry. Both mobile SDKs
 compile. Physical touch, remote focus and sequel gameplay remain device checks.
 
-The Home screen labels an active Hot Seat session PVP. Show its player roster
-near the top, with the next player's bitmap name glowing gold. Do not repeat the
-roster or add a visible “Next” caption. Accessibility names the next player.
+The Home screen shows the active Hot Seat player roster near the top, with the
+next player's bitmap name glowing gold. Keep the roster as one line without a
+PVP heading or its reserved space. Do not repeat the roster or add a visible
+“Next” caption. Accessibility names the next player.
+
+Home gives spare vertical space to the logo before adding empty margins.
+Grow it towards the available header width while preserving its aspect ratio
+and pixel artwork. Measure actions and the roster first so a larger logo never
+adds scrolling or crowds input targets. Mac uses the available menu viewport
+instead of capping the layout at 700 points. Apply the same rule to portrait,
+landscape, book and TV layouts.
 
 On iOS and tvOS, waking the scene or ending an audio interruption keeps the game
 paused until Resume. Foreground menus remain usable during an interruption.
@@ -747,6 +773,20 @@ Returning from details never retries, advances or passes a turn.
 Historical earned-resource captures predate free basic Zoom and quiet results.
 Recheck those changed renders and targets before accepting the new source.
 Physical VoiceOver and controller delivery remain manual checks.
+
+## Progress leaderboards
+
+Progress opens on ranked local results. Keep the leaderboard visible on the first
+page. Put Most saved, Most lost and Best times in the list toolbar. A player row
+opens that player's level results. A level row opens the player ranking for that
+level. Back returns to the caller's selection.
+
+Most saved uses each player's best retained direct result for each level. Most
+lost uses the greatest retained direct loss count for each level. Lost means the
+level population minus the saved count. These records do not identify deaths
+caused by a Nuke skill, so do not label losses as nukes. Best times shows the
+fastest qualifying direct result for each recorded level. Rewind results stay in
+Records and remain separate from direct rankings.
 
 ## Records level browsing and music notices
 
@@ -1468,7 +1508,22 @@ remain manual checks. The new help and accessibility text use English fallback
 until translated.
 
 
+Duo's controls embrace the rounded display. Use rounded stone sockets, flat
+rounded information panels and matching focus outlines in the shared bitmap
+renderers. Keep crisp pixel edges, shipped textures and bitmap lettering.
+Use smaller curves on controls than on their enclosing panels. Keep the full
+rectangular touch and accessibility targets, including the transparent corners.
+Retain the system's corner-adapted safe area for HUD controls, using the longer
+display axis so short landscape playfields retain their height. Outer-display
+menus keep full width and vertical corner clearance, with scrolling. Keep scenery
+edge to edge and use reserved-region logic for cameras and hinges.
+The original full-width game panel remains authored artwork. Rounded treatment
+applies to adaptive controls and the shared menu surfaces across all engines.
+
 On Duo's outer display, draw scenery and page backgrounds to every edge.
+Place Main menu at the left of the fixed gameplay header. Let the status strip
+continue to the right edge of its camera-safe span. Keep the button and strip
+separate for focus and touch, with the same pixel contours as the other controls.
 Choose a fixed menu viewport from the scene's current reserved regions before
 measuring Home, level browsing, Ready, pause, results, recovery or settings.
 Prefer the full-width area above or below a corner cutout. Do not reserve a
@@ -1493,8 +1548,15 @@ including Retina and precision magnification. Isolated sprites retain their
 artwork. Keep the feet, animation, collision and replay positions unchanged.
 Hover, clicks and paused inspection use the visible sprite mask before ordinary
 distance picking. Preserve explicit skill priorities and L3 carrier selection.
-Classic, Lemmings 2 and Lemmings 3 share this presentation. Mobile and TV keep
-their existing crowd rendering.
+Classic, Lemmings 2 and Lemmings 3 share this presentation.
+
+The mobile bitmap renderers, including Duo and TV, cast a subtle dark shadow
+from front lemmings onto rear lemming pixels. Keep it one native artwork pixel
+wide so it remains distinct as the camera zooms, including the touch magnifier
+and CRT output. Follow opaque sprite edges and preserve transparent gaps and
+mirroring. Terrain, ghosts and isolated sprites receive no shadow. Cap repeated
+shading so dense crowds do not turn black. Preserve draw order, sprite positions,
+touch selection and simulation state.
 
 The muted, offscreen crowd audit checks overlap, isolation, native ink,
 transparent gaps, mirroring, fractional zoom, Retina, stale targets and reset.
@@ -1503,6 +1565,25 @@ L2 aspect ratio. Representative renders were inspected. Full Mac compilation
 and focused Classic hover, click, inspection and skill-priority regressions pass.
 The broader playfield suite reports separate trail-budget and PC bomb-pop
 assertion failures. Physical mouse use and CRT compositing remain manual checks.
+
+The same muted, offscreen audit also checks mobile shadows on rear ink only,
+unchanged foreground and terrain, level-edge clipping and repeated overlap.
+It verifies 1–12× zoom at 1×, 2× and 3× display scale and produces 36 additional
+mobile bitmap captures across Classic, L2 and L3 with native and high-resolution
+artwork. Representative close and maximum-zoom captures were inspected.
+The iOS SDK build and 25 focused artwork, explosion, sequel-renderer and
+touch-selection regressions pass with muted audio and offscreen windows.
+Physical Duo display and touch-magnifier/CRT presentation remain device checks.
+
+Mobile and TV native sprite feedback must use each engine's actual frame and
+position. L2/L3 and supported NeoLemmix supply masks to the same selection and
+assignment renderers as Classic. Keep acknowledgement time tied to simulation
+time and clear it after checkpoint restore or rewind. Reduced effects retain
+their existing policies, including TV's explicit completion-glow exclusion.
+Supported NeoLemmix Hot Seat ghosts use the shared archive, sprite tint and
+rear-layer blending. They add no input targets, sound or live simulation changes.
+The [cross-platform register](PlatformFeatureParity.md) records remaining source
+gaps separately from rendered and physical-device acceptance.
 
 Touch replay viewing keeps the level identity on one line in the top status box.
 Long names end in an ellipsis, with the full identity retained for accessibility.
@@ -1514,3 +1595,11 @@ skills or changing transport state. Classic solution replays use this shared mob
 Lemmings 3 mobile sessions do not yet expose simulation replay navigation. Their
 HUD layouts are covered with replay fixtures. Recorded video keeps its captured
 camera. TV retains controller navigation and pause-panel move actions.
+
+
+Mac gameplay Menu and Escape open the shared pause page in Classic, Lemmings 2
+and Lemmings 3. Keep Resume as the primary action, with Retry, Hints and the
+eligible Skip level balance together. Show zero skips as disabled. Learning adds
+Try later. Earned skips remain available with Original or Modern controls.
+Q and Back to library retain the saved browsing return. Skip charges the attempt
+owner once and preserves the paused Hot Seat Ready handover.

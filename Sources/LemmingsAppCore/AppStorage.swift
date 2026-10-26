@@ -49,11 +49,18 @@ public struct AppStorage: @unchecked Sendable {
         #endif
         let support = FileManager.default.urls(for: directory, in: .userDomainMask)[0]
         let identifier = bundle.bundleIdentifier ?? ""
-        return AppStorage(applicationSupport: support.appendingPathComponent(folderName),
+        let integration = identifier.contains("integration-tests")
+        let root = support.appendingPathComponent(folderName)
+        // A separate preferences suite alone does not isolate playlists or checkpoints.
+        let applicationSupport = integration
+            ? FileManager.default.temporaryDirectory.appendingPathComponent("LemmingsIntegrationTests")
+                .appendingPathComponent(identifier).appendingPathComponent(String(ProcessInfo.processInfo.processIdentifier))
+            : root
+        return AppStorage(applicationSupport: applicationSupport,
                           resources: bundle.resourceURL ?? bundle.bundleURL,
                           defaults: .standard, bundle: bundle,
                           isPreviewBuild: identifier.contains("preview"),
-                          isIntegrationTestBuild: identifier.contains("integration-tests"))
+                          isIntegrationTestBuild: integration)
     }
 
     /// Empty folders and empty settings below the temporary directory. Each call makes a new root.

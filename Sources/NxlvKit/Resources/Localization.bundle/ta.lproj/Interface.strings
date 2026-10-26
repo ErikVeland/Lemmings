@@ -1088,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "சந்திரன் ஒளியில் குரல்களைக் குறைப்பவன்";
 "Help" = "உதவி";
 "Help / extra actions" = "உதவி / கூடுதல் நடவடிக்கைகள்";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "வேலை தேவைப்படும் நிலைகளை கண்டுபிடிக்க எங்களுக்கு உதவுங்கள்";
 "High" = "அதிகம்";
 "High rescue rate with efficient skill use." = "திறமையான திறன்களைப் பயன்படுத்தி உயர் மீட்பு விகிதம்.";
@@ -1106,13 +1107,13 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
-"Home" = "முகப்பு";
 "Home {0}/{1}" = "வீடு {0}/{1}";
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
 "Hot Seat" = "மாறிமுறை";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "மாறிமுறைத் தொடக்கங்கள்";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "மாறிமுறை: {0}";
 "Hot Seat…" = "மாறிமுறை…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "மாறிமுறை. {0}. முறையை ஒப்படை {1}. {2} எண் விசைகள் வீரர்களைச் சேர்க்கும் அல்லது அகற்றும். N புதிய வீரரைச் சேர்க்கும். விளையாட்டைத் தேர்ந்தெடுத்தால் இந்தப் பகிர்ந்த தொடர் ஆட்டம் தொடரும். புதிய மாறிமுறை தொடக்கத்திலிருந்து தொடங்கும்.";
@@ -1154,6 +1155,7 @@
 "Increase speed" = "வேகத்தை அதிகரி";
 "Initials: {0}_" = "தொடக்க எழுத்துக்கள்: {0}_";
 "Insights" = "புள்ளிவிவரங்கள்";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "நிலையிலுள்ள கருவிகளைப் பார்க்கவும். ஒவ்வொரு கருவியும் எந்தப் பணியாளருக்குத் தேவை என முடிவு செய்யவும். பாதையின் பகுதிகளை ஒவ்வொன்றாகத் தயார் செய்யவும்.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1710,6 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "அடுத்த தகுதி பெறும் லிம்மிங்";
 "Next graphics" = "அடுத்த வரைகலை";
+"Next lemming" = "Next lemming";
 "Next level" = "அடுத்த நிலை";
 "Next level >" = "அடுத்த நிலை >";
 "Next move" = "அடுத்த நகர்வு";
@@ -1953,6 +1956,7 @@
 "Pause action replay" = "செயல் மறு இயக்கத்தை இடைநிறுத்து";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "இடைநிறுத்தி நுழைவாயிலிலிருந்து வெளியேறும் வாயில்வரை பாதையைப் பார்க்கவும். லெம்மிங் பாதுகாப்பாகக் கடக்க முடியாத முதல் இடத்தைக் கண்டறியவும்.";
 "Pause and open controls" = "இடைநிறுத்தம் மற்றும் திறந்த கட்டுப்பாடுகள்";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "இடைநிறுத்தப் பட்டி";
 "Pause on interruption" = "இடைநிறுத்தத்தில் இடைநிறுத்தம்";
 "Pause on skill change" = "திறன்களை மாற்றுவதில் இடைநிறுத்தம்";
@@ -2058,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "முன்னாள் சிறந்த {0}. இந்த ரன் {1}.";
 "Previous eligible lemming" = "முந்தைய தகுதிபெற்ற லெம்மிங்";
 "Previous hint" = "முந்தைய குறிப்பு";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "முந்தைய நடவடிக்கை";
 "Previous page" = "முந்தைய பக்கம்";
 "Previous record: {0}. New record: {1}." = "முந்தைய பதிவு: {0}. புதிய பதிவு: {1}.";
@@ -2084,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q AGAIN TO QUIT * ESCAPE TO STAY";
 "Queued" = "வரிசையில் உள்ளது";
 "Quit Ultimate Lemmings" = "Ultimate Lemmings இலிருந்து வெளியேறு";
-"Quit to main menu" = "முதன்மைப் பட்டிக்குத் திரும்பு";
 "Quit?" = "வெளியேறவா?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "ஓய்வூதியம் - அதிக சேமிப்பு, குறைவாகப் பயன்படுத்துதல்";
@@ -2317,6 +2321,7 @@
 "Run paused" = "ஆட்டம் இடைநிறுத்தப்பட்டது";
 "Run recovery save failed: {0}" = "மீட்பு சேமிப்பு தோல்வியுற்றது: {0}";
 "Run unavailable" = "ஆட்டம் கிடைக்கவில்லை";
+"Run was not closed" = "Run was not closed";
 "Runner" = "ஓடுபவர்";
 "Running." = "இயங்குகிறது.";
 "S" = "S";
@@ -2348,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "திறன் மாற்றங்கள் திட்டமிடலுக்கு இடைநிறுத்தப்படலாம்";
 "SKILL MODE" = "திறன் முறை";
 "SKILLS" = "திறன்கள்";
-"SKIP LEVEL" = "கப்பல் நிலை";
 "SKIPS {0}" = "தவிர்ப்புகள் {0}";
 "SLIDE" = "ஸ்லைடு";
 "SLIDER" = "வழுக்குபவர்";
@@ -2405,7 +2409,6 @@
 "Save playlist" = "இசைப்பட்டியலைச் சேமி";
 "Save run and return to library" = "ஆட்டத்தைச் சேமித்து நூலகத்திற்குத் திரும்பு";
 "Save this replay at {0}× speed, with music and sound effects." = "இசை மற்றும் ஒலி விளைவுகளுடன் {0}x வேகத்தில் இந்த மறுபடியும் சேமிக்கவும்.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "தேர்ந்தெடுக்கப்பட்ட இடத்திற்கு சேமிக்கவும்";
 "Save {0}  ({1}%)" = "{0} மீட்கவும்  ({1}%)";
 "Save {0} more above requirements." = "{0} மேலே உள்ள தேவைகளை சேமிக்க.";
@@ -2459,7 +2462,6 @@
 "Sequel artwork" = "தொடர் விளையாட்டு ஓவியம்";
 "Sequel artwork requires binary transparency." = "தொடர் கலைகளுக்கு இரட்டை வெளிப்படைத்தன்மை தேவை.";
 "Sequel reconstruction exceeds the image limit." = "தொடர்ச்சி மறுசீரமைப்பு பட வரம்பை மீறுகிறது.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "சேவை IP முகவரியைக் காணும்";
 "Session not changed" = "அமர்வு மாறவில்லை";
@@ -2537,7 +2539,9 @@
 "Skills used: {0}" = "பயன்படுத்திய திறன்கள்: {0}";
 "Skip" = "கடந்து செல்லுங்கள்";
 "Skip as {0} ({1})" = "{0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "ஸ்கிப் நிலை ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "தவிர்ப்புகள்";
 "Slider" = "வழுக்குபவர்";
 "Slot {0}" = "இடம் {0}";

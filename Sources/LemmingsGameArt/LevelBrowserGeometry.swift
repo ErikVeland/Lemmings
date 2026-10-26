@@ -10,7 +10,9 @@ public struct LevelBrowserGeometry {
     /// Back, previous rank, next rank and Play, in that order, when `actionCount` is 4.
     public let actions: [CGRect]
 
-    public init(safe: CGRect, actionCount: Int = 4, titleText: String = "", subtitleText: String = "", occlusions: [MobileReservedRegion] = []) {
+    public init(safe: CGRect, actionCount: Int = 4, titleText: String = "", subtitleText: String = "",
+                actionTitles: [String] = [], includesBack: Bool = true, rankActions: Range<Int>? = nil,
+                occlusions: [MobileReservedRegion] = []) {
         board = safe.insetBy(dx: 8, dy: 12)
         let left = board.minX + 16, width = board.width - 32
         let heading = MobileDisplayRegions.clearHorizontalFrame(
@@ -23,11 +25,27 @@ public struct LevelBrowserGeometry {
             height: max(22, GameTextLayout.height(subtitleText, width: max(1, caption.width))))
         let height: CGFloat = 44
         let count = max(1, actionCount)
-        let gaps = CGFloat(count - 1) * 12
-        let buttonWidth = min(160, (width - gaps) / CGFloat(count))
-        let total = buttonWidth * CGFloat(count) + gaps
-        let x = board.midX - total / 2, y = board.maxY - height - 14
-        actions = (0..<count).map { CGRect(x: x + CGFloat($0) * (buttonWidth + 12), y: y, width: buttonWidth, height: height) }
+        let minimumButtonWidth = max(120, (actionTitles.map { GameTextLayout.width(of: $0) }.max() ?? 0) + 24)
+        let columns = min(count, max(1, Int((width + 12) / (minimumButtonWidth + 12))))
+        let entries = (0..<count).map { GameFrontEnd.Action(String($0), "",
+            primary: $0 == count - 1, backNavigation: includesBack && count > 1 && $0 == 0) }
+        let groups: [[GameFrontEnd.Action]]
+        if let rankActions, columns < count, rankActions.allSatisfy({ entries.indices.contains($0) }) {
+            groups = [rankActions.map { entries[$0] }, entries.enumerated().filter { !rankActions.contains($0.offset) }.map(\.element)]
+        } else { groups = [entries] }
+        let grids = groups.map { GameFooterGrid(actions: $0, columns: columns, spanSingleAction: true) }
+        let rows = grids.reduce(0) { $0 + $1.rows }
+        let y = board.maxY - CGFloat(rows) * (height + 12) + 12 - 14
+        var frames: [String: CGRect] = [:]
+        var row = 0
+        for grid in grids {
+            for slot in grid.slots {
+                frames[slot.action.id] = grid.frame(for: slot, x: left, y: y + CGFloat(row) * (height + 12), width: width,
+                    height: height, gap: 12, rowGap: 12)
+            }
+            row += grid.rows
+        }
+        actions = entries.map { frames[$0.id]! }
         let top = subtitle.maxY + 4
         stage = CGRect(x: board.minX, y: top, width: board.width, height: max(0, y - 6 - top))
     }

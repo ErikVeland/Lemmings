@@ -1088,6 +1088,7 @@
 "He who does Lemming Voices by the light of the Moon" = "Celui qui fait les voix des lemmings au clair de lune";
 "Help" = "Aide";
 "Help / extra actions" = "Aide / actions supplémentaires";
+"Help and settings" = "Help and settings";
 "Help us find levels that need work" = "Aide-nous à trouver les niveaux à améliorer";
 "High" = "Élevé";
 "High rescue rate with efficient skill use." = "Taux de sauvetage élevé avec une utilisation efficace des compétences.";
@@ -1106,13 +1107,13 @@
 "Holiday Lemmings" = "Lemmings des fêtes";
 "Holiday Lemmings 1993" = "Lemmings des fêtes 1993";
 "Holiday Lemmings 1994" = "Lemmings des fêtes 1994";
-"Home" = "Accueil";
 "Home {0}/{1}" = "Accueil {0}/{1}";
 "Hopper" = "Bondisseur";
 "Host" = "Hôte";
 "Hot Seat" = "Hot Seat";
 "Hot Seat ghosts" = "Hot Seat ghosts";
 "Hot Seat starts" = "Départs en Hot Seat";
+"Hot Seat was not saved" = "Hot Seat was not saved";
 "Hot Seat: {0}" = "Hot Seat : {0}";
 "Hot Seat…" = "Hot Seat…";
 "Hot seat. {0}. Pass the turn {1}. {2} Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning." = "Hot Seat. {0}. Passe le tour {1}. {2} Les touches numériques ajoutent ou retirent des joueurs. N ajoute un nouveau joueur. Choisir un jeu poursuit cette campagne partagée. Un nouveau Hot Seat recommence depuis le début.";
@@ -1154,6 +1155,7 @@
 "Increase speed" = "Augmenter la vitesse";
 "Initials: {0}_" = "Initiales : {0}_";
 "Insights" = "Statistiques";
+"Inspect" = "Inspect";
 "Inspect lemmings while paused" = "Inspect lemmings while paused";
 "Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time." = "Examinez les outils du niveau. Décidez qui a besoin de chaque outil, puis préparez le parcours étape par étape.";
 "Install the official game data for this level, then try again." = "Install the official game data for this level, then try again.";
@@ -1710,6 +1712,7 @@
 "Next coaching" = "Next coaching";
 "Next eligible lemming" = "Prochain lemming apte";
 "Next graphics" = "Graphismes suivants";
+"Next lemming" = "Next lemming";
 "Next level" = "Niveau suivant";
 "Next level >" = "Niveau suivant >";
 "Next move" = "Coup suivant";
@@ -1953,6 +1956,7 @@
 "Pause action replay" = "Mettre le replay en pause";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Mettez en pause et suivez le parcours de l’entrée à la sortie. Repérez le premier endroit qu’un lemming ne peut pas franchir sans danger.";
 "Pause and open controls" = "Mettre en pause et ouvrir les commandes";
+"Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
 "Pause menu" = "Menu pause";
 "Pause on interruption" = "Mettre en pause en cas d’interruption";
 "Pause on skill change" = "Mettre en pause lors d’un changement de compétence";
@@ -2058,6 +2062,7 @@
 "Previous best {0}. This run {1}." = "Meilleur résultat précédent : {0}. Cette partie : {1}.";
 "Previous eligible lemming" = "Lemming apte précédent";
 "Previous hint" = "Indice précédent";
+"Previous lemming" = "Previous lemming";
 "Previous move" = "Coup précédent";
 "Previous page" = "Page précédente";
 "Previous record: {0}. New record: {1}." = "Record précédent : {0}. Nouveau record : {1}.";
@@ -2084,7 +2089,6 @@
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q À NOUVEAU POUR QUITTER  *  ÉCHAP POUR RESTER";
 "Queued" = "En attente";
 "Quit Ultimate Lemmings" = "Quitter Ultimate Lemmings";
-"Quit to main menu" = "Retour au menu principal";
 "Quit?" = "Quitter ?";
 "R / B" = "R / B";
 "R RETRY - SAVE MORE, USE LESS" = "R RÉESSAYER - SAUVER PLUS, UTILISER MOINS";
@@ -2317,6 +2321,7 @@
 "Run paused" = "Partie en pause";
 "Run recovery save failed: {0}" = "Échec de l’enregistrement de la reprise de la partie : {0}";
 "Run unavailable" = "Partie indisponible";
+"Run was not closed" = "Run was not closed";
 "Runner" = "Coureur";
 "Running." = "En cours.";
 "S" = "S";
@@ -2348,7 +2353,6 @@
 "SKILL CHANGES CAN PAUSE FOR PLANNING" = "LES CHANGEMENTS DE COMPÉTENCE PEUVENT METTRE EN PAUSE POUR PLANIFIER";
 "SKILL MODE" = "MODE COMPÉTENCE";
 "SKILLS" = "COMPÉTENCES";
-"SKIP LEVEL" = "PASSER LE NIVEAU";
 "SKIPS {0}" = "SAUTS DE NIVEAU {0}";
 "SLIDE" = "GLISSER";
 "SLIDER" = "GLISSEUR";
@@ -2405,7 +2409,6 @@
 "Save playlist" = "Enregistrer la liste de lecture";
 "Save run and return to library" = "Enregistrer la partie et retourner à la bibliothèque";
 "Save this replay at {0}× speed, with music and sound effects." = "Enregistrer ce replay à la vitesse {0}×, avec la musique et les effets sonores.";
-"Save this run and return to the library. (Esc or Q)" = "Save this run and return to the library. (Esc or Q)";
 "Save to selected slot" = "Enregistrer dans l’emplacement sélectionné";
 "Save {0}  ({1}%)" = "Sauver {0}  ({1} %)";
 "Save {0} more above requirements." = "Sauve {0} lemmings de plus que le nombre requis.";
@@ -2459,7 +2462,6 @@
 "Sequel artwork" = "Graphismes de la suite";
 "Sequel artwork requires binary transparency." = "Les graphismes de la suite nécessitent une transparence binaire.";
 "Sequel reconstruction exceeds the image limit." = "La reconstruction de la suite dépasse la limite d’images.";
-"Sequel short games are unavailable on this device." = "Sequel short games are unavailable on this device.";
 "Sequence not started" = "Sequence not started";
 "Service sees IP" = "Le service voit l’adresse IP";
 "Session not changed" = "Session inchangée";
@@ -2537,7 +2539,9 @@
 "Skills used: {0}" = "Compétences utilisées : {0}";
 "Skip" = "Passer";
 "Skip as {0} ({1})" = "Passer en tant que {0} ({1})";
+"Skip could not be returned" = "Skip could not be returned";
 "Skip level ({0})" = "Passer le niveau ({0})";
+"Skip was not saved" = "Skip was not saved";
 "Skips" = "Passages";
 "Slider" = "Glisseur";
 "Slot {0}" = "Emplacement {0}";

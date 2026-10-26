@@ -36,7 +36,7 @@ public struct HotSeatGhostPlayback: Sendable {
         tracks = attempts.prefix(8).compactMap { attempt in
             guard attempt.replay.initialStateHash == hash,
                   attempt.replay.engine == initial.engine,
-                  attempt.replay.engineFingerprint == RunRecovery.bundledEngine,
+                  RunRecovery.isCompatibleEngine(attempt.replay.engineFingerprint),
                   (try? attempt.replay.validateStructure()) != nil,
                   let cursor = try? ActionReplayCursor(replay: attempt.replay, initial: initial) else { return nil }
             return Track(playerID: attempt.playerID, colour: attempt.colour, cursor: cursor)
