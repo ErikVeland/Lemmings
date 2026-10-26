@@ -9,6 +9,17 @@ those platforms. Its cause is not yet proved. Clean compilation and muted UI
 checks do not close it. The requirement applies throughout launch, menus,
 loading, gameplay, pause, results, replay and transitions.
 
+### Invalid player time during stop — 27 October 2026
+
+The muted offline spatial-audio suite reproduced a Core Audio exception during
+`BufferedAudioSource.stop()`: a non-nil `lastRenderTime` can still have neither
+a valid sample time nor a valid host time. Passing that value to
+`playerTime(forNodeTime:)` throws while the output is stopping. The source now
+checks both validity flags before querying and falls back to its last stored
+frame. The full muted, offscreen audio performance suite passes with this fix.
+This closes the reproduced invalid-time crash only. It does not establish clean
+audio on the reported physical devices or close the audio release gate.
+
 Source assessment at `234acea9`, including the working-tree recording-deck
 idempotence change:
 

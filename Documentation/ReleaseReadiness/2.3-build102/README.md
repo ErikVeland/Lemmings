@@ -2,8 +2,8 @@
 
 Status: **blocked; no platform package or submission recorded**.
 
-Candidate source: `038187364` on `main`  
-Release base: `v2.2.2`  
+Candidate source: pending commit on `main`
+Release base: `v2.2.2`
 Platform build numbers: Mac 102, iPhone/iPad/Duo 36, Apple TV 15
 
 Build 102 contains the centered main-menu logo, optical background-corner
@@ -32,13 +32,15 @@ retry used an in-workspace module cache and `MUSIC_AAC_JOBS=2`.
 
 | Check | Result |
 | --- | --- |
-| Hot Seat ghost | BLOCKED; headless process exited 134 after starting the runner, with no diagnostic output |
-| Music rewind | FAIL in headless environment; PCM and rewind-source checks passed, then Core Audio threw while creating `AVAudioUnitEQ` |
+| Hot Seat ghost | PASS; rerun outside the filesystem sandbox |
+| Music rewind | PASS; rerun outside the filesystem sandbox |
 | Save recovery | PASS after directing the Swift module cache to `/private/tmp` |
+| Audio performance and spatial regressions | PASS; muted, offscreen run after the invalid-`AVAudioTime` fix |
 
 The existing build-100 NeoLemmix simulation/replay, Classic DOS replay and
-extra-skill checks remain applicable to unchanged source. No audible test was
-run. The mechanical checks used the muted, offscreen runner where supported.
+extra-skill checks remain applicable to unchanged source. The mechanical
+checks used the muted, offscreen runner. No physical-device listening run was
+performed.
 
 ## Open release gates
 

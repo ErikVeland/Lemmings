@@ -65,6 +65,7 @@ final class BufferedAudioSource: @unchecked Sendable {
   var playedFrame: Int64 { queue.sync { currentPlayedFrame() } }
   private func currentPlayedFrame() -> Int64 {
     guard running, let time = nodes[0].lastRenderTime,
+      time.isSampleTimeValid || time.isHostTimeValid,
       let played = nodes[0].playerTime(forNodeTime: time) else { return lastPlayedFrame }
     return startFrame + played.sampleTime
   }
@@ -92,6 +93,7 @@ final class BufferedAudioSource: @unchecked Sendable {
           // All spatial nodes must release their buffer before any buffer is reused.
           if batch.pending == 0 {
             if let time = self.nodes[0].lastRenderTime,
+               time.isSampleTimeValid || time.isHostTimeValid,
                let played = self.nodes[0].playerTime(forNodeTime: time) {
               self.statistics.observeReserve(frames: max(0, self.nextFrame - self.startFrame - played.sampleTime))
             }
