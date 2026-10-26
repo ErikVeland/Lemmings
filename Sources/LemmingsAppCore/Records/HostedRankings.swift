@@ -44,7 +44,8 @@ public enum HostedCategory: String, CaseIterable, Sendable {
     /// Worldwide ranks every shared player once across all levels.
     public static let worldwide: [HostedCategory] = [.stars, .clears, .perfect]
     /// Each level ranks every shared player once by their best direct run on that level.
-    public static let level: [HostedCategory] = [.mostSaved, .fastestClear, .fastestAllSaved, .leastSkills]
+    /// Fastest 100% leads: most players reach the same saved count, so speed separates them.
+    public static let level: [HostedCategory] = [.fastestAllSaved, .fastestClear, .leastSkills, .mostSaved]
     /// The next metric in the same leaderboard kind, wrapping at the end.
     public func next(_ offset: Int = 1) -> HostedCategory {
         let list = career ? Self.worldwide : Self.level
@@ -108,7 +109,7 @@ public enum HostedLeaderboardText {
     public private(set) var levelConditions: TrolleyConditions?
     public private(set) var levelBusy = false
     public private(set) var levelStatus = ""
-    public private(set) var levelCategory = HostedCategory.mostSaved
+    public private(set) var levelCategory = HostedCategory.fastestAllSaved
     private var levelRequestID = UUID()
     private var submitted: Set<UUID> = []
     private var actions: Set<UUID> = []

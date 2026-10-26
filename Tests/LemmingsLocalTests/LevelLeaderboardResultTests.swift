@@ -36,9 +36,9 @@ final class LevelLeaderboardResultTests: XCTestCase {
             for loaded in [true, false] {
                 let transport = FixedBoardTransport()
                 if loaded {
-                    transport.board = HostedBoard(entries: [.init(rank: 1, name: "AB", score: 10, runID: nil, replay: false),
-                        .init(rank: 1, name: "CD", score: 10, runID: nil, replay: false),
-                        .init(rank: 3, name: "EF", score: 8, runID: nil, replay: false)], page: 0, hasMore: false, verification: "test")
+                    transport.board = HostedBoard(entries: [.init(rank: 1, name: "AB", score: 41000, runID: nil, replay: false),
+                        .init(rank: 1, name: "CD", score: 41000, runID: nil, replay: false),
+                        .init(rank: 3, name: "EF", score: 52500, runID: nil, replay: false)], page: 0, hasMore: false, verification: "test")
                 }
                 let rankings = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: transport,
                                               defaults: storage.defaults, credentials: { _ in "" })
@@ -67,11 +67,11 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 for _ in 0..<200 where rankings.levelBusy { await Task.yield() }
                 try render("\(game)-\(loaded).png")
                 let label = view.accessibilityLabel() ?? ""
-                XCTAssertTrue(label.contains("Level leaderboard, Most saved."), label)
+                XCTAssertTrue(label.contains("Level leaderboard, Fastest 100%."), label)
                 XCTAssertTrue(transport.paths.last?.contains("assisted=0") == true)
                 if loaded {
-                    XCTAssertTrue(label.contains("Leaders: AB, CD"), label)
-                    XCTAssertTrue(label.contains("#3  EF  8"), label)
+                    XCTAssertTrue(label.contains("Leaders: AB, CD  0:41.00"), label)
+                    XCTAssertTrue(label.contains("#3  EF  0:52.50"), label)
                 } else {
                     XCTAssertTrue(label.contains("Offline"), label)
                 }

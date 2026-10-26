@@ -21,7 +21,7 @@ import NxlvKit
         #expect(worldwide.count == 3 && level.count == 4)
         #expect(Set(HostedCategory.worldwide + HostedCategory.level) == Set(HostedCategory.allCases))
         #expect(HostedCategory.perfect.next() == .stars)
-        #expect(HostedCategory.mostSaved.next(-1) == .leastSkills)
+        #expect(HostedCategory.fastestAllSaved.next(-1) == .mostSaved)
     }
 
     @Test func tiedFirstPlacesAreAllLeaders() {
@@ -50,12 +50,12 @@ import NxlvKit
             levelFingerprint: String(repeating: "a", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
             population: 10, rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
         service.refreshLevel(conditions: conditions, category: .stars)
-        #expect(service.levelCategory == .mostSaved)
+        #expect(service.levelCategory == .fastestAllSaved)
         for _ in 0..<100 where service.levelBusy { await Task.yield() }
         #expect(service.levelBoard?.leaders.map(\.name) == ["AB"])
         #expect(service.board == nil)
         let path = try #require(transport.paths.last)
-        #expect(path.contains("board=mostSaved") && path.contains("assisted=0") && path.contains(conditions.fingerprint))
+        #expect(path.contains("board=fastestAllSaved") && path.contains("assisted=0") && path.contains(conditions.fingerprint))
         service.refreshLevel(conditions: conditions, category: .fastestClear)
         for _ in 0..<100 where service.levelBusy { await Task.yield() }
         #expect(transport.paths.last?.contains("board=fastestClear") == true)

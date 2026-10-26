@@ -13,9 +13,9 @@ struct LevelLeaderboardPageTests {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         for width: CGFloat in [320, 390, 834, 1194, 1920] {
             var page = GameFrontEnd.Page(title: "Level complete", details: ["Just dig!", "Saved 8/10   Goal 5", "Time 0:20.00",
-                "Leaders: AB, CD  10", "#1  AB  10", "#1  CD  10", "#3  EF  8"],
+                "Leaders: AB, CD  0:41.00", "#1  AB  0:41.00", "#1  CD  0:41.00", "#3  EF  0:52.50"],
                 footer: [.init("0", "Next level", primary: true), .init("1", "Retry"), .init("2", "Back")], preview: true)
-            page.rows = [.init("levelBoardMetric", "Level leaderboard: Most saved")]
+            page.rows = [.init("levelBoardMetric", "Level leaderboard: Fastest 100%")]
             page.result = true; page.detailHeadings = [0]
             let layout = GameFrontEnd.layout(page, width: width, minimumHeight: 700)
             let metric = try #require(layout.targets.first { $0.action.id == "levelBoardMetric" })

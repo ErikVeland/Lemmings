@@ -136,8 +136,9 @@ Worldwide is one list. It ranks every shared player by the selected metric:
 Career stars, Levels cleared or Three-star levels. It does not depend on the
 last level played and does not split rewind runs into a separate view.
 
-Every level has its own list. It ranks every shared player by Most saved,
-Fastest clear, Fastest 100% or Least skills, from direct runs only. The result
+Every level has its own list. It ranks every shared player by Fastest 100% first, then Fastest clear,
+Least skills or Most saved, from direct runs only. Most saved rarely separates
+players on one level, so it is never the default. The result
 screen shows that list, its top three rows and every tied leader. Arrows (Mac)
 or the metric row (iPhone, iPad, Duo, Apple TV) change the metric. The list
 loads again after the player's own result is shared.
