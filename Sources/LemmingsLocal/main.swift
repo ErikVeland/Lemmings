@@ -4991,6 +4991,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let originalRunID = store.activeRun?.id
     let reusesJourneySession = run.source == .playlist(LearningJourney.playlistID)
       && store.resumableLearningJourney(hotSeatID: originalHotSeatID) != nil
+    // The Golden Path joins the current Hot Seat. A new session ID would split one
+    // roster into a Classic session and a Journey session.
+    let continuesHotSeat = run.source == .playlist(LearningJourney.playlistID) && !reusesJourneySession
+      && arcade.hotSeatIsActive
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
@@ -5036,7 +5040,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
             resumeMusic: false)
-          if reusesJourneySession {
+          if reusesJourneySession || continuesHotSeat {
             // Map and revisit actions retain this roster, turn and session identity.
           } else if hotSeat {
             arcade.prepareHotSeat()
@@ -5061,6 +5065,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     if reusesJourneySession { begin(arcade.hotSeatIsActive, run); return }
+    if continuesHotSeat { begin(true, run); return }
     guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: L10n.text("Start a new session?"))
     page.setDetail(L10n.text("Your current session will stay saved."))

@@ -43,6 +43,12 @@ background. It waits for active uploads, then checks again for changes made
 while an upload was running. Offline play and local mid-level checkpoints keep
 their existing behaviour.
 
+A Hot Seat keeps one session for its players. Starting the Golden Path on Mac
+continues the current Hot Seat. Offline saves of the same session from two
+devices now merge. Earlier builds started the Golden Path in a second session
+with the same players. The first sync merges that session's Classic progress
+into the Journey session. Every device then continues the Journey session.
+
 ## A steadier soundtrack and clearer controls
 
 Repeated startup and audio-engine requests no longer restart a live recorded
