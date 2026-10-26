@@ -42,8 +42,14 @@
 	<string>https://glasscode.academy/lemmings-api/cloud</string>
 	<key>HostedRankingsURL</key>
 	<string>https://glasscode.academy/lemmings-api/rankings</string>
+	<key>GCSupportsGameMode</key>
+	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.games</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.3</string>
+	<key>LSSupportsGameMode</key>
+	<true/>
 	<key>LemmingsCloudProgressEnabled</key>
 	<false/>
 	<key>NSHighResolutionCapable</key>

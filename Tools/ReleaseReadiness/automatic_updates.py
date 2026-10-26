@@ -39,6 +39,11 @@ def validate_info_plist(path):
         raise ValueError("Info.plist must identify a 1.7, 1.8, 1.9, 2.0, 2.1 or 2.2 application.")
     if not isinstance(build, str) or not re.fullmatch(r"\d+", build):
         raise ValueError("Info.plist must contain a numeric build number.")
+    if info.get("LSApplicationCategoryType") != "public.app-category.games":
+        raise ValueError("LSApplicationCategoryType must identify the app as a game.")
+    for key in ("LSSupportsGameMode", "GCSupportsGameMode"):
+        if info.get(key) is not True:
+            raise ValueError(f"{key} must be true.")
     _https_url(info.get("SUFeedURL"), "SUFeedURL")
     public_key = info.get("SUPublicEDKey")
     if not isinstance(public_key, str):

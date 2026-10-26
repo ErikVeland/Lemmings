@@ -1,0 +1,1305 @@
+{
+  "exactStateAliases": 2,
+  "journeyVersion": "learning-30",
+  "levels": [
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Xmas:1:0:0",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "initialStateHash": "e662a941989715ac6c082bd950b597760d385a3392776a79084646c026742105",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "0:Xmas:1:0:0",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "step": 203,
+      "title": "Merry Christmas Mr Lemming"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Xmas:2:0:1",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "initialStateHash": "857d4725e9fdbddff921ccbf4d6d0ee5bb5c11ff68f301ef6fa000c5601bc548",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "1:Xmas:2:0:1",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "step": 204,
+      "title": "Christmas Bonus"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Xmas:3:0:2",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "initialStateHash": "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "33:Crazy:14:1:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "step": 296,
+      "title": "Time waits for no Lemming"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Xmas:4:0:3",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "initialStateHash": "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "62:Wicked:3:9:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "step": 297,
+      "title": "This Corrosion"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Xmas:1:0:0",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "initialStateHash": "64f0b18cec87715368177906dcffca5c8346971745959e9a2eff4bffb6c7295a",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "0:Xmas:1:0:0",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "step": 103,
+      "title": "Jingle Lemming"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Xmas:2:0:1",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "initialStateHash": "ec55df2e9d51b84426a40cae25dddfe45389dfd3fec56eb5b06c000041456a33",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "1:Xmas:2:0:1",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "step": 90,
+      "title": "Happy Holidays Mr Lemming!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Xmas:3:0:2",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "initialStateHash": "4a85bbb80f45a70564c84167ce75f752a98705fa608f29284699e2f68565bee5",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "2:Xmas:3:0:2",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "step": 205,
+      "title": "A Lemming Holiday"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Xmas:4:0:3",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "initialStateHash": "f581e65915506564f468599f3d249e56d848f5a45ac810e4afeb12f08f3fd4c4",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "3:Xmas:4:0:3",
+        "packID": "xmasLemmings1992-LEVEL-4"
+      },
+      "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
+      "step": 193,
+      "title": "The North Poles"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Flurry:1:4:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "a509acc99dff3a298d108970fe1b5cd674e912bccb542a9e6cb2c3d2ebf3f859",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "0:Flurry:1:4:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 129,
+      "title": "Climbing to the Top!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Flurry:2:4:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "da05315b7f24593511ebecae92737f09cd8e0c4a2c1f0e01b81448d7eb67bbb6",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "1:Flurry:2:4:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 100,
+      "title": "Floating Lemming Flurry"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Flurry:3:4:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "69a4f26e4fe1f45430debc901c821631e9ec52795c0ee38f9dd16f5b0bf268a4",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "2:Flurry:3:4:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 104,
+      "title": "Holiday Mining"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Flurry:4:4:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "d95918d4cdfdfa83e3f2ff2dbb37048ba7569435fe76804357573ecd1c0e3c7c",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "3:Flurry:4:4:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 107,
+      "title": "Lemming Tracks in the Snow!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Flurry:5:4:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "2e2ca9584121f816f2a2e4acc107e904f3546ebc4d6c01b2f27623b61df9ccd2",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "4:Flurry:5:4:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 102,
+      "title": "Christmas South of the Equator"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Flurry:6:4:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "63e6f4cfe8780c092be5d470332f1719b03eb885fb1695088d1cefd5f8db5952",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "5:Flurry:6:4:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 87,
+      "title": "Lemming Snowfall"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Flurry:7:4:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "fcbf3ce13796d53635e4619ab2dce092225739f8aafa7b95fdbe580f31b4481d",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "6:Flurry:7:4:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 101,
+      "title": "Lemming Snowjourn"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Flurry:8:4:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "1c68e5562254e82a6f3df5457ac2a073bfba936e25669cbd35852177537379ff",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "7:Flurry:8:4:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 106,
+      "title": "Clouds of Lemmings"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "8:Flurry:9:5:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "1b0155f320da38039ab72beb86369a290e9afabc7e8d081ad7b14b60c4a18eb3",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "8:Flurry:9:5:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 226,
+      "title": "A Block from Home"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Flurry:10:5:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "aaf0b817d3d9b0a018aaeaf2436d3d1f8180be21e8568e7b9ad4c5c8e2fd60bb",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "9:Flurry:10:5:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 105,
+      "title": "32 Lemmings Below Zero"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "10:Flurry:11:5:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "7b5d366a478895e755052ca8cfef425ffd3f332605d02cb644e551e25771595f",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "10:Flurry:11:5:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 88,
+      "title": "At Home in a Cave"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Flurry:12:5:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "2b9f52d1ce47386441d8d9bcb2ab3a6b7d9de1491584655a75d738f720917b12",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "11:Flurry:12:5:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 147,
+      "title": "Presents of Mind"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Flurry:13:5:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "5ebf3f33d31fb537a9fc1e84bad370ebfcae23ac5e1bb18ad5d70af7aa9eaacf",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "12:Flurry:13:5:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 82,
+      "title": "Yo-yo Lem-lem"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "13:Flurry:14:5:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "68cdb7cc9134d9cd54777032aca48ed4435899e3c6dc6e7ca5d7c5b255831d90",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "13:Flurry:14:5:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 128,
+      "title": "Marshmallow Land"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "14:Flurry:15:5:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "9c32bb77ae9f4407d575eedc18959282e06bc93212b93f61333a85f151f4754c",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "14:Flurry:15:5:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 137,
+      "title": "Head for the Hills!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "15:Flurry:16:5:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "18bf2b4c32a66eca1aa923aa9cefdad184eedcd607fa1a77b022b85466823587",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "15:Flurry:16:5:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 111,
+      "title": "The Long Way Around"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "16:Blizzard:1:6:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "20a8d1aef6ca4c28b340f76ab092baed64c9ccef35b91aec52ee150f07477a88",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "16:Blizzard:1:6:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 267,
+      "title": "Oogilemming!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Blizzard:2:6:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "e83abe35429e6d14137d47ee58cfedf1ea660473417d9b7ed9bad38e4d33bb53",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "17:Blizzard:2:6:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 262,
+      "title": "Lemmings Up High"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "18:Blizzard:3:6:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "a4fd2a507e88ab7466f7a7e36dd2d86c6cc171bf6848c5a5e8aad5d84b445777",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "18:Blizzard:3:6:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 272,
+      "title": "Check Your Hints!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "19:Blizzard:4:6:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "4074867deeffdfef9bc75ba219deb5644a8663bcb2398c3acc6a7146c19531c4",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "19:Blizzard:4:6:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 269,
+      "title": "Santus Lemmingus"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "20:Blizzard:5:6:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "354fff763a3eba272a160e91a7d72cebac2c70ad37eb559d7573498b1a775176",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "20:Blizzard:5:6:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 234,
+      "title": "It Came Upon a Lemnight Clear"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "21:Blizzard:6:6:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "8141bde8e27e41f03716717198fd4d3c06a4aa1f8d19bec874fcb9318901a19f",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "21:Blizzard:6:6:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 275,
+      "title": "A Single Lemming..."
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "22:Blizzard:7:6:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "3962025c48216a813cde7d4f10331e31747cac2a6786fbc853147eff0150b6f1",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "22:Blizzard:7:6:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 282,
+      "title": "Break on through..."
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "23:Blizzard:8:6:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "b9784054fdb75c2ff0364706d22248de6fe29980a8353ab268e4ba7910263d29",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "23:Blizzard:8:6:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 271,
+      "title": "Presents of Mind II"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "24:Blizzard:9:7:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "9641e6289b532badf20e54dda983401a52cbbd9a24407d009a578d68b66d7a4d",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "24:Blizzard:9:7:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 290,
+      "title": "Lemmings...The Motion Picture"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "25:Blizzard:10:7:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "403e583135c197a1908e38b2ec57b374dbd098bd035a0b36ab652043f2e90538",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "25:Blizzard:10:7:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 285,
+      "title": "The Wrath of Lem"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "26:Blizzard:11:7:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "c53686b616e5af9bcb7bbdfbcb98a22b9350831bebf962f90ebbcf117c1fc928",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "26:Blizzard:11:7:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 258,
+      "title": "The Search for Lem"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "27:Blizzard:12:7:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "7bf2765d5352fc9dec6b5ead2f44546bb3e5b8a0b692543ac0cb6ff036adbe95",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "27:Blizzard:12:7:3",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 274,
+      "title": "The Voyage Home..."
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "28:Blizzard:13:7:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "6e1e38b3b8fe4892c69b1b45e3070280997332923d674209ca5e1a723e1ca214",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "28:Blizzard:13:7:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 259,
+      "title": "The Final Frontier"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Blizzard:14:7:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "c56e24599895de701892621e50a81dbf07aaf81d0838a8696d61dac6b5c8cef8",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "29:Blizzard:14:7:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 264,
+      "title": "The Undiscovered Country"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "30:Blizzard:15:7:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "173cce94169a877e21dd16c4d88de8e7f7357fa275beeb60f83ccaa1a4d0fb15",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "30:Blizzard:15:7:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 280,
+      "title": "The Needs of the Many..."
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "31:Blizzard:16:7:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "initialStateHash": "307348004e9b63be6e335df2a404a55603a7373266f430dd9ae2e3070b85c0e7",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "31:Blizzard:16:7:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+      "step": 273,
+      "title": "The Next Lemeration"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Frost:1:0:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "b0ea3e45f8f1da3739e689ee8e19151e9374d868b442fddb4a74d8d789d7c477",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "0:Frost:1:0:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 94,
+      "title": "Chains of Command"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Frost:2:0:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "a456c16ded39678a008a40cfff86b8f4d13948d55780e48824630a2a4cfd1889",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "1:Frost:2:0:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 115,
+      "title": "Ski Jump!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Frost:3:0:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "eebe11997a9cbbcc00e906e0d0e7d70fe1a84b575c823d7e8a3c62c7bed1f13a",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "2:Frost:3:0:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 95,
+      "title": "CindyLand"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Frost:4:0:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "885cc70d09917ae8988f50b79047db6632a375628049d73c5c5f4cde2e2754a6",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "3:Frost:4:0:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 146,
+      "title": "Separate Ways"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Frost:5:0:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "56b50345a36ae823b2e0c23b37ff96b81a355dc8c02b7ef23af5cbeb6fe345ae",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "4:Frost:5:0:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 211,
+      "title": "Lemming Reunification"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Frost:6:0:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "397d585b8acaa042b787f343fed1f107e5815558d20e13c6895199fe8805a4ef",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "5:Frost:6:0:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 81,
+      "title": "The Land of the Bizarre"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Frost:7:0:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "b229a15b66afc13b3c35ba0854c3d9db14719f66c9bb3740129909b4c4066cbd",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "6:Frost:7:0:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 124,
+      "title": "Happy New Year!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Frost:8:0:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "82c036bc1e6f5ab456e3c58237f2464aefd17e1f6b0dedd0aec9c2a8eb5ab10a",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "7:Frost:8:0:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 294,
+      "title": "Division Bell"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "8:Frost:9:1:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "c10e7e108aaa4a34de2cd5d05c7d6d1cca52da61647a1236a623232bb0856ba1",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "8:Frost:9:1:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 96,
+      "title": "Quest for Kieran"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Frost:10:1:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "8a76dadd26f0248a3485940595de3aa65113cbfaae2258ef8860417866e39675",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "9:Frost:10:1:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 286,
+      "title": "Four Play"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "10:Frost:11:1:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "08370f832aa7e611fd480ebf928fbcca4dae265a73394fa7113fe3db3605ccaf",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "10:Frost:11:1:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 113,
+      "title": "Maybe not such a doddle"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Frost:12:1:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "5147de2dd7b97330a0eb42810aa6b04064b44b37d8bac6d649789994e63d0ad2",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "11:Frost:12:1:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 143,
+      "title": "It's Boxing Day!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Frost:13:1:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "3af89334833e894fdd8793fc8986e2539d97653c53889524e12a4bcfc50657d5",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "12:Frost:13:1:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 194,
+      "title": "2 Minutes before midnight"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "13:Frost:14:1:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "45a56d057325aafd05a8439f6937edb78d04dcb21515d2ce53c8c812a41c10e0",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "13:Frost:14:1:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 136,
+      "title": "Happy New Year II!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "14:Frost:15:1:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "f536e971eabaa3417059fcac80cd92dd3870fcec8f51fee2ddb37d4adb494444",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "14:Frost:15:1:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 164,
+      "title": "Plethora of Presents"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "15:Frost:16:1:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "5f0a68e37163e3dfc5484dcbcbfeacae6a725233aa3ba7bbeb63301e9c9562ca",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "15:Frost:16:1:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 92,
+      "title": "Up on the Rooftops"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "16:Hail:1:2:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "5f72b9e384877682d4f08aba33b4a22539af36cfeca683083e4eacbe36176776",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "16:Hail:1:2:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 283,
+      "title": "Go Thataway!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Hail:2:2:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "8eff953e88d2bf4adad425897d2d5eab6121fe4180a31783c13c94d421633cc7",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "17:Hail:2:2:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 276,
+      "title": "Break On Through"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "18:Hail:3:2:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "e6d3bc5915aba1f5e2523323c61c127e2e7645ac54b28b18e0dbd636e5fa05d5",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "18:Hail:3:2:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 289,
+      "title": "And a Happy New Year!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "19:Hail:4:2:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "82a4b8a506e2e5b591dc7a88328d728e02393b77355054f72bcbf7db025cb73e",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "19:Hail:4:2:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 284,
+      "title": "Lemmintaschen?"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "20:Hail:5:2:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "7ca4669f221415be2bca159f797d2de5118db2a2dd82d8d4d617f34f450b18ef",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "20:Hail:5:2:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 249,
+      "title": "Get the Point?"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "21:Hail:6:2:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "5285b79e05df916dd09bd4e64f76446899c04360a56206c81438ef426c3d7d3a",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "21:Hail:6:2:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 295,
+      "title": "Surprise Package?"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "22:Hail:7:2:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "8e28976adc7dfe2e7994314507c0b07864e2c66d211ea320a94f497a8a597ce7",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "22:Hail:7:2:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 293,
+      "title": "Steel Ice Span"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "23:Hail:8:2:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "90e32cc0ec3d4958e9832a76b985d52bd6b952ec8f42562cb35c5ebb3483f2aa",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "23:Hail:8:2:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 245,
+      "title": "Sir Edmund Hilemming"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "24:Hail:9:3:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "9290a6957866af291b6e4160601d07e37a999d5260d5952fed794d2b8f300395",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "24:Hail:9:3:0",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 263,
+      "title": "Up, up, and away!"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "25:Hail:10:3:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "b93123321a524317af70e6f38a8c4edef33d21e20f0a87c1b101cc102f7fa725",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "25:Hail:10:3:1",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 287,
+      "title": "Lemmy in the cold, cold ground"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "26:Hail:11:3:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "90b27ddef569160016a0032b0a713e582fe5e46d760b49ab8c98d1f9c02693ec",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "26:Hail:11:3:2",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 236,
+      "title": "Emmings!  (No L)"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "27:Hail:12:3:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "e3cad505ed63831680bff62e1d8c6c7ff8dbb999bfc5e493021c4dbf31960acb",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "27:Hail:12:3:3",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 281,
+      "title": "Merry Christmaze"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "28:Hail:13:3:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "a256ad75bfd3a064afc6b2e37b819f6c4730b63c61af981293878565ed69c47d",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "28:Hail:13:3:4",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 268,
+      "title": "Polar Expedition"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Hail:14:3:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "fb933bb73dfb4a2c111ffc2cd4d8996e9951d8a3b078418b3b8e3813e7fddab9",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "29:Hail:14:3:5",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 237,
+      "title": "Rendezvous II"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "30:Hail:15:3:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "706ba5c59b1f77e930f5ce9d5118398716cdf770e37ac8bfce17579c54769e50",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "30:Hail:15:3:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 260,
+      "title": "Steel Block Party"
+    },
+    {
+      "humanReviewPending": true,
+      "identity": {
+        "engine": "classic",
+        "levelID": "31:Hail:16:3:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "initialStateHash": "9da402f0d6ecefa04c68d41d9c4f177e407826b7eb92a88b09c1b81394499013",
+      "nativeReplayPassed": true,
+      "representedBy": {
+        "engine": "classic",
+        "levelID": "31:Hail:16:3:7",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+      "step": 247,
+      "title": "Peak of Performance"
+    }
+  ],
+  "meaning": "Every source has an exact native winning replay. Alias sources share the complete initial simulation state. Human difficulty remains unmeasured.",
+  "sourceEntries": 72,
+  "uniqueSeasonalSourcesAdded": 70
+}

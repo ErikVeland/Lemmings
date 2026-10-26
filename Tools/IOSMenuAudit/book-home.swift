@@ -11,6 +11,7 @@ extension MenuAudit {
         let typography = GameMenuTypography(interface: typography.interface, homeLogos: logos)
         let poses: [(String, MobileSize, [MobileReservedRegion])] = [
             ("book", .init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))]),
+            ("short-open", .init(width: 1194, height: 690), [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 690))]),
             ("compact", .init(width: 650, height: 465), [.init(kind: .division, frame: .init(x: 318, y: 0, width: 14, height: 465))]),
             ("tall", .init(width: 834, height: 1194), [.init(kind: .division, frame: .init(x: 409, y: 0, width: 16, height: 1194))]),
             ("camera", .init(width: 1194, height: 834), [
@@ -50,6 +51,9 @@ extension MenuAudit {
                     }
                     let layout = GameFrontEnd.layout(page, width: viewport.width, minimumHeight: viewport.height,
                         boxedHome: true, bookHomePanes: panes)
+                    if interface == .standard, ["book", "short-open", "tall"].contains(pose), state != "long" {
+                        guard layout.size.height <= viewport.height else { throw invalidTargets(line: #line) }
+                    }
                     guard let secondary = layout.secondaryBoard, layout.libraryHeading != nil,
                           layout.board.maxX <= panes[0].maxX, secondary.minX >= panes[1].minX,
                           Set(layout.targets.map { $0.action.id }) == Set((page.rows + page.footer).map(\.id)),

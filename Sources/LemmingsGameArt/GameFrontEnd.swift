@@ -58,6 +58,11 @@ public struct GameFrontEnd {
         public var subtitleRuns: [TextRun] = []
         public var titleRuns: [TextRun] = []
         public var rows: [Action]
+        /**
+         * Settings use fixed tabs and bottom navigation in horizontal layouts.
+         */
+        public var settingsTabs: [Action]? = nil
+        public var settingsIndex = false
         /// Search and list-wide actions belong to a separate, fixed toolbar.
         public var listTools: [Action] = []
         public var details: [String]

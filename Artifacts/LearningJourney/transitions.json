@@ -1449,19 +1449,59 @@
     "variantDifferences": []
   },
   {
+    "demand": 651.5225,
+    "level": "The Land of the Bizarre",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 271.79860186818166,
+    "rawReplayScoreChange": -55.86281512605041,
+    "referenceStep": 0.17730000000001384,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 81,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 652.409,
+    "level": "Yo-yo Lem-lem",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 246.93838235294118,
+    "rawReplayScoreChange": -24.860219515240487,
+    "referenceStep": 0.17729999999999108,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 82,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
     "demand": 654.182,
     "level": "The Chain with no name",
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 315.67824582321276,
-    "rawReplayScoreChange": -11.983171171019308,
-    "referenceStep": 0.7092000000000098,
+    "rawReplayScoreChange": 68.73986347027159,
+    "referenceStep": 0.3546000000000049,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 81,
+    "step": 83,
     "variantDifferences": []
   },
   {
@@ -1480,7 +1520,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 82,
+    "step": 84,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1502,7 +1542,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 83,
+    "step": 85,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -1524,8 +1564,46 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 84,
+    "step": 86,
     "variantDifferences": []
+  },
+  {
+    "demand": 665.7045,
+    "level": "Lemming Snowfall",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 141.83925559857894,
+    "rawReplayScoreChange": -188.74897969553868,
+    "referenceStep": 0.17730000000001384,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 87,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 666.591,
+    "level": "At Home in a Cave",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 142.14289215686276,
+    "rawReplayScoreChange": 0.303636558283813,
+    "referenceStep": 0.17729999999999108,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 88,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 668.364,
@@ -1533,16 +1611,36 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 328.40726221830056,
-    "rawReplayScoreChange": -2.1809730758170645,
-    "referenceStep": 0.7092000000000098,
+    "rawReplayScoreChange": 186.2643700614378,
+    "referenceStep": 0.3546000000000049,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 85,
+    "step": 89,
     "variantDifferences": []
+  },
+  {
+    "demand": 670.1365000000001,
+    "level": "Happy Holidays Mr Lemming!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 179.6038108058254,
+    "rawReplayScoreChange": -148.80345141247517,
+    "referenceStep": 0.35450000000000725,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 90,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 671.909,
@@ -1553,8 +1651,8 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 325.4752661064426,
-    "rawReplayScoreChange": -2.931996111857984,
-    "referenceStep": 0.7089999999999919,
+    "rawReplayScoreChange": 145.87145530061719,
+    "referenceStep": 0.35449999999998455,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -1562,12 +1660,33 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 86,
+    "step": 91,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 673.682,
+    "level": "Up on the Rooftops",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 412.84211960861114,
+    "rawReplayScoreChange": 87.36685350216857,
+    "referenceStep": 0.3546000000000049,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 92,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -1578,19 +1697,79 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 261.73358239596456,
-    "rawReplayScoreChange": -63.741683710478014,
-    "referenceStep": 0.7092000000000098,
+    "rawReplayScoreChange": -151.10853721264658,
+    "referenceStep": 0.3546000000000049,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 87,
+    "step": 93,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 677.2275,
+    "level": "Chains of Command",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 160.98086962935483,
+    "rawReplayScoreChange": -100.75271276660973,
+    "referenceStep": 0.35449999999998455,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 94,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 677.670625,
+    "level": "CindyLand",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 298.856054249134,
+    "rawReplayScoreChange": 137.87518461977916,
+    "referenceStep": 0.08862500000000181,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 95,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 678.11375,
+    "level": "Quest for Kieran",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 288.4997549019608,
+    "rawReplayScoreChange": -10.356299347173206,
+    "referenceStep": 0.08862500000000181,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 96,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -1602,15 +1781,15 @@
       "very few tools with high rescue or release pressure"
     ],
     "rawReplayScore": 216.69816468030655,
-    "rawReplayScoreChange": -45.03541771565801,
-    "referenceStep": 0.7089999999999919,
+    "rawReplayScoreChange": -71.80159022165424,
+    "referenceStep": 0.17725000000000363,
     "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 88,
+    "step": 97,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -1629,7 +1808,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 89,
+    "step": 98,
     "variantDifferences": []
   },
   {
@@ -1646,8 +1825,159 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 90,
+    "step": 99,
     "variantDifferences": []
+  },
+  {
+    "demand": 682.7625,
+    "level": "Floating Lemming Flurry",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 146.74437006143773,
+    "rawReplayScoreChange": -52.43518175929057,
+    "referenceStep": 0.032500000000004546,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 100,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 682.7828125000001,
+    "level": "Lemming Snowjourn",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 189.3074382568058,
+    "rawReplayScoreChange": 42.56306819536806,
+    "referenceStep": 0.004062500000009095,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 101,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 682.79296875,
+    "level": "Christmas South of the Equator",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 124.08454901960785,
+    "rawReplayScoreChange": -65.22288923719795,
+    "referenceStep": 0.00203124999998181,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured"
+    ],
+    "step": 102,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 682.803125,
+    "level": "Jingle Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 109.70498039215684,
+    "rawReplayScoreChange": -14.379568627451008,
+    "referenceStep": 0.0020312500000045476,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured"
+    ],
+    "step": 103,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 682.84375,
+    "level": "Holiday Mining",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 71.37382352941177,
+    "rawReplayScoreChange": -38.331156862745075,
+    "referenceStep": 0.008124999999995452,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured"
+    ],
+    "step": 104,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 682.925,
+    "level": "32 Lemmings Below Zero",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 181.8826228625582,
+    "rawReplayScoreChange": 110.50879933314644,
+    "referenceStep": 0.016249999999990904,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 105,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 683.25,
+    "level": "Clouds of Lemmings",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 209.58000482596725,
+    "rawReplayScoreChange": 27.697381963409043,
+    "referenceStep": 0.06500000000000909,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 106,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 683.9000000000001,
+    "level": "Lemming Tracks in the Snow!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 239.12351909184727,
+    "rawReplayScoreChange": 29.54351426588002,
+    "referenceStep": 0.13000000000001818,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 107,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 685.2,
@@ -1658,15 +1988,15 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 230.65036318754585,
-    "rawReplayScoreChange": 31.470811366817543,
-    "referenceStep": 0.5200000000000046,
+    "rawReplayScoreChange": -8.473155904301422,
+    "referenceStep": 0.2599999999999909,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 91,
+    "step": 108,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1688,7 +2018,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 92,
+    "step": 109,
     "variantDifferences": []
   },
   {
@@ -1707,8 +2037,29 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 93,
+    "step": 110,
     "variantDifferences": []
+  },
+  {
+    "demand": 691.7,
+    "level": "The Long Way Around",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 305.14526867047437,
+    "rawReplayScoreChange": 51.48675093004482,
+    "referenceStep": 0.26000000000001366,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 111,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 693.0,
@@ -1716,16 +2067,36 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 320.7880236009906,
-    "rawReplayScoreChange": 67.12950586056104,
-    "referenceStep": 0.5200000000000046,
+    "rawReplayScoreChange": 15.642754930516219,
+    "referenceStep": 0.2599999999999909,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 94,
+    "step": 112,
     "variantDifferences": []
+  },
+  {
+    "demand": 694.3,
+    "level": "Maybe not such a doddle",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 289.294204244704,
+    "rawReplayScoreChange": -31.493819356286565,
+    "referenceStep": 0.2599999999999909,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 113,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 695.6,
@@ -1735,16 +2106,36 @@
       "near-full rescue with several exhausted used skill stocks"
     ],
     "rawReplayScore": 308.2317164114481,
-    "rawReplayScoreChange": -12.556307189542508,
-    "referenceStep": 0.5200000000000046,
+    "rawReplayScoreChange": 18.937512166744057,
+    "referenceStep": 0.26000000000001366,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 95,
+    "step": 114,
     "variantDifferences": []
+  },
+  {
+    "demand": 696.9000000000001,
+    "level": "Ski Jump!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 170.08909832764135,
+    "rawReplayScoreChange": -138.14261808380672,
+    "referenceStep": 0.26000000000001366,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 115,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 698.2,
@@ -1756,15 +2147,15 @@
       "fast minimum release rate with no slower crowd-management option"
     ],
     "rawReplayScore": 372.1743010019038,
-    "rawReplayScoreChange": 63.94258459045574,
-    "referenceStep": 0.5200000000000046,
+    "rawReplayScoreChange": 202.08520267426246,
+    "referenceStep": 0.2599999999999909,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 96,
+    "step": 116,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1789,7 +2180,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 97,
+    "step": 117,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1813,7 +2204,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 98,
+    "step": 118,
     "variantDifferences": []
   },
   {
@@ -1832,7 +2223,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 99,
+    "step": 119,
     "variantDifferences": []
   },
   {
@@ -1849,7 +2240,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 100,
+    "step": 120,
     "variantDifferences": []
   },
   {
@@ -1869,7 +2260,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 101,
+    "step": 121,
     "variantDifferences": []
   },
   {
@@ -1887,7 +2278,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 102,
+    "step": 122,
     "variantDifferences": []
   },
   {
@@ -1904,8 +2295,28 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 103,
+    "step": 123,
     "variantDifferences": []
+  },
+  {
+    "demand": 717.7,
+    "level": "Happy New Year!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 415.1391911724065,
+    "rawReplayScoreChange": 20.17468594288033,
+    "referenceStep": 0.26000000000001366,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 124,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 719.0,
@@ -1913,14 +2324,14 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 305.6043301594982,
-    "rawReplayScoreChange": -89.36017507002799,
-    "referenceStep": 0.5200000000000046,
+    "rawReplayScoreChange": -109.53486101290832,
+    "referenceStep": 0.2599999999999909,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 104,
+    "step": 125,
     "variantDifferences": []
   },
   {
@@ -1937,7 +2348,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 105,
+    "step": 126,
     "variantDifferences": []
   },
   {
@@ -1955,8 +2366,48 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 106,
+    "step": 127,
     "variantDifferences": []
+  },
+  {
+    "demand": 723.75,
+    "level": "Marshmallow Land",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 346.795735813083,
+    "rawReplayScoreChange": 29.92442542159688,
+    "referenceStep": 0.15,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 128,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 724.5,
+    "level": "Climbing to the Top!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 240.38384038824643,
+    "rawReplayScoreChange": -106.41189542483659,
+    "referenceStep": 0.15,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 129,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 726.0,
@@ -1966,15 +2417,15 @@
       "near-full rescue with multiple measured narrow actions"
     ],
     "rawReplayScore": 244.55514741905077,
-    "rawReplayScoreChange": -72.31616297243536,
-    "referenceStep": 0.6,
+    "rawReplayScoreChange": 4.171307030804343,
+    "referenceStep": 0.3,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 107,
+    "step": 130,
     "variantDifferences": []
   },
   {
@@ -1992,7 +2443,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 108,
+    "step": 131,
     "variantDifferences": []
   },
   {
@@ -2013,7 +2464,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 109,
+    "step": 132,
     "variantDifferences": []
   },
   {
@@ -2033,7 +2484,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 110,
+    "step": 133,
     "variantDifferences": []
   },
   {
@@ -2054,7 +2505,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 111,
+    "step": 134,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -2073,8 +2524,49 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 112,
+    "step": 135,
     "variantDifferences": []
+  },
+  {
+    "demand": 742.5,
+    "level": "Happy New Year II!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 441.86206481484857,
+    "rawReplayScoreChange": 223.36233897634338,
+    "referenceStep": 0.3,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 136,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 743.25,
+    "level": "Head for the Hills!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 270.77179518626184,
+    "rawReplayScoreChange": -171.09026962858673,
+    "referenceStep": 0.15,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 137,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 744.0,
@@ -2084,15 +2576,15 @@
       "near-full rescue with multiple measured narrow actions"
     ],
     "rawReplayScore": 293.68643593460376,
-    "rawReplayScoreChange": 75.18671009609858,
-    "referenceStep": 0.6,
+    "rawReplayScoreChange": 22.914640748341924,
+    "referenceStep": 0.15,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 113,
+    "step": 138,
     "variantDifferences": []
   },
   {
@@ -2112,7 +2604,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 114,
+    "step": 139,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2138,7 +2630,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 115,
+    "step": 140,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2164,7 +2656,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 116,
+    "step": 141,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -2189,11 +2681,32 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 117,
+    "step": 142,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 757.5,
+    "level": "It's Boxing Day!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 357.29687047994975,
+    "rawReplayScoreChange": -33.82793874806487,
+    "referenceStep": 0.3,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 143,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -2205,8 +2718,8 @@
       "fast minimum release rate with no slower crowd-management option"
     ],
     "rawReplayScore": 265.22251230924707,
-    "rawReplayScoreChange": -125.90229691876755,
-    "referenceStep": 0.6,
+    "rawReplayScoreChange": -92.07435817070268,
+    "referenceStep": 0.3,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -2214,7 +2727,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 118,
+    "step": 144,
     "variantDifferences": []
   },
   {
@@ -2233,8 +2746,48 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 119,
+    "step": 145,
     "variantDifferences": []
+  },
+  {
+    "demand": 761.1469999999999,
+    "level": "Separate Ways",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 182.16288923719796,
+    "rawReplayScoreChange": -171.36009638448505,
+    "referenceStep": 0.2293999999999869,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 146,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 761.7204999999999,
+    "level": "Presents of Mind",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 337.93822350383596,
+    "rawReplayScoreChange": 155.775334266638,
+    "referenceStep": 0.11469999999999345,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 147,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 762.294,
@@ -2242,8 +2795,8 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 233.05489017050266,
-    "rawReplayScoreChange": -120.46809545118035,
-    "referenceStep": 0.45879999999999654,
+    "rawReplayScoreChange": -104.8833333333333,
+    "referenceStep": 0.11470000000001619,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -2251,7 +2804,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 120,
+    "step": 148,
     "variantDifferences": []
   },
   {
@@ -2270,7 +2823,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 121,
+    "step": 149,
     "variantDifferences": []
   },
   {
@@ -2288,7 +2841,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 122,
+    "step": 150,
     "variantDifferences": []
   },
   {
@@ -2307,7 +2860,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 123,
+    "step": 151,
     "variantDifferences": []
   },
   {
@@ -2326,7 +2879,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 124,
+    "step": 152,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -2348,7 +2901,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 125,
+    "step": 153,
     "variantDifferences": []
   },
   {
@@ -2368,7 +2921,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 126,
+    "step": 154,
     "variantDifferences": []
   },
   {
@@ -2388,7 +2941,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 127,
+    "step": 155,
     "variantDifferences": []
   },
   {
@@ -2409,7 +2962,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 128,
+    "step": 156,
     "variantDifferences": []
   },
   {
@@ -2428,7 +2981,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 129,
+    "step": 157,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2452,7 +3005,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 130,
+    "step": 158,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2478,7 +3031,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 131,
+    "step": 159,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2504,7 +3057,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 132,
+    "step": 160,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -2529,7 +3082,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 133,
+    "step": 161,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2553,7 +3106,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 134,
+    "step": 162,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2578,12 +3131,32 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 135,
+    "step": 163,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "different rescue fraction",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 797.8530000000001,
+    "level": "Plethora of Presents",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 236.9489464059968,
+    "rawReplayScoreChange": -64.09815562636626,
+    "referenceStep": 0.22940000000000965,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 164,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -2594,15 +3167,15 @@
       "multiple hatches with combined work and little rescue or tool margin"
     ],
     "rawReplayScore": 329.6606092436975,
-    "rawReplayScoreChange": 28.613507211334422,
-    "referenceStep": 0.45879999999999654,
+    "rawReplayScoreChange": 92.71166283770069,
+    "referenceStep": 0.2293999999999869,
     "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 136,
+    "step": 165,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -2626,7 +3199,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 137,
+    "step": 166,
     "variantDifferences": []
   },
   {
@@ -2646,7 +3219,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 138,
+    "step": 167,
     "variantDifferences": []
   },
   {
@@ -2665,7 +3238,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 139,
+    "step": 168,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2689,7 +3262,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 140,
+    "step": 169,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2711,7 +3284,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 141,
+    "step": 170,
     "variantDifferences": []
   },
   {
@@ -2730,7 +3303,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 142,
+    "step": 171,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2755,7 +3328,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 143,
+    "step": 172,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2781,7 +3354,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 144,
+    "step": 173,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -2804,7 +3377,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 145,
+    "step": 174,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2831,7 +3404,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 146,
+    "step": 175,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2857,7 +3430,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 147,
+    "step": 176,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2882,7 +3455,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 148,
+    "step": 177,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -2905,7 +3478,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 149,
+    "step": 178,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2931,7 +3504,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 150,
+    "step": 179,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2956,7 +3529,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 151,
+    "step": 180,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2981,7 +3554,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 152,
+    "step": 181,
     "variantDifferences": []
   },
   {
@@ -3002,7 +3575,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 153,
+    "step": 182,
     "variantDifferences": [
       "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
       "Classic conversion retains a four-minute time limit; Redux has no time limit."
@@ -3027,7 +3600,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 154,
+    "step": 183,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3052,7 +3625,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 155,
+    "step": 184,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3077,7 +3650,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 156,
+    "step": 185,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3103,7 +3676,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 157,
+    "step": 186,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3129,7 +3702,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 158,
+    "step": 187,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -3155,7 +3728,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 159,
+    "step": 188,
     "variantDifferences": []
   },
   {
@@ -3177,7 +3750,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 160,
+    "step": 189,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3203,7 +3776,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 161,
+    "step": 190,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3225,7 +3798,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 162,
+    "step": 191,
     "variantDifferences": []
   },
   {
@@ -3245,11 +3818,51 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 163,
+    "step": 192,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 841.85625,
+    "level": "The North Poles",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 292.82530228351766,
+    "rawReplayScoreChange": -142.3546977164823,
+    "referenceStep": 0.07425000000000637,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 193,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 842.2275,
+    "level": "2 Minutes before midnight",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 202.2486274509804,
+    "rawReplayScoreChange": -90.57667483253726,
+    "referenceStep": 0.07424999999998363,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 194,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -3258,8 +3871,8 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 260.1643010019038,
-    "rawReplayScoreChange": -175.01569899809613,
-    "referenceStep": 0.2970000000000027,
+    "rawReplayScoreChange": 57.91567355092343,
+    "referenceStep": 0.14850000000001273,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -3267,7 +3880,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 164,
+    "step": 195,
     "variantDifferences": []
   },
   {
@@ -3287,7 +3900,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 165,
+    "step": 196,
     "variantDifferences": []
   },
   {
@@ -3308,7 +3921,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 166,
+    "step": 197,
     "variantDifferences": []
   },
   {
@@ -3329,7 +3942,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 167,
+    "step": 198,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3356,7 +3969,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 168,
+    "step": 199,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory"
@@ -3377,7 +3990,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 169,
+    "step": 200,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory"
@@ -3400,7 +4013,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 170,
+    "step": 201,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3426,8 +4039,67 @@
       "less than 30 seconds spare on the witness",
       "four or more assignments within two seconds"
     ],
-    "step": 171,
+    "step": 202,
     "variantDifferences": []
+  },
+  {
+    "demand": 854.106,
+    "level": "Merry Christmas Mr Lemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 385.79943137254907,
+    "rawReplayScoreChange": 103.98103957962167,
+    "referenceStep": 0.14839999999999237,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 203,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 854.477,
+    "level": "Christmas Bonus",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 364.92480392156864,
+    "rawReplayScoreChange": -20.874627450980427,
+    "referenceStep": 0.07419999999999619,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 204,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 854.6624999999999,
+    "level": "A Lemming Holiday",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 426.1464853719266,
+    "rawReplayScoreChange": 61.22168145035795,
+    "referenceStep": 0.03709999999998672,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "four or more assignments within two seconds"
+    ],
+    "step": 205,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 854.848,
@@ -3438,15 +4110,15 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 365.9808809456797,
-    "rawReplayScoreChange": 84.1624891527523,
-    "referenceStep": 0.29679999999998474,
+    "rawReplayScoreChange": -60.16560442624689,
+    "referenceStep": 0.03710000000000946,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 172,
+    "step": 206,
     "variantDifferences": []
   },
   {
@@ -3467,7 +4139,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 173,
+    "step": 207,
     "variantDifferences": []
   },
   {
@@ -3491,7 +4163,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 174,
+    "step": 208,
     "variantDifferences": []
   },
   {
@@ -3511,7 +4183,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 175,
+    "step": 209,
     "variantDifferences": []
   },
   {
@@ -3531,8 +4203,28 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 176,
+    "step": 210,
     "variantDifferences": []
+  },
+  {
+    "demand": 861.5305000000001,
+    "level": "Lemming Reunification",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 289.3430299307301,
+    "rawReplayScoreChange": 107.29946253278086,
+    "referenceStep": 0.14850000000001273,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 211,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 862.273,
@@ -3545,8 +4237,8 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 416.6628091510948,
-    "rawReplayScoreChange": 234.61924175314556,
-    "referenceStep": 0.2970000000000027,
+    "rawReplayScoreChange": 127.3197792203647,
+    "referenceStep": 0.14849999999999,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -3554,7 +4246,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 177,
+    "step": 212,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3582,7 +4274,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 178,
+    "step": 213,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -3608,7 +4300,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 179,
+    "step": 214,
     "variantDifferences": []
   },
   {
@@ -3628,7 +4320,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 180,
+    "step": 215,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -3653,7 +4345,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 181,
+    "step": 216,
     "variantDifferences": []
   },
   {
@@ -3674,7 +4366,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 182,
+    "step": 217,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3702,7 +4394,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 183,
+    "step": 218,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3729,7 +4421,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 184,
+    "step": 219,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3759,7 +4451,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 185,
+    "step": 220,
     "variantDifferences": []
   },
   {
@@ -3781,7 +4473,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 186,
+    "step": 221,
     "variantDifferences": []
   },
   {
@@ -3803,7 +4495,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 187,
+    "step": 222,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3828,7 +4520,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 188,
+    "step": 223,
     "variantDifferences": []
   },
   {
@@ -3849,7 +4541,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 189,
+    "step": 224,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3877,10 +4569,31 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 190,
+    "step": 225,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population"
+    ]
+  },
+  {
+    "demand": 882.3185000000001,
+    "level": "A Block from Home",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 348.4027319601136,
+    "rawReplayScoreChange": -24.621765120221596,
+    "referenceStep": 0.14850000000001273,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 226,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -3892,8 +4605,8 @@
       "little deadline margin with combined skills and exhausted stock"
     ],
     "rawReplayScore": 433.1251450849306,
-    "rawReplayScoreChange": 60.10064800459537,
-    "referenceStep": 0.2970000000000027,
+    "rawReplayScoreChange": 84.72241312481697,
+    "referenceStep": 0.14849999999999,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -3902,7 +4615,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 191,
+    "step": 227,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence"
     ]
@@ -3928,7 +4641,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 192,
+    "step": 228,
     "variantDifferences": []
   },
   {
@@ -3951,7 +4664,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 193,
+    "step": 229,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3980,7 +4693,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 194,
+    "step": 230,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population"
@@ -4006,7 +4719,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 195,
+    "step": 231,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -4028,7 +4741,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 196,
+    "step": 232,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4057,8 +4770,28 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 197,
+    "step": 233,
     "variantDifferences": []
+  },
+  {
+    "demand": 902.0999999999999,
+    "level": "It Came Upon a Lemnight Clear",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 557.7923751416067,
+    "rawReplayScoreChange": 161.45692381290547,
+    "referenceStep": 0.13999999999998636,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 234,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 902.8,
@@ -4069,16 +4802,56 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 368.4217529156007,
-    "rawReplayScoreChange": -27.913698413100576,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": -189.37062222600605,
+    "referenceStep": 0.1400000000000091,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 198,
+    "step": 235,
     "variantDifferences": []
+  },
+  {
+    "demand": 903.5,
+    "level": "Emmings!  (No L)",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 479.41550072517356,
+    "rawReplayScoreChange": 110.99374780957288,
+    "referenceStep": 0.1400000000000091,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 236,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 903.85,
+    "level": "Rendezvous II",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 410.0961325334524,
+    "rawReplayScoreChange": -69.31936819172114,
+    "referenceStep": 0.07000000000000454,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 237,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 904.2,
@@ -4089,8 +4862,8 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 517.8743315771402,
-    "rawReplayScoreChange": 149.45257866153952,
-    "referenceStep": 0.2800000000000182,
+    "rawReplayScoreChange": 107.77819904368778,
+    "referenceStep": 0.07000000000000454,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -4098,7 +4871,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 199,
+    "step": 238,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -4122,7 +4895,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 200,
+    "step": 239,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4142,7 +4915,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 201,
+    "step": 240,
     "variantDifferences": []
   },
   {
@@ -4159,7 +4932,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 202,
+    "step": 241,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -4181,7 +4954,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 203,
+    "step": 242,
     "variantDifferences": []
   },
   {
@@ -4201,7 +4974,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 204,
+    "step": 243,
     "variantDifferences": []
   },
   {
@@ -4221,8 +4994,29 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 205,
+    "step": 244,
     "variantDifferences": []
+  },
+  {
+    "demand": 913.3,
+    "level": "Sir Edmund Hilemming",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 423.18971404822355,
+    "rawReplayScoreChange": -34.026250004064025,
+    "referenceStep": 0.13999999999998636,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 245,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 914.0,
@@ -4232,15 +5026,35 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 319.7414484928103,
-    "rawReplayScoreChange": -137.47451555947725,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": -103.44826555541323,
+    "referenceStep": 0.1400000000000091,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 206,
+    "step": 246,
     "variantDifferences": []
+  },
+  {
+    "demand": 914.7,
+    "level": "Peak of Performance",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 262.66288758246736,
+    "rawReplayScoreChange": -57.07856091034296,
+    "referenceStep": 0.1400000000000091,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 247,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 915.4,
@@ -4251,8 +5065,8 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 338.27778139406075,
-    "rawReplayScoreChange": 18.536332901250432,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": 75.61489381159339,
+    "referenceStep": 0.13999999999998636,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -4260,8 +5074,28 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 207,
+    "step": 248,
     "variantDifferences": []
+  },
+  {
+    "demand": 916.0999999999999,
+    "level": "Get the Point?",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 553.2028994732024,
+    "rawReplayScoreChange": 214.9251180791416,
+    "referenceStep": 0.13999999999998636,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 249,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 916.8,
@@ -4271,15 +5105,15 @@
       "dense assignment workload with limited recovery margin"
     ],
     "rawReplayScore": 265.2956608273371,
-    "rawReplayScoreChange": -72.98212056672367,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": -287.9072386458653,
+    "referenceStep": 0.1400000000000091,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 208,
+    "step": 250,
     "variantDifferences": []
   },
   {
@@ -4301,7 +5135,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 209,
+    "step": 251,
     "variantDifferences": []
   },
   {
@@ -4318,7 +5152,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 210,
+    "step": 252,
     "variantDifferences": []
   },
   {
@@ -4335,7 +5169,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 211,
+    "step": 253,
     "variantDifferences": []
   },
   {
@@ -4355,7 +5189,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 212,
+    "step": 254,
     "variantDifferences": []
   },
   {
@@ -4373,7 +5207,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 213,
+    "step": 255,
     "variantDifferences": []
   },
   {
@@ -4389,7 +5223,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 214,
+    "step": 256,
     "variantDifferences": []
   },
   {
@@ -4409,9 +5243,69 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 215,
+    "step": 257,
     "variantDifferences": [
       "Classic has fewer available solution skills than Redux: basher"
+    ]
+  },
+  {
+    "demand": 927.3,
+    "level": "The Search for Lem",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 443.09847458138273,
+    "rawReplayScoreChange": 102.97300000000001,
+    "referenceStep": 0.13999999999998636,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 258,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 927.4749999999999,
+    "level": "The Final Frontier",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 275.781751982296,
+    "rawReplayScoreChange": -167.31672259908675,
+    "referenceStep": 0.034999999999990906,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 259,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 927.65,
+    "level": "Steel Block Party",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 204.01073237445286,
+    "rawReplayScoreChange": -71.77101960784313,
+    "referenceStep": 0.035000000000013645,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 260,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -4423,19 +5317,79 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 342.90082875893796,
-    "rawReplayScoreChange": 2.7753541775552435,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": 138.8900963844851,
+    "referenceStep": 0.07000000000000454,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 216,
+    "step": 261,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 928.7,
+    "level": "Lemmings Up High",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 236.12182752255916,
+    "rawReplayScoreChange": -106.7790012363788,
+    "referenceStep": 0.1400000000000091,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 262,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 929.05,
+    "level": "Up, up, and away!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 305.4834631986927,
+    "rawReplayScoreChange": 69.36163567613352,
+    "referenceStep": 0.06999999999998181,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 263,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 929.2249999999999,
+    "level": "The Undiscovered Country",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 159.70795023937663,
+    "rawReplayScoreChange": -145.77551295931605,
+    "referenceStep": 0.034999999999990906,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 264,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -4444,15 +5398,15 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 242.86046474890577,
-    "rawReplayScoreChange": -100.04036401003219,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": 83.15251450952914,
+    "referenceStep": 0.035000000000013645,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 217,
+    "step": 265,
     "variantDifferences": []
   },
   {
@@ -4471,9 +5425,70 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 218,
+    "step": 266,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
+    ]
+  },
+  {
+    "demand": 930.9749999999999,
+    "level": "Oogilemming!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 497.1982427022931,
+    "rawReplayScoreChange": 165.45768845315905,
+    "referenceStep": 0.034999999999990906,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 267,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 931.15,
+    "level": "Polar Expedition",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 467.56803921568627,
+    "rawReplayScoreChange": -29.63020348660683,
+    "referenceStep": 0.035000000000013645,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 268,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 931.5,
+    "level": "Santus Lemmingus",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 345.948214379853,
+    "rawReplayScoreChange": -121.61982483583324,
+    "referenceStep": 0.07000000000000454,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 269,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -4486,8 +5501,8 @@
       "little deadline margin with combined skills and exhausted stock"
     ],
     "rawReplayScore": 320.71448179271715,
-    "rawReplayScoreChange": -11.026072456416898,
-    "referenceStep": 0.2800000000000182,
+    "rawReplayScoreChange": -25.233732587135876,
+    "referenceStep": 0.1400000000000091,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -4496,8 +5511,134 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 219,
+    "step": 270,
     "variantDifferences": []
+  },
+  {
+    "demand": 932.5500000000001,
+    "level": "Presents of Mind II",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 321.69920389599287,
+    "rawReplayScoreChange": 0.9847221032757147,
+    "referenceStep": 0.07000000000000454,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 271,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 932.9000000000001,
+    "level": "Check Your Hints!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 297.2817973856209,
+    "rawReplayScoreChange": -24.41740651037196,
+    "referenceStep": 0.07000000000000454,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 272,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 932.9875000000001,
+    "level": "The Next Lemeration",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 339.35449708033525,
+    "rawReplayScoreChange": 42.072699694714345,
+    "referenceStep": 0.017499999999995453,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 273,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 933.075,
+    "level": "The Voyage Home...",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 257.2009383753502,
+    "rawReplayScoreChange": -82.15355870498507,
+    "referenceStep": 0.017499999999995453,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 274,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 933.25,
+    "level": "A Single Lemming...",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 296.67802649209995,
+    "rawReplayScoreChange": 39.47708811674977,
+    "referenceStep": 0.034999999999990906,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 275,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 933.425,
+    "level": "Break On Through",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 292.72113275742635,
+    "rawReplayScoreChange": -3.9568937346735993,
+    "referenceStep": 0.034999999999990906,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 276,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 933.6,
@@ -4509,15 +5650,15 @@
       "fast minimum release rate with no slower crowd-management option"
     ],
     "rawReplayScore": 331.0599166626026,
-    "rawReplayScoreChange": 10.345434869885423,
-    "referenceStep": 0.2799999999999955,
+    "rawReplayScoreChange": 38.33878390517623,
+    "referenceStep": 0.035000000000013645,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 220,
+    "step": 277,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4538,7 +5679,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 221,
+    "step": 278,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4561,8 +5702,176 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 222,
+    "step": 279,
     "variantDifferences": []
+  },
+  {
+    "demand": 941.125,
+    "level": "The Needs of the Many...",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 479.8,
+    "rawReplayScoreChange": 192.35688873145574,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill",
+      "four or more assignments within two seconds"
+    ],
+    "step": 280,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 942.25,
+    "level": "Merry Christmaze",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 286.1449215562869,
+    "rawReplayScoreChange": -193.65507844371314,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 281,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 943.375,
+    "level": "Break on through...",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 297.6806080817235,
+    "rawReplayScoreChange": 11.535686525436631,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing"
+    ],
+    "step": 282,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 944.5,
+    "level": "Go Thataway!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 441.67160294957955,
+    "rawReplayScoreChange": 143.99099486785605,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 283,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 946.75,
+    "level": "Lemmintaschen?",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 474.6492347494891,
+    "rawReplayScoreChange": 32.977631799909545,
+    "referenceStep": 0.45,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 284,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 947.875,
+    "level": "The Wrath of Lem",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 260.08308782095486,
+    "rawReplayScoreChange": -214.56614692853424,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 285,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 948.15625,
+    "level": "Four Play",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 550.1517663482723,
+    "rawReplayScoreChange": 290.06867852731745,
+    "referenceStep": 0.05625,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 286,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 948.4375,
+    "level": "Lemmy in the cold, cold ground",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 359.0283869025288,
+    "rawReplayScoreChange": -191.12337944574352,
+    "referenceStep": 0.05625,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 287,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 949.0,
@@ -4573,16 +5882,54 @@
       "near-full rescue with repeated worker skill changes"
     ],
     "rawReplayScore": 366.7278921568627,
-    "rawReplayScoreChange": 79.28478088831844,
-    "referenceStep": 1.8,
+    "rawReplayScoreChange": 7.699505254333928,
+    "referenceStep": 0.1125,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 223,
+    "step": 288,
     "variantDifferences": []
+  },
+  {
+    "demand": 953.5,
+    "level": "And a Happy New Year!",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 382.5409692904275,
+    "rawReplayScoreChange": 15.813077133564775,
+    "referenceStep": 0.9,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 289,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 955.75,
+    "level": "Lemmings...The Motion Picture",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 398.8749354186119,
+    "rawReplayScoreChange": 16.333966128184443,
+    "referenceStep": 0.45,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 290,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
   },
   {
     "demand": 958.0,
@@ -4590,15 +5937,15 @@
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 349.1967884394126,
-    "rawReplayScoreChange": -17.531103717450094,
-    "referenceStep": 1.8,
+    "rawReplayScoreChange": -49.67814697919931,
+    "referenceStep": 0.45,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 224,
+    "step": 291,
     "variantDifferences": []
   },
   {
@@ -4619,11 +5966,70 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 225,
+    "step": 292,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
       "Classic retains a time limit"
+    ]
+  },
+  {
+    "demand": 971.5,
+    "level": "Steel Ice Span",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 308.87352450573985,
+    "rawReplayScoreChange": 76.25387305024134,
+    "referenceStep": 0.9,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 293,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 972.625,
+    "level": "Division Bell",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 96.02730392156863,
+    "rawReplayScoreChange": -212.84622058417122,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 294,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
+    ]
+  },
+  {
+    "demand": 973.75,
+    "level": "Surprise Package?",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 32.93161764705883,
+    "rawReplayScoreChange": -63.0956862745098,
+    "referenceStep": 0.225,
+    "reportedTooHard": false,
+    "risks": [
+      "spatial tolerance unmeasured",
+      "less than 30 seconds spare on the witness"
+    ],
+    "step": 295,
+    "variantDifferences": [
+      "Exact Classic seasonal source; Redux is comparison evidence only.",
+      "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
     ]
   },
   {
@@ -4634,15 +6040,15 @@
       "near-full rescue with several exhausted used skill stocks"
     ],
     "rawReplayScore": 397.44998820971836,
-    "rawReplayScoreChange": 164.83033675421984,
-    "referenceStep": 1.8,
+    "rawReplayScoreChange": 364.5183705626595,
+    "referenceStep": 0.45,
     "reportedTooHard": true,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 226,
+    "step": 296,
     "variantDifferences": []
   },
   {
@@ -4660,7 +6066,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 227,
+    "step": 297,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",

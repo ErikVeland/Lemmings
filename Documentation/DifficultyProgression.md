@@ -2,11 +2,17 @@
 
 ## Meaning and scope
 
-The golden path has 227 lessons in 13 authored teaching chapters. The full order
-is pinned in `Artifacts/LearningJourney/course-plan.json`, with exact sources,
+The golden path has 297 unique puzzles in 13 authored teaching chapters. The full order
+is pinned in `Artifacts/LearningJourney/course-plan.json` and `seasonal-plan.json`, with exact sources,
 winning replays, chapter goals, learning roles and placement reasons. Course
 positions are editorial ordinals. They are not measured human difficulty scores.
 Original measured replay scores remain unchanged.
+
+Learning-30 preserves the complete first 80 learning-29 lesson records after
+Erik and Uva reported a good curve through approximately 80 completed lessons.
+It adds 70 seasonal sources to the later course. All 72 official 1991–1994
+Xmas/Holiday entries are represented. Two exact-state equivalents already form
+the closing pair. See the [later-curve review](JourneyCurveReview-2026-10-26.md).
 
 The opening has 30 beginner lessons: the original skill tutorials, Cellbash,
 simple native practice and all 20 Tame levels. Fifteen lessons then combine
@@ -33,13 +39,13 @@ hatches increase coordination demand without multiplying spawn frequency.
 Same-tick assignments can use Pause. They do not establish physically simultaneous
 clicks or prove that the recorded execution is necessary.
 
-All 227 exact native replays record the first tick that reaches the rescue quota
+All 297 native replay records include the first tick that reaches the rescue quota
 and the tools remaining at that tick. Successful tool consumption must match the
 recorded commands before quota. Later commands do not inflate useful workload.
 Deadline pressure uses the quota tick rather than replay shutdown. This corrects
 false deadline pressure in routes that had already won before running to timeout.
 
-`course-review.json` records all 227 transitions across eight pressure axes:
+`course-review.json` records all 297 transitions across eight pressure axes:
 rescue, available tool scarcity, minimum release rate, hatches, command density,
 worker skill chains, precision and deadline. After the foundations, a transition
 cannot raise more than two axes by over 30 points. A lesson cannot introduce more
@@ -51,17 +57,20 @@ compound jumps. They do not certify novice discovery or special pacing.
 Player-reported walls have explicit `tooHardForEarlyJourney` verdicts and later
 placement floors in `route-safety.json`. They remain in the Journey, with easier
 practice before them. `difficulty-walls.json` records their current positions,
-warning signs and preparation gaps. Watson follows small-budget practice at 88.
-PoP YoR ToP!!! follows group coordination at 136. Just A Quicky follows strict
-combinations at 157, after worker routing, containment and skill-chain practice.
+warning signs and preparation gaps. Watson follows small-budget practice at 97.
+PoP YoR ToP!!! follows group coordination at 165. Just A Quicky follows strict
+combinations after worker routing, containment and skill-chain practice.
 Time waits for no Lemming and This Corrosion remain the closing pair.
 
 Redux provides comparison evidence. A retail rank alone must not hide useful
 easy practice. Fan bridges need an exact human solution review, comparable
 reference bounds and a real gap between official lessons. Machine estimates
 alone cannot admit fan or NeoLemmix puzzles. Simple artwork and short replays
-can conceal difficult discovery. Xmas and Holiday levels also require an exact
-human difficulty review. The owner-confirmed Cellbash practice and official
+can conceal difficult discovery. The owner requested all unique Xmas/Holiday
+puzzles on 26 October 2026. Their authored placements retain exact native routes
+and explicitly await human difficulty review. All Hail and Blizzard entries
+remain in advanced practice or final challenges. A short replay or a seasonal
+rank name does not establish easy discovery. The owner-confirmed Cellbash practice and official
 Macintosh port counterpart remain explicit exceptions.
 
 Older built-in saved journeys restore the authored order of all unvisited lessons,

@@ -1,5 +1,7 @@
 """Regression checks for admission evidence, independent of native UI or audio."""
 import unittest
+from unittest.mock import patch
+import copy
 
 import human_journey as journey
 
@@ -41,6 +43,25 @@ class GoldenPathAdmissionTests(unittest.TestCase):
         for pack, name in [('xmasLemmings1992-LEVEL-4', 'Easy'), ('fan:example', 'Holiday Pack'),
                            ('fan:example', 'Christmas')]:
             self.assertTrue(journey.seasonal({'entry': {'identity': {'packID': pack}, 'packNameSnapshot': name}}))
+
+    def test_every_seasonal_source_has_current_native_evidence_and_unique_coverage(self):
+        manifest = journey.read(journey.ROOT / 'Resources/Progression/learning.json')
+        result = journey.seasonal_coverage(manifest)
+        self.assertEqual(result['sourceEntries'], 72)
+        self.assertEqual(result['uniqueSeasonalSourcesAdded'], 70)
+        self.assertEqual(result['exactStateAliases'], 2)
+        self.assertTrue(all(level['nativeReplayPassed'] and level['step'] > 80 for level in result['levels']))
+        self.assertEqual({level['step'] for level in result['levels'] if level['identity'] != level['representedBy']}, {296, 297})
+
+    def test_a_duplicate_title_cannot_replace_an_exact_state_alias(self):
+        manifest = journey.read(journey.ROOT / 'Resources/Progression/learning.json')
+        original_read = journey.read
+        course = copy.deepcopy(original_read(journey.OUT / 'seasonal-plan.json'))
+        course['exactStateAliases'][0]['representedBy'] = manifest['lessons'][0]['entry']['identity']
+        def read(path):
+            return course if path == journey.OUT / 'seasonal-plan.json' else original_read(path)
+        with patch.object(journey, 'read', side_effect=read), self.assertRaises(AssertionError):
+            journey.seasonal_coverage(manifest)
 
 
 if __name__ == '__main__':

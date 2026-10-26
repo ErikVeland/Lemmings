@@ -15,26 +15,30 @@
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
+      "coveredUniqueSources": 4,
       "pack": "Xmas Lemmings 1991",
-      "selected": 0
+      "selected": 2
     },
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
+      "coveredUniqueSources": 4,
       "pack": "Xmas Lemmings 1992",
-      "selected": 0
+      "selected": 4
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
+      "coveredUniqueSources": 32,
       "pack": "Holiday Lemmings 1993",
-      "selected": 0
+      "selected": 32
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
+      "coveredUniqueSources": 32,
       "pack": "Holiday Lemmings 1994",
-      "selected": 0
+      "selected": 32
     }
   ],
   "eligiblePool": 1721,

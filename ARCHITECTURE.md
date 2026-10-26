@@ -306,6 +306,25 @@ document is the canonical place for the user-facing wording.
 
 ## Build and distribution
 
+### Game Mode
+
+The Mac and iOS app property lists identify the app as a game and enable
+`LSSupportsGameMode`. They retain `GCSupportsGameMode` for earlier systems.
+Mac release-input checks and iOS archive/export checks reject missing or
+disabled declarations. The Desk Clock extensions do not declare Game Mode.
+
+The system controls activation. It requires full-screen play on iOS/iPadOS 18
+or later, or an Apple silicon Mac running macOS 14 or later. Intel Macs,
+earlier systems and tvOS do not share this activation contract. Existing
+window and Duo layout policies remain in place. Launch the Mac app through
+Finder or `open`, rather than its executable directly. A saved player choice
+can leave Game Mode disabled. Verify activation through the system overlay
+on eligible devices after installing the signed candidate.
+See [Apple's Game Mode requirements](https://support.apple.com/en-us/105118)
+and [implementation guidance](https://developer.apple.com/videos/play/wwdc2025/209/).
+
+### Packaging
+
 `Package.swift` defines `NxlvKit`, the mobile core and UI libraries, the native
 macOS executables and package test targets. `Scripts/build-local-app.sh` builds
 universal arm64/x86_64 Mac bundles and embeds the supplied local game data. It

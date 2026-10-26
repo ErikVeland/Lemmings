@@ -100,7 +100,7 @@
       "phase": "bridgePractice"
     }
   ],
-  "journeyVersion": "learning-29",
+  "journeyVersion": "learning-30",
   "lessons": [
     {
       "identity": {
@@ -168,7 +168,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 82,
+      "step": 84,
       "verdict": null
     },
     {
@@ -183,7 +183,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 84,
+      "step": 86,
       "verdict": null
     },
     {
@@ -199,7 +199,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 86,
+      "step": 91,
       "verdict": null
     },
     {
@@ -214,7 +214,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 87,
+      "step": 93,
       "verdict": null
     },
     {
@@ -230,7 +230,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 88,
+      "step": 97,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -246,7 +246,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 91,
+      "step": 108,
       "verdict": null
     },
     {
@@ -261,7 +261,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 93,
+      "step": 110,
       "verdict": null
     },
     {
@@ -276,7 +276,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 95,
+      "step": 114,
       "verdict": null
     },
     {
@@ -293,7 +293,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 96,
+      "step": 116,
       "verdict": null
     },
     {
@@ -309,7 +309,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 97,
+      "step": 117,
       "verdict": null
     },
     {
@@ -324,7 +324,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 98,
+      "step": 118,
       "verdict": null
     },
     {
@@ -339,7 +339,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 99,
+      "step": 119,
       "verdict": null
     },
     {
@@ -355,7 +355,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 101,
+      "step": 121,
       "verdict": null
     },
     {
@@ -370,7 +370,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 102,
+      "step": 122,
       "verdict": null
     },
     {
@@ -385,7 +385,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 107,
+      "step": 130,
       "verdict": null
     },
     {
@@ -400,7 +400,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 108,
+      "step": 131,
       "verdict": null
     },
     {
@@ -416,7 +416,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 109,
+      "step": 132,
       "verdict": null
     },
     {
@@ -431,7 +431,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 110,
+      "step": 133,
       "verdict": null
     },
     {
@@ -447,7 +447,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 111,
+      "step": 134,
       "verdict": null
     },
     {
@@ -462,7 +462,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 113,
+      "step": 138,
       "verdict": null
     },
     {
@@ -477,7 +477,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 114,
+      "step": 139,
       "verdict": null
     },
     {
@@ -492,7 +492,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 115,
+      "step": 140,
       "verdict": null
     },
     {
@@ -508,7 +508,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 116,
+      "step": 141,
       "verdict": null
     },
     {
@@ -525,7 +525,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 117,
+      "step": 142,
       "verdict": null
     },
     {
@@ -541,7 +541,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 118,
+      "step": 144,
       "verdict": null
     },
     {
@@ -556,7 +556,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 119,
+      "step": 145,
       "verdict": null
     },
     {
@@ -571,7 +571,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 121,
+      "step": 149,
       "verdict": null
     },
     {
@@ -586,7 +586,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 122,
+      "step": 150,
       "verdict": null
     },
     {
@@ -602,7 +602,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 123,
+      "step": 151,
       "verdict": null
     },
     {
@@ -617,7 +617,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 124,
+      "step": 152,
       "verdict": null
     },
     {
@@ -633,7 +633,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 125,
+      "step": 153,
       "verdict": null
     },
     {
@@ -649,7 +649,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 126,
+      "step": 154,
       "verdict": null
     },
     {
@@ -665,7 +665,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 127,
+      "step": 155,
       "verdict": null
     },
     {
@@ -681,7 +681,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 128,
+      "step": 156,
       "verdict": null
     },
     {
@@ -696,7 +696,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 129,
+      "step": 157,
       "verdict": null
     },
     {
@@ -711,7 +711,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 130,
+      "step": 158,
       "verdict": null
     },
     {
@@ -728,7 +728,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 131,
+      "step": 159,
       "verdict": null
     },
     {
@@ -745,7 +745,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 132,
+      "step": 160,
       "verdict": null
     },
     {
@@ -762,7 +762,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 133,
+      "step": 161,
       "verdict": null
     },
     {
@@ -779,7 +779,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 134,
+      "step": 162,
       "verdict": null
     },
     {
@@ -794,7 +794,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 135,
+      "step": 163,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -809,7 +809,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 136,
+      "step": 165,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -824,7 +824,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 137,
+      "step": 166,
       "verdict": null
     },
     {
@@ -840,7 +840,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 138,
+      "step": 167,
       "verdict": null
     },
     {
@@ -855,7 +855,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 139,
+      "step": 168,
       "verdict": null
     },
     {
@@ -871,7 +871,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 140,
+      "step": 169,
       "verdict": null
     },
     {
@@ -886,7 +886,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 142,
+      "step": 171,
       "verdict": null
     },
     {
@@ -902,7 +902,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 143,
+      "step": 172,
       "verdict": null
     },
     {
@@ -918,7 +918,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 144,
+      "step": 173,
       "verdict": null
     },
     {
@@ -934,7 +934,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 145,
+      "step": 174,
       "verdict": null
     },
     {
@@ -951,7 +951,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 146,
+      "step": 175,
       "verdict": null
     },
     {
@@ -967,7 +967,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 147,
+      "step": 176,
       "verdict": null
     },
     {
@@ -983,7 +983,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 148,
+      "step": 177,
       "verdict": null
     },
     {
@@ -999,7 +999,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 149,
+      "step": 178,
       "verdict": null
     },
     {
@@ -1015,7 +1015,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 150,
+      "step": 179,
       "verdict": null
     },
     {
@@ -1031,7 +1031,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 151,
+      "step": 180,
       "verdict": null
     },
     {
@@ -1047,7 +1047,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 152,
+      "step": 181,
       "verdict": null
     },
     {
@@ -1064,7 +1064,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 153,
+      "step": 182,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -1081,7 +1081,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 154,
+      "step": 183,
       "verdict": null
     },
     {
@@ -1098,7 +1098,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 155,
+      "step": 184,
       "verdict": null
     },
     {
@@ -1114,7 +1114,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 156,
+      "step": 185,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -1136,7 +1136,7 @@
         "plan a route with no spare used skills"
       ],
       "stage": "Expert",
-      "step": 157,
+      "step": 186,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -1153,7 +1153,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 158,
+      "step": 187,
       "verdict": null
     },
     {
@@ -1170,7 +1170,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 159,
+      "step": 188,
       "verdict": null
     },
     {
@@ -1187,7 +1187,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 160,
+      "step": 189,
       "verdict": null
     },
     {
@@ -1205,7 +1205,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 161,
+      "step": 190,
       "verdict": null
     },
     {
@@ -1220,7 +1220,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 162,
+      "step": 191,
       "verdict": null
     },
     {
@@ -1236,7 +1236,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 163,
+      "step": 192,
       "verdict": null
     },
     {
@@ -1251,7 +1251,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 165,
+      "step": 196,
       "verdict": null
     },
     {
@@ -1267,7 +1267,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 166,
+      "step": 197,
       "verdict": null
     },
     {
@@ -1283,7 +1283,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 167,
+      "step": 198,
       "verdict": null
     },
     {
@@ -1299,7 +1299,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 168,
+      "step": 199,
       "verdict": null
     },
     {
@@ -1314,7 +1314,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 170,
+      "step": 201,
       "verdict": null
     },
     {
@@ -1329,7 +1329,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 171,
+      "step": 202,
       "verdict": null
     },
     {
@@ -1345,7 +1345,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 172,
+      "step": 206,
       "verdict": null
     },
     {
@@ -1361,7 +1361,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 173,
+      "step": 207,
       "verdict": null
     },
     {
@@ -1379,7 +1379,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 174,
+      "step": 208,
       "verdict": null
     },
     {
@@ -1394,7 +1394,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 175,
+      "step": 209,
       "verdict": null
     },
     {
@@ -1410,7 +1410,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 176,
+      "step": 210,
       "verdict": null
     },
     {
@@ -1428,7 +1428,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 177,
+      "step": 212,
       "verdict": null
     },
     {
@@ -1445,7 +1445,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 178,
+      "step": 213,
       "verdict": null
     },
     {
@@ -1463,7 +1463,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 179,
+      "step": 214,
       "verdict": null
     },
     {
@@ -1478,7 +1478,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 180,
+      "step": 215,
       "verdict": null
     },
     {
@@ -1495,7 +1495,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 181,
+      "step": 216,
       "verdict": null
     },
     {
@@ -1511,7 +1511,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 182,
+      "step": 217,
       "verdict": null
     },
     {
@@ -1528,7 +1528,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 183,
+      "step": 218,
       "verdict": null
     },
     {
@@ -1544,7 +1544,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 184,
+      "step": 219,
       "verdict": null
     },
     {
@@ -1563,7 +1563,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 185,
+      "step": 220,
       "verdict": null
     },
     {
@@ -1580,7 +1580,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 186,
+      "step": 221,
       "verdict": null
     },
     {
@@ -1597,7 +1597,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 187,
+      "step": 222,
       "verdict": null
     },
     {
@@ -1614,7 +1614,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 188,
+      "step": 223,
       "verdict": null
     },
     {
@@ -1631,7 +1631,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 189,
+      "step": 224,
       "verdict": null
     },
     {
@@ -1649,7 +1649,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 190,
+      "step": 225,
       "verdict": null
     },
     {
@@ -1665,7 +1665,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 191,
+      "step": 227,
       "verdict": null
     },
     {
@@ -1684,7 +1684,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 192,
+      "step": 228,
       "verdict": null
     },
     {
@@ -1702,7 +1702,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 193,
+      "step": 229,
       "verdict": null
     },
     {
@@ -1720,7 +1720,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 194,
+      "step": 230,
       "verdict": null
     },
     {
@@ -1738,7 +1738,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 195,
+      "step": 231,
       "verdict": null
     },
     {
@@ -1754,7 +1754,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 196,
+      "step": 232,
       "verdict": null
     },
     {
@@ -1771,7 +1771,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 197,
+      "step": 233,
       "verdict": null
     },
     {
@@ -1787,7 +1787,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 198,
+      "step": 235,
       "verdict": null
     },
     {
@@ -1803,7 +1803,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 199,
+      "step": 238,
       "verdict": null
     },
     {
@@ -1818,7 +1818,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 200,
+      "step": 239,
       "verdict": null
     },
     {
@@ -1834,7 +1834,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 203,
+      "step": 242,
       "verdict": null
     },
     {
@@ -1849,7 +1849,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 204,
+      "step": 243,
       "verdict": null
     },
     {
@@ -1864,7 +1864,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 205,
+      "step": 244,
       "verdict": null
     },
     {
@@ -1879,7 +1879,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 206,
+      "step": 246,
       "verdict": null
     },
     {
@@ -1895,7 +1895,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 207,
+      "step": 248,
       "verdict": null
     },
     {
@@ -1910,7 +1910,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 208,
+      "step": 250,
       "verdict": null
     },
     {
@@ -1927,7 +1927,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 209,
+      "step": 251,
       "verdict": null
     },
     {
@@ -1943,7 +1943,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 212,
+      "step": 254,
       "verdict": null
     },
     {
@@ -1958,7 +1958,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 213,
+      "step": 255,
       "verdict": null
     },
     {
@@ -1974,7 +1974,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 215,
+      "step": 257,
       "verdict": null
     },
     {
@@ -1990,7 +1990,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 216,
+      "step": 261,
       "verdict": null
     },
     {
@@ -2005,7 +2005,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 218,
+      "step": 266,
       "verdict": null
     },
     {
@@ -2022,7 +2022,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 219,
+      "step": 270,
       "verdict": null
     },
     {
@@ -2039,7 +2039,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 220,
+      "step": 277,
       "verdict": null
     },
     {
@@ -2054,7 +2054,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 222,
+      "step": 279,
       "verdict": null
     },
     {
@@ -2070,7 +2070,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 223,
+      "step": 288,
       "verdict": null
     },
     {
@@ -2086,7 +2086,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 225,
+      "step": 292,
       "verdict": null
     },
     {
@@ -2101,7 +2101,7 @@
       ],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 226,
+      "step": 296,
       "verdict": "tooHardForEarlyJourney"
     },
     {
@@ -2114,7 +2114,7 @@
       "pressureWarnings": [],
       "requiredPreparation": [],
       "stage": "Expert",
-      "step": 227,
+      "step": 297,
       "verdict": "tooHardForEarlyJourney"
     }
   ],

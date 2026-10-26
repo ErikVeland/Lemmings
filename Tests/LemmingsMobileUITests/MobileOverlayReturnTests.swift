@@ -82,6 +82,30 @@ import LemmingsMobileCore
         }
     }
 
+    @Test func landscapeSettingsTabsReturnToTheOriginalPausedCaller() async throws {
+        try await withGame { game in
+            let library = MobileLibraryViewController()
+            library.view.frame = CGRect(x: 0, y: 0, width: 1194, height: 834)
+            library.addChild(game)
+            defer { game.willMove(toParent: nil); game.removeFromParent() }
+            game.view.frame = library.view.bounds
+            game.showCustomOverlay(title: "Caller", details: [], actions: [("Back", {})])
+            let caller = game.overlayCanvas.page
+            let snapshot = game.session.snapshot
+            game.showInGameSettings()
+            #expect(game.overlayCanvas.page.settingsTabs?.first(where: { $0.selected })?.id == "settingsTab.gameplay")
+            for id in ["settingsTab.audio", "settingsTab.privacy", "settingsTab.controller"] {
+                game.settingsTabs.activate(id)
+                #expect(game.overlayCanvas.page.settingsTabs?.first(where: { $0.selected })?.id == id)
+                #expect(game.playState.phase == .ready && game.session.snapshot == snapshot)
+                #expect(game.globalNavigation.frame.minY >= game.overlay.frame.maxY)
+            }
+            game.overlayCanvas.goBack()
+            #expect(game.overlayCanvas.page == caller)
+            #expect(game.playState.phase == .ready && game.session.snapshot == snapshot)
+        }
+    }
+
     @Test func settingsBackRetracesTheGroupAndCaller() async throws {
         try await withGame { game in
             let library = MobileLibraryViewController()

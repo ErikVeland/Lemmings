@@ -33,7 +33,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #else
     var deskClockBlocksInput: Bool { false }
     #endif
-    private let scrollView = MobileMenuScrollView()
+    let scrollView = MobileMenuScrollView()
     #if os(iOS)
     private var menuBackGesture: UIScreenEdgePanGestureRecognizer?
     #endif
@@ -55,6 +55,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }
     let canvas = MobileMenuCanvas()
     let globalNavigation = MobileNavigationView()
+    let settingsTabs = MobileSettingsTabsView()
+    var selectedSettingsGroup = MobileSettingsGroup.gameplay
+    private var settingsLandscape = false
     let listTools = MobileListToolsView()
     private let unfold = MobileUnfoldView()
     private var previousSize = CGSize.zero
@@ -293,6 +296,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         globalNavigation.onSecondary = { [weak self] in self?.openGlobalSettings() }
         globalNavigation.secondaryTitle = L10n.text("Settings")
         view.addSubview(globalNavigation)
+        settingsTabs.onAction = { [weak self] in self?.handle($0) }
+        canvas.settingsTabs = settingsTabs
+        view.addSubview(settingsTabs)
         #if os(iOS)
         let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgeBack(_:)))
         backGesture.edges = .left
@@ -556,6 +562,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.frame = view.bounds
         homeBackdropView.frame = view.bounds
         canvas.boxesHome = usesHomeBox
+        if settingsLandscape != usesSettingsTabs {
+            settingsLandscape = usesSettingsTabs
+            switch route {
+            case .settings:
+                let page = settingsGroupsPage()
+                if canvas.page != page { canvas.page = page }
+            case let .settingsGroup(group):
+                let page = settingsPage(group)
+                if canvas.page != page { canvas.page = page }
+            default: break
+            }
+        }
         syncPages()
         let safe = view.safeAreaLayoutGuide.layoutFrame
         let book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
@@ -569,6 +587,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         default: globalNavigation.secondaryTitle = L10n.text("Settings")
         }
         if menuRegion.width < 440 || !canvas.page.listTools.isEmpty { globalNavigation.secondaryTitle = nil }
+        let bottomSettingsNavigation = !globalNavigation.isHidden && usesSettingsTabs && {
+            switch route {
+            case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack: true
+            default: false
+            }
+        }()
+        canvas.usesBottomSettingsNavigation = bottomSettingsNavigation
         #if os(iOS)
         menuBackGesture?.isEnabled = !globalNavigation.isHidden
         #endif
@@ -577,11 +602,23 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let navigationHeight = globalNavigation.height(for: menuRegion.width)
             globalNavigation.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY,
                 width: menuRegion.width, height: navigationHeight)
-            menuRegion.origin.y += navigationHeight
+            if bottomSettingsNavigation { globalNavigation.frame.origin.y = menuRegion.maxY - navigationHeight }
+            else { menuRegion.origin.y += navigationHeight }
             menuRegion.size.height -= navigationHeight
             browser.frame = CGRect(x: 0, y: menuRegion.minY, width: view.bounds.width, height: menuRegion.height)
             view.bringSubviewToFront(globalNavigation)
         }
+        settingsTabs.isHidden = !bottomSettingsNavigation || canvas.page.settingsTabs == nil
+        settingsTabs.tabs = canvas.page.settingsTabs ?? []
+        if !settingsTabs.isHidden {
+            let height = settingsTabs.height(for: menuRegion.width)
+            settingsTabs.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: height)
+            menuRegion.origin.y += height
+            menuRegion.size.height = max(0, menuRegion.height - height)
+            view.bringSubviewToFront(settingsTabs)
+        }
+        view.accessibilityElements = bottomSettingsNavigation
+            ? (settingsTabs.isHidden ? [] : [settingsTabs]) + [scrollView, globalNavigation] : nil
         listTools.actions = canvas.page.listTools
         listTools.searchQuery = searchQuery
         listTools.isHidden = globalNavigation.isHidden || listTools.actions.isEmpty

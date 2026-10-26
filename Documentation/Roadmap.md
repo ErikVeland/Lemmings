@@ -73,7 +73,10 @@ Historical route counts do not certify later engine revisions.
 As recorded on 21 October, Mac 2.1.1 build 95 is published. The 2.1.2 source
 preparation is complete, with final package checks and publication pending.
 Classic and The Tribes retain Complete. Chronicles and NeoLemmix remain Beta.
-The learning curriculum has 227 Classic lessons. Equivalent sequel curricula
+The learning curriculum has 297 Classic-mechanics lessons, including all unique
+1991–1994 Xmas/Holiday puzzles. The first 80 lessons retain their tested order.
+Seasonal placements have exact native routes and await human difficulty review.
+See [the later-curve review](JourneyCurveReview-2026-10-26.md). Equivalent sequel curricula
 are not yet established.
 
 | Content family | Retained winning routes | Work still open |

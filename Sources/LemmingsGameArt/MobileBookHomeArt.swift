@@ -5,7 +5,7 @@ public enum MobileBookHomeArt {
     public static func layout(_ page: GameFrontEnd.Page, width: CGFloat, height: CGFloat,
                               panes: [CGRect]) -> GameFrontEnd.Layout {
         let left = panes[0].insetBy(dx: 12, dy: 0), right = panes[1].insetBy(dx: 12, dy: 0)
-        let gap: CGFloat = 8, padding: CGFloat = 12
+        let gap: CGFloat = 6, padding: CGFloat = 12, groupGap: CGFloat = 8, bottomPadding: CGFloat = 20
         let leftWidth = left.width - padding * 2, rightWidth = right.width - padding * 2
         let heading = CGRect(x: left.minX + 62, y: 22, width: left.width - 74, height: 56)
         let libraryHeading = CGRect(x: right.minX + padding, y: 22, width: rightWidth - 52, height: 56)
@@ -14,7 +14,7 @@ public enum MobileBookHomeArt {
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
         let turnInitials = CGRect(x: left.minX + padding, y: subtitle.maxY + 4,
             width: leftWidth, height: showsTurnAtTop ? 22 : 0)
-        let start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 16
+        let start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 12
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: leftWidth - 24) + 8 }.max() ?? 44)
@@ -30,15 +30,17 @@ public enum MobileBookHomeArt {
             var targets: [GameFrontEnd.Target] = []
             for (index, action) in actions.enumerated() {
                 if index > 0, isLibrary(action) != isLibrary(actions[index - 1])
-                    || (action.gameLogo != nil && actions[index - 1].gameLogo == nil) { y += 16 }
+                    || (action.gameLogo != nil && actions[index - 1].gameLogo == nil) { y += groupGap }
                 let extent = action.gameLogo == nil ? rowHeight : max(80, rowHeight)
                 targets.append(.init(action: action, frame: CGRect(x: pane.minX + padding, y: y, width: inner, height: extent)))
                 y += extent + gap
             }
             return (targets, y - (actions.isEmpty ? 0 : gap))
         }
-        let footerSpace = (page.homeInitials.isEmpty || showsTurnAtTop ? 0 : 30)
-            + CGFloat(footer.count) * (footerHeight + gap) + 24
+        let initialsHeight: CGFloat = page.homeInitials.isEmpty || showsTurnAtTop ? 0 : 22
+        let initialsSpace = initialsHeight == 0 ? 0 : initialsHeight + gap
+        let footerRowsHeight = max(0, CGFloat(footer.count) * (footerHeight + gap) - gap)
+        let footerSpace = groupGap + initialsSpace + footerRowsHeight
         // Balance measured content, including saved games, wrapped captions and the footer list.
         let splits = page.rows.count > 1 ? Array(1..<page.rows.count) : [page.rows.count]
         let split = splits.min { a, b in
@@ -50,11 +52,11 @@ public enum MobileBookHomeArt {
         } ?? 0
         let leading = rows(Array(page.rows.prefix(split)), in: left)
         let trailing = rows(Array(page.rows.dropFirst(split)), in: right)
-        let contentHeight = max(height, max(leading.bottom + footerSpace, trailing.bottom + 24))
-        let initials = showsTurnAtTop ? turnInitials : CGRect(x: left.minX + padding, y: max(leading.bottom + 20,
-            contentHeight - footerSpace + 12), width: leftWidth, height: page.homeInitials.isEmpty ? 0 : 22)
-        var footerY = showsTurnAtTop ? max(leading.bottom + 20, contentHeight - footerSpace + 12)
-            : initials.maxY + (page.homeInitials.isEmpty ? 0 : 8)
+        let contentHeight = max(height, max(leading.bottom + footerSpace, trailing.bottom) + bottomPadding)
+        // Reserve actual footer bounds, without adding a trailing row gap to the scroll extent.
+        var footerY = contentHeight - bottomPadding - footerRowsHeight
+        let initials = showsTurnAtTop ? turnInitials : CGRect(x: left.minX + padding,
+            y: footerY - initialsSpace, width: leftWidth, height: initialsHeight)
         var footerTargets: [GameFrontEnd.Target] = []
         for action in footer {
             footerTargets.append(.init(action: action, frame: CGRect(x: left.minX + padding, y: footerY,
@@ -70,12 +72,12 @@ public enum MobileBookHomeArt {
             let b = $1.frame.midX >= right.minX ? 1 : 0
             return a == b ? $0.frame.minY < $1.frame.minY : a < b
         }
-        return GameFrontEnd.Layout(size: CGSize(width: width, height: max(contentHeight, footerY + 12)),
-            board: CGRect(x: left.minX, y: 12, width: left.width, height: max(contentHeight, footerY + 12) - 24),
+        return GameFrontEnd.Layout(size: CGSize(width: width, height: contentHeight),
+            board: CGRect(x: left.minX, y: 12, width: left.width, height: contentHeight - 24),
             heading: heading, subtitle: subtitle, preview: .zero, details: [],
             targets: targets,
             initials: initials,
-            secondaryBoard: CGRect(x: right.minX, y: 12, width: right.width, height: max(contentHeight, footerY + 12) - 24),
+            secondaryBoard: CGRect(x: right.minX, y: 12, width: right.width, height: contentHeight - 24),
             libraryHeading: libraryHeading)
     }
 }

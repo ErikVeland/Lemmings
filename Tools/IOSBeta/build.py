@@ -99,6 +99,15 @@ def signing_capabilities(app, bundle_id):
     return profile
 
 
+def validate_game_mode(info):
+    """Reject packages that lose game classification or either Game Mode support flag."""
+    if info.get("LSApplicationCategoryType") != "public.app-category.games":
+        raise ValueError("LSApplicationCategoryType must identify the app as a game.")
+    for key in ("LSSupportsGameMode", "GCSupportsGameMode"):
+        if info.get(key) is not True:
+            raise ValueError(f"{key} must be true.")
+
+
 def validate_export(package, output, archive_record, device_id, export_method):
     destination = output / "Install"
     with zipfile.ZipFile(package) as bundle:
@@ -116,6 +125,7 @@ def validate_export(package, output, archive_record, device_id, export_method):
         raise ValueError("The IPA does not contain exactly one app.")
     app = apps[0]
     info = plistlib.loads((app / "Info.plist").read_bytes())
+    validate_game_mode(info)
     if (info["CFBundleIdentifier"], info["CFBundleVersion"], info["UIDeviceFamily"]) != (archive_record["bundleID"], str(archive_record["build"]), [1, 2]):
         raise ValueError("The exported app metadata differs from the archive.")
     run(["codesign", "--verify", "--deep", "--strict", str(app)])
@@ -160,6 +170,7 @@ def validate_privacy(privacy):
 def validate_archive(archive, build, bundle_id, signed):
     app = archive / "Products/Applications/UltimateLemmingsIOS.app"
     info = plistlib.loads((app / "Info.plist").read_bytes())
+    validate_game_mode(info)
     for key, expected in {
         "CFBundleIdentifier": bundle_id, "CFBundleShortVersionString": marketing_version(),
         "CFBundleVersion": str(build), "CFBundleSupportedPlatforms": ["iPhoneOS"],

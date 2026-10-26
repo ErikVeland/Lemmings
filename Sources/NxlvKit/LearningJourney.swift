@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static var title: String { L10n.text("Oh My! All Lemmings!") }
-    public static let version = "learning-29"
+    public static let version = "learning-30"
     public static let communityPlacementPolicy = "teaching-curriculum-3"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
@@ -51,6 +51,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         public let upper: Double
         public let sourceRevision: String
         public let replayRevision: String
+        public var humanReviewPending: Bool? = nil
     }
 
     public struct Lesson: Codable, Equatable, Sendable {
@@ -108,7 +109,9 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                   lessons.filter({ !$0.entry.identity.packID.hasPrefix("fan:") }).count * 5 >= lessons.count * 4,
                   lessons.allSatisfy({ lesson in
                       guard let p = lesson.placement else { return false }
-                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "reviewedVariant", "solutionEstimate", "userPlaytest", "teachingCurriculum"].contains(p.basis)
+                      let seasonalCourse = p.basis == "seasonalCurriculum"
+                          && p.humanReviewPending == true && Self.isOfficialSeasonal(lesson.entry)
+                      return (["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "reviewedVariant", "solutionEstimate", "userPlaytest", "teachingCurriculum"].contains(p.basis) || seasonalCourse)
                           && lesson.demand >= Self.teachingMinimumDemand(for: lesson.entry)
                           && !p.reference.isEmpty && p.sourceURL.hasPrefix("https://")
                           && p.position.isFinite && p.lower.isFinite && p.upper.isFinite
@@ -117,7 +120,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                           && lesson.demand == p.position && p.sourceRevision == lesson.entry.sourceRevision
                           && !p.replayRevision.isEmpty
                           && (!lesson.entry.identity.packID.hasPrefix("fan:") || ["reduxPortCounterpart", "reviewedFan", "userPlaytest"].contains(p.basis))
-                          && (!Self.isSeasonal(lesson.entry) || ["reviewedVariant", "reviewedFan", "userPlaytest"].contains(p.basis))
+                          && (!Self.isSeasonal(lesson.entry) || seasonalCourse || ["reviewedVariant", "reviewedFan", "userPlaytest"].contains(p.basis))
                   }),
                   zip(lessons, lessons.dropFirst()).allSatisfy({
                       (0...Self.maximumScoreStep).contains($1.demand - $0.demand)
@@ -130,6 +133,14 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     public static func isSeasonal(_ entry: LevelPlaylistEntry) -> Bool {
         let metadata = entry.identity.packID + " " + entry.packNameSnapshot
         return metadata.range(of: "xmas|christmas|holiday", options: [.regularExpression, .caseInsensitive]) != nil
+    }
+
+    /**
+     * Identifies the four official seasonal sources admitted to the authored course.
+     */
+    public static func isOfficialSeasonal(_ entry: LevelPlaylistEntry) -> Bool {
+        ["xmasLemmings1991-LEVEL-4", "xmasLemmings1992-LEVEL-4",
+         "holidayLemmings1993-MACLEVL-32", "holidayLemmings1994-MACLEVL-32"].contains(entry.identity.packID)
     }
 
     /// Editorial boundaries protect generous practice from restricted puzzle ranks.

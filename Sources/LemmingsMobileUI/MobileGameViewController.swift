@@ -40,6 +40,7 @@ typealias MobileGameControllerBase = UIViewController
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
     let globalNavigation = MobileNavigationView()
+    let settingsTabs = MobileSettingsTabsView()
     #if os(iOS)
     private var menuBackGesture: UIScreenEdgePanGestureRecognizer?
     #endif
@@ -129,6 +130,7 @@ typealias MobileGameControllerBase = UIViewController
     let playfieldView: MobilePlayfieldView
     let hud = MobileHUDView()
     private let touchLoupe = MobileTouchLoupe()
+    let overlayBackdrop = UIView()
     let overlay = MobileGameOverlay()
     let overlayCanvas = MobileMenuCanvas()
     private var overlayActions: [() -> Void] = []
@@ -311,8 +313,10 @@ typealias MobileGameControllerBase = UIViewController
         overlay.contentInsetAdjustmentBehavior = .never
         achievementScroll.contentInsetAdjustmentBehavior = .never
         overlay.onVisibilityChanged = { [weak self] in
+            self?.overlayBackdrop.isHidden = self?.overlay.isHidden ?? true
             self?.updateDisplayLinkState()
             self?.globalNavigation.isHidden = self?.overlay.isHidden ?? true
+            if self?.overlay.isHidden == true { self?.settingsTabs.isHidden = true }
             #if os(iOS)
             self?.menuBackGesture?.isEnabled = self?.overlay.isHidden == false
             #endif
@@ -1945,6 +1949,14 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func configureOverlay() {
+        overlayBackdrop.backgroundColor = .black
+        overlayBackdrop.isOpaque = true
+        overlayBackdrop.isUserInteractionEnabled = false
+        overlayBackdrop.accessibilityElementsHidden = true
+        overlayBackdrop.frame = view.bounds
+        overlayBackdrop.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        overlayBackdrop.isHidden = overlay.isHidden
+        view.addSubview(overlayBackdrop)
         overlay.delegate = self
         overlay.backgroundColor = .black
         overlay.accessibilityViewIsModal = true
@@ -1964,6 +1976,9 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.globalNavigation = globalNavigation
         globalNavigation.onSecondary = { [weak self] in self?.pausePlay(showControls: true) }
         view.addSubview(globalNavigation)
+        settingsTabs.onAction = { [weak self] in self?.overlayCanvas.onAction?($0) }
+        overlayCanvas.settingsTabs = settingsTabs
+        view.addSubview(settingsTabs)
         #if os(iOS)
         let backGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(menuEdgeBack(_:)))
         backGesture.edges = .left
@@ -2526,6 +2541,17 @@ typealias MobileGameControllerBase = UIViewController
 
     func layoutOverlay() {
         guard !overlay.isHidden else { return }
+        /**
+         * Covers the display while content avoids corners, cutouts and the hinge.
+         */
+        overlayBackdrop.frame = view.bounds
+        let horizontalSettings = overlayCanvas.page.settingsTabs != nil
+            && MobileSettingsTabsArt.usesTabs(width: view.bounds.width, height: view.bounds.height)
+        if horizontalSettings, overlayCanvas.page.settingsIndex,
+           let selected = overlayCanvas.page.settingsTabs?.first(where: { $0.selected }) {
+            overlayCanvas.onAction?(selected.id)
+            return
+        }
         var region = MobileSystemRegions.menuFrame(in: view)
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = solutionSelector.isHidden
@@ -2533,13 +2559,25 @@ typealias MobileGameControllerBase = UIViewController
         if let resultPane = layoutSplitResult() { region = resultPane }
         globalNavigation.isHidden = false
         globalNavigation.isUserInteractionEnabled = !displayUpdatesSuspended
-        globalNavigation.secondaryTitle = playState.phase == .ready || session.snapshot.isComplete
+        globalNavigation.secondaryTitle = horizontalSettings || playState.phase == .ready || session.snapshot.isComplete
             || overlayCanvas.page.pause != nil ? nil : L10n.text("Pause menu")
         let navigationHeight = globalNavigation.height(for: region.width)
         globalNavigation.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: navigationHeight)
+        if horizontalSettings { globalNavigation.frame.origin.y = region.maxY - navigationHeight }
         view.bringSubviewToFront(globalNavigation)
-        region.origin.y += navigationHeight
+        if !horizontalSettings { region.origin.y += navigationHeight }
         region.size.height -= navigationHeight
+        overlayCanvas.usesBottomSettingsNavigation = horizontalSettings
+        settingsTabs.tabs = overlayCanvas.page.settingsTabs ?? []
+        settingsTabs.isHidden = !horizontalSettings || settingsTabs.tabs.isEmpty
+        settingsTabs.isUserInteractionEnabled = !displayUpdatesSuspended
+        if !settingsTabs.isHidden {
+            let height = settingsTabs.height(for: region.width)
+            settingsTabs.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: height)
+            region.origin.y += height
+            region.size.height = max(0, region.height - height)
+            view.bringSubviewToFront(settingsTabs)
+        }
         overlay.setViewportFrame(region)
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
         overlayCanvas.frame = CGRect(origin: .zero, size: size)
@@ -2549,9 +2587,10 @@ typealias MobileGameControllerBase = UIViewController
         if !overlay.isScrollEnabled { overlay.contentOffset = .zero }
         #endif
         overlay.accessibilityViewIsModal = false
-        view.accessibilityElements = [globalNavigation]
-            + (solutionSelector.isHidden ? [] : [solutionSelector]) + [overlay]
-            + (achievementScroll.isHidden ? [] : [achievementScroll])
+        view.accessibilityElements = horizontalSettings
+            ? (settingsTabs.isHidden ? [] : [settingsTabs]) + [overlay, globalNavigation]
+            : [globalNavigation] + (solutionSelector.isHidden ? [] : [solutionSelector]) + [overlay]
+                + (achievementScroll.isHidden ? [] : [achievementScroll])
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {

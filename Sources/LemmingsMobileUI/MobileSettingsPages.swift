@@ -7,6 +7,9 @@ import NxlvKit
 import UIKit
 
 extension MobileLibraryViewController {
+    var usesSettingsTabs: Bool {
+        MobileSettingsTabsArt.usesTabs(width: view.bounds.width, height: view.bounds.height)
+    }
     var settingsProfileID: String { hotSeat?.turn ?? profiles.activeID }
     var mobileSettings: MobileSettings {
         get { MobileSettings.load(from: .standard, profileID: settingsProfileID) }
@@ -35,6 +38,9 @@ extension MobileLibraryViewController {
     }
 
     func settingsGroupsPage(inGame: Bool = false) -> GameFrontEnd.Page {
+        if usesSettingsTabs {
+            return settingsPage(inGame && selectedSettingsGroup == .deskClock ? .gameplay : selectedSettingsGroup, inGame: inGame)
+        }
         #if os(tvOS)
         var page = MobileSettingsArt.groups(inGame: inGame, television: true)
         #else
@@ -71,6 +77,7 @@ extension MobileLibraryViewController {
                                ghostsVisible: arcadeStore.hotSeatGhostsVisible)
         #if os(tvOS)
         page.televisionGrid = true
+        page.settingsTabs = MobileSettingsTabsArt.actions(selected: group, inGame: inGame, television: true)
         if group == .controller {
             let input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
             page.rows += [.init("setting.tvAim", L10n.text("Aim sensitivity: \(Int(input.aimSensitivity * 100))%")),
@@ -78,6 +85,7 @@ extension MobileLibraryViewController {
                           .init("setting.tvTriggerFeedback", L10n.text("Adaptive triggers"), selected: input.triggerFeedback != false)]
         }
         #endif
+        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
         return page
     }
     func soundtrackPage() -> GameFrontEnd.Page {
@@ -109,6 +117,14 @@ extension MobileLibraryViewController {
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
     func handleSettings(_ id: String) -> Bool {
         if handleFamiliarNames(id) { return true }
+        if id.hasPrefix("settingsTab."), let group = MobileSettingsGroup(rawValue: String(id.dropFirst(12))) {
+            selectedSettingsGroup = group
+            if case .settingsGroup = route { route = .settingsGroup(group) }
+            scrollView.setContentOffset(.zero, animated: false)
+            rebuild()
+            canvas.focusAction(id)
+            return true
+        }
         #if os(tvOS)
         if id == "setting.tvAim" || id == "setting.tvDeadZone" || id == "setting.tvTriggerFeedback" {
             var input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
@@ -120,6 +136,7 @@ extension MobileLibraryViewController {
         }
         #endif
         if id.hasPrefix("settingsGroup."), let group = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) {
+            selectedSettingsGroup = group
             navigate(.settingsGroup(group)); return true
         }
         if id == "controllerMappings" { navigate(.controllerMappings); return true }

@@ -27,6 +27,9 @@ import UIKit
     private var displayedPage: GameFrontEnd.Page {
         var result = page.home && boxesHome ? page
             : MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName)
+        if usesBottomSettingsNavigation {
+            result.footer.removeAll { $0.isBackNavigation }
+        }
         if !result.listTools.isEmpty, globalNavigation?.isHidden == false, globalNavigation?.showsBack == true {
             result.footer.removeAll { $0.isBackNavigation }
         }
@@ -89,13 +92,20 @@ import UIKit
     private var targets: [UIButton] = []
     private var highlighted: String?
     weak var globalNavigation: MobileNavigationView?
+    weak var settingsTabs: MobileSettingsTabsView?
+    var usesBottomSettingsNavigation = false {
+        didSet { if usesBottomSettingsNavigation != oldValue { rebuild() } }
+    }
     weak var listTools: MobileListToolsView?
     var focusableActions: [GameFrontEnd.Action] {
-        ((globalNavigation?.actions ?? []) + (listTools?.isHidden == false ? listTools?.actions ?? [] : [])
-            + (pageLayout?.targets.map(\.action) ?? (displayedPage.rows + displayedPage.orderedFooter))).filter(\.enabled)
+        let tabs = settingsTabs?.actions ?? []
+        let content = (listTools?.isHidden == false ? listTools?.actions ?? [] : [])
+            + (pageLayout?.targets.map(\.action) ?? (displayedPage.rows + displayedPage.orderedFooter))
+        let navigation = globalNavigation?.actions ?? []
+        return (tabs.isEmpty ? navigation + content : tabs + content + navigation).filter(\.enabled)
     }
     var focusedID: String? {
-        didSet { globalNavigation?.focusedID = focusedID; listTools?.focusedID = focusedID }
+        didSet { globalNavigation?.focusedID = focusedID; listTools?.focusedID = focusedID; settingsTabs?.focusedID = focusedID }
     }
     private var pageLayout: GameFrontEnd.Layout?
     var requiresNeutralActivation = false
@@ -128,6 +138,7 @@ import UIKit
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
         if globalNavigation?.actions.contains(where: { $0.id == focusedID }) == true, let globalNavigation { return [globalNavigation] }
+        if settingsTabs?.actions.contains(where: { $0.id == focusedID }) == true, let settingsTabs { return [settingsTabs] }
         if listTools?.isHidden == false, listTools?.actions.contains(where: { $0.id == focusedID }) == true, let listTools { return [listTools] }
         let preferred = targets.first { $0.isEnabled && $0.accessibilityIdentifier == "menu." + (focusedID ?? "") }
         return preferred.map { [$0] } ?? Array(targets.filter(\.isEnabled).prefix(1))
@@ -291,7 +302,7 @@ import UIKit
         let page = displayedPage
         if page.televisionGrid { televisionPageIndex = page.televisionPageIndex }
         let actions = page.rows + page.orderedFooter
-        let available = actions + page.listTools + (globalNavigation?.actions ?? [])
+        let available = actions + page.listTools + (globalNavigation?.actions ?? []) + (settingsTabs?.actions ?? [])
         if !available.contains(where: { $0.id == focusedID && $0.enabled }) {
             focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL").uppercased() })?.id
                 ?? actions.first(where: { $0.primary && $0.enabled })?.id
@@ -377,6 +388,10 @@ import UIKit
         setNeedsDisplay()
     }
     func activateFocused() {
+        if let focusedID, settingsTabs?.actions.contains(where: { $0.id == focusedID }) == true {
+            settingsTabs?.activate(focusedID)
+            return
+        }
         if let focusedID, globalNavigation?.actions.contains(where: { $0.id == focusedID }) == true {
             globalNavigation?.activate(focusedID)
             return

@@ -20,7 +20,7 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'teaching-curriculum-3'
-VERSION = 'learning-29'
+VERSION = 'learning-30'
 MAINLINE_PACKS = {'lemmings-LEVEL-120', 'ohNoMoreLemmings-DLVEL-100',
                   'ohYesMoreLemmings-OHYES-60'}
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -452,6 +452,43 @@ def apply_course_plan(selected):
     return result
 
 
+def apply_seasonal_plan(selected, candidates, contexts):
+    """Include the owner's seasonal scope without claiming a human difficulty review."""
+    course = read(OUT / 'seasonal-plan.json')
+    original = selected[:]
+    prefix = course['preservedOpening']
+    assert [item['row']['entry']['identity'] for item in original[:len(prefix)]] == prefix
+    chapters = {chapter['id']: chapter for chapter in read(OUT / 'course-plan.json')['chapters']}
+    by_id = {key(item['row']): item for item in original}
+    for lesson in course['lessons']:
+        ident = key(lesson)
+        assert ident not in by_id and ident in candidates, f'Missing seasonal source: {lesson["title"]}'
+        row, context = candidates[ident], contexts[ident]
+        assert row['official'] and seasonal(row)
+        assert row['entry']['sourceRevision'] == lesson['sourceRevision']
+        assert context['replayRevision'] == lesson['replayRevision'] and context['quotaTimingVerified']
+        chapter = chapters[lesson['chapter']]
+        assert chapter['start'] <= lesson['position'] <= chapter['end']
+        assert lesson['position'] > original[len(prefix) - 1]['placement']['position']
+        assert lesson['humanReviewPending'] is True and lesson['reason'].strip()
+        if row['entry']['identity']['levelID'].split(':')[1] in ['Blizzard', 'Hail']:
+            assert lesson['position'] >= chapters['advanced-routes']['start']
+        reference = min(original, key=lambda item: distance(context, item['context']))['reference']
+        item = {'row': row, 'context': context, 'reference': reference, 'variantDifferences': [
+            'Exact Classic seasonal source; Redux is comparison evidence only.',
+            'Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured.'],
+            'placement': {'basis': 'seasonalCurriculum', 'sourceURL': SOURCE,
+                'sourceRevision': lesson['sourceRevision'], 'replayRevision': lesson['replayRevision'],
+                'position': lesson['position'], 'lower': lesson['position'], 'upper': lesson['position'],
+                'reference': reference['reference'], 'adjustment': lesson['reason'],
+                'humanReviewPending': True, 'courseChapter': lesson['chapter'], 'learningRole': lesson['role']},
+            'course': lesson, 'chapter': chapter}
+        by_id[ident] = item
+    result = sorted(by_id.values(), key=lambda item: item['placement']['position'])
+    assert result[:len(prefix)] == original[:len(prefix)], 'The tested opening changed'
+    return result
+
+
 def course_transition_review(plan):
     """Expose every transition and its earlier rehearsals without claiming human playtests."""
     rows = plan['lessons']
@@ -482,7 +519,9 @@ def course_transition_review(plan):
             'goal': lesson['courseChapter']['goal'], 'placementReason': lesson['placementReason'],
             'preparationExamples': examples, 'pressureRises': rises, 'newPressurePeaks': new,
             'pressureAxes': axes, 'quotaTimingVerified': lesson['context']['quotaTimingVerified'],
-            'discoveryAssessment': 'Editorial chapter and role; novice discovery remains unmeasured'})
+            'discoveryAssessment': 'Seasonal placement is provisional; human discovery remains unmeasured'
+                if lesson['placement']['basis'] == 'seasonalCurriculum' else
+                'Editorial chapter and role; novice discovery remains unmeasured'})
     return result
 
 
@@ -490,6 +529,36 @@ def course_review_document(manifest, plan):
     return {'version': 'course-review-1', 'journeyVersion': manifest['version'],
         'meaning': 'A complete editorial review with measured pressure and earlier practice examples. Course positions are ordinal. Small numerical position gaps do not prove human difficulty. Novel discovery and special pacing remain explicit human validation gaps.',
         'chapters': read(OUT / 'course-plan.json')['chapters'], 'lessons': course_transition_review(plan)}
+
+
+def seasonal_coverage(manifest):
+    """Account for every official seasonal source, with exact-state duplicate evidence."""
+    course = read(OUT / 'seasonal-plan.json')
+    audit = read(ROOT / 'Artifacts/ClassicProgression/audit.json')
+    rows = {key(row): row for row in audit}
+    selected = {key(lesson): lesson for lesson in manifest['lessons']}
+    aliases = {key(alias): alias for alias in course['exactStateAliases']}
+    proofs = {key(proof): proof for proof in read(OUT / 'seasonal-native-validation.json')}
+    coverage = []
+    for row in audit:
+        if not row['official'] or not seasonal(row):
+            continue
+        ident = key(row)
+        represented = row['entry']['identity'] if ident in selected else aliases[ident]['representedBy']
+        canonical = rows[key({'identity': represented})]
+        assert key(canonical) in selected and canonical['initialHash'] == row['initialHash']
+        proof = proofs[ident]
+        assert proof['passed'] and proof['sourceRevision'] == row['entry']['sourceRevision']
+        assert proof['replayRevision'] == row['profile']['key']['replayRevision']
+        coverage.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
+            'sourceRevision': row['entry']['sourceRevision'], 'representedBy': represented,
+            'initialStateHash': row['initialHash'], 'nativeReplayPassed': True,
+            'step': next(i + 1 for i, lesson in enumerate(manifest['lessons']) if key(lesson) == key(canonical)),
+            'humanReviewPending': True})
+    return {'journeyVersion': manifest['version'], 'sourceEntries': len(coverage),
+            'uniqueSeasonalSourcesAdded': len(course['lessons']), 'exactStateAliases': len(aliases),
+            'meaning': 'Every source has an exact native winning replay. Alias sources share the complete initial simulation state. Human difficulty remains unmeasured.',
+            'levels': coverage}
 
 
 def build(pool, witnesses, resources, reference, reviews):
@@ -742,6 +811,7 @@ def build(pool, witnesses, resources, reference, reviews):
             selected = [r for r in selected if key(r['row']) != key(item['row'])] + [item]
     selected = apply_teaching_plan(selected, candidates, contexts, resource_by_id, references)
     selected = apply_course_plan(selected)
+    selected = apply_seasonal_plan(selected, candidates, contexts)
     assert sum(item['row']['official'] for item in selected) >= .8 * len(selected), 'The golden path must remain official-heavy'
     assert not any(not item['row']['official'] and item['placement']['basis'] == 'solutionEstimate' for item in selected)
     admitted = {key(item['row']): item for item in selected}
@@ -751,6 +821,7 @@ def build(pool, witnesses, resources, reference, reviews):
             row['status'] = 'included with exact human review' if item['placement']['basis'] in ['reviewedFan', 'reviewedVariant'] else (
                 'included from owner playtest' if item['placement']['basis'] == 'userPlaytest' else
                 'included in authored teaching curriculum; novice playtesting outstanding' if item['placement']['basis'] == 'teachingCurriculum' else
+                'included by owner seasonal scope; human difficulty review outstanding' if item['placement']['basis'] == 'seasonalCurriculum' else
                 'included with port counterpart evidence; human variant review still needed' if item['placement']['basis'] == 'reduxPortCounterpart' else
                 'included official variant with cautious estimated placement; human review still needed')
             row['placement'] = item['placement']
@@ -770,7 +841,7 @@ def build(pool, witnesses, resources, reference, reviews):
         lesson = {'entry': row['entry'], 'objective': objective, 'score': row['profile']['overallScore'],
                   'intrinsicDemand': row['profile']['overallScore'], 'demand': value, 'stage': stage(value),
                   'preparationGaps': new if len(concepts) > 1 and item['reference']['ordinal'] > 7 else [], 'concepts': concepts, 'introduced': new, 'focus': focus,
-                  'needsSupport': bool(context['narrowActions'] or delta > 35 or item.get('reportedWall') or placement.get('pressureWarnings') or placement['basis'] in ['solutionEstimate', 'reduxPortCounterpart']), 'placement': placement}
+                  'needsSupport': bool(context['narrowActions'] or delta > 35 or item.get('reportedWall') or placement.get('pressureWarnings') or placement['basis'] in ['solutionEstimate', 'reduxPortCounterpart', 'seasonalCurriculum']), 'placement': placement}
         lessons.append(lesson)
         curriculum.append({'identity': row['entry']['identity'], 'objective': objective, 'lesson': focus,
                            'level': row['entry']['levelNameSnapshot'], 'purpose': 'Authored teaching practice with an exact native winning witness' if item.get('teaching') else 'Later puzzle practice with community and variant evidence',
@@ -791,7 +862,7 @@ def build(pool, witnesses, resources, reference, reviews):
         transitions[-1]['pressureWarnings'] = placement.get('pressureWarnings', [])
         practiced.update(concepts)
     manifest = {'version': VERSION, 'placementPolicy': POLICY, 'lessons': lessons}
-    plan = {'version': 'curriculum-12', 'poolSize': len(pool), 'targetSize': len(selected),
+    plan = {'version': 'curriculum-13', 'poolSize': len(pool), 'targetSize': len(selected),
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,
@@ -813,6 +884,7 @@ def report(manifest, plan, pending, transitions):
                'chapters': len(read(OUT / 'course-plan.json')['chapters']),
                'editorialCoursePlacements': sum(goal['placement']['basis'] == 'teachingCurriculum' for goal in plan['lessons']),
                'nativeQuotaTimings': sum(goal['context']['quotaTimingVerified'] for goal in plan['lessons']),
+               'seasonalPlacementsPendingHumanReview': sum(l['placement']['basis'] == 'seasonalCurriculum' for l in lessons),
                'pendingReview': len(pending), 'estimatedPlacements': sum(l['placement']['basis'] == 'solutionEstimate' for l in lessons),
                'largestReferenceGap': max(t['referenceStep'] for t in transitions),
                'limits': plan['limits']}
@@ -820,6 +892,10 @@ def report(manifest, plan, pending, transitions):
     corpus = read(OUT / 'corpus-coverage.json')
     for campaign in corpus['campaigns']:
         campaign['selected'] = sum(l['entry']['packNameSnapshot'] == campaign['pack'] for l in lessons)
+        if any(token in campaign['pack'].lower() for token in ['xmas', 'holiday']):
+            coverage = seasonal_coverage(manifest)
+            campaign['coveredUniqueSources'] = sum(level['identity']['packID'].split('-')[0].lower()
+                == campaign['pack'].replace(' ', '').lower() for level in coverage['levels'])
     corpus['eligiblePool'] = plan['poolSize']
     corpus['selectionPolicy'] = 'Authored beginner practice, restricted puzzle boundaries and exact-variant evidence; campaign size is not a quota.'
     write(OUT / 'corpus-coverage.json', corpus)
@@ -855,23 +931,24 @@ def report(manifest, plan, pending, transitions):
         'Scarce tools, high rescue targets, fast minimum rates and demanding execution require earlier practice',
         'At least 80% official levels; no fixed-size padding',
         'Unreviewed fan estimates never enter the golden path',
-        'Seasonal levels need exact human difficulty review',
+        'All unique official seasonal puzzles are included after the preserved 80-lesson opening, with human difficulty review explicitly pending',
+        'Hail and Blizzard remain in advanced practice or capstones; exact-state aliases avoid duplicate puzzles',
         'Reviewed fan bridges stay inside a real gap without introducing unpractised skills',
         'Original measured replay scores remain unchanged; teaching placements are explicit editorial decisions',
         'Adjacent teaching position gaps are checked; passing does not establish human difficulty'],
         'limits': plan['limits']})
     lines = ['# Oh My! All Lemmings! progression', '',
         f"{len(lessons)} Classic-mechanics lessons: {summary['official']} official levels and {summary['fan']} entries from fan archives.", '',
-        'All 227 lessons have an authored place in 13 teaching chapters. `course-plan.json` pins each source, winning route, chapter, learning role and placement reason. `course-review.json` records every transition, measured pressures and earlier practice examples. The opening has 30 beginner lessons, followed by 15 lessons that combine familiar skills before tighter budgets.', '',
+        f'All {len(lessons)} lessons have an authored place in 13 teaching chapters. `course-plan.json` and `seasonal-plan.json` pin each source, winning route, chapter, learning role and placement reason. `course-review.json` records every transition, measured pressures and earlier practice examples. The opening has 30 beginner lessons, followed by 15 lessons that combine familiar skills before tighter budgets. The first 80 lessons retain their complete learning-29 data after the owner reported a good curve through approximately 80 lessons with Uva.', '',
         'The simple practice routes use at most two skill types, no worker job changes or measured narrow actions, and retain spare used skills and a rescue margin. Every Tame level supplies 20 of all eight skills, starts at release rate 1 and requires 25 of 50 lemmings. Their elaborate stored replays no longer push these practice levels behind hard puzzles.', '',
         f"[Redux's community order]({SOURCE}) remains comparison evidence. Its edited NeoLemmix counterparts do not certify beginner suitability in Classic. A retail rank alone must not hide useful easier practice. The course brings generous construction routes forward, introduces small budgets before complex combinations, and reserves clocks and the hardest combinations for later chapters. Original measured replay scores remain unchanged. Course positions are editorial ordinals, not measurements of human difficulty.", '',
         'The path has no level-count quota. Unreviewed fan and NeoLemmix levels remain in the review queue, even when their artwork or winning replay looks easy. A short solution cannot establish how hard the trick is to discover. Reviewed fan bridges must fit between nearby official lessons, stay within their human-reviewed difficulty bounds and use previously practised skills. They fill real gaps rather than add variety.', '',
-        'Xmas and Holiday levels are withheld unless an exact-version human difficulty review supports their placement. Seasonal rank names, visual simplicity and Redux title counterparts do not establish suitability in Classic physics.', '',
+        'The owner requested every unique Xmas/Holiday puzzle on 26 October 2026. Seventy seasonal sources enter after the tested opening. The other two Xmas 1991 sources have exact initial-state matches in the existing closing pair, so they do not repeat. `seasonal-coverage.json` accounts for all 72 sources, each with a current native winning replay. Hail and Blizzard remain in advanced practice or capstones. Seasonal placements are editorial and explicitly await human difficulty review. Seasonal rank names, visual simplicity and short replays cannot establish easy discovery.', '',
         'Cellbash remains lesson 2 from the owner’s single-basher playtest. Going their separate ways is the official Macintosh exclusive delivered through a Classic fan archive. Its Redux counterpart and conversion differences are recorded. Neither exception authorises unrelated fan estimates.', '',
         'Every owner-reported wall is explicitly marked too hard for early teaching in `route-safety.json` and `difficulty-walls.json`. Patience, Let’s be careful out there and Careless clicking costs lives follow the full teaching section in Difficult. Going their separate ways, Rainbow Island, The Crankshaft, PoP YoR ToP!!!, It’s Lemmingentry Watson and Just A Quicky are in Expert. Time waits for no Lemming and This Corrosion retain their late-Expert floors. All retained levels and winning routes remain available.', '',
-        'The course uses introductions, repeated practice, recovery lessons and chapter challenges. We all fall down introduces slow, single-skill full rescue at lesson 33. This should be a doddle! and A ladder would be handy supply generous route-planning practice at 46 and 47. Watson follows small-budget practice at 88, PoP YoR ToP!!! follows group coordination at 136, and Just A Quicky follows strict-budget combinations at 157.', '',
+        'The course uses introductions, repeated practice, recovery lessons and chapter challenges. We all fall down introduces slow, single-skill full rescue at lesson 33. This should be a doddle! and A ladder would be handy supply generous route-planning practice at 46 and 47. Watson follows small-budget practice, PoP YoR ToP!!! follows group coordination, and Just A Quicky follows strict-budget combinations. The current table includes the added seasonal practice.', '',
         'Human pressure is tracked across rescue percentage, available tool types and quantities, used-tool reserves, starting and minimum release rate, hatch count, assignments per tick and second, distinct workers needing commands, and skill chains. Classic cannot reduce release below the authored starting rate. The native exporter verified hatch counts and rate limits for all source levels. Hatches share the global spawn clock; their count is a coordination demand, not a multiplier on spawn frequency. Same-tick commands can be separated with Pause and are not labelled physically simultaneous clicks.', '',
-        'All 227 exact native replays record the first tick that reaches the rescue quota and the tools left at that tick. Commands after that point do not inflate the useful workload. Deadline pressure uses time left when the quota is reached, not when the replay shuts down. Tool scarcity uses the available inventory separately from witness reserves.', '',
+        f'All {len(lessons)} exact native replay records include the first tick that reaches the rescue quota and the tools left at that tick. Commands after that point do not inflate the useful workload. Deadline pressure uses time left when the quota is reached, not when the replay shuts down. Tool scarcity uses the available inventory separately from witness reserves. The 72 seasonal source routes were rerun for learning-30. Existing non-seasonal proof records are retained.', '',
         'Eight measured pressure axes cover rescue, tool scarcity, minimum release rate, hatches, command density, worker skill chains, precision and deadline. After the foundations, no transition raises more than two axes by over 30 points. No lesson introduces more than two peaks over the pressure already seen twice. These checks catch compound jumps; they do not measure the difficulty of discovering a trick.', '',
         '## Teaching chapters', '', '| Lessons | Chapter | Goal |', '| --- | --- | --- |']
     for chapter in read(OUT / 'course-plan.json')['chapters']:
@@ -882,7 +959,7 @@ def report(manifest, plan, pending, transitions):
         'Every lesson requires exact source resources and a matching winning replay. A native win proves one route, not novice discovery or the easiest solution. Official estimates remain uncertain. The curriculum records leave-one-reference-out calibration error and variant differences. These diagnostics do not certify a smooth human difficulty curve.', '',
         'For fan or seasonal review, record the exact source and replay revisions, an ordinary human completion, discovery notes, hints, retries and recovery resources. Compare nearby reference levels played by the same person. Do not infer a human review from machine analysis.', '',
         '## Saved journeys', '',
-        'Older built-in queues restore the teaching order of every unvisited lesson, including an unreported current wall. Past visits, completed records, ownership and run identity remain intact. Unvisited retired fan and seasonal entries leave the queue. Custom playlists and newer saved versions remain unchanged.', '',
+        'Older built-in queues restore the teaching order of every unvisited lesson, including an unreported current wall. Past visits, completed records, ownership and run identity remain intact. The learning-30 expansion preserves the first 80 lessons and inserts seasonal practice into the unvisited tail. Custom playlists and newer saved versions remain unchanged.', '',
         'The bundled path uses Classic mechanics. Lemmings 2 and Lemmings 3 keep their existing campaigns and saved queues. Direct NeoLemmix playlist routing remains unsupported. No untested bridge is substituted for that gap.', '',
         'Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Check with `python3 Tools/DifficultyDiagnostics/human_journey.py --check`.', '',
         '## Current order', '', '| Step | Comparison reference | Level | Chapter | Role | Stage | Evidence |', '| ---: | --- | --- | --- | --- | --- | --- |']
@@ -911,13 +988,16 @@ def load_pool(resources):
 
 
 def main():
-    parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--check', action='store_true')
+    parser.add_argument('--reference-root', type=pathlib.Path, default=REFERENCE)
+    args = parser.parse_args()
     resources = read(OUT / 'source-resources.json')
     pool = load_pool(resources)
     witnesses = read(OUT / 'candidate-solutions.json')
     witnesses.update(read(ROOT / 'Resources/Hints/solutions.json'))
     manifest, plan, pending, transitions = build(pool, witnesses, resources,
-                                               redux_reference(), read(OUT / 'human-reviews.json')['reviews'])
+                                               redux_reference(args.reference_root), read(OUT / 'human-reviews.json')['reviews'])
     bundled = read(ROOT / 'Resources/Progression/solutions.json')
     by_identity = {key(r): r for r in pool}
     for lesson in manifest['lessons']:
@@ -928,7 +1008,8 @@ def main():
                ROOT / 'Resources/Progression/solutions.json': bundled, OUT / 'curriculum.json': plan,
                OUT / 'human-review-queue.json': pending, OUT / 'transitions.json': transitions,
                OUT / 'course-review.json': course_review_document(manifest, plan),
-               OUT / 'redux-reference.json': {'sourceURL': SOURCE, 'levels': redux_reference()}}
+               OUT / 'seasonal-coverage.json': seasonal_coverage(manifest),
+               OUT / 'redux-reference.json': {'sourceURL': SOURCE, 'levels': redux_reference(args.reference_root)}}
     if args.check:
         for path, value in outputs.items():
             assert read(path) == value, f'Stale output: {path}'

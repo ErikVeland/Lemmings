@@ -41,7 +41,13 @@
 	<string>https://glasscode.academy/lemmings-api/rankings</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>GCSupportsGameMode</key>
+	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.games</string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsGameMode</key>
 	<true/>
 	<key>LemmingsCloudProgressEnabled</key>
 	<true/>
