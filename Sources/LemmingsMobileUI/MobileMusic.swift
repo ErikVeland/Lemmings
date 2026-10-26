@@ -37,6 +37,8 @@ import AVFAudio
     private var launchSettled = false
     private var launchSettleTask: Task<Void, Never>?
     private var requestedMenu = (visible: false, active: false)
+    private static let menuSuspendDelay = 0.4
+    private var menuSuspendTask: Task<Void, Never>?
     private var menuKey: String { "menu|" + soundtrack }
     private(set) var currentTrackTitle: String?
     private(set) var currentSoundtrackName: String?
@@ -139,7 +141,19 @@ import AVFAudio
             if playing == menuKey { stop() }
             return
         }
-        if playing == menuKey { active ? resume() : suspend(); return }
+        if playing == menuKey {
+            if active { menuSuspendTask?.cancel(); menuSuspendTask = nil; if inactive { resume() }; return }
+            // Folding or unfolding Duo deactivates the scene for a moment. Cutting the
+            // decks there and fading them back in clicked, so wait before suspending.
+            guard menuSuspendTask == nil, !inactive else { return }
+            menuSuspendTask = Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: UInt64(Self.menuSuspendDelay * 1_000_000_000))
+                guard let self, !Task.isCancelled else { return }
+                self.menuSuspendTask = nil
+                if self.playing == self.menuKey, !self.requestedMenu.active { self.suspend() }
+            }
+            return
+        }
         // A level's attempt owns the decks until it exits and stops them.
         guard active, playing == nil else { return }
         guard launchSettled else {
@@ -391,13 +405,14 @@ import AVFAudio
     }
     func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
     func suspend() {
+        menuSuspendTask?.cancel(); menuSuspendTask = nil
         inactive = true
         resultTransitionTask?.cancel(); resultTransitionTask = nil
         failureMusic.finish()
         nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + NukeMusicSweep.returnDuration)
         applyOutputState()
     }
-    func resume() { inactive = false; applyOutputState() }
+    func resume() { menuSuspendTask?.cancel(); menuSuspendTask = nil; inactive = false; applyOutputState() }
     func stop() {
         resultTransitionTask?.cancel(); resultTransitionTask = nil
         module.stop(); recordings.stop(); dj.stop()

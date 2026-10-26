@@ -48,8 +48,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #if os(tvOS)
         true
         #else
-        // iPad and an unfolded iPhone Duo share the tablet menu box. A folded phone keeps the full-width menu.
+        // iPad and Duo share the tablet menu box. Its compact layout fits the folded Duo below
+        // the camera without scrolling. Other phones keep the full-width menu.
         UIDevice.current.userInterfaceIdiom == .pad || min(view.bounds.width, view.bounds.height) >= 700
+            || MobileSystemRegions.usesFullDisplay(in: view)
         #endif
     }
     private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }

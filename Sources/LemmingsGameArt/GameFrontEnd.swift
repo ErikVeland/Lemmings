@@ -282,11 +282,19 @@ public struct GameFrontEnd {
         let footerGrid = GameFooterGrid(actions: footer, columns: min(requestedFooterColumns, fittingFooterColumns),
             spanSingleAction: true, alignTrailing: false)
         let footerCell = (inner - CGFloat(footerGrid.columns - 1) * gap) / CGFloat(footerGrid.columns)
-        let heading = CGRect(x: x + 62, y: 22, width: boardWidth - 124, height: 44)
-        let subtitle = CGRect(x: x + 12, y: 70, width: inner,
-            height: GameTextLayout.height(page.subtitle, width: inner))
+        // A short status such as Loading... sits in a fixed header slot beside Settings,
+        // so it never moves the logo or the actions when it appears.
+        let statusSlot = GameTextLayout.width(of: L10n.text("Loading...")) + 8
+        let statusWidth = GameTextLayout.width(of: page.subtitle)
+        let headerStatus = !page.subtitle.contains("\n") && statusWidth <= statusSlot
+        let heading = CGRect(x: x + 62, y: 22, width: boardWidth - 124 - statusSlot, height: 44)
+        let statusHeight = GameTextLayout.height(page.subtitle, width: inner)
+        let subtitle = headerStatus
+            ? CGRect(x: x + boardWidth - 62 - statusWidth, y: 22 + floor((44 - statusHeight) / 2),
+                     width: statusWidth, height: statusHeight)
+            : CGRect(x: x + 12, y: 70, width: inner, height: statusHeight)
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
-        let turnInitials = CGRect(x: x + 12, y: subtitle.maxY + 4, width: inner,
+        let turnInitials = CGRect(x: x + 12, y: (headerStatus ? 70 : subtitle.maxY) + 4, width: inner,
             height: showsTurnAtTop ? 22 : 0)
         let gameStart = page.rows.firstIndex {
             $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id)
@@ -295,7 +303,7 @@ public struct GameFrontEnd {
         let sections = [Array(page.rows.prefix(gameStart)), library.filter { $0.gameLogo == nil },
                         library.filter { $0.gameLogo != nil }].filter { !$0.isEmpty }
         var targets: [Target] = []
-        var y = (showsTurnAtTop ? turnInitials.maxY : subtitle.maxY) + 16
+        var y = (showsTurnAtTop ? turnInitials.maxY : headerStatus ? 70 : subtitle.maxY) + 16
         for (section, actions) in sections.enumerated() {
             if section > 0 { y += groupGap }
             let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3 : columns
@@ -338,7 +346,7 @@ public struct GameFrontEnd {
             board: CGRect(x: x, y: 12 + offset, width: boardWidth, height: contentHeight + logoGrowth - 24),
             heading: CGRect(x: heading.minX, y: heading.minY + offset,
                 width: heading.width, height: heading.height + logoGrowth),
-            subtitle: subtitle.offsetBy(dx: 0, dy: offset + logoGrowth),
+            subtitle: subtitle.offsetBy(dx: 0, dy: offset + (headerStatus ? 0 : logoGrowth)),
             preview: .zero, details: [], targets: targets.map {
                 Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0,
                     dy: offset + (headerIDs.contains($0.action.id) ? 0 : logoGrowth)))
@@ -409,6 +417,9 @@ public struct GameFrontEnd {
         if fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
         for board in boards {
             if !fillsCanvas { shape.fill(board, in: context) }
+            // A drawn frame cannot match a rounded display's hardware corner radius,
+            // so the display edge frames full-screen boards and the home menu.
+            if shape == .rounded && (fillsCanvas || page.home) { continue }
             GameMenuFrameArt.draw(in: context, board: board, shape: shape)
         }
         if let heading = layout.libraryHeading {

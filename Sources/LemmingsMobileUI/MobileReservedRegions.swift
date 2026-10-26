@@ -108,7 +108,9 @@ import UIKit
             if #available(iOS 26.0, tvOS 26.0, *) {
                 corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .vertical))
             } else { corners = view.safeAreaInsets }
-            available = view.bounds.inset(by: UIEdgeInsets(top: corners.top, left: 0, bottom: corners.bottom, right: 0))
+            // Inset both edges equally. The home indicator alone left a black bar at the bottom only.
+            let vertical = min(corners.top, corners.bottom)
+            available = view.bounds.inset(by: UIEdgeInsets(top: vertical, left: 0, bottom: vertical, right: 0))
         } else {
             available = isFoldable(in: view) ? view.bounds.inset(by: contentInsets(in: view)) : view.safeAreaLayoutGuide.layoutFrame
         }
