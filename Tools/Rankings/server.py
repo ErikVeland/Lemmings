@@ -226,7 +226,8 @@ class Store:
         if category in CAREER:
             sql = """WITH bests AS (SELECT player,level_key,MAX(stars) best FROM runs
                      WHERE assisted=? AND won=1 GROUP BY player,level_key),
-                     scores AS (SELECT player, """ + CAREER[category] + """ score FROM bests GROUP BY player),
+                     scores AS (SELECT player, """ + CAREER[category] + """ score, SUM(best) stars, COUNT(*) clears,
+                                SUM(best=3) perfect FROM bests GROUP BY player),
                      ranked AS (SELECT ROW_NUMBER() OVER(ORDER BY score DESC,player) rank,* FROM scores)
                      SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
                      ORDER BY rank LIMIT 6 OFFSET ?"""
@@ -248,7 +249,9 @@ class Store:
                             "score": r["score"] if category in CAREER else r["milliseconds"] if category.startswith("fastest") else r["skills"] if category == "leastSkills" else r["saved"],
                             "runID": None if category in CAREER else r["id"],
                             "replay": False if category in CAREER else r["replay_bytes"] > 0,
-                            "actionReplay": False if category in CAREER else r["rank"] <= 10 and r["action_bytes"] > 0} for r in rows[:5]],
+                            "actionReplay": False if category in CAREER else r["rank"] <= 10 and r["action_bytes"] > 0,
+                            **({"stars": r["stars"], "clears": r["clears"], "perfect": r["perfect"]} if category in CAREER else {})}
+                            for r in rows[:5]],
                 "page": page, "hasMore": len(rows) > 5, "verification": "community"}
 
     def top_ten(self, rid):

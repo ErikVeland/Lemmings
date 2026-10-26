@@ -109,35 +109,24 @@ import NxlvKit
         }
     }
     func drawGameCenterBoard() {
-        header(L10n.text("Worldwide leaderboard")); tabs(); boardScopeLinks()
+        leaderboardTabs()
         let service = GameCenterScores.shared, config = service.configuration
         let selected = service.boardID ?? config?.starsID
-        let rankedLevel = config?.levels.first { $0.conditions == level?.conditions }
-        let levelID = rankedLevel?.leaderboardID
-        let choices = [(L10n.text("Career stars"), config?.starsID), (L10n.text("Cleared"), config?.clearsID), (L10n.text("Three-star"), config?.perfectID), (L10n.text("This level"), levelID), (L10n.text("Fastest clear"), rankedLevel?.fastestClearID), (L10n.text("Fastest 100%"), rankedLevel?.fastestAllSavedID)]
-        for (index, item) in choices.enumerated() {
-            button(item.0, CGRect(x: 80 + (index % 3) * 326, y: 201 + (index / 3) * 46, width: 308, height: 40), selected: item.1 == selected, enabled: item.1 != nil && service.available && !service.busy) { [weak self] in
-                guard let self, let id = item.1 else { return }
-                if service.account == nil { service.connect(profileID: self.player.id, window: self.window, boardID: id, history: ArcadeStore.shared.records.trolley) }
-                else { service.refresh(profileID: self.player.id, boardID: id, history: ArcadeStore.shared.records.trolley) }
-            }
-        }
-        let speedBoard = selected != nil && (selected == rankedLevel?.fastestClearID || selected == rankedLevel?.fastestAllSavedID)
+        let speedBoard = false
         func scoreLabel(_ score: Int) -> String { speedBoard ? Self.time(Double(score) / 1000) : "\(score)" }
         if let board = service.board {
             for (index, entry) in board.entries.enumerated() {
-                let y = CGFloat(298 + index * 43)
+                let y = CGFloat(254 + index * 43)
                 text("#\(entry.rank)", 80, y, 100); text(entry.name, 216, y, 594)
                 text(scoreLabel(entry.score), 856, y, 184, alignment: .right)
             }
-            if board.entries.isEmpty { text(L10n.text("Be the first to set a score."), 80, 308, 960) }
+            if board.entries.isEmpty { text(L10n.text("No scores"), 80, 300, 960, alignment: .center) }
             let personal = board.personal.map { L10n.text("Your rank: #\($0.rank) of \(board.players) - \(scoreLabel($0.score))") } ?? L10n.text("No worldwide score yet.")
             text(personal, 80, 521, 960, palette: .green)
         } else {
-            paragraph(service.status, CGRect(x: 80, y: 310, width: 960, height: 72))
+            paragraph(service.status, CGRect(x: 80, y: 290, width: 960, height: 72))
         }
         if service.board != nil { text(service.status, 80, 564, 960, height: 30, alpha: 0.8) }
-        text(L10n.text("Ranked catalogue: \(config?.levels.count ?? 0) configurations. Rewinds excluded."), 80, 604, 960, height: 24, alpha: 0.7)
         if service.available, let config {
             if service.account != nil {
                 button(L10n.text("Open Game Center"), CGRect(x: 332, y: 634, width: 316, height: 48)) { [weak self] in

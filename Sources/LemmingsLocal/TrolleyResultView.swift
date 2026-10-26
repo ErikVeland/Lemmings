@@ -23,7 +23,7 @@ import NxlvKit
     }
 
     func drawTrolleyRecords(_ conditions: TrolleyConditions) {
-        header(level?.title ?? L10n.text("The Trolley")); tabs(); boardScopeLinks()
+        header(level?.title ?? L10n.text("The Trolley")); tabs()
         let target = ArcadeStore.shared.records.trolley.maximum(conditions: conditions, assisted: assisted)
         let baseTitle = target.status == .record && trolleyBoard == .zeroAvoidableLosses ? L10n.text("Record matched") : trolleyBoard.title
         let boardTitle = conditions.bonusSkillID == nil ? baseTitle : L10n.text("BONUS: \(baseTitle)")

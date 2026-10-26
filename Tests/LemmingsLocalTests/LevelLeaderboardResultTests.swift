@@ -106,13 +106,20 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertNotNil(store.record(ArcadeRun(profileID: guest.id, level: level, saved: 10, didWin: true, skills: ["digger": 1], seconds: 20, telemetry: .init(released: 10))))
         XCTAssertNotNil(store.record(ArcadeRun(profileID: guest.id, level: level, saved: 6, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 10))))
         let records = store.records
-        for metric in ["stars", "saved", "lost"] {
-            let page = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "", metric: metric)
-            XCTAssertTrue(page.rows.allSatisfy { $0.id.hasPrefix("progress.player.") }, metric)
-            XCTAssertEqual(Set(page.rows.map(\.id)).count, 2, metric)
-        }
-        XCTAssertEqual(MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "").listTools.first?.id,
-                       "progress.metric.stars")
+        let local = MobileCareerArt.localLeaderboardRows(records: records, category: .stars, activeID: host)
+        XCTAssertTrue(local.allSatisfy { $0.id.hasPrefix("progress.player.") })
+        XCTAssertEqual(Set(local.map(\.id)).count, 2)
+        XCTAssertEqual(local.filter(\.selected).map(\.id), ["progress.player.\(host)"])
+        let board = MobileCareerArt.leaderboards(world: false, category: .clears, rows: local, busy: false, status: "",
+                                                 sharing: true, gameCenter: true)
+        XCTAssertEqual(board.listTools.map(\.id), ["rankScope.world", "rankScope.local",
+            "rankCategory.stars", "rankCategory.clears", "rankCategory.perfect"])
+        XCTAssertEqual(board.listTools.filter(\.selected).map(\.id), ["rankScope.local", "rankCategory.clears"])
+        XCTAssertEqual(board.footer.map(\.id), ["home", "rankGameCenter"])
+        let progress = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "")
+        XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "playInsights"])
+        XCTAssertEqual(progress.footer.map(\.id), ["home"])
+        XCTAssertTrue(progress.listTools.isEmpty)
         let key = "direct|" + level.boardID
         let full = MobileCareerArt.progressLevelPage(records: records, key: key, metric: "unknown")
         XCTAssertEqual(full.listTools.first { $0.selected }?.id, "progress.levelMetric.full")

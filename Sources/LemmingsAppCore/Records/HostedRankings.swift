@@ -11,9 +11,15 @@ public struct HostedBoard: Codable, Equatable {
         public let runID: UUID?
         public let replay: Bool
         public var actionReplay: Bool? = nil
-        public init(rank: Int, name: String, score: Int, runID: UUID?, replay: Bool, actionReplay: Bool? = nil) {
+        /// Career boards also send every career total, so one row can show all three columns.
+        public var stars: Int? = nil
+        public var clears: Int? = nil
+        public var perfect: Int? = nil
+        public init(rank: Int, name: String, score: Int, runID: UUID?, replay: Bool, actionReplay: Bool? = nil,
+                    stars: Int? = nil, clears: Int? = nil, perfect: Int? = nil) {
             self.rank = rank; self.name = name; self.score = score; self.runID = runID
             self.replay = replay; self.actionReplay = actionReplay
+            self.stars = stars; self.clears = clears; self.perfect = perfect
         }
     }
     public let entries: [Entry]

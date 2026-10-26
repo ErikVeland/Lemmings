@@ -284,10 +284,8 @@ import NxlvKit
         let officialRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)
         guard fanRecord.subtitle.contains("Fan-made"), officialRecord.subtitle.contains("Official") else { throw invalidTargets(line: #line) }
         typealias Action = GameFrontEnd.Action
-        let communityRows: [Action] = [.init("rankCategory", "Career stars"), .init("rankShare", "Share records", selected: true)]
-        let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
-            .init("rankBoard.board-\($0.offset)", $0.element, selected: $0.offset == 0)
-        }
+        let worldRows: [Action] = [.init("rankReplay.1", "1.  AB   120", enabled: true, selected: true), .init("rankReplay.2", "2.  CD   98", enabled: false)]
+        let localRows = MobileCareerArt.localLeaderboardRows(records: records, category: .stars, activeID: profiles.activeID)
         let progress = MobileCareerArt.progressPage(records: records, profileID: profiles.activeID, profileName: "AB",
                                                     subtitle: "", campaign: campaign)
         let replayRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID,
@@ -347,13 +345,11 @@ import NxlvKit
             ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)),
             ("achievements-empty", MobileCareerArt.achievementsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", campaign: campaign)),
-            ("rankings-loading", MobileCareerArt.rankings(community: true, subtitle: "", busy: true, status: "", rows: communityRows, connected: false, available: true)),
-            ("rankings-empty", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "No scores", rows: communityRows, connected: false, available: true)),
-            ("rankings-offline", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "Connection unavailable", rows: communityRows, connected: false, available: true)),
-            ("rankings-replays", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "", rows: communityRows + [.init("rankReplay.1", "#1 AB 12:34", enabled: true), .init("rankReplay.2", "#2 CD 12:56", enabled: false)], connected: false, available: true)),
-            ("gamecenter-unavailable", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "Unavailable", rows: boards.map { .init($0.id, $0.title, enabled: false) }, connected: false, available: false)),
-            ("gamecenter-connect", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "", rows: boards, connected: false, available: true)),
-            ("gamecenter-scores", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "", rows: boards + [.init("rankRow.1", "#1 AB 120", enabled: false)], connected: true, available: true))
+            ("leaderboards-loading", MobileCareerArt.leaderboards(world: true, category: .stars, rows: [], busy: true, status: "", sharing: true, gameCenter: true)),
+            ("leaderboards-empty", MobileCareerArt.leaderboards(world: true, category: .stars, rows: [], busy: false, status: "No scores", sharing: false, gameCenter: true)),
+            ("leaderboards-offline", MobileCareerArt.leaderboards(world: true, category: .clears, rows: [], busy: false, status: "Connection unavailable", sharing: nil, gameCenter: false)),
+            ("leaderboards-world", MobileCareerArt.leaderboards(world: true, category: .stars, rows: worldRows, busy: false, status: "", sharing: true, gameCenter: true)),
+            ("leaderboards-local", MobileCareerArt.leaderboards(world: false, category: .perfect, rows: localRows, busy: false, status: "", sharing: true, gameCenter: true))
         ]
     }
     static func auditSettingsSizes(typography: GameMenuTypography, output: URL) throws -> [[String: Any]] {

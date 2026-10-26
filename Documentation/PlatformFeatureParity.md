@@ -130,36 +130,38 @@ also Classic-only across platforms.
 | Manual familiar-name entry on TV | Native contact-picker difference. Do not silently request broader contact access. |
 | Duo hinge-triggered clock versus ordinary clock routes elsewhere | Device-specific hardware trigger. The shared clock remains available through platform-appropriate entry points. |
 
-### Worldwide and level leaderboards — 26 October 2026
+### Progress and Leaderboards — 26 October 2026
 
-Worldwide is one list. It ranks every shared player by the selected metric:
-Career stars, Levels cleared or Three-star levels. It does not depend on the
-last level played and does not split rewind runs into a separate view.
+Home has two separate entries. Progress belongs to the active local player.
+Leaderboards ranks players against each other.
 
-Every level has its own list. It ranks every shared player by Fastest 100% first, then Fastest clear,
-Least skills or Most saved, from direct runs only. Most saved rarely separates
-players on one level, so it is never the default. The result
-screen shows that list, its top three rows and every tied leader. Arrows (Mac)
-or the metric row (iPhone, iPad, Duo, Apple TV) change the metric. The list
-loads again after the player's own result is shared.
+Progress shows the player's career stars, cleared levels and three-star
+levels. It opens Records, Achievements and Play Insights. Back is its only
+footer action.
 
-| Platform | Worldwide list | Level list on result | Source check |
-| --- | --- | --- | --- |
-| Mac | Yes | Yes, Classic, L2, L3 | `LevelLeaderboardResultTests` renders all three engines, loaded and offline |
-| iPhone, iPad, Duo | Yes | Yes | `LevelLeaderboardPageTests` at 320–1194 pt; simulator build |
-| Apple TV | Yes | Yes | `LevelLeaderboardPageTests` at 1920 pt; simulator build |
+Leaderboards has two rows of tabs above one ranked list. The first row picks
+who: World, Game Center (Mac, when available) or This device (This Mac on Mac).
+The second row picks the category: Career stars, Levels cleared or Three-star
+levels. The active player's row is highlighted. On iPhone, iPad, Duo and Apple
+TV, Game Center opens Apple's own leaderboard screen. Share my records is a
+single toggle on World. Per-level lists stay on each result screen and in Mac
+level records. They rank players by Fastest 100% first, then Fastest clear,
+Least skills and Most saved, from direct runs only.
 
-Local boards follow the same rule. All-levels boards rank players: Mac Career
-and mobile Progress (Career stars first, then Most saved and Most lost). Level
-boards rank players on one level: Mac level records and the mobile Progress
-level page open on Fastest 100%, then Fastest clear, Least skills and Most
-saved. The old Progress "Best times" view listed levels, not players, and is
-replaced by Career stars. Mac local boards keep the Rewinds filter.
+| Platform | Progress | Leaderboards | Level list on result | Source check |
+| --- | --- | --- | --- | --- |
+| Mac | Records window | World, Game Center, This Mac | Yes, Classic, L2, L3 | `swift build` |
+| iPhone, iPad, Duo | Shared page | World, This device, Apple Game Center | Yes | `LevelLeaderboardResultTests`; iOS SDK compile |
+| Apple TV | Shared page | World, This device, Apple Game Center | Yes | tvOS SDK compile |
 
-Limits: the result list shows no action replays; Worldwide no longer offers
-level action replays. Game Center boards are unchanged. Not yet checked: the
-hosted service returning shared rank 1 for ties, live service data, physical
-devices and controller focus on Apple TV.
+Limits: the hosted service returns only rank, name and score for each entry.
+World therefore shows one score column. This device and This Mac also show
+cleared and three-star counts. More World columns need a server change. Game
+Center is enabled in the bundled catalogue for every TestFlight and
+development-signed build. Developer ID and ad-hoc Mac builds still switch it
+off, because Apple allows Game Center only with App Store, TestFlight or
+development signing. Not yet checked: rendered captures, live service data,
+physical devices and controller focus on Apple TV.
 
 ## Validation and remaining acceptance
 

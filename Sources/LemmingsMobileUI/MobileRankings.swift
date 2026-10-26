@@ -44,6 +44,8 @@ import UIKit
 @MainActor final class MobileRankingsController {
     enum Provider { case community, gameCenter }
     var provider = Provider.community
+    /// World ranks shared players; This device ranks local players.
+    var world = true
     var category = HostedCategory.stars
     var conditions: TrolleyConditions?
     let community: HostedRankingsService
@@ -151,45 +153,24 @@ extension MobileLibraryViewController {
     }
 
     func rankingsPage(subtitle: String) -> GameFrontEnd.Page {
-        let rankings = mobileRankings
-        let community = rankings.provider == .community
-        let busy = community ? rankings.community.busy : rankings.gameCenter.busy
-        var rows: [GameFrontEnd.Action] = []
-        if community {
-            rows.append(.init("rankCategory", rankings.category.title, enabled: !busy))
-            rows.append(.init("rankShare", L10n.text("Share records"), enabled: rankings.community.endpoint != nil,
-                              selected: rankings.community.sharing(profiles.activeID)))
-            // Worldwide is one list of every shared player. Level rankings live on each level's result screen.
-            for entry in rankings.community.board?.entries ?? [] {
-                rows.append(.init("rankReplay.\(entry.rank)", HostedLeaderboardText.row(entry, category: rankings.category),
-                                  enabled: entry.replay && !busy))
+        let rankings = mobileRankings, community = rankings.community
+        let rows: [GameFrontEnd.Action]
+        if rankings.world {
+            let me = profiles.active.name
+            rows = (community.board?.entries ?? []).map { entry in
+                .init("rankReplay.\(entry.rank)", entry.stars == nil
+                      ? "\(entry.rank).  \(entry.name)   " + rankings.category.score(entry.score)
+                      : MobileCareerArt.careerRowTitle(rank: entry.rank, name: entry.name, stars: entry.stars ?? 0,
+                                                       clears: entry.clears ?? 0, perfect: entry.perfect ?? 0),
+                      enabled: entry.replay, selected: entry.name == me)
             }
         } else {
-            if let config = rankings.gameCenter.configuration {
-                let level = config.levels.first { $0.conditions == rankings.conditions }
-                let choices: [(String, String?)] = [(L10n.text("Career stars"), config.starsID), (L10n.text("Levels cleared"), config.clearsID),
-                    (L10n.text("Three-star levels"), config.perfectID), (L10n.text("This level"), level?.leaderboardID),
-                    (L10n.text("Fastest clear"), level?.fastestClearID), (L10n.text("Fastest 100%"), level?.fastestAllSavedID)]
-                for (title, boardID) in choices {
-                    rows.append(.init("rankBoard." + (boardID ?? title), title,
-                        enabled: boardID != nil && rankings.gameCenter.available && !busy,
-                        selected: boardID == (rankings.gameCenter.boardID ?? config.starsID)))
-                }
-            }
-            let speedBoard = rankings.gameCenter.configuration?.levels.contains {
-                $0.fastestClearID == rankings.gameCenter.boardID || $0.fastestAllSavedID == rankings.gameCenter.boardID
-            } ?? false
-            for entry in rankings.gameCenter.board?.entries ?? [] {
-                let score = speedBoard ? HostedCategory.fastestClear.score(entry.score) : String(entry.score)
-                rows.append(.init("rankRow.\(entry.rank)", "#\(entry.rank)  \(entry.name)  " + score, enabled: false))
-            }
+            rows = MobileCareerArt.localLeaderboardRows(records: arcadeStore.records, category: rankings.category, activeID: profiles.activeID)
         }
-        let loaded = community ? rankings.community.board != nil : rankings.gameCenter.board != nil
-        let empty = community ? rankings.community.board?.entries.isEmpty == true : rankings.gameCenter.board?.entries.isEmpty == true
-        let status = busy ? "" : empty ? L10n.text("No scores") : loaded ? "" : community ? rankings.community.status : rankings.gameCenter.status
-        return MobileCareerArt.rankings(community: community, subtitle: subtitle, busy: busy,
-            status: status, rows: rows, connected: rankings.gameCenter.account != nil,
-            available: community ? rankings.community.endpoint != nil : rankings.gameCenter.available)
+        return MobileCareerArt.leaderboards(world: rankings.world, category: rankings.category, rows: rows,
+            busy: rankings.world && community.busy, status: rankings.world ? community.status : "",
+            sharing: community.endpoint == nil ? nil : community.sharing(profiles.activeID),
+            gameCenter: rankings.gameCenter.available)
     }
 
     func handleRankings(_ id: String) -> Bool {
@@ -200,17 +181,16 @@ extension MobileLibraryViewController {
             rankings.community.onChange = { [weak self] in if self?.route == .rankings { self?.rebuild() } }
             rankings.gameCenter.onChange = { [weak self] in if self?.route == .rankings { self?.rebuild() } }
             navigate(.rankings); refreshRankings()
-        case "rankCommunity": rankings.provider = .community; rebuild()
-        case "rankGameCenter": rankings.provider = .gameCenter; rebuild()
-        case "rankCategory":
-            rankings.category = rankings.category.next(); refreshRankings()
+        case "rankScope.world": rankings.world = true; refreshRankings(); rebuild()
+        case "rankScope.local": rankings.world = false; rebuild()
+        case "rankGameCenter": showGameCenterLeaderboards()
         case "rankShare":
             rankings.community.setSharing(!rankings.community.sharing(profiles.activeID), profile: profiles.activeID); rebuild()
-        case "rankRefresh": refreshRankings()
         default:
-            if id.hasPrefix("rankBoard.") {
-                refreshRankings(boardID: String(id.dropFirst(10)))
-                return true
+            if id.hasPrefix("rankCategory."), let category = HostedCategory(rawValue: String(id.dropFirst(13))) {
+                rankings.category = category
+                if rankings.world { refreshRankings() }
+                rebuild(); return true
             }
             guard id.hasPrefix("rankReplay."), let rank = Int(id.dropFirst(11)),
                   let entry = rankings.community.board?.entries.first(where: { $0.rank == rank }) else { return false }
@@ -253,18 +233,28 @@ extension MobileLibraryViewController {
         }
     }
 
-    func refreshRankings(boardID: String? = nil) {
+    func refreshRankings() {
+        mobileRankings.community.refresh(conditions: nil, category: mobileRankings.category, assisted: false)
+    }
+
+    /// Game Center keeps its own ranking screen. Sign in first when the player has not connected yet.
+    func showGameCenterLeaderboards() {
         let rankings = mobileRankings
-        if rankings.provider == .community {
-            rankings.community.refresh(conditions: nil, category: rankings.category, assisted: false)
-        } else if let config = rankings.gameCenter.configuration {
-            let board = boardID ?? rankings.gameCenter.boardID ?? config.starsID
-            if rankings.gameCenter.account == nil {
-                rankings.gameCenter.connect(profileID: profiles.activeID, boardID: board, history: arcadeStore.records.trolley)
-            } else {
-                rankings.gameCenter.refresh(profileID: profiles.activeID, boardID: board, history: arcadeStore.records.trolley)
-            }
+        guard let config = rankings.gameCenter.configuration, rankings.gameCenter.available else { return }
+        if rankings.gameCenter.account == nil {
+            rankings.gameCenter.connect(profileID: profiles.activeID, boardID: config.starsID, history: arcadeStore.records.trolley)
+            return
         }
+        let controller = GKGameCenterViewController(state: .leaderboards)
+        controller.gameCenterDelegate = MobileGameCenterDismissal.shared
+        present(controller, animated: true)
+    }
+}
+
+@MainActor final class MobileGameCenterDismissal: NSObject, GKGameCenterControllerDelegate {
+    static let shared = MobileGameCenterDismissal()
+    nonisolated func gameCenterViewControllerDidFinish(_ controller: GKGameCenterViewController) {
+        Task { @MainActor in controller.dismiss(animated: true) }
     }
 }
 #endif

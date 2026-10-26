@@ -281,39 +281,65 @@ import NxlvKit
             }
         }
     }
-    func boardScopeLinks() {
-        // This row replaces the generic game subtitle on leaderboard pages.
-        GameStyle.fill(CGRect(x: 70, y: 100, width: 980, height: 34), .black)
-        for (index, item) in [(BoardScope.level, L10n.text("This level")), (.career, L10n.text("All levels")), (.worldwide, L10n.text("Worldwide"))].enumerated() {
-            link(item.1 + (boardScope == item.0 ? " *" : " >"), CGRect(x: 170 + index * 260, y: 99, width: 250, height: 34), palette: boardScope == item.0 ? .green : .blue) { [weak self] in
+    /// Leaderboards pick who in the first row and what in the second. Both rows are tabs.
+    func leaderboardTabs() {
+        title(L10n.text("Leaderboards"), x: 96, y: 40, width: 928, height: 40)
+        let gameCenter = GameCenterScores.shared.available
+        let scopes: [(String, Bool, () -> Void)] = [
+            (L10n.text("World"), boardScope == .worldwide && !usesGameCenter, { [weak self] in self?.openWorldwideBoard() }),
+        ] + (gameCenter ? [(L10n.text("Game Center"), boardScope == .worldwide && usesGameCenter, { [weak self] in
+                guard let self else { return }; self.usesGameCenter = true; self.openGameCenterBoard() })] : [])
+          + [(L10n.text("This Mac"), boardScope == .career, { [weak self] in
+                self?.boardScope = .career; self?.usesGameCenter = false; self?.needsDisplay = true })]
+        let gap: CGFloat = 16
+        var width = (992 - gap * CGFloat(scopes.count - 1)) / CGFloat(scopes.count)
+        for (index, scope) in scopes.enumerated() {
+            button(scope.0, CGRect(x: 64 + CGFloat(index) * (width + gap), y: 96, width: width, height: 44), selected: scope.1, action: scope.2)
+        }
+        let categories = HostedCategory.worldwide
+        width = (992 - gap * CGFloat(categories.count - 1)) / CGFloat(categories.count)
+        for (index, category) in categories.enumerated() {
+            button(category.title, CGRect(x: 64 + CGFloat(index) * (width + gap), y: 152, width: width, height: 40),
+                   selected: hostedCategory == category) { [weak self] in
                 guard let self else { return }
-                self.boardScope = item.0
-                if item.0 == .worldwide { self.openWorldwideBoard() } else { self.needsDisplay = true }
+                hostedCategory = category; hostedPage = 0
+                if usesGameCenter, let config = GameCenterScores.shared.configuration {
+                    let id = [HostedCategory.stars: config.starsID, .clears: config.clearsID, .perfect: config.perfectID][category] ?? config.starsID
+                    GameCenterScores.shared.refresh(profileID: player.id, boardID: id, history: ArcadeStore.shared.records.trolley)
+                }
+                refreshHostedBoard(); needsDisplay = true
             }
         }
     }
     func drawCareerBoard() {
-        header(L10n.text("Career leaderboard")); tabs(); boardScopeLinks(); rewindFilter()
+        leaderboardTabs()
         let history = ArcadeStore.shared.records.trolley
         let attempts = history.attempts.map { a in a.assessed(using: history.maximum(conditions: a.run.level.conditions!, assisted: a.run.assisted)) }
-        let rows = TrolleyCareerScore.rank(attempts: attempts, assisted: assisted)
-        text(L10n.text("Best stars per level, counted once"), 80, 220, 680)
-        text(L10n.text("PLAYER"), 174, 278, 260); text(L10n.text("STARS"), 524, 278, 140)
-        text(L10n.text("CLEARED"), 724, 278, 160); text("3-STAR", 924, 278, 120)
-        for (index, score) in rows.prefix(5).enumerated() {
-            let y = CGFloat(321 + index * 47)
-            GameStyle.fill(CGRect(x: 80, y: y - 5, width: 960, height: 44), score.profileID == player.id ? GameStyle.gold.withAlphaComponent(0.12) : .clear)
-            let row = CGRect(x: 80, y: y - 5, width: 960, height: 44)
-            rowText("\(index + 1)", x: 96, width: 60, row: row)
-            rowText(ArcadeStore.shared.records.profile(score.profileID)?.initials ?? L10n.text("LEM"), x: 174, width: 260, row: row)
-            rowText("\(score.stars)", x: 524, width: 140, row: row); rowText("\(score.clearedLevels)", x: 724, width: 160, row: row); rowText("\(score.threeStarLevels)", x: 924, width: 120, row: row)
+        func value(_ score: TrolleyCareerScore) -> Int {
+            switch hostedCategory { case .clears: score.clearedLevels; case .perfect: score.threeStarLevels; default: score.stars }
         }
-        if rows.isEmpty { text(L10n.text("No completed attempts in this category yet."), 80, 340, 960) }
-        text(L10n.text("Local players on this Mac."), 80, 578, 960)
+        let rows = TrolleyCareerScore.rank(attempts: attempts, assisted: false).sorted {
+            value($0) != value($1) ? value($0) > value($1) : $0.stars > $1.stars
+        }
+        text(L10n.text("RANK"), 80, 214, 90); text(L10n.text("PLAYER"), 174, 214, 300); text(L10n.text("STARS"), 524, 214, 140)
+        text(L10n.text("CLEARED"), 724, 214, 160); text(L10n.text("3-STAR"), 924, 214, 120)
+        var rank = 0, previous: Int?
+        for (index, score) in rows.prefix(7).enumerated() {
+            if value(score) != previous { rank = index + 1; previous = value(score) }
+            let y = CGFloat(254 + index * 47)
+            let row = CGRect(x: 80, y: y - 5, width: 960, height: 44)
+            GameStyle.fill(row, score.profileID == player.id ? GameStyle.gold.withAlphaComponent(0.12) : .clear)
+            let owner = ArcadeStore.shared.records.profile(score.profileID)
+            rowText("\(rank)", x: 96, width: 60, row: row)
+            drawPortrait(owner?.portrait ?? 0, in: CGRect(x: 174, y: y - 2, width: 32, height: 39))
+            rowText(owner?.initials ?? L10n.text("LEM"), x: 222, width: 252, row: row, palette: .green)
+            rowText("\(score.stars)", x: 524, width: 140, row: row); rowText("\(score.clearedLevels)", x: 724, width: 160, row: row)
+            rowText("\(score.threeStarLevels)", x: 924, width: 120, row: row)
+        }
+        if rows.isEmpty { text(L10n.text("No scores"), 80, 300, 960, alignment: .center) }
         pageFooter()
-        let rewinds = assisted ? L10n.text("used") : L10n.text("unused")
-        let summary = rows.enumerated().map { L10n.text("Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? L10n.text("LEM")), \($0.element.stars) stars.") }.joined(separator: " ")
-        setAccessibilityLabel(L10n.text("Local career leaderboard. Rewinds \(rewinds). Best stars per distinct level. \(summary)"))
+        let summary = rows.enumerated().map { L10n.text("Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? L10n.text("LEM")), \(value($0.element)).") }.joined(separator: " ")
+        setAccessibilityLabel(L10n.text("Leaderboards. This Mac. \(hostedCategory.title). \(summary)"))
     }
 }
 #endif

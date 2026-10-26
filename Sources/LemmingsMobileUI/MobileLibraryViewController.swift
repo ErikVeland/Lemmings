@@ -44,14 +44,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
+    private var lastBookPanes: (size: CGSize, panes: [MobileRect]) = (.zero, [])
     private var usesHomeBox: Bool {
         #if os(tvOS)
         true
         #else
         // iPad and Duo share the tablet menu box. Its compact layout fits the folded Duo below
         // the camera without scrolling. Other phones keep the full-width menu.
+        // Duo uses it folded and spanned, so the moving scenery shows behind both layouts.
         UIDevice.current.userInterfaceIdiom == .pad || min(view.bounds.width, view.bounds.height) >= 700
-            || MobileSystemRegions.usesFullDisplay(in: view)
+            || MobileSystemRegions.isFoldable(in: view)
         #endif
     }
     private var homeBackdropName: String { "home-scenery-" + (hotSeat?.scope ?? "solo") }
@@ -615,9 +617,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         syncPages()
         let safe = view.safeAreaLayoutGuide.layoutFrame
-        let book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
+        var book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
             in: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
             avoiding: MobileSystemRegions.read(in: view)) : []
+        // The hinge region can drop out for a moment on periodic layout passes.
+        // Keep the spanned panes until the window size actually changes.
+        if route == .home && canvas.page.home {
+            if book.isEmpty, lastBookPanes.size == view.bounds.size { book = lastBookPanes.panes }
+            else { lastBookPanes = (view.bounds.size, book) }
+        }
         var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
         globalNavigation.isHidden = game != nil || route == .home || deskClockShown
         browser.showsBack = globalNavigation.isHidden
@@ -958,7 +966,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         refreshHomeBackdrop()
         updateLibraryDisplayLink()
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
-        browser.statusText = loading ? L10n.text("Loading...") : notice
+        browser.statusText = loading ? "" : notice
         browser.isLoading = loading
         let available = MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300

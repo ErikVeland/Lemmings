@@ -44,6 +44,7 @@ public enum MobileHomeArt {
             subtitle: subtitle,
             home: true, rows: rows,
             footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
+                     .init("worldwide", L10n.text("Leaderboards")),
                      .init("collections", L10n.text("Collections"), enabled: collectionsAvailable), GameSupport.menuAction]
                 + (deskClock ? [GameFrontEnd.Action("deskClock", L10n.text("Desk Clock"))] : [])
                 + [.init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)

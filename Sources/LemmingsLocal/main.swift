@@ -1964,6 +1964,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onRetry = { [weak self] in self?.retry() }
     playfield.onProfiles = { [weak self] in self?.showProfiles() }
     playfield.onRecords = { [weak self] in self?.showLevelRecords() }
+    playfield.onLeaderboards = { [weak self] in
+      guard let self else { return }
+      ArcadeWindow.shared.showLeaderboards(owner: self.window, background: self.playfield.levelImage)
+    }
     playfield.onPlaylists = { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
     playfield.onUpdate = { [weak self] in self?.updates.showUpdate() }
     playfield.onSettings = { [weak self] in self?.showSettings() }

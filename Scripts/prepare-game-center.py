@@ -9,7 +9,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', type=Path, default=root / 'Resources/GameCenter')
-parser.add_argument('--enable', action='store_true', help='Enable only after the Apple registration and signing setup is complete.')
+parser.add_argument('--disable', dest='enable', action='store_false', help='Ship the catalogue switched off. Game Center is on for every tester build.')
 args = parser.parse_args()
 source = json.loads((root / 'Resources/Trolley/verified-maxima.json').read_text())
 stamp = datetime.datetime.fromisoformat(source['generatedAt'].replace('Z', '+00:00'))

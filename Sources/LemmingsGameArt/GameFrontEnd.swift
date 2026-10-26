@@ -306,7 +306,9 @@ public struct GameFrontEnd {
         var y = (showsTurnAtTop ? turnInitials.maxY : headerStatus ? 70 : subtitle.maxY) + 16
         for (section, actions) in sections.enumerated() {
             if section > 0 { y += groupGap }
-            let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3 : columns
+            // Game logos pair up side by side even in one-column portrait, so each logo stays large.
+            let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3
+                : actions.count > 1 && actions.allSatisfy({ $0.gameLogo != nil }) ? 2 : columns
             let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
             let logos = actions.allSatisfy { $0.gameLogo != nil }
             let rowHeight = logos ? CGFloat(compact ? 64 : 112) : max(44, actions.map {
@@ -415,7 +417,9 @@ public struct GameFrontEnd {
         context.setFillColor(CGColor(gray: 0, alpha: 1))
         let boards = [layout.board] + (layout.secondaryBoard.map { [$0] } ?? [])
         if fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
-        for board in boards {
+        // Spanned home controls float on the moving scenery, with no panel behind them.
+        let floating = page.home && layout.secondaryBoard != nil && !fillsCanvas
+        for board in boards where !floating {
             if !fillsCanvas { shape.fill(board, in: context) }
             // A drawn frame cannot match a rounded display's hardware corner radius,
             // so the display edge frames full-screen boards and the home menu.

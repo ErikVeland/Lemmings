@@ -1,6 +1,6 @@
 {
   "clearsID": "ul.v1.career.cleared",
-  "enabled": false,
+  "enabled": true,
   "levels": [
     {
       "conditions": {

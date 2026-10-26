@@ -289,6 +289,7 @@ struct ReticleFeedback {
   var overlayNextPlayerIndex: Int?
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
+  var onLeaderboards: (() -> Void)?
   var onPlaylists: (() -> Void)?
   var onDonate: (() -> Void)?
   var overlayShowsSettingsButton = false
@@ -301,8 +302,9 @@ struct ReticleFeedback {
     switch index {
     case 0: onProfiles?()
     case 1: onRecords?()
-    case 2: onPlaylists?()
-    case 3: onDonate?()
+    case 2: onLeaderboards?()
+    case 3: onPlaylists?()
+    case 4: onDonate?()
     default: break
     }
   }
@@ -1091,7 +1093,7 @@ struct ReticleFeedback {
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists")), GameSupport.menuAction]
+    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Progress")), .init("leaderboards", L10n.text("Leaderboards")), .init("playlists", L10n.text("Collections / Playlists")), GameSupport.menuAction]
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices {
@@ -1120,6 +1122,7 @@ struct ReticleFeedback {
     switch home.page.footer[footerIndex].id {
     case "players": onProfiles?()
     case "records": onRecords?()
+    case "leaderboards": onLeaderboards?()
     case "playlists": onPlaylists?()
     case "donate": onDonate?()
     case "settings": onSettings?()
@@ -1169,7 +1172,7 @@ struct ReticleFeedback {
     overlayLineRects = home.page.rows.compactMap { row in
       home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
-    overlayFooterButtons = ["players", "records", "playlists", "donate"].compactMap { id in
+    overlayFooterButtons = ["players", "records", "leaderboards", "playlists", "donate"].compactMap { id in
       home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
     let hovered = cursorViewPoint.flatMap { point in

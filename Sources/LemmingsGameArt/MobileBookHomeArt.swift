@@ -1,4 +1,5 @@
 import CoreGraphics
+import NxlvKit
 
 /// Home uses two vertical lists with the same bitmap lettering and original action identifiers.
 public enum MobileBookHomeArt {
@@ -7,10 +8,17 @@ public enum MobileBookHomeArt {
         let left = panes[0].insetBy(dx: 12, dy: 0), right = panes[1].insetBy(dx: 12, dy: 0)
         let gap: CGFloat = 6, padding: CGFloat = 12, groupGap: CGFloat = 8, bottomPadding: CGFloat = 20
         let leftWidth = left.width - padding * 2, rightWidth = right.width - padding * 2
-        var heading = CGRect(x: left.minX + 62, y: 22, width: left.width - 74, height: 56)
+        // Every level row takes two lines here: the title, then its count or Preview.
+        var page = page
+        for index in page.rows.indices where page.rows[index].id == "neolemmix" {
+            page.rows[index].title = page.rows[index].title.replacingOccurrences(of: " Preview", with: "\nPreview")
+        }
+        // What's New and Settings sit in the corners, so the logo keeps equal margins and stays centred.
+        var heading = CGRect(x: left.minX + 62, y: 22, width: left.width - 124, height: 56)
         let libraryHeading = CGRect(x: right.minX + padding, y: 22, width: rightWidth - 52, height: 56)
         var subtitle = CGRect(x: left.minX + padding, y: heading.maxY + 6, width: leftWidth,
-                              height: GameTextLayout.height(page.subtitle, width: leftWidth))
+                              height: max(GameTextLayout.height(L10n.text("Loading..."), width: leftWidth),
+                                          GameTextLayout.height(page.subtitle, width: leftWidth)))
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
         var turnInitials = CGRect(x: left.minX + padding, y: subtitle.maxY + 4,
             width: leftWidth, height: showsTurnAtTop ? 22 : 0)

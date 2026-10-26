@@ -62,7 +62,7 @@ extension MobileLibraryViewController {
         if confirmingRecordsReset { return GameRecoveryArt.recordsReset(arcadeStore.storageError ?? "") }
         var page = MobileCareerArt.progressPage(records: arcadeStore.records, profileID: profiles.activeID,
             profileName: profiles.active.name, subtitle: arcadeStore.storageError ?? subtitle,
-            metric: progressMetric, campaign: mobileCampaignProgress(profileID: profiles.activeID))
+            campaign: mobileCampaignProgress(profileID: profiles.activeID))
         if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
         return page
     }
@@ -193,7 +193,7 @@ extension MobileLibraryViewController {
             navigate(.progressLevel(key, parent)); return true
         }
         if id == "progressBack" {
-            navigate(.progress)
+            navigate(.rankings)
             return true
         }
         switch id {

@@ -62,6 +62,15 @@ import NxlvKit
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
         present(owner: owner)
     }
+    /// Home's Leaderboards opens straight onto the World ranking.
+    func showLeaderboards(owner: NSWindow? = nil, background: CGImage? = nil) {
+        arcadeView.background = background
+        arcadeView.mode = .records; arcadeView.report = nil; arcadeView.assisted = false
+        arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
+        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
+        arcadeView.openWorldwideBoard()
+        present(owner: owner)
+    }
     func showSession(owner: NSWindow? = nil) {
         let show = { [weak self] in self?.presentSession(owner: owner) }
         if let confirmSessionChange { confirmSessionChange { show() } }
@@ -881,7 +890,7 @@ import NxlvKit
         if boardScope == .career { drawCareerBoard(); return }
         if boardScope == .worldwide { drawWorldwideBoard(); return }
         if let conditions = level?.conditions { drawTrolleyRecords(conditions); return }
-        header(level?.title ?? L10n.text("Level records")); tabs(); boardScopeLinks()
+        header(level?.title ?? L10n.text("Level records")); tabs()
         guard let level else {
             text(L10n.text("Your first rescue starts the story."), 64, 293, 992)
             text(L10n.text("Play a level to set a record."), 64, 346, 992)

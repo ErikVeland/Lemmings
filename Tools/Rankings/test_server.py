@@ -149,6 +149,10 @@ class RankingsTests(unittest.TestCase):
         self.assertEqual(self.entries('stars')[0]['score'], 3)
         self.assertEqual(self.entries('clears')[0]['score'], 1)
         self.assertEqual(self.entries('perfect')[0]['score'], 1)
+        # Every career board sends all three totals so one row can show them as columns.
+        row = self.entries('clears')[0]
+        self.assertEqual((row['stars'], row['clears'], row['perfect']), (3, 1, 1))
+        self.assertNotIn('stars', self.entries('mostSaved')[0])
     def test_catalogue_target_and_cloner_ceiling(self):
         self.store.targets[self.key] = 8
         self.add(saved=8)
