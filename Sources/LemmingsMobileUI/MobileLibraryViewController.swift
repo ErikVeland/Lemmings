@@ -17,7 +17,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
         case journey, progression, techniques, rankings
-        case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, records, achievements, recordLevel(String), recordHint(String)
+        case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -82,6 +82,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let tvBuildInfo = MobileBuildInfo.current()
     #endif
     var mobileInsights = MobileInsightsState()
+    var progressMetric = "saved"
     var familiarNames = MobileFamiliarNamesState()
     var fanCountsTask: Task<Void, Never>?
     var fanCountGeneration = UUID()
@@ -867,6 +868,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = CloudSyncArt.page(testerEnabled: libraryCloud.testerSyncEnabled, busy: syncBusy, message: syncMessage, status: libraryCloud.status); canvas.preview = nil
         case .progress:
             canvas.page = progressPage(subtitle: subtitle); canvas.preview = nil
+        case let .progressPlayer(profileID):
+            canvas.page = MobileCareerArt.progressPlayerPage(records: arcadeStore.records, profileID: profileID, metric: progressMetric); canvas.preview = nil
+        case let .progressLevel(key, parentProfileID):
+            canvas.page = MobileCareerArt.progressLevelPage(records: arcadeStore.records, key: key,
+                metric: progressMetric, parentProfileID: parentProfileID); canvas.preview = nil
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
         case .achievements:

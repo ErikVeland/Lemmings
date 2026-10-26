@@ -92,18 +92,146 @@ public enum MobileCareerArt {
             details: levels.isEmpty ? [L10n.text("No records")] : [], footer: [.init("records", L10n.text("Back"))])
     }
 
-    /// Progress gathers records, awards, rankings and play counts behind one Home action.
+    /// Progress shows local rankings first, then lets players open a player or level view.
     public static func progressPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
-                                    campaign: ClassicAchievementProgress = .init(), insightsAvailable: Bool = true) -> GameFrontEnd.Page {
-        let levels = Set(records.runs.filter { $0.profileID == profileID }.map { ($0.assisted ? "a|" : "d|") + $0.level.boardID }).count
+                                    metric: String = "saved", campaign: ClassicAchievementProgress = .init(),
+                                    insightsAvailable: Bool = true) -> GameFrontEnd.Page {
+        let directRuns = records.runs.filter { !$0.assisted }
+        let bestRuns = distinctBestRuns(directRuns)
+        let rows: [GameFrontEnd.Action]
+        switch metric {
+        case "lost":
+            rows = playerTotals(distinctMostLostRuns(directRuns), lost: true).enumerated().map { index, item in
+                .init("progress.player.\(item.profileID)", "\(index + 1). \(playerName(records, item.profileID))   \(item.value) lost",
+                      portrait: records.profile(item.profileID)?.portrait)
+            }
+        case "time":
+            rows = fastestLevelRuns(directRuns).prefix(100).map { run in
+                .init("progress.level.\(recordID(run))", "\(run.level.title)   \(playerName(records, run.profileID))   \(time(run.seconds))")
+            }
+        default:
+            rows = playerTotals(bestRuns, lost: false).enumerated().map { index, item in
+                .init("progress.player.\(item.profileID)", "\(index + 1). \(playerName(records, item.profileID))   \(item.value) saved",
+                      portrait: records.profile(item.profileID)?.portrait)
+            }
+        }
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
-        return .init(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
-            rows: [.init("recordList", L10n.text("Records") + " / " + L10n.text("Replay") + "  \(levels)"),
-                   .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
-                   .init("worldwide", L10n.text("Worldwide")),
-                   .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],
-            footer: [.init("home", L10n.text("Back"))])
+        let note = metric == "time"
+            ? L10n.text("Fastest direct result for each recorded level. Rewind runs are separate in Records.")
+            : L10n.text("Direct runs only. Lost counts use population minus saved from one retained result per level.")
+        var page = GameFrontEnd.Page(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
+            rows: rows, details: rows.isEmpty ? [L10n.text("No records yet. Play a level to set a local record.")] : [note],
+            footer: [.init("home", L10n.text("Back")),
+                    .init("recordList", L10n.text("Records")),
+                    .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
+                    .init("worldwide", L10n.text("Worldwide")),
+                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)], footerColumns: 2)
+        page.listTools = [
+            .init("progress.metric.saved", L10n.text("Most saved"), selected: metric == "saved"),
+            .init("progress.metric.lost", L10n.text("Most lost"), selected: metric == "lost"),
+            .init("progress.metric.time", L10n.text("Best times"), selected: metric == "time")
+        ]
+        return page
+    }
+
+    public static func progressPlayerPage(records: ArcadeRecords, profileID: String, metric: String) -> GameFrontEnd.Page {
+        let playerRuns = records.runs.filter { $0.profileID == profileID && !$0.assisted }
+        let runs = metric == "lost" ? distinctMostLostRuns(playerRuns)
+            : metric == "time" ? fastestPerPlayerLevelRuns(playerRuns) : distinctBestRuns(playerRuns)
+        let profile = playerName(records, profileID)
+        let sorted: [ArcadeRun]
+        switch metric {
+        case "lost": sorted = runs.sorted { losses($0) == losses($1) ? $0.level.title < $1.level.title : losses($0) > losses($1) }
+        case "time": sorted = fastestLevelRuns(runs)
+        default: sorted = runs.sorted { $0.saved == $1.saved ? $0.level.title < $1.level.title : $0.saved > $1.saved }
+        }
+        let rows = sorted.prefix(200).map { run in
+            let value = metric == "lost" ? L10n.text("\(losses(run)) lost")
+                : metric == "time" ? (run.qualifies ? time(run.seconds) : L10n.text("No clear time"))
+                : L10n.text("\(run.saved) saved")
+            return GameFrontEnd.Action("progress.level.\(recordID(run))", "\(run.level.title)   \(value)")
+        }
+        return .init(title: profile, subtitle: L10n.text("Best result per level"), rows: rows,
+            details: [L10n.text("Direct runs only. Lost counts use population minus saved from one retained result per level.")],
+            footer: [.init("records", L10n.text("Back"))])
+    }
+
+    public static func progressLevelPage(records: ArcadeRecords, key: String, metric: String,
+                                         parentProfileID: String? = nil) -> GameFrontEnd.Page {
+        let (boardID, assisted) = recordBoard(key)
+        let runs = records.runs.filter { $0.level.boardID == boardID && $0.assisted == assisted }
+        guard let level = runs.first?.level else {
+            let backID = parentProfileID.map { "progress.playerBack.\($0)" } ?? "progressBack"
+            return .init(title: L10n.text("Level records"), details: [L10n.text("No records yet.")], footer: [.init(backID, L10n.text("Back"))])
+        }
+        let bestByPlayer = Dictionary(grouping: runs, by: \.profileID).compactMap { _, playerRuns -> ArcadeRun? in
+            switch metric {
+            case "lost": return playerRuns.max { losses($0) < losses($1) }
+            case "time": return playerRuns.filter(\.qualifies).min { $0.seconds < $1.seconds }
+            default: return playerRuns.max { $0.saved < $1.saved }
+            }
+        }
+        let ranked = bestByPlayer.sorted { a, b in
+            switch metric {
+            case "lost": return losses(a) == losses(b) ? a.seconds < b.seconds : losses(a) > losses(b)
+            case "time": return a.seconds == b.seconds ? a.saved > b.saved : a.seconds < b.seconds
+            default: return a.saved == b.saved ? a.seconds < b.seconds : a.saved > b.saved
+            }
+        }
+        let details = ranked.enumerated().map { index, run in
+            let value = metric == "lost" ? L10n.text("\(losses(run)) lost")
+                : metric == "time" ? time(run.seconds) : L10n.text("\(run.saved) saved")
+            return "\(index + 1). \(playerName(records, run.profileID))   \(value)"
+        }
+        return .init(title: level.title, subtitle: L10n.text("\(level.total) Lemmings   Save \(level.required)"),
+            details: details.isEmpty ? [L10n.text("No records yet.")] : details,
+            footer: [.init(parentProfileID.map { "progress.playerBack.\($0)" } ?? "progressBack", L10n.text("Back"))])
+    }
+
+    private static func distinctBestRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
+        Dictionary(grouping: runs, by: { "\($0.profileID)|\($0.assisted)|\($0.level.boardID)" }).values.compactMap { group in
+            group.sorted {
+                if $0.saved != $1.saved { return $0.saved > $1.saved }
+                if $0.qualifies != $1.qualifies { return $0.qualifies }
+                return $0.seconds < $1.seconds
+            }.first
+        }
+    }
+
+    private static func distinctMostLostRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
+        Dictionary(grouping: runs, by: { "\($0.profileID)|\($0.assisted)|\($0.level.boardID)" }).values.compactMap { group in
+            group.max { losses($0) < losses($1) }
+        }
+    }
+
+    private static func fastestPerPlayerLevelRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
+        Dictionary(grouping: runs.filter(\.qualifies), by: { "\($0.profileID)|\($0.assisted)|\($0.level.boardID)" }).compactMap { _, group in
+            group.min { $0.seconds < $1.seconds }
+        }
+    }
+
+    private static func playerTotals(_ runs: [ArcadeRun], lost: Bool) -> [(profileID: String, value: Int)] {
+        Dictionary(grouping: runs, by: \.profileID).map { profileID, values in
+            (profileID, values.reduce(0) { $0 + (lost ? losses($1) : $1.saved) })
+        }.sorted { $0.value == $1.value ? $0.profileID < $1.profileID : $0.value > $1.value }
+    }
+
+    private static func fastestLevelRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
+        Dictionary(grouping: runs.filter(\.qualifies), by: { "\($0.assisted)|\($0.level.boardID)" }).compactMap { _, group in
+            group.min { $0.seconds < $1.seconds }
+        }.sorted { $0.seconds == $1.seconds ? $0.level.title < $1.level.title : $0.seconds < $1.seconds }
+    }
+
+    private static func losses(_ run: ArcadeRun) -> Int { max(0, run.population - run.saved) }
+    private static func playerName(_ records: ArcadeRecords, _ profileID: String) -> String {
+        records.profile(profileID)?.initials ?? L10n.text("LEM")
+    }
+    private static func recordID(_ run: ArcadeRun) -> String {
+        (run.assisted ? "assisted|" : "direct|") + run.level.boardID
+    }
+    private static func time(_ seconds: Double) -> String {
+        String(format: "%d:%05.2f", Int(seconds) / 60, seconds.truncatingRemainder(dividingBy: 60))
     }
 
     /// Strips the "direct|" or "assisted|" prefix from a record key and returns the board ID and assisted flag.

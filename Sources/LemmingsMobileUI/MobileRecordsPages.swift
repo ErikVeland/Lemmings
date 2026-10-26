@@ -62,7 +62,7 @@ extension MobileLibraryViewController {
         if confirmingRecordsReset { return GameRecoveryArt.recordsReset(arcadeStore.storageError ?? "") }
         var page = MobileCareerArt.progressPage(records: arcadeStore.records, profileID: profiles.activeID,
             profileName: profiles.active.name, subtitle: arcadeStore.storageError ?? subtitle,
-            campaign: mobileCampaignProgress(profileID: profiles.activeID))
+            metric: progressMetric, campaign: mobileCampaignProgress(profileID: profiles.activeID))
         if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
         return page
     }
@@ -169,6 +169,30 @@ extension MobileLibraryViewController {
     }
 
     func handleRecords(_ id: String) -> Bool {
+        if id.hasPrefix("progress.metric.") {
+            let metric = String(id.dropFirst("progress.metric.".count))
+            guard ["saved", "lost", "time"].contains(metric) else { return true }
+            progressMetric = metric; rebuild(); return true
+        }
+        if id.hasPrefix("progress.player.") {
+            let profileID = String(id.dropFirst("progress.player.".count))
+            guard arcadeStore.records.profile(profileID) != nil else { return true }
+            navigate(.progressPlayer(profileID)); return true
+        }
+        if id.hasPrefix("progress.playerBack.") {
+            let profileID = String(id.dropFirst("progress.playerBack.".count))
+            guard arcadeStore.records.profile(profileID) != nil else { return true }
+            navigate(.progressPlayer(profileID)); return true
+        }
+        if id.hasPrefix("progress.level.") {
+            let key = String(id.dropFirst("progress.level.".count))
+            let parent: String? = if case let .progressPlayer(profileID) = route { profileID } else { nil }
+            navigate(.progressLevel(key, parent)); return true
+        }
+        if id == "progressBack" {
+            navigate(.progress)
+            return true
+        }
         switch id {
         case "recordsFix":
             if arcadeStore.reloadRecords() { _ = saveProfiles() }
