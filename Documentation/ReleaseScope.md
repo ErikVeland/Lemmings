@@ -58,8 +58,10 @@ clean listening acceptance exists for Duo, iPad 8 or Apple TV 4K. The connected
 device list contains only the Mac, and CoreSimulator is unavailable here.
 
 The Developer ID identity and `lemmings-beta` notary profile are usable. No
-Apple Distribution identity is present. No build 102 release archive has been
-signed, notarized or uploaded. See the [build 102 record](ReleaseReadiness/2.3-build102/README.md).
+Apple Distribution identity is present. Xcode 27.2 created a signed iOS build
+36 archive, but App Store export reports “No Accounts” and no iOS Distribution
+certificate with a private key. No build 102 release archive has been
+notarized or uploaded. See the [build 102 record](ReleaseReadiness/2.3-build102/README.md).
 
 ## Latest published release
 

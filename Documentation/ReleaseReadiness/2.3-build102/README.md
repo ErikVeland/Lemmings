@@ -17,6 +17,8 @@ guidance and the Hot Seat progress selector. The release notes are
 | Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
+| iOS build 36 archive | PASS; signed archive created with active Xcode 27.2 |
+| iOS build 36 App Store export | BLOCKED; Xcode reports “No Accounts” and no iOS Distribution certificate/private key |
 | Universal Mac local app preflight | PASS at `03818736`; ad hoc signature verifies; arm64 and x86_64 |
 | Release history and input checks | PASS |
 | Release script dry run at `0b349063` | PASS; live feed comparison unavailable because `origin/main` could not be fetched; no build or upload performed |
@@ -53,10 +55,12 @@ in this session, so the Duo, iPad and Apple TV checks cannot run here.
   [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
 - The `lemmings-beta` notary profile is now usable, and the Developer ID
   Application identity is present. Notary history shows an accepted prior
-  standard archive, but it is not a build 102 package. The current signing
-  identities still do not include Apple Distribution, so iOS/tvOS App Store
-  signing and upload remain unavailable. No build 102 release archive has been
-  Developer ID signed, notarized or uploaded.
+  standard archive, but it is not a build 102 package. The signed iOS archive
+  did not export to an IPA: active Xcode reports “No Accounts” and no iOS
+  Distribution certificate with a private key. The current signing identities
+  still do not include Apple Distribution, so iOS/tvOS store export and upload
+  remain unavailable. No build 102 release package has been notarized or
+  uploaded.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 
