@@ -70,6 +70,16 @@ public struct RunRecovery: Codable, Sendable {
     }
 
     public static let bundledEngine: String = engineFingerprint(resources: AppStorage.current().resources)
+    /// Shipped engines whose recorded actions still replay on this one: 2.1.2 and 2.2 to 2.2.2.
+    /// Action replays still check their final state, so a replay that diverges is rejected.
+    static let earlierCompatibleEngines: Set<String> = [
+        "4e3bac8f74be058c9b684907678a8a1751b7dccba156d301fe2bf6e2097c389f",
+        "ccd0577faa7a3d114ed4a45edbf24fad3b2405de914e7d10f22a7a2f6ae75490",
+    ]
+    /// Whether a recording made with `fingerprint` can play on the bundled engine.
+    public static func isCompatibleEngine(_ fingerprint: String) -> Bool {
+        !bundledEngine.isEmpty && (fingerprint == bundledEngine || earlierCompatibleEngines.contains(fingerprint))
+    }
     /// The engine fingerprint in the bundled resources, or an empty string.
     public static func engineFingerprint(resources: URL) -> String {
         (try? String(contentsOf: resources.appendingPathComponent("Trolley/engine-fingerprint.txt"), encoding: .utf8))?
