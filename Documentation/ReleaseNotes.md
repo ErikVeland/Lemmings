@@ -1,5 +1,12 @@
 # Release notes
 
+## Current build candidate
+
+The current source version is **2.3** (Mac build 100, iOS build 34, tvOS build 13). Read the
+[complete 2.3 candidate notes](ReleaseNotes-2.3-build100.md). These notes cover
+the consolidated work since 2.2.2 and must stay current with the source selected
+for a build.
+
 ## Latest published release
 
 Mac 2.3 build 100 is in release. See the
