@@ -777,15 +777,16 @@ Physical VoiceOver and controller delivery remain manual checks.
 ## Progress leaderboards
 
 Progress opens on ranked local results. Keep the leaderboard visible on the first
-page. Put Most saved, Most lost and Best times in the list toolbar. A player row
+page. Put Career stars, Most saved and Most lost in the list toolbar. Every row
+is a player. A player row
 opens that player's level results. A level row opens the player ranking for that
 level. Back returns to the caller's selection.
 
 Most saved uses each player's best retained direct result for each level. Most
 lost uses the greatest retained direct loss count for each level. Lost means the
 level population minus the saved count. These records do not identify deaths
-caused by a Nuke skill, so do not label losses as nukes. Best times shows the
-fastest qualifying direct result for each recorded level. Rewind results stay in
+caused by a Nuke skill, so do not label losses as nukes. A level page ranks
+players on that level and opens on Fastest 100%. Rewind results stay in
 Records and remain separate from direct rankings.
 
 ## Worldwide and level leaderboards

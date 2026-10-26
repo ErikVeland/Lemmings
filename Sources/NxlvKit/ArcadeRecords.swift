@@ -34,6 +34,8 @@ public struct ArcadeLevel: Codable, Equatable, Sendable {
 
 public enum ArcadeBoard: String, Codable, CaseIterable, Sendable {
     case rescue, efficiency, allSaved, fastestClear, fastestAllSaved
+    /// The level leaderboard order shared with Trolley and worldwide boards.
+    public static let levelMetrics: [ArcadeBoard] = [.fastestAllSaved, .fastestClear, .efficiency, .rescue]
     public var title: String {
         switch self {
         case .rescue: L10n.text("MOST SAVED")

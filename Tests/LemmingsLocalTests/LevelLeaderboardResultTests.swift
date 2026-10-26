@@ -4,6 +4,7 @@ import Foundation
 import NxlvKit
 import XCTest
 @testable import LemmingsLocal
+import LemmingsGameArt
 
 @MainActor private final class FixedBoardTransport: HostedRankingsTransport {
     var board: HostedBoard?
@@ -86,5 +87,38 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 XCTAssertTrue(transport.paths.last?.contains("board=fastestClear") == true)
             }
         }
+    }
+}
+
+final class LocalLeaderboardPageTests: XCTestCase {
+    /// Progress ranks players across all levels; a level page ranks players on that level, Fastest 100% first.
+    @MainActor func testProgressRanksPlayersAndLevelOpensOnFastestFullRescue() throws {
+        let storage = try AppStorage.temporary(named: "local-leaderboards")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let host = store.records.mainProfileID
+        let guest = try XCTUnwrap(store.addProfile(initials: "GU", portrait: 1, select: false))
+        let conditions = TrolleyConditions(gameID: "lemmings", packID: "pack", levelID: "level-0",
+            levelFingerprint: String(repeating: "c", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
+            population: 10, rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
+        let level = ArcadeLevel(id: "level", title: "Test", game: "Classic", rules: "classic-dos-v1", total: 10, required: 5, conditions: conditions)
+        XCTAssertNotNil(store.record(ArcadeRun(profileID: host, level: level, saved: 10, didWin: true, skills: ["digger": 1], seconds: 30, telemetry: .init(released: 10))))
+        XCTAssertNotNil(store.record(ArcadeRun(profileID: guest.id, level: level, saved: 10, didWin: true, skills: ["digger": 1], seconds: 20, telemetry: .init(released: 10))))
+        XCTAssertNotNil(store.record(ArcadeRun(profileID: guest.id, level: level, saved: 6, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 10))))
+        let records = store.records
+        for metric in ["stars", "saved", "lost"] {
+            let page = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "", metric: metric)
+            XCTAssertTrue(page.rows.allSatisfy { $0.id.hasPrefix("progress.player.") }, metric)
+            XCTAssertEqual(Set(page.rows.map(\.id)).count, 2, metric)
+        }
+        XCTAssertEqual(MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "").listTools.first?.id,
+                       "progress.metric.stars")
+        let key = "direct|" + level.boardID
+        let full = MobileCareerArt.progressLevelPage(records: records, key: key, metric: "unknown")
+        XCTAssertEqual(full.listTools.first { $0.selected }?.id, "progress.levelMetric.full")
+        XCTAssertEqual(full.details, ["1. GU   0:20.00", "2. \(records.profile(host)!.initials)   0:30.00"])
+        let clear = MobileCareerArt.progressLevelPage(records: records, key: key, metric: "clear")
+        XCTAssertEqual(clear.details.first, "1. GU   0:10.00")
+        XCTAssertEqual(clear.details.count, 2)
     }
 }

@@ -30,7 +30,7 @@ import NxlvKit
         let ordering = target.status == .record && [.rescuePotential, .zeroAvoidableLosses, .cleanRescue].contains(trolleyBoard)
             ? L10n.text("Best-known target: \(target.value ?? 0) saved. Fewest skills, then fastest time.")
             : trolleyBoard.ordering
-        let categories = TrolleyBoard.allCases, index = categories.firstIndex(of: trolleyBoard) ?? 0
+        let categories = TrolleyBoard.levelMetrics, index = categories.firstIndex(of: trolleyBoard) ?? 0
         button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
             self?.trolleyBoard = categories[(index + categories.count - 1) % categories.count]; self?.needsDisplay = true
         }
@@ -84,7 +84,7 @@ import NxlvKit
             }
         }
         pageFooter()
-        setAccessibilityLabel(L10n.text("\(boardTitle). Rewinds: \(assisted ? L10n.text("used") : L10n.text("unused")). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns."))
+        setAccessibilityLabel(L10n.text("\(boardTitle). Rewinds: \(assisted ? L10n.text("used") : L10n.text("unused")). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 4 to choose a board. Escape returns."))
     }
 
     private func achievementPriority(_ award: TrolleyAchievement) -> Int {

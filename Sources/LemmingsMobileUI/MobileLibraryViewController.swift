@@ -87,7 +87,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let tvBuildInfo = MobileBuildInfo.current()
     #endif
     var mobileInsights = MobileInsightsState()
-    var progressMetric = "saved"
+    var progressMetric = "stars"
+    var progressLevelMetric = "full"
     var familiarNames = MobileFamiliarNamesState()
     var fanCountsTask: Task<Void, Never>?
     var fanCountGeneration = UUID()
@@ -911,7 +912,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = MobileCareerArt.progressPlayerPage(records: arcadeStore.records, profileID: profileID, metric: progressMetric); canvas.preview = nil
         case let .progressLevel(key, parentProfileID):
             canvas.page = MobileCareerArt.progressLevelPage(records: arcadeStore.records, key: key,
-                metric: progressMetric, parentProfileID: parentProfileID); canvas.preview = nil
+                metric: progressLevelMetric, parentProfileID: parentProfileID); canvas.preview = nil
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
         case .achievements:

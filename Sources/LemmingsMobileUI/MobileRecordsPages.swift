@@ -171,8 +171,11 @@ extension MobileLibraryViewController {
     func handleRecords(_ id: String) -> Bool {
         if id.hasPrefix("progress.metric.") {
             let metric = String(id.dropFirst("progress.metric.".count))
-            guard ["saved", "lost", "time"].contains(metric) else { return true }
+            guard ["stars", "saved", "lost"].contains(metric) else { return true }
             progressMetric = metric; rebuild(); return true
+        }
+        if id.hasPrefix("progress.levelMetric.") {
+            progressLevelMetric = String(id.dropFirst("progress.levelMetric.".count)); rebuild(); return true
         }
         if id.hasPrefix("progress.player.") {
             let profileID = String(id.dropFirst("progress.player.".count))

@@ -149,6 +149,13 @@ loads again after the player's own result is shared.
 | iPhone, iPad, Duo | Yes | Yes | `LevelLeaderboardPageTests` at 320–1194 pt; simulator build |
 | Apple TV | Yes | Yes | `LevelLeaderboardPageTests` at 1920 pt; simulator build |
 
+Local boards follow the same rule. All-levels boards rank players: Mac Career
+and mobile Progress (Career stars first, then Most saved and Most lost). Level
+boards rank players on one level: Mac level records and the mobile Progress
+level page open on Fastest 100%, then Fastest clear, Least skills and Most
+saved. The old Progress "Best times" view listed levels, not players, and is
+replaced by Career stars. Mac local boards keep the Rewinds filter.
+
 Limits: the result list shows no action replays; Worldwide no longer offers
 level action replays. Game Center boards are unchanged. Not yet checked: the
 hosted service returning shared rank 1 for ties, live service data, physical

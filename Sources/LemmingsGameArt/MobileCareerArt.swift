@@ -105,9 +105,15 @@ public enum MobileCareerArt {
                 .init("progress.player.\(item.profileID)", "\(index + 1). \(playerName(records, item.profileID))   \(item.value) lost",
                       portrait: records.profile(item.profileID)?.portrait)
             }
-        case "time":
-            rows = fastestLevelRuns(directRuns).prefix(100).map { run in
-                .init("progress.level.\(recordID(run))", "\(run.level.title)   \(playerName(records, run.profileID))   \(time(run.seconds))")
+        case "stars":
+            // The same career ranking as Worldwide, counted from this device's direct runs.
+            let history = records.trolley
+            let attempts = history.attempts.compactMap { attempt in
+                attempt.run.level.conditions.map { attempt.assessed(using: history.maximum(conditions: $0, assisted: attempt.run.assisted)) }
+            }
+            rows = TrolleyCareerScore.rank(attempts: attempts, assisted: false).enumerated().map { index, score in
+                .init("progress.player.\(score.profileID)", "\(index + 1). \(playerName(records, score.profileID))   \(score.stars) stars",
+                      portrait: records.profile(score.profileID)?.portrait)
             }
         default:
             rows = playerTotals(bestRuns, lost: false).enumerated().map { index, item in
@@ -117,8 +123,8 @@ public enum MobileCareerArt {
         }
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
-        let note = metric == "time"
-            ? L10n.text("Fastest direct result for each recorded level. Rewind runs are separate in Records.")
+        let note = metric == "stars"
+            ? L10n.text("Best stars per level, counted once. Direct runs only.")
             : L10n.text("Direct runs only. Lost counts use population minus saved from one retained result per level.")
         var page = GameFrontEnd.Page(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: rows, details: rows.isEmpty ? [L10n.text("No records yet. Play a level to set a local record.")] : [note],
@@ -128,9 +134,9 @@ public enum MobileCareerArt {
                     .init("worldwide", L10n.text("Worldwide")),
                     .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)], footerColumns: 2)
         page.listTools = [
+            .init("progress.metric.stars", L10n.text("Career stars"), selected: metric == "stars"),
             .init("progress.metric.saved", L10n.text("Most saved"), selected: metric == "saved"),
-            .init("progress.metric.lost", L10n.text("Most lost"), selected: metric == "lost"),
-            .init("progress.metric.time", L10n.text("Best times"), selected: metric == "time")
+            .init("progress.metric.lost", L10n.text("Most lost"), selected: metric == "lost")
         ]
         return page
     }
@@ -138,17 +144,15 @@ public enum MobileCareerArt {
     public static func progressPlayerPage(records: ArcadeRecords, profileID: String, metric: String) -> GameFrontEnd.Page {
         let playerRuns = records.runs.filter { $0.profileID == profileID && !$0.assisted }
         let runs = metric == "lost" ? distinctMostLostRuns(playerRuns)
-            : metric == "time" ? fastestPerPlayerLevelRuns(playerRuns) : distinctBestRuns(playerRuns)
+            : distinctBestRuns(playerRuns)
         let profile = playerName(records, profileID)
         let sorted: [ArcadeRun]
         switch metric {
         case "lost": sorted = runs.sorted { losses($0) == losses($1) ? $0.level.title < $1.level.title : losses($0) > losses($1) }
-        case "time": sorted = fastestLevelRuns(runs)
         default: sorted = runs.sorted { $0.saved == $1.saved ? $0.level.title < $1.level.title : $0.saved > $1.saved }
         }
         let rows = sorted.prefix(200).map { run in
             let value = metric == "lost" ? L10n.text("\(losses(run)) lost")
-                : metric == "time" ? (run.qualifies ? time(run.seconds) : L10n.text("No clear time"))
                 : L10n.text("\(run.saved) saved")
             return GameFrontEnd.Action("progress.level.\(recordID(run))", "\(run.level.title)   \(value)")
         }
@@ -157,6 +161,9 @@ public enum MobileCareerArt {
             footer: [.init("records", L10n.text("Back"))])
     }
 
+    /// Level boards use the shared level metrics, Fastest 100% first, whatever the all-levels metric is.
+    public static let levelMetrics: [(id: String, title: String)] = [("full", L10n.text("Fastest 100%")),
+        ("clear", L10n.text("Fastest clear")), ("skills", L10n.text("Least skills")), ("saved", L10n.text("Most saved"))]
     public static func progressLevelPage(records: ArcadeRecords, key: String, metric: String,
                                          parentProfileID: String? = nil) -> GameFrontEnd.Page {
         let (boardID, assisted) = recordBoard(key)
@@ -165,28 +172,35 @@ public enum MobileCareerArt {
             let backID = parentProfileID.map { "progress.playerBack.\($0)" } ?? "progressBack"
             return .init(title: L10n.text("Level records"), details: [L10n.text("No records yet.")], footer: [.init(backID, L10n.text("Back"))])
         }
-        let bestByPlayer = Dictionary(grouping: runs, by: \.profileID).compactMap { _, playerRuns -> ArcadeRun? in
+        let metric = levelMetrics.contains { $0.id == metric } ? metric : "full"
+        let eligible = runs.filter { run in
             switch metric {
-            case "lost": return playerRuns.max { losses($0) < losses($1) }
-            case "time": return playerRuns.filter(\.qualifies).min { $0.seconds < $1.seconds }
-            default: return playerRuns.max { $0.saved < $1.saved }
+            case "full": run.qualifies && run.saved >= run.population
+            case "clear", "skills": run.qualifies
+            default: true
             }
         }
-        let ranked = bestByPlayer.sorted { a, b in
+        func precedes(_ a: ArcadeRun, _ b: ArcadeRun) -> Bool {
             switch metric {
-            case "lost": return losses(a) == losses(b) ? a.seconds < b.seconds : losses(a) > losses(b)
-            case "time": return a.seconds == b.seconds ? a.saved > b.saved : a.seconds < b.seconds
-            default: return a.saved == b.saved ? a.seconds < b.seconds : a.saved > b.saved
+            case "full", "clear": if a.seconds != b.seconds { return a.seconds < b.seconds }
+            case "skills": if a.skillCount != b.skillCount { return a.skillCount < b.skillCount }
+            default: break
             }
+            if a.saved != b.saved { return a.saved > b.saved }
+            if a.skillCount != b.skillCount { return a.skillCount < b.skillCount }
+            return a.seconds < b.seconds
         }
+        let ranked = Dictionary(grouping: eligible, by: \.profileID).compactMap { $0.value.sorted(by: precedes).first }.sorted(by: precedes)
         let details = ranked.enumerated().map { index, run in
-            let value = metric == "lost" ? L10n.text("\(losses(run)) lost")
-                : metric == "time" ? time(run.seconds) : L10n.text("\(run.saved) saved")
+            let value = ["full", "clear"].contains(metric) ? time(run.seconds)
+                : metric == "skills" ? L10n.text("\(run.skillCount) skills") : L10n.text("\(run.saved) saved")
             return "\(index + 1). \(playerName(records, run.profileID))   \(value)"
         }
-        return .init(title: level.title, subtitle: L10n.text("\(level.total) Lemmings   Save \(level.required)"),
+        var page = GameFrontEnd.Page(title: level.title, subtitle: L10n.text("\(level.total) Lemmings   Save \(level.required)"),
             details: details.isEmpty ? [L10n.text("No records yet.")] : details,
             footer: [.init(parentProfileID.map { "progress.playerBack.\($0)" } ?? "progressBack", L10n.text("Back"))])
+        page.listTools = levelMetrics.map { .init("progress.levelMetric.\($0.id)", $0.title, selected: metric == $0.id) }
+        return page
     }
 
     private static func distinctBestRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
@@ -205,11 +219,6 @@ public enum MobileCareerArt {
         }
     }
 
-    private static func fastestPerPlayerLevelRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
-        Dictionary(grouping: runs.filter(\.qualifies), by: { "\($0.profileID)|\($0.assisted)|\($0.level.boardID)" }).compactMap { _, group in
-            group.min { $0.seconds < $1.seconds }
-        }
-    }
 
     private static func playerTotals(_ runs: [ArcadeRun], lost: Bool) -> [(profileID: String, value: Int)] {
         Dictionary(grouping: runs, by: \.profileID).map { profileID, values in
@@ -217,11 +226,6 @@ public enum MobileCareerArt {
         }.sorted { $0.value == $1.value ? $0.profileID < $1.profileID : $0.value > $1.value }
     }
 
-    private static func fastestLevelRuns(_ runs: [ArcadeRun]) -> [ArcadeRun] {
-        Dictionary(grouping: runs.filter(\.qualifies), by: { "\($0.assisted)|\($0.level.boardID)" }).compactMap { _, group in
-            group.min { $0.seconds < $1.seconds }
-        }.sorted { $0.seconds == $1.seconds ? $0.level.title < $1.level.title : $0.seconds < $1.seconds }
-    }
 
     private static func losses(_ run: ArcadeRun) -> Int { max(0, run.population - run.saved) }
     private static func playerName(_ records: ArcadeRecords, _ profileID: String) -> String {

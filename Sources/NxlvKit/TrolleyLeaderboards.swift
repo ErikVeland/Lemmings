@@ -2,6 +2,9 @@ import Foundation
 
 public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
     case mostSaved, rescuePotential, zeroAvoidableLosses, leastSkills, mostUsedSkill, moralSurplus, cleanRescue, fastestClear, fastestAllSaved
+    /// Level leaderboards offer the same metrics locally and worldwide. Fastest 100% leads because
+    /// most players reach the same saved count, so speed separates them.
+    public static let levelMetrics: [TrolleyBoard] = [.fastestAllSaved, .fastestClear, .leastSkills, .mostSaved]
     public var title: String {
         switch self {
         case .fastestClear: L10n.text("Fastest clear")

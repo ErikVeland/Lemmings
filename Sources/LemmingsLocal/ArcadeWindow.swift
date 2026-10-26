@@ -32,7 +32,7 @@ import NxlvKit
         arcadeView.rewardVolume = rewardVolume
         arcadeView.rewardVolumeProvider = rewardVolumeProvider
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
-        arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
+        arcadeView.assisted = report.run.assisted; arcadeView.board = .fastestAllSaved; arcadeView.trolleyBoard = .fastestAllSaved
         arcadeView.boardScope = .level
         arcadeView.continueTitle = continueTitle; arcadeView.background = background
         arcadeView.resultStatus = status
@@ -56,7 +56,7 @@ import NxlvKit
         arcadeView.mode = .records; arcadeView.report = nil
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.recordLevels = levels.isEmpty ? RecordLevelNavigation.savedLevels(current: arcadeView.level) : levels
-        arcadeView.assisted = false; arcadeView.board = .rescue
+        arcadeView.assisted = false; arcadeView.board = .fastestAllSaved; arcadeView.trolleyBoard = .fastestAllSaved
         arcadeView.boardScope = .level
         arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
@@ -171,13 +171,13 @@ import NxlvKit
     var careerPage = 0
     var boardScope = BoardScope.level
     var usesGameCenter = false
-    var hostedCategory = HostedCategory.fastestClear
+    var hostedCategory = HostedCategory.stars
     var hostedPage = 0
     var level: ArcadeLevel?
     var recordLevels: [ArcadeLevel] = []
     var assisted = false
-    var board = ArcadeBoard.rescue
-    var trolleyBoard = TrolleyBoard.mostSaved
+    var board = ArcadeBoard.fastestAllSaved
+    var trolleyBoard = TrolleyBoard.fastestAllSaved
     var awardGroup = TrolleyAchievementGroup.rescue
     var awardPage = 0
     var highlightedAwards: Set<TrolleyAchievement> = []
@@ -887,7 +887,7 @@ import NxlvKit
             text(L10n.text("Play a level to set a record."), 64, 346, 992)
             pageFooter(); return
         }
-        let categories = ArcadeBoard.allCases, index = categories.firstIndex(of: board) ?? 0
+        let categories = ArcadeBoard.levelMetrics, index = categories.firstIndex(of: board) ?? 0
         button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
             self?.board = categories[(index + categories.count - 1) % categories.count]; self?.needsDisplay = true
         }
@@ -1072,8 +1072,8 @@ import NxlvKit
             if mode == .result { performDefaultResultAction() } else if report != nil { returnToPage(.result) }
             return
         }
-        if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil, boardScope == .level {
-            trolleyBoard = TrolleyBoard.allCases[number - 1]; needsDisplay = true; return
+        if let number = Int(key), (1...TrolleyBoard.levelMetrics.count).contains(number), level?.conditions != nil, boardScope == .level {
+            trolleyBoard = TrolleyBoard.levelMetrics[number - 1]; needsDisplay = true; return
         }
         switch key {
         case "W": if mode == .records { assisted.toggle(); hostedPage = 0; refreshHostedBoard() }
@@ -1088,9 +1088,7 @@ import NxlvKit
         case "D": page(.details)
         case "G": page(.goals)
         case "C": page(.career)
-        case "1": board = .rescue
-        case "2": board = .efficiency
-        case "3": board = .allSaved
+        case "1", "2", "3", "4": board = ArcadeBoard.levelMetrics[Int(key)! - 1]
         default:
             if event.keyCode == 123 { changeLevel(-1) }
             if event.keyCode == 124 { changeLevel(1) }
