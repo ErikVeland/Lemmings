@@ -2,7 +2,7 @@
 
 Status: **blocked; no platform package or submission recorded**.
 
-Candidate source: pending commit on `main`
+Candidate source: `b1dd685f` on `main`
 Release base: `v2.2.2`
 Platform build numbers: Mac 102, iPhone/iPad/Duo 36, Apple TV 15
 

@@ -63,8 +63,9 @@ home scenery, without a dark panel behind them. The portrait menu stays below th
 camera cutout and above the home indicator. The layout keeps its position when
 loading status appears. Menu audio waits through brief fold transitions
 and lets launch settle before the first theme. Audio playback also rebuilds its
-output after media-service resets. The main menu logo stays optically centred
-when status text or corner controls appear.
+output after media-service resets. Output shutdown also handles an invalid
+playback time during system interruption. The main menu logo stays optically
+centred when status text or corner controls appear.
 
 ## Player rankings
 
