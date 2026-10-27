@@ -20,7 +20,7 @@ guidance and the Hot Seat progress selector. The release notes are
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
 | iOS build 36 archive | PASS; signed archive created with active Xcode 27.2 |
-| iOS build 36 App Store export | BLOCKED; authorized export reports no iOS Distribution certificate with a private key for team `54WU29TRTY` |
+| iOS build 36 App Store export | BLOCKED; authorized export reports “No Accounts” and no iOS Distribution certificate with a private key for team `54WU29TRTY`; allowing managed signing did not resolve either issue |
 | Universal Mac candidate package | PASS; Developer ID signed, notarisation accepted, stapled, and Gatekeeper validation passed |
 | Mac updater/feed packaging | PASS; five signed deltas cover builds 95–99; public appcast verified |
 | tvOS build 15 archive | PASS; unsigned compile archive only, no App Store export |
@@ -77,9 +77,11 @@ in this session, so the Duo, iPad and Apple TV checks cannot run here.
 - The `lemmings-beta` profile is usable and the build 102 Mac standard and slim
   ZIPs are notarised. The signing keychain lists Developer ID Application and
   Apple Development identities, but no Apple Distribution identity. The
-  authorized iOS build 36 export fails without an iOS Distribution certificate
-  and private key. The tvOS archive is unsigned. Store export and submission
-  remain unavailable until signing is restored.
+  authorized iOS build 36 export reports “No Accounts” and fails without an iOS
+  Distribution certificate and private key. Allowing managed signing also
+  reports “No Accounts.” The tvOS archive is unsigned. Store export and
+  submission remain unavailable until the Xcode account and signing identity
+  are restored.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 
