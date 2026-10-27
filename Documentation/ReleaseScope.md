@@ -9,9 +9,11 @@ verification. Older release receipts below retain the checks actually performed.
 
 Assessment: 26 October 2026, `feature/2.3` at `234acea9` plus the current
 working tree. This is a source/evidence audit, not a signed candidate acceptance.
-Performance is the owner's main remaining gap. Audio crackling at any stage is
-a release blocker. The owner reports it on the latest Duo, iPad 8th generation
-and Apple TV 4K. No current clean-audio acceptance is recorded for those devices.
+Performance is the owner's main remaining gap. Audio crackling blocks release
+on each affected platform. The owner reports it on the latest Duo, iPad 8th
+generation and Apple TV 4K. No current clean-audio acceptance is recorded for
+those devices. These reports do not block a Mac release without a Mac-specific
+failure.
 
 | Priority | Remaining gap | Closure needed |
 | --- | --- | --- |
@@ -43,34 +45,41 @@ tests. It inspected current code and retained evidence. The existing local
 `MusicFileDeck.play()` idempotence change remains WIP, not a certified fix.
 
 Mac, then iOS, tvOS and sideloading remains the delivery order. A platform may
-ship when its own blockers close. This order does not waive reported audio
-failure, and Mac need not wait for a later platform's store processing.
+ship when its own blockers close. Platform acceptance stays scoped to the
+platform being published. Mac need not wait for a later platform's store
+processing. The reported audio failure remains open for affected mobile and TV
+platforms.
 
 ### 2.3 build 102 follow-up — 27 October 2026
 
-Candidate source `b1dd685f` guards `AVAudioPlayerNode.playerTime` against an
-invalid `AVAudioTime` during output stop. The muted, offscreen audio performance
-suite, Music Rewind checks, Hot Seat ghost checks and save-recovery checks pass.
-The iOS and tvOS SDK/application-entry checks also pass. This fixes the
-reproduced stop-time exception; it does not close the owner's reported audio
-crackling gate. The shared effects callback still waits on control work, and no
-clean listening acceptance exists for Duo, iPad 8 or Apple TV 4K. The connected
-device list contains only the Mac, and CoreSimulator is unavailable here.
+Release source `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` guards
+`AVAudioPlayerNode.playerTime` against an invalid `AVAudioTime` during output
+stop. Muted, offscreen audio performance, Music Rewind, Hot Seat ghost, save
+recovery, NeoLemmings simulation and replay, and mobile core checks pass. This
+fixes the reproduced stop-time exception; it does not close the reported
+crackling on Duo, iPad 8 or Apple TV 4K. No clean listening acceptance is
+recorded for those devices, and no audible-clean claim is made for Mac. Under
+the release schedule, those platform reports remain open without delaying Mac.
 
-The Developer ID identity and `lemmings-beta` notary profile are usable. No
-Apple Distribution identity is present. Xcode 27.2 created a signed iOS build
-36 archive, but App Store export reports “No Accounts” and no iOS Distribution
-certificate with a private key. No build 102 release archive has been
-notarized or uploaded. See the [build 102 record](ReleaseReadiness/2.3-build102/README.md).
+Mac build 102 is published. Its standard and slim packages were signed,
+notarised, stapled and accepted by Gatekeeper. The public release has the full
+updater ZIP, slim ZIP and five signed deltas for builds 95–99; the signed
+appcast is live on `main`. GitHub asset hashes and sizes are recorded in the
+[build 102 release record](ReleaseReadiness/2.3-build102/README.md).
+
+iOS build 36 has a signed archive, but App Store export reported “No Accounts”
+and no iOS Distribution certificate/private key. The tvOS build 15 archive is
+unsigned. Store delivery and mobile/TV device acceptance remain open. The
+connected device list contains only the Mac; CoreSimulator is unavailable.
 
 ## Latest published release
 
-Mac 2.2.2 build 99 and AltStore Classic build 33 are available. Universal Mac
-full/slim downloads, five signed updates, all eight public asset hashes and both
-live feeds are verified. iPhone/iPad/Duo build 33 is Waiting for Review with the
-existing external group. Apple TV build 12 is also Waiting for Review, with the
-existing groups assigned. External TestFlight availability is not yet verified. See the
-[current release record](ReleaseReadiness/2.2.2-build99/README.md).
+Mac 2.3 build 102 is published with universal full and slim downloads, five
+signed deltas and the live signed appcast. iOS build 36 and tvOS build 15
+remain in the delivery queue; sideloading channels follow them. See the
+[current release record](ReleaseReadiness/2.3-build102/README.md). The
+[2.2.2 build 99 record](ReleaseReadiness/2.2.2-build99/README.md) remains
+historical.
 
 The final frozen source is `fea37bf3`; artifacts use `9ffc23e7` with identical
 production inputs. Only two Mac integration-test files differ. All 56 final
