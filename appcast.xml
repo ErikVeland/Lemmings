@@ -2,6 +2,44 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.3</title>
+            <pubDate>Tue, 27 Oct 2026 09:10:13 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>102</sparkle:version>
+            <sparkle:shortVersionString>2.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>Platform builds: Mac 102, iPhone/iPad/Duo 36, Apple TV 15</p>
+<h3>Easier to find your way back</h3>
+<p>The shared menus give each platform a clearer route through the game. Home, Back, favourites, recent levels and saved playlists keep their place across Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix play. Fan collections are easier to browse, and numbered packs stay together. Pause and replay pages keep their main actions in reach while longer lists scroll.</p>
+<p>On Mac, keyboard and controller routes reach the same actions. On iPhone, iPad, Duo and Apple TV, touch, focus and remote layouts adapt to the screen while keeping shared choices and saved identities intact.</p>
+<h3>More ways to play a short session</h3>
+<p>Golden Path progress now credits a won lesson to its original collection. Lemmings 2 adds an isolated practice route and a short Classic tribe sampler that carries the right survivors between levels. Level skips show their available balance and preserve the starting population; a failed handover returns the skip.</p>
+<h3>Native play across the three games</h3>
+<p>Mobile and Apple TV connect more of the native Lemmings 2 and Lemmings 3 controls, campaign sessions, checkpoints and replay tools. Lemmings 2 supports its machine input and held aiming controls. Sequel attempts can be reviewed from recorded actions, and original Lemmings 2 and Lemmings 3 movies can be opened from the shared library while play stays paused.</p>
+<p>Supported NeoLemmix levels retain finite extra-skill charges through recovery. Across the games, crowd shadows, assignment feedback and optional sprite trails make busy scenes easier to read. TV keeps its performance limits.</p>
+<h3>Progress follows the player</h3>
+<p>Cloud sync now requests a final save pass when the app closes or moves to the background. It waits for active uploads, then checks again for changes made while an upload was running. Offline play and local mid-level checkpoints keep their existing behaviour.</p>
+<p>A Hot Seat keeps one session for its players. Starting the Golden Path on Mac continues the current Hot Seat. Offline saves of the same session from two devices now merge. Earlier builds started the Golden Path in a second session with the same players. The first sync merges that session's Classic progress into the Journey session. Every device then continues the Journey session.</p>
+<h3>A steadier soundtrack and clearer controls</h3>
+<p>Repeated startup and audio-engine requests no longer restart a live recorded soundtrack's fade-in. Shared pause and replay controls use clearer groups and distinct states, with layouts for compact phones, Duo screens, tablets, Mac and TV. The Desk Clock keeps its pose-specific entry and pause behaviour.</p>
+<h3>Duo home and audio stability</h3>
+<p>Duo Home fits on both screens and when folded. Its controls sit over the moving home scenery, without a dark panel behind them. The portrait menu stays below the camera cutout and above the home indicator. The layout keeps its position when loading status appears. Menu audio waits through brief fold transitions and lets launch settle before the first theme. Audio playback also rebuilds its output after media-service resets. Output shutdown also handles an invalid playback time during system interruption. The main menu logo stays optically centred when status text or corner controls appear.</p>
+<h3>Player rankings</h3>
+<p>Progress and Leaderboards have separate destinations. Local and hosted rankings show one ordered list across the available categories. Level results include player rankings for Fastest 100%, Fastest clear, Least skills and Most saved.</p>
+<h3>Platforms and scope</h3>
+<p>Version 2.3 covers Mac, iPhone, iPad, Duo and Apple TV. Mac ships first; iOS, tvOS and sideloading channels follow their own delivery checks. The existing Classic and The Tribes Complete classifications remain unchanged. Chronicles and NeoLemmix remain Beta, with their recorded route and source limits. Human language review and physical-device acceptance remain separate from source and render checks.</p>
+<p class="meta">Build: 102<br>Release commit: 96dc81b8491dfdb58683f0e32025fc4c8137aa1c<br>Release base: v2.2.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-2.3-build102.zip" length="2057392819" type="application/octet-stream" sparkle:edSignature="O+BiuZVd91Ewn2dA5dNvLYNkzB2hWSBg4w4voIXyfvnLj+icgyKjMyD2M0yvG5lLWVqHPvH58EYPyEc06Z0/Cg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from99.delta" sparkle:deltaFrom="99" length="47125150" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="mFv9FohN0U7WSgxE/XpflOPp+HP0yvMR6QY3wDAMq9rRT/fLaX3nGKY/FI/G8PuPU9yQxZZG3mOgdt4UlC17BQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from98.delta" sparkle:deltaFrom="98" length="47777738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="d/LM4yrPX+buCKKagur8UZX3045o/RU7MAOsYuoVPBTjwl6iKOEDrIarbCQFGzGdKQ3aJ1KlnkelnXNsQs2gBQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from97.delta" sparkle:deltaFrom="97" length="47814326" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="N9hRZxmxoD1Zm/C6EVxOzDurq87dmmSvc1dz9tjFhNwtrskYVDGjFMcRLVPTAHjQhupRIsrRXc6vQz01vmBKAw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from96.delta" sparkle:deltaFrom="96" length="48263210" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="X+Hpxz1OnGZq/vra0cHJvFFUXdFp8jThdEY5wUvFDXpOCq773B6Z05T84PKE3vBTgAXt421Q03kpzJu4QljsAg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from95.delta" sparkle:deltaFrom="95" length="43272750" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="h1jmaOf4gAZAwJTYoqTEDTf6AqG6HW3CX7TBVSojzPqYz0IDdrPfj6ZkOgftaDaraC+3nVSvLNHT093FpmoyAA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.2.2</title>
             <pubDate>Sat, 24 Oct 2026 11:01:18 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
