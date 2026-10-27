@@ -1,7 +1,8 @@
 # 2.3 build 102 release candidate
 
-Status: **Mac 2.3 build 102 published and verified; iOS, tvOS and sideloading
-delivery remain open**.
+Status: **Mac 2.3 build 102 published; all seven public assets and the appcast
+are verified. The public tag still points to build 100. iOS, tvOS and
+sideloading delivery remain open.**
 
 Release source: `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` on `main`
 Release base: `v2.2.2`
@@ -19,12 +20,12 @@ guidance and the Hot Seat progress selector. The release notes are
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
 | iOS build 36 archive | PASS; signed archive created with active Xcode 27.2 |
-| iOS build 36 App Store export | BLOCKED; retry on 27 October still reports “No Accounts” and no iOS Distribution certificate/private key |
+| iOS build 36 App Store export | BLOCKED; authorized export reports no iOS Distribution certificate with a private key for team `54WU29TRTY` |
 | Universal Mac candidate package | PASS; Developer ID signed, notarisation accepted, stapled, and Gatekeeper validation passed |
 | Mac updater/feed packaging | PASS; five signed deltas cover builds 95–99; public appcast verified |
 | tvOS build 15 archive | PASS; unsigned compile archive only, no App Store export |
 | Release history and input checks | PASS |
-| Release publication | PASS; v2.3 published with full updater ZIP, slim ZIP and five delta assets; public appcast points to build 102 |
+| Release publication | PASS; release 424931561 published with full updater ZIP, slim ZIP and five delta assets; public appcast points to build 102 |
 
 The iOS and tvOS checks compile sources. They do not establish store
 processing or physical-device acceptance. The Mac standard and slim packages
@@ -35,6 +36,18 @@ packages and five deltas. GitHub reports the full ZIP SHA-256 as
 slim ZIP SHA-256 as
 `2b023b02556de8b3e3835a64cd9bf38abbd1f2e4e9944c2288a5b51aaf59b4c4`.
 The signed public appcast on `main` advertises build 102 and those five deltas.
+All seven complete public downloads match GitHub asset sizes and SHA-256
+digests, and each digest matches its local release artifact. See
+[`publication.json`](publication.json). However, the annotated `v2.3` tag
+still points to build 100 source `d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9`,
+while the release, appcast and assets identify source
+`96dc81b8491dfdb58683f0e32025fc4c8137aa1c`. The asset and feed data are intact.
+An exact compare-and-swap retag was attempted with the expected old tag object,
+but automatic approval review rejected it because the supplied owner approval
+was from a delegated transcript rather than a trusted direct message. No tag
+change was made. Retagging affects source provenance and consumers that have
+cached the old ref; the release and its files remain published. Get direct
+owner approval before retrying the exact expected-old update.
 Automated release gates 6–7 were skipped under repository policy after the
 affected engine checks below passed; no foreground launch check was run.
 
@@ -61,12 +74,12 @@ in this session, so the Duo, iPad and Apple TV checks cannot run here.
   close that platform gate. This did not block the Mac publication under the
   release schedule. No audible-clean claim is made for Mac. See
   [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
-- The `lemmings-beta` profile is usable and the build 102 Mac standard ZIP is
-  notarised. The signing keychain currently lists Developer ID Application and
-  Apple Development identities, but no Apple Distribution identity. The iOS
-  build 36 archive retry still fails export with “No Accounts” and no iOS
-  Distribution certificate/private key. The tvOS archive is unsigned. Store
-  export and submission remain unavailable.
+- The `lemmings-beta` profile is usable and the build 102 Mac standard and slim
+  ZIPs are notarised. The signing keychain lists Developer ID Application and
+  Apple Development identities, but no Apple Distribution identity. The
+  authorized iOS build 36 export fails without an iOS Distribution certificate
+  and private key. The tvOS archive is unsigned. Store export and submission
+  remain unavailable until signing is restored.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 

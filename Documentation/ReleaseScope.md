@@ -67,6 +67,17 @@ updater ZIP, slim ZIP and five signed deltas for builds 95–99; the signed
 appcast is live on `main`. GitHub asset hashes and sizes are recorded in the
 [build 102 release record](ReleaseReadiness/2.3-build102/README.md).
 
+The public annotated `v2.3` tag still points to build 100 source
+`d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9`, while release 424931561 and the
+build 102 appcast identify `96dc81b8491dfdb58683f0e32025fc4c8137aa1c`. A
+compare-and-swap correction to the latter was rejected by automatic approval
+review because its exact owner approval came from delegated transcript
+evidence, not a trusted direct message. No tag change was made. The discrepancy
+affects source provenance and clients that cached the old ref; it does not
+change the published downloads or feed. Obtain direct owner approval before
+retrying an exact expected-old tag update. Full download evidence is in
+[`publication.json`](ReleaseReadiness/2.3-build102/publication.json).
+
 iOS build 36 has a signed archive, but App Store export reported “No Accounts”
 and no iOS Distribution certificate/private key. The tvOS build 15 archive is
 unsigned. Store delivery and mobile/TV device acceptance remain open. The

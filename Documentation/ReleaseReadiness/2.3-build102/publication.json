@@ -1,0 +1,101 @@
+{
+  "verified": false,
+  "publicAssetsAndAppcastVerified": true,
+  "previousBuild102ReceiptFound": false,
+  "receiptPath": "Documentation/ReleaseReadiness/2.3-build102/publication.json",
+  "verifiedUTC": "2026-10-27T01:33:35Z",
+  "version": "2.3",
+  "macBuild": 102,
+  "iosBuild": 36,
+  "tvOSBuild": 15,
+  "sourceCommit": "96dc81b8491dfdb58683f0e32025fc4c8137aa1c",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.3",
+  "releaseId": 424931561,
+  "releaseTag": "v2.3",
+  "publishedAt": "2026-10-27T01:17:08Z",
+  "releaseTargetCommitish": "96dc81b8491dfdb58683f0e32025fc4c8137aa1c",
+  "tagRef": "refs/tags/v2.3",
+  "tagObject": "65b1d71c32bba1d9c28b8b1b9320ac53f4aceb50",
+  "tagCommit": "d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9",
+  "tagMatchesReleaseSource": false,
+  "tagCorrection": {
+    "status": "not applied",
+    "reason": "Approval review rejected the force-with-lease tag update because its exact approval evidence came from a delegated transcript rather than a trusted direct user message.",
+    "expectedOldTagObject": "65b1d71c32bba1d9c28b8b1b9320ac53f4aceb50",
+    "proposedTargetCommit": "96dc81b8491dfdb58683f0e32025fc4c8137aa1c",
+    "requiredAction": "Obtain direct owner authorization in this task, then recheck the exact remote tag object and use a compare-and-swap update."
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.3-build102.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-2.3-build102.zip",
+      "size": 2057392819,
+      "sha256": "2a12460a6db2b4e33d936509e093ddb3dd5a673e0346bf907c9fdeada193eef1",
+      "githubDigest": "sha256:2a12460a6db2b4e33d936509e093ddb3dd5a673e0346bf907c9fdeada193eef1",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-2.3-build102-slim.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-2.3-build102-slim.zip",
+      "size": 273323549,
+      "sha256": "2b023b02556de8b3e3835a64cd9bf38abbd1f2e4e9944c2288a5b51aaf59b4c4",
+      "githubDigest": "sha256:2b023b02556de8b3e3835a64cd9bf38abbd1f2e4e9944c2288a5b51aaf59b4c4",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build102-from95.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from95.delta",
+      "size": 43272750,
+      "sha256": "3da4a9540f033a902ebae0e727daf3b7deb0a87ad047b9a7454eca73cc9606a1",
+      "githubDigest": "sha256:3da4a9540f033a902ebae0e727daf3b7deb0a87ad047b9a7454eca73cc9606a1",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build102-from96.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from96.delta",
+      "size": 48263210,
+      "sha256": "9bd6dbffd865bfd7a5151b909b7c1edef8467a214ee82b7e3b215b86fd653e85",
+      "githubDigest": "sha256:9bd6dbffd865bfd7a5151b909b7c1edef8467a214ee82b7e3b215b86fd653e85",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build102-from97.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from97.delta",
+      "size": 47814326,
+      "sha256": "c34947333f61c98c9fa0e7abeab792bf274f612525a5c781c834768882f099d1",
+      "githubDigest": "sha256:c34947333f61c98c9fa0e7abeab792bf274f612525a5c781c834768882f099d1",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build102-from98.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from98.delta",
+      "size": 47777738,
+      "sha256": "7c7cbdf8723d6de7d9722a717f2232707f27152d25be984baf078a76dfb38d5b",
+      "githubDigest": "sha256:7c7cbdf8723d6de7d9722a717f2232707f27152d25be984baf078a76dfb38d5b",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    },
+    {
+      "name": "UltimateLemmings-build102-from99.delta",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from99.delta",
+      "size": 47125150,
+      "sha256": "4f45c4fd27cba1b312a6a072ac8bf01cd617ec13f73e868d1a98d05a00cdb9f8",
+      "githubDigest": "sha256:4f45c4fd27cba1b312a6a072ac8bf01cd617ec13f73e868d1a98d05a00cdb9f8",
+      "localBuildDigestMatches": true,
+      "completePublicDownloadVerified": true
+    }
+  ],
+  "appcast": {
+    "url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+    "sha256": "dd66f375b62eefd86faeef446c1566a53192adb6e780a284d8c5d14a35ee607e",
+    "githubBlobSHA": "77face19ba906a810c80168c8798859bedbf7983",
+    "build": 102,
+    "releaseCommitMatches": true,
+    "rawContentVerified": true
+  }
+}
