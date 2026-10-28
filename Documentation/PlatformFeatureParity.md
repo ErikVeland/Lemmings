@@ -256,3 +256,17 @@ validate UIKit's reported corner geometry on physical Duo hardware.
 Shared artwork compiles for Mac. Final UI modules compile against the iOS and
 tvOS SDKs. Engine suites were skipped because simulation and input semantics
 are unchanged. Evidence is in ignored `.build/duo-rounded/` files.
+
+Portrait phone library, gameplay, pause, solution and original media menus
+extend their scrolling viewport towards the display edges. On Duo, library and
+gameplay pages keep their title above fixed navigation and begin scrolling below
+that navigation. Initial and
+final content positions retain clearance for system regions and fixed navigation;
+the pause footer remains pinned inside that clearance. This shared presentation
+covers all engines. Split displays retain separate viewports on each side of the
+hinge. Physical Duo scrolling, touch and VoiceOver acceptance remain outstanding.
+
+The mobile source currently has no About route or About screen to validate.
+The Duo static-heading treatment covers the existing shared reading pages; an
+About screen must adopt the same layout if added. Rendered and physical-device
+acceptance for the new header remains outstanding.

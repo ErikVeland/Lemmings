@@ -287,6 +287,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             guard let self else { return }
             self.selectedIndex = index
             self.browser.setFavourite(self.isFavourite(index))
+            self.view.setNeedsLayout()
         }
         browser.onFavourite = { [weak self] index in self?.toggleFavourite(index) }
         browser.onPlaylist = { [weak self] index in
@@ -642,6 +643,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             default: false
             }
         }()
+        #if os(iOS)
+        let staticHeading = MobileSystemRegions.isFoldable(in: view)
+            && view.bounds.height > view.bounds.width && !globalNavigation.isHidden
+            && !bottomSettingsNavigation
+        #else
+        let staticHeading = false
+        #endif
+        globalNavigation.headingTitle = staticHeading ? (browserShown ? browser.headingText : canvas.staticHeadingTitle) : nil
+        canvas.showsStaticHeading = staticHeading && !browserShown
+        browser.showsStaticHeading = staticHeading && browserShown
         canvas.usesBottomSettingsNavigation = bottomSettingsNavigation
         #if os(iOS)
         menuBackGesture?.isEnabled = !globalNavigation.isHidden
@@ -679,13 +690,27 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             menuRegion.size.height -= listTools.shelfHeight
             view.bringSubviewToFront(listTools)
         }
-        scrollView.setViewportFrame(menuRegion)
+        var scrollFrame = menuRegion
+        #if os(iOS)
+        let extendsPortraitViewport = view.bounds.height > view.bounds.width
+            && view.bounds.width < 600 && book.isEmpty
+            && !MobileSystemRegions.read(in: view).contains { $0.kind == .division }
+        if extendsPortraitViewport {
+            let top = staticHeading ? globalNavigation.frame.maxY : view.bounds.minY
+            scrollFrame.origin.y = top
+            scrollFrame.size.height = max(0, view.bounds.maxY - top)
+        }
+        #endif
+        scrollView.setViewportFrame(scrollFrame)
         canvas.bookHomePanes = book.map {
             CGRect(x: $0.minX - safe.minX, y: $0.minY - safe.minY, width: $0.width, height: $0.height)
         }
-        let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
-        canvas.frame = CGRect(origin: .zero, size: size)
-        scrollView.contentSize = size
+        let size = canvas.size(width: scrollView.bounds.width, minimumHeight: menuRegion.height)
+        let contentTop = max(0, menuRegion.minY - scrollFrame.minY)
+        let contentBottom = max(0, scrollFrame.maxY - menuRegion.maxY)
+        scrollView.unobscuredInsets = UIEdgeInsets(top: contentTop, left: 0, bottom: contentBottom, right: 0)
+        canvas.frame = CGRect(x: 0, y: contentTop, width: size.width, height: size.height)
+        scrollView.contentSize = CGSize(width: size.width, height: contentTop + size.height + contentBottom)
         #if os(tvOS)
         scrollView.isScrollEnabled = !canvas.page.home && !canvas.page.televisionGrid
         if !scrollView.isScrollEnabled { scrollView.contentOffset = .zero }

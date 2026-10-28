@@ -1535,8 +1535,9 @@ renderers. Keep crisp pixel edges, shipped textures and bitmap lettering.
 Use smaller curves on controls than on their enclosing panels. Keep the full
 rectangular touch and accessibility targets, including the transparent corners.
 Retain the system's corner-adapted safe area for HUD controls, using the longer
-display axis so short landscape playfields retain their height. Outer-display
-menus keep full width and vertical corner clearance, with scrolling. Keep scenery
+display axis so short landscape playfields retain their height. Portrait phone library menus scroll across the full display height. Keep the
+first and last content positions clear of system regions and fixed navigation.
+Other outer-display menus keep full width and vertical corner clearance. Keep scenery
 edge to edge and use reserved-region logic for cameras and hinges.
 The original full-width game panel remains authored artwork. Rounded treatment
 applies to adaptive controls and the shared menu surfaces across all engines.
@@ -1545,9 +1546,12 @@ On Duo's outer display, draw scenery and page backgrounds to every edge.
 Place Main menu at the left of the fixed gameplay header. Let the status strip
 continue to the right edge of its camera-safe span. Keep the button and strip
 separate for focus and touch, with the same pixel contours as the other controls.
-Choose a fixed menu viewport from the scene's current reserved regions before
+Choose a fixed content area from the scene's current reserved regions before
 measuring Home, level browsing, Ready, pause, results, recovery or settings.
-Prefer the full-width area above or below a corner cutout. Do not reserve a
+On portrait Duo menus, place the page title in a fixed bitmap header above the
+navigation buttons. Scrolling starts below those buttons, and the first and
+last content positions retain system clearance. Other portrait phone menus may
+scroll through the full display height, with clearance at their resting endpoints. Prefer the full-width area above or below a corner cutout. Do not reserve a
 whole side for that corner, or resize individual controls as they scroll past it.
 Scrolling and bounce change only the content position. A real pose or window
 change can choose a new viewport. Gameplay keeps local clearance for its fixed

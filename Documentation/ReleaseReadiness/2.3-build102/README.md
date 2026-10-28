@@ -1,8 +1,10 @@
 # 2.3 build 102 release candidate
 
 Status: **Mac 2.3 build 102 published; all seven public assets and the appcast
-are verified. The public tag still points to build 100. iOS, tvOS and
-sideloading delivery remain open.**
+are verified. iOS build 36 uploaded to App Store Connect and is processing.
+tvOS build 15 archive succeeded, but export is blocked by malformed local
+provisioning profiles. The public tag still points to build 100. Sideloading
+delivery remains open.**
 
 Release source: `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` on `main`
 Release base: `v2.2.2`
@@ -19,11 +21,11 @@ guidance and the Hot Seat progress selector. The release notes are
 | Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
-| iOS build 36 archive | PASS; signed archive created with active Xcode 27.2 |
-| iOS build 36 App Store export | BLOCKED; authorized export reports “No Accounts” and no iOS Distribution certificate with a private key for team `54WU29TRTY`; allowing managed signing did not resolve either issue |
+| iOS build 36 archive | PASS; signed archive created with stable Xcode 27.1 |
+| iOS build 36 App Store export and upload | PASS; stable Xcode 27.1 export passed strict signing verification; App Store Connect accepted upload and reported processing. Public availability is not yet verified. |
 | Universal Mac candidate package | PASS; Developer ID signed, notarisation accepted, stapled, and Gatekeeper validation passed |
 | Mac updater/feed packaging | PASS; five signed deltas cover builds 95–99; public appcast verified |
-| tvOS build 15 archive | PASS; unsigned compile archive only, no App Store export |
+| tvOS build 15 archive | PASS; stable Xcode 27.1 archive created. Export failed because Xcode found malformed provisioning profile files in its local cache; no tvOS upload was made. |
 | Release history and input checks | PASS |
 | Release publication | PASS; release 424931561 published with full updater ZIP, slim ZIP and five delta assets; public appcast points to build 102 |
 
@@ -75,13 +77,11 @@ in this session, so the Duo, iPad and Apple TV checks cannot run here.
   release schedule. No audible-clean claim is made for Mac. See
   [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
 - The `lemmings-beta` profile is usable and the build 102 Mac standard and slim
-  ZIPs are notarised. The signing keychain lists Developer ID Application and
-  Apple Development identities, but no Apple Distribution identity. The
-  authorized iOS build 36 export reports “No Accounts” and fails without an iOS
-  Distribution certificate and private key. Allowing managed signing also
-  reports “No Accounts.” The tvOS archive is unsigned. Store export and
-  submission remain unavailable until the Xcode account and signing identity
-  are restored.
+  ZIPs are notarised. Stable Xcode 27.1 created a managed Apple Distribution
+  identity for iOS and uploaded build 36 to App Store Connect. Processing and
+  public availability remain unverified. The tvOS archive built, but export
+  failed when Xcode encountered 21 malformed profile files in its local cache.
+  Repair or refresh those cached profiles, then export and upload tvOS build 15.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 

@@ -55,6 +55,10 @@ import UIKit
         #endif
         return result
     }
+    var showsStaticHeading = false {
+        didSet { if showsStaticHeading != oldValue { setNeedsLayout(); setNeedsDisplay() } }
+    }
+    var staticHeadingTitle: String { displayedPage.title }
     var splitResult = false
     var fitsSupportPage = false {
         didSet { if fitsSupportPage != oldValue { rebuild() } }
@@ -172,7 +176,8 @@ import UIKit
 
     private func interfaceScale(width: CGFloat, viewportHeight: CGFloat? = nil) -> CGFloat {
         let setting = MobileSettings.current(from: .standard).classic.interfaceSize
-        let height = viewportHeight ?? (superview as? UIScrollView)?.bounds.height ?? bounds.height
+        let height = viewportHeight ?? (measuredViewport.height > 0 ? measuredViewport.height
+            : (superview as? UIScrollView)?.bounds.height ?? bounds.height)
         if fitsSupportPage {
             #if os(tvOS)
             let preferred = MobileSettingsArt.interfaceScale(setting, width: width, television: true)
@@ -219,7 +224,7 @@ import UIKit
             if measuredViewport.width > 0, measuredViewport.width != width,
                !page.home, page.pause == nil, !page.rows.isEmpty,
                let scroll = superview as? UIScrollView {
-                let visible = CGRect(origin: scroll.contentOffset, size: measuredViewport)
+                let visible = convert(CGRect(origin: scroll.contentOffset, size: measuredViewport), from: scroll)
                 if let anchor = targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
                     pendingReflowAnchor = (anchor.accessibilityIdentifier ?? "", anchor.frame.minY - visible.minY)
                 }
@@ -245,12 +250,15 @@ import UIKit
         let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
-        let minimumHeight = (superview as? UIScrollView)?.bounds.height
-            ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)
+        let minimumHeight = measuredViewport.height > 0 ? measuredViewport.height
+            : (superview as? UIScrollView)?.bounds.height ?? bounds.height
         var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale, scale: scale)
         if page.pause != nil, let scroll = superview as? UIScrollView {
-            layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
-                width: scroll.bounds.width / scale, height: scroll.bounds.height / scale), actionIDs: Set(page.footer.map(\.id)))
+            let insets = (scroll as? MobileMenuScrollView)?.unobscuredInsets ?? .zero
+            let viewportTop = scroll.contentOffset.y + insets.top - frame.minY
+            let viewportHeight = max(0, scroll.bounds.height - insets.top - insets.bottom)
+            layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: viewportTop / scale,
+                width: scroll.bounds.width / scale, height: viewportHeight / scale), actionIDs: Set(page.footer.map(\.id)))
         }
         pageLayout = layout
         let footerIDs = Set(page.footer.map(\.id))
@@ -267,8 +275,10 @@ import UIKit
         pauseShelfShield.isHidden = shelfTop == nil
         if let shelfTop, let scroll = superview as? UIScrollView {
             let top = shelfTop * scale
+            let bottomInset = (scroll as? MobileMenuScrollView)?.unobscuredInsets.bottom ?? 0
+            let viewportBottom = scroll.contentOffset.y + scroll.bounds.height - bottomInset - frame.minY
             pauseShelfShield.frame = CGRect(x: 0, y: top, width: bounds.width,
-                height: max(0, scroll.contentOffset.y + scroll.bounds.height - top))
+                height: max(0, viewportBottom - top))
             bringSubviewToFront(pauseShelfShield)
             for target in targets where footerIDs.contains(target.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") {
                 bringSubviewToFront(target)
@@ -278,11 +288,12 @@ import UIKit
             pendingReflowAnchor = nil
             if let target = targets.first(where: { $0.accessibilityIdentifier == anchor.id }) {
                 let maximum = max(0, scroll.contentSize.height - scroll.bounds.height)
-                scroll.setContentOffset(CGPoint(x: 0, y: min(maximum, max(0, target.frame.minY - anchor.offset))), animated: false)
+                scroll.setContentOffset(CGPoint(x: 0, y: min(maximum, max(0, target.frame.minY + frame.minY - anchor.offset))), animated: false)
             }
         }
         var elements: [Any] = []
-        for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
+        let headingText = showsStaticHeading ? "" : page.title
+        for (text, frame) in [(headingText, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = textElement(frame.applying(transform))
             element.accessibilityLabel = text
             if let items = page.achievementItems,
@@ -421,7 +432,9 @@ import UIKit
         guard let scroll = superview as? UIScrollView else { return }
         var frame = target.insetBy(dx: 0, dy: -8)
         if page.pause != nil { frame.size.height += pauseShelfShield.bounds.height }
-        scroll.scrollRectToVisible(frame, animated: false)
+        let scrollFrame = convert(frame, to: scroll)
+        if let menuScroll = scroll as? MobileMenuScrollView { menuScroll.reveal(scrollFrame) }
+        else { scroll.scrollRectToVisible(scrollFrame, animated: false) }
         setNeedsLayout()
     }
     func moveFocus(_ offset: Int) {
@@ -499,10 +512,10 @@ import UIKit
         context.saveGState()
         defer { context.restoreGState() }
         context.scaleBy(x: scale, y: scale)
-        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: ((superview as? UIScrollView)?.bounds.height
-            ?? (measuredViewport.height > 0 ? measuredViewport.height : bounds.height)) / scale, scale: scale)
+        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: (measuredViewport.height > 0
+            ? measuredViewport.height : (superview as? UIScrollView)?.bounds.height ?? bounds.height) / scale, scale: scale)
         guard let typography = MobileGameArt.typography else {
-            MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
+            if !showsStaticHeading { MobilePixelText.draw(page.title, in: layout.heading, palette: .green) }
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
             if let heading = layout.libraryHeading { MobilePixelText.draw(L10n.text("Levels"), in: heading, palette: .green) }
             let footerIDs = Set(page.footer.map(\.id))
@@ -532,7 +545,9 @@ import UIKit
             }
             return
         }
-        GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
+        var renderedPage = page
+        if showsStaticHeading { renderedPage.title = ""; renderedPage.titleRuns = [] }
+        GameFrontEnd.draw(renderedPage, layout: layout, typography: typography, preview: preview,
                          previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), shape: MobileSystemRegions.controlShape(in: self), in: context)
         if let resultStars, !layout.preview.isEmpty {
             let preview = layout.preview

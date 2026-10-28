@@ -24,6 +24,13 @@ import UIKit
     var isLoading = false { didSet { play.isEnabled = !isLoading } }
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
+    var headingText: String { titleLabel.text }
+    var showsStaticHeading = false {
+        didSet {
+            titleLabel.isHidden = showsStaticHeading
+            titleLabel.accessibilityElementsHidden = showsStaticHeading
+        }
+    }
     private let subtitleLabel = MobilePixelLabel()
     private let flow = MobileCoverFlowView()
     private let back = MobilePixelButton()

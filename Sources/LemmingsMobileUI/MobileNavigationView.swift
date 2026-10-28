@@ -15,6 +15,16 @@ import NxlvKit
     }
     var secondaryTitle: String? { didSet { if oldValue != secondaryTitle { rebuild() } } }
     private var buttons: [MobilePixelButton] = []
+    private let heading = MobilePixelLabel()
+    var headingTitle: String? {
+        didSet {
+            guard oldValue != headingTitle else { return }
+            heading.text = headingTitle ?? ""
+            heading.isHidden = headingTitle == nil
+            setNeedsLayout()
+        }
+    }
+    private var headingHeight: CGFloat { headingTitle == nil ? 0 : 48 }
     var focusedID: String? {
         didSet { for button in buttons { button.isSelectedState = button.accessibilityIdentifier == focusedID } }
     }
@@ -34,9 +44,9 @@ import NxlvKit
     var shelfHeight: CGFloat { navigationLayout.size.height }
     func height(for width: CGFloat) -> CGFloat {
         #if os(tvOS)
-        GameNavigationArt.layout(width: width, actions: GameNavigationArt.actions(back: showsBack, backTitle: backTitle, secondary: secondaryTitle), television: true).size.height
+        return headingHeight + GameNavigationArt.layout(width: width, actions: GameNavigationArt.actions(back: showsBack, backTitle: backTitle, secondary: secondaryTitle), television: true).size.height
         #else
-        GameNavigationArt.layout(width: width, actions: GameNavigationArt.actions(back: showsBack, backTitle: backTitle, secondary: secondaryTitle)).size.height
+        return headingHeight + GameNavigationArt.layout(width: width, actions: GameNavigationArt.actions(back: showsBack, backTitle: backTitle, secondary: secondaryTitle)).size.height
         #endif
     }
     private var navigationLayout: GameFrontEnd.Layout {
@@ -49,6 +59,12 @@ import NxlvKit
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
+        heading.palette = .green
+        heading.face = .large
+        heading.maximumScale = 1
+        heading.isHidden = true
+        heading.accessibilityTraits = [.staticText, .header]
+        addSubview(heading)
         rebuild()
     }
     required init?(coder: NSCoder) { nil }
@@ -72,10 +88,13 @@ import NxlvKit
     override func layoutSubviews() {
         super.layoutSubviews()
         let targets = navigationLayout.targets
+        heading.frame = CGRect(x: 16, y: 0, width: max(0, bounds.width - 32), height: headingHeight)
         for target in targets {
-            buttons.first { $0.accessibilityIdentifier == target.action.id }?.frame = target.frame
+            buttons.first { $0.accessibilityIdentifier == target.action.id }?.frame = target.frame.offsetBy(dx: 0, dy: headingHeight)
         }
-        accessibilityElements = targets.compactMap { target in buttons.first { $0.accessibilityIdentifier == target.action.id } }
+        var elements: [Any] = heading.isHidden ? [] : [heading]
+        elements += targets.compactMap { target in buttons.first { $0.accessibilityIdentifier == target.action.id } }
+        accessibilityElements = elements
     }
 }
 #endif

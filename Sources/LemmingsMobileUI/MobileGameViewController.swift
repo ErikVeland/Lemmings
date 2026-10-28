@@ -2661,6 +2661,14 @@ typealias MobileGameControllerBase = UIViewController
         globalNavigation.isUserInteractionEnabled = !displayUpdatesSuspended
         globalNavigation.secondaryTitle = horizontalSettings || playState.phase == .ready || session.snapshot.isComplete
             || overlayCanvas.page.pause != nil ? nil : L10n.text("Pause menu")
+        #if os(iOS)
+        let staticHeading = MobileSystemRegions.isFoldable(in: view)
+            && view.bounds.height > view.bounds.width && !horizontalSettings
+        #else
+        let staticHeading = false
+        #endif
+        globalNavigation.headingTitle = staticHeading ? overlayCanvas.staticHeadingTitle : nil
+        overlayCanvas.showsStaticHeading = staticHeading
         let navigationHeight = globalNavigation.height(for: region.width)
         globalNavigation.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: navigationHeight)
         if horizontalSettings { globalNavigation.frame.origin.y = region.maxY - navigationHeight }
@@ -2679,10 +2687,24 @@ typealias MobileGameControllerBase = UIViewController
             region.size.height = max(0, region.height - height)
             view.bringSubviewToFront(settingsTabs)
         }
-        overlay.setViewportFrame(region)
+        var scrollFrame = region
+        #if os(iOS)
+        let extendsPortraitViewport = view.bounds.height > view.bounds.width
+            && view.bounds.width < 600 && achievementScroll.isHidden
+            && !MobileSystemRegions.read(in: view).contains { $0.kind == .division }
+        if extendsPortraitViewport {
+            let top = staticHeading ? globalNavigation.frame.maxY : view.bounds.minY
+            scrollFrame.origin.y = top
+            scrollFrame.size.height = max(0, view.bounds.maxY - top)
+        }
+        #endif
+        overlay.setViewportFrame(scrollFrame)
         let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
-        overlayCanvas.frame = CGRect(origin: .zero, size: size)
-        overlay.contentSize = size
+        let contentTop = max(0, region.minY - scrollFrame.minY)
+        let contentBottom = max(0, scrollFrame.maxY - region.maxY)
+        overlay.unobscuredInsets = UIEdgeInsets(top: contentTop, left: 0, bottom: contentBottom, right: 0)
+        overlayCanvas.frame = CGRect(x: 0, y: contentTop, width: size.width, height: size.height)
+        overlay.contentSize = CGSize(width: size.width, height: contentTop + size.height + contentBottom)
         #if os(tvOS)
         overlay.isScrollEnabled = !overlayCanvas.page.televisionGrid
         if !overlay.isScrollEnabled { overlay.contentOffset = .zero }

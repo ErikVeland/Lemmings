@@ -32,6 +32,7 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        scroll.contentInsetAdjustmentBehavior = .never
         view.addSubview(scroll); scroll.addSubview(canvas)
         canvas.onAction = { [weak self] in self?.perform($0) }
         #if os(tvOS)
@@ -63,9 +64,22 @@ import UIKit
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scroll.setViewportFrame(MobileSystemRegions.menuFrame(in: view))
-        let size = canvas.size(width: scroll.bounds.width, minimumHeight: scroll.bounds.height)
-        canvas.frame = CGRect(origin: .zero, size: size); scroll.contentSize = size
+        let region = MobileSystemRegions.menuFrame(in: view)
+        var scrollFrame = region
+        #if os(iOS)
+        if view.bounds.height > view.bounds.width && view.bounds.width < 600
+            && !MobileSystemRegions.read(in: view).contains(where: { $0.kind == .division }) {
+            scrollFrame.origin.y = view.bounds.minY
+            scrollFrame.size.height = view.bounds.height
+        }
+        #endif
+        scroll.setViewportFrame(scrollFrame)
+        let top = max(0, region.minY - scrollFrame.minY)
+        let bottom = max(0, scrollFrame.maxY - region.maxY)
+        scroll.unobscuredInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+        let size = canvas.size(width: scroll.bounds.width, minimumHeight: region.height)
+        canvas.frame = CGRect(x: 0, y: top, width: size.width, height: size.height)
+        scroll.contentSize = CGSize(width: size.width, height: top + size.height + bottom)
     }
     private func rebuild() {
         if let media {

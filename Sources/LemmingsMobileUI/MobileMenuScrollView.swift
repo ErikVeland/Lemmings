@@ -3,6 +3,19 @@ import UIKit
 
 /// A menu drag can take over after a button has started tracking the touch.
 @MainActor class MobileMenuScrollView: UIScrollView {
+    var unobscuredInsets = UIEdgeInsets.zero
+
+    func reveal(_ rect: CGRect) {
+        let visibleTop = contentOffset.y + unobscuredInsets.top
+        let visibleBottom = contentOffset.y + bounds.height - unobscuredInsets.bottom
+        var offset = contentOffset.y
+        if rect.minY < visibleTop { offset -= visibleTop - rect.minY }
+        else if rect.maxY > visibleBottom { offset += rect.maxY - visibleBottom }
+        let minimum = -adjustedContentInset.top
+        let maximum = max(minimum, contentSize.height - bounds.height + adjustedContentInset.bottom)
+        setContentOffset(CGPoint(x: contentOffset.x, y: min(maximum, max(minimum, offset))), animated: false)
+    }
+
     func setViewportFrame(_ frame: CGRect) {
         if self.frame != frame { cancelInteraction() }
         self.frame = frame
